@@ -1,0 +1,136 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "airplaneSeatClass": {
+        "@type": "AirplaneSeatClass",
+        "name": "ECONOMY"
+    },
+    "reservationFor": {
+        "@type": "Flight",
+        "airline": {
+            "@type": "Airline",
+            "iataCode": "LH",
+            "name": "LUFTHANSA"
+        },
+        "arrivalAirport": {
+            "@type": "Airport",
+            "iataCode": "MUC",
+            "name": "MUNICH DE MUNICH INTERNATIONAL"
+        },
+        "arrivalTime": "2017-04-07T09:35:00+02:00",
+        "departureAirport": {
+            "@type": "Airport",
+            "iataCode": "TXL",
+            "name": "BERLIN DE TEGEL"
+        },
+        "departureTime": "2017-04-07T08:30:00+02:00",
+        "flightNumber": "2029"
+    },
+    "reservationNumber": "KDEKDE",
+    "underName": {
+        "@type": "Person",
+        "name": "VOLKER KRAUSE"
+    }
+},
+{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "airplaneSeatClass": {
+        "@type": "AirplaneSeatClass",
+        "name": "ECONOMY"
+    },
+    "reservationFor": {
+        "@type": "Flight",
+        "airline": {
+            "@type": "Airline",
+            "iataCode": "LH",
+            "name": "LUFTHANSA"
+        },
+        "arrivalAirport": {
+            "@type": "Airport",
+            "iataCode": "TLS",
+            "name": "TOULOUSE FR BLAGNAC"
+        },
+        "arrivalTime": "2017-04-07T13:00:00+02:00",
+        "departureAirport": {
+            "@type": "Airport",
+            "iataCode": "MUC",
+            "name": "MUNICH DE MUNICH INTERNATIONAL"
+        },
+        "departureTime": "2017-04-07T11:10:00+02:00",
+        "flightNumber": "2218"
+    },
+    "reservationNumber": "KDEKDE",
+    "underName": {
+        "@type": "Person",
+        "name": "VOLKER KRAUSE"
+    }
+},
+{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "airplaneSeatClass": {
+        "@type": "AirplaneSeatClass",
+        "name": "ECONOMY"
+    },
+    "reservationFor": {
+        "@type": "Flight",
+        "airline": {
+            "@type": "Airline",
+            "iataCode": "LH",
+            "name": "LUFTHANSA"
+        },
+        "arrivalAirport": {
+            "@type": "Airport",
+            "iataCode": "MUC",
+            "name": "MUNICH DE MUNICH INTERNATIONAL"
+        },
+        "arrivalTime": "2017-04-09T19:55:00+02:00",
+        "departureAirport": {
+            "@type": "Airport",
+            "iataCode": "TLS",
+            "name": "TOULOUSE FR BLAGNAC"
+        },
+        "departureTime": "2017-04-09T18:15:00+02:00",
+        "flightNumber": "2221"
+    },
+    "reservationNumber": "KDEKDE",
+    "underName": {
+        "@type": "Person",
+        "name": "VOLKER KRAUSE"
+    }
+},
+{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "airplaneSeatClass": {
+        "@type": "AirplaneSeatClass",
+        "name": "ECONOMY"
+    },
+    "reservationFor": {
+        "@type": "Flight",
+        "airline": {
+            "@type": "Airline",
+            "iataCode": "LH",
+            "name": "LUFTHANSA"
+        },
+        "arrivalAirport": {
+            "@type": "Airport",
+            "iataCode": "TXL",
+            "name": "BERLIN DE TEGEL"
+        },
+        "arrivalTime": "2017-04-09T22:35:00+02:00",
+        "departureAirport": {
+            "@type": "Airport",
+            "iataCode": "MUC",
+            "name": "MUNICH DE MUNICH INTERNATIONAL"
+        },
+        "departureTime": "2017-04-09T21:30:00+02:00",
+        "flightNumber": "2054"
+    },
+    "reservationNumber": "KDEKDE",
+    "underName": {
+        "@type": "Person",
+        "name": "VOLKER KRAUSE"
+    }
+}]

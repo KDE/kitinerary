@@ -1,0 +1,29 @@
+<!-- https://developers.google.com/gmail/markup/getting-started -->
+<html>
+  <body>
+    <p>
+      Dear John, thanks for booking your Google I/O ticket with us.
+    </p>
+    <p itemscope itemtype="http://schema.org/EventReservation">
+      BOOKING DETAILS<br/>
+      Reservation number: <span itemprop="reservationNumber">IO12345</span><br/>
+      Order for: <span itemprop="underName" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Smith</span>
+      </span><br/>
+      <div itemprop="reservationFor" itemscope itemtype="http://schema.org/Event">
+        Event: <span itemprop="name">Google I/O 2013</span><br/>
+        <time itemprop="startDate" datetime="2013-05-15T08:30:00-08:00">Start time: May 15th 2013 8:00am PST</time><br/>
+        Venue: <span itemprop="location" itemscope itemtype="http://schema.org/Place">
+          <span itemprop="name">Moscone Center</span>
+          <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <span itemprop="streetAddress">800 Howard St.</span>,
+            <span itemprop="addressLocality">San Francisco</span>,
+            <span itemprop="addressRegion">CA</span>,
+            <span itemprop="postalCode">94103</span>,
+            <span itemprop="addressCountry">US</span>
+          </span>
+        </span>
+      </div>
+    </p>
+  </body>
+</html>

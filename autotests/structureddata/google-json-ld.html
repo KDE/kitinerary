@@ -1,0 +1,44 @@
+<!-- https://developers.google.com/gmail/markup/getting-started -->
+<html>
+  <body>
+    <script type="application/ld+json">
+    {
+      "@context":              "http://schema.org",
+      "@type":                 "EventReservation",
+      "reservationNumber":     "IO12345",
+      "underName": {
+        "@type":               "Person",
+        "name":                "John Smith"
+      },
+      "reservationFor": {
+        "@type":               "Event",
+        "name":                "Google I/O 2013",
+        "startDate":           "2013-05-15T08:30:00-08:00",
+        "location": {
+          "@type":             "Place",
+          "name":              "Moscone Center",
+          "address": {
+            "@type":           "PostalAddress",
+            "streetAddress":   "800 Howard St.",
+            "addressLocality": "San Francisco",
+            "addressRegion":   "CA",
+            "postalCode":      "94103",
+            "addressCountry":  "US"
+          }
+        }
+      }
+    }
+    </script>
+    <p>
+      Dear John, thanks for booking your Google I/O ticket with us.
+    </p>
+    <p>
+      BOOKING DETAILS<br/>
+      Reservation number: IO12345<br/>
+      Order for: John Smith<br/>
+      Event: Google I/O 2013<br/>
+      Start time: May 15th 2013 8:00am PST<br/>
+      Venue: Moscone Center, 800 Howard St., San Francisco, CA 94103<br/>
+    </p>
+  </body>
+</html>

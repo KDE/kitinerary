@@ -1,0 +1,36 @@
+<!-- real-world hotel booking confirmation breaking XML parser by using an unquoted '&' in the JSON data -->
+<html dir="ltr">
+	<head>
+		<title>Reservation Confirmation</title>
+		<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "LodgingReservation",
+  "reservationNumber": "KDEKDEKDE",
+  "reservationStatus": "http://schema.org/Confirmed",
+  "underName": {
+    "@type": "Person",
+    "name": "Volker Krause"
+  },
+  "reservationFor": {
+    "@type": "LodgingBusiness",
+    "name": "Parser & Breaking Hotels",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "10 Downing Street",
+      "addressLocality": "London",
+      "addressRegion": "LONDON",
+      "postalCode": "123 ABC",
+      "addressCountry": "GB"
+    },
+    "telephone": "+44-123-4-567-890"
+  },
+  "checkinDate": "2017-06-15T14:00:00+0:00",
+  "checkoutDate": "2017-06-18T11:00:00+0:00"
+}
+</script>
+	</head>
+	<body>
+		<p>random content<br>can be invalid
+</bod>
+</html>
