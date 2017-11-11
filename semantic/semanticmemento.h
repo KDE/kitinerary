@@ -22,7 +22,8 @@
 
 #include <MimeTreeParser/BodyPart>
 
-#include <QJsonArray>
+#include <QVariant>
+#include <QVector>
 
 /** Memento holding the semantic information extracted for an email. */
 class SemanticMemento : public MimeTreeParser::Interface::BodyPartMemento
@@ -32,11 +33,11 @@ public:
     void detach() override;
     bool isEmpty() const;
 
-    QJsonArray data() const;
-    void setData(const QJsonArray &data);
+    QVector<QVariant> data() const;
+    void setData(const QVector<QVariant> &data);
 
 private:
-    QJsonArray m_data;
+    QVector<QVariant> m_data;
 };
 
 #endif // SEMANTICMEMENTO_H

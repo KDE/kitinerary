@@ -97,9 +97,10 @@ static QVariant createInstance(const QJsonObject &obj)
 
 #undef MAKE_FACTORY
 
-QVariantList JsonLdDocument::fromJson(const QJsonArray &array)
+QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
 {
-    QVariantList l;
+    QVector<QVariant> l;
+    l.reserve(array.size());
     for (const auto &obj : array) {
         const auto v = createInstance(obj.toObject());
         if (!v.isNull())

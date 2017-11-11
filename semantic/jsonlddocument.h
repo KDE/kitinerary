@@ -21,13 +21,14 @@
 #define JSONLDDOCUMENT_H
 
 #include <QVariant>
+#include <QVector>
 
 class QJsonArray;
 
 /** Serialization/deserialization code for JSON-LD data. */
 namespace JsonLdDocument
 {
-QVariantList fromJson(const QJsonArray &array);
+QVector<QVariant> fromJson(const QJsonArray &array);
 }
 
 #endif // JSONLDDOCUMENT_H

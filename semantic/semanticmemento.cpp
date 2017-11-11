@@ -30,12 +30,12 @@ bool SemanticMemento::isEmpty() const
     return m_data.isEmpty();
 }
 
-QJsonArray SemanticMemento::data() const
+QVector<QVariant> SemanticMemento::data() const
 {
     return m_data;
 }
 
-void SemanticMemento::setData(const QJsonArray &data)
+void SemanticMemento::setData(const QVector<QVariant> &data)
 {
     m_data = data;
 }
