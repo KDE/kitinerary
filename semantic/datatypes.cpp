@@ -24,12 +24,12 @@
 
 bool Airport::operator!=(const Airport &other) const
 {
-    return m_iataCode != other.m_iataCode && m_name != other.m_name;
+    return m_iataCode != other.m_iataCode || m_name != other.m_name;
 }
 
 bool Airline::operator!=(const Airline &other) const
 {
-    return m_iataCode != other.m_iataCode && m_name != other.m_name;
+    return m_iataCode != other.m_iataCode || m_name != other.m_name;
 }
 
 static QString localizedDateTime(const QDateTime &dt)
