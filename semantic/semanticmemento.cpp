@@ -19,6 +19,8 @@
 
 #include "semanticmemento.h"
 
+#include <KMime/ContentIndex>
+
 SemanticMemento::~SemanticMemento() = default;
 
 void SemanticMemento::detach()
@@ -30,6 +32,16 @@ bool SemanticMemento::isEmpty() const
     return m_data.isEmpty();
 }
 
+bool SemanticMemento::isParsed(const KMime::ContentIndex& index) const
+{
+    return m_parsedParts.contains(index);
+}
+
+void SemanticMemento::setParsed(const KMime::ContentIndex& index)
+{
+    m_parsedParts.insert(index);
+}
+
 QVector<QVariant> SemanticMemento::data() const
 {
     return m_data;
@@ -38,4 +50,14 @@ QVector<QVariant> SemanticMemento::data() const
 void SemanticMemento::setData(const QVector<QVariant> &data)
 {
     m_data = data;
+}
+
+bool SemanticMemento::hasStructuredData() const
+{
+    return m_foundStructuredData && !isEmpty();
+}
+
+void SemanticMemento::setStructuredDataFound(bool f)
+{
+    m_foundStructuredData = f;
 }

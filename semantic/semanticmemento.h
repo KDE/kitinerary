@@ -22,8 +22,11 @@
 
 #include <MimeTreeParser/BodyPart>
 
+#include <QSet>
 #include <QVariant>
 #include <QVector>
+
+namespace KMime { class ContentIndex; }
 
 /** Memento holding the semantic information extracted for an email. */
 class SemanticMemento : public MimeTreeParser::Interface::BodyPartMemento
@@ -33,11 +36,19 @@ public:
     void detach() override;
     bool isEmpty() const;
 
+    bool isParsed(const KMime::ContentIndex &index) const;
+    void setParsed(const KMime::ContentIndex &index);
+
     QVector<QVariant> data() const;
     void setData(const QVector<QVariant> &data);
 
+    bool hasStructuredData() const;
+    void setStructuredDataFound(bool f);
+
 private:
     QVector<QVariant> m_data;
+    QSet<KMime::ContentIndex> m_parsedParts;
+    bool m_foundStructuredData = false;
 };
 
 #endif // SEMANTICMEMENTO_H
