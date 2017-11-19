@@ -1,0 +1,48 @@
+[
+    {
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "SN",
+                "name": "Brussels Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "name": "Brussels Airport, BE"
+            },
+            "arrivalTime": "2017-02-03T19:45:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "name": "Berlin, Tegel Airport, DE"
+            },
+            "departureTime": "2017-02-03T18:25:00",
+            "flightNumber": "2588"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "SN",
+                "name": "Brussels Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "name": "Berlin, Tegel Airport, DE"
+            },
+            "arrivalTime": "2017-02-05T22:00:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "name": "Brussels Airport, BE"
+            },
+            "departureTime": "2017-02-05T20:40:00",
+            "flightNumber": "2591"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

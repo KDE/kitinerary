@@ -5,6 +5,7 @@ set(semantic_lib_srcs
     extractorcontext.cpp
     extractorengine.cpp
     extractorfilter.cpp
+    extractorpreprocessor.cpp
     extractorrepository.cpp
     extractorrule.cpp
     jsonlddocument.cpp

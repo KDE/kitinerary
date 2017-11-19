@@ -19,6 +19,7 @@
 
 #include "extractor.h"
 #include "extractorengine.h"
+#include "extractorpreprocessor.h"
 
 #include <QDebug>
 #include <QDir>
@@ -36,7 +37,7 @@ private Q_SLOTS:
         Q_INIT_RESOURCE(rules);
     }
 
-    void testExtract_data()
+    void testExtractText_data()
     {
         QTest::addColumn<QString>("inputFile");
         QTest::addColumn<QString>("extractorName");
@@ -55,7 +56,7 @@ private Q_SLOTS:
         }
     }
 
-    void testExtract()
+    void testExtractText()
     {
         QFETCH(QString, inputFile);
         QFETCH(QString, extractorName);
@@ -69,7 +70,56 @@ private Q_SLOTS:
 
         ExtractorEngine engine;
         engine.setText(QString::fromUtf8(f.readAll()));
-        engine.setExtractor({&extractor});
+        engine.setExtractor(&extractor);
+        const auto data = engine.extract();
+
+        QFile ref(jsonFile);
+        QVERIFY(ref.open(QFile::ReadOnly));
+        const auto doc = QJsonDocument::fromJson(ref.readAll());
+        QVERIFY(doc.isArray());
+
+        if (data != doc.array())
+            qDebug().noquote() << QJsonDocument(data).toJson();
+        QCOMPARE(data, doc.array());
+    }
+
+    void testExtractHtml_data()
+    {
+        QTest::addColumn<QString>("inputFile");
+        QTest::addColumn<QString>("extractorName");
+        QTest::addColumn<QString>("jsonFile");
+
+        QDir dir(QStringLiteral(SOURCE_DIR "/unstructureddata"));
+        const auto lst = dir.entryList(QStringList(QStringLiteral("*.html")), QDir::Files | QDir::Readable | QDir::NoSymLinks);
+        for (const auto &file : lst) {
+            const auto refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 5) + QStringLiteral(".json");
+            if (!QFile::exists(refFile)) {
+                qDebug() << "reference file" << refFile << "does not exist, skipping test file" << file;
+                continue;
+            }
+            const auto idx = file.indexOf(QLatin1Char('_'));
+            QTest::newRow(file.toLatin1()) << QString(dir.path() + QLatin1Char('/') +  file) << file.left(idx) << refFile;
+        }
+    }
+
+    void testExtractHtml()
+    {
+        QFETCH(QString, inputFile);
+        QFETCH(QString, extractorName);
+        QFETCH(QString, jsonFile);
+
+        QFile f(inputFile);
+        QVERIFY(f.open(QFile::ReadOnly));
+
+        Extractor extractor;
+        QVERIFY(extractor.load(QLatin1String(":/org.kde.messageviewer/semantic/rules/") + extractorName + QLatin1String(".xml")));
+
+        ExtractorPreprocessor preproc;
+        preproc.preprocessHtml(QString::fromUtf8(f.readAll()));
+
+        ExtractorEngine engine;
+        engine.setText(preproc.text());
+        engine.setExtractor(&extractor);
         const auto data = engine.extract();
 
         QFile ref(jsonFile);
