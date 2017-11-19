@@ -1,0 +1,54 @@
+=====================================================================================
+Thank you for booking with Travellink Corporate
+=====================================================================================
+
+Booking reference: ABCDEF
+
+
+
+
+
+Reserved by:                  Travel Agent
+Company:                      My Company
+Address:                      Street 30
+                              12345 City
+
+Traveller:                    John Doe
+
+
+=====================================================================================
+FLIGHT                        Airline booking reference: ABCDEF - BT
+=====================================================================================
+
+                                                                    Status: Confirmed
+OUTBOUND                      Berlin - Riga
+Flight:                       BT212, Air Baltic
+Operated by:                  Air Baltic
+Date:                         Sun 5 Nov 2017
+Departure:                    08:55 Tegel(TXL), Berlin, Germany
+Date:                         Sun 5 Nov 2017
+Arrival:                      11:35 Riga(RIX), Riga, Latvia
+Cabin class:                  Economy
+Duration:
+
+                                                                    Status: Confirmed
+HOMEBOUND                     Riga - Berlin
+Flight:                       BT211, Air Baltic
+Operated by:                  Air Baltic
+Date:                         Fri 10 Nov 2017
+Departure:                    07:35 Riga(RIX), Riga, Latvia
+Date:                         Fri 10 Nov 2017
+Arrival:                      08:20 Tegel(TXL), Berlin, Germany
+Cabin class:                  Economy
+Duration:
+                              Departure and arrival times displayed are always in local time.
+                              Please note! Verify your flight departure terminal before you leave for the airport.
+
+
+
+
+-------------------------------------------------------------------------------------
+Booking information
+-------------------------------------------------------------------------------------
+
+Check-in: Use Booking reference and your surname (Passport/National ID) for check-in at the airport counter or at the airlines website.

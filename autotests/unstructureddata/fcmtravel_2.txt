@@ -1,0 +1,72 @@
+=====================================================================================
+Thank you for booking with Travellink Corporate
+=====================================================================================
+
+
+Travellink booking reference: XXX007
+
+
+
+
+
+Reserved by:                  Booking Agent
+Company:                      My Company
+Address:                      Street 30
+                              12345 City
+
+Traveller:                    John Doe
+Traveller:                    Jane Doe
+
+=====================================================================================
+
+=====================================================================================
+
+                                                                    Status: Confirmed
+OUTBOUND                      Berlin - San Francisco
+Flight:                       AB6439, Air Berlin
+Date:                         Mon 17 Oct 2016
+Departure:                    10:50 Tegel(TXL), Berlin, Germany
+Date:                         Mon 17 Oct 2016
+Arrival:                      12:00 International Airport(DUS), Duesseldorf, Germany
+Cabin class:                  Economy
+
+                                                                    Status: Confirmed
+Flight:                       AB7392, Air Berlin
+Date:                         Mon 17 Oct 2016
+Departure:                    13:20 International Airport(DUS), Duesseldorf, Germany
+Date:                         Mon 17 Oct 2016
+Arrival:                      15:55 San Francisco International(SFO), San Francisco, United States Of America
+                              Terminal I
+Cabin class:                  Economy
+Duration:                     14h 05min
+
+                                                                    Status: Confirmed
+HOMEBOUND                     Portland - Berlin
+Flight:                       AA086, American Airlines
+Date:                         Sat 22 Oct 2016
+Departure:                    08:00 Portland International(PDX), Portland, United States Of America
+Date:                         Sat 22 Oct 2016
+Arrival:                      14:00 O Hare International(ORD), Chicago, United States Of America
+                              Terminal 3
+Cabin class:                  Economy
+
+                                                                    Status: Confirmed
+Flight:                       AB7421, Air Berlin
+Date:                         Sat 22 Oct 2016
+Departure:                    15:25 O Hare International(ORD), Chicago, United States Of America
+                              Terminal 3
+Date:                         Sun 23 Oct 2016
+Arrival:                      07:00 Tegel(TXL), Berlin, Germany
+Cabin class:                  Economy
+Duration:                     14h 00min
+                              Departure and arrival times displayed are always in local time.
+                              Please note! Verify your flight departure terminal before you leave for the airport.
+
+
+
+
+-------------------------------------------------------------------------------------
+Booking information
+-------------------------------------------------------------------------------------
+
+Check-in: Use Booking reference and your surname (Passport/National ID) for check-in at the airport counter or at the airlines website.

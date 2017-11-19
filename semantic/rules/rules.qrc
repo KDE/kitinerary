@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/org.kde.messageviewer/semantic/rules">
+        <file>amadeus.xml</file>
+        <file>eurowings.xml</file>
+        <file>fcmtravel.xml</file>
+    </qresource>
+</RCC>

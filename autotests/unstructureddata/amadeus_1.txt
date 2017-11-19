@@ -1,0 +1,66 @@
+/TIT IMPORTANT MESSAGE PLEASE READ INFO AT THE BOTTOM
+
+TRAVEL AGENCY                                 BOOKING REF: 123456
+SOME PLACE, SOMEWHERE. 9                 DATE:        27 MAY 2016
+S-171 54 SOME CITY
+COUNTRY                                           DOE/JOHN MR
+
+
+FLIGHT     DL 9520 - DELTA AIR LINES                         TUE 07 JUNE 2016
+-----------------------------------------------------------------------------
+DEPARTURE: BERLIN, DE (TEGEL)                                    07 JUN 12:10
+ARRIVAL:   AMSTERDAM, NL (SCHIPHOL AIRPORT)                      07 JUN 13:30
+           FLIGHT BOOKING REF: DL/123456
+           RESERVATION CONFIRMED, ECONOMY (M)                 DURATION: 01:20
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+           BAGGAGE ALLOWANCE:        1PC
+           MEAL:                     SNACK
+NON STOP   BERLIN TO AMSTERDAM
+           OPERATED BY:              KLM ROYAL DUTCH AIRLINES, KL 1824
+           EQUIPMENT:                BOEING 737-900
+
+FLIGHT     DL 139 - DELTA AIR LINES                          TUE 07 JUNE 2016
+-----------------------------------------------------------------------------
+DEPARTURE: AMSTERDAM, NL (SCHIPHOL AIRPORT)                      07 JUN 15:00
+ARRIVAL:   DETROIT, MI (METROPOLITAN WAYNE CO), TERMINAL EM -    07 JUN 17:40
+           E.H. MCNAMARA TERMINAL
+           FLIGHT BOOKING REF: DL/123456
+           RESERVATION CONFIRMED, ECONOMY (M)                 DURATION: 08:40
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+           BAGGAGE ALLOWANCE:        1PC
+           MEAL:                     DINNER
+NON STOP   AMSTERDAM TO DETROIT, MI
+           OPERATED BY:              DELTA AIR LINES, DL
+           EQUIPMENT:                AIRBUS INDUSTRIE A330-200
+
+FLIGHT     DL 8573 - DELTA AIR LINES                         THU 09 JUNE 2016
+-----------------------------------------------------------------------------
+DEPARTURE: DETROIT, MI (METROPOLITAN WAYNE CO), TERMINAL EM -    09 JUN 21:40
+           E.H. MCNAMARA TERMINAL
+ARRIVAL:   PARIS, FR (CHARLES DE GAULLE), TERMINAL 2E -          10 JUN 11:30
+           AEROGARE 2 TERMINAL E
+           FLIGHT BOOKING REF: DL/123456
+           RESERVATION CONFIRMED, ECONOMY (M)                 DURATION: 07:50
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+           BAGGAGE ALLOWANCE:        1PC
+           MEAL:                     BREAKFAST
+NON STOP   DETROIT, MI TO PARIS
+           OPERATED BY:              AIR FRANCE, AF 377
+           EQUIPMENT:                AIRBUS INDUSTRIE A340-300
+
+FLIGHT     DL 8680 - DELTA AIR LINES                         FRI 10 JUNE 2016
+-----------------------------------------------------------------------------
+DEPARTURE: PARIS, FR (CHARLES DE GAULLE), TERMINAL 2F -          10 JUN 13:00
+           AEROGARE 2 TERMINAL F
+ARRIVAL:   BERLIN, DE (TEGEL)                                    10 JUN 14:40
+           FLIGHT BOOKING REF: DL/123456
+           RESERVATION CONFIRMED, ECONOMY (M)                 DURATION: 01:40
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+           BAGGAGE ALLOWANCE:        1PC
+NON STOP   PARIS TO BERLIN
+           OPERATED BY:              AIR FRANCE, AF 1534
+           EQUIPMENT:                AIRBUS INDUSTRIE A321
+
+FLIGHT(S) CALCULATED AVERAGE CO2 EMISSIONS IS 978.44 KG/PERSON
+SOURCE: ICAO CARBON EMISSIONS CALCULATOR
+http://www.icao.int/environmental-protection/CarbonOffset/Pages/default.aspx

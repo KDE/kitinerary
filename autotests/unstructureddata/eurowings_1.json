@@ -1,0 +1,48 @@
+[
+    {
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "4U",
+                "name": "Germanwings"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "name": "London Heathrow"
+            },
+            "arrivalTime": "2017-06-15T13:50:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "name": "Berlin-Tegel"
+            },
+            "departureTime": "2017-06-15T12:55:00",
+            "flightNumber": "8462"
+        },
+        "reservationNumber": "ABC123"
+    },
+    {
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "4U",
+                "name": "Germanwings"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "name": "Berlin-Tegel"
+            },
+            "arrivalTime": "2017-06-18T22:00:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "name": "London Heathrow"
+            },
+            "departureTime": "2017-06-18T19:10:00",
+            "flightNumber": "8465"
+        },
+        "reservationNumber": "ABC123"
+    }
+]

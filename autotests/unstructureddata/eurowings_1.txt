@@ -1,0 +1,57 @@
+                                                             Eurowings
+
+PASSENGER RECEIPT
+   Confirmation of Booking
+
+MR John Doe                                  23.04.2017 | 11:10:45 Uhr
+
+
+Street 5
+12345 City
+Country
+
+
+Dear MR John Doe,
+
+many thanks for booking your flight with us.
+We wish you a pleasant flight.
+
+======================================================================
+YOUR BOOKING
+======================================================================
+
+   Individual reservation code:   ** ABC123 **
+   (please state at check-in)
+
+   Date of booking:            23.04.2017  11:09
+   Date of change:             23.04.2017  11:09
+
+----------------------------------------------------------------------
+   ** FLIGHT DATA (TIMES ARE LOCAL TIMES) **
+----------------------------------------------------------------------
+
+   Flight: 15.06.2017  |  4U 8462 (X)
+   * operated by Germanwings
+
+   Departure: 12:55  Berlin-Tegel
+   Arrival:   13:50  London Heathrow
+
+   Flight: 18.06.2017  |  4U 8465 (K)
+   * operated by Germanwings
+
+   Departure: 19:10  London Heathrow
+   Arrival:   22:00  Berlin-Tegel
+
+----------------------------------------------------------------------
+   ** PASSENGER **
+----------------------------------------------------------------------
+
+   1. Passenger: MR John Doe
+   Frequent Flyer Number: 123401234567890
+
+
+======================================================================
+FREE INFORMATION SERVICE
+======================================================================
+
+   Stay up to date on your flight status. Sign up with your mobile[...]

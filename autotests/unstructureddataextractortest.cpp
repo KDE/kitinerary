@@ -17,7 +17,8 @@
    02110-1301, USA.
 */
 
-#include "structureddataextractor.h"
+#include "extractor.h"
+#include "extractorengine.h"
 
 #include <QDebug>
 #include <QDir>
@@ -26,48 +27,63 @@
 #include <QObject>
 #include <QTest>
 
-class StructuredDataExtractorTest : public QObject
+class UnstructuredDataExtractorTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void init()
+    {
+        Q_INIT_RESOURCE(rules);
+    }
+
     void testExtract_data()
     {
         QTest::addColumn<QString>("inputFile");
+        QTest::addColumn<QString>("extractorName");
         QTest::addColumn<QString>("jsonFile");
 
-        QDir dir(QStringLiteral(SOURCE_DIR "/structureddata"));
-        const auto lst = dir.entryList(QStringList(QStringLiteral("*.html")), QDir::Files | QDir::Readable | QDir::NoSymLinks);
+        QDir dir(QStringLiteral(SOURCE_DIR "/unstructureddata"));
+        const auto lst = dir.entryList(QStringList(QStringLiteral("*.txt")), QDir::Files | QDir::Readable | QDir::NoSymLinks);
         for (const auto &file : lst) {
-            const auto refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 5) + QStringLiteral(".json");
+            const auto refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 4) + QStringLiteral(".json");
             if (!QFile::exists(refFile)) {
                 qDebug() << "reference file" << refFile << "does not exist, skipping test file" << file;
                 continue;
             }
-            QTest::newRow(file.toLatin1()) << QString(dir.path() + QLatin1Char('/') +  file) << refFile;
+            const auto idx = file.indexOf(QLatin1Char('_'));
+            QTest::newRow(file.toLatin1()) << QString(dir.path() + QLatin1Char('/') +  file) << file.left(idx) << refFile;
         }
     }
 
     void testExtract()
     {
         QFETCH(QString, inputFile);
+        QFETCH(QString, extractorName);
         QFETCH(QString, jsonFile);
 
-        StructuredDataExtractor extractor;
         QFile f(inputFile);
         QVERIFY(f.open(QFile::ReadOnly));
-        extractor.parse(QString::fromUtf8(f.readAll()));
+
+        Extractor extractor;
+        QVERIFY(extractor.load(QLatin1String(":/org.kde.messageviewer/semantic/rules/") + extractorName + QLatin1String(".xml")));
+
+        ExtractorEngine engine;
+        engine.setText(QString::fromUtf8(f.readAll()));
+        engine.setExtractor({&extractor});
+        const auto data = engine.extract();
 
         QFile ref(jsonFile);
         QVERIFY(ref.open(QFile::ReadOnly));
         const auto doc = QJsonDocument::fromJson(ref.readAll());
         QVERIFY(doc.isArray());
 
-        if (extractor.data() != doc.array())
-            qDebug().noquote() << QJsonDocument(extractor.data()).toJson();
-        QCOMPARE(extractor.data(), doc.array());
+        if (data != doc.array())
+            qDebug().noquote() << QJsonDocument(data).toJson();
+        QCOMPARE(data, doc.array());
     }
 };
 
-QTEST_APPLESS_MAIN(StructuredDataExtractorTest)
+QTEST_APPLESS_MAIN(UnstructuredDataExtractorTest)
 
-#include "structureddataextractortest.moc"
+#include "unstructureddataextractortest.moc"
+
