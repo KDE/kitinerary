@@ -38,7 +38,7 @@ std::vector<const Extractor*> ExtractorRepository::extractorsForMessage(KMime::C
     if (!part)
         return v;
 
-    for (auto it = m_extractors.begin(); it != m_extractors.end(); ++it) {
+    for (auto it = m_extractors.begin(), end = m_extractors.end(); it != end; ++it) {
         for (const auto &filter : (*it).filters()) {
             auto header = part->headerByType(filter.headerName());
             if (!header && part->topLevel())
