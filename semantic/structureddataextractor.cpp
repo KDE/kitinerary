@@ -48,56 +48,64 @@ void StructuredDataExtractor::parseXml(const QString &text)
             if (reader.name() == QLatin1String("script") && reader.attributes().value(QLatin1String("type")) == QLatin1String("application/ld+json")) {
                 const auto jsonData = reader.readElementText(QXmlStreamReader::IncludeChildElements);
                 const auto jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
-                if (jsonDoc.isNull())
+                if (jsonDoc.isNull()) {
                     continue;
-                if (jsonDoc.isArray())
+                }
+                if (jsonDoc.isArray()) {
                     m_data.append(jsonDoc.array());
-                else if (jsonDoc.isObject())
+                } else if (jsonDoc.isObject()) {
                     m_data.push_back(jsonDoc.object());
+                }
             }
 
             // Microdata
             const auto itemType = reader.attributes().value(QLatin1String("itemtype")).toString();
             if (itemType.startsWith(QLatin1String("http://schema.org/"))) {
                 auto obj = parseMicroData(reader);
-                if (obj.isEmpty())
+                if (obj.isEmpty()) {
                     continue;
+                }
                 obj.insert(QStringLiteral("@context"), QStringLiteral("http://schema.org"));
                 const QUrl typeUrl(itemType);
                 obj.insert(QStringLiteral("@type"), typeUrl.fileName());
                 m_data.push_back(obj);
                 continue;
             }
-
         }
         reader.readNext();
     }
 
-    if (reader.hasError())
+    if (reader.hasError()) {
         qCDebug(SEMANTIC_LOG) << reader.errorString() << reader.lineNumber() << reader.columnNumber();
+    }
 }
 
 void StructuredDataExtractor::findLdJson(const QString &text)
 {
     for (int i = 0; i < text.size();) {
         i = text.indexOf(QLatin1String("<script"), i, Qt::CaseInsensitive);
-        if (i < 0)
+        if (i < 0) {
             break;
+        }
         i = text.indexOf(QLatin1String("type=\"application/ld+json\""), i, Qt::CaseInsensitive);
-        if (i < 0)
+        if (i < 0) {
             break;
+        }
         auto begin = text.indexOf(QLatin1Char('>'), i) + 1;
-        if (i < 0)
+        if (i < 0) {
             break;
+        }
         i = text.indexOf(QLatin1String("</script>"), begin, Qt::CaseInsensitive);
         const auto jsonData = text.mid(begin, i - begin);
         auto jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
-        if (jsonDoc.isNull())
+        if (jsonDoc.isNull()) {
             continue;
-        if (jsonDoc.isArray())
+        }
+        if (jsonDoc.isArray()) {
             m_data.append(jsonDoc.array());
-        else if (jsonDoc.isObject())
+        } else if (jsonDoc.isObject()) {
             m_data.push_back(jsonDoc.object());
+        }
     }
 }
 
@@ -138,17 +146,18 @@ QJsonObject StructuredDataExtractor::parseMicroData(QXmlStreamReader &reader) co
                 obj.insert(prop, valueForItemProperty(reader));
                 continue;
             }
-
         } else if (reader.tokenType() == QXmlStreamReader::EndElement) {
             --depth;
-            if (depth == 0)
+            if (depth == 0) {
                 return obj;
+            }
         }
         reader.readNext();
     }
 
-    if (reader.hasError())
+    if (reader.hasError()) {
         qCDebug(SEMANTIC_LOG) << reader.errorString() << reader.lineNumber() << reader.columnNumber();
+    }
     return {};
 }
 
@@ -156,18 +165,20 @@ QString StructuredDataExtractor::valueForItemProperty(QXmlStreamReader &reader) 
 {
     // TODO see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#Values
     const auto elemName = reader.name();
-    if (elemName == QLatin1String("span"))
+    if (elemName == QLatin1String("span")) {
         return reader.readElementText(QXmlStreamReader::IncludeChildElements);
+    }
 
     QString v;
-    if (elemName == QLatin1String("meta"))
+    if (elemName == QLatin1String("meta")) {
         v = reader.attributes().value(QLatin1String("content")).toString();
-    else if (elemName == QLatin1String("time"))
+    } else if (elemName == QLatin1String("time")) {
         v = reader.attributes().value(QLatin1String("datetime")).toString();
-    else if (elemName == QLatin1String("link") || elemName == QLatin1String("a"))
+    } else if (elemName == QLatin1String("link") || elemName == QLatin1String("a")) {
         v = reader.attributes().value(QLatin1String("href")).toString();
-    else
+    } else {
         qCDebug(SEMANTIC_LOG) << "TODO:" << elemName;
+    }
 
     reader.readNext();
     return v;

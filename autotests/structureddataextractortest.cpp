@@ -62,8 +62,9 @@ private Q_SLOTS:
         const auto doc = QJsonDocument::fromJson(ref.readAll());
         QVERIFY(doc.isArray());
 
-        if (extractor.data() != doc.array())
+        if (extractor.data() != doc.array()) {
             qDebug().noquote() << QJsonDocument(extractor.data()).toJson();
+        }
         QCOMPARE(extractor.data(), doc.array());
     }
 };

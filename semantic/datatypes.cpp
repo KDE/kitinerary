@@ -35,8 +35,9 @@ bool Airline::operator!=(const Airline &other) const
 static QString localizedDateTime(const QDateTime &dt)
 {
     auto s = QLocale().toString(dt, QLocale::ShortFormat);
-    if (dt.timeSpec() == Qt::TimeZone || dt.timeSpec() == Qt::OffsetFromUTC)
+    if (dt.timeSpec() == Qt::TimeZone || dt.timeSpec() == Qt::OffsetFromUTC) {
         s += QLatin1Char(' ') + dt.timeZone().abbreviation(dt);
+    }
     return s;
 }
 

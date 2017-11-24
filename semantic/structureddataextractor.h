@@ -33,7 +33,10 @@ class StructuredDataExtractor
 {
 public:
     void parse(const QString &text);
-    QJsonArray data() const { return m_data; }
+    QJsonArray data() const
+    {
+        return m_data;
+    }
 
 private:
     /** Try to parse using an actual XML parser. */
