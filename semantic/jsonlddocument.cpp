@@ -30,42 +30,44 @@
 static QVariant createInstance(const QJsonObject &obj);
 
 // Eurowings workarounds...
-static const char* fallbackDateTimePattern[] = {
+static const char *fallbackDateTimePattern[] = {
     "yyyy-MM-dd HH:mm:ss",
     "yyyy-MM-dd HH:mm",
     "MM-dd-yyyy HH:mm" // yes, seriously ;(
 };
-static const auto fallbackDateTimePatternCount = sizeof(fallbackDateTimePattern) / sizeof(const char*);
+static const auto fallbackDateTimePatternCount = sizeof(fallbackDateTimePattern) / sizeof(const char *);
 
 static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
 {
     switch (prop.type()) {
-        case QVariant::String:
-            return v.toString();
-        case QVariant::DateTime:
-        {
-            auto str = v.toString();
-            auto dt = QDateTime::fromString(str, Qt::ISODate);
-            for (unsigned int i = 0; i < fallbackDateTimePatternCount && dt.isNull(); ++i) {
-                dt = QDateTime::fromString(str, QString::fromLatin1(fallbackDateTimePattern[i]));
-            }
-            if (dt.isNull())
-                qCDebug(SEMANTIC_LOG) << "Datetime parsing failed for" << str;
-            return dt;
+    case QVariant::String:
+        return v.toString();
+    case QVariant::DateTime:
+    {
+        auto str = v.toString();
+        auto dt = QDateTime::fromString(str, Qt::ISODate);
+        for (unsigned int i = 0; i < fallbackDateTimePatternCount && dt.isNull(); ++i) {
+            dt = QDateTime::fromString(str, QString::fromLatin1(fallbackDateTimePattern[i]));
         }
-        default:
-            break;
+        if (dt.isNull()) {
+            qCDebug(SEMANTIC_LOG) << "Datetime parsing failed for" << str;
+        }
+        return dt;
+    }
+    default:
+        break;
     }
     return createInstance(v.toObject());
 }
 
-template <typename T>
+template<typename T>
 static QVariant createInstance(const QJsonObject &obj)
 {
     T t;
     for (auto it = obj.begin(); it != obj.end(); ++it) {
-        if (it.key().startsWith(QLatin1Char('@')))
+        if (it.key().startsWith(QLatin1Char('@'))) {
             continue;
+        }
         const auto idx = T::staticMetaObject.indexOfProperty(it.key().toLatin1());
         if (idx < 0) {
             qCDebug(SEMANTIC_LOG) << "property" << it.key() << "could not be set on object of type" << T::staticMetaObject.className();
@@ -103,7 +105,9 @@ QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
     l.reserve(array.size());
     for (const auto &obj : array) {
         const auto v = createInstance(obj.toObject());
-        if (!v.isNull())
+        if (!v.isNull()) {
             l.push_back(v);
-    }    return l;
+        }
+    }
+    return l;
 }
