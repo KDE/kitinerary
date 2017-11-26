@@ -17,10 +17,18 @@
    02110-1301, USA.
 */
 
+#include "config-semantic.h"
+
 #include "extractorpreprocessor.h"
 #include "semantic_debug.h"
 
+#ifdef HAVE_POPPLER
+#include <poppler-qt5.h>
+#endif
+
 #include <QDebug>
+
+#include <memory>
 
 void ExtractorPreprocessor::preprocessPlainText(const QString& input)
 {
@@ -56,12 +64,28 @@ void ExtractorPreprocessor::preprocessHtml(const QString& input)
     //qCDebug(SEMANTIC_LOG) << "Preprocessed HTML content: " << m_buffer;
 }
 
+void ExtractorPreprocessor::preprocessPdf(const QByteArray &input)
+{
+#ifdef HAVE_POPPLER
+    std::unique_ptr<Poppler::Document> doc(Poppler::Document::loadFromData(input));
+    if (!doc || doc->isLocked())
+        return;
+
+    for (int i = 0; i < doc->numPages(); ++i) {
+        std::unique_ptr<Poppler::Page> page(doc->page(i));
+        m_buffer += page->text({}, Poppler::Page::PhysicalLayout);
+    }
+#else
+    Q_UNUSED(input);
+#endif
+}
+
 QString ExtractorPreprocessor::text() const
 {
     return m_buffer;
 }
 
-void ExtractorPreprocessor::replaceEntityAndAppend(const QStringRef& source)
+void ExtractorPreprocessor::replaceEntityAndAppend(const QStringRef &source)
 {
     int begin = 0;
     int end = source.indexOf(QLatin1Char('&'), begin);

@@ -17,24 +17,9 @@
    02110-1301, USA.
 */
 
-#ifndef EXTRACTORPREPROCESSOR_H
-#define EXTRACTORPREPROCESSOR_H
+#ifndef CONFIG_SEMANTIC_H
+#define CONFIG_SEMANTIC_H
 
-#include <QString>
+#cmakedefine HAVE_POPPLER
 
-/** Preprocessing of HTML and PDF attachments. */
-class ExtractorPreprocessor
-{
-public:
-    void preprocessPlainText(const QString &input);
-    void preprocessHtml(const QString &input);
-    void preprocessPdf(const QByteArray &input);
-
-    QString text() const;
-
-private:
-    void replaceEntityAndAppend(const QStringRef &source);
-    QString m_buffer;
-};
-
-#endif // EXTRACTORPREPROCESSOR_H
+#endif

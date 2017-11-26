@@ -1,3 +1,8 @@
+if(TARGET Poppler::Qt5)
+    set(HAVE_POPPLER ON)
+endif()
+configure_file(config-semantic.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-semantic.h)
+
 # static lib for use by unit test
 set(semantic_lib_srcs
     datatypes.cpp
@@ -16,6 +21,9 @@ ecm_qt_declare_logging_category(semantic_lib_srcs HEADER semantic_debug.h IDENTI
 add_library(semantic_extractor STATIC ${semantic_lib_srcs})
 set_target_properties(semantic_extractor PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(semantic_extractor PUBLIC Qt5::Core KF5::Mime)
+if (HAVE_POPPLER)
+    target_link_libraries(semantic_extractor PRIVATE Poppler::Qt5)
+endif()
 
 
 set(semantic_plugin_srcs
