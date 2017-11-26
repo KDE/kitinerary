@@ -111,3 +111,19 @@ QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
     }
     return l;
 }
+
+QVariant JsonLdDocument::readProperty(const QVariant &value, const char *name)
+{
+    const auto mo = QMetaType(value.userType()).metaObject();
+    if (!mo) {
+        return {};
+    }
+
+    const auto idx = mo->indexOfProperty(name);
+    if (idx < 0) {
+        return {};
+    }
+
+    const auto prop = mo->property(idx);
+    return prop.readOnGadget(value.constData());
+}
