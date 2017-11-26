@@ -32,6 +32,11 @@ bool Airline::operator!=(const Airline &other) const
     return m_iataCode != other.m_iataCode || m_name != other.m_name;
 }
 
+bool TrainStation::operator!=(const TrainStation &other) const
+{
+    return m_name != other.m_name;
+}
+
 static QString localizedDateTime(const QDateTime &dt)
 {
     auto s = QLocale().toString(dt, QLocale::ShortFormat);
@@ -59,4 +64,14 @@ QString LodgingReservation::checkinDateLocalized() const
 QString LodgingReservation::checkoutDateLocalized() const
 {
     return QLocale().toString(m_checkoutDate.date(), QLocale::ShortFormat);
+}
+
+QString TrainTrip::departureTimeLocalized() const
+{
+    return QLocale().toString(m_departureTime, QLocale::ShortFormat);
+}
+
+QString TrainTrip::arrivalTimeLocalized() const
+{
+    return QLocale().toString(m_arrivalTime, QLocale::ShortFormat);
 }

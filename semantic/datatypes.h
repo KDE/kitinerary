@@ -54,6 +54,13 @@ public:
     bool operator!=(const Airline &other) const;
 };
 
+class TrainStation {
+    SEMANTIC_GADGET
+    SEMANTIC_PROPERTY(QString, name)
+public:
+    bool operator!=(const TrainStation &other) const;
+};
+
 class Flight
 {
     SEMANTIC_GADGET
@@ -87,6 +94,25 @@ class LodgingBusiness
     SEMANTIC_PROPERTY(QVariant, address)
 };
 
+class TrainTrip
+{
+    SEMANTIC_GADGET
+    SEMANTIC_PROPERTY(QString, arrivalPlatform)
+    SEMANTIC_PROPERTY(TrainStation, arrivalStation)
+    SEMANTIC_PROPERTY(QDateTime, arrivalTime)
+    SEMANTIC_PROPERTY(QString, departurePlatform)
+    SEMANTIC_PROPERTY(TrainStation, departureStation)
+    SEMANTIC_PROPERTY(QDateTime, departureTime)
+    SEMANTIC_PROPERTY(QString, trainNumber)
+
+    Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized CONSTANT)
+    Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized CONSTANT)
+
+private:
+    QString departureTimeLocalized() const;
+    QString arrivalTimeLocalized() const;
+};
+
 class Reservation
 {
     Q_GADGET
@@ -112,13 +138,20 @@ class FlightReservation : protected Reservation
     SEMANTIC_GADGET
 };
 
+class TrainReservation : protected Reservation
+{
+    SEMANTIC_GADGET
+};
+
 Q_DECLARE_METATYPE(Airport)
 Q_DECLARE_METATYPE(Airline)
 Q_DECLARE_METATYPE(Flight)
+Q_DECLARE_METATYPE(FlightReservation)
 Q_DECLARE_METATYPE(LodgingBusiness)
 Q_DECLARE_METATYPE(LodgingReservation)
-Q_DECLARE_METATYPE(FlightReservation)
 Q_DECLARE_METATYPE(PostalAddress)
+Q_DECLARE_METATYPE(TrainStation)
+Q_DECLARE_METATYPE(TrainTrip)
 
 #undef SEMANTIC_GADGET
 
