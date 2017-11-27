@@ -20,7 +20,6 @@
 #include "structureddataextractor.h"
 #include "semantic_debug.h"
 
-#include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRegularExpression>

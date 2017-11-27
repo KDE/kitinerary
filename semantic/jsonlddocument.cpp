@@ -21,7 +21,6 @@
 #include "datatypes.h"
 #include "semantic_debug.h"
 
-#include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
