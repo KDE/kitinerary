@@ -34,40 +34,46 @@ Extractor::~Extractor()
     qDeleteAll(m_rules);
 }
 
-bool Extractor::load(const QString& fileName)
+bool Extractor::load(const QString &fileName)
 {
     qCDebug(SEMANTIC_LOG) << "loading" << fileName;
     QFile file(fileName);
-    if (!file.open(QFile::ReadOnly))
+    if (!file.open(QFile::ReadOnly)) {
         return false;
+    }
 
     QXmlStreamReader reader(&file);
     while (!reader.atEnd()) {
         reader.readNext();
-        if (reader.tokenType() != QXmlStreamReader::StartElement)
+        if (reader.tokenType() != QXmlStreamReader::StartElement) {
             continue;
-        if (reader.name() == QLatin1String("extractor"))
+        }
+        if (reader.name() == QLatin1String("extractor")) {
             continue;
+        }
 
         if (reader.name() == QLatin1String("filter")) {
             ExtractorFilter f;
-            if (!f.load(reader))
+            if (!f.load(reader)) {
                 return false;
+            }
             m_filters.push_back(std::move(f));
             continue;
         }
 
         std::unique_ptr<ExtractorRule> rule;
-        if (reader.name() == QLatin1String("variable"))
+        if (reader.name() == QLatin1String("variable")) {
             rule.reset(new ExtractorVariableRule);
-        else if (reader.name() == QLatin1String("class"))
+        } else if (reader.name() == QLatin1String("class")) {
             rule.reset(new ExtractorClassRule);
-        else if (reader.name() == QLatin1String("property"))
+        } else if (reader.name() == QLatin1String("property")) {
             rule.reset(new ExtractorPropertyRule);
-        else
+        } else {
             return false;
-        if (!rule->load(reader))
+        }
+        if (!rule->load(reader)) {
             return false;
+        }
         m_rules.push_back(rule.release());
     }
 
@@ -75,12 +81,12 @@ bool Extractor::load(const QString& fileName)
     return true;
 }
 
-QVector<ExtractorRule*> Extractor::rules() const
+QVector<ExtractorRule *> Extractor::rules() const
 {
     return m_rules;
 }
 
-const std::vector<ExtractorFilter>& Extractor::filters() const
+const std::vector<ExtractorFilter> &Extractor::filters() const
 {
     return m_filters;
 }

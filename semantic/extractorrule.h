@@ -56,7 +56,7 @@ private:
 class ExtractorVariableRule : public ExtractorRule
 {
 public:
-    bool match(ExtractorContext * context) const override;
+    bool match(ExtractorContext *context) const override;
 };
 
 class ExtractorClassRule : public ExtractorRule
@@ -64,16 +64,16 @@ class ExtractorClassRule : public ExtractorRule
 public:
     ~ExtractorClassRule();
     bool load(QXmlStreamReader &reader) override;
-    bool match(ExtractorContext * context) const override;
-    QVector<ExtractorRule*> rules() const;
+    bool match(ExtractorContext *context) const override;
+    QVector<ExtractorRule *> rules() const;
 private:
-    QVector<ExtractorRule*> m_rules;
+    QVector<ExtractorRule *> m_rules;
 };
 
 class ExtractorPropertyRule : public ExtractorRule
 {
 public:
-    bool match(ExtractorContext * context) const override;
+    bool match(ExtractorContext *context) const override;
 };
 
 #endif // EXTRACTORRULE_H

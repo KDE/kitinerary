@@ -33,17 +33,17 @@ class Extractor
 {
 public:
     Extractor();
-    Extractor(const Extractor&) = delete;
-    Extractor(Extractor&&);
+    Extractor(const Extractor &) = delete;
+    Extractor(Extractor &&);
     ~Extractor();
 
     bool load(const QString &fileName);
 
-    QVector<ExtractorRule*> rules() const;
-    const std::vector<ExtractorFilter>& filters() const;
+    QVector<ExtractorRule *> rules() const;
+    const std::vector<ExtractorFilter> &filters() const;
 
 private:
-    QVector<ExtractorRule*> m_rules;
+    QVector<ExtractorRule *> m_rules;
     std::vector<ExtractorFilter> m_filters;
 };
 

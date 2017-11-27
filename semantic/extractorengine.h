@@ -37,7 +37,7 @@ public:
     ~ExtractorEngine();
 
     void setExtractor(const Extractor *extractor);
-    const QString& text() const;
+    const QString &text() const;
     void setText(const QString &text);
 
     QJsonArray extract();

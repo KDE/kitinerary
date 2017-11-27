@@ -36,9 +36,9 @@ public:
     ExtractorContext(ExtractorEngine *engine, ExtractorContext *parent = nullptr);
     ~ExtractorContext();
 
-    ExtractorEngine* engine() const;
-    QVector<ExtractorRule*>& rules();
-    void setRules(const QVector<ExtractorRule*> &rules);
+    ExtractorEngine *engine() const;
+    QVector<ExtractorRule *> &rules();
+    void setRules(const QVector<ExtractorRule *> &rules);
 
     int offset() const;
     void setOffset(int offset);
@@ -51,7 +51,7 @@ public:
 private:
     ExtractorEngine *m_engine;
     ExtractorContext *m_parent;
-    QVector<ExtractorRule*> m_rules;
+    QVector<ExtractorRule *> m_rules;
     QHash<QString, QString> m_variables;
     QJsonObject m_obj;
     int m_offset = 0;

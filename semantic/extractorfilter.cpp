@@ -24,17 +24,17 @@
 ExtractorFilter::ExtractorFilter() = default;
 ExtractorFilter::~ExtractorFilter() = default;
 
-const char* ExtractorFilter::headerName() const
+const char *ExtractorFilter::headerName() const
 {
     return m_headerName.constData();
 }
 
-bool ExtractorFilter::matches(const QString& headerData) const
+bool ExtractorFilter::matches(const QString &headerData) const
 {
     return m_exp.match(headerData).hasMatch();
 }
 
-bool ExtractorFilter::load(QXmlStreamReader& reader)
+bool ExtractorFilter::load(QXmlStreamReader &reader)
 {
     Q_ASSERT(reader.name() == QLatin1String("filter"));
     m_headerName = reader.attributes().value(QLatin1String("header")).toString().toUtf8();

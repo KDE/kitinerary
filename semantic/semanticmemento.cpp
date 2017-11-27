@@ -32,12 +32,12 @@ bool SemanticMemento::isEmpty() const
     return m_data.isEmpty();
 }
 
-bool SemanticMemento::isParsed(const KMime::ContentIndex& index) const
+bool SemanticMemento::isParsed(const KMime::ContentIndex &index) const
 {
     return m_parsedParts.contains(index);
 }
 
-void SemanticMemento::setParsed(const KMime::ContentIndex& index)
+void SemanticMemento::setParsed(const KMime::ContentIndex &index)
 {
     m_parsedParts.insert(index);
 }

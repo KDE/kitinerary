@@ -32,7 +32,7 @@ public:
     ExtractorFilter();
     ~ExtractorFilter();
 
-    const char* headerName() const;
+    const char *headerName() const;
     bool matches(const QString &headerData) const;
     bool load(QXmlStreamReader &reader);
 

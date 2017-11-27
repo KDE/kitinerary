@@ -49,8 +49,9 @@ QString ExtractorRule::value(const QRegularExpressionMatch &match, ExtractorCont
     auto v = m_value;
     while (true) {
         const auto begin = v.indexOf(QLatin1String("${"));
-        if (begin < 0)
+        if (begin < 0) {
             break;
+        }
         const auto end = v.indexOf(QLatin1Char('}'), begin + 3);
         const auto varName = v.mid(begin + 2, end - begin - 2);
         bool isNum = false;
@@ -70,7 +71,7 @@ QString ExtractorRule::format() const
     return m_format;
 }
 
-bool ExtractorRule::load(QXmlStreamReader& reader)
+bool ExtractorRule::load(QXmlStreamReader &reader)
 {
     m_name = reader.attributes().value(QLatin1String("name")).toString();
     m_type = reader.attributes().value(QLatin1String("type")).toString();
@@ -78,11 +79,11 @@ bool ExtractorRule::load(QXmlStreamReader& reader)
     m_format = reader.attributes().value(QLatin1String("format")).toString();
     m_repeat = reader.attributes().value(QLatin1String("repeat")) == QLatin1String("true");
     m_regexp.setPattern(reader.attributes().value(QLatin1String("match")).toString());
-    if (!m_regexp.isValid())
+    if (!m_regexp.isValid()) {
         qCWarning(SEMANTIC_LOG) << m_regexp.errorString() << m_regexp.pattern() << "at offset" << m_regexp.patternErrorOffset();
+    }
     return true;
 }
-
 
 bool ExtractorVariableRule::match(ExtractorContext *context) const
 {
@@ -95,37 +96,42 @@ bool ExtractorVariableRule::match(ExtractorContext *context) const
     return res.hasMatch();
 }
 
-
 ExtractorClassRule::~ExtractorClassRule()
 {
     qDeleteAll(m_rules);
 }
 
-bool ExtractorClassRule::load(QXmlStreamReader& reader)
+bool ExtractorClassRule::load(QXmlStreamReader &reader)
 {
-    if (!ExtractorRule::load(reader))
+    if (!ExtractorRule::load(reader)) {
         return false;
+    }
 
     while (!reader.atEnd()) {
         reader.readNext();
-        if (reader.tokenType() == QXmlStreamReader::EndElement)
+        if (reader.tokenType() == QXmlStreamReader::EndElement) {
             return true;
-        if (reader.tokenType() != QXmlStreamReader::StartElement)
+        }
+        if (reader.tokenType() != QXmlStreamReader::StartElement) {
             continue;
+        }
         std::unique_ptr<ExtractorRule> rule;
         if (reader.name() == QLatin1String("variable")) {
             rule.reset(new ExtractorVariableRule);
-            if (!rule->load(reader))
+            if (!rule->load(reader)) {
                 return false;
+            }
             reader.skipCurrentElement();
         } else if (reader.name() == QLatin1String("class")) {
             rule.reset(new ExtractorClassRule);
-            if (!rule->load(reader))
+            if (!rule->load(reader)) {
                 return false;
+            }
         } else if (reader.name() == QLatin1String("property")) {
             rule.reset(new ExtractorPropertyRule);
-            if (!rule->load(reader))
+            if (!rule->load(reader)) {
                 return false;
+            }
             reader.skipCurrentElement();
         } else {
             return false;
@@ -146,7 +152,7 @@ bool ExtractorClassRule::match(ExtractorContext *context) const
     return res.hasMatch();
 }
 
-QVector<ExtractorRule*> ExtractorClassRule::rules() const
+QVector<ExtractorRule *> ExtractorClassRule::rules() const
 {
     return m_rules;
 }

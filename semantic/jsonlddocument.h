@@ -30,7 +30,6 @@ namespace JsonLdDocument {
 QVector<QVariant> fromJson(const QJsonArray &array);
 
 QVariant readProperty(const QVariant &value, const char *name);
-
 }
 
 #endif // JSONLDDOCUMENT_H

@@ -20,7 +20,7 @@
 #include "extractorcontext.h"
 #include "semantic_debug.h"
 
-ExtractorContext::ExtractorContext(ExtractorEngine *engine, ExtractorContext* parent)
+ExtractorContext::ExtractorContext(ExtractorEngine *engine, ExtractorContext *parent)
     : m_engine(engine)
     , m_parent(parent)
 {
@@ -28,7 +28,7 @@ ExtractorContext::ExtractorContext(ExtractorEngine *engine, ExtractorContext* pa
 
 ExtractorContext::~ExtractorContext() = default;
 
-QVector<ExtractorRule*>& ExtractorContext::rules()
+QVector<ExtractorRule *> &ExtractorContext::rules()
 {
     return m_rules;
 }
@@ -43,33 +43,35 @@ void ExtractorContext::setOffset(int offset)
     m_offset = offset;
 }
 
-ExtractorEngine* ExtractorContext::engine() const
+ExtractorEngine *ExtractorContext::engine() const
 {
     return m_engine;
 }
 
-void ExtractorContext::setRules(const QVector<ExtractorRule*> &rules)
+void ExtractorContext::setRules(const QVector<ExtractorRule *> &rules)
 {
     m_rules = rules;
 }
 
-QString ExtractorContext::variableValue(const QString& name) const
+QString ExtractorContext::variableValue(const QString &name) const
 {
     const auto it = m_variables.constFind(name);
-    if (it != m_variables.constEnd())
+    if (it != m_variables.constEnd()) {
         return it.value();
-    if (m_parent)
+    }
+    if (m_parent) {
         return m_parent->variableValue(name);
+    }
     return {};
 }
 
-void ExtractorContext::setVariable(const QString& name, const QString& value)
+void ExtractorContext::setVariable(const QString &name, const QString &value)
 {
     m_variables.insert(name, value);
     qCDebug(SEMANTIC_LOG) << m_variables;
 }
 
-void ExtractorContext::setProperty(const QString& name, const QJsonValue& value)
+void ExtractorContext::setProperty(const QString &name, const QJsonValue &value)
 {
     m_obj.insert(name, value);
 }

@@ -22,7 +22,9 @@
 
 #include <vector>
 
-namespace KMime { class Content; }
+namespace KMime {
+class Content;
+}
 
 class Extractor;
 
@@ -32,10 +34,10 @@ class ExtractorRepository
 public:
     ExtractorRepository();
     ~ExtractorRepository();
-    ExtractorRepository(const ExtractorRepository&) = delete;
+    ExtractorRepository(const ExtractorRepository &) = delete;
 
     /** Finds matching extractors for the given message part. */
-    std::vector<const Extractor*> extractorsForMessage(KMime::Content *part) const;
+    std::vector<const Extractor *> extractorsForMessage(KMime::Content *part) const;
 
 private:
     void loadExtractors();

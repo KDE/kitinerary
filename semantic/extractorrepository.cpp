@@ -32,19 +32,22 @@ ExtractorRepository::ExtractorRepository()
 
 ExtractorRepository::~ExtractorRepository() = default;
 
-std::vector<const Extractor*> ExtractorRepository::extractorsForMessage(KMime::Content *part) const
+std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::Content *part) const
 {
-    std::vector<const Extractor*> v;
-    if (!part)
+    std::vector<const Extractor *> v;
+    if (!part) {
         return v;
+    }
 
     for (auto it = m_extractors.begin(), end = m_extractors.end(); it != end; ++it) {
         for (const auto &filter : (*it).filters()) {
             auto header = part->headerByType(filter.headerName());
-            if (!header && part->topLevel())
+            if (!header && part->topLevel()) {
                 header = part->topLevel()->headerByType(filter.headerName());
-            if (!header)
+            }
+            if (!header) {
                 continue;
+            }
             const auto headerData = header->asUnicodeString();
             if (filter.matches(headerData)) {
                 v.push_back(&(*it));
@@ -61,7 +64,8 @@ void ExtractorRepository::loadExtractors()
     QDirIterator it(QStringLiteral(":/org.kde.messageviewer/semantic/rules"), {QStringLiteral("*.xml")}, QDir::Files);
     while (it.hasNext()) {
         Extractor e;
-        if (e.load(it.next()))
+        if (e.load(it.next())) {
             m_extractors.push_back(std::move(e));
+        }
     }
 }

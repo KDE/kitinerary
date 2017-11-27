@@ -30,20 +30,21 @@ void ExtractorEngine::setExtractor(const Extractor *extractor)
     m_extractor = extractor;
 }
 
-const QString& ExtractorEngine::text() const
+const QString &ExtractorEngine::text() const
 {
     return m_text;
 }
 
-void ExtractorEngine::setText(const QString& text)
+void ExtractorEngine::setText(const QString &text)
 {
     m_text = text;
 }
 
 QJsonArray ExtractorEngine::extract()
 {
-    if (!m_extractor || m_text.isEmpty())
+    if (!m_extractor || m_text.isEmpty()) {
         return {};
+    }
 
     qCDebug(SEMANTIC_LOG) << m_text << m_text.size();
     ExtractorContext context(this);
@@ -55,25 +56,28 @@ QJsonArray ExtractorEngine::extract()
 void ExtractorEngine::executeContext(ExtractorContext *context)
 {
     while (!context->rules().isEmpty()) {
-        QVector<ExtractorRule*> repeatingRules;
+        QVector<ExtractorRule *> repeatingRules;
         for (auto it = context->rules().begin(); it != context->rules().end(); ++it) {
-            if (!(*it)->match(context))
+            if (!(*it)->match(context)) {
                 continue;
-            if (auto classRule = dynamic_cast<ExtractorClassRule*>(*it)) {
+            }
+            if (auto classRule = dynamic_cast<ExtractorClassRule *>(*it)) {
                 qCDebug(SEMANTIC_LOG) << classRule->type() << classRule->name();
                 ExtractorContext subContext(this, context);
                 subContext.setRules(classRule->rules());
                 subContext.setProperty(QLatin1String("@type"), classRule->type());
                 subContext.setOffset(context->offset());
                 executeContext(&subContext);
-                if (classRule->name().isEmpty())
+                if (classRule->name().isEmpty()) {
                     m_result.push_back(subContext.object());
-                else
+                } else {
                     context->setProperty(classRule->name(), subContext.object());
+                }
                 context->setOffset(subContext.offset());
             }
-            if ((*it)->repeats())
+            if ((*it)->repeats()) {
                 repeatingRules.push_back(*it);
+            }
         }
         context->setRules(repeatingRules);
     }

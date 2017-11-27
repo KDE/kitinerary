@@ -78,8 +78,9 @@ private Q_SLOTS:
         const auto doc = QJsonDocument::fromJson(ref.readAll());
         QVERIFY(doc.isArray());
 
-        if (data != doc.array())
+        if (data != doc.array()) {
             qDebug().noquote() << QJsonDocument(data).toJson();
+        }
         QCOMPARE(data, doc.array());
     }
 
@@ -127,8 +128,9 @@ private Q_SLOTS:
         const auto doc = QJsonDocument::fromJson(ref.readAll());
         QVERIFY(doc.isArray());
 
-        if (data != doc.array())
+        if (data != doc.array()) {
             qDebug().noquote() << QJsonDocument(data).toJson();
+        }
         QCOMPARE(data, doc.array());
     }
 };
@@ -136,4 +138,3 @@ private Q_SLOTS:
 QTEST_APPLESS_MAIN(UnstructuredDataExtractorTest)
 
 #include "unstructureddataextractortest.moc"
-

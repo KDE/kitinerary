@@ -30,12 +30,12 @@
 
 #include <memory>
 
-void ExtractorPreprocessor::preprocessPlainText(const QString& input)
+void ExtractorPreprocessor::preprocessPlainText(const QString &input)
 {
     m_buffer = input;
 }
 
-void ExtractorPreprocessor::preprocessHtml(const QString& input)
+void ExtractorPreprocessor::preprocessHtml(const QString &input)
 {
     m_buffer.reserve(input.size());
     int begin = 0;
@@ -45,8 +45,9 @@ void ExtractorPreprocessor::preprocessHtml(const QString& input)
             replaceEntityAndAppend(input.midRef(begin, end - begin));
         }
         begin = input.indexOf(QLatin1Char('>'), end);
-        if (begin < 0)
+        if (begin < 0) {
             break;
+        }
 
         // replace elements with something suitable for field separation
         const auto elementName = input.mid(end + 1, begin - end - 1);
@@ -59,8 +60,9 @@ void ExtractorPreprocessor::preprocessHtml(const QString& input)
         ++begin;
         end = input.indexOf(QLatin1Char('<'), begin);
     }
-    if (begin >= 0 && end < 0)
+    if (begin >= 0 && end < 0) {
         replaceEntityAndAppend(input.midRef(begin));
+    }
     //qCDebug(SEMANTIC_LOG) << "Preprocessed HTML content: " << m_buffer;
 }
 
@@ -68,8 +70,9 @@ void ExtractorPreprocessor::preprocessPdf(const QByteArray &input)
 {
 #ifdef HAVE_POPPLER
     std::unique_ptr<Poppler::Document> doc(Poppler::Document::loadFromData(input));
-    if (!doc || doc->isLocked())
+    if (!doc || doc->isLocked()) {
         return;
+    }
 
     for (int i = 0; i < doc->numPages(); ++i) {
         std::unique_ptr<Poppler::Page> page(doc->page(i));
@@ -94,8 +97,9 @@ void ExtractorPreprocessor::replaceEntityAndAppend(const QStringRef &source)
             m_buffer.append(source.mid(begin, end - begin));
         }
         begin = source.indexOf(QLatin1Char(';'), end);
-        if (begin < 0)
+        if (begin < 0) {
             break;
+        }
         const auto entityName = source.mid(end + 1, begin - end - 1);
         if (entityName == QLatin1String("nbsp")) {
             m_buffer.append(QLatin1Char(' '));

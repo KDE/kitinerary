@@ -26,7 +26,9 @@
 #include <QVariant>
 #include <QVector>
 
-namespace KMime { class ContentIndex; }
+namespace KMime {
+class ContentIndex;
+}
 
 /** Memento holding the semantic information extracted for an email. */
 class SemanticMemento : public MimeTreeParser::Interface::BodyPartMemento
