@@ -26,8 +26,6 @@
 #include <poppler-qt5.h>
 #endif
 
-#include <QDebug>
-
 #include <memory>
 
 void ExtractorPreprocessor::preprocessPlainText(const QString &input)
