@@ -22,7 +22,6 @@
 #include "semantic_debug.h"
 
 #include <QJsonArray>
-#include <QJsonDocument>
 #include <QJsonObject>
 #include <QMetaProperty>
 
