@@ -21,8 +21,6 @@
 
 #include <KMime/ContentIndex>
 
-SemanticMemento::~SemanticMemento() = default;
-
 void SemanticMemento::detach()
 {
 }
