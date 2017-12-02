@@ -13,11 +13,11 @@
                 <property name="iataCode" value="${airlineCode}"/>
                 <property name="name" match="operated by (.*)\n" value="${1}"/>
             </class>
-            <property name="departureTime" match="Departure:\s*([0-9]{2}:[0-9]{2})" value="${date} ${1}" type="dateTime" format="dd.MM.yyyy hh:mm"/>
+            <property name="departureTime" match="Departure:\s*([0-9]{2}:[0-9]{2})" value="${date} ${1}" type="dateTime" format="dd.MM.yyyy hh:mm" locale="en"/>
             <class type="Airport" name="departureAirport">
                 <property name="name" match="\s*(.*)\n" value="${1}"/>
             </class>
-            <property name="arrivalTime" match="Arrival:\s*([0-9]{2}:[0-9]{2})" value="${date} ${1}" type="dateTime" format="dd.MM.yyyy hh:mm"/>
+            <property name="arrivalTime" match="Arrival:\s*([0-9]{2}:[0-9]{2})" value="${date} ${1}" type="dateTime" format="dd.MM.yyyy hh:mm" locale="en"/>
             <class type="Airport" name="arrivalAirport">
                 <property name="name" match="\s*(.*)\n" value="${1}"/>
             </class>

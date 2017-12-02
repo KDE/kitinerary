@@ -71,6 +71,11 @@ QString ExtractorRule::format() const
     return m_format;
 }
 
+QLocale ExtractorRule::locale() const
+{
+    return m_locale;
+}
+
 bool ExtractorRule::load(QXmlStreamReader &reader)
 {
     m_name = reader.attributes().value(QLatin1String("name")).toString();
@@ -82,6 +87,8 @@ bool ExtractorRule::load(QXmlStreamReader &reader)
     if (!m_regexp.isValid()) {
         qCWarning(SEMANTIC_LOG) << m_regexp.errorString() << m_regexp.pattern() << "at offset" << m_regexp.patternErrorOffset();
     }
+    if (reader.attributes().hasAttribute(QLatin1String("locale")))
+        m_locale = QLocale(reader.attributes().value(QLatin1String("locale")).toString());
     return true;
 }
 
@@ -163,7 +170,7 @@ bool ExtractorPropertyRule::match(ExtractorContext *context) const
     if (res.hasMatch()) {
         auto val = value(res, context);
         if (type() == QLatin1String("dateTime") && !format().isEmpty()) {
-            const auto dt = QDateTime::fromString(val, format());
+            const auto dt = locale().toDateTime(val, format());
             val = dt.toString(Qt::ISODate);
         }
 

@@ -32,9 +32,11 @@ class UnstructuredDataExtractorTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void init()
+    void initTestCase()
     {
         Q_INIT_RESOURCE(rules);
+        // use some exotic locale to ensure the date/time parsing doesn't just work by luck
+        QLocale::setDefault(QLocale(QStringLiteral("fr_FR")));
     }
 
     void testExtractText_data()

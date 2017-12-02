@@ -20,6 +20,7 @@
 #ifndef EXTRACTORRULE_H
 #define EXTRACTORRULE_H
 
+#include <QLocale>
 #include <QRegularExpression>
 #include <QString>
 #include <QVector>
@@ -42,6 +43,7 @@ public:
 protected:
     QString value(const QRegularExpressionMatch &match, ExtractorContext *context) const;
     QString format() const;
+    QLocale locale() const;
 
     QRegularExpression m_regexp;
 
@@ -50,6 +52,7 @@ private:
     QString m_type;
     QString m_value;
     QString m_format;
+    QLocale m_locale;
     bool m_repeat = false;
 };
 

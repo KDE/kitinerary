@@ -14,13 +14,13 @@
                 <property name="name" match=", ([A-Za-z0-9 ]*)\n" value="${1}"/>
             </class>
             <variable name="depDate" match="Date: *[A-Z][a-z]{2} (.*)\n" value="${1}"/>
-            <property name="departureTime" match="Departure: *([0-9]+:[0-9]+)" value="${depDate} ${1}" type="dateTime" format="d MMM yyyy hh:mm"/>
+            <property name="departureTime" match="Departure: *([0-9]+:[0-9]+)" value="${depDate} ${1}" type="dateTime" format="d MMM yyyy hh:mm" locale="en"/>
             <class type="Airport" name="departureAirport">
                 <property name="name" match=" *(.*)\(" value="${1}"/>
                 <property name="iataCode" match="[A-Z]{3}" value="${0}"/>
             </class>
             <variable name="arrDate" match="Date: *[A-Z][a-z]{2} (.*)\n" value="${1}"/>
-            <property name="arrivalTime" match="Arrival: *([0-9]+:[0-9]+)" value="${arrDate} ${1}" type="dateTime" format="d MMM yyyy hh:mm"/>
+            <property name="arrivalTime" match="Arrival: *([0-9]+:[0-9]+)" value="${arrDate} ${1}" type="dateTime" format="d MMM yyyy hh:mm" locale="en"/>
             <class type="Airport" name="arrivalAirport">
                 <property name="name" match=" *(.*)\(" value="${1}"/>
                 <property name="iataCode" match="[A-Z]{3}" value="${0}"/>
