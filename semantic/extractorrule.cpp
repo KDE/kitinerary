@@ -87,8 +87,9 @@ bool ExtractorRule::load(QXmlStreamReader &reader)
     if (!m_regexp.isValid()) {
         qCWarning(SEMANTIC_LOG) << m_regexp.errorString() << m_regexp.pattern() << "at offset" << m_regexp.patternErrorOffset();
     }
-    if (reader.attributes().hasAttribute(QLatin1String("locale")))
+    if (reader.attributes().hasAttribute(QLatin1String("locale"))) {
         m_locale = QLocale(reader.attributes().value(QLatin1String("locale")).toString());
+    }
     return true;
 }
 
