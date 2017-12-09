@@ -37,7 +37,35 @@
  *  The classes in here could possibly be auto-generated from the ontology defined by http://schema.org...
  */
 
-class Airport
+class GeoCoordinates
+{
+    SEMANTIC_GADGET
+    SEMANTIC_PROPERTY(float, latitude)
+    SEMANTIC_PROPERTY(float, longitude)
+public:
+    GeoCoordinates();
+    bool isValid() const;
+};
+
+class PostalAddress
+{
+    SEMANTIC_GADGET
+    SEMANTIC_PROPERTY(QString, streetAddress)
+    SEMANTIC_PROPERTY(QString, addressLocality)
+    SEMANTIC_PROPERTY(QString, postalCode)
+    SEMANTIC_PROPERTY(QString, addressCountry)
+};
+
+class Place
+{
+    Q_GADGET
+    SEMANTIC_PROPERTY(QVariant, address)
+    SEMANTIC_PROPERTY(QVariant, geo)
+public:
+    bool operator!=(const Place &other) const;
+};
+
+class Airport : protected Place
 {
     SEMANTIC_GADGET
     SEMANTIC_PROPERTY(QString, name)
@@ -54,7 +82,8 @@ public:
     bool operator!=(const Airline &other) const;
 };
 
-class TrainStation {
+class TrainStation : protected Place
+{
     SEMANTIC_GADGET
     SEMANTIC_PROPERTY(QString, name)
 public:
@@ -78,20 +107,10 @@ private:
     QString arrivalTimeLocalized() const;
 };
 
-class PostalAddress
-{
-    SEMANTIC_GADGET
-    SEMANTIC_PROPERTY(QString, streetAddress)
-    SEMANTIC_PROPERTY(QString, addressLocality)
-    SEMANTIC_PROPERTY(QString, postalCode)
-    SEMANTIC_PROPERTY(QString, addressCountry)
-};
-
-class LodgingBusiness
+class LodgingBusiness: protected Place
 {
     SEMANTIC_GADGET
     SEMANTIC_PROPERTY(QString, name)
-    SEMANTIC_PROPERTY(QVariant, address)
 };
 
 class TrainTrip
@@ -143,6 +162,7 @@ class TrainReservation : protected Reservation
     SEMANTIC_GADGET
 };
 
+Q_DECLARE_METATYPE(GeoCoordinates)
 Q_DECLARE_METATYPE(Airport)
 Q_DECLARE_METATYPE(Airline)
 Q_DECLARE_METATYPE(Flight)

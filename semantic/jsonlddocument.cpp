@@ -85,6 +85,7 @@ static QVariant createInstance(const QJsonObject &obj)
 static QVariant createInstance(const QJsonObject &obj)
 {
     const auto type = obj.value(QLatin1String("@type")).toString();
+    MAKE_FACTORY(GeoCoordinates);
     MAKE_FACTORY(Airline);
     MAKE_FACTORY(Airport);
     MAKE_FACTORY(FlightReservation);

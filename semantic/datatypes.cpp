@@ -22,9 +22,27 @@
 #include <QLocale>
 #include <QTimeZone>
 
+#include <cmath>
+
+GeoCoordinates::GeoCoordinates()
+    : m_latitude(NAN)
+    , m_longitude(NAN)
+{
+}
+
+bool GeoCoordinates::isValid() const
+{
+    return !std::isnan(m_latitude) && !std::isnan(m_longitude);
+}
+
+bool Place::operator!=(const Place &other) const
+{
+    return m_geo != other.m_geo || m_address != other.m_address;
+}
+
 bool Airport::operator!=(const Airport &other) const
 {
-    return m_iataCode != other.m_iataCode || m_name != other.m_name;
+    return m_iataCode != other.m_iataCode || m_name != other.m_name || Place::operator!=(other);
 }
 
 bool Airline::operator!=(const Airline &other) const
