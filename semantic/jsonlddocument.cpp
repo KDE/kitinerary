@@ -114,9 +114,9 @@ QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
     return l;
 }
 
-QVariant JsonLdDocument::readProperty(const QVariant &value, const char *name)
+QVariant JsonLdDocument::readProperty(const QVariant &obj, const char *name)
 {
-    const auto mo = QMetaType(value.userType()).metaObject();
+    const auto mo = QMetaType(obj.userType()).metaObject();
     if (!mo) {
         return {};
     }
@@ -127,5 +127,21 @@ QVariant JsonLdDocument::readProperty(const QVariant &value, const char *name)
     }
 
     const auto prop = mo->property(idx);
-    return prop.readOnGadget(value.constData());
+    return prop.readOnGadget(obj.constData());
+}
+
+void JsonLdDocument::writeProperty(QVariant &obj, const char *name, const QVariant &value)
+{
+    const auto mo = QMetaType(obj.userType()).metaObject();
+    if (!mo) {
+        return;
+    }
+
+    const auto idx = mo->indexOfProperty(name);
+    if (idx < 0) {
+        return;
+    }
+
+    const auto prop = mo->property(idx);
+    prop.writeOnGadget(obj.data(), value);
 }

@@ -17,23 +17,27 @@
    02110-1301, USA.
 */
 
-#ifndef JSONLDDOCUMENT_H
-#define JSONLDDOCUMENT_H
+#ifndef EXTRACTORPOSTPROCESSOR_H
+#define EXTRACTORPOSTPROCESSOR_H
 
 #include <QVariant>
 #include <QVector>
 
-class QJsonArray;
+/** Post-process extracted data to filter out garbage and augment data from other sources. */
+class ExtractorPostprocessor
+{
+public:
+    void process(const QVector<QVariant> &data);
+    QVector<QVariant> result() const;
 
-/** Serialization/deserialization code for JSON-LD data. */
-namespace JsonLdDocument {
-QVector<QVariant> fromJson(const QJsonArray &array);
+private:
+    QVariant processProperty(QVariant obj, const char *name, QVariant(ExtractorPostprocessor::*processor)(QVariant) const) const;
 
-/** Read property @p name on object @p obj. */
-QVariant readProperty(const QVariant &obj, const char *name);
-/** Set property @p name on object @p obj to value @p value. */
-void writeProperty(QVariant &obj, const char *name, const QVariant &value);
+    QVariant processFlightReservation(QVariant res) const;
+    QVariant processFlight(QVariant flight) const;
+    QVariant processAirport(QVariant airport) const;
 
-}
+    QVector<QVariant> m_data;
+};
 
-#endif // JSONLDDOCUMENT_H
+#endif // EXTRACTORPOSTPROCESSOR_H

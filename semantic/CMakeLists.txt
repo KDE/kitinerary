@@ -14,6 +14,7 @@ set(semantic_lib_srcs
     extractorengine.cpp
     extractorfilter.cpp
     extractorpreprocessor.cpp
+    extractorpostprocessor.cpp
     extractorrepository.cpp
     extractorrule.cpp
     jsonlddocument.cpp
