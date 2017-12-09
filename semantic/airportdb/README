@@ -1,0 +1,18 @@
+Updating the airport database
+=============================
+
+(1) Download timezone shapefile
+
+Pick the latest timezones.shapefile.zip from
+https://github.com/evansiroky/timezone-boundary-builder/releases
+
+Extract combined_shapefile.shp from that zip file into this folder.
+
+(2) Generate timezone lookup map
+
+Open timezones.qgs in QGIS. Select "Project" > "Print Composers" > "timezone_lookup_map" and then
+"Composer" > "Export as Image". Choose "timezones.png" in this folder and 2400dpi.
+
+(3) Run the code generator
+
+Run `make rebuild-airportdb` in the build dir of this folder.

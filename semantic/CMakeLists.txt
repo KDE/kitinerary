@@ -1,3 +1,5 @@
+add_subdirectory(airportdb)
+
 if(TARGET Poppler::Qt5)
     set(HAVE_POPPLER ON)
 endif()
@@ -5,6 +7,7 @@ configure_file(config-semantic.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-semant
 
 # static lib for use by unit test
 set(semantic_lib_srcs
+    airportdb/airportdb.cpp
     datatypes.cpp
     extractor.cpp
     extractorcontext.cpp
