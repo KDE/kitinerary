@@ -101,7 +101,7 @@ void ExtractorPostprocessor::processFlightTime(QVariant &flight, const char *tim
     }
 
     auto dt = JsonLdDocument::readProperty(flight, timePropName).toDateTime();
-    if (!dt.isValid() || dt.timeSpec() != Qt::LocalTime) {
+    if (!dt.isValid() || dt.timeSpec() == Qt::TimeZone) {
         return;
     }
 
@@ -110,6 +110,16 @@ void ExtractorPostprocessor::processFlightTime(QVariant &flight, const char *tim
         return;
     }
 
+    // prefer our timezone over externally provided UTC offset, if they match
+    if (dt.timeSpec() == Qt::OffsetFromUTC && tz.offsetFromUtc(dt) != dt.offsetFromUtc()) {
+        return;
+    }
+
+    dt.setTimeSpec(Qt::TimeZone);
     dt.setTimeZone(tz);
+    // if we updated from UTC offset to timezone spec here, QDateTime will compare equal
+    // and the auto-generated property code will not actually update the property
+    // so, clear the property first to force an update
+    JsonLdDocument::writeProperty(flight, timePropName, QDateTime());
     JsonLdDocument::writeProperty(flight, timePropName, dt);
 }
