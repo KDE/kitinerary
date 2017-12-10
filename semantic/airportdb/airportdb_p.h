@@ -23,7 +23,6 @@
 #include <cstdint>
 
 namespace AirportDb  {
-
 // pack 24 bit offset, 8 bit length and 16 bit IATA index into 48bit with 16bit alignment
 struct NameIndex
 {
@@ -41,14 +40,13 @@ struct NameIndex
     }
 
     uint16_t offset1;
-    uint8_t  offset2;
-    uint8_t  length;
+    uint8_t offset2;
+    uint8_t length;
     uint16_t iataIndex;
 };
 
 static_assert(sizeof(NameIndex) == 6, "NameIndex size changed!");
 static_assert(alignof(NameIndex) <= 2, "NameIndex alignment changed!");
-
 }
 
 #endif

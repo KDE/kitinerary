@@ -32,8 +32,9 @@ Timezones::Timezones()
     while (!colorMap.atEnd()) {
         const auto line = colorMap.readLine();
         const auto split = line.split(',');
-        if (split.size() < 5)
+        if (split.size() < 5) {
             continue;
+        }
         QColor c;
         c.setRed(split.at(0).toInt());
         c.setGreen(split.at(1).toInt());

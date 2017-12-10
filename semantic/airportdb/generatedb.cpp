@@ -95,25 +95,25 @@ static QJsonArray queryWikidata(const char *sparqlQuery, const QString &debugFil
 static bool soundsMilitaryish(const QString &s)
 {
     return s.contains(QLatin1String("Airbase"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Air Base"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Air Force"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Air National Guard Base"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Air Reserve Base"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Air Station"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Army Airfield"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Army Airport"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Army Heliport"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Canadian Forces Base"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Joint Base"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Marine Corps"), Qt::CaseInsensitive)
-        || s.contains(QLatin1String("Military "))
-        || s.contains(QLatin1String("Naval "))
-        || s.contains(QLatin1String("RAF "))
-        || s.contains(QLatin1String("RAAF "))
-        || s.contains(QLatin1String("RNAS "))
-        || s.contains(QLatin1String("CFB "))
-        || s.contains(QLatin1String("PAF "))
-        || s.contains(QLatin1String("NAF "))
+           || s.contains(QLatin1String("Air Base"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Air Force"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Air National Guard Base"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Air Reserve Base"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Air Station"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Army Airfield"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Army Airport"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Army Heliport"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Canadian Forces Base"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Joint Base"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Marine Corps"), Qt::CaseInsensitive)
+           || s.contains(QLatin1String("Military "))
+           || s.contains(QLatin1String("Naval "))
+           || s.contains(QLatin1String("RAF "))
+           || s.contains(QLatin1String("RAAF "))
+           || s.contains(QLatin1String("RNAS "))
+           || s.contains(QLatin1String("CFB "))
+           || s.contains(QLatin1String("PAF "))
+           || s.contains(QLatin1String("NAF "))
     ;
 }
 
@@ -121,16 +121,19 @@ int coordinateConflicts = 0;
 
 static void merge(Airport &lhs, const Airport &rhs)
 {
-    if (lhs.iataCode != rhs.iataCode)
+    if (lhs.iataCode != rhs.iataCode) {
         qWarning() << "Multiple IATA codes on" << lhs.uri; // this can actually be valid, see BSL/MLH/EAP
+    }
     // we don't really care about multiple ICAO codes
 //     if (lhs.icaoCode != rhs.icaoCode)
 //         qWarning() << "Multiple ICAO codes on" << lhs.uri;
     QString extraLabel;
-    if (lhs.label != rhs.label)
+    if (lhs.label != rhs.label) {
         extraLabel += QLatin1Char(' ') + rhs.label;
-    if (lhs.alias != rhs.alias)
+    }
+    if (lhs.alias != rhs.alias) {
         extraLabel += QLatin1Char(' ') + rhs.alias;
+    }
     lhs.alias += extraLabel;
     if (std::isnan(lhs.latitude) || std::isnan(lhs.longitude)) {
         lhs.latitude = rhs.latitude;
@@ -169,7 +172,8 @@ int main(int argc, char **argv)
             OPTIONAL { ?airport wdt:P576 ?demolished. }
             OPTIONAL { ?iataStmt pq:P582 ?iataEndDate. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-        } ORDER BY (?airport))", QStringLiteral("wikidata_airports.json"));
+        } ORDER BY (?airport))", QStringLiteral(
+                                                "wikidata_airports.json"));
     if (airportArray.isEmpty()) {
         qWarning() << "No results in SPARQL query found.";
         return 1;
@@ -200,8 +204,9 @@ int main(int argc, char **argv)
         a.label = obj.value(QLatin1String("airportLabel")).toObject().value(QLatin1String("value")).toString();
         a.alias = obj.value(QLatin1String("airportAltLabel")).toObject().value(QLatin1String("value")).toString();
         // primitive military airport filter, turns out to be more reliable than the query below
-        if (soundsMilitaryish(a.label) || soundsMilitaryish(a.alias))
+        if (soundsMilitaryish(a.label) || soundsMilitaryish(a.alias)) {
             continue;
+        }
         parseCoordinate(obj.value(QLatin1String("coord")).toObject().value(QLatin1String("value")).toString(), a);
 
         // merge multiple records for the same airport
@@ -255,8 +260,9 @@ int main(int argc, char **argv)
             continue;
         }
         auto tzIt = std::lower_bound(usedTimezones.begin(), usedTimezones.end(), it.value().tz);
-        if (tzIt == usedTimezones.end() || (*tzIt) != it.value().tz)
+        if (tzIt == usedTimezones.end() || (*tzIt) != it.value().tz) {
             usedTimezones.insert(tzIt, it.value().tz);
+        }
     }
     std::vector<uint16_t> timezoneOffsets;
     timezoneOffsets.reserve(usedTimezones.size());
@@ -270,14 +276,17 @@ int main(int argc, char **argv)
     QMap<QString, QString> labelMap;
     for (auto it = airportMap.begin(); it != airportMap.end(); ++it) {
         auto l = (it.value().label + QLatin1Char(' ') + it.value().alias)
-            .split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
-        std::for_each(l.begin(), l.end(), [](QString &s) { s = s.toCaseFolded(); });
+                 .split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
+        std::for_each(l.begin(), l.end(), [](QString &s) {
+            s = s.toCaseFolded();
+        });
         l.removeAll(it.value().iataCode.toCaseFolded());
         l.removeAll(it.value().icaoCode.toCaseFolded());
         l.removeDuplicates();
         for (const auto &s : l) {
-            if (s.size() <= 2)
+            if (s.size() <= 2) {
                 continue;
+            }
             if (!labelMap.contains(s)) {
                 labelMap.insert(s, it.value().iataCode);
             } else {
@@ -294,7 +303,8 @@ int main(int argc, char **argv)
         qWarning() << f.errorString();
         return 1;
     }
-    f.write(R"(/*
+    f.write(
+        R"(/*
  * This code is auto-generated from Wikidata data. Licensed under CC0.
  */
 
@@ -384,8 +394,9 @@ static const char name_string_table[] =
     string_offsets.reserve(labelMap.size());
     uint32_t label_offset = 0;
     for (auto it = labelMap.begin(); it != labelMap.end(); ++it) {
-        if (it.value().isEmpty())
+        if (it.value().isEmpty()) {
             continue;
+        }
         f.write("    \"");
         f.write(it.key().toUtf8());
         f.write("\" // ");

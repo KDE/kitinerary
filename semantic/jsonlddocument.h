@@ -33,7 +33,6 @@ QVector<QVariant> fromJson(const QJsonArray &array);
 QVariant readProperty(const QVariant &obj, const char *name);
 /** Set property @p name on object @p obj to value @p value. */
 void writeProperty(QVariant &obj, const char *name, const QVariant &value);
-
 }
 
 #endif // JSONLDDOCUMENT_H

@@ -31,7 +31,7 @@ public:
     QVector<QVariant> result() const;
 
 private:
-    QVariant processProperty(QVariant obj, const char *name, QVariant(ExtractorPostprocessor::*processor)(QVariant) const) const;
+    QVariant processProperty(QVariant obj, const char *name, QVariant (ExtractorPostprocessor::*processor)(QVariant) const) const;
 
     QVariant processFlightReservation(QVariant res) const;
     QVariant processFlight(QVariant flight) const;

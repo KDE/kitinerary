@@ -29,7 +29,6 @@
 #include <cstring>
 
 namespace AirportDb {
-
 static_assert(sizeof(IataCode) == sizeof(uint16_t), "IATA code changed size!");
 static constexpr auto iata_table_size = sizeof(iata_table) / sizeof(IataCode);
 static_assert(iata_table_size == sizeof(coordinate_table) / sizeof(Coordinate), "Airport coordinate table size mismatch!");
@@ -47,10 +46,12 @@ bool Coordinate::operator==(const Coordinate &other) const
 
 IataCode::IataCode(const QString &iataStr) : IataCode()
 {
-    if (iataStr.size() != 3)
+    if (iataStr.size() != 3) {
         return;
-    if (!iataStr.at(0).isUpper() || !iataStr.at(1).isUpper() || !iataStr.at(2).isUpper())
+    }
+    if (!iataStr.at(0).isUpper() || !iataStr.at(1).isUpper() || !iataStr.at(2).isUpper()) {
         return;
+    }
     m_letter0 = iataStr.at(0).toLatin1() - 'A';
     m_letter1 = iataStr.at(1).toLatin1() - 'A';
     m_letter2 = iataStr.at(2).toLatin1() - 'A';
@@ -79,8 +80,9 @@ bool IataCode::operator!=(IataCode other) const
 
 QString IataCode::toString() const
 {
-    if (!isValid())
+    if (!isValid()) {
         return QString();
+    }
     QString s;
     s.reserve(3);
     s.push_back(QLatin1Char(m_letter0 + 'A'));
@@ -94,12 +96,12 @@ uint16_t IataCode::toUInt16() const
     return m_letter0 << 11 | m_letter1 << 6 | m_letter2 << 1 | m_valid;
 }
 
-static const IataCode* iataBegin()
+static const IataCode *iataBegin()
 {
     return iata_table;
 }
 
-static const IataCode* iataEnd()
+static const IataCode *iataEnd()
 {
     return iata_table + iata_table_size;
 }
@@ -107,8 +109,9 @@ static const IataCode* iataEnd()
 static int indexOfAirport(IataCode iataCode)
 {
     const auto iataIt = std::lower_bound(iataBegin(), iataEnd(), iataCode);
-    if (iataIt == iataEnd() || (*iataIt) != iataCode)
+    if (iataIt == iataEnd() || (*iataIt) != iataCode) {
         return -1;
+    }
 
     return std::distance(iataBegin(), iataIt);
 }
@@ -116,27 +119,29 @@ static int indexOfAirport(IataCode iataCode)
 Coordinate coordinateForAirport(IataCode iataCode)
 {
     const auto iataIdx = indexOfAirport(iataCode);
-    if (iataIdx >= 0)
+    if (iataIdx >= 0) {
         return coordinate_table[iataIdx];
+    }
     return {};
 }
 
 QTimeZone timezoneForAirport(IataCode iataCode)
 {
     const auto iataIdx = indexOfAirport(iataCode);
-    if (iataIdx < 0)
+    if (iataIdx < 0) {
         return QTimeZone();
+    }
     return QTimeZone(timezone_names + timezone_table[iataIdx]);
 }
 
 static const auto name_string_index_size = sizeof(name_string_index) / sizeof(NameIndex);
 
-static const NameIndex* nameIndexBegin()
+static const NameIndex *nameIndexBegin()
 {
     return name_string_index;
 }
 
-static const NameIndex* nameIndexEnd()
+static const NameIndex *nameIndexEnd()
 {
     return name_string_index + name_string_index_size;
 }
@@ -147,22 +152,24 @@ IataCode iataCodeFromName(const QString &name)
     int iataIdx = -1;
     for (const auto &s : name.toCaseFolded().split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts)) {
         const auto it = std::lower_bound(nameIndexBegin(), nameIndexEnd(), s.toUtf8(), [](const NameIndex &lhs, const QByteArray &rhs) {
-            const auto cmp = strncmp(name_string_table + lhs.offset(), rhs.constData(), std::min<int>(lhs.length, rhs.size()));
-            if (cmp == 0) {
-                return lhs.length < rhs.size();
-            }
-            return cmp < 0;
-        });
-        if (it == nameIndexEnd() || it->length != s.toUtf8().size() || strncmp(name_string_table + it->offset(), s.toUtf8().constData(), it->length) != 0)
+                const auto cmp = strncmp(name_string_table + lhs.offset(), rhs.constData(), std::min<int>(lhs.length, rhs.size()));
+                if (cmp == 0) {
+                    return lhs.length < rhs.size();
+                }
+                return cmp < 0;
+            });
+        if (it == nameIndexEnd() || it->length != s.toUtf8().size() || strncmp(name_string_table + it->offset(), s.toUtf8().constData(), it->length) != 0) {
             continue;
-        if (iataIdx >= 0 && iataIdx != it->iataIndex)
+        }
+        if (iataIdx >= 0 && iataIdx != it->iataIndex) {
             return code; // not unique
+        }
         iataIdx = it->iataIndex;
     }
 
-    if (iataIdx > 0)
+    if (iataIdx > 0) {
         code = iata_table[iataIdx];
+    }
     return code;
 }
-
 }
