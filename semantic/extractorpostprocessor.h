@@ -36,6 +36,7 @@ private:
     QVariant processFlightReservation(QVariant res) const;
     QVariant processFlight(QVariant flight) const;
     QVariant processAirport(QVariant airport) const;
+    void processFlightTime(QVariant &flight, const char *timePropName, const char *airportPropName) const;
 
     QVector<QVariant> m_data;
 };

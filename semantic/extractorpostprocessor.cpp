@@ -22,6 +22,9 @@
 #include "jsonlddocument.h"
 #include "airportdb/airportdb.h"
 
+#include <QDebug>
+#include <QTimeZone>
+
 void ExtractorPostprocessor::process(const QVector<QVariant> &data)
 {
     m_data.reserve(data.size());
@@ -57,7 +60,8 @@ QVariant ExtractorPostprocessor::processFlight(QVariant flight) const
     flight = processProperty(flight, "departureAirport", &ExtractorPostprocessor::processAirport);
     flight = processProperty(flight, "arrivalAirport", &ExtractorPostprocessor::processAirport);
 
-    // TODO fix timezones
+    processFlightTime(flight, "departureTime", "departureAirport");
+    processFlightTime(flight, "arrivalTime", "arrivalAirport");
 
     return flight;
 }
@@ -86,4 +90,26 @@ QVariant ExtractorPostprocessor::processAirport(QVariant airport) const
     }
 
     return airport;
+}
+
+void ExtractorPostprocessor::processFlightTime(QVariant &flight, const char *timePropName, const char *airportPropName) const
+{
+    const auto airport = JsonLdDocument::readProperty(flight, airportPropName);
+    const auto iataCode = JsonLdDocument::readProperty(airport, "iataCode").toString();
+    if (iataCode.isEmpty()) {
+        return;
+    }
+
+    auto dt = JsonLdDocument::readProperty(flight, timePropName).toDateTime();
+    if (!dt.isValid() || dt.timeSpec() != Qt::LocalTime) {
+        return;
+    }
+
+    const auto tz = AirportDb::timezoneForAirport(AirportDb::IataCode{iataCode});
+    if (!tz.isValid()) {
+        return;
+    }
+
+    dt.setTimeZone(tz);
+    JsonLdDocument::writeProperty(flight, timePropName, dt);
 }
