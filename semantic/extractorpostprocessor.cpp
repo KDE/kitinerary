@@ -28,10 +28,12 @@
 void ExtractorPostprocessor::process(const QVector<QVariant> &data)
 {
     m_data.reserve(data.size());
-    for (const auto &d : data) {
+    for (auto d : data) {
         if (d.userType() == qMetaTypeId<FlightReservation>()) {
-            m_data.push_back(processFlightReservation(d));
-        } else {
+            d = processFlightReservation(d);
+        }
+
+        if (filterReservation(d)) {
             m_data.push_back(d);
         }
     }
@@ -122,4 +124,33 @@ void ExtractorPostprocessor::processFlightTime(QVariant &flight, const char *tim
     // so, clear the property first to force an update
     JsonLdDocument::writeProperty(flight, timePropName, QDateTime());
     JsonLdDocument::writeProperty(flight, timePropName, dt);
+}
+
+bool ExtractorPostprocessor::filterReservation(const QVariant &res) const
+{
+    const auto resFor = JsonLdDocument::readProperty(res, "reservationFor");
+    if (resFor.isNull()) {
+        return false;
+    }
+
+    if (resFor.userType() == qMetaTypeId<Flight>()) {
+        return filterFlight(resFor);
+    }
+    return true;
+}
+
+bool ExtractorPostprocessor::filterFlight(const QVariant &flight) const
+{
+    const auto depDt = JsonLdDocument::readProperty(flight, "departureTime").toDateTime();
+    const auto arrDt = JsonLdDocument::readProperty(flight, "arrivalTime").toDateTime();
+    return filterAirport(JsonLdDocument::readProperty(flight, "departureAirport"))
+        && filterAirport(JsonLdDocument::readProperty(flight, "arrivalAirport"))
+        && depDt.isValid() && arrDt.isValid();
+}
+
+bool ExtractorPostprocessor::filterAirport(const QVariant &airport) const
+{
+    const auto iataCode = JsonLdDocument::readProperty(airport, "iataCode").toString();
+    const auto name = JsonLdDocument::readProperty(airport, "name").toString();
+    return !iataCode.isEmpty() || !name.isEmpty();
 }

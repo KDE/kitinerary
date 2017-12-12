@@ -1,0 +1,73 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "reservationNumber": "RXJ34P",
+    "reservationFor": {
+        "@type": "Flight",
+        "flightNumber": "110",
+        "airline": {
+            "@type": "Airline",
+            "name": "United",
+            "iataCode": "UA"
+        },
+        "departureAirport": {
+            "@type": "Airport",
+            "name": "San Francisco Airport",
+            "iataCode": "SFO"
+        },
+        "departureTime": "2027-03-04T20:15:00-08:00",
+        "arrivalTime": "2027-03-05T06:30:00-05:00"
+    }
+}, {
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "reservationNumber": "XXX123"
+}, {
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "reservationNumber": "RXJ34P",
+    "reservationFor": {
+        "@type": "Flight",
+        "flightNumber": "110",
+        "airline": {
+            "@type": "Airline",
+            "name": "United",
+            "iataCode": "UA"
+        },
+        "departureAirport": {
+            "@type": "Airport",
+            "name": "San Francisco Airport",
+            "iataCode": "SFO"
+        },
+        "arrivalAirport": {
+            "@type": "Airport",
+            "name": "John F. Kennedy International Airport"
+        },
+        "arrivalTime": "2027-03-05T06:30:00-05:00"
+    }
+}, {
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "reservationNumber": "RXJ34P",
+    "reservationFor": {
+        "@type": "Flight",
+        "flightNumber": "110",
+        "airline": {
+            "@type": "Airline",
+            "name": "United",
+            "iataCode": "UA"
+        },
+        "departureAirport": {
+            "@type": "Airport",
+            "name": "San Francisco Airport",
+            "iataCode": "SFO"
+        },
+        "departureTime": "2027-03-04T20:15:00-08:00",
+        "arrivalAirport": {
+            "@type": "Airport",
+            "name": "John F. Kennedy International Airport"
+        }
+    }
+}
+]
+

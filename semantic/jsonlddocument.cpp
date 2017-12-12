@@ -114,6 +114,61 @@ QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
     return l;
 }
 
+static QJsonValue toJson(const QVariant &v)
+{
+    const auto mo = QMetaType(v.userType()).metaObject();
+    if (!mo) {
+        // basic types
+        switch (v.type())  {
+            case QVariant::String:
+                return v.toString();
+            case QVariant::Double:
+                return v.toDouble();
+            case QVariant::Int:
+                return v.toInt();
+            case QVariant::DateTime:
+                return v.toDateTime().toString(Qt::ISODate);
+            default:
+                break;
+        }
+        if (v.userType() == qMetaTypeId<float>()) {
+            return v.toFloat();
+        }
+        qCDebug(SEMANTIC_LOG) << "unhandled value:" << v;
+        return {};
+    }
+
+    // composite types
+    QJsonObject obj;
+    obj.insert(QStringLiteral("@type"), QString::fromUtf8(mo->className()));
+    for (int i = 0; i < mo->propertyCount(); ++i) {
+        const auto prop = mo->property(i);
+        if (!prop.isStored()) {
+            continue;
+        }
+        const auto value = prop.readOnGadget(v.constData());
+        if (!value.isNull()) {
+            obj.insert(QString::fromUtf8(prop.name()), toJson(value));
+        }
+    }
+    return obj;
+}
+
+QJsonArray JsonLdDocument::toJson(const QVector<QVariant> &data)
+{
+    QJsonArray a;
+    for (const auto &d : data) {
+        const auto value = toJson(d);
+        if (!value.isObject()) {
+            continue;
+        }
+        auto obj = value.toObject();
+        obj.insert(QStringLiteral("@context"), QStringLiteral("http://schema.org"));
+        a.push_back(obj);
+    }
+    return a;
+}
+
 QVariant JsonLdDocument::readProperty(const QVariant &obj, const char *name)
 {
     const auto mo = QMetaType(obj.userType()).metaObject();

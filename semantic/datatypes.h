@@ -26,7 +26,7 @@
 
 #define SEMANTIC_GADGET \
     Q_GADGET \
-    Q_PROPERTY(QString className READ className CONSTANT) \
+    Q_PROPERTY(QString className READ className STORED false CONSTANT) \
     inline QString className() const { return QString::fromUtf8(staticMetaObject.className()); }
 
 #define SEMANTIC_PROPERTY(Type, Name) \
@@ -100,8 +100,8 @@ class Flight
     SEMANTIC_PROPERTY(Airport, arrivalAirport)
     SEMANTIC_PROPERTY(QDateTime, arrivalTime)
 
-    Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized CONSTANT)
-    Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized CONSTANT)
+    Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
+    Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized STORED false CONSTANT)
 private:
     QString departureTimeLocalized() const;
     QString arrivalTimeLocalized() const;
@@ -124,8 +124,8 @@ class TrainTrip
     SEMANTIC_PROPERTY(QDateTime, departureTime)
     SEMANTIC_PROPERTY(QString, trainNumber)
 
-    Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized CONSTANT)
-    Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized CONSTANT)
+    Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
+    Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized STORED false CONSTANT)
 
 private:
     QString departureTimeLocalized() const;
@@ -145,8 +145,8 @@ class LodgingReservation : protected Reservation
     SEMANTIC_PROPERTY(QDateTime, checkinDate)
     SEMANTIC_PROPERTY(QDateTime, checkoutDate)
 
-    Q_PROPERTY(QString checkinDateLocalized READ checkinDateLocalized CONSTANT)
-    Q_PROPERTY(QString checkoutDateLocalized READ checkoutDateLocalized CONSTANT)
+    Q_PROPERTY(QString checkinDateLocalized READ checkinDateLocalized STORED false CONSTANT)
+    Q_PROPERTY(QString checkoutDateLocalized READ checkoutDateLocalized STORED false CONSTANT)
 private:
     QString checkinDateLocalized() const;
     QString checkoutDateLocalized() const;

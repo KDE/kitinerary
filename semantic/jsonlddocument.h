@@ -28,6 +28,7 @@ class QJsonArray;
 /** Serialization/deserialization code for JSON-LD data. */
 namespace JsonLdDocument {
 QVector<QVariant> fromJson(const QJsonArray &array);
+QJsonArray toJson(const QVector<QVariant> &data);
 
 /** Read property @p name on object @p obj. */
 QVariant readProperty(const QVariant &obj, const char *name);
