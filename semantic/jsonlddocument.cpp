@@ -119,17 +119,17 @@ static QJsonValue toJson(const QVariant &v)
     const auto mo = QMetaType(v.userType()).metaObject();
     if (!mo) {
         // basic types
-        switch (v.type())  {
-            case QVariant::String:
-                return v.toString();
-            case QVariant::Double:
-                return v.toDouble();
-            case QVariant::Int:
-                return v.toInt();
-            case QVariant::DateTime:
-                return v.toDateTime().toString(Qt::ISODate);
-            default:
-                break;
+        switch (v.type()) {
+        case QVariant::String:
+            return v.toString();
+        case QVariant::Double:
+            return v.toDouble();
+        case QVariant::Int:
+            return v.toInt();
+        case QVariant::DateTime:
+            return v.toDateTime().toString(Qt::ISODate);
+        default:
+            break;
         }
         if (v.userType() == qMetaTypeId<float>()) {
             return v.toFloat();

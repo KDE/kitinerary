@@ -144,8 +144,8 @@ bool ExtractorPostprocessor::filterFlight(const QVariant &flight) const
     const auto depDt = JsonLdDocument::readProperty(flight, "departureTime").toDateTime();
     const auto arrDt = JsonLdDocument::readProperty(flight, "arrivalTime").toDateTime();
     return filterAirport(JsonLdDocument::readProperty(flight, "departureAirport"))
-        && filterAirport(JsonLdDocument::readProperty(flight, "arrivalAirport"))
-        && depDt.isValid() && arrDt.isValid();
+           && filterAirport(JsonLdDocument::readProperty(flight, "arrivalAirport"))
+           && depDt.isValid() && arrDt.isValid();
 }
 
 bool ExtractorPostprocessor::filterAirport(const QVariant &airport) const
