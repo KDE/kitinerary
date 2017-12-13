@@ -62,11 +62,12 @@ bool Extractor::load(const QString &fileName)
         }
 
         std::unique_ptr<ExtractorRule> rule;
-        if (reader.name() == QLatin1String("variable")) {
+        QStringRef readerName = reader.name();
+        if (readerName == QLatin1String("variable")) {
             rule.reset(new ExtractorVariableRule);
-        } else if (reader.name() == QLatin1String("class")) {
+        } else if (readerName == QLatin1String("class")) {
             rule.reset(new ExtractorClassRule);
-        } else if (reader.name() == QLatin1String("property")) {
+        } else if (readerName == QLatin1String("property")) {
             rule.reset(new ExtractorPropertyRule);
         } else {
             return false;

@@ -72,7 +72,7 @@ void ExtractorPreprocessor::preprocessPdf(const QByteArray &input)
         return;
     }
 
-    for (int i = 0; i < doc->numPages(); ++i) {
+    for (int i = 0, total = doc->numPages(); i < total; ++i) {
         std::unique_ptr<Poppler::Page> page(doc->page(i));
         m_buffer += page->text({}, Poppler::Page::PhysicalLayout);
     }
