@@ -41,6 +41,8 @@ private:
     bool filterReservation(const QVariant &res) const;
     bool filterFlight(const QVariant &flight) const;
     bool filterAirport(const QVariant &airport) const;
+    bool filterTrainTrip(const QVariant &trip) const;
+    bool filterTrainStation(const QVariant &station) const;
 
     QVector<QVariant> m_data;
 };

@@ -135,6 +135,8 @@ bool ExtractorPostprocessor::filterReservation(const QVariant &res) const
 
     if (resFor.userType() == qMetaTypeId<Flight>()) {
         return filterFlight(resFor);
+    } else if (resFor.userType() == qMetaTypeId<TrainTrip>()) {
+        return filterTrainTrip(resFor);
     }
     return true;
 }
@@ -153,4 +155,18 @@ bool ExtractorPostprocessor::filterAirport(const QVariant &airport) const
     const auto iataCode = JsonLdDocument::readProperty(airport, "iataCode").toString();
     const auto name = JsonLdDocument::readProperty(airport, "name").toString();
     return !iataCode.isEmpty() || !name.isEmpty();
+}
+
+bool ExtractorPostprocessor::filterTrainTrip(const QVariant &trip) const
+{
+    const auto depDt = JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
+    const auto arrDt = JsonLdDocument::readProperty(trip, "arrivalTime").toDateTime();
+    return filterAirport(JsonLdDocument::readProperty(trip, "departureStation"))
+        && filterAirport(JsonLdDocument::readProperty(trip, "arrivalStation"))
+        && depDt.isValid() && arrDt.isValid();
+}
+
+bool ExtractorPostprocessor::filterTrainStation(const QVariant &station) const
+{
+    return !JsonLdDocument::readProperty(station, "name").toString().isEmpty();
 }
