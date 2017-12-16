@@ -61,21 +61,10 @@ bool Extractor::load(const QString &fileName)
             continue;
         }
 
-        std::unique_ptr<ExtractorRule> rule;
-        QStringRef readerName = reader.name();
-        if (readerName == QLatin1String("variable")) {
-            rule.reset(new ExtractorVariableRule);
-        } else if (readerName == QLatin1String("class")) {
-            rule.reset(new ExtractorClassRule);
-        } else if (readerName == QLatin1String("property")) {
-            rule.reset(new ExtractorPropertyRule);
-        } else {
-            return false;
+        auto rule = ExtractorRule::fromXml(reader);
+        if (rule) {
+            m_rules.push_back(rule);
         }
-        if (!rule->load(reader)) {
-            return false;
-        }
-        m_rules.push_back(rule.release());
     }
 
     qCDebug(SEMANTIC_LOG) << fileName << "loaded!";

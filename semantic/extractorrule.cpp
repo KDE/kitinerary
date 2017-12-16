@@ -27,7 +27,15 @@
 
 #include <memory>
 
-ExtractorRule::~ExtractorRule() = default;
+ExtractorRule::~ExtractorRule()
+{
+    qDeleteAll(m_rules);
+}
+
+QVector<ExtractorRule*> ExtractorRule::rules() const
+{
+    return m_rules;
+}
 
 QString ExtractorRule::name() const
 {
@@ -90,7 +98,42 @@ bool ExtractorRule::load(QXmlStreamReader &reader)
     if (reader.attributes().hasAttribute(QLatin1String("locale"))) {
         m_locale = QLocale(reader.attributes().value(QLatin1String("locale")).toString());
     }
-    return true;
+
+    while (!reader.atEnd()) {
+        reader.readNext();
+        if (reader.tokenType() == QXmlStreamReader::EndElement) {
+            return true;
+        }
+        if (reader.tokenType() != QXmlStreamReader::StartElement) {
+            continue;
+        }
+        auto rule = fromXml(reader);
+        if (!rule) {
+            return false;
+        }
+        m_rules.push_back(rule);
+    }
+
+    return false;
+}
+
+ExtractorRule *ExtractorRule::fromXml(QXmlStreamReader &reader)
+{
+    std::unique_ptr<ExtractorRule> rule;
+    QStringRef readerName = reader.name();
+    if (readerName == QLatin1String("variable")) {
+        rule.reset(new ExtractorVariableRule);
+    } else if (readerName == QLatin1String("class")) {
+        rule.reset(new ExtractorClassRule);
+    } else if (readerName == QLatin1String("property")) {
+        rule.reset(new ExtractorPropertyRule);
+    } else {
+        return nullptr;
+    }
+    if (!rule->load(reader)) {
+        return nullptr;
+    }
+    return rule.release();
 }
 
 bool ExtractorVariableRule::match(ExtractorContext *context) const
@@ -104,53 +147,6 @@ bool ExtractorVariableRule::match(ExtractorContext *context) const
     return res.hasMatch();
 }
 
-ExtractorClassRule::~ExtractorClassRule()
-{
-    qDeleteAll(m_rules);
-}
-
-bool ExtractorClassRule::load(QXmlStreamReader &reader)
-{
-    if (!ExtractorRule::load(reader)) {
-        return false;
-    }
-
-    while (!reader.atEnd()) {
-        reader.readNext();
-        if (reader.tokenType() == QXmlStreamReader::EndElement) {
-            return true;
-        }
-        if (reader.tokenType() != QXmlStreamReader::StartElement) {
-            continue;
-        }
-        std::unique_ptr<ExtractorRule> rule;
-        if (reader.name() == QLatin1String("variable")) {
-            rule.reset(new ExtractorVariableRule);
-            if (!rule->load(reader)) {
-                return false;
-            }
-            reader.skipCurrentElement();
-        } else if (reader.name() == QLatin1String("class")) {
-            rule.reset(new ExtractorClassRule);
-            if (!rule->load(reader)) {
-                return false;
-            }
-        } else if (reader.name() == QLatin1String("property")) {
-            rule.reset(new ExtractorPropertyRule);
-            if (!rule->load(reader)) {
-                return false;
-            }
-            reader.skipCurrentElement();
-        } else {
-            return false;
-        }
-
-        m_rules.push_back(rule.release());
-    }
-
-    return true;
-}
-
 bool ExtractorClassRule::match(ExtractorContext *context) const
 {
     const auto res = m_regexp.match(context->engine()->text(), context->offset());
@@ -158,11 +154,6 @@ bool ExtractorClassRule::match(ExtractorContext *context) const
         context->setOffset(res.capturedEnd());
     }
     return res.hasMatch();
-}
-
-QVector<ExtractorRule *> ExtractorClassRule::rules() const
-{
-    return m_rules;
 }
 
 bool ExtractorPropertyRule::match(ExtractorContext *context) const

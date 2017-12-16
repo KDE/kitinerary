@@ -36,9 +36,12 @@ public:
     virtual bool load(QXmlStreamReader &reader);
     virtual bool match(ExtractorContext *context) const = 0;
 
+    QVector<ExtractorRule *> rules() const;
     QString name() const;
     QString type() const;
     bool repeats() const;
+
+    static ExtractorRule *fromXml(QXmlStreamReader &reader);
 
 protected:
     QString value(const QRegularExpressionMatch &match, ExtractorContext *context) const;
@@ -48,6 +51,7 @@ protected:
     QRegularExpression m_regexp;
 
 private:
+    QVector<ExtractorRule *> m_rules;
     QString m_name;
     QString m_type;
     QString m_value;
@@ -65,12 +69,7 @@ public:
 class ExtractorClassRule : public ExtractorRule
 {
 public:
-    ~ExtractorClassRule();
-    bool load(QXmlStreamReader &reader) override;
     bool match(ExtractorContext *context) const override;
-    QVector<ExtractorRule *> rules() const;
-private:
-    QVector<ExtractorRule *> m_rules;
 };
 
 class ExtractorPropertyRule : public ExtractorRule
