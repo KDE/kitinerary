@@ -33,8 +33,7 @@ class ExtractorRule
 {
 public:
     virtual ~ExtractorRule();
-    virtual bool load(QXmlStreamReader &reader);
-    virtual bool match(ExtractorContext *context) const = 0;
+    bool match(ExtractorContext *context) const;
 
     bool hasSubRules() const;
     QVector<ExtractorRule *> rules() const;
@@ -45,6 +44,8 @@ public:
     static ExtractorRule *fromXml(QXmlStreamReader &reader);
 
 protected:
+    bool load(QXmlStreamReader &reader);
+    virtual void processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const = 0;
     QString value(const QRegularExpressionMatch &match, ExtractorContext *context) const;
     QString format() const;
     QLocale locale() const;
@@ -64,19 +65,19 @@ private:
 class ExtractorVariableRule : public ExtractorRule
 {
 public:
-    bool match(ExtractorContext *context) const override;
+    void processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const override;
 };
 
 class ExtractorClassRule : public ExtractorRule
 {
 public:
-    bool match(ExtractorContext *context) const override;
+    void processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const override;
 };
 
 class ExtractorPropertyRule : public ExtractorRule
 {
 public:
-    bool match(ExtractorContext *context) const override;
+    void processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const override;
 };
 
 #endif // EXTRACTORRULE_H

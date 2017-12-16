@@ -141,38 +141,36 @@ ExtractorRule *ExtractorRule::fromXml(QXmlStreamReader &reader)
     return rule.release();
 }
 
-bool ExtractorVariableRule::match(ExtractorContext *context) const
+bool ExtractorRule::match(ExtractorContext *context) const
 {
-    const auto res = m_regexp.match(context->engine()->text(), context->offset());
+    // use QString::midRef(offset) rather than match(text(), offset) as that makes '^' matches work
+    const auto res = m_regexp.match(context->engine()->text().midRef(context->offset()));
     if (res.hasMatch()) {
-        qCDebug(SEMANTIC_LOG) << name() << res.captured() << context->offset() << res.capturedEnd() << context->engine()->text().mid(context->offset(), 20);
-        context->setVariable(name(), value(res, context));
-        context->setOffset(res.capturedEnd());
+        qCDebug(SEMANTIC_LOG) << name() << res.captured() << context->offset() << res.capturedEnd() << context->engine()->text().midRef(context->offset(), 20);
+        processMatch(res, context);
+        context->setOffset(res.capturedEnd() + context->offset());
     }
     return res.hasMatch();
 }
 
-bool ExtractorClassRule::match(ExtractorContext *context) const
+void ExtractorVariableRule::processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const
 {
-    const auto res = m_regexp.match(context->engine()->text(), context->offset());
-    if (res.hasMatch()) {
-        context->setOffset(res.capturedEnd());
-    }
-    return res.hasMatch();
+    context->setVariable(name(), value(match, context));
 }
 
-bool ExtractorPropertyRule::match(ExtractorContext *context) const
+void ExtractorClassRule::processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const
 {
-    const auto res = m_regexp.match(context->engine()->text(), context->offset());
-    if (res.hasMatch()) {
-        auto val = value(res, context);
-        if (type() == QLatin1String("dateTime") && !format().isEmpty()) {
-            const auto dt = locale().toDateTime(val, format());
-            val = dt.toString(Qt::ISODate);
-        }
+    Q_UNUSED(match);
+    Q_UNUSED(context);
+}
 
-        context->setProperty(name(), val);
-        context->setOffset(res.capturedEnd());
+void ExtractorPropertyRule::processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const
+{
+    auto val = value(match, context);
+    if (type() == QLatin1String("dateTime") && !format().isEmpty()) {
+        const auto dt = locale().toDateTime(val, format());
+        val = dt.toString(Qt::ISODate);
     }
-    return res.hasMatch();
+
+    context->setProperty(name(), val);
 }
