@@ -53,6 +53,11 @@ QJsonArray ExtractorEngine::extract()
     return m_result;
 }
 
+static bool isEmptyObject(const QJsonObject &obj)
+{
+    return obj.size() <= 1 && obj.contains(QLatin1String("@type"));
+}
+
 void ExtractorEngine::executeContext(ExtractorContext *context)
 {
     while (!context->rules().isEmpty()) {
@@ -71,10 +76,12 @@ void ExtractorEngine::executeContext(ExtractorContext *context)
                 }
                 subContext.setOffset(context->offset());
                 executeContext(&subContext);
-                if (classRule && (*it)->name().isEmpty()) {
-                    m_result.push_back(subContext.object());
-                } else if (classRule) {
-                    context->setProperty(classRule->name(), subContext.object());
+                if (classRule && !isEmptyObject(subContext.object())) {
+                    if ((*it)->name().isEmpty()) {
+                        m_result.push_back(subContext.object());
+                    } else {
+                        context->setProperty(classRule->name(), subContext.object());
+                    }
                 }
                 context->setOffset(subContext.offset());
             }
