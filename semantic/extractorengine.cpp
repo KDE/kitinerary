@@ -61,16 +61,19 @@ void ExtractorEngine::executeContext(ExtractorContext *context)
             if (!(*it)->match(context)) {
                 continue;
             }
-            if (auto classRule = dynamic_cast<ExtractorClassRule *>(*it)) {
-                qCDebug(SEMANTIC_LOG) << classRule->type() << classRule->name();
+            auto classRule = dynamic_cast<ExtractorClassRule *>(*it);
+            if ((*it)->hasSubRules() || classRule) {
+                qCDebug(SEMANTIC_LOG) << (*it)->type() << (*it)->name();
                 ExtractorContext subContext(this, context);
-                subContext.setRules(classRule->rules());
-                subContext.setProperty(QLatin1String("@type"), classRule->type());
+                subContext.setRules((*it)->rules());
+                if (classRule) {
+                    subContext.setProperty(QLatin1String("@type"), classRule->type());
+                }
                 subContext.setOffset(context->offset());
                 executeContext(&subContext);
-                if (classRule->name().isEmpty()) {
+                if (classRule && (*it)->name().isEmpty()) {
                     m_result.push_back(subContext.object());
-                } else {
+                } else if (classRule) {
                     context->setProperty(classRule->name(), subContext.object());
                 }
                 context->setOffset(subContext.offset());

@@ -36,6 +36,7 @@ public:
     virtual bool load(QXmlStreamReader &reader);
     virtual bool match(ExtractorContext *context) const = 0;
 
+    bool hasSubRules() const;
     QVector<ExtractorRule *> rules() const;
     QString name() const;
     QString type() const;
