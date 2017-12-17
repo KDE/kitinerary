@@ -35,17 +35,26 @@ public:
     virtual ~ExtractorRule();
     bool match(ExtractorContext *context) const;
 
+    enum Type {
+        Variable,
+        Class,
+        Property,
+        Break
+    };
+    Type ruleType() const;
+
     bool hasSubRules() const;
     QVector<ExtractorRule *> rules() const;
     QString name() const;
-    QString type() const;
+    QString dataType() const;
     bool repeats() const;
 
     static ExtractorRule *fromXml(QXmlStreamReader &reader);
 
 protected:
+    explicit ExtractorRule(Type type);
     bool load(QXmlStreamReader &reader);
-    virtual void processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const = 0;
+    virtual void processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const;
     QString value(const QRegularExpressionMatch &match, ExtractorContext *context) const;
     QString format() const;
     QLocale locale() const;
@@ -55,29 +64,38 @@ protected:
 private:
     QVector<ExtractorRule *> m_rules;
     QString m_name;
-    QString m_type;
+    QString m_dataType;
     QString m_value;
     QString m_format;
     QLocale m_locale;
+    Type m_ruleType;
     bool m_repeat = false;
 };
 
 class ExtractorVariableRule : public ExtractorRule
 {
 public:
+    ExtractorVariableRule();
     void processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const override;
 };
 
 class ExtractorClassRule : public ExtractorRule
 {
 public:
-    void processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const override;
+    ExtractorClassRule();
 };
 
 class ExtractorPropertyRule : public ExtractorRule
 {
 public:
+    ExtractorPropertyRule();
     void processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const override;
+};
+
+class ExtractorBreakRule : public ExtractorRule
+{
+public:
+    ExtractorBreakRule();
 };
 
 #endif // EXTRACTORRULE_H

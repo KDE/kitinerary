@@ -27,9 +27,19 @@
 
 #include <memory>
 
+ExtractorRule::ExtractorRule(ExtractorRule::Type type)
+    : m_ruleType(type)
+{
+}
+
 ExtractorRule::~ExtractorRule()
 {
     qDeleteAll(m_rules);
+}
+
+ExtractorRule::Type ExtractorRule::ruleType() const
+{
+    return m_ruleType;
 }
 
 bool ExtractorRule::hasSubRules() const
@@ -47,9 +57,9 @@ QString ExtractorRule::name() const
     return m_name;
 }
 
-QString ExtractorRule::type() const
+QString ExtractorRule::dataType() const
 {
-    return m_type;
+    return m_dataType;
 }
 
 bool ExtractorRule::repeats() const
@@ -92,7 +102,7 @@ QLocale ExtractorRule::locale() const
 bool ExtractorRule::load(QXmlStreamReader &reader)
 {
     m_name = reader.attributes().value(QLatin1String("name")).toString();
-    m_type = reader.attributes().value(QLatin1String("type")).toString();
+    m_dataType = reader.attributes().value(QLatin1String("type")).toString();
     m_value = reader.attributes().value(QLatin1String("value")).toString();
     m_format = reader.attributes().value(QLatin1String("format")).toString();
     m_repeat = reader.attributes().value(QLatin1String("repeat")) == QLatin1String("true");
@@ -132,6 +142,8 @@ ExtractorRule *ExtractorRule::fromXml(QXmlStreamReader &reader)
         rule.reset(new ExtractorClassRule);
     } else if (readerName == QLatin1String("property")) {
         rule.reset(new ExtractorPropertyRule);
+    } else if (readerName == QLatin1String("break")) {
+        rule.reset(new ExtractorBreakRule);
     } else {
         return nullptr;
     }
@@ -153,24 +165,44 @@ bool ExtractorRule::match(ExtractorContext *context) const
     return res.hasMatch();
 }
 
-void ExtractorVariableRule::processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const
-{
-    context->setVariable(name(), value(match, context));
-}
-
-void ExtractorClassRule::processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const
+void ExtractorRule::processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const
 {
     Q_UNUSED(match);
     Q_UNUSED(context);
 }
 
+ExtractorVariableRule::ExtractorVariableRule()
+    : ExtractorRule(ExtractorRule::Variable)
+{
+}
+
+void ExtractorVariableRule::processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const
+{
+    context->setVariable(name(), value(match, context));
+}
+
+ExtractorClassRule::ExtractorClassRule()
+    : ExtractorRule(ExtractorRule::Class)
+{
+}
+
+ExtractorPropertyRule::ExtractorPropertyRule()
+    : ExtractorRule(ExtractorRule::Property)
+{
+}
+
 void ExtractorPropertyRule::processMatch(const QRegularExpressionMatch &match, ExtractorContext *context) const
 {
     auto val = value(match, context);
-    if (type() == QLatin1String("dateTime") && !format().isEmpty()) {
+    if (dataType() == QLatin1String("dateTime") && !format().isEmpty()) {
         const auto dt = locale().toDateTime(val, format());
         val = dt.toString(Qt::ISODate);
     }
 
     context->setProperty(name(), val);
+}
+
+ExtractorBreakRule::ExtractorBreakRule()
+    : ExtractorRule(ExtractorRule::Break)
+{
 }

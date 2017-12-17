@@ -43,7 +43,11 @@ public:
     QJsonArray extract();
 
 private:
-    void executeContext(ExtractorContext *context);
+    enum class Result {
+        Return,
+        Break
+    };
+    Result executeContext(ExtractorContext *context);
 
     const Extractor *m_extractor = nullptr;
     QString m_text;

@@ -58,7 +58,7 @@ static bool isEmptyObject(const QJsonObject &obj)
     return obj.size() <= 1 && obj.contains(QLatin1String("@type"));
 }
 
-void ExtractorEngine::executeContext(ExtractorContext *context)
+ExtractorEngine::Result ExtractorEngine::executeContext(ExtractorContext *context)
 {
     while (!context->rules().isEmpty()) {
         QVector<ExtractorRule *> repeatingRules;
@@ -66,29 +66,42 @@ void ExtractorEngine::executeContext(ExtractorContext *context)
             if (!(*it)->match(context)) {
                 continue;
             }
-            auto classRule = dynamic_cast<ExtractorClassRule *>(*it);
-            if ((*it)->hasSubRules() || classRule) {
-                qCDebug(SEMANTIC_LOG) << (*it)->type() << (*it)->name();
-                ExtractorContext subContext(this, context);
-                subContext.setRules((*it)->rules());
-                if (classRule) {
-                    subContext.setProperty(QLatin1String("@type"), classRule->type());
-                }
-                subContext.setOffset(context->offset());
-                executeContext(&subContext);
-                if (classRule && !isEmptyObject(subContext.object())) {
-                    if ((*it)->name().isEmpty()) {
-                        m_result.push_back(subContext.object());
-                    } else {
-                        context->setProperty(classRule->name(), subContext.object());
-                    }
-                }
-                context->setOffset(subContext.offset());
+
+            qCDebug(SEMANTIC_LOG) << (*it)->ruleType() << (*it)->dataType() << (*it)->name();
+            ExtractorContext subContext(this, context);
+            subContext.setRules((*it)->rules());
+            subContext.setOffset(context->offset());
+
+            switch ((*it)->ruleType()) {
+                case ExtractorRule::Class:
+                    subContext.setProperty(QLatin1String("@type"), (*it)->dataType());
+                    break;
+                case ExtractorRule::Break:
+                    return Result::Break;
+                default:
+                    break;
             }
+
+            const auto subResult = executeContext(&subContext);
+            if (subResult == Result::Break) {
+                return (*it)->repeats() ? Result::Return : Result::Break;
+            }
+
+            if ((*it)->ruleType() == ExtractorRule::Class && !isEmptyObject(subContext.object())) {
+                if ((*it)->name().isEmpty()) {
+                    m_result.push_back(subContext.object());
+                } else {
+                    context->setProperty((*it)->name(), subContext.object());
+                }
+            }
+            context->setOffset(subContext.offset());
+
             if ((*it)->repeats()) {
                 repeatingRules.push_back(*it);
             }
         }
         context->setRules(repeatingRules);
     }
+
+    return Result::Return;
 }
