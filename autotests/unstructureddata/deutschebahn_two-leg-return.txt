@@ -1,0 +1,54 @@
+                                                   Online-Ticket
+                                                                                          Barcode bitte nicht knicken!
+ICE Fahrkarte
+ Fahrtantritt Hinfahrt: 03.11.2027
+ Fahrtantritt Rückfahrt: 04.11.2027
+City-Rückfahrt am 04.11.17
+Flexpreis (Hin- und Rückfahrt)
+Klasse:    2
+Erw:       1, mit 1 BC50
+Hinfahrt: Berlin+City     Somewhere(Specific), mit ICE
+Rückfahrt: Somewhere(Specific)     Berlin+City, mit ICE
+Über:      VIA: H: H*(BI/OS)*K R: D*(OS/BI)*H
+Umtausch/Erstattung kostenlos bis 1 Tag vor Reiseantritt (Hinfahrt).
+                                                                                         Hinfahrt:
+Zahlungspositionen und Preis                                                             Gültig ab:                      03.11.2027
+Positionen                     Preis        MwSt (D) 19%               MwSt D: 7%
+ICE Fahrkarte           1    999,99€      999,00€    99,84€                                                                           Zangenabdruck
+Reservierungen          2      9,00€        9,00€     9,44€                              Rückfahrt:
+Summe                        999,00€      999,00€    99,28€                              Gültig ab:                      04.11.2027
+Lastschriftzahlung
+Betrag     999,99€          Bank        Big Money Bank
+                                                                                                                                      Zangenabdruck
+Datum      02.11.2027       IBAN        DExxxxxxxxxxxxxxxxxxxx
+                                                                                         Herr John Doe
+Der oben genannte Betrag wird von Ihrem Konto eingezogen. Die Buchung Ihres
+Online-Tickets erfolgte am 02.11.2027 13:59 Uhr. DB Fernverkehr AG/DB Regio AG,          Auftragsnummer:                                XXX007
+Stephensonstr. 1, 60326 Frankfurt, Steuernummer: 29/001/60002.
+Ihre Reiseverbindung und Reservierung Hinfahrt am 03.11.2027
+Halt                                   Datum    Zeit       Gleis         Produkte    Reservierung
+Berlin Hbf (tief)                      03.11.   ab 07:49   4A-D          ICE 954     1 Sitzplatz, Wg. 34, Pl. 61, 1 Fenster, Großraum,
+Köln Hbf                               03.11.   an 12:09   6 D-G                     Nichtraucher, Res.Nr. 1234 1013 0000 76
+Köln Hbf                               03.11.   ab 12:17   10 A-B        S0
+Somewhere(Specific)                    03.11.   an 12:45   3
+Ihre Reiseverbindung und Reservierung Rückfahrt am 04.11.2027
+Halt                                   Datum    Zeit       Gleis         Produkte    Reservierung
+Somewhere(Specific)                    04.11.   ab 14:06   3             S0
+Düsseldorf Hbf                         04.11.   an 14:28   14
+Düsseldorf Hbf                         04.11.   ab 14:52   19            ICE 641     1 Sitzplatz, Wg. 22, Pl. 85, 1 Fenster, Großraum,
+Berlin Hbf (tief)                      04.11.   an 19:27                             Nichtraucher,
+                                                                                     Ruhebereich, Res.Nr. 1234 1014 0000 04
+Wichtige Nutzungshinweise:
+- Ihre Fahrkarte gilt nur zusammen mit einem amtlichen Lichtbildausweis (z.B. Personalausweis) oder Ihrer BahnCard.
+- Mit Ihrer Fahrkarte zum Flexpreis können Sie jeden Zug der gewählten Verbindung nutzen: mit einer IC/EC-Fahrkarte alle IC- und EC-Züge, mit
+  einer ICE-Fahrkarte auch alle anderen Züge.
+- Das Online-Ticket gilt nur für den unter "Fahrkarte" angegebenen Reiseabschnitt. Die Übersicht "Ihre Reiseverbindung" enthält gegebenenfalls
+  Reiseinformationen zu Teilstrecken (z.B. Bus oder Straßenbahn), für die eine weitere Fahrkarte erforderlich sein kann.
+- Wenn Ihr Ticket den Zusatz "+City" oder "City mobil" zeigt, gilt dieser nur am Tag der Hinfahrt bzw. am Tag der Rückfahrt.
+- Es gelten die nationalen und internationalen Beförderungsbedingungen der DB AG. Innerhalb von Verkehrsverbünden und Tarifgemeinschaften
+  gelten deren Bedingungen. Alle Bedingungen finden Sie unter: www.bahn.de/agb und www.diebefoerderer.de.
+Ihre Reisedaten können sich kurzfristig durch Bauarbeiten oder andere erforderliche Fahrplananpassungen ändern.
+Bitte informieren Sie sich kurz vor Ihrer Reise über mögliche Änderungen Ihrer Reisedaten unter www.bahn.de/reiseplan oder mobil über die
+App DB Navigator. Achten Sie auch auf Informationen und Ansagen im Zug und am Bahnhof. Wir danken Ihnen für Ihre Buchung und wünschen
+Ihnen eine angenehme Reise!.
+XXX007                                                                                                                                   Seite 1 / 1

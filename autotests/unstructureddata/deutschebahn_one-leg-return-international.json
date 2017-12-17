@@ -1,0 +1,42 @@
+[
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Brno hl.n."
+            },
+            "arrivalTime": "2027-11-15T14:19:00",
+            "departurePlatform": "2",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Berlin Hbf (tief)"
+            },
+            "departureTime": "2027-11-15T06:46:00",
+            "trainNumber": "EC 171"
+        },
+        "reservationNumber": ""
+    },
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "6",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Berlin Hbf (tief)"
+            },
+            "arrivalTime": "2027-11-17T21:15:00",
+            "departurePlatform": "",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Brno hl.n."
+            },
+            "departureTime": "2027-11-17T13:39:00",
+            "trainNumber": "EC 170"
+        },
+        "reservationNumber": ""
+    }
+]

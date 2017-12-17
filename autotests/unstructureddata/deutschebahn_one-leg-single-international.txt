@@ -1,0 +1,52 @@
+      Online-Ticket                                                                            Bitte auf A4 ausdrucken
+                 IC/EC Fahrkarte                                          UMT./ERSTATT. KOSTENPFLICHTIG;
+        CIV 1080             Europa-Spezial                               BIS 1 TAG VOR 1.GELTUNGSTAG             1 Erwachsener
+                                    DB: GILT NUR FÜR EINGETRAGENE         ZÜGE UND REISETAGE(ZUGBINDUNG)
+       Gültigkeit: ab 12.09.2027 - 26.09.2027                                                                   NV (S/RB/RE/IRE)
+                                                                                                                                     XX
+                               VON                                      ->NACH                                                       XX
+IC/EC                          Brno                                     ->Berlin                                               05 T:05              2
+       VIA: <1154>(C.Trebova/Havlickuv Brod)*Praha*Usti nad Labem*Schöna(Gr)
+       <1080>(12.09.2027)SchönaG EC170
+       Europa-Spezial
+       Europa-Spez.Tschech.
+       -------                      .
+      Zahlungspositionen und Preis                                                                            Hinfahrt:
+       Positionen                        Preis       Mwst D: 19%             Mwst D: 7%                       Zertifikat:           ABCD 1234 V6Q
+       IC/EC Fahrkarte         1       99,00€       99,00€      9,83€                                         Gültig ab:                       12.09.2027
+       Reservierung            1         9,00€
+       Summe                           99,00€       99,00€      9,83€
+       Kreditkartenzahlung
+                                                                                                                                               Zangenabdruck
+       Betrag      99,00€           VU-Nr       1234123419     Transaktions-Nr     123123
+       Datum       29.08.2027       Gen-Nr      051509                                                        Herr John Doe
+       Ihre Kreditkarte wurde mit dem oben genannten Betrag belastet. Die Buchung Ihres                       ID-Karte:                BahnCard 1234
+       Online-Tickets erfolgte am 29.08.2027. DB Fernverkehr AG/DB Regio AG,                                  Auftragsnummer:                    XXX007
+       Stephensonstr. 1, 60326 Frankfurt, Steuernummer: 29/550/00001.
+      Ihre Reiseverbindung und Reservierung Hinfahrt am 12.09.2027
+      Halt                              Datum Zeit          Gleis    Produkte/Reservierung
+      Brno hl.n.                        12.09. ab 13:39              EC 170, 2 Sitzplätze, Wg. 256,
+      Berlin Hbf (tief)                 12.09. an 21:15 6            Pl. 71 73, 1 Fenster, 1 Gang,
+                                                                     Großraum, Nichtraucher
+      Wichtige Nutzungshinweise:
+      - Beauftragen Sie niemals Unbekannte mit der Buchung eines personalisierten Online-Tickets zu
+         vermeintlich besonders günstigen Preisen. Tickets werden nur zu dem aufgedruckten Originalpreis
+         ausgegeben. Mit der Nutzung eines solchen Online-Tickets erkennen Sie die Gültigkeit des durch
+         den Buchenden für Sie abgeschlossenen Beförderungsvertrags zu dem aufgedruckten Preis an
+      - Die Fahrkarte muss ausgedruckt vorliegen und gilt nur zusammen mit der beim Kauf angegebenen
+         eigenen gültigen Identifizierungskarte
+      - Bei Normalpreisen auch in anderen Zügen als in der Reiseverbindung angegeben innerhalb der
+         Geltungsdauer gültig (ggf. Aufpreis für anderen Weg erforderlich)
+      - Erstattung oder Rücknahme über www.bahn.de, in DB Reisezentren oder die in Ihrer
+         Auftragsbestätigung angegebene Serviceadresse. Keine Erstattung oder Rücknahme in Reisebüros
+      - Das Online-Ticket gilt nur für den unter "Fahrkarte" angegebenen Reiseabschnitt. Die Übersicht "Ihre
+         Reiseverbindung" enthält ggf. Reiseinformationen zu Teilstrecken (z.B. mit dem Bus), für die ein
+         weiteres Ticket erforderlich ist.
+      - Es gelten die nationalen und internationalen Beförderungsbedingungen der jeweiligen Beförderer
+         bzw. innerhalb von Verkehrsverbünden und Tarifgemeinschaften deren Beförderungsbedingungen.
+         Den jeweiligen Beförderer finden Sie unter: www.DieBefoerderer.de bzw. www.bahn.de/agb .
+      Bitte informieren Sie sich kurz vor Ihrer Reise über mögliche Änderungen Ihrer Reisedaten unter
+      www.bahn.de/reiseplan oder mobil über die App DB Navigator. Achten Sie auch auf Informationen                    Barcode bitte nicht knicken!
+      und Ansagen im Zug und am Bahnhof. Wir danken Ihnen für Ihre Buchung und wünschen Ihnen
+      eine angenehme Reise!
+      XXX007                                                                                                                                  Seite 1 / 1

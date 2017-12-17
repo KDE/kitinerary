@@ -1,0 +1,60 @@
+                                                  Online-Ticket
+                                                        Bitte auf A4 ausdrucken
+                                                                                          Barcode bitte nicht knicken!
+ICE Fahrkarte
+ Fahrtantritt am 28.12.2026
+Flexpreis (Einfache Fahrt)
+Klasse:   2
+Erw:      1, mit 1 BC50
+Hinfahrt: Somewhere(Specific)                Berlin+City, mit ICE
+Über:     VIA: D*(OS/BI)*H
+Zahlungspositionen und Preis
+Positionen                     Preis        MwSt (D) 19%             MwSt D: 7%
+ICE Fahrkarte           1     99,00€       99,00€     9,10€
+Reservierung            1      9,50€        9,50€     9,72€
+                                                                                         Hinfahrt:
+Summe                         99,50€       99,50€     9,82€
+                                                                                         Gültig ab:                      28.12.2026
+Lastschriftzahlung
+Betrag     99,50€           Bank        Big Money Bank
+Datum      27.12.2026       IBAN        DExxxxxxxxxxxxxxxxxxxx                                                                              Zangenabdruck
+Der oben genannte Betrag wird von Ihrem Konto eingezogen. Die Buchung Ihres              Herr John Doe
+Online-Tickets erfolgte am 27.12.2026 10:03 Uhr. DB Fernverkehr AG/DB Regio AG,          Auftragsnummer:                                      XXX007
+Stephensonstr. 1, 60326 Frankfurt, Steuernummer: 29/001/60002.
+Ihre Reiseverbindung und Reservierung Hinfahrt am 28.12.2026
+Halt                                   Datum    Zeit       Gleis        Produkte     Reservierung
+Somewhere(Specific)                    28.12.   ab 15:06   3            S0
+Düsseldorf Hbf                         28.12.   an 15:28   14
+Düsseldorf Hbf                         28.12.   ab 15:52   19           ICE 943      1 Sitzplatz, Wg. 24, Pl. 66, 1 Fenster, Großraum,
+Berlin Hbf (tief)                      28.12.   an 20:09   6D-G                      Nichtraucher, Res.Nr. 8051 1002 8138 40
+Wichtige Nutzungshinweise:
+- Beauftragen Sie niemals Unbekannte mit der Buchung eines personalisierten Online-Tickets zu vermeintlich besonders günstigen Preisen.
+  Tickets werden nur zu dem aufgedruckten Originalpreis ausgegeben. Mit der Nutzung eines solchen Online-Tickets erkennen Sie die Gültigkeit
+  des durch den Buchenden für Sie abgeschlossenen Beförderungsvertrags zu dem aufgedruckten Preis an
+- Die Fahrkarte muss ausgedruckt vorliegen und gilt nur zusammen mit einem Personalausweis, Reisepass, elektronischen Aufenthaltstitel, BüMA
+  oder der BahnCard des Fahrkarteninhabers.
+- Bei Tickets mit BahnCard-Rabatt müssen Sie eine gültige BahnCard vorlegen können
+- Bei Flexpreisen auch in anderen Zügen als in der Reiseverbindung angegeben innerhalb der Geltungsdauer gültig (ggf. Aufpreis für anderen
+  Weg erforderlich). Der Fahrtantritt bei Flexpreisen Inland muss am angegebenen Fahrtantritt erfolgen. Soll der Tag des Fahrtantritts geändert
+  werden, so ist ein Umtausch erforderlich
+- Erstattung oder Rücknahme über www.bahn.de, in DB Reisezentren oder die in Ihrer Auftragsbestätigung angegebene Serviceadresse. Keine
+  Erstattung oder Rücknahme in Reisebüros
+- Das Online-Ticket gilt nur für den unter "Fahrkarte" angegebenen Reiseabschnitt. Die Übersicht "Ihre Reiseverbindung" enthält ggf.
+  Reiseinformationen zu Teilstrecken (z.B. mit dem Bus), für die ein weiteres Ticket erforderlich ist
+- Wenn Ihr Ticket den Zusatz "+City" oder "City mobil" beinhaltet, gilt dieser nur am Tag der Hinfahrt bzw. am Tag der Rückfahrt (Reisetage wie
+  unter "Ihre Reiseverbindung" angegeben)
+- Es gelten die nationalen und internationalen Beförderungsbedingungen der jeweiligen Beförderer bzw. innerhalb von Verkehrsverbünden und
+  Tarifgemeinschaften deren Beförderungsbedingungen. Den jeweiligen Beförderer finden Sie unter: www.DieBefoerderer.de bzw. www.bahn.de/
+  agb .
+Ihre Reisedaten können sich kurzfristig durch Bauarbeiten oder andere erforderliche Fahrplananpassungen ändern
+Bitte informieren Sie sich kurz vor Ihrer Reise über mögliche Änderungen Ihrer Reisedaten unter www.bahn.de/reiseplan oder mobil über die
+App DB Navigator. Achten Sie auch auf Informationen und Ansagen im Zug und am Bahnhof. Wir danken Ihnen für Ihre Buchung und wünschen
+Ihnen eine angenehme Reise!
+                                                                                                                              Aktuelle
+                                                                                                                              Infos aufs
+                                                                                                                              Handy!
+                                                                                                                              Fahrpläne, Pünktlichkeit,
+                                                                                                                              Alternativen zur Fahrt
+                                                                                                                              und mehr!
+                                                                                                                              m.bahn.de
+XXX007                                                                                                                                         Seite 1 / 1

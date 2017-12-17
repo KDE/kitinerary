@@ -2,6 +2,7 @@
     <qresource prefix="/org.kde.messageviewer/semantic/rules">
         <file>amadeus.xml</file>
         <file>brusselsairlines.xml</file>
+        <file>deutschebahn.xml</file>
         <file>eurowings.xml</file>
         <file>fcmtravel.xml</file>
     </qresource>

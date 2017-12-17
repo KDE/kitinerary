@@ -1,0 +1,58 @@
+                                             Online-Ticket
+                                                  Bitte auf A4 ausdrucken
+                                                                                           Barcode bitte nicht knicken!
+IC/EC Fahrkarte
+ Gültigkeit: 10.02.2027 - 09.03.2027 Hinfahrt bis 11.02.2027
+Rückfahrt an 2 aufeinander folgenden Tagen innerhalb der Gültigkeit
+Normalpreis (Hin- und Rückfahrt)
+Klasse:    2
+Erw:       1, mit 1 BC50
+Hinfahrt: Berlin     Osnabrück+City, mit IC/EC
+Rückfahrt: Osnabrück+City    Berlin, mit IC/EC
+Über:      VIA: BGS*(MD*EILS/SDL)*H*(HF*BI/BUEN)
+15 EUR ENTGELT FÜR UMTAUSCH/ERSTATTUNG AB 1. GELTUNGSTAG
+Zahlungspositionen und Preis
+                                                                                          Hinfahrt:
+Positionen                     Preis       Mwst D: 19%                                    Zertifikat:                     1234 ABCD UPY
+IC/EC Fahrkarte        1      99,00€      99,00€    99,34€                                Gültig ab:                      10.02.2027
+Summe                         99,00€      99,00€    99,34€
+Kreditkartenzahlung
+                                                                                                                                           Zangenabdruck
+Betrag    99,00€           VU-Nr       1234123419      Transaktions-Nr      123123        Rückfahrt:
+Datum     08.02.2027       Gen-Nr      010123                                             Zertifikat:                     1234 ABCD 5Q9
+Ihre Kreditkarte wurde mit dem oben genannten Betrag belastet. Die Buchung Ihres          Gültig ab:                      10.02.2027
+Online-Tickets erfolgte am 08.02.2027. DB Fernverkehr AG/DB Regio AG,
+Stephensonstr. 1, 60326 Frankfurt, Steuernummer: 045 231 28552.                                                                            Zangenabdruck
+                                                                                          Herr John Doe
+                                                                                          ID-Karte:                                  BahnCard 1234
+                                                                                          Auftragsnummer:                                 XXX007
+Ihre Reiseverbindung und Reservierung Hinfahrt am 10.02.2027
+Halt                          Datum Zeit      Gleis Fahrt                   Reservierung
+Berlin Hbf                    10.02. ab 08:37 13    IC 148
+Osnabrück Hbf                 10.02. an 11:51 12
+Ihre Reiseverbindung und Reservierung Rückfahrt am 12.02.2027
+Halt                          Datum Zeit      Gleis Fahrt                   Reservierung
+Osnabrück Hbf                 12.02. ab 16:08 11    IC 147
+Berlin Hbf                    12.02. an 19:19 11
+Hinweise:
+- Die Fahrkarte muss ausgedruckt vorliegen und gilt nur zusammen mit der beim Kauf angegebenen eigenen gültigen Identifizierungskarte
+- Bei Normalpreisen auch in anderen Zügen als in der Reiseverbindung angegeben innerhalb der Geltungsdauer gültig (ggf. Aufpreis für anderen
+  Weg erforderlich)
+- Erstattung oder Rücknahme über www.bahn.de, in DB ReiseZentren oder die in Ihrer Auftragsbestätigung angegebene Serviceadresse. Keine
+  Erstattung oder Rücknahme in Reisebüros
+- Das Online-Ticket gilt nur für den unter "Fahrkarte" angegebenen Reiseabschnitt. Die Übersicht "Ihre Reiseverbindung" enthält ggf.
+  Reiseinformationen zu Teilstrecken (z.B. mit dem Bus), für die ein weiteres Ticket erforderlich ist
+- Wenn Ihr Ticket die City-Option beinhaltet, gilt diese nur am Ankunftstag der Hinfahrt bzw. am Abfahrtstag der Rückfahrt (Reisetage wie unter
+  "Ihre Reiseverbindung" angegeben)
+- Für Fahrten im City-Gebiet mit City-Ticket oder City mobil muss die Echtheit des Online-Tickets durch den Zangenabdruck des Zugbegleiters
+  bestätigt werden
+- Es gelten die Beförderungsbedingungen der DB AG bzw. besondere Regelungen für bestimmte Strecken und Angebote (z.B. innerhalb von
+  Verkehrsverbünden, Tarifgemeinschaften, Ländertarife).
+Mehr Information gibt es unter www.bahn.de/onlineticket. Wir danken Ihnen für Ihre Buchung und wünschen Ihnen eine angenehme Reise!
+                                                                                                                              Aktuelle
+                                                                                                                              Infos aufs
+                                                                                                                              Handy!
+                                                                                                                              Fahrpläne, Pünktlichkeit,
+                                                                                                                              Ticketbuchung und mehr!
+                                                                                                                              m.bahn.de
+XXX007                                                                                                                                        Seite 1 / 1

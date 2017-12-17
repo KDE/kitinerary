@@ -1,0 +1,42 @@
+[
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "12",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Osnabrück Hbf"
+            },
+            "arrivalTime": "2027-02-10T11:51:00",
+            "departurePlatform": "13",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Berlin Hbf"
+            },
+            "departureTime": "2027-02-10T08:37:00",
+            "trainNumber": "IC 148"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "11",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Berlin Hbf"
+            },
+            "arrivalTime": "2027-02-12T19:19:00",
+            "departurePlatform": "11",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Osnabrück Hbf"
+            },
+            "departureTime": "2027-02-12T16:08:00",
+            "trainNumber": "IC 147"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

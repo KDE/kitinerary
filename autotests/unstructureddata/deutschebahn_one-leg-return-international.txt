@@ -1,0 +1,56 @@
+      Online-Ticket                                                                        Bitte auf A4 ausdrucken
+               IC/EC Fahrkarte                                         UMTAUSCH/ERSTATTUNG KOSTEN-
+        CIV 1080            Normalpreis                                PFLICHTIG AB 1.GELTUNGSTAG             1 Erwachsener
+       Gültigkeit: ab 15.11.2027 - 14.12.2027
+                              VON                                   ->NACH
+IC/EC                         Berlin                                ->Brno                                                                      2
+IC/EC                         Brno                                  ->Berlin
+       VIA: <1080>BGS*(BKH/BWK)*BSFL*ZS*DOKI*ELW*DD*BSU*Schöna(Gr)<1154>Usti
+       nad Labem*Praha*(Havlickuv Brod/C.Trebova)
+       Normalpreis
+       1 BC 50                    1 RAILPLUS
+      Zahlungspositionen und Preis                                                                        Hinfahrt:
+       Positionen                     Preis       Mwst D: 19%                                             Zertifikat:            ABCD 1234 QVZ
+       IC/EC Fahrkarte        1     999,20€     99,00€       9,18€                                        Gültig ab:                       15.11.2027
+       Reservierungen         2       9,00€
+       Summe                        999,20€     99,00€       9,18€
+       Kreditkartenzahlung
+                                                                                                                                           Zangenabdruck
+       Betrag      999,20€         VU-Nr     4556123419     Transaktions-Nr    123456
+       Datum       13.11.2027      Gen-Nr    012343                                                       Rückfahrt:
+                                                                                                          Zertifikat:           ABCD 1234 C5P
+       Ihre Kreditkarte wurde mit dem oben genannten Betrag belastet. Die Buchung Ihres
+       Online-Tickets erfolgte am 13.11.2027. DB Fernverkehr AG/DB Regio AG,                              Gültig ab:                       15.11.2027
+       Stephensonstr. 1, 60326 Frankfurt, Steuernummer: 045 231 28552.
+      Ihre Reiseverbindung und Reservierung Hinfahrt am 15.11.2027                                                                         Zangenabdruck
+      Halt                           Datum Zeit          Gleis   Fahrt/Reservierung                       Herr John Doe
+      Berlin Hbf (tief)              15.11. ab 06:46 2           EC 171, 1 Sitzplatz, Wg. 258,            ID-Karte:                BahnCard 1234
+      Brno hl.n.                     15.11. an 14:19             Pl. 105, 1 Fenster, Abteil,              Auftragsnummer:                     XXX007
+                                                                 Nichtraucher
+      Ihre Reiseverbindung und Reservierung Rückfahrt am 17.11.2027
+      Halt                           Datum Zeit          Gleis   Fahrt/Reservierung
+      Brno hl.n.                     17.11. ab 13:39             EC 170, 1 Sitzplatz, Wg. 256,
+      Berlin Hbf (tief)              17.11. an 21:15 6           Pl. 62, 1 Fenster, Großraum,
+                                                                 Nichtraucher
+                                                                                                                   Barcode bitte nicht knicken!
+      XXX007                                                                                                                              Seite 1 / 2
+Hinweise:
+- Die Fahrkarte muss ausgedruckt vorliegen und gilt nur zusammen mit der beim Kauf angegebenen
+   eigenen gültigen Identifizierungskarte
+- Bei Normalpreisen auch in anderen Zügen als in der Reiseverbindung angegeben innerhalb der
+   Geltungsdauer gültig (ggf. Aufpreis für anderen Weg erforderlich)
+- Erstattung oder Rücknahme über www.bahn.de, in DB Reisezentren oder die in Ihrer
+   Auftragsbestätigung angegebene Serviceadresse. Keine Erstattung oder Rücknahme in Reisebüros
+- Das Online-Ticket gilt nur für den unter "Fahrkarte" angegebenen Reiseabschnitt. Die Übersicht "Ihre
+   Reiseverbindung" enthält ggf. Reiseinformationen zu Teilstrecken (z.B. mit dem Bus), für die ein
+   weiteres Ticket erforderlich ist.
+- Wenn Ihr Ticket die City-Option beinhaltet, gilt diese nur am Ankunftstag der Hinfahrt bzw. am
+   Abfahrtstag der Rückfahrt (Reisetage wie unter "Ihre Reiseverbindung" angegeben). Die Hinfahrt
+   muss durch Zangenabdruck entwertet sein.
+- Es gelten die nationalen und internationalen Beförderungsbedingungen der jeweiligen Beförderer
+   bzw. innerhalb von Verkehrsverbünden und Tarifgemeinschaften deren Beförderungsbedingungen.
+   Den jeweiligen Beförderer finden Sie unter: www.DieBefoerderer.de bzw. www.bahn.de/agb .
+Mehr Information gibt es unter www.bahn.de/onlineticket. Informieren Sie sich unter www.bahn.de/
+reiseplan zeitnah über Ihre Verbindung. Wir danken Ihnen für Ihre Buchung und wünschen Ihnen
+eine angenehme Reise!
+XXX007                                                                                                 Seite 2 / 2

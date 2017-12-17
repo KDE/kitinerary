@@ -1,0 +1,42 @@
+[
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "14",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Düsseldorf Hbf"
+            },
+            "arrivalTime": "2026-12-28T15:28:00",
+            "departurePlatform": "3",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Somewhere(Specific)"
+            },
+            "departureTime": "2026-12-28T15:06:00",
+            "trainNumber": "S0"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "6D-G",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Berlin Hbf (tief)"
+            },
+            "arrivalTime": "2026-12-28T20:09:00",
+            "departurePlatform": "19",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Düsseldorf Hbf"
+            },
+            "departureTime": "2026-12-28T15:52:00",
+            "trainNumber": "ICE 943"
+        },
+        "reservationNumber": "XXX007"
+    }
+]
