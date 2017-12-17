@@ -66,6 +66,10 @@ bool Extractor::load(const QString &fileName)
             m_rules.push_back(rule);
         }
     }
+    if (reader.hasError()) {
+        qCWarning(SEMANTIC_LOG) << "Loading error:" << fileName << reader.errorString();
+        return false;
+    }
 
     qCDebug(SEMANTIC_LOG) << fileName << "loaded!";
     return true;
