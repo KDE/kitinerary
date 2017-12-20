@@ -162,8 +162,8 @@ bool ExtractorPostprocessor::filterTrainTrip(const QVariant &trip) const
     const auto depDt = JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
     const auto arrDt = JsonLdDocument::readProperty(trip, "arrivalTime").toDateTime();
     return filterAirport(JsonLdDocument::readProperty(trip, "departureStation"))
-        && filterAirport(JsonLdDocument::readProperty(trip, "arrivalStation"))
-        && depDt.isValid() && arrDt.isValid();
+           && filterAirport(JsonLdDocument::readProperty(trip, "arrivalStation"))
+           && depDt.isValid() && arrDt.isValid();
 }
 
 bool ExtractorPostprocessor::filterTrainStation(const QVariant &station) const

@@ -47,7 +47,7 @@ bool ExtractorRule::hasSubRules() const
     return !m_rules.empty();
 }
 
-QVector<ExtractorRule*> ExtractorRule::rules() const
+QVector<ExtractorRule *> ExtractorRule::rules() const
 {
     return m_rules;
 }

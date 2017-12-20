@@ -73,13 +73,13 @@ ExtractorEngine::Result ExtractorEngine::executeContext(ExtractorContext *contex
             subContext.setOffset(context->offset());
 
             switch ((*it)->ruleType()) {
-                case ExtractorRule::Class:
-                    subContext.setProperty(QLatin1String("@type"), (*it)->dataType());
-                    break;
-                case ExtractorRule::Break:
-                    return Result::Break;
-                default:
-                    break;
+            case ExtractorRule::Class:
+                subContext.setProperty(QLatin1String("@type"), (*it)->dataType());
+                break;
+            case ExtractorRule::Break:
+                return Result::Break;
+            default:
+                break;
             }
 
             const auto subResult = executeContext(&subContext);
