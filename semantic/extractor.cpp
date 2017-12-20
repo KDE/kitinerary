@@ -18,66 +18,52 @@
 */
 
 #include "extractor.h"
-#include "extractorrule.h"
 #include "semantic_debug.h"
 
 #include <QFile>
-#include <QXmlStreamReader>
+#include <QFileInfo>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 
 #include <memory>
 
 Extractor::Extractor() = default;
 Extractor::Extractor(Extractor &&) = default;
-
-Extractor::~Extractor()
-{
-    qDeleteAll(m_rules);
-}
+Extractor::~Extractor() = default;
 
 bool Extractor::load(const QString &fileName)
 {
-    qCDebug(SEMANTIC_LOG) << "loading" << fileName;
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
         return false;
     }
 
-    QXmlStreamReader reader(&file);
-    while (!reader.atEnd()) {
-        reader.readNext();
-        if (reader.tokenType() != QXmlStreamReader::StartElement) {
-            continue;
-        }
-        if (reader.name() == QLatin1String("extractor")) {
-            continue;
-        }
-
-        if (reader.name() == QLatin1String("filter")) {
-            ExtractorFilter f;
-            if (!f.load(reader)) {
-                return false;
-            }
-            m_filters.push_back(std::move(f));
-            continue;
-        }
-
-        auto rule = ExtractorRule::fromXml(reader);
-        if (rule) {
-            m_rules.push_back(rule);
-        }
-    }
-    if (reader.hasError()) {
-        qCWarning(SEMANTIC_LOG) << "Loading error:" << fileName << reader.errorString();
+    QJsonParseError error;
+    const auto doc = QJsonDocument::fromJson(file.readAll(), &error);
+    if (doc.isNull()) {
+        qCWarning(SEMANTIC_LOG) << "Extractor loading error:" << fileName << error.errorString();
         return false;
     }
 
-    qCDebug(SEMANTIC_LOG) << fileName << "loaded!";
-    return true;
+    const auto obj = doc.object();
+    for (const auto &filterValue : obj.value(QLatin1String("filter")).toArray()) {
+        ExtractorFilter f;
+        if (!f.load(filterValue.toObject()))
+            return false;
+        m_filters.push_back(std::move(f));
+    }
+
+    const auto scriptName = obj.value(QLatin1String("script")).toString();
+    QFileInfo fi(fileName);
+    m_scriptName = fi.absolutePath() + QLatin1Char('/') + scriptName;
+    return !m_filters.empty() && !m_scriptName.isEmpty() && QFile::exists(m_scriptName);
 }
 
-QVector<ExtractorRule *> Extractor::rules() const
+QString Extractor::scriptFileName() const
 {
-    return m_rules;
+    return m_scriptName;
 }
 
 const std::vector<ExtractorFilter> &Extractor::filters() const

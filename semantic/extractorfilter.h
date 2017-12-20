@@ -23,7 +23,7 @@
 #include <QRegularExpression>
 #include <QByteArray>
 
-class QXmlStreamReader;
+class QJsonObject;
 
 /** Determines whether an extractor is applicable to a given email. */
 class ExtractorFilter
@@ -34,7 +34,7 @@ public:
 
     const char *headerName() const;
     bool matches(const QString &headerData) const;
-    bool load(QXmlStreamReader &reader);
+    bool load(const QJsonObject &obj);
 
 private:
     QByteArray m_headerName;

@@ -19,7 +19,7 @@
 
 #include "extractorfilter.h"
 
-#include <QXmlStreamReader>
+#include <QJsonObject>
 
 ExtractorFilter::ExtractorFilter() = default;
 ExtractorFilter::~ExtractorFilter() = default;
@@ -34,10 +34,9 @@ bool ExtractorFilter::matches(const QString &headerData) const
     return m_exp.match(headerData).hasMatch();
 }
 
-bool ExtractorFilter::load(QXmlStreamReader &reader)
+bool ExtractorFilter::load(const QJsonObject& obj)
 {
-    Q_ASSERT(reader.name() == QLatin1String("filter"));
-    m_headerName = reader.attributes().value(QLatin1String("header")).toString().toUtf8();
-    m_exp.setPattern(reader.attributes().value(QLatin1String("match")).toString());
+    m_headerName = obj.value(QLatin1String("header")).toString().toUtf8();
+    m_exp.setPattern(obj.value(QLatin1String("match")).toString());
     return !m_headerName.isEmpty() && m_exp.isValid();
 }

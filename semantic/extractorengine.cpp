@@ -18,9 +18,40 @@
 */
 
 #include "extractorengine.h"
-#include "extractorcontext.h"
-#include "extractorrule.h"
 #include "semantic_debug.h"
+
+#include <QDateTime>
+#include <QFile>
+#include <QLocale>
+#include <QJSEngine>
+
+class JsApi : public QObject {
+    Q_OBJECT
+public:
+    explicit JsApi(QJSEngine *engine)
+        : QObject(engine)
+        , m_engine(engine)
+    {
+    }
+
+    Q_INVOKABLE QJSValue newObject(const QString &typeName) const;
+    Q_INVOKABLE QDateTime toDateTime(const QString &dt, const QString &format, const QString &locale) const;
+
+private:
+    QJSEngine *m_engine;
+};
+
+QJSValue JsApi::newObject(const QString& typeName) const
+{
+    auto v = m_engine->newObject();
+    v.setProperty(QStringLiteral("@type"), typeName);
+    return v;
+}
+
+QDateTime JsApi::toDateTime(const QString &dt, const QString &format, const QString &locale) const
+{
+    return QLocale(locale).toDateTime(dt, format);
+}
 
 ExtractorEngine::ExtractorEngine() = default;
 ExtractorEngine::~ExtractorEngine() = default;
@@ -46,62 +77,44 @@ QJsonArray ExtractorEngine::extract()
         return {};
     }
 
-    qCDebug(SEMANTIC_LOG) << m_text << m_text.size();
-    ExtractorContext context(this);
-    context.setRules(m_extractor->rules());
-    executeContext(&context);
+    executeScript();
     return m_result;
 }
 
-static bool isEmptyObject(const QJsonObject &obj)
+void ExtractorEngine::executeScript()
 {
-    return obj.size() <= 1 && obj.contains(QLatin1String("@type"));
-}
+    Q_ASSERT(m_extractor);
 
-ExtractorEngine::Result ExtractorEngine::executeContext(ExtractorContext *context)
-{
-    while (!context->rules().isEmpty()) {
-        QVector<ExtractorRule *> repeatingRules;
-        for (auto it = context->rules().begin(); it != context->rules().end(); ++it) {
-            if (!(*it)->match(context)) {
-                continue;
-            }
-
-            qCDebug(SEMANTIC_LOG) << (*it)->ruleType() << (*it)->dataType() << (*it)->name();
-            ExtractorContext subContext(this, context);
-            subContext.setRules((*it)->rules());
-            subContext.setOffset(context->offset());
-
-            switch ((*it)->ruleType()) {
-            case ExtractorRule::Class:
-                subContext.setProperty(QLatin1String("@type"), (*it)->dataType());
-                break;
-            case ExtractorRule::Break:
-                return Result::Break;
-            default:
-                break;
-            }
-
-            const auto subResult = executeContext(&subContext);
-            if (subResult == Result::Break) {
-                return (*it)->repeats() ? Result::Return : Result::Break;
-            }
-
-            if ((*it)->ruleType() == ExtractorRule::Class && !isEmptyObject(subContext.object())) {
-                if ((*it)->name().isEmpty()) {
-                    m_result.push_back(subContext.object());
-                } else {
-                    context->setProperty((*it)->name(), subContext.object());
-                }
-            }
-            context->setOffset(subContext.offset());
-
-            if ((*it)->repeats()) {
-                repeatingRules.push_back(*it);
-            }
-        }
-        context->setRules(repeatingRules);
+    QFile f(m_extractor->scriptFileName());
+    if (!f.open(QFile::ReadOnly)) {
+        qCWarning(SEMANTIC_LOG) << "Failed to open extractor script" << f.fileName() << f.errorString();
+        return;
     }
 
-    return Result::Return;
+    QJSEngine engine;
+    engine.installExtensions(QJSEngine::ConsoleExtension);
+    auto jsApi = new JsApi(&engine);
+    engine.globalObject().setProperty(QStringLiteral("JsonLd"), engine.newQObject(jsApi));
+    auto result = engine.evaluate(QString::fromUtf8(f.readAll()), f.fileName());
+    if (result.isError()) {
+        qCWarning(SEMANTIC_LOG) << "Script parsing error in" << result.property(QLatin1String("fileName")).toString()
+            << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
+        return;
+    }
+
+    auto mainFunc = engine.globalObject().property(QLatin1String("main"));
+    if (!mainFunc.isCallable()) {
+        qCWarning(SEMANTIC_LOG) << "Script has no main() function!";
+        return;
+    }
+    result = mainFunc.call({m_text});
+    if (result.isError()) {
+        qCWarning(SEMANTIC_LOG) << "Script execution error in" << result.property(QLatin1String("fileName")).toString()
+            << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
+        return;
+    }
+
+    m_result = QJsonArray::fromVariantList(result.toVariant().toList());
 }
+
+#include "extractorengine.moc"

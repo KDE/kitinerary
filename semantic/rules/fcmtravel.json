@@ -1,0 +1,7 @@
+{
+    "filter": [
+        { "header": "From", "match": "@fcmtravel\." },
+        { "header": "From", "match": "@travellink\." }
+    ],
+    "script": "fcmtravel.js"
+}

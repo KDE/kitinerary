@@ -1,0 +1,6 @@
+{
+    "filter": [
+        { "header": "From", "match": "@amadeus.com" }
+    ],
+    "script": "amadeus.js"
+}

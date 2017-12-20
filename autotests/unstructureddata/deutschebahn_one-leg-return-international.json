@@ -17,7 +17,7 @@
             "departureTime": "2027-11-15T06:46:00",
             "trainNumber": "EC 171"
         },
-        "reservationNumber": ""
+        "reservationNumber": "XXX007"
     },
     {
         "@type": "TrainReservation",
@@ -37,6 +37,6 @@
             "departureTime": "2027-11-17T13:39:00",
             "trainNumber": "EC 170"
         },
-        "reservationNumber": ""
+        "reservationNumber": "XXX007"
     }
 ]

@@ -27,8 +27,6 @@
 
 #include <vector>
 
-class ExtractorContext;
-
 /** Code for executing an extractor rule set on a specific email part. */
 class ExtractorEngine
 {
@@ -43,11 +41,7 @@ public:
     QJsonArray extract();
 
 private:
-    enum class Result {
-        Return,
-        Break
-    };
-    Result executeContext(ExtractorContext *context);
+    void executeScript();
 
     const Extractor *m_extractor = nullptr;
     QString m_text;

@@ -1,9 +1,14 @@
 <RCC>
     <qresource prefix="/org.kde.messageviewer/semantic/rules">
-        <file>amadeus.xml</file>
-        <file>brusselsairlines.xml</file>
-        <file>deutschebahn.xml</file>
-        <file>eurowings.xml</file>
-        <file>fcmtravel.xml</file>
+        <file>amadeus.json</file>
+        <file>amadeus.js</file>
+        <file>brusselsairlines.json</file>
+        <file>brusselsairlines.js</file>
+        <file>deutschebahn.json</file>
+        <file>deutschebahn.js</file>
+        <file>eurowings.json</file>
+        <file>eurowings.js</file>
+        <file>fcmtravel.json</file>
+        <file>fcmtravel.js</file>
     </qresource>
 </RCC>

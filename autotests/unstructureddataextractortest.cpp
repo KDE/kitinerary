@@ -68,7 +68,7 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
 
         Extractor extractor;
-        QVERIFY(extractor.load(QLatin1String(":/org.kde.messageviewer/semantic/rules/") + extractorName + QLatin1String(".xml")));
+        QVERIFY(extractor.load(QLatin1String(":/org.kde.messageviewer/semantic/rules/") + extractorName + QLatin1String(".json")));
 
         ExtractorEngine engine;
         engine.setText(QString::fromUtf8(f.readAll()));
@@ -115,7 +115,7 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
 
         Extractor extractor;
-        QVERIFY(extractor.load(QLatin1String(":/org.kde.messageviewer/semantic/rules/") + extractorName + QLatin1String(".xml")));
+        QVERIFY(extractor.load(QLatin1String(":/org.kde.messageviewer/semantic/rules/") + extractorName + QLatin1String(".json")));
 
         ExtractorPreprocessor preproc;
         preproc.preprocessHtml(QString::fromUtf8(f.readAll()));
@@ -137,6 +137,6 @@ private Q_SLOTS:
     }
 };
 
-QTEST_APPLESS_MAIN(UnstructuredDataExtractorTest)
+QTEST_MAIN(UnstructuredDataExtractorTest)
 
 #include "unstructureddataextractortest.moc"

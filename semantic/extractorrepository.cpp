@@ -61,7 +61,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
 
 void ExtractorRepository::loadExtractors()
 {
-    QDirIterator it(QStringLiteral(":/org.kde.messageviewer/semantic/rules"), {QStringLiteral("*.xml")}, QDir::Files);
+    QDirIterator it(QStringLiteral(":/org.kde.messageviewer/semantic/rules"), {QStringLiteral("*.json")}, QDir::Files);
     while (it.hasNext()) {
         Extractor e;
         if (e.load(it.next())) {

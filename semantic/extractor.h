@@ -22,7 +22,6 @@
 
 #include "extractorfilter.h"
 
-#include <QVector>
 #include <vector>
 
 class ExtractorRule;
@@ -39,11 +38,11 @@ public:
 
     bool load(const QString &fileName);
 
-    QVector<ExtractorRule *> rules() const;
+    QString scriptFileName() const;
     const std::vector<ExtractorFilter> &filters() const;
 
 private:
-    QVector<ExtractorRule *> m_rules;
+    QString m_scriptName;
     std::vector<ExtractorFilter> m_filters;
 };
 
