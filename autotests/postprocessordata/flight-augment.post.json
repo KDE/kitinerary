@@ -12,8 +12,8 @@
             "@type": "Airport",
             "geo": {
                 "@type": "GeoCoordinates",
-                "latitude": -77.45580291748047,
-                "longitude": 38.944400787353516
+                "longitude": -77.45580291748047,
+                "latitude": 38.944400787353516
             },
             "iataCode": "IAD",
             "name": "Washington Dulles International Airport"
@@ -23,8 +23,8 @@
             "@type": "Airport",
             "geo": {
                 "@type": "GeoCoordinates",
-                "latitude": -122.30899810791016,
-                "longitude": 47.44889831542969
+                "longitude": -122.30899810791016,
+                "latitude": 47.44889831542969
             },
             "iataCode": "SEA",
             "name": "Seattle-Tacoma International Airport"

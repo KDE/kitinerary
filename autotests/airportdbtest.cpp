@@ -56,8 +56,8 @@ private Q_SLOTS:
     {
         auto coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"TXL"});
         QVERIFY(coord.isValid());
-        QCOMPARE((int)coord.latitude, 13);
-        QCOMPARE((int)coord.longitude, 52);
+        QCOMPARE((int)coord.longitude, 13);
+        QCOMPARE((int)coord.latitude, 52);
 
         coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"XXX"});
         QVERIFY(!coord.isValid());
@@ -66,11 +66,11 @@ private Q_SLOTS:
 
         // test coordinate parsing corner cases
         coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"LCY"});
-        QCOMPARE((int)coord.latitude, 0);
-        QVERIFY(coord.latitude > 0.0f);
+        QCOMPARE((int)coord.longitude, 0);
+        QVERIFY(coord.longitude > 0.0f);
         coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"LHR"});
-        QCOMPARE((int)coord.latitude, 0);
-        QVERIFY(coord.latitude < 0.0f);
+        QCOMPARE((int)coord.longitude, 0);
+        QVERIFY(coord.longitude < 0.0f);
 
         // Köln-Bonn is a hybrid civilian/military airport, so that should be included
         coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"CGN"});

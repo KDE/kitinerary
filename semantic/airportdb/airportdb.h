@@ -31,22 +31,22 @@ namespace AirportDb {
 /** Geographical coordinate. */
 struct Coordinate {
     inline constexpr Coordinate()
-        : latitude(NAN)
-        , longitude(NAN)
+        : longitude(NAN)
+        , latitude(NAN)
     {
     }
 
-    inline explicit constexpr Coordinate(float lat, float lng)
-        : latitude(lat)
-        , longitude(lng)
+    inline explicit constexpr Coordinate(float lng, float lat)
+        : longitude(lng)
+        , latitude(lat)
     {
     }
 
     bool isValid() const;
     bool operator==(const Coordinate &other) const;
 
-    float latitude;
     float longitude;
+    float latitude;
 };
 
 /** IATA airport code. */
