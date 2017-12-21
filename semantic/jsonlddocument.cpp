@@ -52,9 +52,13 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         }
         return dt;
     }
+    case QVariant::Double:
+        return v.toDouble();
     default:
         break;
     }
+    if (prop.type() == qMetaTypeId<float>())
+        return v.toDouble();
     return createInstance(v.toObject());
 }
 
