@@ -101,7 +101,9 @@ void StructuredDataExtractor::findLdJson(const QString &text)
             continue;
         }
         if (jsonDoc.isArray()) {
-            m_data.append(jsonDoc.array());
+            for (const auto &v : jsonDoc.array()) {
+                m_data.push_back(v);
+            }
         } else if (jsonDoc.isObject()) {
             m_data.push_back(jsonDoc.object());
         }
