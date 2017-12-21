@@ -122,6 +122,7 @@ class TrainTrip
     SEMANTIC_PROPERTY(QString, departurePlatform)
     SEMANTIC_PROPERTY(TrainStation, departureStation)
     SEMANTIC_PROPERTY(QDateTime, departureTime)
+    SEMANTIC_PROPERTY(QString, trainName)
     SEMANTIC_PROPERTY(QString, trainNumber)
 
     Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
