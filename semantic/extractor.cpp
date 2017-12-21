@@ -50,8 +50,9 @@ bool Extractor::load(const QString &fileName)
     const auto obj = doc.object();
     for (const auto &filterValue : obj.value(QLatin1String("filter")).toArray()) {
         ExtractorFilter f;
-        if (!f.load(filterValue.toObject()))
+        if (!f.load(filterValue.toObject())) {
             return false;
+        }
         m_filters.push_back(std::move(f));
     }
 

@@ -34,7 +34,7 @@ bool ExtractorFilter::matches(const QString &headerData) const
     return m_exp.match(headerData).hasMatch();
 }
 
-bool ExtractorFilter::load(const QJsonObject& obj)
+bool ExtractorFilter::load(const QJsonObject &obj)
 {
     m_headerName = obj.value(QLatin1String("header")).toString().toUtf8();
     m_exp.setPattern(obj.value(QLatin1String("match")).toString());

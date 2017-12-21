@@ -25,7 +25,8 @@
 #include <QLocale>
 #include <QJSEngine>
 
-class JsApi : public QObject {
+class JsApi : public QObject
+{
     Q_OBJECT
 public:
     explicit JsApi(QJSEngine *engine)
@@ -41,7 +42,7 @@ private:
     QJSEngine *m_engine;
 };
 
-QJSValue JsApi::newObject(const QString& typeName) const
+QJSValue JsApi::newObject(const QString &typeName) const
 {
     auto v = m_engine->newObject();
     v.setProperty(QStringLiteral("@type"), typeName);
@@ -98,7 +99,7 @@ void ExtractorEngine::executeScript()
     auto result = engine.evaluate(QString::fromUtf8(f.readAll()), f.fileName());
     if (result.isError()) {
         qCWarning(SEMANTIC_LOG) << "Script parsing error in" << result.property(QLatin1String("fileName")).toString()
-            << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
+                                << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
         return;
     }
 
@@ -110,7 +111,7 @@ void ExtractorEngine::executeScript()
     result = mainFunc.call({m_text});
     if (result.isError()) {
         qCWarning(SEMANTIC_LOG) << "Script execution error in" << result.property(QLatin1String("fileName")).toString()
-            << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
+                                << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
         return;
     }
 
