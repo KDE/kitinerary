@@ -24,6 +24,7 @@
 #include <KMime/Content>
 
 #include <QDirIterator>
+#include <QStandardPaths>
 
 ExtractorRepository::ExtractorRepository()
 {
@@ -61,11 +62,16 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
 
 void ExtractorRepository::loadExtractors()
 {
-    QDirIterator it(QStringLiteral(":/org.kde.messageviewer/semantic/rules"), {QStringLiteral("*.json")}, QDir::Files);
-    while (it.hasNext()) {
-        Extractor e;
-        if (e.load(it.next())) {
-            m_extractors.push_back(std::move(e));
+    QStringList searchDirs = { QStringLiteral(":/org.kde.pim") };
+    searchDirs += QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+
+    for (const auto &dir : qAsConst(searchDirs)) {
+        QDirIterator it(dir + QStringLiteral("/messageviewer/semantic/extractors"), {QStringLiteral("*.json")}, QDir::Files);
+        while (it.hasNext()) {
+            Extractor e;
+            if (e.load(it.next())) {
+                m_extractors.push_back(std::move(e));
+            }
         }
     }
 }

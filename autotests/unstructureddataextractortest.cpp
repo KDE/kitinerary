@@ -34,7 +34,7 @@ class UnstructuredDataExtractorTest : public QObject
 private Q_SLOTS:
     void initTestCase()
     {
-        Q_INIT_RESOURCE(rules);
+        Q_INIT_RESOURCE(extractors);
         // use some exotic locale to ensure the date/time parsing doesn't just work by luck
         QLocale::setDefault(QLocale(QStringLiteral("fr_FR")));
     }
@@ -68,7 +68,7 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
 
         Extractor extractor;
-        QVERIFY(extractor.load(QLatin1String(":/org.kde.messageviewer/semantic/rules/") + extractorName + QLatin1String(".json")));
+        QVERIFY(extractor.load(QLatin1String(":/org.kde.pim/messageviewer/semantic/extractors/") + extractorName + QLatin1String(".json")));
 
         ExtractorEngine engine;
         engine.setText(QString::fromUtf8(f.readAll()));
@@ -115,7 +115,7 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
 
         Extractor extractor;
-        QVERIFY(extractor.load(QLatin1String(":/org.kde.messageviewer/semantic/rules/") + extractorName + QLatin1String(".json")));
+        QVERIFY(extractor.load(QLatin1String(":/org.kde.pim/messageviewer/semantic/extractors/") + extractorName + QLatin1String(".json")));
 
         ExtractorPreprocessor preproc;
         preproc.preprocessHtml(QString::fromUtf8(f.readAll()));

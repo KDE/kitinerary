@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/org.kde.messageviewer/semantic/rules">
+    <qresource prefix="/org.kde.pim/messageviewer/semantic/extractors">
         <file>amadeus.json</file>
         <file>amadeus.js</file>
         <file>brusselsairlines.json</file>

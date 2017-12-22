@@ -18,7 +18,7 @@ set(semantic_lib_srcs
     jsonlddocument.cpp
     structureddataextractor.cpp
 )
-qt5_add_resources(semantic_lib_srcs rules/rules.qrc)
+qt5_add_resources(semantic_lib_srcs extractors/extractors.qrc)
 ecm_qt_declare_logging_category(semantic_lib_srcs HEADER semantic_debug.h IDENTIFIER SEMANTIC_LOG CATEGORY_NAME org.kde.pim.messageviewer.semantic)
 add_library(semantic_extractor STATIC ${semantic_lib_srcs})
 set_target_properties(semantic_extractor PROPERTIES POSITION_INDEPENDENT_CODE ON)
