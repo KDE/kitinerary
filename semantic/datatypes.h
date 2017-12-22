@@ -133,11 +133,26 @@ private:
     QString arrivalTimeLocalized() const;
 };
 
+class Seat
+{
+    SEMANTIC_GADGET
+    SEMANTIC_PROPERTY(QString, seatNumber)
+    SEMANTIC_PROPERTY(QString, seatRow)
+    SEMANTIC_PROPERTY(QString, seatSection)
+};
+
+class Ticket
+{
+    SEMANTIC_GADGET
+    SEMANTIC_PROPERTY(QVariant, ticketedSeat)
+};
+
 class Reservation
 {
     Q_GADGET
     SEMANTIC_PROPERTY(QString, reservationNumber)
     SEMANTIC_PROPERTY(QVariant, reservationFor)
+    SEMANTIC_PROPERTY(QVariant, reservedTicket)
 };
 
 class LodgingReservation : protected Reservation
@@ -171,6 +186,8 @@ Q_DECLARE_METATYPE(FlightReservation)
 Q_DECLARE_METATYPE(LodgingBusiness)
 Q_DECLARE_METATYPE(LodgingReservation)
 Q_DECLARE_METATYPE(PostalAddress)
+Q_DECLARE_METATYPE(Seat)
+Q_DECLARE_METATYPE(Ticket)
 Q_DECLARE_METATYPE(TrainStation)
 Q_DECLARE_METATYPE(TrainTrip)
 

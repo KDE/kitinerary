@@ -59,8 +59,10 @@ function main(text) {
             res.reservationFor.trainNumber = trainNumber[1];
         var seatRes = legText.match(/VOITURE (\d+) - PLACE (\d+)/);
         if (seatRes) {
-            // TODO seat reservation data model is missing
-            console.warn("coach:", seatRes[1], "seat:", seatRes[2]);
+            res.reservedTicket = JsonLd.newObject("Ticket");
+            res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
+            res.reservedTicket.ticketedSeat.seatSection = seatRes[1];
+            res.reservedTicket.ticketedSeat.seatNumber = seatRes[2];
         }
 
         reservations.push(res);
