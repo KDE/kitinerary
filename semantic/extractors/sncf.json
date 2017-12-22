@@ -1,0 +1,7 @@
+{
+    "filter": [
+        { "header": "From", "match": "e-billet@sncf.fr" }
+    ],
+    "script": "sncf.js"
+}
+
