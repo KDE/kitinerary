@@ -1,0 +1,50 @@
+[
+    {
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LX"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "ZRH",
+                "name": "Zürich"
+            },
+            "arrivalTime": "2017-09-10T08:15:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Berlin"
+            },
+            "departureTime": "2017-09-10T06:45:00",
+            "flightNumber": "963"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LX"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Berlin"
+            },
+            "arrivalTime": "2017-09-15T22:15:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "ZRH",
+                "name": "Zürich"
+            },
+            "departureTime": "2017-09-15T20:50:00",
+            "flightNumber": "962"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

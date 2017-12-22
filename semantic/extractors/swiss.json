@@ -1,0 +1,6 @@
+{
+    "filter": [
+        { "header": "From", "match": "noreply@swiss.com" }
+    ],
+    "script": "swiss.js"
+}

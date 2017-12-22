@@ -10,5 +10,7 @@
         <file>eurowings.js</file>
         <file>fcmtravel.json</file>
         <file>fcmtravel.js</file>
+        <file>swiss.json</file>
+        <file>swiss.js</file>
     </qresource>
 </RCC>
