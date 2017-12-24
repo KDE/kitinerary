@@ -57,8 +57,9 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
     default:
         break;
     }
-    if (prop.type() == qMetaTypeId<float>())
+    if (prop.type() == qMetaTypeId<float>()) {
         return v.toDouble();
+    }
     return createInstance(v.toObject());
 }
 
