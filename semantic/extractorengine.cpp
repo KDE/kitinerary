@@ -36,7 +36,7 @@ public:
     }
 
     Q_INVOKABLE QJSValue newObject(const QString &typeName) const;
-    Q_INVOKABLE QDateTime toDateTime(const QString &dt, const QString &format, const QString &locale) const;
+    Q_INVOKABLE QDateTime toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const;
 
 private:
     QJSEngine *m_engine;
@@ -49,9 +49,27 @@ QJSValue JsApi::newObject(const QString &typeName) const
     return v;
 }
 
-QDateTime JsApi::toDateTime(const QString &dt, const QString &format, const QString &locale) const
+QDateTime JsApi::toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const
 {
-    return QLocale(locale).toDateTime(dt, format);
+    QLocale locale(localeName);
+    const auto dt = locale.toDateTime(dtStr, format);
+    if (dt.isValid()) {
+        return dt;
+    }
+
+    // try harder for the "MMM" month format
+    // QLocale expects the exact string in QLocale::shortMonthName(), while we often encounter a three
+    // letter month identifier. For en_US that's the same, for Swedish it isn't though for example. So
+    // let's try to fix up the month identifiers to the full short name.
+    if (format.contains(QLatin1String("MMM"))) {
+        auto dtStrFixed = dtStr;
+        for (int i = 0; i < 12; ++i) {
+            const auto monthName = locale.monthName(i, QLocale::ShortFormat);
+            dtStrFixed = dtStrFixed.replace(monthName.left(3), monthName);
+        }
+        return locale.toDateTime(dtStrFixed, format);
+    }
+    return dt;
 }
 
 ExtractorEngine::ExtractorEngine() = default;
