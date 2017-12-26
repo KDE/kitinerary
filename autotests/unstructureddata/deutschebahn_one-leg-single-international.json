@@ -17,6 +17,14 @@
             "departureTime": "2027-09-12T13:39:00",
             "trainNumber": "EC 170"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "71",
+                "seatSection": "256"
+            }
+        }
     }
 ]

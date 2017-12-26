@@ -21,6 +21,27 @@ function isHeaderOrFooter(line) {
     return line.search(/(Ihre Reiseverbindung|Wichtige Nutzungshinweise|Hinweise:|Seite \d \/ \d)/) >= 0;
 }
 
+function createSeat(res)
+{
+    if (!res.reservedTicket)
+        res.reservedTicket = JsonLd.newObject("Ticket");
+    if (!res.reservedTicket.ticketedSeat)
+        res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
+}
+
+function parseSeat(res, text) {
+    var coach = text.match(/Wg. (\d+)/);
+    if (coach) {
+        createSeat(res);
+        res.reservedTicket.ticketedSeat.seatSection = coach[1];
+    }
+    var seat = text.match(/Pl. (\d+)/);
+    if (seat) {
+        createSeat(res);
+        res.reservedTicket.ticketedSeat.seatNumber = seat[1];
+    }
+}
+
 function parseDeparture(res, line, year, compact) {
     res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
     var station = line.match(/^(.+?)  /);
@@ -39,8 +60,11 @@ function parseDeparture(res, line, year, compact) {
         res.reservationFor.departurePlatform = platform[1];
     }
     var trainId = line.substr(idx).match(compact ? / +([^,]*?)(?=(,|$))/ : / +(.*?)(?=(  |$))/);
-    if (trainId)
+    if (trainId) {
+        idx += trainId.index + trainId[0].length
         res.reservationFor.trainNumber = trainId[1];
+    }
+    parseSeat(res, line.substr(idx));
 }
 
 function parseArrival(res, line, year) {
@@ -56,8 +80,11 @@ function parseArrival(res, line, year) {
         res.reservationFor.arrivalTime = JsonLd.toDateTime(dt[1] + ' ' + dt[2] + ' ' + year + ' ' + dt[3], "dd MM yyyy hh:mm", "de");
     }
     var platform = line.substr(idx).match(/^ {1,3}(.*?)(?=(  | IC|$))/);
-    if (platform)
+    if (platform) {
+        idx += platform.index + platform[0].length;
         res.reservationFor.arrivalPlatform = platform[1];
+    }
+    parseSeat(res, line.substr(idx));
 }
 
 function parseLegs(text, year, compact) {

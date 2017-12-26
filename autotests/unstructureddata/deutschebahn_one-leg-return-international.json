@@ -17,7 +17,15 @@
             "departureTime": "2027-11-15T06:46:00",
             "trainNumber": "EC 171"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "105",
+                "seatSection": "258"
+            }
+        }
     },
     {
         "@type": "TrainReservation",
@@ -37,6 +45,14 @@
             "departureTime": "2027-11-17T13:39:00",
             "trainNumber": "EC 170"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "62",
+                "seatSection": "256"
+            }
+        }
     }
 ]

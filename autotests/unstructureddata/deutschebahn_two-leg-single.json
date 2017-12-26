@@ -37,6 +37,14 @@
             "departureTime": "2026-12-28T15:52:00",
             "trainNumber": "ICE 943"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "66",
+                "seatSection": "24"
+            }
+        }
     }
 ]

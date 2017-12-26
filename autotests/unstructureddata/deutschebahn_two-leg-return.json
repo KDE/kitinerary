@@ -17,7 +17,15 @@
             "departureTime": "2027-11-03T07:49:00",
             "trainNumber": "ICE 954"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "61",
+                "seatSection": "34"
+            }
+        }
     },
     {
         "@type": "TrainReservation",
@@ -77,6 +85,14 @@
             "departureTime": "2027-11-04T14:52:00",
             "trainNumber": "ICE 641"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "85",
+                "seatSection": "22"
+            }
+        }
     }
 ]
