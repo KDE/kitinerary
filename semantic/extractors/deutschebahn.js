@@ -33,7 +33,7 @@ function parseDeparture(res, line, year, compact) {
         idx += dt.index + dt[0].length;
         res.reservationFor.departureTime = JsonLd.toDateTime(dt[1] + ' ' + dt[2] + ' ' + year + ' ' + dt[3], "dd MM yyyy hh:mm", "de");
     }
-    var platform = line.substr(idx).match(/^ {1,3}(.*?)(  |$)/);
+    var platform = line.substr(idx).match(/^ {1,3}(.*?)(?=(  | IC|$))/);
     if (platform) {
         idx += platform.index + platform[0].length;
         res.reservationFor.departurePlatform = platform[1];
@@ -55,7 +55,7 @@ function parseArrival(res, line, year) {
         idx += dt.index + dt[0].length;
         res.reservationFor.arrivalTime = JsonLd.toDateTime(dt[1] + ' ' + dt[2] + ' ' + year + ' ' + dt[3], "dd MM yyyy hh:mm", "de");
     }
-    var platform = line.substr(idx).match(/^ {1,3}(.*?)(  |$)/);
+    var platform = line.substr(idx).match(/^ {1,3}(.*?)(?=(  | IC|$))/);
     if (platform)
         res.reservationFor.arrivalPlatform = platform[1];
 }
