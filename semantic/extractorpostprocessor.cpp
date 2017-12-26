@@ -62,6 +62,7 @@ QVariant ExtractorPostprocessor::processFlight(QVariant flight) const
     flight = processProperty(flight, "departureAirport", &ExtractorPostprocessor::processAirport);
     flight = processProperty(flight, "arrivalAirport", &ExtractorPostprocessor::processAirport);
 
+    processFlightTime(flight, "boardingTime", "departureAirport");
     processFlightTime(flight, "departureTime", "departureAirport");
     processFlightTime(flight, "arrivalTime", "arrivalAirport");
 

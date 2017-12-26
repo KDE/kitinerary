@@ -74,6 +74,15 @@ QString Flight::arrivalTimeLocalized() const
     return localizedDateTime(m_arrivalTime);
 }
 
+QString Flight::boardingTimeLocalized() const
+{
+    auto s = QLocale().toString(m_boardingTime.time(), QLocale::ShortFormat);
+    if (m_boardingTime.timeSpec() == Qt::TimeZone || m_boardingTime.timeSpec() == Qt::OffsetFromUTC) {
+        s += QLatin1Char(' ') + m_boardingTime.timeZone().abbreviation(m_boardingTime);
+    }
+    return s;
+}
+
 QString LodgingReservation::checkinDateLocalized() const
 {
     return QLocale().toString(m_checkinDate.date(), QLocale::ShortFormat);

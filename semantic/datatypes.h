@@ -90,6 +90,10 @@ public:
     bool operator!=(const TrainStation &other) const;
 };
 
+/**
+ * @see https://schema.org/Flight
+ * @see https://developers.google.com/gmail/markup/reference/flight-reservation
+ */
 class Flight
 {
     SEMANTIC_GADGET
@@ -100,11 +104,17 @@ class Flight
     SEMANTIC_PROPERTY(Airport, arrivalAirport)
     SEMANTIC_PROPERTY(QDateTime, arrivalTime)
 
+    // Google extension for boarding pass data
+    SEMANTIC_PROPERTY(QDateTime, boardingTime)
+    SEMANTIC_PROPERTY(QString, departureGate)
+
     Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
     Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized STORED false CONSTANT)
+    Q_PROPERTY(QString boardingTimeLocalized READ boardingTimeLocalized STORED false CONSTANT)
 private:
     QString departureTimeLocalized() const;
     QString arrivalTimeLocalized() const;
+    QString boardingTimeLocalized() const;
 };
 
 class LodgingBusiness: protected Place
@@ -168,9 +178,17 @@ private:
     QString checkoutDateLocalized() const;
 };
 
+/**
+ * @see https://schema.org/FlightReservation
+ * @see https://developers.google.com/gmail/markup/reference/flight-reservation
+ */
 class FlightReservation : protected Reservation
 {
     SEMANTIC_GADGET
+
+    // Google extensions
+    SEMANTIC_PROPERTY(QString, airplaneSeat)
+    SEMANTIC_PROPERTY(QString, boardingGroup)
 };
 
 class TrainReservation : protected Reservation
