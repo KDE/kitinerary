@@ -56,6 +56,7 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
                            JsonLdDocument::readProperty(arrPort, "iataCode").toString()
                            ));
     event->setLocation(JsonLdDocument::readProperty(depPort, "name").toString());
+    fillGeoPosition(depPort, event);
     event->setDtStart(JsonLdDocument::readProperty(flight, "departureTime").toDateTime());
     event->setDtEnd(JsonLdDocument::readProperty(flight, "arrivalTime").toDateTime());
     event->setAllDay(false);
@@ -79,6 +80,7 @@ void CalendarHandler::fillTrainReservation(const QVariant &reservation, const KC
                            JsonLdDocument::readProperty(arrStation, "name").toString()
                            ));
     event->setLocation(JsonLdDocument::readProperty(depStation, "name").toString());
+    fillGeoPosition(depStation, event);
     event->setDtStart(JsonLdDocument::readProperty(trip, "departureTime").toDateTime());
     event->setDtEnd(JsonLdDocument::readProperty(trip, "arrivalTime").toDateTime());
     event->setAllDay(false);
@@ -126,6 +128,7 @@ void CalendarHandler::fillLodgingReservation(const QVariant &reservation, const 
                             JsonLdDocument::readProperty(address, "addressLocality").toString(),
                             JsonLdDocument::readProperty(address, "addressCountry").toString()
                             ));
+    fillGeoPosition(lodgingBusiness, event);
     event->setDtStart(QDateTime(JsonLdDocument::readProperty(reservation, "checkinDate").toDate(), QTime()));
     event->setDtEnd(QDateTime(JsonLdDocument::readProperty(reservation, "checkoutDate").toDate(), QTime()));
     event->setAllDay(true);
@@ -133,4 +136,16 @@ void CalendarHandler::fillLodgingReservation(const QVariant &reservation, const 
                                JsonLdDocument::readProperty(reservation, "reservationNumber").toString()
                                ));
     event->setTransparency(Event::Transparent);
+}
+
+void CalendarHandler::fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event)
+{
+    const auto geo = JsonLdDocument::readProperty(place, "geo");
+    if (geo.isNull()) {
+        return;
+    }
+
+    event->setHasGeo(true);
+    event->setGeoLatitude(JsonLdDocument::readProperty(geo, "latitude").toFloat());
+    event->setGeoLongitude(JsonLdDocument::readProperty(geo, "longitude").toFloat());
 }

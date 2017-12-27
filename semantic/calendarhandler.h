@@ -34,6 +34,7 @@ private:
     static void fillFlightReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
     static void fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
     static void fillLodgingReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+    static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
 };
 
 #endif // CALENDARHANDLER_H
