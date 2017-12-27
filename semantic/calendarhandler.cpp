@@ -64,9 +64,6 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
     event->setDtStart(JsonLdDocument::readProperty(flight, "departureTime").toDateTime());
     event->setDtEnd(JsonLdDocument::readProperty(flight, "arrivalTime").toDateTime());
     event->setAllDay(false);
-    event->setDescription(i18n("Booking reference: %1",
-                               JsonLdDocument::readProperty(reservation, "reservationNumber").toString()
-                               ));
 
     const auto boardingTime = JsonLdDocument::readProperty(flight, "boardingTime").toDateTime();
     const auto departureGate = JsonLdDocument::readProperty(flight, "departureGate").toString();
@@ -80,6 +77,27 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
         alarm->setEnabled(true);
         event->addAlarm(alarm);
     }
+
+    QStringList desc;
+    if (boardingTime.isValid()) {
+        desc.push_back(i18n("Boarding time: %1", QLocale().toString(boardingTime.time(), QLocale::ShortFormat)));
+    }
+    if (!departureGate.isEmpty()) {
+        desc.push_back(i18n("Departure gate: %1", departureGate));
+    }
+    auto s = JsonLdDocument::readProperty(reservation, "boardingGroup").toString();
+    if (!s.isEmpty()) {
+        desc.push_back(i18n("Boarding group: %1", s));
+    }
+    s = JsonLdDocument::readProperty(reservation, "airplaneSeat").toString();
+    if (!s.isEmpty()) {
+        desc.push_back(i18n("Seat: %1", s));
+    }
+    s = JsonLdDocument::readProperty(reservation, "reservationNumber").toString();
+    if (!s.isEmpty()) {
+        desc.push_back(i18n("Booking reference: %1", s));
+    }
+    event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
 void CalendarHandler::fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
