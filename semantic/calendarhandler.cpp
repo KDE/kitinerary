@@ -22,6 +22,8 @@
 #include "jsonlddocument.h"
 #include "semantic_debug.h"
 
+#include <KCalCore/Alarm>
+
 #include <KLocalizedString>
 
 using namespace KCalCore;
@@ -49,9 +51,11 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
         return;
     }
 
-    event->setSummary(i18n("Flight %1 %2 from %3 to %4",
-                           JsonLdDocument::readProperty(airline, "iataCode").toString(),
-                           JsonLdDocument::readProperty(flight, "flightNumber").toString(),
+    const auto flightNumber = JsonLdDocument::readProperty(airline, "iataCode").toString()
+                            + QLatin1Char(' ')
+                            + JsonLdDocument::readProperty(flight, "flightNumber").toString();
+
+    event->setSummary(i18n("Flight %1 from %2 to %3", flightNumber,
                            JsonLdDocument::readProperty(depPort, "iataCode").toString(),
                            JsonLdDocument::readProperty(arrPort, "iataCode").toString()
                            ));
@@ -63,6 +67,19 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
     event->setDescription(i18n("Booking reference: %1",
                                JsonLdDocument::readProperty(reservation, "reservationNumber").toString()
                                ));
+
+    const auto boardingTime = JsonLdDocument::readProperty(flight, "boardingTime").toDateTime();
+    const auto departureGate = JsonLdDocument::readProperty(flight, "departureGate").toString();
+    if (boardingTime.isValid()) {
+        Alarm::Ptr alarm(new Alarm(event.data()));
+        alarm->setStartOffset(Duration(event->dtStart(), boardingTime));
+        if (departureGate.isEmpty())
+            alarm->setDisplayAlarm(i18n("Boarding for flight %1", flightNumber));
+        else
+            alarm->setDisplayAlarm(i18n("Boarding for flight %1 at gate %2", flightNumber, departureGate));
+        alarm->setEnabled(true);
+        event->addAlarm(alarm);
+    }
 }
 
 void CalendarHandler::fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
