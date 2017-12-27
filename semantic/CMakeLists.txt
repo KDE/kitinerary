@@ -8,6 +8,7 @@ configure_file(config-semantic.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-semant
 # static lib for use by unit test
 set(semantic_lib_srcs
     airportdb/airportdb.cpp
+    calendarhandler.cpp
     datatypes.cpp
     extractor.cpp
     extractorengine.cpp
@@ -22,7 +23,7 @@ qt5_add_resources(semantic_lib_srcs extractors/extractors.qrc)
 ecm_qt_declare_logging_category(semantic_lib_srcs HEADER semantic_debug.h IDENTIFIER SEMANTIC_LOG CATEGORY_NAME org.kde.pim.messageviewer.semantic)
 add_library(semantic_extractor STATIC ${semantic_lib_srcs})
 set_target_properties(semantic_extractor PROPERTIES POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(semantic_extractor PUBLIC Qt5::Core KF5::Mime PRIVATE Qt5::Qml)
+target_link_libraries(semantic_extractor PUBLIC Qt5::Core KF5::Mime KF5::CalendarCore PRIVATE Qt5::Qml KF5::I18n)
 if (HAVE_POPPLER)
     target_link_libraries(semantic_extractor PRIVATE Poppler::Qt5)
 endif()
