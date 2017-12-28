@@ -22,6 +22,7 @@
 
 #include <QDateTime>
 #include <QString>
+#include <QUrl>
 #include <QVariant>
 
 #define SEMANTIC_GADGET \
@@ -163,6 +164,11 @@ class Reservation
     SEMANTIC_PROPERTY(QString, reservationNumber)
     SEMANTIC_PROPERTY(QVariant, reservationFor)
     SEMANTIC_PROPERTY(QVariant, reservedTicket)
+
+    // Google extension
+    SEMANTIC_PROPERTY(QUrl, cancelReservationUrl)
+    SEMANTIC_PROPERTY(QUrl, modifyReservationUrl)
+    SEMANTIC_PROPERTY(QUrl, url)
 };
 
 class LodgingReservation : protected Reservation

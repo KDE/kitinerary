@@ -2,6 +2,8 @@
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "cancelReservationUrl": "https://www.trainline.fr/tickets",
+        "modifyReservationUrl": "https://www.trainline.fr/tickets",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {
@@ -35,11 +37,14 @@
                 "seatNumber": "71",
                 "seatSection": "13"
             }
-        }
+        },
+        "url": "https://www.trainline.fr/tickets"
     },
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "cancelReservationUrl": "https://www.trainline.fr/tickets",
+        "modifyReservationUrl": "https://www.trainline.fr/tickets",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {
@@ -73,6 +78,7 @@
                 "seatNumber": "62",
                 "seatSection": "17"
             }
-        }
+        },
+        "url": "https://www.trainline.fr/tickets"
     }
 ]

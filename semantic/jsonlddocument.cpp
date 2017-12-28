@@ -54,6 +54,8 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
     }
     case QVariant::Double:
         return v.toDouble();
+    case QVariant::Url:
+        return QUrl(v.toString());
     default:
         break;
     }
@@ -121,6 +123,14 @@ QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
     return l;
 }
 
+static bool valueIsNull(const QVariant &v)
+{
+    if (v.type() == QVariant::Url) {
+        return !v.toUrl().isValid();
+    }
+    return v.isNull();
+}
+
 static QJsonValue toJson(const QVariant &v)
 {
     const auto mo = QMetaType(v.userType()).metaObject();
@@ -135,6 +145,8 @@ static QJsonValue toJson(const QVariant &v)
             return v.toInt();
         case QVariant::DateTime:
             return v.toDateTime().toString(Qt::ISODate);
+        case QVariant::Url:
+            return v.toUrl().toString();
         default:
             break;
         }
@@ -154,7 +166,7 @@ static QJsonValue toJson(const QVariant &v)
             continue;
         }
         const auto value = prop.readOnGadget(v.constData());
-        if (!value.isNull()) {
+        if (!valueIsNull(value)) {
             obj.insert(QString::fromUtf8(prop.name()), toJson(value));
         }
     }
