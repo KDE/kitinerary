@@ -1,0 +1,6 @@
+{
+    "filter": [
+        { "header": "From", "match": "noreply@klm.com" }
+    ],
+    "script": "klm.js"
+}
