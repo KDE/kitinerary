@@ -165,10 +165,15 @@ void CalendarHandler::fillLodgingReservation(const QVariant &reservation, const 
                             JsonLdDocument::readProperty(address, "addressCountry").toString()
                             ));
     fillGeoPosition(lodgingBusiness, event);
-    event->setDtStart(QDateTime(JsonLdDocument::readProperty(reservation, "checkinDate").toDate(), QTime()));
-    event->setDtEnd(QDateTime(JsonLdDocument::readProperty(reservation, "checkoutDate").toDate(), QTime()));
+
+    const auto checkinDt = JsonLdDocument::readProperty(reservation, "checkinDate").toDateTime();
+    const auto checkoutDt = JsonLdDocument::readProperty(reservation, "checkoutDate").toDateTime();
+    event->setDtStart(QDateTime(checkinDt.date(), QTime()));
+    event->setDtEnd(QDateTime(checkoutDt.date(), QTime()));
     event->setAllDay(true);
-    event->setDescription(i18n("Booking reference: %1",
+    event->setDescription(i18n("Check-in: %1\nCheck-out: %2\nBooking reference: %3",
+                               QLocale().toString(checkinDt.time(), QLocale::ShortFormat),
+                               QLocale().toString(checkoutDt.time(), QLocale::ShortFormat),
                                JsonLdDocument::readProperty(reservation, "reservationNumber").toString()
                                ));
     event->setTransparency(Event::Transparent);
