@@ -45,8 +45,6 @@ private:
     bool filterTrainTrip(const QVariant &trip) const;
     bool filterTrainStation(const QVariant &station) const;
 
-    static QDateTime startDateTime(const QVariant &res);
-
     QVector<QVariant> m_data;
 };
 

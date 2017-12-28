@@ -18,6 +18,7 @@
 */
 
 #include "extractorpostprocessor.h"
+#include "calendarhandler.h"
 #include "datatypes.h"
 #include "jsonlddocument.h"
 #include "airportdb/airportdb.h"
@@ -41,7 +42,7 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
     }
 
     std::stable_sort(m_data.begin(), m_data.end(), [](const QVariant &lhs, const QVariant &rhs) {
-        return startDateTime(lhs) < startDateTime(rhs);
+        return CalendarHandler::startDateTime(lhs) < CalendarHandler::startDateTime(rhs);
     });
 }
 
@@ -187,15 +188,4 @@ bool ExtractorPostprocessor::filterTrainTrip(const QVariant &trip) const
 bool ExtractorPostprocessor::filterTrainStation(const QVariant &station) const
 {
     return !JsonLdDocument::readProperty(station, "name").toString().isEmpty();
-}
-
-QDateTime ExtractorPostprocessor::startDateTime(const QVariant &res)
-{
-    if (res.userType() == qMetaTypeId<FlightReservation>() || res.userType() == qMetaTypeId<TrainReservation>()) {
-        const auto trip = JsonLdDocument::readProperty(res, "reservationFor");
-        return JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
-    } else if (res.userType() == qMetaTypeId<LodgingReservation>()) {
-        return JsonLdDocument::readProperty(res, "checkinDate").toDateTime();
-    }
-    return {};
 }
