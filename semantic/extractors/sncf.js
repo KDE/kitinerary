@@ -17,6 +17,14 @@
    02110-1301, USA.
 */
 
+function parseDate(dateStr, timeStr) {
+    // the text does not contain the year at all, so guess that from Context.senderDate
+    var date = JsonLd.toDateTime(dateStr + '/' + Context.senderDate.getFullYear() + ' ' + timeStr, "dd/MM/yyyy hh'h'mm", "fr");
+    if (date < Context.senderDate)
+        date.setFullYear(Context.senderDate.getFullYear() + 1);
+    return date;
+}
+
 function main(text) {
     var reservations = new Array();
     var bookingRef = text.match(/DOSSIER VOYAGE : ([A-Z0-9]{6})/);
@@ -38,8 +46,7 @@ function main(text) {
         index += depLine.index + depLine[0].length;
         res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
         res.reservationFor.departureStation.name = depLine[1];
-        // TODO determine the year (which is nowhere in the ticket!)
-        res.reservationFor.departureTime = JsonLd.toDateTime(depLine[2] + '/' + 1970 + ' ' + depLine[3], "dd/MM/yyyy hh'h'mm", "fr");
+        res.reservationFor.departureTime = parseDate(depLine[2],  depLine[3]);
 
         var arrLine = text.substr(pos + index).match(/\n  ([\w -]+?)  +(\d{2}\/\d{2}) à (\d{2}h\d{2})/);
         if (!arrLine)
@@ -47,8 +54,7 @@ function main(text) {
         index += arrLine.index + arrLine[0].length;
         res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
         res.reservationFor.arrivalStation.name = arrLine[1];
-        // TODO year, see above
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(arrLine[2] + '/' + 1970 + ' ' + arrLine[3], "dd/MM/yyyy hh'h'mm", "fr");
+        res.reservationFor.arrivalTime = parseDate(arrLine[2], arrLine[3]);
 
         // parse seat, train number, etc from the text for one leg
         // since the stations are vertically centered, the stuff we are looking for might be at different

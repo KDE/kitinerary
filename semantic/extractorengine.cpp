@@ -72,7 +72,20 @@ QDateTime JsApi::toDateTime(const QString &dtStr, const QString &format, const Q
     return dt;
 }
 
-ExtractorEngine::ExtractorEngine() = default;
+class ContextObject : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QDateTime senderDate MEMBER m_senderDate)
+
+public:
+    QDateTime m_senderDate;
+};
+
+ExtractorEngine::ExtractorEngine()
+    : m_context(new ContextObject) // will be deleted by QJSEngine taking ownership
+{
+}
+
 ExtractorEngine::~ExtractorEngine() = default;
 
 void ExtractorEngine::setExtractor(const Extractor *extractor)
@@ -80,14 +93,14 @@ void ExtractorEngine::setExtractor(const Extractor *extractor)
     m_extractor = extractor;
 }
 
-const QString &ExtractorEngine::text() const
-{
-    return m_text;
-}
-
 void ExtractorEngine::setText(const QString &text)
 {
     m_text = text;
+}
+
+void ExtractorEngine::setSenderDate(const QDateTime &dt)
+{
+    m_context->m_senderDate = dt;
 }
 
 QJsonArray ExtractorEngine::extract()
@@ -114,6 +127,7 @@ void ExtractorEngine::executeScript()
     engine.installExtensions(QJSEngine::ConsoleExtension);
     auto jsApi = new JsApi(&engine);
     engine.globalObject().setProperty(QStringLiteral("JsonLd"), engine.newQObject(jsApi));
+    engine.globalObject().setProperty(QStringLiteral("Context"), engine.newQObject(m_context));
     auto result = engine.evaluate(QString::fromUtf8(f.readAll()), f.fileName());
     if (result.isError()) {
         qCWarning(SEMANTIC_LOG) << "Script parsing error in" << result.property(QLatin1String("fileName")).toString()

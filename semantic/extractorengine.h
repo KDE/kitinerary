@@ -27,6 +27,9 @@
 
 #include <vector>
 
+class ContextObject;
+class QDateTime;
+
 /** Code for executing an extractor rule set on a specific email part. */
 class ExtractorEngine
 {
@@ -35,8 +38,9 @@ public:
     ~ExtractorEngine();
 
     void setExtractor(const Extractor *extractor);
-    const QString &text() const;
     void setText(const QString &text);
+    /** The date the email containing the processed text was sent. */
+    void setSenderDate(const QDateTime &dt);
 
     QJsonArray extract();
 
@@ -44,6 +48,7 @@ private:
     void executeScript();
 
     const Extractor *m_extractor = nullptr;
+    ContextObject *m_context = nullptr;
     QString m_text;
     QJsonArray m_result;
 };

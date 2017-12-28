@@ -1,0 +1,28 @@
+[
+   {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "MONTPELLIER ST-RO"
+            },
+            "arrivalTime": "2018-07-15T19:58:00",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "TOULOUSE MATABIAU"
+            },
+            "departureTime": "2018-07-15T17:50:00",
+            "trainNumber": "6857"
+        },
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "31",
+                "seatSection": "13"
+            }
+        }
+    }
+]
