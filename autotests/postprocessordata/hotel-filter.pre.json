@@ -1,0 +1,41 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "LodgingReservation",
+        "checkoutDate": "2017-09-20T12:00:00+03:00",
+        "reservationFor": {
+            "@type": "LodgingBusiness",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "Finland",
+                "addressLocality": "Espoo",
+                "addressRegion": "",
+                "postalCode": "02600",
+                "streetAddress": "Leppävaarankatu 1"
+            },
+            "name": "Glo Hotel Sello"
+        },
+        "reservationNumber": "1234567890",
+        "reservationStatus": "http://schema.org/Confirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "LodgingReservation",
+        "checkinDate": "2017-09-19T15:00:00+03:00",
+        "reservationFor": {
+            "@type": "LodgingBusiness",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "Finland",
+                "addressLocality": "Espoo",
+                "addressRegion": "",
+                "postalCode": "02600",
+                "streetAddress": "Leppävaarankatu 1"
+            },
+            "name": "Glo Hotel Sello"
+        },
+        "reservationNumber": "1234567890",
+        "reservationStatus": "http://schema.org/Confirmed"
+    }
+]
+

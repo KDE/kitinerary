@@ -145,7 +145,18 @@ bool ExtractorPostprocessor::filterReservation(const QVariant &res) const
     } else if (resFor.userType() == qMetaTypeId<TrainTrip>()) {
         return filterTrainTrip(resFor);
     }
+
+    if (res.userType() == qMetaTypeId<LodgingReservation>()) {
+        return filterLodgingReservation(res);
+    }
     return true;
+}
+
+bool ExtractorPostprocessor::filterLodgingReservation(const QVariant& res) const
+{
+    const auto checkinDate = JsonLdDocument::readProperty(res, "checkinDate").toDateTime();
+    const auto checkoutDate = JsonLdDocument::readProperty(res, "checkoutDate").toDateTime();
+    return checkinDate.isValid() && checkoutDate.isValid();
 }
 
 bool ExtractorPostprocessor::filterFlight(const QVariant &flight) const
