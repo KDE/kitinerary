@@ -178,7 +178,7 @@ bool ExtractorPostprocessor::filterTrainStation(const QVariant &station) const
     return !JsonLdDocument::readProperty(station, "name").toString().isEmpty();
 }
 
-QDateTime ExtractorPostprocessor::startDateTime(const QVariant& res)
+QDateTime ExtractorPostprocessor::startDateTime(const QVariant &res)
 {
     if (res.userType() == qMetaTypeId<FlightReservation>() || res.userType() == qMetaTypeId<TrainReservation>()) {
         const auto trip = JsonLdDocument::readProperty(res, "reservationFor");

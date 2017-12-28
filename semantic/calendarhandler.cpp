@@ -52,8 +52,8 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
     }
 
     const auto flightNumber = JsonLdDocument::readProperty(airline, "iataCode").toString()
-                            + QLatin1Char(' ')
-                            + JsonLdDocument::readProperty(flight, "flightNumber").toString();
+                              + QLatin1Char(' ')
+                              + JsonLdDocument::readProperty(flight, "flightNumber").toString();
 
     event->setSummary(i18n("Flight %1 from %2 to %3", flightNumber,
                            JsonLdDocument::readProperty(depPort, "iataCode").toString(),
@@ -70,10 +70,11 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
     if (boardingTime.isValid()) {
         Alarm::Ptr alarm(new Alarm(event.data()));
         alarm->setStartOffset(Duration(event->dtStart(), boardingTime));
-        if (departureGate.isEmpty())
+        if (departureGate.isEmpty()) {
             alarm->setDisplayAlarm(i18n("Boarding for flight %1", flightNumber));
-        else
+        } else {
             alarm->setDisplayAlarm(i18n("Boarding for flight %1 at gate %2", flightNumber, departureGate));
+        }
         alarm->setEnabled(true);
         event->addAlarm(alarm);
     }
