@@ -20,6 +20,7 @@
 #ifndef CALENDARHANDLER_H
 #define CALENDARHANDLER_H
 
+#include <KCalCore/Calendar>
 #include <KCalCore/Event>
 
 class QVariant;
@@ -28,6 +29,15 @@ class QVariant;
 class CalendarHandler
 {
 public:
+    /** Returns the start time associated with the given reservation. */
+    static QDateTime startDateTime(const QVariant &reservation);
+
+    /** Attempts to find an event in @p calendar for @p reservation. */
+    static KCalCore::Event::Ptr findEvent(const KCalCore::Calendar::Ptr &calendar, const QVariant &reservation);
+
+    /** Fills @p event with details of @p reservation.
+     *  Can be used on new events or to update existing ones.
+     */
     static void fillEvent(const QVariant &reservation, const KCalCore::Event::Ptr &event);
 
 private:

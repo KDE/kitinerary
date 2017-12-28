@@ -28,15 +28,52 @@
 
 using namespace KCalCore;
 
+QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
+{
+    if (reservation.userType() == qMetaTypeId<FlightReservation>() || reservation.userType() == qMetaTypeId<TrainReservation>()) {
+        const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
+        return JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
+    } else if (reservation.userType() == qMetaTypeId<LodgingReservation>()) {
+        return JsonLdDocument::readProperty(reservation, "checkinDate").toDateTime();
+    }
+    return {};
+}
+
+Event::Ptr CalendarHandler::findEvent(const Calendar::Ptr &calendar, const QVariant &reservation)
+{
+    const auto bookingRef = JsonLdDocument::readProperty(reservation, "reservationNumber").toString();
+    if (bookingRef.isEmpty()) {
+        return {};
+    }
+
+    auto dt = startDateTime(reservation);
+    if (reservation.userType() == qMetaTypeId<LodgingReservation>()) {
+        dt = QDateTime(dt.date(), QTime());
+    }
+
+    const auto events = calendar->events(dt);
+    for (const auto &event : events) {
+        if (event->dtStart() == dt && event->uid().startsWith(bookingRef)) {
+            return event;
+        }
+    }
+    return {};
+}
+
 void CalendarHandler::fillEvent(const QVariant &reservation, const KCalCore::Event::Ptr &event)
 {
     const int typeId = reservation.userType();
     if (typeId == qMetaTypeId<FlightReservation>()) {
-        return fillFlightReservation(reservation, event);
+        fillFlightReservation(reservation, event);
     } else if (typeId == qMetaTypeId<LodgingReservation>()) {
-        return fillLodgingReservation(reservation, event);
+        fillLodgingReservation(reservation, event);
     } else if (typeId == qMetaTypeId<TrainReservation>()) {
-        return fillTrainReservation(reservation, event);
+        fillTrainReservation(reservation, event);
+    }
+
+    const auto bookingRef = JsonLdDocument::readProperty(reservation, "reservationNumber").toString();
+    if (!event->uid().startsWith(bookingRef)) {
+        event->setUid(bookingRef + QLatin1Char('-') + event->uid());
     }
 }
 
