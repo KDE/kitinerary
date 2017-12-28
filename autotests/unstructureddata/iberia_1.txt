@@ -1,0 +1,45 @@
+                                                                                                      Strichcode0752371401064KRAU
+                                                                                                                 Ihres Flugscheins in den
+                                                                                                     Check-In Automaten einführen.
+                                                                                                     Insert the barcode into the check-in
+                                                                                                     machines.
+Ihr E-Ticket und Reiseroutel
+Your electronic ticket and itinerary.
+Check-in erforderlich / Need to check in.
+Passagierdaten /Passenger data
+Name (Nicht übertragbar) /Name (not transferable)
+DOE, JOHN
+Ausweisdokument /Identity document                                     Buchungsnummer /Booking code
+                                                                       XXX007
+Ticketnummer /Number
+075-1234567890
+Flugdaten /Flight data
+Ausgangspunkt/Zielort     Flug              Abflug       Ankunft    Nicht gültig           Klasse - Tarif          Freigepäck           Flugstatus
+Origin/Destination        Flight            Departure    Arrival    Not Valid              Class - Fare            Baggage              Status
+ Von /From                IB3677            20-Jul       20-Jul     Vor dem /Before        F                       1PC /                Bestätigt
+ Berlin (TXL)                               12:25        15:35      20-Jul                 FNNN0C                                       Confirmed
+ Nach /To                                                Terminal 4 Nach /After
+ Madrid (MAD)                                                       20-Jul
+                           Durchgeführt von /Operated by
+                           : Iberia Express
+ Von /From                IB8588            20-Jul       20-Jul     Vor dem /Before        F                       1 Stück-             Bestätigt
+ Madrid (MAD)                               17:50        19:00      20-Jul                 FNNN0C                  System /Pieces Confirmed
+ Nach /To                                   Terminal 4              Nach /After
+ Almeria (LEI)                                                      20-Jul
+                           Durchgeführt von /Operated by
+                           : Iberia Regional Air Nostrum
+ Von /From                IB8603            28-Jul       28-Jul     Vor dem /Before        H                       1 Stück-             Bestätigt
+ Almeria (LEI)                              07:15        08:25      28-Jul                 HDNN0C                  System /Pieces Confirmed
+ Nach /To                                                Terminal 4 Nach /After
+ Madrid (MAD)                                                       28-Jul
+                           Durchgeführt von /Operated by
+                           : Iberia Regional Air Nostrum
+ Von /From                IB3186            28-Jul       28-Jul     Vor dem /Before        H                       1 Stück-             Bestätigt
+ Madrid (MAD)                               12:00        15:00      28-Jul                 HDNN0C                  System /Pieces Confirmed
+ Nach /To                                   Terminal 4S             Nach /After
+ Berlin (TXL)                                                       28-Jul
+Einzelheiten zur Ticketausstellung /Ticket issue data
+Ticketnummer /Number                           Ausstellungsdatum /Issue date              Ausgestelltvon /Issued by
+075-1234567890                                 05-Juni-2017                               IBERIA LAE SA Operadora Unipersonal
+Büronummer /Iss. Off. Code                     Steuernummer /Fiscal No.                   Ausstellungsort /Place of issue
+12345678                                       A12345678                                  Spanien

@@ -1,0 +1,101 @@
+[
+    {
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "Iberia Express"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "MAD",
+                "name": "Madrid"
+            },
+            "arrivalTime": "2018-07-20T15:35:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Berlin"
+            },
+            "departureTime": "2018-07-20T12:25:00",
+            "flightNumber": "3677"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "Iberia Regional Air Nostrum"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "LEI",
+                "name": "Almeria"
+            },
+            "arrivalTime": "2018-07-20T19:00:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "MAD",
+                "name": "Madrid"
+            },
+            "departureTime": "2018-07-20T17:50:00",
+            "flightNumber": "8588"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "Iberia Regional Air Nostrum"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "MAD",
+                "name": "Madrid"
+            },
+            "arrivalTime": "2018-07-28T08:25:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "LEI",
+                "name": "Almeria"
+            },
+            "departureTime": "2018-07-28T07:15:00",
+            "flightNumber": "8603"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Berlin"
+            },
+            "arrivalTime": "2018-07-28T15:00:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "MAD",
+                "name": "Madrid"
+            },
+            "departureTime": "2018-07-28T12:00:00",
+            "flightNumber": "3186"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

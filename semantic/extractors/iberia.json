@@ -1,0 +1,6 @@
+{
+    "filter": [
+        { "header": "From", "match": "@iberia.com" }
+    ],
+    "script": "iberia.js"
+}
