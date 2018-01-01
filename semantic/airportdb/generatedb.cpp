@@ -221,7 +221,7 @@ int main(int argc, char **argv)
         // TODO deal with IATA code duplications
         if (iataMap.contains(a.iataCode) && iataMap.value(a.iataCode) != a.uri) {
             ++iataCollisions;
-            qDebug() << "duplicate iata code:" << a.iataCode << a.label << airportMap.value(iataMap.value(a.iataCode)).label;
+            qDebug() << "duplicate iata code:" << a.iataCode << a.label << a.uri << airportMap.value(iataMap.value(a.iataCode)).label << airportMap.value(iataMap.value(a.iataCode)).uri;
         }
         iataMap.insert(a.iataCode, a.uri);
     }
@@ -255,7 +255,7 @@ int main(int argc, char **argv)
         }
         (*it).tz = tzDb.timezoneForCoordinate((*it).longitude, (*it).latitude);
         if ((*it).tz.isEmpty()) {
-            qDebug() << "Failed to find timezone for" << (*it).iataCode << (*it).latitude << (*it).longitude;
+            qDebug() << "Failed to find timezone for" << (*it).iataCode << (*it).label << (*it).latitude << (*it).longitude << (*it).uri;
             ++timezoneLoopupFails;
             continue;
         }
