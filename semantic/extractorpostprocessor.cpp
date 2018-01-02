@@ -153,7 +153,7 @@ bool ExtractorPostprocessor::filterReservation(const QVariant &res) const
     return true;
 }
 
-bool ExtractorPostprocessor::filterLodgingReservation(const QVariant& res) const
+bool ExtractorPostprocessor::filterLodgingReservation(const QVariant &res) const
 {
     const auto checkinDate = JsonLdDocument::readProperty(res, "checkinDate").toDateTime();
     const auto checkoutDate = JsonLdDocument::readProperty(res, "checkoutDate").toDateTime();
