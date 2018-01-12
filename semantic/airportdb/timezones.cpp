@@ -47,9 +47,34 @@ Timezones::~Timezones() = default;
 
 QByteArray Timezones::timezoneForCoordinate(float longitude, float latitude) const
 {
-    const int x = m_map.width() * ((longitude + 180.0f)/ 360.0f);
-    const int y = -m_map.height() * ((latitude - 90.0f) / 180.0f);
+    const int x = qRound(m_map.width() * ((longitude + 180.0f)/ 360.0f));
+    const int y = qRound(-m_map.height() * ((latitude - 90.0f) / 180.0f));
 
     //qDebug() << x << y << m_map.width() << m_map.height() << longitude << latitude << QColor(m_map.pixel(x, y)) << m_zones.value(m_map.pixel(x, y));
+    const auto tz = timezoneForPixel(x, y);
+    if (!tz.isEmpty()) {
+        return m_zones.value(m_map.pixel(x, y));
+    }
+
+    // search the vicinity, helps with costal/island airports
+    const struct { int x; int y; } offsets[] = { {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1} };
+    QSet<QByteArray> tzs;
+    for (int i = 0; i < 8; ++i) {
+        const auto tz = timezoneForPixel(x + offsets[i].x, y + offsets[i].y);
+        if (!tz.isEmpty()) {
+            tzs.insert(tz);
+        }
+    }
+    if (tzs.size() == 1) {
+        return *tzs.constBegin();
+    }
+    //qDebug() << "Timezone candidates:" << tzs;
+    return {};
+}
+
+QByteArray Timezones::timezoneForPixel(int x, int y) const
+{
+    x %= m_map.width();
+    y %= m_map.height();
     return m_zones.value(m_map.pixel(x, y));
 }

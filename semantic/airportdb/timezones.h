@@ -32,6 +32,8 @@ public:
     QByteArray timezoneForCoordinate(float longitude, float latitude) const;
 
 private:
+    QByteArray timezoneForPixel(int x, int y) const;
+
     QImage m_map;
     QHash<QRgb, QByteArray> m_zones;
 };
