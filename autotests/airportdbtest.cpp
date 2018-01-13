@@ -119,6 +119,7 @@ private Q_SLOTS:
 
     void iataLookupTest()
     {
+        // via unique fragment lookup
         QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("Flughafen Berlin-Tegel")), AirportDb::IataCode{"TXL"});
         QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("TEGEL")), AirportDb::IataCode{"TXL"});
         QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("Paris Charles de Gaulle")), AirportDb::IataCode{"CDG"});
@@ -126,13 +127,18 @@ private Q_SLOTS:
         QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("AMSTERDAM, NL (SCHIPHOL AIRPORT)")), AirportDb::IataCode{"AMS"});
         QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("London Heathrow")), AirportDb::IataCode{"LHR"});
 
+        // via non-unique fragment lookup
+        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("John F. Kennedy International Airport")), AirportDb::IataCode{"JFK"});
+        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("San Francisco International")), AirportDb::IataCode{"SFO"});
+        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("Düsseldorf International")), AirportDb::IataCode{"DUS"});
+        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("London City")), AirportDb::IataCode{"LCY"});
+        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("DETROIT, MI (METROPOLITAN WAYNE CO)")), AirportDb::IataCode{"DTW"});
+
         // not unique
         QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("Flughafen Berlin")).isValid());
         QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("Charles de Gaulle Orly")).isValid());
         QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("Brussels Airport, BE")).isValid());
-
-        // would be nice of those would work, but needs more complex index
-        QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("DETROIT, MI (METROPOLITAN WAYNE CO), TERMINAL EM")).isValid());
+        QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("Frankfurt")).isValid());
     }
 };
 

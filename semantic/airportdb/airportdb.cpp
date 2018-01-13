@@ -134,42 +134,98 @@ QTimeZone timezoneForAirport(IataCode iataCode)
     return QTimeZone(timezone_names + timezone_table[iataIdx]);
 }
 
-static const auto name_string_index_size = sizeof(name_string_index) / sizeof(NameIndex);
+static const auto name1_string_index_size = sizeof(name1_string_index) / sizeof(Name1Index);
 
-static const NameIndex *nameIndexBegin()
+static const Name1Index *name1IndexBegin()
 {
-    return name_string_index;
+    return name1_string_index;
 }
 
-static const NameIndex *nameIndexEnd()
+static const Name1Index *name1IndexEnd()
 {
-    return name_string_index + name_string_index_size;
+    return name1_string_index + name1_string_index_size;
 }
 
-IataCode iataCodeFromName(const QString &name)
+static const auto nameN_string_index_size = sizeof(nameN_string_index) / sizeof(NameNIndex);
+
+static const NameNIndex *nameNIndexBegin()
 {
-    IataCode code;
+    return nameN_string_index;
+}
+
+static const NameNIndex *nameNIndexEnd()
+{
+    return nameN_string_index + nameN_string_index_size;
+}
+
+static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
+{
     int iataIdx = -1;
-    for (const auto &s : name.toCaseFolded().split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts)) {
-        const auto it = std::lower_bound(nameIndexBegin(), nameIndexEnd(), s.toUtf8(), [](const NameIndex &lhs, const QByteArray &rhs) {
-                const auto cmp = strncmp(name_string_table + lhs.offset(), rhs.constData(), std::min<int>(lhs.length, rhs.size()));
+    for (const auto &s : fragments) {
+        const auto it = std::lower_bound(name1IndexBegin(), name1IndexEnd(), s.toUtf8(), [](const Name1Index &lhs, const QByteArray &rhs) {
+                const auto cmp = strncmp(name1_string_table + lhs.offset(), rhs.constData(), std::min<int>(lhs.length, rhs.size()));
                 if (cmp == 0) {
                     return lhs.length < rhs.size();
                 }
                 return cmp < 0;
             });
-        if (it == nameIndexEnd() || it->length != s.toUtf8().size() || strncmp(name_string_table + it->offset(), s.toUtf8().constData(), it->length) != 0) {
+        if (it == name1IndexEnd() || it->length != s.toUtf8().size() || strncmp(name1_string_table + it->offset(), s.toUtf8().constData(), it->length) != 0) {
             continue;
         }
         if (iataIdx >= 0 && iataIdx != it->iataIndex) {
-            return code; // not unique
+            return {}; // not unique
         }
         iataIdx = it->iataIndex;
     }
 
     if (iataIdx > 0) {
-        code = iata_table[iataIdx];
+        return iata_table[iataIdx];
     }
-    return code;
+    return  {};
+}
+
+IataCode iataCodeFromName(const QString &name)
+{
+    const auto fragments = name.toCaseFolded().split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
+    const IataCode code = iataCodeForUniqueFragment(fragments);
+    if (code.isValid()) {
+        return code;
+    }
+
+    // we we didn't find a unique name fragment, try the non-unique index
+    QSet<uint16_t> iataIdxs;
+    for (const auto &s : fragments) {
+        const auto it = std::lower_bound(nameNIndexBegin(), nameNIndexEnd(), s.toUtf8(), [](const NameNIndex &lhs, const QByteArray &rhs) {
+            const auto cmp = strncmp(nameN_string_table + lhs.strOffset, rhs.constData(), std::min<int>(lhs.strLength, rhs.size()));
+            if (cmp == 0) {
+                return lhs.strLength < rhs.size();
+            }
+            return cmp < 0;
+        });
+        if (it == nameNIndexEnd() || it->strLength != s.toUtf8().size() || strncmp(nameN_string_table + it->strOffset, s.toUtf8().constData(), it->strLength) != 0) {
+            continue;
+        }
+
+        QSet<uint16_t> candidates;
+        candidates.reserve(it->iataCount);
+        for (auto i = 0; i < it->iataCount; ++i) {
+            candidates.insert(nameN_iata_table[it->iataOffset + i]);
+        }
+        if (iataIdxs.isEmpty()) { // first round
+            iataIdxs = candidates;
+            continue;
+        }
+
+        iataIdxs &= candidates;
+        if (iataIdxs.isEmpty()) {
+            break;
+        }
+    }
+
+    if (iataIdxs.size() == 1) {
+        return iata_table[*iataIdxs.constBegin()];
+    }
+
+    return {};
 }
 }

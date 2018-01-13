@@ -117,6 +117,22 @@ static bool soundsMilitaryish(const QString &s)
     ;
 }
 
+static void stripAirportAllLanguages(QStringList &s)
+{
+    // only languages used in the English (sic!) wikidata labels and description matter here
+    s.removeAll(QLatin1String("aeroport"));
+    s.removeAll(QLatin1String("aeroporto"));
+    s.removeAll(QLatin1String("aeropuerto"));
+    s.removeAll(QLatin1String("air"));
+    s.removeAll(QLatin1String("airfield"));
+    s.removeAll(QLatin1String("airpark"));
+    s.removeAll(QLatin1String("airport"));
+    s.removeAll(QLatin1String("airstrip"));
+    s.removeAll(QLatin1String("flughafen"));
+    s.removeAll(QLatin1String("lufthavn"));
+    s.removeAll(QLatin1String("terminal"));
+}
+
 int coordinateConflicts = 0;
 
 static void merge(Airport &lhs, const Airport &rhs)
@@ -273,7 +289,7 @@ int main(int argc, char **argv)
     }
 
     // step 3 index the names for reverse lookup
-    QMap<QString, QString> labelMap;
+    QMap<QString, QVector<QString>> labelMap;
     for (auto it = airportMap.begin(); it != airportMap.end(); ++it) {
         auto l = (it.value().label + QLatin1Char(' ') + it.value().alias)
                  .split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
@@ -282,19 +298,17 @@ int main(int argc, char **argv)
         });
         l.removeAll(it.value().iataCode.toCaseFolded());
         l.removeAll(it.value().icaoCode.toCaseFolded());
+        stripAirportAllLanguages(l);
         l.removeDuplicates();
         for (const auto &s : l) {
             if (s.size() <= 2) {
                 continue;
             }
-            if (!labelMap.contains(s)) {
-                labelMap.insert(s, it.value().iataCode);
-            } else {
-//                 if (!labelMap.value(s).isEmpty())
-//                     qDebug() << "clash on" << s;
-                labelMap[s] = QString();
-            }
+            labelMap[s].push_back(it.value().iataCode);
         }
+    }
+    for (auto it = labelMap.begin(); it  != labelMap.end(); ++it) {
+        std::sort(it.value().begin(), it.value().end());
     }
 
     // step 4 generate code
@@ -386,32 +400,32 @@ static const uint16_t timezone_table[] = {
     }
     f.write(R"(};
 
-// reverse name lookup string table
-static const char name_string_table[] =
+// reverse name lookup string table for unique strings
+static const char name1_string_table[] =
 )");
     // TODO prefix compression
-    std::vector<NameIndex> string_offsets;
+    std::vector<Name1Index> string_offsets;
     string_offsets.reserve(labelMap.size());
     uint32_t label_offset = 0;
     for (auto it = labelMap.begin(); it != labelMap.end(); ++it) {
-        if (it.value().isEmpty()) {
+        if (it.value().size() > 1) {
             continue;
         }
         f.write("    \"");
         f.write(it.key().toUtf8());
         f.write("\" // ");
-        f.write(it.value().toUtf8());
+        f.write(it.value().at(0).toUtf8());
         f.write("\n");
-        string_offsets.push_back(NameIndex{label_offset, (uint8_t)it.key().toUtf8().size(), (uint16_t)std::distance(iataMap.begin(), iataMap.find(it.value()))});
+        string_offsets.push_back(Name1Index{label_offset, (uint8_t)it.key().toUtf8().size(), (uint16_t)std::distance(iataMap.begin(), iataMap.find(it.value().at(0)))});
         label_offset += it.key().toUtf8().size();
     }
     f.write(R"(;
 
 // string table indices into name_string_table
-static const NameIndex name_string_index[] = {
+static const Name1Index name1_string_index[] = {
 )");
     for (const auto &offset : string_offsets) {
-        f.write("    NameIndex{");
+        f.write("    Name1Index{");
         f.write(QByteArray::number(offset.offset()));
         f.write(", ");
         f.write(QByteArray::number(offset.length));
@@ -421,10 +435,68 @@ static const NameIndex name_string_index[] = {
     }
     f.write(R"(};
 
+// reverse name lookup string table for non-unique strings
+static const char nameN_string_table[] =
+)");
+    // TODO prefix compression?
+    struct stringN_index_t {
+        QByteArray str;
+        uint16_t strOffset;
+        uint16_t iataMapOffset;
+        QVector<QString> iataList;
+    };
+    std::vector<stringN_index_t> stringN_offsets;
+    stringN_offsets.reserve(labelMap.size() - string_offsets.size());
+    uint16_t string_offset = 0;
+    uint16_t iata_map_offset = 0;
+    for (auto it = labelMap.begin(); it != labelMap.end(); ++it) {
+        if (it.value().size() == 1) {
+            continue;
+        }
+        f.write("    \"");
+        f.write(it.key().toUtf8());
+        f.write("\"\n");
+        stringN_offsets.emplace_back(stringN_index_t{it.key().toUtf8(), string_offset, iata_map_offset, it.value()});
+        string_offset += it.key().toUtf8().size();
+        iata_map_offset += it.value().size();
+    }
+    f.write(R"(;
+
+// string table index to iata code mapping
+static const uint16_t nameN_iata_table[] = {
+)");
+    for (const auto &offset : stringN_offsets) {
+        f.write("    ");
+        for (const auto &iataCode : offset.iataList) {
+            f.write(QByteArray::number(std::distance(iataMap.begin(), iataMap.find(iataCode))));
+            f.write(", ");
+        }
+        f.write(" // ");
+        f.write(offset.str);
+        f.write("\n");
+    }
+    f.write(R"(};
+
+// index into the above string and iata index tables
+static const NameNIndex nameN_string_index[] = {
+)");
+    for (const auto &offset : stringN_offsets) {
+        f.write("    NameNIndex{");
+        f.write(QByteArray::number(offset.strOffset));
+        f.write(", ");
+        f.write(QByteArray::number(offset.str.length()));
+        f.write(", ");
+        f.write(QByteArray::number(offset.iataMapOffset));
+        f.write(", ");
+        f.write(QByteArray::number(offset.iataList.size()));
+        f.write("},\n");
+    }
+    f.write(R"(};
 }
 )");
 
-    qDebug() << "Generated database containing" << iataMap.size() << "airports and" << labelMap.size() << "name keys.";
+    qDebug() << "Generated database containing" << iataMap.size() << "airports";
+    qDebug() << "Name fragment index:" << string_offsets.size() << "unique keys," << labelMap.size() - string_offsets.size() << "non-unique keys";
     qDebug() << "IATA code collisions:" << iataCollisions;
     qDebug() << "Coordinate conflicts:" << coordinateConflicts;
     qDebug() << "Failed timezone lookups:" << timezoneLoopupFails;
