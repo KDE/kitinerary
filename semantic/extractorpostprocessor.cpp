@@ -68,6 +68,7 @@ QVariant ExtractorPostprocessor::processFlight(QVariant flight) const
 {
     flight = processProperty(flight, "departureAirport", &ExtractorPostprocessor::processAirport);
     flight = processProperty(flight, "arrivalAirport", &ExtractorPostprocessor::processAirport);
+    flight = processProperty(flight, "airline", &ExtractorPostprocessor::processAirline);
 
     processFlightTime(flight, "boardingTime", "departureAirport");
     processFlightTime(flight, "departureTime", "departureAirport");
@@ -78,10 +79,14 @@ QVariant ExtractorPostprocessor::processFlight(QVariant flight) const
 
 QVariant ExtractorPostprocessor::processAirport(QVariant airport) const
 {
+    // clean up name
+    const auto name = JsonLdDocument::readProperty(airport, "name").toString();
+    JsonLdDocument::writeProperty(airport, "name", name.trimmed());
+
     // complete missing IATA codes
     auto iataCode = JsonLdDocument::readProperty(airport, "iataCode").toString();
     if (iataCode.isEmpty()) {
-        iataCode = AirportDb::iataCodeFromName(JsonLdDocument::readProperty(airport, "name").toString()).toString();
+        iataCode = AirportDb::iataCodeFromName(name).toString();
         if (!iataCode.isEmpty()) {
             JsonLdDocument::writeProperty(airport, "iataCode", iataCode);
         }
@@ -100,6 +105,13 @@ QVariant ExtractorPostprocessor::processAirport(QVariant airport) const
     }
 
     return airport;
+}
+
+QVariant ExtractorPostprocessor::processAirline(QVariant airline) const
+{
+    const auto name = JsonLdDocument::readProperty(airline, "name").toString();
+    JsonLdDocument::writeProperty(airline, "name", name.trimmed());
+    return airline;
 }
 
 void ExtractorPostprocessor::processFlightTime(QVariant &flight, const char *timePropName, const char *airportPropName) const
