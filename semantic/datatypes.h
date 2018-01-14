@@ -195,6 +195,7 @@ class FlightReservation : protected Reservation
     // Google extensions
     SEMANTIC_PROPERTY(QString, airplaneSeat)
     SEMANTIC_PROPERTY(QString, boardingGroup)
+    SEMANTIC_PROPERTY(QUrl, ticketDownloadUrl)
 };
 
 class TrainReservation : protected Reservation
