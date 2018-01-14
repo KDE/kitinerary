@@ -2,8 +2,6 @@
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
-        "cancelReservationUrl": "https://www.trainline.fr/tickets",
-        "modifyReservationUrl": "https://www.trainline.fr/tickets",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {
@@ -43,8 +41,6 @@
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
-        "cancelReservationUrl": "https://www.trainline.fr/tickets",
-        "modifyReservationUrl": "https://www.trainline.fr/tickets",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {

@@ -34,6 +34,10 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
     for (auto d : data) {
         if (d.userType() == qMetaTypeId<FlightReservation>()) {
             d = processFlightReservation(d);
+        } else if (d.userType() == qMetaTypeId<TrainReservation>()) {
+            d = processReservation(d);
+        } else if (d.userType() == qMetaTypeId<LodgingReservation>()) {
+            d = processReservation(d);
         }
 
         if (filterReservation(d)) {
@@ -61,7 +65,9 @@ QVariant ExtractorPostprocessor::processProperty(QVariant obj, const char *name,
 
 QVariant ExtractorPostprocessor::processFlightReservation(QVariant res) const
 {
-    return processProperty(res, "reservationFor", &ExtractorPostprocessor::processFlight);
+    res = processReservation(res);
+    res = processProperty(res, "reservationFor", &ExtractorPostprocessor::processFlight);
+    return res;
 }
 
 QVariant ExtractorPostprocessor::processFlight(QVariant flight) const
@@ -144,6 +150,21 @@ void ExtractorPostprocessor::processFlightTime(QVariant &flight, const char *tim
     // so, clear the property first to force an update
     JsonLdDocument::writeProperty(flight, timePropName, QDateTime());
     JsonLdDocument::writeProperty(flight, timePropName, dt);
+}
+
+QVariant ExtractorPostprocessor::processReservation(QVariant res) const
+{
+    const auto viewUrl = JsonLdDocument::readProperty(res, "url").toUrl();
+    const auto modUrl = JsonLdDocument::readProperty(res, "modifyReservationUrl").toUrl();
+    const auto cancelUrl = JsonLdDocument::readProperty(res, "cancelReservationUrl").toUrl();
+    if (modUrl.isValid() && viewUrl == modUrl) {
+        JsonLdDocument::removeProperty(res, "modifyReservationUrl");
+    }
+    if (cancelUrl.isValid() && viewUrl == cancelUrl) {
+        JsonLdDocument::removeProperty(res, "cancelReservationUrl");
+    }
+
+    return res;
 }
 
 bool ExtractorPostprocessor::filterReservation(const QVariant &res) const

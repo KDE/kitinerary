@@ -38,6 +38,7 @@ private:
     QVariant processAirport(QVariant airport) const;
     QVariant processAirline(QVariant airline) const;
     void processFlightTime(QVariant &flight, const char *timePropName, const char *airportPropName) const;
+    QVariant processReservation(QVariant res) const;
 
     bool filterReservation(const QVariant &res) const;
     bool filterLodgingReservation(const QVariant &res) const;

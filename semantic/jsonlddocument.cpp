@@ -219,3 +219,8 @@ void JsonLdDocument::writeProperty(QVariant &obj, const char *name, const QVaria
     const auto prop = mo->property(idx);
     prop.writeOnGadget(obj.data(), value);
 }
+
+void JsonLdDocument::removeProperty(QVariant &obj, const char *name)
+{
+    writeProperty(obj, name, QVariant());
+}
