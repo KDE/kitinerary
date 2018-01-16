@@ -61,7 +61,6 @@ struct NameNIndex
 
 static_assert(sizeof(NameNIndex) == 8, "NameNIndex size changed!");
 static_assert(sizeof(NameNIndex) % alignof(NameNIndex) == 0, "NameNIndex is not properly aligned!");
-
 }
 
 #endif

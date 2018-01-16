@@ -57,7 +57,10 @@ QByteArray Timezones::timezoneForCoordinate(float longitude, float latitude) con
     }
 
     // search the vicinity, helps with costal/island airports
-    const struct { int x; int y; } offsets[] = { {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1} };
+    const struct {
+        int x;
+        int y;
+    } offsets[] = { {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1} };
     QSet<QByteArray> tzs;
     for (int i = 0; i < 8; ++i) {
         const auto tz = timezoneForPixel(x + offsets[i].x, y + offsets[i].y);

@@ -289,7 +289,7 @@ int main(int argc, char **argv)
     }
 
     // step 3 index the names for reverse lookup
-    QMap<QString, QVector<QString>> labelMap;
+    QMap<QString, QVector<QString> > labelMap;
     for (auto it = airportMap.begin(); it != airportMap.end(); ++it) {
         auto l = (it.value().label + QLatin1Char(' ') + it.value().alias)
                  .split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
@@ -307,7 +307,7 @@ int main(int argc, char **argv)
             labelMap[s].push_back(it.value().iataCode);
         }
     }
-    for (auto it = labelMap.begin(); it  != labelMap.end(); ++it) {
+    for (auto it = labelMap.begin(); it != labelMap.end(); ++it) {
         std::sort(it.value().begin(), it.value().end());
     }
 

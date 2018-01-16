@@ -181,7 +181,7 @@ static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
     if (iataIdx > 0) {
         return iata_table[iataIdx];
     }
-    return  {};
+    return {};
 }
 
 IataCode iataCodeFromName(const QString &name)
@@ -196,12 +196,12 @@ IataCode iataCodeFromName(const QString &name)
     QSet<uint16_t> iataIdxs;
     for (const auto &s : fragments) {
         const auto it = std::lower_bound(nameNIndexBegin(), nameNIndexEnd(), s.toUtf8(), [](const NameNIndex &lhs, const QByteArray &rhs) {
-            const auto cmp = strncmp(nameN_string_table + lhs.strOffset, rhs.constData(), std::min<int>(lhs.strLength, rhs.size()));
-            if (cmp == 0) {
-                return lhs.strLength < rhs.size();
-            }
-            return cmp < 0;
-        });
+                const auto cmp = strncmp(nameN_string_table + lhs.strOffset, rhs.constData(), std::min<int>(lhs.strLength, rhs.size()));
+                if (cmp == 0) {
+                    return lhs.strLength < rhs.size();
+                }
+                return cmp < 0;
+            });
         if (it == nameNIndexEnd() || it->strLength != s.toUtf8().size() || strncmp(nameN_string_table + it->strOffset, s.toUtf8().constData(), it->strLength) != 0) {
             continue;
         }
