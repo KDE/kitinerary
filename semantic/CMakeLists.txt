@@ -47,5 +47,6 @@ target_link_libraries(messageviewer_bodypartformatter_semantic
   KF5::I18n
   Grantlee5::Templates
   Qt5::DBus
+  KF5::Prison
 )
 install(TARGETS messageviewer_bodypartformatter_semantic DESTINATION ${KDE_INSTALL_PLUGINDIR}/messageviewer/bodypartformatter)

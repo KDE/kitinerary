@@ -48,6 +48,20 @@ QVector<QVariant> SemanticMemento::data() const
 void SemanticMemento::setData(const QVector<QVariant> &data)
 {
     m_data = data;
+    m_expanded.resize(data.size());
+}
+
+QVector<bool> SemanticMemento::expanded() const
+{
+    return m_expanded;
+}
+
+void SemanticMemento::toggleExpanded(int index)
+{
+    if (index >= m_expanded.size()) {
+        return;
+    }
+    m_expanded[index] = !m_expanded.at(index);
 }
 
 bool SemanticMemento::hasStructuredData() const

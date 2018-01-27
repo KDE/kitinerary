@@ -156,6 +156,7 @@ class Ticket
 {
     SEMANTIC_GADGET
     SEMANTIC_PROPERTY(QVariant, ticketedSeat)
+    SEMANTIC_PROPERTY(QString, ticketToken)
 };
 
 class Reservation

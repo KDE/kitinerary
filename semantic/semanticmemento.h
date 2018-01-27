@@ -44,11 +44,15 @@ public:
     QVector<QVariant> data() const;
     void setData(const QVector<QVariant> &data);
 
+    QVector<bool> expanded() const;
+    void toggleExpanded(int index);
+
     bool hasStructuredData() const;
     void setStructuredDataFound(bool f);
 
 private:
     QVector<QVariant> m_data;
+    QVector<bool> m_expanded;
     QSet<KMime::ContentIndex> m_parsedParts;
     bool m_foundStructuredData = false;
 };
