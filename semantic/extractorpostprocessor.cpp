@@ -157,11 +157,25 @@ QVariant ExtractorPostprocessor::processReservation(QVariant res) const
     const auto viewUrl = JsonLdDocument::readProperty(res, "url").toUrl();
     const auto modUrl = JsonLdDocument::readProperty(res, "modifyReservationUrl").toUrl();
     const auto cancelUrl = JsonLdDocument::readProperty(res, "cancelReservationUrl").toUrl();
+    // remove duplicated urls
     if (modUrl.isValid() && viewUrl == modUrl) {
         JsonLdDocument::removeProperty(res, "modifyReservationUrl");
     }
     if (cancelUrl.isValid() && viewUrl == cancelUrl) {
         JsonLdDocument::removeProperty(res, "cancelReservationUrl");
+    }
+
+    // move ticketToken to Ticket (Google vs. schema.org difference)
+    const auto token = JsonLdDocument::readProperty(res, "ticketToken").toString();
+    if (!token.isEmpty()) {
+        auto ticket = JsonLdDocument::readProperty(res, "reservedTicket");
+        if (ticket.isNull()) {
+            ticket = QVariant::fromValue(Ticket{});
+        }
+        if (JsonLdDocument::readProperty(ticket, "ticketToken").toString().isEmpty()) {
+            JsonLdDocument::writeProperty(ticket, "ticketToken", token);
+            JsonLdDocument::writeProperty(res, "reservedTicket", ticket);
+        }
     }
 
     return res;

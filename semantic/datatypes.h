@@ -169,6 +169,7 @@ class Reservation
     // Google extension
     SEMANTIC_PROPERTY(QUrl, cancelReservationUrl)
     SEMANTIC_PROPERTY(QUrl, modifyReservationUrl)
+    SEMANTIC_PROPERTY(QString, ticketToken)
     SEMANTIC_PROPERTY(QUrl, url)
 };
 

@@ -30,6 +30,7 @@
         "reservationNumber": "XXX007",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketToken": "aztecCode:somerandomdata            DOE             JOHN111110             00000",
             "ticketedSeat": {
                 "@type": "Seat",
                 "seatNumber": "71",
@@ -69,6 +70,7 @@
         "reservationNumber": "XXX007",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketToken": "aztecCode:somerandomdata            DOE             JOHN111110          00000",
             "ticketedSeat": {
                 "@type": "Seat",
                 "seatNumber": "62",
