@@ -96,8 +96,11 @@ void StructuredDataExtractor::findLdJson(const QString &text)
         }
         i = text.indexOf(QLatin1String("</script>"), begin, Qt::CaseInsensitive);
         const auto jsonData = text.mid(begin, i - begin);
-        auto jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
+        QJsonParseError error;
+        auto jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8(), &error);
         if (jsonDoc.isNull()) {
+            qCDebug(SEMANTIC_LOG).noquote() << jsonData;
+            qCDebug(SEMANTIC_LOG) << error.errorString() << "at offset" << error.offset;
             continue;
         }
         if (jsonDoc.isArray()) {
