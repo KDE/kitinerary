@@ -91,6 +91,14 @@ public:
     bool operator!=(const TrainStation &other) const;
 };
 
+class BusStation : protected Place
+{
+    SEMANTIC_GADGET
+    SEMANTIC_PROPERTY(QString, name)
+public:
+    bool operator!=(const BusStation &other) const;
+};
+
 /**
  * @see https://schema.org/Flight
  * @see https://developers.google.com/gmail/markup/reference/flight-reservation
@@ -135,6 +143,26 @@ class TrainTrip
     SEMANTIC_PROPERTY(QDateTime, departureTime)
     SEMANTIC_PROPERTY(QString, trainName)
     SEMANTIC_PROPERTY(QString, trainNumber)
+
+    Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
+    Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized STORED false CONSTANT)
+
+private:
+    QString departureTimeLocalized() const;
+    QString arrivalTimeLocalized() const;
+};
+
+class BusTrip
+{
+    SEMANTIC_GADGET
+    SEMANTIC_PROPERTY(QString, arrivalPlatform)
+    SEMANTIC_PROPERTY(BusStation, arrivalStation)
+    SEMANTIC_PROPERTY(QDateTime, arrivalTime)
+    SEMANTIC_PROPERTY(QString, departurePlatform)
+    SEMANTIC_PROPERTY(BusStation, departureStation)
+    SEMANTIC_PROPERTY(QDateTime, departureTime)
+    SEMANTIC_PROPERTY(QString, busName)
+    SEMANTIC_PROPERTY(QString, busNumber)
 
     Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
     Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized STORED false CONSTANT)
@@ -205,6 +233,11 @@ class TrainReservation : protected Reservation
     SEMANTIC_GADGET
 };
 
+class BusReservation : protected Reservation
+{
+    SEMANTIC_GADGET
+};
+
 Q_DECLARE_METATYPE(GeoCoordinates)
 Q_DECLARE_METATYPE(Airport)
 Q_DECLARE_METATYPE(Airline)
@@ -217,6 +250,10 @@ Q_DECLARE_METATYPE(Seat)
 Q_DECLARE_METATYPE(Ticket)
 Q_DECLARE_METATYPE(TrainStation)
 Q_DECLARE_METATYPE(TrainTrip)
+Q_DECLARE_METATYPE(TrainReservation)
+Q_DECLARE_METATYPE(BusStation)
+Q_DECLARE_METATYPE(BusTrip)
+Q_DECLARE_METATYPE(BusReservation)
 
 #undef SEMANTIC_GADGET
 

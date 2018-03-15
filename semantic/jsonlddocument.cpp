@@ -105,6 +105,9 @@ static QVariant createInstance(const QJsonObject &obj)
     MAKE_FACTORY(TrainStation);
     MAKE_FACTORY(TrainTrip);
     MAKE_FACTORY(TrainReservation);
+    MAKE_FACTORY(BusStation);
+    MAKE_FACTORY(BusTrip);
+    MAKE_FACTORY(BusReservation);
     return {};
 }
 

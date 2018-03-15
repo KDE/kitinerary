@@ -38,6 +38,8 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
             d = processReservation(d);
         } else if (d.userType() == qMetaTypeId<LodgingReservation>()) {
             d = processReservation(d);
+        } else if (d.userType() == qMetaTypeId<BusReservation>()) {
+            d = processReservation(d);
         }
 
         if (filterReservation(d)) {
@@ -191,7 +193,9 @@ bool ExtractorPostprocessor::filterReservation(const QVariant &res) const
     if (resFor.userType() == qMetaTypeId<Flight>()) {
         return filterFlight(resFor);
     } else if (resFor.userType() == qMetaTypeId<TrainTrip>()) {
-        return filterTrainTrip(resFor);
+        return filterTrainOrBusTrip(resFor);
+    } else if (resFor.userType() == qMetaTypeId<BusTrip>()) {
+        return filterTrainOrBusTrip(resFor);
     }
 
     if (res.userType() == qMetaTypeId<LodgingReservation>()) {
@@ -223,16 +227,16 @@ bool ExtractorPostprocessor::filterAirport(const QVariant &airport) const
     return !iataCode.isEmpty() || !name.isEmpty();
 }
 
-bool ExtractorPostprocessor::filterTrainTrip(const QVariant &trip) const
+bool ExtractorPostprocessor::filterTrainOrBusTrip(const QVariant &trip) const
 {
     const auto depDt = JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
     const auto arrDt = JsonLdDocument::readProperty(trip, "arrivalTime").toDateTime();
-    return filterAirport(JsonLdDocument::readProperty(trip, "departureStation"))
-           && filterAirport(JsonLdDocument::readProperty(trip, "arrivalStation"))
+    return filterTrainOrBusStation(JsonLdDocument::readProperty(trip, "departureStation"))
+           && filterTrainOrBusStation(JsonLdDocument::readProperty(trip, "arrivalStation"))
            && depDt.isValid() && arrDt.isValid();
 }
 
-bool ExtractorPostprocessor::filterTrainStation(const QVariant &station) const
+bool ExtractorPostprocessor::filterTrainOrBusStation(const QVariant &station) const
 {
     return !JsonLdDocument::readProperty(station, "name").toString().isEmpty();
 }

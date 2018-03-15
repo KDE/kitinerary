@@ -30,7 +30,9 @@ using namespace KCalCore;
 
 QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
 {
-    if (reservation.userType() == qMetaTypeId<FlightReservation>() || reservation.userType() == qMetaTypeId<TrainReservation>()) {
+    if (reservation.userType() == qMetaTypeId<FlightReservation>()
+        || reservation.userType() == qMetaTypeId<TrainReservation>()
+        || reservation.userType() == qMetaTypeId<BusReservation>()) {
         const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
         return JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
     } else if (reservation.userType() == qMetaTypeId<LodgingReservation>()) {
@@ -69,6 +71,8 @@ void CalendarHandler::fillEvent(const QVariant &reservation, const KCalCore::Eve
         fillLodgingReservation(reservation, event);
     } else if (typeId == qMetaTypeId<TrainReservation>()) {
         fillTrainReservation(reservation, event);
+    } else if (typeId == qMetaTypeId<BusReservation>()) {
+        fillBusReservation(reservation, event);
     }
 
     const auto bookingRef = JsonLdDocument::readProperty(reservation, "reservationNumber").toString();
@@ -138,20 +142,12 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-void CalendarHandler::fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+void CalendarHandler::fillTripReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
 {
     const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
     const auto depStation = JsonLdDocument::readProperty(trip, "departureStation");
     const auto arrStation = JsonLdDocument::readProperty(trip, "arrivalStation");
-    if (trip.isNull() || depStation.isNull() || arrStation.isNull()) {
-        return;
-    }
 
-    event->setSummary(i18n("Train %1 from %2 to %3",
-                           JsonLdDocument::readProperty(trip, "trainNumber").toString(),
-                           JsonLdDocument::readProperty(depStation, "name").toString(),
-                           JsonLdDocument::readProperty(arrStation, "name").toString()
-                           ));
     event->setLocation(JsonLdDocument::readProperty(depStation, "name").toString());
     fillGeoPosition(depStation, event);
     event->setDtStart(JsonLdDocument::readProperty(trip, "departureTime").toDateTime());
@@ -182,6 +178,40 @@ void CalendarHandler::fillTrainReservation(const QVariant &reservation, const KC
         desc.push_back(i18n("Booking reference: %1", s));
     }
     event->setDescription(desc.join(QLatin1Char('\n')));
+}
+
+void CalendarHandler::fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+{
+    const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
+    const auto depStation = JsonLdDocument::readProperty(trip, "departureStation");
+    const auto arrStation = JsonLdDocument::readProperty(trip, "arrivalStation");
+    if (trip.isNull() || depStation.isNull() || arrStation.isNull()) {
+        return;
+    }
+
+    event->setSummary(i18n("Train %1 from %2 to %3",
+                           JsonLdDocument::readProperty(trip, "trainNumber").toString(),
+                           JsonLdDocument::readProperty(depStation, "name").toString(),
+                           JsonLdDocument::readProperty(arrStation, "name").toString()
+                           ));
+    fillTripReservation(reservation, event);
+}
+
+void CalendarHandler::fillBusReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+{
+    const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
+    const auto depStation = JsonLdDocument::readProperty(trip, "departureStation");
+    const auto arrStation = JsonLdDocument::readProperty(trip, "arrivalStation");
+    if (trip.isNull() || depStation.isNull() || arrStation.isNull()) {
+        return;
+    }
+
+    event->setSummary(i18n("Bus %1 from %2 to %3",
+                           JsonLdDocument::readProperty(trip, "busNumber").toString(),
+                           JsonLdDocument::readProperty(depStation, "name").toString(),
+                           JsonLdDocument::readProperty(arrStation, "name").toString()
+                           ));
+    fillTripReservation(reservation, event);
 }
 
 void CalendarHandler::fillLodgingReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
