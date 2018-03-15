@@ -1,0 +1,29 @@
+[
+    {
+        "@type": "BusReservation",
+        "modifyReservationUrl": "http://jizdenky.studentagency.cz/OnlineTicket?pam1=0987654321&pam2=0123456789",
+        "reservationFor": {
+            "@type": "BusTrip",
+            "arrivalStation": {
+                "@type": "BusStation",
+                "name": "Wien, SchwechatAirport Bbf."
+            },
+            "arrivalTime": "2012-06-29T05:35:00",
+            "busName": "Praha → Vídeň",
+            "busNumber": "SA",
+            "departureStation": {
+                "@type": "BusStation",
+                "name": "Brno, AN u hotelu Grand"
+            },
+            "departureTime": "2012-06-29T03:20:00"
+        },
+        "reservationNumber": "0123456789",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "43"
+            }
+        }
+    }
+]

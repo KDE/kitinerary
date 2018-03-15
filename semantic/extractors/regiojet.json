@@ -1,0 +1,7 @@
+{
+    "filter": [
+        { "header": "From", "match": "express@studentagency.cz" },
+        { "header": "From", "match": "info@regiojet.cz" }
+    ],
+    "script": "regiojet.js"
+}

@@ -1,0 +1,44 @@
+Electronic ticket  0123456789
+
+Number of passengers (used tarifs): 1 (Adult)
+Passengers: Daniel Vratil
+ 
+
+Route
+Date          Station/Transfer              Arrival   Departure Platf.    Connection            Coach/Seats       
+Fri 31/07/15  Wien, Schwechat Airport Bbf.            22:10     2         Vienna → Prague (SA)  48                
+Sat 01/08/15  Brno, AN u hotelu Grand       00:30                                                                 
+
+
+
+Price: 340 CZK 
+Cancellation terms: more than 1 hour: 0 %, less than 1 hour: not possible 
+Rebook terms: more than 1 hour: by cancellation for 0 CZK, less than 1 hour: not possible
+
+Action: Flexi (https://bustickets.studentagency.eu/en/special-offers/special-offers-details/akce-praha-drazdany-berlin-nejlevnejsi-cena-2015.html)
+
+
+Important information:
+Dear passengers! Please have your valid travel document (ID card or passport) ready for inspection when boarding the bus. Residence permits, travel document copies, etc. are not a valid travel document! Clients without valid travel documents will not be transported.
+Luggage – luggage transported for one passenger free of charge:
+1 piece of hand luggage (maximum size 15 x 25 x 35 cm)
+and 1 piece of luggage in the luggage compartment not exceeding 30 kg or the size of 30 x 60 x 80 cm.
+The fee for each  extra  piece of luggage/fee for luggage exceeding the maximum size/fee the transport of a bicycle is  100 CZK/ 4 € while paying by a coach or 50 CZK /2 € for payment in advance in the reservation system.
+
+Operators:
+SA - STUDENT AGENCY k.s., ID: 25317075, internet: www.studentagency.cz, phone: +420 841 101 101
+
+
+You can manage your ticket here https://jizdenky.studentagency.cz/OnlineTicket?pam1=0987654321&pam2=0123456789 (you will need the ticket number to log in)
+
+To board the bus, you only need to give the ticket number unless otherwise stated in the conditions.
+ 
+
+
+
+Yours sincerely
+STUDENT AGENCY/ REGIOJET
+www.studentagency.cz, www.regiojet.cz
+phone: +420 841 101 101, +420 542 42 42 42
+--------------------------------------------------------------------------------
+Thank you for using online bus/train ticket reservation system utilized by STUDENT AGENCY and REGIOJET (http://www.studentagency.cz; http://www.regiojet.cz).

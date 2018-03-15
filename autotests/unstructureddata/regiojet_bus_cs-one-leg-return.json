@@ -1,0 +1,56 @@
+[
+    {
+        "@type": "BusReservation",
+        "modifyReservationUrl": "https://jizdenky.studentagency.cz/OnlineTicket?pam1=9876543210&pam2=0123456789",
+        "reservationFor": {
+            "@type": "BusTrip",
+            "arrivalStation": {
+                "@type": "BusStation",
+                "name": "Wien, Lassallestr./Praterstern"
+            },
+            "arrivalTime": "2012-08-11T11:20:00",
+            "busName": "Praha → Vídeň",
+            "busNumber": "SA",
+            "departureStation": {
+                "@type": "BusStation",
+                "name": "Brno, AN u hotelu Grand"
+            },
+            "departureTime": "2012-08-11T09:30:00"
+        },
+        "reservationNumber": "0123456789",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "51, 52, 55, 56"
+            }
+        }
+    },
+    {
+        "@type": "BusReservation",
+        "modifyReservationUrl": "https://jizdenky.studentagency.cz/OnlineTicket?pam1=9876543210&pam2=0123456789",
+        "reservationFor": {
+            "@type": "BusTrip",
+            "arrivalStation": {
+                "@type": "BusStation",
+                "name": "Brno, AN u hotelu Grand"
+            },
+            "arrivalTime": "2012-08-12T00:30:00",
+            "busName": "Vídeň → Praha",
+            "busNumber": "SA",
+            "departureStation": {
+                "@type": "BusStation",
+                "name": "Wien, Lassallestr./Praterstern"
+            },
+            "departureTime": "2012-08-11T22:40:00"
+        },
+        "reservationNumber": "0123456789",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "35, 36, 39, 40"
+            }
+        }
+    }
+]

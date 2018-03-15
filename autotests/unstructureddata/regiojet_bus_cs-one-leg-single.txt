@@ -1,0 +1,39 @@
+Elektronická jízdenka č. 0123456789
+
+Počet cestujících (použité tarify): 1 (ISIC)
+ 
+
+Cesta
+Datum         Zastávka/Přestup             Příjezd   Odjezd    Nást.     Spoj                Vůz/sedadla       
+Pá 29.6.12    Brno, AN u hotelu Grand                3:20                Praha → Vídeň (SA)  43                
+              Wien, SchwechatAirport Bbf.  5:35                                                                
+
+Cena: 272 CZK  
+Stornovací podmínky: více než 5 hodin: 0 %, méně než 5 hodin: nelze stornovat 
+Podmínky přerezervace: více než 5 hodin: 0 CZK, méně než 5 hodin: nelze přerezervovat
+
+Akce: Flexi (http://jizdenky.studentagency.cz/cs/ceniky/ceniky-podstranky/flexi-jizdenka.html)
+
+Důležité informace:
+Zavazadla - bezplatně přepravujeme pro 1 cestujícího:
+1 příruční zavazadlo (max. rozměry 15 x 25 x 35 cm)
+a 1 zavazadlo v zavazadlovém prostoru do 30 kg a rozměrů 30 x 60 x 80 cm.
+Poplatek za každé další zavazadlo/poplatek za nadrozměrné zavazadlo/poplatek za přepravu kola je 100 Kč/ 4 EUR.
+
+Dopravci:
+SA - STUDENT AGENCY, s.r.o., IČO: 25317075, internet: www.studentagency.cz, telefon: +420 542 42 42 42
+
+
+Vaši jízdenku můžete spravovat zde http://jizdenky.studentagency.cz/OnlineTicket?pam1=0987654321&pam2=0123456789 (k přihlášení potřebujete číslo jízdenky) 
+
+
+
+S pozdravem
+STUDENT AGENCY Express
+STUDENT AGENCY s.r.o.
+www.studentagency.cz
+tel: +420 841 101 101, +420 542 42 42 42, pro letenky +420 800 100 300
+
+--------------------------------------------------------------------------------
+STUDENT AGENCY express je online rezervační systém autobusové dopravy společnosti STUDENT AGENCY (http://www.studentagency.cz).
+Pokud nechcete automaticky dostávat emaily o změnách v rezervacích, proveďte změnu v sekci nastavení.

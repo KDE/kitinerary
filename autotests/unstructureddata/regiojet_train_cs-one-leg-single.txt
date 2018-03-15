@@ -1,0 +1,43 @@
+Elektronická jízdenka č. 0123456789
+
+Počet cestujících (použité tarify): 1 (Dospělý)
+ 
+
+Cesta
+Datum         Zastávka/Přestup           Příjezd   Odjezd    Nást.     Spoj                                     Vůz/sedadla       
+Ne 2.7.17     Olomouc, hl.n.                       11:56               Návsí (Jablunkov) → Praha (RJ, RJ 1010)  1/48              
+              Praha, hl.n.               14:12                                                                                    
+
+
+
+Cena: 239 CZK  
+Stornovací podmínky: více než 15 minut: 0 %, méně než 15 minut: nelze stornovat 
+Podmínky přerezervace: více než 15 minut: stornem za 0 CZK, méně než 15 minut: nelze přerezervovat
+
+
+Tarif: LOW COST - bez servisu
+
+Důležité informace:
+Vybrali jste si sedadlo ve třídě LOW COST – bez servisu. Sedadla jsou vybavana loketními opěrkami a jsou nepolohovatelná, proto jsou vhodná pro cestování na krátkých trasách. K dispozici je balená voda Rajec, denní tisk a časopisy na představcích. Užijte si ničím nerušenou jízdu s možností sledování více než 50 filmů, poslechem hudby a hraním her ve vlastním zařízení.
+
+Dopravci:
+RJ - REGIOJET a.s., IČO: 28333187, DIČ: CZ28333187, internet: www.regiojet.cz, telefon: +420841101101
+
+
+Vaši jízdenku můžete spravovat zde https://jizdenky.regiojet.cz/OnlineTicket?pam1=0987654321&pam2=0123456789 (k přihlášení potřebujete číslo jízdenky)
+
+K odbavení u spoje postačuje sdělit číslo jízdenky, není-li v podmínkách uvedeno jinak.
+ 
+
+
+
+
+
+S pozdravem
+REGIOJET
+www.regiojet.cz
+tel: +420 841 101 101, +420 542 42 42 42
+--------------------------------------------------------------------------------
+Děkujeme, že používáte online rezervační systém autobusové a vlakové dopravy společnosti REGIOJET (http://www.regiojet.cz).
+Online rezervační systém spravuje STUDENT AGENCY k.s., Česká republika
+Pokud nechcete automaticky dostávat emaily, proveďte změnu v sekci nastavení.

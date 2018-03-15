@@ -1,0 +1,30 @@
+[
+    {
+        "@type": "TrainReservation",
+        "modifyReservationUrl": "https://jizdenky.regiojet.cz/OnlineTicket?pam1=0987654321&pam2=0123456789",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Praha, hl.n."
+            },
+            "arrivalTime": "2017-07-02T14:12:00",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Olomouc, hl.n."
+            },
+            "departureTime": "2017-07-02T11:56:00",
+            "trainName": "Návsí (Jablunkov) → Praha",
+            "trainNumber": "RJ, RJ 1010"
+        },
+        "reservationNumber": "0123456789",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "48",
+                "seatSection": "1"
+            }
+        }
+    }
+]

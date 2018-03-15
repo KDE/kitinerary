@@ -1,0 +1,44 @@
+Elektronická jízdenka č. 0123456789
+
+Počet cestujících (použité tarify): 4 (Dospělý, Dospělý, ISIC, ISIC)
+ 
+
+Cesta tam
+Datum         Zastávka/Přestup                Příjezd   Odjezd    Nást.     Spoj                Vůz/sedadla       
+So 11.8.12    Brno, AN u hotelu Grand                   9:30                Praha → Vídeň (SA)  51, 52, 55, 56    
+              Wien, Lassallestr./Praterstern  11:20                                                               
+
+Cesta zpět
+Datum         Zastávka/Přestup                Příjezd   Odjezd    Nást.     Spoj                Vůz/sedadla       
+So 11.8.12    Wien, Lassallestr./Praterstern            22:40               Vídeň → Praha (SA)  35, 36, 39, 40    
+Ne 12.8.12    Brno, AN u hotelu Grand         0:30                                                                
+
+Cena: 1 443 CZK  
+Stornovací podmínky: více než 5 hodin: 0 %, méně než 5 hodin: nelze stornovat 
+Podmínky přerezervace: více než 5 hodin: 0 CZK, méně než 5 hodin: nelze přerezervovat
+
+Akce: Flexi (http://jizdenky.studentagency.cz/cs/ceniky/ceniky-podstranky/flexi-jizdenka.html)
+
+Důležité informace:
+Zavazadla - bezplatně přepravujeme pro 1 cestujícího:
+1 příruční zavazadlo (max. rozměry 15 x 25 x 35 cm)
+a 1 zavazadlo v zavazadlovém prostoru do 30 kg a rozměrů 30 x 60 x 80 cm.
+Poplatek za každé další zavazadlo/poplatek za nadrozměrné zavazadlo/poplatek za přepravu kola je 100 Kč/ 4 EUR.
+
+Dopravci:
+SA - STUDENT AGENCY, s.r.o., IČO: 25317075, internet: www.studentagency.cz, telefon: +420 542 42 42 42
+
+
+Vaši jízdenku můžete spravovat zde https://jizdenky.studentagency.cz/OnlineTicket?pam1=9876543210&pam2=0123456789 (k přihlášení potřebujete číslo jízdenky) 
+
+
+
+S pozdravem
+STUDENT AGENCY Express
+STUDENT AGENCY s.r.o.
+www.studentagency.cz
+tel: +420 841 101 101, +420 542 42 42 42, pro letenky +420 800 100 300
+
+--------------------------------------------------------------------------------
+STUDENT AGENCY express je online rezervační systém autobusové dopravy společnosti STUDENT AGENCY (http://www.studentagency.cz).
+Pokud nechcete automaticky dostávat emaily o změnách v rezervacích, proveďte změnu v sekci nastavení.
