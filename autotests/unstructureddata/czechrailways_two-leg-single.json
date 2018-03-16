@@ -1,0 +1,46 @@
+[
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Hradec Králové hl.n."
+            },
+            "arrivalTime": "2017-08-09T10:51:00",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Praha hl.n."
+            },
+            "departureTime": "2017-08-09T09:07:00",
+            "trainNumber": "R 945"
+        },
+        "reservationNumber": "Z39230",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "115",
+                "seatSection": "372"
+            }
+        }
+    },
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Jaroměř"
+            },
+            "arrivalTime": "2017-08-09T11:16:00",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Hradec Králové hl.n."
+            },
+            "departureTime": "2017-08-09T11:02:00",
+            "trainNumber": "Sp 1786"
+        },
+        "reservationNumber": "Z39230"
+    }
+]

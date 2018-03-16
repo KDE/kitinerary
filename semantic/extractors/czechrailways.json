@@ -1,0 +1,7 @@
+{
+    "filter": [
+        { "header": "From", "match": "info@cd.cz" },
+        { "header": "From", "match": "eshop@cd.cz" }
+    ],
+    "script": "czechrailways.js"
+}

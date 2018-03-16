@@ -1,0 +1,28 @@
+[
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Praha hl.n."
+            },
+            "arrivalTime": "2017-07-09T17:06:00",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Brno dolní nádraží"
+            },
+            "departureTime": "2017-07-09T14:34:00",
+            "trainNumber": "RJ 76"
+        },
+        "reservationNumber": "FXI305",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "91",
+                "seatSection": "26"
+            }
+        }
+    }
+]

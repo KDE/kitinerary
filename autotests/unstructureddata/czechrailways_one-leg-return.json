@@ -1,0 +1,52 @@
+[
+    {
+       "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Brno hl.n."
+            },
+            "arrivalTime": "2017-12-31T16:20:00",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Praha hl.n."
+            },
+            "departureTime": "2017-12-31T13:51:00",
+            "trainNumber": "EC 173"
+        },
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "71",
+                "seatSection": "262"
+            }
+        }
+    },
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Praha hl.n."
+            },
+            "arrivalTime": "2018-01-01T13:07:00",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Brno hl.n."
+            },
+            "departureTime": "2018-01-01T10:38:00",
+            "trainNumber": "rj 72"
+        },
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "51",
+                "seatSection": "27"
+            }
+        }
+    }
+]

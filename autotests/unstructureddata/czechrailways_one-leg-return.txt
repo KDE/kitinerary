@@ -1,0 +1,41 @@
+!    1154
+                         JÍZDENKA A MÍSTENKA
+                         eTiket                                                                  Osob: 1
+                        Z/DE/VON                              @     DO/A/NACH                                                     TŘÍDA/
+                                                                                                                                  CL./KL.
+ 31/12       13:51      Praha hl.n.                           @     Brno hl.n.                          *              *             1
+     *          *       Brno hl.n.                            @     Praha hl.n.                     01/01         24:00              1
+ Přes: PhaLb,Kolín,Pard.Hl,Ústí/Or,ČTřeb                                                                                   Km: 255
+ Rezervace (místo)
+ IN 25 zpáteční
+                                                                                                    Cena                   662 Kč
+Doklad je nepřenosný a platí vždy pouze ve spojení s osobním průkazem cestujícího, jehož jméno je uvedeno na jízdence.
+Jízdu je nutno nastoupit v 1. den platnosti, nejdříve však v 13:51 hod.
+Daňový doklad (informace o ceně)
+Summary / Rechnung
+Položka                                  Tar. cena    Body        Cena    DPH
+Jízdenka                           1        662 Kč       66      662 Kč   15%
+Rezervace                          2           0 Kč                 0 Kč
+Celkem                                                           662 Kč
+Datum vystavení/datum platby: 30.12.2017 20:27 Platba:             KARTOU/CC
+Prodejce: České dráhy, a.s. 30002                     Číslo obj.: 20361 103 00
+Praha 1, Nábřeží L.Svobody 1222, PSČ 110 15           DIČ:         CZ70994226
+Jízdní řád a rezervace pro cestu TAM
+Timetable and Reservations – Outward Journey / Fahrplan und Reservierung Hinfahrt
+Stanice                          Odj. / Příj. x           w       Místo / Seat / Sitzplatz Údaje pro kontrolu
+Praha hl.n.                     31.12. 13:51 EC 173 262           71                       Angaben für Kontrolle
+Brno hl.n.                      31.12. 16:20                                               Doklad číslo / Beleg Nr.:
+                                                                                           *8576-222
+                                                                                           Jméno / Name:
+Jízdní řád a rezervace pro cestu ZPĚT
+Timetable and Reservations – Return Journey / Fahrplan und Reservierung Rückfahrt          VRÁTIL Daniel
+Stanice                          Odj. / Příj. x           w       Místo / Seat / Sitzplatz
+Brno hl.n.                      01.01. 10:38 rj 72        27      51                       Kód transakce:
+Praha hl.n.                     01.01. 13:07
+                                                                                           GIG2L1
+Jízdenku lze použít po stejné trase i pro pozdější vlakové spojení v době její platnosti.
+Rezervace místa platí pouze pro uvedené vlaky.                                              Kód nepřehýbejte! / Do not fold the barcode!
+                                                                                                      Barcode nicht knicken!
+Reklama
+Šťastnou cestu vlakem přejí České dráhy, Váš osobní dopravce.                                                                 Strana 1/1
+
