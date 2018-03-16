@@ -34,7 +34,7 @@ class ContentIndex;
 class SemanticMemento : public MimeTreeParser::Interface::BodyPartMemento
 {
 public:
-    ~SemanticMemento() = default;
+    ~SemanticMemento() override = default;
     void detach() override;
     bool isEmpty() const;
 
