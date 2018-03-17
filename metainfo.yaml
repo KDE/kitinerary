@@ -1,0 +1,20 @@
+maintainer: vkrause
+description: Itinerary extraction and data model
+tier: 3
+type: functional
+platforms:
+    - name: Linux
+    - name: FreeBSD
+    - name: Windows
+    - name: MacOSX
+    - name: Android
+portingAid: false
+deprecated: false
+release: true
+libraries:
+ - qmake: KItinerary
+   cmake: KItinerary
+cmakename: KItinerary
+
+public_lib: true
+group: kdepim
