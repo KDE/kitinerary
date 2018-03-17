@@ -38,12 +38,12 @@ private Q_SLOTS:
         QDir dir(QStringLiteral(SOURCE_DIR "/structureddata"));
         const auto lst = dir.entryList(QStringList(QStringLiteral("*.html")), QDir::Files | QDir::Readable | QDir::NoSymLinks);
         for (const auto &file : lst) {
-            const auto refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 5) + QStringLiteral(".json");
+            const QString refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 5) + QStringLiteral(".json");
             if (!QFile::exists(refFile)) {
                 qDebug() << "reference file" << refFile << "does not exist, skipping test file" << file;
                 continue;
             }
-            QTest::newRow(file.toLatin1()) << QString(dir.path() + QLatin1Char('/') +  file) << refFile;
+            QTest::newRow(file.toLatin1().constData()) << QString(dir.path() + QLatin1Char('/') +  file) << refFile;
         }
     }
 

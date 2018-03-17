@@ -92,7 +92,7 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
         return;
     }
 
-    const auto flightNumber = JsonLdDocument::readProperty(airline, "iataCode").toString()
+    const QString flightNumber = JsonLdDocument::readProperty(airline, "iataCode").toString()
                               + QLatin1Char(' ')
                               + JsonLdDocument::readProperty(flight, "flightNumber").toString();
 

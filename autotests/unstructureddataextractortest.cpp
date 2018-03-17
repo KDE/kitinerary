@@ -48,13 +48,13 @@ private Q_SLOTS:
         QDir dir(QStringLiteral(SOURCE_DIR "/unstructureddata"));
         const auto lst = dir.entryList(QStringList(QStringLiteral("*.txt")), QDir::Files | QDir::Readable | QDir::NoSymLinks);
         for (const auto &file : lst) {
-            const auto refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 4) + QStringLiteral(".json");
+            const QString refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 4) + QStringLiteral(".json");
             if (!QFile::exists(refFile)) {
                 qDebug() << "reference file" << refFile << "does not exist, skipping test file" << file;
                 continue;
             }
             const auto idx = file.indexOf(QLatin1Char('_'));
-            QTest::newRow(file.toLatin1()) << QString(dir.path() + QLatin1Char('/') +  file) << file.left(idx) << refFile;
+            QTest::newRow(file.toLatin1().constData()) << QString(dir.path() + QLatin1Char('/') +  file) << file.left(idx) << refFile;
         }
     }
 
@@ -96,13 +96,13 @@ private Q_SLOTS:
         QDir dir(QStringLiteral(SOURCE_DIR "/unstructureddata"));
         const auto lst = dir.entryList(QStringList(QStringLiteral("*.html")), QDir::Files | QDir::Readable | QDir::NoSymLinks);
         for (const auto &file : lst) {
-            const auto refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 5) + QStringLiteral(".json");
+            const QString refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 5) + QStringLiteral(".json");
             if (!QFile::exists(refFile)) {
                 qDebug() << "reference file" << refFile << "does not exist, skipping test file" << file;
                 continue;
             }
             const auto idx = file.indexOf(QLatin1Char('_'));
-            QTest::newRow(file.toLatin1()) << QString(dir.path() + QLatin1Char('/') +  file) << file.left(idx) << refFile;
+            QTest::newRow(file.toLatin1().constData()) << QString(dir.path() + QLatin1Char('/') +  file) << file.left(idx) << refFile;
         }
     }
 

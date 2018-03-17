@@ -291,7 +291,7 @@ int main(int argc, char **argv)
     // step 3 index the names for reverse lookup
     QMap<QString, QVector<QString> > labelMap;
     for (auto it = airportMap.begin(); it != airportMap.end(); ++it) {
-        auto l = (it.value().label + QLatin1Char(' ') + it.value().alias)
+        auto l = QString(it.value().label + QLatin1Char(' ') + it.value().alias)
                  .split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
         std::for_each(l.begin(), l.end(), [](QString &s) {
             s = s.toCaseFolded();

@@ -1,0 +1,48 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "16E",
+        "airplaneSeatClass": {
+            "@type": "AirplaneSeatClass",
+            "name": "P"
+        },
+        "boardingGroup": "C",
+        "boardingPolicy": "GroupBoardingPolicy",
+        "modifiedTime": "2017-09-20T08:14:39+02:00",
+        "modifyReservationUrl": "https://www.airberlin.com/de-DE/cockpit/index/index/bookingNo/XXX007/lastname/DOE/submit/1",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB",
+                "image": "https://www.airberlin.com/site/affiliate/bannerintegration/boardingpass/ab_ow_pos_RGB.png",
+                "name": "airberlin"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Berlin (Tegel)"
+            },
+            "arrivalTime": "2017-09-20T16:00:00+02:00",
+            "boardingTime": "2017-09-20T14:25:00+03:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "HEL",
+                "name": "Helsinki"
+            },
+            "departureGate": "16",
+            "departureTime": "2017-09-20T15:05:00+03:00",
+            "flightNumber": "8075"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/Confirmed",
+        "ticketDownloadUrl": "https://m.airberlin.com/ckbc/pnr/XXX007/ln/DOE/cpid/94482631/fn/JOHN",
+        "ticketNumber": "1234567890123",
+        "ticketToken": "https://checkin.airberlin.com/app/barcode.fly?pnr=XXX007&ln=DOE&cpid=12345678&fn=JOHN",
+        "underName": {
+            "@type": "Person",
+            "name": "JOHN DOE"
+        }
+    }
+]

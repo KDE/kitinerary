@@ -40,12 +40,12 @@ private Q_SLOTS:
         QDir dir(QStringLiteral(SOURCE_DIR "/postprocessordata"));
         const auto lst = dir.entryList(QStringList(QStringLiteral("*.pre.json")), QDir::Files | QDir::Readable | QDir::NoSymLinks);
         for (const auto &file : lst) {
-            const auto refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 8) + QStringLiteral("post.json");
+            const QString refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 8) + QStringLiteral("post.json");
             if (!QFile::exists(refFile)) {
                 qDebug() << "reference file" << refFile << "does not exist, skipping test file" << file;
                 continue;
             }
-            QTest::newRow(file.toLatin1()) << QString(dir.path() + QLatin1Char('/') +  file) << refFile;
+            QTest::newRow(file.toLatin1().constData()) << QString(dir.path() + QLatin1Char('/') +  file) << refFile;
         }
     }
 

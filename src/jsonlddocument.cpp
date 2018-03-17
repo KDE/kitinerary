@@ -73,7 +73,7 @@ static QVariant createInstance(const QJsonObject &obj)
         if (it.key().startsWith(QLatin1Char('@'))) {
             continue;
         }
-        const auto idx = T::staticMetaObject.indexOfProperty(it.key().toLatin1());
+        const auto idx = T::staticMetaObject.indexOfProperty(it.key().toLatin1().constData());
         if (idx < 0) {
             qCDebug(SEMANTIC_LOG) << "property" << it.key() << "could not be set on object of type" << T::staticMetaObject.className();
             continue;
