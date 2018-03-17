@@ -44,18 +44,27 @@ endif()
 
 ecm_generate_headers(KItinerary_HEADERS
     HEADER_NAMES
+        CalendarHandler
         Extractor
         ExtractorEngine
         ExtractorPreprocessor
         ExtractorPostprocessor
+        ExtractorRepository
         JsonLdDocument
         StructuredDataExtractor
     REQUIRED_HEADERS KItinerary_HEADERS
+)
+ecm_generate_headers(KItinerary_AirportDb_HEADERS
+    HEADER_NAMES
+        AirportDb
+    REQUIRED_HEADERS KItinerary_AirportDb_HEADERS
+    RELATIVE airportdb
 )
 
 install(TARGETS KItinerary EXPORT KItineraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
     ${KItinerary_HEADERS}
+    ${KItinerary_AirportDb_HEADERS}
     ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KItinerary
 )
