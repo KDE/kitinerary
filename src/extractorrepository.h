@@ -20,6 +20,8 @@
 #ifndef EXTRACTORREPOSITORY_H
 #define EXTRACTORREPOSITORY_H
 
+#include "kitinerary_export.h"
+
 #include <vector>
 
 namespace KMime {
@@ -29,7 +31,7 @@ class Content;
 class Extractor;
 
 /** Collection of all unstructured data extractor rule sets. */
-class ExtractorRepository
+class KITINERARY_EXPORT ExtractorRepository
 {
 public:
     ExtractorRepository();

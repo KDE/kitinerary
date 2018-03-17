@@ -17,7 +17,7 @@
    02110-1301, USA.
 */
 
-#include "config-semantic.h"
+#include "config-kitinerary.h"
 
 #include "extractorpreprocessor.h"
 #include "semantic_debug.h"

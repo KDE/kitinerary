@@ -17,8 +17,8 @@
    02110-1301, USA.
 */
 
-#ifndef CONFIG_SEMANTIC_H
-#define CONFIG_SEMANTIC_H
+#ifndef CONFIG_KITINERARY_H
+#define CONFIG_KITINERARY_H
 
 #cmakedefine HAVE_POPPLER
 

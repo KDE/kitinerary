@@ -3,7 +3,7 @@ add_subdirectory(airportdb)
 if(TARGET Poppler::Qt5)
     set(HAVE_POPPLER ON)
 endif()
-configure_file(config-semantic.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-semantic.h)
+configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 set(kitinerary_lib_srcs
     airportdb/airportdb.cpp
