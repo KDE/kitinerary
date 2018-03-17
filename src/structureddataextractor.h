@@ -20,6 +20,8 @@
 #ifndef STRUCTUREDDATAEXTRACTOR_H
 #define STRUCTUREDDATAEXTRACTOR_H
 
+#include "kitinerary_export.h"
+
 #include <QJsonArray>
 
 class QJsonObject;
@@ -29,7 +31,7 @@ class QXmlStreamReader;
 /** Extract schema.org structured data from HTML text.
  *  @see https://developers.google.com/gmail/markup/getting-started
  */
-class StructuredDataExtractor
+class KITINERARY_EXPORT StructuredDataExtractor
 {
 public:
     void parse(const QString &text);

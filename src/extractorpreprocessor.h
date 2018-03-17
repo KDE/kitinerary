@@ -20,10 +20,12 @@
 #ifndef EXTRACTORPREPROCESSOR_H
 #define EXTRACTORPREPROCESSOR_H
 
+#include "kitinerary_export.h"
+
 #include <QString>
 
 /** Preprocessing of HTML and PDF attachments. */
-class ExtractorPreprocessor
+class KITINERARY_EXPORT ExtractorPreprocessor
 {
 public:
     void preprocessPlainText(const QString &input);

@@ -20,6 +20,8 @@
 #ifndef JSONLDDOCUMENT_H
 #define JSONLDDOCUMENT_H
 
+#include "kitinerary_export.h"
+
 #include <QVariant>
 #include <QVector>
 
@@ -27,15 +29,15 @@ class QJsonArray;
 
 /** Serialization/deserialization code for JSON-LD data. */
 namespace JsonLdDocument {
-QVector<QVariant> fromJson(const QJsonArray &array);
-QJsonArray toJson(const QVector<QVariant> &data);
+KITINERARY_EXPORT QVector<QVariant> fromJson(const QJsonArray &array);
+KITINERARY_EXPORT QJsonArray toJson(const QVector<QVariant> &data);
 
 /** Read property @p name on object @p obj. */
-QVariant readProperty(const QVariant &obj, const char *name);
+KITINERARY_EXPORT QVariant readProperty(const QVariant &obj, const char *name);
 /** Set property @p name on object @p obj to value @p value. */
-void writeProperty(QVariant &obj, const char *name, const QVariant &value);
+KITINERARY_EXPORT void writeProperty(QVariant &obj, const char *name, const QVariant &value);
 /** Removes property @p name on object @p obj. */
-void removeProperty(QVariant &obj, const char *name);
+KITINERARY_EXPORT void removeProperty(QVariant &obj, const char *name);
 }
 
 #endif // JSONLDDOCUMENT_H

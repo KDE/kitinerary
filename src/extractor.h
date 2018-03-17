@@ -20,6 +20,8 @@
 #ifndef EXTRACTOR_H
 #define EXTRACTOR_H
 
+#include "kitinerary_export.h"
+
 #include "extractorfilter.h"
 
 #include <vector>
@@ -28,7 +30,7 @@ class ExtractorRule;
 class QString;
 
 /** A single unstructured data extraction rule set. */
-class Extractor
+class KITINERARY_EXPORT Extractor
 {
 public:
     Extractor();

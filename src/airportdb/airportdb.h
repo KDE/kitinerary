@@ -20,6 +20,8 @@
 #ifndef AIRPORTDB_H
 #define AIRPORTDB_H
 
+#include "kitinerary_export.h"
+
 #include <cmath>
 #include <cstdint>
 
@@ -29,7 +31,7 @@ class QTimeZone;
 /** Database of all civilian airports, their locations and timezones. */
 namespace AirportDb {
 /** Geographical coordinate. */
-struct Coordinate {
+struct KITINERARY_EXPORT Coordinate {
     inline constexpr Coordinate()
         : longitude(NAN)
         , latitude(NAN)
@@ -50,7 +52,7 @@ struct Coordinate {
 };
 
 /** IATA airport code. */
-class IataCode
+class KITINERARY_EXPORT IataCode
 {
 public:
     inline constexpr IataCode()
@@ -85,13 +87,13 @@ private:
 };
 
 /** Returns the geographical coordinates the airport with IATA code @p iataCode is in. */
-Coordinate coordinateForAirport(IataCode iataCode);
+KITINERARY_EXPORT Coordinate coordinateForAirport(IataCode iataCode);
 
 /** Returns the timezone the airport with IATA code @p iataCode is in. */
-QTimeZone timezoneForAirport(IataCode iataCode);
+KITINERARY_EXPORT QTimeZone timezoneForAirport(IataCode iataCode);
 
 /** Attempts to find the unique IATA code for the given airport name. */
-IataCode iataCodeFromName(const QString &name);
+KITINERARY_EXPORT IataCode iataCodeFromName(const QString &name);
 }
 
 #endif // AIRPORTDB_H

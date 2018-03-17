@@ -20,11 +20,13 @@
 #ifndef EXTRACTORPOSTPROCESSOR_H
 #define EXTRACTORPOSTPROCESSOR_H
 
+#include "kitinerary_export.h"
+
 #include <QVariant>
 #include <QVector>
 
 /** Post-process extracted data to filter out garbage and augment data from other sources. */
-class ExtractorPostprocessor
+class KITINERARY_EXPORT ExtractorPostprocessor
 {
 public:
     void process(const QVector<QVariant> &data);

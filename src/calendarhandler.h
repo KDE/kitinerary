@@ -20,13 +20,15 @@
 #ifndef CALENDARHANDLER_H
 #define CALENDARHANDLER_H
 
+#include "kitinerary_export.h"
+
 #include <KCalCore/Calendar>
 #include <KCalCore/Event>
 
 class QVariant;
 
 /** Methods for converting between ical events and JSON-LD booking data. */
-class CalendarHandler
+class KITINERARY_EXPORT CalendarHandler
 {
 public:
     /** Returns the start time associated with the given reservation. */

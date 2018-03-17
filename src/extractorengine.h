@@ -20,6 +20,7 @@
 #ifndef EXTRACTORENGINE_H
 #define EXTRACTORENGINE_H
 
+#include "kitinerary_export.h"
 #include "extractor.h"
 
 #include <QJsonArray>
@@ -31,7 +32,7 @@ class ContextObject;
 class QDateTime;
 
 /** Code for executing an extractor rule set on a specific email part. */
-class ExtractorEngine
+class KITINERARY_EXPORT ExtractorEngine
 {
 public:
     ExtractorEngine();
