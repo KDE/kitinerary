@@ -53,17 +53,17 @@ function parseSeat(res, text) {
 // you can even do that with Czech Railways...
 function detectYear(tripDate, purchaseDate)
 {
-    var tripDay = tripDate[1];
-    var tripMonth = tripDate[2];
-    var purchaseDay = purchaseDate[1];
-    var purchaseMonth = purchaseDate[2];
-    var purchaseYear = purchaseDate[3];
+    var tripDay = parseInt(tripDate[1]);
+    var tripMonth = parseInt(tripDate[2]);
+    var purchaseDay = parseInt(purchaseDate[2]);
+    var purchaseMonth = parseInt(purchaseDate[3]);
+    var purchaseYear = parseInt(purchaseDate[4]);
 
     if ((purchaseMonth < tripMonth) ||
         (purchaseMonth == tripMonth) && (purchaseDay <= tripDay)) {
         return purchaseYear;
     } else {
-        return parseInt(purchaseYear) + 1;
+        return purchaseYear + 1;
     }
 }
 
@@ -129,11 +129,10 @@ function parseLegs(text, purchaseDate) {
 }
 
 function main(text) {
-    console.log(text);
     var reservations = new Array();
     var pos = 0;
 
-    var purchaseDate = text.match(/[d|D]atum platby|UZP: ([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})/)
+    var purchaseDate = text.match(/([d|D]atum platby|UZP): ([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})/)
 
     while (true) {
          // find itinerary headers

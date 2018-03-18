@@ -1,3 +1,20 @@
 [
+    {
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Praha Masarykovo n."
+            },
+            "arrivalTime": "2017-01-01T17:33:00",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Lysá n.Labem"
+            },
+            "departureTime": "2017-01-01T16:55:00",
+            "trainNumber": "Os 9424"
+        },
+        "reservationNumber": "VM5MZ3"
+    }
 ]
-
