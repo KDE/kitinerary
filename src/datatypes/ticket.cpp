@@ -1,0 +1,51 @@
+/*
+    Copyright (C) 2018 Volker Krause <vkrause@kde.org>
+
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Library General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or (at your
+    option) any later version.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public
+    License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "ticket.h"
+#include "datatypes_p.h"
+
+using namespace KItinerary;
+
+namespace KItinerary {
+
+class SeatPrivate : public detail::private_base<SeatPrivate>
+{
+public:
+    QString seatNumber;
+    QString seatRow;
+    QString seatSection;
+};
+
+KITINERARY_MAKE_SIMPLE_CLASS(Seat)
+KITINERARY_MAKE_PROPERTY(Seat, QString, seatNumber, setSeatNumber)
+KITINERARY_MAKE_PROPERTY(Seat, QString, seatRow, setSeatRow)
+KITINERARY_MAKE_PROPERTY(Seat, QString, seatSection, setSeatSection)
+
+class TicketPrivate : public detail::private_base<TicketPrivate>
+{
+public:
+    Seat ticketedSeat;
+    QString ticketToken;
+};
+
+KITINERARY_MAKE_SIMPLE_CLASS(Ticket)
+KITINERARY_MAKE_PROPERTY(Ticket, Seat, ticketedSeat, setTicketedSeat)
+KITINERARY_MAKE_PROPERTY(Ticket, QString, ticketToken, setTicketToken)
+
+}
+
+#include "moc_ticket.cpp"

@@ -18,12 +18,22 @@
 */
 
 #include "jsonlddocument.h"
-#include "datatypes.h"
 #include "semantic_debug.h"
 
+#include <datatypes/bustrip.h>
+#include <datatypes/flight.h>
+#include <datatypes/place.h>
+#include <datatypes/reservation.h>
+#include <datatypes/ticket.h>
+#include <datatypes/traintrip.h>
+
+#include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMetaProperty>
+#include <QUrl>
+
+using namespace KItinerary;
 
 static QVariant createInstance(const QJsonObject &obj);
 
@@ -162,7 +172,7 @@ static QJsonValue toJson(const QVariant &v)
 
     // composite types
     QJsonObject obj;
-    obj.insert(QStringLiteral("@type"), QString::fromUtf8(mo->className()));
+    obj.insert(QStringLiteral("@type"), JsonLdDocument::readProperty(v, "className").toString());
     for (int i = 0; i < mo->propertyCount(); ++i) {
         const auto prop = mo->property(i);
         if (!prop.isStored()) {

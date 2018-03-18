@@ -7,8 +7,15 @@ configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kiti
 
 set(kitinerary_lib_srcs
     airportdb/airportdb.cpp
+
+    datatypes/bustrip.cpp
+    datatypes/flight.cpp
+    datatypes/place.cpp
+    datatypes/reservation.cpp
+    datatypes/ticket.cpp
+    datatypes/traintrip.cpp
+
     calendarhandler.cpp
-    datatypes.cpp
     extractor.cpp
     extractorengine.cpp
     extractorfilter.cpp
@@ -29,6 +36,7 @@ set_target_properties(KItinerary PROPERTIES
     EXPORT_NAME KItinerary
 )
 target_include_directories(KItinerary INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}>")
+target_include_directories(KItinerary PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
 target_link_libraries(KItinerary
     PUBLIC
         Qt5::Core
@@ -52,19 +60,35 @@ ecm_generate_headers(KItinerary_HEADERS
         ExtractorRepository
         JsonLdDocument
         StructuredDataExtractor
+    PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS
 )
 ecm_generate_headers(KItinerary_AirportDb_HEADERS
     HEADER_NAMES
         AirportDb
+    PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_AirportDb_HEADERS
     RELATIVE airportdb
+)
+ecm_generate_headers(KItinerary_Datatypes_HEADERS
+    HEADER_NAMES
+        BusTrip
+        Datatypes
+        Flight
+        Reservation
+        Place
+        Ticket
+        TrainTrip
+    PREFIX KItinerary
+    REQUIRED_HEADERS KItinerary_Datatypes_HEADERS
+    RELATIVE datatypes
 )
 
 install(TARGETS KItinerary EXPORT KItineraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
     ${KItinerary_HEADERS}
     ${KItinerary_AirportDb_HEADERS}
+    ${KItinerary_Datatypes_HEADERS}
     ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KItinerary
 )

@@ -18,15 +18,18 @@
 */
 
 #include "calendarhandler.h"
-#include "datatypes.h"
 #include "jsonlddocument.h"
 #include "semantic_debug.h"
+
+#include <datatypes/place.h>
+#include <datatypes/reservation.h>
 
 #include <KCalCore/Alarm>
 
 #include <KLocalizedString>
 
 using namespace KCalCore;
+using namespace KItinerary;
 
 QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
 {
@@ -248,12 +251,12 @@ void CalendarHandler::fillLodgingReservation(const QVariant &reservation, const 
 
 void CalendarHandler::fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event)
 {
-    const auto geo = JsonLdDocument::readProperty(place, "geo");
-    if (geo.isNull()) {
+    const auto geo = JsonLdDocument::readProperty(place, "geo").value<GeoCoordinates>();
+    if (!geo.isValid()) {
         return;
     }
 
     event->setHasGeo(true);
-    event->setGeoLatitude(JsonLdDocument::readProperty(geo, "latitude").toFloat());
-    event->setGeoLongitude(JsonLdDocument::readProperty(geo, "longitude").toFloat());
+    event->setGeoLatitude(geo.latitude());
+    event->setGeoLongitude(geo.longitude());
 }

@@ -19,14 +19,22 @@
 
 #include "extractorpostprocessor.h"
 #include "calendarhandler.h"
-#include "datatypes.h"
 #include "jsonlddocument.h"
 #include "airportdb/airportdb.h"
+
+#include <datatypes/bustrip.h>
+#include <datatypes/flight.h>
+#include <datatypes/place.h>
+#include <datatypes/reservation.h>
+#include <datatypes/ticket.h>
+#include <datatypes/traintrip.h>
 
 #include <QDebug>
 #include <QTimeZone>
 
 #include <algorithm>
+
+using namespace KItinerary;
 
 void ExtractorPostprocessor::process(const QVector<QVariant> &data)
 {
