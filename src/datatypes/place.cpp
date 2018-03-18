@@ -62,13 +62,13 @@ class PlacePrivate : public detail::private_abstract_base<PlacePrivate>
 public:
     virtual ~PlacePrivate() = default;
     QString name;
-    QVariant address;
+    PostalAddress address;
     GeoCoordinates geo;
 };
 
 KITINERARY_MAKE_ABSTRACT_CLASS(Place)
 KITINERARY_MAKE_PROPERTY(Place, QString, name, setName)
-KITINERARY_MAKE_PROPERTY(Place, QVariant, address, setAddress)
+KITINERARY_MAKE_PROPERTY(Place, PostalAddress, address, setAddress)
 KITINERARY_MAKE_PROPERTY(Place, GeoCoordinates, geo, setGeo)
 
 

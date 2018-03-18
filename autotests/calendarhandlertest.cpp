@@ -32,6 +32,7 @@
 #include <QTest>
 
 using namespace KCalCore;
+using namespace KItinerary;
 
 void initLocale()
 {

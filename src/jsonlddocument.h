@@ -17,8 +17,8 @@
    02110-1301, USA.
 */
 
-#ifndef JSONLDDOCUMENT_H
-#define JSONLDDOCUMENT_H
+#ifndef KITINERARY_JSONLDDOCUMENT_H
+#define KITINERARY_JSONLDDOCUMENT_H
 
 #include "kitinerary_export.h"
 
@@ -26,6 +26,8 @@
 #include <QVector>
 
 class QJsonArray;
+
+namespace KItinerary {
 
 /** Serialization/deserialization code for JSON-LD data. */
 namespace JsonLdDocument {
@@ -40,4 +42,6 @@ KITINERARY_EXPORT void writeProperty(QVariant &obj, const char *name, const QVar
 KITINERARY_EXPORT void removeProperty(QVariant &obj, const char *name);
 }
 
-#endif // JSONLDDOCUMENT_H
+}
+
+#endif // KITINERARY_JSONLDDOCUMENT_H

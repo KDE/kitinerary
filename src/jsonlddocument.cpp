@@ -33,6 +33,8 @@
 #include <QMetaProperty>
 #include <QUrl>
 
+#include <cmath>
+
 using namespace KItinerary;
 
 static QVariant createInstance(const QJsonObject &obj);
@@ -141,6 +143,9 @@ static bool valueIsNull(const QVariant &v)
     if (v.type() == QVariant::Url) {
         return !v.toUrl().isValid();
     }
+    if (v.type() == qMetaTypeId<float>()) {
+        return std::isnan(v.toFloat());
+    }
     return v.isNull();
 }
 
@@ -180,10 +185,17 @@ static QJsonValue toJson(const QVariant &v)
         }
         const auto value = prop.readOnGadget(v.constData());
         if (!valueIsNull(value)) {
-            obj.insert(QString::fromUtf8(prop.name()), toJson(value));
+            auto jsVal = toJson(value);
+            if (jsVal.type() != QJsonValue::Null) {
+                obj.insert(QString::fromUtf8(prop.name()), toJson(value));
+            }
         }
     }
-    return obj;
+    if (obj.size() > 1) {
+        return obj;
+    }
+
+    return {};
 }
 
 QJsonArray JsonLdDocument::toJson(const QVector<QVariant> &data)

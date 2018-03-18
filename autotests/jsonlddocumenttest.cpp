@@ -1,0 +1,102 @@
+/*
+    Copyright (c) 2018 Volker Krause <vkrause@kde.org>
+
+    This library is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Library General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or (at your
+    option) any later version.
+
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public
+    License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to the
+    Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+    02110-1301, USA.
+*/
+
+#include <KItinerary/Flight>
+#include <KItinerary/Place>
+#include <KItinerary/JsonLdDocument>
+
+#include <QDebug>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QObject>
+#include <QTest>
+#include <QTimeZone>
+
+using namespace KItinerary;
+
+class JsonLdDocumentTest : public QObject
+{
+    Q_OBJECT
+private Q_SLOTS:
+    void initTestCase()
+    {
+        qputenv("TZ", "GMT");
+        qRegisterMetaType<Airport>();
+    }
+
+    void testSerialization()
+    {
+        Flight f;
+        f.setFlightNumber(QLatin1String("1234"));
+        f.setDepartureTime(QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+        Airport ap;
+        ap.setName(QLatin1String("Berlin Tegel"));
+        ap.setIataCode(QLatin1String("TXL"));
+        f.setDepartureAirport(ap);
+
+        const auto array = JsonLdDocument::toJson({QVariant::fromValue(f)});
+        QCOMPARE(array.size(), 1);
+        const auto obj = array.at(0).toObject();
+        QCOMPARE(obj.value(QLatin1String("@context")).toString(), QLatin1String("http://schema.org"));
+        QCOMPARE(obj.value(QLatin1String("@type")).toString(), QLatin1String("Flight"));
+        QCOMPARE(obj.value(QLatin1String("flightNumber")).toString(), QLatin1String("1234"));
+
+        QCOMPARE(obj.value(QLatin1String("departureTime")).toString(), QLatin1String("2018-03-18T18:44:00+01:00"));
+
+        auto obj2 = obj.value(QLatin1String("departureAirport")).toObject();
+        QCOMPARE(obj2.value(QLatin1String("@type")).toString(), QLatin1String("Airport"));
+
+        qDebug().noquote() << QJsonDocument(obj).toJson();
+    }
+
+    void testDeserialization()
+    {
+        QByteArray b("[{"
+            "\"@context\": \"http://schema.org\","
+            "\"@type\": \"Flight\","
+            "\"departureAirport\": {"
+                "\"@type\": \"Airport\","
+                "\"iataCode\": \"TXL\","
+                "\"name\": \"Berlin Tegel\""
+            "},"
+            "\"departureTime\": \"2018-03-18T18:44:00+01:00\","
+            "\"flightNumber\": \"1234\""
+        "}]");
+
+        const auto array = QJsonDocument::fromJson(b).array();
+        const auto datas = JsonLdDocument::fromJson(array);
+        QCOMPARE(datas.size(), 1);
+
+        const auto data = datas.at(0);
+        QVERIFY(data.canConvert<Flight>());
+        Flight flight = data.value<Flight>();
+        QCOMPARE(flight.flightNumber(), QLatin1String("1234"));
+        QCOMPARE(flight.departureAirport().iataCode(), QLatin1String("TXL"));
+        QCOMPARE(flight.departureAirport().name(), QLatin1String("Berlin Tegel"));
+        QCOMPARE(flight.departureTime(), QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+        QEXPECT_FAIL("", "timezone serialization missing", Abort);
+        QCOMPARE(flight.departureTime().timeSpec(), Qt::TimeZone);
+        QCOMPARE(flight.departureTime().timeZone(), QTimeZone("Europe/Berlin"));
+    }
+};
+
+QTEST_APPLESS_MAIN(JsonLdDocumentTest)
+
+#include "jsonlddocumenttest.moc"

@@ -28,6 +28,8 @@
 #include <QObject>
 #include <QTest>
 
+using namespace KItinerary;
+
 class PostprocessorTest : public QObject
 {
     Q_OBJECT
