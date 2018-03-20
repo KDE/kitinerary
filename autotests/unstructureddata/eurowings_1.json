@@ -1,5 +1,6 @@
 [
     {
+        "@context": "http://schema.org",
         "@type": "FlightReservation",
         "reservationFor": {
             "@type": "Flight",
@@ -23,6 +24,7 @@
         "reservationNumber": "ABC123"
     },
     {
+        "@context": "http://schema.org",
         "@type": "FlightReservation",
         "reservationFor": {
             "@type": "Flight",

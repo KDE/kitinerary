@@ -1,5 +1,6 @@
 [
     {
+        "@context": "http://schema.org",
         "@type": "BusReservation",
         "modifyReservationUrl": "https://jizdenky.studentagency.cz/OnlineTicket?pam1=9876543210&pam2=0123456789",
         "reservationFor": {
@@ -27,6 +28,7 @@
         }
     },
     {
+        "@context": "http://schema.org",
         "@type": "BusReservation",
         "modifyReservationUrl": "https://jizdenky.studentagency.cz/OnlineTicket?pam1=9876543210&pam2=0123456789",
         "reservationFor": {

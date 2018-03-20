@@ -1,5 +1,6 @@
 [
     {
+        "@context": "http://schema.org",
         "@type": "FlightReservation",
         "reservationFor": {
             "@type": "Flight",
@@ -25,6 +26,7 @@
         "reservationNumber": "XXX007"
     },
     {
+        "@context": "http://schema.org",
         "@type": "FlightReservation",
         "reservationFor": {
             "@type": "Flight",
@@ -50,6 +52,7 @@
         "reservationNumber": "XXX007"
     },
     {
+        "@context": "http://schema.org",
         "@type": "FlightReservation",
         "reservationFor": {
             "@type": "Flight",
@@ -75,6 +78,7 @@
         "reservationNumber": "XXX007"
     },
     {
+        "@context": "http://schema.org",
         "@type": "FlightReservation",
         "reservationFor": {
             "@type": "Flight",

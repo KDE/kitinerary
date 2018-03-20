@@ -1,5 +1,6 @@
 [
     {
+        "@context": "http://schema.org",
         "@type": "TrainReservation",
         "reservationFor": {
             "@type": "TrainTrip",
@@ -28,6 +29,7 @@
         }
     },
     {
+        "@context": "http://schema.org",
         "@type": "TrainReservation",
         "reservationFor": {
             "@type": "TrainTrip",
