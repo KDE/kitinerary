@@ -105,7 +105,7 @@ private:
 }
 }
 
-#define KITINERARY_BASE_GADGET(Class) \
+#define KITINERARY_ABSTRACT_GADGET(Class) \
     Q_GADGET \
 protected: \
     Class() = delete; \

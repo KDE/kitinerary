@@ -51,7 +51,7 @@ private:
     QString departureTimeLocalized() const;
     QString arrivalTimeLocalized() const;
 
-    detail::shared_data_ptr<TrainTripPrivate> d;
+    QExplicitlySharedDataPointer<TrainTripPrivate> d;
 };
 
 }

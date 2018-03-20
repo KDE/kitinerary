@@ -39,7 +39,7 @@ class KITINERARY_EXPORT GeoCoordinates
 public:
     bool isValid() const;
 private:
-    detail::shared_data_ptr<GeoCoordinatesPrivate> d;
+    QExplicitlySharedDataPointer<GeoCoordinatesPrivate> d;
 };
 
 class PostalAddressPrivate;
@@ -55,7 +55,7 @@ class KITINERARY_EXPORT PostalAddress
     KITINERARY_PROPERTY(QString, postalCode, setPostalCode)
     KITINERARY_PROPERTY(QString, addressCountry, setAddressCountry)
 private:
-    detail::shared_data_ptr<PostalAddressPrivate> d;
+    QExplicitlySharedDataPointer<PostalAddressPrivate> d;
 };
 
 class PlacePrivate;
@@ -65,7 +65,7 @@ class PlacePrivate;
  */
 class KITINERARY_EXPORT Place
 {
-    KITINERARY_BASE_GADGET(Place)
+    KITINERARY_ABSTRACT_GADGET(Place)
     KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(KItinerary::PostalAddress, address, setAddress)
     KITINERARY_PROPERTY(KItinerary::GeoCoordinates, geo, setGeo)

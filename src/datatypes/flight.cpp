@@ -25,7 +25,7 @@ using namespace KItinerary;
 
 namespace KItinerary {
 
-class AirlinePrivate : public detail::private_base<AirlinePrivate>
+class AirlinePrivate : public QSharedData
 {
 public:
     QString name;
@@ -37,7 +37,7 @@ KITINERARY_MAKE_PROPERTY(Airline, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Airline, QString, iataCode, setIataCode)
 
 
-class FlightPrivate : public detail::private_base<FlightPrivate>
+class FlightPrivate : public QSharedData
 {
 public:
     QString flightNumber;

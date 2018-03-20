@@ -22,7 +22,7 @@ using namespace KItinerary;
 
 namespace KItinerary {
 
-class SeatPrivate : public detail::private_base<SeatPrivate>
+class SeatPrivate : public QSharedData
 {
 public:
     QString seatNumber;
@@ -35,7 +35,7 @@ KITINERARY_MAKE_PROPERTY(Seat, QString, seatNumber, setSeatNumber)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatRow, setSeatRow)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatSection, setSeatSection)
 
-class TicketPrivate : public detail::private_base<TicketPrivate>
+class TicketPrivate : public QSharedData
 {
 public:
     Seat ticketedSeat;

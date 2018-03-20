@@ -45,13 +45,6 @@ public:
     }
 };
 
-template<typename T>
-class private_base : public QSharedData
-{
-public:
-    inline T* clone(const T *source) const { return new T(*source); }
-};
-
 }
 
 #define KITINERARY_MAKE_SIMPLE_CLASS(Class) \

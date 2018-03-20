@@ -35,7 +35,7 @@ class KITINERARY_EXPORT Seat
     KITINERARY_PROPERTY(QString, seatRow, setSeatRow)
     KITINERARY_PROPERTY(QString, seatSection, setSeatSection)
 private:
-    detail::shared_data_ptr<SeatPrivate> d;
+    QExplicitlySharedDataPointer<SeatPrivate> d;
 };
 
 class TicketPrivate;
@@ -49,7 +49,7 @@ class KITINERARY_EXPORT Ticket
     KITINERARY_PROPERTY(KItinerary::Seat, ticketedSeat, setTicketedSeat)
     KITINERARY_PROPERTY(QString, ticketToken, setTicketToken)
 private:
-    detail::shared_data_ptr<TicketPrivate> d;
+    QExplicitlySharedDataPointer<TicketPrivate> d;
 };
 
 }

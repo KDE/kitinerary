@@ -32,7 +32,7 @@ class ReservationPrivate;
  */
 class KITINERARY_EXPORT Reservation
 {
-    KITINERARY_BASE_GADGET(Reservation)
+    KITINERARY_ABSTRACT_GADGET(Reservation)
     KITINERARY_PROPERTY(QString, reservationNumber, setReservationNumber)
     KITINERARY_PROPERTY(QVariant, reservationFor, setReservationFor)
     KITINERARY_PROPERTY(QVariant, reservedTicket, setReservedTicket)

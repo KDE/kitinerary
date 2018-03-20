@@ -24,7 +24,7 @@ using namespace KItinerary;
 
 namespace KItinerary {
 
-class GeoCoordinatesPrivate : public detail::private_base<GeoCoordinatesPrivate>
+class GeoCoordinatesPrivate : public QSharedData
 {
 public:
     float latitude = NAN;
@@ -41,7 +41,7 @@ bool GeoCoordinates::isValid() const
 }
 
 
-class PostalAddressPrivate : public detail::private_base<PostalAddressPrivate>
+class PostalAddressPrivate : public QSharedData
 {
 public:
     QString streetAddress;

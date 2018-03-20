@@ -23,7 +23,7 @@ using namespace KItinerary;
 
 namespace KItinerary {
 
-class TrainTripPrivate : public detail::private_base<TrainTripPrivate>
+class TrainTripPrivate : public QSharedData
 {
 public:
     QString arrivalPlatform;

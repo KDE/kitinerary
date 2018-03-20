@@ -38,7 +38,7 @@ class KITINERARY_EXPORT Airline
     KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(QString, iataCode, setIataCode)
 private:
-    detail::shared_data_ptr<AirlinePrivate> d;
+    QExplicitlySharedDataPointer<AirlinePrivate> d;
 };
 
 class FlightPrivate;
@@ -69,7 +69,7 @@ private:
     QString arrivalTimeLocalized() const;
     QString boardingTimeLocalized() const;
 
-    detail::shared_data_ptr<FlightPrivate> d;
+    QExplicitlySharedDataPointer<FlightPrivate> d;
 };
 
 }
