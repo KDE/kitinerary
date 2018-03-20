@@ -185,9 +185,9 @@ static QJsonValue toJson(const QVariant &v)
         }
         const auto value = prop.readOnGadget(v.constData());
         if (!valueIsNull(value)) {
-            auto jsVal = toJson(value);
+            const auto jsVal = toJson(value);
             if (jsVal.type() != QJsonValue::Null) {
-                obj.insert(QString::fromUtf8(prop.name()), toJson(value));
+                obj.insert(QString::fromUtf8(prop.name()), jsVal);
             }
         }
     }
