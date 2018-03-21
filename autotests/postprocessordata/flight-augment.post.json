@@ -18,7 +18,11 @@
             "iataCode": "IAD",
             "name": "Washington Dulles International Airport"
         },
-        "arrivalTime": "2027-03-05T06:30:00-05:00",
+        "arrivalTime": {
+            "@type": "QDateTime",
+            "@value": "2027-03-05T06:30:00-05:00",
+            "timezone": "America/New_York"
+        },
         "departureAirport": {
             "@type": "Airport",
             "geo": {
@@ -29,7 +33,11 @@
             "iataCode": "SEA",
             "name": "Seattle-Tacoma International Airport"
         },
-        "departureTime": "2027-03-04T20:15:00-08:00",
+        "departureTime": {
+            "@type": "QDateTime",
+            "@value": "2027-03-04T20:15:00-08:00",
+            "timezone": "America/Los_Angeles"
+        },
         "flightNumber": "110"
     },
     "reservationNumber": "RXJ34P"

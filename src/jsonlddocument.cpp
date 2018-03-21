@@ -32,6 +32,7 @@
 #include <QJsonObject>
 #include <QMetaProperty>
 #include <QUrl>
+#include <QTimeZone>
 
 #include <cmath>
 
@@ -54,14 +55,24 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         return v.toString();
     case QVariant::DateTime:
     {
-        auto str = v.toString();
-        auto dt = QDateTime::fromString(str, Qt::ISODate);
-        for (unsigned int i = 0; i < fallbackDateTimePatternCount && dt.isNull(); ++i) {
-            dt = QDateTime::fromString(str, QString::fromLatin1(fallbackDateTimePattern[i]));
+        QDateTime dt;
+        if (v.isObject()) {
+            const auto dtObj = v.toObject();
+            if (dtObj.value(QLatin1String("@type")).toString() == QLatin1String("QDateTime")) {
+                dt = QDateTime::fromString(dtObj.value(QLatin1String("@value")).toString(), Qt::ISODate);
+                dt.setTimeZone(QTimeZone(dtObj.value(QLatin1String("timezone")).toString().toUtf8()));
+            }
+        } else {
+            auto str = v.toString();
+            dt = QDateTime::fromString(str, Qt::ISODate);
+            for (unsigned int i = 0; i < fallbackDateTimePatternCount && dt.isNull(); ++i) {
+                dt = QDateTime::fromString(str, QString::fromLatin1(fallbackDateTimePattern[i]));
+            }
+            if (dt.isNull()) {
+                qCDebug(SEMANTIC_LOG) << "Datetime parsing failed for" << str;
+            }
         }
-        if (dt.isNull()) {
-            qCDebug(SEMANTIC_LOG) << "Datetime parsing failed for" << str;
-        }
+
         return dt;
     }
     case QVariant::Double:
@@ -162,7 +173,17 @@ static QJsonValue toJson(const QVariant &v)
         case QVariant::Int:
             return v.toInt();
         case QVariant::DateTime:
+        {
+            const auto dt = v.toDateTime();
+            if (dt.timeSpec() == Qt::TimeZone) {
+                QJsonObject dtObj;
+                dtObj.insert(QStringLiteral("@type"), QStringLiteral("QDateTime"));
+                dtObj.insert(QStringLiteral("@value"), dt.toString(Qt::ISODate));
+                dtObj.insert(QStringLiteral("timezone"), QString::fromUtf8(dt.timeZone().id()));
+                return dtObj;
+            }
             return v.toDateTime().toString(Qt::ISODate);
+        }
         case QVariant::Url:
             return v.toUrl().toString();
         default:

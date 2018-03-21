@@ -46,6 +46,7 @@ private Q_SLOTS:
         Flight f;
         f.setFlightNumber(QLatin1String("1234"));
         f.setDepartureTime(QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+        f.setArrivalTime(QDateTime(QDate(2018, 3, 18), QTime(19, 44, 0), Qt::UTC));
         Airport ap;
         ap.setName(QLatin1String("Berlin Tegel"));
         ap.setIataCode(QLatin1String("TXL"));
@@ -59,7 +60,11 @@ private Q_SLOTS:
         QCOMPARE(obj.value(QLatin1String("@type")).toString(), QLatin1String("Flight"));
         QCOMPARE(obj.value(QLatin1String("flightNumber")).toString(), QLatin1String("1234"));
 
-        QCOMPARE(obj.value(QLatin1String("departureTime")).toString(), QLatin1String("2018-03-18T18:44:00+01:00"));
+        QCOMPARE(obj.value(QLatin1String("arrivalTime")).toString(), QLatin1String("2018-03-18T19:44:00Z"));
+        auto dtObj = obj.value(QLatin1String("departureTime")).toObject();
+        QCOMPARE(dtObj.value(QLatin1String("@value")).toString(), QLatin1String("2018-03-18T18:44:00+01:00"));
+        QCOMPARE(dtObj.value(QLatin1String("@type")).toString(), QLatin1String("QDateTime"));
+        QCOMPARE(dtObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
 
         auto obj2 = obj.value(QLatin1String("departureAirport")).toObject();
         QCOMPARE(obj2.value(QLatin1String("@type")).toString(), QLatin1String("Airport"));
@@ -81,6 +86,7 @@ private Q_SLOTS:
                 "\"name\": \"Berlin Tegel\""
             "},"
             "\"departureTime\": \"2018-03-18T18:44:00+01:00\","
+            "\"arrivalTime\": { \"@type\": \"QDateTime\", \"@value\": \"2018-03-18T19:44:00+01:00\", \"timezone\": \"Europe/Berlin\" },"
             "\"departureGate\": \"\","
             "\"flightNumber\": \"1234\""
         "}]");
@@ -96,9 +102,10 @@ private Q_SLOTS:
         QCOMPARE(flight.departureAirport().iataCode(), QLatin1String("TXL"));
         QCOMPARE(flight.departureAirport().name(), QLatin1String("Berlin Tegel"));
         QCOMPARE(flight.departureTime(), QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
-        QEXPECT_FAIL("", "timezone serialization missing", Abort);
-        QCOMPARE(flight.departureTime().timeSpec(), Qt::TimeZone);
-        QCOMPARE(flight.departureTime().timeZone(), QTimeZone("Europe/Berlin"));
+        QCOMPARE(flight.arrivalTime(), QDateTime(QDate(2018, 3, 18), QTime(19, 44, 0), QTimeZone("Europe/Berlin")));
+        QCOMPARE(flight.arrivalTime().timeSpec(), Qt::TimeZone);
+        QCOMPARE(flight.arrivalTime().timeZone(), QTimeZone("Europe/Berlin"));
+
         QVERIFY(flight.departureGate().isEmpty());
         QVERIFY(!flight.departureGate().isNull());
     }
