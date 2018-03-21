@@ -50,6 +50,7 @@ private Q_SLOTS:
         ap.setName(QLatin1String("Berlin Tegel"));
         ap.setIataCode(QLatin1String("TXL"));
         f.setDepartureAirport(ap);
+        f.setDepartureGate(QLatin1String(""));
 
         const auto array = JsonLdDocument::toJson({QVariant::fromValue(f)});
         QCOMPARE(array.size(), 1);
@@ -62,6 +63,9 @@ private Q_SLOTS:
 
         auto obj2 = obj.value(QLatin1String("departureAirport")).toObject();
         QCOMPARE(obj2.value(QLatin1String("@type")).toString(), QLatin1String("Airport"));
+
+        QVERIFY(obj.contains(QLatin1String("departureGate")));
+        QCOMPARE(obj.value(QLatin1String("departureGate")).toString(), QLatin1String(""));
 
         qDebug().noquote() << QJsonDocument(obj).toJson();
     }
@@ -77,6 +81,7 @@ private Q_SLOTS:
                 "\"name\": \"Berlin Tegel\""
             "},"
             "\"departureTime\": \"2018-03-18T18:44:00+01:00\","
+            "\"departureGate\": \"\","
             "\"flightNumber\": \"1234\""
         "}]");
 
@@ -94,6 +99,8 @@ private Q_SLOTS:
         QEXPECT_FAIL("", "timezone serialization missing", Abort);
         QCOMPARE(flight.departureTime().timeSpec(), Qt::TimeZone);
         QCOMPARE(flight.departureTime().timeZone(), QTimeZone("Europe/Berlin"));
+        QVERIFY(flight.departureGate().isEmpty());
+        QVERIFY(!flight.departureGate().isNull());
     }
 };
 
