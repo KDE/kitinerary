@@ -44,6 +44,7 @@ public:
     /* Element-dependent Microdata property value. */
     QString valueForItemProperty(QXmlStreamReader &reader) const;
     void parseJson(const QByteArray &data);
+    QByteArray fixupJson(const QByteArray &data) const;
 
     QJsonArray m_data;
 };
@@ -205,15 +206,33 @@ QString StructuredDataExtractorPrivate::valueForItemProperty(QXmlStreamReader &r
 void StructuredDataExtractorPrivate::parseJson(const QByteArray &data)
 {
     QJsonParseError error;
-    const auto jsonDoc = QJsonDocument::fromJson(data, &error);
+    auto jsonDoc = QJsonDocument::fromJson(data, &error);
     if (jsonDoc.isNull()) {
-        qCDebug(SEMANTIC_LOG).noquote() << data;
-        qCDebug(SEMANTIC_LOG) << error.errorString() << "at offset" << error.offset;
-        return;
+        if (error.error != QJsonParseError::NoError) {
+            // try to fix up common JSON encoding errors
+            jsonDoc = QJsonDocument::fromJson(fixupJson(data));
+        }
+        if (jsonDoc.isNull()) {
+            qCDebug(SEMANTIC_LOG).noquote() << data;
+            qCDebug(SEMANTIC_LOG) << error.errorString() << "at offset" << error.offset;
+            return;
+        }
     }
     if (jsonDoc.isArray()) {
-        m_data.append(jsonDoc.array());
+        for (const auto &v : jsonDoc.array()) {
+            m_data.push_back(v);
+        }
     } else if (jsonDoc.isObject()) {
         m_data.push_back(jsonDoc.object());
     }
+}
+
+QByteArray StructuredDataExtractorPrivate::fixupJson(const QByteArray &data) const
+{
+    auto output(data);
+
+    // Eurowings doesn't put a comma between objects in top-level arrays...
+    output.replace("}{", "},{");
+
+    return output;
 }
