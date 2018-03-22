@@ -43,6 +43,7 @@ public:
     QJsonObject parseMicroData(QXmlStreamReader &reader) const;
     /* Element-dependent Microdata property value. */
     QString valueForItemProperty(QXmlStreamReader &reader) const;
+    void parseJson(const QByteArray &data);
 
     QJsonArray m_data;
 };
@@ -80,15 +81,7 @@ void StructuredDataExtractorPrivate::parseXml(const QString &text)
             // JSON-LD
             if (reader.name() == QLatin1String("script") && reader.attributes().value(QLatin1String("type")) == QLatin1String("application/ld+json")) {
                 const auto jsonData = reader.readElementText(QXmlStreamReader::IncludeChildElements);
-                const auto jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
-                if (jsonDoc.isNull()) {
-                    continue;
-                }
-                if (jsonDoc.isArray()) {
-                    m_data.append(jsonDoc.array());
-                } else if (jsonDoc.isObject()) {
-                    m_data.push_back(jsonDoc.object());
-                }
+                parseJson(jsonData.toUtf8());
             }
 
             // Microdata
@@ -130,20 +123,7 @@ void StructuredDataExtractorPrivate::findLdJson(const QString &text)
         }
         i = text.indexOf(QLatin1String("</script>"), begin, Qt::CaseInsensitive);
         const auto jsonData = text.mid(begin, i - begin);
-        QJsonParseError error;
-        auto jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8(), &error);
-        if (jsonDoc.isNull()) {
-            qCDebug(SEMANTIC_LOG).noquote() << jsonData;
-            qCDebug(SEMANTIC_LOG) << error.errorString() << "at offset" << error.offset;
-            continue;
-        }
-        if (jsonDoc.isArray()) {
-            for (const auto &v : jsonDoc.array()) {
-                m_data.push_back(v);
-            }
-        } else if (jsonDoc.isObject()) {
-            m_data.push_back(jsonDoc.object());
-        }
+        parseJson(jsonData.toUtf8());
     }
 }
 
@@ -220,4 +200,20 @@ QString StructuredDataExtractorPrivate::valueForItemProperty(QXmlStreamReader &r
 
     reader.readNext();
     return v;
+}
+
+void StructuredDataExtractorPrivate::parseJson(const QByteArray &data)
+{
+    QJsonParseError error;
+    const auto jsonDoc = QJsonDocument::fromJson(data, &error);
+    if (jsonDoc.isNull()) {
+        qCDebug(SEMANTIC_LOG).noquote() << data;
+        qCDebug(SEMANTIC_LOG) << error.errorString() << "at offset" << error.offset;
+        return;
+    }
+    if (jsonDoc.isArray()) {
+        m_data.append(jsonDoc.array());
+    } else if (jsonDoc.isObject()) {
+        m_data.push_back(jsonDoc.object());
+    }
 }
