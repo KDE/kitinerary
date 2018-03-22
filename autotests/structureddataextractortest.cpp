@@ -22,9 +22,12 @@
 #include <QDebug>
 #include <QDir>
 #include <QFile>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QObject>
 #include <QTest>
+
+using namespace KItinerary;
 
 class StructuredDataExtractorTest : public QObject
 {

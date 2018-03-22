@@ -22,11 +22,14 @@
 
 #include "kitinerary_export.h"
 
-#include <QJsonArray>
+#include <memory>
 
-class QJsonObject;
+class QJsonArray;
 class QString;
-class QXmlStreamReader;
+
+namespace KItinerary {
+
+class StructuredDataExtractorPrivate;
 
 /** Extract schema.org structured data from HTML text.
  *  @see https://developers.google.com/gmail/markup/getting-started
@@ -34,25 +37,21 @@ class QXmlStreamReader;
 class KITINERARY_EXPORT StructuredDataExtractor
 {
 public:
+    StructuredDataExtractor();
+    StructuredDataExtractor(const StructuredDataExtractor&) = delete;
+    StructuredDataExtractor(StructuredDataExtractor&&);
+    ~StructuredDataExtractor();
+
+    /** Attempt to find JSON-LD data in the given HTML content. */
     void parse(const QString &text);
-    QJsonArray data() const
-    {
-        return m_data;
-    }
+
+    /** Returns the extracted data. */
+    QJsonArray data() const;
 
 private:
-    /** Try to parse using an actual XML parser. */
-    void parseXml(const QString &text);
-    /** Try to find application/ld+json content with basic string search. */
-    void findLdJson(const QString &text);
-    /** Try to fix some common HTML4 damage to make @p text consumable for parseXml(). */
-    QString fixupHtml4(const QString &text) const;
-    /** Recursive microdata parsing. */
-    QJsonObject parseMicroData(QXmlStreamReader &reader) const;
-    /** Element-dependent Microdata property value. */
-    QString valueForItemProperty(QXmlStreamReader &reader) const;
-
-    QJsonArray m_data;
+    std::unique_ptr<StructuredDataExtractorPrivate> d;
 };
+
+}
 
 #endif // STRUCTUREDDATAEXTRACTOR_H

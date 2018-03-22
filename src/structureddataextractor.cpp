@@ -20,6 +20,7 @@
 #include "structureddataextractor.h"
 #include "semantic_debug.h"
 
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRegularExpression>
@@ -27,18 +28,51 @@
 #include <QUrl>
 #include <QXmlStreamReader>
 
+using namespace KItinerary;
+
+namespace KItinerary {
+class StructuredDataExtractorPrivate {
+public:
+    /* Try to parse using an actual XML parser. */
+    void parseXml(const QString &text);
+    /* Try to find application/ld+json content with basic string search. */
+    void findLdJson(const QString &text);
+    /* Try to fix some common HTML4 damage to make @p text consumable for parseXml(). */
+    QString fixupHtml4(const QString &text) const;
+    /* Recursive microdata parsing. */
+    QJsonObject parseMicroData(QXmlStreamReader &reader) const;
+    /* Element-dependent Microdata property value. */
+    QString valueForItemProperty(QXmlStreamReader &reader) const;
+
+    QJsonArray m_data;
+};
+}
+
+StructuredDataExtractor::StructuredDataExtractor()
+    : d(new StructuredDataExtractorPrivate)
+{
+}
+
+StructuredDataExtractor::StructuredDataExtractor(StructuredDataExtractor&&) = default;
+StructuredDataExtractor::~StructuredDataExtractor() = default;
+
 void StructuredDataExtractor::parse(const QString &text)
 {
-    parseXml(text);
-    if (m_data.isEmpty()) {
-        findLdJson(text);
-        if (m_data.isEmpty()) {
-            parseXml(fixupHtml4(text));
+    d->parseXml(text);
+    if (d->m_data.isEmpty()) {
+        d->findLdJson(text);
+        if (d->m_data.isEmpty()) {
+            d->parseXml(d->fixupHtml4(text));
         }
     }
 }
 
-void StructuredDataExtractor::parseXml(const QString &text)
+QJsonArray StructuredDataExtractor::data() const
+{
+    return d->m_data;
+}
+
+void StructuredDataExtractorPrivate::parseXml(const QString &text)
 {
     QXmlStreamReader reader(text);
     while (!reader.atEnd()) {
@@ -79,7 +113,7 @@ void StructuredDataExtractor::parseXml(const QString &text)
     }
 }
 
-void StructuredDataExtractor::findLdJson(const QString &text)
+void StructuredDataExtractorPrivate::findLdJson(const QString &text)
 {
     for (int i = 0; i < text.size();) {
         i = text.indexOf(QLatin1String("<script"), i, Qt::CaseInsensitive);
@@ -113,7 +147,7 @@ void StructuredDataExtractor::findLdJson(const QString &text)
     }
 }
 
-QString StructuredDataExtractor::fixupHtml4(const QString &text) const
+QString StructuredDataExtractorPrivate::fixupHtml4(const QString &text) const
 {
     auto output(text);
 
@@ -127,7 +161,7 @@ QString StructuredDataExtractor::fixupHtml4(const QString &text) const
     return output;
 }
 
-QJsonObject StructuredDataExtractor::parseMicroData(QXmlStreamReader &reader) const
+QJsonObject StructuredDataExtractorPrivate::parseMicroData(QXmlStreamReader &reader) const
 {
     QJsonObject obj;
     reader.readNext();
@@ -165,7 +199,7 @@ QJsonObject StructuredDataExtractor::parseMicroData(QXmlStreamReader &reader) co
     return {};
 }
 
-QString StructuredDataExtractor::valueForItemProperty(QXmlStreamReader &reader) const
+QString StructuredDataExtractorPrivate::valueForItemProperty(QXmlStreamReader &reader) const
 {
     // TODO see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#Values
     const auto elemName = reader.name();
