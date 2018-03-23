@@ -20,13 +20,15 @@
 #include "config-kitinerary.h"
 
 #include "extractorpreprocessor.h"
-#include "semantic_debug.h"
+#include "logging.h"
 
 #ifdef HAVE_POPPLER
 #include <poppler-qt5.h>
 #endif
 
 #include <memory>
+
+using namespace KItinerary;
 
 void ExtractorPreprocessor::preprocessPlainText(const QString &input)
 {
@@ -61,7 +63,7 @@ void ExtractorPreprocessor::preprocessHtml(const QString &input)
     if (begin >= 0 && end < 0) {
         replaceEntityAndAppend(input.midRef(begin));
     }
-    //qCDebug(SEMANTIC_LOG) << "Preprocessed HTML content: " << m_buffer;
+    //qCDebug(Log) << "Preprocessed HTML content: " << m_buffer;
 }
 
 void ExtractorPreprocessor::preprocessPdf(const QByteArray &input)

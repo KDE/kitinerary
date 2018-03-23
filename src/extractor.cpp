@@ -18,7 +18,7 @@
 */
 
 #include "extractor.h"
-#include "semantic_debug.h"
+#include "logging.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -28,6 +28,8 @@
 #include <QJsonParseError>
 
 #include <memory>
+
+using namespace KItinerary;
 
 Extractor::Extractor() = default;
 Extractor::Extractor(Extractor &&) = default;
@@ -43,7 +45,7 @@ bool Extractor::load(const QString &fileName)
     QJsonParseError error;
     const auto doc = QJsonDocument::fromJson(file.readAll(), &error);
     if (doc.isNull()) {
-        qCWarning(SEMANTIC_LOG) << "Extractor loading error:" << fileName << error.errorString();
+        qCWarning(Log) << "Extractor loading error:" << fileName << error.errorString();
         return false;
     }
 

@@ -18,7 +18,7 @@
 */
 
 #include "structureddataextractor.h"
-#include "semantic_debug.h"
+#include "logging.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -103,7 +103,7 @@ void StructuredDataExtractorPrivate::parseXml(const QString &text)
     }
 
     if (reader.hasError()) {
-        qCDebug(SEMANTIC_LOG) << reader.errorString() << reader.lineNumber() << reader.columnNumber();
+        qCDebug(Log) << reader.errorString() << reader.lineNumber() << reader.columnNumber();
     }
 }
 
@@ -175,7 +175,7 @@ QJsonObject StructuredDataExtractorPrivate::parseMicroData(QXmlStreamReader &rea
     }
 
     if (reader.hasError()) {
-        qCDebug(SEMANTIC_LOG) << reader.errorString() << reader.lineNumber() << reader.columnNumber();
+        qCDebug(Log) << reader.errorString() << reader.lineNumber() << reader.columnNumber();
     }
     return {};
 }
@@ -196,7 +196,7 @@ QString StructuredDataExtractorPrivate::valueForItemProperty(QXmlStreamReader &r
     } else if (elemName == QLatin1String("link") || elemName == QLatin1String("a")) {
         v = reader.attributes().value(QLatin1String("href")).toString();
     } else {
-        qCDebug(SEMANTIC_LOG) << "TODO:" << elemName;
+        qCDebug(Log) << "TODO:" << elemName;
     }
 
     reader.readNext();
@@ -213,8 +213,8 @@ void StructuredDataExtractorPrivate::parseJson(const QByteArray &data)
             jsonDoc = QJsonDocument::fromJson(fixupJson(data));
         }
         if (jsonDoc.isNull()) {
-            qCDebug(SEMANTIC_LOG).noquote() << data;
-            qCDebug(SEMANTIC_LOG) << error.errorString() << "at offset" << error.offset;
+            qCDebug(Log).noquote() << data;
+            qCDebug(Log) << error.errorString() << "at offset" << error.offset;
             return;
         }
     }

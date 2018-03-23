@@ -19,7 +19,7 @@
 
 #include "calendarhandler.h"
 #include "jsonlddocument.h"
-#include "semantic_debug.h"
+#include "logging.h"
 
 #include <datatypes/place.h>
 #include <datatypes/reservation.h>
@@ -91,7 +91,7 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
     const auto depPort = JsonLdDocument::readProperty(flight, "departureAirport");
     const auto arrPort = JsonLdDocument::readProperty(flight, "arrivalAirport");
     if (flight.isNull() || airline.isNull() || depPort.isNull() || arrPort.isNull()) {
-        qCDebug(SEMANTIC_LOG) << "got invalid flight reservation";
+        qCDebug(Log) << "got invalid flight reservation";
         return;
     }
 

@@ -26,7 +26,7 @@ set(kitinerary_lib_srcs
     structureddataextractor.cpp
 )
 qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
-ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER semantic_debug.h IDENTIFIER SEMANTIC_LOG CATEGORY_NAME org.kde.kitinerary)
+ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
 
 add_library(KItinerary SHARED ${kitinerary_lib_srcs})
 generate_export_header(KItinerary BASE_NAME KItinerary)

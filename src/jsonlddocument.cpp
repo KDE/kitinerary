@@ -18,7 +18,7 @@
 */
 
 #include "jsonlddocument.h"
-#include "semantic_debug.h"
+#include "logging.h"
 
 #include <datatypes/bustrip.h>
 #include <datatypes/flight.h>
@@ -69,7 +69,7 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
                 dt = QDateTime::fromString(str, QString::fromLatin1(fallbackDateTimePattern[i]));
             }
             if (dt.isNull()) {
-                qCDebug(SEMANTIC_LOG) << "Datetime parsing failed for" << str;
+                qCDebug(Log) << "Datetime parsing failed for" << str;
             }
         }
 
@@ -98,7 +98,7 @@ static QVariant createInstance(const QJsonObject &obj)
         }
         const auto idx = T::staticMetaObject.indexOfProperty(it.key().toLatin1().constData());
         if (idx < 0) {
-            qCDebug(SEMANTIC_LOG) << "property" << it.key() << "could not be set on object of type" << T::staticMetaObject.className();
+            qCDebug(Log) << "property" << it.key() << "could not be set on object of type" << T::staticMetaObject.className();
             continue;
         }
         const auto prop = T::staticMetaObject.property(idx);
@@ -192,7 +192,7 @@ static QJsonValue toJson(const QVariant &v)
         if (v.userType() == qMetaTypeId<float>()) {
             return v.toFloat();
         }
-        qCDebug(SEMANTIC_LOG) << "unhandled value:" << v;
+        qCDebug(Log) << "unhandled value:" << v;
         return {};
     }
 

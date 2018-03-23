@@ -18,12 +18,14 @@
 */
 
 #include "extractorengine.h"
-#include "semantic_debug.h"
+#include "logging.h"
 
 #include <QDateTime>
 #include <QFile>
 #include <QLocale>
 #include <QJSEngine>
+
+using namespace KItinerary;
 
 class JsApi : public QObject
 {
@@ -119,7 +121,7 @@ void ExtractorEngine::executeScript()
 
     QFile f(m_extractor->scriptFileName());
     if (!f.open(QFile::ReadOnly)) {
-        qCWarning(SEMANTIC_LOG) << "Failed to open extractor script" << f.fileName() << f.errorString();
+        qCWarning(Log) << "Failed to open extractor script" << f.fileName() << f.errorString();
         return;
     }
 
@@ -130,19 +132,19 @@ void ExtractorEngine::executeScript()
     engine.globalObject().setProperty(QStringLiteral("Context"), engine.newQObject(m_context));
     auto result = engine.evaluate(QString::fromUtf8(f.readAll()), f.fileName());
     if (result.isError()) {
-        qCWarning(SEMANTIC_LOG) << "Script parsing error in" << result.property(QLatin1String("fileName")).toString()
+        qCWarning(Log) << "Script parsing error in" << result.property(QLatin1String("fileName")).toString()
                                 << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
         return;
     }
 
     auto mainFunc = engine.globalObject().property(QLatin1String("main"));
     if (!mainFunc.isCallable()) {
-        qCWarning(SEMANTIC_LOG) << "Script has no main() function!";
+        qCWarning(Log) << "Script has no main() function!";
         return;
     }
     result = mainFunc.call({m_text});
     if (result.isError()) {
-        qCWarning(SEMANTIC_LOG) << "Script execution error in" << result.property(QLatin1String("fileName")).toString()
+        qCWarning(Log) << "Script execution error in" << result.property(QLatin1String("fileName")).toString()
                                 << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
         return;
     }

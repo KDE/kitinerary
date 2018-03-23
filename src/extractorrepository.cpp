@@ -19,7 +19,6 @@
 
 #include "extractorrepository.h"
 #include "extractor.h"
-#include "semantic_debug.h"
 
 #include <KMime/Content>
 
