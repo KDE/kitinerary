@@ -25,10 +25,10 @@ using namespace KItinerary;
 
 namespace KItinerary {
 
-class ReservationPrivate : public detail::private_abstract_base<ReservationPrivate>
+class ReservationPrivate : public QSharedData
 {
+    KITINERARY_PRIVATE_ABSTRACT_GADGET(Reservation)
 public:
-    virtual ~ReservationPrivate() = default;
     QString reservationNumber;
     QVariant reservationFor;
     QVariant reservedTicket;
@@ -47,8 +47,9 @@ KITINERARY_MAKE_PROPERTY(Reservation, QUrl, modifyReservationUrl, setModifyReser
 KITINERARY_MAKE_PROPERTY(Reservation, QString, ticketToken, setTicketToken)
 KITINERARY_MAKE_PROPERTY(Reservation, QUrl, url, setUrl)
 
-class LodgingReservationPrivate : public detail::private_derived_base<LodgingReservationPrivate, ReservationPrivate>
+class LodgingReservationPrivate : public ReservationPrivate
 {
+    KITINERARY_PRIVATE_GADGET(LodgingReservation)
 public:
     QDateTime checkinDate;
     QDateTime checkoutDate;
@@ -70,8 +71,9 @@ QString LodgingReservation::checkoutDateLocalized() const
 }
 
 
-class FlightReservationPrivate : public detail::private_derived_base<FlightReservationPrivate, ReservationPrivate>
+class FlightReservationPrivate : public ReservationPrivate
 {
+    KITINERARY_PRIVATE_GADGET(FlightReservation)
 public:
     QString airplaneSeat;
     QString boardingGroup;
@@ -83,11 +85,24 @@ KITINERARY_MAKE_PROPERTY(FlightReservation, QString, airplaneSeat, setAirplaneSe
 KITINERARY_MAKE_PROPERTY(FlightReservation, QString, boardingGroup, setBoardingGroup)
 KITINERARY_MAKE_PROPERTY(FlightReservation, QUrl, ticketDownloadUrl, setTicketDownloadUrl)
 
-class TrainReservationPrivate : public detail::private_derived_base<TrainReservationPrivate, ReservationPrivate> {};
+class TrainReservationPrivate : public ReservationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(TrainReservation)
+};
 KITINERARY_MAKE_SUB_CLASS(TrainReservation, Reservation)
-class BusReservationPrivate : public detail::private_derived_base<BusReservationPrivate, ReservationPrivate> {};
+
+class BusReservationPrivate : public ReservationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(BusReservation)
+};
 KITINERARY_MAKE_SUB_CLASS(BusReservation, Reservation)
 
+}
+
+template <>
+KItinerary::ReservationPrivate *QExplicitlySharedDataPointer<KItinerary::ReservationPrivate>::clone()
+{
+    return d->clone();
 }
 
 #include "moc_reservation.cpp"

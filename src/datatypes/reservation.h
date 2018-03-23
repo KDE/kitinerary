@@ -43,7 +43,7 @@ class KITINERARY_EXPORT Reservation
     KITINERARY_PROPERTY(QString, ticketToken, setTicketToken)
     KITINERARY_PROPERTY(QUrl, url, setUrl)
 protected:
-    detail::shared_data_ptr<ReservationPrivate> d;
+    QExplicitlySharedDataPointer<ReservationPrivate> d;
 };
 
 /** A hotel reservation.

@@ -57,10 +57,10 @@ KITINERARY_MAKE_PROPERTY(PostalAddress, QString, postalCode, setPostalCode)
 KITINERARY_MAKE_PROPERTY(PostalAddress, QString, addressCountry, setAddressCountry)
 
 
-class PlacePrivate : public detail::private_abstract_base<PlacePrivate>
+class PlacePrivate : public QSharedData
 {
+    KITINERARY_PRIVATE_ABSTRACT_GADGET(Place)
 public:
-    virtual ~PlacePrivate() = default;
     QString name;
     PostalAddress address;
     GeoCoordinates geo;
@@ -72,8 +72,9 @@ KITINERARY_MAKE_PROPERTY(Place, PostalAddress, address, setAddress)
 KITINERARY_MAKE_PROPERTY(Place, GeoCoordinates, geo, setGeo)
 
 
-class AirportPrivate : public detail::private_derived_base<AirportPrivate, PlacePrivate>
+class AirportPrivate : public PlacePrivate
 {
+    KITINERARY_PRIVATE_GADGET(Airport)
 public:
     QString iataCode;
 };
@@ -81,13 +82,29 @@ public:
 KITINERARY_MAKE_SUB_CLASS(Airport, Place)
 KITINERARY_MAKE_PROPERTY(Airport, QString, iataCode, setIataCode)
 
-class TrainStationPrivate : public detail::private_derived_base<TrainStationPrivate, PlacePrivate> {};
+class TrainStationPrivate : public PlacePrivate
+{
+    KITINERARY_PRIVATE_GADGET(TrainStation)
+};
 KITINERARY_MAKE_SUB_CLASS(TrainStation, Place)
-class BusStationPrivate : public detail::private_derived_base<BusStationPrivate, PlacePrivate> {};
+
+class BusStationPrivate : public PlacePrivate
+{
+    KITINERARY_PRIVATE_GADGET(BusStation)
+};
 KITINERARY_MAKE_SUB_CLASS(BusStation, Place)
-class LodgingBusinessPrivate : public detail::private_derived_base<LodgingBusinessPrivate, PlacePrivate> {};
+class LodgingBusinessPrivate : public PlacePrivate
+{
+    KITINERARY_PRIVATE_GADGET(LodgingBusiness)
+};
 KITINERARY_MAKE_SUB_CLASS(LodgingBusiness, Place)
 
+}
+
+template <>
+KItinerary::PlacePrivate *QExplicitlySharedDataPointer<KItinerary::PlacePrivate>::clone()
+{
+    return d->clone();
 }
 
 #include "moc_place.cpp"

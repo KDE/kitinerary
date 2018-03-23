@@ -24,28 +24,20 @@
 
 namespace KItinerary {
 
-namespace detail {
+#define KITINERARY_PRIVATE_ABSTRACT_GADGET(Class) \
+public: \
+virtual ~ Class ## Private() = default; \
+virtual Class ## Private * clone() const = 0; \
+typedef Class ## Private base_type; \
+private: \
 
-template<typename T>
-class private_abstract_base : public QSharedData
-{
-public:
-    virtual ~private_abstract_base() = default;
-    virtual T* clone(const T *source) const = 0;
-    typedef T base_type;
-};
+#define KITINERARY_PRIVATE_GADGET(Class) \
+public: \
+inline base_type* clone() const override { \
+    return new Class ## Private(*this); \
+} \
+private:
 
-template<typename T, typename Base>
-class private_derived_base : public Base
-{
-public:
-    inline typename Base::base_type* clone(const typename Base::base_type *source) const override
-    {
-        return new T(*static_cast<const T*>(source));
-    }
-};
-
-}
 
 #define KITINERARY_MAKE_SIMPLE_CLASS(Class) \
 Class::Class() : d(new Class ## Private) {} \

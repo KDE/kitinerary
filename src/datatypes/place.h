@@ -70,7 +70,7 @@ class KITINERARY_EXPORT Place
     KITINERARY_PROPERTY(KItinerary::PostalAddress, address, setAddress)
     KITINERARY_PROPERTY(KItinerary::GeoCoordinates, geo, setGeo)
 protected:
-    detail::shared_data_ptr<PlacePrivate> d;
+    QExplicitlySharedDataPointer<PlacePrivate> d;
 };
 
 /** Airport.
