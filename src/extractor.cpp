@@ -18,6 +18,7 @@
 */
 
 #include "extractor.h"
+#include "extractorfilter.h"
 #include "logging.h"
 
 #include <QFile>
@@ -31,7 +32,19 @@
 
 using namespace KItinerary;
 
-Extractor::Extractor() = default;
+namespace KItinerary {
+class ExtractorPrivate
+{
+public:
+    QString m_scriptName;
+    std::vector<ExtractorFilter> m_filters;
+};
+}
+
+Extractor::Extractor()
+    : d(new ExtractorPrivate)
+{
+}
 Extractor::Extractor(Extractor &&) = default;
 Extractor::~Extractor() = default;
 
@@ -55,21 +68,21 @@ bool Extractor::load(const QString &fileName)
         if (!f.load(filterValue.toObject())) {
             return false;
         }
-        m_filters.push_back(std::move(f));
+        d->m_filters.push_back(std::move(f));
     }
 
     const auto scriptName = obj.value(QLatin1String("script")).toString();
     QFileInfo fi(fileName);
-    m_scriptName = fi.absolutePath() + QLatin1Char('/') + scriptName;
-    return !m_filters.empty() && !m_scriptName.isEmpty() && QFile::exists(m_scriptName);
+    d->m_scriptName = fi.absolutePath() + QLatin1Char('/') + scriptName;
+    return !d->m_filters.empty() && !d->m_scriptName.isEmpty() && QFile::exists(d->m_scriptName);
 }
 
 QString Extractor::scriptFileName() const
 {
-    return m_scriptName;
+    return d->m_scriptName;
 }
 
 const std::vector<ExtractorFilter> &Extractor::filters() const
 {
-    return m_filters;
+    return d->m_filters;
 }

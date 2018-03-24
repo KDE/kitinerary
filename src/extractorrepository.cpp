@@ -19,6 +19,7 @@
 
 #include "extractorrepository.h"
 #include "extractor.h"
+#include "extractorfilter.h"
 
 #include <KMime/Content>
 

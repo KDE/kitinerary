@@ -22,15 +22,15 @@
 
 #include "kitinerary_export.h"
 
-#include "extractorfilter.h"
-
+#include <memory>
 #include <vector>
 
 class QString;
 
 namespace KItinerary {
 
-class ExtractorRule;
+class ExtractorFilter;
+class ExtractorPrivate;
 
 /** A single unstructured data extraction rule set. */
 class KITINERARY_EXPORT Extractor
@@ -47,8 +47,7 @@ public:
     const std::vector<ExtractorFilter> &filters() const;
 
 private:
-    QString m_scriptName;
-    std::vector<ExtractorFilter> m_filters;
+    std::unique_ptr<ExtractorPrivate> d;
 };
 
 }
