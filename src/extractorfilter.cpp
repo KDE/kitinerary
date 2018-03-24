@@ -21,6 +21,8 @@
 
 #include <QJsonObject>
 
+using namespace KItinerary;
+
 ExtractorFilter::ExtractorFilter() = default;
 ExtractorFilter::~ExtractorFilter() = default;
 

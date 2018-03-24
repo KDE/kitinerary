@@ -25,6 +25,8 @@
 
 class QJsonObject;
 
+namespace KItinerary {
+
 /** Determines whether an extractor is applicable to a given email. */
 class ExtractorFilter
 {
@@ -40,5 +42,7 @@ private:
     QByteArray m_headerName;
     QRegularExpression m_exp;
 };
+
+}
 
 #endif // EXTRACTORFILTER_H

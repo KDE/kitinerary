@@ -28,8 +28,11 @@
 
 #include <vector>
 
-class ContextObject;
 class QDateTime;
+
+namespace KItinerary {
+
+class ContextObject;
 
 /** Code for executing an extractor rule set on a specific email part. */
 class KITINERARY_EXPORT ExtractorEngine
@@ -53,5 +56,7 @@ private:
     QString m_text;
     QJsonArray m_result;
 };
+
+}
 
 #endif // EXTRACTORENGINE_H

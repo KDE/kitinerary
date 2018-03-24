@@ -28,6 +28,8 @@ namespace KMime {
 class Content;
 }
 
+namespace KItinerary {
+
 class Extractor;
 
 /** Collection of all unstructured data extractor rule sets. */
@@ -46,5 +48,7 @@ private:
 
     std::vector<Extractor> m_extractors;
 };
+
+}
 
 #endif // EXTRACTORREPOSITORY_H

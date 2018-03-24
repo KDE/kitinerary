@@ -27,6 +27,8 @@
 
 using namespace KItinerary;
 
+namespace KItinerary {
+
 class JsApi : public QObject
 {
     Q_OBJECT
@@ -86,6 +88,8 @@ public:
 ExtractorEngine::ExtractorEngine()
     : m_context(new ContextObject) // will be deleted by QJSEngine taking ownership
 {
+}
+
 }
 
 ExtractorEngine::~ExtractorEngine() = default;

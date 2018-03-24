@@ -26,8 +26,11 @@
 
 #include <vector>
 
-class ExtractorRule;
 class QString;
+
+namespace KItinerary {
+
+class ExtractorRule;
 
 /** A single unstructured data extraction rule set. */
 class KITINERARY_EXPORT Extractor
@@ -47,5 +50,7 @@ private:
     QString m_scriptName;
     std::vector<ExtractorFilter> m_filters;
 };
+
+}
 
 #endif // EXTRACTOR_H

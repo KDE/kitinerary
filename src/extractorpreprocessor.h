@@ -24,6 +24,8 @@
 
 #include <QString>
 
+namespace KItinerary {
+
 /** Preprocessing of HTML and PDF attachments. */
 class KITINERARY_EXPORT ExtractorPreprocessor
 {
@@ -38,5 +40,7 @@ private:
     void replaceEntityAndAppend(const QStringRef &source);
     QString m_buffer;
 };
+
+}
 
 #endif // EXTRACTORPREPROCESSOR_H

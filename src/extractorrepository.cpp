@@ -25,6 +25,8 @@
 #include <QDirIterator>
 #include <QStandardPaths>
 
+using namespace KItinerary;
+
 ExtractorRepository::ExtractorRepository()
 {
     loadExtractors();

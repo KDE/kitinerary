@@ -25,6 +25,8 @@
 #include <QVariant>
 #include <QVector>
 
+namespace KItinerary {
+
 /** Post-process extracted data to filter out garbage and augment data from other sources. */
 class KITINERARY_EXPORT ExtractorPostprocessor
 {
@@ -51,5 +53,7 @@ private:
 
     QVector<QVariant> m_data;
 };
+
+}
 
 #endif // EXTRACTORPOSTPROCESSOR_H
