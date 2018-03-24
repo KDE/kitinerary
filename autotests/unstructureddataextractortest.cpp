@@ -70,7 +70,7 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
 
         Extractor extractor;
-        QVERIFY(extractor.load(QLatin1String(":/org.kde.pim/messageviewer/semantic/extractors/") + extractorName + QLatin1String(".json")));
+        QVERIFY(extractor.load(QLatin1String(":/org.kde.kitinerary/extractors/") + extractorName + QLatin1String(".json")));
 
         ExtractorEngine engine;
         engine.setText(QString::fromUtf8(f.readAll()));
@@ -118,7 +118,7 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
 
         Extractor extractor;
-        QVERIFY(extractor.load(QLatin1String(":/org.kde.pim/messageviewer/semantic/extractors/") + extractorName + QLatin1String(".json")));
+        QVERIFY(extractor.load(QLatin1String(":/org.kde.kitinerary/extractors/") + extractorName + QLatin1String(".json")));
 
         ExtractorPreprocessor preproc;
         preproc.preprocessHtml(QString::fromUtf8(f.readAll()));

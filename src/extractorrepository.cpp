@@ -64,10 +64,10 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
 void ExtractorRepository::loadExtractors()
 {
     auto searchDirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
-    searchDirs += QStringLiteral(":/org.kde.pim");
+    searchDirs += QStringLiteral(":/org.kde.kitinerary");
 
     for (const auto &dir : qAsConst(searchDirs)) {
-        QDirIterator it(dir + QStringLiteral("/messageviewer/semantic/extractors"), {QStringLiteral("*.json")}, QDir::Files);
+        QDirIterator it(dir + QStringLiteral("/extractors"), {QStringLiteral("*.json")}, QDir::Files);
         while (it.hasNext()) {
             Extractor e;
             if (e.load(it.next())) {
