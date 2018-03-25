@@ -22,11 +22,8 @@
 #include "logging.h"
 
 #include <QFile>
-#include <QFileInfo>
 #include <QJsonArray>
-#include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonParseError>
 
 #include <memory>
 
@@ -48,21 +45,8 @@ Extractor::Extractor()
 Extractor::Extractor(Extractor &&) = default;
 Extractor::~Extractor() = default;
 
-bool Extractor::load(const QString &fileName)
+bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
 {
-    QFile file(fileName);
-    if (!file.open(QFile::ReadOnly)) {
-        return false;
-    }
-
-    QJsonParseError error;
-    const auto doc = QJsonDocument::fromJson(file.readAll(), &error);
-    if (doc.isNull()) {
-        qCWarning(Log) << "Extractor loading error:" << fileName << error.errorString();
-        return false;
-    }
-
-    const auto obj = doc.object();
     for (const auto &filterValue : obj.value(QLatin1String("filter")).toArray()) {
         ExtractorFilter f;
         if (!f.load(filterValue.toObject())) {
@@ -72,9 +56,14 @@ bool Extractor::load(const QString &fileName)
     }
 
     const auto scriptName = obj.value(QLatin1String("script")).toString();
-    QFileInfo fi(fileName);
-    d->m_scriptName = fi.absolutePath() + QLatin1Char('/') + scriptName;
-    return !d->m_filters.empty() && !d->m_scriptName.isEmpty() && QFile::exists(d->m_scriptName);
+    d->m_scriptName = baseDir + QLatin1Char('/') + scriptName;
+
+    if (d->m_scriptName.isEmpty() || !QFile::exists(d->m_scriptName)) {
+        qCWarning(Log) << "Script file not found:" << d->m_scriptName;
+        return false;
+    }
+
+    return !d->m_filters.empty();
 }
 
 QString Extractor::scriptFileName() const

@@ -25,6 +25,7 @@
 #include <memory>
 #include <vector>
 
+class QJsonObject;
 class QString;
 
 namespace KItinerary {
@@ -41,7 +42,7 @@ public:
     Extractor(Extractor &&);
     ~Extractor();
 
-    bool load(const QString &fileName);
+    bool load(const QJsonObject &obj, const QString &baseDir);
 
     QString scriptFileName() const;
     const std::vector<ExtractorFilter> &filters() const;

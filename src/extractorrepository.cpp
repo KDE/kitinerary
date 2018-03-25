@@ -20,10 +20,13 @@
 #include "extractorrepository.h"
 #include "extractor.h"
 #include "extractorfilter.h"
+#include "logging.h"
 
 #include <KMime/Content>
 
 #include <QDirIterator>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QStandardPaths>
 
 using namespace KItinerary;
@@ -70,8 +73,24 @@ void ExtractorRepository::loadExtractors()
     for (const auto &dir : qAsConst(searchDirs)) {
         QDirIterator it(dir + QStringLiteral("/extractors"), {QStringLiteral("*.json")}, QDir::Files);
         while (it.hasNext()) {
+            const auto fileName = it.next();
+            QFile file(fileName);
+            if (!file.open(QFile::ReadOnly)) {
+                continue;
+            }
+
+            QJsonParseError error;
+            const auto doc = QJsonDocument::fromJson(file.readAll(), &error);
+            if (doc.isNull()) {
+                qCWarning(Log) << "Extractor loading error:" << fileName << error.errorString();
+                continue;
+            }
+
+            const auto obj = doc.object();
+            QFileInfo fi(fileName);
+
             Extractor e;
-            if (e.load(it.next())) {
+            if (e.load(obj, fi.absoluteFilePath())) {
                 m_extractors.push_back(std::move(e));
             }
         }

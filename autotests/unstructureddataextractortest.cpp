@@ -26,6 +26,7 @@
 #include <QDir>
 #include <QFile>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QObject>
 #include <QTest>
 
@@ -34,6 +35,17 @@ using namespace KItinerary;
 class UnstructuredDataExtractorTest : public QObject
 {
     Q_OBJECT
+private:
+    bool loadExtractor(Extractor &extractor, const QString &extractorName)
+    {
+        QFile f(QLatin1String(":/org.kde.kitinerary/extractors/") + extractorName + QLatin1String(".json"));
+        if (!f.open(QFile::ReadOnly)) {
+            return false;
+        }
+        const auto doc = QJsonDocument::fromJson(f.readAll());
+        return extractor.load(doc.object(), QLatin1String(":/org.kde.kitinerary/extractors/"));
+    }
+
 private Q_SLOTS:
     void initTestCase()
     {
@@ -70,7 +82,7 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
 
         Extractor extractor;
-        QVERIFY(extractor.load(QLatin1String(":/org.kde.kitinerary/extractors/") + extractorName + QLatin1String(".json")));
+        QVERIFY(loadExtractor(extractor, extractorName));
 
         ExtractorEngine engine;
         engine.setText(QString::fromUtf8(f.readAll()));
@@ -118,7 +130,7 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
 
         Extractor extractor;
-        QVERIFY(extractor.load(QLatin1String(":/org.kde.kitinerary/extractors/") + extractorName + QLatin1String(".json")));
+        QVERIFY(loadExtractor(extractor, extractorName));
 
         ExtractorPreprocessor preproc;
         preproc.preprocessHtml(QString::fromUtf8(f.readAll()));
