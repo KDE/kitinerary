@@ -1,0 +1,29 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "17C",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "4U",
+                "name": "Germanwings"
+             },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Berlin-Tegel"
+            },
+            "boardingTime": "2017-06-18T18:40:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "LHR",
+                "name": "London Heathrow"
+            },
+            "departureGate": " - ",
+            "flightNumber": "8465"
+        },
+        "reservationNumber": "XXX007"
+    }
+]
