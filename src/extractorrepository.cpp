@@ -24,19 +24,33 @@
 
 #include <KMime/Content>
 
+#include <KPkPass/BoardingPass>
+
 #include <QDirIterator>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QStandardPaths>
 
 using namespace KItinerary;
 
+namespace KItinerary {
+class ExtractorRepositoryPrivate {
+public:
+    void loadExtractors();
+
+    std::vector<Extractor> m_extractors;
+};
+}
+
 ExtractorRepository::ExtractorRepository()
+    : d(new ExtractorRepositoryPrivate)
 {
-    loadExtractors();
+    d->loadExtractors();
 }
 
 ExtractorRepository::~ExtractorRepository() = default;
+ExtractorRepository::ExtractorRepository(KItinerary::ExtractorRepository &&) = default;
 
 std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::Content *part) const
 {
@@ -45,7 +59,10 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
         return v;
     }
 
-    for (auto it = m_extractors.begin(), end = m_extractors.end(); it != end; ++it) {
+    for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
+        if ((*it).type() != Extractor::Text) {
+            continue;
+        }
         for (const auto &filter : (*it).filters()) {
             auto header = part->headerByType(filter.headerName());
             if (!header && part->topLevel()) {
@@ -65,7 +82,36 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
     return v;
 }
 
-void ExtractorRepository::loadExtractors()
+std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::Pass* pass) const
+{
+    std::vector<const Extractor *> v;
+    auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass);
+    if (!boardingPass) {
+        return v;
+    }
+
+    for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
+        if ((*it).type() != Extractor::PkPass) {
+            continue;
+        }
+        for (const auto &filter : (*it).filters()) {
+            QString value;
+            if (strcmp(filter.headerName(), "passTypeIdentifier") == 0) {
+                value = boardingPass->passTypeIdentifier();
+            } else {
+                continue;
+            }
+            if (filter.matches(value)) {
+                v.push_back(&(*it));
+                break;
+            }
+        }
+    }
+
+    return v;
+}
+
+void ExtractorRepositoryPrivate::loadExtractors()
 {
     auto searchDirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
     searchDirs += QStringLiteral(":/org.kde.kitinerary");
@@ -86,12 +132,24 @@ void ExtractorRepository::loadExtractors()
                 continue;
             }
 
-            const auto obj = doc.object();
             QFileInfo fi(fileName);
 
-            Extractor e;
-            if (e.load(obj, fi.absoluteFilePath())) {
-                m_extractors.push_back(std::move(e));
+            if (doc.isObject()) {
+                const auto obj = doc.object();
+                Extractor e;
+                if (e.load(obj, fi.absolutePath())) {
+                    m_extractors.push_back(std::move(e));
+                }
+            } else if (doc.isArray()) {
+                for (const auto &v : doc.array()) {
+                Extractor e;
+                    if (e.load(v.toObject(), fi.absolutePath())) {
+                        m_extractors.push_back(std::move(e));
+                    }
+                }
+            } else {
+                qCWarning(Log) << "Invalid extractor meta-data:" << fileName;
+                continue;
             }
         }
     }

@@ -35,6 +35,7 @@ class ExtractorPrivate
 public:
     QString m_scriptName;
     std::vector<ExtractorFilter> m_filters;
+    Extractor::Type m_type = Extractor::Text;
 };
 }
 
@@ -47,6 +48,11 @@ Extractor::~Extractor() = default;
 
 bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
 {
+    const auto type = obj.value(QLatin1String("type")).toString();
+    if (type == QLatin1String("pkpass")) {
+        d->m_type = PkPass;
+    }
+
     for (const auto &filterValue : obj.value(QLatin1String("filter")).toArray()) {
         ExtractorFilter f;
         if (!f.load(filterValue.toObject())) {
@@ -58,12 +64,21 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
     const auto scriptName = obj.value(QLatin1String("script")).toString();
     d->m_scriptName = baseDir + QLatin1Char('/') + scriptName;
 
-    if (d->m_scriptName.isEmpty() || !QFile::exists(d->m_scriptName)) {
+    if (!d->m_scriptName.isEmpty() && !QFile::exists(d->m_scriptName)) {
         qCWarning(Log) << "Script file not found:" << d->m_scriptName;
+        return false;
+    }
+    if (d->m_type == Text && d->m_scriptName.isEmpty()) {
+        qCWarning(Log) << "Script file required for text extractors!";
         return false;
     }
 
     return !d->m_filters.empty();
+}
+
+Extractor::Type Extractor::type() const
+{
+    return d->m_type;
 }
 
 QString Extractor::scriptFileName() const

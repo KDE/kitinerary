@@ -1,0 +1,4 @@
+{
+    "type": "pkpass",
+    "filter": [ { "header": "passTypeIdentifier", "match": "pass.com.lufthansa.mbp" } ]
+}

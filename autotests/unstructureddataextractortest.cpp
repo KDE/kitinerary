@@ -43,7 +43,12 @@ private:
             return false;
         }
         const auto doc = QJsonDocument::fromJson(f.readAll());
-        return extractor.load(doc.object(), QLatin1String(":/org.kde.kitinerary/extractors/"));
+        if (doc.isObject()) {
+            return extractor.load(doc.object(), QLatin1String(":/org.kde.kitinerary/extractors/"));
+        } else if (doc.isArray()) {
+            return extractor.load(doc.array().at(0).toObject(), QLatin1String(":/org.kde.kitinerary/extractors/"));
+        }
+        return false;
     }
 
 private Q_SLOTS:

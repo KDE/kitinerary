@@ -22,15 +22,21 @@
 
 #include "kitinerary_export.h"
 
+#include <memory>
 #include <vector>
 
 namespace KMime {
 class Content;
 }
 
+namespace KPkPass {
+class Pass;
+}
+
 namespace KItinerary {
 
 class Extractor;
+class ExtractorRepositoryPrivate;
 
 /** Collection of all unstructured data extractor rule sets. */
 class KITINERARY_EXPORT ExtractorRepository
@@ -38,15 +44,16 @@ class KITINERARY_EXPORT ExtractorRepository
 public:
     ExtractorRepository();
     ~ExtractorRepository();
+    ExtractorRepository(ExtractorRepository &&);
     ExtractorRepository(const ExtractorRepository &) = delete;
 
     /** Finds matching extractors for the given message part. */
     std::vector<const Extractor *> extractorsForMessage(KMime::Content *part) const;
+    /** Finds matching extractors for the given pkpass boarding pass. */
+    std::vector<const Extractor *> extractorsForPass(KPkPass::Pass *pass) const;
 
 private:
-    void loadExtractors();
-
-    std::vector<Extractor> m_extractors;
+    std::unique_ptr<ExtractorRepositoryPrivate> d;
 };
 
 }

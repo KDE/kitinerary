@@ -16,6 +16,7 @@
         <file>iberia.js</file>
         <file>klm.json</file>
         <file>klm.js</file>
+        <file>lufthansa.json</file>
         <file>regiojet.json</file>
         <file>regiojet.js</file>
         <file>sncf.json</file>

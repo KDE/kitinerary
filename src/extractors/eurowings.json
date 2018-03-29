@@ -1,6 +1,10 @@
-{
+[{
+    "type": "text",
     "filter": [
         { "header": "From", "match": "@booking.eurowings.com" }
     ],
     "script": "eurowings.js"
-}
+}, {
+    "type": "pkpass",
+    "filter": [ { "header": "passTypeIdentifier", "match": "pass.wings.boardingpass" } ]
+}]

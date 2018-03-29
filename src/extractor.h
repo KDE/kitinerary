@@ -44,6 +44,13 @@ public:
 
     bool load(const QJsonObject &obj, const QString &baseDir);
 
+    /** Type of data this extractor can process. */
+    enum Type {
+        Text,
+        PkPass
+    };
+    Type type() const;
+
     QString scriptFileName() const;
     const std::vector<ExtractorFilter> &filters() const;
 
