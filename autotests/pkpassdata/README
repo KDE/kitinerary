@@ -1,0 +1,2 @@
+Note that the pkpass files in here are stripped to the bare minimum needed for extractor tests,
+they are not useful for testing anything beyond that, in particular displaying them!

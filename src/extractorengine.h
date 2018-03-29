@@ -21,18 +21,21 @@
 #define EXTRACTORENGINE_H
 
 #include "kitinerary_export.h"
-#include "extractor.h"
 
-#include <QJsonArray>
-#include <QString>
+#include <memory>
 
-#include <vector>
+namespace KPkPass {
+class Pass;
+}
 
 class QDateTime;
+class QJsonArray;
+class QString;
 
 namespace KItinerary {
 
-class ContextObject;
+class Extractor;
+class ExtractorEnginePrivate;
 
 /** Code for executing an extractor rule set on a specific email part. */
 class KITINERARY_EXPORT ExtractorEngine
@@ -40,21 +43,27 @@ class KITINERARY_EXPORT ExtractorEngine
 public:
     ExtractorEngine();
     ~ExtractorEngine();
+    ExtractorEngine(ExtractorEngine &&);
+    ExtractorEngine(const ExtractorEngine &) = delete;
 
     void setExtractor(const Extractor *extractor);
+
+    /** The text to extract data from.
+     *  Only considered for text extractors.
+     */
     void setText(const QString &text);
+    /** The pkpass boarding pass to extract data from.
+     *  Only considered for pkpass extractors.
+     */
+    void setPass(KPkPass::Pass *pass);
+
     /** The date the email containing the processed text was sent. */
     void setSenderDate(const QDateTime &dt);
 
     QJsonArray extract();
 
 private:
-    void executeScript();
-
-    const Extractor *m_extractor = nullptr;
-    ContextObject *m_context = nullptr;
-    QString m_text;
-    QJsonArray m_result;
+    std::unique_ptr<ExtractorEnginePrivate> d;
 };
 
 }

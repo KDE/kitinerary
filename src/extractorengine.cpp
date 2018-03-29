@@ -18,16 +18,34 @@
 */
 
 #include "extractorengine.h"
+#include "extractor.h"
 #include "logging.h"
+
+#include <KPkPass/BoardingPass>
 
 #include <QDateTime>
 #include <QFile>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QLocale>
 #include <QJSEngine>
 
 using namespace KItinerary;
 
 namespace KItinerary {
+
+class ContextObject;
+
+class ExtractorEnginePrivate {
+public:
+    void executeScript();
+
+    const Extractor *m_extractor = nullptr;
+    ContextObject *m_context = nullptr;
+    QString m_text;
+    KPkPass::BoardingPass *m_pass;
+    QJsonArray m_result;
+};
 
 class JsApi : public QObject
 {
@@ -84,42 +102,60 @@ class ContextObject : public QObject
 public:
     QDateTime m_senderDate;
 };
+}
 
 ExtractorEngine::ExtractorEngine()
-    : m_context(new ContextObject) // will be deleted by QJSEngine taking ownership
+    : d(new ExtractorEnginePrivate)
 {
+    d->m_context = new ContextObject; // will be deleted by QJSEngine taking ownership
 }
 
-}
-
+ExtractorEngine::ExtractorEngine(ExtractorEngine &&) = default;
 ExtractorEngine::~ExtractorEngine() = default;
 
 void ExtractorEngine::setExtractor(const Extractor *extractor)
 {
-    m_extractor = extractor;
+    d->m_extractor = extractor;
 }
 
 void ExtractorEngine::setText(const QString &text)
 {
-    m_text = text;
+    d->m_text = text;
+}
+
+void ExtractorEngine::setPass(KPkPass::Pass *pass)
+{
+    d->m_pass = qobject_cast<KPkPass::BoardingPass*>(pass);
 }
 
 void ExtractorEngine::setSenderDate(const QDateTime &dt)
 {
-    m_context->m_senderDate = dt;
+    d->m_context->m_senderDate = dt;
 }
 
 QJsonArray ExtractorEngine::extract()
 {
-    if (!m_extractor || m_text.isEmpty()) {
+    if (!d->m_extractor) {
         return {};
     }
+    switch (d->m_extractor->type()) {
+        case Extractor::Text:
+            if (d->m_text.isEmpty()) {
+                return {};
+            }
+            break;
+        case Extractor::PkPass:
+            if (!d->m_pass) {
+                return {};
+            }
+            break;
+    }
 
-    executeScript();
-    return m_result;
+    d->executeScript();
+    return d->m_result;
 }
 
-void ExtractorEngine::executeScript()
+void ExtractorEnginePrivate::executeScript()
 {
     Q_ASSERT(m_extractor);
 
@@ -146,14 +182,31 @@ void ExtractorEngine::executeScript()
         qCWarning(Log) << "Script has no main() function!";
         return;
     }
-    result = mainFunc.call({m_text});
+
+    QJSValueList args;
+    switch (m_extractor->type()) {
+        case Extractor::Text:
+            args = {m_text};
+            break;
+        case Extractor::PkPass:
+            args = {engine.toScriptValue<QObject*>(m_pass)};
+            break;
+    }
+
+    result = mainFunc.call(args);
     if (result.isError()) {
         qCWarning(Log) << "Script execution error in" << result.property(QLatin1String("fileName")).toString()
                                 << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
         return;
     }
 
-    m_result = QJsonArray::fromVariantList(result.toVariant().toList());
+    if (result.isArray()) {
+        m_result = QJsonArray::fromVariantList(result.toVariant().toList());
+    } else if (result.isObject()) {
+        m_result = { QJsonValue::fromVariant(result.toVariant()) };
+    } else {
+        qCWarning(Log) << "Invalid result type from script";
+    }
 }
 
 #include "extractorengine.moc"

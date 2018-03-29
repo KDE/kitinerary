@@ -1,0 +1,29 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "5A",
+        "reservationFor": {
+            "@type": "Flight",
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "BERLIN"
+            },
+            "boardingTime": "2018-03-06T17:05:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 48.35390090942383,
+                    "longitude": 11.786100387573242
+                },
+                "iataCode": "MUC",
+                "name": "MUNICH"
+            },
+            "departureGate": "G20"
+        },
+        "reservationNumber": "XXX007",
+        "ticketToken": "M1DOE/JOHN       TICKETTOKEN"
+    }
+]
