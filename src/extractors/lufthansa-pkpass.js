@@ -30,9 +30,6 @@ function main(pass)
     res.reservationFor.departureAirport = JsonLd.newObject("Airport");
     res.reservationFor.departureAirport.iataCode = pass.field["origin"].value;
     res.reservationFor.departureAirport.name = pass.field["origin"].label;
-    res.reservationFor.departureAirport.geo = JsonLd.newObject("GeoCoordinates");
-    res.reservationFor.departureAirport.geo.latitude = pass.locations[0].latitude;
-    res.reservationFor.departureAirport.geo.longitude = pass.locations[0].longitude;
     res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
     res.reservationFor.arrivalAirport.iataCode = pass.field["destination"].value;
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;

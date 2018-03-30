@@ -23,6 +23,7 @@
 
 #include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>
+#include <KPkPass/Location>
 
 #include <QDateTime>
 #include <QFile>
@@ -229,7 +230,16 @@ void ExtractorEnginePrivate::extractPass()
     }
 
     // location is the best guess for the departure airport geo coordinates
-    // TODO
+    auto depAirport = resFor.value(QLatin1String("departureAirport")).toObject();
+    auto depGeo = depAirport.value(QLatin1String("geo")).toObject();
+    if (m_pass->locations().size() == 1 && depGeo.isEmpty()) {
+        const auto loc = m_pass->locations().at(0);
+        depGeo.insert(QLatin1String("@type"), QLatin1String("GeoCoordinates"));
+        depGeo.insert(QLatin1String("latitude"), loc.latitude());
+        depGeo.insert(QLatin1String("longitude"), loc.longitude());
+        depAirport.insert(QLatin1String("geo"), depGeo);
+        resFor.insert(QLatin1String("departureAirport"), depAirport);
+    }
 
     // barcode contains the ticket token
     if (!m_pass->barcodes().isEmpty() && !res.contains(QLatin1String("ticketToken"))) {
