@@ -5,6 +5,10 @@
         "airplaneSeat": "5A",
         "reservationFor": {
             "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LH"
+            },
             "arrivalAirport": {
                 "@type": "Airport",
                 "iataCode": "TXL",
@@ -21,7 +25,8 @@
                 "iataCode": "MUC",
                 "name": "MUNICH"
             },
-            "departureGate": "G20"
+            "departureGate": "G20",
+            "flightNumber": "724"
         },
         "reservationNumber": "XXX007",
         "ticketToken": "M1DOE/JOHN       TICKETTOKEN"

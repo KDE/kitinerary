@@ -39,7 +39,10 @@ function main(pass)
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
     res.reservationNumber = pass.field["filekey"].value;
     res.reservationFor.boardingTime = pass.relevantDate;
-    // TODO flight number read from "flight" field (value is "LHxxxx")
+
+    res.reservationFor.flightNumber = pass.field["flight"].value.substring(3);
+    res.reservationFor.airline = JsonLd.newObject("Airline");
+    res.reservationFor.airline.iataCode = pass.field["flight"].value.substring(0, 2);
 
     return res;
 }

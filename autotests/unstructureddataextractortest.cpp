@@ -39,15 +39,15 @@ class UnstructuredDataExtractorTest : public QObject
 private:
     bool loadExtractor(Extractor &extractor, const QString &extractorName)
     {
-        QFile f(QLatin1String(":/org.kde.kitinerary/extractors/") + extractorName + QLatin1String(".json"));
+        QFile f(QLatin1String(":/org.kde.pim/kitinerary/extractors/") + extractorName + QLatin1String(".json"));
         if (!f.open(QFile::ReadOnly)) {
             return false;
         }
         const auto doc = QJsonDocument::fromJson(f.readAll());
         if (doc.isObject()) {
-            return extractor.load(doc.object(), QLatin1String(":/org.kde.kitinerary/extractors/"));
+            return extractor.load(doc.object(), QLatin1String(":/org.kde.pim/kitinerary/extractors/"));
         } else if (doc.isArray()) {
-            return extractor.load(doc.array().at(0).toObject(), QLatin1String(":/org.kde.kitinerary/extractors/"));
+            return extractor.load(doc.array().at(0).toObject(), QLatin1String(":/org.kde.pim/kitinerary/extractors/"));
         }
         return false;
     }

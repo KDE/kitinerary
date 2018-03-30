@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/org.kde.kitinerary/extractors">
+    <qresource prefix="/org.kde.pim/kitinerary/extractors">
         <file>amadeus.json</file>
         <file>amadeus.js</file>
         <file>brusselsairlines.json</file>

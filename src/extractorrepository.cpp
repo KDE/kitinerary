@@ -114,10 +114,10 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::P
 void ExtractorRepositoryPrivate::loadExtractors()
 {
     auto searchDirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
-    searchDirs += QStringLiteral(":/org.kde.kitinerary");
+    searchDirs += QStringLiteral(":/org.kde.pim");
 
     for (const auto &dir : qAsConst(searchDirs)) {
-        QDirIterator it(dir + QStringLiteral("/extractors"), {QStringLiteral("*.json")}, QDir::Files);
+        QDirIterator it(dir + QStringLiteral("/kitinerary/extractors"), {QStringLiteral("*.json")}, QDir::Files);
         while (it.hasNext()) {
             const auto fileName = it.next();
             QFile file(fileName);

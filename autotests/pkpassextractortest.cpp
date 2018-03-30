@@ -69,7 +69,7 @@ private Q_SLOTS:
 
         ExtractorRepository repo;
         const auto extractors = repo.extractorsForPass(pass);
-        QCOMPARE(extractors.size(), 1);
+        QVERIFY(!extractors.empty());
 
         ExtractorEngine engine;
         engine.setSenderDate(QDateTime(QDate(2017, 12, 29), QTime(18, 46, 2)));
