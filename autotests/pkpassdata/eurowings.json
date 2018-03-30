@@ -24,6 +24,7 @@
             "departureGate": " - ",
             "flightNumber": "8465"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "ticketToken": "aztecCode:M1KRAUSE/VOLKER        TICKETTOKEN"
     }
 ]

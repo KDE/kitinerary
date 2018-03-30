@@ -21,6 +21,7 @@
 #include "extractor.h"
 #include "logging.h"
 
+#include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>
 
 #include <QDateTime>
@@ -39,6 +40,7 @@ class ContextObject;
 class ExtractorEnginePrivate {
 public:
     void executeScript();
+    void extractPass();
 
     const Extractor *m_extractor = nullptr;
     ContextObject *m_context = nullptr;
@@ -143,15 +145,17 @@ QJsonArray ExtractorEngine::extract()
             if (d->m_text.isEmpty()) {
                 return {};
             }
+            d->executeScript();
             break;
         case Extractor::PkPass:
             if (!d->m_pass) {
                 return {};
             }
+            d->executeScript();
+            d->extractPass();
             break;
     }
 
-    d->executeScript();
     return d->m_result;
 }
 
@@ -207,6 +211,46 @@ void ExtractorEnginePrivate::executeScript()
     } else {
         qCWarning(Log) << "Invalid result type from script";
     }
+}
+
+void ExtractorEnginePrivate::extractPass()
+{
+    if (m_result.size() != 1) { // a pkpass file contains exactly one boarding pass
+        return;
+    }
+
+    // extract structured data from a pkpass, if the extractor script hasn't done so already
+    auto res = m_result.at(0).toObject();
+    auto resFor = res.value(QLatin1String("reservationFor")).toObject();
+
+    // "relevantDate" is the best guess for the boarding time
+    if (m_pass->relevantDate().isValid() && !resFor.contains(QLatin1String("boardingTime"))) {
+        resFor.insert(QLatin1String("boardingTime"), m_pass->relevantDate().toString(Qt::ISODate));
+    }
+
+    // location is the best guess for the departure airport geo coordinates
+    // TODO
+
+    // barcode contains the ticket token
+    if (!m_pass->barcodes().isEmpty() && !res.contains(QLatin1String("ticketToken"))) {
+        const auto barcode = m_pass->barcodes().at(0);
+        QString token;
+        switch (barcode.format()) {
+            case KPkPass::Barcode::QR:
+                token += QLatin1String("qrCode:");
+                break;
+            case KPkPass::Barcode::Aztec:
+                token += QLatin1String("aztecCode:");
+                break;
+            default:
+                break;
+        }
+        token += barcode.message();
+        res.insert(QLatin1String("ticketToken"), token);
+    }
+
+    res.insert(QLatin1String("reservationFor"), resFor);
+    m_result[0] = res;
 }
 
 #include "extractorengine.moc"

@@ -24,7 +24,6 @@ function main(pass)
 //     }
 
     var res = JsonLd.newObject("FlightReservation");
-    res.ticketToken = pass.barcodes[0].message; // TODO this loses the barcode format and produces the wrong output format
     res.airplaneSeat = pass.field["seat"].value;
     res.reservationFor = JsonLd.newObject("Flight");
     res.reservationFor.departureGate = pass.field["gate"].value;
@@ -38,7 +37,6 @@ function main(pass)
     res.reservationFor.arrivalAirport.iataCode = pass.field["destination"].value;
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
     res.reservationNumber = pass.field["filekey"].value;
-    res.reservationFor.boardingTime = pass.relevantDate;
 
     res.reservationFor.flightNumber = pass.field["flight"].value.substring(3);
     res.reservationFor.airline = JsonLd.newObject("Airline");
