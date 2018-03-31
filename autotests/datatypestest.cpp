@@ -27,6 +27,9 @@
 #include <KItinerary/JsonLdDocument>
 
 #include <QDebug>
+#include <QQmlComponent>
+#include <QQmlContext>
+#include <QQmlEngine>
 #include <QObject>
 #include <QTest>
 
@@ -80,9 +83,31 @@ private Q_SLOTS:
         Ticket ticket;
         QCOMPARE(JsonLdDocument::readProperty(QVariant::fromValue(ticket.ticketedSeat()), "className").toString(), QLatin1String("Seat"));
     }
+
+    void testQmlCompatibility()
+    {
+        // one variant and one typed property
+        FlightReservation res;
+        Flight flight;
+        Airport airport;
+        airport.setName(QLatin1String("Berlin Tegel"));
+        flight.setDepartureAirport(airport);
+        res.setReservationFor(QVariant::fromValue(flight));
+
+        QQmlEngine engine;
+        engine.rootContext()->setContextProperty(QLatin1String("_res"), QVariant::fromValue(res));
+        QQmlComponent component(&engine);
+        component.setData("import QtQml 2.2\nQtObject { Component.onCompleted: console.log(_res.reservationFor.departureAirport.name); }", QUrl());
+        if (component.status() == QQmlComponent::Error) {
+            qWarning() << component.errorString();
+        }
+        QCOMPARE(component.status(), QQmlComponent::Ready);
+        auto obj = component.create();
+        QVERIFY(obj);
+    }
 };
 
-QTEST_APPLESS_MAIN(DatatypesTest)
+QTEST_MAIN(DatatypesTest)
 
 #include "datatypestest.moc"
 

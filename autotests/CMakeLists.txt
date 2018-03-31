@@ -1,4 +1,4 @@
-ecm_add_test(datatypestest.cpp LINK_LIBRARIES Qt5::Test KItinerary)
+ecm_add_test(datatypestest.cpp LINK_LIBRARIES Qt5::Test Qt5::Qml KItinerary)
 ecm_add_test(jsonlddocumenttest.cpp LINK_LIBRARIES Qt5::Test KItinerary)
 ecm_add_test(airportdbtest.cpp LINK_LIBRARIES Qt5::Test KItinerary)
 add_definitions(-DSOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
