@@ -22,6 +22,7 @@ set(kitinerary_lib_srcs
     extractorpreprocessor.cpp
     extractorpostprocessor.cpp
     extractorrepository.cpp
+    iatabcbpparser.cpp
     jsonlddocument.cpp
     structureddataextractor.cpp
 )

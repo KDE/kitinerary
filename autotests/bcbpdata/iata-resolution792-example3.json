@@ -1,0 +1,24 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "2F",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AF"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "CDG"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "GVA"
+            },
+            "flightNumber": "123"
+        },
+        "reservationNumber": "ABC123"
+    }
+]

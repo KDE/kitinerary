@@ -1,0 +1,46 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "2F",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AF"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "CDG"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "GVA"
+            },
+            "flightNumber": "123"
+        },
+        "reservationNumber": "ABC123"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "1A",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "NW"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "DTW"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "CDG"
+            },
+            "flightNumber": "49"
+        },
+        "reservationNumber": "DEF456"
+    }
+]

@@ -1,0 +1,24 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "3A",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AC"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "FRA"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "YUL"
+            },
+            "flightNumber": "834"
+        },
+        "reservationNumber": "AB12C3"
+    }
+]

@@ -1,0 +1,46 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "3A",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AC"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "FRA"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "YUL"
+            },
+            "flightNumber": "834"
+        },
+        "reservationNumber": "AB12C3"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "12C",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LH"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "GVA"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "FRA"
+            },
+            "flightNumber": "3664"
+        },
+        "reservationNumber": "DEF456"
+    }
+]
