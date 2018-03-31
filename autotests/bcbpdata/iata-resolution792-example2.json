@@ -19,6 +19,10 @@
             },
             "flightNumber": "834"
         },
-        "reservationNumber": "AB12C3"
+        "reservationNumber": "AB12C3",
+        "underName": {
+           "@type": "Person",
+           "name": "DESMARAIS/LUC"
+        }
     }
 ]

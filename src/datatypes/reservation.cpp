@@ -32,6 +32,7 @@ public:
     QString reservationNumber;
     QVariant reservationFor;
     QVariant reservedTicket;
+    QVariant underName;
     QUrl cancelReservationUrl;
     QUrl modifyReservationUrl;
     QString ticketToken;
@@ -42,6 +43,7 @@ KITINERARY_MAKE_ABSTRACT_CLASS(Reservation)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, reservationNumber, setReservationNumber)
 KITINERARY_MAKE_PROPERTY(Reservation, QVariant, reservationFor, setReservationFor)
 KITINERARY_MAKE_PROPERTY(Reservation, QVariant, reservedTicket, setReservedTicket)
+KITINERARY_MAKE_PROPERTY(Reservation, QVariant, underName, setUnderName)
 KITINERARY_MAKE_PROPERTY(Reservation, QUrl, cancelReservationUrl, setCancelReservationUrl)
 KITINERARY_MAKE_PROPERTY(Reservation, QUrl, modifyReservationUrl, setModifyReservationUrl)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, ticketToken, setTicketToken)

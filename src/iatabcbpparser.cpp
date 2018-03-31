@@ -18,9 +18,10 @@
 #include "iatabcbpparser.h"
 #include "logging.h"
 
-#include "datatypes/flight.h"
-#include "datatypes/reservation.h"
-#include "datatypes/place.h"
+#include <KItinerary/Flight>
+#include <KItinerary/Reservation>
+#include <KItinerary/Person>
+#include <KItinerary/Place>
 
 #include <QVariant>
 
@@ -94,7 +95,11 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message)
     result.reserve(legCount);
     FlightReservation res1;
 
-    // TODO: 20x passenger name
+    Person person;
+    const auto fullName = message.midRef(2, 20).trimmed();
+    // TODO split in family and given name
+    person.setName(fullName.toString());
+    res1.setUnderName(QVariant::fromValue(person));
 
     const auto varSize = parseRepeatedMandatorySection(message.midRef(UniqueMandatorySize), res1);
     int index = UniqueMandatorySize + RepeastedMandatorySize;

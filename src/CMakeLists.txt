@@ -10,6 +10,7 @@ set(kitinerary_lib_srcs
 
     datatypes/bustrip.cpp
     datatypes/flight.cpp
+    datatypes/person.cpp
     datatypes/place.cpp
     datatypes/reservation.cpp
     datatypes/ticket.cpp
@@ -78,6 +79,7 @@ ecm_generate_headers(KItinerary_Datatypes_HEADERS
         Datatypes
         Flight
         Reservation
+        Person
         Place
         Ticket
         TrainTrip

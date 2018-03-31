@@ -36,6 +36,7 @@ class KITINERARY_EXPORT Reservation
     KITINERARY_PROPERTY(QString, reservationNumber, setReservationNumber)
     KITINERARY_PROPERTY(QVariant, reservationFor, setReservationFor)
     KITINERARY_PROPERTY(QVariant, reservedTicket, setReservedTicket)
+    KITINERARY_PROPERTY(QVariant, underName, setUnderName)
 
     // Google extension
     KITINERARY_PROPERTY(QUrl, cancelReservationUrl, setCancelReservationUrl)

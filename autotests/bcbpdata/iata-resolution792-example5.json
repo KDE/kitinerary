@@ -19,7 +19,11 @@
             },
             "flightNumber": "123"
         },
-        "reservationNumber": "ABC123"
+        "reservationNumber": "ABC123",
+        "underName": {
+           "@type": "Person",
+           "name": "GRANDMAIRE/MELANIE"
+        }
     },
     {
         "@context": "http://schema.org",
@@ -41,6 +45,10 @@
             },
             "flightNumber": "49"
         },
-        "reservationNumber": "DEF456"
+        "reservationNumber": "DEF456",
+        "underName": {
+           "@type": "Person",
+           "name": "GRANDMAIRE/MELANIE"
+        }
     }
 ]
