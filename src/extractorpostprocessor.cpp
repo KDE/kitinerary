@@ -35,37 +35,68 @@
 #include <algorithm>
 
 using namespace KItinerary;
+namespace KItinerary {
+class ExtractorPostprocessorPrivate
+{
+public:
+    QVariant processProperty(QVariant obj, const char *name, QVariant (ExtractorPostprocessorPrivate::*processor)(QVariant) const) const;
+
+    QVariant processFlightReservation(QVariant res) const;
+    QVariant processFlight(QVariant flight) const;
+    QVariant processAirport(QVariant airport) const;
+    QVariant processAirline(QVariant airline) const;
+    void processFlightTime(QVariant &flight, const char *timePropName, const char *airportPropName) const;
+    QVariant processReservation(QVariant res) const;
+
+    bool filterReservation(const QVariant &res) const;
+    bool filterLodgingReservation(const QVariant &res) const;
+    bool filterFlight(const QVariant &flight) const;
+    bool filterAirport(const QVariant &airport) const;
+    bool filterTrainOrBusTrip(const QVariant &trip) const;
+    bool filterTrainOrBusStation(const QVariant &station) const;
+
+    QVector<QVariant> m_data;
+};
+}
+
+ExtractorPostprocessor::ExtractorPostprocessor()
+    : d(new ExtractorPostprocessorPrivate)
+{
+}
+
+ExtractorPostprocessor::ExtractorPostprocessor(ExtractorPostprocessor &&) = default;
+ExtractorPostprocessor::~ExtractorPostprocessor() = default;
 
 void ExtractorPostprocessor::process(const QVector<QVariant> &data)
 {
-    m_data.reserve(data.size());
-    for (auto d : data) {
-        if (d.userType() == qMetaTypeId<FlightReservation>()) {
-            d = processFlightReservation(d);
-        } else if (d.userType() == qMetaTypeId<TrainReservation>()) {
-            d = processReservation(d);
-        } else if (d.userType() == qMetaTypeId<LodgingReservation>()) {
-            d = processReservation(d);
-        } else if (d.userType() == qMetaTypeId<BusReservation>()) {
-            d = processReservation(d);
+    d->m_data.reserve(data.size());
+    for (auto elem : data) {
+        if (elem.userType() == qMetaTypeId<FlightReservation>()) {
+            elem = d->processFlightReservation(elem);
+        } else if (elem.userType() == qMetaTypeId<TrainReservation>()) {
+            elem = d->processReservation(elem);
+        } else if (elem.userType() == qMetaTypeId<LodgingReservation>()) {
+            elem = d->processReservation(elem);
+        } else if (elem.userType() == qMetaTypeId<BusReservation>()) {
+            elem = d->processReservation(elem);
         }
 
-        if (filterReservation(d)) {
-            m_data.push_back(d);
+        if (d->filterReservation(elem)) {
+            d->m_data.push_back(elem);
         }
     }
 
-    std::stable_sort(m_data.begin(), m_data.end(), [](const QVariant &lhs, const QVariant &rhs) {
+    std::stable_sort(d->m_data.begin(), d->m_data.end(), [](const QVariant &lhs, const QVariant &rhs) {
         return CalendarHandler::startDateTime(lhs) < CalendarHandler::startDateTime(rhs);
     });
 }
 
 QVector<QVariant> ExtractorPostprocessor::result() const
 {
-    return m_data;
+    return d->m_data;
 }
 
-QVariant ExtractorPostprocessor::processProperty(QVariant obj, const char *name, QVariant (ExtractorPostprocessor::*processor)(QVariant) const) const
+QVariant ExtractorPostprocessorPrivate::processProperty(QVariant obj, const char *name, QVariant (ExtractorPostprocessorPrivate::*processor)(QVariant) const) const
 {
     auto value = JsonLdDocument::readProperty(obj, name);
     value = (this->*processor)(value);
@@ -73,18 +104,18 @@ QVariant ExtractorPostprocessor::processProperty(QVariant obj, const char *name,
     return obj;
 }
 
-QVariant ExtractorPostprocessor::processFlightReservation(QVariant res) const
+QVariant ExtractorPostprocessorPrivate::processFlightReservation(QVariant res) const
 {
     res = processReservation(res);
-    res = processProperty(res, "reservationFor", &ExtractorPostprocessor::processFlight);
+    res = processProperty(res, "reservationFor", &ExtractorPostprocessorPrivate::processFlight);
     return res;
 }
 
-QVariant ExtractorPostprocessor::processFlight(QVariant flight) const
+QVariant ExtractorPostprocessorPrivate::processFlight(QVariant flight) const
 {
-    flight = processProperty(flight, "departureAirport", &ExtractorPostprocessor::processAirport);
-    flight = processProperty(flight, "arrivalAirport", &ExtractorPostprocessor::processAirport);
-    flight = processProperty(flight, "airline", &ExtractorPostprocessor::processAirline);
+    flight = processProperty(flight, "departureAirport", &ExtractorPostprocessorPrivate::processAirport);
+    flight = processProperty(flight, "arrivalAirport", &ExtractorPostprocessorPrivate::processAirport);
+    flight = processProperty(flight, "airline", &ExtractorPostprocessorPrivate::processAirline);
 
     processFlightTime(flight, "boardingTime", "departureAirport");
     processFlightTime(flight, "departureTime", "departureAirport");
@@ -93,7 +124,7 @@ QVariant ExtractorPostprocessor::processFlight(QVariant flight) const
     return flight;
 }
 
-QVariant ExtractorPostprocessor::processAirport(QVariant airport) const
+QVariant ExtractorPostprocessorPrivate::processAirport(QVariant airport) const
 {
     // clean up name
     const auto name = JsonLdDocument::readProperty(airport, "name").toString();
@@ -123,14 +154,14 @@ QVariant ExtractorPostprocessor::processAirport(QVariant airport) const
     return airport;
 }
 
-QVariant ExtractorPostprocessor::processAirline(QVariant airline) const
+QVariant ExtractorPostprocessorPrivate::processAirline(QVariant airline) const
 {
     const auto name = JsonLdDocument::readProperty(airline, "name").toString();
     JsonLdDocument::writeProperty(airline, "name", name.trimmed());
     return airline;
 }
 
-void ExtractorPostprocessor::processFlightTime(QVariant &flight, const char *timePropName, const char *airportPropName) const
+void ExtractorPostprocessorPrivate::processFlightTime(QVariant &flight, const char *timePropName, const char *airportPropName) const
 {
     const auto airport = JsonLdDocument::readProperty(flight, airportPropName);
     const auto iataCode = JsonLdDocument::readProperty(airport, "iataCode").toString();
@@ -162,7 +193,7 @@ void ExtractorPostprocessor::processFlightTime(QVariant &flight, const char *tim
     JsonLdDocument::writeProperty(flight, timePropName, dt);
 }
 
-QVariant ExtractorPostprocessor::processReservation(QVariant res) const
+QVariant ExtractorPostprocessorPrivate::processReservation(QVariant res) const
 {
     const auto viewUrl = JsonLdDocument::readProperty(res, "url").toUrl();
     const auto modUrl = JsonLdDocument::readProperty(res, "modifyReservationUrl").toUrl();
@@ -191,7 +222,7 @@ QVariant ExtractorPostprocessor::processReservation(QVariant res) const
     return res;
 }
 
-bool ExtractorPostprocessor::filterReservation(const QVariant &res) const
+bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
 {
     const auto resFor = JsonLdDocument::readProperty(res, "reservationFor");
     if (resFor.isNull()) {
@@ -212,14 +243,14 @@ bool ExtractorPostprocessor::filterReservation(const QVariant &res) const
     return true;
 }
 
-bool ExtractorPostprocessor::filterLodgingReservation(const QVariant &res) const
+bool ExtractorPostprocessorPrivate::filterLodgingReservation(const QVariant &res) const
 {
     const auto checkinDate = JsonLdDocument::readProperty(res, "checkinDate").toDateTime();
     const auto checkoutDate = JsonLdDocument::readProperty(res, "checkoutDate").toDateTime();
     return checkinDate.isValid() && checkoutDate.isValid();
 }
 
-bool ExtractorPostprocessor::filterFlight(const QVariant &flight) const
+bool ExtractorPostprocessorPrivate::filterFlight(const QVariant &flight) const
 {
     const auto depDt = JsonLdDocument::readProperty(flight, "departureTime").toDateTime();
     const auto arrDt = JsonLdDocument::readProperty(flight, "arrivalTime").toDateTime();
@@ -228,14 +259,14 @@ bool ExtractorPostprocessor::filterFlight(const QVariant &flight) const
            && depDt.isValid() && arrDt.isValid();
 }
 
-bool ExtractorPostprocessor::filterAirport(const QVariant &airport) const
+bool ExtractorPostprocessorPrivate::filterAirport(const QVariant &airport) const
 {
     const auto iataCode = JsonLdDocument::readProperty(airport, "iataCode").toString();
     const auto name = JsonLdDocument::readProperty(airport, "name").toString();
     return !iataCode.isEmpty() || !name.isEmpty();
 }
 
-bool ExtractorPostprocessor::filterTrainOrBusTrip(const QVariant &trip) const
+bool ExtractorPostprocessorPrivate::filterTrainOrBusTrip(const QVariant &trip) const
 {
     const auto depDt = JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
     const auto arrDt = JsonLdDocument::readProperty(trip, "arrivalTime").toDateTime();
@@ -244,7 +275,7 @@ bool ExtractorPostprocessor::filterTrainOrBusTrip(const QVariant &trip) const
            && depDt.isValid() && arrDt.isValid();
 }
 
-bool ExtractorPostprocessor::filterTrainOrBusStation(const QVariant &station) const
+bool ExtractorPostprocessorPrivate::filterTrainOrBusStation(const QVariant &station) const
 {
     return !JsonLdDocument::readProperty(station, "name").toString().isEmpty();
 }

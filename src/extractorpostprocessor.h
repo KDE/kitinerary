@@ -25,33 +25,26 @@
 #include <QVariant>
 #include <QVector>
 
+#include <memory>
+
 namespace KItinerary {
+
+class ExtractorPostprocessorPrivate;
 
 /** Post-process extracted data to filter out garbage and augment data from other sources. */
 class KITINERARY_EXPORT ExtractorPostprocessor
 {
 public:
+    ExtractorPostprocessor();
+    ExtractorPostprocessor(const ExtractorPostprocessor&) = delete;
+    ExtractorPostprocessor(ExtractorPostprocessor&&);
+    ~ExtractorPostprocessor();
+
     void process(const QVector<QVariant> &data);
     QVector<QVariant> result() const;
 
 private:
-    QVariant processProperty(QVariant obj, const char *name, QVariant (ExtractorPostprocessor::*processor)(QVariant) const) const;
-
-    QVariant processFlightReservation(QVariant res) const;
-    QVariant processFlight(QVariant flight) const;
-    QVariant processAirport(QVariant airport) const;
-    QVariant processAirline(QVariant airline) const;
-    void processFlightTime(QVariant &flight, const char *timePropName, const char *airportPropName) const;
-    QVariant processReservation(QVariant res) const;
-
-    bool filterReservation(const QVariant &res) const;
-    bool filterLodgingReservation(const QVariant &res) const;
-    bool filterFlight(const QVariant &flight) const;
-    bool filterAirport(const QVariant &airport) const;
-    bool filterTrainOrBusTrip(const QVariant &trip) const;
-    bool filterTrainOrBusStation(const QVariant &station) const;
-
-    QVector<QVariant> m_data;
+    std::unique_ptr<ExtractorPostprocessorPrivate> d;
 };
 
 }
