@@ -20,21 +20,15 @@
 function main(pass)
 {
     var res = JsonLd.newObject("FlightReservation");
-    res.airplaneSeat = pass.field["seat"].value;
     res.reservationFor = JsonLd.newObject("Flight");
     res.reservationFor.departureGate = pass.field["gate"].value;
     res.reservationFor.departureAirport = JsonLd.newObject("Airport");
-    res.reservationFor.departureAirport.iataCode = pass.field["origin"].value;
     res.reservationFor.departureAirport.name = pass.field["origin"].label;
     res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
-    res.reservationFor.arrivalAirport.iataCode = pass.field["destination"].value;
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
-    res.reservationNumber = pass.field["recordlocator"].value;
     res.reservationFor.boardingTime = JsonLd.toDateTime(pass.field["departureDate"].value + ' ' + pass.field["boarding"].value, "M/d/yyyy hh:mm", "en");
 
-    res.reservationFor.flightNumber = pass.field["flightNumber"].value.substring(3);
     res.reservationFor.airline = JsonLd.newObject("Airline");
-    res.reservationFor.airline.iataCode = pass.field["flightNumber"].value.substring(0, 2);
     res.reservationFor.airline.name = pass.field["operatingcarrier"].value;
 
     return res;

@@ -24,20 +24,12 @@ function main(pass)
 //     }
 
     var res = JsonLd.newObject("FlightReservation");
-    res.airplaneSeat = pass.field["seat"].value;
     res.reservationFor = JsonLd.newObject("Flight");
     res.reservationFor.departureGate = pass.field["gate"].value;
     res.reservationFor.departureAirport = JsonLd.newObject("Airport");
-    res.reservationFor.departureAirport.iataCode = pass.field["origin"].value;
     res.reservationFor.departureAirport.name = pass.field["origin"].label;
     res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
-    res.reservationFor.arrivalAirport.iataCode = pass.field["destination"].value;
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
-    res.reservationNumber = pass.field["filekey"].value;
-
-    res.reservationFor.flightNumber = pass.field["flight"].value.substring(3);
-    res.reservationFor.airline = JsonLd.newObject("Airline");
-    res.reservationFor.airline.iataCode = pass.field["flight"].value.substring(0, 2);
 
     return res;
 }
