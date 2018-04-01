@@ -1,0 +1,48 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "19F",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 48.35390090942383,
+                    "longitude": 11.786100387573242
+                },
+                "iataCode": "MUC"
+            },
+            "boardingTime": {
+                "@type": "QDateTime",
+                "@value": "2017-10-24T15:55:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.559688568115234,
+                    "longitude": 13.287711143493652
+                },
+                "iataCode": "TXL"
+            },
+            "flightNumber": "6203"
+        },
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 TXLMUCAB 6203 297Y019F0060 33C>5080      B2A                                         N00  "
+        },
+        "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 TXLMUCAB 6203 297Y019F0060 33C>5080      B2A                                         N00  ",
+        "underName": {
+            "@type": "Person",
+            "name": "KRAUSE/VOLKER"
+        }
+    }
+]

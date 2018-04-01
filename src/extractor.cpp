@@ -62,7 +62,9 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
     }
 
     const auto scriptName = obj.value(QLatin1String("script")).toString();
-    d->m_scriptName = baseDir + QLatin1Char('/') + scriptName;
+    if (!scriptName.isEmpty()) {
+        d->m_scriptName = baseDir + QLatin1Char('/') + scriptName;
+    }
 
     if (!d->m_scriptName.isEmpty() && !QFile::exists(d->m_scriptName)) {
         qCWarning(Log) << "Script file not found:" << d->m_scriptName;

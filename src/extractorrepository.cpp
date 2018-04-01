@@ -40,6 +40,7 @@ public:
     void loadExtractors();
 
     std::vector<Extractor> m_extractors;
+    Extractor m_genericPkPassExtractor;
 };
 }
 
@@ -108,6 +109,10 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::P
         }
     }
 
+    if (v.empty()) {
+        v.push_back(&d->m_genericPkPassExtractor);
+    }
+
     return v;
 }
 
@@ -153,4 +158,8 @@ void ExtractorRepositoryPrivate::loadExtractors()
             }
         }
     }
+
+    QJsonObject dummy;
+    dummy.insert(QLatin1String("type"), QLatin1String("pkpass"));
+    m_genericPkPassExtractor.load(dummy, QString());
 }

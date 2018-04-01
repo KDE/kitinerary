@@ -28,6 +28,7 @@
 #include <QDateTime>
 #include <QFile>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QLocale>
 #include <QJSEngine>
@@ -163,6 +164,9 @@ QJsonArray ExtractorEngine::extract()
 void ExtractorEnginePrivate::executeScript()
 {
     Q_ASSERT(m_extractor);
+    if (m_extractor->scriptFileName().isEmpty()) {
+        return;
+    }
 
     QFile f(m_extractor->scriptFileName());
     if (!f.open(QFile::ReadOnly)) {
@@ -216,8 +220,24 @@ void ExtractorEnginePrivate::executeScript()
 
 void ExtractorEnginePrivate::extractPass()
 {
-    if (m_result.size() != 1) { // a pkpass file contains exactly one boarding pass
+    if (m_result.size() > 1) { // a pkpass file contains exactly one boarding pass
         return;
+    }
+
+    if (m_result.isEmpty()) { // no script run, so we need to create the top-level element ourselves
+        QJsonObject res;
+        QJsonObject resFor;
+        switch (m_pass->transitType()) {
+            case KPkPass::BoardingPass::Air:
+                res.insert(QLatin1String("@type"), QLatin1String("FlightReservation"));
+                resFor.insert(QLatin1String("@type"), QLatin1String("Flight"));
+                break;
+            // TODO expand once we have test files for train tickets
+            default:
+                return;
+        }
+        res.insert(QLatin1String("reservationFor"), resFor);
+        m_result.push_back(res);
     }
 
     // extract structured data from a pkpass, if the extractor script hasn't done so already
@@ -231,6 +251,9 @@ void ExtractorEnginePrivate::extractPass()
 
     // location is the best guess for the departure airport geo coordinates
     auto depAirport = resFor.value(QLatin1String("departureAirport")).toObject();
+    if (depAirport.isEmpty()) {
+        depAirport.insert(QLatin1String("@type"), QLatin1String("Airport"));
+    }
     auto depGeo = depAirport.value(QLatin1String("geo")).toObject();
     if (m_pass->locations().size() == 1 && depGeo.isEmpty()) {
         const auto loc = m_pass->locations().at(0);

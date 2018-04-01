@@ -1,0 +1,48 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "14E",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "BT"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 56.92359924316406,
+                    "longitude": 23.971099853515625
+                },
+                "iataCode": "RIX"
+            },
+            "boardingTime": {
+                "@type": "QDateTime",
+                "@value": "2017-11-05T07:25:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL"
+            },
+            "flightNumber": "212"
+        },
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 TXLRIXBT 0212 309Y014E0063 100"
+        },
+        "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 TXLRIXBT 0212 309Y014E0063 100",
+        "underName": {
+            "@type": "Person",
+            "name": "KRAUSE/VOLKER"
+        }
+    }
+]

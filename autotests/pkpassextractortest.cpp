@@ -20,6 +20,7 @@
 #include <KItinerary/ExtractorPostprocessor>
 #include <KItinerary/ExtractorRepository>
 #include <KItinerary/JsonLdDocument>
+#include <KItinerary/Place>
 
 #include <KPkPass/BoardingPass>
 
@@ -42,6 +43,7 @@ private Q_SLOTS:
         // use some exotic locale to ensure the date/time parsing doesn't just work by luck
         QLocale::setDefault(QLocale(QStringLiteral("fr_FR")));
         qputenv("TZ", "EST");
+        qRegisterMetaType<Airport>();
     }
 
     void testExtractText_data()
