@@ -1,0 +1,48 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "1A",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AC"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.03329849243164,
+                    "longitude": 8.570560455322266
+                },
+                "iataCode": "FRA"
+            },
+            "boardingTime": {
+                "@type": "QDateTime",
+                "@value": "2027-03-05T06:30:00-05:00",
+                "timezone": "America/Toronto"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 45.47060012817383,
+                    "longitude": -73.74079895019531
+                },
+                "iataCode": "YUL"
+            },
+            "flightNumber": "834"
+        },
+        "reservationNumber": "ABC123",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1DESMARAIS/LUC       EABC123 YULFRAAC 0834 326J001A0025 100"
+        },
+        "underName": {
+           "@type": "Person",
+           "name": "DESMARAIS/LUC"
+        },
+        "ticketToken": "aztecCode:M1DESMARAIS/LUC       EABC123 YULFRAAC 0834 326J001A0025 100"
+    }
+]

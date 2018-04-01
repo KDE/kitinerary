@@ -40,6 +40,12 @@ KITINERARY_EXPORT QVariant readProperty(const QVariant &obj, const char *name);
 KITINERARY_EXPORT void writeProperty(QVariant &obj, const char *name, const QVariant &value);
 /** Removes property @p name on object @p obj. */
 KITINERARY_EXPORT void removeProperty(QVariant &obj, const char *name);
+
+/** Apply all properties of @p rhs on to @p lhs.
+ *  Use this to merge two top-level objects of the same type, with
+ *  @p rhs containing newer information.
+ */
+KITINERARY_EXPORT QVariant apply(const QVariant &lhs, const QVariant &rhs);
 }
 
 }

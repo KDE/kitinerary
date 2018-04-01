@@ -270,3 +270,35 @@ void JsonLdDocument::removeProperty(QVariant &obj, const char *name)
 {
     writeProperty(obj, name, QVariant());
 }
+
+QVariant JsonLdDocument::apply(const QVariant& lhs, const QVariant& rhs)
+{
+    if (rhs.isNull()) {
+        return lhs;
+    }
+    if (lhs.isNull()) {
+        return rhs;
+    }
+    if (lhs.userType() != rhs.userType()) {
+        qCWarning(Log) << "type mismatch during merging:" << lhs << rhs;
+        return {};
+    }
+
+    auto res = lhs;
+    const auto mo = QMetaType(res.userType()).metaObject();
+    for (int i = 0; i < mo->propertyCount(); ++i) {
+        const auto prop = mo->property(i);
+        if (!prop.isStored()) {
+            continue;
+        }
+        auto pv = prop.readOnGadget(rhs.constData());
+        if (QMetaType(pv.userType()).metaObject()) {
+            pv = apply(prop.readOnGadget(lhs.constData()), pv);
+        }
+        if (!pv.isNull()) {
+            prop.writeOnGadget(res.data(), pv);
+        }
+    }
+
+    return res;
+}

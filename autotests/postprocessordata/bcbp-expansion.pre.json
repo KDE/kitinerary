@@ -1,0 +1,9 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "reservationFor": {
+        "@type": "Flight",
+        "boardingTime": "2027-03-05T06:30:00"
+    },
+    "ticketToken": "aztecCode:M1DESMARAIS/LUC       EABC123 YULFRAAC 0834 326J001A0025 100"
+}]

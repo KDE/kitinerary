@@ -21,6 +21,7 @@
 #include "calendarhandler.h"
 #include "jsonlddocument.h"
 #include "airportdb/airportdb.h"
+#include "iatabcbpparser.h"
 
 #include <datatypes/bustrip.h>
 #include <datatypes/flight.h>
@@ -106,6 +107,20 @@ QVariant ExtractorPostprocessorPrivate::processProperty(QVariant obj, const char
 
 QVariant ExtractorPostprocessorPrivate::processFlightReservation(QVariant res) const
 {
+    // expand ticketToken for IATA BCBP data
+    auto bcbp = JsonLdDocument::readProperty(res, "ticketToken").toString();
+    if (!bcbp.isEmpty()) {
+        if (bcbp.startsWith(QLatin1String("aztecCode:"))) {
+            bcbp = bcbp.mid(10);
+        } else if (bcbp.startsWith(QLatin1String("qrCode:"))) {
+            bcbp = bcbp.mid(7);
+        }
+        const auto bcbpData = IataBcbpParser::parse(bcbp);
+        if (bcbpData.size() == 1) {
+            res = JsonLdDocument::apply(bcbpData.at(0), res);
+        }
+    }
+
     res = processReservation(res);
     res = processProperty(res, "reservationFor", &ExtractorPostprocessorPrivate::processFlight);
     return res;
@@ -254,6 +269,7 @@ bool ExtractorPostprocessorPrivate::filterFlight(const Flight &flight) const
 {
     const auto arrivalDepatureValid = flight.departureTime().isValid() && flight.arrivalTime().isValid();
     const auto boardingValid = flight.boardingTime().isValid();
+    qDebug() << arrivalDepatureValid << boardingValid << filterAirport(flight.departureAirport());
     return filterAirport(flight.departureAirport())
            && filterAirport(flight.arrivalAirport())
            && (arrivalDepatureValid || boardingValid);

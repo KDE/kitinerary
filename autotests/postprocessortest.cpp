@@ -20,6 +20,8 @@
 #include "extractorpostprocessor.h"
 #include "jsonlddocument.h"
 
+#include <KItinerary/Place>
+
 #include <QDebug>
 #include <QDir>
 #include <QFile>
@@ -34,6 +36,11 @@ class PostprocessorTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase()
+    {
+        qRegisterMetaType<Airport>();
+    }
+
     void testPostProc_data()
     {
         QTest::addColumn<QString>("preFile");
