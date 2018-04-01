@@ -15,10 +15,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "extractor.h"
-#include "extractorengine.h"
-#include "extractorrepository.h"
-#include "jsonlddocument.h"
+#include <KItinerary/Extractor>
+#include <KItinerary/ExtractorEngine>
+#include <KItinerary/ExtractorPostprocessor>
+#include <KItinerary/ExtractorRepository>
+#include <KItinerary/JsonLdDocument>
 
 #include <KPkPass/BoardingPass>
 
@@ -76,18 +77,24 @@ private Q_SLOTS:
         engine.setSenderDate(QDateTime(QDate(2017, 12, 29), QTime(18, 46, 2)));
         engine.setExtractor(extractors.at(0));
         engine.setPass(pass);
-        const auto result = JsonLdDocument::toJson(JsonLdDocument::fromJson(engine.extract()));
+        auto result = JsonLdDocument::fromJson(engine.extract());
         QCOMPARE(result.size(), 1);
+
+        ExtractorPostprocessor postproc;
+        postproc.process(result);
+        result = postproc.result();
+        QCOMPARE(result.size(), 1);
+        const auto resJson = JsonLdDocument::toJson(result);
 
         QFile ref(refFile);
         QVERIFY(ref.open(QFile::ReadOnly));
         const auto doc = QJsonDocument::fromJson(ref.readAll());
         QVERIFY(doc.isArray());
 
-        if (result != doc.array()) {
-            qDebug().noquote() << QJsonDocument(result).toJson();
+        if (resJson != doc.array()) {
+            qDebug().noquote() << QJsonDocument(resJson).toJson();
         }
-        QCOMPARE(result, doc.array());
+        QCOMPARE(resJson, doc.array());
     }
 };
 

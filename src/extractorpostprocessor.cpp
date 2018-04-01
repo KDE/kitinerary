@@ -269,7 +269,6 @@ bool ExtractorPostprocessorPrivate::filterFlight(const Flight &flight) const
 {
     const auto arrivalDepatureValid = flight.departureTime().isValid() && flight.arrivalTime().isValid();
     const auto boardingValid = flight.boardingTime().isValid();
-    qDebug() << arrivalDepatureValid << boardingValid << filterAirport(flight.departureAirport());
     return filterAirport(flight.departureAirport())
            && filterAirport(flight.arrivalAirport())
            && (arrivalDepatureValid || boardingValid);
