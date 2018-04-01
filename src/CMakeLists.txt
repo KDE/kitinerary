@@ -53,7 +53,7 @@ if (HAVE_POPPLER)
     target_link_libraries(KItinerary PRIVATE Poppler::Qt5)
 endif()
 
-ecm_generate_headers(KItinerary_HEADERS
+ecm_generate_headers(KItinerary_FORWARDING_HEADERS
     HEADER_NAMES
         CalendarHandler
         Extractor
@@ -66,14 +66,14 @@ ecm_generate_headers(KItinerary_HEADERS
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS
 )
-ecm_generate_headers(KItinerary_AirportDb_HEADERS
+ecm_generate_headers(KItinerary_AirportDb_FORWARDING_HEADERS
     HEADER_NAMES
         AirportDb
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_AirportDb_HEADERS
     RELATIVE airportdb
 )
-ecm_generate_headers(KItinerary_Datatypes_HEADERS
+ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
     HEADER_NAMES
         BusTrip
         Datatypes
@@ -90,9 +90,15 @@ ecm_generate_headers(KItinerary_Datatypes_HEADERS
 
 install(TARGETS KItinerary EXPORT KItineraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
+    ${KItinerary_FORWARDING_HEADERS}
+    ${KItinerary_AirportDb_FORWARDING_HEADERS}
+    ${KItinerary_Datatypes_FORWARDING_HEADERS}
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KItinerary
+)
+install(FILES
     ${KItinerary_HEADERS}
     ${KItinerary_AirportDb_HEADERS}
     ${KItinerary_Datatypes_HEADERS}
     ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_export.h
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KItinerary
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/kitinerary
 )
