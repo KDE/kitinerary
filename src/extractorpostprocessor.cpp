@@ -50,8 +50,8 @@ public:
 
     bool filterReservation(const QVariant &res) const;
     bool filterLodgingReservation(const QVariant &res) const;
-    bool filterFlight(const QVariant &flight) const;
-    bool filterAirport(const QVariant &airport) const;
+    bool filterFlight(const Flight &flight) const;
+    bool filterAirport(const Airport &airport) const;
     bool filterTrainOrBusTrip(const QVariant &trip) const;
     bool filterTrainOrBusStation(const QVariant &station) const;
 
@@ -230,7 +230,7 @@ bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
     }
 
     if (resFor.userType() == qMetaTypeId<Flight>()) {
-        return filterFlight(resFor);
+        return filterFlight(resFor.value<Flight>());
     } else if (resFor.userType() == qMetaTypeId<TrainTrip>()) {
         return filterTrainOrBusTrip(resFor);
     } else if (resFor.userType() == qMetaTypeId<BusTrip>()) {
@@ -250,20 +250,18 @@ bool ExtractorPostprocessorPrivate::filterLodgingReservation(const QVariant &res
     return checkinDate.isValid() && checkoutDate.isValid();
 }
 
-bool ExtractorPostprocessorPrivate::filterFlight(const QVariant &flight) const
+bool ExtractorPostprocessorPrivate::filterFlight(const Flight &flight) const
 {
-    const auto depDt = JsonLdDocument::readProperty(flight, "departureTime").toDateTime();
-    const auto arrDt = JsonLdDocument::readProperty(flight, "arrivalTime").toDateTime();
-    return filterAirport(JsonLdDocument::readProperty(flight, "departureAirport"))
-           && filterAirport(JsonLdDocument::readProperty(flight, "arrivalAirport"))
-           && depDt.isValid() && arrDt.isValid();
+    const auto arrivalDepatureValid = flight.departureTime().isValid() && flight.arrivalTime().isValid();
+    const auto boardingValid = flight.boardingTime().isValid();
+    return filterAirport(flight.departureAirport())
+           && filterAirport(flight.arrivalAirport())
+           && (arrivalDepatureValid || boardingValid);
 }
 
-bool ExtractorPostprocessorPrivate::filterAirport(const QVariant &airport) const
+bool ExtractorPostprocessorPrivate::filterAirport(const Airport &airport) const
 {
-    const auto iataCode = JsonLdDocument::readProperty(airport, "iataCode").toString();
-    const auto name = JsonLdDocument::readProperty(airport, "name").toString();
-    return !iataCode.isEmpty() || !name.isEmpty();
+    return !airport.iataCode().isEmpty() || !airport.name().isEmpty();
 }
 
 bool ExtractorPostprocessorPrivate::filterTrainOrBusTrip(const QVariant &trip) const
