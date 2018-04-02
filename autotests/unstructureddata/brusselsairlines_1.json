@@ -18,6 +18,7 @@
                 "@type": "Airport",
                 "name": "Berlin, Tegel Airport, DE"
             },
+            "departureDay": "2017-02-03",
             "departureTime": "2017-02-03T18:25:00",
             "flightNumber": "2588"
         },
@@ -42,6 +43,7 @@
                 "@type": "Airport",
                 "name": "Brussels Airport, BE"
             },
+            "departureDay": "2017-02-05",
             "departureTime": "2017-02-05T20:40:00",
             "flightNumber": "2591"
         },

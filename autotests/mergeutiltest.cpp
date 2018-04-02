@@ -60,6 +60,7 @@ private Q_SLOTS:
         Flight f1;
         f1.setAirline(airline1);
         f1.setFlightNumber(QLatin1String("8457"));
+        f1.setDepartureTime(QDateTime(QDate(2018, 4, 2), QTime(17, 51, 0)));
 
         Flight f2;
         QVERIFY(!MergeUtil::isSameFlight(f1, f2));
@@ -73,6 +74,9 @@ private Q_SLOTS:
         QVERIFY(!MergeUtil::isSameFlight(f1, f2));
         airline2.setIataCode(QLatin1String("KL"));
         f2.setAirline(airline2);
+        QVERIFY(!MergeUtil::isSameFlight(f1, f2));
+
+        f2.setDepartureDay(QDate(2018, 4, 2));
         QVERIFY(MergeUtil::isSameFlight(f1, f2));
     }
 

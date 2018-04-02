@@ -46,6 +46,7 @@ private Q_SLOTS:
         Flight f;
         f.setFlightNumber(QLatin1String("1234"));
         f.setDepartureTime(QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+        f.setDepartureDay(QDate(2018, 3, 18));
         f.setArrivalTime(QDateTime(QDate(2018, 3, 18), QTime(19, 44, 0), Qt::UTC));
         Airport ap;
         ap.setName(QLatin1String("Berlin Tegel"));
@@ -65,6 +66,7 @@ private Q_SLOTS:
         QCOMPARE(dtObj.value(QLatin1String("@value")).toString(), QLatin1String("2018-03-18T18:44:00+01:00"));
         QCOMPARE(dtObj.value(QLatin1String("@type")).toString(), QLatin1String("QDateTime"));
         QCOMPARE(dtObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
+        QCOMPARE(obj.value(QLatin1String("departureDay")).toString(), QLatin1String("2018-03-18"));
 
         auto obj2 = obj.value(QLatin1String("departureAirport")).toObject();
         QCOMPARE(obj2.value(QLatin1String("@type")).toString(), QLatin1String("Airport"));
@@ -86,6 +88,7 @@ private Q_SLOTS:
                 "\"name\": \"Berlin Tegel\""
             "},"
             "\"departureTime\": \"2018-03-18T18:44:00+01:00\","
+            "\"departureDay\": \"2018-03-17\","
             "\"arrivalTime\": { \"@type\": \"QDateTime\", \"@value\": \"2018-03-18T19:44:00+01:00\", \"timezone\": \"Europe/Berlin\" },"
             "\"departureGate\": \"\","
             "\"flightNumber\": \"1234\""
@@ -102,6 +105,7 @@ private Q_SLOTS:
         QCOMPARE(flight.departureAirport().iataCode(), QLatin1String("TXL"));
         QCOMPARE(flight.departureAirport().name(), QLatin1String("Berlin Tegel"));
         QCOMPARE(flight.departureTime(), QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+        QCOMPARE(flight.departureDay(), QDate(2018, 3, 17));
         QCOMPARE(flight.arrivalTime(), QDateTime(QDate(2018, 3, 18), QTime(19, 44, 0), QTimeZone("Europe/Berlin")));
         QCOMPARE(flight.arrivalTime().timeSpec(), Qt::TimeZone);
         QCOMPARE(flight.arrivalTime().timeZone(), QTimeZone("Europe/Berlin"));

@@ -17,6 +17,7 @@
                 "@type": "Airport",
                 "iataCode": "YUL"
             },
+            "departureDay": "2018-11-22",
             "flightNumber": "834"
         },
         "reservationNumber": "ABC123",

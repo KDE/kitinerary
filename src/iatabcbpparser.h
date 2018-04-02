@@ -20,10 +20,12 @@
 
 #include "kitinerary_export.h"
 
+#include <QDate>
 #include <QVector>
 
 #include <memory>
 
+class QDate;
 class QString;
 class QVariant;
 
@@ -36,9 +38,11 @@ namespace KItinerary {
 namespace IataBcbpParser
 {
 /** Parses the bar coded boarding pass message @p message into
-    *  a list of FlightReservation instances.
-    */
-KITINERARY_EXPORT QVector<QVariant> parse(const QString &message);
+ *  a list of FlightReservation instances.
+ *  @param issueDate The date the boarding pass was issued (or a sufficiently close approximation).
+ *  This is necessary as by default the BCBP data only contains day and month of the flight, not the year.
+ */
+KITINERARY_EXPORT QVector<QVariant> parse(const QString &message, const QDate &issueDate = QDate());
 }
 
 }

@@ -17,6 +17,7 @@
                 "@type": "Airport",
                 "iataCode": "GVA"
             },
+            "departureDay": "2018-12-05",
             "flightNumber": "123"
         },
         "reservationNumber": "ABC123",

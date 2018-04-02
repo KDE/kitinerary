@@ -60,7 +60,7 @@ private Q_SLOTS:
         const auto refArray = QJsonDocument::fromJson(f.readAll()).array();
         QVERIFY(!refArray.isEmpty());
 
-        const auto res = IataBcbpParser::parse(message);
+        const auto res = IataBcbpParser::parse(message, QDate(2018, 4, 2));
         const auto resJson = JsonLdDocument::toJson(res);
 
         if (refArray != resJson) {

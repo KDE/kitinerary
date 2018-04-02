@@ -19,6 +19,7 @@
                 "iataCode": "TXL",
                 "name": "Berlin"
             },
+            "departureDay": "2017-09-10",
             "departureTime": "2017-09-10T06:45:00",
             "flightNumber": "963"
         },
@@ -44,6 +45,7 @@
                 "iataCode": "ZRH",
                 "name": "Zürich"
             },
+            "departureDay": "2017-09-15",
             "departureTime": "2017-09-15T20:50:00",
             "flightNumber": "962"
         },

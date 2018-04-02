@@ -20,6 +20,7 @@
                 "iataCode": "TXL",
                 "name": "Berlin"
             },
+            "departureDay": "2018-07-20",
             "departureTime": "2018-07-20T12:25:00",
             "flightNumber": "3677"
         },
@@ -46,6 +47,7 @@
                 "iataCode": "MAD",
                 "name": "Madrid"
             },
+            "departureDay": "2018-07-20",
             "departureTime": "2018-07-20T17:50:00",
             "flightNumber": "8588"
         },
@@ -72,6 +74,7 @@
                 "iataCode": "LEI",
                 "name": "Almeria"
             },
+            "departureDay": "2018-07-28",
             "departureTime": "2018-07-28T07:15:00",
             "flightNumber": "8603"
         },
@@ -97,6 +100,7 @@
                 "iataCode": "MAD",
                 "name": "Madrid"
             },
+            "departureDay": "2018-07-28",
             "departureTime": "2018-07-28T12:00:00",
             "flightNumber": "3186"
         },

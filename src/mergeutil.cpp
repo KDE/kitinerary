@@ -22,6 +22,7 @@
 #include <KItinerary/Person>
 #include <KItinerary/Reservation>
 
+#include <QDate>
 #include <QVariant>
 
 using namespace KItinerary;
@@ -64,8 +65,7 @@ bool MergeUtil::isSameFlight(const Flight& lhs, const Flight& rhs)
         return false;
     }
 
-    // TODO check departure day
-    return lhs.flightNumber() == rhs.flightNumber() && lhs.airline().iataCode() == rhs.airline().iataCode();
+    return lhs.flightNumber() == rhs.flightNumber() && lhs.airline().iataCode() == rhs.airline().iataCode() && lhs.departureDay() == rhs.departureDay();
 }
 
 bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)

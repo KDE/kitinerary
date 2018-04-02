@@ -33,6 +33,7 @@
             "iataCode": "SEA",
             "name": "Seattle-Tacoma International Airport"
         },
+        "departureDay": "2027-03-04",
         "departureTime": {
             "@type": "QDateTime",
             "@value": "2027-03-04T20:15:00-08:00",

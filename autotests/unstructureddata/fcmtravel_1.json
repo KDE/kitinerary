@@ -20,6 +20,7 @@
                 "iataCode": "TXL",
                 "name": "Tegel"
             },
+            "departureDay": "2017-11-05",
             "departureTime": "2017-11-05T08:55:00",
             "flightNumber": "212"
         },
@@ -46,6 +47,7 @@
                 "iataCode": "RIX",
                 "name": "Riga"
             },
+            "departureDay": "2017-11-10",
             "departureTime": "2017-11-10T07:35:00",
             "flightNumber": "211"
         },

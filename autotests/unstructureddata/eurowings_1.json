@@ -18,6 +18,7 @@
                 "@type": "Airport",
                 "name": "Berlin-Tegel"
             },
+            "departureDay": "2017-06-15",
             "departureTime": "2017-06-15T12:55:00",
             "flightNumber": "8462"
         },
@@ -42,6 +43,7 @@
                 "@type": "Airport",
                 "name": "London Heathrow"
             },
+            "departureDay": "2017-06-18",
             "departureTime": "2017-06-18T19:10:00",
             "flightNumber": "8465"
         },

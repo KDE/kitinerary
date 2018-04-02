@@ -35,6 +35,7 @@
                 "iataCode": "LHR",
                 "name": "London Heathrow"
             },
+            "departureDay": "2017-06-18",
             "departureGate": " - ",
             "flightNumber": "8465"
         },

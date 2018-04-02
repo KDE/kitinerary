@@ -17,6 +17,7 @@
                 "@type": "Airport",
                 "iataCode": "GVA"
             },
+            "departureDay": "2018-12-05",
             "flightNumber": "123"
         },
         "reservationNumber": "ABC123",
@@ -43,6 +44,7 @@
                 "@type": "Airport",
                 "iataCode": "CDG"
             },
+            "departureDay": "2018-12-05",
             "flightNumber": "49"
         },
         "reservationNumber": "DEF456",

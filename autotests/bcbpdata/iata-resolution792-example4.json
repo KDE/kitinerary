@@ -17,6 +17,7 @@
                 "@type": "Airport",
                 "iataCode": "YUL"
             },
+            "departureDay": "2018-11-22",
             "flightNumber": "834"
         },
         "reservationNumber": "AB12C3",
@@ -43,6 +44,7 @@
                 "@type": "Airport",
                 "iataCode": "FRA"
             },
+            "departureDay": "2018-11-23",
             "flightNumber": "3664"
         },
         "reservationNumber": "DEF456",

@@ -34,6 +34,7 @@
                 "iataCode": "MUC",
                 "name": "MUNICH"
             },
+            "departureDay": "2018-03-06",
             "departureGate": "G20",
             "flightNumber": "2724"
         },

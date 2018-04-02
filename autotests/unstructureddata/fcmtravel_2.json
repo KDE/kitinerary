@@ -20,6 +20,7 @@
                 "iataCode": "TXL",
                 "name": "Tegel"
             },
+            "departureDay": "2016-10-17",
             "departureTime": "2016-10-17T10:50:00",
             "flightNumber": "6439"
         },
@@ -46,6 +47,7 @@
                 "iataCode": "DUS",
                 "name": "International Airport"
             },
+            "departureDay": "2016-10-17",
             "departureTime": "2016-10-17T13:20:00",
             "flightNumber": "7392"
         },
@@ -72,6 +74,7 @@
                 "iataCode": "PDX",
                 "name": "Portland International"
             },
+            "departureDay": "2016-10-22",
             "departureTime": "2016-10-22T08:00:00",
             "flightNumber": "086"
         },
@@ -98,6 +101,7 @@
                 "iataCode": "ORD",
                 "name": "O Hare International"
             },
+            "departureDay": "2016-10-22",
             "departureTime": "2016-10-22T15:25:00",
             "flightNumber": "7421"
         },

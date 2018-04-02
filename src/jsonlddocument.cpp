@@ -53,6 +53,8 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
     switch (prop.type()) {
     case QVariant::String:
         return v.toString();
+    case QVariant::Date:
+        return QDate::fromString(v.toString(), Qt::ISODate);
     case QVariant::DateTime:
     {
         QDateTime dt;
@@ -172,6 +174,8 @@ static QJsonValue toJson(const QVariant &v)
             return v.toDouble();
         case QVariant::Int:
             return v.toInt();
+        case QVariant::Date:
+            return v.toDate().toString(Qt::ISODate);
         case QVariant::DateTime:
         {
             const auto dt = v.toDateTime();

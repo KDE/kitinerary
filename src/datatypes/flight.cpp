@@ -48,6 +48,7 @@ public:
     QDateTime arrivalTime;
     QDateTime boardingTime;
     QString departureGate;
+    QDate departureDay;
 };
 
 KITINERARY_MAKE_SIMPLE_CLASS(Flight)
@@ -59,6 +60,26 @@ KITINERARY_MAKE_PROPERTY(Flight, Airport, arrivalAirport, setArrivalAirport)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, arrivalTime, setArrivalTime)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, boardingTime, setBoardingTime)
 KITINERARY_MAKE_PROPERTY(Flight, QString, departureGate, setDepartureGate)
+
+QDate Flight::departureDay() const
+{
+    if (d->departureDay.isValid()) {
+        return d->departureDay;
+    }
+    if (d->departureTime.isValid()) {
+        return d->departureTime.date();
+    }
+    if (d->boardingTime.isValid()) {
+        return d->boardingTime.date();
+    }
+    return {};
+}
+
+void Flight::setDepartureDay(const QDate &value)
+{
+    d.detach();
+    d->departureDay = value;
+}
 
 QString Flight::departureTimeLocalized() const
 {
