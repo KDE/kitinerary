@@ -27,6 +27,7 @@ set(kitinerary_lib_srcs
     extractorrepository.cpp
     iatabcbpparser.cpp
     jsonlddocument.cpp
+    mergeutil.cpp
     structureddataextractor.cpp
 )
 qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
@@ -65,6 +66,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         ExtractorPostprocessor
         ExtractorRepository
         JsonLdDocument
+        MergeUtil
         StructuredDataExtractor
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS
