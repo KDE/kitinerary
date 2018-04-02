@@ -14,7 +14,6 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(GenerateExportHeader)
 
-set(CMAKE_AUTOMOC ON)
 ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
     VERSION_HEADER kitinerary_version.h
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfigVersion.cmake"
