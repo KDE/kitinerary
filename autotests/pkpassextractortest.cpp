@@ -101,6 +101,6 @@ private Q_SLOTS:
     }
 };
 
-QTEST_MAIN(PkPassExtractorTest)
+QTEST_GUILESS_MAIN(PkPassExtractorTest)
 
 #include "pkpassextractortest.moc"
