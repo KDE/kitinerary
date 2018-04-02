@@ -47,7 +47,7 @@ target_link_libraries(KItinerary
     PRIVATE
         Qt5::Qml
         KF5::I18n
-        KPkPass
+        KPim::PkPass
 )
 if (HAVE_POPPLER)
     target_link_libraries(KItinerary PRIVATE Poppler::Qt5)
