@@ -25,5 +25,6 @@
         <file>sncf.js</file>
         <file>swiss.json</file>
         <file>swiss.js</file>
+        <file>swiss-pkpass.js</file>
     </qresource>
 </RCC>
