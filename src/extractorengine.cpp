@@ -283,6 +283,13 @@ void ExtractorEnginePrivate::extractPass()
     }
 
     res.insert(QLatin1String("reservationFor"), resFor);
+
+    // associate the pass with the result, so we can find the pass again for display
+    if (!m_pass->passTypeIdentifier().isEmpty() && !m_pass->serialNumber().isEmpty()) {
+        res.insert(QLatin1String("pkpassPassTypeIdentifier"), m_pass->passTypeIdentifier());
+        res.insert(QLatin1String("pkpassSerialNumber"), m_pass->serialNumber());
+    }
+
     m_result[0] = res;
 }
 

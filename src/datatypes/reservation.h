@@ -43,6 +43,18 @@ class KITINERARY_EXPORT Reservation
     KITINERARY_PROPERTY(QUrl, modifyReservationUrl, setModifyReservationUrl)
     KITINERARY_PROPERTY(QString, ticketToken, setTicketToken)
     KITINERARY_PROPERTY(QUrl, url, setUrl)
+
+    // KDE extensions
+    /** @property pkpassPassTypeIdentifier pass type identifier of an associated
+     *  Apple Wallet boarding pass.
+     *  @see KPkPass::Pass::passTypeIdentifier
+     */
+    KITINERARY_PROPERTY(QString, pkpassPassTypeIdentifier, setPkpassPassTypeIdentifier)
+    /** @property pkpassSerialNumber serial number of an associated Apple Wallet
+     *  boarding pass.
+     *  @see KPkPass::Pass::serialNumber
+     */
+    KITINERARY_PROPERTY(QString, pkpassSerialNumber, setPkpassSerialNumber)
 protected:
     QExplicitlySharedDataPointer<ReservationPrivate> d;
 };

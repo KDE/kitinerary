@@ -37,6 +37,8 @@ public:
     QUrl modifyReservationUrl;
     QString ticketToken;
     QUrl url;
+    QString pkpassPassTypeIdentifier;
+    QString pkpassSerialNumber;
 };
 
 KITINERARY_MAKE_ABSTRACT_CLASS(Reservation)
@@ -48,6 +50,8 @@ KITINERARY_MAKE_PROPERTY(Reservation, QUrl, cancelReservationUrl, setCancelReser
 KITINERARY_MAKE_PROPERTY(Reservation, QUrl, modifyReservationUrl, setModifyReservationUrl)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, ticketToken, setTicketToken)
 KITINERARY_MAKE_PROPERTY(Reservation, QUrl, url, setUrl)
+KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassPassTypeIdentifier, setPkpassPassTypeIdentifier)
+KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassSerialNumber, setPkpassSerialNumber)
 
 class LodgingReservationPrivate : public ReservationPrivate
 {
