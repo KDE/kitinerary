@@ -43,6 +43,13 @@ public:
     void process(const QVector<QVariant> &data);
     QVector<QVariant> result() const;
 
+    /** The date the reservation(s) processed here have been made, if known.
+     *  This is used for determining the year of incomplete dates provided by
+     *  various sources. Therefore this has to be somewhen before the reservation
+     *  becomes due.
+     */
+    void setContextDate(const QDateTime &dt);
+
 private:
     std::unique_ptr<ExtractorPostprocessorPrivate> d;
 };

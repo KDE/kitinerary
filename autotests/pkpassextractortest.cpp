@@ -83,6 +83,7 @@ private Q_SLOTS:
         QCOMPARE(result.size(), 1);
 
         ExtractorPostprocessor postproc;
+        postproc.setContextDate(QDateTime(QDate(2017, 12, 29), QTime(18, 46, 2)));
         postproc.process(result);
         result = postproc.result();
         QCOMPARE(result.size(), 1);

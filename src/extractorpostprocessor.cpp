@@ -57,6 +57,7 @@ public:
     bool filterTrainOrBusStation(const QVariant &station) const;
 
     QVector<QVariant> m_data;
+    QDateTime m_contextDate;
 };
 }
 
@@ -97,6 +98,11 @@ QVector<QVariant> ExtractorPostprocessor::result() const
     return d->m_data;
 }
 
+void ExtractorPostprocessor::setContextDate(const QDateTime& dt)
+{
+    d->m_contextDate = dt;
+}
+
 QVariant ExtractorPostprocessorPrivate::processProperty(QVariant obj, const char *name, QVariant (ExtractorPostprocessorPrivate::*processor)(QVariant) const) const
 {
     auto value = JsonLdDocument::readProperty(obj, name);
@@ -115,7 +121,7 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(QVariant res) c
         } else if (bcbp.startsWith(QLatin1String("qrCode:"))) {
             bcbp = bcbp.mid(7);
         }
-        const auto bcbpData = IataBcbpParser::parse(bcbp);
+        const auto bcbpData = IataBcbpParser::parse(bcbp, m_contextDate.date());
         if (bcbpData.size() == 1) {
             res = JsonLdDocument::apply(bcbpData.at(0), res);
         }
@@ -267,11 +273,11 @@ bool ExtractorPostprocessorPrivate::filterLodgingReservation(const QVariant &res
 
 bool ExtractorPostprocessorPrivate::filterFlight(const Flight &flight) const
 {
-    const auto arrivalDepatureValid = flight.departureTime().isValid() && flight.arrivalTime().isValid();
-    const auto boardingValid = flight.boardingTime().isValid();
+    // this will be valid if either boarding time, departure time or departure day is set
+    const auto validDate = flight.departureDay().isValid();
     return filterAirport(flight.departureAirport())
            && filterAirport(flight.arrivalAirport())
-           && (arrivalDepatureValid || boardingValid);
+           && validDate;
 }
 
 bool ExtractorPostprocessorPrivate::filterAirport(const Airport &airport) const

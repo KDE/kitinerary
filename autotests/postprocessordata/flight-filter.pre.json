@@ -64,8 +64,7 @@
         },
         "departureTime": "2027-03-04T20:15:00-08:00",
         "arrivalAirport": {
-            "@type": "Airport",
-            "name": "John F. Kennedy International Airport"
+            "@type": "Airport"
         }
     }
 }
