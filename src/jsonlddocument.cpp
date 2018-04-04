@@ -22,6 +22,7 @@
 
 #include <datatypes/bustrip.h>
 #include <datatypes/flight.h>
+#include <datatypes/organization.h>
 #include <datatypes/place.h>
 #include <datatypes/reservation.h>
 #include <datatypes/ticket.h>
@@ -133,6 +134,7 @@ static QVariant createInstance(const QJsonObject &obj)
     MAKE_FACTORY(BusStation);
     MAKE_FACTORY(BusTrip);
     MAKE_FACTORY(BusReservation);
+    MAKE_FACTORY(Organization);
     return {};
 }
 

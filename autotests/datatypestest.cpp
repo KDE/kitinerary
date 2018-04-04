@@ -1,5 +1,6 @@
 /*
     Copyright (c) 2018 Volker Krause <vkrause@kde.org>
+    Copyright (c) 2018 Luca Beltrame <lbeltrame@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -19,6 +20,7 @@
 
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
+#include <KItinerary/Organization>
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
 #include <KItinerary/TrainTrip>
@@ -82,6 +84,18 @@ private Q_SLOTS:
 
         Ticket ticket;
         QCOMPARE(JsonLdDocument::readProperty(QVariant::fromValue(ticket.ticketedSeat()), "className").toString(), QLatin1String("Seat"));
+
+        Organization org;
+        org.setName(QLatin1String("JR East"));
+        org.setEmail(QLatin1String("nowhere@nowhere.com"));
+        org.setTelephone(QLatin1String("+55-1234-345"));
+        org.setUrl(QUrl(QLatin1String("http://www.jreast.co.jp/e/")));
+        QCOMPARE(JsonLdDocument::readProperty(QVariant::fromValue(org), "className").toString(), QLatin1String("Organization"));
+        QCOMPARE(org.name(), QLatin1String("JR East"));
+        QCOMPARE(org.email(), QLatin1String("nowhere@nowhere.com"));
+        QCOMPARE(org.telephone(), QLatin1String("+55-1234-345"));
+        QCOMPARE(org.url(), QUrl(QLatin1String("http://www.jreast.co.jp/e/")));
+
     }
 
     void testQmlCompatibility()
