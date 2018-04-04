@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
-project(KItinerary VERSION 0.0.1)
+set(PIM_VERSION "5.8.40")
+project(KItinerary VERSION ${PIM_VERSION})
 
 find_package(ECM 5.38 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DIR}/cmake)
