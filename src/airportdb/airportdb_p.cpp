@@ -8,6 +8,7 @@
 #include <cmath>
 #include <limits>
 
+namespace KItinerary {
 namespace AirportDb {
 
 // sorted table of all iata codes
@@ -45445,4 +45446,5 @@ static const NameNIndex nameN_string_index[] = {
     NameNIndex{8625, 5, 8104, 2},
     NameNIndex{8630, 11, 8106, 2},
 };
+}
 }

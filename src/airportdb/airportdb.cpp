@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <cstring>
 
+namespace KItinerary {
 namespace AirportDb {
 static_assert(sizeof(IataCode) == sizeof(uint16_t), "IATA code changed size!");
 static constexpr auto iata_table_size = sizeof(iata_table) / sizeof(IataCode);
@@ -227,5 +228,6 @@ IataCode iataCodeFromName(const QString &name)
     }
 
     return {};
+}
 }
 }

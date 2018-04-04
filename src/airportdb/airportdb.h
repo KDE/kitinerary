@@ -28,6 +28,8 @@
 class QString;
 class QTimeZone;
 
+namespace KItinerary {
+
 /** Database of all civilian airports, their locations and timezones. */
 namespace AirportDb {
 /** Geographical coordinate. */
@@ -94,6 +96,8 @@ KITINERARY_EXPORT QTimeZone timezoneForAirport(IataCode iataCode);
 
 /** Attempts to find the unique IATA code for the given airport name. */
 KITINERARY_EXPORT IataCode iataCodeFromName(const QString &name);
+}
+
 }
 
 #endif // AIRPORTDB_H

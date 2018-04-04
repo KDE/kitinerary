@@ -26,6 +26,8 @@
 
 #include <cmath>
 
+using namespace KItinerary;
+
 class AirportDbTest : public QObject
 {
     Q_OBJECT

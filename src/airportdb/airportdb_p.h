@@ -22,6 +22,7 @@
 
 #include <cstdint>
 
+namespace KItinerary {
 namespace AirportDb  {
 // pack 24 bit offset, 8 bit length and 16 bit IATA index into 48bit with 16bit alignment
 struct Name1Index
@@ -61,6 +62,7 @@ struct NameNIndex
 
 static_assert(sizeof(NameNIndex) == 8, "NameNIndex size changed!");
 static_assert(sizeof(NameNIndex) % alignof(NameNIndex) == 0, "NameNIndex is not properly aligned!");
+}
 }
 
 #endif

@@ -37,7 +37,7 @@
 
 #include <cmath>
 
-using namespace AirportDb;
+using namespace KItinerary::AirportDb;
 
 struct Airport
 {
@@ -328,6 +328,7 @@ int main(int argc, char **argv)
 #include <cmath>
 #include <limits>
 
+namespace KItinerary {
 namespace AirportDb {
 
 // sorted table of all iata codes
@@ -492,6 +493,7 @@ static const NameNIndex nameN_string_index[] = {
         f.write("},\n");
     }
     f.write(R"(};
+}
 }
 )");
 
