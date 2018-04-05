@@ -27,6 +27,8 @@ namespace KItinerary {
 
 class ReservationPrivate;
 
+class Organization;
+
 /** Abstract base class for reservations.
  *  @see https://schema.org/Reservation
  */
@@ -37,6 +39,7 @@ class KITINERARY_EXPORT Reservation
     KITINERARY_PROPERTY(QVariant, reservationFor, setReservationFor)
     KITINERARY_PROPERTY(QVariant, reservedTicket, setReservedTicket)
     KITINERARY_PROPERTY(QVariant, underName, setUnderName)
+    KITINERARY_PROPERTY(Organization, provider, setProvider)
 
     // Google extension
     KITINERARY_PROPERTY(QUrl, cancelReservationUrl, setCancelReservationUrl)

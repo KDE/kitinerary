@@ -27,6 +27,8 @@ class BusStation;
 
 class BusTripPrivate;
 
+class Organization;
+
 /** A bus trip.
  *  @see https://schema.org/BusTrip
  */
@@ -41,6 +43,7 @@ class KITINERARY_EXPORT BusTrip
     KITINERARY_PROPERTY(QDateTime, departureTime, setDepartureTime)
     KITINERARY_PROPERTY(QString, busName, setBusName)
     KITINERARY_PROPERTY(QString, busNumber, setBusNumber)
+    KITINERARY_PROPERTY(KItinerary::Organization, provider, setProvider)
 
     Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
     Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized STORED false CONSTANT)

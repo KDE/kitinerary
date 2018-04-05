@@ -16,6 +16,7 @@
 */
 
 #include "reservation.h"
+#include "organization.h"
 #include "datatypes_p.h"
 
 #include <QUrl>
@@ -39,6 +40,7 @@ public:
     QUrl url;
     QString pkpassPassTypeIdentifier;
     QString pkpassSerialNumber;
+    Organization provider;
 };
 
 KITINERARY_MAKE_ABSTRACT_CLASS(Reservation)
@@ -52,6 +54,7 @@ KITINERARY_MAKE_PROPERTY(Reservation, QString, ticketToken, setTicketToken)
 KITINERARY_MAKE_PROPERTY(Reservation, QUrl, url, setUrl)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassPassTypeIdentifier, setPkpassPassTypeIdentifier)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassSerialNumber, setPkpassSerialNumber)
+KITINERARY_MAKE_PROPERTY(Reservation, Organization, provider, setProvider)
 
 class LodgingReservationPrivate : public ReservationPrivate
 {

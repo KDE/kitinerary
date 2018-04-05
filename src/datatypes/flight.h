@@ -29,6 +29,8 @@ class Airport;
 
 class AirlinePrivate;
 
+class Organization;
+
 /** An airline.
  *  @see https://schema.org/Airline
  */
@@ -56,6 +58,7 @@ class KITINERARY_EXPORT Flight
     KITINERARY_PROPERTY(QDateTime, departureTime, setDepartureTime)
     KITINERARY_PROPERTY(KItinerary::Airport, arrivalAirport, setArrivalAirport)
     KITINERARY_PROPERTY(QDateTime, arrivalTime, setArrivalTime)
+    KITINERARY_PROPERTY(KItinerary::Organization, provider, setProvider)
 
     // Google extension for boarding pass data
     KITINERARY_PROPERTY(QDateTime, boardingTime, setBoardingTime)

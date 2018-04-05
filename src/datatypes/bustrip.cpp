@@ -16,6 +16,7 @@
 */
 
 #include "bustrip.h"
+#include "organization.h"
 #include "place.h"
 #include "datatypes_p.h"
 
@@ -34,6 +35,7 @@ public:
     QDateTime departureTime;
     QString busName;
     QString busNumber;
+    Organization provider;
 };
 
 KITINERARY_MAKE_SIMPLE_CLASS(BusTrip)
@@ -45,6 +47,7 @@ KITINERARY_MAKE_PROPERTY(BusTrip, BusStation, departureStation, setDepartureStat
 KITINERARY_MAKE_PROPERTY(BusTrip, QDateTime, departureTime, setDepartureTime)
 KITINERARY_MAKE_PROPERTY(BusTrip, QString, busName, setBusName)
 KITINERARY_MAKE_PROPERTY(BusTrip, QString, busNumber, setBusNumber)
+KITINERARY_MAKE_PROPERTY(BusTrip, Organization, provider, setProvider)
 
 QString BusTrip::departureTimeLocalized() const
 {

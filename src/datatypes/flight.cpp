@@ -17,6 +17,7 @@
 
 #include "flight.h"
 #include "place.h"
+#include "organization.h"
 #include "datatypes_p.h"
 
 #include <QVariant>
@@ -49,6 +50,7 @@ public:
     QDateTime boardingTime;
     QString departureGate;
     QDate departureDay;
+    Organization provider;
 };
 
 KITINERARY_MAKE_SIMPLE_CLASS(Flight)
@@ -60,6 +62,7 @@ KITINERARY_MAKE_PROPERTY(Flight, Airport, arrivalAirport, setArrivalAirport)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, arrivalTime, setArrivalTime)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, boardingTime, setBoardingTime)
 KITINERARY_MAKE_PROPERTY(Flight, QString, departureGate, setDepartureGate)
+KITINERARY_MAKE_PROPERTY(Flight, Organization, provider, setProvider)
 
 QDate Flight::departureDay() const
 {
