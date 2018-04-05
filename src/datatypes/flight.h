@@ -65,7 +65,7 @@ class KITINERARY_EXPORT Flight
     KITINERARY_PROPERTY(QString, departureGate, setDepartureGate)
 
     // KDE extensions
-    /** @property departureDay The scheduled day of departure.
+    /** The scheduled day of departure.
      *  This is part of the unique identification of a flight and part of the IATA BCBP data.
      *  This might be different from departureTime, which reflects the actual time of departure
      *  and thus can in case of delays even move to a following day.

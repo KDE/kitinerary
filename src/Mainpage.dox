@@ -1,0 +1,4 @@
+/**
+ * @namespace KItinerary
+ * Classes for reservation/travel data models, data extraction and data augmentation.
+ */
