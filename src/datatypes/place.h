@@ -93,7 +93,7 @@ class KITINERARY_EXPORT TrainStation : public Place
 /** Bus station.
  *  @see https://schema.org/BusStation
  */
-class KITINERARY_EXPORT BusStation : protected Place
+class KITINERARY_EXPORT BusStation : public Place
 {
     KITINERARY_GADGET(BusStation)
 };
@@ -101,7 +101,7 @@ class KITINERARY_EXPORT BusStation : protected Place
 /** Hotel.
  *  @see https://schema.org/LodgingBusiness
  */
-class KITINERARY_EXPORT LodgingBusiness: protected Place
+class KITINERARY_EXPORT LodgingBusiness: public Place
 {
     KITINERARY_GADGET(LodgingBusiness)
 };
