@@ -18,6 +18,7 @@
 */
 
 #include "jsonlddocument.h"
+#include "jsonldimportfilter.h"
 #include "logging.h"
 
 #include <datatypes/bustrip.h>
@@ -147,7 +148,7 @@ QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
     QVector<QVariant> l;
     l.reserve(array.size());
     for (const auto &obj : array) {
-        const auto v = createInstance(obj.toObject());
+        const auto v = createInstance(JsonLdImportFilter::filterObject(obj.toObject()));
         if (!v.isNull()) {
             l.push_back(v);
         }

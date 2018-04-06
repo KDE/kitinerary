@@ -43,7 +43,6 @@
             "@type": "Ticket",
             "ticketToken": "aztecCode:M1DOE/JOHN            EXXX007 MUCTXLLH 2724 065M005A0017 35D>6180WW8064BLH              2A22012345678900 LH                        N*30600000K09         "
         },
-        "ticketToken": "aztecCode:M1DOE/JOHN            EXXX007 MUCTXLLH 2724 065M005A0017 35D>6180WW8064BLH              2A22012345678900 LH                        N*30600000K09         ",
         "underName": {
             "@type": "Person",
             "name": "DOE/JOHN"

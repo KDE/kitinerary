@@ -34,10 +34,9 @@ public:
     QVariant reservationFor;
     QVariant reservedTicket;
     QVariant underName;
+    QUrl url;
     QUrl cancelReservationUrl;
     QUrl modifyReservationUrl;
-    QString ticketToken;
-    QUrl url;
     QString pkpassPassTypeIdentifier;
     QString pkpassSerialNumber;
     Organization provider;
@@ -50,7 +49,6 @@ KITINERARY_MAKE_PROPERTY(Reservation, QVariant, reservedTicket, setReservedTicke
 KITINERARY_MAKE_PROPERTY(Reservation, QVariant, underName, setUnderName)
 KITINERARY_MAKE_PROPERTY(Reservation, QUrl, cancelReservationUrl, setCancelReservationUrl)
 KITINERARY_MAKE_PROPERTY(Reservation, QUrl, modifyReservationUrl, setModifyReservationUrl)
-KITINERARY_MAKE_PROPERTY(Reservation, QString, ticketToken, setTicketToken)
 KITINERARY_MAKE_PROPERTY(Reservation, QUrl, url, setUrl)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassPassTypeIdentifier, setPkpassPassTypeIdentifier)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassSerialNumber, setPkpassSerialNumber)

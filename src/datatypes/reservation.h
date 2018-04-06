@@ -40,21 +40,18 @@ class KITINERARY_EXPORT Reservation
     KITINERARY_PROPERTY(QVariant, reservedTicket, setReservedTicket)
     KITINERARY_PROPERTY(QVariant, underName, setUnderName)
     KITINERARY_PROPERTY(Organization, provider, setProvider)
+    KITINERARY_PROPERTY(QUrl, url, setUrl)
 
     // Google extension
     KITINERARY_PROPERTY(QUrl, cancelReservationUrl, setCancelReservationUrl)
     KITINERARY_PROPERTY(QUrl, modifyReservationUrl, setModifyReservationUrl)
-    KITINERARY_PROPERTY(QString, ticketToken, setTicketToken)
-    KITINERARY_PROPERTY(QUrl, url, setUrl)
 
     // KDE extensions
-    /** @property pkpassPassTypeIdentifier pass type identifier of an associated
-     *  Apple Wallet boarding pass.
+    /** Pass type identifier of an associated Apple Wallet boarding pass.
      *  @see KPkPass::Pass::passTypeIdentifier
      */
     KITINERARY_PROPERTY(QString, pkpassPassTypeIdentifier, setPkpassPassTypeIdentifier)
-    /** @property pkpassSerialNumber serial number of an associated Apple Wallet
-     *  boarding pass.
+    /** Serial number of an associated Apple Wallet boarding pass.
      *  @see KPkPass::Pass::serialNumber
      */
     KITINERARY_PROPERTY(QString, pkpassSerialNumber, setPkpassSerialNumber)

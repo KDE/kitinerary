@@ -45,7 +45,6 @@
             "@type": "Ticket",
             "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 ZRHTXLLX 0962 258Y010E0143 15D>5180 M7258BLX              2A724xxxxxxxxxx0 LX LH 123456789012345     N*30600000K09         "
         },
-        "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 ZRHTXLLX 0962 258Y010E0143 15D>5180 M7258BLX              2A724xxxxxxxxxx0 LX LH 123456789012345     N*30600000K09         ",
         "underName": {
             "@type": "Person",
             "name": "KRAUSE/VOLKER"

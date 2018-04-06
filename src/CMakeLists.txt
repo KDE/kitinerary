@@ -28,6 +28,7 @@ set(kitinerary_lib_srcs
     extractorrepository.cpp
     iatabcbpparser.cpp
     jsonlddocument.cpp
+    jsonldimportfilter.cpp
     mergeutil.cpp
     structureddataextractor.cpp
 )

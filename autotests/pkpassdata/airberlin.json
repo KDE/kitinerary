@@ -40,7 +40,6 @@
             "@type": "Ticket",
             "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 TXLMUCAB 6203 297Y019F0060 33C>5080      B2A                                         N00  "
         },
-        "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 TXLMUCAB 6203 297Y019F0060 33C>5080      B2A                                         N00  ",
         "underName": {
             "@type": "Person",
             "name": "KRAUSE/VOLKER"

@@ -44,7 +44,6 @@
             "@type": "Ticket",
             "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 LHRTXL4U 8465 169Y017C0040 147>1181  7168B4U 0000000000000291040PASSPORTID2   LH 123412341234012     "
         },
-        "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 LHRTXL4U 8465 169Y017C0040 147>1181  7168B4U 0000000000000291040PASSPORTID2   LH 123412341234012     ",
         "underName": {
             "@type": "Person",
             "name": "KRAUSE/VOLKER"

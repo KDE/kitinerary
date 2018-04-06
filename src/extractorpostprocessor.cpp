@@ -23,12 +23,12 @@
 #include "airportdb/airportdb.h"
 #include "iatabcbpparser.h"
 
-#include <datatypes/bustrip.h>
-#include <datatypes/flight.h>
-#include <datatypes/place.h>
-#include <datatypes/reservation.h>
-#include <datatypes/ticket.h>
-#include <datatypes/traintrip.h>
+#include <KItinerary/BusTrip>
+#include <KItinerary/Flight>
+#include <KItinerary/Place>
+#include <KItinerary/Reservation>
+#include <KItinerary/Ticket>
+#include <KItinerary/TrainTrip>
 
 #include <QDebug>
 #include <QTimeZone>
@@ -42,7 +42,7 @@ class ExtractorPostprocessorPrivate
 public:
     QVariant processProperty(QVariant obj, const char *name, QVariant (ExtractorPostprocessorPrivate::*processor)(QVariant) const) const;
 
-    QVariant processFlightReservation(QVariant res) const;
+    QVariant processFlightReservation(FlightReservation res) const;
     QVariant processFlight(QVariant flight) const;
     QVariant processAirport(QVariant airport) const;
     QVariant processAirline(QVariant airline) const;
@@ -74,7 +74,7 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
     d->m_data.reserve(data.size());
     for (auto elem : data) {
         if (elem.userType() == qMetaTypeId<FlightReservation>()) {
-            elem = d->processFlightReservation(elem);
+            elem = d->processFlightReservation(elem.value<FlightReservation>());
         } else if (elem.userType() == qMetaTypeId<TrainReservation>()) {
             elem = d->processReservation(elem);
         } else if (elem.userType() == qMetaTypeId<LodgingReservation>()) {
@@ -111,10 +111,10 @@ QVariant ExtractorPostprocessorPrivate::processProperty(QVariant obj, const char
     return obj;
 }
 
-QVariant ExtractorPostprocessorPrivate::processFlightReservation(QVariant res) const
+QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservation res) const
 {
     // expand ticketToken for IATA BCBP data
-    auto bcbp = JsonLdDocument::readProperty(res, "ticketToken").toString();
+    auto bcbp = res.reservedTicket().value<Ticket>().ticketToken();
     if (!bcbp.isEmpty()) {
         if (bcbp.startsWith(QLatin1String("aztecCode:"))) {
             bcbp = bcbp.mid(10);
@@ -123,13 +123,13 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(QVariant res) c
         }
         const auto bcbpData = IataBcbpParser::parse(bcbp, m_contextDate.date());
         if (bcbpData.size() == 1) {
-            res = JsonLdDocument::apply(bcbpData.at(0), res);
+            res = JsonLdDocument::apply(bcbpData.at(0), QVariant::fromValue(res)).value<FlightReservation>();
         }
     }
 
-    res = processReservation(res);
-    res = processProperty(res, "reservationFor", &ExtractorPostprocessorPrivate::processFlight);
-    return res;
+    res = processReservation(QVariant::fromValue(res)).value<FlightReservation>();
+    res = processProperty(QVariant::fromValue(res), "reservationFor", &ExtractorPostprocessorPrivate::processFlight).value<FlightReservation>();
+    return QVariant::fromValue(res);
 }
 
 QVariant ExtractorPostprocessorPrivate::processFlight(QVariant flight) const
@@ -225,19 +225,6 @@ QVariant ExtractorPostprocessorPrivate::processReservation(QVariant res) const
     }
     if (cancelUrl.isValid() && viewUrl == cancelUrl) {
         JsonLdDocument::removeProperty(res, "cancelReservationUrl");
-    }
-
-    // move ticketToken to Ticket (Google vs. schema.org difference)
-    const auto token = JsonLdDocument::readProperty(res, "ticketToken").toString();
-    if (!token.isEmpty()) {
-        auto ticket = JsonLdDocument::readProperty(res, "reservedTicket");
-        if (ticket.isNull()) {
-            ticket = QVariant::fromValue(Ticket{});
-        }
-        if (JsonLdDocument::readProperty(ticket, "ticketToken").toString().isEmpty()) {
-            JsonLdDocument::writeProperty(ticket, "ticketToken", token);
-            JsonLdDocument::writeProperty(res, "reservedTicket", ticket);
-        }
     }
 
     return res;

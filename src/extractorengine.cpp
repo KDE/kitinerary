@@ -265,7 +265,7 @@ void ExtractorEnginePrivate::extractPass()
     }
 
     // barcode contains the ticket token
-    if (!m_pass->barcodes().isEmpty() && !res.contains(QLatin1String("ticketToken"))) {
+    if (!m_pass->barcodes().isEmpty() && !res.contains(QLatin1String("reservedTicket"))) {
         const auto barcode = m_pass->barcodes().at(0);
         QString token;
         switch (barcode.format()) {
@@ -279,7 +279,10 @@ void ExtractorEnginePrivate::extractPass()
                 break;
         }
         token += barcode.message();
-        res.insert(QLatin1String("ticketToken"), token);
+        QJsonObject ticket;
+        ticket.insert(QLatin1String("@type"), QLatin1String("Ticket"));
+        ticket.insert(QLatin1String("ticketToken"), token);
+        res.insert(QLatin1String("reservedTicket"), ticket);
     }
 
     res.insert(QLatin1String("reservationFor"), resFor);

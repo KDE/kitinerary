@@ -29,9 +29,13 @@ class QJsonArray;
 
 namespace KItinerary {
 
-/** Serialization/deserialization code for JSON-LD data. */
+/** Serialization/deserialization code for JSON-LD data.
+ *  @see https://www.w3.org/TR/json-ld/
+ */
 namespace JsonLdDocument {
+/** Convert JSON-LD data into instantiated data types. */
 KITINERARY_EXPORT QVector<QVariant> fromJson(const QJsonArray &array);
+/** Serialize instantiated data types to JSON. */
 KITINERARY_EXPORT QJsonArray toJson(const QVector<QVariant> &data);
 
 /** Read property @p name on object @p obj. */
