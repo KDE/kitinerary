@@ -228,7 +228,7 @@ void CalendarHandler::fillLodgingReservation(const QVariant &reservation, const 
     event->setSummary(i18n("Hotel reservation: %1",
                            JsonLdDocument::readProperty(lodgingBusiness, "name").toString()
                            ));
-    event->setLocation(i18n("%1, %2 %3, %4",
+    event->setLocation(i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
                             JsonLdDocument::readProperty(address, "streetAddress").toString(),
                             JsonLdDocument::readProperty(address, "postalCode").toString(),
                             JsonLdDocument::readProperty(address, "addressLocality").toString(),
