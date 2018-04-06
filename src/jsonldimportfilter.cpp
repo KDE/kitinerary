@@ -21,7 +21,20 @@
 
 using namespace KItinerary;
 
-static QJsonObject filterReservation(QJsonObject res)
+static void filterTrainTrip(QJsonObject &trip)
+{
+    if (trip.value(QLatin1String("@type")).toString() != QLatin1String("TrainTrip")) {
+        return;
+    }
+
+    // move TrainTrip::trainCompany to TrainTrip::provider (as defined by schema.org)
+    const auto company = trip.value(QLatin1String("trainCompany")).toObject();
+    if (!company.isEmpty() && !trip.contains(QLatin1String("provider"))) {
+        trip.insert(QLatin1String("provider"), company);
+    }
+}
+
+static void filterReservation(QJsonObject &res)
 {
     // move ticketToken to Ticket (Google vs. schema.org difference)
     const auto token = res.value(QLatin1String("ticketToken")).toString();
@@ -35,14 +48,23 @@ static QJsonObject filterReservation(QJsonObject res)
             res.insert(QLatin1String("reservedTicket"), ticket);
         }
     }
-
-    return res;
 }
 
 QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
 {
-    if (obj.value(QLatin1String("@type")).toString().endsWith(QLatin1String("Reservation"))) {
-        return filterReservation(obj);
+    QJsonObject res(obj);
+    const auto type = obj.value(QLatin1String("@type")).toString();
+    if (type.endsWith(QLatin1String("Reservation"))) {
+        filterReservation(res);
     }
-    return obj;
+
+    if (type == QLatin1String("TrainReservation")) {
+        auto train = obj.value(QLatin1String("reservationFor")).toObject();
+        filterTrainTrip(train);
+        if (!train.isEmpty()) {
+            res.insert(QLatin1String("reservationFor"), train);
+        }
+    }
+
+    return res;
 }
