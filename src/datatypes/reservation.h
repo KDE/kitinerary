@@ -106,7 +106,7 @@ class KITINERARY_EXPORT TrainReservation : public Reservation
 /** A bus reservation.
  *  @see https://schema.org/BusReservation
  */
-class KITINERARY_EXPORT BusReservation : protected Reservation
+class KITINERARY_EXPORT BusReservation : public Reservation
 {
     KITINERARY_GADGET(BusReservation)
 };
