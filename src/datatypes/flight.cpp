@@ -26,18 +26,6 @@ using namespace KItinerary;
 
 namespace KItinerary {
 
-class AirlinePrivate : public QSharedData
-{
-public:
-    QString name;
-    QString iataCode;
-};
-
-KITINERARY_MAKE_SIMPLE_CLASS(Airline)
-KITINERARY_MAKE_PROPERTY(Airline, QString, name, setName)
-KITINERARY_MAKE_PROPERTY(Airline, QString, iataCode, setIataCode)
-
-
 class FlightPrivate : public QSharedData
 {
 public:

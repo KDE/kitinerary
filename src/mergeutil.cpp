@@ -19,6 +19,7 @@
 
 #include <KItinerary/Flight>
 #include <KItinerary/JsonLdDocument>
+#include <KItinerary/Organization>
 #include <KItinerary/Person>
 #include <KItinerary/Reservation>
 

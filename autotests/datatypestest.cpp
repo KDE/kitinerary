@@ -43,9 +43,7 @@ class DatatypesTest : public QObject
 private Q_SLOTS:
     void testValueTypeSemantics()
     {
-//         Place p; // must not compile
         Airport airport;
-//         Place p = airport; // must not compile!
         airport.setName(QLatin1String("Berlin Tegel"));
         {
             auto ap2 = airport;
@@ -53,6 +51,11 @@ private Q_SLOTS:
             ap2.setIataCode(QLatin1String("TXL"));
             QVERIFY(airport.iataCode().isEmpty());
         }
+        Place place = airport; // assignment to base class works, but cannot be reversed
+        QCOMPARE(place.name(), QLatin1String("Berlin Tegel"));
+        place.setName(QLatin1String("London Heathrow")); // changing a value degenerated to its base class will detach but not slice
+        QCOMPARE(place.name(), QLatin1String("London Heathrow"));
+        QCOMPARE(JsonLdDocument::readProperty(QVariant::fromValue(place), "className").toString(), QLatin1String("Place")); // className is not polymorphic
 
         QVERIFY(!airport.geo().isValid());
         QCOMPARE(JsonLdDocument::readProperty(QVariant::fromValue(airport), "className").toString(), QLatin1String("Airport"));
@@ -109,6 +112,16 @@ private Q_SLOTS:
         QCOMPARE(bus.provider().name(), QLatin1String("JR East"));
         QCOMPARE(bus.provider().email(), QLatin1String("nowhere@nowhere.com"));
 
+        Airline airline;
+        airline.setIataCode(QLatin1String("LH"));
+        flight.setAirline(airline);
+        QCOMPARE(flight.airline().iataCode(), QLatin1String("LH"));
+        {
+            const auto flight2 = flight;
+            QCOMPARE(flight2.airline().iataCode(), QLatin1String("LH"));
+            QCOMPARE(JsonLdDocument::readProperty(QVariant::fromValue(flight.airline()), "className").toString(), QLatin1String("Airline"));
+            QCOMPARE(JsonLdDocument::readProperty(QVariant::fromValue(flight.airline()), "iataCode").toString(), QLatin1String("LH"));
+        }
     }
 
     void testQmlCompatibility()

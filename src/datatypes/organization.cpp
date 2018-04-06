@@ -26,6 +26,7 @@ namespace KItinerary {
 
 class OrganizationPrivate: public QSharedData
 {
+    KITINERARY_PRIVATE_BASE_GADGET(Organization)
 public:
     QString name;
     QString email;
@@ -34,13 +35,29 @@ public:
     PostalAddress address;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(Organization)
+KITINERARY_MAKE_BASE_CLASS(Organization)
 KITINERARY_MAKE_PROPERTY(Organization, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Organization, QString, email, setEmail)
 KITINERARY_MAKE_PROPERTY(Organization, QString, telephone, setTelephone)
 KITINERARY_MAKE_PROPERTY(Organization, QUrl, url, setUrl)
 KITINERARY_MAKE_PROPERTY(Organization, PostalAddress, address, setAddress)
 
+class AirlinePrivate : public OrganizationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(Airline)
+public:
+    QString iataCode;
+};
+
+KITINERARY_MAKE_SUB_CLASS(Airline, Organization)
+KITINERARY_MAKE_PROPERTY(Airline, QString, iataCode, setIataCode)
+
+}
+
+template <>
+KItinerary::OrganizationPrivate *QExplicitlySharedDataPointer<KItinerary::OrganizationPrivate>::clone()
+{
+    return d->clone();
 }
 
 #include "moc_organization.cpp"

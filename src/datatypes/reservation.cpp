@@ -28,7 +28,7 @@ namespace KItinerary {
 
 class ReservationPrivate : public QSharedData
 {
-    KITINERARY_PRIVATE_ABSTRACT_GADGET(Reservation)
+    KITINERARY_PRIVATE_BASE_GADGET(Reservation)
 public:
     QString reservationNumber;
     QVariant reservationFor;
@@ -43,7 +43,7 @@ public:
     Organization provider;
 };
 
-KITINERARY_MAKE_ABSTRACT_CLASS(Reservation)
+KITINERARY_MAKE_BASE_CLASS(Reservation)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, reservationNumber, setReservationNumber)
 KITINERARY_MAKE_PROPERTY(Reservation, QVariant, reservationFor, setReservationFor)
 KITINERARY_MAKE_PROPERTY(Reservation, QVariant, reservedTicket, setReservedTicket)

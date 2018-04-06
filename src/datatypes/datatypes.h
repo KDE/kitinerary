@@ -37,16 +37,6 @@ struct parameter_type
 }
 }
 
-#define KITINERARY_ABSTRACT_GADGET(Class) \
-    Q_GADGET \
-protected: \
-    Class() = delete; \
-    Class(const Class &other); \
-    Class(Class ## Private *dd); \
-    ~Class(); \
-    Class& operator=(const Class &other) = delete; \
-private:
-
 #define KITINERARY_GADGET(Class) \
     Q_GADGET \
     Q_PROPERTY(QString className READ className STORED false CONSTANT) \
@@ -56,6 +46,12 @@ public: \
     Class(const Class &other); \
     ~Class(); \
     Class& operator=(const Class &other); \
+private:
+
+#define KITINERARY_BASE_GADGET(Class) \
+    KITINERARY_GADGET(Class) \
+protected: \
+    Class(Class ## Private *dd); \
 private:
 
 #define KITINERARY_PROPERTY(Type, Name, SetName) \

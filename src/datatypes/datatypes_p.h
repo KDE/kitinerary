@@ -24,10 +24,12 @@
 
 namespace KItinerary {
 
-#define KITINERARY_PRIVATE_ABSTRACT_GADGET(Class) \
+#define KITINERARY_PRIVATE_BASE_GADGET(Class) \
 public: \
 virtual ~ Class ## Private() = default; \
-virtual Class ## Private * clone() const = 0; \
+virtual Class ## Private * clone() const { \
+    return new Class ##Private(*this); \
+} \
 typedef Class ## Private base_type; \
 private: \
 
@@ -46,10 +48,13 @@ Class::~Class() = default; \
 Class& Class::operator=(const Class &other) { d = other.d; return *this; } \
 QString Class::className() const { return QStringLiteral(#Class); }
 
-#define KITINERARY_MAKE_ABSTRACT_CLASS(Class) \
+#define KITINERARY_MAKE_BASE_CLASS(Class) \
+Class::Class() : d(new Class ## Private) {} \
 Class::Class(const Class &other) = default; \
 Class::Class(Class ## Private *dd) : d(dd) {} \
-Class::~Class() = default;
+Class::~Class() = default; \
+Class& Class::operator=(const Class &other) { d = other.d; return *this; } \
+QString Class::className() const { return QStringLiteral(#Class); }
 
 #define KITINERARY_MAKE_SUB_CLASS(Class, Base) \
 Class::Class() : Base(new Class ## Private) {} \

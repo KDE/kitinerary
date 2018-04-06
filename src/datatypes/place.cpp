@@ -59,14 +59,14 @@ KITINERARY_MAKE_PROPERTY(PostalAddress, QString, addressCountry, setAddressCount
 
 class PlacePrivate : public QSharedData
 {
-    KITINERARY_PRIVATE_ABSTRACT_GADGET(Place)
+    KITINERARY_PRIVATE_BASE_GADGET(Place)
 public:
     QString name;
     PostalAddress address;
     GeoCoordinates geo;
 };
 
-KITINERARY_MAKE_ABSTRACT_CLASS(Place)
+KITINERARY_MAKE_BASE_CLASS(Place)
 KITINERARY_MAKE_PROPERTY(Place, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Place, PostalAddress, address, setAddress)
 KITINERARY_MAKE_PROPERTY(Place, GeoCoordinates, geo, setGeo)

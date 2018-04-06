@@ -18,6 +18,7 @@
 */
 
 #include <KItinerary/Flight>
+#include <KItinerary/Organization>
 #include <KItinerary/Place>
 #include <KItinerary/JsonLdDocument>
 
@@ -39,6 +40,7 @@ private Q_SLOTS:
     {
         qputenv("TZ", "GMT");
         qRegisterMetaType<Airport>();
+        qRegisterMetaType<Airline>();
     }
 
     void testSerialization()
@@ -53,6 +55,9 @@ private Q_SLOTS:
         ap.setIataCode(QLatin1String("TXL"));
         f.setDepartureAirport(ap);
         f.setDepartureGate(QLatin1String(""));
+        Airline airline;
+        airline.setIataCode(QLatin1String("LH"));
+        f.setAirline(airline);
 
         const auto array = JsonLdDocument::toJson({QVariant::fromValue(f)});
         QCOMPARE(array.size(), 1);
@@ -73,6 +78,8 @@ private Q_SLOTS:
 
         QVERIFY(obj.contains(QLatin1String("departureGate")));
         QCOMPARE(obj.value(QLatin1String("departureGate")).toString(), QLatin1String(""));
+
+        QVERIFY(obj.contains(QLatin1String("airline")));
 
         qDebug().noquote() << QJsonDocument(obj).toJson();
     }

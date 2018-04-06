@@ -36,18 +36,32 @@ class OrganizationPrivate;
 
 class KITINERARY_EXPORT Organization
 {
-    KITINERARY_GADGET(Organization)
+    KITINERARY_BASE_GADGET(Organization)
     KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(QString, email, setEmail)
     KITINERARY_PROPERTY(QString, telephone, setTelephone)
     KITINERARY_PROPERTY(QUrl, url, setUrl)
     KITINERARY_PROPERTY(KItinerary::PostalAddress, address, setAddress)
-private:
+protected:
+    ///@cond internal
     QExplicitlySharedDataPointer<OrganizationPrivate> d;
+    ///@endcond
+};
+
+class AirlinePrivate;
+
+/** An airline.
+ *  @see https://schema.org/Airline
+ */
+class KITINERARY_EXPORT Airline : public Organization
+{
+    KITINERARY_GADGET(Airline)
+    KITINERARY_PROPERTY(QString, iataCode, setIataCode)
 };
 
 } // namespace KItinerary
 
 Q_DECLARE_METATYPE(KItinerary::Organization)
+Q_DECLARE_METATYPE(KItinerary::Airline)
 
 #endif // KITINERARY_ORGANIZATION_H

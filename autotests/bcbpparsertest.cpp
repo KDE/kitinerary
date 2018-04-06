@@ -16,7 +16,8 @@
 */
 
 #include "iatabcbpparser.h"
-#include "jsonlddocument.h"
+#include <KItinerary/JsonLdDocument>
+#include <KItinerary/Organization>
 #include <KItinerary/Place>
 
 #include <QDebug>
@@ -34,6 +35,7 @@ class BcbpParserTest : public QObject
 private Q_SLOTS:
     void initTestCase()
     {
+        qRegisterMetaType<Airline>();
         qRegisterMetaType<Airport>();
     }
 

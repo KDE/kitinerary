@@ -17,6 +17,7 @@
 
 #include <KItinerary/Flight>
 #include <KItinerary/MergeUtil>
+#include <KItinerary/Organization>
 #include <KItinerary/Person>
 #include <KItinerary/Reservation>
 

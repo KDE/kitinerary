@@ -19,9 +19,10 @@
 #include "logging.h"
 
 #include <KItinerary/Flight>
-#include <KItinerary/Reservation>
+#include <KItinerary/Organization>
 #include <KItinerary/Person>
 #include <KItinerary/Place>
+#include <KItinerary/Reservation>
 
 #include <QDate>
 #include <QVariant>

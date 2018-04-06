@@ -25,23 +25,9 @@ class QDateTime;
 
 namespace KItinerary {
 
+class Airline;
 class Airport;
-
-class AirlinePrivate;
-
 class Organization;
-
-/** An airline.
- *  @see https://schema.org/Airline
- */
-class KITINERARY_EXPORT Airline
-{
-    KITINERARY_GADGET(Airline)
-    KITINERARY_PROPERTY(QString, name, setName)
-    KITINERARY_PROPERTY(QString, iataCode, setIataCode)
-private:
-    QExplicitlySharedDataPointer<AirlinePrivate> d;
-};
 
 class FlightPrivate;
 
@@ -85,7 +71,6 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::Airline)
 Q_DECLARE_METATYPE(KItinerary::Flight)
 
 #endif // KITINERARY_FLIGHT_H

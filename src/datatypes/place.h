@@ -65,7 +65,7 @@ class PlacePrivate;
  */
 class KITINERARY_EXPORT Place
 {
-    KITINERARY_ABSTRACT_GADGET(Place)
+    KITINERARY_BASE_GADGET(Place)
     KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(KItinerary::PostalAddress, address, setAddress)
     KITINERARY_PROPERTY(KItinerary::GeoCoordinates, geo, setGeo)

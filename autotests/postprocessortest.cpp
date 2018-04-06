@@ -20,6 +20,7 @@
 #include "extractorpostprocessor.h"
 #include "jsonlddocument.h"
 
+#include <KItinerary/Organization>
 #include <KItinerary/Place>
 
 #include <QDebug>
@@ -38,6 +39,7 @@ class PostprocessorTest : public QObject
 private Q_SLOTS:
     void initTestCase()
     {
+        qRegisterMetaType<Airline>();
         qRegisterMetaType<Airport>();
     }
 
