@@ -59,7 +59,9 @@ class KITINERARY_EXPORT Reservation
      */
     KITINERARY_PROPERTY(QString, pkpassSerialNumber, setPkpassSerialNumber)
 protected:
+    ///@cond internal
     QExplicitlySharedDataPointer<ReservationPrivate> d;
+    ///@endcond
 };
 
 /** A hotel reservation.
