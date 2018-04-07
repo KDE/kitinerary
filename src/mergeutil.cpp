@@ -22,6 +22,7 @@
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
 #include <KItinerary/Reservation>
+#include <KItinerary/TrainTrip>
 
 #include <QDate>
 #include <QVariant>
@@ -51,7 +52,21 @@ bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
         }
     }
 
-    // TODO train/bus: booking ref, train number and depature day match
+    // train: booking ref, train number and depature day match
+    if (lhs.userType() == qMetaTypeId<TrainReservation>()) {
+        const auto lhsRes = lhs.value<TrainReservation>();
+        const auto rhsRes = rhs.value<TrainReservation>();
+        if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
+            return false;
+        }
+        const auto lhsTrip = lhsRes.reservationFor().value<TrainTrip>();
+        const auto rhsTrip = rhsRes.reservationFor().value<TrainTrip>();
+        if (!isSameTrainTrip(lhsTrip, rhsTrip)) {
+            return false;
+        }
+    }
+
+    // TODO bus: booking ref, train number and depature day match
     // TODO hotel: booking ref, checkin day match
 
     // for all: underName either matches or is not set
@@ -67,6 +82,15 @@ bool MergeUtil::isSameFlight(const Flight& lhs, const Flight& rhs)
     }
 
     return lhs.flightNumber() == rhs.flightNumber() && lhs.airline().iataCode() == rhs.airline().iataCode() && lhs.departureDay() == rhs.departureDay();
+}
+
+bool MergeUtil::isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
+{
+    if (lhs.trainNumber().isEmpty() || rhs.trainNumber().isEmpty()) {
+        return false;
+    }
+
+    return lhs.trainName() == rhs.trainName() && lhs.trainNumber() == rhs.trainNumber() && lhs.departureTime().date() == rhs.departureTime().date();
 }
 
 bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)

@@ -25,6 +25,7 @@ class QVariant;
 namespace KItinerary {
 class Flight;
 class Person;
+class TrainTrip;
 
 /** Utilities for merging reservations or elements of them. */
 namespace MergeUtil
@@ -49,6 +50,13 @@ KITINERARY_EXPORT bool isSameReservation(const QVariant &lhs, const QVariant &rh
  * That is, if the flight number and departure day match.
  */
 KITINERARY_EXPORT bool isSameFlight(const Flight &lhs, const Flight &rhs);
+
+/**
+ * Checks if two TrainTrip objects refer to the same trip
+ *
+ * That is, if the train name/number and departure day match.
+ */
+KITINERARY_EXPORT bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs);
 
 /**
  * Checks if two Person objects refer to the same person.
