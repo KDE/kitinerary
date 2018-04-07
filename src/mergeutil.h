@@ -36,7 +36,7 @@ namespace MergeUtil
  *  This depends on the reservation type:
  *  - Flights: booking reference, flight number and departure day match
  *  - Train trip: booking reference, train number and departure day match
- *  - But trip: TODO
+ *  - But trip: booking ref and/or number and departure time match
  *  - Hotel booking: hotel name, booking reference and checkin day match
  *
  *  For all reservation types, the Reservation::underName property is

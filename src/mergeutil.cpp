@@ -17,6 +17,7 @@
 
 #include "mergeutil.h"
 
+#include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Organization>
@@ -31,6 +32,7 @@
 using namespace KItinerary;
 
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs);
+static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs);
 static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs);
 
 bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
@@ -70,7 +72,19 @@ bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
         }
     }
 
-    // TODO bus: booking ref, train number and depature day match
+    // bus: booking ref, number and depature time match
+    if (lhs.userType() == qMetaTypeId<BusReservation>()) {
+        const auto lhsRes = lhs.value<BusReservation>();
+        const auto rhsRes = rhs.value<BusReservation>();
+        if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
+            return false;
+        }
+        const auto lhsTrip = lhsRes.reservationFor().value<BusTrip>();
+        const auto rhsTrip = rhsRes.reservationFor().value<BusTrip>();
+        if (!isSameBusTrip(lhsTrip, rhsTrip)) {
+            return false;
+        }
+    }
 
     // hotel: booking ref, checkin day, name match
     if (lhs.userType() == qMetaTypeId<LodgingReservation>()) {
@@ -108,6 +122,15 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
     }
 
     return lhs.trainName() == rhs.trainName() && lhs.trainNumber() == rhs.trainNumber() && lhs.departureTime().date() == rhs.departureTime().date();
+}
+
+static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs)
+{
+    if (lhs.busNumber().isEmpty() || rhs.busNumber().isEmpty()) {
+        return false;
+    }
+
+    return lhs.busName() == rhs.busName() && lhs.busNumber() == rhs.busNumber() && lhs.departureTime() == rhs.departureTime();
 }
 
 static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs)
