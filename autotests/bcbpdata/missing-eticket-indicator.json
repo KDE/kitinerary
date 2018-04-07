@@ -1,0 +1,29 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "12C",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "EW"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "BRU"
+            },
+            "departureDay": "2019-02-04",
+            "flightNumber": "8103"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+           "@type": "Person",
+           "name": "DOE/JOHN"
+        }
+    }
+]

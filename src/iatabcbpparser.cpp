@@ -34,7 +34,6 @@ enum Constants {
     UniqueMandatorySize = 23,
     RepeastedMandatorySize = 37,
     FormatCode = 'M',
-    ElectronicTicketIndicator = 'E',
     BeginOfVersionNumber = '>'
 };
 
@@ -97,7 +96,7 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &iss
         qCWarning(Log) << "IATA BCBP code too short";
         return {};
     }
-    if (message.at(0) != QLatin1Char(FormatCode) || !message.at(1).isDigit() || message.at(22) != QLatin1Char(ElectronicTicketIndicator)) {
+    if (message.at(0) != QLatin1Char(FormatCode) || !message.at(1).isDigit()) {
         qCWarning(Log) << "IATA BCBP code invalid unique mandatory section format";
         return {};
     }

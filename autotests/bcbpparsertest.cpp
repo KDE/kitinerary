@@ -50,6 +50,9 @@ private Q_SLOTS:
         QTest::newRow("single leg, partial") << QStringLiteral("M1GRANDMAIRE/MELANIE  EABC123 GVACDGAF 0123 339C002F0025 130>5002A0571234567890  AF AF 1234567890123456    Y^18ABCDEFGH") << QStringLiteral("iata-resolution792-example3.json");
         QTest::newRow("multi leg, all fields") << QStringLiteral("M2DESMARAIS/LUC       EAB12C3 YULFRAAC 0834 326J003A0027 167>5321WW1325BAC 0014123456002001412346700100141234789012A0141234567890 1AC AC 1234567890123    4PCYLX58ZDEF456 FRAGVALH 3664 327C012C0002 12E2A0140987654321 1AC AC 1234567890123    3PCNWQ^108ABCDEFGH") << QStringLiteral("iata-resolution792-example4.json");
         QTest::newRow("multi leg, partial") << QStringLiteral("M2GRANDMAIRE/MELANIE  EABC123 GVACDGAF 0123 339C002F0025 130>5002A0571234567890  AF AF 1234567890123456    YDEF456 CDGDTWNW 0049 339F001A0002 12C2A012098765432101                       2PC ^18ABCDEFGH") << QStringLiteral("iata-resolution792-example5.json");
+
+        // EW misses the 'E' eticket marker (BCBP item 253)
+        QTest::newRow("missing eticket indicator") << QStringLiteral("M1DOE/JOHN             XXX007 BRUTXLEW 8103 035Y012C0030 147>1181W 8033BEW 0000000000000291040000000000 0   LH 123456789012345     ") << QStringLiteral("missing-eticket-indicator.json");
     }
 
     void testParserValid()
