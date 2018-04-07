@@ -32,11 +32,12 @@ public:
     QString flightNumber;
     Airline airline;
     Airport departureAirport;
+    QString departureGate;
+    QString departureTerminal;
     QDateTime departureTime;
     Airport arrivalAirport;
     QDateTime arrivalTime;
     QDateTime boardingTime;
-    QString departureGate;
     QDate departureDay;
     Organization provider;
 };
@@ -45,11 +46,12 @@ KITINERARY_MAKE_SIMPLE_CLASS(Flight)
 KITINERARY_MAKE_PROPERTY(Flight, QString, flightNumber, setFlightNumber)
 KITINERARY_MAKE_PROPERTY(Flight, Airline, airline, setAirline)
 KITINERARY_MAKE_PROPERTY(Flight, Airport, departureAirport, setDepartureAirport)
+KITINERARY_MAKE_PROPERTY(Flight, QString, departureGate, setDepartureGate)
+KITINERARY_MAKE_PROPERTY(Flight, QString, departureTerminal, setDepartureTerminal)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, departureTime, setDepartureTime)
 KITINERARY_MAKE_PROPERTY(Flight, Airport, arrivalAirport, setArrivalAirport)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, arrivalTime, setArrivalTime)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, boardingTime, setBoardingTime)
-KITINERARY_MAKE_PROPERTY(Flight, QString, departureGate, setDepartureGate)
 KITINERARY_MAKE_PROPERTY(Flight, Organization, provider, setProvider)
 
 QDate Flight::departureDay() const

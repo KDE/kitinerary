@@ -41,6 +41,8 @@ class KITINERARY_EXPORT Flight
     KITINERARY_PROPERTY(QString, flightNumber, setFlightNumber)
     KITINERARY_PROPERTY(KItinerary::Airline, airline, setAirline)
     KITINERARY_PROPERTY(KItinerary::Airport, departureAirport, setDepartureAirport)
+    KITINERARY_PROPERTY(QString, departureGate, setDepartureGate)
+    KITINERARY_PROPERTY(QString, departureTerminal, setDepartureTerminal)
     KITINERARY_PROPERTY(QDateTime, departureTime, setDepartureTime)
     KITINERARY_PROPERTY(KItinerary::Airport, arrivalAirport, setArrivalAirport)
     KITINERARY_PROPERTY(QDateTime, arrivalTime, setArrivalTime)
@@ -48,7 +50,6 @@ class KITINERARY_EXPORT Flight
 
     // Google extension for boarding pass data
     KITINERARY_PROPERTY(QDateTime, boardingTime, setBoardingTime)
-    KITINERARY_PROPERTY(QString, departureGate, setDepartureGate)
 
     // KDE extensions
     /** The scheduled day of departure.
