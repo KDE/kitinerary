@@ -37,7 +37,7 @@ namespace MergeUtil
  *  - Flights: booking reference, flight number and departure day match
  *  - Train trip: booking reference, train number and departure day match
  *  - But trip: TODO
- *  - Hotel booking: booking reference and checkin day match
+ *  - Hotel booking: hotel name, booking reference and checkin day match
  *
  *  For all reservation types, the Reservation::underName property is
  *  checked and either needs to be equal or absent in one of the values.
@@ -50,13 +50,6 @@ KITINERARY_EXPORT bool isSameReservation(const QVariant &lhs, const QVariant &rh
  * That is, if the flight number and departure day match.
  */
 KITINERARY_EXPORT bool isSameFlight(const Flight &lhs, const Flight &rhs);
-
-/**
- * Checks if two TrainTrip objects refer to the same trip
- *
- * That is, if the train name/number and departure day match.
- */
-KITINERARY_EXPORT bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs);
 
 /**
  * Checks if two Person objects refer to the same person.

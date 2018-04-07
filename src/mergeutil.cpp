@@ -20,6 +20,7 @@
 #include <KItinerary/Flight>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Organization>
+#include <KItinerary/Place>
 #include <KItinerary/Person>
 #include <KItinerary/Reservation>
 #include <KItinerary/TrainTrip>
@@ -28,6 +29,9 @@
 #include <QVariant>
 
 using namespace KItinerary;
+
+static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs);
+static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs);
 
 bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
 {
@@ -67,7 +71,20 @@ bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
     }
 
     // TODO bus: booking ref, train number and depature day match
-    // TODO hotel: booking ref, checkin day match
+
+    // hotel: booking ref, checkin day, name match
+    if (lhs.userType() == qMetaTypeId<LodgingReservation>()) {
+        const auto lhsRes = lhs.value<LodgingReservation>();
+        const auto rhsRes = rhs.value<LodgingReservation>();
+        if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
+            return false;
+        }
+        const auto lhsHotel = lhsRes.reservationFor().value<LodgingBusiness>();
+        const auto rhsHotel = rhsRes.reservationFor().value<LodgingBusiness>();
+        if (!isSameLodingBusiness(lhsHotel, rhsHotel) || lhsRes.checkinDate() != rhsRes.checkinDate()) {
+            return false;
+        }
+    }
 
     // for all: underName either matches or is not set
     const auto lhsUN = JsonLdDocument::readProperty(lhs, "underName");
@@ -84,13 +101,22 @@ bool MergeUtil::isSameFlight(const Flight& lhs, const Flight& rhs)
     return lhs.flightNumber() == rhs.flightNumber() && lhs.airline().iataCode() == rhs.airline().iataCode() && lhs.departureDay() == rhs.departureDay();
 }
 
-bool MergeUtil::isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
+static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
 {
     if (lhs.trainNumber().isEmpty() || rhs.trainNumber().isEmpty()) {
         return false;
     }
 
     return lhs.trainName() == rhs.trainName() && lhs.trainNumber() == rhs.trainNumber() && lhs.departureTime().date() == rhs.departureTime().date();
+}
+
+static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs)
+{
+    if (lhs.name().isEmpty() || rhs.name().isEmpty()) {
+        return false;
+    }
+
+    return lhs.name() == rhs.name();
 }
 
 bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)
