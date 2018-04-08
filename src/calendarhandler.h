@@ -29,31 +29,20 @@ class QVariant;
 
 namespace KItinerary {
 
-class LodgingReservation;
-
 /** Methods for converting between ical events and JSON-LD booking data. */
-class KITINERARY_EXPORT CalendarHandler
+namespace KITINERARY_EXPORT CalendarHandler
 {
-public:
     /** Returns the start time associated with the given reservation. */
-    static QDateTime startDateTime(const QVariant &reservation);
+    QDateTime startDateTime(const QVariant &reservation);
 
     /** Attempts to find an event in @p calendar for @p reservation. */
-    static KCalCore::Event::Ptr findEvent(const KCalCore::Calendar::Ptr &calendar, const QVariant &reservation);
+    KCalCore::Event::Ptr findEvent(const KCalCore::Calendar::Ptr &calendar, const QVariant &reservation);
 
     /** Fills @p event with details of @p reservation.
      *  Can be used on new events or to update existing ones.
      */
-    static void fillEvent(const QVariant &reservation, const KCalCore::Event::Ptr &event);
-
-private:
-    static void fillFlightReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
-    static void fillTripReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
-    static void fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
-    static void fillBusReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
-    static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event);
-    static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
-};
+    void fillEvent(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+}
 
 }
 

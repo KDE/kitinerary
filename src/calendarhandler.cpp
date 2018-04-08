@@ -31,6 +31,13 @@
 using namespace KCalCore;
 using namespace KItinerary;
 
+static void fillFlightReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+static void fillTripReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+static void fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+static void fillBusReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event);
+static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
+
 QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
 {
     if (reservation.userType() == qMetaTypeId<FlightReservation>()
@@ -84,7 +91,7 @@ void CalendarHandler::fillEvent(const QVariant &reservation, const KCalCore::Eve
     }
 }
 
-void CalendarHandler::fillFlightReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+static void fillFlightReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
 {
     const auto flight = JsonLdDocument::readProperty(reservation, "reservationFor");
     const auto airline = JsonLdDocument::readProperty(flight, "airline");
@@ -145,7 +152,7 @@ void CalendarHandler::fillFlightReservation(const QVariant &reservation, const K
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-void CalendarHandler::fillTripReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+static void fillTripReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
 {
     const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
     const auto depStation = JsonLdDocument::readProperty(trip, "departureStation");
@@ -183,7 +190,7 @@ void CalendarHandler::fillTripReservation(const QVariant &reservation, const KCa
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-void CalendarHandler::fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+static void fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
 {
     const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
     const auto depStation = JsonLdDocument::readProperty(trip, "departureStation");
@@ -200,7 +207,7 @@ void CalendarHandler::fillTrainReservation(const QVariant &reservation, const KC
     fillTripReservation(reservation, event);
 }
 
-void CalendarHandler::fillBusReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+static void fillBusReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
 {
     const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
     const auto depStation = JsonLdDocument::readProperty(trip, "departureStation");
@@ -217,7 +224,7 @@ void CalendarHandler::fillBusReservation(const QVariant &reservation, const KCal
     fillTripReservation(reservation, event);
 }
 
-void CalendarHandler::fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event)
+static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event)
 {
     if (reservation.reservationFor().isNull()) {
         return;
@@ -241,7 +248,7 @@ void CalendarHandler::fillLodgingReservation(const LodgingReservation &reservati
     event->setTransparency(Event::Transparent);
 }
 
-void CalendarHandler::fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event)
+static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event)
 {
     const auto geo = JsonLdDocument::readProperty(place, "geo").value<GeoCoordinates>();
     if (!geo.isValid()) {
