@@ -37,7 +37,7 @@ static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusine
 
 bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
 {
-    if (lhs.isNull() || rhs.isNull()) {
+    if (lhs.isNull() || rhs.isNull() || !JsonLd::canConvert<Reservation>(lhs) || !JsonLd::canConvert<Reservation>(rhs)) {
         return false;
     }
     if (lhs.userType() != rhs.userType()) {
@@ -101,8 +101,8 @@ bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
     }
 
     // for all: underName either matches or is not set
-    const auto lhsUN = JsonLdDocument::readProperty(lhs, "underName");
-    const auto rhsUN = JsonLdDocument::readProperty(rhs, "underName");
+    const auto lhsUN = JsonLd::convert<Reservation>(lhs).underName();
+    const auto rhsUN = JsonLd::convert<Reservation>(rhs).underName();
     return lhsUN.isNull() || rhsUN.isNull() || isSamePerson(lhsUN.value<Person>(), rhsUN.value<Person>());
 }
 

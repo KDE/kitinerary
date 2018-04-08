@@ -40,31 +40,26 @@ inline base_type* clone() const override { \
 } \
 private:
 
+#define KITINERARY_MAKE_CLASS_IMPL(Class) \
+Class::Class(const Class &other) = default; \
+Class::~Class() = default; \
+Class& Class::operator=(const Class &other) { d = other.d; return *this; } \
+QString Class::className() const { return QStringLiteral(#Class); } \
+Class::operator QVariant() const { return QVariant::fromValue(*this); } \
+static_assert(sizeof(Class) == sizeof(void*), "dptr must be the only member!"); \
 
 #define KITINERARY_MAKE_SIMPLE_CLASS(Class) \
 Class::Class() : d(new Class ## Private) {} \
-Class::Class(const Class &other) = default; \
-Class::~Class() = default; \
-Class& Class::operator=(const Class &other) { d = other.d; return *this; } \
-QString Class::className() const { return QStringLiteral(#Class); } \
-Class::operator QVariant() const { return QVariant::fromValue(*this); }
+KITINERARY_MAKE_CLASS_IMPL(Class)
 
 #define KITINERARY_MAKE_BASE_CLASS(Class) \
 Class::Class() : d(new Class ## Private) {} \
-Class::Class(const Class &other) = default; \
 Class::Class(Class ## Private *dd) : d(dd) {} \
-Class::~Class() = default; \
-Class& Class::operator=(const Class &other) { d = other.d; return *this; } \
-QString Class::className() const { return QStringLiteral(#Class); } \
-Class::operator QVariant() const { return QVariant::fromValue(*this); }
+KITINERARY_MAKE_CLASS_IMPL(Class)
 
 #define KITINERARY_MAKE_SUB_CLASS(Class, Base) \
 Class::Class() : Base(new Class ## Private) {} \
-Class::Class(const Class &other) = default; \
-Class::~Class() = default; \
-Class& Class::operator=(const Class &other) { d = other.d; return *this; } \
-QString Class::className() const { return QStringLiteral(#Class); } \
-Class::operator QVariant() const { return QVariant::fromValue(*this); }
+KITINERARY_MAKE_CLASS_IMPL(Class)
 
 #define K_D(Class) auto d = static_cast<Class ## Private *>(this->d.data())
 

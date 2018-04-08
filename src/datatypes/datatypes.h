@@ -20,12 +20,41 @@
 
 #include <QMetaType>
 #include <QSharedDataPointer>
+#include <QVariant>
 
 #include <type_traits>
 
 class QString;
 
 namespace KItinerary {
+
+/** JSON-LD data type helper functions. */
+namespace JsonLd {
+
+/** Checks if the given value can be up-cast to T */
+template <typename T>
+inline bool canConvert(const QVariant &value)
+{
+    const auto mo = QMetaType(value.userType()).metaObject();
+    if (!mo) {
+        return false;
+    }
+    return mo->inherits(&T::staticMetaObject);
+}
+
+/** Up-cast @p value to T.
+ *  @note This does not perform any safety checks!
+ *  @see canConvert
+ */
+template <typename T>
+inline T convert(const QVariant &value)
+{
+    return T(*static_cast<const T*>(value.constData()));
+}
+
+}
+
+///@cond internal
 namespace detail {
 
 template <typename T>
@@ -61,5 +90,7 @@ public: \
     Type Name() const; \
     void SetName(KItinerary::detail::parameter_type<Type>::type v); \
 private:
+
+///@endcond
 
 #endif

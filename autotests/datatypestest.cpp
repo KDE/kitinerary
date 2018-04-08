@@ -145,6 +145,23 @@ private Q_SLOTS:
         auto obj = component.create();
         QVERIFY(obj);
     }
+
+    void testUpCastHelper()
+    {
+        Place p;
+        FoodEstablishment r;
+        Airport a;
+        a.setName(QLatin1String("Berlin Tegel"));
+        a.setIataCode(QLatin1String("TXL"));
+
+        QVERIFY(JsonLd::canConvert<Place>(a));
+        QVERIFY(JsonLd::canConvert<Airport>(a));
+        QVERIFY(!JsonLd::canConvert<FoodEstablishment>(a));
+        QVERIFY(!JsonLd::canConvert<Airport>(p));
+
+        p = JsonLd::convert<Place>(a);
+        QCOMPARE(p.name(), QLatin1String("Berlin Tegel"));
+    }
 };
 
 QTEST_MAIN(DatatypesTest)
