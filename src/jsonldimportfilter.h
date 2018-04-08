@@ -27,6 +27,7 @@ namespace KItinerary {
  */
 namespace JsonLdImportFilter
 {
+    /** Filter the top-level object @p obj for loading with JsonLdDocument. */
     QJsonObject filterObject(const QJsonObject &obj);
 }
 

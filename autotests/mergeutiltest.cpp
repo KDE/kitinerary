@@ -93,6 +93,27 @@ private Q_SLOTS:
         p2.setName(QLatin1String("Volker Krause"));
         QVERIFY(MergeUtil::isSamePerson(p1, p2));
     }
+
+    void testIsSameLodingReservation()
+    {
+        LodgingReservation res1;
+        LodgingBusiness hotel1;
+        hotel1.setName(QLatin1String("Haus Randa"));
+        res1.setReservationFor(QVariant::fromValue(hotel1));
+        res1.setCheckinTime(QDateTime(QDate(2018, 4, 9), QTime(10, 0)));
+        res1.setReservationNumber(QLatin1String("1234"));
+
+        LodgingReservation res2;
+        QVERIFY(!MergeUtil::isSameReservation(QVariant::fromValue(res1), QVariant::fromValue(res2)));
+        res2.setReservationNumber(QLatin1String("1234"));
+        QVERIFY(!MergeUtil::isSameReservation(QVariant::fromValue(res1), QVariant::fromValue(res2)));
+        res2.setCheckinTime(QDateTime(QDate(2018, 4, 9), QTime(15, 0)));
+        QVERIFY(!MergeUtil::isSameReservation(QVariant::fromValue(res1), QVariant::fromValue(res2)));
+        LodgingBusiness hotel2;
+        hotel2.setName(QLatin1String("Haus Randa"));
+        res2.setReservationFor(QVariant::fromValue(hotel2));
+        QVERIFY(MergeUtil::isSameReservation(QVariant::fromValue(res1), QVariant::fromValue(res2)));
+    }
 };
 
 QTEST_APPLESS_MAIN(MergeUtilTest)

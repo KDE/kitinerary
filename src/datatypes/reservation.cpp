@@ -58,23 +58,23 @@ class LodgingReservationPrivate : public ReservationPrivate
 {
     KITINERARY_PRIVATE_GADGET(LodgingReservation)
 public:
-    QDateTime checkinDate;
-    QDateTime checkoutDate;
+    QDateTime checkinTime;
+    QDateTime checkoutTime;
 };
 KITINERARY_MAKE_SUB_CLASS(LodgingReservation, Reservation)
-KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkinDate, setCheckinDate)
-KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkoutDate, setCheckoutDate)
+KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkinTime, setCheckinTime)
+KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkoutTime, setCheckoutTime)
 
 QString LodgingReservation::checkinDateLocalized() const
 {
     K_D(const LodgingReservation);
-    return QLocale().toString(d->checkinDate.date(), QLocale::ShortFormat);
+    return QLocale().toString(d->checkinTime.date(), QLocale::ShortFormat);
 }
 
 QString LodgingReservation::checkoutDateLocalized() const
 {
     K_D(const LodgingReservation);
-    return QLocale().toString(d->checkoutDate.date(), QLocale::ShortFormat);
+    return QLocale().toString(d->checkoutTime.date(), QLocale::ShortFormat);
 }
 
 

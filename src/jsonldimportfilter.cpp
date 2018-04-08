@@ -17,9 +17,19 @@
 
 #include "jsonldimportfilter.h"
 
+#include <QDebug>
 #include <QJsonObject>
 
 using namespace KItinerary;
+
+static void renameProperty(QJsonObject &obj, const char *oldName, const char *newName)
+{
+    const auto value = obj.value(QLatin1String(oldName));
+    if (!value.isNull() && !obj.contains(QLatin1String(newName))) {
+        obj.insert(QLatin1String(newName), value);
+        obj.remove(QLatin1String(oldName));
+    }
+}
 
 static void filterTrainTrip(QJsonObject &trip)
 {
@@ -28,10 +38,14 @@ static void filterTrainTrip(QJsonObject &trip)
     }
 
     // move TrainTrip::trainCompany to TrainTrip::provider (as defined by schema.org)
-    const auto company = trip.value(QLatin1String("trainCompany")).toObject();
-    if (!company.isEmpty() && !trip.contains(QLatin1String("provider"))) {
-        trip.insert(QLatin1String("provider"), company);
-    }
+    renameProperty(trip, "trainCompany", "provider");
+}
+
+static void filterLodgingReservation(QJsonObject &res)
+{
+    // check[in|out]Date -> check[in|out]Time (legacy Google format)
+    renameProperty(res, "checkinDate", "checkinTime");
+    renameProperty(res, "checkoutDate", "checkoutTime");
 }
 
 static void filterReservation(QJsonObject &res)
@@ -64,6 +78,8 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         if (!train.isEmpty()) {
             res.insert(QLatin1String("reservationFor"), train);
         }
+    } else if (type == QLatin1String("LodgingReservation")) {
+        filterLodgingReservation(res);
     }
 
     return res;

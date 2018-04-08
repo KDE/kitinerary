@@ -95,7 +95,7 @@ bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
         }
         const auto lhsHotel = lhsRes.reservationFor().value<LodgingBusiness>();
         const auto rhsHotel = rhsRes.reservationFor().value<LodgingBusiness>();
-        if (!isSameLodingBusiness(lhsHotel, rhsHotel) || lhsRes.checkinDate() != rhsRes.checkinDate()) {
+        if (!isSameLodingBusiness(lhsHotel, rhsHotel) || lhsRes.checkinTime().date() != rhsRes.checkinTime().date()) {
             return false;
         }
     }

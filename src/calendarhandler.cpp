@@ -39,7 +39,7 @@ QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
         const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
         return JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
     } else if (reservation.userType() == qMetaTypeId<LodgingReservation>()) {
-        return JsonLdDocument::readProperty(reservation, "checkinDate").toDateTime();
+        return reservation.value<LodgingReservation>().checkinTime();
     }
     return {};
 }
@@ -71,7 +71,7 @@ void CalendarHandler::fillEvent(const QVariant &reservation, const KCalCore::Eve
     if (typeId == qMetaTypeId<FlightReservation>()) {
         fillFlightReservation(reservation, event);
     } else if (typeId == qMetaTypeId<LodgingReservation>()) {
-        fillLodgingReservation(reservation, event);
+        fillLodgingReservation(reservation.value<LodgingReservation>(), event);
     } else if (typeId == qMetaTypeId<TrainReservation>()) {
         fillTrainReservation(reservation, event);
     } else if (typeId == qMetaTypeId<BusReservation>()) {
@@ -217,35 +217,27 @@ void CalendarHandler::fillBusReservation(const QVariant &reservation, const KCal
     fillTripReservation(reservation, event);
 }
 
-void CalendarHandler::fillLodgingReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+void CalendarHandler::fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event)
 {
-    const auto lodgingBusiness = JsonLdDocument::readProperty(reservation, "reservationFor");
-    const auto address = JsonLdDocument::readProperty(lodgingBusiness, "address");
-    if (lodgingBusiness.isNull() || address.isNull()) {
+    if (reservation.reservationFor().isNull()) {
         return;
     }
+    const auto lodgingBusiness = reservation.reservationFor().value<LodgingBusiness>();
+    const auto address = lodgingBusiness.address();
 
-    event->setSummary(i18n("Hotel reservation: %1",
-                           JsonLdDocument::readProperty(lodgingBusiness, "name").toString()
-                           ));
+    event->setSummary(i18n("Hotel reservation: %1", lodgingBusiness.name()));
     event->setLocation(i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
-                            JsonLdDocument::readProperty(address, "streetAddress").toString(),
-                            JsonLdDocument::readProperty(address, "postalCode").toString(),
-                            JsonLdDocument::readProperty(address, "addressLocality").toString(),
-                            JsonLdDocument::readProperty(address, "addressCountry").toString()
-                            ));
-    fillGeoPosition(lodgingBusiness, event);
+                             address.streetAddress(), address.postalCode(),
+                             address.addressLocality(), address.addressCountry()));
+    fillGeoPosition(QVariant::fromValue(lodgingBusiness), event);
 
-    const auto checkinDt = JsonLdDocument::readProperty(reservation, "checkinDate").toDateTime();
-    const auto checkoutDt = JsonLdDocument::readProperty(reservation, "checkoutDate").toDateTime();
-    event->setDtStart(QDateTime(checkinDt.date(), QTime()));
-    event->setDtEnd(QDateTime(checkoutDt.date(), QTime()));
+    event->setDtStart(QDateTime(reservation.checkinTime().date(), QTime()));
+    event->setDtEnd(QDateTime(reservation.checkoutTime().date(), QTime()));
     event->setAllDay(true);
     event->setDescription(i18n("Check-in: %1\nCheck-out: %2\nBooking reference: %3",
-                               QLocale().toString(checkinDt.time(), QLocale::ShortFormat),
-                               QLocale().toString(checkoutDt.time(), QLocale::ShortFormat),
-                               JsonLdDocument::readProperty(reservation, "reservationNumber").toString()
-                               ));
+                               QLocale().toString(reservation.checkinTime().time(), QLocale::ShortFormat),
+                               QLocale().toString(reservation.checkoutTime().time(), QLocale::ShortFormat),
+                               reservation.reservationNumber()));
     event->setTransparency(Event::Transparent);
 }
 

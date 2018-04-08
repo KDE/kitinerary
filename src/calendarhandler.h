@@ -29,6 +29,8 @@ class QVariant;
 
 namespace KItinerary {
 
+class LodgingReservation;
+
 /** Methods for converting between ical events and JSON-LD booking data. */
 class KITINERARY_EXPORT CalendarHandler
 {
@@ -49,7 +51,7 @@ private:
     static void fillTripReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
     static void fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
     static void fillBusReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
-    static void fillLodgingReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+    static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event);
     static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
 };
 

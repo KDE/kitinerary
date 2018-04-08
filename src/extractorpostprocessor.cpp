@@ -50,7 +50,7 @@ public:
     QVariant processReservation(QVariant res) const;
 
     bool filterReservation(const QVariant &res) const;
-    bool filterLodgingReservation(const QVariant &res) const;
+    bool filterLodgingReservation(const LodgingReservation &res) const;
     bool filterFlight(const Flight &flight) const;
     bool filterAirport(const Airport &airport) const;
     bool filterTrainOrBusTrip(const QVariant &trip) const;
@@ -246,16 +246,14 @@ bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
     }
 
     if (res.userType() == qMetaTypeId<LodgingReservation>()) {
-        return filterLodgingReservation(res);
+        return filterLodgingReservation(res.value<LodgingReservation>());
     }
     return true;
 }
 
-bool ExtractorPostprocessorPrivate::filterLodgingReservation(const QVariant &res) const
+bool ExtractorPostprocessorPrivate::filterLodgingReservation(const LodgingReservation &res) const
 {
-    const auto checkinDate = JsonLdDocument::readProperty(res, "checkinDate").toDateTime();
-    const auto checkoutDate = JsonLdDocument::readProperty(res, "checkoutDate").toDateTime();
-    return checkinDate.isValid() && checkoutDate.isValid();
+    return res.checkinTime().isValid() && res.checkoutTime().isValid();
 }
 
 bool ExtractorPostprocessorPrivate::filterFlight(const Flight &flight) const

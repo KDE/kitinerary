@@ -63,12 +63,13 @@ protected:
 
 /** A hotel reservation.
  *  @see https://schema.org/LodgingReservation
+ *  @see https://developers.google.com/gmail/markup/reference/hotel-reservation
  */
 class KITINERARY_EXPORT LodgingReservation : public Reservation
 {
     KITINERARY_GADGET(LodgingReservation)
-    KITINERARY_PROPERTY(QDateTime, checkinDate, setCheckinDate)
-    KITINERARY_PROPERTY(QDateTime, checkoutDate, setCheckoutDate)
+    KITINERARY_PROPERTY(QDateTime, checkinTime, setCheckinTime)
+    KITINERARY_PROPERTY(QDateTime, checkoutTime, setCheckoutTime)
 
     Q_PROPERTY(QString checkinDateLocalized READ checkinDateLocalized STORED false CONSTANT)
     Q_PROPERTY(QString checkoutDateLocalized READ checkoutDateLocalized STORED false CONSTANT)
