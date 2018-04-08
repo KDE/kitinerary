@@ -46,6 +46,7 @@ public: \
     Class(const Class &other); \
     ~Class(); \
     Class& operator=(const Class &other); \
+    operator QVariant () const; \
 private:
 
 #define KITINERARY_BASE_GADGET(Class) \

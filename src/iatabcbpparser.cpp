@@ -76,7 +76,7 @@ static int parseRepeatedMandatorySection(const QStringRef& msg, const QDate &iss
             flight.setDepartureDay(QDate(issueDate.year() + 1, 1, 1).addDays(days));
         }
     }
-    res.setReservationFor(QVariant::fromValue(flight));
+    res.setReservationFor(flight);
 
     // 1x Compartment code
 
@@ -111,7 +111,7 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &iss
     const auto fullName = message.midRef(2, 20).trimmed();
     // TODO split in family and given name
     person.setName(fullName.toString());
-    res1.setUnderName(QVariant::fromValue(person));
+    res1.setUnderName(person);
 
     const auto varSize = parseRepeatedMandatorySection(message.midRef(UniqueMandatorySize), issueDate, res1);
     int index = UniqueMandatorySize + RepeastedMandatorySize;
@@ -135,7 +135,7 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &iss
         index += varSize;
     }
 
-    result.push_back(QVariant::fromValue(res1));
+    result.push_back(res1);
 
     // all following legs only contain repeated sections, copy content from the unique ones from the first leg
     for (int i = 1; i < legCount; ++i) {
@@ -156,7 +156,7 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &iss
         // skip for airline use section
 
         index += varSize;
-        result.push_back(QVariant::fromValue(res));
+        result.push_back(res);
     }
 
     // optional security section at the end, not interesting for us

@@ -123,13 +123,13 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
         }
         const auto bcbpData = IataBcbpParser::parse(bcbp, m_contextDate.date());
         if (bcbpData.size() == 1) {
-            res = JsonLdDocument::apply(bcbpData.at(0), QVariant::fromValue(res)).value<FlightReservation>();
+            res = JsonLdDocument::apply(bcbpData.at(0), res).value<FlightReservation>();
         }
     }
 
-    res = processReservation(QVariant::fromValue(res)).value<FlightReservation>();
-    res = processProperty(QVariant::fromValue(res), "reservationFor", &ExtractorPostprocessorPrivate::processFlight).value<FlightReservation>();
-    return QVariant::fromValue(res);
+    res = processReservation(res).value<FlightReservation>();
+    res = processProperty(res, "reservationFor", &ExtractorPostprocessorPrivate::processFlight).value<FlightReservation>();
+    return res;
 }
 
 QVariant ExtractorPostprocessorPrivate::processFlight(QVariant flight) const

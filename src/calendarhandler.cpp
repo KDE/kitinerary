@@ -229,7 +229,7 @@ void CalendarHandler::fillLodgingReservation(const LodgingReservation &reservati
     event->setLocation(i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
                              address.streetAddress(), address.postalCode(),
                              address.addressLocality(), address.addressCountry()));
-    fillGeoPosition(QVariant::fromValue(lodgingBusiness), event);
+    fillGeoPosition(lodgingBusiness, event);
 
     event->setDtStart(QDateTime(reservation.checkinTime().date(), QTime()));
     event->setDtEnd(QDateTime(reservation.checkoutTime().date(), QTime()));
