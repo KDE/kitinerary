@@ -53,6 +53,9 @@ private Q_SLOTS:
 
         // EW misses the 'E' eticket marker (BCBP item 253)
         QTest::newRow("missing eticket indicator") << QStringLiteral("M1DOE/JOHN             XXX007 BRUTXLEW 8103 035Y012C0030 147>1181W 8033BEW 0000000000000291040000000000 0   LH 123456789012345     ") << QStringLiteral("missing-eticket-indicator.json");
+
+        // boarding pass issue date (BCBP item 22)
+        QTest::newRow("issue date") << QStringLiteral("M1DOE/JOHN            EXXX007 TXLBRUSN 2588 034Y023D0999 35D>5181WM7034BSN              2A08200000000000 SN LH 123456789012345      *30600000K0902       ") << QStringLiteral("issue-date.json");
     }
 
     void testParserValid()

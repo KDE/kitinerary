@@ -2,28 +2,28 @@
     {
         "@context": "http://schema.org",
         "@type": "FlightReservation",
-        "airplaneSeat": "12C",
+        "airplaneSeat": "23D",
         "reservationFor": {
             "@type": "Flight",
             "airline": {
                 "@type": "Airline",
-                "iataCode": "EW"
+                "iataCode": "SN"
             },
             "arrivalAirport": {
                 "@type": "Airport",
-                "iataCode": "TXL"
+                "iataCode": "BRU"
             },
             "departureAirport": {
                 "@type": "Airport",
-                "iataCode": "BRU"
+                "iataCode": "TXL"
             },
-            "departureDay": "2018-02-04",
-            "flightNumber": "8103"
+            "departureDay": "2017-02-03",
+            "flightNumber": "2588"
         },
         "reservationNumber": "XXX007",
         "underName": {
-           "@type": "Person",
-           "name": "DOE/JOHN"
+            "@type": "Person",
+            "name": "DOE/JOHN"
         }
     }
 ]
