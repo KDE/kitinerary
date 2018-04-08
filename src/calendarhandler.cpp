@@ -21,8 +21,12 @@
 #include "jsonlddocument.h"
 #include "logging.h"
 
-#include <datatypes/place.h>
-#include <datatypes/reservation.h>
+#include <KItinerary/BusTrip>
+#include <KItinerary/Flight>
+#include <KItinerary/Organization>
+#include <KItinerary/Place>
+#include <KItinerary/Reservation>
+#include <KItinerary/TrainTrip>
 
 #include <KCalCore/Alarm>
 
@@ -31,10 +35,10 @@
 using namespace KCalCore;
 using namespace KItinerary;
 
-static void fillFlightReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+static void fillFlightReservation(const FlightReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillTripReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
-static void fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
-static void fillBusReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event);
+static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
 
@@ -53,7 +57,10 @@ QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
 
 Event::Ptr CalendarHandler::findEvent(const Calendar::Ptr &calendar, const QVariant &reservation)
 {
-    const auto bookingRef = JsonLdDocument::readProperty(reservation, "reservationNumber").toString();
+    if (!JsonLd::canConvert<Reservation>(reservation)) {
+        return {};
+    }
+    const auto bookingRef = JsonLd::convert<Reservation>(reservation).reservationNumber();
     if (bookingRef.isEmpty()) {
         return {};
     }
@@ -76,48 +83,41 @@ void CalendarHandler::fillEvent(const QVariant &reservation, const KCalCore::Eve
 {
     const int typeId = reservation.userType();
     if (typeId == qMetaTypeId<FlightReservation>()) {
-        fillFlightReservation(reservation, event);
+        fillFlightReservation(reservation.value<FlightReservation>(), event);
     } else if (typeId == qMetaTypeId<LodgingReservation>()) {
         fillLodgingReservation(reservation.value<LodgingReservation>(), event);
     } else if (typeId == qMetaTypeId<TrainReservation>()) {
-        fillTrainReservation(reservation, event);
+        fillTrainReservation(reservation.value<TrainReservation>(), event);
     } else if (typeId == qMetaTypeId<BusReservation>()) {
-        fillBusReservation(reservation, event);
+        fillBusReservation(reservation.value<BusReservation>(), event);
+    } else {
+        return;
     }
 
-    const auto bookingRef = JsonLdDocument::readProperty(reservation, "reservationNumber").toString();
+    const auto bookingRef = JsonLd::convert<Reservation>(reservation).reservationNumber();
     if (!event->uid().startsWith(bookingRef)) {
         event->setUid(bookingRef + QLatin1Char('-') + event->uid());
     }
 }
 
-static void fillFlightReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+static void fillFlightReservation(const FlightReservation &reservation, const KCalCore::Event::Ptr &event)
 {
-    const auto flight = JsonLdDocument::readProperty(reservation, "reservationFor");
-    const auto airline = JsonLdDocument::readProperty(flight, "airline");
-    const auto depPort = JsonLdDocument::readProperty(flight, "departureAirport");
-    const auto arrPort = JsonLdDocument::readProperty(flight, "arrivalAirport");
-    if (flight.isNull() || airline.isNull() || depPort.isNull() || arrPort.isNull()) {
-        qCDebug(Log) << "got invalid flight reservation";
-        return;
-    }
+    const auto flight = reservation.reservationFor().value<Flight>();
+    const auto airline = flight.airline();
+    const auto depPort = flight.departureAirport();
+    const auto arrPort = flight.arrivalAirport();
 
-    const QString flightNumber = JsonLdDocument::readProperty(airline, "iataCode").toString()
-                              + QLatin1Char(' ')
-                              + JsonLdDocument::readProperty(flight, "flightNumber").toString();
+    const QString flightNumber = airline.iataCode() + QLatin1Char(' ') + flight.flightNumber();
 
-    event->setSummary(i18n("Flight %1 from %2 to %3", flightNumber,
-                           JsonLdDocument::readProperty(depPort, "iataCode").toString(),
-                           JsonLdDocument::readProperty(arrPort, "iataCode").toString()
-                           ));
-    event->setLocation(JsonLdDocument::readProperty(depPort, "name").toString());
+    event->setSummary(i18n("Flight %1 from %2 to %3", flightNumber, depPort.iataCode(), arrPort.iataCode()));
+    event->setLocation(depPort.name());
     fillGeoPosition(depPort, event);
-    event->setDtStart(JsonLdDocument::readProperty(flight, "departureTime").toDateTime());
-    event->setDtEnd(JsonLdDocument::readProperty(flight, "arrivalTime").toDateTime());
+    event->setDtStart(flight.departureTime());
+    event->setDtEnd(flight.arrivalTime());
     event->setAllDay(false);
 
-    const auto boardingTime = JsonLdDocument::readProperty(flight, "boardingTime").toDateTime();
-    const auto departureGate = JsonLdDocument::readProperty(flight, "departureGate").toString();
+    const auto boardingTime = flight.boardingTime();
+    const auto departureGate = flight.departureGate();
     if (boardingTime.isValid()) {
         Alarm::Ptr alarm(new Alarm(event.data()));
         alarm->setStartOffset(Duration(event->dtStart(), boardingTime));
@@ -137,17 +137,14 @@ static void fillFlightReservation(const QVariant &reservation, const KCalCore::E
     if (!departureGate.isEmpty()) {
         desc.push_back(i18n("Departure gate: %1", departureGate));
     }
-    auto s = JsonLdDocument::readProperty(reservation, "boardingGroup").toString();
-    if (!s.isEmpty()) {
-        desc.push_back(i18n("Boarding group: %1", s));
+    if (!reservation.boardingGroup().isEmpty()) {
+        desc.push_back(i18n("Boarding group: %1", reservation.boardingGroup()));
     }
-    s = JsonLdDocument::readProperty(reservation, "airplaneSeat").toString();
-    if (!s.isEmpty()) {
-        desc.push_back(i18n("Seat: %1", s));
+    if (!reservation.airplaneSeat().isEmpty()) {
+        desc.push_back(i18n("Seat: %1", reservation.airplaneSeat()));
     }
-    s = JsonLdDocument::readProperty(reservation, "reservationNumber").toString();
-    if (!s.isEmpty()) {
-        desc.push_back(i18n("Booking reference: %1", s));
+    if (!reservation.reservationNumber().isEmpty()) {
+        desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
     }
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
@@ -190,45 +187,28 @@ static void fillTripReservation(const QVariant &reservation, const KCalCore::Eve
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillTrainReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event)
 {
-    const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
-    const auto depStation = JsonLdDocument::readProperty(trip, "departureStation");
-    const auto arrStation = JsonLdDocument::readProperty(trip, "arrivalStation");
-    if (trip.isNull() || depStation.isNull() || arrStation.isNull()) {
-        return;
-    }
+    const auto trip = reservation.reservationFor().value<TrainTrip>();
+    const auto depStation = trip.departureStation();
+    const auto arrStation = trip.arrivalStation();
 
-    event->setSummary(i18n("Train %1 from %2 to %3",
-                           JsonLdDocument::readProperty(trip, "trainNumber").toString(),
-                           JsonLdDocument::readProperty(depStation, "name").toString(),
-                           JsonLdDocument::readProperty(arrStation, "name").toString()
-                           ));
+    event->setSummary(i18n("Train %1 from %2 to %3", trip.trainNumber(), depStation.name(), arrStation.name()));
     fillTripReservation(reservation, event);
 }
 
-static void fillBusReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event)
 {
-    const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
-    const auto depStation = JsonLdDocument::readProperty(trip, "departureStation");
-    const auto arrStation = JsonLdDocument::readProperty(trip, "arrivalStation");
-    if (trip.isNull() || depStation.isNull() || arrStation.isNull()) {
-        return;
-    }
+    const auto trip = reservation.reservationFor().value<BusTrip>();
+    const auto depStation = trip.departureStation();
+    const auto arrStation = trip.arrivalStation();
 
-    event->setSummary(i18n("Bus %1 from %2 to %3",
-                           JsonLdDocument::readProperty(trip, "busNumber").toString(),
-                           JsonLdDocument::readProperty(depStation, "name").toString(),
-                           JsonLdDocument::readProperty(arrStation, "name").toString()
-                           ));
+    event->setSummary(i18n("Bus %1 from %2 to %3", trip.busNumber(), depStation.name(), arrStation.name()));
     fillTripReservation(reservation, event);
 }
 
 static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event)
 {
-    if (reservation.reservationFor().isNull()) {
-        return;
-    }
     const auto lodgingBusiness = reservation.reservationFor().value<LodgingBusiness>();
     const auto address = lodgingBusiness.address();
 
@@ -250,7 +230,10 @@ static void fillLodgingReservation(const LodgingReservation &reservation, const 
 
 static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event)
 {
-    const auto geo = JsonLdDocument::readProperty(place, "geo").value<GeoCoordinates>();
+    if (!JsonLd::canConvert<Place>(place)) {
+        return;
+    }
+    const auto geo = JsonLd::convert<Place>(place).geo();
     if (!geo.isValid()) {
         return;
     }
