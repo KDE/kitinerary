@@ -67,6 +67,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         ExtractorPreprocessor
         ExtractorPostprocessor
         ExtractorRepository
+        IataBcbpParser
         JsonLdDocument
         MergeUtil
         StructuredDataExtractor
