@@ -30,18 +30,18 @@ class QVariant;
 namespace KItinerary {
 
 /** Methods for converting between ical events and JSON-LD booking data. */
-namespace KITINERARY_EXPORT CalendarHandler
+namespace CalendarHandler
 {
     /** Returns the start time associated with the given reservation. */
-    QDateTime startDateTime(const QVariant &reservation);
+    KITINERARY_EXPORT QDateTime startDateTime(const QVariant &reservation);
 
     /** Attempts to find an event in @p calendar for @p reservation. */
-    KCalCore::Event::Ptr findEvent(const KCalCore::Calendar::Ptr &calendar, const QVariant &reservation);
+    KITINERARY_EXPORT KCalCore::Event::Ptr findEvent(const KCalCore::Calendar::Ptr &calendar, const QVariant &reservation);
 
     /** Fills @p event with details of @p reservation.
      *  Can be used on new events or to update existing ones.
      */
-    void fillEvent(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+    KITINERARY_EXPORT void fillEvent(const QVariant &reservation, const KCalCore::Event::Ptr &event);
 }
 
 }
