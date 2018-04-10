@@ -134,6 +134,7 @@ QString StructuredDataExtractorPrivate::fixupHtml4(const QString &text) const
 
     // close single-element tags
     output.replace(QRegularExpression(QStringLiteral("(<meta[^>]*[^>/])>")), QStringLiteral("\\1/>"));
+    output.replace(QRegularExpression(QStringLiteral("(<link[^>]*[^>/])>")), QStringLiteral("\\1/>"));
 
     // fix value-less attributes
     output.replace(QRegularExpression(QStringLiteral("(<[^>]+ )itemscope( [^>]*>)")), QStringLiteral("\\1itemscope=\"\"\\2"));
