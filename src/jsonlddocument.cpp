@@ -93,23 +93,28 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
     return createInstance(v.toObject());
 }
 
+static void createInstance(const QMetaObject *mo, void *v, const QJsonObject &obj)
+{
+   for (auto it = obj.begin(); it != obj.end(); ++it) {
+        if (it.key().startsWith(QLatin1Char('@'))) {
+            continue;
+        }
+        const auto idx = mo->indexOfProperty(it.key().toLatin1().constData());
+        if (idx < 0) {
+            qCDebug(Log) << "property" << it.key() << "could not be set on object of type" << mo->className();
+            continue;
+        }
+        const auto prop = mo->property(idx);
+        const auto value = propertyValue(prop, it.value());
+        prop.writeOnGadget(v, value);
+    }
+}
+
 template<typename T>
 static QVariant createInstance(const QJsonObject &obj)
 {
     T t;
-    for (auto it = obj.begin(); it != obj.end(); ++it) {
-        if (it.key().startsWith(QLatin1Char('@'))) {
-            continue;
-        }
-        const auto idx = T::staticMetaObject.indexOfProperty(it.key().toLatin1().constData());
-        if (idx < 0) {
-            qCDebug(Log) << "property" << it.key() << "could not be set on object of type" << T::staticMetaObject.className();
-            continue;
-        }
-        const auto prop = T::staticMetaObject.property(idx);
-        const auto value = propertyValue(prop, it.value());
-        prop.writeOnGadget(&t, value);
-    }
+    createInstance(&T::staticMetaObject, &t, obj);
     return QVariant::fromValue(t);
 }
 
