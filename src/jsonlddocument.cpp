@@ -21,13 +21,14 @@
 #include "jsonldimportfilter.h"
 #include "logging.h"
 
-#include <datatypes/bustrip.h>
-#include <datatypes/flight.h>
-#include <datatypes/organization.h>
-#include <datatypes/place.h>
-#include <datatypes/reservation.h>
-#include <datatypes/ticket.h>
-#include <datatypes/traintrip.h>
+#include <KItinerary/BusTrip>
+#include <KItinerary/Flight>
+#include <KItinerary/Organization>
+#include <KItinerary/Person>
+#include <KItinerary/Place>
+#include <KItinerary/Reservation>
+#include <KItinerary/Ticket>
+#include <KItinerary/TrainTrip>
 
 #include <QDateTime>
 #include <QJsonArray>
@@ -119,25 +120,27 @@ static QVariant createInstance(const QJsonObject &obj)
 static QVariant createInstance(const QJsonObject &obj)
 {
     const auto type = obj.value(QLatin1String("@type")).toString();
-    MAKE_FACTORY(GeoCoordinates);
     MAKE_FACTORY(Airline);
     MAKE_FACTORY(Airport);
-    MAKE_FACTORY(FlightReservation);
+    MAKE_FACTORY(BusReservation);
+    MAKE_FACTORY(BusStation);
+    MAKE_FACTORY(BusTrip);
     MAKE_FACTORY(Flight);
+    MAKE_FACTORY(FlightReservation);
+    MAKE_FACTORY(FoodEstablishment);
+    MAKE_FACTORY(GeoCoordinates);
     MAKE_FACTORY(LodgingBusiness);
     MAKE_FACTORY(LodgingReservation);
-    MAKE_FACTORY(FoodEstablishment);
-    MAKE_FACTORY(TouristAttraction);
+    MAKE_FACTORY(Organization);
+    MAKE_FACTORY(Person);
+    MAKE_FACTORY(Place);
     MAKE_FACTORY(PostalAddress);
     MAKE_FACTORY(Seat);
     MAKE_FACTORY(Ticket);
+    MAKE_FACTORY(TouristAttraction);
+    MAKE_FACTORY(TrainReservation);
     MAKE_FACTORY(TrainStation);
     MAKE_FACTORY(TrainTrip);
-    MAKE_FACTORY(TrainReservation);
-    MAKE_FACTORY(BusStation);
-    MAKE_FACTORY(BusTrip);
-    MAKE_FACTORY(BusReservation);
-    MAKE_FACTORY(Organization);
     return {};
 }
 

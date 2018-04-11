@@ -41,6 +41,10 @@
                 "seatSection": "13"
             }
         },
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
         "url": "https://www.trainline.fr/tickets"
     },
     {
@@ -84,6 +88,10 @@
                 "seatNumber": "62",
                 "seatSection": "17"
             }
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
         },
         "url": "https://www.trainline.fr/tickets"
     }
