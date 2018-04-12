@@ -34,11 +34,13 @@ namespace KItinerary {
 class StructuredDataExtractorPrivate {
 public:
     /* Try to parse using an actual XML parser. */
-    void parseXml(const QString &text);
+    bool parseXml(const QString &text);
     /* Try to find application/ld+json content with basic string search. */
-    void findLdJson(const QString &text);
+    bool findLdJson(const QString &text);
     /* Try to fix some common HTML4 damage to make @p text consumable for parseXml(). */
-    QString fixupHtml4(const QString &text) const;
+    void fixupHtml4(QString &text) const;
+    /* Strip leading content before what looks like the first occurance of microdata. */
+    void stripLeadingContent(QString &text) const;
     /* Recursive microdata parsing. */
     QJsonObject parseMicroData(QXmlStreamReader &reader) const;
     /* Element-dependent Microdata property value. */
@@ -60,13 +62,28 @@ StructuredDataExtractor::~StructuredDataExtractor() = default;
 
 void StructuredDataExtractor::parse(const QString &text)
 {
-    d->parseXml(text);
-    if (d->m_data.isEmpty()) {
-        d->findLdJson(text);
-        if (d->m_data.isEmpty()) {
-            d->parseXml(d->fixupHtml4(text));
-        }
+    // assume a more or less well-formed input and see what we find
+    if (d->parseXml(text)) {
+        return;
     }
+
+    if (d->findLdJson(text)) {
+        return;
+    }
+
+    // no luck, check if we have any chance at all
+    if (!text.contains(QLatin1String("http://schema.org"))) {
+        return;
+    }
+
+    // now try the expensive desperate stuff
+    auto fixedText = text;
+    d->fixupHtml4(fixedText);
+    if (d->parseXml(fixedText)) {
+        return;
+    }
+    d->stripLeadingContent(fixedText);
+    d->parseXml(fixedText);
 }
 
 QJsonArray StructuredDataExtractor::data() const
@@ -74,7 +91,7 @@ QJsonArray StructuredDataExtractor::data() const
     return d->m_data;
 }
 
-void StructuredDataExtractorPrivate::parseXml(const QString &text)
+bool StructuredDataExtractorPrivate::parseXml(const QString &text)
 {
     QXmlStreamReader reader(text);
     while (!reader.atEnd()) {
@@ -105,9 +122,11 @@ void StructuredDataExtractorPrivate::parseXml(const QString &text)
     if (reader.hasError()) {
         qCDebug(Log) << reader.errorString() << reader.lineNumber() << reader.columnNumber();
     }
+
+    return !m_data.isEmpty();
 }
 
-void StructuredDataExtractorPrivate::findLdJson(const QString &text)
+bool StructuredDataExtractorPrivate::findLdJson(const QString &text)
 {
     for (int i = 0; i < text.size();) {
         i = text.indexOf(QLatin1String("<script"), i, Qt::CaseInsensitive);
@@ -126,21 +145,35 @@ void StructuredDataExtractorPrivate::findLdJson(const QString &text)
         const auto jsonData = text.mid(begin, i - begin);
         parseJson(jsonData.toUtf8());
     }
+
+    return !m_data.isEmpty();
 }
 
-QString StructuredDataExtractorPrivate::fixupHtml4(const QString &text) const
+void StructuredDataExtractorPrivate::fixupHtml4(QString &text) const
 {
-    auto output(text);
-
     // close single-element tags
-    output.replace(QRegularExpression(QStringLiteral("(<meta[^>]*[^>/])>")), QStringLiteral("\\1/>"));
-    output.replace(QRegularExpression(QStringLiteral("(<link[^>]*[^>/])>")), QStringLiteral("\\1/>"));
+    text.replace(QRegularExpression(QStringLiteral("(<meta[^>]*[^>/])>")), QStringLiteral("\\1/>"));
+    text.replace(QRegularExpression(QStringLiteral("(<link[^>]*[^>/])>")), QStringLiteral("\\1/>"));
 
     // fix value-less attributes
-    output.replace(QRegularExpression(QStringLiteral("(<[^>]+ )itemscope( [^>]*>)")), QStringLiteral("\\1itemscope=\"\"\\2"));
+    text.replace(QRegularExpression(QStringLiteral("(<[^>]+ )itemscope( [^>]*>)")), QStringLiteral("\\1itemscope=\"\"\\2"));
 
     // TODO remove legacy entities like &nbsp;
-    return output;
+}
+
+void StructuredDataExtractorPrivate::stripLeadingContent(QString &text) const
+{
+    auto idx = text.indexOf(QLatin1String("http://schema.org"));
+    if (idx < 0) {
+        return;
+    }
+
+    idx = text.midRef(0, idx).lastIndexOf(QLatin1Char('<'));
+    if (idx <= 0) {
+        return;
+    }
+
+    text.remove(0, idx - 1);
 }
 
 QJsonObject StructuredDataExtractorPrivate::parseMicroData(QXmlStreamReader &reader) const
@@ -195,7 +228,11 @@ QString StructuredDataExtractorPrivate::valueForItemProperty(QXmlStreamReader &r
     } else if (elemName == QLatin1String("time")) {
         v = reader.attributes().value(QLatin1String("datetime")).toString();
     } else if (elemName == QLatin1String("link") || elemName == QLatin1String("a")) {
-        v = reader.attributes().value(QLatin1String("href")).toString();
+        if (reader.attributes().hasAttribute(QLatin1String("href"))) {
+            v = reader.attributes().value(QLatin1String("href")).toString();
+        } else if (reader.attributes().hasAttribute(QLatin1String("content"))) {
+            v = reader.attributes().value(QLatin1String("content")).toString();
+        }
     } else {
         qCDebug(Log) << "TODO:" << elemName;
     }

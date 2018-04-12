@@ -1,0 +1,50 @@
+[
+     {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "additionalTicketText": "",
+        "airplaneSeat": "25A",
+        "airplaneSeatClass": {
+            "@type": "AirplaneSeatClass",
+            "name": "ECO LIGHT"
+        },
+        "checkinUrl": "https://mobile.lufthansa.com/service/checkin?ticketnr=1234567890123&fname=JOHN&name=DOE",
+        "modifyReservationUrl": "https://mobile.lufthansa.com/service/checkin?ticketnr=1234567890123&fname=JOHN&name=DOE",
+        "passengerSequenceNumber": "17",
+        "programMembership": {
+            "@type": "ProgramMembership",
+            "program": ""
+        },
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LH",
+                "image": "https://some.url/logo.png",
+                "name": "Lufthansa"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Berlin"
+            },
+            "boardingTime": "2017-03-06T17:05:00.000+01:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "MUC",
+                "name": "Munich"
+            },
+            "departureTime": "2017-03-06",
+            "flightNumber": "2724"
+        },
+        "reservationNumber": "XXX007",
+        "showDepartureTimeOnBoardingPass": "false",
+        "ticketDownloadUrl": "https://mobile.lufthansa.com/service/mbpdownload?guid=0987654321&l=en",
+        "ticketNumber": "1234567890123",
+        "ticketToken": "https://mobile.lufthansa.com/mbp/barcode?guid=QWERTZUIOP",
+        "underName": {
+            "@type": "Person",
+            "name": "John Dow"
+        }
+    }
+]
