@@ -22,10 +22,6 @@ function main(pass)
     var res = JsonLd.newObject("FlightReservation");
     res.reservationFor = JsonLd.newObject("Flight");
     res.reservationFor.departureGate = pass.field["gate"].value;
-    res.reservationFor.departureAirport = JsonLd.newObject("Airport");
-    res.reservationFor.departureAirport.name = pass.field["depart"].label;
-    res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
-    res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
 
     var date = JsonLd.toDateTime(pass.field["date"].value + ' ' + Context.senderDate.getFullYear() + ' ' + pass.field["boarding"].value, "ddMMMM yyyy hh:mm", "en");
     if (date < Context.senderDate)
