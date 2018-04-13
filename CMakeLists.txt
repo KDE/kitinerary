@@ -29,8 +29,9 @@ find_package(Poppler COMPONENTS Qt5)
 set_package_properties("Poppler" PROPERTIES TYPE OPTIONAL PURPOSE "Support for extraction from PDF booking confirmations.")
 
 add_subdirectory(src)
-add_subdirectory(autotests)
-
+if(BUILD_TESTING)
+   add_subdirectory(autotests)
+endif()
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 
