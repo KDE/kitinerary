@@ -109,12 +109,25 @@ class KITINERARY_EXPORT BusReservation : public Reservation
     KITINERARY_GADGET(BusReservation)
 };
 
+/** A restaurant reservation.
+ *  @see https://schema.org/FoodEstablishmentReservation
+ *  @see https://developers.google.com/gmail/markup/reference/restaurant-reservation
+ */
+class KITINERARY_EXPORT FoodEstablishmentReservation : public Reservation
+{
+    KITINERARY_GADGET(FoodEstablishmentReservation)
+    KITINERARY_PROPERTY(QDateTime, endTime, setEndTime)
+    KITINERARY_PROPERTY(int, partySize, setPartySize)
+    KITINERARY_PROPERTY(QDateTime, startTime, setStartTime)
+};
+
 }
 
 Q_DECLARE_METATYPE(KItinerary::FlightReservation)
 Q_DECLARE_METATYPE(KItinerary::LodgingReservation)
 Q_DECLARE_METATYPE(KItinerary::TrainReservation)
 Q_DECLARE_METATYPE(KItinerary::BusReservation)
+Q_DECLARE_METATYPE(KItinerary::FoodEstablishmentReservation)
 
 #endif // KITINERARY_RESERVATION_H
 

@@ -104,6 +104,19 @@ class BusReservationPrivate : public ReservationPrivate
 };
 KITINERARY_MAKE_SUB_CLASS(BusReservation, Reservation)
 
+class FoodEstablishmentReservationPrivate : public ReservationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(FoodEstablishmentReservation)
+public:
+    QDateTime endTime;
+    QDateTime startTime;
+    int partySize = 0;
+};
+KITINERARY_MAKE_SUB_CLASS(FoodEstablishmentReservation, Reservation)
+KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, endTime, setEndTime)
+KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, int, partySize, setPartySize)
+KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, startTime, setStartTime)
+
 }
 
 template <>
