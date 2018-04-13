@@ -20,7 +20,7 @@
             },
             "boardingTime": {
                 "@type": "QDateTime",
-                "@value": "2017-11-05T07:25:00+01:00",
+                "@value": "2017-11-05T08:25:00+01:00",
                 "timezone": "Europe/Berlin"
             },
             "departureAirport": {

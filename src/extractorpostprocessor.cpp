@@ -205,8 +205,12 @@ void ExtractorPostprocessorPrivate::processFlightTime(QVariant &flight, const ch
         return;
     }
 
-    dt.setTimeSpec(Qt::TimeZone);
-    dt.setTimeZone(tz);
+    if (dt.timeSpec() == Qt::OffsetFromUTC || dt.timeSpec() == Qt::LocalTime) {
+        dt.setTimeSpec(Qt::TimeZone);
+        dt.setTimeZone(tz);
+    } else if (dt.timeSpec() == Qt::UTC) {
+        dt = dt.toTimeZone(tz);
+    }
     // if we updated from UTC offset to timezone spec here, QDateTime will compare equal
     // and the auto-generated property code will not actually update the property
     // so, clear the property first to force an update
