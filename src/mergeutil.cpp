@@ -34,6 +34,7 @@ using namespace KItinerary;
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs);
 static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs);
 static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs);
+static bool isSameFoodEstablishment(const FoodEstablishment &lhs, const FoodEstablishment &rhs);
 
 bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
 {
@@ -100,6 +101,20 @@ bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
         }
     }
 
+    // restaurant reservation: sane restaurant, same booking ref, same day
+    if (lhs.userType() == qMetaTypeId<FoodEstablishmentReservation>()) {
+        const auto lhsRes = lhs.value<FoodEstablishmentReservation>();
+        const auto rhsRes = rhs.value<FoodEstablishmentReservation>();
+        if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
+            return false;
+        }
+        const auto lhsRestaurant = lhsRes.reservationFor().value<FoodEstablishment>();
+        const auto rhsRestaurant = rhsRes.reservationFor().value<FoodEstablishment>();
+        if (!isSameFoodEstablishment(lhsRestaurant, rhsRestaurant) || lhsRes.startTime().date() != rhsRes.endTime().date()) {
+            return false;
+        }
+    }
+
     // for all: underName either matches or is not set
     const auto lhsUN = JsonLd::convert<Reservation>(lhs).underName();
     const auto rhsUN = JsonLd::convert<Reservation>(rhs).underName();
@@ -134,6 +149,15 @@ static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs)
 }
 
 static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs)
+{
+    if (lhs.name().isEmpty() || rhs.name().isEmpty()) {
+        return false;
+    }
+
+    return lhs.name() == rhs.name();
+}
+
+static bool isSameFoodEstablishment(const FoodEstablishment &lhs, const FoodEstablishment &rhs)
 {
     if (lhs.name().isEmpty() || rhs.name().isEmpty()) {
         return false;
