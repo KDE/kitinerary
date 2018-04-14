@@ -160,6 +160,19 @@ void StructuredDataExtractorPrivate::fixupHtml4(QString &text) const
     // fix value-less attributes
     text.replace(QRegularExpression(QStringLiteral("(<[^>]+ )itemscope( [^>]*>)")), QStringLiteral("\\1itemscope=\"\"\\2"));
 
+    // fix unencoded entities in url attributes
+    QRegularExpression hrefRE(QStringLiteral("href=\"[^\"]*&[^;\"]*\""));
+    for (auto idx = 0; idx < text.size();) {
+        const auto match = hrefRE.match(text, idx, QRegularExpression::NormalMatch, QRegularExpression::DontCheckSubjectStringMatchOption);
+        if (!match.hasMatch()) {
+            break;
+        }
+        auto fixedHref = text.mid(match.capturedStart() + 6, match.capturedLength() - 7);
+        fixedHref.replace(QLatin1Char('&'), QLatin1String("&amp;"));
+        text.replace(match.capturedStart() + 6, match.capturedLength() - 7, fixedHref);
+        idx = match.capturedEnd();
+    }
+
     // TODO remove legacy entities like &nbsp;
 }
 
