@@ -40,14 +40,15 @@ public:
     /* Try to fix some common HTML4 damage to make @p text consumable for parseXml(). */
     void fixupHtml4(QString &text) const;
     /* Strip leading content before what looks like the first occurance of microdata. */
-    void stripLeadingContent(QString &text) const;
+    bool stripLeadingContent(QString &text) const;
     /* Recursive microdata parsing. */
-    QJsonObject parseMicroData(QXmlStreamReader &reader) const;
+    QJsonObject parseMicroData(QXmlStreamReader &reader);
     /* Element-dependent Microdata property value. */
     QString valueForItemProperty(QXmlStreamReader &reader) const;
     void parseJson(const QByteArray &data);
     QByteArray fixupJson(const QByteArray &data) const;
 
+    uint64_t m_parserOffset = 0;
     QJsonArray m_data;
 };
 }
@@ -83,9 +84,11 @@ void StructuredDataExtractor::parse(const QString &text)
     if (d->parseXml(fixedText)) {
         return;
     }
-    d->stripLeadingContent(fixedText);
     qCDebug(Log) << "Trying to strip leading garbage";
-    d->parseXml(fixedText);
+    d->m_parserOffset = 0;
+    while (d->stripLeadingContent(fixedText)) {
+        d->parseXml(fixedText);
+    }
 }
 
 QJsonArray StructuredDataExtractor::data() const
@@ -98,6 +101,8 @@ bool StructuredDataExtractorPrivate::parseXml(const QString &text)
     QXmlStreamReader reader(text);
     while (!reader.atEnd()) {
         if (reader.tokenType() == QXmlStreamReader::StartElement) {
+            m_parserOffset = std::max<uint64_t>(0, reader.characterOffset() - 1);
+
             // JSON-LD
             if (reader.name() == QLatin1String("script") && reader.attributes().value(QLatin1String("type")) == QLatin1String("application/ld+json")) {
                 const auto jsonData = reader.readElementText(QXmlStreamReader::IncludeChildElements);
@@ -176,30 +181,33 @@ void StructuredDataExtractorPrivate::fixupHtml4(QString &text) const
     // TODO remove legacy entities like &nbsp;
 }
 
-void StructuredDataExtractorPrivate::stripLeadingContent(QString &text) const
+bool StructuredDataExtractorPrivate::stripLeadingContent(QString &text) const
 {
-    auto idx = text.indexOf(QLatin1String("http://schema.org"));
+    auto idx = text.indexOf(QLatin1String("http://schema.org"), m_parserOffset);
     if (idx < 0) {
-        return;
+        return false;
     }
 
     idx = text.midRef(0, idx).lastIndexOf(QLatin1Char('<'));
     if (idx <= 0) {
-        return;
+        return false;
     }
 
     text.remove(0, idx);
+    return true;
 }
 
-QJsonObject StructuredDataExtractorPrivate::parseMicroData(QXmlStreamReader &reader) const
+QJsonObject StructuredDataExtractorPrivate::parseMicroData(QXmlStreamReader &reader)
 {
     QJsonObject obj;
     reader.readNext();
     int depth = 1;
 
     while (!reader.atEnd()) {
+        m_parserOffset = std::max<uint64_t>(0, reader.characterOffset() - 1);
         if (reader.tokenType() == QXmlStreamReader::StartElement) {
             ++depth;
+
             const auto prop = reader.attributes().value(QLatin1String("itemprop")).toString();
             const auto type = reader.attributes().value(QLatin1String("itemtype")).toString();
             if (type.startsWith(QLatin1String("http://schema.org/"))) {

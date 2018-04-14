@@ -1,0 +1,70 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "checkinUrl": "https://wci.austrian.com/app/ck.fly?documentType=ETIX&pnr=XXX007&fqtvType=booking&lastNameEtix=Doe&l=de",
+        "modifiedTime": "2028-04-14T10:18:50+02:00",
+        "modifyReservationUrl": "https://book.austrian.com/app/fb.fly?lastname=Doe&pnr=XXX007&action=pnr_search&fromcms=1&l=de",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "OS",
+                "name": "Austrian Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "VIE",
+                "name": "Wien"
+            },
+            "arrivalTime": "2028-08-10T18:25:00+02:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Berlin - Tegel"
+            },
+            "departureTime": "2028-08-10T17:05:00+02:00",
+            "flightNumber": "232"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "checkinUrl": "https://wci.austrian.com/app/ck.fly?documentType=ETIX&pnr=XXX007&fqtvType=booking&lastNameEtix=Doe&l=de",
+        "modifiedTime": "2028-04-14T10:18:50+02:00",
+        "modifyReservationUrl": "https://book.austrian.com/app/fb.fly?lastname=Doe&pnr=XXX007&action=pnr_search&fromcms=1&l=de",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "OS",
+                "name": "Austrian Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Berlin - Tegel"
+            },
+            "arrivalTime": "2028-08-18T10:20:00+02:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "VIE",
+                "name": "Wien"
+            },
+            "departureTime": "2028-08-18T09:00:00+02:00",
+            "flightNumber": "225"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    }
+]
