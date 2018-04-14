@@ -17,6 +17,15 @@
    02110-1301, USA.
 */
 
+function makeAirport(name)
+{
+    var airport = JsonLd.newObject("Airport");
+    airport.name = name;
+    if (name.startsWith("Brussels Airport"))
+        airport.iataCode = "BRU"; // disambiguate Brussel airports
+    return airport;
+}
+
 function main(text) {
     var reservations = new Array();
     var bookingRef = text.match(/Booking reference:\s+([A-Z0-9]{6})/);
@@ -42,8 +51,7 @@ function main(text) {
             if (!depAirport)
                 break;
             var idx = depAirport.index + depAirport[0].length;
-            res.reservationFor.departureAirport = JsonLd.newObject("Airport");
-            res.reservationFor.departureAirport.name = lastAirport != "" ? lastAirport : depAirport[1].trim();
+            res.reservationFor.departureAirport = makeAirport(lastAirport != "" ? lastAirport : depAirport[1].trim());
 
             var depTime = text.substr(pos + idx).match(/([0-9]{2} [A-Za-z]{3} [0-9]{4}),\s*([0-9]{2}:[0-9]{2})/);
             if (!depTime)
@@ -55,8 +63,7 @@ function main(text) {
             if (!arrAirport)
                 break;
             idx += arrAirport.index + arrAirport[0].length;
-            res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
-            res.reservationFor.arrivalAirport.name = arrAirport[1].trim();
+            res.reservationFor.arrivalAirport = makeAirport(arrAirport[1].trim());
             lastAirport = res.reservationFor.arrivalAirport.name;
 
             var arrTime = text.substr(pos + idx).match(/([0-9]{2} [A-Za-z]{3} [0-9]{4}),\s*([0-9]{2}:[0-9]{2})/);

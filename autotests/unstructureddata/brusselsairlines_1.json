@@ -11,7 +11,8 @@
             },
             "arrivalAirport": {
                 "@type": "Airport",
-                "name": "Brussels Airport, BE"
+                "name": "Brussels Airport, BE",
+                "iataCode": "BRU"
             },
             "arrivalTime": "2017-02-03T19:45:00",
             "departureAirport": {
@@ -41,7 +42,8 @@
             "arrivalTime": "2017-02-05T22:00:00",
             "departureAirport": {
                 "@type": "Airport",
-                "name": "Brussels Airport, BE"
+                "name": "Brussels Airport, BE",
+                "iataCode": "BRU"
             },
             "departureDay": "2017-02-05",
             "departureTime": "2017-02-05T20:40:00",
