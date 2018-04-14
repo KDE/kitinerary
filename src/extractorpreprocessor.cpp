@@ -27,6 +27,7 @@
 #endif
 
 #include <memory>
+#include <tuple>
 
 using namespace KItinerary;
 
@@ -88,29 +89,43 @@ QString ExtractorPreprocessor::text() const
     return m_buffer;
 }
 
+static std::tuple<int, int> findRange(const QStringRef &text, QChar c1, QChar c2, int start = 0)
+{
+    int begin = text.indexOf(c1, start);
+    if (begin < 0) {
+        return std::make_tuple(-1, -1);
+    }
+
+    for (int end = begin + 1; end < text.size(); ++end) {
+        if (text.at(end) == c2) {
+            return std::make_tuple(begin, end);
+        }
+        if (text.at(end) == c1) {
+            begin = end;
+        }
+    }
+
+    return std::make_tuple(-1, -1);
+}
+
 void ExtractorPreprocessor::replaceEntityAndAppend(const QStringRef &source)
 {
-    int begin = 0;
-    int end = source.indexOf(QLatin1Char('&'), begin);
+    int pos = 0;
+    int begin, end;
+    std::tie(begin, end) = findRange(source, QLatin1Char('&'), QLatin1Char(';'));
     while (begin < source.size() && end < source.size() && end >= 0 && begin >= 0) {
-        if (end > begin) {
-            m_buffer.append(source.mid(begin, end - begin));
+        if (begin > pos) {
+            m_buffer.append(source.mid(pos, begin - pos));
         }
-        begin = source.indexOf(QLatin1Char(';'), end);
-        if (begin < 0) {
-            break;
-        }
-        const auto entityName = source.mid(end + 1, begin - end - 1);
+
+        const auto entityName = source.mid(begin + 1, end - begin - 1);
         if (entityName == QLatin1String("nbsp")) {
             m_buffer.append(QLatin1Char(' '));
         } else {
-            // keep unknown entities
-            m_buffer.append(source.mid(end, begin - end + 1));
+            m_buffer.append(source.mid(begin, end - begin + 1));
         }
-        ++begin;
-        end = source.indexOf(QLatin1Char('&'), begin);
+        pos = end + 1;
+        std::tie(begin, end) = findRange(source, QLatin1Char('&'), QLatin1Char(';'), pos);
     }
-    if (begin >= 0 && end < 0) {
-        m_buffer.append(source.mid(begin));
-    }
+    m_buffer.append(source.mid(pos));
 }
