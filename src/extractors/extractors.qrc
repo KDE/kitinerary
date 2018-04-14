@@ -2,6 +2,8 @@
     <qresource prefix="/org.kde.pim/kitinerary/extractors">
         <file>amadeus.json</file>
         <file>amadeus.js</file>
+        <file>aohostels.json</file>
+        <file>aohostels.js</file>
         <file>brusselsairlines.json</file>
         <file>brusselsairlines.js</file>
         <file>czechrailways.json</file>
