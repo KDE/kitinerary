@@ -102,13 +102,6 @@ class BusStationPrivate : public PlacePrivate
     KITINERARY_PRIVATE_GADGET(BusStation)
 };
 KITINERARY_MAKE_SUB_CLASS(BusStation, Place)
-class LodgingBusinessPrivate : public PlacePrivate
-{
-    KITINERARY_PRIVATE_GADGET(LodgingBusiness)
-};
-KITINERARY_MAKE_SUB_CLASS(LodgingBusiness, Place)
-
-}
 
 class TouristAttractionPrivate: public PlacePrivate
 {
@@ -116,13 +109,7 @@ class TouristAttractionPrivate: public PlacePrivate
 };
 KITINERARY_MAKE_SUB_CLASS(TouristAttraction, Place)
 
-class FoodEstablishmentPrivate: public PlacePrivate
-{
-    KITINERARY_PRIVATE_GADGET(FoodEstablishment)
-};
-KITINERARY_MAKE_SUB_CLASS(FoodEstablishment, Place)
-
-
+}
 
 template <>
 KItinerary::PlacePrivate *QExplicitlySharedDataPointer<KItinerary::PlacePrivate>::clone()

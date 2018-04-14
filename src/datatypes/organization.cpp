@@ -52,6 +52,18 @@ public:
 KITINERARY_MAKE_SUB_CLASS(Airline, Organization)
 KITINERARY_MAKE_PROPERTY(Airline, QString, iataCode, setIataCode)
 
+class FoodEstablishmentPrivate: public OrganizationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(FoodEstablishment)
+};
+KITINERARY_MAKE_SUB_CLASS(FoodEstablishment, Organization)
+
+class LodgingBusinessPrivate : public OrganizationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(LodgingBusiness)
+};
+KITINERARY_MAKE_SUB_CLASS(LodgingBusiness, Organization)
+
 }
 
 template <>

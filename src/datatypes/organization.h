@@ -59,9 +59,27 @@ class KITINERARY_EXPORT Airline : public Organization
     KITINERARY_PROPERTY(QString, iataCode, setIataCode)
 };
 
+/** Hotel.
+ *  @see https://schema.org/LodgingBusiness
+ */
+class KITINERARY_EXPORT LodgingBusiness: public Organization
+{
+    KITINERARY_GADGET(LodgingBusiness)
+};
+
+/** Food-related business (such as a restaurant, or a bakery).
+ * @see https://schema.org/FoodEstablishment
+ */
+class KITINERARY_EXPORT FoodEstablishment: public Organization
+{
+    KITINERARY_GADGET(FoodEstablishment)
+};
+
 } // namespace KItinerary
 
 Q_DECLARE_METATYPE(KItinerary::Organization)
 Q_DECLARE_METATYPE(KItinerary::Airline)
+Q_DECLARE_METATYPE(KItinerary::FoodEstablishment)
+Q_DECLARE_METATYPE(KItinerary::LodgingBusiness)
 
 #endif // KITINERARY_ORGANIZATION_H
