@@ -51,6 +51,14 @@ static const char *fallbackDateTimePattern[] = {
 };
 static const auto fallbackDateTimePatternCount = sizeof(fallbackDateTimePattern) / sizeof(const char *);
 
+static double doubleValue(const QJsonValue &v)
+{
+    if (v.isDouble()) {
+        return v.toDouble();
+    }
+    return v.toString().toDouble();
+}
+
 static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
 {
     switch (prop.type()) {
@@ -81,14 +89,14 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         return dt;
     }
     case QVariant::Double:
-        return v.toDouble();
+        return doubleValue(v);
     case QVariant::Url:
         return QUrl(v.toString());
     default:
         break;
     }
     if (prop.type() == qMetaTypeId<float>()) {
-        return v.toDouble();
+        return doubleValue(v);
     }
     return createInstance(v.toObject());
 }
