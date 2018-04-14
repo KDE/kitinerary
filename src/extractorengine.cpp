@@ -41,6 +41,7 @@ class ContextObject;
 
 class ExtractorEnginePrivate {
 public:
+    void setupEngine();
     void executeScript();
     void extractPass();
 
@@ -49,6 +50,7 @@ public:
     QString m_text;
     KPkPass::BoardingPass *m_pass;
     QJsonArray m_result;
+    QJSEngine m_engine;
 };
 
 class JsApi : public QObject
@@ -108,10 +110,20 @@ public:
 };
 }
 
+void ExtractorEnginePrivate::setupEngine()
+{
+    m_context = new ContextObject; // will be deleted by QJSEngine taking ownership
+    m_engine.installExtensions(QJSEngine::ConsoleExtension);
+    auto jsApi = new JsApi(&m_engine);
+    m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), m_engine.newQObject(jsApi));
+    m_engine.globalObject().setProperty(QStringLiteral("Context"), m_engine.newQObject(m_context));
+}
+
+
 ExtractorEngine::ExtractorEngine()
     : d(new ExtractorEnginePrivate)
 {
-    d->m_context = new ContextObject; // will be deleted by QJSEngine taking ownership
+    d->setupEngine();
 }
 
 ExtractorEngine::ExtractorEngine(ExtractorEngine &&) = default;
@@ -174,19 +186,14 @@ void ExtractorEnginePrivate::executeScript()
         return;
     }
 
-    QJSEngine engine;
-    engine.installExtensions(QJSEngine::ConsoleExtension);
-    auto jsApi = new JsApi(&engine);
-    engine.globalObject().setProperty(QStringLiteral("JsonLd"), engine.newQObject(jsApi));
-    engine.globalObject().setProperty(QStringLiteral("Context"), engine.newQObject(m_context));
-    auto result = engine.evaluate(QString::fromUtf8(f.readAll()), f.fileName());
+    auto result = m_engine.evaluate(QString::fromUtf8(f.readAll()), f.fileName());
     if (result.isError()) {
         qCWarning(Log) << "Script parsing error in" << result.property(QLatin1String("fileName")).toString()
                                 << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
         return;
     }
 
-    auto mainFunc = engine.globalObject().property(QLatin1String("main"));
+    auto mainFunc = m_engine.globalObject().property(QLatin1String("main"));
     if (!mainFunc.isCallable()) {
         qCWarning(Log) << "Script has no main() function!";
         return;
@@ -198,7 +205,7 @@ void ExtractorEnginePrivate::executeScript()
             args = {m_text};
             break;
         case Extractor::PkPass:
-            args = {engine.toScriptValue<QObject*>(m_pass)};
+            args = {m_engine.toScriptValue<QObject*>(m_pass)};
             break;
     }
 
