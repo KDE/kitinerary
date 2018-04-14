@@ -41,7 +41,7 @@ inline base_type* clone() const override { \
 private:
 
 #define KITINERARY_MAKE_CLASS_IMPL(Class) \
-Class::Class(const Class &other) = default; \
+Class::Class(const Class&) = default; \
 Class::~Class() = default; \
 Class& Class::operator=(const Class &other) { d = other.d; return *this; } \
 QString Class::className() const { return QStringLiteral(#Class); } \
