@@ -79,10 +79,12 @@ void StructuredDataExtractor::parse(const QString &text)
     // now try the expensive desperate stuff
     auto fixedText = text;
     d->fixupHtml4(fixedText);
+    qCDebug(Log) << "Trying to fix HTML4 content";
     if (d->parseXml(fixedText)) {
         return;
     }
     d->stripLeadingContent(fixedText);
+    qCDebug(Log) << "Trying to strip leading garbage";
     d->parseXml(fixedText);
 }
 
@@ -173,7 +175,7 @@ void StructuredDataExtractorPrivate::stripLeadingContent(QString &text) const
         return;
     }
 
-    text.remove(0, idx - 1);
+    text.remove(0, idx);
 }
 
 QJsonObject StructuredDataExtractorPrivate::parseMicroData(QXmlStreamReader &reader) const
