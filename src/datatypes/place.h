@@ -36,7 +36,12 @@ class KITINERARY_EXPORT GeoCoordinates
     KITINERARY_GADGET(GeoCoordinates)
     KITINERARY_PROPERTY(float, latitude, setLatitude)
     KITINERARY_PROPERTY(float, longitude, setLongitude)
+
+    Q_PROPERTY(bool isValid READ isValid STORED false)
 public:
+    /** Returns @c true if both latitude and longitude are set and within
+     *  the valid range.
+     */
     bool isValid() const;
 private:
     QExplicitlySharedDataPointer<GeoCoordinatesPrivate> d;
@@ -53,7 +58,13 @@ class KITINERARY_EXPORT PostalAddress
     KITINERARY_PROPERTY(QString, streetAddress, setStreeAddress)
     KITINERARY_PROPERTY(QString, addressLocality, setAddressLocality)
     KITINERARY_PROPERTY(QString, postalCode, setPostalCode)
+    KITINERARY_PROPERTY(QString, addressRegion, setAddressRegion)
     KITINERARY_PROPERTY(QString, addressCountry, setAddressCountry)
+
+    Q_PROPERTY(bool isEmpty READ isEmpty STORED false)
+public:
+    /** Returns @c true if there is no property set in this object. */
+    bool isEmpty() const;
 private:
     QExplicitlySharedDataPointer<PostalAddressPrivate> d;
 };
