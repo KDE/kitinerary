@@ -18,9 +18,10 @@
 */
 
 #include <KItinerary/Flight>
+#include <KItinerary/JsonLdDocument>
 #include <KItinerary/Organization>
 #include <KItinerary/Place>
-#include <KItinerary/JsonLdDocument>
+#include <KItinerary/Reservation>
 
 #include <QDebug>
 #include <QJsonArray>
@@ -59,9 +60,9 @@ private Q_SLOTS:
         airline.setIataCode(QLatin1String("LH"));
         f.setAirline(airline);
 
-        const auto array = JsonLdDocument::toJson({QVariant::fromValue(f)});
+        auto array = JsonLdDocument::toJson({QVariant::fromValue(f)});
         QCOMPARE(array.size(), 1);
-        const auto obj = array.at(0).toObject();
+        auto obj = array.at(0).toObject();
         QCOMPARE(obj.value(QLatin1String("@context")).toString(), QLatin1String("http://schema.org"));
         QCOMPARE(obj.value(QLatin1String("@type")).toString(), QLatin1String("Flight"));
         QCOMPARE(obj.value(QLatin1String("flightNumber")).toString(), QLatin1String("1234"));
@@ -82,6 +83,14 @@ private Q_SLOTS:
         QVERIFY(obj.contains(QLatin1String("airline")));
 
         qDebug().noquote() << QJsonDocument(obj).toJson();
+
+        // integer values
+        FoodEstablishmentReservation res;
+        res.setPartySize(2);
+        array = JsonLdDocument::toJson({res});
+        QCOMPARE(array.size(), 1);
+        obj = array.at(0).toObject();
+        QCOMPARE(obj.value(QLatin1String("partySize")).toInt(), 2);
     }
 
     void testDeserialization()
@@ -101,11 +110,11 @@ private Q_SLOTS:
             "\"flightNumber\": \"1234\""
         "}]");
 
-        const auto array = QJsonDocument::fromJson(b).array();
-        const auto datas = JsonLdDocument::fromJson(array);
+        auto array = QJsonDocument::fromJson(b).array();
+        auto datas = JsonLdDocument::fromJson(array);
         QCOMPARE(datas.size(), 1);
 
-        const auto data = datas.at(0);
+        auto data = datas.at(0);
         QVERIFY(data.canConvert<Flight>());
         Flight flight = data.value<Flight>();
         QCOMPARE(flight.flightNumber(), QLatin1String("1234"));
@@ -119,6 +128,21 @@ private Q_SLOTS:
 
         QVERIFY(flight.departureGate().isEmpty());
         QVERIFY(!flight.departureGate().isNull());
+
+        // integer values
+        b = QByteArray("[{"
+            "\"@context\": \"http://schema.org\","
+            "\"@type\": \"FoodEstablishmentReservation\","
+            "\"partySize\": 42"
+        "}]");
+
+        array = QJsonDocument::fromJson(b).array();
+        datas = JsonLdDocument::fromJson(array);
+        QCOMPARE(datas.size(), 1);
+        data = datas.at(0);
+        QVERIFY(data.canConvert<FoodEstablishmentReservation>());
+        auto res = data.value<FoodEstablishmentReservation>();
+        QCOMPARE(res.partySize(), 42);
     }
 };
 

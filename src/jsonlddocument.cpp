@@ -90,6 +90,10 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
     }
     case QVariant::Double:
         return doubleValue(v);
+    case QVariant::Int:
+        if (v.isDouble())
+            return v.toDouble();
+        return v.toString().toInt();
     case QVariant::Url:
         return QUrl(v.toString());
     default:
