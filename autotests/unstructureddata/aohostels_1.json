@@ -18,7 +18,9 @@
                 "latitude": 48.1828498840332,
                 "longitude": 16.37863540649414
             },
-            "name": "a&o Wien Hauptbahnhof"
+            "email": "AO-XX-XX@aohostels.com",
+            "name": "a&o Wien Hauptbahnhof",
+            "telephone": "+43 1 602 1234 5678"
         },
         "reservationNumber": "AOI-XX-1234567",
         "underName": {

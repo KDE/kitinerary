@@ -33,6 +33,7 @@ public:
     QString telephone;
     QUrl url;
     PostalAddress address;
+    GeoCoordinates geo;
 };
 
 KITINERARY_MAKE_BASE_CLASS(Organization)
@@ -41,6 +42,7 @@ KITINERARY_MAKE_PROPERTY(Organization, QString, email, setEmail)
 KITINERARY_MAKE_PROPERTY(Organization, QString, telephone, setTelephone)
 KITINERARY_MAKE_PROPERTY(Organization, QUrl, url, setUrl)
 KITINERARY_MAKE_PROPERTY(Organization, PostalAddress, address, setAddress)
+KITINERARY_MAKE_PROPERTY(Organization, KItinerary::GeoCoordinates, geo, setGeo)
 
 class AirlinePrivate : public OrganizationPrivate
 {

@@ -42,6 +42,7 @@ class KITINERARY_EXPORT Organization
     KITINERARY_PROPERTY(QString, telephone, setTelephone)
     KITINERARY_PROPERTY(QUrl, url, setUrl)
     KITINERARY_PROPERTY(KItinerary::PostalAddress, address, setAddress)
+    KITINERARY_PROPERTY(KItinerary::GeoCoordinates, geo, setGeo)
 protected:
     ///@cond internal
     QExplicitlySharedDataPointer<OrganizationPrivate> d;
