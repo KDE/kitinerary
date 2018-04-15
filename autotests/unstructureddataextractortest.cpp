@@ -17,10 +17,11 @@
    02110-1301, USA.
 */
 
-#include "extractor.h"
-#include "extractorengine.h"
-#include "extractorpreprocessor.h"
-#include "jsonlddocument.h"
+#include <KItinerary/Extractor>
+#include <KItinerary/ExtractorEngine>
+#include <KItinerary/ExtractorPreprocessor>
+#include <KItinerary/JsonLdDocument>
+#include <KItinerary/Organization>
 
 #include <QDebug>
 #include <QDir>
@@ -57,6 +58,8 @@ private Q_SLOTS:
     {
         // use some exotic locale to ensure the date/time parsing doesn't just work by luck
         QLocale::setDefault(QLocale(QStringLiteral("fr_FR")));
+
+        qRegisterMetaType<Organization>();
     }
 
     void testExtractText_data()
