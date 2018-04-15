@@ -30,7 +30,12 @@ namespace KItinerary {
 
 class OrganizationPrivate;
 
-/** An organization
+/** An organization.
+ *
+ *  This slightly deviates from the schema.org definition and also includes
+ *  properties of Place that its sub-classes need. This is a simplification
+ *  to avoid having to use multi-inheritance.
+ *
  *  @see https://schema.org/Organization
  */
 
