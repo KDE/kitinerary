@@ -33,12 +33,6 @@ class BcbpParserTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase()
-    {
-        qRegisterMetaType<Airline>();
-        qRegisterMetaType<Airport>();
-    }
-
     void testParserValid_data()
     {
         QTest::addColumn<QString>("message");

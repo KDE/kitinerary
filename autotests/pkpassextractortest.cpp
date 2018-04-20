@@ -44,8 +44,6 @@ private Q_SLOTS:
         // use some exotic locale to ensure the date/time parsing doesn't just work by luck
         QLocale::setDefault(QLocale(QStringLiteral("fr_FR")));
         qputenv("TZ", "EST");
-        qRegisterMetaType<Airline>();
-        qRegisterMetaType<Airport>();
     }
 
     void testExtractText_data()

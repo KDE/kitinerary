@@ -37,12 +37,6 @@ class PostprocessorTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase()
-    {
-        qRegisterMetaType<Airline>();
-        qRegisterMetaType<Airport>();
-    }
-
     void testPostProc_data()
     {
         QTest::addColumn<QString>("preFile");

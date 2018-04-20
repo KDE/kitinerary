@@ -40,8 +40,6 @@ private Q_SLOTS:
     void initTestCase()
     {
         qputenv("TZ", "GMT");
-        qRegisterMetaType<Airport>();
-        qRegisterMetaType<Airline>();
     }
 
     void testSerialization()

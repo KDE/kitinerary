@@ -11,6 +11,7 @@ set(kitinerary_lib_srcs
     airportdb/airportdb.cpp
 
     datatypes/bustrip.cpp
+    datatypes/datatypes.cpp
     datatypes/flight.cpp
     datatypes/organization.cpp
     datatypes/person.cpp
