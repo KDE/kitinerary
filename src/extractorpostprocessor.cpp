@@ -40,13 +40,14 @@ namespace KItinerary {
 class ExtractorPostprocessorPrivate
 {
 public:
-    QVariant processProperty(QVariant obj, const char *name, QVariant (ExtractorPostprocessorPrivate::*processor)(QVariant) const) const;
+    template <typename ObjT, typename PropT>
+    ObjT processProperty(ObjT obj, const char *name, PropT (ExtractorPostprocessorPrivate::*processor)(PropT) const) const;
 
     QVariant processFlightReservation(FlightReservation res) const;
-    QVariant processFlight(QVariant flight) const;
+    Flight processFlight(Flight flight) const;
     QVariant processAirport(QVariant airport) const;
     QVariant processAirline(QVariant airline) const;
-    void processFlightTime(QVariant &flight, const char *timePropName, const char *airportPropName) const;
+    void processFlightTime(Flight &flight, const char *timePropName, const char *airportPropName) const;
     QVariant processReservation(QVariant res) const;
 
     bool filterReservation(const QVariant &res) const;
@@ -103,9 +104,10 @@ void ExtractorPostprocessor::setContextDate(const QDateTime& dt)
     d->m_contextDate = dt;
 }
 
-QVariant ExtractorPostprocessorPrivate::processProperty(QVariant obj, const char *name, QVariant (ExtractorPostprocessorPrivate::*processor)(QVariant) const) const
+template <typename ObjT, typename PropT>
+ObjT ExtractorPostprocessorPrivate::processProperty(ObjT obj, const char *name, PropT (ExtractorPostprocessorPrivate::*processor)(PropT) const) const
 {
-    auto value = JsonLdDocument::readProperty(obj, name);
+    auto value = JsonLdDocument::readProperty(obj, name).template value<PropT>();
     value = (this->*processor)(value);
     JsonLdDocument::writeProperty(obj, name, value);
     return obj;
@@ -128,11 +130,11 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
     }
 
     res = processReservation(res).value<FlightReservation>();
-    res = processProperty(res, "reservationFor", &ExtractorPostprocessorPrivate::processFlight).value<FlightReservation>();
+    res = processProperty(res, "reservationFor", &ExtractorPostprocessorPrivate::processFlight);
     return res;
 }
 
-QVariant ExtractorPostprocessorPrivate::processFlight(QVariant flight) const
+Flight ExtractorPostprocessorPrivate::processFlight(Flight flight) const
 {
     flight = processProperty(flight, "departureAirport", &ExtractorPostprocessorPrivate::processAirport);
     flight = processProperty(flight, "arrivalAirport", &ExtractorPostprocessorPrivate::processAirport);
@@ -182,7 +184,7 @@ QVariant ExtractorPostprocessorPrivate::processAirline(QVariant airline) const
     return airline;
 }
 
-void ExtractorPostprocessorPrivate::processFlightTime(QVariant &flight, const char *timePropName, const char *airportPropName) const
+void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, const char *timePropName, const char *airportPropName) const
 {
     const auto airport = JsonLdDocument::readProperty(flight, airportPropName);
     const auto iataCode = JsonLdDocument::readProperty(airport, "iataCode").toString();
