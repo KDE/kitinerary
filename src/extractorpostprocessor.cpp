@@ -193,7 +193,16 @@ void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, const char
     }
 
     auto dt = JsonLdDocument::readProperty(flight, timePropName).toDateTime();
-    if (!dt.isValid() || dt.timeSpec() == Qt::TimeZone) {
+    if (!dt.isValid()) {
+        return;
+    }
+
+    if (dt.date().year() <= 1970 && flight.departureDay().isValid()) { // we just have the time, but not the day
+        dt.setDate(flight.departureDay());
+        JsonLdDocument::writeProperty(flight, timePropName, dt);
+    }
+
+    if (dt.timeSpec() == Qt::TimeZone) {
         return;
     }
 

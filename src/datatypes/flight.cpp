@@ -59,10 +59,11 @@ QDate Flight::departureDay() const
     if (d->departureDay.isValid()) {
         return d->departureDay;
     }
-    if (d->departureTime.isValid()) {
+    // pre-1970 dates are used as transient state when we only know the time
+    if (d->departureTime.isValid() && d->departureTime.date().year() > 1970) {
         return d->departureTime.date();
     }
-    if (d->boardingTime.isValid()) {
+    if (d->boardingTime.isValid() && d->boardingTime.date().year() > 1970) {
         return d->boardingTime.date();
     }
     return {};

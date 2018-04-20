@@ -255,6 +255,20 @@ void ExtractorEnginePrivate::extractPass()
     if (m_pass->relevantDate().isValid() && !resFor.contains(QLatin1String("boardingTime"))) {
         resFor.insert(QLatin1String("boardingTime"), m_pass->relevantDate().toString(Qt::ISODate));
     }
+    // look for common field names containing the boarding time, if we still have no idea
+    if (!resFor.contains(QLatin1String("boardingTime"))) {
+        for (const auto &field : m_pass->fields()) {
+            if (!field.key().contains(QLatin1String("boarding"), Qt::CaseInsensitive)) {
+                continue;
+            }
+            const auto time = QTime::fromString(field.value().toString());
+            if (time.isValid()) {
+                // this misses date, but the postprocessor will fill that in
+                resFor.insert(QLatin1String("boardingTime"), QDateTime(QDate(1, 1, 1), time).toString(Qt::ISODate));
+                break;
+            }
+        }
+    }
 
     // location is the best guess for the departure airport geo coordinates
     auto depAirport = resFor.value(QLatin1String("departureAirport")).toObject();

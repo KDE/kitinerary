@@ -22,7 +22,7 @@
             },
             "boardingTime": {
                 "@type": "QDateTime",
-                "@value": "2018-09-15T20:25:00+02:00",
+                "@value": "2017-09-15T20:25:00+02:00",
                 "timezone": "Europe/Zurich"
             },
             "departureAirport": {
@@ -34,7 +34,7 @@
                 },
                 "iataCode": "ZRH"
             },
-            "departureDay": "2018-09-15",
+            "departureDay": "2017-09-15",
             "departureGate": "AB",
             "flightNumber": "962"
         },

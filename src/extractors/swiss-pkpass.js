@@ -23,11 +23,6 @@ function main(pass)
     res.reservationFor = JsonLd.newObject("Flight");
     res.reservationFor.departureGate = pass.field["gate"].value;
 
-    var date = JsonLd.toDateTime(pass.field["date"].value + ' ' + Context.senderDate.getFullYear() + ' ' + pass.field["boarding"].value, "ddMMMM yyyy hh:mm", "en");
-    if (date < Context.senderDate)
-        date.setFullYear(Context.senderDate.getFullYear() + 1);
-    res.reservationFor.boardingTime = date;
-
     return res;
 }
 
