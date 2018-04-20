@@ -25,6 +25,7 @@
 
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
+#include <KItinerary/Organization>
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
@@ -45,9 +46,9 @@ public:
 
     QVariant processFlightReservation(FlightReservation res) const;
     Flight processFlight(Flight flight) const;
-    QVariant processAirport(QVariant airport) const;
-    QVariant processAirline(QVariant airline) const;
-    void processFlightTime(Flight &flight, const char *timePropName, const char *airportPropName) const;
+    Airport processAirport(Airport airport) const;
+    Airline processAirline(Airline airline) const;
+    void processFlightTime(Flight &flight, const char *timePropName, const Airport &airport) const;
     QVariant processReservation(QVariant res) const;
 
     bool filterReservation(const QVariant &res) const;
@@ -140,58 +141,49 @@ Flight ExtractorPostprocessorPrivate::processFlight(Flight flight) const
     flight = processProperty(flight, "arrivalAirport", &ExtractorPostprocessorPrivate::processAirport);
     flight = processProperty(flight, "airline", &ExtractorPostprocessorPrivate::processAirline);
 
-    processFlightTime(flight, "boardingTime", "departureAirport");
-    processFlightTime(flight, "departureTime", "departureAirport");
-    processFlightTime(flight, "arrivalTime", "arrivalAirport");
+    processFlightTime(flight, "boardingTime", flight.departureAirport());
+    processFlightTime(flight, "departureTime", flight.departureAirport());
+    processFlightTime(flight, "arrivalTime", flight.arrivalAirport());
 
     return flight;
 }
 
-QVariant ExtractorPostprocessorPrivate::processAirport(QVariant airport) const
+Airport ExtractorPostprocessorPrivate::processAirport(Airport airport) const
 {
     // clean up name
-    const auto name = JsonLdDocument::readProperty(airport, "name").toString();
-    JsonLdDocument::writeProperty(airport, "name", name.trimmed());
+    airport.setName(airport.name().trimmed());
 
     // complete missing IATA codes
-    auto iataCode = JsonLdDocument::readProperty(airport, "iataCode").toString();
+    auto iataCode = airport.iataCode();
     if (iataCode.isEmpty()) {
-        iataCode = AirportDb::iataCodeFromName(name).toString();
+        iataCode = AirportDb::iataCodeFromName(airport.name()).toString();
         if (!iataCode.isEmpty()) {
-            JsonLdDocument::writeProperty(airport, "iataCode", iataCode);
+            airport.setIataCode(iataCode);
         }
     }
 
     // complete missing geo coordinates
-    auto geo = JsonLdDocument::readProperty(airport, "geo");
-    if (!geo.value<GeoCoordinates>().isValid()) {
+    auto geo = airport.geo();
+    if (!geo.isValid()) {
         const auto coord = AirportDb::coordinateForAirport(AirportDb::IataCode{iataCode});
         if (coord.isValid()) {
-            geo = QVariant::fromValue(GeoCoordinates());
-            JsonLdDocument::writeProperty(geo, "latitude", coord.latitude);
-            JsonLdDocument::writeProperty(geo, "longitude", coord.longitude);
-            JsonLdDocument::writeProperty(airport, "geo", geo);
+            geo.setLatitude(coord.latitude);
+            geo.setLongitude(coord.longitude);
+            airport.setGeo(geo);
         }
     }
 
     return airport;
 }
 
-QVariant ExtractorPostprocessorPrivate::processAirline(QVariant airline) const
+Airline ExtractorPostprocessorPrivate::processAirline(Airline airline) const
 {
-    const auto name = JsonLdDocument::readProperty(airline, "name").toString();
-    JsonLdDocument::writeProperty(airline, "name", name.trimmed());
+    airline.setName(airline.name().trimmed());
     return airline;
 }
 
-void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, const char *timePropName, const char *airportPropName) const
+void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, const char *timePropName, const Airport &airport) const
 {
-    const auto airport = JsonLdDocument::readProperty(flight, airportPropName);
-    const auto iataCode = JsonLdDocument::readProperty(airport, "iataCode").toString();
-    if (iataCode.isEmpty()) {
-        return;
-    }
-
     auto dt = JsonLdDocument::readProperty(flight, timePropName).toDateTime();
     if (!dt.isValid()) {
         return;
@@ -202,11 +194,11 @@ void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, const char
         JsonLdDocument::writeProperty(flight, timePropName, dt);
     }
 
-    if (dt.timeSpec() == Qt::TimeZone) {
+    if (dt.timeSpec() == Qt::TimeZone || airport.iataCode().isEmpty()) {
         return;
     }
 
-    const auto tz = AirportDb::timezoneForAirport(AirportDb::IataCode{iataCode});
+    const auto tz = AirportDb::timezoneForAirport(AirportDb::IataCode{airport.iataCode()});
     if (!tz.isValid()) {
         return;
     }
