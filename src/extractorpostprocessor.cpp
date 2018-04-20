@@ -60,6 +60,7 @@ public:
 
     QVector<QVariant> m_data;
     QDateTime m_contextDate;
+    bool m_resultFinalized = false;
 };
 }
 
@@ -73,7 +74,8 @@ ExtractorPostprocessor::~ExtractorPostprocessor() = default;
 
 void ExtractorPostprocessor::process(const QVector<QVariant> &data)
 {
-    d->m_data.reserve(data.size());
+    d->m_resultFinalized = false;
+    d->m_data.reserve(d->m_data.size() + data.size());
     for (auto elem : data) {
         if (elem.userType() == qMetaTypeId<FlightReservation>()) {
             elem = d->processFlightReservation(elem.value<FlightReservation>());
@@ -84,19 +86,27 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
         } else if (elem.userType() == qMetaTypeId<BusReservation>()) {
             elem = d->processReservation(elem);
         }
+        d->m_data.push_back(elem);
+    }
+}
 
-        if (d->filterReservation(elem)) {
-            d->m_data.push_back(elem);
+QVector<QVariant> ExtractorPostprocessor::result() const
+{
+    if (!d->m_resultFinalized) {
+        for (auto it = d->m_data.begin(); it != d->m_data.end();) {
+            if (d->filterReservation(*it)) {
+                ++it;
+            } else {
+                it = d->m_data.erase(it);
+            }
         }
+        d->m_resultFinalized = true;
     }
 
     std::stable_sort(d->m_data.begin(), d->m_data.end(), [](const QVariant &lhs, const QVariant &rhs) {
         return CalendarHandler::startDateTime(lhs) < CalendarHandler::startDateTime(rhs);
     });
-}
 
-QVector<QVariant> ExtractorPostprocessor::result() const
-{
     return d->m_data;
 }
 

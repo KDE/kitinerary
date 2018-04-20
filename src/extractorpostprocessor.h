@@ -40,7 +40,14 @@ public:
     ExtractorPostprocessor(ExtractorPostprocessor&&);
     ~ExtractorPostprocessor();
 
+    /** This will normalize and augment the given data elements and merge them with
+     *  already added data elements if applicable.
+     */
     void process(const QVector<QVariant> &data);
+
+    /** This returns the final result of all previously executed processing steps
+     *  followed by sorting and filtering out all invalid data elements.
+     */
     QVector<QVariant> result() const;
 
     /** The date the reservation(s) processed here have been made, if known.
