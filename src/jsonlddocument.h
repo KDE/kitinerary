@@ -26,30 +26,46 @@
 #include <QVector>
 
 class QJsonArray;
+class QMetaObject;
 
 namespace KItinerary {
 
 /** Serialization/deserialization code for JSON-LD data.
  *  @see https://www.w3.org/TR/json-ld/
  */
-namespace JsonLdDocument {
-/** Convert JSON-LD data into instantiated data types. */
-KITINERARY_EXPORT QVector<QVariant> fromJson(const QJsonArray &array);
-/** Serialize instantiated data types to JSON. */
-KITINERARY_EXPORT QJsonArray toJson(const QVector<QVariant> &data);
+class JsonLdDocument {
 
-/** Read property @p name on object @p obj. */
-KITINERARY_EXPORT QVariant readProperty(const QVariant &obj, const char *name);
-/** Set property @p name on object @p obj to value @p value. */
-KITINERARY_EXPORT void writeProperty(QVariant &obj, const char *name, const QVariant &value);
-/** Removes property @p name on object @p obj. */
-KITINERARY_EXPORT void removeProperty(QVariant &obj, const char *name);
+public:
+    /** Convert JSON-LD data into instantiated data types. */
+    static KITINERARY_EXPORT QVector<QVariant> fromJson(const QJsonArray &array);
+    /** Serialize instantiated data types to JSON. */
+    static KITINERARY_EXPORT QJsonArray toJson(const QVector<QVariant> &data);
 
-/** Apply all properties of @p rhs on to @p lhs.
- *  Use this to merge two top-level objects of the same type, with
- *  @p rhs containing newer information.
- */
-KITINERARY_EXPORT QVariant apply(const QVariant &lhs, const QVariant &rhs);
+    /** Read property @p name on object @p obj. */
+    static KITINERARY_EXPORT QVariant readProperty(const QVariant &obj, const char *name);
+    /** Set property @p name on object @p obj to value @p value. */
+    static KITINERARY_EXPORT void writeProperty(QVariant &obj, const char *name, const QVariant &value);
+    /** Set property @p name on object @p obj to value @p value. */
+    template <typename T>
+    inline static void writeProperty(T &obj, const char *name, const QVariant &value);
+
+    /** Removes property @p name on object @p obj. */
+    KITINERARY_EXPORT static void removeProperty(QVariant &obj, const char *name);
+
+    /** Apply all properties of @p rhs on to @p lhs.
+    *  Use this to merge two top-level objects of the same type, with
+    *  @p rhs containing newer information.
+    */
+    KITINERARY_EXPORT static QVariant apply(const QVariant &lhs, const QVariant &rhs);
+
+private:
+    KITINERARY_EXPORT static void writePropertyImpl(const QMetaObject *mo, void *obj, const char *name, const QVariant &value);
+};
+
+template <typename T>
+inline void JsonLdDocument::writeProperty(T &obj, const char *name, const QVariant &value)
+{
+    writePropertyImpl(&T::staticMetaObject, &obj, name, value);
 }
 
 }

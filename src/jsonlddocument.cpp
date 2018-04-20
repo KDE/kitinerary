@@ -253,7 +253,7 @@ QJsonArray JsonLdDocument::toJson(const QVector<QVariant> &data)
 {
     QJsonArray a;
     for (const auto &d : data) {
-        const auto value = toJson(d);
+        const auto value = ::toJson(d);
         if (!value.isObject()) {
             continue;
         }
@@ -287,13 +287,18 @@ void JsonLdDocument::writeProperty(QVariant &obj, const char *name, const QVaria
         return;
     }
 
+    writePropertyImpl(mo, obj.data(), name, value);
+}
+
+void JsonLdDocument::writePropertyImpl(const QMetaObject* mo, void* obj, const char* name, const QVariant& value)
+{
     const auto idx = mo->indexOfProperty(name);
     if (idx < 0) {
         return;
     }
 
     const auto prop = mo->property(idx);
-    prop.writeOnGadget(obj.data(), value);
+    prop.writeOnGadget(obj, value);
 }
 
 void JsonLdDocument::removeProperty(QVariant &obj, const char *name)
