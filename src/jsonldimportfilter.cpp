@@ -48,6 +48,14 @@ static void filterLodgingReservation(QJsonObject &res)
     renameProperty(res, "checkoutDate", "checkoutTime");
 }
 
+static void filterFlight(QJsonObject &res)
+{
+    // move incomplete departureTime (ie. just ISO date, no time) to departureDay
+    if (res.value(QLatin1String("departureTime")).toString().size() == 10) {
+        renameProperty(res, "departureTime", "departureDay");
+    }
+}
+
 static void filterReservation(QJsonObject &res)
 {
     // move ticketToken to Ticket (Google vs. schema.org difference)
@@ -80,6 +88,12 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         }
     } else if (type == QLatin1String("LodgingReservation")) {
         filterLodgingReservation(res);
+    } else if (type == QLatin1String("FlightReservation")) {
+        auto flight = obj.value(QLatin1String("reservationFor")).toObject();
+        filterFlight(flight);
+        if (!flight.isEmpty()) {
+            res.insert(QLatin1String("reservationFor"), flight);
+        }
     }
 
     return res;

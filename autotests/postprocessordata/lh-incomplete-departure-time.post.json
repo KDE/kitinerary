@@ -1,0 +1,43 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "5A",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LH",
+                "name": "Lufthansa"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Berlin"
+            },
+            "boardingTime": {
+                "@type": "QDateTime",
+                "@value": "2018-03-06T17:05:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 48.35390090942383,
+                    "longitude": 11.786100387573242
+                },
+                "iataCode": "MUC",
+                "name": "Munich"
+            },
+            "departureDay": "2018-03-06",
+            "flightNumber": "2724"
+        },
+        "reservationNumber": "XXX007"
+    }
+]
