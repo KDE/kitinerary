@@ -1,0 +1,63 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "14D",
+        "pkpassPassTypeIdentifier": "pass.ncr.brussels.boarding-pass",
+        "pkpassSerialNumber": "123456789",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "SN",
+                "name": "Brussels Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 43.6349983215332,
+                    "longitude": 1.3677799701690674
+                },
+                "iataCode": "TLS",
+                "name": "Toulouse, Blagnac Airport, FR"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2018-04-20T11:20:00+02:00",
+                "timezone": "Europe/Paris"
+            },
+            "boardingTime": {
+                "@type": "QDateTime",
+                "@value": "2018-04-20T09:10:00+02:00",
+                "timezone": "Europe/Brussels"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.88970184326172,
+                    "longitude": 4.478000164031982
+                },
+                "iataCode": "BRU",
+                "name": "Brussels Airport, BE"
+            },
+            "departureDay": "2018-04-20",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2018-04-20T09:40:00+02:00",
+                "timezone": "Europe/Brussels"
+            },
+            "flightNumber": "3667"
+        },
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1DOE/JOHNMR          EXXX007 BRUTLSSN 3667 110Y014D0014 35D>5181WM8109BSN              2A08221234567890 SN LH 123456789012345      *30600000K0902       "
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "DOE/JOHNMR"
+        }
+    }
+]

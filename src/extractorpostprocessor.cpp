@@ -18,10 +18,13 @@
 */
 
 #include "extractorpostprocessor.h"
-#include "calendarhandler.h"
-#include "jsonlddocument.h"
+
 #include "airportdb/airportdb.h"
+#include "calendarhandler.h"
 #include "iatabcbpparser.h"
+#include "jsonlddocument.h"
+#include "logging.h"
+#include "mergeutil.h"
 
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
@@ -32,6 +35,8 @@
 #include <KItinerary/TrainTrip>
 
 #include <QDebug>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QTimeZone>
 
 #include <algorithm>
@@ -41,6 +46,8 @@ namespace KItinerary {
 class ExtractorPostprocessorPrivate
 {
 public:
+    void mergeOrAppend(const QVariant &elem);
+
     template <typename ObjT, typename PropT>
     ObjT processProperty(ObjT obj, const char *name, PropT (ExtractorPostprocessorPrivate::*processor)(PropT) const) const;
 
@@ -86,7 +93,7 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
         } else if (elem.userType() == qMetaTypeId<BusReservation>()) {
             elem = d->processReservation(elem);
         }
-        d->m_data.push_back(elem);
+        d->mergeOrAppend(elem);
     }
 }
 
@@ -97,6 +104,7 @@ QVector<QVariant> ExtractorPostprocessor::result() const
             if (d->filterReservation(*it)) {
                 ++it;
             } else {
+                //qCDebug(Log).noquote() << "Discarding element:" << QJsonDocument(JsonLdDocument::toJson({*it})).toJson();
                 it = d->m_data.erase(it);
             }
         }
@@ -113,6 +121,19 @@ QVector<QVariant> ExtractorPostprocessor::result() const
 void ExtractorPostprocessor::setContextDate(const QDateTime& dt)
 {
     d->m_contextDate = dt;
+}
+
+void ExtractorPostprocessorPrivate::mergeOrAppend(const QVariant &elem)
+{
+    const auto it = std::find_if(m_data.begin(), m_data.end(), [elem](const QVariant &other) {
+        return MergeUtil::isSameReservation(elem, other);
+    });
+
+    if (it == m_data.end()) {
+        m_data.push_back(elem);
+    } else {
+        *it = JsonLdDocument::apply(*it, elem);
+    }
 }
 
 template <typename ObjT, typename PropT>
