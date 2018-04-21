@@ -27,10 +27,32 @@
 #include <KItinerary/TrainTrip>
 
 #include <QDate>
+#include <QDebug>
 #include <QVariant>
 
 using namespace KItinerary;
 
+/* Checks that @p lhs and @p rhs are non-empty and equal. */
+static bool equalAndPresent(const QString &lhs, const QString &rhs)
+{
+    return !lhs.isEmpty() && lhs == rhs;
+}
+static bool equalAndPresent(const QDate &lhs, const QDate &rhs)
+{
+    return lhs.isValid() && lhs == rhs;
+}
+
+/* Checks that @p lhs and @p rhs are not non-equal if both values are set. */
+static bool conflictIfPresent(const QString &lhs, const QString &rhs)
+{
+    return !lhs.isEmpty() && !rhs.isEmpty() && lhs != rhs;
+}
+static bool conflictIfPresent(const QDateTime &lhs, const QDateTime &rhs)
+{
+    return lhs.isValid() && rhs.isValid() && lhs != rhs;
+}
+
+static bool isSameFlight(const Flight &lhs, const Flight &rhs);
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs);
 static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs);
 static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs);
@@ -121,13 +143,29 @@ bool MergeUtil::isSameReservation(const QVariant& lhs, const QVariant& rhs)
     return lhsUN.isNull() || rhsUN.isNull() || isSamePerson(lhsUN.value<Person>(), rhsUN.value<Person>());
 }
 
-bool MergeUtil::isSameFlight(const Flight& lhs, const Flight& rhs)
+static bool isSameFlight(const Flight& lhs, const Flight& rhs)
 {
-    if (lhs.flightNumber().isEmpty() || rhs.flightNumber().isEmpty()) {
+    // if there is a conflict on where this is going, or when, this is obviously not the same flight
+    if (conflictIfPresent(lhs.departureAirport().iataCode(), rhs.departureAirport().iataCode()) ||
+        conflictIfPresent(lhs.arrivalAirport().iataCode(), rhs.arrivalAirport().iataCode()) ||
+        !equalAndPresent(lhs.departureDay(), rhs.departureDay())) {
         return false;
     }
 
-    return lhs.flightNumber() == rhs.flightNumber() && lhs.airline().iataCode() == rhs.airline().iataCode() && lhs.departureDay() == rhs.departureDay();
+    // same flight number and airline (on the same day) -> we assume same flight
+    if (equalAndPresent(lhs.flightNumber(), rhs.flightNumber()) && equalAndPresent(lhs.airline().iataCode(), rhs.airline().iataCode())) {
+        return true;
+    }
+
+    // we get here if we have matching origin/destination on the same day, but mismatching flight numbers
+    // so this might be a codeshare flight
+    // our caller checks for matching booking ref, so just look for a few counter-indicators here
+    // (that is, if this is ever made available as standalone API, the last return should not be true)
+    if (conflictIfPresent(lhs.departureTime(), rhs.departureTime())) {
+        return false;
+    }
+
+    return true;
 }
 
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)

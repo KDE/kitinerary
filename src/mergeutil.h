@@ -45,13 +45,6 @@ namespace MergeUtil
 KITINERARY_EXPORT bool isSameReservation(const QVariant &lhs, const QVariant &rhs);
 
 /**
- * Checks if two Flight objects refer to the same flight.
- *
- * That is, if the flight number and departure day match.
- */
-KITINERARY_EXPORT bool isSameFlight(const Flight &lhs, const Flight &rhs);
-
-/**
  * Checks if two Person objects refer to the same person.
  *
  * Essentially a case-insensitive comparisson of the name components.
