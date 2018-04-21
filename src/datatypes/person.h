@@ -33,6 +33,8 @@ class KITINERARY_EXPORT Person
     KITINERARY_GADGET(Person)
     KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(QString, email, setEmail)
+    KITINERARY_PROPERTY(QString, familyName, setFamilyName)
+    KITINERARY_PROPERTY(QString, givenName, setGivenName)
 private:
     QExplicitlySharedDataPointer<PersonPrivate> d;
 };

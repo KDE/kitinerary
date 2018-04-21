@@ -100,11 +100,19 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &ext
     result.reserve(legCount);
     FlightReservation res1;
 
-    Person person;
-    const auto fullName = message.midRef(2, 20).trimmed();
-    // TODO split in family and given name
-    person.setName(fullName.toString());
-    res1.setUnderName(person);
+    {
+        Person person;
+        const auto fullName = message.midRef(2, 20).trimmed();
+
+        const auto idx = fullName.indexOf(QLatin1Char('/'));
+        if (idx > 0 && idx < fullName.size() - 1) {
+            person.setFamilyName(fullName.left(idx).toString());
+            person.setGivenName(fullName.mid(idx + 1).toString());
+        } else {
+            person.setName(fullName.toString());
+        }
+        res1.setUnderName(person);
+    }
 
     const auto varSize = parseRepeatedMandatorySection(message.midRef(UniqueMandatorySize), res1);
     int index = UniqueMandatorySize + RepeastedMandatorySize;

@@ -42,7 +42,9 @@
         },
         "underName": {
             "@type": "Person",
-            "name": "KRAUSE/VOLKER"
+            "familyName": "KRAUSE",
+            "givenName": "VOLKER",
+            "name": "VOLKER KRAUSE"
         }
     }
 ]

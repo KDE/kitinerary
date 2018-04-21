@@ -23,7 +23,8 @@
         "reservationNumber": "ABC123",
         "underName": {
            "@type": "Person",
-           "name": "GRANDMAIRE/MELANIE"
+           "familyName": "GRANDMAIRE",
+           "givenName": "MELANIE"
         }
     },
     {
@@ -50,7 +51,8 @@
         "reservationNumber": "DEF456",
         "underName": {
            "@type": "Person",
-           "name": "GRANDMAIRE/MELANIE"
+           "familyName": "GRANDMAIRE",
+           "givenName": "MELANIE"
         }
     }
 ]

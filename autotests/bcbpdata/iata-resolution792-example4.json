@@ -23,7 +23,8 @@
         "reservationNumber": "AB12C3",
         "underName": {
            "@type": "Person",
-           "name": "DESMARAIS/LUC"
+           "familyName": "DESMARAIS",
+           "givenName": "LUC"
         }
     },
     {
@@ -50,7 +51,8 @@
         "reservationNumber": "DEF456",
         "underName": {
            "@type": "Person",
-           "name": "DESMARAIS/LUC"
+           "familyName": "DESMARAIS",
+           "givenName": "LUC"
         }
     }
 ]

@@ -23,7 +23,8 @@
         "reservationNumber": "ABC123",
         "underName": {
            "@type": "Person",
-           "name": "DESMARAIS/LUC"
+           "familyName": "DESMARAIS",
+           "givenName": "LUC"
         }
     }
 ]

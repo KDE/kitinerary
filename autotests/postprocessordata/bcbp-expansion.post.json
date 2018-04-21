@@ -42,7 +42,9 @@
         },
         "underName": {
            "@type": "Person",
-           "name": "DESMARAIS/LUC"
+           "name": "LUC DESMARAIS",
+           "familyName": "DESMARAIS",
+           "givenName": "LUC"
         }
     }
 ]

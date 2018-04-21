@@ -57,7 +57,9 @@
         },
         "underName": {
             "@type": "Person",
-            "name": "DOE/JOHNMR"
+            "name": "JOHNMR DOE",
+            "familyName": "DOE",
+            "givenName": "JOHNMR"
         }
     }
 ]

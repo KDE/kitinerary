@@ -33,9 +33,9 @@
 using namespace KItinerary;
 
 /* Checks that @p lhs and @p rhs are non-empty and equal. */
-static bool equalAndPresent(const QString &lhs, const QString &rhs)
+static bool equalAndPresent(const QString &lhs, const QString &rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
 {
-    return !lhs.isEmpty() && lhs == rhs;
+    return !lhs.isEmpty() && (lhs.compare(rhs, caseSensitive) == 0);
 }
 static bool equalAndPresent(const QDate &lhs, const QDate &rhs)
 {
@@ -206,6 +206,12 @@ static bool isSameFoodEstablishment(const FoodEstablishment &lhs, const FoodEsta
 
 bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)
 {
-    // TODO: extend this once Person has familiy and given name fields
-    return lhs.name().compare(rhs.name(), Qt::CaseInsensitive) == 0;
+    if (lhs.name().compare(rhs.name(), Qt::CaseInsensitive) == 0) {
+        return true;
+    }
+
+    return equalAndPresent(lhs.familyName(), rhs.familyName(), Qt::CaseInsensitive)
+        && equalAndPresent(lhs.givenName(), rhs.givenName(), Qt::CaseInsensitive);
+
+    // TODO deal with cases where on side has the name split, and the other side only has the full name
 }

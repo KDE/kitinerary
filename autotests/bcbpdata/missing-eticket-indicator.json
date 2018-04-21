@@ -23,7 +23,8 @@
         "reservationNumber": "XXX007",
         "underName": {
            "@type": "Person",
-           "name": "DOE/JOHN"
+           "familyName": "DOE",
+           "givenName": "JOHN"
         }
     }
 ]

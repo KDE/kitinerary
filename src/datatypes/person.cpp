@@ -27,11 +27,15 @@ class PersonPrivate : public QSharedData
 public:
     QString name;
     QString email;
+    QString familyName;
+    QString givenName;
 };
 
 KITINERARY_MAKE_SIMPLE_CLASS(Person)
 KITINERARY_MAKE_PROPERTY(Person, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Person, QString, email, setEmail)
+KITINERARY_MAKE_PROPERTY(Person, QString, familyName, setFamilyName)
+KITINERARY_MAKE_PROPERTY(Person, QString, givenName, setGivenName)
 
 }
 

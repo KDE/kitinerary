@@ -127,6 +127,15 @@ private Q_SLOTS:
         Person p2;
         p2.setName(QLatin1String("Volker Krause"));
         QVERIFY(MergeUtil::isSamePerson(p1, p2));
+
+        Person p3;
+        p3.setName(QLatin1String("KRAUSE Volker"));
+        p3.setFamilyName(QLatin1String("KRAUSE"));
+        p3.setGivenName(QLatin1String("Volker"));
+
+        p1.setFamilyName(QLatin1String("Krause"));
+        p1.setGivenName(QLatin1String("VOLKER"));
+        QVERIFY(MergeUtil::isSamePerson(p1, p3));
     }
 
     void testIsSameLodingReservation()

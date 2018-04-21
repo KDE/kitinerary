@@ -29,6 +29,7 @@
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
 #include <KItinerary/Organization>
+#include <KItinerary/Person>
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
@@ -57,6 +58,7 @@ public:
     Airline processAirline(Airline airline) const;
     void processFlightTime(Flight &flight, const char *timePropName, const Airport &airport) const;
     QVariant processReservation(QVariant res) const;
+    Person processPerson(Person person) const;
 
     bool filterReservation(const QVariant &res) const;
     bool filterLodgingReservation(const LodgingReservation &res) const;
@@ -93,6 +95,15 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
         } else if (elem.userType() == qMetaTypeId<BusReservation>()) {
             elem = d->processReservation(elem);
         }
+
+        if (JsonLd::canConvert<Reservation>(elem)) {
+            const auto res = JsonLd::convert<Reservation>(elem);
+            if (!res.underName().isNull()) {
+                const auto person = d->processPerson(res.underName().value<Person>());
+                JsonLdDocument::writeProperty(elem, "underName", person);
+            }
+        }
+
         d->mergeOrAppend(elem);
     }
 }
@@ -266,6 +277,14 @@ QVariant ExtractorPostprocessorPrivate::processReservation(QVariant res) const
     }
 
     return res;
+}
+
+Person ExtractorPostprocessorPrivate::processPerson(Person person) const
+{
+    if (person.name().isEmpty() && !person.familyName().isEmpty() && !person.givenName().isEmpty()) {
+        person.setName(person.givenName() + QLatin1Char(' ') + person.familyName());
+    }
+    return person;
 }
 
 bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
