@@ -73,7 +73,7 @@ static int parseRepeatedMandatorySection(const QStringRef& msg, FlightReservatio
 
     // 1x Compartment code
 
-    res.setAirplaneSeat(stripLeadingZeros(msg.mid(25, 4)).toString());
+    res.setAirplaneSeat(stripLeadingZeros(msg.mid(25, 4)).trimmed().toString());
 
     // 5x Checkin sequence number
     // 1x Passenger status
@@ -123,46 +123,45 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &ext
 
     auto issueDate = externalIssueDate;
     if (varSize > 0) {
-        // parse unique conditional section
-        if (message.at(index) != QLatin1Char(BeginOfVersionNumber)) {
-            qCWarning(Log) << "IATA BCBP unique conditional section has invalid format";
-            return {};
-        }
-        // 1x version number
-        // 2x field size of unique conditional section
-        const auto uniqCondSize = readHexValue(message.midRef(index + 2), 2);
-        if (uniqCondSize + 4 > varSize) {
-            qCWarning(Log) << "IATA BCBP unique conditional section has invalid size" << varSize << uniqCondSize;
-            return {};
-        }
-
-        // 1x passenger description
-        // 1x source of checking
-        // 1x source of boarding pass issuance
-
-        // 4x date of issue of boarding pass
-        // this only contains the last digit of the year (sic), but we assume it to be in the past
-        // so this still gives us a 10 year range of correctly determined times
-        if (uniqCondSize >= 11 && externalIssueDate.isValid()) {
-            const auto year = message.at(index + 7).toLatin1() - '0';
-            const auto days = message.midRef(index + 8, 3).toInt() - 1;
-            if (year < 0 || year > 9 || days < 0 || days > 365) {
-                qCWarning(Log) << "IATA BCBP invalid boarding pass issue date format" << message.midRef(index + 7, 8);
+        // parse unique conditional section, if there is one, otherwise we skip all of this assuming "for airline use"
+        if (message.at(index) == QLatin1Char(BeginOfVersionNumber)) {
+            // 1x version number
+            // 2x field size of unique conditional section
+            const auto uniqCondSize = readHexValue(message.midRef(index + 2), 2);
+            if (uniqCondSize + 4 > varSize) {
+                qCWarning(Log) << "IATA BCBP unique conditional section has invalid size" << varSize << uniqCondSize;
                 return {};
             }
 
-            auto currentYear = externalIssueDate.year() - externalIssueDate.year() % 10 + year;
-            if (currentYear > externalIssueDate.year()) {
-                currentYear -= 10;
+            // 1x passenger description
+            // 1x source of checking
+            // 1x source of boarding pass issuance
+
+            // 4x date of issue of boarding pass
+            // this only contains the last digit of the year (sic), but we assume it to be in the past
+            // so this still gives us a 10 year range of correctly determined times
+            if (uniqCondSize >= 11 && externalIssueDate.isValid()) {
+                const auto year = message.at(index + 7).toLatin1() - '0';
+                const auto days = message.midRef(index + 8, 3).toInt() - 1;
+                if (year < 0 || year > 9 || days < 0 || days > 365) {
+                    qCWarning(Log) << "IATA BCBP invalid boarding pass issue date format" << message.midRef(index + 7, 8);
+                    return {};
+                }
+
+                auto currentYear = externalIssueDate.year() - externalIssueDate.year() % 10 + year;
+                if (currentYear > externalIssueDate.year()) {
+                    currentYear -= 10;
+                }
+                issueDate = QDate(currentYear, 1, 1).addDays(days);
             }
-            issueDate = QDate(currentYear, 1, 1).addDays(days);
+
+            // 1x document type
+            // 3x airline code of boarding pass issuer
+            // 3x 13x baggage tag numbers
+
+            // skip repeated conditional section, containing mainly bonus program data
         }
 
-        // 1x document type
-        // 3x airline code of boarding pass issuer
-        // 3x 13x baggage tag numbers
-
-        // skip repeated conditional section, containing mainly bonus program data
         // skip for airline use section
         index += varSize;
     }

@@ -50,6 +50,9 @@ private Q_SLOTS:
 
         // boarding pass issue date (BCBP item 22)
         QTest::newRow("issue date") << QStringLiteral("M1DOE/JOHN            EXXX007 TXLBRUSN 2588 034Y023D0999 35D>5181WM7034BSN              2A08200000000000 SN LH 123456789012345      *30600000K0902       ") << QStringLiteral("issue-date.json");
+
+        // EasyJet being easy on the standard interpretation
+        QTest::newRow("easyjet") << QStringLiteral("M1DOE/JOHN            EABCDEFGMRSLGWEZY8724 99  3C  506  10Axxxxxxxxxx") << QStringLiteral("easyjet.json");
     }
 
     void testParserValid()

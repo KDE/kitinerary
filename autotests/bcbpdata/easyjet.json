@@ -1,0 +1,30 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "3C",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "EZY"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "LGW"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "MRS"
+            },
+            "departureDay": "2018-04-09",
+            "flightNumber": "8724"
+        },
+        "reservationNumber": "ABCDEFG",
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHN"
+        }
+    }
+]
