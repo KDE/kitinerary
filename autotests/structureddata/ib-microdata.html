@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<base href="http://www.iberia.com"> <!-- note the invalid XML here -->
+	</head>
+	<body>
+		<div itemscope itemtype="http://schema.org/FlightReservation">
+			<meta itemprop="reservationNumber" content="XXX007" />
+			<div itemprop="underName" itemscope itemtype="http://schema.org/Person">
+				<meta itemprop="name" content="VOLKER" />
+			</div>
+			<div itemprop="reservationFor" itemscope itemtype="http://schema.org/Flight">
+				<meta itemprop="flightNumber" content="8588" />
+				<div itemprop="airline" itemscope itemtype="http://schema.org/Airline">
+					<meta itemprop="name" content="OPERADOR AIR NOSTRUM" />
+					<meta itemprop="iataCode" content="IB" />
+				</div>
+				<div itemprop="departureAirport" itemscope itemtype="http://schema.org/Airport">
+					<meta itemprop="name" content="MADRID" />
+					<meta itemprop="iataCode" content="MAD" />
+				</div>
+				<meta itemprop="departureTime" content="2017-07-20T17:50:00+02:00" />
+				<div itemprop="arrivalAirport" itemscope itemtype="http://schema.org/Airport">
+					<meta itemprop="name" content="ALMERIA" />
+					<meta itemprop="iataCode" content="LEI" />
+				</div>
+				<meta itemprop="arrivalTime" content="2017-07-20T19:00:00+02:00" />
+			</div>
+			<meta itemprop="airplaneSeat" content="9D" />
+			<div itemprop="airplaneSeatClass" itemscope itemtype="http://schema.org/AirplaneSeatClass">
+				<meta itemprop="name" content="ECONOMY" />
+			</div>
+			<meta itemprop="ticketNumber" content="0123456789012" />
+			<!-- note the '>' in the IATA BCBP data that must not be damaged by attempts to fix the XML -->
+			<meta itemprop="ticketToken" content="qrCode:M1KRAUSE/VOLKER       EYYY08  MADLEIIB 8588 201F009D0018 14B>5181WM7200BIB              2A0123456789012 2                              " />
+			<meta itemprop="reservationStatus" content="http://schema.org/Checkin" />
+		</div>
+	</body>
+</html>

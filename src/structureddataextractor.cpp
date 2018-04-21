@@ -38,7 +38,10 @@ public:
     /* Try to find application/ld+json content with basic string search. */
     bool findLdJson(const QString &text);
     /* Try to fix some common HTML4 damage to make @p text consumable for parseXml(). */
-    void fixupHtml4(QString &text) const;
+    void fixupHtml4Soft(QString &text) const;
+    void fixupHtml4Desperate(QString &text) const;
+    bool increaseDesperation(QString &text);
+
     /* Strip leading content before what looks like the first occurance of microdata. */
     bool stripLeadingContent(QString &text) const;
     /* Recursive microdata parsing. */
@@ -50,6 +53,7 @@ public:
 
     uint64_t m_parserOffset = 0;
     QJsonArray m_data;
+    int m_desperationLevel = 0;
 };
 }
 
@@ -79,15 +83,16 @@ void StructuredDataExtractor::parse(const QString &text)
 
     // now try the expensive desperate stuff
     auto fixedText = text;
-    d->fixupHtml4(fixedText);
-    qCDebug(Log) << "Trying to fix HTML4 content";
-    if (d->parseXml(fixedText)) {
-        return;
-    }
-    qCDebug(Log) << "Trying to strip leading garbage";
     d->m_parserOffset = 0;
+    d->m_desperationLevel = 0;
+
+    qCDebug(Log) << "Trying to strip leading garbage";
     while (d->stripLeadingContent(fixedText)) {
-        d->parseXml(fixedText);
+        while (!d->parseXml(fixedText)) {
+            if (!d->increaseDesperation(fixedText)) {
+                return;
+            }
+        }
     }
 }
 
@@ -156,14 +161,17 @@ bool StructuredDataExtractorPrivate::findLdJson(const QString &text)
     return !m_data.isEmpty();
 }
 
-void StructuredDataExtractorPrivate::fixupHtml4(QString &text) const
+void StructuredDataExtractorPrivate::fixupHtml4Soft(QString &text) const
+{
+    // fix value-less attributes
+    text.replace(QRegularExpression(QStringLiteral("(<[^>]+ )itemscope( [^>]*>)")), QStringLiteral("\\1itemscope=\"\"\\2"));
+}
+
+void StructuredDataExtractorPrivate::fixupHtml4Desperate(QString &text) const
 {
     // close single-element tags
     text.replace(QRegularExpression(QStringLiteral("(<meta[^>]*[^>/])>")), QStringLiteral("\\1/>"));
     text.replace(QRegularExpression(QStringLiteral("(<link[^>]*[^>/])>")), QStringLiteral("\\1/>"));
-
-    // fix value-less attributes
-    text.replace(QRegularExpression(QStringLiteral("(<[^>]+ )itemscope( [^>]*>)")), QStringLiteral("\\1itemscope=\"\"\\2"));
 
     // fix unencoded entities in url attributes
     QRegularExpression hrefRE(QStringLiteral("href=\"[^\"]*&[^;\"]*\""));
@@ -179,6 +187,23 @@ void StructuredDataExtractorPrivate::fixupHtml4(QString &text) const
     }
 
     // TODO remove legacy entities like &nbsp;
+}
+
+bool StructuredDataExtractorPrivate::increaseDesperation(QString& text)
+{
+    switch (m_desperationLevel++) {
+        case 0:
+            qCDebug(Log) << "Trying to fix HTML4 content";
+            fixupHtml4Soft(text);
+            break;
+        case 1:
+            qCDebug(Log) << "Desperately trying to fix HTML4 content";
+            fixupHtml4Desperate(text);
+            break;
+        default:
+            return false;
+    }
+    return true;
 }
 
 bool StructuredDataExtractorPrivate::stripLeadingContent(QString &text) const

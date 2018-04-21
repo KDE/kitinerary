@@ -1,0 +1,40 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "9D",
+        "airplaneSeatClass": {
+            "@type": "AirplaneSeatClass",
+            "name": "ECONOMY"
+        },
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "OPERADOR AIR NOSTRUM"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "LEI",
+                "name": "ALMERIA"
+            },
+            "arrivalTime": "2017-07-20T19:00:00+02:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "MAD",
+                "name": "MADRID"
+            },
+            "departureTime": "2017-07-20T17:50:00+02:00",
+            "flightNumber": "8588"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/Checkin",
+        "ticketNumber": "0123456789012",
+        "ticketToken": "qrCode:M1KRAUSE/VOLKER       EYYY08  MADLEIIB 8588 201F009D0018 14B>5181WM7200BIB              2A0123456789012 2                              ",
+        "underName": {
+            "@type": "Person",
+            "name": "VOLKER"
+        }
+    }
+]
