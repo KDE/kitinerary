@@ -20,6 +20,7 @@
 #include "calendarhandler.h"
 #include "jsonlddocument.h"
 #include "logging.h"
+#include "mergeutil.h"
 
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
@@ -31,6 +32,9 @@
 #include <KCalCore/Alarm>
 
 #include <KLocalizedString>
+
+#include <QJsonArray>
+#include <QJsonDocument>
 
 using namespace KCalCore;
 using namespace KItinerary;
@@ -44,8 +48,13 @@ static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &e
 
 QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
 {
-    if (reservation.userType() == qMetaTypeId<FlightReservation>()
-        || reservation.userType() == qMetaTypeId<TrainReservation>()
+    if (reservation.userType() == qMetaTypeId<FlightReservation>()) {
+        const auto flight = reservation.value<FlightReservation>().reservationFor().value<Flight>();
+        if (flight.departureTime().isValid()) {
+            return flight.departureTime();
+        }
+        return QDateTime(flight.departureDay(), QTime());
+    } else if (reservation.userType() == qMetaTypeId<TrainReservation>()
         || reservation.userType() == qMetaTypeId<BusReservation>()) {
         const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
         return JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
@@ -60,23 +69,40 @@ Event::Ptr CalendarHandler::findEvent(const Calendar::Ptr &calendar, const QVari
     if (!JsonLd::canConvert<Reservation>(reservation)) {
         return {};
     }
-    const auto bookingRef = JsonLd::convert<Reservation>(reservation).reservationNumber();
+    auto bookingRef = JsonLd::convert<Reservation>(reservation).reservationNumber();
     if (bookingRef.isEmpty()) {
         return {};
     }
+    bookingRef.prepend(QLatin1String("KIT-"));
 
     auto dt = startDateTime(reservation);
     if (reservation.userType() == qMetaTypeId<LodgingReservation>()) {
         dt = QDateTime(dt.date(), QTime());
     }
 
-    const auto events = calendar->events(dt);
+    const auto events = calendar->events(dt.date());
     for (const auto &event : events) {
-        if (event->dtStart() == dt && event->uid().startsWith(bookingRef)) {
+        if (!event->uid().startsWith(bookingRef)) {
+            continue;
+        }
+        const auto otherRes = CalendarHandler::reservationForEvent(event);
+        if (MergeUtil::isSameReservation(otherRes, reservation)) {
             return event;
         }
     }
+
     return {};
+}
+
+QVariant CalendarHandler::reservationForEvent(const KCalCore::Event::Ptr &event)
+{
+    const auto payload = event->customProperty("KITINERARY", "RESERVATION").toUtf8();
+    const auto json = QJsonDocument::fromJson(payload).array();
+    const auto data = JsonLdDocument::fromJson(json);
+    if (data.size() != 1) {
+        return {};
+    }
+    return data.at(0);
 }
 
 void CalendarHandler::fillEvent(const QVariant &reservation, const KCalCore::Event::Ptr &event)
@@ -95,9 +121,12 @@ void CalendarHandler::fillEvent(const QVariant &reservation, const KCalCore::Eve
     }
 
     const auto bookingRef = JsonLd::convert<Reservation>(reservation).reservationNumber();
-    if (!event->uid().startsWith(bookingRef)) {
-        event->setUid(bookingRef + QLatin1Char('-') + event->uid());
+    if (!event->uid().startsWith(QLatin1String("KIT-") + bookingRef)) {
+        event->setUid(QLatin1String("KIT-") + bookingRef + QLatin1Char('-') + event->uid());
     }
+
+    const auto payload = QJsonDocument(JsonLdDocument::toJson({reservation})).toJson(QJsonDocument::Compact);
+    event->setCustomProperty("KITINERARY", "RESERVATION", QString::fromUtf8(payload));
 }
 
 static void fillFlightReservation(const FlightReservation &reservation, const KCalCore::Event::Ptr &event)

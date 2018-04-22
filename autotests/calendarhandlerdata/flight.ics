@@ -5,7 +5,7 @@ CALSCALE:GREGORIAN
 BEGIN:VEVENT
 DTSTAMP:20171227T111649Z
 CREATED:20171227T111649Z
-UID:XXX007-1b22236a-21ff-4885-8c99-b3b2bbca062c
+UID:KIT-XXX007-1b22236a-21ff-4885-8c99-b3b2bbca062c
 LAST-MODIFIED:20171227T111649Z
 DESCRIPTION:Boarding time: 2:25 PM\nDeparture gate: 16\nBoarding group: C\nSeat: 16E\nBooking reference: XXX007
 SUMMARY:Flight AB 8075 from HEL to TXL
@@ -14,6 +14,29 @@ GEO:60.317200;24.963301
 DTSTART;TZID=Europe/Helsinki:20170920T150500
 DTEND;TZID=Europe/Berlin:20170920T160000
 TRANSP:OPAQUE
+X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
+ "FlightReservation"\,"airplaneSeat":"16E"\,"boardingGroup":
+ "C"\,"modifyReservationUrl":"https:
+ //www.airberlin.com/de-DE/cockpit/index/index/bookingNo/XXX007/lastname/DO
+ E/submit/1"\,"reservationFor":{"@type":"Flight"\,"airline":{"@type":
+ "Airline"\,"iataCode":"AB"\,"name":"airberlin"}\,"arrivalAirport":
+ {"@type":"Airport"\,"geo":{"@type":"GeoCoordinates"\,"latitude":
+ 52.55970001220703\,"longitude":13.287799835205078}\,"iataCode":
+ "TXL"\,"name":"Berlin (Tegel)"}\,"arrivalTime":{"@type":
+ "QDateTime"\,"@value":"2017-09-20T16:00:00+02:00"\,"timezone":
+ "Europe/Berlin"}\,"boardingTime":{"@type":"QDateTime"\,"@value":
+ "2017-09-20T14:25:00+03:00"\,"timezone":
+ "Europe/Helsinki"}\,"departureAirport":{"@type":"Airport"\,"geo":{"@type":
+ "GeoCoordinates"\,"latitude":60.31719970703125\,"longitude":
+ 24.963300704956055}\,"iataCode":"HEL"\,"name":"Helsinki"}\,"departureDay":
+ "2017-09-20"\,"departureGate":"16"\,"departureTime":{"@type":
+ "QDateTime"\,"@value":"2017-09-20T15:05:00+03:00"\,"timezone":
+ "Europe/Helsinki"}\,"flightNumber":"8075"}\,"reservationNumber":
+ "XXX007"\,"reservedTicket":{"@type":"Ticket"\,"ticketToken":"https:
+ //checkin.airberlin.com/app/barcode.fly?pnr=XXX007&ln=DOE&cpid=12345678&fn
+ =JOHN"}\,"ticketDownloadUrl":"https:
+ //m.airberlin.com/ckbc/pnr/XXX007/ln/DOE/cpid/94482631/fn/JOHN"\,"underNam
+ e":{"@type":"Person"\,"name":"JOHN DOE"}}]
 BEGIN:VALARM
 DESCRIPTION:Boarding for flight AB 8075 at gate 16
 ACTION:DISPLAY

@@ -5,7 +5,7 @@ CALSCALE:GREGORIAN
 BEGIN:VEVENT
 DTSTAMP:20171227T111649Z
 CREATED:20171227T111649Z
-UID:XXX007-1b22236a-21ff-4885-8c99-b3b2bbca062c
+UID:KIT-XXX007-1b22236a-21ff-4885-8c99-b3b2bbca062c
 LAST-MODIFIED:20171227T111649Z
 DESCRIPTION:Coach: 17\nSeat: 62\nBooking reference: XXX007
 SUMMARY:Train 5186 from Nîmes Gare to Lyon Part-Dieu
@@ -14,5 +14,18 @@ GEO:43.832291;4.365845
 DTSTART;TZID="UTC+02:00":20170929T182600
 DTEND;TZID="UTC+02:00":20170929T195200
 TRANSP:OPAQUE
+X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
+ "TrainReservation"\,"reservationFor":{"@type":
+ "TrainTrip"\,"arrivalStation":{"@type":"TrainStation"\,"geo":{"@type":
+ "GeoCoordinates"\,"latitude":45.76055908203125\,"longitude":
+ 4.8593549728393555}\,"name":"Lyon Part-Dieu"}\,"arrivalTime":
+ "2017-09-29T19:52:00+02:00"\,"departureStation":{"@type":
+ "TrainStation"\,"geo":{"@type":"GeoCoordinates"\,"latitude":
+ 43.83229064941406\,"longitude":4.365845203399658}\,"name":"Nîmes Gare"}\,"departureTime":"2017-09-29T18:26:00+02:00"\,"provider":{"@type":
+ "Organization"\,"name":"SNCF"}\,"trainName":"TGV"\,"trainNumber":
+ "5186"}\,"reservationNumber":"XXX007"\,"reservedTicket":{"@type":
+ "Ticket"\,"ticketToken":"aztecCode:somerandomdata            DOE             JOHN111110          00000"\,"ticketedSeat":{"@type":
+ "Seat"\,"seatNumber":"62"\,"seatSection":"17"}}\,"underName":{"@type":
+ "Person"\,"name":"John Doe"}\,"url":"https://www.trainline.fr/tickets"}]
 END:VEVENT
 END:VCALENDAR

@@ -38,6 +38,9 @@ namespace CalendarHandler
     /** Attempts to find an event in @p calendar for @p reservation. */
     KITINERARY_EXPORT KCalCore::Event::Ptr findEvent(const KCalCore::Calendar::Ptr &calendar, const QVariant &reservation);
 
+    /** Returns the reservation object for this event. */
+    KITINERARY_EXPORT QVariant reservationForEvent(const KCalCore::Event::Ptr &event);
+
     /** Fills @p event with details of @p reservation.
      *  Can be used on new events or to update existing ones.
      */
