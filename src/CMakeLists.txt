@@ -19,6 +19,7 @@ set(kitinerary_lib_srcs
     datatypes/reservation.cpp
     datatypes/ticket.cpp
     datatypes/traintrip.cpp
+    datatypes/visit.cpp
 
     calendarhandler.cpp
     extractor.cpp
