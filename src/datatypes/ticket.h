@@ -47,7 +47,28 @@ class KITINERARY_EXPORT Ticket
 {
     KITINERARY_GADGET(Ticket)
     KITINERARY_PROPERTY(KItinerary::Seat, ticketedSeat, setTicketedSeat)
+    /** The raw ticket token string.
+     *  @see ticketTokenType, ticketTokenData
+     */
     KITINERARY_PROPERTY(QString, ticketToken, setTicketToken)
+
+    /** The type of the content in ticketToken. */
+    Q_PROPERTY(TicketTokenType ticketTokenType READ ticketTokenType STORED false)
+    /** The ticket token payload for barcodes, otherwise the same as ticketToken. */
+    Q_PROPERTY(QString ticketTokenData READ ticketTokenData STORED false)
+
+public:
+    /** The type of content in the ticketToken property. */
+    enum TicketTokenType {
+        QRCode, ///< QR code
+        AztecCode, ///< Aztec bar code
+        Url, ///< A download URL
+        Unknown ///< Unknown or empty ticket token
+    };
+    Q_ENUM(TicketTokenType)
+
+    TicketTokenType ticketTokenType() const;
+    QString ticketTokenData() const;
 private:
     QExplicitlySharedDataPointer<TicketPrivate> d;
 };

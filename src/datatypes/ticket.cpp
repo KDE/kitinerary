@@ -46,6 +46,31 @@ KITINERARY_MAKE_SIMPLE_CLASS(Ticket)
 KITINERARY_MAKE_PROPERTY(Ticket, Seat, ticketedSeat, setTicketedSeat)
 KITINERARY_MAKE_PROPERTY(Ticket, QString, ticketToken, setTicketToken)
 
+Ticket::TicketTokenType Ticket::ticketTokenType() const
+{
+    if (d->ticketToken.startsWith(QLatin1Literal("qrcode:"), Qt::CaseInsensitive)) {
+        return QRCode;
+    } else if (d->ticketToken.startsWith(QLatin1String("azteccode:"), Qt::CaseInsensitive)) {
+        return AztecCode;
+    } else if (d->ticketToken.startsWith(QLatin1String("http"), Qt::CaseInsensitive)) {
+        return Url;
+    }
+    return Unknown;
+}
+
+QString Ticket::ticketTokenData() const
+{
+    switch (ticketTokenType()) {
+        case QRCode:
+            return ticketToken().mid(7);
+        case AztecCode:
+            return ticketToken().mid(10);
+        default:
+            break;
+    }
+    return ticketToken();
+}
+
 }
 
 #include "moc_ticket.cpp"
