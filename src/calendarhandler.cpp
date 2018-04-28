@@ -148,15 +148,22 @@ static void fillFlightReservation(const FlightReservation &reservation, const KC
     const auto boardingTime = flight.boardingTime();
     const auto departureGate = flight.departureGate();
     if (boardingTime.isValid()) {
-        Alarm::Ptr alarm(new Alarm(event.data()));
-        alarm->setStartOffset(Duration(event->dtStart(), boardingTime));
-        if (departureGate.isEmpty()) {
-            alarm->setDisplayAlarm(i18n("Boarding for flight %1", flightNumber));
-        } else {
-            alarm->setDisplayAlarm(i18n("Boarding for flight %1 at gate %2", flightNumber, departureGate));
+        const auto startOffset = Duration(event->dtStart(), boardingTime);
+        const auto existinAlarms = event->alarms();
+        const auto it = std::find_if(existinAlarms.begin(), existinAlarms.end(), [startOffset](const Alarm::Ptr &other) {
+            return other->startOffset() == startOffset;
+        });
+        if (it == existinAlarms.end()) {
+            Alarm::Ptr alarm(new Alarm(event.data()));
+            alarm->setStartOffset(Duration(event->dtStart(), boardingTime));
+            if (departureGate.isEmpty()) {
+                alarm->setDisplayAlarm(i18n("Boarding for flight %1", flightNumber));
+            } else {
+                alarm->setDisplayAlarm(i18n("Boarding for flight %1 at gate %2", flightNumber, departureGate));
+            }
+            alarm->setEnabled(true);
+            event->addAlarm(alarm);
         }
-        alarm->setEnabled(true);
-        event->addAlarm(alarm);
     }
 
     QStringList desc;
