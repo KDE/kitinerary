@@ -94,6 +94,7 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
         Place
         Ticket
         TrainTrip
+        Visit
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_Datatypes_HEADERS
     RELATIVE datatypes

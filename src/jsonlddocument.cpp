@@ -29,6 +29,7 @@
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
+#include <KItinerary/Visit>
 
 #include <QDateTime>
 #include <QJsonArray>
@@ -156,6 +157,7 @@ static QVariant createInstance(const QJsonObject &obj)
     MAKE_FACTORY(Seat);
     MAKE_FACTORY(Ticket);
     MAKE_FACTORY(TouristAttraction);
+    MAKE_FACTORY(TouristAttractionVisit);
     MAKE_FACTORY(TrainReservation);
     MAKE_FACTORY(TrainStation);
     MAKE_FACTORY(TrainTrip);
