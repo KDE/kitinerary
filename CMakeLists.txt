@@ -27,6 +27,8 @@ find_package(KF5CalendarCore CONFIG REQUIRED)
 find_package(KPimPkPass CONFIG REQUIRED)
 find_package(Poppler COMPONENTS Core)
 set_package_properties("Poppler" PROPERTIES TYPE OPTIONAL PURPOSE "Support for extraction from PDF booking confirmations.")
+find_package(zxing)
+set_package_properties("zxing" PROPERTIES TYPE OPTIONAL PURPOSE "Support for barcode decoding.")
 
 add_subdirectory(src)
 if(BUILD_TESTING)

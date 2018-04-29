@@ -5,6 +5,9 @@ add_subdirectory(airportdb)
 if(TARGET Poppler::Core)
     set(HAVE_POPPLER ON)
 endif()
+if (TARGET zxing::libzxing)
+    set(HAVE_ZXING ON)
+endif()
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 set(kitinerary_lib_srcs
@@ -21,6 +24,7 @@ set(kitinerary_lib_srcs
     datatypes/traintrip.cpp
     datatypes/visit.cpp
 
+    barcodedecoder.cpp
     calendarhandler.cpp
     extractor.cpp
     extractorengine.cpp
@@ -37,6 +41,7 @@ set(kitinerary_lib_srcs
 )
 qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
+kde_source_files_enable_exceptions(barcodedecoder.cpp)
 
 add_library(KPimItinerary SHARED ${kitinerary_lib_srcs})
 add_library(KPim::Itinerary ALIAS KPimItinerary)
@@ -61,9 +66,13 @@ target_link_libraries(KPimItinerary
 if (HAVE_POPPLER)
     target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
 endif()
+if (HAVE_ZXING)
+    target_link_libraries(KPimItinerary PRIVATE zxing::libzxing)
+endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS
     HEADER_NAMES
+        BarcodeDecoder
         CalendarHandler
         Extractor
         ExtractorEngine
