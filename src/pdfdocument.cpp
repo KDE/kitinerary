@@ -96,6 +96,7 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
             break;
         case csCalRGB:
         case csDeviceRGB:
+        case csICCBased:
             if (colorMap->getNumPixelComps() == 3 && colorMap->getBits() == 8) {
                 img = QImage(width, height, QImage::Format_RGB888);
             } else {
