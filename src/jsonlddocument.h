@@ -26,7 +26,7 @@
 #include <QVector>
 
 class QJsonArray;
-class QMetaObject;
+struct QMetaObject;
 
 namespace KItinerary {
 
