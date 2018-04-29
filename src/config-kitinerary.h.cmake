@@ -21,6 +21,7 @@
 #define CONFIG_KITINERARY_H
 
 #cmakedefine HAVE_POPPLER
+#cmakedefine HAVE_POPPLER_0_58
 #cmakedefine HAVE_ZXING
 
 #endif
