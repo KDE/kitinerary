@@ -17,14 +17,9 @@
    02110-1301, USA.
 */
 
-#include "config-kitinerary.h"
-
 #include "extractorpreprocessor.h"
 #include "logging.h"
-
-#ifdef HAVE_POPPLER
-#include <poppler-qt5.h>
-#endif
+#include "pdfdocument.h"
 
 #include <memory>
 #include <tuple>
@@ -69,19 +64,10 @@ void ExtractorPreprocessor::preprocessHtml(const QString &input)
 
 void ExtractorPreprocessor::preprocessPdf(const QByteArray &input)
 {
-#ifdef HAVE_POPPLER
-    std::unique_ptr<Poppler::Document> doc(Poppler::Document::loadFromData(input));
-    if (!doc || doc->isLocked()) {
-        return;
+    std::unique_ptr<PdfDocument> doc(PdfDocument::fromData(input));
+    if (doc) {
+        m_buffer = doc->text();
     }
-
-    for (int i = 0, total = doc->numPages(); i < total; ++i) {
-        std::unique_ptr<Poppler::Page> page(doc->page(i));
-        m_buffer += page->text({}, Poppler::Page::PhysicalLayout);
-    }
-#else
-    Q_UNUSED(input);
-#endif
 }
 
 QString ExtractorPreprocessor::text() const

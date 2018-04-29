@@ -1,0 +1,54 @@
+/*
+    Copyright (C) 2018 Volker Krause <vkrause@kde.org>
+
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Library General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or (at your
+    option) any later version.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public
+    License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include <KItinerary/PdfDocument>
+
+#include <QDebug>
+#include <QFile>
+#include <QObject>
+#include <QTest>
+
+using namespace KItinerary;
+
+class PdfDocumentTest : public QObject
+{
+    Q_OBJECT
+private Q_SLOTS:
+    void testPdfDocument()
+    {
+        QFile f(QStringLiteral(SOURCE_DIR "/misc/test.pdf"));
+        QVERIFY(f.open(QFile::ReadOnly));
+        std::unique_ptr<PdfDocument> doc(PdfDocument::fromData(f.readAll()));
+        QVERIFY(doc);
+        QCOMPARE(doc->text(), QStringLiteral("This is the first page.\nIt contains a PDF 417 barcode.\nThis is the second page.\nIt contains an Aztec code.\n"));
+        QCOMPARE(doc->imageCount(), 2);
+    }
+
+    void testInvalidPdfDocument()
+    {
+        QVERIFY(!PdfDocument::fromData(QByteArray()));
+        QVERIFY(!PdfDocument::fromData(QByteArray("HELLO")));
+
+        QFile f(QStringLiteral(SOURCE_DIR "/misc/test.pdf"));
+        QVERIFY(f.open(QFile::ReadOnly));
+        QVERIFY(!PdfDocument::fromData(f.readAll().left(f.size() / 2)));
+    }
+};
+
+QTEST_GUILESS_MAIN(PdfDocumentTest)
+
+#include "pdfdocumenttest.moc"

@@ -2,7 +2,7 @@ set(KDE_INSTALL_INCLUDEDIR_PIM ${KDE_INSTALL_INCLUDEDIR}/KPim)
 
 add_subdirectory(airportdb)
 
-if(TARGET Poppler::Qt5)
+if(TARGET Poppler::Core)
     set(HAVE_POPPLER ON)
 endif()
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
@@ -32,6 +32,7 @@ set(kitinerary_lib_srcs
     jsonlddocument.cpp
     jsonldimportfilter.cpp
     mergeutil.cpp
+    pdfdocument.cpp
     structureddataextractor.cpp
 )
 qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
@@ -58,7 +59,7 @@ target_link_libraries(KPimItinerary
         KPim::PkPass
 )
 if (HAVE_POPPLER)
-    target_link_libraries(KPimItinerary PRIVATE Poppler::Qt5)
+    target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
 endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS
@@ -72,6 +73,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         IataBcbpParser
         JsonLdDocument
         MergeUtil
+        PdfDocument
         StructuredDataExtractor
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS

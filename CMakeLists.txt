@@ -25,7 +25,7 @@ find_package(KF5 REQUIRED COMPONENTS I18n)
 find_package(KF5Mime CONFIG REQUIRED)
 find_package(KF5CalendarCore CONFIG REQUIRED)
 find_package(KPimPkPass CONFIG REQUIRED)
-find_package(Poppler COMPONENTS Qt5)
+find_package(Poppler COMPONENTS Core)
 set_package_properties("Poppler" PROPERTIES TYPE OPTIONAL PURPOSE "Support for extraction from PDF booking confirmations.")
 
 add_subdirectory(src)
