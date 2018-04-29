@@ -37,6 +37,7 @@ private Q_SLOTS:
         QTest::newRow("8bit") << QStringLiteral("pdf417_8bit.png");
         QTest::newRow("24bit") << QStringLiteral("pdf417_24bit.png");
         QTest::newRow("32bit") << QStringLiteral("pdf417_32bit.png");
+        QTest::newRow("cropped") << QStringLiteral("pdf417_cropped.png");
     }
 
     void testPDF417()
