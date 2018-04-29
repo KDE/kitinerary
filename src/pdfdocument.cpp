@@ -189,7 +189,9 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
 #ifdef HAVE_POPPLER_0_58
     auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), Object());
 #else
-    auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), nullptr);
+    Object obj;
+    obj.initNull();
+    auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), &obj);
 #endif
     std::unique_ptr<PDFDoc> popplerDoc(new PDFDoc(stream, nullptr, nullptr));
     if (!popplerDoc->isOk()) {
