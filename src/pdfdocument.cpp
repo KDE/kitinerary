@@ -186,7 +186,7 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
     std::unique_ptr<PdfDocument> doc(new PdfDocument(parent));
     doc->d->m_pdfData = data;
     // PDFDoc takes ownership of stream
-    auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), Object(objNull));
+    auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), Object());
     std::unique_ptr<PDFDoc> popplerDoc(new PDFDoc(stream, nullptr, nullptr));
     if (!popplerDoc->isOk()) {
         return nullptr;
