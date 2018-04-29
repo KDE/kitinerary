@@ -20,6 +20,7 @@
 #include "extractorengine.h"
 #include "extractor.h"
 #include "logging.h"
+#include "pdfdocument.h"
 
 #include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>
@@ -48,6 +49,7 @@ public:
     const Extractor *m_extractor = nullptr;
     ContextObject *m_context = nullptr;
     QString m_text;
+    PdfDocument *m_pdfDoc;
     KPkPass::BoardingPass *m_pass;
     QJsonArray m_result;
     QJSEngine m_engine;
@@ -129,6 +131,13 @@ ExtractorEngine::ExtractorEngine()
 ExtractorEngine::ExtractorEngine(ExtractorEngine &&) = default;
 ExtractorEngine::~ExtractorEngine() = default;
 
+void ExtractorEngine::clear()
+{
+    d->m_text.clear();
+    d->m_pdfDoc = nullptr;
+    d->m_pass = nullptr;
+}
+
 void ExtractorEngine::setExtractor(const Extractor *extractor)
 {
     d->m_extractor = extractor;
@@ -137,6 +146,14 @@ void ExtractorEngine::setExtractor(const Extractor *extractor)
 void ExtractorEngine::setText(const QString &text)
 {
     d->m_text = text;
+}
+
+void ExtractorEngine::setPdfDocument(PdfDocument *pdfDoc)
+{
+    d->m_pdfDoc = pdfDoc;
+    if (pdfDoc) {
+        d->m_text = pdfDoc->text();
+    }
 }
 
 void ExtractorEngine::setPass(KPkPass::Pass *pass)

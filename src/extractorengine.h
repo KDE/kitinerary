@@ -36,6 +36,7 @@ namespace KItinerary {
 
 class Extractor;
 class ExtractorEnginePrivate;
+class PdfDocument;
 
 /** Code for executing an extractor rule set on a specific email part. */
 class KITINERARY_EXPORT ExtractorEngine
@@ -46,12 +47,20 @@ public:
     ExtractorEngine(ExtractorEngine &&);
     ExtractorEngine(const ExtractorEngine &) = delete;
 
+    /** Resets the internal state, call before processing new input data. */
+    void clear();
+
+    /** Set the extractor to be run on the current data. */
     void setExtractor(const Extractor *extractor);
 
     /** The text to extract data from.
      *  Only considered for text extractors.
      */
     void setText(const QString &text);
+    /** A PDF document to extract data from.
+     *  Only considered for PDF or text extractors.
+     */
+    void setPdfDocument(PdfDocument *pdfDoc);
     /** The pkpass boarding pass to extract data from.
      *  Only considered for pkpass extractors.
      */

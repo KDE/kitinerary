@@ -32,7 +32,7 @@ class KITINERARY_EXPORT ExtractorPreprocessor
 public:
     void preprocessPlainText(const QString &input);
     void preprocessHtml(const QString &input);
-    void preprocessPdf(const QByteArray &input);
+    Q_DECL_DEPRECATED void preprocessPdf(const QByteArray &input);
 
     QString text() const;
 
