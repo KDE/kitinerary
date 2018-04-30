@@ -32,7 +32,7 @@ using namespace KItinerary;
 namespace KItinerary {
 enum Constants {
     UniqueMandatorySize = 23,
-    RepeastedMandatorySize = 37,
+    RepeatedMandatorySize = 37,
     FormatCode = 'M',
     BeginOfVersionNumber = '>'
 };
@@ -51,6 +51,10 @@ static int readHexValue(const QStringRef &s, int width)
 
 static int parseRepeatedMandatorySection(const QStringRef& msg, FlightReservation& res)
 {
+    if (msg.size() < 24) { // pre-checking data, technically incomplete, but we can make use of this nevertheless
+        qCWarning(Log) << "IATA BCBP repeated mandatory section too short";
+        return -1; // error
+    }
     res.setReservationNumber(msg.mid(0, 7).trimmed().toString());
 
     Flight flight;
@@ -71,6 +75,10 @@ static int parseRepeatedMandatorySection(const QStringRef& msg, FlightReservatio
     flight.setDepartureDay(QDate(1970, 1, 1).addDays(days));
     res.setReservationFor(flight);
 
+    if (msg.size() < RepeatedMandatorySize) {
+        return 0;
+    }
+
     // 1x Compartment code
 
     res.setAirplaneSeat(stripLeadingZeros(msg.mid(25, 4)).trimmed().toString());
@@ -85,8 +93,8 @@ static int parseRepeatedMandatorySection(const QStringRef& msg, FlightReservatio
 
 QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &externalIssueDate)
 {
-    if (message.size() < (UniqueMandatorySize + RepeastedMandatorySize)) {
-        qCWarning(Log) << "IATA BCBP code too short";
+    if (message.size() < UniqueMandatorySize) {
+        qCWarning(Log) << "IATA BCBP code too short for unique mandatory section";
         return {};
     }
     if (message.at(0) != QLatin1Char(FormatCode) || !message.at(1).isDigit()) {
@@ -115,14 +123,17 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &ext
     }
 
     const auto varSize = parseRepeatedMandatorySection(message.midRef(UniqueMandatorySize), res1);
-    int index = UniqueMandatorySize + RepeastedMandatorySize;
-    if (message.size() < (index + varSize)) {
-        qCWarning(Log) << "IATA BCBP code too short for conditional section in first leg" << varSize << message.size();
+    if (varSize < 0) { // parser error
         return {};
     }
-
+    int index = UniqueMandatorySize + RepeatedMandatorySize;
     auto issueDate = externalIssueDate;
     if (varSize > 0) {
+        if (message.size() < (index + varSize)) {
+            qCWarning(Log) << "IATA BCBP code too short for conditional section in first leg" << varSize << message.size();
+            return {};
+        }
+
         // parse unique conditional section, if there is one, otherwise we skip all of this assuming "for airline use"
         if (message.at(index) == QLatin1Char(BeginOfVersionNumber)) {
             // 1x version number
@@ -170,14 +181,17 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &ext
 
     // all following legs only contain repeated sections, copy content from the unique ones from the first leg
     for (int i = 1; i < legCount; ++i) {
-        if (message.size() < (index + RepeastedMandatorySize)) {
+        if (message.size() < (index + RepeatedMandatorySize)) {
             qCWarning(Log) << "IATA BCBP repeated mandatory section too short" << i;
             return {};
         }
 
         FlightReservation res = res1;
         const auto varSize = parseRepeatedMandatorySection(message.midRef(index), res);
-        index += RepeastedMandatorySize;
+        if (varSize < 0) { // parser error
+            return {};
+        }
+        index += RepeatedMandatorySize;
         if (message.size() < (index + varSize)) {
             qCWarning(Log) << "IATA BCBP repeated conditional section too short" << i;
             return {};

@@ -53,6 +53,10 @@ private Q_SLOTS:
 
         // EasyJet being easy on the standard interpretation
         QTest::newRow("easyjet") << QStringLiteral("M1DOE/JOHN            EABCDEFGMRSLGWEZY8724 99  3C  506  10Axxxxxxxxxx") << QStringLiteral("easyjet.json");
+
+        // Brussels Airlines short codes on booking confirmation
+        QTest::newRow("minimal1") << QStringLiteral("M1DOE/JOHN            EXXX007 TXLBRUSN 2592 110Y") << QStringLiteral("minimal.json");
+        QTest::newRow("minimal2") << QStringLiteral("M1DOE/JOHN            EXXX007 TXLBRUSN 2592 110") << QStringLiteral("minimal.json");
     }
 
     void testParserValid()
@@ -81,6 +85,7 @@ private Q_SLOTS:
         QTest::newRow("empty") << QString();
         QTest::newRow("too short") << QStringLiteral("M1DESMARAIS/LUC       ");
         QTest::newRow("wrong leg count") << QStringLiteral("M2DESMARAIS/LUC       EABC123 YULFRAAC 0834 326J001A0025 100");
+        QTest::newRow("too short repeated mandatory section") << QStringLiteral("M1DOE/JOHN            EXXX007 TXLBRUSN 2592 11");
     }
 
     void testParserInvalid()
