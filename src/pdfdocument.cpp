@@ -40,8 +40,10 @@ public:
 
 class PdfPagePrivate : public QSharedData {
 public:
+    int m_pageNum = -1;
     QString m_text;
     std::vector<PdfImage> m_images;
+    PdfDocumentPrivate *m_doc;
 };
 
 class PdfDocumentPrivate {
@@ -49,6 +51,9 @@ public:
     QByteArray m_pdfData; // needs to be kept alive as long as the Poppler::PdfDoc instance lives
     std::vector<PdfImage> m_images;
     std::vector<PdfPage> m_pages;
+#ifdef HAVE_POPPLER
+    std::unique_ptr<PDFDoc> m_popplerDoc;
+#endif
 };
 
 #ifdef HAVE_POPPLER
@@ -214,6 +219,29 @@ QString PdfPage::text() const
     return d->m_text;
 }
 
+static double ratio(double begin, double end, double ratio)
+{
+    return begin + (end - begin) * ratio;
+}
+
+QString PdfPage::textInRect(double left, double top, double right, double bottom) const
+{
+#ifdef HAVE_POPPLER
+    GlobalParams params;
+    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, &params);
+
+    std::unique_ptr<ExtractorOutputDevice> device(new ExtractorOutputDevice(d->m_doc));
+    d->m_doc->m_popplerDoc->displayPageSlice(device.get(), d->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
+    auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
+    qDebug() << pageRect->x1 << pageRect->y1 << pageRect->x2 << pageRect->y2;
+    std::unique_ptr<GooString> s(device->getText(ratio(pageRect->x1, pageRect->x2, left), ratio(pageRect->y1, pageRect->y2, top),
+                                                 ratio(pageRect->x1, pageRect->x2, right), ratio(pageRect->y1, pageRect->y2, bottom)));
+    return QString::fromUtf8(s->getCString());
+#else
+    return {};
+#endif
+}
+
 int PdfPage::imageCount() const
 {
     return d->m_images.size();
@@ -308,16 +336,20 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
     std::unique_ptr<ExtractorOutputDevice> device(new ExtractorOutputDevice(doc->d.get()));
     doc->d->m_pages.reserve(popplerDoc->getNumPages());
     for (int i = 0; i < popplerDoc->getNumPages(); ++i) {
-        PdfPage page;
         popplerDoc->displayPageSlice(device.get(), i + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
         auto pageRect = popplerDoc->getPage(i + 1)->getCropBox();
         std::unique_ptr<GooString> s(device->getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
         std::copy(device->m_images.begin(), device->m_images.end(), std::back_inserter(doc->d->m_images));
+
+        PdfPage page;
+        page.d->m_pageNum = i;
+        page.d->m_doc = doc->d.get();
         page.d->m_text = QString::fromUtf8(s->getCString());
         page.d->m_images = std::move(device->m_images);
         doc->d->m_pages.push_back(page);
     }
 
+    doc->d->m_popplerDoc = std::move(popplerDoc);
     return doc.release();
 #else
     Q_UNUSED(data);
