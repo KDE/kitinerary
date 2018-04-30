@@ -35,6 +35,7 @@
 #include <QJsonObject>
 #include <QLocale>
 #include <QJSEngine>
+#include <QJSValueIterator>
 
 using namespace KItinerary;
 
@@ -270,7 +271,13 @@ void ExtractorEnginePrivate::executeScript()
     }
 
     if (result.isArray()) {
-        m_result = QJsonArray::fromVariantList(result.toVariant().toList());
+        QJSValueIterator it(result);
+        while (it.hasNext()) {
+            it.next();
+            if (it.value().isObject()) {
+                m_result.push_back(QJsonValue::fromVariant(it.value().toVariant()));
+            }
+        }
     } else if (result.isObject()) {
         m_result = { QJsonValue::fromVariant(result.toVariant()) };
     } else {
