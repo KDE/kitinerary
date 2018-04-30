@@ -55,11 +55,11 @@ public:
     QJSEngine m_engine;
 };
 
-class JsApi : public QObject
+class JsonLdJsApi : public QObject
 {
     Q_OBJECT
 public:
-    explicit JsApi(QJSEngine *engine)
+    explicit JsonLdJsApi(QJSEngine *engine)
         : QObject(engine)
         , m_engine(engine)
     {
@@ -72,14 +72,14 @@ private:
     QJSEngine *m_engine;
 };
 
-QJSValue JsApi::newObject(const QString &typeName) const
+QJSValue JsonLdJsApi::newObject(const QString &typeName) const
 {
     auto v = m_engine->newObject();
     v.setProperty(QStringLiteral("@type"), typeName);
     return v;
 }
 
-QDateTime JsApi::toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const
+QDateTime JsonLdJsApi::toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const
 {
     QLocale locale(localeName);
     const auto dt = locale.toDateTime(dtStr, format);
@@ -116,7 +116,7 @@ void ExtractorEnginePrivate::setupEngine()
 {
     m_context = new ContextObject; // will be deleted by QJSEngine taking ownership
     m_engine.installExtensions(QJSEngine::ConsoleExtension);
-    auto jsApi = new JsApi(&m_engine);
+    auto jsApi = new JsonLdJsApi(&m_engine);
     m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), m_engine.newQObject(jsApi));
     m_engine.globalObject().setProperty(QStringLiteral("Context"), m_engine.newQObject(m_context));
 }
