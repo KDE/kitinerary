@@ -7,7 +7,7 @@
     },
     {
         "type": "pdf",
-        "filter": [ { "header": "From", "match": "noreply@notifications.brusselsairlines.com" } ],
+        "filter": [ { "header": "From", "match": "brusselsairlines.com" } ],
         "script": "brusselsairlines-receipt.js"
     }
 ]
