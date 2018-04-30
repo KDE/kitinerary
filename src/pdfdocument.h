@@ -20,13 +20,72 @@
 
 #include "kitinerary_export.h"
 
+#include <QExplicitlySharedDataPointer>
 #include <QObject>
+#include <QVariant>
 
 #include <memory>
 
 class QImage;
 
 namespace KItinerary {
+
+class PdfImagePrivate;
+
+/** An image in a PDF document.
+ */
+class KITINERARY_EXPORT PdfImage
+{
+    Q_GADGET
+    Q_PROPERTY(int width READ width)
+    Q_PROPERTY(int height READ height)
+public:
+    PdfImage();
+    PdfImage(const PdfImage &other);
+    ~PdfImage();
+    PdfImage& operator=(const PdfImage &other);
+
+    int width() const;
+    int height() const;
+    QImage image() const;
+
+private:
+    friend class ExtractorOutputDevice;
+    QExplicitlySharedDataPointer<PdfImagePrivate> d;
+};
+
+
+class PdfPagePrivate;
+
+/** A page in a PDF document.
+ */
+class KITINERARY_EXPORT PdfPage
+{
+    Q_GADGET
+    Q_PROPERTY(QString text READ text)
+    Q_PROPERTY(QVariantList images READ imagesVariant)
+public:
+    PdfPage();
+    PdfPage(const PdfPage &other);
+    ~PdfPage();
+    PdfPage& operator=(const PdfPage &other);
+
+    /** The entire text on this page. */
+    QString text() const;
+
+    /** The number of images found in this document. */
+    int imageCount() const;
+
+    /** The n-th image found in this document. */
+    PdfImage image(int index) const;
+
+private:
+    QVariantList imagesVariant() const;
+
+    friend class PdfDocument;
+    QExplicitlySharedDataPointer<PdfPagePrivate> d;
+};
+
 
 class PdfDocumentPrivate;
 
@@ -40,6 +99,9 @@ class KITINERARY_EXPORT PdfDocument : public QObject
     Q_OBJECT
     Q_PROPERTY(QString text READ text CONSTANT)
     Q_PROPERTY(int imageCount READ imageCount CONSTANT)
+    Q_PROPERTY(QVariantList images READ imagesVariant)
+    Q_PROPERTY(int pageCount READ pageCount CONSTANT)
+    Q_PROPERTY(QVariantList pages READ pagesVariant CONSTANT)
 public:
     explicit PdfDocument(QObject *parent = nullptr);
     ~PdfDocument();
@@ -51,7 +113,13 @@ public:
     int imageCount() const;
 
     /** The n-th image found in this document. */
-    QImage image(int index) const;
+    PdfImage image(int index) const;
+
+    /** The number of pages in this document. */
+    int pageCount() const;
+
+    /** The n-thj page in this document. */
+    PdfPage page(int index) const;
 
     /** Creates a PdfDocument from the given raw data.
      *  @returns @c nullptr if loading fails or Poppler was not found.
@@ -59,9 +127,15 @@ public:
     static PdfDocument* fromData(const QByteArray &data, QObject *parent = nullptr);
 
 private:
+    QVariantList imagesVariant() const;
+    QVariantList pagesVariant() const;
+
     std::unique_ptr<PdfDocumentPrivate> d;
 };
 
 }
+
+Q_DECLARE_METATYPE(KItinerary::PdfImage)
+Q_DECLARE_METATYPE(KItinerary::PdfPage)
 
 #endif // KITINERARY_PDFDOCUMENT_H

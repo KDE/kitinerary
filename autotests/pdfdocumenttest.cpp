@@ -36,6 +36,18 @@ private Q_SLOTS:
         QVERIFY(doc);
         QCOMPARE(doc->text(), QStringLiteral("This is the first page.\nIt contains a PDF 417 barcode.\nThis is the second page.\nIt contains an Aztec code.\n"));
         QCOMPARE(doc->imageCount(), 2);
+        QCOMPARE(doc->pageCount(), 2);
+        QCOMPARE(doc->property("pages").toList().size(), 2);
+        QCOMPARE(doc->property("images").toList().size(), 2);
+
+        auto page = doc->page(0);
+        QCOMPARE(page.text(), QStringLiteral("This is the first page.\nIt contains a PDF 417 barcode.\n"));
+        QCOMPARE(page.imageCount(), 1);
+        QCOMPARE(PdfPage::staticMetaObject.property(1).readOnGadget(&page).toList().size(), 1);
+
+        page = doc->page(1);
+        QCOMPARE(page.text(), QStringLiteral("This is the second page.\nIt contains an Aztec code.\n"));
+        QCOMPARE(page.imageCount(), 1);
     }
 
     void testInvalidPdfDocument()

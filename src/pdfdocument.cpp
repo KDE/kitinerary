@@ -32,12 +32,23 @@
 using namespace KItinerary;
 
 namespace KItinerary {
+class PdfImagePrivate : public QSharedData {
+public:
+    int m_ref = -1;
+    QImage m_img;
+};
+
+class PdfPagePrivate : public QSharedData {
+public:
+    QString m_text;
+    std::vector<PdfImage> m_images;
+};
+
 class PdfDocumentPrivate {
 public:
-    QByteArray m_pdfData;
-    QString m_text;
-    std::vector<QImage> m_images;
-    std::vector<int> m_imgRefs;
+    QByteArray m_pdfData; // needs to be kept alive as long as the Poppler::PdfDoc instance lives
+    std::vector<PdfImage> m_images;
+    std::vector<PdfPage> m_pages;
 };
 
 #ifdef HAVE_POPPLER
@@ -47,6 +58,8 @@ public:
     ExtractorOutputDevice(PdfDocumentPrivate *dd);
     GBool needNonText() override { return true; }
     void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, GBool interpolate, int *maskColors, GBool inlineImg) override;
+
+    std::vector<PdfImage> m_images;
 
 private:
     PdfDocumentPrivate *d;
@@ -75,11 +88,13 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
 
     // check for duplicate occurances of ref->getRef().num
     if (ref->isRef()) {
-        auto it = std::lower_bound(d->m_imgRefs.begin(), d->m_imgRefs.end(), ref->getRef().num);
-        if (it != d->m_imgRefs.end() && *it == ref->getRef().num) {
+        auto it = std::find_if(d->m_images.begin(), d->m_images.end(), [ref](const PdfImage &other) {
+            return other.d->m_ref == ref->getRef().num;
+        });
+        if (it != d->m_images.end()) {
+            m_images.push_back(*it);
             return;
         }
-        d->m_imgRefs.insert(it, ref->getRef().num);
     }
 
     QImage img;
@@ -151,9 +166,72 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     }
 
     imgStream->close();
-    d->m_images.push_back(img);
+    PdfImage pdfImg;
+    pdfImg.d->m_img = img;
+    if (ref->isRef()) {
+        pdfImg.d->m_ref = ref->getRef().num;
+    }
+    m_images.push_back(pdfImg);
 }
 #endif
+
+PdfImage::PdfImage()
+    : d(new PdfImagePrivate)
+{
+}
+
+PdfImage::PdfImage(const PdfImage& other) = default;
+PdfImage::~PdfImage() = default;
+PdfImage& PdfImage::operator=(const PdfImage& other) = default;
+
+int PdfImage::height() const
+{
+    return d->m_img.height();
+}
+
+int PdfImage::width() const
+{
+    return d->m_img.width();
+}
+
+QImage PdfImage::image() const
+{
+    return d->m_img;
+}
+
+
+PdfPage::PdfPage()
+    : d(new PdfPagePrivate)
+{
+}
+
+PdfPage::PdfPage(const PdfPage& other) = default;
+PdfPage::~PdfPage() = default;
+PdfPage& PdfPage::operator=(const PdfPage& other) = default;
+
+QString PdfPage::text() const
+{
+    return d->m_text;
+}
+
+int PdfPage::imageCount() const
+{
+    return d->m_images.size();
+}
+
+PdfImage PdfPage::image(int index) const
+{
+    return d->m_images[index];
+}
+
+QVariantList PdfPage::imagesVariant() const
+{
+    QVariantList l;
+    l.reserve(imageCount());
+    std::for_each(d->m_images.begin(), d->m_images.end(), [&l](const PdfImage& img) { l.push_back(QVariant::fromValue(img)); });
+    return l;
+}
+
 
 PdfDocument::PdfDocument(QObject *parent)
     : QObject(parent)
@@ -165,7 +243,9 @@ PdfDocument::~PdfDocument() = default;
 
 QString PdfDocument::text() const
 {
-    return d->m_text;
+    QString text;
+    std::for_each(d->m_pages.begin(), d->m_pages.end(), [&text](const PdfPage &p) { text += p.text(); });
+    return text;
 }
 
 int PdfDocument::imageCount() const
@@ -173,9 +253,35 @@ int PdfDocument::imageCount() const
     return d->m_images.size();
 }
 
-QImage PdfDocument::image(int index) const
+PdfImage PdfDocument::image(int index) const
 {
     return d->m_images[index];
+}
+
+QVariantList PdfDocument::imagesVariant() const
+{
+    QVariantList l;
+    l.reserve(imageCount());
+    std::for_each(d->m_images.begin(), d->m_images.end(), [&l](const PdfImage& img) { l.push_back(QVariant::fromValue(img)); });
+    return l;
+}
+
+int PdfDocument::pageCount() const
+{
+    return d->m_pages.size();
+}
+
+PdfPage PdfDocument::page(int index) const
+{
+    return d->m_pages[index];
+}
+
+QVariantList PdfDocument::pagesVariant() const
+{
+    QVariantList l;
+    l.reserve(pageCount());
+    std::for_each(d->m_pages.begin(), d->m_pages.end(), [&l](const PdfPage& p) { l.push_back(QVariant::fromValue(p)); });
+    return l;
 }
 
 PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
@@ -200,11 +306,16 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
     }
 
     std::unique_ptr<ExtractorOutputDevice> device(new ExtractorOutputDevice(doc->d.get()));
+    doc->d->m_pages.reserve(popplerDoc->getNumPages());
     for (int i = 0; i < popplerDoc->getNumPages(); ++i) {
+        PdfPage page;
         popplerDoc->displayPageSlice(device.get(), i + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
         auto pageRect = popplerDoc->getPage(i + 1)->getCropBox();
         std::unique_ptr<GooString> s(device->getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
-        doc->d->m_text += QString::fromUtf8(s->getCString());
+        std::copy(device->m_images.begin(), device->m_images.end(), std::back_inserter(doc->d->m_images));
+        page.d->m_text = QString::fromUtf8(s->getCString());
+        page.d->m_images = std::move(device->m_images);
+        doc->d->m_pages.push_back(page);
     }
 
     return doc.release();
