@@ -126,6 +126,9 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
                 return;
             }
             break;
+        case csIndexed:
+            img = QImage(width, height, QImage::Format_RGB888);
+            break;
         default:
             // the fancy photo/print formats aren't used for the stuff we are interested in
             return;
@@ -142,7 +145,7 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
                 auto imgData = img.scanLine(i);
                 GfxRGB rgb;
                 for (int j = 0; j < width; ++j) {
-                    colorMap->getRGB(row + (j * 3), &rgb);
+                    colorMap->getRGB(row + (j * colorMap->getNumPixelComps()), &rgb);
                     *imgData++ = colToByte(rgb.r);
                     *imgData++ = colToByte(rgb.g);
                     *imgData++ = colToByte(rgb.b);
