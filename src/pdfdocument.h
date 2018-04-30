@@ -41,9 +41,9 @@ class KITINERARY_EXPORT PdfImage
     Q_PROPERTY(int height READ height)
 public:
     PdfImage();
-    PdfImage(const PdfImage &other);
+    PdfImage(const PdfImage&);
     ~PdfImage();
-    PdfImage& operator=(const PdfImage &other);
+    PdfImage& operator=(const PdfImage&);
 
     int width() const;
     int height() const;
@@ -66,9 +66,9 @@ class KITINERARY_EXPORT PdfPage
     Q_PROPERTY(QVariantList images READ imagesVariant)
 public:
     PdfPage();
-    PdfPage(const PdfPage &other);
+    PdfPage(const PdfPage&);
     ~PdfPage();
-    PdfPage& operator=(const PdfPage &other);
+    PdfPage& operator=(const PdfPage&);
 
     /** The entire text on this page. */
     QString text() const;

@@ -185,9 +185,9 @@ PdfImage::PdfImage()
 {
 }
 
-PdfImage::PdfImage(const PdfImage& other) = default;
+PdfImage::PdfImage(const PdfImage&) = default;
 PdfImage::~PdfImage() = default;
-PdfImage& PdfImage::operator=(const PdfImage& other) = default;
+PdfImage& PdfImage::operator=(const PdfImage&) = default;
 
 int PdfImage::height() const
 {
@@ -210,19 +210,21 @@ PdfPage::PdfPage()
 {
 }
 
-PdfPage::PdfPage(const PdfPage& other) = default;
+PdfPage::PdfPage(const PdfPage&) = default;
 PdfPage::~PdfPage() = default;
-PdfPage& PdfPage::operator=(const PdfPage& other) = default;
+PdfPage& PdfPage::operator=(const PdfPage&) = default;
 
 QString PdfPage::text() const
 {
     return d->m_text;
 }
 
+#ifdef HAVE_POPPLER
 static double ratio(double begin, double end, double ratio)
 {
     return begin + (end - begin) * ratio;
 }
+#endif
 
 QString PdfPage::textInRect(double left, double top, double right, double bottom) const
 {
@@ -238,6 +240,10 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
                                                  ratio(pageRect->x1, pageRect->x2, right), ratio(pageRect->y1, pageRect->y2, bottom)));
     return QString::fromUtf8(s->getCString());
 #else
+    Q_UNUSED(left);
+    Q_UNUSED(top);
+    Q_UNUSED(right);
+    Q_UNUSED(bottom);
     return {};
 #endif
 }
