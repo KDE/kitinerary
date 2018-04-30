@@ -142,6 +142,27 @@ private Q_SLOTS:
         auto res = data.value<FoodEstablishmentReservation>();
         QCOMPARE(res.partySize(), 42);
     }
+
+    void testApply()
+    {
+        Flight f1;
+        f1.setDepartureGate(QLatin1String("38"));
+        Airline a1;
+        a1.setIataCode(QLatin1String("AB"));
+        f1.setAirline(a1);
+
+        Flight f2;
+        f2.setDepartureTerminal(QLatin1String("A"));
+        Airline a2;
+        a2.setName(QLatin1String("Air Berlin"));
+        f2.setAirline(a2);
+
+        f1 = JsonLdDocument::apply(f1, f2).value<Flight>();
+        QCOMPARE(f1.departureGate(), QLatin1String("38"));
+        QCOMPARE(f1.departureTerminal(), QLatin1String("A"));
+        QCOMPARE(f1.airline().iataCode(), QLatin1String("AB"));
+        QCOMPARE(f1.airline().name(), QLatin1String("Air Berlin"));
+    }
 };
 
 QTEST_APPLESS_MAIN(JsonLdDocumentTest)

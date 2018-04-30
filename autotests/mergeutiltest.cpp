@@ -136,6 +136,9 @@ private Q_SLOTS:
         p1.setFamilyName(QLatin1String("Krause"));
         p1.setGivenName(QLatin1String("VOLKER"));
         QVERIFY(MergeUtil::isSamePerson(p1, p3));
+
+        p1.setGivenName(QLatin1String("VOLKERMR")); // IATA BCBP names with titles attached
+        QVERIFY(MergeUtil::isSamePerson(p1, p3));
     }
 
     void testIsSameLodingReservation()

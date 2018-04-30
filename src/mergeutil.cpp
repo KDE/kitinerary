@@ -210,8 +210,14 @@ bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)
         return true;
     }
 
-    return equalAndPresent(lhs.familyName(), rhs.familyName(), Qt::CaseInsensitive)
-        && equalAndPresent(lhs.givenName(), rhs.givenName(), Qt::CaseInsensitive);
+    if (!equalAndPresent(lhs.familyName(), rhs.familyName(), Qt::CaseInsensitive)) {
+        return false;
+    }
+
+     // names from IATA BCBP can have "MS", "MR", "MRS" etc appended to the first name
+    return equalAndPresent(lhs.givenName(), rhs.givenName(), Qt::CaseInsensitive)
+        || lhs.givenName().startsWith(rhs.givenName(), Qt::CaseInsensitive)
+        || rhs.givenName().startsWith(rhs.givenName(), Qt::CaseInsensitive);
 
     // TODO deal with cases where on side has the name split, and the other side only has the full name
 }
