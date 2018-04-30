@@ -61,7 +61,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
     }
 
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
-        if ((*it).type() != Extractor::Text) {
+        if ((*it).type() == Extractor::PkPass) {
             continue;
         }
         for (const auto &filter : (*it).filters()) {

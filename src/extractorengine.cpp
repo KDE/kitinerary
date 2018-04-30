@@ -49,7 +49,7 @@ public:
     const Extractor *m_extractor = nullptr;
     ContextObject *m_context = nullptr;
     QString m_text;
-    PdfDocument *m_pdfDoc;
+    PdfDocument *m_pdfDoc = nullptr;
     KPkPass::BoardingPass *m_pass;
     QJsonArray m_result;
     QJSEngine m_engine;
@@ -178,6 +178,12 @@ QJsonArray ExtractorEngine::extract()
             }
             d->executeScript();
             break;
+        case Extractor::Pdf:
+            if (!d->m_pdfDoc) {
+                return {};
+            }
+            d->executeScript();
+            break;
         case Extractor::PkPass:
             if (!d->m_pass) {
                 return {};
@@ -220,6 +226,9 @@ void ExtractorEnginePrivate::executeScript()
     switch (m_extractor->type()) {
         case Extractor::Text:
             args = {m_text};
+            break;
+        case Extractor::Pdf:
+            args = {m_engine.toScriptValue<QObject*>(m_pdfDoc)};
             break;
         case Extractor::PkPass:
             args = {m_engine.toScriptValue<QObject*>(m_pass)};

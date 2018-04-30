@@ -51,6 +51,8 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
     const auto type = obj.value(QLatin1String("type")).toString();
     if (type == QLatin1String("pkpass")) {
         d->m_type = PkPass;
+    } else if (type == QLatin1String("pdf")) {
+        d->m_type = Pdf;
     }
 
     for (const auto &filterValue : obj.value(QLatin1String("filter")).toArray()) {

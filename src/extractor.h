@@ -47,6 +47,7 @@ public:
     /** Type of data this extractor can process. */
     enum Type {
         Text,
+        Pdf,
         PkPass
     };
     Type type() const;
