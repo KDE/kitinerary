@@ -51,6 +51,9 @@ private Q_SLOTS:
         page = doc->page(1);
         QCOMPARE(page.text(), QStringLiteral("This is the second page.\nIt contains an Aztec code.\n"));
         QCOMPARE(page.imageCount(), 1);
+
+        QVERIFY(page.imagesInRect(0, 0, 0.5, 1).isEmpty());
+        QCOMPARE(page.imagesInRect(0, 0.5, 1, 1).size(), 1);
     }
 
     void testInvalidPdfDocument()

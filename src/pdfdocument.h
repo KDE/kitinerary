@@ -51,6 +51,7 @@ public:
 
 private:
     friend class ExtractorOutputDevice;
+    friend class PdfPage;
     QExplicitlySharedDataPointer<PdfImagePrivate> d;
 };
 
@@ -83,6 +84,11 @@ public:
 
     /** The n-th image found in this document. */
     PdfImage image(int index) const;
+
+    /** Returns the images in the specified sub-rect of this page.
+     *  All parameters are relative values between @c 0 and @c 1 of the entire page size.
+     */
+    Q_INVOKABLE QVariantList imagesInRect(double left, double top, double right, double bottom) const;
 
 private:
     QVariantList imagesVariant() const;

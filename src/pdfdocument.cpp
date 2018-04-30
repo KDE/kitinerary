@@ -29,6 +29,8 @@
 #include <TextOutputDev.h>
 #endif
 
+#include <cmath>
+
 using namespace KItinerary;
 
 namespace KItinerary {
@@ -36,6 +38,8 @@ class PdfImagePrivate : public QSharedData {
 public:
     int m_ref = -1;
     QImage m_img;
+    double m_x = NAN;
+    double m_y = NAN;
 };
 
 class PdfPagePrivate : public QSharedData {
@@ -82,7 +86,6 @@ ExtractorOutputDevice::ExtractorOutputDevice(PdfDocumentPrivate *dd)
 
 void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str, int width, int height, GfxImageColorMap* colorMap, GBool interpolate, int* maskColors, GBool inlineImg)
 {
-    Q_UNUSED(state);
     Q_UNUSED(interpolate);
     Q_UNUSED(maskColors);
     Q_UNUSED(inlineImg);
@@ -176,6 +179,8 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     if (ref->isRef()) {
         pdfImg.d->m_ref = ref->getRef().num;
     }
+    pdfImg.d->m_x = state->getCTM()[4];
+    pdfImg.d->m_y = state->getCTM()[5];
     m_images.push_back(pdfImg);
 }
 #endif
@@ -234,8 +239,7 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
 
     std::unique_ptr<ExtractorOutputDevice> device(new ExtractorOutputDevice(d->m_doc));
     d->m_doc->m_popplerDoc->displayPageSlice(device.get(), d->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
-    auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
-    qDebug() << pageRect->x1 << pageRect->y1 << pageRect->x2 << pageRect->y2;
+    const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device->getText(ratio(pageRect->x1, pageRect->x2, left), ratio(pageRect->y1, pageRect->y2, top),
                                                  ratio(pageRect->x1, pageRect->x2, right), ratio(pageRect->y1, pageRect->y2, bottom)));
     return QString::fromUtf8(s->getCString());
@@ -263,6 +267,25 @@ QVariantList PdfPage::imagesVariant() const
     QVariantList l;
     l.reserve(imageCount());
     std::for_each(d->m_images.begin(), d->m_images.end(), [&l](const PdfImage& img) { l.push_back(QVariant::fromValue(img)); });
+    return l;
+}
+
+QVariantList PdfPage::imagesInRect(double left, double top, double right, double bottom) const
+{
+    QVariantList l;
+#ifdef HAVE_POPPLER
+    GlobalParams params;
+    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, &params);
+    const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
+
+    for (const auto &img : d->m_images) {
+        if ((img.d->m_x >= ratio(pageRect->x1, pageRect->x2, left) && img.d->m_x <= ratio(pageRect->x1, pageRect->x2, right)) &&
+            (img.d->m_y >= ratio(pageRect->y1, pageRect->y2, top)  && img.d->m_y <= ratio(pageRect->y1, pageRect->y2, bottom)))
+        {
+            l.push_back(QVariant::fromValue(img));
+        }
+    }
+#endif
     return l;
 }
 
@@ -343,7 +366,7 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
     doc->d->m_pages.reserve(popplerDoc->getNumPages());
     for (int i = 0; i < popplerDoc->getNumPages(); ++i) {
         popplerDoc->displayPageSlice(device.get(), i + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
-        auto pageRect = popplerDoc->getPage(i + 1)->getCropBox();
+        const auto pageRect = popplerDoc->getPage(i + 1)->getCropBox();
         std::unique_ptr<GooString> s(device->getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
         std::copy(device->m_images.begin(), device->m_images.end(), std::back_inserter(doc->d->m_images));
 
