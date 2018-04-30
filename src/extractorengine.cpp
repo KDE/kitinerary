@@ -18,6 +18,7 @@
 */
 
 #include "extractorengine.h"
+#include "barcodedecoder.h"
 #include "extractor.h"
 #include "logging.h"
 #include "pdfdocument.h"
@@ -28,6 +29,7 @@
 
 #include <QDateTime>
 #include <QFile>
+#include <QImage>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -102,6 +104,30 @@ QDateTime JsonLdJsApi::toDateTime(const QString &dtStr, const QString &format, c
     return dt;
 }
 
+class BarcodeJsApi : public QObject
+{
+    Q_OBJECT
+public:
+    Q_INVOKABLE QString decodePdf417(const QVariant &img) const;
+    Q_INVOKABLE QString decodeAztec(const QVariant &img) const;
+};
+
+QString BarcodeJsApi::decodePdf417(const QVariant &img) const
+{
+    if (img.userType() == qMetaTypeId<PdfImage>()) {
+        return BarcodeDecoder::decodePdf417(img.value<PdfImage>().image());
+    }
+    return {};
+}
+
+QString BarcodeJsApi::decodeAztec(const QVariant &img) const
+{
+    if (img.userType() == qMetaTypeId<PdfImage>()) {
+        return BarcodeDecoder::decodeAztec(img.value<PdfImage>().image());
+    }
+    return {};
+}
+
 class ContextObject : public QObject
 {
     Q_OBJECT
@@ -118,6 +144,7 @@ void ExtractorEnginePrivate::setupEngine()
     m_engine.installExtensions(QJSEngine::ConsoleExtension);
     auto jsApi = new JsonLdJsApi(&m_engine);
     m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), m_engine.newQObject(jsApi));
+    m_engine.globalObject().setProperty(QStringLiteral("Barcode"), m_engine.newQObject(new BarcodeJsApi));
     m_engine.globalObject().setProperty(QStringLiteral("Context"), m_engine.newQObject(m_context));
 }
 
