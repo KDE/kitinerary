@@ -25,7 +25,7 @@ function parseDate(dateStr, timeStr) {
     return date;
 }
 
-function main(text) {
+function parseText(text) {
     var reservations = new Array();
     var bookingRef = text.match(/DOSSIER VOYAGE : +([A-Z0-9]{6})/);
 
@@ -37,6 +37,7 @@ function main(text) {
         var index = header.index + header[0].length;
 
         var res = JsonLd.newObject("TrainReservation");
+        res.reservedTicket = JsonLd.newObject("Ticket");
         res.reservationNumber = bookingRef[1];
         res.reservationFor = JsonLd.newObject("TrainTrip");
 
@@ -65,7 +66,6 @@ function main(text) {
             res.reservationFor.trainNumber = trainNumber[1];
         var seatRes = legText.match(/(VOITURE|COACH) (\d+) - PLACE (\d+)/);
         if (seatRes) {
-            res.reservedTicket = JsonLd.newObject("Ticket");
             res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
             res.reservedTicket.ticketedSeat.seatSection = seatRes[2];
             res.reservedTicket.ticketedSeat.seatNumber = seatRes[3];
@@ -75,6 +75,38 @@ function main(text) {
         if (index == 0)
             break;
         pos += index;
+    }
+
+    return reservations;
+}
+
+function parsePdf(pdf) {
+    var reservations = new Array();
+
+    for (var i = 0; i < pdf.pageCount; ++i) {
+        var page = pdf.pages[i];
+
+        var barcode = "";
+        var images = page.imagesInRect(0.75, 0, 1, 0.75);
+        console.log(images);
+        for (var j = 0; j < images.length && barcode == ""; ++j) {
+            if (Math.abs(images[j].width - images[j].height) < 10) // almost square
+                barcode = Barcode.decodeAztec(images[j]);
+        }
+
+        var underName = null;
+        if (barcode != "") {
+            var underName = JsonLd.newObject("Person");
+            underName.familyName = barcode.substring(73, 91).trim();
+            underName.givenName = barcode.substring(92, 110).trim();
+        }
+
+        var legs = parseText(page.text);
+        for (var j = 0; j < legs.length; ++j) {
+            legs[j].underName = underName;
+            legs[j].reservedTicket.ticketToken = "aztecCode:" + barcode;
+            reservations.push(legs[j]);
+        }
     }
 
     return reservations;
