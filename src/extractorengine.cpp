@@ -111,6 +111,7 @@ class BarcodeJsApi : public QObject
 public:
     Q_INVOKABLE QString decodePdf417(const QVariant &img) const;
     Q_INVOKABLE QString decodeAztec(const QVariant &img) const;
+    Q_INVOKABLE QString decodeAztecBinary(const QVariant &img) const;
 };
 
 QString BarcodeJsApi::decodePdf417(const QVariant &img) const
@@ -125,6 +126,16 @@ QString BarcodeJsApi::decodeAztec(const QVariant &img) const
 {
     if (img.userType() == qMetaTypeId<PdfImage>()) {
         return BarcodeDecoder::decodeAztec(img.value<PdfImage>().image());
+    }
+    return {};
+}
+
+QString BarcodeJsApi::decodeAztecBinary(const QVariant &img) const
+{
+    if (img.userType() == qMetaTypeId<PdfImage>()) {
+        const auto b = BarcodeDecoder::decodeAztecBinary(img.value<PdfImage>().image());
+        // ugly, but this at least makes js preserve \0 bytes it seems...
+        return QString::fromLatin1(b.constData(), b.size());
     }
     return {};
 }

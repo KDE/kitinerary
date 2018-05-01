@@ -21,25 +21,13 @@ function isHeaderOrFooter(line) {
     return line.search(/(Ihre Reiseverbindung|Wichtige Nutzungshinweise|Hinweise:|Seite \d \/ \d)/) >= 0;
 }
 
-function createSeat(res)
-{
-    if (!res.reservedTicket)
-        res.reservedTicket = JsonLd.newObject("Ticket");
-    if (!res.reservedTicket.ticketedSeat)
-        res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
-}
-
 function parseSeat(res, text) {
     var coach = text.match(/Wg. (\d+)/);
-    if (coach) {
-        createSeat(res);
+    if (coach)
         res.reservedTicket.ticketedSeat.seatSection = coach[1];
-    }
     var seat = text.match(/Pl. (\d+)/);
-    if (seat) {
-        createSeat(res);
+    if (seat)
         res.reservedTicket.ticketedSeat.seatNumber = seat[1];
-    }
 }
 
 function parseDeparture(res, line, year, compact) {
@@ -97,6 +85,8 @@ function parseLegs(text, year, compact) {
     while (depIdx < lines.length) {
         var res = JsonLd.newObject("TrainReservation");
         res.reservationFor = JsonLd.newObject("TrainTrip");
+        res.reservedTicket = JsonLd.newObject("Ticket");
+        res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
 
         // stop when reaching the footer or the next itinerary header
         if (isHeaderOrFooter(lines[depIdx]))
@@ -116,7 +106,7 @@ function parseLegs(text, year, compact) {
     return reservations;
 }
 
-function main(text) {
+function parseText(text) {
     var reservations = new Array();
     var pos = 0;
     while (true) {
@@ -150,5 +140,21 @@ function main(text) {
     var bookingRef = text.match(/Auftragsnummer:\s*([A-Z0-9]{6})\n/);
     for (var i = 0; i < reservations.length; ++i)
         reservations[i].reservationNumber = bookingRef[1];
+    return reservations;
+}
+
+function parsePdf(pdf) {
+    // try to find the UIC918.3 barcode
+    var images = pdf.pages[0].imagesInRect(0.6, 0, 1, 1);
+    var barcode = "";
+    for (var i = 0; i < images.length && barcode == ""; ++i) {
+        if (images[i].width == images[i].height)
+            barcode = Barcode.decodeAztecBinary(images[i]);
+    }
+
+    var reservations = parseText(pdf.text);
+    for (var i = 0; i < reservations.length && barcode != ""; ++i) {
+        reservations[i].reservedTicket.ticketToken = "aztecCode:" + barcode;
+    }
     return reservations;
 }

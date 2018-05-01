@@ -88,7 +88,6 @@ function parsePdf(pdf) {
 
         var barcode = "";
         var images = page.imagesInRect(0.75, 0, 1, 0.75);
-        console.log(images);
         for (var j = 0; j < images.length && barcode == ""; ++j) {
             if (Math.abs(images[j].width - images[j].height) < 10) // almost square
                 barcode = Barcode.decodeAztec(images[j]);
