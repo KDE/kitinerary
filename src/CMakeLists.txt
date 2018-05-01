@@ -11,6 +11,9 @@ endif()
 if (TARGET zxing::libzxing)
     set(HAVE_ZXING ON)
 endif()
+if (ZLIB_FOUND)
+    set(HAVE_ZLIB ON)
+endif()
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 set(kitinerary_lib_srcs
@@ -41,6 +44,7 @@ set(kitinerary_lib_srcs
     mergeutil.cpp
     pdfdocument.cpp
     structureddataextractor.cpp
+    uic9183parser.cpp
 )
 qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
@@ -72,6 +76,9 @@ endif()
 if (HAVE_ZXING)
     target_link_libraries(KPimItinerary PRIVATE zxing::libzxing)
 endif()
+if (HAVE_ZLIB)
+    target_link_libraries(KPimItinerary PRIVATE ${ZLIB_LIBRARIES})
+endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS
     HEADER_NAMES
@@ -87,6 +94,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         MergeUtil
         PdfDocument
         StructuredDataExtractor
+        Uic9183Parser
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS
 )

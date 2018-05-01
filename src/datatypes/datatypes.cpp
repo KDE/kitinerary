@@ -16,6 +16,7 @@
 */
 
 #include "organization.h"
+#include "person.h"
 #include "place.h"
 
 #include <QCoreApplication>
@@ -29,6 +30,7 @@ struct StartupFunction {
         // add types here that are not covered by moc's auto-registration
         qRegisterMetaType<Airline>();
         qRegisterMetaType<Airport>();
+        qRegisterMetaType<Person>();
         qRegisterMetaType<Organization>();
     }
 };
