@@ -50,6 +50,46 @@ private:
     int m_size = 0;
 };
 
+// 0080BL vendor block sub-block ("S block")
+// 1x 'S'
+// 3x field type
+// 4x field value length
+// nx field value
+class Vendor0080BLSubBlock
+{
+public:
+    Vendor0080BLSubBlock() = default;
+    Vendor0080BLSubBlock(const char *data, int size);
+
+    bool isNull() const { return m_size <= 8; }
+    int size() const { return m_size; }
+    const char *id() const { return m_data + 1; }
+    const char *data() const { return m_data + 8; }
+
+private:
+    const char *m_data = nullptr;
+    int m_size = 0;
+};
+
+// 0080BL vendor block (DB) (version 2, dynamic size)
+// 2x stuff
+// 1x number of certificate blocks
+// 22+8+8+8x certificate block
+// 2x number of sub blocks
+class Vendor0080BLBlock
+{
+public:
+    Vendor0080BLBlock(const Uic9183Block &block);
+
+    bool isValid() const;
+    Vendor0080BLSubBlock findSubBlock(const char id[3]) const;
+
+private:
+    static int subblockOffset(const Uic9183Block &block);
+
+    Uic9183Block m_block;
+};
+
 class Uic9183ParserPrivate : public QSharedData
 {
 public:
@@ -69,6 +109,52 @@ Uic9183Block::Uic9183Block(const char* data, int size)
 int Uic9183Block::version() const
 {
     return QByteArray(m_data + 6, 2).toInt();
+}
+
+Vendor0080BLSubBlock::Vendor0080BLSubBlock(const char *data, int size)
+    : m_data(data)
+    , m_size(size)
+{
+}
+
+Vendor0080BLBlock::Vendor0080BLBlock(const Uic9183Block &block)
+{
+    if (block.isNull() || block.size() < 15 || block.version() != 2 || subblockOffset(block) > block.size()) {
+        return;
+    }
+    m_block = block;
+}
+
+bool Vendor0080BLBlock::isValid() const
+{
+    return !m_block.isNull();
+}
+
+Vendor0080BLSubBlock Vendor0080BLBlock::findSubBlock(const char id[3]) const
+{
+    for (int i = subblockOffset(m_block); i < m_block.size();) {
+        if (*(m_block.data() + i) != 'S') {
+            qCWarning(Log) << "0080BL invalid S-block format.";
+            return {};
+        }
+        const int subblockSize = QByteArray(m_block.data() + i + 4, 4).toInt();
+        if (subblockSize + i > m_block.size()) {
+            qCWarning(Log) << "0080BL S-block size exceeds block size.";
+            return {};
+        }
+        Vendor0080BLSubBlock sb(m_block.data() + i, subblockSize);
+        if (!sb.isNull() && strncmp(sb.id(), id, 3) == 0) {
+            return sb;
+        }
+        i += subblockSize + 8;
+    }
+    return {};
+}
+
+int Vendor0080BLBlock::subblockOffset(const Uic9183Block& block)
+{
+    const auto certCount = *(block.data() + 14) - '0';
+    return 15 + 46 * certCount + 2;
 }
 
 
@@ -161,7 +247,7 @@ void Uic9183Parser::parse(const QByteArray &data)
     }
     inflateEnd(&stream);
     d->m_payload.truncate(d->m_payload.size() - stream.avail_out);
-    qDebug() << res <<  d->m_payload << stream.avail_out;
+    qCDebug(Log) << res <<  d->m_payload << stream.avail_out;
 #endif
 }
 
@@ -182,18 +268,37 @@ bool Uic9183Parser::isValid() const
 QString Uic9183Parser::pnr() const
 {
     const auto b = d->findBlock("U_HEAD");
-    qDebug() << b.isNull() << b.version() << b.size();
     if (b.isNull() || b.version() != 1 || b.size() != 53) {
         return {};
     }
     return QString::fromUtf8(b.data() + 16, 6);
 }
 
-// 0080BL vendor block (DB) (version 2, dynamic size)
-
 Person Uic9183Parser::person() const
 {
-    // TODO
+    // Deutsche Bahn vendor block
+    const auto b = Vendor0080BLBlock(d->findBlock("0080BL"));
+    if (b.isValid()) {
+        // S028 contains family and given name separated by a '#', UTF-8 encoded
+        auto sblock = b.findSubBlock("028");
+        if (!sblock.isNull()) {
+            const auto endIt = sblock.data() + sblock.size();
+            auto it = std::find(sblock.data(), endIt, '#');
+            if (it != endIt) {
+                Person p;
+                p.setGivenName(QString::fromUtf8(sblock.data(), std::distance(sblock.data(), it)));
+                ++it;
+                p.setFamilyName(QString::fromUtf8(it, std::distance(it, endIt)));
+                return p;
+            }
+        }
+        // S023 contains the full name, UTF-8 encoded
+        sblock = b.findSubBlock("023");
+        if (!sblock.isNull()) {
+            Person p;
+            p.setName(QString::fromUtf8(sblock.data(), sblock.size()));
+        }
+    }
     return {};
 }
 

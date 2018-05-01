@@ -2,6 +2,11 @@
     {
         "@context": "http://schema.org",
         "@type": "",
+        "person": {
+            "@type": "Person",
+            "familyName": "häöür Räß",
+            "givenName": "kíck_-_:.,stû R"
+        },
         "pnr": "9E8DXL"
     }
 ]
