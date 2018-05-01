@@ -34,6 +34,7 @@ class ExtractorPrivate
 {
 public:
     QString m_scriptName;
+    QString m_scriptFunction;
     std::vector<ExtractorFilter> m_filters;
     Extractor::Type m_type = Extractor::Text;
 };
@@ -72,10 +73,11 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
         qCWarning(Log) << "Script file not found:" << d->m_scriptName;
         return false;
     }
-    if (d->m_type == Text && d->m_scriptName.isEmpty()) {
-        qCWarning(Log) << "Script file required for text extractors!";
+    if (d->m_type != PkPass && d->m_scriptName.isEmpty()) {
+        qCWarning(Log) << "Script file required for text, HTML or PDF extractors!";
         return false;
     }
+    d->m_scriptFunction = obj.value(QLatin1String("function")).toString(QStringLiteral("main"));
 
     return !d->m_filters.empty();
 }
@@ -88,6 +90,11 @@ Extractor::Type Extractor::type() const
 QString Extractor::scriptFileName() const
 {
     return d->m_scriptName;
+}
+
+QString Extractor::scriptFunction() const
+{
+    return d->m_scriptFunction;
 }
 
 const std::vector<ExtractorFilter> &Extractor::filters() const

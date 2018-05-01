@@ -48,7 +48,11 @@ private:
         if (doc.isObject()) {
             return extractor.load(doc.object(), QLatin1String(":/org.kde.pim/kitinerary/extractors/"));
         } else if (doc.isArray()) {
-            return extractor.load(doc.array().at(0).toObject(), QLatin1String(":/org.kde.pim/kitinerary/extractors/"));
+            for (const auto &v : doc.array()) {
+                if (v.toObject().value(QLatin1String("type")).toString(QStringLiteral("text")) == QLatin1String("text")) {
+                    return extractor.load(v.toObject(), QLatin1String(":/org.kde.pim/kitinerary/extractors/"));
+                }
+            }
         }
         return false;
     }

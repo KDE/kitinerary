@@ -244,9 +244,9 @@ void ExtractorEnginePrivate::executeScript()
         return;
     }
 
-    auto mainFunc = m_engine.globalObject().property(QLatin1String("main"));
+    auto mainFunc = m_engine.globalObject().property(m_extractor->scriptFunction());
     if (!mainFunc.isCallable()) {
-        qCWarning(Log) << "Script has no main() function!";
+        qCWarning(Log) << "Script entry point not found!" << m_extractor->scriptFunction();
         return;
     }
 

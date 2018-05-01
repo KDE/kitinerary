@@ -52,7 +52,10 @@ public:
     };
     Type type() const;
 
+    /** The JS script containing the code of the extractor. */
     QString scriptFileName() const;
+    /** The JS function entry point for this extractor, @c main if empty. */
+    QString scriptFunction() const;
     const std::vector<ExtractorFilter> &filters() const;
 
 private:
