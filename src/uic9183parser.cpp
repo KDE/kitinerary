@@ -61,7 +61,7 @@ public:
     Vendor0080BLSubBlock() = default;
     Vendor0080BLSubBlock(const char *data, int size);
 
-    bool isNull() const { return m_size <= 8; }
+    bool isNull() const { return m_size <= 0 || !m_data; }
     int size() const { return m_size; }
     const char *id() const { return m_data + 1; }
     const char *data() const { return m_data + 8; }
