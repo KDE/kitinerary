@@ -305,6 +305,7 @@ Person Uic9183Parser::person() const
         if (!sblock.isNull()) {
             Person p;
             p.setName(QString::fromUtf8(sblock.data(), sblock.size()));
+            return p;
         }
     }
     return {};
