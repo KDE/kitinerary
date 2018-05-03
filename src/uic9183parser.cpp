@@ -174,7 +174,7 @@ Uic9183Block Uic9183ParserPrivate::findBlock(const char name[6]) const
 
     for (int i = 0; i < m_payload.size() - 12;) {
         const int blockSize = m_payload.mid(i + 8, 4).toInt();
-        if (blockSize + i >= m_payload.size()) {
+        if (blockSize + i > m_payload.size()) {
             qCWarning(Log) << "UIC 918-3 block size exceeds payload size.";
             return {};
         }
