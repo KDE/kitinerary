@@ -71,10 +71,10 @@ private:
     int m_size = 0;
 };
 
-// 0080BL vendor block (DB) (version 2, dynamic size)
+// 0080BL vendor block (DB) (version 2/3, dynamic size)
 // 2x stuff
 // 1x number of certificate blocks
-// 22+8+8+8x certificate block
+// 22+8+8+8x (v2) or 8+8+10x (v3) certificate block
 // 2x number of sub blocks
 class Vendor0080BLBlock
 {
@@ -119,7 +119,14 @@ Vendor0080BLSubBlock::Vendor0080BLSubBlock(const char *data, int size)
 
 Vendor0080BLBlock::Vendor0080BLBlock(const Uic9183Block &block)
 {
-    if (block.isNull() || block.size() < 15 || block.version() != 2 || subblockOffset(block) > block.size()) {
+    if (block.isNull()) {
+        return;
+    }
+    if (block.version() != 2 && block.version() != 3) {
+        qCWarning(Log) << "Unsupported version of 0080BL vendor block." << block.version();
+        return;
+    }
+    if (block.isNull() || block.size() < 15 || subblockOffset(block) > block.size()) {
         return;
     }
     m_block = block;
@@ -154,7 +161,8 @@ Vendor0080BLSubBlock Vendor0080BLBlock::findSubBlock(const char id[3]) const
 int Vendor0080BLBlock::subblockOffset(const Uic9183Block& block)
 {
     const auto certCount = *(block.data() + 14) - '0';
-    return 15 + 46 * certCount + 2;
+    const auto certSize = block.version() == 2 ? 46 : 26;
+    return 15 + certSize * certCount + 2;
 }
 
 
