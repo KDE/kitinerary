@@ -29,7 +29,8 @@ function main(pass)
     res.reservationFor.boardingTime = JsonLd.toDateTime(pass.field["departureDate"].value + ' ' + pass.field["boarding"].value, "M/d/yyyy hh:mm", "en");
 
     res.reservationFor.airline = JsonLd.newObject("Airline");
-    res.reservationFor.airline.name = pass.field["operatingcarrier"].value;
+    if (pass.field["operatingcarrier"])
+        res.reservationFor.airline.name = pass.field["operatingcarrier"].value;
 
     return res;
 }
