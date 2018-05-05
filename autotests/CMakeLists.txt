@@ -14,3 +14,4 @@ ecm_add_test(unstructureddataextractortest.cpp LINK_LIBRARIES Qt5::Test KPim::It
 ecm_add_test(pkpassextractortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary KPim::PkPass)
 ecm_add_test(postprocessortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 ecm_add_test(calendarhandlertest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
+ecm_add_test(extractortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary KPim::PkPass)
