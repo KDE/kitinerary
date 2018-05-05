@@ -267,8 +267,8 @@ bool Uic9183Parser::isValid() const
 // U_HEAD (version 1, size 53)
 // 4x issuing carrier id
 // 6x PNR
-// 20x stuff
-// 12x issuing date/time as ddMMyyyyHHMM
+// 20x unique ticket key
+// 12x issuing date/time as ddMMyyyyHHMM, as UTC
 // 1x flags
 // 2x ticket language
 // 2x secondary ticket language
