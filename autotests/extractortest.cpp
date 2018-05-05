@@ -63,7 +63,6 @@ private Q_SLOTS:
     {
         QTest::addColumn<QString>("contextFile");
         QTest::addColumn<QString>("inputFile");
-        QTest::addColumn<QString>("refFile");
 
         QDir baseDir(QStringLiteral(SOURCE_DIR "/../../kitinerary-tests"));
         // test data not available: add dummy entry to not fail the test
@@ -77,9 +76,10 @@ private Q_SLOTS:
             QFileInfo contextFi(dirIt.next());
             QDirIterator fileIt(contextFi.absolutePath(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass")}, QDir::Files | QDir::Readable | QDir::NoSymLinks);
             while (fileIt.hasNext()) {
-                QFileInfo fi(fileIt.next());
-                const QString ref = fi.absoluteFilePath() + QStringLiteral(".json");
-                QTest::newRow((contextFi.dir().dirName() + QLatin1Char('-') + fi.fileName()).toLatin1().constData()) << contextFi.absoluteFilePath() << fi.absoluteFilePath() << ref;
+                fileIt.next();
+                QTest::newRow((contextFi.dir().dirName() + QLatin1Char('-') + fileIt.fileName()).toLatin1().constData())
+                    << contextFi.absoluteFilePath()
+                    << fileIt.fileInfo().absoluteFilePath();
             }
         }
     }
@@ -88,7 +88,6 @@ private Q_SLOTS:
     {
         QFETCH(QString, contextFile);
         QFETCH(QString, inputFile);
-        QFETCH(QString, refFile);
         if (contextFile.isEmpty()) {
             return;
         }
@@ -139,7 +138,8 @@ private Q_SLOTS:
             jsonResult = m_engine.extract();
         }
 
-        if (jsonResult.isEmpty()) {
+        const auto expectedSkip = QFile::exists(inputFile + QLatin1String(".skip"));
+        if (jsonResult.isEmpty() && expectedSkip) {
             QSKIP("nothing extracted");
             return;
         }
@@ -154,7 +154,8 @@ private Q_SLOTS:
         }
         QVERIFY(!postProcResult.isEmpty());
 
-        if (!QFile::exists(refFile)) {
+        const QString refFile = inputFile + QLatin1String(".json");
+        if (!QFile::exists(refFile) && !expectedSkip) {
             QFile f(refFile);
             QVERIFY(f.open(QFile::WriteOnly));
             f.write(QJsonDocument(postProcResult).toJson());
