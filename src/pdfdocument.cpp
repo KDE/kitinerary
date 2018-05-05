@@ -106,32 +106,14 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     }
 
     QImage img;
-    switch (colorMap->getColorSpace()->getMode()) {
-        case csCalGray:
-        case csDeviceGray:
-            if (colorMap->getNumPixelComps() == 1 && colorMap->getBits() == 1) {
-                img = QImage(width, height, QImage::Format_Grayscale8);
-            } else if (colorMap->getNumPixelComps() == 1 && colorMap->getBits() == 8) {
-                img = QImage(width, height, QImage::Format_Grayscale8);
-            } else {
-                return;
-            }
-            break;
-        case csCalRGB:
-        case csDeviceRGB:
-        case csICCBased:
-            if (colorMap->getNumPixelComps() == 3 && colorMap->getBits() == 8) {
-                img = QImage(width, height, QImage::Format_RGB888);
-            } else {
-                return;
-            }
-            break;
-        case csIndexed:
-            img = QImage(width, height, QImage::Format_RGB888);
-            break;
-        default:
-            // the fancy photo/print formats aren't used for the stuff we are interested in
-            return;
+    if (colorMap->getColorSpace()->getMode() == csIndexed) {
+        img = QImage(width, height, QImage::Format_RGB888);
+    } else if (colorMap->getNumPixelComps() == 1 && (colorMap->getBits() >= 1 && colorMap->getBits() <= 8)) {
+        img = QImage(width, height, QImage::Format_Grayscale8);
+    } else if (colorMap->getNumPixelComps() == 3 && colorMap->getBits() == 8) {
+        img = QImage(width, height, QImage::Format_RGB888);
+    } else {
+        return;
     }
 
     std::unique_ptr<ImageStream> imgStream(new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits()));
@@ -159,15 +141,6 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
                 for (int j = 0; j < width; ++j) {
                     colorMap->getGray(row + j, &gray);
                     *imgData++ = colToByte(gray);
-                }
-                break;
-            }
-            case QImage::Format_Mono:
-            {
-                GfxGray gray;
-                for (int j = 0; j < width; ++j) {
-                    colorMap->getGray(row + j, &gray);
-                    img.setPixel(j, i, colToByte(gray));
                 }
                 break;
             }
