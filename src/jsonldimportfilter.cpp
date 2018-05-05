@@ -68,6 +68,7 @@ static void filterReservation(QJsonObject &res)
         if (!ticket.contains(QLatin1String("ticketToken"))) {
             ticket.insert(QLatin1String("ticketToken"), token);
             res.insert(QLatin1String("reservedTicket"), ticket);
+            res.remove(QLatin1String("ticketToken"));
         }
     }
 }
