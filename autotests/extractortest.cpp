@@ -67,7 +67,7 @@ private Q_SLOTS:
         QDir baseDir(QStringLiteral(SOURCE_DIR "/../../kitinerary-tests"));
         // test data not available: add dummy entry to not fail the test
         if (!baseDir.exists()) {
-            QTest::newRow("test data not available") << QString() << QString() << QString();
+            QTest::newRow("test data not available") << QString() << QString();
             return;
         }
 
