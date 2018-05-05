@@ -20,14 +20,12 @@
 function main(text) {
     var reservations = new Array();
     var bookingRef = text.match(/Flug - Buchungscode\s+([0-9A-z]{6})/);
-    console.warn(bookingRef);
     if (!bookingRef)
         return reservations;
 
     var pos = bookingRef.index + bookingRef[0].length;
     while (true) {
         var departure = text.substr(pos).match(/[A-Z][a-z] (\d{1,2} \w{3} \d{2})\s+(\d{2}:\d{2})\s+(.+?)\n\t+\((.+?)\)\n/);
-        console.warn("departure", departure);
         if (!departure)
             break;
         var index = departure.index + departure[0].length;
@@ -40,7 +38,6 @@ function main(text) {
         res.reservationFor.departureAirport.name = departure[3] + ", " + departure[4];
 
         var arrival = text.substr(pos + index).match(/[A-Z][a-z] (\d{1,2} \w{3} \d{2})\s+(\d{2}:\d{2})\s+(.+?)\n\s+\((.+?)\)\n/);
-        console.warn("arrivla", arrival);
         if (!arrival)
             break;
         index += arrival.index + arrival[1].length;
@@ -50,7 +47,6 @@ function main(text) {
         res.reservationFor.arrivalAirport.name = arrival[3] + ", " + arrival[4];
 
         var flightNumber = text.substr(pos + index).match(/Flugnummer: ([A-Z]{2}) (\d{2,4})\n/);
-        console.warn("details", flightNumber);
         if (!flightNumber)
             break;
         index += flightNumber.index + flightNumber[0].length;

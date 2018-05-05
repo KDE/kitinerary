@@ -85,12 +85,21 @@ QJSValue JsonLdJsApi::newObject(const QString &typeName) const
     return v;
 }
 
+// two digit year numbers end up in the last century, fix that
+static QDateTime fixupDate(const QDateTime &dt)
+{
+    if (dt.date().year() / 100 == 19) {
+        return dt.addYears(100);
+    }
+    return dt;
+}
+
 QDateTime JsonLdJsApi::toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const
 {
     QLocale locale(localeName);
     const auto dt = locale.toDateTime(dtStr, format);
     if (dt.isValid()) {
-        return dt;
+        return fixupDate(dt);
     }
 
     // try harder for the "MMM" month format
@@ -103,7 +112,7 @@ QDateTime JsonLdJsApi::toDateTime(const QString &dtStr, const QString &format, c
             const auto monthName = locale.monthName(i, QLocale::ShortFormat);
             dtStrFixed = dtStrFixed.replace(monthName.left(3), monthName);
         }
-        return locale.toDateTime(dtStrFixed, format);
+        return fixupDate(locale.toDateTime(dtStrFixed, format));
     }
     return dt;
 }
