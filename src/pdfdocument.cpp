@@ -41,6 +41,7 @@ public:
 #endif
 
     int m_ref = -1;
+    PdfPagePrivate *m_page = nullptr;
     QImage m_img;
     double m_x = NAN;
     double m_y = NAN;
@@ -79,6 +80,22 @@ public:
 
 private:
     PdfDocumentPrivate *d;
+};
+
+class ImageLoaderOutputDevice : public OutputDev
+{
+public:
+    ImageLoaderOutputDevice(PdfImagePrivate *dd);
+
+    GBool interpretType3Chars() override { return false; }
+    GBool needNonText() override { return true; }
+    GBool upsideDown() override { return false; }
+    GBool useDrawChar() override { return false; }
+
+    void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, GBool interpolate, int *maskColors, GBool inlineImg) override;
+
+private:
+    PdfImagePrivate *d;
 };
 #endif
 
@@ -133,6 +150,7 @@ ExtractorOutputDevice::ExtractorOutputDevice(PdfDocumentPrivate *dd)
 
 void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str, int width, int height, GfxImageColorMap* colorMap, GBool interpolate, int* maskColors, GBool inlineImg)
 {
+    Q_UNUSED(str);
     Q_UNUSED(interpolate);
     Q_UNUSED(maskColors);
     Q_UNUSED(inlineImg);
@@ -173,9 +191,31 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     pdfImg.d->m_y = state->getCTM()[5];
     pdfImg.d->m_format = format;
     m_images.push_back(pdfImg);
+}
 
-    // TODO defer to first use
-    pdfImg.d->load(str, colorMap);
+ImageLoaderOutputDevice::ImageLoaderOutputDevice(PdfImagePrivate* dd)
+    : d(dd)
+{
+}
+
+void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, GBool interpolate, int *maskColors, GBool inlineImg)
+{
+    Q_UNUSED(state);
+    Q_UNUSED(width);
+    Q_UNUSED(height);
+    Q_UNUSED(interpolate);
+    Q_UNUSED(maskColors);
+    Q_UNUSED(inlineImg);
+
+    if (!colorMap || !colorMap->isOk()) {
+        return;
+    }
+
+    if (ref->isRef() && d->m_ref != ref->getRef().num) {
+        return;
+    }
+
+    d->load(str, colorMap);
 }
 #endif
 
@@ -200,6 +240,17 @@ int PdfImage::width() const
 
 QImage PdfImage::image() const
 {
+    if (!d->m_img.isNull() || d->m_ref < 0) {
+        return d->m_img;
+    }
+
+#ifdef HAVE_POPPLER
+    GlobalParams params;
+    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, &params);
+
+    std::unique_ptr<ImageLoaderOutputDevice> device(new ImageLoaderOutputDevice(d.data()));
+    d->m_page->m_doc->m_popplerDoc->displayPageSlice(device.get(), d->m_page->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
+#endif
     return d->m_img;
 }
 
@@ -279,6 +330,11 @@ QVariantList PdfPage::imagesInRect(double left, double top, double right, double
             l.push_back(QVariant::fromValue(img));
         }
     }
+#else
+    Q_UNUSED(left);
+    Q_UNUSED(top);
+    Q_UNUSED(right);
+    Q_UNUSED(bottom);
 #endif
     return l;
 }
@@ -369,6 +425,9 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
         page.d->m_doc = doc->d.get();
         page.d->m_text = QString::fromUtf8(s->getCString());
         page.d->m_images = std::move(device->m_images);
+        for (auto it = page.d->m_images.begin(); it != page.d->m_images.end(); ++it) {
+            (*it).d->m_page = page.d.data();
+        }
         doc->d->m_pages.push_back(page);
     }
 

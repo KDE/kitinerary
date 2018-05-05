@@ -51,6 +51,7 @@ public:
 
 private:
     friend class ExtractorOutputDevice;
+    friend class PdfDocument;
     friend class PdfPage;
     QExplicitlySharedDataPointer<PdfImagePrivate> d;
 };
