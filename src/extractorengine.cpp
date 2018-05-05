@@ -204,6 +204,8 @@ void ExtractorEngine::clear()
     d->m_text.clear();
     d->m_pdfDoc = nullptr;
     d->m_pass = nullptr;
+    d->m_result = {};
+    d->m_context->m_senderDate = {};
 }
 
 void ExtractorEngine::setExtractor(const Extractor *extractor)
