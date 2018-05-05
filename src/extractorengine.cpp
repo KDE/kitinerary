@@ -20,8 +20,10 @@
 #include "extractorengine.h"
 #include "barcodedecoder.h"
 #include "extractor.h"
+#include "jsonlddocument.h"
 #include "logging.h"
 #include "pdfdocument.h"
+#include "uic9183parser.h"
 
 #include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>
@@ -70,6 +72,7 @@ public:
 
     Q_INVOKABLE QJSValue newObject(const QString &typeName) const;
     Q_INVOKABLE QDateTime toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const;
+    Q_INVOKABLE QJSValue toJson(const QVariant &v) const;
 
 private:
     QJSEngine *m_engine;
@@ -105,6 +108,15 @@ QDateTime JsonLdJsApi::toDateTime(const QString &dtStr, const QString &format, c
     return dt;
 }
 
+QJSValue JsonLdJsApi::toJson(const QVariant &v) const
+{
+    const auto json = JsonLdDocument::toJson({v});
+    if (json.isEmpty()) {
+        return {};
+    }
+    return m_engine->toScriptValue(json.at(0));
+}
+
 class BarcodeJsApi : public QObject
 {
     Q_OBJECT
@@ -112,6 +124,7 @@ public:
     Q_INVOKABLE QString decodePdf417(const QVariant &img) const;
     Q_INVOKABLE QString decodeAztec(const QVariant &img) const;
     Q_INVOKABLE QString decodeAztecBinary(const QVariant &img) const;
+    Q_INVOKABLE QVariant decodeUic9183(const QString &s) const;
 };
 
 QString BarcodeJsApi::decodePdf417(const QVariant &img) const
@@ -138,6 +151,13 @@ QString BarcodeJsApi::decodeAztecBinary(const QVariant &img) const
         return QString::fromLatin1(b.constData(), b.size());
     }
     return {};
+}
+
+QVariant BarcodeJsApi::decodeUic9183(const QString &s) const
+{
+    Uic9183Parser p;
+    p.parse(s.toLatin1());
+    return QVariant::fromValue(p);
 }
 
 class ContextObject : public QObject
