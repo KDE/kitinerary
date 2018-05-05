@@ -19,6 +19,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <QImage>
 #include <QObject>
 #include <QTest>
 
@@ -47,6 +48,12 @@ private Q_SLOTS:
 
         QCOMPARE(page.textInRect(0, 0, 1, 0.5), QStringLiteral("This is the first page.\nIt contains a PDF 417 barcode.\n"));
         QCOMPARE(page.textInRect(0, 0.5, 1, 1), QString());
+
+        auto img = page.image(0);
+        QCOMPARE(img.width(), 350);
+        QCOMPARE(img.height(), 152);
+        QCOMPARE(img.image().width(), img.width());
+        QCOMPARE(img.image().height(), img.height());
 
         page = doc->page(1);
         QCOMPARE(page.text(), QStringLiteral("This is the second page.\nIt contains an Aztec code.\n"));

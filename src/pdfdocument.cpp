@@ -36,10 +36,17 @@ using namespace KItinerary;
 namespace KItinerary {
 class PdfImagePrivate : public QSharedData {
 public:
+#ifdef HAVE_POPPLER
+    void load(Stream *str, GfxImageColorMap *colorMap);
+#endif
+
     int m_ref = -1;
     QImage m_img;
     double m_x = NAN;
     double m_y = NAN;
+    int m_width = 0;
+    int m_height = 0;
+    QImage::Format m_format = QImage::Format_Invalid;
 };
 
 class PdfPagePrivate : public QSharedData {
@@ -78,6 +85,46 @@ private:
 }
 
 #ifdef HAVE_POPPLER
+void PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
+{
+    m_img = QImage(m_width, m_height, m_format);
+    std::unique_ptr<ImageStream> imgStream(new ImageStream(str, m_width, colorMap->getNumPixelComps(), colorMap->getBits()));
+    imgStream->reset();
+
+    for (int i = 0; i < m_height; ++i) {
+        const auto row = imgStream->getLine();
+        switch (m_format) {
+            case QImage::Format_RGB888:
+            {
+                auto imgData = m_img.scanLine(i);
+                GfxRGB rgb;
+                for (int j = 0; j < m_width; ++j) {
+                    colorMap->getRGB(row + (j * colorMap->getNumPixelComps()), &rgb);
+                    *imgData++ = colToByte(rgb.r);
+                    *imgData++ = colToByte(rgb.g);
+                    *imgData++ = colToByte(rgb.b);
+                }
+                break;
+            }
+            case QImage::Format_Grayscale8:
+            {
+                auto imgData = m_img.scanLine(i);
+                GfxGray gray;
+                for (int j = 0; j < m_width; ++j) {
+                    colorMap->getGray(row + j, &gray);
+                    *imgData++ = colToByte(gray);
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    imgStream->close();
+}
+
+
 ExtractorOutputDevice::ExtractorOutputDevice(PdfDocumentPrivate *dd)
     : TextOutputDev(nullptr, false, 0, false, false)
     , d(dd)
@@ -105,59 +152,30 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
         }
     }
 
-    QImage img;
+    QImage::Format format;
     if (colorMap->getColorSpace()->getMode() == csIndexed) {
-        img = QImage(width, height, QImage::Format_RGB888);
+        format = QImage::Format_RGB888;
     } else if (colorMap->getNumPixelComps() == 1 && (colorMap->getBits() >= 1 && colorMap->getBits() <= 8)) {
-        img = QImage(width, height, QImage::Format_Grayscale8);
+        format = QImage::Format_Grayscale8;
     } else if (colorMap->getNumPixelComps() == 3 && colorMap->getBits() == 8) {
-        img = QImage(width, height, QImage::Format_RGB888);
+        format = QImage::Format_RGB888;
     } else {
         return;
     }
 
-    std::unique_ptr<ImageStream> imgStream(new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits()));
-    imgStream->reset();
-
-    for (int i = 0; i < height; ++i) {
-        const auto row = imgStream->getLine();
-        switch (img.format()) {
-            case QImage::Format_RGB888:
-            {
-                auto imgData = img.scanLine(i);
-                GfxRGB rgb;
-                for (int j = 0; j < width; ++j) {
-                    colorMap->getRGB(row + (j * colorMap->getNumPixelComps()), &rgb);
-                    *imgData++ = colToByte(rgb.r);
-                    *imgData++ = colToByte(rgb.g);
-                    *imgData++ = colToByte(rgb.b);
-                }
-                break;
-            }
-            case QImage::Format_Grayscale8:
-            {
-                auto imgData = img.scanLine(i);
-                GfxGray gray;
-                for (int j = 0; j < width; ++j) {
-                    colorMap->getGray(row + j, &gray);
-                    *imgData++ = colToByte(gray);
-                }
-                break;
-            }
-            default:
-                break;
-        }
-    }
-
-    imgStream->close();
     PdfImage pdfImg;
-    pdfImg.d->m_img = img;
     if (ref->isRef()) {
         pdfImg.d->m_ref = ref->getRef().num;
     }
+    pdfImg.d->m_width = width;
+    pdfImg.d->m_height = height;
     pdfImg.d->m_x = state->getCTM()[4];
     pdfImg.d->m_y = state->getCTM()[5];
+    pdfImg.d->m_format = format;
     m_images.push_back(pdfImg);
+
+    // TODO defer to first use
+    pdfImg.d->load(str, colorMap);
 }
 #endif
 
@@ -172,12 +190,12 @@ PdfImage& PdfImage::operator=(const PdfImage&) = default;
 
 int PdfImage::height() const
 {
-    return d->m_img.height();
+    return d->m_height;
 }
 
 int PdfImage::width() const
 {
-    return d->m_img.width();
+    return d->m_width;
 }
 
 QImage PdfImage::image() const
