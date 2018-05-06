@@ -80,6 +80,14 @@ class KITINERARY_EXPORT Place
     KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(KItinerary::PostalAddress, address, setAddress)
     KITINERARY_PROPERTY(KItinerary::GeoCoordinates, geo, setGeo)
+    /** Identifier.
+     *  We use the following schemas currently:
+     *  - 'uic:', UIC station code (see https://www.wikidata.org/wiki/Property:P722)
+     *  - 'sncf:', Gares & Connextions ID, (see https://www.wikidata.org/wiki/Property:P3104), French train station identifier.
+     *  - 'ibnr:', Internationale Bahnhofsnummer, (see https://www.wikidata.org/wiki/Property:P954), German train station identifier.
+     *  @see http://schema.org/docs/datamodel.html#identifierBg
+     */
+    KITINERARY_PROPERTY(QString, identifier, setIdentifier)
 protected:
     ///@cond internal
     QExplicitlySharedDataPointer<PlacePrivate> d;

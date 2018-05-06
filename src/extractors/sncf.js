@@ -86,15 +86,35 @@ function parsePdf(pdf) {
     for (var i = 0; i < pdf.pageCount; ++i) {
         var page = pdf.pages[i];
 
-        var barcode = "";
+        // barcode format:
+        // 'i0CV'
+        // 6x PNR
+        // 9x document id
+        // '1211'
+        // dd/MM/yyyy birthdate
+        // 2x 5x gare & connextion ids of the first leg
+        // 5x train number first leg
+        // dd/MM travel date
+        // 18x client id
+        // 19x family name
+        // 19x given name
+        // 1x class
+        // 4x stuff
+        // '1' to indicate a second leg, '0' otherwise
+        // 2x 5x gare & connexion ids for the second leg
+        // 5x train number second leg
+        var barcode = null;
         var images = page.imagesInRect(0.75, 0, 1, 0.75);
-        for (var j = 0; j < images.length && barcode == ""; ++j) {
-            if (Math.abs(images[j].width - images[j].height) < 10) // almost square
+        for (var j = 0; j < images.length && !barcode; ++j) {
+            if (Math.abs(images[j].width - images[j].height) < 10) {// almost square
                 barcode = Barcode.decodeAztec(images[j]);
+                if (barcode.substr(0, 4).toUpperCase() != "I0CV")
+                    barcode = null;
+            }
         }
 
         var underName = null;
-        if (barcode != "") {
+        if (barcode) {
             var underName = JsonLd.newObject("Person");
             underName.familyName = barcode.substring(73, 91).trim();
             underName.givenName = barcode.substring(92, 110).trim();
@@ -102,8 +122,12 @@ function parsePdf(pdf) {
 
         var legs = parseText(page.text);
         for (var j = 0; j < legs.length; ++j) {
-            legs[j].underName = underName;
-            legs[j].reservedTicket.ticketToken = "aztecCode:" + barcode;
+            if (barcode) {
+                legs[j].underName = underName;
+                legs[j].reservedTicket.ticketToken = "aztecCode:" + barcode;
+                legs[j].reservationFor.departureStation.identifier = "sncf:" + barcode.substr(j == 0 ? 33 : 116, 5);
+                legs[j].reservationFor.arrivalStation.identifier = "sncf:" + barcode.substr(j == 0 ? 38 : 121, 5);
+            }
             reservations.push(legs[j]);
         }
     }
