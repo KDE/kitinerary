@@ -1,0 +1,30 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "2D",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "TP"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "LCG"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "LIS"
+            },
+            "departureDay": "2018-07-23",
+            "flightNumber": "1080"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHN"
+        }
+    }
+]

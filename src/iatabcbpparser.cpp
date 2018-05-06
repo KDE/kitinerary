@@ -151,11 +151,11 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &ext
             // 4x date of issue of boarding pass
             // this only contains the last digit of the year (sic), but we assume it to be in the past
             // so this still gives us a 10 year range of correctly determined times
-            if (uniqCondSize >= 11 && externalIssueDate.isValid()) {
+            if (uniqCondSize >= 11 && externalIssueDate.isValid() && message.at(index + 7).isDigit() && message.at(index + 10).isDigit()) {
                 const auto year = message.at(index + 7).toLatin1() - '0';
                 const auto days = message.midRef(index + 8, 3).toInt() - 1;
                 if (year < 0 || year > 9 || days < 0 || days > 365) {
-                    qCWarning(Log) << "IATA BCBP invalid boarding pass issue date format" << message.midRef(index + 7, 8);
+                    qCWarning(Log) << "IATA BCBP invalid boarding pass issue date format" << message.midRef(index + 7, 4);
                     return {};
                 }
 
