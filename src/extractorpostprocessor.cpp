@@ -159,13 +159,8 @@ ObjT ExtractorPostprocessorPrivate::processProperty(ObjT obj, const char *name, 
 QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservation res) const
 {
     // expand ticketToken for IATA BCBP data
-    auto bcbp = res.reservedTicket().value<Ticket>().ticketToken();
+    const auto bcbp = res.reservedTicket().value<Ticket>().ticketTokenData();
     if (!bcbp.isEmpty()) {
-        if (bcbp.startsWith(QLatin1String("aztecCode:"))) {
-            bcbp = bcbp.mid(10);
-        } else if (bcbp.startsWith(QLatin1String("qrCode:"))) {
-            bcbp = bcbp.mid(7);
-        }
         const auto bcbpData = IataBcbpParser::parse(bcbp, m_contextDate.date());
         if (bcbpData.size() == 1) {
             res = JsonLdDocument::apply(bcbpData.at(0), res).value<FlightReservation>();
