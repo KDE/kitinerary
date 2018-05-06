@@ -66,6 +66,8 @@ public:
     const char *id() const { return m_data + 1; }
     const char *data() const { return m_data + 8; }
 
+    QString toString() const { return QString::fromUtf8(data(), size()); }
+
 private:
     const char *m_data = nullptr;
     int m_size = 0;
@@ -304,8 +306,38 @@ Person Uic9183Parser::person() const
         sblock = b.findSubBlock("023");
         if (!sblock.isNull()) {
             Person p;
-            p.setName(QString::fromUtf8(sblock.data(), sblock.size()));
+            p.setName(sblock.toString());
             return p;
+        }
+    }
+    return {};
+}
+
+QString Uic9183Parser::outboundDepartureStationId() const
+{
+    const auto b = Vendor0080BLBlock(d->findBlock("0080BL"));
+    if (b.isValid()) {
+        // S035 contains the IBNR, possible with leading '80' country code and leading 0 stripped
+        const auto sblock = b.findSubBlock("035");
+        if (!sblock.isNull() && sblock.size() <= 7) {
+            QString ibnr = QStringLiteral("ibnr:8000000");
+            const auto s = sblock.toString();
+            return ibnr.replace(ibnr.size() - s.size(), s.size(), s);
+        }
+    }
+    return {};
+}
+
+QString Uic9183Parser::outboundArrivalStationId() const
+{
+    const auto b = Vendor0080BLBlock(d->findBlock("0080BL"));
+    if (b.isValid()) {
+        // S036 contains the IBNR, possible with leading '80' country code and leading 0 stripped
+        const auto sblock = b.findSubBlock("036");
+        if (!sblock.isNull() && sblock.size() <= 7) {
+            QString ibnr = QStringLiteral("ibnr:8000000");
+            const auto s = sblock.toString();
+            return ibnr.replace(ibnr.size() - s.size(), s.size(), s);
         }
     }
     return {};

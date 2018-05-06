@@ -42,6 +42,9 @@ class KITINERARY_EXPORT Uic9183Parser
     Q_GADGET
     Q_PROPERTY(QString pnr READ pnr)
     Q_PROPERTY(KItinerary::Person person READ person)
+    Q_PROPERTY(QString outboundDepartureStationId READ outboundDepartureStationId)
+    Q_PROPERTY(QString outboundArrivalStationId READ outboundArrivalStationId)
+
 public:
     Uic9183Parser();
     Uic9183Parser(const Uic9183Parser&);
@@ -55,6 +58,11 @@ public:
     QString pnr() const;
     /** The person this ticket is issued to. */
     Person person() const;
+
+    /** Station identifier for the departure station of the outbound trip. */
+    QString outboundDepartureStationId() const;
+    /** Station identifier for the arrival station of the outbound trip. */
+    QString outboundArrivalStationId() const;
 
 private:
     QExplicitlySharedDataPointer<Uic9183ParserPrivate> d;
