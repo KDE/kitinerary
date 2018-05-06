@@ -57,6 +57,8 @@ public:
     Airport processAirport(Airport airport) const;
     Airline processAirline(Airline airline) const;
     void processFlightTime(Flight &flight, const char *timePropName, const Airport &airport) const;
+    TrainReservation processTrainReservation(TrainReservation res) const;
+    TrainTrip processTrainTrip(TrainTrip trip) const;
     QVariant processReservation(QVariant res) const;
     Person processPerson(Person person) const;
 
@@ -89,19 +91,17 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
         if (elem.userType() == qMetaTypeId<FlightReservation>()) {
             elem = d->processFlightReservation(elem.value<FlightReservation>());
         } else if (elem.userType() == qMetaTypeId<TrainReservation>()) {
-            elem = d->processReservation(elem);
-        } else if (elem.userType() == qMetaTypeId<LodgingReservation>()) {
-            elem = d->processReservation(elem);
-        } else if (elem.userType() == qMetaTypeId<BusReservation>()) {
-            elem = d->processReservation(elem);
+            elem = d->processTrainReservation(elem.value<TrainReservation>());
         }
 
         if (JsonLd::canConvert<Reservation>(elem)) {
-            const auto res = JsonLd::convert<Reservation>(elem);
+            auto res = JsonLd::convert<Reservation>(elem);
             if (!res.underName().isNull()) {
                 const auto person = d->processPerson(res.underName().value<Person>());
+                res.setUnderName(person);
                 JsonLdDocument::writeProperty(elem, "underName", person);
             }
+            elem = d->processReservation(elem);
         }
 
         d->mergeOrAppend(elem);
@@ -167,7 +167,6 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
         }
     }
 
-    res = processReservation(res).value<FlightReservation>();
     res = processProperty(res, "reservationFor", &ExtractorPostprocessorPrivate::processFlight);
     return res;
 }
@@ -256,6 +255,19 @@ void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, const char
     // so, clear the property first to force an update
     JsonLdDocument::writeProperty(flight, timePropName, QDateTime());
     JsonLdDocument::writeProperty(flight, timePropName, dt);
+}
+
+TrainReservation ExtractorPostprocessorPrivate::processTrainReservation(TrainReservation res) const
+{
+    res = processProperty(res, "reservationFor", &ExtractorPostprocessorPrivate::processTrainTrip);
+    return res;
+}
+
+TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
+{
+    trip.setArrivalPlatform(trip.arrivalPlatform().trimmed());
+    trip.setDeparturePlatform(trip.departurePlatform().trimmed());
+    return trip;
 }
 
 QVariant ExtractorPostprocessorPrivate::processReservation(QVariant res) const
