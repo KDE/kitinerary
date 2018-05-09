@@ -39,6 +39,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QTimeZone>
+#include <QUrl>
 
 #include <algorithm>
 

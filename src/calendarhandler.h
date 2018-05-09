@@ -22,10 +22,15 @@
 
 #include "kitinerary_export.h"
 
-#include <KCalCore/Calendar>
-#include <KCalCore/Event>
+#include <QSharedPointer>
 
+class QDateTime;
 class QVariant;
+
+namespace KCalCore {
+class Calendar;
+class Event;
+}
 
 namespace KItinerary {
 
@@ -36,15 +41,15 @@ namespace CalendarHandler
     KITINERARY_EXPORT QDateTime startDateTime(const QVariant &reservation);
 
     /** Attempts to find an event in @p calendar for @p reservation. */
-    KITINERARY_EXPORT KCalCore::Event::Ptr findEvent(const KCalCore::Calendar::Ptr &calendar, const QVariant &reservation);
+    KITINERARY_EXPORT QSharedPointer<KCalCore::Event> findEvent(const QSharedPointer<KCalCore::Calendar> &calendar, const QVariant &reservation);
 
     /** Returns the reservation object for this event. */
-    KITINERARY_EXPORT QVariant reservationForEvent(const KCalCore::Event::Ptr &event);
+    KITINERARY_EXPORT QVariant reservationForEvent(const QSharedPointer<KCalCore::Event> &event);
 
     /** Fills @p event with details of @p reservation.
      *  Can be used on new events or to update existing ones.
      */
-    KITINERARY_EXPORT void fillEvent(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+    KITINERARY_EXPORT void fillEvent(const QVariant &reservation, const QSharedPointer<KCalCore::Event> &event);
 }
 
 }

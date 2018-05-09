@@ -17,6 +17,7 @@
    02110-1301, USA.
 */
 
+#include "config-kitinerary.h"
 #include "calendarhandler.h"
 #include "jsonlddocument.h"
 #include "logging.h"
@@ -29,25 +30,33 @@
 #include <KItinerary/Reservation>
 #include <KItinerary/TrainTrip>
 
+#ifdef HAVE_KCAL
 #include <KCalCore/Alarm>
+#include <KCalCore/Calendar>
+#include <KCalCore/Event>
+#endif
 
 #include <KLocalizedString>
 
+#include <QDateTime>
 #include <QJsonArray>
 #include <QJsonDocument>
 
-using namespace KCalCore;
 using namespace KItinerary;
 
+#ifdef HAVE_KCAL
+using namespace KCalCore;
 static void fillFlightReservation(const FlightReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillTripReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
 static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
+#endif
 
 QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
 {
+#ifdef HAVE_KCAL
     if (reservation.userType() == qMetaTypeId<FlightReservation>()) {
         const auto flight = reservation.value<FlightReservation>().reservationFor().value<Flight>();
         if (flight.departureTime().isValid()) {
@@ -61,11 +70,15 @@ QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
     } else if (reservation.userType() == qMetaTypeId<LodgingReservation>()) {
         return reservation.value<LodgingReservation>().checkinTime();
     }
+#else
+    Q_UNUSED(reservation);
+#endif
     return {};
 }
 
-Event::Ptr CalendarHandler::findEvent(const Calendar::Ptr &calendar, const QVariant &reservation)
+QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalCore::Calendar> &calendar, const QVariant &reservation)
 {
+#ifdef HAVE_KCAL
     if (!JsonLd::canConvert<Reservation>(reservation)) {
         return {};
     }
@@ -90,12 +103,17 @@ Event::Ptr CalendarHandler::findEvent(const Calendar::Ptr &calendar, const QVari
             return event;
         }
     }
+#else
+    Q_UNUSED(calendar);
+    Q_UNUSED(reservation);
+#endif
 
     return {};
 }
 
-QVariant CalendarHandler::reservationForEvent(const KCalCore::Event::Ptr &event)
+QVariant CalendarHandler::reservationForEvent(const QSharedPointer<KCalCore::Event> &event)
 {
+#ifdef HAVE_KCAL
     const auto payload = event->customProperty("KITINERARY", "RESERVATION").toUtf8();
     const auto json = QJsonDocument::fromJson(payload).array();
     const auto data = JsonLdDocument::fromJson(json);
@@ -103,10 +121,15 @@ QVariant CalendarHandler::reservationForEvent(const KCalCore::Event::Ptr &event)
         return {};
     }
     return data.at(0);
+#else
+    Q_UNUSED(event);
+    return {};
+#endif
 }
 
-void CalendarHandler::fillEvent(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+void CalendarHandler::fillEvent(const QVariant &reservation, const QSharedPointer<KCalCore::Event> &event)
 {
+#ifdef HAVE_KCAL
     const int typeId = reservation.userType();
     if (typeId == qMetaTypeId<FlightReservation>()) {
         fillFlightReservation(reservation.value<FlightReservation>(), event);
@@ -127,8 +150,13 @@ void CalendarHandler::fillEvent(const QVariant &reservation, const KCalCore::Eve
 
     const auto payload = QJsonDocument(JsonLdDocument::toJson({reservation})).toJson(QJsonDocument::Compact);
     event->setCustomProperty("KITINERARY", "RESERVATION", QString::fromUtf8(payload));
+#else
+    Q_UNUSED(reservation);
+    Q_UNUSED(event);
+#endif
 }
 
+#ifdef HAVE_KCAL
 static void fillFlightReservation(const FlightReservation &reservation, const KCalCore::Event::Ptr &event)
 {
     const auto flight = reservation.reservationFor().value<Flight>();
@@ -278,3 +306,4 @@ static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &e
     event->setGeoLatitude(geo.latitude());
     event->setGeoLongitude(geo.longitude());
 }
+#endif

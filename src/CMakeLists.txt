@@ -14,6 +14,9 @@ endif()
 if (ZLIB_FOUND)
     set(HAVE_ZLIB ON)
 endif()
+if (TARGET KF5::CalendarCore)
+    set(HAVE_KCAL ON)
+endif()
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 set(kitinerary_lib_srcs
@@ -64,7 +67,6 @@ target_link_libraries(KPimItinerary
     PUBLIC
         Qt5::Core
         KF5::Mime
-        KF5::CalendarCore
     PRIVATE
         Qt5::Qml
         KF5::I18n
@@ -78,6 +80,9 @@ if (HAVE_ZXING)
 endif()
 if (HAVE_ZLIB)
     target_link_libraries(KPimItinerary PRIVATE ${ZLIB_LIBRARIES})
+endif()
+if (HAVE_KCAL)
+    target_link_libraries(KPimItinerary PUBLIC KF5::CalendarCore)
 endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS

@@ -24,5 +24,6 @@
 #cmakedefine HAVE_POPPLER_0_58
 #cmakedefine HAVE_ZLIB
 #cmakedefine HAVE_ZXING
+#cmakedefine HAVE_KCAL
 
 #endif
