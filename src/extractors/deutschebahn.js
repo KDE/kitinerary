@@ -106,9 +106,14 @@ function parseLegs(text, year, compact) {
     return reservations;
 }
 
-function parseText(text) {
+function parseText(text) { // used by unit tests
+    return parseTicket(text, null);
+}
+
+function parseTicket(text, uic918ticket) {
     var reservations = new Array();
     var pos = 0;
+    var returnResIndex = 0;
     while (true) {
         // find itinerary headers
         var header = text.substr(pos).match(/Ihre Reiseverbindung[\S ]+(Hin|Rück)fahrt am [0-9]{2}.[0-9]{2}.([0-9]{4}).*\n/);
@@ -128,6 +133,23 @@ function parseText(text) {
             reservations = reservations.concat(parseLegs(text.substr(pos + idx), year, true));
         } else {
             break;
+        }
+
+        // for outward journeys we have station ids from the UIC 918-3 code
+        if (uic918ticket && header[1] == "Hin") {
+            reservations[0].reservationFor.departureStation.identifier = uic918ticket.outboundDepartureStationId;
+            reservations[reservations.length - 1].reservationFor.arrivalStation.identifier = uic918ticket.outboundArrivalStationId;
+            returnResIndex = reservations.length;
+        } else {
+            // propagate station ids from outward to return journey
+            for (var i = returnResIndex; i < reservations.length; ++i) {
+                for (var j = 0; j < returnResIndex; ++j) {
+                    if (reservations[i].reservationFor.departureStation.name == reservations[j].reservationFor.arrivalStation.name)
+                        reservations[i].reservationFor.departureStation.identifier = reservations[j].reservationFor.arrivalStation.identifier;
+                    if (reservations[i].reservationFor.arrivalStation.name == reservations[j].reservationFor.departureStation.name)
+                        reservations[i].reservationFor.arrivalStation.identifier = reservations[j].reservationFor.departureStation.identifier;
+                }
+            }
         }
 
         if (idx == 0)
@@ -156,7 +178,7 @@ function parsePdf(pdf) {
         }
     }
 
-    var reservations = parseText(pdf.text);
+    var reservations = parseTicket(pdf.text, uic918ticket);
     for (var i = 0; i < reservations.length && barcode != ""; ++i) {
         reservations[i].reservedTicket.ticketToken = "aztecCode:" + barcode;
         reservations[i].underName = JsonLd.toJson(uic918ticket.person);
