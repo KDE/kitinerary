@@ -60,6 +60,7 @@ public:
     void processFlightTime(Flight &flight, const char *timePropName, const Airport &airport) const;
     TrainReservation processTrainReservation(TrainReservation res) const;
     TrainTrip processTrainTrip(TrainTrip trip) const;
+    TrainStation processTrainStation(TrainStation station) const;
     QVariant processReservation(QVariant res) const;
     Person processPerson(Person person) const;
 
@@ -268,7 +269,26 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
 {
     trip.setArrivalPlatform(trip.arrivalPlatform().trimmed());
     trip.setDeparturePlatform(trip.departurePlatform().trimmed());
+    trip = processProperty(trip, "departureStation", &ExtractorPostprocessorPrivate::processTrainStation);
+    trip = processProperty(trip, "arrivalStation", &ExtractorPostprocessorPrivate::processTrainStation);
     return trip;
+}
+
+TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation station) const
+{
+    const auto id = station.identifier();
+    if (id.isEmpty()) { // empty -> null cleanup, to have more compact json-ld output
+        station.setIdentifier(QString());
+    } else if (id.startsWith(QLatin1String("sncf")) && id.size() == 10) {
+        // Gare & Connexion ids start with a country code, propagate that to the station address field
+        auto addr = station.address();
+        if (addr.addressCountry().isEmpty()) {
+            addr.setAddressCountry(id.mid(5, 2).toUpper());
+            station.setAddress(addr);
+        }
+    }
+
+    return station;
 }
 
 QVariant ExtractorPostprocessorPrivate::processReservation(QVariant res) const
