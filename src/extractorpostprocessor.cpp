@@ -54,7 +54,7 @@ public:
     Flight processFlight(Flight flight) const;
     Airport processAirport(Airport airport) const;
     Airline processAirline(Airline airline) const;
-    void processFlightTime(Flight &flight, const char *timePropName, const Airport &airport) const;
+    void processFlightTime(Flight &flight, QDateTime(Flight::* getter)() const, void(Flight::* setter)(const QDateTime&), const Airport &airport) const;
     TrainReservation processTrainReservation(TrainReservation res) const;
     TrainTrip processTrainTrip(TrainTrip trip) const;
     TrainStation processTrainStation(TrainStation station) const;
@@ -167,9 +167,9 @@ Flight ExtractorPostprocessorPrivate::processFlight(Flight flight) const
     flight.setArrivalAirport(processAirport(flight.arrivalAirport()));
     flight.setAirline(processAirline(flight.airline()));
 
-    processFlightTime(flight, "boardingTime", flight.departureAirport());
-    processFlightTime(flight, "departureTime", flight.departureAirport());
-    processFlightTime(flight, "arrivalTime", flight.arrivalAirport());
+    processFlightTime(flight, &Flight::boardingTime, &Flight::setBoardingTime, flight.departureAirport());
+    processFlightTime(flight, &Flight::departureTime, &Flight::setDepartureTime, flight.departureAirport());
+    processFlightTime(flight, &Flight::arrivalTime, &Flight::setArrivalTime, flight.arrivalAirport());
 
     return flight;
 }
@@ -208,16 +208,16 @@ Airline ExtractorPostprocessorPrivate::processAirline(Airline airline) const
     return airline;
 }
 
-void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, const char *timePropName, const Airport &airport) const
+void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, QDateTime(Flight::* getter)() const, void(Flight::* setter)(const QDateTime&), const Airport &airport) const
 {
-    auto dt = JsonLdDocument::readProperty(flight, timePropName).toDateTime();
+    auto dt = (flight.*getter)();
     if (!dt.isValid()) {
         return;
     }
 
     if (dt.date().year() <= 1970 && flight.departureDay().isValid()) { // we just have the time, but not the day
         dt.setDate(flight.departureDay());
-        JsonLdDocument::writeProperty(flight, timePropName, dt);
+        (flight.*setter)(dt);
     }
 
     if (dt.timeSpec() == Qt::TimeZone || airport.iataCode().isEmpty()) {
@@ -243,8 +243,8 @@ void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, const char
     // if we updated from UTC offset to timezone spec here, QDateTime will compare equal
     // and the auto-generated property code will not actually update the property
     // so, clear the property first to force an update
-    JsonLdDocument::writeProperty(flight, timePropName, QDateTime());
-    JsonLdDocument::writeProperty(flight, timePropName, dt);
+    (flight.*setter)(QDateTime());
+    (flight.*setter)(dt);
 }
 
 TrainReservation ExtractorPostprocessorPrivate::processTrainReservation(TrainReservation res) const
