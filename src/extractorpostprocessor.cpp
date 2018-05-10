@@ -50,9 +50,6 @@ class ExtractorPostprocessorPrivate
 public:
     void mergeOrAppend(const QVariant &elem);
 
-    template <typename ObjT, typename PropT>
-    ObjT processProperty(ObjT obj, const char *name, PropT (ExtractorPostprocessorPrivate::*processor)(PropT) const) const;
-
     QVariant processFlightReservation(FlightReservation res) const;
     Flight processFlight(Flight flight) const;
     Airport processAirport(Airport airport) const;
@@ -149,15 +146,6 @@ void ExtractorPostprocessorPrivate::mergeOrAppend(const QVariant &elem)
     }
 }
 
-template <typename ObjT, typename PropT>
-ObjT ExtractorPostprocessorPrivate::processProperty(ObjT obj, const char *name, PropT (ExtractorPostprocessorPrivate::*processor)(PropT) const) const
-{
-    auto value = JsonLdDocument::readProperty(obj, name).template value<PropT>();
-    value = (this->*processor)(value);
-    JsonLdDocument::writeProperty(obj, name, value);
-    return obj;
-}
-
 QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservation res) const
 {
     // expand ticketToken for IATA BCBP data
@@ -169,15 +157,15 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
         }
     }
 
-    res = processProperty(res, "reservationFor", &ExtractorPostprocessorPrivate::processFlight);
+    res.setReservationFor(processFlight(res.reservationFor().value<Flight>()));
     return res;
 }
 
 Flight ExtractorPostprocessorPrivate::processFlight(Flight flight) const
 {
-    flight = processProperty(flight, "departureAirport", &ExtractorPostprocessorPrivate::processAirport);
-    flight = processProperty(flight, "arrivalAirport", &ExtractorPostprocessorPrivate::processAirport);
-    flight = processProperty(flight, "airline", &ExtractorPostprocessorPrivate::processAirline);
+    flight.setDepartureAirport(processAirport(flight.departureAirport()));
+    flight.setArrivalAirport(processAirport(flight.arrivalAirport()));
+    flight.setAirline(processAirline(flight.airline()));
 
     processFlightTime(flight, "boardingTime", flight.departureAirport());
     processFlightTime(flight, "departureTime", flight.departureAirport());
@@ -261,7 +249,7 @@ void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, const char
 
 TrainReservation ExtractorPostprocessorPrivate::processTrainReservation(TrainReservation res) const
 {
-    res = processProperty(res, "reservationFor", &ExtractorPostprocessorPrivate::processTrainTrip);
+    res.setReservationFor(processTrainTrip(res.reservationFor().value<TrainTrip>()));
     return res;
 }
 
@@ -269,8 +257,8 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
 {
     trip.setArrivalPlatform(trip.arrivalPlatform().trimmed());
     trip.setDeparturePlatform(trip.departurePlatform().trimmed());
-    trip = processProperty(trip, "departureStation", &ExtractorPostprocessorPrivate::processTrainStation);
-    trip = processProperty(trip, "arrivalStation", &ExtractorPostprocessorPrivate::processTrainStation);
+    trip.setDeparatureStation(processTrainStation(trip.departureStation()));
+    trip.setArrivalStation(processTrainStation(trip.arrivalStation()));
     return trip;
 }
 
