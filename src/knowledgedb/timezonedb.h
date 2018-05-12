@@ -18,7 +18,10 @@
 #ifndef KITINERARY_TIMEZONEDB_H
 #define KITINERARY_TIMEZONEDB_H
 
+#include <kitinerary_export.h>
+
 #include <cstdint>
+#include <limits>
 
 class QTimeZone;
 
@@ -29,11 +32,16 @@ namespace KnowledgeDb {
      *  @note Do not use in API/ABI.
      */
     struct Timezone {
+        inline constexpr Timezone() = default;
+        inline explicit constexpr Timezone(uint16_t o)
+            : offset(o)
+        {}
+
         /** Returns the corresponding QTimeZone. */
-        QTimeZone toQTimeZone() const;
+        KITINERARY_EXPORT QTimeZone toQTimeZone() const;
 
         // offset into timezone name string table
-        uint16_t offset;
+        uint16_t offset = std::numeric_limits<uint16_t>::max();
     };
 }
 }

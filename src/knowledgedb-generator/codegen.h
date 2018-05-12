@@ -20,16 +20,20 @@
 
 #include "knowledgedb.h"
 
+class QByteArray;
 class QIODevice;
 
 namespace KItinerary {
 namespace Generator {
+
+class Timezones;
 
 /** Code generation utilities. */
 namespace CodeGen
 {
     void writeLicenseHeader(QIODevice *out);
     void writeCoordinate(QIODevice *out, const KnowledgeDb::Coordinate &coord);
+    void writeTimezone(QIODevice *out, Timezones *tzDb, const QByteArray &tzName);
 }
 
 }

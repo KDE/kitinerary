@@ -277,11 +277,7 @@ static const Timezone timezone_table[] = {
     for (auto it = iataMap.constBegin(); it != iataMap.constEnd(); ++it) {
         const auto &airport = airportMap.value(it.value());
         out->write("    ");
-        if (airport.tz.isEmpty()) {
-            out->write("std::numeric_limits<uint16_t>::max()");
-        } else {
-            out->write(QByteArray::number(tzDb.offset(airport.tz)));
-        }
+        CodeGen::writeTimezone(out, &tzDb, airport.tz);
         out->write(", // ");
         out->write(airport.iataCode.toUtf8());
         if (!airport.tz.isEmpty()) {

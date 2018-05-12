@@ -16,6 +16,7 @@
 */
 
 #include "codegen.h"
+#include "timezones.h"
 
 #include <QIODevice>
 
@@ -37,4 +38,15 @@ void CodeGen::writeCoordinate(QIODevice* out, const KnowledgeDb::Coordinate& coo
         out->write(QByteArray::number(coord.latitude));
     }
     out->write("}");
+}
+
+void CodeGen::writeTimezone(QIODevice *out, Timezones *tzDb, const QByteArray &tzName)
+{
+    if (tzName.isEmpty()) {
+        out->write("Timezone{}");
+    } else {
+        out->write("Timezone{");
+        out->write(QByteArray::number(tzDb->offset(tzName)));
+        out->write("}");
+    }
 }
