@@ -19,7 +19,8 @@
 
 #include "airportdb.h"
 #include "airportdb_p.h"
-#include "airportdb_p.cpp"
+#include "airportdb_data.cpp"
+#include "timezonedb.h"
 
 #include <QDebug>
 #include <QRegularExpression>
@@ -132,7 +133,7 @@ QTimeZone timezoneForAirport(IataCode iataCode)
     if (iataIdx < 0) {
         return QTimeZone();
     }
-    return QTimeZone(timezone_names + timezone_table[iataIdx]);
+    return KnowledgeDb::timezoneForOffset(timezone_table[iataIdx]);
 }
 
 static const auto name1_string_index_size = sizeof(name1_string_index) / sizeof(Name1Index);

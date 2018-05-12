@@ -19,13 +19,13 @@
 
 #include "extractorpostprocessor.h"
 
-#include "airportdb/airportdb.h"
 #include "calendarhandler.h"
 #include "iatabcbpparser.h"
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "mergeutil.h"
 
+#include <KItinerary/AirportDb>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
 #include <KItinerary/Organization>

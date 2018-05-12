@@ -1,6 +1,6 @@
 set(KDE_INSTALL_INCLUDEDIR_PIM ${KDE_INSTALL_INCLUDEDIR}/KPim)
 
-add_subdirectory(airportdb)
+add_subdirectory(knowledgedb-generator)
 
 if(TARGET Poppler::Core)
     set(HAVE_POPPLER ON)
@@ -20,8 +20,6 @@ endif()
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 set(kitinerary_lib_srcs
-    airportdb/airportdb.cpp
-
     datatypes/bustrip.cpp
     datatypes/datatypes.cpp
     datatypes/flight.cpp
@@ -32,6 +30,10 @@ set(kitinerary_lib_srcs
     datatypes/ticket.cpp
     datatypes/traintrip.cpp
     datatypes/visit.cpp
+
+    knowledgedb/airportdb.cpp
+    knowledgedb/knowledgedb.cpp
+    knowledgedb/timezonedb.cpp
 
     barcodedecoder.cpp
     calendarhandler.cpp
@@ -103,12 +105,13 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS
 )
-ecm_generate_headers(KItinerary_AirportDb_FORWARDING_HEADERS
+ecm_generate_headers(KItinerary_KnowledgeDb_FORWARDING_HEADERS
     HEADER_NAMES
         AirportDb
+        KnowledgeDb
     PREFIX KItinerary
-    REQUIRED_HEADERS KItinerary_AirportDb_HEADERS
-    RELATIVE airportdb
+    REQUIRED_HEADERS KItinerary_KnowledgeDb_HEADERS
+    RELATIVE knowledgedb
 )
 ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
     HEADER_NAMES
@@ -130,7 +133,7 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
 install(TARGETS KPimItinerary EXPORT KPimItineraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
     ${KItinerary_FORWARDING_HEADERS}
-    ${KItinerary_AirportDb_FORWARDING_HEADERS}
+    ${KItinerary_KnowledgeDb_FORWARDING_HEADERS}
     ${KItinerary_Datatypes_FORWARDING_HEADERS}
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/KItinerary
 )

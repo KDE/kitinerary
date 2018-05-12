@@ -15,4 +15,4 @@ Open timezones.qgs in QGIS. Select "Project" > "Print Composers" > "timezone_loo
 
 (3) Run the code generator
 
-Run `make rebuild-airportdb` in the build dir of this folder.
+Run `make rebuild-knowledgedb` in the build dir of this folder.

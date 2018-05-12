@@ -1,43 +1,38 @@
 /*
-   Copyright (c) 2017 Volker Krause <vkrause@kde.org>
+    Copyright (C) 2018 Volker Krause <vkrause@kde.org>
 
-   This library is free software; you can redistribute it and/or modify it
-   under the terms of the GNU Library General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Library General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or (at your
+    option) any later version.
 
-   This library is distributed in the hope that it will be useful, but WITHOUT
-   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-   FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public
-   License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public
+    License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to the
-   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-   02110-1301, USA.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "airportdbgenerator.h"
+#include "codegen.h"
 #include "timezones.h"
-#include "airportdb_p.h"
+#include "wikidata.h"
 
-#include <QByteArray>
-#include <QCommandLineParser>
-#include <QCoreApplication>
+#include <airportdb_p.h>
+#include <knowledgedb.h>
+
 #include <QDebug>
-#include <QFile>
+#include <QIODevice>
 #include <QJsonArray>
-#include <QJsonDocument>
 #include <QJsonObject>
-#include <QMap>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
 #include <QRegularExpression>
-#include <QUrlQuery>
+#include <QUrl>
 
-#include <cmath>
-
+using namespace KItinerary;
 using namespace KItinerary::AirportDb;
+using namespace KItinerary::Generator;
 
 struct Airport
 {
@@ -48,49 +43,8 @@ struct Airport
     QString alias;
     QByteArray tz;
     int tzOffset;
-    float longitude = NAN;
-    float latitude = NAN;
+    KnowledgeDb::Coordinate coord;
 };
-
-static void parseCoordinate(const QString &value, Airport &a)
-{
-    const auto idx = value.indexOf(QLatin1Char(' '));
-    bool latOk = false, longOk = false;
-    a.longitude = value.midRef(6, idx - 6).toFloat(&latOk);
-    a.latitude = value.midRef(idx + 1, value.size() - idx - 2).toFloat(&longOk);
-    if (!latOk || !longOk) {
-        a.longitude = NAN;
-        a.latitude = NAN;
-    }
-}
-
-static QJsonArray queryWikidata(const char *sparqlQuery, const QString &debugFileName)
-{
-    QUrl url(QStringLiteral("https://query.wikidata.org/sparql"));
-    QUrlQuery query;
-    query.addQueryItem(QStringLiteral("query"), QString::fromUtf8(sparqlQuery).trimmed().simplified());
-    query.addQueryItem(QStringLiteral("format"), QStringLiteral("json"));
-    url.setQuery(query);
-
-    QNetworkAccessManager nam;
-    auto reply = nam.get(QNetworkRequest(url));
-    QObject::connect(reply, &QNetworkReply::finished, QCoreApplication::instance(), &QCoreApplication::quit);
-    QCoreApplication::instance()->exec();
-    if (reply->error() != QNetworkReply::NoError) {
-        qWarning() << reply->errorString();
-        return {};
-    }
-
-    const auto data = reply->readAll();
-    {
-        QFile f(debugFileName);
-        f.open(QFile::WriteOnly);
-        f.write(data);
-    }
-    const auto doc = QJsonDocument::fromJson(data);
-    const auto resultArray = doc.object().value(QLatin1String("results")).toObject().value(QLatin1String("bindings")).toArray();
-    return resultArray;
-}
 
 static bool soundsMilitaryish(const QString &s)
 {
@@ -151,33 +105,24 @@ static void merge(Airport &lhs, const Airport &rhs)
         extraLabel += QLatin1Char(' ') + rhs.alias;
     }
     lhs.alias += extraLabel;
-    if (std::isnan(lhs.latitude) || std::isnan(lhs.longitude)) {
-        lhs.latitude = rhs.latitude;
-        lhs.longitude = rhs.longitude;
-    } else if (!std::isnan(rhs.latitude) && !std::isnan(rhs.longitude)) {
-        if (std::abs(lhs.latitude - rhs.latitude) > 0.2f || std::abs(lhs.longitude - rhs.longitude) > 0.2f) {
+    if (!lhs.coord.isValid()) {
+        lhs.coord = rhs.coord;
+    } else if (rhs.coord.isValid()) {
+        if (std::abs(lhs.coord.latitude - rhs.coord.latitude) > 0.2f || std::abs(lhs.coord.longitude - rhs.coord.longitude) > 0.2f) {
             ++coordinateConflicts;
             qDebug() << lhs.uri << "has multiple conflicting coordinates";
         }
         // pick always the same independent of the input order, so stabilize generated output
-        lhs.latitude = std::min(lhs.latitude, rhs.latitude);
-        lhs.longitude = std::min(lhs.longitude, rhs.longitude);
+        lhs.coord.latitude = std::min(lhs.coord.latitude, rhs.coord.latitude);
+        lhs.coord.longitude = std::min(lhs.coord.longitude, rhs.coord.longitude);
     }
 }
 
-int main(int argc, char **argv)
+void AirportDbGenerator::generate(QIODevice* out)
 {
-    QCoreApplication app(argc, argv);
-    QCommandLineParser parser;
-    QCommandLineOption outputOpt({QStringLiteral("o"), QStringLiteral("output")}, QStringLiteral("Output file."), QStringLiteral("output file"));
-    parser.addOption(outputOpt);
-    parser.process(app);
-
     // step 1 query wikidata for all airports
-    QUrl url(QStringLiteral("https://query.wikidata.org/sparql"));
-    QUrlQuery query;
     // sorted by URI to stabilize the result in case of conflicts
-    const auto airportArray = queryWikidata(R"(
+    const auto airportArray = WikiData::query(R"(
         SELECT DISTINCT ?airport ?airportLabel ?airportAltLabel ?iataCode ?icaoCode ?coord ?endDate ?demolished ?iataEndDate WHERE {
             ?airport (wdt:P31/wdt:P279*) wd:Q1248784.
             ?airport p:P238 ?iataStmt.
@@ -188,11 +133,10 @@ int main(int argc, char **argv)
             OPTIONAL { ?airport wdt:P576 ?demolished. }
             OPTIONAL { ?iataStmt pq:P582 ?iataEndDate. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-        } ORDER BY (?airport))", QStringLiteral(
-                                                "wikidata_airports.json"));
+        } ORDER BY (?airport))", "wikidata_airports.json");
     if (airportArray.isEmpty()) {
         qWarning() << "No results in SPARQL query found.";
-        return 1;
+        exit(1);
     }
 
     QHash<QUrl, Airport> airportMap;
@@ -219,11 +163,11 @@ int main(int argc, char **argv)
         a.icaoCode = obj.value(QLatin1String("icaoCode")).toObject().value(QLatin1String("value")).toString();
         a.label = obj.value(QLatin1String("airportLabel")).toObject().value(QLatin1String("value")).toString();
         a.alias = obj.value(QLatin1String("airportAltLabel")).toObject().value(QLatin1String("value")).toString();
-        // primitive military airport filter, turns out to be more reliable than the query below
+        // primitive military airport filter, turns out to be more reliable than querying for the military airport types
         if (soundsMilitaryish(a.label) || soundsMilitaryish(a.alias)) {
             continue;
         }
-        parseCoordinate(obj.value(QLatin1String("coord")).toObject().value(QLatin1String("value")).toString(), a);
+        a.coord = WikiData::parseCoordinate(obj.value(QLatin1String("coord")).toObject().value(QLatin1String("value")).toString());
 
         // merge multiple records for the same airport
         auto it = airportMap.find(a.uri);
@@ -242,50 +186,19 @@ int main(int argc, char **argv)
         iataMap.insert(a.iataCode, a.uri);
     }
 
-    // step 1a query all military airports, and exlcude those
-    // this could possibly be done with a single SPARQL query, but I haven't found one that works
-    // within the 60s query timeout of Wikidata
-    // TODO check for p:582 (endTime) on P31 (iow: exclude former military airports, such as HHN)
-    const auto militaryAirportArray = queryWikidata(R"(
-        SELECT DISTINCT ?airport ?iataCode WHERE {
-            ?airport wdt:P31 wd:Q695850.
-            ?airport wdt:P238 ?iataCode.
-        })", QStringLiteral("wikidata_military_airports.json"));
-    for (const auto &data : militaryAirportArray) {
-        const auto uri = QUrl(data.toObject().value(QLatin1String("airport")).toObject().value(QLatin1String("value")).toString());
-        const auto iataCode = data.toObject().value(QLatin1String("iataCode")).toObject().value(QLatin1String("value")).toString();
-        // disabled for now, too many false positivies, e.g. CGN
-//         if (iataMap.contains(iataCode))
-//             qDebug() << "Removing military airport" << iataCode << airportMap.value(iataMap.value(iataCode)).label;
-//         iataMap.remove(iataCode);
-//         airportMap.remove(uri);
-    }
-
     // step 2 augment the data with timezones
     Timezones tzDb;
-    std::vector<QByteArray> usedTimezones;
     int timezoneLoopupFails = 0;
     for (auto it = airportMap.begin(); it != airportMap.end(); ++it) {
-        if (std::isnan((*it).latitude) || std::isnan((*it).longitude)) {
+        if (!(*it).coord.isValid()) {
             continue;
         }
-        (*it).tz = tzDb.timezoneForCoordinate((*it).longitude, (*it).latitude);
+        (*it).tz = tzDb.timezoneForCoordinate((*it).coord);
         if ((*it).tz.isEmpty()) {
-            qDebug() << "Failed to find timezone for" << (*it).iataCode << (*it).label << (*it).latitude << (*it).longitude << (*it).uri;
+            qDebug() << "Failed to find timezone for" << (*it).iataCode << (*it).label << (*it).coord.latitude << (*it).coord.longitude << (*it).uri;
             ++timezoneLoopupFails;
             continue;
         }
-        auto tzIt = std::lower_bound(usedTimezones.begin(), usedTimezones.end(), it.value().tz);
-        if (tzIt == usedTimezones.end() || (*tzIt) != it.value().tz) {
-            usedTimezones.insert(tzIt, it.value().tz);
-        }
-    }
-    std::vector<uint16_t> timezoneOffsets;
-    timezoneOffsets.reserve(usedTimezones.size());
-    uint16_t offset = 0;
-    for (const auto &tz : usedTimezones) {
-        timezoneOffsets.push_back(offset);
-        offset += tz.size() + 1; // +1 of the trailing null byte
     }
 
     // step 3 index the names for reverse lookup
@@ -312,20 +225,13 @@ int main(int argc, char **argv)
     }
 
     // step 4 generate code
-    QFile f(parser.value(outputOpt));
-    if (!f.open(QFile::WriteOnly)) {
-        qWarning() << f.errorString();
-        return 1;
-    }
-    f.write(
-        R"(/*
- * This code is auto-generated from Wikidata data. Licensed under CC0.
- */
+    CodeGen::writeLicenseHeader(out);
+    out->write(R"(
 
 #include "airportdb.h"
 #include "airportdb_p.h"
+#include "knowledgedb.h"
 
-#include <cmath>
 #include <limits>
 
 namespace KItinerary {
@@ -338,13 +244,13 @@ static constexpr IataCode iata_table[] = {
 
     // IATA to airport data index
     for (auto it = iataMap.constBegin(); it != iataMap.constEnd(); ++it) {
-        f.write("    IataCode{\"");
-        f.write(it.key().toUtf8());
-        f.write("\"}, // ");
-        f.write(airportMap.value(it.value()).label.toUtf8());
-        f.write("\n");
+        out->write("    IataCode{\"");
+        out->write(it.key().toUtf8());
+        out->write("\"}, // ");
+        out->write(airportMap.value(it.value()).label.toUtf8());
+        out->write("\n");
     }
-    f.write(R"(};
+    out->write(R"(};
 
 // airport coordinates in latitude/longitude pairs
 // NAN indicates the coordinate is not known
@@ -354,52 +260,34 @@ static constexpr Coordinate coordinate_table[] = {
     // TODO: should be possible to squeeze into 48 bit per coordinate, as 10m resolution is good enough for us
     for (auto it = iataMap.constBegin(); it != iataMap.constEnd(); ++it) {
         const auto &airport = airportMap.value(it.value());
-        f.write("    Coordinate{");
-        if (!std::isnan(airport.longitude) && !std::isnan(airport.latitude)) {
-            f.write(QByteArray::number(airport.longitude));
-            f.write(", ");
-            f.write(QByteArray::number(airport.latitude));
-        }
-        f.write("}, // ");
-        f.write(airport.iataCode.toUtf8());
-        f.write("\n");
+        out->write("    ");
+        CodeGen::writeCoordinate(out, airport.coord);
+        out->write(", // ");
+        out->write(airport.iataCode.toUtf8());
+        out->write("\n");
     }
-    f.write(R"(};
-
-// timezone name strings
-static const char timezone_names[] =
-)");
-    // timezone string tables
-    for (const auto &tz : usedTimezones) {
-        f.write("    ");
-        f.write("\"");
-        f.write(tz);
-        f.write("\\0\"\n");
-    }
-    f.write(R"(;
+    out->write(R"(};
 
 // timezone name string table indexes
 static const uint16_t timezone_table[] = {
 )");
     for (auto it = iataMap.constBegin(); it != iataMap.constEnd(); ++it) {
         const auto &airport = airportMap.value(it.value());
-        f.write("    ");
-        const auto tzIt = std::lower_bound(usedTimezones.begin(), usedTimezones.end(), airport.tz);
-        if (tzIt != usedTimezones.end() && (*tzIt) == airport.tz) {
-            const auto tzIdx = std::distance(usedTimezones.begin(), tzIt);
-            f.write(QByteArray::number(timezoneOffsets[tzIdx]));
+        out->write("    ");
+        if (airport.tz.isEmpty()) {
+            out->write("std::numeric_limits<uint16_t>::max()");
         } else {
-            f.write("std::numeric_limits<uint16_t>::max()");
+            out->write(QByteArray::number(tzDb.offset(airport.tz)));
         }
-        f.write(", // ");
-        f.write(airport.iataCode.toUtf8());
-        if (tzIt != usedTimezones.end() && (*tzIt) == airport.tz) {
-            f.write(" ");
-            f.write(*tzIt);
+        out->write(", // ");
+        out->write(airport.iataCode.toUtf8());
+        if (!airport.tz.isEmpty()) {
+            out->write(" ");
+            out->write(airport.tz);
         }
-        f.write("\n");
+        out->write("\n");
     }
-    f.write(R"(};
+    out->write(R"(};
 
 // reverse name lookup string table for unique strings
 static const char name1_string_table[] =
@@ -412,29 +300,29 @@ static const char name1_string_table[] =
         if (it.value().size() > 1) {
             continue;
         }
-        f.write("    \"");
-        f.write(it.key().toUtf8());
-        f.write("\" // ");
-        f.write(it.value().at(0).toUtf8());
-        f.write("\n");
+        out->write("    \"");
+        out->write(it.key().toUtf8());
+        out->write("\" // ");
+        out->write(it.value().at(0).toUtf8());
+        out->write("\n");
         string_offsets.push_back(Name1Index{label_offset, (uint8_t)it.key().toUtf8().size(), (uint16_t)std::distance(iataMap.begin(), iataMap.find(it.value().at(0)))});
         label_offset += it.key().toUtf8().size();
     }
-    f.write(R"(;
+    out->write(R"(;
 
 // string table indices into name_string_table
 static const Name1Index name1_string_index[] = {
 )");
     for (const auto &offset : string_offsets) {
-        f.write("    Name1Index{");
-        f.write(QByteArray::number(offset.offset()));
-        f.write(", ");
-        f.write(QByteArray::number(offset.length));
-        f.write(", ");
-        f.write(QByteArray::number(offset.iataIndex));
-        f.write("},\n");
+        out->write("    Name1Index{");
+        out->write(QByteArray::number(offset.offset()));
+        out->write(", ");
+        out->write(QByteArray::number(offset.length));
+        out->write(", ");
+        out->write(QByteArray::number(offset.iataIndex));
+        out->write("},\n");
     }
-    f.write(R"(};
+    out->write(R"(};
 
 // reverse name lookup string table for non-unique strings
 static const char nameN_string_table[] =
@@ -454,45 +342,45 @@ static const char nameN_string_table[] =
         if (it.value().size() == 1) {
             continue;
         }
-        f.write("    \"");
-        f.write(it.key().toUtf8());
-        f.write("\"\n");
+        out->write("    \"");
+        out->write(it.key().toUtf8());
+        out->write("\"\n");
         stringN_offsets.emplace_back(stringN_index_t{it.key().toUtf8(), string_offset, iata_map_offset, it.value()});
         string_offset += it.key().toUtf8().size();
         iata_map_offset += it.value().size();
     }
-    f.write(R"(;
+    out->write(R"(;
 
 // string table index to iata code mapping
 static const uint16_t nameN_iata_table[] = {
 )");
     for (const auto &offset : stringN_offsets) {
-        f.write("    ");
+        out->write("    ");
         for (const auto &iataCode : offset.iataList) {
-            f.write(QByteArray::number(std::distance(iataMap.begin(), iataMap.find(iataCode))));
-            f.write(", ");
+            out->write(QByteArray::number(std::distance(iataMap.begin(), iataMap.find(iataCode))));
+            out->write(", ");
         }
-        f.write(" // ");
-        f.write(offset.str);
-        f.write("\n");
+        out->write(" // ");
+        out->write(offset.str);
+        out->write("\n");
     }
-    f.write(R"(};
+    out->write(R"(};
 
 // index into the above string and iata index tables
 static const NameNIndex nameN_string_index[] = {
 )");
     for (const auto &offset : stringN_offsets) {
-        f.write("    NameNIndex{");
-        f.write(QByteArray::number(offset.strOffset));
-        f.write(", ");
-        f.write(QByteArray::number(offset.str.length()));
-        f.write(", ");
-        f.write(QByteArray::number(offset.iataMapOffset));
-        f.write(", ");
-        f.write(QByteArray::number(offset.iataList.size()));
-        f.write("},\n");
+        out->write("    NameNIndex{");
+        out->write(QByteArray::number(offset.strOffset));
+        out->write(", ");
+        out->write(QByteArray::number(offset.str.length()));
+        out->write(", ");
+        out->write(QByteArray::number(offset.iataMapOffset));
+        out->write(", ");
+        out->write(QByteArray::number(offset.iataList.size()));
+        out->write("},\n");
     }
-    f.write(R"(};
+    out->write(R"(};
 }
 }
 )");
@@ -502,5 +390,4 @@ static const NameNIndex nameN_string_index[] = {
     qDebug() << "IATA code collisions:" << iataCollisions;
     qDebug() << "Coordinate conflicts:" << coordinateConflicts;
     qDebug() << "Failed timezone lookups:" << timezoneLoopupFails;
-    return 0;
 }

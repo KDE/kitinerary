@@ -17,11 +17,19 @@
    02110-1301, USA.
 */
 
+#ifndef KITINERARY_GENERATOR_TIMEZONES
+#define KITINERARY_GENERATOR_TIMEZONES
+
+#include <knowledgedb.h>
+
 #include <QImage>
 #include <QHash>
 
 class QByteArray;
 class QColor;
+
+namespace KItinerary {
+namespace Generator {
 
 class Timezones
 {
@@ -29,11 +37,22 @@ public:
     Timezones();
     ~Timezones();
 
-    QByteArray timezoneForCoordinate(float longitude, float latitude) const;
+    QByteArray timezoneForCoordinate(const KnowledgeDb::Coordinate &coord) const;
+
+    // the offset into the timezone string table
+    uint16_t offset(const QByteArray &tz) const;
 
 private:
+    friend class TimezoneDbGenerator;
     QByteArray timezoneForPixel(int x, int y) const;
 
     QImage m_map;
-    QHash<QRgb, QByteArray> m_zones;
+    QHash<QRgb, QByteArray> m_colorMap;
+    std::vector<QByteArray> m_zones;
+    std::vector<uint16_t> m_zoneOffsets;
 };
+
+}
+}
+
+#endif

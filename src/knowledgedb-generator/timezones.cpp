@@ -22,12 +22,23 @@
 #include <QDebug>
 #include <QFile>
 
+#include <cassert>
+#include <limits>
+
+using namespace KItinerary::Generator;
+
 Timezones::Timezones()
 {
-    m_map.load(QStringLiteral("timezones.png"));
+    if (!m_map.load(QStringLiteral("timezones.png"))) {
+        qCritical() << "Unable to open timezone map.";
+        exit(1);
+    }
 
     QFile colorMap(QStringLiteral("timezones.colormap"));
-    colorMap.open(QFile::ReadOnly);
+    if (!colorMap.open(QFile::ReadOnly)) {
+        qCritical() << "Unable to open timezone colormap file: " << colorMap.errorString();
+        exit(1);
+    }
 
     while (!colorMap.atEnd()) {
         const auto line = colorMap.readLine();
@@ -35,25 +46,40 @@ Timezones::Timezones()
         if (split.size() < 5) {
             continue;
         }
+
+        const auto tzName = split.at(4).trimmed();
+        if (tzName.isEmpty()) {
+            continue;
+        }
+        m_zones.push_back(tzName);
+
         QColor c;
         c.setRed(split.at(0).toInt());
         c.setGreen(split.at(1).toInt());
         c.setBlue(split.at(2).toInt());
-        m_zones.insert(c.rgb(), split.at(4).trimmed());
+        m_colorMap.insert(c.rgb(), split.at(4).trimmed());
+    }
+
+    std::sort(m_zones.begin(), m_zones.end());
+    m_zoneOffsets.reserve(m_zones.size());
+    uint16_t offset = 0;
+    for (const auto &tz : m_zones) {
+        m_zoneOffsets.push_back(offset);
+        offset += tz.size() + 1; // +1 of the trailing null byte
     }
 }
 
 Timezones::~Timezones() = default;
 
-QByteArray Timezones::timezoneForCoordinate(float longitude, float latitude) const
+QByteArray Timezones::timezoneForCoordinate(const KnowledgeDb::Coordinate &coord) const
 {
-    const int x = qRound(m_map.width() * ((longitude + 180.0f)/ 360.0f));
-    const int y = qRound(-m_map.height() * ((latitude - 90.0f) / 180.0f));
+    const int x = qRound(m_map.width() * ((coord.longitude + 180.0f)/ 360.0f));
+    const int y = qRound(-m_map.height() * ((coord.latitude - 90.0f) / 180.0f));
 
     //qDebug() << x << y << m_map.width() << m_map.height() << longitude << latitude << QColor(m_map.pixel(x, y)) << m_zones.value(m_map.pixel(x, y));
     const auto tz = timezoneForPixel(x, y);
     if (!tz.isEmpty()) {
-        return m_zones.value(m_map.pixel(x, y));
+        return m_colorMap.value(m_map.pixel(x, y));
     }
 
     // search the vicinity, helps with costal/island airports
@@ -79,5 +105,14 @@ QByteArray Timezones::timezoneForPixel(int x, int y) const
 {
     x %= m_map.width();
     y %= m_map.height();
-    return m_zones.value(m_map.pixel(x, y));
+    return m_colorMap.value(m_map.pixel(x, y));
+}
+
+uint16_t Timezones::offset(const QByteArray& tz) const
+{
+    const auto it = std::lower_bound(m_zones.begin(), m_zones.end(), tz);
+    if (it == m_zones.end() || (*it) != tz) {
+        return std::numeric_limits<uint16_t>::max();
+    }
+    return m_zoneOffsets[std::distance(m_zones.begin(), it)];
 }
