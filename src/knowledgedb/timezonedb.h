@@ -24,8 +24,17 @@ class QTimeZone;
 
 namespace KItinerary {
 namespace KnowledgeDb {
-    /** Timezone at timezone table offset. */
-    QTimeZone timezoneForOffset(uint16_t offset);
+
+    /** Timezone type as used in the database.
+     *  @note Do not use in API/ABI.
+     */
+    struct Timezone {
+        /** Returns the corresponding QTimeZone. */
+        QTimeZone toQTimeZone() const;
+
+        // offset into timezone name string table
+        uint16_t offset;
+    };
 }
 }
 

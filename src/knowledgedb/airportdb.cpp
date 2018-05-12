@@ -123,7 +123,7 @@ QTimeZone timezoneForAirport(IataCode iataCode)
     if (iataIdx < 0) {
         return QTimeZone();
     }
-    return KnowledgeDb::timezoneForOffset(timezone_table[iataIdx]);
+    return timezone_table[iataIdx].toQTimeZone();
 }
 
 static const auto name1_string_index_size = sizeof(name1_string_index) / sizeof(Name1Index);

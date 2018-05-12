@@ -20,9 +20,9 @@
 
 #include <QTimeZone>
 
-using namespace KItinerary;
+using namespace KItinerary::KnowledgeDb;
 
-QTimeZone KnowledgeDb::timezoneForOffset(uint16_t offset)
+QTimeZone Timezone::toQTimeZone() const
 {
     if (offset > sizeof(timezone_names)) {
         return {};

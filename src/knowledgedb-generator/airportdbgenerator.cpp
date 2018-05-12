@@ -231,6 +231,7 @@ void AirportDbGenerator::generate(QIODevice* out)
 #include "airportdb.h"
 #include "airportdb_p.h"
 #include "knowledgedb.h"
+#include "timezonedb.h"
 
 #include <limits>
 
@@ -271,7 +272,7 @@ static constexpr Coordinate coordinate_table[] = {
     out->write(R"(};
 
 // timezone name string table indexes
-static const uint16_t timezone_table[] = {
+static const Timezone timezone_table[] = {
 )");
     for (auto it = iataMap.constBegin(); it != iataMap.constEnd(); ++it) {
         const auto &airport = airportMap.value(it.value());

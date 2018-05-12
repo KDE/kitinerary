@@ -5,6 +5,7 @@
 #include "airportdb.h"
 #include "airportdb_p.h"
 #include "knowledgedb.h"
+#include "timezonedb.h"
 
 #include <limits>
 
@@ -15454,7 +15455,7 @@ static constexpr Coordinate coordinate_table[] = {
 };
 
 // timezone name string table indexes
-static const uint16_t timezone_table[] = {
+static const Timezone timezone_table[] = {
     6740, // AAA Pacific/Tahiti
     4901, // AAB Australia/Adelaide
     184, // AAC Africa/Cairo
