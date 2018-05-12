@@ -21,6 +21,7 @@
 #define AIRPORTDB_H
 
 #include "kitinerary_export.h"
+#include "knowledgedb.h"
 
 #include <cmath>
 #include <cstdint>
@@ -32,26 +33,6 @@ namespace KItinerary {
 
 /** Database of all civilian airports, their locations and timezones. */
 namespace AirportDb {
-/** Geographical coordinate. */
-struct KITINERARY_EXPORT Coordinate {
-    inline constexpr Coordinate()
-        : longitude(NAN)
-        , latitude(NAN)
-    {
-    }
-
-    inline explicit constexpr Coordinate(float lng, float lat)
-        : longitude(lng)
-        , latitude(lat)
-    {
-    }
-
-    bool isValid() const;
-    bool operator==(const Coordinate &other) const;
-
-    float longitude;
-    float latitude;
-};
 
 /** IATA airport code. */
 class KITINERARY_EXPORT IataCode
@@ -89,7 +70,7 @@ private:
 };
 
 /** Returns the geographical coordinates the airport with IATA code @p iataCode is in. */
-KITINERARY_EXPORT Coordinate coordinateForAirport(IataCode iataCode);
+KITINERARY_EXPORT KnowledgeDb::Coordinate coordinateForAirport(IataCode iataCode);
 
 /** Returns the timezone the airport with IATA code @p iataCode is in. */
 KITINERARY_EXPORT QTimeZone timezoneForAirport(IataCode iataCode);

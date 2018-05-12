@@ -8,6 +8,8 @@
 
 #include <limits>
 
+using namespace KItinerary::KnowledgeDb;
+
 namespace KItinerary {
 namespace AirportDb {
 

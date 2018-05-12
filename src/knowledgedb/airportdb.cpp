@@ -33,18 +33,8 @@ namespace KItinerary {
 namespace AirportDb {
 static_assert(sizeof(IataCode) == sizeof(uint16_t), "IATA code changed size!");
 static constexpr auto iata_table_size = sizeof(iata_table) / sizeof(IataCode);
-static_assert(iata_table_size == sizeof(coordinate_table) / sizeof(Coordinate), "Airport coordinate table size mismatch!");
+static_assert(iata_table_size == sizeof(coordinate_table) / sizeof(KnowledgeDb::Coordinate), "Airport coordinate table size mismatch!");
 static_assert(iata_table_size == sizeof(timezone_table) / sizeof(uint16_t), "Airport timezone table size mismatch!");
-
-bool Coordinate::isValid() const
-{
-    return !std::isnan(latitude) && !std::isnan(longitude);
-}
-
-bool Coordinate::operator==(const Coordinate &other) const
-{
-    return latitude == other.latitude && longitude == other.longitude;
-}
 
 IataCode::IataCode(const QString &iataStr) : IataCode()
 {

@@ -234,6 +234,8 @@ void AirportDbGenerator::generate(QIODevice* out)
 
 #include <limits>
 
+using namespace KItinerary::KnowledgeDb;
+
 namespace KItinerary {
 namespace AirportDb {
 
