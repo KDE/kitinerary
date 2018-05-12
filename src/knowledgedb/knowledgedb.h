@@ -43,7 +43,7 @@ struct Coordinate {
     {
     }
 
-    inline constexpr bool isValid() const
+    inline bool isValid() const
     {
         return !std::isnan(latitude) && !std::isnan(longitude);
     }
