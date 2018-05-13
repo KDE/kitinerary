@@ -34,6 +34,7 @@
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
+#include <KItinerary/TrainStationDb>
 
 #include <QDebug>
 #include <QJsonArray>
@@ -267,12 +268,28 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
     const auto id = station.identifier();
     if (id.isEmpty()) { // empty -> null cleanup, to have more compact json-ld output
         station.setIdentifier(QString());
-    } else if (id.startsWith(QLatin1String("sncf")) && id.size() == 10) {
+    } else if (id.startsWith(QLatin1String("sncf:")) && id.size() == 10) {
         // Gare & Connexion ids start with a country code, propagate that to the station address field
         auto addr = station.address();
         if (addr.addressCountry().isEmpty()) {
             addr.setAddressCountry(id.mid(5, 2).toUpper());
             station.setAddress(addr);
+        }
+
+        const auto record = TrainStationDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{id.mid(5)});
+        if (!station.geo().isValid() && record.coordinate.isValid()) {
+            GeoCoordinates geo;
+            geo.setLatitude(record.coordinate.latitude);
+            geo.setLongitude(record.coordinate.longitude);
+            station.setGeo(geo);
+        }
+    } else if (id.startsWith(QLatin1String("ibnr:")) && id.size() == 12) {
+        const auto record = TrainStationDb::stationForIbnr(KnowledgeDb::IBNR{id.mid(5).toUInt()});
+        if (!station.geo().isValid() && record.coordinate.isValid()) {
+            GeoCoordinates geo;
+            geo.setLatitude(record.coordinate.latitude);
+            geo.setLongitude(record.coordinate.longitude);
+            station.setGeo(geo);
         }
     }
 
