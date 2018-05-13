@@ -73,6 +73,10 @@ Timezones::~Timezones() = default;
 
 QByteArray Timezones::timezoneForCoordinate(const KnowledgeDb::Coordinate &coord) const
 {
+    if (!coord.isValid()) {
+        return {};
+    }
+
     const int x = qRound(m_map.width() * ((coord.longitude + 180.0f)/ 360.0f));
     const int y = qRound(-m_map.height() * ((coord.latitude - 90.0f) / 180.0f));
 

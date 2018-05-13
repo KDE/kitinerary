@@ -49,11 +49,8 @@ bool TrainStationDbGenerator::generate(QIODevice *out)
         return false;
     }
 
-    // timezone lookup
-    for (auto it = m_stations.begin(); it != m_stations.end(); ++it) {
-        // TODO warn about lookup failures
-        (*it).tz = m_tzDb.timezoneForCoordinate((*it).coord);
-    }
+    // timezone lookup and filtering
+    processStations();
 
     // code generation
     CodeGen::writeLicenseHeader(out);
@@ -73,6 +70,7 @@ namespace KnowledgeDb {
 }
 )");
 
+    printSummary();
     return true;
 }
 
@@ -93,10 +91,33 @@ bool TrainStationDbGenerator::fetchIBNR()
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
         const auto uri = insertOrMerge(stationObj);
-        // TODO handle IBNR conflicts or format issues
-        m_ibnrMap[stationObj.value(QLatin1String("ibnr")).toObject().value(QLatin1String("value")).toString().toUInt()] = uri;
+
+        const auto id = stationObj.value(QLatin1String("ibnr")).toObject().value(QLatin1String("value")).toString().toUInt();
+        if (id < 1000000 || id > 9999999) {
+            ++m_idFormatViolations;
+            qWarning() << "IBNR format violation" << id << uri;
+            continue;
+        }
+
+        const auto it = m_ibnrMap.find(id);
+        if (it != m_ibnrMap.end() && (*it).second != uri) {
+            ++m_idConflicts;
+            qWarning() << "Conflict on IBNR" << id << uri << m_ibnrMap[id];
+        } else {
+            m_ibnrMap[id] = uri;
+        }
     }
 
+    return true;
+}
+
+static bool isOnlyLetters(const QString &s)
+{
+    for (const auto c : s) {
+        if (c < QLatin1Char('A') || c > QLatin1Char('Z')) {
+            return false;
+        }
+    }
     return true;
 }
 
@@ -117,8 +138,21 @@ bool TrainStationDbGenerator::fetchGaresConnexions()
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
         const auto uri = insertOrMerge(stationObj);
-        // TODO handle id conflicts or format issues
-        m_garesConnexionsIdMap[stationObj.value(QLatin1String("gareConnexionId")).toObject().value(QLatin1String("value")).toString().toUpper()] = uri;
+
+        const auto id = stationObj.value(QLatin1String("gareConnexionId")).toObject().value(QLatin1String("value")).toString().toUpper();
+        if (id.size() != 5 || !isOnlyLetters(id)) {
+            ++m_idFormatViolations;
+            qWarning() << "Gares & Connexions ID format violation" << id << uri;
+            continue;
+        }
+
+        const auto it = m_garesConnexionsIdMap.find(id);
+        if (it != m_garesConnexionsIdMap.end() && (*it).second != uri) {
+            ++m_idConflicts;
+            qWarning() << "Conflict on Gares & Connexions ID" << id << uri << m_garesConnexionsIdMap[id];
+        } else {
+            m_garesConnexionsIdMap[id] = uri;
+        }
     }
 
     return true;
@@ -137,12 +171,43 @@ QUrl TrainStationDbGenerator::insertOrMerge(const QJsonObject &obj)
 
     const auto it = std::lower_bound(m_stations.begin(), m_stations.end(), s);
     if (it != m_stations.end() && (*it).uri == s.uri) {
-        // TODO merge: check for coordinate conflicts
+        // check for coordinate conflicts
+        if (s.coord.isValid() && (*it).coord.isValid()) {
+            if (std::abs(s.coord.latitude - (*it).coord.latitude) > 0.2f || std::abs(s.coord.longitude - (*it).coord.longitude) > 0.2f) {
+                ++m_coordinateConflicts;
+                qWarning() << s.uri << "has multiple conflicting coordinates";
+            }
+            // pick always the same independent of the input order, so stabilize generated output
+            (*it).coord.latitude = std::min((*it).coord.latitude, s.coord.latitude);
+            (*it).coord.longitude = std::min((*it).coord.longitude, s.coord.longitude);
+        }
+
         return s.uri;
     }
 
     m_stations.insert(it, s);
     return s.uri;
+}
+
+void TrainStationDbGenerator::processStations()
+{
+    for (auto it = m_stations.begin(); it != m_stations.end();) {
+        if (!(*it).coord.isValid()) {
+            qDebug() << "Station has no geo coordinates:" << (*it).name << (*it).uri;
+        }
+
+        (*it).tz = m_tzDb.timezoneForCoordinate((*it).coord);
+        if ((*it).tz.isEmpty() && (*it).coord.isValid()) {
+            ++m_timezoneLookupFailure;
+            qWarning() << "Timezone lookup failure:" << (*it).name << (*it).uri;
+        }
+
+        if (!(*it).coord.isValid() && (*it).tz.isEmpty()) { // no useful information
+            it = m_stations.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
 void TrainStationDbGenerator::writeStationData(QIODevice *out)
@@ -165,6 +230,9 @@ void TrainStationDbGenerator::writeIBNRMap(QIODevice *out)
     out->write("static const IBNR ibnr_table[] = {\n");
     for (auto it = m_ibnrMap.begin(); it != m_ibnrMap.end(); ++it) {
         const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it->second);
+        if (station == m_stations.end() || (*station).uri != it->second) {
+            continue;
+        }
         out->write("    IBNR{");
         out->write(QByteArray::number(it->first));
         out->write("}, // ");
@@ -176,6 +244,9 @@ void TrainStationDbGenerator::writeIBNRMap(QIODevice *out)
     out->write("static const TrainStationIndex ibnr_index[] = {\n");
     for (auto it = m_ibnrMap.begin(); it != m_ibnrMap.end(); ++it) {
         const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it->second);
+        if (station == m_stations.end() || (*station).uri != it->second) {
+            continue;
+        }
         out->write("    ");
         out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
         out->write(", // ");
@@ -192,6 +263,9 @@ void TrainStationDbGenerator::writeGareConnexionMap(QIODevice *out)
     out->write("static const GaresConnexionsId garesConnexionsId_table[] = {\n");
     for (auto it = m_garesConnexionsIdMap.begin(); it != m_garesConnexionsIdMap.end(); ++it) {
         const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it->second);
+        if (station == m_stations.end() || (*station).uri != it->second) {
+            continue;
+        }
         out->write("    GaresConnexionsId{\"");
         out->write(it->first.toUtf8());
         out->write("\"}, // ");
@@ -203,6 +277,9 @@ void TrainStationDbGenerator::writeGareConnexionMap(QIODevice *out)
     out->write("static const TrainStationIndex garesConnexionsId_index[] = {\n");
     for (auto it = m_garesConnexionsIdMap.begin(); it != m_garesConnexionsIdMap.end(); ++it) {
         const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it->second);
+        if (station == m_stations.end() || (*station).uri != it->second) {
+            continue;
+        }
         out->write("    ");
         out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
         out->write(", // ");
@@ -212,4 +289,15 @@ void TrainStationDbGenerator::writeGareConnexionMap(QIODevice *out)
         out->write("\n");
     }
     out->write("};\n\n");
+}
+
+void TrainStationDbGenerator::printSummary()
+{
+    qDebug() << "Generated database containing" << m_stations.size() << "train stations";
+    qDebug() << "IBNR index:" << m_ibnrMap.size() << "elements";
+    qDebug() << "Gares & Connexions ID index:" << m_garesConnexionsIdMap.size() << "elements";
+    qDebug() << "Identifier collisions:" << m_idConflicts;
+    qDebug() << "Identifier format violations:" << m_idFormatViolations;
+    qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;
+    qDebug() << "Failed timezone lookups:" << m_timezoneLookupFailure;
 }

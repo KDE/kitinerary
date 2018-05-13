@@ -52,14 +52,21 @@ private:
     bool fetchIBNR();
     bool fetchGaresConnexions();
     QUrl insertOrMerge(const QJsonObject &obj);
+    void processStations();
     void writeStationData(QIODevice *out);
     void writeIBNRMap(QIODevice *out);
     void writeGareConnexionMap(QIODevice *out);
+    void printSummary();
 
     std::vector<Station> m_stations;
     std::map<uint32_t, QUrl> m_ibnrMap;
     std::map<QString, QUrl> m_garesConnexionsIdMap;
     Timezones m_tzDb;
+
+    int m_idConflicts = 0;
+    int m_idFormatViolations = 0;
+    int m_timezoneLookupFailure = 0;
+    int m_coordinateConflicts = 0;
 };
 
 }
