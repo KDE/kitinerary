@@ -29,11 +29,6 @@ using namespace KItinerary::Generator;
 
 Timezones::Timezones()
 {
-    if (!m_map.load(QStringLiteral("timezones.png"))) {
-        qCritical() << "Unable to open timezone map.";
-        exit(1);
-    }
-
     QFile colorMap(QStringLiteral("timezones.colormap"));
     if (!colorMap.open(QFile::ReadOnly)) {
         qCritical() << "Unable to open timezone colormap file: " << colorMap.errorString();
@@ -75,6 +70,11 @@ QByteArray Timezones::timezoneForCoordinate(const KnowledgeDb::Coordinate &coord
 {
     if (!coord.isValid()) {
         return {};
+    }
+
+    if (m_map.isNull() && !m_map.load(QStringLiteral("timezones.png"))) {
+        qCritical() << "Unable to open timezone map.";
+        exit(1);
     }
 
     const int x = qRound(m_map.width() * ((coord.longitude + 180.0f)/ 360.0f));

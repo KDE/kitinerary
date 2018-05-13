@@ -46,7 +46,7 @@ private:
     friend class TimezoneDbGenerator;
     QByteArray timezoneForPixel(int x, int y) const;
 
-    QImage m_map;
+    mutable QImage m_map;
     QHash<QRgb, QByteArray> m_colorMap;
     std::vector<QByteArray> m_zones;
     std::vector<uint16_t> m_zoneOffsets;
