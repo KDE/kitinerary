@@ -5,6 +5,7 @@ add_executable(generate-knowledgedb
     wikidata.cpp
     airportdbgenerator.cpp
     timezonedbgenerator.cpp
+    trainstationdbgenerator.cpp
 )
 target_include_directories(generate-knowledgedb PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../knowledgedb)
 target_link_libraries(generate-knowledgedb PRIVATE Qt5::Network Qt5::Gui)
@@ -37,5 +38,6 @@ macro(generate_db dbtype outfile)
 endmacro()
 generate_db(timezone timezonedb_data.cpp)
 generate_db(airport airportdb_data.cpp)
+generate_db(trainstation trainstationdb_data.cpp)
 
 add_custom_target(rebuild-knowledgedb DEPENDS ${outfiles} ${CMAKE_CURRENT_SOURCE_DIR}/timezones.png)

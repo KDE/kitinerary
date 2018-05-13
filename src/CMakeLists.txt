@@ -34,6 +34,7 @@ set(kitinerary_lib_srcs
     knowledgedb/airportdb.cpp
     knowledgedb/knowledgedb.cpp
     knowledgedb/timezonedb.cpp
+    knowledgedb/trainstationdb.cpp
 
     barcodedecoder.cpp
     calendarhandler.cpp
@@ -109,6 +110,7 @@ ecm_generate_headers(KItinerary_KnowledgeDb_FORWARDING_HEADERS
     HEADER_NAMES
         AirportDb
         KnowledgeDb
+        TrainStationDb
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_KnowledgeDb_HEADERS
     RELATIVE knowledgedb
