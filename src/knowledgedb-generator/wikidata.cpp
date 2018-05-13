@@ -51,7 +51,7 @@ QJsonArray WikiData::query(const char *sparqlQuery, const char *cacheFileName)
     QDir().mkdir(QLatin1String("data"));
     QFile cacheFile(QLatin1String("data/") + QString::fromUtf8(cacheFileName));
     QByteArray data;
-    if (cacheFile.exists()) { // TODO make this switchable
+    if (cacheFile.exists() && qEnvironmentVariableIsSet("KITINERARY_USE_WIKIDATA_CACHE")) {
         cacheFile.open(QFile::ReadOnly);
         data = cacheFile.readAll();
         cacheFile.close();
