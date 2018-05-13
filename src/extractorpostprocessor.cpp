@@ -59,6 +59,7 @@ public:
     TrainReservation processTrainReservation(TrainReservation res) const;
     TrainTrip processTrainTrip(TrainTrip trip) const;
     TrainStation processTrainStation(TrainStation station) const;
+    QDateTime processTrainTripTime(QDateTime dt, const TrainStation &station) const;
     QVariant processReservation(QVariant res) const;
     Person processPerson(Person person) const;
 
@@ -260,6 +261,8 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
     trip.setDeparturePlatform(trip.departurePlatform().trimmed());
     trip.setDeparatureStation(processTrainStation(trip.departureStation()));
     trip.setArrivalStation(processTrainStation(trip.arrivalStation()));
+    trip.setDepartureTime(processTrainTripTime(trip.departureTime(), trip.departureStation()));
+    trip.setArrivalTime(processTrainTripTime(trip.arrivalTime(), trip.arrivalStation()));
     return trip;
 }
 
@@ -294,6 +297,42 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
     }
 
     return station;
+}
+
+QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, const TrainStation& station) const
+{
+    if (!dt.isValid()) {
+        return dt;
+    }
+
+    if (dt.timeSpec() == Qt::TimeZone || station.identifier().isEmpty()) {
+        return dt;
+    }
+
+    QTimeZone tz;
+    if (station.identifier().startsWith(QLatin1String("sncf:"))) {
+        const auto record = TrainStationDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{station.identifier().mid(5)});
+        tz = record.timezone.toQTimeZone();
+    } else if (station.identifier().startsWith(QLatin1String("ibnr:"))) {
+        const auto record = TrainStationDb::stationForIbnr(KnowledgeDb::IBNR{station.identifier().mid(5).toUInt()});
+        tz = record.timezone.toQTimeZone();
+    }
+    if (!tz.isValid()) {
+        return dt;
+    }
+
+    // prefer our timezone over externally provided UTC offset, if they match
+    if (dt.timeSpec() == Qt::OffsetFromUTC && tz.offsetFromUtc(dt) != dt.offsetFromUtc()) {
+        return dt;
+    }
+
+    if (dt.timeSpec() == Qt::OffsetFromUTC || dt.timeSpec() == Qt::LocalTime) {
+        dt.setTimeSpec(Qt::TimeZone);
+        dt.setTimeZone(tz);
+    } else if (dt.timeSpec() == Qt::UTC) {
+        dt = dt.toTimeZone(tz);
+    }
+    return dt;
 }
 
 QVariant ExtractorPostprocessorPrivate::processReservation(QVariant res) const
