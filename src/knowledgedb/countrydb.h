@@ -22,6 +22,8 @@
 
 #include <cstdint>
 
+class QString;
+
 namespace KItinerary {
 namespace KnowledgeDb {
 
@@ -41,6 +43,8 @@ public:
         , m_unused(0)
     {}
 
+    KITINERARY_EXPORT explicit CountryId(const QString &id);
+
     inline constexpr bool operator<(CountryId other) const
     {
         return (m_id1 << 5 | m_id2) < (other.m_id1 << 5 | other.m_id2);
@@ -49,6 +53,11 @@ public:
     inline constexpr bool operator!=(CountryId other) const
     {
         return m_id1 != other.m_id1 || m_id2 != other.m_id2;
+    }
+
+    inline constexpr bool isValid() const
+    {
+        return m_id1 != 0 || m_id2 != 0;
     }
 
 private:

@@ -18,6 +18,8 @@
 #include "countrydb.h"
 #include "countrydb_data.cpp"
 
+#include <QString>
+
 #include <algorithm>
 
 using namespace KItinerary;
@@ -34,6 +36,21 @@ const Country* countryTableBegin() { return country_table; }
 const Country* countryTableEnd() { return country_table + country_table_size; }
 
 }
+}
+
+CountryId::CountryId(const QString& id)
+{
+    m_id1 = m_id2 = 0;
+    m_unused = 0;
+
+    if (id.size() != 2) {
+        return;
+    }
+    if (!id.at(0).isUpper() || !id.at(1).isUpper()) {
+        return;
+    }
+    m_id1 = id.at(0).toLatin1() - '@';
+    m_id2 = id.at(1).toLatin1() - '@';
 }
 
 Country KnowledgeDb::countryForId(CountryId id)
