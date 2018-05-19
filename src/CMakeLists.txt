@@ -145,6 +145,7 @@ install(FILES
     ${KItinerary_HEADERS}
     ${KItinerary_AirportDb_HEADERS}
     ${KItinerary_Datatypes_HEADERS}
+    ${KItinerary_KnowledgeDb_HEADERS}
     ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/kitinerary
 )
