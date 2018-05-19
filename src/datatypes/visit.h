@@ -30,7 +30,7 @@ class TouristAttractionVisitPrivate;
 class KITINERARY_EXPORT TouristAttractionVisit
 {
     KITINERARY_GADGET(TouristAttractionVisit)
-    KITINERARY_PROPERTY(TouristAttraction, touristAttraction, setTouristAttraction)
+    KITINERARY_PROPERTY(KItinerary::TouristAttraction, touristAttraction, setTouristAttraction)
     KITINERARY_PROPERTY(QDateTime, arrivalTime, setArrivalTime)
     KITINERARY_PROPERTY(QDateTime, departureTime, setDepartureTime)
     Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
