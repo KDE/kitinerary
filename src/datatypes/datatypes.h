@@ -31,6 +31,13 @@ namespace KItinerary {
 /** JSON-LD data type helper functions. */
 namespace JsonLd {
 
+/** Returns @c true if @p value is of type @tparam T. */
+template <typename T>
+inline bool isA(const QVariant &value)
+{
+    return value.userType() == qMetaTypeId<T>();
+}
+
 /** Checks if the given value can be up-cast to T */
 template <typename T>
 inline bool canConvert(const QVariant &value)
