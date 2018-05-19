@@ -1,6 +1,7 @@
 /*
  * This code is auto-generated from Wikidata data. Licensed under CC0.
  */
+
 namespace KItinerary {
 namespace KnowledgeDb {
 

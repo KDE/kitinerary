@@ -67,7 +67,7 @@ QJsonArray WikiData::query(const char *sparqlQuery, const char *cacheFileName)
         QNetworkAccessManager nam;
         auto reply = nam.get(QNetworkRequest(url));
         QObject::connect(reply, &QNetworkReply::finished, QCoreApplication::instance(), &QCoreApplication::quit);
-        QCoreApplication::instance()->exec();
+        QCoreApplication::exec();
         if (reply->error() != QNetworkReply::NoError) {
             qWarning() << reply->errorString();
             return {};

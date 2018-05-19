@@ -26,7 +26,8 @@ void CodeGen::writeLicenseHeader(QIODevice *out)
 {
     out->write(R"(/*
  * This code is auto-generated from Wikidata data. Licensed under CC0.
- */)");
+ */
+)");
 }
 
 void CodeGen::writeCoordinate(QIODevice* out, const KnowledgeDb::Coordinate& coord)

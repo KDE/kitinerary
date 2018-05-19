@@ -17,6 +17,7 @@
    02110-1301, USA.
 */
 
+#include <KItinerary/CountryDb>
 #include <KItinerary/TrainStationDb>
 
 #include <QDebug>
@@ -73,6 +74,19 @@ private Q_SLOTS:
         QVERIFY(station.coordinate.isValid());
         QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone("Europe/Zurich"));
+    }
+
+    void testCountryDb()
+    {
+        auto country = KnowledgeDb::countryForId(CountryId{});
+        QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Unknown);
+
+        country = KnowledgeDb::countryForId(CountryId{"DE"});
+        QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Right);
+        country = KnowledgeDb::countryForId(CountryId{"GB"});
+        QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Left);
+        country = KnowledgeDb::countryForId(CountryId{"CK"});
+        QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Unknown);
     }
 };
 

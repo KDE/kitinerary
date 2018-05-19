@@ -32,6 +32,7 @@ set(kitinerary_lib_srcs
     datatypes/visit.cpp
 
     knowledgedb/airportdb.cpp
+    knowledgedb/countrydb.cpp
     knowledgedb/knowledgedb.cpp
     knowledgedb/timezonedb.cpp
     knowledgedb/trainstationdb.cpp
@@ -109,6 +110,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
 ecm_generate_headers(KItinerary_KnowledgeDb_FORWARDING_HEADERS
     HEADER_NAMES
         AirportDb
+        CountryDb
         KnowledgeDb
         TrainStationDb
     PREFIX KItinerary

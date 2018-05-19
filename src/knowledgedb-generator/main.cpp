@@ -16,6 +16,7 @@
 */
 
 #include "airportdbgenerator.h"
+#include "countrydbgenerator.h"
 #include "timezonedbgenerator.h"
 #include "trainstationdbgenerator.h"
 
@@ -46,6 +47,9 @@ int main(int argc, char **argv)
     if (parser.value(dbOpt) == QLatin1String("airport")) {
         AirportDbGenerator gen;
         gen.generate(&out);
+    } else if (parser.value(dbOpt) == QLatin1String("country")) {
+        CountryDbGenerator gen;
+        return gen.generate(&out) ? 0 : 1;
     } else if (parser.value(dbOpt) == QLatin1String("timezone")) {
         TimezoneDbGenerator gen;
         gen.generate(&out);
