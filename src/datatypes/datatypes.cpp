@@ -32,6 +32,8 @@ struct StartupFunction {
         qRegisterMetaType<Airport>();
         qRegisterMetaType<Person>();
         qRegisterMetaType<Organization>();
+        qRegisterMetaType<TouristAttraction>();
+        qRegisterMetaType<TrainStation>();
     }
 };
 
