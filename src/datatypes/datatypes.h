@@ -88,7 +88,7 @@ private:
     Q_PROPERTY(Type Name READ Name WRITE SetName STORED true) \
 public: \
     Type Name() const; \
-    void SetName(KItinerary::detail::parameter_type<Type>::type v); \
+    void SetName(KItinerary::detail::parameter_type<Type>::type value); \
 private:
 
 ///@endcond
