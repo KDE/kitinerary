@@ -21,30 +21,16 @@
 #include "wikidata.h"
 
 #include <airportdb_p.h>
-#include <knowledgedb.h>
 
 #include <QDebug>
 #include <QIODevice>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QRegularExpression>
-#include <QUrl>
 
 using namespace KItinerary;
 using namespace KItinerary::AirportDb;
 using namespace KItinerary::Generator;
-
-struct Airport
-{
-    QUrl uri;
-    QString iataCode;
-    QString icaoCode;
-    QString label;
-    QString alias;
-    QByteArray tz;
-    int tzOffset;
-    KnowledgeDb::Coordinate coord;
-};
 
 static bool soundsMilitaryish(const QString &s)
 {
@@ -87,9 +73,7 @@ static void stripAirportAllLanguages(QStringList &s)
     s.removeAll(QLatin1String("terminal"));
 }
 
-int coordinateConflicts = 0;
-
-static void merge(Airport &lhs, const Airport &rhs)
+void AirportDbGenerator::merge(Airport &lhs, const Airport &rhs)
 {
     if (lhs.iataCode != rhs.iataCode) {
         qWarning() << "Multiple IATA codes on" << lhs.uri; // this can actually be valid, see BSL/MLH/EAP
@@ -109,7 +93,7 @@ static void merge(Airport &lhs, const Airport &rhs)
         lhs.coord = rhs.coord;
     } else if (rhs.coord.isValid()) {
         if (std::abs(lhs.coord.latitude - rhs.coord.latitude) > 0.2f || std::abs(lhs.coord.longitude - rhs.coord.longitude) > 0.2f) {
-            ++coordinateConflicts;
+            ++m_coordinateConflicts;
             qDebug() << lhs.uri << "has multiple conflicting coordinates";
         }
         // pick always the same independent of the input order, so stabilize generated output
@@ -139,9 +123,6 @@ void AirportDbGenerator::generate(QIODevice* out)
         exit(1);
     }
 
-    QHash<QUrl, Airport> airportMap;
-    QMap<QString, QUrl> iataMap;
-    int iataCollisions = 0;
     for (const auto &data: airportArray) {
         const auto obj = data.toObject();
         if (obj.isEmpty()) {
@@ -170,40 +151,39 @@ void AirportDbGenerator::generate(QIODevice* out)
         a.coord = WikiData::parseCoordinate(obj.value(QLatin1String("coord")).toObject().value(QLatin1String("value")).toString());
 
         // merge multiple records for the same airport
-        auto it = airportMap.find(a.uri);
-        if (it != airportMap.end()) {
+        auto it = m_airportMap.find(a.uri);
+        if (it != m_airportMap.end()) {
             merge(*it, a);
             // continue nevertheless, to deal with multiple IATA codes per airport (e.g. BSL/MLH/EAP)
         } else {
-            airportMap.insert(a.uri, a);
+            m_airportMap.insert(a.uri, a);
         }
 
         // TODO deal with IATA code duplications
-        if (iataMap.contains(a.iataCode) && iataMap.value(a.iataCode) != a.uri) {
-            ++iataCollisions;
-            qDebug() << "duplicate iata code:" << a.iataCode << a.label << a.uri << airportMap.value(iataMap.value(a.iataCode)).label << airportMap.value(iataMap.value(a.iataCode)).uri;
+        if (m_iataMap.contains(a.iataCode) && m_iataMap.value(a.iataCode) != a.uri) {
+            ++m_iataCollisions;
+            qDebug() << "duplicate iata code:" << a.iataCode << a.label << a.uri << m_airportMap.value(m_iataMap.value(a.iataCode)).label << m_airportMap.value(m_iataMap.value(a.iataCode)).uri;
         }
-        iataMap.insert(a.iataCode, a.uri);
+        m_iataMap.insert(a.iataCode, a.uri);
     }
 
     // step 2 augment the data with timezones
     Timezones tzDb;
-    int timezoneLoopupFails = 0;
-    for (auto it = airportMap.begin(); it != airportMap.end(); ++it) {
+    for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
         if (!(*it).coord.isValid()) {
             continue;
         }
         (*it).tz = tzDb.timezoneForCoordinate((*it).coord);
         if ((*it).tz.isEmpty()) {
             qDebug() << "Failed to find timezone for" << (*it).iataCode << (*it).label << (*it).coord.latitude << (*it).coord.longitude << (*it).uri;
-            ++timezoneLoopupFails;
+            ++m_timezoneLoopupFails;
             continue;
         }
     }
 
     // step 3 index the names for reverse lookup
     QMap<QString, QVector<QString> > labelMap;
-    for (auto it = airportMap.begin(); it != airportMap.end(); ++it) {
+    for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
         auto l = QString(it.value().label + QLatin1Char(' ') + it.value().alias)
                  .split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
         std::for_each(l.begin(), l.end(), [](QString &s) {
@@ -246,11 +226,11 @@ static constexpr IataCode iata_table[] = {
 )");
 
     // IATA to airport data index
-    for (auto it = iataMap.constBegin(); it != iataMap.constEnd(); ++it) {
+    for (auto it = m_iataMap.constBegin(); it != m_iataMap.constEnd(); ++it) {
         out->write("    IataCode{\"");
         out->write(it.key().toUtf8());
         out->write("\"}, // ");
-        out->write(airportMap.value(it.value()).label.toUtf8());
+        out->write(m_airportMap.value(it.value()).label.toUtf8());
         out->write("\n");
     }
     out->write(R"(};
@@ -261,8 +241,8 @@ static constexpr Coordinate coordinate_table[] = {
 )");
     // airport data tables - coordinates
     // TODO: should be possible to squeeze into 48 bit per coordinate, as 10m resolution is good enough for us
-    for (auto it = iataMap.constBegin(); it != iataMap.constEnd(); ++it) {
-        const auto &airport = airportMap.value(it.value());
+    for (auto it = m_iataMap.constBegin(); it != m_iataMap.constEnd(); ++it) {
+        const auto &airport = m_airportMap.value(it.value());
         out->write("    ");
         CodeGen::writeCoordinate(out, airport.coord);
         out->write(", // ");
@@ -274,8 +254,8 @@ static constexpr Coordinate coordinate_table[] = {
 // timezone name string table indexes
 static const Timezone timezone_table[] = {
 )");
-    for (auto it = iataMap.constBegin(); it != iataMap.constEnd(); ++it) {
-        const auto &airport = airportMap.value(it.value());
+    for (auto it = m_iataMap.constBegin(); it != m_iataMap.constEnd(); ++it) {
+        const auto &airport = m_airportMap.value(it.value());
         out->write("    ");
         CodeGen::writeTimezone(out, &tzDb, airport.tz);
         out->write(", // ");
@@ -304,7 +284,7 @@ static const char name1_string_table[] =
         out->write("\" // ");
         out->write(it.value().at(0).toUtf8());
         out->write("\n");
-        string_offsets.push_back(Name1Index{label_offset, (uint8_t)it.key().toUtf8().size(), (uint16_t)std::distance(iataMap.begin(), iataMap.find(it.value().at(0)))});
+        string_offsets.push_back(Name1Index{label_offset, (uint8_t)it.key().toUtf8().size(), (uint16_t)std::distance(m_iataMap.begin(), m_iataMap.find(it.value().at(0)))});
         label_offset += it.key().toUtf8().size();
     }
     out->write(R"(;
@@ -356,7 +336,7 @@ static const uint16_t nameN_iata_table[] = {
     for (const auto &offset : stringN_offsets) {
         out->write("    ");
         for (const auto &iataCode : offset.iataList) {
-            out->write(QByteArray::number(std::distance(iataMap.begin(), iataMap.find(iataCode))));
+            out->write(QByteArray::number(std::distance(m_iataMap.begin(), m_iataMap.find(iataCode))));
             out->write(", ");
         }
         out->write(" // ");
@@ -384,9 +364,9 @@ static const NameNIndex nameN_string_index[] = {
 }
 )");
 
-    qDebug() << "Generated database containing" << iataMap.size() << "airports";
+    qDebug() << "Generated database containing" << m_iataMap.size() << "airports";
     qDebug() << "Name fragment index:" << string_offsets.size() << "unique keys," << labelMap.size() - string_offsets.size() << "non-unique keys";
-    qDebug() << "IATA code collisions:" << iataCollisions;
-    qDebug() << "Coordinate conflicts:" << coordinateConflicts;
-    qDebug() << "Failed timezone lookups:" << timezoneLoopupFails;
+    qDebug() << "IATA code collisions:" << m_iataCollisions;
+    qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;
+    qDebug() << "Failed timezone lookups:" << m_timezoneLoopupFails;
 }

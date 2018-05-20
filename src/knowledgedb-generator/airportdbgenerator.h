@@ -18,6 +18,12 @@
 #ifndef KITINERARY_AIRPORTDBGENERATOR_H
 #define KITINERARY_AIRPORTDBGENERATOR_H
 
+#include <knowledgedb.h>
+
+#include <QHash>
+#include <QMap>
+#include <QUrl>
+
 class QIODevice;
 
 namespace KItinerary {
@@ -28,6 +34,27 @@ class AirportDbGenerator
 {
 public:
     void generate(QIODevice *out);
+
+    struct Airport
+    {
+        QUrl uri;
+        QString iataCode;
+        QString icaoCode;
+        QString label;
+        QString alias;
+        QByteArray tz;
+        int tzOffset;
+        KnowledgeDb::Coordinate coord;
+    };
+private:
+    void merge(Airport &lhs, const Airport &rhs);
+
+    QHash<QUrl, Airport> m_airportMap;
+    QMap<QString, QUrl> m_iataMap;
+
+    int m_iataCollisions = 0;
+    int m_coordinateConflicts = 0;
+    int m_timezoneLoopupFails = 0;
 };
 
 }
