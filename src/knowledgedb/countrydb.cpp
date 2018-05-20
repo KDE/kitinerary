@@ -18,6 +18,7 @@
 #include "countrydb.h"
 #include "countrydb_data.cpp"
 
+#include <QDebug>
 #include <QString>
 
 #include <algorithm>
@@ -71,6 +72,56 @@ QString KnowledgeDb::CountryId::toString() const
     s[0] = QLatin1Char('@' + m_id1);
     s[1] = QLatin1Char('@' + m_id2);
     return s;
+}
+
+struct PowerPlugCompatMap {
+    PowerPlugType plug;
+    PowerPlugTypes sockets;
+};
+
+static const PowerPlugCompatMap power_plug_compat_map[] = {
+    { TypeA, TypeA | TypeB },
+    { TypeB, TypeB },
+    { TypeC, TypeC | TypeE | TypeF | TypeH | TypeJ | TypeK | TypeL | TypeN },
+    { TypeD, TypeD },
+    { TypeE, TypeE | TypeF | TypeK }, // TypeE <-> TypeF not strictly correct, but in practise almost always compatible
+    { TypeF, TypeE | TypeF | TypeK },
+    { TypeG, TypeG },
+    { TypeH, TypeH },
+    { TypeI, TypeI },
+    { TypeJ, TypeJ },
+    { TypeK, TypeK },
+    { TypeL, TypeL },
+    { TypeM, TypeM },
+    { TypeN, TypeN }
+};
+
+PowerPlugTypes KnowledgeDb::incompatiblePowerPlugs(PowerPlugTypes plugs, PowerPlugTypes sockets)
+{
+    PowerPlugTypes failPlugs{};
+    for (const auto map : power_plug_compat_map) {
+        if ((plugs & map.plug) == 0) {
+            continue;
+        }
+        if ((map.sockets & sockets) == 0) {
+            failPlugs |= map.plug;
+        }
+    }
+    return failPlugs;
+}
+
+PowerPlugTypes KnowledgeDb::incompatiblePowerSockets(PowerPlugTypes plugs, PowerPlugTypes sockets)
+{
+    PowerPlugTypes failSockets{};
+    for (const auto map : power_plug_compat_map) {
+        if ((plugs & map.plug) == 0) {
+            continue;
+        }
+        if ((map.sockets & ~sockets) != 0) {
+            failSockets |= (map.sockets ^ sockets) & sockets;
+        }
+    }
+    return failSockets & ~plugs;
 }
 
 #include "moc_countrydb.cpp"

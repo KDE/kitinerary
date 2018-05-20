@@ -97,6 +97,47 @@ private Q_SLOTS:
         country = KnowledgeDb::countryForId(CountryId{"CK"});
         QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Unknown);
     }
+
+    void testPowerPlugCompat_data()
+    {
+        using namespace KnowledgeDb;
+
+        QTest::addColumn<PowerPlugTypes>("plugs");
+        QTest::addColumn<PowerPlugTypes>("sockets");
+        QTest::addColumn<PowerPlugTypes>("failPlugs");
+        QTest::addColumn<PowerPlugTypes>("failSockets");
+
+        QTest::newRow("empty") << PowerPlugTypes{} << PowerPlugTypes{} << PowerPlugTypes{} << PowerPlugTypes{};
+        QTest::newRow("DE-DE") << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{} << PowerPlugTypes{};
+        QTest::newRow("DE-CH") << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeC|TypeJ} << PowerPlugTypes{TypeF} << PowerPlugTypes{TypeJ};
+        QTest::newRow("CH-DE") << PowerPlugTypes{TypeC|TypeJ} << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeJ} << PowerPlugTypes{TypeF};
+        QTest::newRow("DE-FR") << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeC|TypeE} << PowerPlugTypes{} << PowerPlugTypes{};
+        QTest::newRow("DE-GB") << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeG} << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeG};
+        QTest::newRow("DE-IT") << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeC|TypeF|TypeL} << PowerPlugTypes{} << PowerPlugTypes{TypeL};
+        QTest::newRow("IT-DE") << PowerPlugTypes{TypeC|TypeF|TypeL} << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeL} << PowerPlugTypes{};
+        QTest::newRow("DE-IL") << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeC|TypeH|TypeM} << PowerPlugTypes{TypeF} << PowerPlugTypes{TypeH|TypeM};
+        QTest::newRow("DE-AO") << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeC} << PowerPlugTypes{TypeF} << PowerPlugTypes{};
+        QTest::newRow("AO-DE") << PowerPlugTypes{TypeC} << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{} << PowerPlugTypes{};
+        QTest::newRow("DE-DK") << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeC|TypeE|TypeF|TypeK} << PowerPlugTypes{} << PowerPlugTypes{};
+        QTest::newRow("DK-DE") << PowerPlugTypes{TypeC|TypeF|TypeE|TypeK} << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeK} << PowerPlugTypes{};
+        QTest::newRow("DE-ZA") << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeC|TypeD|TypeM|TypeN} << PowerPlugTypes{TypeF} << PowerPlugTypes{TypeD|TypeM|TypeN};
+        QTest::newRow("ZA-CH") << PowerPlugTypes{TypeC|TypeD|TypeM|TypeN} << PowerPlugTypes{TypeC|TypeJ} << PowerPlugTypes{TypeD|TypeM|TypeN} << PowerPlugTypes{TypeJ};
+        QTest::newRow("ZA-DE") << PowerPlugTypes{TypeC|TypeD|TypeM|TypeN} << PowerPlugTypes{TypeC|TypeF} << PowerPlugTypes{TypeD|TypeM|TypeN} << PowerPlugTypes{TypeF};
+        QTest::newRow("ZA-IT") << PowerPlugTypes{TypeC|TypeD|TypeM|TypeN} << PowerPlugTypes{TypeC|TypeF|TypeL} << PowerPlugTypes{TypeD|TypeM|TypeN} << PowerPlugTypes{TypeF|TypeL};
+    }
+
+    void testPowerPlugCompat()
+    {
+        using namespace KnowledgeDb;
+
+        QFETCH(PowerPlugTypes, plugs);
+        QFETCH(PowerPlugTypes, sockets);
+        QFETCH(PowerPlugTypes, failPlugs);
+        QFETCH(PowerPlugTypes, failSockets);
+
+        QCOMPARE(KnowledgeDb::incompatiblePowerPlugs(plugs, sockets), failPlugs);
+        QCOMPARE(KnowledgeDb::incompatiblePowerSockets(plugs, sockets), failSockets);
+    }
 };
 
 QTEST_APPLESS_MAIN(KnowledgeDbTest)

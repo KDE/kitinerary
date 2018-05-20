@@ -108,6 +108,13 @@ enum PowerPlugType : uint16_t {
 Q_DECLARE_FLAGS(PowerPlugTypes, PowerPlugType)
 Q_FLAG_NS(PowerPlugTypes)
 
+/** Returns the power plugs out of @p plugs that wont fit into @p sockets. */
+KITINERARY_EXPORT PowerPlugTypes incompatiblePowerPlugs(PowerPlugTypes plugs, PowerPlugTypes sockets);
+/** Returns the power sockets out pf @p sockets that are unable to receive plugs
+ *  out of @p plugs, excluding those in @p plugs.
+ */
+KITINERARY_EXPORT PowerPlugTypes incompatiblePowerSockets(PowerPlugTypes plugs, PowerPlugTypes sockets);
+
 /** Country information. */
 struct Country
 {
