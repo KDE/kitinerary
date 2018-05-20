@@ -46,7 +46,7 @@ static bool operator<(const TrainStationDbGenerator::Station &lhs, const QUrl &r
 bool TrainStationDbGenerator::generate(QIODevice *out)
 {
     // retrieve content from Wikidata
-    if (!fetchIBNR() || !fetchGaresConnexions()) {
+    if (!fetchIBNR() || !fetchGaresConnexions() || !fetchCountryInformation()) {
         return false;
     }
 
@@ -149,7 +149,27 @@ bool TrainStationDbGenerator::fetchGaresConnexions()
     return true;
 }
 
-QUrl TrainStationDbGenerator::insertOrMerge(const QJsonObject &obj)
+bool TrainStationDbGenerator::fetchCountryInformation()
+{
+    const auto stationArray = WikiData::query(R"(
+        SELECT DISTINCT ?station ?isoCode WHERE {
+            ?station (wdt:P31/wdt:P279*) wd:Q55488.
+            ?station wdt:P17 ?country.
+            ?country wdt:P297 ?isoCode.
+        } ORDER BY (?station))", "wikidata_trainstation_country.json");
+    if (stationArray.isEmpty()) {
+        qWarning() << "Empty query result!";
+        return false;
+    }
+
+    for (const auto &stationData : stationArray) {
+        const auto uri = insertOrMerge(stationData.toObject(), true);
+    }
+
+    return true;
+}
+
+QUrl TrainStationDbGenerator::insertOrMerge(const QJsonObject &obj, bool mergeOnly)
 {
     if (obj.isEmpty()) {
         return {};
@@ -159,9 +179,13 @@ QUrl TrainStationDbGenerator::insertOrMerge(const QJsonObject &obj)
     s.uri = QUrl(obj.value(QLatin1String("station")).toObject().value(QLatin1String("value")).toString());
     s.name = obj.value(QLatin1String("stationLabel")).toObject().value(QLatin1String("value")).toString();
     s.coord = WikiData::parseCoordinate(obj.value(QLatin1String("coord")).toObject().value(QLatin1String("value")).toString());
+    s.isoCode = obj.value(QLatin1String("isoCode")).toObject().value(QLatin1String("value")).toString();
 
     const auto it = std::lower_bound(m_stations.begin(), m_stations.end(), s);
     if (it != m_stations.end() && (*it).uri == s.uri) {
+        if ((*it).name.isEmpty()) {
+            (*it).name = s.name;
+        }
         // check for coordinate conflicts
         if (s.coord.isValid() && (*it).coord.isValid()) {
             if (std::abs(s.coord.latitude - (*it).coord.latitude) > 0.2f || std::abs(s.coord.longitude - (*it).coord.longitude) > 0.2f) {
@@ -172,11 +196,21 @@ QUrl TrainStationDbGenerator::insertOrMerge(const QJsonObject &obj)
             (*it).coord.latitude = std::min((*it).coord.latitude, s.coord.latitude);
             (*it).coord.longitude = std::min((*it).coord.longitude, s.coord.longitude);
         }
+        if ((*it).isoCode != s.isoCode && !s.isoCode.isEmpty()) {
+            if (!(*it).isoCode.isEmpty()) {
+                ++m_countryConflicts;
+                qWarning() << s.uri << (*it).name << "has multiple country codes";
+            } else {
+                (*it).isoCode = s.isoCode;
+            }
+        }
 
         return s.uri;
     }
 
-    m_stations.insert(it, s);
+    if (!mergeOnly) {
+        m_stations.insert(it, s);
+    }
     return s.uri;
 }
 
@@ -193,7 +227,7 @@ void TrainStationDbGenerator::processStations()
             qWarning() << "Timezone lookup failure:" << (*it).name << (*it).uri;
         }
 
-        if (!(*it).coord.isValid() && (*it).tz.isEmpty()) { // no useful information
+        if (!(*it).coord.isValid() && (*it).tz.isEmpty() && (*it).isoCode.isEmpty()) { // no useful information
             it = m_stations.erase(it);
         } else {
             ++it;
@@ -209,6 +243,8 @@ void TrainStationDbGenerator::writeStationData(QIODevice *out)
         CodeGen::writeCoordinate(out, station.coord);
         out->write(", ");
         CodeGen::writeTimezone(out, &m_tzDb, station.tz);
+        out->write(", ");
+        CodeGen::writeCountryIsoCode(out, station.isoCode);
         out->write("}, // ");
         out->write(station.name.toUtf8());
         out->write("\n");
@@ -290,5 +326,6 @@ void TrainStationDbGenerator::printSummary()
     qDebug() << "Identifier collisions:" << m_idConflicts;
     qDebug() << "Identifier format violations:" << m_idFormatViolations;
     qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;
+    qDebug() << "Country ISO code conflicts: " << m_countryConflicts;
     qDebug() << "Failed timezone lookups:" << m_timezoneLookupFailure;
 }

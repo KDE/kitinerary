@@ -22,6 +22,7 @@
 
 class QByteArray;
 class QIODevice;
+class QString;
 
 namespace KItinerary {
 namespace Generator {
@@ -33,6 +34,7 @@ namespace CodeGen
 {
     void writeLicenseHeader(QIODevice *out);
     void writeCoordinate(QIODevice *out, const KnowledgeDb::Coordinate &coord);
+    void writeCountryIsoCode(QIODevice *out, const QString &isoCode);
     void writeTimezone(QIODevice *out, Timezones *tzDb, const QByteArray &tzName);
 }
 

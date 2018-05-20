@@ -46,12 +46,14 @@ public:
         QString name;
         KnowledgeDb::Coordinate coord;
         QByteArray tz;
+        QString isoCode;
     };
 
 private:
     bool fetchIBNR();
     bool fetchGaresConnexions();
-    QUrl insertOrMerge(const QJsonObject &obj);
+    bool fetchCountryInformation();
+    QUrl insertOrMerge(const QJsonObject &obj, bool mergeOnly = false);
     void processStations();
     void writeStationData(QIODevice *out);
     void writeIBNRMap(QIODevice *out);
@@ -67,6 +69,7 @@ private:
     int m_idFormatViolations = 0;
     int m_timezoneLookupFailure = 0;
     int m_coordinateConflicts = 0;
+    int m_countryConflicts = 0;
 };
 
 }

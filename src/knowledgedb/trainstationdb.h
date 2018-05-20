@@ -19,6 +19,7 @@
 #define KITINERARY_TRAINSTATIONDB_H
 
 #include "kitinerary_export.h"
+#include "countrydb.h"
 #include "knowledgedb.h"
 #include "timezonedb.h"
 
@@ -39,6 +40,7 @@ typedef uint16_t TrainStationIndex;
 struct TrainStation {
     Coordinate coordinate;
     Timezone timezone;
+    CountryId country;
 };
 
 /** IBNR station id.

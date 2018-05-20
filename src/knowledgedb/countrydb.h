@@ -53,6 +53,11 @@ public:
         return (m_id1 << 5 | m_id2) < (other.m_id1 << 5 | other.m_id2);
     }
 
+    inline constexpr bool operator==(CountryId other) const
+    {
+        return m_id1 == other.m_id1 && m_id2 == other.m_id2;
+    }
+
     inline constexpr bool operator!=(CountryId other) const
     {
         return m_id1 != other.m_id1 || m_id2 != other.m_id2;

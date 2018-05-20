@@ -41,6 +41,17 @@ void CodeGen::writeCoordinate(QIODevice* out, const KnowledgeDb::Coordinate& coo
     out->write("}");
 }
 
+void CodeGen::writeCountryIsoCode(QIODevice *out, const QString &isoCode)
+{
+    out->write("CountryId{");
+    if (!isoCode.isEmpty()) {
+        out->write("\"");
+        out->write(isoCode.toUtf8());
+        out->write("\"");
+    }
+    out->write("}");
+}
+
 void CodeGen::writeTimezone(QIODevice *out, Timezones *tzDb, const QByteArray &tzName)
 {
     if (tzName.isEmpty()) {
