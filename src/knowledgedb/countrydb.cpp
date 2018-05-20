@@ -59,7 +59,7 @@ Country KnowledgeDb::countryForId(CountryId id)
         return lhs.id < rhs;
     });
     if (it == countryTableEnd() || (*it).id != id) {
-        return {};
+        return {CountryId{}, DrivingSide::Unknown, Unknown};
     }
     return (*it);
 }

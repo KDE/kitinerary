@@ -54,7 +54,7 @@ TrainStation TrainStationDb::stationForIbnr(IBNR ibnr)
 {
     const auto ibnrIt = std::lower_bound(ibnrTableBegin(), ibnrTableEnd(), ibnr);
     if (ibnrIt == ibnrTableEnd() || *ibnrIt != ibnr) {
-        return {};
+        return {Coordinate{}, Timezone{}, CountryId{}};
     }
 
     return trainstation_table[ibnr_index[std::distance(ibnrTableBegin(), ibnrIt)]];
@@ -64,7 +64,7 @@ TrainStation TrainStationDb::stationForGaresConnexionsId(GaresConnexionsId gares
 {
     const auto gcIt = std::lower_bound(garesConnexionsIdBegin(), garesConnexionsIdEnd(), garesConnexionsId);
     if (gcIt == garesConnexionsIdEnd() || *gcIt != garesConnexionsId) {
-        return {};
+        return {Coordinate{}, Timezone{}, CountryId{}};
     }
 
     return trainstation_table[garesConnexionsId_index[std::distance(garesConnexionsIdBegin(), gcIt)]];
