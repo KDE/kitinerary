@@ -63,3 +63,5 @@ Country KnowledgeDb::countryForId(CountryId id)
     }
     return (*it);
 }
+
+#include "moc_countrydb.cpp"

@@ -20,12 +20,15 @@
 
 #include "kitinerary_export.h"
 
+#include <QMetaType>
+
 #include <cstdint>
 
 class QString;
 
 namespace KItinerary {
 namespace KnowledgeDb {
+    KITINERARY_EXPORT Q_NAMESPACE
 
 /** ISO 3166-1 alpha 2 country identifier. */
 class CountryId
@@ -71,6 +74,7 @@ enum class DrivingSide : uint8_t {
     Left,
     Right,
 };
+Q_ENUM_NS(DrivingSide)
 
 /** Country information. */
 struct Country
@@ -88,5 +92,7 @@ KITINERARY_EXPORT Country countryForId(CountryId id);
 
 }
 }
+
+Q_DECLARE_METATYPE(KItinerary::KnowledgeDb::DrivingSide)
 
 #endif // KITINERARY_COUNTRYDB_H
