@@ -68,6 +68,8 @@ public:
         return m_id1 != 0 || m_id2 != 0;
     }
 
+    KITINERARY_EXPORT QString toString() const;
+
 private:
     uint16_t m_id1 : 5;
     uint16_t m_id2 : 5;

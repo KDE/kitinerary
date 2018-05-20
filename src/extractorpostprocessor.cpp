@@ -286,6 +286,10 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
             geo.setLongitude(record.coordinate.longitude);
             station.setGeo(geo);
         }
+        if (addr.addressCountry().isEmpty() && record.country.isValid()) {
+            addr.setAddressCountry(record.country.toString());
+            station.setAddress(addr);
+        }
     } else if (id.startsWith(QLatin1String("ibnr:")) && id.size() == 12) {
         const auto record = TrainStationDb::stationForIbnr(KnowledgeDb::IBNR{id.mid(5).toUInt()});
         if (!station.geo().isValid() && record.coordinate.isValid()) {
@@ -293,6 +297,11 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
             geo.setLatitude(record.coordinate.latitude);
             geo.setLongitude(record.coordinate.longitude);
             station.setGeo(geo);
+        }
+        auto addr = station.address();
+        if (addr.addressCountry().isEmpty() && record.country.isValid()) {
+            addr.setAddressCountry(record.country.toString());
+            station.setAddress(addr);
         }
     }
 

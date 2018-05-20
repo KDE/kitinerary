@@ -64,4 +64,13 @@ Country KnowledgeDb::countryForId(CountryId id)
     return (*it);
 }
 
+QString KnowledgeDb::CountryId::toString() const
+{
+    QString s;
+    s.resize(2);
+    s[0] = QLatin1Char('@' + m_id1);
+    s[1] = QLatin1Char('@' + m_id2);
+    return s;
+}
+
 #include "moc_countrydb.cpp"
