@@ -60,23 +60,25 @@ static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &e
 
 QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
 {
-#ifdef HAVE_KCAL
-    if (reservation.userType() == qMetaTypeId<FlightReservation>()) {
+    if (JsonLd::isA<FlightReservation>(reservation)) {
         const auto flight = reservation.value<FlightReservation>().reservationFor().value<Flight>();
         if (flight.departureTime().isValid()) {
             return flight.departureTime();
         }
         return QDateTime(flight.departureDay(), QTime());
-    } else if (reservation.userType() == qMetaTypeId<TrainReservation>()
-        || reservation.userType() == qMetaTypeId<BusReservation>()) {
-        const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
-        return JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
-    } else if (reservation.userType() == qMetaTypeId<LodgingReservation>()) {
+    }
+    if (JsonLd::isA<TrainReservation>(reservation)) {
+        return reservation.value<TrainReservation>().reservationFor().value<TrainTrip>().departureTime();
+    }
+    if (JsonLd::isA<BusReservation>(reservation)) {
+        return reservation.value<BusReservation>().reservationFor().value<BusTrip>().departureTime();
+    }
+    if (JsonLd::isA<LodgingReservation>(reservation)) {
         return reservation.value<LodgingReservation>().checkinTime();
     }
-#else
-    Q_UNUSED(reservation);
-#endif
+    if (JsonLd::isA<FoodEstablishmentReservation>(reservation)) {
+        return reservation.value<FoodEstablishmentReservation>().startTime();
+    }
     return {};
 }
 
