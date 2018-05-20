@@ -18,6 +18,7 @@
 #ifndef KITINERARY_GENERATOR_COUNTRYDBGENERATOR_H
 #define KITINERARY_GENERATOR_COUNTRYDBGENERATOR_H
 
+#include <QSet>
 #include <QUrl>
 
 #include <map>
@@ -40,11 +41,13 @@ public:
         QUrl uri;
         QString name;
         QString drivingSide;
+        QSet<QString> powerPlugTypes;
     };
 
 private:
     bool fetchCountryList();
     bool fetchDrivingDirections();
+    bool fetchPowerPlugTypes();
     QUrl insertOrMerge(const QJsonObject &obj);
     void writeCountryTable(QIODevice *out);
     void printSummary();

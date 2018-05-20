@@ -69,6 +69,7 @@ private:
     uint16_t m_unused : 6;
 };
 
+/** Driving side. */
 enum class DrivingSide : uint8_t {
     Unknown,
     Left,
@@ -76,12 +77,36 @@ enum class DrivingSide : uint8_t {
 };
 Q_ENUM_NS(DrivingSide)
 
+/** Power plug types.
+ *  @note This cannot be an enum class due to QTBUG-47652.
+ */
+enum PowerPlugType : uint16_t {
+    Unknown = 0,
+    TypeA = 1 << 0,  ///< US two-pin plugs
+    TypeB = 1 << 1,  ///< US three-pin plugs
+    TypeC = 1 << 2,  ///< Europlug
+    TypeD = 1 << 3,  ///< Type D
+    TypeE = 1 << 4,  ///< French plug
+    TypeF = 1 << 5,  ///< Schuko plug
+    TypeG = 1 << 6,  ///< UK plug
+    TypeH = 1 << 7,  ///< Israel plug
+    TypeI = 1 << 8,  ///< Australian plug
+    TypeJ = 1 << 9,  ///< Swiss plug
+    TypeK = 1 << 10, ///< Danish plug
+    TypeL = 1 << 11, ///< Type L
+    TypeM = 1 << 12, ///< Type M
+    TypeN = 1 << 13, ///< Type N (Brasilian)
+};
+
+Q_DECLARE_FLAGS(PowerPlugTypes, PowerPlugType)
+Q_FLAG_NS(PowerPlugTypes)
+
 /** Country information. */
 struct Country
 {
     CountryId id;
     DrivingSide drivingSide;
-    // TODO power plugs
+    PowerPlugTypes powerPlugTypes;
     // TODO voltage/frequency
     // TODO currency
 };
@@ -93,6 +118,8 @@ KITINERARY_EXPORT Country countryForId(CountryId id);
 }
 }
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KItinerary::KnowledgeDb::PowerPlugTypes)
 Q_DECLARE_METATYPE(KItinerary::KnowledgeDb::DrivingSide)
+Q_DECLARE_METATYPE(KItinerary::KnowledgeDb::PowerPlugTypes)
 
 #endif // KITINERARY_COUNTRYDB_H

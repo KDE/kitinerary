@@ -80,11 +80,14 @@ private Q_SLOTS:
     {
         auto country = KnowledgeDb::countryForId(CountryId{});
         QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Unknown);
+        QCOMPARE(country.powerPlugTypes, {Unknown});
 
         country = KnowledgeDb::countryForId(CountryId{"DE"});
         QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Right);
+        QCOMPARE(country.powerPlugTypes, {TypeC|TypeF});
         country = KnowledgeDb::countryForId(CountryId{"GB"});
         QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Left);
+        QCOMPARE(country.powerPlugTypes, {TypeG});
         country = KnowledgeDb::countryForId(CountryId{"CK"});
         QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Unknown);
     }

@@ -45,7 +45,7 @@ static bool operator<(const CountryDbGenerator::Country &lhs, const QUrl &rhs)
 
 bool CountryDbGenerator::generate(QIODevice* out)
 {
-    if (!fetchCountryList() || !fetchDrivingDirections()) {
+    if (!fetchCountryList() || !fetchDrivingDirections() || !fetchPowerPlugTypes()) {
         return false;
     }
 
@@ -124,6 +124,28 @@ bool CountryDbGenerator::fetchDrivingDirections()
     return true;
 }
 
+bool CountryDbGenerator::fetchPowerPlugTypes()
+{
+    const auto countryArray = WikiData::query(R"(
+        SELECT DISTINCT ?country ?plugType ?plugTypeEndTime WHERE {
+            ?country wdt:P31 wd:Q6256.
+            ?country p:P2853 ?plugTypeStmt.
+            ?plugTypeStmt ps:P2853 ?plugType.
+            OPTIONAL { ?plugTypeStmt pq:P582 ?plugTypeEndTime. }
+        } ORDER BY (?country))", "wikidata_country_power_plug_type.json");
+    if (countryArray.isEmpty()) {
+        qWarning() << "Empty query result!";
+        return false;
+    }
+
+    for (const auto &countryData : countryArray) {
+        const auto countryObj = countryData.toObject();
+        insertOrMerge(countryObj);
+    }
+
+    return true;
+}
+
 QUrl CountryDbGenerator::insertOrMerge(const QJsonObject& obj)
 {
     if (obj.isEmpty()) {
@@ -136,6 +158,9 @@ QUrl CountryDbGenerator::insertOrMerge(const QJsonObject& obj)
     if (!obj.contains(QLatin1String("drivingSideEndTime"))) {
         c.drivingSide = obj.value(QLatin1String("drivingSide")).toObject().value(QLatin1String("value")).toString();
     }
+    if (!obj.contains(QLatin1String("plugTypeEndTime")) && obj.contains(QLatin1String("plugType"))) {
+        c.powerPlugTypes.insert(QUrl(obj.value(QLatin1String("plugType")).toObject().value(QLatin1String("value")).toString()).fileName());
+    }
 
     const auto it = std::lower_bound(m_countries.begin(), m_countries.end(), c);
     if (it != m_countries.end() && (*it).uri == c.uri) {
@@ -144,6 +169,7 @@ QUrl CountryDbGenerator::insertOrMerge(const QJsonObject& obj)
         } else if (!c.drivingSide.isEmpty()) {
             (*it).drivingSide = c.drivingSide;
         }
+        (*it).powerPlugTypes += c.powerPlugTypes;
         return c.uri;
     }
 
@@ -151,8 +177,33 @@ QUrl CountryDbGenerator::insertOrMerge(const QJsonObject& obj)
     return c.uri;
 }
 
+struct plug_type_mapping {
+    const char *wikidataId;
+    const char *enumName;
+};
+static const plug_type_mapping plug_type_table[] = {
+    { "Q24288454", "TypeA" },
+    { "Q24288456", "TypeB" },
+    { "Q1378312",  "TypeC" },
+    { "Q2335524",  "TypeD" },
+    { "Q2335536",  "TypeE" },
+    { "Q1123613",  "TypeF" },
+    { "Q1528507",  "TypeG" },
+    { "Q1266396",  "TypeH" },
+    { "Q2335539",  "TypeI" },
+    { "Q2335530",  "TypeJ" },
+    { "Q1502017",  "TypeK" },
+    { "Q1520890",  "TypeL" },
+    { "Q1383497",  "TypeM" },
+    { "Q1653438",  "TypeN" }
+};
+
+static const auto plug_type_table_size = sizeof(plug_type_table) / sizeof(plug_type_mapping);
+
 void CountryDbGenerator::writeCountryTable(QIODevice *out)
 {
+    const auto plug_type_table_end = plug_type_table + plug_type_table_size;
+
     out->write("static const Country country_table[] = {\n");
     for (const auto &kv : m_isoCodeMap) {
         const auto countryIt = std::lower_bound(m_countries.begin(), m_countries.end(), kv.second);
@@ -167,6 +218,23 @@ void CountryDbGenerator::writeCountryTable(QIODevice *out)
         } else {
             out->write("DrivingSide::Unknown");
         }
+
+        out->write(", {");
+        QStringList plugTypes;
+        plugTypes.reserve((*countryIt).powerPlugTypes.size());
+        for (const auto &plugType : (*countryIt).powerPlugTypes) {
+            const auto it = std::find_if(plug_type_table, plug_type_table_end, [plugType](const plug_type_mapping &elem) {
+                return QLatin1String(elem.wikidataId) == plugType;
+            });
+            if (it != plug_type_table_end) {
+                plugTypes.push_back(QLatin1String((*it).enumName));
+            } else {
+                qWarning() << "Unknown plug type" << plugType << (*countryIt).name;
+            }
+        }
+        std::sort(plugTypes.begin(), plugTypes.end());
+        out->write(plugTypes.join(QLatin1Char('|')).toUtf8());
+        out->write("}");
 
         out->write("}, // ");
         out->write((*countryIt).name.toUtf8());
