@@ -5,6 +5,7 @@ find_dependency(Qt5Gui)
 find_dependency(KF5Mime)
 if (NOT ANDROID)
     find_dependency(KF5CalendarCore)
+    find_dependency(KF5Contacts)
 endif()
 
 include("${CMAKE_CURRENT_LIST_DIR}/KPimItineraryTargets.cmake")

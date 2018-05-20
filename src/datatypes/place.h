@@ -59,6 +59,7 @@ class KITINERARY_EXPORT PostalAddress
     KITINERARY_PROPERTY(QString, addressLocality, setAddressLocality)
     KITINERARY_PROPERTY(QString, postalCode, setPostalCode)
     KITINERARY_PROPERTY(QString, addressRegion, setAddressRegion)
+    /** The country this address is in, as ISO 3166-1 alpha 2 code. */
     KITINERARY_PROPERTY(QString, addressCountry, setAddressCountry)
 
     Q_PROPERTY(bool isEmpty READ isEmpty STORED false)

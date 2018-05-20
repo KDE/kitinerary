@@ -17,6 +17,9 @@ endif()
 if (TARGET KF5::CalendarCore)
     set(HAVE_KCAL ON)
 endif()
+if (TARGET KF5::Contacts)
+    set(HAVE_KCONTACTS ON)
+endif()
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 set(kitinerary_lib_srcs
@@ -87,6 +90,9 @@ if (HAVE_ZLIB)
 endif()
 if (HAVE_KCAL)
     target_link_libraries(KPimItinerary PUBLIC KF5::CalendarCore)
+endif()
+if (HAVE_KCONTACTS)
+    target_link_libraries(KPimItinerary PUBLIC KF5::Contacts)
 endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS

@@ -25,5 +25,6 @@
 #cmakedefine HAVE_ZLIB
 #cmakedefine HAVE_ZXING
 #cmakedefine HAVE_KCAL
+#cmakedefine HAVE_KCONTACTS
 
 #endif

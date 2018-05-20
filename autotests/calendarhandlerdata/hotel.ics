@@ -19,7 +19,7 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  ata&pbsource=email_cancel"\,"checkinTime":"2017-09-19T15:00:00+03:
  00"\,"checkoutTime":"2017-09-20T12:00:00+03:00"\,"reservationFor":
  {"@type":"LodgingBusiness"\,"address":{"@type":
- "PostalAddress"\,"addressCountry":"Finland"\,"addressLocality":
+ "PostalAddress"\,"addressCountry":"FI"\,"addressLocality":
  "Espoo"\,"addressRegion":""\,"postalCode":"02600"\,"streetAddress":
  "Leppävaarankatu 1"}\,"name":"Glo Hotel Sello"\,"telephone":
  "+358101234567"\,"url":"https:

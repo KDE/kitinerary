@@ -17,6 +17,7 @@
    02110-1301, USA.
 */
 
+#include "config-kitinerary.h"
 #include "extractorpostprocessor.h"
 
 #include "calendarhandler.h"
@@ -35,6 +36,10 @@
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 #include <KItinerary/TrainStationDb>
+
+#ifdef HAVE_KCONTACTS
+#include <KContacts/Address>
+#endif
 
 #include <QDebug>
 #include <QJsonArray>
@@ -60,8 +65,11 @@ public:
     TrainTrip processTrainTrip(TrainTrip trip) const;
     TrainStation processTrainStation(TrainStation station) const;
     QDateTime processTrainTripTime(QDateTime dt, const TrainStation &station) const;
+    LodgingReservation processLodgingReservation(LodgingReservation res) const;
+    FoodEstablishmentReservation processFoodEstablishmentReservation(FoodEstablishmentReservation res) const;
     QVariant processReservation(QVariant res) const;
     Person processPerson(Person person) const;
+    template <typename T> T processPlace(T place) const;
 
     bool filterReservation(const QVariant &res) const;
     bool filterLodgingReservation(const LodgingReservation &res) const;
@@ -89,10 +97,14 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
     d->m_resultFinalized = false;
     d->m_data.reserve(d->m_data.size() + data.size());
     for (auto elem : data) {
-        if (elem.userType() == qMetaTypeId<FlightReservation>()) {
+        if (JsonLd::isA<FlightReservation>(elem)) {
             elem = d->processFlightReservation(elem.value<FlightReservation>());
-        } else if (elem.userType() == qMetaTypeId<TrainReservation>()) {
+        } else if (JsonLd::isA<TrainReservation>(elem)) {
             elem = d->processTrainReservation(elem.value<TrainReservation>());
+        } else if (JsonLd::isA<LodgingReservation>(elem)) {
+            elem = d->processLodgingReservation(elem.value<LodgingReservation>());
+        } else if (JsonLd::isA<FoodEstablishmentReservation>(elem)) {
+            elem = d->processFoodEstablishmentReservation(elem.value<FoodEstablishmentReservation>());
         }
 
         if (JsonLd::canConvert<Reservation>(elem)) {
@@ -201,7 +213,7 @@ Airport ExtractorPostprocessorPrivate::processAirport(Airport airport) const
         }
     }
 
-    return airport;
+    return processPlace(airport);
 }
 
 Airline ExtractorPostprocessorPrivate::processAirline(Airline airline) const
@@ -305,7 +317,7 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
         }
     }
 
-    return station;
+    return processPlace(station);
 }
 
 QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, const TrainStation& station) const
@@ -344,6 +356,18 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, cons
     return dt;
 }
 
+LodgingReservation ExtractorPostprocessorPrivate::processLodgingReservation(LodgingReservation res) const
+{
+    res.setReservationFor(processPlace(res.reservationFor().value<LodgingBusiness>()));
+    return res;
+}
+
+FoodEstablishmentReservation ExtractorPostprocessorPrivate::processFoodEstablishmentReservation(FoodEstablishmentReservation res) const
+{
+    res.setReservationFor(processPlace(res.reservationFor().value<FoodEstablishment>()));
+    return res;
+}
+
 QVariant ExtractorPostprocessorPrivate::processReservation(QVariant res) const
 {
     const auto viewUrl = JsonLdDocument::readProperty(res, "url").toUrl();
@@ -366,6 +390,21 @@ Person ExtractorPostprocessorPrivate::processPerson(Person person) const
         person.setName(person.givenName() + QLatin1Char(' ') + person.familyName());
     }
     return person;
+}
+
+template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) const
+{
+#ifdef HAVE_KCONTACTS
+    auto addr = place.address();
+    if (!addr.addressCountry().isEmpty() && addr.addressCountry().size() != 2) {
+        const auto isoCode = KContacts::Address::countryToISO(addr.addressCountry()).toUpper();
+        if (!isoCode.isEmpty()) {
+            addr.setAddressCountry(isoCode);
+            place.setAddress(addr);
+        }
+    }
+#endif
+    return place;
 }
 
 bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const

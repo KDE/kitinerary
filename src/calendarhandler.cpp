@@ -36,6 +36,10 @@
 #include <KCalCore/Event>
 #endif
 
+#ifdef HAVE_KCONTACTS
+#include <KContacts/Address>
+#endif
+
 #include <KLocalizedString>
 
 #include <QDateTime>
@@ -277,9 +281,11 @@ static void fillLodgingReservation(const LodgingReservation &reservation, const 
     const auto address = lodgingBusiness.address();
 
     event->setSummary(i18n("Hotel reservation: %1", lodgingBusiness.name()));
+#ifdef HAVE_KCONTACTS
     event->setLocation(i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
                              address.streetAddress(), address.postalCode(),
-                             address.addressLocality(), address.addressCountry()));
+                             address.addressLocality(), KContacts::Address::ISOtoCountry(address.addressCountry())));
+#endif
     fillGeoPosition(lodgingBusiness, event);
 
     event->setDtStart(QDateTime(reservation.checkinTime().date(), QTime()));
