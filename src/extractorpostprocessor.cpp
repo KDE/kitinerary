@@ -217,6 +217,16 @@ Airport ExtractorPostprocessorPrivate::processAirport(Airport airport) const
         }
     }
 
+    // add country
+    auto addr = airport.address();
+    if (addr.addressCountry().isEmpty()) {
+        const auto isoCode = AirportDb::countryForAirport(AirportDb::IataCode{iataCode});
+        if (isoCode.isValid()) {
+            addr.setAddressCountry(isoCode.toString());
+            airport.setAddress(addr);
+        }
+    }
+
     return processPlace(airport);
 }
 

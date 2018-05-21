@@ -10,6 +10,10 @@
         },
         "arrivalAirport": {
             "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
             "geo": {
                 "@type": "GeoCoordinates",
                 "longitude": -77.45580291748047,
@@ -25,6 +29,10 @@
         },
         "departureAirport": {
             "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
             "geo": {
                 "@type": "GeoCoordinates",
                 "longitude": -122.30899810791016,

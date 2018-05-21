@@ -14,6 +14,10 @@
             },
             "arrivalAirport": {
                 "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
                 "geo": {
                     "@type": "GeoCoordinates",
                     "latitude": 43.6349983215332,
@@ -34,6 +38,10 @@
             },
             "departureAirport": {
                 "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "BE"
+                },
                 "geo": {
                     "@type": "GeoCoordinates",
                     "latitude": 50.88970184326172,
