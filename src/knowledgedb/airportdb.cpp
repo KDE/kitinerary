@@ -32,9 +32,10 @@
 namespace KItinerary {
 namespace AirportDb {
 static_assert(sizeof(IataCode) == sizeof(uint16_t), "IATA code changed size!");
-static constexpr auto iata_table_size = sizeof(iata_table) / sizeof(IataCode);
-static_assert(iata_table_size == sizeof(coordinate_table) / sizeof(KnowledgeDb::Coordinate), "Airport coordinate table size mismatch!");
-static_assert(iata_table_size == sizeof(timezone_table) / sizeof(uint16_t), "Airport timezone table size mismatch!");
+static_assert(alignof(Airport) <= sizeof(Airport), "Airport struct alignment too big!");
+
+static constexpr auto airport_table_size = sizeof(airport_table) / sizeof(Airport);
+static_assert(airport_table_size == sizeof(coordinate_table) / sizeof(KnowledgeDb::Coordinate), "Airport coordinate table size mismatch!");
 
 IataCode::IataCode(const QString &iataStr) : IataCode()
 {
@@ -88,42 +89,39 @@ uint16_t IataCode::toUInt16() const
     return m_letter0 << 11 | m_letter1 << 6 | m_letter2 << 1 | m_valid;
 }
 
-static const IataCode *iataBegin()
+static bool operator<(const Airport &lhs, IataCode rhs)
 {
-    return iata_table;
-}
-
-static const IataCode *iataEnd()
-{
-    return iata_table + iata_table_size;
-}
-
-static int indexOfAirport(IataCode iataCode)
-{
-    const auto iataIt = std::lower_bound(iataBegin(), iataEnd(), iataCode);
-    if (iataIt == iataEnd() || (*iataIt) != iataCode) {
-        return -1;
-    }
-
-    return std::distance(iataBegin(), iataIt);
+    return lhs.iataCode < rhs;
 }
 
 Coordinate coordinateForAirport(IataCode iataCode)
 {
-    const auto iataIdx = indexOfAirport(iataCode);
-    if (iataIdx >= 0) {
-        return coordinate_table[iataIdx];
+    const auto it = std::lower_bound(std::begin(airport_table), std::end(airport_table), iataCode);
+    if (it == std::end(airport_table) || (*it).iataCode != iataCode) {
+        return {};
     }
-    return {};
+
+    return coordinate_table[std::distance(std::begin(airport_table), it)];
 }
 
 QTimeZone timezoneForAirport(IataCode iataCode)
 {
-    const auto iataIdx = indexOfAirport(iataCode);
-    if (iataIdx < 0) {
-        return QTimeZone();
+    const auto it = std::lower_bound(std::begin(airport_table), std::end(airport_table), iataCode);
+    if (it == std::end(airport_table) || (*it).iataCode != iataCode) {
+        return {};
     }
-    return timezone_table[iataIdx].toQTimeZone();
+
+    return (*it).timezone.toQTimeZone();
+}
+
+KnowledgeDb::CountryId countryForAirport(IataCode iataCode)
+{
+    const auto it = std::lower_bound(std::begin(airport_table), std::end(airport_table), iataCode);
+    if (it == std::end(airport_table) || (*it).iataCode != iataCode) {
+        return {};
+    }
+
+    return (*it).country;
 }
 
 static const auto name1_string_index_size = sizeof(name1_string_index) / sizeof(Name1Index);
@@ -171,7 +169,7 @@ static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
     }
 
     if (iataIdx > 0) {
-        return iata_table[iataIdx];
+        return airport_table[iataIdx].iataCode;
     }
     return {};
 }
@@ -215,7 +213,7 @@ IataCode iataCodeFromName(const QString &name)
     }
 
     if (iataIdxs.size() == 1) {
-        return iata_table[*iataIdxs.constBegin()];
+        return airport_table[*iataIdxs.constBegin()].iataCode;
     }
 
     return {};

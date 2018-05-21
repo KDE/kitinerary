@@ -22,6 +22,8 @@
 
 #include "kitinerary_export.h"
 #include "knowledgedb.h"
+#include "countrydb.h"
+#include "timezonedb.h"
 
 #include <cmath>
 #include <cstdint>
@@ -69,11 +71,23 @@ private:
     uint16_t m_valid : 1;
 };
 
+/** Airport information structure as used in the database.
+ *  @internal
+ */
+struct Airport {
+    IataCode iataCode;
+    KnowledgeDb::CountryId country;
+    KnowledgeDb::Timezone timezone;
+};
+
 /** Returns the geographical coordinates the airport with IATA code @p iataCode is in. */
 KITINERARY_EXPORT KnowledgeDb::Coordinate coordinateForAirport(IataCode iataCode);
 
 /** Returns the timezone the airport with IATA code @p iataCode is in. */
 KITINERARY_EXPORT QTimeZone timezoneForAirport(IataCode iataCode);
+
+/** Returns the country the airport with IATA code @p iataCode is in. */
+KITINERARY_EXPORT KnowledgeDb::CountryId countryForAirport(IataCode iataCode);
 
 /** Attempts to find the unique IATA code for the given airport name. */
 KITINERARY_EXPORT IataCode iataCodeFromName(const QString &name);

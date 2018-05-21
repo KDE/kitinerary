@@ -142,6 +142,15 @@ private Q_SLOTS:
         QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("Brussels Airport, BE")).isValid());
         QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("Frankfurt")).isValid());
     }
+
+    void countryDataTest()
+    {
+        auto iso = AirportDb::countryForAirport(AirportDb::IataCode{});
+        QVERIFY(!iso.isValid());
+
+        iso = AirportDb::countryForAirport(AirportDb::IataCode{"TXL"});
+        QCOMPARE(iso, KnowledgeDb::CountryId{"DE"});
+    }
 };
 
 QTEST_APPLESS_MAIN(AirportDbTest)

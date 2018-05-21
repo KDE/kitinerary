@@ -268,23 +268,27 @@ using namespace KItinerary::KnowledgeDb;
 namespace KItinerary {
 namespace AirportDb {
 
-// sorted table of all iata codes
-// the corresponding index is used to acces data from all following tables
-static constexpr IataCode iata_table[] = {
+// airport data sorted by IATA code
+// the corresponding index is used to acces data the following tables
+static constexpr Airport airport_table[] = {
 )");
 
     // IATA to airport data index
     for (auto it = m_iataMap.constBegin(); it != m_iataMap.constEnd(); ++it) {
-        out->write("    IataCode{\"");
+        out->write("    Airport{IataCode{\"");
         out->write(it.key().toUtf8());
-        out->write("\"}, // ");
+        out->write("\"}, ");
+        CodeGen::writeCountryIsoCode(out, m_airportMap.value(it.value()).country);
+        out->write(", ");
+        CodeGen::writeTimezone(out, &m_tzDb, m_airportMap.value(it.value()).tz);
+        out->write("}, // ");
         out->write(m_airportMap.value(it.value()).label.toUtf8());
         out->write("\n");
     }
     out->write(R"(};
 
 // airport coordinates in latitude/longitude pairs
-// NAN indicates the coordinate is not known
+// stored out of line of the airport_table to avoid alignment padding
 static constexpr Coordinate coordinate_table[] = {
 )");
     // airport data tables - coordinates
@@ -295,23 +299,6 @@ static constexpr Coordinate coordinate_table[] = {
         CodeGen::writeCoordinate(out, airport.coord);
         out->write(", // ");
         out->write(airport.iataCode.toUtf8());
-        out->write("\n");
-    }
-    out->write(R"(};
-
-// timezone name string table indexes
-static const Timezone timezone_table[] = {
-)");
-    for (auto it = m_iataMap.constBegin(); it != m_iataMap.constEnd(); ++it) {
-        const auto &airport = m_airportMap.value(it.value());
-        out->write("    ");
-        CodeGen::writeTimezone(out, &m_tzDb, airport.tz);
-        out->write(", // ");
-        out->write(airport.iataCode.toUtf8());
-        if (!airport.tz.isEmpty()) {
-            out->write(" ");
-            out->write(airport.tz);
-        }
         out->write("\n");
     }
     out->write(R"(};
