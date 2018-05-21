@@ -53,6 +53,7 @@ set(kitinerary_lib_srcs
     jsonldimportfilter.cpp
     mergeutil.cpp
     pdfdocument.cpp
+    sortutil.cpp
     structureddataextractor.cpp
     uic9183parser.cpp
 )
@@ -108,6 +109,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         JsonLdDocument
         MergeUtil
         PdfDocument
+        SortUtil
         StructuredDataExtractor
         Uic9183Parser
     PREFIX KItinerary

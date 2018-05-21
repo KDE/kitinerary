@@ -20,11 +20,11 @@
 #include "config-kitinerary.h"
 #include "extractorpostprocessor.h"
 
-#include "calendarhandler.h"
 #include "iatabcbpparser.h"
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "mergeutil.h"
+#include "sortutil.h"
 
 #include <KItinerary/AirportDb>
 #include <KItinerary/BusTrip>
@@ -139,10 +139,7 @@ QVector<QVariant> ExtractorPostprocessor::result() const
         d->m_resultFinalized = true;
     }
 
-    std::stable_sort(d->m_data.begin(), d->m_data.end(), [](const QVariant &lhs, const QVariant &rhs) {
-        return CalendarHandler::startDateTime(lhs) < CalendarHandler::startDateTime(rhs);
-    });
-
+    std::stable_sort(d->m_data.begin(), d->m_data.end(), SortUtil::isBefore);
     return d->m_data;
 }
 

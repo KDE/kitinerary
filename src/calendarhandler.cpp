@@ -22,6 +22,7 @@
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "mergeutil.h"
+#include "sortutil.h"
 
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
@@ -61,29 +62,7 @@ static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &e
 
 QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
 {
-    if (JsonLd::isA<FlightReservation>(reservation)) {
-        const auto flight = reservation.value<FlightReservation>().reservationFor().value<Flight>();
-        if (flight.departureTime().isValid()) {
-            return flight.departureTime();
-        }
-        return QDateTime(flight.departureDay(), QTime());
-    }
-    if (JsonLd::isA<TrainReservation>(reservation)) {
-        return reservation.value<TrainReservation>().reservationFor().value<TrainTrip>().departureTime();
-    }
-    if (JsonLd::isA<BusReservation>(reservation)) {
-        return reservation.value<BusReservation>().reservationFor().value<BusTrip>().departureTime();
-    }
-    if (JsonLd::isA<LodgingReservation>(reservation)) {
-        return reservation.value<LodgingReservation>().checkinTime();
-    }
-    if (JsonLd::isA<FoodEstablishmentReservation>(reservation)) {
-        return reservation.value<FoodEstablishmentReservation>().startTime();
-    }
-    if (JsonLd::isA<TouristAttractionVisit>(reservation)) {
-        return reservation.value<TouristAttractionVisit>().arrivalTime();
-    }
-    return {};
+    return SortUtil::startDateTime(reservation);
 }
 
 QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalCore::Calendar> &calendar, const QVariant &reservation)
@@ -98,7 +77,7 @@ QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<
     }
     bookingRef.prepend(QLatin1String("KIT-"));
 
-    const auto dt = startDateTime(reservation).date();
+    const auto dt = SortUtil::startDateTime(reservation).date();
     const auto events = calendar->events(dt);
     for (const auto &event : events) {
         if (!event->uid().startsWith(bookingRef)) {
