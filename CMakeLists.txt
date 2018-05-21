@@ -37,6 +37,7 @@ set_package_properties("zxing" PROPERTIES TYPE OPTIONAL PURPOSE "Support for bar
 find_package(ZLIB)
 set_package_properties("ZLIB" PROPERTIES TYPE OPTIONAL PURPOSE "Support for decoding UIC 918-3 train tickets.")
 
+add_definitions(-DTRANSLATION_DOMAIN=\"kitinerary\")
 add_subdirectory(src)
 if(BUILD_TESTING)
    add_subdirectory(autotests)
