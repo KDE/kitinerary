@@ -29,6 +29,7 @@
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
 #include <KItinerary/TrainTrip>
+#include <KItinerary/Visit>
 
 #ifdef HAVE_KCAL
 #include <KCalCore/Alarm>
@@ -78,6 +79,9 @@ QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
     }
     if (JsonLd::isA<FoodEstablishmentReservation>(reservation)) {
         return reservation.value<FoodEstablishmentReservation>().startTime();
+    }
+    if (JsonLd::isA<TouristAttractionVisit>(reservation)) {
+        return reservation.value<TouristAttractionVisit>().arrivalTime();
     }
     return {};
 }
