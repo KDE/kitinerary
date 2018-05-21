@@ -36,6 +36,7 @@
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 #include <KItinerary/TrainStationDb>
+#include <KItinerary/Visit>
 
 #ifdef HAVE_KCONTACTS
 #include <KContacts/Address>
@@ -67,6 +68,7 @@ public:
     QDateTime processTrainTripTime(QDateTime dt, const TrainStation &station) const;
     LodgingReservation processLodgingReservation(LodgingReservation res) const;
     FoodEstablishmentReservation processFoodEstablishmentReservation(FoodEstablishmentReservation res) const;
+    TouristAttractionVisit processTouristAttractionVisit(TouristAttractionVisit visit) const;
     QVariant processReservation(QVariant res) const;
     Person processPerson(Person person) const;
     template <typename T> T processPlace(T place) const;
@@ -105,6 +107,8 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
             elem = d->processLodgingReservation(elem.value<LodgingReservation>());
         } else if (JsonLd::isA<FoodEstablishmentReservation>(elem)) {
             elem = d->processFoodEstablishmentReservation(elem.value<FoodEstablishmentReservation>());
+        } else if (JsonLd::isA<TouristAttractionVisit>(elem)) {
+            elem = d->processTouristAttractionVisit(elem.value<TouristAttractionVisit>());
         }
 
         if (JsonLd::canConvert<Reservation>(elem)) {
@@ -368,6 +372,12 @@ FoodEstablishmentReservation ExtractorPostprocessorPrivate::processFoodEstablish
     return res;
 }
 
+TouristAttractionVisit ExtractorPostprocessorPrivate::processTouristAttractionVisit(TouristAttractionVisit visit) const
+{
+    visit.setTouristAttraction(processPlace(visit.touristAttraction()));
+    return visit;
+}
+
 QVariant ExtractorPostprocessorPrivate::processReservation(QVariant res) const
 {
     const auto viewUrl = JsonLdDocument::readProperty(res, "url").toUrl();
@@ -409,23 +419,26 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
 
 bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
 {
-    const auto resFor = JsonLdDocument::readProperty(res, "reservationFor");
-    if (resFor.isNull()) {
-        return false;
+    if (JsonLd::isA<FlightReservation>(res)) {
+        return filterFlight(res.value<FlightReservation>().reservationFor().value<Flight>());
     }
-
-    if (resFor.userType() == qMetaTypeId<Flight>()) {
-        return filterFlight(resFor.value<Flight>());
-    } else if (resFor.userType() == qMetaTypeId<TrainTrip>()) {
-        return filterTrainOrBusTrip(resFor);
-    } else if (resFor.userType() == qMetaTypeId<BusTrip>()) {
-        return filterTrainOrBusTrip(resFor);
+    if (JsonLd::isA<TrainReservation>(res)) {
+        return filterTrainOrBusTrip(res.value<TrainReservation>().reservationFor());
     }
-
-    if (res.userType() == qMetaTypeId<LodgingReservation>()) {
+    if (JsonLd::isA<BusReservation>(res)) {
+        return filterTrainOrBusTrip(res.value<BusReservation>().reservationFor());
+    }
+    if (JsonLd::isA<LodgingReservation>(res)) {
         return filterLodgingReservation(res.value<LodgingReservation>());
     }
-    return true;
+
+    // types without specific filters yet
+    if (JsonLd::isA<TouristAttractionVisit>(res) || JsonLd::isA<FoodEstablishmentReservation>(res)) {
+        return true;
+    }
+
+    // unknown top-level type
+    return false;
 }
 
 bool ExtractorPostprocessorPrivate::filterLodgingReservation(const LodgingReservation &res) const
