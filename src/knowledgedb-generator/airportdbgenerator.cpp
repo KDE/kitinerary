@@ -168,6 +168,37 @@ bool AirportDbGenerator::fetchAirports()
     return true;
 }
 
+bool AirportDbGenerator::fetchCountries()
+{
+    const auto array = WikiData::query(R"(
+        SELECT DISTINCT ?airport ?isoCode WHERE {
+            ?airport (wdt:P31/wdt:P279*) wd:Q1248784.
+            ?airport wdt:P17 ?country.
+            ?country wdt:P297 ?isoCode.
+        } ORDER BY (?airport))", "wikidata_airport_country.json");
+    if (array.isEmpty()) {
+        qWarning() << "Empty query result!";
+        return false;
+    }
+
+    for (const auto &airportData: array) {
+        const auto obj = airportData.toObject();
+        const auto uri = QUrl(obj.value(QLatin1String("airport")).toObject().value(QLatin1String("value")).toString());
+        const auto isoCode = obj.value(QLatin1String("isoCode")).toObject().value(QLatin1String("value")).toString();
+        const auto it = m_airportMap.find(uri);
+        if (it != m_airportMap.end()) {
+            if ((*it).country != isoCode && !(*it).country.isEmpty()) {
+                ++m_countryConflicts;
+                qWarning() << "Country code conflict on" << (*it).label << (*it).uri << (*it).country << isoCode;
+                continue;
+            }
+            (*it).country = isoCode;
+        }
+    }
+
+    return true;
+}
+
 void AirportDbGenerator::lookupTimezones()
 {
     for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
@@ -211,7 +242,7 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
 bool AirportDbGenerator::generate(QIODevice* out)
 {
     // step 1 query wikidata for all airports
-    if (!fetchAirports()) {
+    if (!fetchAirports() || !fetchCountries()) {
         return false;
     }
 
@@ -385,6 +416,7 @@ static const NameNIndex nameN_string_index[] = {
     qDebug() << "Name fragment index:" << string_offsets.size() << "unique keys," << m_labelMap.size() - string_offsets.size() << "non-unique keys";
     qDebug() << "IATA code collisions:" << m_iataCollisions;
     qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;
+    qDebug() << "Country conflicts:" << m_countryConflicts;
     qDebug() << "Failed timezone lookups:" << m_timezoneLoopupFails;
 
     return true;

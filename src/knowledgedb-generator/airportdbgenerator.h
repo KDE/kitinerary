@@ -43,12 +43,14 @@ public:
         QString icaoCode;
         QString label;
         QString alias;
+        QString country;
         QByteArray tz;
         int tzOffset;
         KnowledgeDb::Coordinate coord;
     };
 private:
     bool fetchAirports();
+    bool fetchCountries();
     void merge(Airport &lhs, const Airport &rhs);
     void lookupTimezones();
     void indexNames();
@@ -61,6 +63,7 @@ private:
 
     int m_iataCollisions = 0;
     int m_coordinateConflicts = 0;
+    int m_countryConflicts = 0;
     int m_timezoneLoopupFails = 0;
 };
 
