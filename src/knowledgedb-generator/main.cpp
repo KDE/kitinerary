@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 
     if (parser.value(dbOpt) == QLatin1String("airport")) {
         AirportDbGenerator gen;
-        gen.generate(&out);
+        return gen.generate(&out) ? 0 : 1;
     } else if (parser.value(dbOpt) == QLatin1String("country")) {
         CountryDbGenerator gen;
         return gen.generate(&out) ? 0 : 1;

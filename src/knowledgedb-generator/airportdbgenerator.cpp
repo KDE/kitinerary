@@ -17,7 +17,6 @@
 
 #include "airportdbgenerator.h"
 #include "codegen.h"
-#include "timezones.h"
 #include "wikidata.h"
 
 #include <airportdb_p.h>
@@ -102,9 +101,8 @@ void AirportDbGenerator::merge(Airport &lhs, const Airport &rhs)
     }
 }
 
-void AirportDbGenerator::generate(QIODevice* out)
+bool AirportDbGenerator::fetchAirports()
 {
-    // step 1 query wikidata for all airports
     // sorted by URI to stabilize the result in case of conflicts
     const auto airportArray = WikiData::query(R"(
         SELECT DISTINCT ?airport ?airportLabel ?airportAltLabel ?iataCode ?icaoCode ?coord ?endDate ?demolished ?iataEndDate WHERE {
@@ -120,7 +118,7 @@ void AirportDbGenerator::generate(QIODevice* out)
         } ORDER BY (?airport))", "wikidata_airports.json");
     if (airportArray.isEmpty()) {
         qWarning() << "No results in SPARQL query found.";
-        exit(1);
+        return false;
     }
 
     for (const auto &data: airportArray) {
@@ -167,22 +165,26 @@ void AirportDbGenerator::generate(QIODevice* out)
         m_iataMap.insert(a.iataCode, a.uri);
     }
 
-    // step 2 augment the data with timezones
-    Timezones tzDb;
+    return true;
+}
+
+void AirportDbGenerator::lookupTimezones()
+{
     for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
         if (!(*it).coord.isValid()) {
             continue;
         }
-        (*it).tz = tzDb.timezoneForCoordinate((*it).coord);
+        (*it).tz = m_tzDb.timezoneForCoordinate((*it).coord);
         if ((*it).tz.isEmpty()) {
             qDebug() << "Failed to find timezone for" << (*it).iataCode << (*it).label << (*it).coord.latitude << (*it).coord.longitude << (*it).uri;
             ++m_timezoneLoopupFails;
             continue;
         }
     }
+}
 
-    // step 3 index the names for reverse lookup
-    QMap<QString, QVector<QString> > labelMap;
+void KItinerary::Generator::AirportDbGenerator::indexNames()
+{
     for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
         auto l = QString(it.value().label + QLatin1Char(' ') + it.value().alias)
                  .split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
@@ -197,12 +199,27 @@ void AirportDbGenerator::generate(QIODevice* out)
             if (s.size() <= 2) {
                 continue;
             }
-            labelMap[s].push_back(it.value().iataCode);
+            m_labelMap[s].push_back(it.value().iataCode);
         }
     }
-    for (auto it = labelMap.begin(); it != labelMap.end(); ++it) {
+    for (auto it = m_labelMap.begin(); it != m_labelMap.end(); ++it) {
         std::sort(it.value().begin(), it.value().end());
     }
+}
+
+
+bool AirportDbGenerator::generate(QIODevice* out)
+{
+    // step 1 query wikidata for all airports
+    if (!fetchAirports()) {
+        return false;
+    }
+
+    // step 2 augment the data with timezones
+    lookupTimezones();
+
+    // step 3 index the names for reverse lookup
+    indexNames();
 
     // step 4 generate code
     CodeGen::writeLicenseHeader(out);
@@ -257,7 +274,7 @@ static const Timezone timezone_table[] = {
     for (auto it = m_iataMap.constBegin(); it != m_iataMap.constEnd(); ++it) {
         const auto &airport = m_airportMap.value(it.value());
         out->write("    ");
-        CodeGen::writeTimezone(out, &tzDb, airport.tz);
+        CodeGen::writeTimezone(out, &m_tzDb, airport.tz);
         out->write(", // ");
         out->write(airport.iataCode.toUtf8());
         if (!airport.tz.isEmpty()) {
@@ -273,9 +290,9 @@ static const char name1_string_table[] =
 )");
     // TODO prefix compression
     std::vector<Name1Index> string_offsets;
-    string_offsets.reserve(labelMap.size());
+    string_offsets.reserve(m_labelMap.size());
     uint32_t label_offset = 0;
-    for (auto it = labelMap.begin(); it != labelMap.end(); ++it) {
+    for (auto it = m_labelMap.begin(); it != m_labelMap.end(); ++it) {
         if (it.value().size() > 1) {
             continue;
         }
@@ -314,10 +331,10 @@ static const char nameN_string_table[] =
         QVector<QString> iataList;
     };
     std::vector<stringN_index_t> stringN_offsets;
-    stringN_offsets.reserve(labelMap.size() - string_offsets.size());
+    stringN_offsets.reserve(m_labelMap.size() - string_offsets.size());
     uint16_t string_offset = 0;
     uint16_t iata_map_offset = 0;
-    for (auto it = labelMap.begin(); it != labelMap.end(); ++it) {
+    for (auto it = m_labelMap.begin(); it != m_labelMap.end(); ++it) {
         if (it.value().size() == 1) {
             continue;
         }
@@ -365,8 +382,10 @@ static const NameNIndex nameN_string_index[] = {
 )");
 
     qDebug() << "Generated database containing" << m_iataMap.size() << "airports";
-    qDebug() << "Name fragment index:" << string_offsets.size() << "unique keys," << labelMap.size() - string_offsets.size() << "non-unique keys";
+    qDebug() << "Name fragment index:" << string_offsets.size() << "unique keys," << m_labelMap.size() - string_offsets.size() << "non-unique keys";
     qDebug() << "IATA code collisions:" << m_iataCollisions;
     qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;
     qDebug() << "Failed timezone lookups:" << m_timezoneLoopupFails;
+
+    return true;
 }

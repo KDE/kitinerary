@@ -19,6 +19,7 @@
 #define KITINERARY_AIRPORTDBGENERATOR_H
 
 #include <knowledgedb.h>
+#include "timezones.h"
 
 #include <QHash>
 #include <QMap>
@@ -33,7 +34,7 @@ namespace Generator {
 class AirportDbGenerator
 {
 public:
-    void generate(QIODevice *out);
+    bool generate(QIODevice *out);
 
     struct Airport
     {
@@ -47,10 +48,16 @@ public:
         KnowledgeDb::Coordinate coord;
     };
 private:
+    bool fetchAirports();
     void merge(Airport &lhs, const Airport &rhs);
+    void lookupTimezones();
+    void indexNames();
 
     QHash<QUrl, Airport> m_airportMap;
     QMap<QString, QUrl> m_iataMap;
+    QMap<QString, QVector<QString>> m_labelMap;
+
+    Timezones m_tzDb;
 
     int m_iataCollisions = 0;
     int m_coordinateConflicts = 0;
