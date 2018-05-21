@@ -139,7 +139,13 @@ public:
 QString BarcodeJsApi::decodePdf417(const QVariant &img) const
 {
     if (img.userType() == qMetaTypeId<PdfImage>()) {
-        return BarcodeDecoder::decodePdf417(img.value<PdfImage>().image());
+        QImage image = img.value<PdfImage>().image();
+	if (image.width() < image.height()) {
+             QTransform tf;
+             tf.rotate(-90);
+	     image = image.transformed(tf);
+	}
+        return BarcodeDecoder::decodePdf417(image);
     }
     return {};
 }
