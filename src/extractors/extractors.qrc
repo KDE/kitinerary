@@ -24,6 +24,8 @@
         <file>lufthansa-pkpass.js</file>
         <file>regiojet.json</file>
         <file>regiojet.js</file>
+        <file>sas.json</file>
+        <file>sas-boardingpass.js</file>
         <file>sncf.json</file>
         <file>sncf.js</file>
         <file>swiss.json</file>

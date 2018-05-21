@@ -1,0 +1,7 @@
+[
+    {
+        "type": "pdf",
+        "filter": [ { "header": "From", "match": "no-reply@flysas.com" } ],
+        "script": "sas-boardingpass.js"
+    }
+]
