@@ -98,12 +98,8 @@ QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<
     }
     bookingRef.prepend(QLatin1String("KIT-"));
 
-    auto dt = startDateTime(reservation);
-    if (reservation.userType() == qMetaTypeId<LodgingReservation>()) {
-        dt = QDateTime(dt.date(), QTime());
-    }
-
-    const auto events = calendar->events(dt.date());
+    const auto dt = startDateTime(reservation).date();
+    const auto events = calendar->events(dt);
     for (const auto &event : events) {
         if (!event->uid().startsWith(bookingRef)) {
             continue;
