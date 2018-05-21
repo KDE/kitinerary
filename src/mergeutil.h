@@ -31,18 +31,18 @@ class TrainTrip;
 namespace MergeUtil
 {
 /**
- *  Checks if two reservations refer to the same booking element.
+ *  Checks if two top-level values refer to the same booking element.
  *
  *  This depends on the reservation type:
  *  - Flights: booking reference, flight number and departure day match
  *  - Train trip: booking reference, train number and departure day match
- *  - But trip: booking ref and/or number and departure time match
+ *  - Bus trip: booking ref and/or number and departure time match
  *  - Hotel booking: hotel name, booking reference and checkin day match
  *
  *  For all reservation types, the Reservation::underName property is
  *  checked and either needs to be equal or absent in one of the values.
  */
-KITINERARY_EXPORT bool isSameReservation(const QVariant &lhs, const QVariant &rhs);
+KITINERARY_EXPORT bool isSame(const QVariant &lhs, const QVariant &rhs);
 
 /**
  * Checks if two Person objects refer to the same person.

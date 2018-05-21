@@ -105,7 +105,7 @@ QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<
             continue;
         }
         const auto otherRes = CalendarHandler::reservationForEvent(event);
-        if (MergeUtil::isSameReservation(otherRes, reservation)) {
+        if (MergeUtil::isSame(otherRes, reservation)) {
             return event;
         }
     }

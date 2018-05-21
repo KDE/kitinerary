@@ -154,7 +154,7 @@ void ExtractorPostprocessor::setContextDate(const QDateTime& dt)
 void ExtractorPostprocessorPrivate::mergeOrAppend(const QVariant &elem)
 {
     const auto it = std::find_if(m_data.begin(), m_data.end(), [elem](const QVariant &other) {
-        return MergeUtil::isSameReservation(elem, other);
+        return MergeUtil::isSame(elem, other);
     });
 
     if (it == m_data.end()) {

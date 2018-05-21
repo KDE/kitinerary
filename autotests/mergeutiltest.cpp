@@ -41,15 +41,15 @@ private:
         r2.setReservationFor(rhs);
         r2.setReservationNumber(QLatin1String("XXX007"));
 
-        return MergeUtil::isSameReservation(r1, r2);
+        return MergeUtil::isSame(r1, r2);
     }
 private Q_SLOTS:
     void testIsSameReservation()
     {
-        QVERIFY(!MergeUtil::isSameReservation({}, {}));
+        QVERIFY(!MergeUtil::isSame({}, {}));
         FlightReservation res1;
-        QVERIFY(!MergeUtil::isSameReservation(res1, {}));
-        QVERIFY(!MergeUtil::isSameReservation({}, res1));
+        QVERIFY(!MergeUtil::isSame(res1, {}));
+        QVERIFY(!MergeUtil::isSame({}, res1));
 
         res1.setReservationNumber(QLatin1String("XXX007"));
         Flight flight1;
@@ -62,14 +62,14 @@ private Q_SLOTS:
         Flight flight2;
         flight2.setFlightNumber(QLatin1String("1234"));
         res2.setReservationFor(flight2);
-        QVERIFY(!MergeUtil::isSameReservation(res1, res2));
+        QVERIFY(!MergeUtil::isSame(res1, res2));
 
         flight2.setDepartureDay(QDate(2018, 4, 21));
         res2.setReservationFor(flight2);
-        QVERIFY(!MergeUtil::isSameReservation(res1, res2));
+        QVERIFY(!MergeUtil::isSame(res1, res2));
 
         res2.setReservationNumber(QLatin1String("XXX007"));
-        QVERIFY(MergeUtil::isSameReservation(res1, res2));
+        QVERIFY(MergeUtil::isSame(res1, res2));
     }
 
     void testIsSameFlight()
@@ -151,15 +151,15 @@ private Q_SLOTS:
         res1.setReservationNumber(QLatin1String("1234"));
 
         LodgingReservation res2;
-        QVERIFY(!MergeUtil::isSameReservation(res1, res2));
+        QVERIFY(!MergeUtil::isSame(res1, res2));
         res2.setReservationNumber(QLatin1String("1234"));
-        QVERIFY(!MergeUtil::isSameReservation(res1, res2));
+        QVERIFY(!MergeUtil::isSame(res1, res2));
         res2.setCheckinTime(QDateTime(QDate(2018, 4, 9), QTime(15, 0)));
-        QVERIFY(!MergeUtil::isSameReservation(res1, res2));
+        QVERIFY(!MergeUtil::isSame(res1, res2));
         LodgingBusiness hotel2;
         hotel2.setName(QLatin1String("Haus Randa"));
         res2.setReservationFor(hotel2);
-        QVERIFY(MergeUtil::isSameReservation(res1, res2));
+        QVERIFY(MergeUtil::isSame(res1, res2));
     }
 };
 
