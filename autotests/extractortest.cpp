@@ -71,16 +71,23 @@ private Q_SLOTS:
             return;
         }
 
+        bool someTestsFound = false;
+
         QDirIterator dirIt(baseDir.path(), {QStringLiteral("context.eml")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
         while (dirIt.hasNext()) {
             QFileInfo contextFi(dirIt.next());
             QDirIterator fileIt(contextFi.absolutePath(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass")}, QDir::Files | QDir::Readable | QDir::NoSymLinks);
             while (fileIt.hasNext()) {
                 fileIt.next();
+                someTestsFound = true;
                 QTest::newRow((contextFi.dir().dirName() + QLatin1Char('-') + fileIt.fileName()).toLatin1().constData())
                     << contextFi.absoluteFilePath()
                     << fileIt.fileInfo().absoluteFilePath();
             }
+        }
+        if (!someTestsFound) {
+            QTest::newRow("no tests found in test dir") << QString() << QString();
+            return;
         }
     }
 
