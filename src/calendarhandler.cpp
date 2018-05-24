@@ -29,6 +29,7 @@
 #include <KItinerary/Organization>
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
+#include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
 
@@ -53,7 +54,8 @@ using namespace KItinerary;
 #ifdef HAVE_KCAL
 using namespace KCalCore;
 static void fillFlightReservation(const FlightReservation &reservation, const KCalCore::Event::Ptr &event);
-static void fillTripReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event);
+template <typename Trip, typename Res>
+static void fillTripReservation(const Res &reservation, const KCalCore::Event::Ptr &event);
 static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event);
@@ -198,40 +200,35 @@ static void fillFlightReservation(const FlightReservation &reservation, const KC
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillTripReservation(const QVariant &reservation, const KCalCore::Event::Ptr &event)
+template <typename Trip, typename Res>
+static void fillTripReservation(const Res &reservation, const KCalCore::Event::Ptr &event)
 {
-    const auto trip = JsonLdDocument::readProperty(reservation, "reservationFor");
-    const auto depStation = JsonLdDocument::readProperty(trip, "departureStation");
-    const auto arrStation = JsonLdDocument::readProperty(trip, "arrivalStation");
+    const auto trip = reservation.reservationFor().template value<Trip>();
+    const auto depStation = trip.departureStation();
 
-    event->setLocation(JsonLdDocument::readProperty(depStation, "name").toString());
+    event->setLocation(depStation.name());
     fillGeoPosition(depStation, event);
-    event->setDtStart(JsonLdDocument::readProperty(trip, "departureTime").toDateTime());
-    event->setDtEnd(JsonLdDocument::readProperty(trip, "arrivalTime").toDateTime());
+    event->setDtStart(trip.departureTime());
+    event->setDtEnd(trip.arrivalTime());
     event->setAllDay(false);
 
     QStringList desc;
-    auto s = JsonLdDocument::readProperty(trip, "departurePlatform").toString();
-    if (!s.isEmpty()) {
-        desc.push_back(i18n("Departure platform: %1", s));
+    if (!trip.departurePlatform().isEmpty()) {
+        desc.push_back(i18n("Departure platform: %1", trip.departurePlatform()));
     }
-    const auto ticket = JsonLdDocument::readProperty(reservation, "reservedTicket");
-    const auto seat = JsonLdDocument::readProperty(ticket, "ticketedSeat");
-    s = JsonLdDocument::readProperty(seat, "seatSection").toString();
-    if (!s.isEmpty()) {
-        desc.push_back(i18n("Coach: %1", s));
+    const auto ticket = reservation.reservedTicket().template value<Ticket>();
+    const auto seat = ticket.ticketedSeat();
+    if (!seat.seatSection().isEmpty()) {
+        desc.push_back(i18n("Coach: %1", seat.seatSection()));
     }
-    s = JsonLdDocument::readProperty(seat, "seatNumber").toString();
-    if (!s.isEmpty()) {
-        desc.push_back(i18n("Seat: %1", s));
+    if (!seat.seatNumber().isEmpty()) {
+        desc.push_back(i18n("Seat: %1", seat.seatNumber()));
     }
-    s = JsonLdDocument::readProperty(trip, "arrivalPlatform").toString();
-    if (!s.isEmpty()) {
-        desc.push_back(i18n("Arrival platform: %1", s));
+    if (!trip.arrivalPlatform().isEmpty()) {
+        desc.push_back(i18n("Arrival platform: %1", trip.arrivalPlatform()));
     }
-    s = JsonLdDocument::readProperty(reservation, "reservationNumber").toString();
-    if (!s.isEmpty()) {
-        desc.push_back(i18n("Booking reference: %1", s));
+    if (!reservation.reservationNumber().isEmpty()) {
+        desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
     }
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
@@ -243,7 +240,7 @@ static void fillTrainReservation(const TrainReservation &reservation, const KCal
     const auto arrStation = trip.arrivalStation();
 
     event->setSummary(i18n("Train %1 from %2 to %3", trip.trainNumber(), depStation.name(), arrStation.name()));
-    fillTripReservation(reservation, event);
+    fillTripReservation<TrainTrip>(reservation, event);
 }
 
 static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event)
@@ -253,7 +250,7 @@ static void fillBusReservation(const BusReservation &reservation, const KCalCore
     const auto arrStation = trip.arrivalStation();
 
     event->setSummary(i18n("Bus %1 from %2 to %3", trip.busNumber(), depStation.name(), arrStation.name()));
-    fillTripReservation(reservation, event);
+    fillTripReservation<BusTrip>(reservation, event);
 }
 
 static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event)
