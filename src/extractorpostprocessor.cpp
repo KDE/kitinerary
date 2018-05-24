@@ -77,8 +77,8 @@ public:
     bool filterLodgingReservation(const LodgingReservation &res) const;
     bool filterFlight(const Flight &flight) const;
     bool filterAirport(const Airport &airport) const;
-    bool filterTrainOrBusTrip(const QVariant &trip) const;
-    bool filterTrainOrBusStation(const QVariant &station) const;
+    template <typename T> bool filterTrainOrBusTrip(const T &trip) const;
+    template <typename T> bool filterTrainOrBusStation(const T &station) const;
 
     QVector<QVariant> m_data;
     QDateTime m_contextDate;
@@ -430,10 +430,10 @@ bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
         return filterFlight(res.value<FlightReservation>().reservationFor().value<Flight>());
     }
     if (JsonLd::isA<TrainReservation>(res)) {
-        return filterTrainOrBusTrip(res.value<TrainReservation>().reservationFor());
+        return filterTrainOrBusTrip(res.value<TrainReservation>().reservationFor().value<TrainTrip>());
     }
     if (JsonLd::isA<BusReservation>(res)) {
-        return filterTrainOrBusTrip(res.value<BusReservation>().reservationFor());
+        return filterTrainOrBusTrip(res.value<BusReservation>().reservationFor().value<BusTrip>());
     }
     if (JsonLd::isA<LodgingReservation>(res)) {
         return filterLodgingReservation(res.value<LodgingReservation>());
@@ -467,16 +467,16 @@ bool ExtractorPostprocessorPrivate::filterAirport(const Airport &airport) const
     return !airport.iataCode().isEmpty() || !airport.name().isEmpty();
 }
 
-bool ExtractorPostprocessorPrivate::filterTrainOrBusTrip(const QVariant &trip) const
+template <typename T>
+bool ExtractorPostprocessorPrivate::filterTrainOrBusTrip(const T &trip) const
 {
-    const auto depDt = JsonLdDocument::readProperty(trip, "departureTime").toDateTime();
-    const auto arrDt = JsonLdDocument::readProperty(trip, "arrivalTime").toDateTime();
-    return filterTrainOrBusStation(JsonLdDocument::readProperty(trip, "departureStation"))
-           && filterTrainOrBusStation(JsonLdDocument::readProperty(trip, "arrivalStation"))
-           && depDt.isValid() && arrDt.isValid();
+    return filterTrainOrBusStation(trip.departureStation())
+           && filterTrainOrBusStation(trip.arrivalStation())
+           && trip.departureTime().isValid() && trip.arrivalTime().isValid();
 }
 
-bool ExtractorPostprocessorPrivate::filterTrainOrBusStation(const QVariant &station) const
+template <typename T>
+bool ExtractorPostprocessorPrivate::filterTrainOrBusStation(const T &station) const
 {
-    return !JsonLdDocument::readProperty(station, "name").toString().isEmpty();
+    return !station.name().isEmpty();
 }
