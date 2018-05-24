@@ -1,4 +1,5 @@
 EXTRACT_STATIC = NO
+EXCLUDE_PATTERNS += */knowledgedb-generator/*
 PREDEFINED += \
     KITINERARY_EXPORT="" \
     KITINERARY_PROPERTY(type,name,setter)="Q_PROPERTY(type name READ name WRITE setter)"
