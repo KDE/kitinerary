@@ -28,17 +28,6 @@ using namespace KItinerary::KnowledgeDb;
 
 static_assert(sizeof(CountryId) <= 2, "CountryId too large");
 
-namespace KItinerary {
-namespace KnowledgeDb {
-
-static const auto country_table_size = sizeof(country_table) / sizeof(Country);
-
-const Country* countryTableBegin() { return country_table; }
-const Country* countryTableEnd() { return country_table + country_table_size; }
-
-}
-}
-
 CountryId::CountryId(const QString& id)
 {
     m_id1 = m_id2 = 0;
@@ -56,10 +45,10 @@ CountryId::CountryId(const QString& id)
 
 Country KnowledgeDb::countryForId(CountryId id)
 {
-    const auto it = std::lower_bound(countryTableBegin(), countryTableEnd(), id, [](const Country &lhs, CountryId rhs) {
+    const auto it = std::lower_bound(std::begin(country_table), std::end(country_table), id, [](const Country &lhs, CountryId rhs) {
         return lhs.id < rhs;
     });
-    if (it == countryTableEnd() || (*it).id != id) {
+    if (it == std::end(country_table) || (*it).id != id) {
         return {CountryId{}, DrivingSide::Unknown, Unknown};
     }
     return (*it);
