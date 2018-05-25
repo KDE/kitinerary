@@ -37,9 +37,6 @@ namespace KItinerary {
 /** Methods for converting between ical events and JSON-LD booking data. */
 namespace CalendarHandler
 {
-    /** Returns the start time associated with the given reservation. */
-    KITINERARY_DEPRECATED_EXPORT QDateTime startDateTime(const QVariant &reservation);
-
     /** Attempts to find an event in @p calendar for @p reservation. */
     KITINERARY_EXPORT QSharedPointer<KCalCore::Event> findEvent(const QSharedPointer<KCalCore::Calendar> &calendar, const QVariant &reservation);
 

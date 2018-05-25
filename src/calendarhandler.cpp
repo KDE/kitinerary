@@ -62,11 +62,6 @@ static void fillLodgingReservation(const LodgingReservation &reservation, const 
 static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
 #endif
 
-QDateTime CalendarHandler::startDateTime(const QVariant &reservation)
-{
-    return SortUtil::startDateTime(reservation);
-}
-
 QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalCore::Calendar> &calendar, const QVariant &reservation)
 {
 #ifdef HAVE_KCAL
