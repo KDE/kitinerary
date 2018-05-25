@@ -302,7 +302,7 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
             station.setAddress(addr);
         }
 
-        const auto record = TrainStationDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{id.mid(5)});
+        const auto record = KnowledgeDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{id.mid(5)});
         if (!station.geo().isValid() && record.coordinate.isValid()) {
             GeoCoordinates geo;
             geo.setLatitude(record.coordinate.latitude);
@@ -314,7 +314,7 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
             station.setAddress(addr);
         }
     } else if (id.startsWith(QLatin1String("ibnr:")) && id.size() == 12) {
-        const auto record = TrainStationDb::stationForIbnr(KnowledgeDb::IBNR{id.mid(5).toUInt()});
+        const auto record = KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{id.mid(5).toUInt()});
         if (!station.geo().isValid() && record.coordinate.isValid()) {
             GeoCoordinates geo;
             geo.setLatitude(record.coordinate.latitude);
@@ -343,10 +343,10 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, cons
 
     QTimeZone tz;
     if (station.identifier().startsWith(QLatin1String("sncf:"))) {
-        const auto record = TrainStationDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{station.identifier().mid(5)});
+        const auto record = KnowledgeDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{station.identifier().mid(5)});
         tz = record.timezone.toQTimeZone();
     } else if (station.identifier().startsWith(QLatin1String("ibnr:"))) {
-        const auto record = TrainStationDb::stationForIbnr(KnowledgeDb::IBNR{station.identifier().mid(5).toUInt()});
+        const auto record = KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{station.identifier().mid(5).toUInt()});
         tz = record.timezone.toQTimeZone();
     }
     if (!tz.isValid()) {

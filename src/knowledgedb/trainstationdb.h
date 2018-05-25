@@ -96,18 +96,14 @@ private:
     // TODO 24bit would be enough
     uint32_t m_id = 0;
 };
+
+/** Lookup train station data by IBNR. */
+KITINERARY_EXPORT TrainStation stationForIbnr(IBNR ibnr);
+
+/** Lookup train station data by Gares & Connexions ID. */
+KITINERARY_EXPORT TrainStation stationForGaresConnexionsId(GaresConnexionsId garesConnexionsId);
+
 }
-
-/** Static train station data from Wikidata. */
-namespace TrainStationDb
-{
-    /** Lookup station data by IBNR. */
-    KITINERARY_EXPORT KnowledgeDb::TrainStation stationForIbnr(KnowledgeDb::IBNR ibnr);
-
-    /** Lookup station data by Gares & Connexions ID. */
-    KITINERARY_EXPORT KnowledgeDb::TrainStation stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId garesConnexionsId);
-}
-
 }
 
 #endif // KITINERARY_TRAINSTATIONDB_H

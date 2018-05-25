@@ -34,20 +34,20 @@ class KnowledgeDbTest : public QObject
 private Q_SLOTS:
     void testIBNRLookup()
     {
-        auto station = TrainStationDb::stationForIbnr(IBNR{1234567});
+        auto station = KnowledgeDb::stationForIbnr(IBNR{1234567});
         QVERIFY(!station.coordinate.isValid());
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone());
 
-        station = TrainStationDb::stationForIbnr({});
+        station = KnowledgeDb::stationForIbnr({});
         QVERIFY(!station.coordinate.isValid());
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone());
 
-        station = TrainStationDb::stationForIbnr(IBNR{8011160});
+        station = KnowledgeDb::stationForIbnr(IBNR{8011160});
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone("Europe/Berlin"));
         QCOMPARE(station.country, CountryId{"DE"});
 
-        station = TrainStationDb::stationForIbnr(IBNR{8501687});
+        station = KnowledgeDb::stationForIbnr(IBNR{8501687});
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone("Europe/Zurich"));
         QCOMPARE(station.country, CountryId{"CH"});
@@ -55,25 +55,25 @@ private Q_SLOTS:
 
     void testGaresConnexionsIdLookup()
     {
-        auto station = TrainStationDb::stationForGaresConnexionsId({});
+        auto station = KnowledgeDb::stationForGaresConnexionsId({});
         QVERIFY(!station.coordinate.isValid());
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone());
 
-        station = TrainStationDb::stationForGaresConnexionsId(GaresConnexionsId{"XXXXX"});
+        station = KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId{"XXXXX"});
         QVERIFY(!station.coordinate.isValid());
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone());
 
-        station = TrainStationDb::stationForGaresConnexionsId(GaresConnexionsId{"FRAES"});
+        station = KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId{"FRAES"});
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone("Europe/Paris"));
         QCOMPARE(station.country, CountryId{"FR"});
 
-        station = TrainStationDb::stationForGaresConnexionsId(GaresConnexionsId{QStringLiteral("FRXYT")});
+        station = KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId{QStringLiteral("FRXYT")});
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone("Europe/Paris"));
         QCOMPARE(station.country, CountryId{"FR"});
 
-        station = TrainStationDb::stationForGaresConnexionsId(GaresConnexionsId{"CHGVA"});
+        station = KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId{"CHGVA"});
         QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);
         QVERIFY(station.coordinate.isValid());
         QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);

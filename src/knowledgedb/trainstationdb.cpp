@@ -31,14 +31,6 @@ namespace KnowledgeDb {
 static const auto trainstation_table_size = sizeof(trainstation_table) / sizeof(TrainStation);
 static_assert(trainstation_table_size < (1 << (sizeof(TrainStationIndex) * 8)), "TrainStationIndex data type too small!");
 
-static const auto ibnr_table_size = sizeof(ibnr_table) / sizeof(IBNR);
-static const IBNR* ibnrTableBegin() { return ibnr_table; }
-static const IBNR* ibnrTableEnd() { return ibnr_table + ibnr_table_size; }
-
-static const auto garesConnexionsId_table_size = sizeof(garesConnexionsId_table) / sizeof(GaresConnexionsId);
-static const GaresConnexionsId* garesConnexionsIdBegin() { return garesConnexionsId_table; }
-static const GaresConnexionsId* garesConnexionsIdEnd() { return garesConnexionsId_table + garesConnexionsId_table_size; }
-
 }
 }
 
@@ -50,22 +42,22 @@ GaresConnexionsId::GaresConnexionsId(const QString& id)
     m_id = fromChars(id.toUpper().toLatin1().constData());
 }
 
-TrainStation TrainStationDb::stationForIbnr(IBNR ibnr)
+TrainStation KnowledgeDb::stationForIbnr(IBNR ibnr)
 {
-    const auto ibnrIt = std::lower_bound(ibnrTableBegin(), ibnrTableEnd(), ibnr);
-    if (ibnrIt == ibnrTableEnd() || *ibnrIt != ibnr) {
+    const auto ibnrIt = std::lower_bound(std::begin(ibnr_table), std::end(ibnr_table), ibnr);
+    if (ibnrIt == std::end(ibnr_table) || *ibnrIt != ibnr) {
         return {Coordinate{}, Timezone{}, CountryId{}};
     }
 
-    return trainstation_table[ibnr_index[std::distance(ibnrTableBegin(), ibnrIt)]];
+    return trainstation_table[ibnr_index[std::distance(std::begin(ibnr_table), ibnrIt)]];
 }
 
-TrainStation TrainStationDb::stationForGaresConnexionsId(GaresConnexionsId garesConnexionsId)
+TrainStation KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId garesConnexionsId)
 {
-    const auto gcIt = std::lower_bound(garesConnexionsIdBegin(), garesConnexionsIdEnd(), garesConnexionsId);
-    if (gcIt == garesConnexionsIdEnd() || *gcIt != garesConnexionsId) {
+    const auto gcIt = std::lower_bound(std::begin(garesConnexionsId_table), std::end(garesConnexionsId_table), garesConnexionsId);
+    if (gcIt == std::end(garesConnexionsId_table) || *gcIt != garesConnexionsId) {
         return {Coordinate{}, Timezone{}, CountryId{}};
     }
 
-    return trainstation_table[garesConnexionsId_index[std::distance(garesConnexionsIdBegin(), gcIt)]];
+    return trainstation_table[garesConnexionsId_index[std::distance(std::begin(garesConnexionsId_table), gcIt)]];
 }
