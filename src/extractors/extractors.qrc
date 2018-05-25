@@ -26,6 +26,7 @@
         <file>regiojet.js</file>
         <file>sas.json</file>
         <file>sas-boardingpass.js</file>
+        <file>sas-receipt.js</file>
         <file>sncf.json</file>
         <file>sncf.js</file>
         <file>swiss.json</file>
