@@ -23,7 +23,7 @@
 #include <cstdint>
 
 namespace KItinerary {
-namespace AirportDb  {
+namespace KnowledgeDb  {
 // pack 24 bit offset, 8 bit length and 16 bit IATA index into 48bit with 16bit alignment
 struct Name1Index
 {

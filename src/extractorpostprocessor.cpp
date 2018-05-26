@@ -91,7 +91,7 @@ ExtractorPostprocessor::ExtractorPostprocessor()
 {
 }
 
-ExtractorPostprocessor::ExtractorPostprocessor(ExtractorPostprocessor &&) = default;
+ExtractorPostprocessor::ExtractorPostprocessor(ExtractorPostprocessor &&) noexcept = default;
 ExtractorPostprocessor::~ExtractorPostprocessor() = default;
 
 void ExtractorPostprocessor::process(const QVector<QVariant> &data)
@@ -197,7 +197,7 @@ Airport ExtractorPostprocessorPrivate::processAirport(Airport airport) const
     // complete missing IATA codes
     auto iataCode = airport.iataCode();
     if (iataCode.isEmpty()) {
-        iataCode = AirportDb::iataCodeFromName(airport.name()).toString();
+        iataCode = KnowledgeDb::iataCodeFromName(airport.name()).toString();
         if (!iataCode.isEmpty()) {
             airport.setIataCode(iataCode);
         }
@@ -206,7 +206,7 @@ Airport ExtractorPostprocessorPrivate::processAirport(Airport airport) const
     // complete missing geo coordinates
     auto geo = airport.geo();
     if (!geo.isValid()) {
-        const auto coord = AirportDb::coordinateForAirport(AirportDb::IataCode{iataCode});
+        const auto coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{iataCode});
         if (coord.isValid()) {
             geo.setLatitude(coord.latitude);
             geo.setLongitude(coord.longitude);
@@ -217,7 +217,7 @@ Airport ExtractorPostprocessorPrivate::processAirport(Airport airport) const
     // add country
     auto addr = airport.address();
     if (addr.addressCountry().isEmpty()) {
-        const auto isoCode = AirportDb::countryForAirport(AirportDb::IataCode{iataCode});
+        const auto isoCode = KnowledgeDb::countryForAirport(KnowledgeDb::IataCode{iataCode});
         if (isoCode.isValid()) {
             addr.setAddressCountry(isoCode.toString());
             airport.setAddress(addr);
@@ -249,7 +249,7 @@ void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, QDateTime(
         return;
     }
 
-    const auto tz = AirportDb::timezoneForAirport(AirportDb::IataCode{airport.iataCode()});
+    const auto tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{airport.iataCode()});
     if (!tz.isValid()) {
         return;
     }

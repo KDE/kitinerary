@@ -32,9 +32,7 @@ class QString;
 class QTimeZone;
 
 namespace KItinerary {
-
-/** Database of all civilian airports, their locations and timezones. */
-namespace AirportDb {
+namespace KnowledgeDb {
 
 /** IATA airport code. */
 class KITINERARY_EXPORT IataCode
@@ -76,18 +74,18 @@ private:
  */
 struct Airport {
     IataCode iataCode;
-    KnowledgeDb::CountryId country;
-    KnowledgeDb::Timezone timezone;
+    CountryId country;
+    Timezone timezone;
 };
 
 /** Returns the geographical coordinates the airport with IATA code @p iataCode is in. */
-KITINERARY_EXPORT KnowledgeDb::Coordinate coordinateForAirport(IataCode iataCode);
+KITINERARY_EXPORT Coordinate coordinateForAirport(IataCode iataCode);
 
 /** Returns the timezone the airport with IATA code @p iataCode is in. */
 KITINERARY_EXPORT QTimeZone timezoneForAirport(IataCode iataCode);
 
 /** Returns the country the airport with IATA code @p iataCode is in. */
-KITINERARY_EXPORT KnowledgeDb::CountryId countryForAirport(IataCode iataCode);
+KITINERARY_EXPORT CountryId countryForAirport(IataCode iataCode);
 
 /** Attempts to find the unique IATA code for the given airport name. */
 KITINERARY_EXPORT IataCode iataCodeFromName(const QString &name);

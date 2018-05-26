@@ -34,121 +34,121 @@ class AirportDbTest : public QObject
 private Q_SLOTS:
     void iataCodeTest()
     {
-        const auto txl = AirportDb::IataCode{"TXL"};
+        const auto txl = KnowledgeDb::IataCode{"TXL"};
         QVERIFY(txl.isValid());
-        const auto invalid = AirportDb::IataCode{};
+        const auto invalid = KnowledgeDb::IataCode{};
         QVERIFY(!invalid.isValid());
         QVERIFY(txl != invalid);
         QVERIFY(!(txl == invalid));
         QVERIFY(txl == txl);
         QCOMPARE(invalid.toString(), QString());
 
-        const auto cdg = AirportDb::IataCode{"CDG"};
+        const auto cdg = KnowledgeDb::IataCode{"CDG"};
         QVERIFY(cdg.isValid());
         QVERIFY(cdg != txl);
         QVERIFY(!(cdg == txl));
         QVERIFY(cdg < txl);
         QVERIFY(!(txl < cdg));
 
-        QVERIFY(AirportDb::IataCode{"ABC"} < AirportDb::IataCode{"CBA"});
-        QVERIFY(!(AirportDb::IataCode{"CBA"} < AirportDb::IataCode{"ABC"}));
+        QVERIFY(KnowledgeDb::IataCode{"ABC"} < KnowledgeDb::IataCode{"CBA"});
+        QVERIFY(!(KnowledgeDb::IataCode{"CBA"} < KnowledgeDb::IataCode{"ABC"}));
     }
 
     void coordinateLookupTest()
     {
-        auto coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"TXL"});
+        auto coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"TXL"});
         QVERIFY(coord.isValid());
         QCOMPARE((int)coord.longitude, 13);
         QCOMPARE((int)coord.latitude, 52);
 
-        coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"XXX"});
+        coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"XXX"});
         QVERIFY(!coord.isValid());
         QVERIFY(std::isnan(coord.latitude));
         QVERIFY(std::isnan(coord.longitude));
 
         // test coordinate parsing corner cases
-        coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"LCY"});
+        coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"LCY"});
         QCOMPARE((int)coord.longitude, 0);
         QVERIFY(coord.longitude > 0.0f);
-        coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"LHR"});
+        coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"LHR"});
         QCOMPARE((int)coord.longitude, 0);
         QVERIFY(coord.longitude < 0.0f);
 
         // Köln-Bonn is a hybrid civilian/military airport, so that should be included
-        coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"CGN"});
+        coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"CGN"});
         QVERIFY(coord.isValid());
         // Frankfurt-Hahn is a former military airport, should be included
-        coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"HHN"});
+        coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"HHN"});
         QVERIFY(coord.isValid());
         // Ramstein is a military airport that should not be included
-        coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"RMS"});
+        coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"RMS"});
         QVERIFY(!coord.isValid());
 
         // IATA codes that changed airports in various ways
-        QVERIFY(AirportDb::coordinateForAirport(AirportDb::IataCode{"DEN"}).isValid());
-        QVERIFY(AirportDb::coordinateForAirport(AirportDb::IataCode{"MUC"}).isValid());
-        QVERIFY(AirportDb::coordinateForAirport(AirportDb::IataCode{"GOT"}).isValid());
-        QVERIFY(AirportDb::coordinateForAirport(AirportDb::IataCode{"OSL"}).isValid());
+        QVERIFY(KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"DEN"}).isValid());
+        QVERIFY(KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"MUC"}).isValid());
+        QVERIFY(KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"GOT"}).isValid());
+        QVERIFY(KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"OSL"}).isValid());
 
         // IATA codes of no longer active airports
-        QVERIFY(!AirportDb::coordinateForAirport(AirportDb::IataCode{"THF"}).isValid());
+        QVERIFY(!KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"THF"}).isValid());
 
         // IATA codes of civilian airports that match the primitive military filter
-        QVERIFY(AirportDb::coordinateForAirport(AirportDb::IataCode{"RAF"}).isValid());
-        QVERIFY(AirportDb::coordinateForAirport(AirportDb::IataCode{"CFB"}).isValid());
-        QVERIFY(AirportDb::coordinateForAirport(AirportDb::IataCode{"PAF"}).isValid());
+        QVERIFY(KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"RAF"}).isValid());
+        QVERIFY(KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"CFB"}).isValid());
+        QVERIFY(KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"PAF"}).isValid());
 
         // one airport with 3 IATA codes
-        coord = AirportDb::coordinateForAirport(AirportDb::IataCode{"BSL"});
+        coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"BSL"});
         QVERIFY(coord.isValid());
-        QCOMPARE(AirportDb::coordinateForAirport(AirportDb::IataCode{"BSL"}), AirportDb::coordinateForAirport(AirportDb::IataCode{"MLH"}));
-        QCOMPARE(AirportDb::coordinateForAirport(AirportDb::IataCode{"BSL"}), AirportDb::coordinateForAirport(AirportDb::IataCode{"EAP"}));
+        QCOMPARE(KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"BSL"}), KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"MLH"}));
+        QCOMPARE(KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"BSL"}), KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"EAP"}));
     }
 
     void timezoneLookupTest()
     {
-        auto tz = AirportDb::timezoneForAirport(AirportDb::IataCode{"TXL"});
+        auto tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{"TXL"});
         QVERIFY(tz.isValid());
         QCOMPARE(tz.id(), QByteArray("Europe/Berlin"));
 
-        tz = AirportDb::timezoneForAirport(AirportDb::IataCode{"XXX"});
+        tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{"XXX"});
         QVERIFY(!tz.isValid());
 
         // tiny, make sure our lookup resolution is big enough for that
-        tz = AirportDb::timezoneForAirport(AirportDb::IataCode{"LUX"});
+        tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{"LUX"});
         QCOMPARE(tz.id(), QByteArray("Europe/Luxembourg"));
     }
 
     void iataLookupTest()
     {
         // via unique fragment lookup
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("Flughafen Berlin-Tegel")), AirportDb::IataCode{"TXL"});
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("TEGEL")), AirportDb::IataCode{"TXL"});
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("Paris Charles de Gaulle")), AirportDb::IataCode{"CDG"});
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("Zürich")), AirportDb::IataCode{"ZRH"});
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("AMSTERDAM, NL (SCHIPHOL AIRPORT)")), AirportDb::IataCode{"AMS"});
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("London Heathrow")), AirportDb::IataCode{"LHR"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Flughafen Berlin-Tegel")), KnowledgeDb::IataCode{"TXL"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("TEGEL")), KnowledgeDb::IataCode{"TXL"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Paris Charles de Gaulle")), KnowledgeDb::IataCode{"CDG"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Zürich")), KnowledgeDb::IataCode{"ZRH"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("AMSTERDAM, NL (SCHIPHOL AIRPORT)")), KnowledgeDb::IataCode{"AMS"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("London Heathrow")), KnowledgeDb::IataCode{"LHR"});
 
         // via non-unique fragment lookup
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("John F. Kennedy International Airport")), AirportDb::IataCode{"JFK"});
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("San Francisco International")), AirportDb::IataCode{"SFO"});
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("Düsseldorf International")), AirportDb::IataCode{"DUS"});
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("London City")), AirportDb::IataCode{"LCY"});
-        QCOMPARE(AirportDb::iataCodeFromName(QStringLiteral("DETROIT, MI (METROPOLITAN WAYNE CO)")), AirportDb::IataCode{"DTW"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("John F. Kennedy International Airport")), KnowledgeDb::IataCode{"JFK"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("San Francisco International")), KnowledgeDb::IataCode{"SFO"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Düsseldorf International")), KnowledgeDb::IataCode{"DUS"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("London City")), KnowledgeDb::IataCode{"LCY"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("DETROIT, MI (METROPOLITAN WAYNE CO)")), KnowledgeDb::IataCode{"DTW"});
 
         // not unique
-        QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("Flughafen Berlin")).isValid());
-        QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("Charles de Gaulle Orly")).isValid());
-        QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("Brussels Airport, BE")).isValid());
-        QVERIFY(!AirportDb::iataCodeFromName(QStringLiteral("Frankfurt")).isValid());
+        QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Flughafen Berlin")).isValid());
+        QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Charles de Gaulle Orly")).isValid());
+        QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Brussels Airport, BE")).isValid());
+        QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Frankfurt")).isValid());
     }
 
     void countryDataTest()
     {
-        auto iso = AirportDb::countryForAirport(AirportDb::IataCode{});
+        auto iso = KnowledgeDb::countryForAirport(KnowledgeDb::IataCode{});
         QVERIFY(!iso.isValid());
 
-        iso = AirportDb::countryForAirport(AirportDb::IataCode{"TXL"});
+        iso = KnowledgeDb::countryForAirport(KnowledgeDb::IataCode{"TXL"});
         QCOMPARE(iso, KnowledgeDb::CountryId{"DE"});
     }
 };

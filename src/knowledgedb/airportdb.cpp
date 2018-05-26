@@ -30,7 +30,7 @@
 #include <cstring>
 
 namespace KItinerary {
-namespace AirportDb {
+namespace KnowledgeDb {
 static_assert(sizeof(IataCode) == sizeof(uint16_t), "IATA code changed size!");
 static_assert(alignof(Airport) <= sizeof(Airport), "Airport struct alignment too big!");
 

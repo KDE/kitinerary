@@ -28,7 +28,7 @@
 #include <QRegularExpression>
 
 using namespace KItinerary;
-using namespace KItinerary::AirportDb;
+using namespace KItinerary::KnowledgeDb;
 using namespace KItinerary::Generator;
 
 static bool soundsMilitaryish(const QString &s)
@@ -266,7 +266,7 @@ bool AirportDbGenerator::generate(QIODevice* out)
 using namespace KItinerary::KnowledgeDb;
 
 namespace KItinerary {
-namespace AirportDb {
+namespace KnowledgeDb {
 
 // airport data sorted by IATA code
 // the corresponding index is used to acces data the following tables
@@ -319,7 +319,7 @@ static const char name1_string_table[] =
         out->write("\" // ");
         out->write(it.value().at(0).toUtf8());
         out->write("\n");
-        string_offsets.push_back(Name1Index{label_offset, (uint8_t)it.key().toUtf8().size(), (uint16_t)std::distance(m_iataMap.begin(), m_iataMap.find(it.value().at(0)))});
+        string_offsets.emplace_back(Name1Index{label_offset, (uint8_t)it.key().toUtf8().size(), (uint16_t)std::distance(m_iataMap.begin(), m_iataMap.find(it.value().at(0)))});
         label_offset += it.key().toUtf8().size();
     }
     out->write(R"(;

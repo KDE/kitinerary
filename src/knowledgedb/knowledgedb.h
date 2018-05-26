@@ -22,7 +22,12 @@
 
 namespace KItinerary {
 
-/** Utilities and basic data types for the static knowledge database. */
+/** Lookup functions, utilities and data types for the static knowledge database.
+ *  The content accessible by this functions is extracted from Wikidata and compiled
+ *  into this library.
+ *  @note The types in this namespace match the binary storage structure and thus
+ *  are not intented for use in binary compatible APIs.
+ */
 namespace KnowledgeDb
 {
 

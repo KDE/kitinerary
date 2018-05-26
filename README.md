@@ -17,6 +17,8 @@ There's a number of ways to extract reservation or itinerary data:
   provided by KItinerary::StructuredDataExtractor.
 * Structured data from IATA bar coded boarding passes (BCBP), provided by
   KItinerary::IataBcbpParser.
+* Structured data from UIC 918.3 train ticket passes, provided by
+  KItinerary::Uic9183Parser.
 * Unstructured data from plain text, HTML or PDF email parts, using
   vendor-specific scripts, provided by KItinerary::ExtractorEngine.
 * Unstructured data from Apple Wallet boarding passes, using
@@ -26,7 +28,8 @@ There's a number of ways to extract reservation or itinerary data:
 
 Extracted data can be augmented by static knowledge obtained from Wikidata:
 
-Via KItinerary::AirportDb:
-* Airport IATA codes.
-* Airport timezones.
-* Airport geo coordinates.
+Via KItinerary::KnowledgeDb:
+* Airport IATA codes, countries, timezones and geo coordinates.
+* Train station countries, timezones and geo coordinates.
+* Train station lookup by IBNR or Gares & Connexion IDs.
+* Country ISO codes, driving side and used power plugs.

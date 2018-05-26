@@ -13,7 +13,7 @@
 using namespace KItinerary::KnowledgeDb;
 
 namespace KItinerary {
-namespace AirportDb {
+namespace KnowledgeDb {
 
 // airport data sorted by IATA code
 // the corresponding index is used to acces data the following tables

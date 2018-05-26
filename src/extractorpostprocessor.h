@@ -37,7 +37,7 @@ class KITINERARY_EXPORT ExtractorPostprocessor
 public:
     ExtractorPostprocessor();
     ExtractorPostprocessor(const ExtractorPostprocessor&) = delete;
-    ExtractorPostprocessor(ExtractorPostprocessor&&);
+    ExtractorPostprocessor(ExtractorPostprocessor&&) noexcept;
     ~ExtractorPostprocessor();
 
     /** This will normalize and augment the given data elements and merge them with
