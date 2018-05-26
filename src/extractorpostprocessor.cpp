@@ -75,7 +75,7 @@ public:
     FoodEstablishmentReservation processFoodEstablishmentReservation(FoodEstablishmentReservation res) const;
     TouristAttractionVisit processTouristAttractionVisit(TouristAttractionVisit visit) const;
 
-    QVariant processReservation(QVariant res) const;
+    template <typename T> T processReservation(T res) const;
     Person processPerson(Person person) const;
     template <typename T> T processPlace(T place) const;
 
@@ -117,16 +117,6 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
             elem = d->processTouristAttractionVisit(elem.value<TouristAttractionVisit>());
         } else if (JsonLd::isA<BusReservation>(elem)) {
             elem = d->processBusReservation(elem.value<BusReservation>());
-        }
-
-        if (JsonLd::canConvert<Reservation>(elem)) {
-            auto res = JsonLd::convert<Reservation>(elem);
-            if (!res.underName().isNull()) {
-                const auto person = d->processPerson(res.underName().value<Person>());
-                res.setUnderName(person);
-                JsonLdDocument::writeProperty(elem, "underName", person);
-            }
-            elem = d->processReservation(elem);
         }
 
         d->mergeOrAppend(elem);
@@ -181,7 +171,7 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
     }
 
     res.setReservationFor(processFlight(res.reservationFor().value<Flight>()));
-    return res;
+    return processReservation(res);
 }
 
 Flight ExtractorPostprocessorPrivate::processFlight(Flight flight) const
@@ -276,7 +266,7 @@ QDateTime ExtractorPostprocessorPrivate::processFlightTime(QDateTime dt, const F
 TrainReservation ExtractorPostprocessorPrivate::processTrainReservation(TrainReservation res) const
 {
     res.setReservationFor(processTrainTrip(res.reservationFor().value<TrainTrip>()));
-    return res;
+    return processReservation(res);
 }
 
 TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
@@ -371,7 +361,7 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, cons
 BusReservation ExtractorPostprocessorPrivate::processBusReservation(BusReservation res) const
 {
     res.setReservationFor(processBusTrip(res.reservationFor().value<BusTrip>()));
-    return res;
+    return processReservation(res);
 }
 
 BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
@@ -384,13 +374,13 @@ BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
 LodgingReservation ExtractorPostprocessorPrivate::processLodgingReservation(LodgingReservation res) const
 {
     res.setReservationFor(processPlace(res.reservationFor().value<LodgingBusiness>()));
-    return res;
+    return processReservation(res);
 }
 
 FoodEstablishmentReservation ExtractorPostprocessorPrivate::processFoodEstablishmentReservation(FoodEstablishmentReservation res) const
 {
     res.setReservationFor(processPlace(res.reservationFor().value<FoodEstablishment>()));
-    return res;
+    return processReservation(res);
 }
 
 TouristAttractionVisit ExtractorPostprocessorPrivate::processTouristAttractionVisit(TouristAttractionVisit visit) const
@@ -399,18 +389,23 @@ TouristAttractionVisit ExtractorPostprocessorPrivate::processTouristAttractionVi
     return visit;
 }
 
-QVariant ExtractorPostprocessorPrivate::processReservation(QVariant res) const
+template <typename T>
+T ExtractorPostprocessorPrivate::processReservation(T res) const
 {
-    const auto viewUrl = JsonLdDocument::readProperty(res, "url").toUrl();
-    const auto modUrl = JsonLdDocument::readProperty(res, "modifyReservationUrl").toUrl();
-    const auto cancelUrl = JsonLdDocument::readProperty(res, "cancelReservationUrl").toUrl();
     // remove duplicated urls
+    const auto viewUrl = res.url();
+    const auto modUrl = res.modifyReservationUrl();
+    const auto cancelUrl = res.cancelReservationUrl();
+
     if (modUrl.isValid() && viewUrl == modUrl) {
-        JsonLdDocument::removeProperty(res, "modifyReservationUrl");
+        res.setModifyReservationUrl({});
     }
     if (cancelUrl.isValid() && viewUrl == cancelUrl) {
-        JsonLdDocument::removeProperty(res, "cancelReservationUrl");
+        res.setCancelReservationUrl({});
     }
+
+    // process underName
+    res.setUnderName(processPerson(res.underName().template value<Person>()));
 
     return res;
 }
