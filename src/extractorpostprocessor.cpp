@@ -61,14 +61,17 @@ public:
     Flight processFlight(Flight flight) const;
     Airport processAirport(Airport airport) const;
     Airline processAirline(Airline airline) const;
-    void processFlightTime(Flight &flight, QDateTime(Flight::* getter)() const, void(Flight::* setter)(const QDateTime&), const Airport &airport) const;
+    QDateTime processFlightTime(QDateTime dt, const Flight &flight, const Airport &airport) const;
+
     TrainReservation processTrainReservation(TrainReservation res) const;
     TrainTrip processTrainTrip(TrainTrip trip) const;
     TrainStation processTrainStation(TrainStation station) const;
     QDateTime processTrainTripTime(QDateTime dt, const TrainStation &station) const;
+
     LodgingReservation processLodgingReservation(LodgingReservation res) const;
     FoodEstablishmentReservation processFoodEstablishmentReservation(FoodEstablishmentReservation res) const;
     TouristAttractionVisit processTouristAttractionVisit(TouristAttractionVisit visit) const;
+
     QVariant processReservation(QVariant res) const;
     Person processPerson(Person person) const;
     template <typename T> T processPlace(T place) const;
@@ -181,11 +184,9 @@ Flight ExtractorPostprocessorPrivate::processFlight(Flight flight) const
     flight.setDepartureAirport(processAirport(flight.departureAirport()));
     flight.setArrivalAirport(processAirport(flight.arrivalAirport()));
     flight.setAirline(processAirline(flight.airline()));
-
-    processFlightTime(flight, &Flight::boardingTime, &Flight::setBoardingTime, flight.departureAirport());
-    processFlightTime(flight, &Flight::departureTime, &Flight::setDepartureTime, flight.departureAirport());
-    processFlightTime(flight, &Flight::arrivalTime, &Flight::setArrivalTime, flight.arrivalAirport());
-
+    flight.setBoardingTime(processFlightTime(flight.boardingTime(), flight, flight.departureAirport()));
+    flight.setDepartureTime(processFlightTime(flight.departureTime(), flight, flight.departureAirport()));
+    flight.setArrivalTime(processFlightTime(flight.arrivalTime(), flight, flight.arrivalAirport()));
     return flight;
 }
 
@@ -233,30 +234,28 @@ Airline ExtractorPostprocessorPrivate::processAirline(Airline airline) const
     return airline;
 }
 
-void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, QDateTime(Flight::* getter)() const, void(Flight::* setter)(const QDateTime&), const Airport &airport) const
+QDateTime ExtractorPostprocessorPrivate::processFlightTime(QDateTime dt, const Flight &flight, const Airport &airport) const
 {
-    auto dt = (flight.*getter)();
     if (!dt.isValid()) {
-        return;
+        return dt;
     }
 
     if (dt.date().year() <= 1970 && flight.departureDay().isValid()) { // we just have the time, but not the day
         dt.setDate(flight.departureDay());
-        (flight.*setter)(dt);
     }
 
     if (dt.timeSpec() == Qt::TimeZone || airport.iataCode().isEmpty()) {
-        return;
+        return dt;
     }
 
     const auto tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{airport.iataCode()});
     if (!tz.isValid()) {
-        return;
+        return dt;
     }
 
     // prefer our timezone over externally provided UTC offset, if they match
     if (dt.timeSpec() == Qt::OffsetFromUTC && tz.offsetFromUtc(dt) != dt.offsetFromUtc()) {
-        return;
+        return dt;
     }
 
     if (dt.timeSpec() == Qt::OffsetFromUTC || dt.timeSpec() == Qt::LocalTime) {
@@ -265,11 +264,8 @@ void ExtractorPostprocessorPrivate::processFlightTime(Flight &flight, QDateTime(
     } else if (dt.timeSpec() == Qt::UTC) {
         dt = dt.toTimeZone(tz);
     }
-    // if we updated from UTC offset to timezone spec here, QDateTime will compare equal
-    // and the auto-generated property code will not actually update the property
-    // so, clear the property first to force an update
-    (flight.*setter)(QDateTime());
-    (flight.*setter)(dt);
+
+    return dt;
 }
 
 TrainReservation ExtractorPostprocessorPrivate::processTrainReservation(TrainReservation res) const
