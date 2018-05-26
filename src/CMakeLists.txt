@@ -34,6 +34,10 @@ set(kitinerary_lib_srcs
     datatypes/traintrip.cpp
     datatypes/visit.cpp
 
+    jsapi/barcode.cpp
+    jsapi/context.cpp
+    jsapi/jsonld.cpp
+
     knowledgedb/airportdb.cpp
     knowledgedb/countrydb.cpp
     knowledgedb/knowledgedb.cpp

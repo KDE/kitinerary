@@ -44,7 +44,7 @@ class KITINERARY_EXPORT ExtractorEngine
 public:
     ExtractorEngine();
     ~ExtractorEngine();
-    ExtractorEngine(ExtractorEngine &&);
+    ExtractorEngine(ExtractorEngine &&) noexcept;
     ExtractorEngine(const ExtractorEngine &) = delete;
 
     /** Resets the internal state, call before processing new input data. */

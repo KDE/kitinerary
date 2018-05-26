@@ -1,0 +1,67 @@
+/*
+    Copyright (C) 2018 Volker Krause <vkrause@kde.org>
+
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Library General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or (at your
+    option) any later version.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public
+    License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "barcode.h"
+
+#include <KItinerary/BarcodeDecoder>
+#include <KItinerary/PdfDocument>
+#include <KItinerary/Uic9183Parser>
+
+#include <QImage>
+
+using namespace KItinerary;
+
+QString JsApi::Barcode::decodePdf417(const QVariant &img) const
+{
+    if (img.userType() == qMetaTypeId<PdfImage>()) {
+        QImage image = img.value<PdfImage>().image();
+        if (image.width() < image.height()) {
+            QTransform tf;
+            tf.rotate(-90);
+            image = image.transformed(tf);
+        }
+        return BarcodeDecoder::decodePdf417(image);
+    }
+    return {};
+}
+
+QString JsApi::Barcode::decodeAztec(const QVariant &img) const
+{
+    if (img.userType() == qMetaTypeId<PdfImage>()) {
+        return BarcodeDecoder::decodeAztec(img.value<PdfImage>().image());
+    }
+    return {};
+}
+
+QString JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
+{
+    if (img.userType() == qMetaTypeId<PdfImage>()) {
+        const auto b = BarcodeDecoder::decodeAztecBinary(img.value<PdfImage>().image());
+        // ugly, but this at least makes js preserve \0 bytes it seems...
+        return QString::fromLatin1(b.constData(), b.size());
+    }
+    return {};
+}
+
+QVariant JsApi::Barcode::decodeUic9183(const QString &s) const
+{
+    Uic9183Parser p;
+    p.parse(s.toLatin1());
+    return QVariant::fromValue(p);
+}
+
+#include "moc_barcode.cpp"

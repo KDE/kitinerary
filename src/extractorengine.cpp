@@ -18,12 +18,14 @@
 */
 
 #include "extractorengine.h"
-#include "barcodedecoder.h"
 #include "extractor.h"
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "pdfdocument.h"
-#include "uic9183parser.h"
+
+#include "jsapi/barcode.h"
+#include "jsapi/context.h"
+#include "jsapi/jsonld.h"
 
 #include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>
@@ -31,7 +33,6 @@
 
 #include <QDateTime>
 #include <QFile>
-#include <QImage>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -43,8 +44,6 @@ using namespace KItinerary;
 
 namespace KItinerary {
 
-class ContextObject;
-
 class ExtractorEnginePrivate {
 public:
     void setupEngine();
@@ -52,7 +51,7 @@ public:
     void extractPass();
 
     const Extractor *m_extractor = nullptr;
-    ContextObject *m_context = nullptr;
+    JsApi::Context *m_context = nullptr;
     QString m_text;
     PdfDocument *m_pdfDoc = nullptr;
     KPkPass::BoardingPass *m_pass;
@@ -60,138 +59,15 @@ public:
     QJSEngine m_engine;
 };
 
-class JsonLdJsApi : public QObject
-{
-    Q_OBJECT
-public:
-    explicit JsonLdJsApi(QJSEngine *engine)
-        : QObject(engine)
-        , m_engine(engine)
-    {
-    }
-
-    Q_INVOKABLE QJSValue newObject(const QString &typeName) const;
-    Q_INVOKABLE QDateTime toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const;
-    Q_INVOKABLE QJSValue toJson(const QVariant &v) const;
-
-private:
-    QJSEngine *m_engine;
-};
-
-QJSValue JsonLdJsApi::newObject(const QString &typeName) const
-{
-    auto v = m_engine->newObject();
-    v.setProperty(QStringLiteral("@type"), typeName);
-    return v;
-}
-
-// two digit year numbers end up in the last century, fix that
-static QDateTime fixupDate(const QDateTime &dt)
-{
-    if (dt.date().year() / 100 == 19) {
-        return dt.addYears(100);
-    }
-    return dt;
-}
-
-QDateTime JsonLdJsApi::toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const
-{
-    QLocale locale(localeName);
-    const auto dt = locale.toDateTime(dtStr, format);
-    if (dt.isValid()) {
-        return fixupDate(dt);
-    }
-
-    // try harder for the "MMM" month format
-    // QLocale expects the exact string in QLocale::shortMonthName(), while we often encounter a three
-    // letter month identifier. For en_US that's the same, for Swedish it isn't though for example. So
-    // let's try to fix up the month identifiers to the full short name.
-    if (format.contains(QLatin1String("MMM"))) {
-        auto dtStrFixed = dtStr;
-        for (int i = 0; i < 12; ++i) {
-            const auto monthName = locale.monthName(i, QLocale::ShortFormat);
-            dtStrFixed = dtStrFixed.replace(monthName.left(3), monthName);
-        }
-        return fixupDate(locale.toDateTime(dtStrFixed, format));
-    }
-    return dt;
-}
-
-QJSValue JsonLdJsApi::toJson(const QVariant &v) const
-{
-    const auto json = JsonLdDocument::toJson({v});
-    if (json.isEmpty()) {
-        return {};
-    }
-    return m_engine->toScriptValue(json.at(0));
-}
-
-class BarcodeJsApi : public QObject
-{
-    Q_OBJECT
-public:
-    Q_INVOKABLE QString decodePdf417(const QVariant &img) const;
-    Q_INVOKABLE QString decodeAztec(const QVariant &img) const;
-    Q_INVOKABLE QString decodeAztecBinary(const QVariant &img) const;
-    Q_INVOKABLE QVariant decodeUic9183(const QString &s) const;
-};
-
-QString BarcodeJsApi::decodePdf417(const QVariant &img) const
-{
-    if (img.userType() == qMetaTypeId<PdfImage>()) {
-        QImage image = img.value<PdfImage>().image();
-	if (image.width() < image.height()) {
-             QTransform tf;
-             tf.rotate(-90);
-	     image = image.transformed(tf);
-	}
-        return BarcodeDecoder::decodePdf417(image);
-    }
-    return {};
-}
-
-QString BarcodeJsApi::decodeAztec(const QVariant &img) const
-{
-    if (img.userType() == qMetaTypeId<PdfImage>()) {
-        return BarcodeDecoder::decodeAztec(img.value<PdfImage>().image());
-    }
-    return {};
-}
-
-QString BarcodeJsApi::decodeAztecBinary(const QVariant &img) const
-{
-    if (img.userType() == qMetaTypeId<PdfImage>()) {
-        const auto b = BarcodeDecoder::decodeAztecBinary(img.value<PdfImage>().image());
-        // ugly, but this at least makes js preserve \0 bytes it seems...
-        return QString::fromLatin1(b.constData(), b.size());
-    }
-    return {};
-}
-
-QVariant BarcodeJsApi::decodeUic9183(const QString &s) const
-{
-    Uic9183Parser p;
-    p.parse(s.toLatin1());
-    return QVariant::fromValue(p);
-}
-
-class ContextObject : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QDateTime senderDate MEMBER m_senderDate)
-
-public:
-    QDateTime m_senderDate;
-};
 }
 
 void ExtractorEnginePrivate::setupEngine()
 {
-    m_context = new ContextObject; // will be deleted by QJSEngine taking ownership
+    m_context = new JsApi::Context; // will be deleted by QJSEngine taking ownership
     m_engine.installExtensions(QJSEngine::ConsoleExtension);
-    auto jsApi = new JsonLdJsApi(&m_engine);
+    auto jsApi = new JsApi::JsonLd(&m_engine);
     m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), m_engine.newQObject(jsApi));
-    m_engine.globalObject().setProperty(QStringLiteral("Barcode"), m_engine.newQObject(new BarcodeJsApi));
+    m_engine.globalObject().setProperty(QStringLiteral("Barcode"), m_engine.newQObject(new JsApi::Barcode));
     m_engine.globalObject().setProperty(QStringLiteral("Context"), m_engine.newQObject(m_context));
 }
 
@@ -202,7 +78,7 @@ ExtractorEngine::ExtractorEngine()
     d->setupEngine();
 }
 
-ExtractorEngine::ExtractorEngine(ExtractorEngine &&) = default;
+ExtractorEngine::ExtractorEngine(ExtractorEngine &&) noexcept = default;
 ExtractorEngine::~ExtractorEngine() = default;
 
 void ExtractorEngine::clear()
@@ -424,5 +300,3 @@ void ExtractorEnginePrivate::extractPass()
 
     m_result[0] = res;
 }
-
-#include "extractorengine.moc"
