@@ -68,6 +68,9 @@ public:
     TrainStation processTrainStation(TrainStation station) const;
     QDateTime processTrainTripTime(QDateTime dt, const TrainStation &station) const;
 
+    BusReservation processBusReservation(BusReservation res) const;
+    BusTrip processBusTrip(BusTrip trip) const;
+
     LodgingReservation processLodgingReservation(LodgingReservation res) const;
     FoodEstablishmentReservation processFoodEstablishmentReservation(FoodEstablishmentReservation res) const;
     TouristAttractionVisit processTouristAttractionVisit(TouristAttractionVisit visit) const;
@@ -112,6 +115,8 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
             elem = d->processFoodEstablishmentReservation(elem.value<FoodEstablishmentReservation>());
         } else if (JsonLd::isA<TouristAttractionVisit>(elem)) {
             elem = d->processTouristAttractionVisit(elem.value<TouristAttractionVisit>());
+        } else if (JsonLd::isA<BusReservation>(elem)) {
+            elem = d->processBusReservation(elem.value<BusReservation>());
         }
 
         if (JsonLd::canConvert<Reservation>(elem)) {
@@ -361,6 +366,19 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, cons
         dt = dt.toTimeZone(tz);
     }
     return dt;
+}
+
+BusReservation ExtractorPostprocessorPrivate::processBusReservation(BusReservation res) const
+{
+    res.setReservationFor(processBusTrip(res.reservationFor().value<BusTrip>()));
+    return res;
+}
+
+BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
+{
+    trip.setDepartureStation(processPlace(trip.departureStation()));
+    trip.setArrivalStation(processPlace(trip.arrivalStation()));
+    return trip;
 }
 
 LodgingReservation ExtractorPostprocessorPrivate::processLodgingReservation(LodgingReservation res) const
