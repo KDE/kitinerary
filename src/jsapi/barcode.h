@@ -29,15 +29,15 @@ class Barcode : public QObject
     Q_OBJECT
 public:
     /** Decode a PDF417 barcode image.
-     *  @param img An image containing the barcode, e.g. a PDFImage instance.
+     *  @param img An image containing the barcode, e.g. a PdfImage instance.
      */
     Q_INVOKABLE QString decodePdf417(const QVariant &img) const;
     /** Decode a Aztec barcode image.
-     *  @param img An image containing the barcode, e.g. a PDFImage instance.
+     *  @param img An image containing the barcode, e.g. a PdfImage instance.
      */
     Q_INVOKABLE QString decodeAztec(const QVariant &img) const;
     /** Decode a Aztec barcode image containing binary data.
-     *  @param img An image containing the barcode, e.g. a PDFImage instance.
+     *  @param img An image containing the barcode, e.g. a PdfImage instance.
      */
     Q_INVOKABLE QString decodeAztecBinary(const QVariant &img) const;
     /** Decode an UIC 918.3 message from a train ticket Aztec code.

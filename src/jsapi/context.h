@@ -23,7 +23,9 @@
 
 namespace KItinerary {
 
-/** JavaScript API exposed to extractor scripts. */
+/** JavaScript API exposed to extractor scripts.
+ *  @see ExtractorEngine
+ */
 namespace JsApi {
 
 /** The extraction context.

@@ -31,10 +31,12 @@ class JsonLd : public QObject
 {
     Q_OBJECT
 public:
+    ///@cond internal
     explicit JsonLd(QJSEngine *engine);
     ~JsonLd();
+    ///@endcond
 
-    /** Create a new JSON-LD object of type @typeName. */
+    /** Create a new JSON-LD object of type @p typeName. */
     Q_INVOKABLE QJSValue newObject(const QString &typeName) const;
     /** Convert a date/time string to a date/time value.
      *  @param dtStr The input string containing a date/time value.
