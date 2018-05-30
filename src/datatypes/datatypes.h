@@ -31,14 +31,14 @@ namespace KItinerary {
 /** JSON-LD data type helper functions. */
 namespace JsonLd {
 
-/** Returns @c true if @p value is of type @tparam T. */
+/** Returns @c true if @p value is of type @p T. */
 template <typename T>
 inline bool isA(const QVariant &value)
 {
     return value.userType() == qMetaTypeId<T>();
 }
 
-/** Checks if the given value can be up-cast to T */
+/** Checks if the given value can be up-cast to @p T */
 template <typename T>
 inline bool canConvert(const QVariant &value)
 {
@@ -49,7 +49,7 @@ inline bool canConvert(const QVariant &value)
     return mo->inherits(&T::staticMetaObject);
 }
 
-/** Up-cast @p value to T.
+/** Up-cast @p value to @p T.
  *  @note This does not perform any safety checks!
  *  @see canConvert
  */
@@ -61,7 +61,6 @@ inline T convert(const QVariant &value)
 
 }
 
-///@cond internal
 namespace detail {
 
 template <typename T>
@@ -97,7 +96,5 @@ public: \
     Type Name() const; \
     void SetName(KItinerary::detail::parameter_type<Type>::type value); \
 private:
-
-///@endcond
 
 #endif
