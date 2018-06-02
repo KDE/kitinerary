@@ -11,9 +11,6 @@ endif()
 if (TARGET zxing::libzxing)
     set(HAVE_ZXING ON)
 endif()
-if (ZLIB_FOUND)
-    set(HAVE_ZLIB ON)
-endif()
 if (TARGET KF5::CalendarCore)
     set(HAVE_KCAL ON)
 endif()
@@ -83,15 +80,13 @@ target_link_libraries(KPimItinerary
         Qt5::Qml
         KF5::I18n
         KPim::PkPass
+        ${ZLIB_LIBRARIES}
 )
 if (HAVE_POPPLER)
     target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
 endif()
 if (HAVE_ZXING)
     target_link_libraries(KPimItinerary PRIVATE zxing::libzxing)
-endif()
-if (HAVE_ZLIB)
-    target_link_libraries(KPimItinerary PRIVATE ${ZLIB_LIBRARIES})
 endif()
 if (HAVE_KCAL)
     target_link_libraries(KPimItinerary PUBLIC KF5::CalendarCore)

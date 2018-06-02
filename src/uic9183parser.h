@@ -49,7 +49,7 @@ public:
     Uic9183Parser();
     Uic9183Parser(const Uic9183Parser&);
     ~Uic9183Parser();
-    Uic9183Parser& operator=(Uic9183Parser&);
+    Uic9183Parser& operator=(const Uic9183Parser&);
 
     void parse(const QByteArray &data);
     bool isValid() const;

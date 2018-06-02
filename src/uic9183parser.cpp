@@ -15,7 +15,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "config-kitinerary.h"
 #include "uic9183parser.h"
 #include "logging.h"
 
@@ -23,9 +22,7 @@
 
 #include <QDebug>
 
-#ifdef HAVE_ZLIB
 #include <zlib.h>
-#endif
 
 #include <cassert>
 #include <cstring>
@@ -181,7 +178,7 @@ Uic9183Block Uic9183ParserPrivate::findBlock(const char name[6]) const
             return {};
         }
         if (strncmp(name, m_payload.data() + i, 6) == 0) {
-            return Uic9183Block(m_payload.data() + i, blockSize);
+            return {m_payload.data() + i, blockSize};
         }
         i += blockSize;
     }
@@ -196,7 +193,7 @@ Uic9183Parser::Uic9183Parser()
 
 Uic9183Parser::Uic9183Parser(const Uic9183Parser&) = default;
 Uic9183Parser::~Uic9183Parser() = default;
-Uic9183Parser& Uic9183Parser::operator=(Uic9183Parser&) = default;
+Uic9183Parser& Uic9183Parser::operator=(const Uic9183Parser&) = default;
 
 void Uic9183Parser::parse(const QByteArray &data)
 {
@@ -234,7 +231,6 @@ void Uic9183Parser::parse(const QByteArray &data)
         return;
     }
     // nx zlib payload
-#ifdef HAVE_ZLIB
     d->m_payload.resize(4096);
     z_stream stream;
     stream.zalloc = nullptr;
@@ -257,8 +253,7 @@ void Uic9183Parser::parse(const QByteArray &data)
     }
     inflateEnd(&stream);
     d->m_payload.truncate(d->m_payload.size() - stream.avail_out);
-    qCDebug(Log) << res <<  d->m_payload << stream.avail_out;
-#endif
+    //qCDebug(Log) << res <<  d->m_payload << stream.avail_out;
 }
 
 bool Uic9183Parser::isValid() const
