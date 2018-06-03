@@ -20,13 +20,13 @@
 var regExMap = new Array();
 regExMap['en_US'] = new Array();
 regExMap['en_US']['bookingRef'] = /[Bb]ooking reference: ([A-Z0-9]{6})/;
-regExMap['en_US']['flightLine'] = /Flight:\s+([A-Z0-9]{2}) *([0-9]{2,4}), ([A-Za-z0-9 ]*)\n/;
+regExMap['en_US']['flightLine'] = /Flight:\s+([A-Z0-9]{2}) *([0-9]{2,4}), (.+)\n/;
 regExMap['en_US']['date'] = /Date: *[A-Z][a-z]{2} (.*)\n/;
 regExMap['en_US']['departure'] = /Departure: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
 regExMap['en_US']['arrival'] = /Arrival: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
 regExMap['sv_SE'] = new Array();
 regExMap['sv_SE']['bookingRef'] = /[Bb]okningsreferens: ([A-Z0-9]{6})/;
-regExMap['sv_SE']['flightLine'] = /Flyg:\s+([A-Z0-9]{2}) *([0-9]{2,4}), ([A-Za-z0-9 ]*)\n/;
+regExMap['sv_SE']['flightLine'] = /Flyg:\s+([A-Z0-9]{2}) *([0-9]{2,4}), (.+)\n/;
 regExMap['sv_SE']['date'] = /Datum: *.{3} (.*)\n/;
 regExMap['sv_SE']['departure'] = /Avgång: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
 regExMap['sv_SE']['arrival'] = /Ankomst: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
