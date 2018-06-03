@@ -129,6 +129,11 @@ struct Country
 /** Look up contry infromation by id. */
 KITINERARY_EXPORT Country countryForId(CountryId id);
 
+/** Iterator access for the country information table. */
+KITINERARY_EXPORT const Country* countriesBegin();
+/** Iterator access for the country information table. */
+KITINERARY_EXPORT const Country* countriesEnd();
+
 }
 }
 
