@@ -37,13 +37,28 @@ set_package_properties("zxing" PROPERTIES TYPE OPTIONAL PURPOSE "Support for bar
 find_package(ZLIB REQUIRED)
 set_package_properties("ZLIB" PROPERTIES PURPOSE "Support for decoding UIC 918-3 train tickets.")
 
+if(TARGET Poppler::Core)
+    set(HAVE_POPPLER ON)
+    if (${Poppler_VERSION} VERSION_GREATER 0.57)
+        set(HAVE_POPPLER_0_58 ON)
+    endif()
+endif()
+if (TARGET zxing::libzxing)
+    set(HAVE_ZXING ON)
+endif()
+if (TARGET KF5::CalendarCore)
+    set(HAVE_KCAL ON)
+endif()
+if (TARGET KF5::Contacts)
+    set(HAVE_KCONTACTS ON)
+endif()
+
 add_definitions(-DTRANSLATION_DOMAIN=\"kitinerary\")
 add_subdirectory(src)
 if(BUILD_TESTING)
    add_subdirectory(autotests)
 endif()
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
 
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KPimItinerary")
 

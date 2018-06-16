@@ -3,8 +3,10 @@
 include(CMakeFindDependencyMacro)
 find_dependency(Qt5Gui)
 find_dependency(KF5Mime)
-if (NOT ANDROID)
+if (@HAVE_KCAL@)
     find_dependency(KF5CalendarCore)
+endif()
+if (@HAVE_KCONTACTS@)
     find_dependency(KF5Contacts)
 endif()
 
