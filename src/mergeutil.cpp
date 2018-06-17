@@ -147,11 +147,11 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         return isSameTouristAttractionVisit(l, r);
     }
 
-    if (!JsonLd::canConvert<Reservation>(lhs) || !JsonLd::canConvert<Reservation>(rhs)) {
+    if (JsonLd::canConvert<Reservation>(lhs)) {
         // for all: underName either matches or is not set
-        const auto lhsUN = JsonLd::convert<Reservation>(lhs).underName();
-        const auto rhsUN = JsonLd::convert<Reservation>(rhs).underName();
-        return lhsUN.isNull() || rhsUN.isNull() || isSamePerson(lhsUN.value<Person>(), rhsUN.value<Person>());
+        const auto lhsUN = JsonLd::convert<Reservation>(lhs).underName().value<Person>();
+        const auto rhsUN = JsonLd::convert<Reservation>(rhs).underName().value<Person>();
+        return lhsUN.name().isEmpty() || rhsUN.name().isEmpty() || isSamePerson(lhsUN, rhsUN);
     }
 
     return true;

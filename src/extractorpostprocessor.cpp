@@ -167,6 +167,13 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
         const auto bcbpData = IataBcbpParser::parse(bcbp, m_contextDate.date());
         if (bcbpData.size() == 1) {
             res = JsonLdDocument::apply(bcbpData.at(0), res).value<FlightReservation>();
+        } else {
+            for (const auto &data : bcbpData) {
+                if (MergeUtil::isSame(res, data)) {
+                    res = JsonLdDocument::apply(data, res).value<FlightReservation>();
+                    break;
+                }
+            }
         }
     }
 
