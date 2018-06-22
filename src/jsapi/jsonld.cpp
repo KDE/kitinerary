@@ -20,6 +20,7 @@
 #include <KItinerary/JsonLdDocument>
 
 #include <QDateTime>
+#include <QDebug>
 #include <QJSEngine>
 #include <QJsonArray>
 #include <QLocale>
@@ -66,7 +67,7 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
         auto dtStrFixed = dtStr;
         for (int i = 0; i < 12; ++i) {
             const auto monthName = locale.monthName(i, QLocale::ShortFormat);
-            dtStrFixed = dtStrFixed.replace(monthName.left(3), monthName);
+            dtStrFixed = dtStrFixed.replace(monthName.left(3), monthName, Qt::CaseInsensitive);
         }
         return fixupDate(locale.toDateTime(dtStrFixed, format));
     }
