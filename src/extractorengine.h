@@ -38,7 +38,32 @@ class Extractor;
 class ExtractorEnginePrivate;
 class PdfDocument;
 
-/** Code for executing an extractor rule set on a specific email part. */
+/**
+ * Unstructured data extraction engine.
+ *
+ * This will apply the given Extractor instance to the given input data
+ * (plain text, HTML text, PDF documents, etc), and return the extracted
+ * JSON-LD data.
+ *
+ * @section create_extractors Creating Extractors
+ *
+ * For adding custom extractors, two parts are needed:
+ * - JSON meta-data describing the extractor and when to apply it, as described
+ *   in the Extractor documentation.
+ * - An extractor JavaScript file, compatible with QJSEngine.
+ *
+ * The extractor script will have access to API defined in the JsApi namespace:
+ * - JsApi::Context: information about the input data being processed.
+ * - JsApi::JsonLd: functions for generating JSON-LD data.
+ * - JsApi::Barcode: barcode decoding functions.
+ *
+ * The entry point to the script is specified in the meta-data, its argument depends
+ * on the extractor type:
+ * - Plain text extractors are passed a string.
+ * - PDF extractors are passed a PDFDocument instance allowing access to textual and
+ *   image content.
+ * - Apple Wallet pass extractors are passed a KPkPass::BoardingPass instance.
+ */
 class KITINERARY_EXPORT ExtractorEngine
 {
 public:
