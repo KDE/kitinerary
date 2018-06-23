@@ -38,6 +38,8 @@ class ExtractorPrivate;
  * These rules are loaded from JSON meta-data files in a compiled-in qrc file
  * and from $XDG_DATA_DIRS/kitinerary/extractors.
  *
+ * @section extractor_metadata Meta Data Format
+ *
  * The meta-data files either contain a single JSON object or an array of JSON objects
  * with the following content:
  * - \c type: The type of the extractor, \c text if not specified.
@@ -75,25 +77,30 @@ class ExtractorPrivate;
 class KITINERARY_EXPORT Extractor
 {
 public:
+    ///@cond internal
     Extractor();
     Extractor(const Extractor &) = delete;
     Extractor(Extractor &&);
     ~Extractor();
+    ///@endcond
 
+    /** Load meta data from the given JSON object. */
     bool load(const QJsonObject &obj, const QString &baseDir);
 
     /** Type of data this extractor can process. */
     enum Type {
-        Text,
-        Pdf,
-        PkPass
+        Text, ///< A plain-text extractor.
+        Pdf, ///< A PDF document extractor.
+        PkPass ///< A Apple Wallet pass extractor.
     };
+    /** Returns the type of this extractor. */
     Type type() const;
 
     /** The JS script containing the code of the extractor. */
     QString scriptFileName() const;
     /** The JS function entry point for this extractor, @c main if empty. */
     QString scriptFunction() const;
+    /** Returns the filters deciding whether this extractor should be applied. */
     const std::vector<ExtractorFilter> &filters() const;
 
 private:

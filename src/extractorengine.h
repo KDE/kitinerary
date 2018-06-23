@@ -47,6 +47,8 @@ class PdfDocument;
  *
  * @section create_extractors Creating Extractors
  *
+ * @subsection extractor_api Extractor API
+ *
  * For adding custom extractors, two parts are needed:
  * - JSON meta-data describing the extractor and when to apply it, as described
  *   in the Extractor documentation.
@@ -63,6 +65,24 @@ class PdfDocument;
  * - PDF extractors are passed a PDFDocument instance allowing access to textual and
  *   image content.
  * - Apple Wallet pass extractors are passed a KPkPass::BoardingPass instance.
+ *
+ * These functions should return an object or an array of objects following the JSON-LD
+ * format defined on schema.org. JsApi::JsonLd provides helper functions to build such
+ * objects. If @c null or an empty array is returned, the next applicable extractor is
+ * run.
+ *
+ * @subsection extractor_tools Development Tools
+ *
+ * For interactive testing during development of new extractors, it is recommended to
+ * link (or copy) the JSON meta data and JavaScript code files to the search path for
+ * Extractor meta data.
+ *
+ * Additionally, there's an interactive testing and inspection tool called @c kitinerary-workbench
+ * (see https://cgit.kde.org/scratch/vkrause/kitinerary-workbench.git/).
+ *
+ * @subsection extractor_testing Automated Testing
+ *
+ * TODO
  */
 class KITINERARY_EXPORT ExtractorEngine
 {
@@ -94,6 +114,9 @@ public:
     /** The date the email containing the processed text was sent. */
     void setSenderDate(const QDateTime &dt);
 
+    /** Perform the actual extration, and return the JSON-LD data
+     *  that has been found.
+     */
     QJsonArray extract();
 
 private:
