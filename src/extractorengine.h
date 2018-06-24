@@ -82,7 +82,24 @@ class PdfDocument;
  *
  * @subsection extractor_testing Automated Testing
  *
- * TODO
+ * There are a few unit tests for extractors in the kitinerary repository (see unstructureddataextractortest.cpp),
+ * however the majority of real-world test data cannot be shared this way, due to privacy
+ * and copyright issues (e.g. PDFs containing copyrighted vendor logos and user credit card details).
+ * Therefore there is also support for testing against external data (see extractortest.cpp).
+ *
+ * External test data is assumed to be in a folder named @c kitinerary-tests next to the @c kitinerary
+ * source folder. The test program searches this folder recursively for folders with the following content
+ * and attempts to extract data from each test file in there.
+ *
+ * - @c context.eml: MIME message header data specifying the context in which the test data
+ *   was received. This typically only needs a @c From: and @c Date: line, but can even be
+ *   entirely empty (but existing) for structured data that does not need a custom extractor.
+ *   This context information is applied to all tests in this folder.
+ * - @c <testname>.[txt|html|pdf|pkpass]: The input test data.
+ * - @c <testname.extension>.json: The expected JSON-LD output. If this file doesn't
+ *   exists it is created by the test program.
+ * - @c <testname.extension>.skip: If this file is present the corresponding test
+ *   is skipped.
  */
 class KITINERARY_EXPORT ExtractorEngine
 {
