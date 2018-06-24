@@ -33,6 +33,8 @@ class JsApiTest : public QObject
 private Q_SLOTS:
     void initTestCase()
     {
+        // use some exotic locale and timezone to ensure the date/time parsing doesn't just work by luck
+        QLocale::setDefault(QLocale(QStringLiteral("fr_FR")));
         qputenv("TZ", "GMT");
     }
 
@@ -48,6 +50,7 @@ private Q_SLOTS:
         QTest::newRow("short month name en") << s("2018 Mar 22 19:37") << s("yyyy MMM dd hh:mm") << s("en") << QDateTime({2018, 3, 22}, {19, 37});
         QTest::newRow("short month name sv") << s("2018 Mar 22 19:37") << s("yyyy MMM dd hh:mm") << s("sv_SE") << QDateTime({2018, 3, 22}, {19, 37});
         QTest::newRow("short month name de") << s("2018 Mai 22 19:37") << s("yyyy MMM dd hh:mm") << s("de") << QDateTime({2018, 5, 22}, {19, 37});
+        QTest::newRow("missing year") << s("1 22 19:37") << s("M dd hh:mm") << s("en") << QDateTime({2019, 1, 22}, {19, 37});
     }
 
     void testToDateTime()
@@ -58,6 +61,7 @@ private Q_SLOTS:
         QFETCH(QDateTime, result);
 
         JsApi::JsonLd jsonLd(nullptr);
+        jsonLd.setContextDate({{2018, 4, 1}, {}});
         QCOMPARE(jsonLd.toDateTime(input, format, locale), result);
     }
 };

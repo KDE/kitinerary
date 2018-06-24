@@ -52,6 +52,7 @@ public:
 
     const Extractor *m_extractor = nullptr;
     JsApi::Context *m_context = nullptr;
+    JsApi::JsonLd *m_jsonLdApi = nullptr;
     QString m_text;
     PdfDocument *m_pdfDoc = nullptr;
     KPkPass::BoardingPass *m_pass;
@@ -65,8 +66,8 @@ void ExtractorEnginePrivate::setupEngine()
 {
     m_context = new JsApi::Context; // will be deleted by QJSEngine taking ownership
     m_engine.installExtensions(QJSEngine::ConsoleExtension);
-    auto jsApi = new JsApi::JsonLd(&m_engine);
-    m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), m_engine.newQObject(jsApi));
+    m_jsonLdApi = new JsApi::JsonLd(&m_engine);
+    m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), m_engine.newQObject(m_jsonLdApi));
     m_engine.globalObject().setProperty(QStringLiteral("Barcode"), m_engine.newQObject(new JsApi::Barcode));
     m_engine.globalObject().setProperty(QStringLiteral("Context"), m_engine.newQObject(m_context));
 }
@@ -116,6 +117,7 @@ void ExtractorEngine::setPass(KPkPass::Pass *pass)
 void ExtractorEngine::setSenderDate(const QDateTime &dt)
 {
     d->m_context->m_senderDate = dt;
+    d->m_jsonLdApi->setContextDate(dt);
 }
 
 QJsonArray ExtractorEngine::extract()

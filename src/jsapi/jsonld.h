@@ -18,6 +18,7 @@
 #ifndef KITINERARY_JSAPI_JSONLD_H
 #define KITINERARY_JSAPI_JSONLD_H
 
+#include <QDateTime>
 #include <QObject>
 
 class QJSEngine;
@@ -41,7 +42,10 @@ public:
     /** Convert a date/time string to a date/time value.
      *  @param dtStr The input string containing a date/time value.
      *  @param format The format of the input string. Same format specification as
-     *  used by QLocale and QDateTime.
+     *  used by QLocale and QDateTime. If the year is not part of the date
+     *  it is attempted to be recovered from the context date set on the
+     *  ExtractorEngine (that is, the returned date will be after the context
+     *  date).
      *  @param localeName The locale in which the string is formatted. This is
      *  relevant when the input contains for example localized month names or
      *  month abbreviations.
@@ -53,8 +57,12 @@ public:
      */
     Q_INVOKABLE QJSValue toJson(const QVariant &v) const;
 
+    ///@cond internal
+    void setContextDate(const QDateTime &dt);
+    ///@endcond
 private:
     QJSEngine *m_engine;
+    QDateTime m_contextDate;
 };
 
 }

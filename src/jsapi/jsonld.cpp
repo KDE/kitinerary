@@ -42,35 +42,37 @@ QJSValue JsApi::JsonLd::newObject(const QString &typeName) const
     return v;
 }
 
-// two digit year numbers end up in the last century, fix that
-static QDateTime fixupDate(const QDateTime &dt)
-{
-    if (dt.date().year() / 100 == 19) {
-        return dt.addYears(100);
-    }
-    return dt;
-}
-
 QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const
 {
     QLocale locale(localeName);
-    const auto dt = locale.toDateTime(dtStr, format);
-    if (dt.isValid()) {
-        return fixupDate(dt);
-    }
+    auto dt = locale.toDateTime(dtStr, format);
 
     // try harder for the "MMM" month format
     // QLocale expects the exact string in QLocale::shortMonthName(), while we often encounter a three
     // letter month identifier. For en_US that's the same, for Swedish it isn't though for example. So
     // let's try to fix up the month identifiers to the full short name.
-    if (format.contains(QLatin1String("MMM"))) {
+    if (!dt.isValid() && format.contains(QLatin1String("MMM"))) {
         auto dtStrFixed = dtStr;
         for (int i = 0; i < 12; ++i) {
             const auto monthName = locale.monthName(i, QLocale::ShortFormat);
             dtStrFixed = dtStrFixed.replace(monthName.left(3), monthName, Qt::CaseInsensitive);
         }
-        return fixupDate(locale.toDateTime(dtStrFixed, format));
+        dt = locale.toDateTime(dtStrFixed, format);
     }
+
+    // if the date does not contain a year number, determine that based on the context date, if set
+    if (dt.isValid() && m_contextDate.isValid() && !format.contains(QLatin1String("yy"))) {
+        dt.setDate({m_contextDate.date().year(), dt.date().month(), dt.date().day()});
+        if (dt < m_contextDate) {
+            dt = dt.addYears(1);
+        }
+    }
+
+    // fix two-digit years ending up in the wrong century
+    if (dt.isValid() && !format.contains(QLatin1String("yyyy")) && dt.date().year() / 100 == 19) {
+        dt = dt.addYears(100);
+    }
+
     return dt;
 }
 
@@ -81,6 +83,11 @@ QJSValue JsApi::JsonLd::toJson(const QVariant &v) const
         return {};
     }
     return m_engine->toScriptValue(json.at(0));
+}
+
+void JsApi::JsonLd::setContextDate(const QDateTime& dt)
+{
+    m_contextDate = dt;
 }
 
 #include "moc_jsonld.cpp"

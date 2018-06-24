@@ -17,14 +17,6 @@
    02110-1301, USA.
 */
 
-function parseDate(dateStr, timeStr) {
-    // the text does not contain the year at all, so guess that from Context.senderDate
-    var date = JsonLd.toDateTime(dateStr + '-' + Context.senderDate.getFullYear() + ' ' + timeStr, "dd-MMM-yyyy hh:mm", "en");
-    if (date < Context.senderDate)
-        date.setFullYear(Context.senderDate.getFullYear() + 1);
-    return date;
-}
-
 function main(text) {
     var reservations = new Array();
 
@@ -54,8 +46,8 @@ function main(text) {
         res.reservationFor.departureAirport = JsonLd.newObject("Airport");
         res.reservationFor.departureAirport.name = secondLine[1];
         res.reservationFor.departureAirport.iataCode = secondLine[2];
-        res.reservationFor.departureTime = parseDate(firstLine[3], secondLine[3]);
-        res.reservationFor.arrivalTime = parseDate(firstLine[4], secondLine[4]);
+        res.reservationFor.departureTime = JsonLd.toDateTime(firstLine[3] + " " + secondLine[3], "dd-MMM hh:mm", "en");
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(firstLine[4] + " " + secondLine[4], "dd-MMM hh:mm", "en");
 
         var fourthLine = text.substr(pos + index).match(/^.*\n (\w+) \(([A-Z]{3})\) .*\n/);
         if (!fourthLine)
