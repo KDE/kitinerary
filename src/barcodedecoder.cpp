@@ -112,8 +112,15 @@ char QImageLuminanceSource::luminance(int x, int y) const
 QString BarcodeDecoder::decodePdf417(const QImage &img)
 {
 #ifdef HAVE_ZXING
+    auto normalizedImg = img;
+    if (normalizedImg.width() < normalizedImg.height()) {
+        QTransform tf;
+        tf.rotate(-90);
+        normalizedImg = normalizedImg.transformed(tf);
+    }
+
     try {
-        const zxing::Ref<zxing::LuminanceSource> source(new QImageLuminanceSource(img));
+        const zxing::Ref<zxing::LuminanceSource> source(new QImageLuminanceSource(normalizedImg));
 
         const zxing::Ref<zxing::Binarizer> binarizer(new zxing::HybridBinarizer(source));
         const zxing::Ref<zxing::BinaryBitmap> binary(new zxing::BinaryBitmap(binarizer));
