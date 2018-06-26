@@ -106,8 +106,24 @@ char QImageLuminanceSource::luminance(int x, int y) const
     return qGray(m_img.pixel(x, y));
 }
 
-#endif
+static QString decodePdf417Internal(const QImage &img)
+{
+    try {
+        const zxing::Ref<zxing::LuminanceSource> source(new QImageLuminanceSource(img));
 
+        const zxing::Ref<zxing::Binarizer> binarizer(new zxing::HybridBinarizer(source));
+        const zxing::Ref<zxing::BinaryBitmap> binary(new zxing::BinaryBitmap(binarizer));
+        const zxing::DecodeHints hints(zxing::DecodeHints::PDF_417_HINT);
+
+        zxing::MultiFormatReader reader;
+        const auto result = reader.decode(binary, hints);
+        return QString::fromStdString(result->getText()->getText());
+    } catch (const std::exception &e) {
+        qCDebug(Log) << e.what();
+    }
+    return {};
+}
+#endif
 
 QString BarcodeDecoder::decodePdf417(const QImage &img)
 {
@@ -119,19 +135,12 @@ QString BarcodeDecoder::decodePdf417(const QImage &img)
         normalizedImg = normalizedImg.transformed(tf);
     }
 
-    try {
-        const zxing::Ref<zxing::LuminanceSource> source(new QImageLuminanceSource(normalizedImg));
-
-        const zxing::Ref<zxing::Binarizer> binarizer(new zxing::HybridBinarizer(source));
-        const zxing::Ref<zxing::BinaryBitmap> binary(new zxing::BinaryBitmap(binarizer));
-        const zxing::DecodeHints hints(zxing::DecodeHints::PDF_417_HINT);
-
-        zxing::MultiFormatReader reader;
-        const auto result = reader.decode(binary, hints);
-        return QString::fromStdString(result->getText()->getText());
-    } catch (const std::exception &e) {
-        qCWarning(Log) << e.what();
+    const auto result = decodePdf417Internal(normalizedImg);
+    if (!result.isEmpty()) {
+        return result;
     }
+    // try flipped around the x axis, zxing doesn't detect that, but it's e.g. encountered in SAS passes
+    return decodePdf417Internal(normalizedImg.transformed(QTransform{1, 0, 0, -1, 0, 0}));
 #else
     Q_UNUSED(img);
 #endif
