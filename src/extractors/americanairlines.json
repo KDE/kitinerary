@@ -1,0 +1,5 @@
+{
+    "type": "pdf",
+    "filter": [ { "header": "From", "match": "americanairlines@aa.com" } ],
+    "script": "americanairlines.js"
+}
