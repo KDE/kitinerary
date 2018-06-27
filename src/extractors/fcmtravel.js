@@ -67,11 +67,11 @@ function main(text) {
             res.reservationFor.departureAirport.iataCode = depLine[3];
 
             var arrDate = text.substr(pos + index).match(regExMap[locale]['date']);
-            if (arrDate)
-                index += arrDate.index + arrDate[0].length;
             var arrLine = text.substr(pos + index).match(regExMap[locale]['arrival']);
             if (!arrLine)
                 break;
+            if (!arrDate || arrDate.index > arrLine.index) // arrival date is sometimes optional
+                arrDate = depDate;
             index += arrLine.index + arrLine[0].length;
             res.reservationFor.arrivalTime = JsonLd.toDateTime(arrDate[1] + " " + arrLine[1], "d MMM yyyy hh:mm", locale);
             res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
