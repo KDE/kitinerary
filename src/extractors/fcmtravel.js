@@ -19,13 +19,15 @@
 
 var regExMap = new Array();
 regExMap['en_US'] = new Array();
-regExMap['en_US']['bookingRef'] = /[Bb]ooking reference: ([A-Z0-9]{6})/;
+regExMap['en_US']['bookingRef1'] = /Airline booking reference: ([A-Z0-9]{6})/;
+regExMap['en_US']['bookingRef2'] = /[Bb]ooking reference\s*:\s*([A-Z0-9]{6})/;
 regExMap['en_US']['flightLine'] = /Flight:\s+([A-Z0-9]{2}) *([0-9]{2,4}), (.+)\n/;
 regExMap['en_US']['date'] = /Date: *[A-Z][a-z]{2} (.*)\n/;
 regExMap['en_US']['departure'] = /Departure: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
 regExMap['en_US']['arrival'] = /Arrival: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
 regExMap['sv_SE'] = new Array();
-regExMap['sv_SE']['bookingRef'] = /[Bb]okningsreferens: ([A-Z0-9]{6})/;
+regExMap['sv_SE']['bookingRef1'] = /Flygbolagets bokningsreferens: ([A-Z0-9]{6})/;
+regExMap['sv_SE']['bookingRef2'] = /[Bb]okningsreferens\s*:\s*([A-Z0-9]{6})/;
 regExMap['sv_SE']['flightLine'] = /Flyg:\s+([A-Z0-9]{2}) *([0-9]{2,4}), (.+)\n/;
 regExMap['sv_SE']['date'] = /Datum: *.{3} (.*)\n/;
 regExMap['sv_SE']['departure'] = /Avgång: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
@@ -35,7 +37,9 @@ function main(text) {
     var reservations = new Array();
 
     for (var locale in regExMap) {
-        var bookingRef = text.match(regExMap[locale]['bookingRef']);
+        var bookingRef = text.match(regExMap[locale]['bookingRef1']);
+        if (!bookingRef)
+            bookingRef = text.match(regExMap[locale]['bookingRef2']);
         if (!bookingRef)
             continue;
 
