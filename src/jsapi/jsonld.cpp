@@ -53,7 +53,7 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
     // let's try to fix up the month identifiers to the full short name.
     if (!dt.isValid() && format.contains(QLatin1String("MMM"))) {
         auto dtStrFixed = dtStr;
-        for (int i = 0; i < 12; ++i) {
+        for (int i = 1; i <= 12; ++i) {
             const auto monthName = locale.monthName(i, QLocale::ShortFormat);
             dtStrFixed = dtStrFixed.replace(monthName.left(3), monthName, Qt::CaseInsensitive);
         }
