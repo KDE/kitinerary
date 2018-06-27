@@ -60,8 +60,22 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
         dt = locale.toDateTime(dtStrFixed, format);
     }
 
+    if (!dt.isValid()) {
+        return dt;
+    }
+
+    const bool hasFullYear = format.contains(QLatin1String("yyyy"));
+    const bool hasYear = hasFullYear || format.contains(QLatin1String("yy"));
+    const bool hasMonth = format.contains(QLatin1String("M"));
+    const bool hasDay = format.contains(QLatin1String("d"));
+
+    // time only, set a default date
+    if (!hasDay && !hasMonth && !hasYear) {
+        dt.setDate({1970, 1, 1});
+    }
+
     // if the date does not contain a year number, determine that based on the context date, if set
-    if (dt.isValid() && m_contextDate.isValid() && !format.contains(QLatin1String("yy"))) {
+    else if (!hasYear && m_contextDate.isValid()) {
         dt.setDate({m_contextDate.date().year(), dt.date().month(), dt.date().day()});
         if (dt < m_contextDate) {
             dt = dt.addYears(1);
@@ -69,7 +83,7 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
     }
 
     // fix two-digit years ending up in the wrong century
-    if (dt.isValid() && !format.contains(QLatin1String("yyyy")) && dt.date().year() / 100 == 19) {
+    else if (!hasFullYear && dt.date().year() / 100 == 19) {
         dt = dt.addYears(100);
     }
 

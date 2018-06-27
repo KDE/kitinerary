@@ -38,8 +38,8 @@ function main(pdf) {
                 res.reservationFor.boardingTime = JsonLd.toDateTime(time[1] + time[2], "dd.MM.yyyyhh:mm", "en")
             time = page.text.match(/Arr. terminal\s+(\d{2}:\d{2})\s+(\d{2}:\d{2})/);
             if (time) {
-                res.reservationFor.departureTime = JsonLd.toDateTime("1970-01-01 " + time[1], "yyyy-MM-dd hh:mm", "en")
-                res.reservationFor.arrivalTime = JsonLd.toDateTime("1970-01-01 " + time[2], "yyyy-MM-dd hh:mm", "en")
+                res.reservationFor.departureTime = JsonLd.toDateTime(time[1], "hh:mm", "en")
+                res.reservationFor.arrivalTime = JsonLd.toDateTime(time[2], "hh:mm", "en")
             }
 
             result.push(res);
