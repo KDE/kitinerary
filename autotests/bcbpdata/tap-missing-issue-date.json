@@ -21,6 +21,10 @@
             "flightNumber": "1080"
         },
         "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1DOE/JOHN            EXXX007 LISLCGTP 1080 204Y002D0003 35C>2180      B1A              2904712345678900                           *306      09     BRND"
+        },
         "underName": {
             "@type": "Person",
             "familyName": "DOE",

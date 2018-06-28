@@ -22,7 +22,7 @@
         "reservationNumber": "XXX007",
         "reservedTicket": {
             "@type": "Ticket",
-            "ticketToken": "aztecCode:M1DOE/JOHN            EXXX007 TXLBRUSN 2592 110Y"
+            "ticketToken": "aztecCode:M1DOE/JOHN            EXXX007 TXLBRUSN 2592 110"
         },
         "underName": {
             "@type": "Person",

@@ -21,6 +21,10 @@
             "flightNumber": "123"
         },
         "reservationNumber": "ABC123",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M2GRANDMAIRE/MELANIE  EABC123 GVACDGAF 0123 339C002F0025 130>5002A0571234567890  AF AF 1234567890123456    YDEF456 CDGDTWNW 0049 339F001A0002 12C2A012098765432101                       2PC ^18ABCDEFGH"
+        },
         "underName": {
            "@type": "Person",
            "familyName": "GRANDMAIRE",
@@ -49,6 +53,10 @@
             "flightNumber": "49"
         },
         "reservationNumber": "DEF456",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M2GRANDMAIRE/MELANIE  EABC123 GVACDGAF 0123 339C002F0025 130>5002A0571234567890  AF AF 1234567890123456    YDEF456 CDGDTWNW 0049 339F001A0002 12C2A012098765432101                       2PC ^18ABCDEFGH"
+        },
         "underName": {
            "@type": "Person",
            "familyName": "GRANDMAIRE",

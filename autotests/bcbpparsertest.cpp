@@ -56,7 +56,7 @@ private Q_SLOTS:
 
         // Brussels Airlines short codes on booking confirmation
         QTest::newRow("minimal1") << QStringLiteral("M1DOE/JOHN            EXXX007 TXLBRUSN 2592 110Y") << QStringLiteral("minimal.json");
-        QTest::newRow("minimal2") << QStringLiteral("M1DOE/JOHN            EXXX007 TXLBRUSN 2592 110") << QStringLiteral("minimal.json");
+        QTest::newRow("minimal2") << QStringLiteral("M1DOE/JOHN            EXXX007 TXLBRUSN 2592 110") << QStringLiteral("minimal2.json");
 
         // TAP missing boarding pass issue date
         QTest::newRow("no issue date") << QStringLiteral("M1DOE/JOHN            EXXX007 LISLCGTP 1080 204Y002D0003 35C>2180      B1A              2904712345678900                           *306      09     BRND") << QStringLiteral("tap-missing-issue-date.json");

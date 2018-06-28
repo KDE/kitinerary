@@ -21,6 +21,10 @@
             "flightNumber": "8724"
         },
         "reservationNumber": "ABCDEFG",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1DOE/JOHN            EABCDEFGMRSLGWEZY8724 99  3C  506  10Axxxxxxxxxx"
+        },
         "underName": {
             "@type": "Person",
             "familyName": "DOE",

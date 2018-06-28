@@ -23,6 +23,7 @@
 #include <KItinerary/Person>
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
+#include <KItinerary/Ticket>
 
 #include <QDate>
 #include <QVariant>
@@ -120,6 +121,12 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &ext
             person.setName(fullName.toString());
         }
         res1.setUnderName(person);
+    }
+
+    {
+        Ticket ticket;
+        ticket.setTicketToken(QStringLiteral("aztecCode:") + message);
+        res1.setReservedTicket(ticket);
     }
 
     const auto varSize = parseRepeatedMandatorySection(message.midRef(UniqueMandatorySize), res1);

@@ -21,6 +21,10 @@
             "flightNumber": "2588"
         },
         "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1DOE/JOHN            EXXX007 TXLBRUSN 2588 034Y023D0999 35D>5181WM7034BSN              2A08200000000000 SN LH 123456789012345      *30600000K0902       "
+        },
         "underName": {
             "@type": "Person",
             "familyName": "DOE",

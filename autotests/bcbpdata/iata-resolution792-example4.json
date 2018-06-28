@@ -21,6 +21,10 @@
             "flightNumber": "834"
         },
         "reservationNumber": "AB12C3",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M2DESMARAIS/LUC       EAB12C3 YULFRAAC 0834 326J003A0027 167>5321WW1325BAC 0014123456002001412346700100141234789012A0141234567890 1AC AC 1234567890123    4PCYLX58ZDEF456 FRAGVALH 3664 327C012C0002 12E2A0140987654321 1AC AC 1234567890123    3PCNWQ^108ABCDEFGH"
+        },
         "underName": {
            "@type": "Person",
            "familyName": "DESMARAIS",
@@ -49,6 +53,10 @@
             "flightNumber": "3664"
         },
         "reservationNumber": "DEF456",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M2DESMARAIS/LUC       EAB12C3 YULFRAAC 0834 326J003A0027 167>5321WW1325BAC 0014123456002001412346700100141234789012A0141234567890 1AC AC 1234567890123    4PCYLX58ZDEF456 FRAGVALH 3664 327C012C0002 12E2A0140987654321 1AC AC 1234567890123    3PCNWQ^108ABCDEFGH"
+        },
         "underName": {
            "@type": "Person",
            "familyName": "DESMARAIS",
