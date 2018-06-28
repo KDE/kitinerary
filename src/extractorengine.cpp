@@ -51,6 +51,7 @@ public:
     void extractPass();
 
     const Extractor *m_extractor = nullptr;
+    JsApi::Barcode *m_barcodeApi = nullptr;
     JsApi::Context *m_context = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
     QString m_text;
@@ -68,7 +69,8 @@ void ExtractorEnginePrivate::setupEngine()
     m_engine.installExtensions(QJSEngine::ConsoleExtension);
     m_jsonLdApi = new JsApi::JsonLd(&m_engine);
     m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), m_engine.newQObject(m_jsonLdApi));
-    m_engine.globalObject().setProperty(QStringLiteral("Barcode"), m_engine.newQObject(new JsApi::Barcode));
+    m_barcodeApi = new JsApi::Barcode;
+    m_engine.globalObject().setProperty(QStringLiteral("Barcode"), m_engine.newQObject(m_barcodeApi));
     m_engine.globalObject().setProperty(QStringLiteral("Context"), m_engine.newQObject(m_context));
 }
 
@@ -118,6 +120,7 @@ void ExtractorEngine::setSenderDate(const QDateTime &dt)
 {
     d->m_context->m_senderDate = dt;
     d->m_jsonLdApi->setContextDate(dt);
+    d->m_barcodeApi->setContextDate(dt.date());
 }
 
 QJsonArray ExtractorEngine::extract()

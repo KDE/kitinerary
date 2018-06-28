@@ -18,6 +18,7 @@
 #ifndef KITINERARY_JSAPI_BARCODE_H
 #define KITINERARY_JSAPI_BARCODE_H
 
+#include <QDate>
 #include <QObject>
 
 namespace KItinerary {
@@ -44,6 +45,17 @@ public:
      *  @returns An instance of Uic9183Parser.
      */
     Q_INVOKABLE QVariant decodeUic9183(const QString &s) const;
+    /** Decode an IATA BCBP message from a flight boarding pass barcode.
+     *  @returns A JSON-LD structure representing the boarding pass.
+     */
+    Q_INVOKABLE QVariant decodeIataBcbp(const QString &s) const;
+
+    ///@cond internal
+    void setContextDate(const QDate &date);
+    ///@endcond
+
+private:
+    QDate m_contextDate;
 };
 
 }

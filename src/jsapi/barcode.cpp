@@ -18,6 +18,7 @@
 #include "barcode.h"
 
 #include <KItinerary/BarcodeDecoder>
+#include <KItinerary/IataBcbpParser>
 #include <KItinerary/PdfDocument>
 #include <KItinerary/Uic9183Parser>
 
@@ -56,6 +57,16 @@ QVariant JsApi::Barcode::decodeUic9183(const QString &s) const
     Uic9183Parser p;
     p.parse(s.toLatin1());
     return QVariant::fromValue(p);
+}
+
+QVariant JsApi::Barcode::decodeIataBcbp(const QString &s) const
+{
+    return QVariant::fromValue(IataBcbpParser::parse(s, m_contextDate));
+}
+
+void JsApi::Barcode::setContextDate(const QDate& date)
+{
+    m_contextDate = date;
 }
 
 #include "moc_barcode.cpp"

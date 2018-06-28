@@ -92,6 +92,10 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
 
 QJSValue JsApi::JsonLd::toJson(const QVariant &v) const
 {
+    if (v.canConvert<QVector<QVariant>>()) {
+        return m_engine->toScriptValue(JsonLdDocument::toJson(v.value<QVector<QVariant>>()));
+    }
+
     const auto json = JsonLdDocument::toJson({v});
     if (json.isEmpty()) {
         return {};
