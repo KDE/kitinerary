@@ -71,6 +71,11 @@ class PdfDocument;
  * objects. If @c null or an empty array is returned, the next applicable extractor is
  * run.
  *
+ * Returned objects are then passed through ExtractorPostprocessor which will normalize,
+ * augment and validate the data. This can greatly simplify the extraction, as for example
+ * the expansion of an IATA BCBP ticket token already fills most key properties of a flight
+ * reservation automatically.
+ *
  * @subsection extractor_tools Development Tools
  *
  * For interactive testing during development of new extractors, it is recommended to
