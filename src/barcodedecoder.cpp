@@ -119,7 +119,7 @@ static QString decodePdf417Internal(const QImage &img)
         const auto result = reader.decode(binary, hints);
         return QString::fromStdString(result->getText()->getText());
     } catch (const std::exception &e) {
-        qCDebug(Log) << e.what();
+        //qCDebug(Log) << e.what();
     }
     return {};
 }
@@ -166,7 +166,7 @@ QByteArray BarcodeDecoder::decodeAztecBinary(const QImage &img)
         const auto result = reader.decode(binary, hints);
         return QByteArray(result->getText()->getText().c_str(), result->getText()->getText().size());
     } catch (const std::exception &e) {
-        qCWarning(Log) << e.what();
+        //qCDebug(Log) << e.what();
     }
 #else
     Q_UNUSED(img);
