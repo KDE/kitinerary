@@ -1,5 +1,10 @@
-{
+[{
     "type": "pkpass",
     "filter": [ { "header": "passTypeIdentifier", "match": "pass.com.lufthansa.mbp" } ],
     "script": "lufthansa-pkpass.js"
-}
+}, {
+    "type": "pdf",
+    "filter": [{ "header": "From", "match": "lufthansa.com" }],
+    "script": "generic.js",
+    "function": "parsePdfBoardingPass"
+}]

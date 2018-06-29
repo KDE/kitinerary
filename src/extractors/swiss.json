@@ -1,11 +1,18 @@
 [
     {
+        "type": "text",
         "filter": [ { "header": "From", "match": "noreply@swiss.com" } ],
         "script": "swiss.js"
     },
     {
-    "type": "pkpass",
-    "filter": [ { "header": "passTypeIdentifier", "match": "pass.booking.swiss.com" } ],
-    "script": "swiss-pkpass.js"
+        "type": "pkpass",
+        "filter": [ { "header": "passTypeIdentifier", "match": "pass.booking.swiss.com" } ],
+        "script": "swiss-pkpass.js"
+    },
+    {
+        "type": "pdf",
+        "filter": [{ "header": "From", "match": "swiss.com" }],
+        "script": "generic.js",
+        "function": "parsePdfBoardingPass"
     }
 ]

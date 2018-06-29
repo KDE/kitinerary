@@ -34,7 +34,7 @@ function parsePdfBoardingPass(pdf) {
             var bcbp;
             if (aspectRatio < 1.2)
                 bcbp = Barcode.decodeAztec(image);
-            else if (aspectRatio > 2 && aspectRatio < 6)
+            else if (aspectRatio > 1.5 && aspectRatio < 6)
                 bcbp = Barcode.decodePdf417(image);
             if (!bcbp)
                 continue;

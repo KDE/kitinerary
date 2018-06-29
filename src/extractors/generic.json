@@ -3,9 +3,7 @@
     "filter": [
         { "header": "From", "match": "airberlin.com" },
         { "header": "From", "match": "britishairways.com" },
-        { "header": "From", "match": "eurowings.com" },
         { "header": "From", "match": "finnair.com" },
-        { "header": "From", "match": "klm.com" },
         { "header": "From", "match": "tap.pt" }
     ],
     "script": "generic.js",

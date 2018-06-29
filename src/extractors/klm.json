@@ -1,6 +1,12 @@
-{
+[{
+    "type": "text",
     "filter": [
         { "header": "From", "match": "noreply@klm.com" }
     ],
     "script": "klm.js"
-}
+}, {
+    "type": "pdf",
+    "filter": [{ "header": "From", "match": "klm.com" }],
+    "script": "generic.js",
+    "function": "parsePdfBoardingPass"
+}]

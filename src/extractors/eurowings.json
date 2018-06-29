@@ -8,4 +8,9 @@
     "type": "pkpass",
     "filter": [ { "header": "passTypeIdentifier", "match": "pass.wings.boardingpass" } ],
     "script": "eurowings-pkpass.js"
+}, {
+    "type": "pdf",
+    "filter": [{ "header": "From", "match": "eurowings.com" }],
+    "script": "generic.js",
+    "function": "parsePdfBoardingPass"
 }]
