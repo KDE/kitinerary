@@ -25,6 +25,7 @@ regExMap['en_US']['flightLine'] = /Flight:\s+([A-Z0-9]{2}) *([0-9]{2,4}), (.+)\n
 regExMap['en_US']['date'] = /Date: *[A-Z][a-z]{2} (.*)\n/;
 regExMap['en_US']['departure'] = /Departure: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
 regExMap['en_US']['arrival'] = /Arrival: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
+regExMap['en_US']['traveler'] = /Traveller:\s+(.+)\n/;
 regExMap['sv_SE'] = new Array();
 regExMap['sv_SE']['bookingRef1'] = /Flygbolagets bokningsreferens: ([A-Z0-9]{6})/;
 regExMap['sv_SE']['bookingRef2'] = /[Bb]okningsreferens\s*:\s*([A-Z0-9]{6})/;
@@ -32,9 +33,11 @@ regExMap['sv_SE']['flightLine'] = /Flyg:\s+([A-Z0-9]{2}) *([0-9]{2,4}), (.+)\n/;
 regExMap['sv_SE']['date'] = /Datum: *.{3} (.*)\n/;
 regExMap['sv_SE']['departure'] = /Avgång: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
 regExMap['sv_SE']['arrival'] = /Ankomst: *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/;
+regExMap['sv_SE']['traveler'] = /Resenär:\s+(.+)\n/;
 
 function main(text) {
     var reservations = new Array();
+    var traveler = new Array();
 
     for (var locale in regExMap) {
         var bookingRef = text.match(regExMap[locale]['bookingRef1']);
@@ -88,9 +91,32 @@ function main(text) {
             pos += index;
         }
 
-        if (reservations.length > 0)
+        if (reservations.length > 0) {
+            pos = 0;
+            while(true) {
+                var name = text.substr(pos).match(regExMap[locale]['traveler']);
+                if (!name)
+                    break;
+                pos += name.index + name[0].length;
+                traveler.push(name[1]);
+            }
             break;
+        }
     }
 
-    return reservations;
+    // merge traveler and reservation data
+    if (traveler.length == 0)
+        return reservations;
+    var result = new Array();
+    for (var i = 0; i < reservations.length; ++i) {
+        for (var j = 0; j < traveler.length; ++j) {
+            // urgh, but apparently that's the way to clone objects in JS
+            // without that we only have one reference that then will end up all with the same person name
+            var r = JsonLd.clone(reservations[i]);
+            r.underName = JsonLd.newObject("Person");
+            r.underName.name = traveler[j];
+            result.push(r);
+        }
+    }
+    return result;
 }

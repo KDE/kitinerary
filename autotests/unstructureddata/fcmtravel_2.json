@@ -24,7 +24,42 @@
             "departureTime": "2016-10-17T10:50:00",
             "flightNumber": "6439"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB",
+                "name": "Air Berlin"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "DUS",
+                "name": "International Airport"
+            },
+            "arrivalTime": "2016-10-17T12:00:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Tegel"
+            },
+            "departureDay": "2016-10-17",
+            "departureTime": "2016-10-17T10:50:00",
+            "flightNumber": "6439"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "Jane Doe"
+        }
     },
     {
         "@context": "http://schema.org",
@@ -51,7 +86,42 @@
             "departureTime": "2016-10-17T13:20:00",
             "flightNumber": "7392"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB",
+                "name": "Air Berlin"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "SFO",
+                "name": "San Francisco International"
+            },
+            "arrivalTime": "2016-10-17T15:55:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "DUS",
+                "name": "International Airport"
+            },
+            "departureDay": "2016-10-17",
+            "departureTime": "2016-10-17T13:20:00",
+            "flightNumber": "7392"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "Jane Doe"
+        }
     },
     {
         "@context": "http://schema.org",
@@ -78,7 +148,42 @@
             "departureTime": "2016-10-22T08:00:00",
             "flightNumber": "086"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AA",
+                "name": "American Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "ORD",
+                "name": "O Hare International"
+            },
+            "arrivalTime": "2016-10-22T14:00:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "PDX",
+                "name": "Portland International"
+            },
+            "departureDay": "2016-10-22",
+            "departureTime": "2016-10-22T08:00:00",
+            "flightNumber": "086"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "Jane Doe"
+        }
     },
     {
         "@context": "http://schema.org",
@@ -105,6 +210,41 @@
             "departureTime": "2016-10-22T15:25:00",
             "flightNumber": "7421"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB",
+                "name": "Air Berlin"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL",
+                "name": "Tegel"
+            },
+            "arrivalTime": "2016-10-23T07:00:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "ORD",
+                "name": "O Hare International"
+            },
+            "departureDay": "2016-10-22",
+            "departureTime": "2016-10-22T15:25:00",
+            "flightNumber": "7421"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "Jane Doe"
+        }
     }
 ]

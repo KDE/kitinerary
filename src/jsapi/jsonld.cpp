@@ -103,6 +103,11 @@ QJSValue JsApi::JsonLd::toJson(const QVariant &v) const
     return m_engine->toScriptValue(json.at(0));
 }
 
+QJSValue JsApi::JsonLd::clone(const QJSValue& v) const
+{
+    return m_engine->toScriptValue(v.toVariant());
+}
+
 void JsApi::JsonLd::setContextDate(const QDateTime& dt)
 {
     m_contextDate = dt;

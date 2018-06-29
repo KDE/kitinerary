@@ -56,6 +56,10 @@ public:
      *  such as Uic9183Parser.
      */
     Q_INVOKABLE QJSValue toJson(const QVariant &v) const;
+    /** Clones the given JS object.
+     *  That is, create a deep copy of @p v.
+     */
+    Q_INVOKABLE QJSValue clone(const QJSValue &v) const;
 
     ///@cond internal
     void setContextDate(const QDateTime &dt);
