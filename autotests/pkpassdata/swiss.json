@@ -3,6 +3,7 @@
         "@context": "http://schema.org",
         "@type": "FlightReservation",
         "airplaneSeat": "10E",
+        "passengerSequenceNumber": "143",
         "pkpassPassTypeIdentifier": "pass.booking.swiss.com",
         "pkpassSerialNumber": "123456789",
         "reservationFor": {

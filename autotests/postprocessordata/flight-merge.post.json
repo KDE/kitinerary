@@ -3,6 +3,7 @@
         "@context": "http://schema.org",
         "@type": "FlightReservation",
         "airplaneSeat": "14D",
+        "passengerSequenceNumber": "14",
         "pkpassPassTypeIdentifier": "pass.ncr.brussels.boarding-pass",
         "pkpassSerialNumber": "123456789",
         "reservationFor": {

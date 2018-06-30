@@ -3,6 +3,7 @@
         "@context": "http://schema.org",
         "@type": "FlightReservation",
         "airplaneSeat": "3A",
+        "passengerSequenceNumber": "27",
         "reservationFor": {
             "@type": "Flight",
             "airline": {
@@ -34,6 +35,7 @@
     {
         "@context": "http://schema.org",
         "@type": "FlightReservation",
+        "passengerSequenceNumber": "2",
         "airplaneSeat": "12C",
         "reservationFor": {
             "@type": "Flight",

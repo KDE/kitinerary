@@ -83,8 +83,8 @@ static int parseRepeatedMandatorySection(const QStringRef& msg, FlightReservatio
     // 1x Compartment code
 
     res.setAirplaneSeat(stripLeadingZeros(msg.mid(25, 4)).trimmed().toString());
+    res.setPassengerSequenceNumber(stripLeadingZeros(msg.mid(29, 5)).trimmed().toString());
 
-    // 5x Checkin sequence number
     // 1x Passenger status
 
     // field size of conditional section + airline use section

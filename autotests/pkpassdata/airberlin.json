@@ -3,6 +3,7 @@
         "@context": "http://schema.org",
         "@type": "FlightReservation",
         "airplaneSeat": "19F",
+        "passengerSequenceNumber": "60",
         "reservationFor": {
             "@type": "Flight",
             "airline": {

@@ -82,12 +82,14 @@ class FlightReservationPrivate : public ReservationPrivate
 {
     KITINERARY_PRIVATE_GADGET(FlightReservation)
 public:
+    QString passengerSequenceNumber;
     QString airplaneSeat;
     QString boardingGroup;
     QUrl ticketDownloadUrl;
 };
 
 KITINERARY_MAKE_SUB_CLASS(FlightReservation, Reservation)
+KITINERARY_MAKE_PROPERTY(FlightReservation, QString, passengerSequenceNumber, setPassengerSequenceNumber)
 KITINERARY_MAKE_PROPERTY(FlightReservation, QString, airplaneSeat, setAirplaneSeat)
 KITINERARY_MAKE_PROPERTY(FlightReservation, QString, boardingGroup, setBoardingGroup)
 KITINERARY_MAKE_PROPERTY(FlightReservation, QUrl, ticketDownloadUrl, setTicketDownloadUrl)

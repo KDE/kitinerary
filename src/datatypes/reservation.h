@@ -86,6 +86,12 @@ private:
 class KITINERARY_EXPORT FlightReservation : public Reservation
 {
     KITINERARY_GADGET(FlightReservation)
+    /** Passenger sequnce number
+     *  Despite the name, do not expect this to be a number, infants without
+     *  their own seat get vendor-defined codes here for example.
+     *  @see https://schema.org/passengerSequenceNumber
+     */
+    KITINERARY_PROPERTY(QString, passengerSequenceNumber, setPassengerSequenceNumber)
 
     // Google extensions
     KITINERARY_PROPERTY(QString, airplaneSeat, setAirplaneSeat)
