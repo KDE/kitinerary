@@ -21,6 +21,7 @@
 
 #include <QUrl>
 #include <QVariant>
+#include <QVector>
 
 using namespace KItinerary;
 
@@ -40,6 +41,7 @@ public:
     QString pkpassPassTypeIdentifier;
     QString pkpassSerialNumber;
     Organization provider;
+    QVector<QVariant> potentialAction;
 };
 
 KITINERARY_MAKE_BASE_CLASS(Reservation)
@@ -53,6 +55,7 @@ KITINERARY_MAKE_PROPERTY(Reservation, QUrl, url, setUrl)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassPassTypeIdentifier, setPkpassPassTypeIdentifier)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassSerialNumber, setPkpassSerialNumber)
 KITINERARY_MAKE_PROPERTY(Reservation, Organization, provider, setProvider)
+KITINERARY_MAKE_PROPERTY(Reservation, QVector<QVariant>, potentialAction, setPotentialAction)
 
 class LodgingReservationPrivate : public ReservationPrivate
 {

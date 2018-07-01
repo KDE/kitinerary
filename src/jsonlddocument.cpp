@@ -21,6 +21,7 @@
 #include "jsonldimportfilter.h"
 #include "logging.h"
 
+#include <KItinerary/Action>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
 #include <KItinerary/Organization>
@@ -37,6 +38,7 @@
 #include <QMetaProperty>
 #include <QUrl>
 #include <QTimeZone>
+#include <QVector>
 
 #include <cmath>
 
@@ -103,6 +105,22 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
     if (prop.type() == qMetaTypeId<float>()) {
         return doubleValue(v);
     }
+
+    if (prop.userType() == qMetaTypeId<QVector<QVariant>>()) {
+        QVector<QVariant> l;
+        if (v.isArray()) {
+            const auto array = v.toArray();
+            l.reserve(array.size());
+            for (const auto &elem : array) {
+                const auto var = createInstance(elem.toObject());
+                if (!var.isNull()) {
+                    l.push_back(var);
+                }
+            }
+        }
+        return QVariant::fromValue(l);
+    }
+
     return createInstance(v.toObject());
 }
 
@@ -138,11 +156,15 @@ static QVariant createInstance(const QJsonObject &obj)
 static QVariant createInstance(const QJsonObject &obj)
 {
     const auto type = obj.value(QLatin1String("@type")).toString();
+    MAKE_FACTORY(Action);
     MAKE_FACTORY(Airline);
     MAKE_FACTORY(Airport);
     MAKE_FACTORY(BusReservation);
     MAKE_FACTORY(BusStation);
     MAKE_FACTORY(BusTrip);
+    MAKE_FACTORY(CancelAction);
+    MAKE_FACTORY(CheckInAction);
+    MAKE_FACTORY(DownloadAction);
     MAKE_FACTORY(Flight);
     MAKE_FACTORY(FlightReservation);
     MAKE_FACTORY(FoodEstablishment);
@@ -161,6 +183,8 @@ static QVariant createInstance(const QJsonObject &obj)
     MAKE_FACTORY(TrainReservation);
     MAKE_FACTORY(TrainStation);
     MAKE_FACTORY(TrainTrip);
+    MAKE_FACTORY(UpdateAction);
+    MAKE_FACTORY(ViewAction);
     return {};
 }
 
@@ -224,6 +248,19 @@ static QJsonValue toJson(const QVariant &v)
         if (v.userType() == qMetaTypeId<float>()) {
             return v.toFloat();
         }
+
+        if (v.userType() == qMetaTypeId<QVector<QVariant>>()) {
+            const auto vec = v.value<QVector<QVariant>>();
+            if (vec.isEmpty()) {
+                return {};
+            }
+            QJsonArray array;
+            for (const auto &var : vec) {
+                array.push_back(toJson(var));
+            }
+            return array;
+        }
+
         qCDebug(Log) << "unhandled value:" << v;
         return {};
     }

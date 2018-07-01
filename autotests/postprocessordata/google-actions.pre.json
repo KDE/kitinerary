@@ -1,0 +1,89 @@
+[{
+  "@context": "http://schema.org",
+  "@type": "FlightReservation",
+  "reservationNumber": "RXJ34P",
+  "reservationStatus": "http://schema.org/Confirmed",
+  "url": "http://cheapair.com/view/RXJ34P",
+  "underName": {
+    "@type": "Person",
+    "name": "Eva Green",
+    "email": "eva@mail.com"
+  },
+  "bookingAgent": {
+    "@type": "Organization",
+    "name": "Cheap Air Travel",
+    "url": "http://cheapair.com/"
+  },
+  "bookingTime": "2027-01-14T13:05:00-05:00",
+  "modifiedTime": "2027-03-14T13:05:00-05:00",
+  "programMembership": {
+    "@type": "ProgramMembership",
+    "memberNumber": "4BY123111",
+    "program": "StarAlliance"
+  },
+  "confirmReservationUrl": "http://cheapair.com/confirm?id=RXJ34P",
+  "cancelReservationUrl": "http://cheapair.com/cancel?id=RXJ34P",
+  "modifyReservationUrl": "http://cheapair.com/edit?id=RXJ34P",
+  "checkinUrl": "http://united.com/onlinecheckin.html",
+  "potentialAction": [
+    {
+      "@type": "ConfirmAction",
+      "target": "http://cheapair.com/confirm?id=RXJ34P"
+    },
+    {
+      "@type": "CancelAction",
+      "target": "http://cheapair.com/cancel?id=RXJ34P"
+    },
+    {
+      "@type": "EditAction",
+      "target": "http://cheapair.com/edit?id=RXJ34P"
+    },
+    {
+      "@type": "CheckInAction",
+      "target": "http://united.com/onlinecheckin.html"
+    }
+  ],
+  "reservationFor": {
+    "@type": "Flight",
+    "flightNumber": "110",
+    "airline": {
+      "@type": "Airline",
+      "name": "United",
+      "iataCode": "UA"
+    },
+    "operatedBy": {
+      "@type": "Airline",
+      "name": "Continental Airlines",
+      "iataCode": "CO"
+    },
+    "departureAirport": {
+      "@type": "Airport",
+      "name": "San Francisco Airport",
+      "iataCode": "SFO"
+    },
+    "departureTime": "2027-03-04T20:15:00-08:00",
+    "departureGate": "11",
+    "departureTerminal": "B",
+    "arrivalAirport": {
+      "@type": "Airport",
+      "name": "John F. Kennedy International Airport",
+      "iataCode": "JFK"
+    },
+    "arrivalTime": "2027-03-05T06:30:00-05:00",
+    "arrivalGate": "32",
+    "arrivalTerminal": "B",
+    "webCheckinTime": "2027-03-03T20:00:00-08:00",
+    "boardingTime": "2027-03-04T19:15:00-08:00"
+  },
+  "ticketNumber": "123XYZ",
+  "ticketDownloadUrl": "http://cheapair.com/download/RXJ34P.pdf",
+  "ticketPrintUrl": "http://cheapair.com/print/RXJ34P.html",
+  "ticketToken": "qrCode:123456789",
+  "additionalTicketText": "Some ticket details, terms and conditions...",
+  "airplaneSeat": "9A",
+  "airplaneSeatClass": {
+    "@type": "AirplaneSeatClass",
+    "name": "Business"
+  },
+  "boardingGroup": "B"
+}]

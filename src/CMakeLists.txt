@@ -4,6 +4,7 @@ add_subdirectory(knowledgedb-generator)
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 set(kitinerary_lib_srcs
+    datatypes/action.cpp
     datatypes/bustrip.cpp
     datatypes/datatypes.cpp
     datatypes/flight.cpp
@@ -110,6 +111,7 @@ ecm_generate_headers(KItinerary_KnowledgeDb_FORWARDING_HEADERS
 )
 ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
     HEADER_NAMES
+        Action
         BusTrip
         Datatypes
         Flight
