@@ -18,6 +18,8 @@
 #include "jsonldimportfilter.h"
 
 #include <QDebug>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
 
 using namespace KItinerary;
@@ -29,6 +31,27 @@ static void renameProperty(QJsonObject &obj, const char *oldName, const char *ne
         obj.insert(QLatin1String(newName), value);
         obj.remove(QLatin1String(oldName));
     }
+}
+
+static void moveToAction(QJsonObject &obj, const char *propName, const char *typeName)
+{
+    const auto value = obj.value(QLatin1String(propName));
+    if (value.isNull() || value.isUndefined()) {
+        return;
+    }
+
+    auto actions = obj.value(QLatin1String("potentialAction")).toArray();
+    for (const auto &act : actions) {
+        if (act.toObject().value(QLatin1String("@type")).toString() == QLatin1String(typeName)) {
+            return;
+        }
+    }
+
+    QJsonObject action;
+    action.insert(QStringLiteral("@type"), QLatin1String(typeName));
+    action.insert(QStringLiteral("target"), value);
+    actions.push_back(action);
+    obj.insert(QLatin1String("potentialAction"), actions);
 }
 
 static void filterTrainTrip(QJsonObject &trip)
@@ -71,6 +94,12 @@ static void filterReservation(QJsonObject &res)
             res.remove(QLatin1String("ticketToken"));
         }
     }
+
+    // move Google xxxUrl properties to Action instances
+    moveToAction(res, "cancelReservationUrl", "CancelAction");
+    moveToAction(res, "checkinUrl", "CheckInAction");
+    moveToAction(res, "modifyReservationUrl", "UpdateAction");
+    moveToAction(res, "ticketDownloadUrl", "DownloadAction");
 }
 
 QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)

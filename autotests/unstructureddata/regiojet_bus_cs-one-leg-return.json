@@ -3,6 +3,12 @@
         "@context": "http://schema.org",
         "@type": "BusReservation",
         "modifyReservationUrl": "https://jizdenky.studentagency.cz/OnlineTicket?pam1=9876543210&pam2=0123456789",
+        "potentialAction": [
+            {
+                "@type": "UpdateAction",
+                "target": "https://jizdenky.studentagency.cz/OnlineTicket?pam1=9876543210&pam2=0123456789"
+            }
+        ],
         "reservationFor": {
             "@type": "BusTrip",
             "arrivalStation": {
@@ -31,6 +37,12 @@
         "@context": "http://schema.org",
         "@type": "BusReservation",
         "modifyReservationUrl": "https://jizdenky.studentagency.cz/OnlineTicket?pam1=9876543210&pam2=0123456789",
+        "potentialAction": [
+            {
+                "@type": "UpdateAction",
+                "target": "https://jizdenky.studentagency.cz/OnlineTicket?pam1=9876543210&pam2=0123456789"
+            }
+        ],
         "reservationFor": {
             "@type": "BusTrip",
             "arrivalStation": {

@@ -15,7 +15,9 @@ DTSTART;TZID="UTC+02:00":20170929T182600
 DTEND;TZID="UTC+02:00":20170929T195200
 TRANSP:OPAQUE
 X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
- "TrainReservation"\,"reservationFor":{"@type":
+ "TrainReservation"\,"potentialAction":[{"@type":"CancelAction"\,"target":
+ "https://www.trainline.fr/tickets"}\,{"@type":"UpdateAction"\,"target":
+ "https://www.trainline.fr/tickets"}]\,"reservationFor":{"@type":
  "TrainTrip"\,"arrivalStation":{"@type":"TrainStation"\,"geo":{"@type":
  "GeoCoordinates"\,"latitude":45.76055908203125\,"longitude":
  4.8593549728393555}\,"name":"Lyon Part-Dieu"}\,"arrivalTime":

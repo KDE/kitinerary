@@ -14,6 +14,14 @@
             {
                 "@type": "CheckInAction",
                 "target": "http://united.com/onlinecheckin.html"
+            },
+            {
+                "@type": "UpdateAction",
+                "target": "http://cheapair.com/edit?id=RXJ34P"
+            },
+            {
+                "@type": "DownloadAction",
+                "target": "http://cheapair.com/download/RXJ34P.pdf"
             }
         ],
         "reservationFor": {

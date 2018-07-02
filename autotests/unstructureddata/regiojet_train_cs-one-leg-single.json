@@ -3,6 +3,12 @@
         "@context": "http://schema.org",
         "@type": "TrainReservation",
         "modifyReservationUrl": "https://jizdenky.regiojet.cz/OnlineTicket?pam1=0987654321&pam2=0123456789",
+        "potentialAction": [
+            {
+                "@type": "UpdateAction",
+                "target": "https://jizdenky.regiojet.cz/OnlineTicket?pam1=0987654321&pam2=0123456789"
+            }
+        ],
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {
