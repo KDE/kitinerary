@@ -22,7 +22,11 @@
             {
                 "@type": "DownloadAction",
                 "target": "http://cheapair.com/download/RXJ34P.pdf"
-            }
+            },
+            {
+                 "@type": "ViewAction",
+                 "target": "http://cheapair.com/view/RXJ34P"
+             }
         ],
         "reservationFor": {
             "@type": "Flight",

@@ -100,6 +100,7 @@ static void filterReservation(QJsonObject &res)
     moveToAction(res, "checkinUrl", "CheckInAction");
     moveToAction(res, "modifyReservationUrl", "UpdateAction");
     moveToAction(res, "ticketDownloadUrl", "DownloadAction");
+    moveToAction(res, "url", "ViewAction");
 }
 
 QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)

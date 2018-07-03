@@ -4,11 +4,7 @@
         "@type": "TrainReservation",
         "potentialAction": [
             {
-                "@type": "CancelAction",
-                "target": "https://www.trainline.fr/tickets"
-            },
-            {
-                "@type": "UpdateAction",
+                "@type": "ViewAction",
                 "target": "https://www.trainline.fr/tickets"
             }
         ],
@@ -62,11 +58,7 @@
         "@type": "TrainReservation",
         "potentialAction": [
             {
-                "@type": "CancelAction",
-                "target": "https://www.trainline.fr/tickets"
-            },
-            {
-                "@type": "UpdateAction",
+                "@type": "ViewAction",
                 "target": "https://www.trainline.fr/tickets"
             }
         ],

@@ -26,6 +26,7 @@
 #include "mergeutil.h"
 #include "sortutil.h"
 
+#include <KItinerary/Action>
 #include <KItinerary/AirportDb>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
@@ -78,6 +79,7 @@ public:
     template <typename T> T processReservation(T res) const;
     Person processPerson(Person person) const;
     template <typename T> T processPlace(T place) const;
+    QVector<QVariant> processActions(QVector<QVariant> actions) const;
 
     bool filterReservation(const QVariant &res) const;
     bool filterLodgingReservation(const LodgingReservation &res) const;
@@ -413,6 +415,7 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
 
     // process underName
     res.setUnderName(processPerson(res.underName().template value<Person>()));
+    res.setPotentialAction(processActions(res.potentialAction()));
 
     return res;
 }
@@ -438,6 +441,41 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
     }
 #endif
     return place;
+}
+
+QVector<QVariant> ExtractorPostprocessorPrivate::processActions(QVector<QVariant> actions) const
+{
+    // remove non-actions and actions with invalid URLs
+    QUrl viewUrl;
+    for (auto it = actions.begin(); it != actions.end();) {
+        if (!JsonLd::canConvert<Action>(*it)) {
+            it = actions.erase(it);
+            continue;
+        }
+
+        const auto action = JsonLd::convert<Action>(*it);
+        if (!action.target().isValid()) {
+            it = actions.erase(it);
+            continue;
+        }
+
+        if (JsonLd::isA<ViewAction>(*it)) {
+            viewUrl = action.target();
+        }
+        ++it;
+    }
+
+    // remove actions that don't actually have their own target
+    for (auto it = actions.begin(); it != actions.end();) {
+        const auto action = JsonLd::convert<Action>(*it);
+        if (JsonLd::isA<ViewAction>(*it) || action.target() != viewUrl) {
+            ++it;
+        } else {
+            it = actions.erase(it);
+        }
+    }
+
+    return actions;
 }
 
 bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
