@@ -12,6 +12,10 @@
                 "target": "http://cheapair.com/cancel?id=RXJ34P"
             },
             {
+                "@type": "UpdateAction",
+                "target": "http://cheapair.com/edit?id=RXJ34P"
+            },
+            {
                 "@type": "CheckInAction",
                 "target": "http://united.com/onlinecheckin.html"
             },

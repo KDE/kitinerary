@@ -103,6 +103,26 @@ static void filterReservation(QJsonObject &res)
     moveToAction(res, "url", "ViewAction");
 }
 
+static QJsonArray filterActions(const QJsonValue &v)
+{
+    QJsonArray actions;
+    if (v.isArray()) {
+        actions = v.toArray();
+    } else {
+        actions.push_back(v);
+    }
+
+    for (auto it = actions.begin(); it != actions.end(); ++it) {
+        auto action = (*it).toObject();
+        if (action.value(QLatin1String("@type")).toString() == QLatin1String("EditAction")) {
+            action.insert(QLatin1String("@type"), QLatin1String("UpdateAction"));
+        }
+        *it = action;
+    }
+
+    return actions;
+}
+
 QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
 {
     QJsonObject res(obj);
@@ -125,6 +145,11 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         if (!flight.isEmpty()) {
             res.insert(QLatin1String("reservationFor"), flight);
         }
+    }
+
+    auto actions = res.value(QLatin1String("potentialAction"));
+    if (!actions.isUndefined()) {
+        res.insert(QLatin1String("potentialAction"), filterActions(actions));
     }
 
     return res;
