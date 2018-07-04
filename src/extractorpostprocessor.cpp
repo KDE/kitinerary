@@ -465,10 +465,20 @@ QVector<QVariant> ExtractorPostprocessorPrivate::processActions(QVector<QVariant
         ++it;
     }
 
-    // remove actions that don't actually have their own target
+    // normalize the order, so JSON comparisson still yields correct results
+    std::sort(actions.begin(), actions.end(), [](const QVariant &lhs, const QVariant &rhs) {
+        return strcmp(lhs.typeName(), rhs.typeName()) < 0;
+    });
+
+    // remove actions that don't actually have their own target, or duplicates
+    QUrl prevUrl;
+    const char* prevType = nullptr;
     for (auto it = actions.begin(); it != actions.end();) {
         const auto action = JsonLd::convert<Action>(*it);
-        if (JsonLd::isA<ViewAction>(*it) || action.target() != viewUrl) {
+        const auto isDuplicate = action.target() == prevUrl && (prevType ? strcmp(prevType, (*it).typeName()) == 0 : false);
+        if ((JsonLd::isA<ViewAction>(*it) || action.target() != viewUrl) && !isDuplicate) {
+            prevUrl = action.target();
+            prevType = (*it).typeName();
             ++it;
         } else {
             it = actions.erase(it);
