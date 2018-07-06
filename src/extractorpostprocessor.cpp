@@ -79,7 +79,7 @@ public:
     template <typename T> T processReservation(T res) const;
     Person processPerson(Person person) const;
     template <typename T> T processPlace(T place) const;
-    QVector<QVariant> processActions(QVector<QVariant> actions) const;
+    QVariantList processActions(QVariantList actions) const;
 
     bool filterReservation(const QVariant &res) const;
     bool filterLodgingReservation(const LodgingReservation &res) const;
@@ -443,7 +443,7 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
     return place;
 }
 
-QVector<QVariant> ExtractorPostprocessorPrivate::processActions(QVector<QVariant> actions) const
+QVariantList ExtractorPostprocessorPrivate::processActions(QVariantList actions) const
 {
     // remove non-actions and actions with invalid URLs
     QUrl viewUrl;

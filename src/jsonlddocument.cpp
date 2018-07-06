@@ -106,8 +106,8 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         return doubleValue(v);
     }
 
-    if (prop.userType() == qMetaTypeId<QVector<QVariant>>()) {
-        QVector<QVariant> l;
+    if (prop.userType() == qMetaTypeId<QVariantList>()) {
+        QVariantList l;
         if (v.isArray()) {
             const auto array = v.toArray();
             l.reserve(array.size());
@@ -249,13 +249,13 @@ static QJsonValue toJson(const QVariant &v)
             return v.toFloat();
         }
 
-        if (v.userType() == qMetaTypeId<QVector<QVariant>>()) {
-            const auto vec = v.value<QVector<QVariant>>();
-            if (vec.isEmpty()) {
+        if (v.canConvert<QVariantList>()) {
+            QSequentialIterable iterable = v.value<QSequentialIterable>();
+            if (iterable.size() == 0) {
                 return {};
             }
             QJsonArray array;
-            for (const auto &var : vec) {
+            for (const auto &var : iterable) {
                 array.push_back(toJson(var));
             }
             return array;

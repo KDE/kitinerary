@@ -41,7 +41,7 @@ class KITINERARY_EXPORT Reservation
     KITINERARY_PROPERTY(QVariant, underName, setUnderName)
     KITINERARY_PROPERTY(KItinerary::Organization, provider, setProvider)
     KITINERARY_PROPERTY(QUrl, url, setUrl)
-    KITINERARY_PROPERTY(QVector<QVariant>, potentialAction, setPotentialAction)
+    KITINERARY_PROPERTY(QVariantList, potentialAction, setPotentialAction)
 
     // Google extension
     KITINERARY_PROPERTY(QUrl, cancelReservationUrl, setCancelReservationUrl)
