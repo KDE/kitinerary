@@ -4,8 +4,6 @@
         "@type": "FlightReservation",
         "airplaneSeat": "9A",
         "boardingGroup": "B",
-        "cancelReservationUrl": "http://cheapair.com/cancel?id=RXJ34P",
-        "modifyReservationUrl": "http://cheapair.com/edit?id=RXJ34P",
         "potentialAction": [
             {
                 "@type": "CancelAction",
@@ -88,7 +86,6 @@
             "@type": "Ticket",
             "ticketToken": "qrCode:123456789"
         },
-        "ticketDownloadUrl": "http://cheapair.com/download/RXJ34P.pdf",
         "underName": {
             "@type": "Person",
             "email": "eva@mail.com",

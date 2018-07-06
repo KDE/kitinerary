@@ -2,7 +2,6 @@
     {
         "@context": "http://schema.org",
         "@type": "BusReservation",
-        "modifyReservationUrl": "http://jizdenky.studentagency.cz/OnlineTicket?pam1=0987654321&pam2=0123456789",
         "potentialAction": [
             {
                 "@type": "UpdateAction",

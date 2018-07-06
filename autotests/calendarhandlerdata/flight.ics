@@ -16,7 +16,7 @@ DTEND;TZID=Europe/Berlin:20170920T160000
 TRANSP:OPAQUE
 X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "FlightReservation"\,"airplaneSeat":"16E"\,"boardingGroup":
- "C"\,"modifyReservationUrl":"https://www.airberlin.com/de-DE/cockpit/index/index/bookingNo/XXX007/lastname/DOE/submit/1"\,"potentialAction":[{"@type":"DownloadAction"\,"target":
+ "C"\,"potentialAction":[{"@type":"DownloadAction"\,"target":
  "https://m.airberlin.com/ckbc/pnr/XXX007/ln/DOE/cpid/94482631/fn/JOHN"}\,{"@type":"UpdateAction"\,"target":"https://www.airberlin.com/de-DE/cockpit/index/index/bookingNo/XXX007/lastname/DOE/submit/1"}]\,"reservationFor":{"@type":"Flight"\,"airline":{"@type":
  "Airline"\,"iataCode":"AB"\,"name":"airberlin"}\,"arrivalAirport":
  {"@type":"Airport"\,"address":{"@type":"PostalAddress"\,"addressCountry":
@@ -33,7 +33,7 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "2017-09-20"\,"departureGate":"16"\,"departureTime":{"@type":
  "QDateTime"\,"@value":"2017-09-20T15:05:00+03:00"\,"timezone":
  "Europe/Helsinki"}\,"flightNumber":"8075"}\,"reservationNumber":
- "XXX007"\,"reservedTicket":{"@type":"Ticket"\,"ticketToken":"https://checkin.airberlin.com/app/barcode.fly?pnr=XXX007&ln=DOE&cpid=12345678&fn=JOHN"}\,"ticketDownloadUrl":"https://m.airberlin.com/ckbc/pnr/XXX007/ln/DOE/cpid/94482631/fn/JOHN"\,"underName":{"@type":"Person"\,"name":"JOHN DOE"}}]
+ "XXX007"\,"reservedTicket":{"@type":"Ticket"\,"ticketToken":"https://checkin.airberlin.com/app/barcode.fly?pnr=XXX007&ln=DOE&cpid=12345678&fn=JOHN"}\,"underName":{"@type":"Person"\,"name":"JOHN DOE"}}]
 BEGIN:VALARM
 DESCRIPTION:Boarding for flight AB 8075 at gate 16
 ACTION:DISPLAY

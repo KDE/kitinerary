@@ -401,22 +401,8 @@ TouristAttractionVisit ExtractorPostprocessorPrivate::processTouristAttractionVi
 template <typename T>
 T ExtractorPostprocessorPrivate::processReservation(T res) const
 {
-    // remove duplicated urls
-    const auto viewUrl = res.url();
-    const auto modUrl = res.modifyReservationUrl();
-    const auto cancelUrl = res.cancelReservationUrl();
-
-    if (modUrl.isValid() && viewUrl == modUrl) {
-        res.setModifyReservationUrl({});
-    }
-    if (cancelUrl.isValid() && viewUrl == cancelUrl) {
-        res.setCancelReservationUrl({});
-    }
-
-    // process underName
     res.setUnderName(processPerson(res.underName().template value<Person>()));
     res.setPotentialAction(processActions(res.potentialAction()));
-
     return res;
 }
 

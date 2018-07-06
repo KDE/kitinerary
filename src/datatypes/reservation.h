@@ -43,10 +43,6 @@ class KITINERARY_EXPORT Reservation
     KITINERARY_PROPERTY(QUrl, url, setUrl)
     KITINERARY_PROPERTY(QVariantList, potentialAction, setPotentialAction)
 
-    // Google extension
-    KITINERARY_PROPERTY(QUrl, cancelReservationUrl, setCancelReservationUrl)
-    KITINERARY_PROPERTY(QUrl, modifyReservationUrl, setModifyReservationUrl)
-
     // KDE extensions
     /** Pass type identifier of an associated Apple Wallet boarding pass.
      *  @see KPkPass::Pass::passTypeIdentifier
@@ -97,7 +93,6 @@ class KITINERARY_EXPORT FlightReservation : public Reservation
     // Google extensions
     KITINERARY_PROPERTY(QString, airplaneSeat, setAirplaneSeat)
     KITINERARY_PROPERTY(QString, boardingGroup, setBoardingGroup)
-    KITINERARY_PROPERTY(QUrl, ticketDownloadUrl, setTicketDownloadUrl)
 };
 
 /** A train reservation.

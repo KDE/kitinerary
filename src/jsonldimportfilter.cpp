@@ -33,7 +33,7 @@ static void renameProperty(QJsonObject &obj, const char *oldName, const char *ne
     }
 }
 
-static void moveToAction(QJsonObject &obj, const char *propName, const char *typeName)
+static void migrateToAction(QJsonObject &obj, const char *propName, const char *typeName, bool remove)
 {
     const auto value = obj.value(QLatin1String(propName));
     if (value.isNull() || value.isUndefined()) {
@@ -52,6 +52,10 @@ static void moveToAction(QJsonObject &obj, const char *propName, const char *typ
     action.insert(QStringLiteral("target"), value);
     actions.push_back(action);
     obj.insert(QLatin1String("potentialAction"), actions);
+
+    if (remove) {
+        obj.remove(QLatin1String("propName"));
+    }
 }
 
 static void filterTrainTrip(QJsonObject &trip)
@@ -96,11 +100,11 @@ static void filterReservation(QJsonObject &res)
     }
 
     // move Google xxxUrl properties to Action instances
-    moveToAction(res, "cancelReservationUrl", "CancelAction");
-    moveToAction(res, "checkinUrl", "CheckInAction");
-    moveToAction(res, "modifyReservationUrl", "UpdateAction");
-    moveToAction(res, "ticketDownloadUrl", "DownloadAction");
-    moveToAction(res, "url", "ViewAction");
+    migrateToAction(res, "cancelReservationUrl", "CancelAction", true);
+    migrateToAction(res, "checkinUrl", "CheckInAction", true);
+    migrateToAction(res, "modifyReservationUrl", "UpdateAction", true);
+    migrateToAction(res, "ticketDownloadUrl", "DownloadAction", true);
+    migrateToAction(res, "url", "ViewAction", false);
 }
 
 static QJsonArray filterActions(const QJsonValue &v)
