@@ -77,7 +77,7 @@ if (HAVE_KCAL)
     target_link_libraries(KPimItinerary PUBLIC KF5::CalendarCore)
 endif()
 if (HAVE_KCONTACTS)
-    target_link_libraries(KPimItinerary PUBLIC KF5::Contacts)
+    target_link_libraries(KPimItinerary PRIVATE KF5::Contacts)
 endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS
