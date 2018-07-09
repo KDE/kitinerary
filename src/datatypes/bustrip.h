@@ -45,13 +45,7 @@ class KITINERARY_EXPORT BusTrip
     KITINERARY_PROPERTY(QString, busNumber, setBusNumber)
     KITINERARY_PROPERTY(KItinerary::Organization, provider, setProvider)
 
-    Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
-    Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized STORED false CONSTANT)
-
 private:
-    QString departureTimeLocalized() const;
-    QString arrivalTimeLocalized() const;
-
     QExplicitlySharedDataPointer<BusTripPrivate> d;
 };
 

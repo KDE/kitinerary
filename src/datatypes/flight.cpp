@@ -20,6 +20,7 @@
 #include "organization.h"
 #include "datatypes_p.h"
 
+#include <QDateTime>
 #include <QVariant>
 
 using namespace KItinerary;
@@ -73,28 +74,6 @@ void Flight::setDepartureDay(const QDate &value)
 {
     d.detach();
     d->departureDay = value;
-}
-
-QString Flight::departureTimeLocalized() const
-{
-    K_D(const Flight);
-    return localizedDateTime(d->departureTime);
-}
-
-QString Flight::arrivalTimeLocalized() const
-{
-    K_D(const Flight);
-    return localizedDateTime(d->arrivalTime);
-}
-
-QString Flight::boardingTimeLocalized() const
-{
-    K_D(const Flight);
-    auto s = QLocale().toString(d->boardingTime.time(), QLocale::ShortFormat);
-    if (d->boardingTime.timeSpec() == Qt::TimeZone || d->boardingTime.timeSpec() == Qt::OffsetFromUTC) {
-        s += QLatin1Char(' ') + d->boardingTime.timeZone().abbreviation(d->boardingTime);
-    }
-    return s;
 }
 
 }

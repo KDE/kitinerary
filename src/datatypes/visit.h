@@ -33,12 +33,8 @@ class KITINERARY_EXPORT TouristAttractionVisit
     KITINERARY_PROPERTY(KItinerary::TouristAttraction, touristAttraction, setTouristAttraction)
     KITINERARY_PROPERTY(QDateTime, arrivalTime, setArrivalTime)
     KITINERARY_PROPERTY(QDateTime, departureTime, setDepartureTime)
-    Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
-    Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized STORED false CONSTANT)
 
 private:
-    QString departureTimeLocalized() const;
-    QString arrivalTimeLocalized() const;
     QExplicitlySharedDataPointer<TouristAttractionVisitPrivate> d;
 };
 

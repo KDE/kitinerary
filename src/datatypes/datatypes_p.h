@@ -18,10 +18,6 @@
 #ifndef KITINERARY_DATATYPES_P_H
 #define KITINERARY_DATATYPES_P_H
 
-#include <QDateTime>
-#include <QLocale>
-#include <QTimeZone>
-
 namespace KItinerary {
 
 #define KITINERARY_PRIVATE_BASE_GADGET(Class) \
@@ -68,15 +64,6 @@ Type Class::Name() const { return static_cast<const Class ## Private*>(d.data())
 void Class::SetName(detail::parameter_type<Type>::type value) { \
     d.detach(); \
     static_cast<Class ## Private*>(d.data())->Name = value; \
-}
-
-static inline QString localizedDateTime(const QDateTime &dt)
-{
-    auto s = QLocale().toString(dt, QLocale::ShortFormat);
-    if (dt.timeSpec() == Qt::TimeZone || dt.timeSpec() == Qt::OffsetFromUTC) {
-        s += QLatin1Char(' ') + dt.timeZone().abbreviation(dt);
-    }
-    return s;
 }
 
 }

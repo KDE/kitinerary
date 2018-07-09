@@ -20,6 +20,8 @@
 #include "place.h"
 #include "datatypes_p.h"
 
+#include <QDateTime>
+
 using namespace KItinerary;
 
 namespace KItinerary {
@@ -48,18 +50,6 @@ KITINERARY_MAKE_PROPERTY(TrainTrip, QDateTime, departureTime, setDepartureTime)
 KITINERARY_MAKE_PROPERTY(TrainTrip, Organization, provider, setProvider)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QString, trainName, setTrainName)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QString, trainNumber, setTrainNumber)
-
-QString TrainTrip::departureTimeLocalized() const
-{
-    K_D(const TrainTrip);
-    return QLocale().toString(d->departureTime, QLocale::ShortFormat);
-}
-
-QString TrainTrip::arrivalTimeLocalized() const
-{
-    K_D(const TrainTrip);
-    return QLocale().toString(d->arrivalTime, QLocale::ShortFormat);
-}
 
 }
 

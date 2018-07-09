@@ -59,14 +59,7 @@ class KITINERARY_EXPORT Flight
      */
     KITINERARY_PROPERTY(QDate, departureDay, setDepartureDay)
 
-    Q_PROPERTY(QString departureTimeLocalized READ departureTimeLocalized STORED false CONSTANT)
-    Q_PROPERTY(QString arrivalTimeLocalized READ arrivalTimeLocalized STORED false CONSTANT)
-    Q_PROPERTY(QString boardingTimeLocalized READ boardingTimeLocalized STORED false CONSTANT)
 private:
-    QString departureTimeLocalized() const;
-    QString arrivalTimeLocalized() const;
-    QString boardingTimeLocalized() const;
-
     QExplicitlySharedDataPointer<FlightPrivate> d;
 };
 

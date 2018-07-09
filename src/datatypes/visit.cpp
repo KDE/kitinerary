@@ -19,6 +19,8 @@
 #include "place.h"
 #include "datatypes_p.h"
 
+#include <QDateTime>
+
 using namespace KItinerary;
 
 namespace KItinerary {
@@ -35,18 +37,6 @@ KITINERARY_MAKE_SIMPLE_CLASS(TouristAttractionVisit)
 KITINERARY_MAKE_PROPERTY(TouristAttractionVisit, TouristAttraction, touristAttraction, setTouristAttraction)
 KITINERARY_MAKE_PROPERTY(TouristAttractionVisit, QDateTime, arrivalTime, setArrivalTime)
 KITINERARY_MAKE_PROPERTY(TouristAttractionVisit, QDateTime, departureTime, setDepartureTime)
-
-QString TouristAttractionVisit::departureTimeLocalized() const
-{
-    K_D(const TouristAttractionVisit);
-    return QLocale().toString(d->departureTime, QLocale::ShortFormat);
-}
-
-QString TouristAttractionVisit::arrivalTimeLocalized() const
-{
-    K_D(const TouristAttractionVisit);
-    return QLocale().toString(d->arrivalTime, QLocale::ShortFormat);
-}
 
 }
 

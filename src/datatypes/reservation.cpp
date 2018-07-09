@@ -19,6 +19,7 @@
 #include "organization.h"
 #include "datatypes_p.h"
 
+#include <QDateTime>
 #include <QUrl>
 #include <QVariant>
 #include <QVector>
@@ -63,18 +64,6 @@ public:
 KITINERARY_MAKE_SUB_CLASS(LodgingReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkinTime, setCheckinTime)
 KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkoutTime, setCheckoutTime)
-
-QString LodgingReservation::checkinDateLocalized() const
-{
-    K_D(const LodgingReservation);
-    return QLocale().toString(d->checkinTime.date(), QLocale::ShortFormat);
-}
-
-QString LodgingReservation::checkoutDateLocalized() const
-{
-    K_D(const LodgingReservation);
-    return QLocale().toString(d->checkoutTime.date(), QLocale::ShortFormat);
-}
 
 
 class FlightReservationPrivate : public ReservationPrivate

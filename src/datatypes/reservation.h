@@ -67,13 +67,6 @@ class KITINERARY_EXPORT LodgingReservation : public Reservation
     KITINERARY_GADGET(LodgingReservation)
     KITINERARY_PROPERTY(QDateTime, checkinTime, setCheckinTime)
     KITINERARY_PROPERTY(QDateTime, checkoutTime, setCheckoutTime)
-
-    Q_PROPERTY(QString checkinDateLocalized READ checkinDateLocalized STORED false CONSTANT)
-    Q_PROPERTY(QString checkoutDateLocalized READ checkoutDateLocalized STORED false CONSTANT)
-
-private:
-    QString checkinDateLocalized() const;
-    QString checkoutDateLocalized() const;
 };
 
 /** A flight reservation.
