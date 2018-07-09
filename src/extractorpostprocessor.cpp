@@ -408,6 +408,8 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
 
 Person ExtractorPostprocessorPrivate::processPerson(Person person) const
 {
+    person.setName(person.name().simplified());
+
     if (person.name().isEmpty() && !person.familyName().isEmpty() && !person.givenName().isEmpty()) {
         person.setName(person.givenName() + QLatin1Char(' ') + person.familyName());
     }
