@@ -114,37 +114,37 @@ private:
 void PdfImagePrivate::load(Stream* str, int width, int height, GfxImageColorMap* colorMap)
 {
     m_img = QImage(width, height, m_format);
-    std::unique_ptr<ImageStream> imgStream(new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits()));
+    const auto bytesPerPixel = colorMap->getNumPixelComps();
+    std::unique_ptr<ImageStream> imgStream(new ImageStream(str, width, bytesPerPixel, colorMap->getBits()));
     imgStream->reset();
 
-    for (int i = 0; i < height; ++i) {
-        const auto row = imgStream->getLine();
-        switch (m_format) {
-            case QImage::Format_RGB888:
-            {
+    switch (m_format) {
+        case QImage::Format_RGB888:
+            for (int i = 0; i < height; ++i) {
+                const auto row = imgStream->getLine();
                 auto imgData = m_img.scanLine(i);
                 GfxRGB rgb;
                 for (int j = 0; j < width; ++j) {
-                    colorMap->getRGB(row + (j * colorMap->getNumPixelComps()), &rgb);
+                    colorMap->getRGB(row + (j * bytesPerPixel), &rgb);
                     *imgData++ = colToByte(rgb.r);
                     *imgData++ = colToByte(rgb.g);
                     *imgData++ = colToByte(rgb.b);
                 }
-                break;
             }
-            case QImage::Format_Grayscale8:
-            {
+            break;
+        case QImage::Format_Grayscale8:
+            for (int i = 0; i < height; ++i) {
+                const auto row = imgStream->getLine();
                 auto imgData = m_img.scanLine(i);
                 GfxGray gray;
                 for (int j = 0; j < width; ++j) {
                     colorMap->getGray(row + j, &gray);
                     *imgData++ = colToByte(gray);
                 }
-                break;
             }
-            default:
-                break;
-        }
+            break;
+        default:
+            break;
     }
     imgStream->close();
 
