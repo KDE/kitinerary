@@ -30,19 +30,6 @@ using namespace KItinerary;
 class MergeUtilTest : public QObject
 {
     Q_OBJECT
-private:
-    bool isSameFlight(const Flight &lhs, const Flight &rhs)
-    {
-        FlightReservation r1;
-        r1.setReservationFor(lhs);
-        r1.setReservationNumber(QLatin1String("XXX007"));
-
-        FlightReservation r2;
-        r2.setReservationFor(rhs);
-        r2.setReservationNumber(QLatin1String("XXX007"));
-
-        return MergeUtil::isSame(r1, r2);
-    }
 private Q_SLOTS:
     void testIsSameReservation()
     {
@@ -82,21 +69,21 @@ private Q_SLOTS:
         f1.setDepartureTime(QDateTime(QDate(2018, 4, 2), QTime(17, 51, 0)));
 
         Flight f2;
-        QVERIFY(!isSameFlight(f1, f2));
+        QVERIFY(!MergeUtil::isSame(f1, f2));
 
         f2.setFlightNumber(QLatin1String("8457"));
-        QVERIFY(!isSameFlight(f1, f2));
+        QVERIFY(!MergeUtil::isSame(f1, f2));
 
         Airline airline2;
         airline2.setIataCode(QLatin1String("AF"));
         f2.setAirline(airline2);
-        QVERIFY(!isSameFlight(f1, f2));
+        QVERIFY(!MergeUtil::isSame(f1, f2));
         airline2.setIataCode(QLatin1String("KL"));
         f2.setAirline(airline2);
-        QVERIFY(!isSameFlight(f1, f2));
+        QVERIFY(!MergeUtil::isSame(f1, f2));
 
         f2.setDepartureDay(QDate(2018, 4, 2));
-        QVERIFY(isSameFlight(f1, f2));
+        QVERIFY(MergeUtil::isSame(f1, f2));
     }
 
     void testCodeShareFlight()
@@ -113,7 +100,7 @@ private Q_SLOTS:
         Flight f2(f1);
         f2.setAirline(a2);
 
-        QVERIFY(isSameFlight(f1, f2));
+        QVERIFY(MergeUtil::isSame(f1, f2));
     }
 
     void testIsSamePerson()

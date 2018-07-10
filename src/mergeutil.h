@@ -31,9 +31,10 @@ class TrainTrip;
 namespace MergeUtil
 {
 /**
- *  Checks if two top-level values refer to the same booking element.
+ *  Checks if two Reservation or Trip values refer to the same booking element.
  *
- *  This depends on the reservation type:
+ *  This does not mean being exactly equal, but having matching identifying properties.
+ *  What this means exactly depends on the data type:
  *  - Flights: booking reference, flight number and departure day match
  *  - Train trip: booking reference, train number and departure day match
  *  - Bus trip: booking ref and/or number and departure time match

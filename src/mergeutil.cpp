@@ -70,6 +70,16 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         return false;
     }
 
+    // for all reservations check underName
+    if (JsonLd::canConvert<Reservation>(lhs)) {
+        // for all: underName either matches or is not set
+        const auto lhsUN = JsonLd::convert<Reservation>(lhs).underName().value<Person>();
+        const auto rhsUN = JsonLd::convert<Reservation>(rhs).underName().value<Person>();
+        if (!lhsUN.name().isEmpty() && !rhsUN.name().isEmpty() &&  !isSamePerson(lhsUN, rhsUN)) {
+            return false;
+        }
+    }
+
     // flight: booking ref, flight number and departure day match
     if (JsonLd::isA<FlightReservation>(lhs)) {
         const auto lhsRes = lhs.value<FlightReservation>();
@@ -77,11 +87,12 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (lhsRes.reservationNumber() != rhsRes.reservationNumber() || lhsRes.reservationNumber().isEmpty()) {
             return false;
         }
-        const auto lhsFlight = lhsRes.reservationFor().value<Flight>();
-        const auto rhsFlight = rhsRes.reservationFor().value<Flight>();
-        if (!isSameFlight(lhsFlight, rhsFlight)) {
-            return false;
-        }
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor());
+    }
+    if (JsonLd::isA<Flight>(lhs)) {
+        const auto lhsFlight = lhs.value<Flight>();
+        const auto rhsFlight = rhs.value<Flight>();
+        return isSameFlight(lhsFlight, rhsFlight);
     }
 
     // train: booking ref, train number and depature day match
@@ -91,11 +102,12 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
             return false;
         }
-        const auto lhsTrip = lhsRes.reservationFor().value<TrainTrip>();
-        const auto rhsTrip = rhsRes.reservationFor().value<TrainTrip>();
-        if (!isSameTrainTrip(lhsTrip, rhsTrip)) {
-            return false;
-        }
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor());
+    }
+    if (JsonLd::isA<TrainTrip>(lhs)) {
+        const auto lhsTrip = lhs.value<TrainTrip>();
+        const auto rhsTrip = rhs.value<TrainTrip>();
+        return isSameTrainTrip(lhsTrip, rhsTrip);
     }
 
     // bus: booking ref, number and depature time match
@@ -105,11 +117,12 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
             return false;
         }
-        const auto lhsTrip = lhsRes.reservationFor().value<BusTrip>();
-        const auto rhsTrip = rhsRes.reservationFor().value<BusTrip>();
-        if (!isSameBusTrip(lhsTrip, rhsTrip)) {
-            return false;
-        }
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor());
+    }
+    if (JsonLd::isA<BusTrip>(lhs)) {
+        const auto lhsTrip = lhs.value<BusTrip>();
+        const auto rhsTrip = rhs.value<BusTrip>();
+        return isSameBusTrip(lhsTrip, rhsTrip);
     }
 
     // hotel: booking ref, checkin day, name match
@@ -119,11 +132,12 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
             return false;
         }
-        const auto lhsHotel = lhsRes.reservationFor().value<LodgingBusiness>();
-        const auto rhsHotel = rhsRes.reservationFor().value<LodgingBusiness>();
-        if (!isSameLodingBusiness(lhsHotel, rhsHotel) || lhsRes.checkinTime().date() != rhsRes.checkinTime().date()) {
-            return false;
-        }
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.checkinTime().date() == rhsRes.checkinTime().date();;
+    }
+    if (JsonLd::isA<LodgingBusiness>(lhs)) {
+        const auto lhsHotel = lhs.value<LodgingBusiness>();
+        const auto rhsHotel = rhs.value<LodgingBusiness>();
+        return isSameLodingBusiness(lhsHotel, rhsHotel);
     }
 
     // restaurant reservation: sane restaurant, same booking ref, same day
@@ -133,11 +147,12 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
             return false;
         }
-        const auto lhsRestaurant = lhsRes.reservationFor().value<FoodEstablishment>();
-        const auto rhsRestaurant = rhsRes.reservationFor().value<FoodEstablishment>();
-        if (!isSameFoodEstablishment(lhsRestaurant, rhsRestaurant) || lhsRes.startTime().date() != rhsRes.endTime().date()) {
-            return false;
-        }
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.startTime().date() == rhsRes.endTime().date();
+    }
+    if (JsonLd::isA<FoodEstablishment>(lhs)) {
+        const auto lhsRestaurant = lhs.value<FoodEstablishment>();
+        const auto rhsRestaurant = rhs.value<FoodEstablishment>();
+        return isSameFoodEstablishment(lhsRestaurant, rhsRestaurant);
     }
 
     // tourist attraction visit
@@ -145,13 +160,6 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         const auto l = lhs.value<TouristAttractionVisit>();
         const auto r = rhs.value<TouristAttractionVisit>();
         return isSameTouristAttractionVisit(l, r);
-    }
-
-    if (JsonLd::canConvert<Reservation>(lhs)) {
-        // for all: underName either matches or is not set
-        const auto lhsUN = JsonLd::convert<Reservation>(lhs).underName().value<Person>();
-        const auto rhsUN = JsonLd::convert<Reservation>(rhs).underName().value<Person>();
-        return lhsUN.name().isEmpty() || rhsUN.name().isEmpty() || isSamePerson(lhsUN, rhsUN);
     }
 
     return true;
