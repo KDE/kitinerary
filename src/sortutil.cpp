@@ -19,6 +19,7 @@
 
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
+#include <KItinerary/Person>
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
 #include <KItinerary/TrainTrip>
@@ -93,5 +94,15 @@ QDateTime SortUtil::endtDateTime(const QVariant &res)
 
 bool SortUtil::isBefore(const QVariant &lhs, const QVariant &rhs)
 {
+    if (startDateTime(lhs) == startDateTime(rhs) && lhs.userType() == rhs.userType() && JsonLd::canConvert<Reservation>(lhs)) {
+        // for multi-traveler reservations, sort by traveler name to achieve a stable result
+        const auto lhsRes = JsonLd::convert<Reservation>(lhs);
+        const auto rhsRes = JsonLd::convert<Reservation>(rhs);
+        if (!lhsRes.underName().isNull() && !rhsRes.underName().isNull()) {
+            const auto lhsUN = lhsRes.underName().value<Person>();
+            const auto rhsUN = rhsRes.underName().value<Person>();
+            return lhsUN.name() < rhsUN.name();
+        }
+    }
     return startDateTime(lhs) < startDateTime(rhs);
 }
