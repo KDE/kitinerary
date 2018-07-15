@@ -7,7 +7,7 @@ DTSTAMP:20171227T111649Z
 CREATED:20171227T111649Z
 UID:KIT-XXX007-1b22236a-21ff-4885-8c99-b3b2bbca062c
 LAST-MODIFIED:20171227T111649Z
-DESCRIPTION:Boarding time: 2:25 PM\nDeparture gate: 16\nBoarding group: C\nSeat: 16E\nBooking reference: XXX007
+DESCRIPTION:Boarding time: 2:25 PM\nDeparture gate: 16\nJOHN DOE\nBoarding group: C\nSeat: 16E\nBooking reference: XXX007
 SUMMARY:Flight AB 8075 from HEL to TXL
 LOCATION:Helsinki
 GEO:60.317200;24.963301

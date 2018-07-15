@@ -27,6 +27,7 @@
 #include <KItinerary/BusTrip>
 #include <KItinerary/Flight>
 #include <KItinerary/Organization>
+#include <KItinerary/Person>
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
@@ -53,7 +54,7 @@ using namespace KItinerary;
 
 #ifdef HAVE_KCAL
 using namespace KCalCore;
-static void fillFlightReservation(const FlightReservation &reservation, const KCalCore::Event::Ptr &event);
+static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event);
 template <typename Trip, typename Res>
 static void fillTripReservation(const Res &reservation, const KCalCore::Event::Ptr &event);
 static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event);
@@ -80,9 +81,11 @@ QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<
         if (!event->uid().startsWith(bookingRef)) {
             continue;
         }
-        const auto otherRes = CalendarHandler::reservationForEvent(event);
-        if (MergeUtil::isSame(otherRes, reservation)) {
-            return event;
+        const auto otherRes = CalendarHandler::reservationsForEvent(event);
+        for (const auto &other : otherRes) {
+            if (MergeUtil::isSame(other, reservation)) {
+                return event;
+            }
         }
     }
 #else
@@ -93,28 +96,36 @@ QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<
     return {};
 }
 
-QVariant CalendarHandler::reservationForEvent(const QSharedPointer<KCalCore::Event> &event)
+QVector<QVariant> CalendarHandler::reservationsForEvent(const QSharedPointer<KCalCore::Event> &event)
 {
 #ifdef HAVE_KCAL
     const auto payload = event->customProperty("KITINERARY", "RESERVATION").toUtf8();
     const auto json = QJsonDocument::fromJson(payload).array();
-    const auto data = JsonLdDocument::fromJson(json);
-    if (data.size() != 1) {
-        return {};
-    }
-    return data.at(0);
+    return JsonLdDocument::fromJson(json);
 #else
     Q_UNUSED(event);
     return {};
 #endif
 }
 
-void CalendarHandler::fillEvent(const QVariant &reservation, const QSharedPointer<KCalCore::Event> &event)
+QVariant CalendarHandler::reservationForEvent(const QSharedPointer<KCalCore::Event> &event)
 {
+    const auto v = reservationsForEvent(event);
+    return v.isEmpty() ? QVariant() : v.at(0);
+}
+
+void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalCore::Event> &event)
+{
+    if (reservations.isEmpty()) {
+        return;
+    }
+
 #ifdef HAVE_KCAL
+    // TODO pass reservationS into all functions below for multi-traveler support
+    const auto reservation = reservations.at(0);
     const int typeId = reservation.userType();
     if (typeId == qMetaTypeId<FlightReservation>()) {
-        fillFlightReservation(reservation.value<FlightReservation>(), event);
+        fillFlightReservation(reservations, event);
     } else if (typeId == qMetaTypeId<LodgingReservation>()) {
         fillLodgingReservation(reservation.value<LodgingReservation>(), event);
     } else if (typeId == qMetaTypeId<TrainReservation>()) {
@@ -125,23 +136,26 @@ void CalendarHandler::fillEvent(const QVariant &reservation, const QSharedPointe
         return;
     }
 
-    const auto bookingRef = JsonLd::convert<Reservation>(reservation).reservationNumber();
-    if (!event->uid().startsWith(QLatin1String("KIT-") + bookingRef)) {
-        event->setUid(QLatin1String("KIT-") + bookingRef + QLatin1Char('-') + event->uid());
+    if (!event->uid().startsWith(QLatin1String("KIT-"))) {
+        event->setUid(QLatin1String("KIT-") + event->uid());
     }
 
-    const auto payload = QJsonDocument(JsonLdDocument::toJson({reservation})).toJson(QJsonDocument::Compact);
+    const auto payload = QJsonDocument(JsonLdDocument::toJson(reservations)).toJson(QJsonDocument::Compact);
     event->setCustomProperty("KITINERARY", "RESERVATION", QString::fromUtf8(payload));
 #else
-    Q_UNUSED(reservation);
     Q_UNUSED(event);
 #endif
 }
 
-#ifdef HAVE_KCAL
-static void fillFlightReservation(const FlightReservation &reservation, const KCalCore::Event::Ptr &event)
+void CalendarHandler::fillEvent(const QVariant &reservation, const QSharedPointer<KCalCore::Event> &event)
 {
-    const auto flight = reservation.reservationFor().value<Flight>();
+    fillEvent(QVector<QVariant>{reservation}, event);
+}
+
+#ifdef HAVE_KCAL
+static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event)
+{
+    const auto flight = reservations.at(0).value<FlightReservation>().reservationFor().value<Flight>();
     const auto airline = flight.airline();
     const auto depPort = flight.departureAirport();
     const auto arrPort = flight.arrivalAirport();
@@ -183,16 +197,24 @@ static void fillFlightReservation(const FlightReservation &reservation, const KC
     if (!departureGate.isEmpty()) {
         desc.push_back(i18n("Departure gate: %1", departureGate));
     }
-    if (!reservation.boardingGroup().isEmpty()) {
-        desc.push_back(i18n("Boarding group: %1", reservation.boardingGroup()));
+
+    for (const auto r : reservations) {
+        const auto reservation = r.value<FlightReservation>();
+        const auto person = reservation.underName().value<KItinerary::Person>();
+        if (!person.name().isEmpty()) {
+            desc.push_back(person.name());
+        }
+        if (!reservation.boardingGroup().isEmpty()) {
+            desc.push_back(i18n("Boarding group: %1", reservation.boardingGroup()));
+        }
+        if (!reservation.airplaneSeat().isEmpty()) {
+            desc.push_back(i18n("Seat: %1", reservation.airplaneSeat()));
+        }
+        if (!reservation.reservationNumber().isEmpty()) {
+            desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
+        }
+        event->setDescription(desc.join(QLatin1Char('\n')));
     }
-    if (!reservation.airplaneSeat().isEmpty()) {
-        desc.push_back(i18n("Seat: %1", reservation.airplaneSeat()));
-    }
-    if (!reservation.reservationNumber().isEmpty()) {
-        desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
-    }
-    event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
 template <typename Trip, typename Res>

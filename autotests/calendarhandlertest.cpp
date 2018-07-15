@@ -87,7 +87,7 @@ private Q_SLOTS:
         QCOMPARE(refEvents.size(), inArray.size());
         for (int i = 0; i < inArray.size(); ++i) {
             Event::Ptr newEvent(new Event);
-            CalendarHandler::fillEvent(postproc.result().at(i), newEvent);
+            CalendarHandler::fillEvent(postproc.result(), newEvent);
 
             // sync volatile fields, we only care for differences elsewhere
             const auto refEvent = refEvents.at(i);
