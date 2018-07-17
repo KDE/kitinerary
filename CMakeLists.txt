@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.0)
 set(PIM_VERSION "5.9.40")
 project(KItinerary VERSION ${PIM_VERSION})
 
-find_package(ECM 5.38 REQUIRED NO_MODULE)
+set(KF5_VERSION "5.47.0")
+
+find_package(ECM ${KF5_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DIR}/cmake)
 
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
@@ -20,11 +22,20 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfigVersion.cmake"
 )
 
-find_package(Qt5 REQUIRED COMPONENTS Test Gui Qml)
-find_package(KF5 REQUIRED COMPONENTS I18n)
-find_package(KF5Mime CONFIG REQUIRED)
-find_package(KF5CalendarCore CONFIG)
-find_package(KF5Contacts CONFIG)
+set(QT_REQUIRED_VERSION "5.9.0")
+
+
+find_package(Qt5 ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Test Gui Qml)
+find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n)
+
+set(KMIME_VERSION "5.8.80")
+set(KCALENDARCORE_LIB_VERSION "5.8.80")
+set(KCONTACTS_LIB_VERSION "5.8.80")
+
+
+find_package(KF5Mime ${KMIME_VERSION} CONFIG REQUIRED)
+find_package(KF5CalendarCore ${KCALENDARCORE_LIB_VERSION} CONFIG)
+find_package(KF5Contacts ${KCONTACTS_LIB_VERSION} CONFIG)
 if (NOT ANDROID)
     set_package_properties(KF5CalendarCore PROPERTIES TYPE REQUIRED)
     set_package_properties(KF5Contacts PROPERTIES TYPE REQUIRED)
