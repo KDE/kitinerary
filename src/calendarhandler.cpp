@@ -69,16 +69,11 @@ QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<
     if (!JsonLd::canConvert<Reservation>(reservation)) {
         return {};
     }
-    auto bookingRef = JsonLd::convert<Reservation>(reservation).reservationNumber();
-    if (bookingRef.isEmpty()) {
-        return {};
-    }
-    bookingRef.prepend(QLatin1String("KIT-"));
 
     const auto dt = SortUtil::startDateTime(reservation).date();
     const auto events = calendar->events(dt);
     for (const auto &event : events) {
-        if (!event->uid().startsWith(bookingRef)) {
+        if (!event->uid().startsWith(QLatin1String("KIT-"))) {
             continue;
         }
         const auto otherRes = CalendarHandler::reservationsForEvent(event);
