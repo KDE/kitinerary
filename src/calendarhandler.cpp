@@ -103,12 +103,6 @@ QVector<QVariant> CalendarHandler::reservationsForEvent(const QSharedPointer<KCa
 #endif
 }
 
-QVariant CalendarHandler::reservationForEvent(const QSharedPointer<KCalCore::Event> &event)
-{
-    const auto v = reservationsForEvent(event);
-    return v.isEmpty() ? QVariant() : v.at(0);
-}
-
 void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalCore::Event> &event)
 {
     if (reservations.isEmpty()) {
@@ -140,11 +134,6 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
 #else
     Q_UNUSED(event);
 #endif
-}
-
-void CalendarHandler::fillEvent(const QVariant &reservation, const QSharedPointer<KCalCore::Event> &event)
-{
-    fillEvent(QVector<QVariant>{reservation}, event);
 }
 
 #ifdef HAVE_KCAL

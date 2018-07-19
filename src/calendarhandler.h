@@ -45,8 +45,6 @@ namespace CalendarHandler
      *  In case of a mult-travler trip, the result contains more than one reservation.
      */
     KITINERARY_EXPORT QVector<QVariant> reservationsForEvent(const QSharedPointer<KCalCore::Event> &event);
-    /** Returns the reservation object for this event. */
-    KITINERARY_DEPRECATED_EXPORT QVariant reservationForEvent(const QSharedPointer<KCalCore::Event> &event);
 
     /** Fills @p event with details of @p reservations.
      *  Can be used on new events or to update existing ones.
@@ -54,10 +52,6 @@ namespace CalendarHandler
      *  That is, MergeUtil::isSame() returns true for Reservation::reservationFor for each pair of values.
      */
     KITINERARY_EXPORT void fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalCore::Event> &event);
-    /** Fills @p event with details of @p reservation.
-     *  Can be used on new events or to update existing ones.
-     */
-    KITINERARY_DEPRECATED_EXPORT void fillEvent(const QVariant &reservation, const QSharedPointer<KCalCore::Event> &event);
 }
 
 }
