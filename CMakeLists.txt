@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-set(PIM_VERSION "5.8.80")
+set(PIM_VERSION "5.8.90")
 project(KItinerary VERSION ${PIM_VERSION})
 
 find_package(ECM 5.38 REQUIRED NO_MODULE)
