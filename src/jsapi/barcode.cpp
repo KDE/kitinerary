@@ -42,26 +42,30 @@ QString JsApi::Barcode::decodeAztec(const QVariant &img) const
     return {};
 }
 
-QString JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
+QVariant JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
 {
     if (img.userType() == qMetaTypeId<PdfImage>()) {
         const auto b = BarcodeDecoder::decodeAztecBinary(img.value<PdfImage>().image());
-        // ugly, but this at least makes js preserve \0 bytes it seems...
-        return QString::fromLatin1(b.constData(), b.size());
+        return QVariant::fromValue(b);
     }
     return {};
 }
 
-QVariant JsApi::Barcode::decodeUic9183(const QString &s) const
+QVariant JsApi::Barcode::decodeUic9183(const QVariant &s) const
 {
     Uic9183Parser p;
-    p.parse(s.toLatin1());
+    p.parse(s.toByteArray());
     return QVariant::fromValue(p);
 }
 
 QVariant JsApi::Barcode::decodeIataBcbp(const QString &s) const
 {
     return QVariant::fromValue(IataBcbpParser::parse(s, m_contextDate));
+}
+
+QString JsApi::Barcode::toBase64(const QVariant &b) const
+{
+    return QString::fromUtf8(b.toByteArray().toBase64());
 }
 
 void JsApi::Barcode::setContextDate(const QDate& date)

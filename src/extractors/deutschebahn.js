@@ -168,9 +168,9 @@ function parseTicket(text, uic918ticket) {
 function parsePdf(pdf) {
     // try to find the UIC918.3 barcode
     var images = pdf.pages[0].imagesInRect(0.6, 0, 1, 1);
-    var barcode = "";
+    var barcode = null;
     var uic918ticket = null;
-    for (var i = 0; i < images.length && barcode == ""; ++i) {
+    for (var i = 0; i < images.length && !barcode; ++i) {
         if (images[i].width == images[i].height) {
             barcode = Barcode.decodeAztecBinary(images[i]);
             uic918ticket = Barcode.decodeUic9183(barcode);
@@ -178,9 +178,10 @@ function parsePdf(pdf) {
         }
     }
 
+    console.log(barcode, uic918ticket, !barcode);
     var reservations = parseTicket(pdf.text, uic918ticket);
-    for (var i = 0; i < reservations.length && barcode != ""; ++i) {
-        reservations[i].reservedTicket.ticketToken = "aztecCode:" + barcode;
+    for (var i = 0; i < reservations.length && barcode; ++i) {
+        reservations[i].reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(barcode);
         reservations[i].underName = JsonLd.toJson(uic918ticket.person);
     }
     return reservations;
