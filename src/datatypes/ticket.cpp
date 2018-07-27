@@ -18,6 +18,8 @@
 #include "ticket.h"
 #include "datatypes_p.h"
 
+#include <QByteArray>
+
 using namespace KItinerary;
 
 namespace KItinerary {
@@ -50,7 +52,7 @@ Ticket::TicketTokenType Ticket::ticketTokenType() const
 {
     if (d->ticketToken.startsWith(QLatin1Literal("qrcode:"), Qt::CaseInsensitive)) {
         return QRCode;
-    } else if (d->ticketToken.startsWith(QLatin1String("azteccode:"), Qt::CaseInsensitive)) {
+    } else if (d->ticketToken.startsWith(QLatin1String("aztec"), Qt::CaseInsensitive)) {
         return AztecCode;
     } else if (d->ticketToken.startsWith(QLatin1String("http"), Qt::CaseInsensitive)) {
         return Url;
@@ -60,13 +62,13 @@ Ticket::TicketTokenType Ticket::ticketTokenType() const
 
 QString Ticket::ticketTokenData() const
 {
-    switch (ticketTokenType()) {
-        case QRCode:
-            return ticketToken().mid(7);
-        case AztecCode:
-            return ticketToken().mid(10);
-        default:
-            break;
+    if (d->ticketToken.startsWith(QLatin1Literal("qrcode:"), Qt::CaseInsensitive)) {
+        return ticketToken().mid(7);
+    } else if (d->ticketToken.startsWith(QLatin1String("azteccode:"), Qt::CaseInsensitive)) {
+        return ticketToken().mid(10);
+    } else if (d->ticketToken.startsWith(QLatin1String("aztecbin:"), Qt::CaseInsensitive)) {
+        const auto b = QByteArray::fromBase64(d->ticketToken.midRef(9).toLatin1());
+        return QString::fromLatin1(b.constData(), b.size());
     }
     return ticketToken();
 }
