@@ -105,6 +105,12 @@ KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, endTime, setEn
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, int, partySize, setPartySize)
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, startTime, setStartTime)
 
+class EventReservationPrivate : public ReservationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(EventReservation)
+};
+KITINERARY_MAKE_SUB_CLASS(EventReservation, Reservation)
+
 }
 
 template <>

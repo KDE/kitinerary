@@ -116,6 +116,15 @@ class KITINERARY_EXPORT FoodEstablishmentReservation : public Reservation
     KITINERARY_PROPERTY(QDateTime, startTime, setStartTime)
 };
 
+/** An event reservation.
+ *  @see https://schema.org/EventReservation
+ *  @see https://developers.google.com/gmail/markup/reference/event-reservation
+ */
+class KITINERARY_EXPORT EventReservation : public Reservation
+{
+    KITINERARY_GADGET(EventReservation)
+};
+
 }
 
 Q_DECLARE_METATYPE(KItinerary::FlightReservation)
@@ -123,6 +132,7 @@ Q_DECLARE_METATYPE(KItinerary::LodgingReservation)
 Q_DECLARE_METATYPE(KItinerary::TrainReservation)
 Q_DECLARE_METATYPE(KItinerary::BusReservation)
 Q_DECLARE_METATYPE(KItinerary::FoodEstablishmentReservation)
+Q_DECLARE_METATYPE(KItinerary::EventReservation)
 
 #endif // KITINERARY_RESERVATION_H
 

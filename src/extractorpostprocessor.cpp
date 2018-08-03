@@ -29,6 +29,7 @@
 #include <KItinerary/Action>
 #include <KItinerary/AirportDb>
 #include <KItinerary/BusTrip>
+#include <KItinerary/Event>
 #include <KItinerary/Flight>
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
@@ -75,6 +76,8 @@ public:
     LodgingReservation processLodgingReservation(LodgingReservation res) const;
     FoodEstablishmentReservation processFoodEstablishmentReservation(FoodEstablishmentReservation res) const;
     TouristAttractionVisit processTouristAttractionVisit(TouristAttractionVisit visit) const;
+    EventReservation processEventReservation(EventReservation res) const;
+    Event processEvent(Event event) const;
 
     template <typename T> T processReservation(T res) const;
     Person processPerson(Person person) const;
@@ -87,6 +90,7 @@ public:
     bool filterAirport(const Airport &airport) const;
     template <typename T> bool filterTrainOrBusTrip(const T &trip) const;
     template <typename T> bool filterTrainOrBusStation(const T &station) const;
+    bool filterEventReservation(const EventReservation &res) const;
 
     QVector<QVariant> m_data;
     QDateTime m_contextDate;
@@ -119,6 +123,8 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
             elem = d->processTouristAttractionVisit(elem.value<TouristAttractionVisit>());
         } else if (JsonLd::isA<BusReservation>(elem)) {
             elem = d->processBusReservation(elem.value<BusReservation>());
+        } else if (JsonLd::isA<EventReservation>(elem)) {
+            elem = d->processEventReservation(elem.value<EventReservation>());
         }
 
         d->mergeOrAppend(elem);
@@ -398,6 +404,27 @@ TouristAttractionVisit ExtractorPostprocessorPrivate::processTouristAttractionVi
     return visit;
 }
 
+EventReservation ExtractorPostprocessorPrivate::processEventReservation(EventReservation res) const
+{
+    res.setReservationFor(processEvent(res.reservationFor().value<Event>()));
+    return processReservation(res);
+}
+
+Event ExtractorPostprocessorPrivate::processEvent(Event event) const
+{
+    // normalize location to be a Place
+    if (JsonLd::isA<PostalAddress>(event.location())) {
+        Place place;
+        place.setAddress(event.location().value<PostalAddress>());
+        event.setLocation(place);
+    }
+
+    if (JsonLd::isA<Place>(event.location())) {
+        event.setLocation(processPlace(event.location().value<Place>()));
+    }
+    return event;
+}
+
 template <typename T>
 T ExtractorPostprocessorPrivate::processReservation(T res) const
 {
@@ -490,6 +517,9 @@ bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
     if (JsonLd::isA<LodgingReservation>(res)) {
         return filterLodgingReservation(res.value<LodgingReservation>());
     }
+    if (JsonLd::isA<EventReservation>(res)) {
+        return filterEventReservation(res.value<EventReservation>());
+    }
 
     // types without specific filters yet
     if (JsonLd::isA<TouristAttractionVisit>(res) || JsonLd::isA<FoodEstablishmentReservation>(res)) {
@@ -531,4 +561,10 @@ template <typename T>
 bool ExtractorPostprocessorPrivate::filterTrainOrBusStation(const T &station) const
 {
     return !station.name().isEmpty();
+}
+
+bool ExtractorPostprocessorPrivate::filterEventReservation(const EventReservation &res) const
+{
+    const auto event = res.reservationFor().value<Event>();
+    return !event.name().isEmpty() && event.startDate().isValid();
 }

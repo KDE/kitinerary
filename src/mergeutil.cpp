@@ -18,6 +18,7 @@
 #include "mergeutil.h"
 
 #include <KItinerary/BusTrip>
+#include <KItinerary/Event>
 #include <KItinerary/Flight>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Organization>
@@ -42,6 +43,10 @@ static bool equalAndPresent(const QDate &lhs, const QDate &rhs)
 {
     return lhs.isValid() && lhs == rhs;
 }
+static bool equalAndPresent(const QDateTime &lhs, const QDateTime &rhs)
+{
+    return lhs.isValid() && lhs == rhs;
+}
 
 /* Checks that @p lhs and @p rhs are not non-equal if both values are set. */
 static bool conflictIfPresent(const QString &lhs, const QString &rhs)
@@ -60,6 +65,7 @@ static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusine
 static bool isSameFoodEstablishment(const FoodEstablishment &lhs, const FoodEstablishment &rhs);
 static bool isSameTouristAttractionVisit(const TouristAttractionVisit &lhs, const TouristAttractionVisit &rhs);
 static bool isSameTouristAttraction(const TouristAttraction &lhs, const TouristAttraction &rhs);
+static bool isSameEvent(const Event &lhs, const Event &rhs);
 
 bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 {
@@ -140,7 +146,7 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         return isSameLodingBusiness(lhsHotel, rhsHotel);
     }
 
-    // restaurant reservation: sane restaurant, same booking ref, same day
+    // restaurant reservation: same restaurant, same booking ref, same day
     if (JsonLd::isA<FoodEstablishmentReservation>(lhs)) {
         const auto lhsRes = lhs.value<FoodEstablishmentReservation>();
         const auto rhsRes = rhs.value<FoodEstablishmentReservation>();
@@ -153,6 +159,21 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         const auto lhsRestaurant = lhs.value<FoodEstablishment>();
         const auto rhsRestaurant = rhs.value<FoodEstablishment>();
         return isSameFoodEstablishment(lhsRestaurant, rhsRestaurant);
+    }
+
+    // event reservation
+    if (JsonLd::isA<EventReservation>(lhs)) {
+        const auto lhsRes = lhs.value<EventReservation>();
+        const auto rhsRes = rhs.value<EventReservation>();
+        if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
+            return false;
+        }
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor());
+    }
+    if (JsonLd::isA<Event>(lhs)) {
+        const auto lhsEv = lhs.value<Event>();
+        const auto rhsEv = rhs.value<Event>();
+        return isSameEvent(lhsEv, rhsEv);
     }
 
     // tourist attraction visit
@@ -252,4 +273,10 @@ bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)
         || rhs.givenName().startsWith(rhs.givenName(), Qt::CaseInsensitive);
 
     // TODO deal with cases where on side has the name split, and the other side only has the full name
+}
+
+static bool isSameEvent(const Event &lhs, const Event &rhs)
+{
+    return equalAndPresent(lhs.name(), rhs.name())
+        && equalAndPresent(lhs.startDate(), rhs.startDate());
 }

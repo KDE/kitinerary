@@ -25,6 +25,7 @@
 #include "sortutil.h"
 
 #include <KItinerary/BusTrip>
+#include <KItinerary/Event>
 #include <KItinerary/Flight>
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
@@ -60,6 +61,7 @@ static void fillTripReservation(const Res &reservation, const KCalCore::Event::P
 static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event);
+static void fillEventReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event);
 static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
 #endif
 
@@ -121,6 +123,8 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
         fillTrainReservation(reservation.value<TrainReservation>(), event);
     } else if (typeId == qMetaTypeId<BusReservation>()) {
         fillBusReservation(reservation.value<BusReservation>(), event);
+    } else if (JsonLd::isA<EventReservation>(reservation)) {
+        fillEventReservation(reservations, event);
     } else {
         return;
     }
@@ -197,8 +201,8 @@ static void fillFlightReservation(const QVector<QVariant> &reservations, const K
         if (!reservation.reservationNumber().isEmpty()) {
             desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
         }
-        event->setDescription(desc.join(QLatin1Char('\n')));
     }
+    event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
 template <typename Trip, typename Res>
@@ -274,7 +278,52 @@ static void fillLodgingReservation(const LodgingReservation &reservation, const 
                                QLocale().toString(reservation.checkinTime().time(), QLocale::ShortFormat),
                                QLocale().toString(reservation.checkoutTime().time(), QLocale::ShortFormat),
                                reservation.reservationNumber()));
-    event->setTransparency(Event::Transparent);
+    event->setTransparency(KCalCore::Event::Transparent);
+}
+
+static void fillEventReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event)
+{
+    const auto ev = reservations.at(0).value<EventReservation>().reservationFor().value<KItinerary::Event>();
+    Place location;
+    if (JsonLd::canConvert<Place>(ev.location())) {
+        location = JsonLd::convert<Place>(ev.location());
+    }
+
+    event->setSummary(ev.name());
+    event->setLocation(location.name());
+    fillGeoPosition(location, event);
+    event->setDtStart(ev.startDate());
+    event->setDtEnd(ev.endDate());
+    event->setAllDay(false);
+
+    if (ev.doorTime().isValid()) {
+        const auto startOffset = Duration(event->dtStart(), ev.doorTime());
+        const auto existinAlarms = event->alarms();
+        const auto it = std::find_if(existinAlarms.begin(), existinAlarms.end(), [startOffset](const Alarm::Ptr &other) {
+            return other->startOffset() == startOffset;
+        });
+        if (it == existinAlarms.end()) {
+            Alarm::Ptr alarm(new Alarm(event.data()));
+            alarm->setStartOffset(Duration(event->dtStart(), ev.doorTime()));
+            alarm->setDisplayAlarm(i18n("Entrance for %1", ev.name()));
+            alarm->setEnabled(true);
+            event->addAlarm(alarm);
+        }
+    }
+
+    QStringList desc;
+    for (const auto r : reservations) {
+        const auto reservation = r.value<EventReservation>();
+        const auto person = reservation.underName().value<KItinerary::Person>();
+        if (!person.name().isEmpty()) {
+            desc.push_back(person.name());
+        }
+        // TODO: add seat information if present
+        if (!reservation.reservationNumber().isEmpty()) {
+            desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
+        }
+    }
+    event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
 static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event)

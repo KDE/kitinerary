@@ -18,6 +18,7 @@
 #include "sortutil.h"
 
 #include <KItinerary/BusTrip>
+#include <KItinerary/Event>
 #include <KItinerary/Flight>
 #include <KItinerary/Person>
 #include <KItinerary/Place>
@@ -58,6 +59,9 @@ QDateTime SortUtil::startDateTime(const QVariant &res)
     if (JsonLd::isA<TouristAttractionVisit>(res)) {
         return res.value<TouristAttractionVisit>().arrivalTime();
     }
+    if (JsonLd::isA<EventReservation>(res)) {
+        return res.value<EventReservation>().reservationFor().value<Event>().startDate();
+    }
 
     return {};
 }
@@ -87,6 +91,9 @@ QDateTime SortUtil::endtDateTime(const QVariant &res)
     }
     if (JsonLd::isA<TouristAttractionVisit>(res)) {
         return res.value<TouristAttractionVisit>().departureTime();
+    }
+    if (JsonLd::isA<EventReservation>(res)) {
+        return res.value<EventReservation>().reservationFor().value<Event>().endDate();
     }
 
     return {};

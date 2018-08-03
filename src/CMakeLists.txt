@@ -7,6 +7,7 @@ set(kitinerary_lib_srcs
     datatypes/action.cpp
     datatypes/bustrip.cpp
     datatypes/datatypes.cpp
+    datatypes/event.cpp
     datatypes/flight.cpp
     datatypes/organization.cpp
     datatypes/person.cpp
@@ -114,6 +115,7 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
         Action
         BusTrip
         Datatypes
+        Event
         Flight
         Organization
         Reservation
