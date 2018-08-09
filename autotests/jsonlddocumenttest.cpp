@@ -106,7 +106,7 @@ private Q_SLOTS:
         QCOMPARE(resDtObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
         qDebug().noquote() << QJsonDocument(obj).toJson();
         auto undernameObj = obj.value(QLatin1String("underName")).toObject();
-        QCOMPARE(undernameObj.value(QLatin1String("name")), QLatin1String("John"));
+        QCOMPARE(undernameObj.value(QLatin1String("name")).toString(), QLatin1String("John"));
     }
 
     void testDeserialization()
