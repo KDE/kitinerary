@@ -82,7 +82,11 @@ QDateTime SortUtil::endtDateTime(const QVariant &res)
         return res.value<BusReservation>().reservationFor().value<BusTrip>().arrivalTime();
     }
     if (JsonLd::isA<FoodEstablishmentReservation>(res)) {
-        return res.value<FoodEstablishmentReservation>().endTime();
+        auto endTime = res.value<FoodEstablishmentReservation>().endTime();
+        if (!endTime.isValid()) {
+            endTime = QDateTime(res.value<FoodEstablishmentReservation>().startTime().date(), QTime(23, 59, 59));
+        }
+        return endTime;
     }
     if (JsonLd::isA<LodgingReservation>(res)) {
         const auto hotel = res.value<LodgingReservation>();

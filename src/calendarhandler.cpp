@@ -63,6 +63,8 @@ static void fillBusReservation(const BusReservation &reservation, const KCalCore
 static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillEventReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event);
 static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
+static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalCore::Event::Ptr &event);
+
 #endif
 
 QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalCore::Calendar> &calendar, const QVariant &reservation)
@@ -125,6 +127,8 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
         fillBusReservation(reservation.value<BusReservation>(), event);
     } else if (JsonLd::isA<EventReservation>(reservation)) {
         fillEventReservation(reservations, event);
+    } else if (JsonLd::isA<FoodEstablishmentReservation>(reservation)) {
+        fillFoodReservation(reservation.value<FoodEstablishmentReservation>(), event);
     } else {
         return;
     }
@@ -339,5 +343,34 @@ static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &e
     event->setHasGeo(true);
     event->setGeoLatitude(geo.latitude());
     event->setGeoLongitude(geo.longitude());
+}
+
+static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalCore::Event::Ptr &event)
+{
+    const auto foodEstablishment = reservation.reservationFor().value<FoodEstablishment>();
+    const auto address = foodEstablishment.address();
+
+    event->setSummary(i18n("Restaurant reservation: %1", foodEstablishment.name()));
+#ifdef HAVE_KCONTACTS
+    event->setLocation(i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
+                             address.streetAddress(), address.postalCode(),
+                             address.addressLocality(), KContacts::Address::ISOtoCountry(address.addressCountry())));
+#endif
+    fillGeoPosition(foodEstablishment, event);
+
+    event->setDtStart(reservation.startTime());
+    auto endTime = reservation.endTime();
+    if (!endTime.isValid()) {
+        endTime = QDateTime(reservation.startTime().date(), QTime(23, 59, 59));
+    }
+    event->setDtEnd(endTime);
+    event->setAllDay(false);
+    event->setTransparency(KCalCore::Event::Transparent);
+    event->setSummary(i18n("Restaurant reservation: %1", foodEstablishment.name()));
+    event->setDescription(i18n("Number Of People: %1\nReservation reference: %2\nUnder name: %3",
+                               reservation.partySize(),
+                               reservation.reservationNumber(),
+                               reservation.underName().value<KItinerary::Person>().name()));
+
 }
 #endif

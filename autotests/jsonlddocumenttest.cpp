@@ -22,6 +22,7 @@
 #include <KItinerary/Organization>
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
+#include <KItinerary/Person>
 
 #include <QDebug>
 #include <QJsonArray>
@@ -85,10 +86,27 @@ private Q_SLOTS:
         // integer values
         FoodEstablishmentReservation res;
         res.setPartySize(2);
+        const QString reservationNumber{QStringLiteral("OT123456")};
+        res.setReservationNumber(reservationNumber);
+        res.setStartTime(QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+        Person person;
+        const QString fullName{QStringLiteral("John")};
+
+        person.setName(fullName);
+        res.setUnderName(person);
+
         array = JsonLdDocument::toJson({res});
         QCOMPARE(array.size(), 1);
         obj = array.at(0).toObject();
         QCOMPARE(obj.value(QLatin1String("partySize")).toInt(), 2);
+        QCOMPARE(obj.value(QLatin1String("reservationNumber")).toString(), reservationNumber);
+        auto resDtObj = obj.value(QLatin1String("startTime")).toObject();
+        QCOMPARE(resDtObj.value(QLatin1String("@value")).toString(), QLatin1String("2018-03-18T18:44:00+01:00"));
+        QCOMPARE(resDtObj.value(QLatin1String("@type")).toString(), QLatin1String("QDateTime"));
+        QCOMPARE(resDtObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
+        qDebug().noquote() << QJsonDocument(obj).toJson();
+        auto undernameObj = obj.value(QLatin1String("underName")).toObject();
+        QCOMPARE(undernameObj.value(QLatin1String("name")), QLatin1String("John"));
     }
 
     void testDeserialization()
@@ -131,7 +149,14 @@ private Q_SLOTS:
         b = QByteArray("[{"
             "\"@context\": \"http://schema.org\","
             "\"@type\": \"FoodEstablishmentReservation\","
-            "\"partySize\": 42"
+            "\"partySize\": 42,"
+            "\"reservationNumber\": \"0T44542\","
+            "\"underName\": {"
+            "    \"@type\": \"Person\","
+            "    \"name\": \"John Smith\","
+            "    \"email\": \"foo@kde.org\""
+            "}"
+
         "}]");
 
         array = QJsonDocument::fromJson(b).array();
@@ -141,6 +166,9 @@ private Q_SLOTS:
         QVERIFY(data.canConvert<FoodEstablishmentReservation>());
         auto res = data.value<FoodEstablishmentReservation>();
         QCOMPARE(res.partySize(), 42);
+        QCOMPARE(res.reservationNumber(), QStringLiteral("0T44542"));
+        QCOMPARE(res.underName().value<Person>().name(), QStringLiteral("John Smith"));
+        QCOMPARE(res.underName().value<Person>().email(), QStringLiteral("foo@kde.org"));
     }
 
     void testApply()

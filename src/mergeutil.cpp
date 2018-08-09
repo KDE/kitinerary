@@ -153,7 +153,12 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
             return false;
         }
-        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.startTime().date() == rhsRes.endTime().date();
+        auto endTime = rhsRes.endTime();
+        if (!endTime.isValid()) {
+            endTime = QDateTime(rhsRes.startTime().date(), QTime(23, 59, 59));
+        }
+
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.startTime().date() == endTime.date();
     }
     if (JsonLd::isA<FoodEstablishment>(lhs)) {
         const auto lhsRestaurant = lhs.value<FoodEstablishment>();

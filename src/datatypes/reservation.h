@@ -112,6 +112,7 @@ class KITINERARY_EXPORT FoodEstablishmentReservation : public Reservation
 {
     KITINERARY_GADGET(FoodEstablishmentReservation)
     KITINERARY_PROPERTY(QDateTime, endTime, setEndTime)
+    KITINERARY_PROPERTY(QDateTime, modifiedTime, setModifiedTime)
     KITINERARY_PROPERTY(int, partySize, setPartySize)
     KITINERARY_PROPERTY(QDateTime, startTime, setStartTime)
 };
