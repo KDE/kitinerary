@@ -443,6 +443,7 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
     return res;
 }
 
+
 Person ExtractorPostprocessorPrivate::processPerson(Person person) const
 {
     person.setName(person.name().simplified());
@@ -450,6 +451,16 @@ Person ExtractorPostprocessorPrivate::processPerson(Person person) const
     if (person.name().isEmpty() && !person.familyName().isEmpty() && !person.givenName().isEmpty()) {
         person.setName(person.givenName() + QLatin1Char(' ') + person.familyName());
     }
+
+    // strip prefixes, they break comparisons
+    static const char* honorificPrefixes[] = { "MR ", "MS ", "MRS " };
+    for (auto prefix : honorificPrefixes) {
+        if (person.name().startsWith(QLatin1String(prefix), Qt::CaseInsensitive)) {
+            person.setName(person.name().mid(strlen(prefix)));
+            break;
+        }
+    }
+
     return person;
 }
 
