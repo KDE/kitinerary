@@ -186,7 +186,7 @@ static void fillFlightReservation(const QVector<QVariant> &reservations, const K
         desc.push_back(i18n("Departure gate: %1", departureGate));
     }
 
-    for (const auto r : reservations) {
+    for (const auto &r : reservations) {
         const auto reservation = r.value<FlightReservation>();
         const auto person = reservation.underName().value<KItinerary::Person>();
         if (!person.name().isEmpty()) {
@@ -312,7 +312,7 @@ static void fillEventReservation(const QVector<QVariant> &reservations, const KC
     }
 
     QStringList desc;
-    for (const auto r : reservations) {
+    for (const auto &r : reservations) {
         const auto reservation = r.value<EventReservation>();
         const auto person = reservation.underName().value<KItinerary::Person>();
         if (!person.name().isEmpty()) {
