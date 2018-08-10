@@ -29,6 +29,7 @@
 #include <KItinerary/Person>
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
+#include <KItinerary/RentalCar>
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
@@ -173,6 +174,7 @@ static QVariant createInstance(const QJsonObject &obj)
     MAKE_FACTORY(FoodEstablishment);
     MAKE_FACTORY(FoodEstablishmentReservation);
     MAKE_FACTORY(RentalCarReservation);
+    MAKE_FACTORY(RentalCar);
     MAKE_FACTORY(GeoCoordinates);
     MAKE_FACTORY(LodgingBusiness);
     MAKE_FACTORY(LodgingReservation);

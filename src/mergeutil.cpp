@@ -21,6 +21,7 @@
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
 #include <KItinerary/JsonLdDocument>
+#include <KItinerary/RentalCar>
 #include <KItinerary/Organization>
 #include <KItinerary/Place>
 #include <KItinerary/Person>
@@ -66,6 +67,7 @@ static bool isSameFoodEstablishment(const FoodEstablishment &lhs, const FoodEsta
 static bool isSameTouristAttractionVisit(const TouristAttractionVisit &lhs, const TouristAttractionVisit &rhs);
 static bool isSameTouristAttraction(const TouristAttraction &lhs, const TouristAttraction &rhs);
 static bool isSameEvent(const Event &lhs, const Event &rhs);
+static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs);
 
 bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 {
@@ -138,12 +140,27 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
             return false;
         }
-        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.checkinTime().date() == rhsRes.checkinTime().date();;
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.checkinTime().date() == rhsRes.checkinTime().date();
     }
     if (JsonLd::isA<LodgingBusiness>(lhs)) {
         const auto lhsHotel = lhs.value<LodgingBusiness>();
         const auto rhsHotel = rhs.value<LodgingBusiness>();
         return isSameLodingBusiness(lhsHotel, rhsHotel);
+    }
+
+    // Rental Car
+    if (JsonLd::isA<RentalCarReservation>(lhs)) {
+        const auto lhsRes = lhs.value<RentalCarReservation>();
+        const auto rhsRes = rhs.value<RentalCarReservation>();
+        if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
+            return false;
+        }
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.pickupTime().date() == rhsRes.pickupTime().date();
+    }
+    if (JsonLd::isA<RentalCar>(lhs)) {
+        const auto lhsEv = lhs.value<RentalCar>();
+        const auto rhsEv = rhs.value<RentalCar>();
+        return isSameRentalCar(lhsEv, rhsEv);
     }
 
     // restaurant reservation: same restaurant, same booking ref, same day
@@ -284,4 +301,9 @@ static bool isSameEvent(const Event &lhs, const Event &rhs)
 {
     return equalAndPresent(lhs.name(), rhs.name())
         && equalAndPresent(lhs.startDate(), rhs.startDate());
+}
+
+static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs)
+{
+    return lhs.name() == rhs.name();
 }

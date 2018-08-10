@@ -16,6 +16,7 @@ set(kitinerary_lib_srcs
     datatypes/ticket.cpp
     datatypes/traintrip.cpp
     datatypes/visit.cpp
+    datatypes/rentalcar.cpp
 
     jsapi/barcode.cpp
     jsapi/context.cpp
@@ -119,6 +120,7 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
         Flight
         Organization
         Reservation
+        RentalCar
         Person
         Place
         Ticket

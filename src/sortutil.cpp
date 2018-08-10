@@ -22,6 +22,7 @@
 #include <KItinerary/Flight>
 #include <KItinerary/Person>
 #include <KItinerary/Place>
+#include <KItinerary/RentalCar>
 #include <KItinerary/Reservation>
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
@@ -50,6 +51,9 @@ QDateTime SortUtil::startDateTime(const QVariant &res)
     }
     if (JsonLd::isA<FoodEstablishmentReservation>(res)) {
         return res.value<FoodEstablishmentReservation>().startTime();
+    }
+    if (JsonLd::isA<RentalCarReservation>(res)) {
+        return res.value<RentalCarReservation>().pickupTime();
     }
     if (JsonLd::isA<LodgingReservation>(res)) {
         const auto hotel = res.value<LodgingReservation>();
@@ -88,6 +92,10 @@ QDateTime SortUtil::endtDateTime(const QVariant &res)
         }
         return endTime;
     }
+    if (JsonLd::isA<RentalCarReservation>(res)) {
+        return res.value<RentalCarReservation>().dropoffTime();
+    }
+
     if (JsonLd::isA<LodgingReservation>(res)) {
         const auto hotel = res.value<LodgingReservation>();
         // hotel checkin/checkout is always considered the first/last thing of the day

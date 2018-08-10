@@ -77,6 +77,7 @@ public:
     FoodEstablishmentReservation processFoodEstablishmentReservation(FoodEstablishmentReservation res) const;
     TouristAttractionVisit processTouristAttractionVisit(TouristAttractionVisit visit) const;
     EventReservation processEventReservation(EventReservation res) const;
+    RentalCarReservation processRentalCarReservation(RentalCarReservation res) const;
     Event processEvent(Event event) const;
 
     template <typename T> T processReservation(T res) const;
@@ -125,6 +126,8 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
             elem = d->processBusReservation(elem.value<BusReservation>());
         } else if (JsonLd::isA<EventReservation>(elem)) {
             elem = d->processEventReservation(elem.value<EventReservation>());
+        } else if (JsonLd::isA<RentalCarReservation>(elem)) {
+            elem = d->processRentalCarReservation(elem.value<RentalCarReservation>());
         }
 
         d->mergeOrAppend(elem);
@@ -389,6 +392,13 @@ BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
 LodgingReservation ExtractorPostprocessorPrivate::processLodgingReservation(LodgingReservation res) const
 {
     res.setReservationFor(processPlace(res.reservationFor().value<LodgingBusiness>()));
+    return processReservation(res);
+}
+
+RentalCarReservation ExtractorPostprocessorPrivate::processRentalCarReservation(RentalCarReservation res) const
+{
+    res.setPickUpLocation(processPlace(res.pickUpLocation()));
+    res.setDropOffLocation(processPlace(res.dropOffLocation()));
     return processReservation(res);
 }
 
