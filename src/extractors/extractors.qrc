@@ -40,5 +40,7 @@
         <file>swiss.json</file>
         <file>swiss.js</file>
         <file>swiss-pkpass.js</file>
+        <file>hertz.js</file>
+        <file>hertz.json</file>
     </qresource>
 </RCC>
