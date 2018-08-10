@@ -106,7 +106,7 @@ private Q_SLOTS:
         QCOMPARE(resDtObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
         qDebug().noquote() << QJsonDocument(obj).toJson();
         auto undernameObj = obj.value(QLatin1String("underName")).toObject();
-        QCOMPARE(undernameObj.value(QLatin1String("name")), QLatin1String("John"));
+        QCOMPARE(undernameObj.value(QLatin1String("name")).toString(), QLatin1String("John"));
 
         //Rental Car
         RentalCarReservation rentalRes;
@@ -145,7 +145,7 @@ private Q_SLOTS:
 
         qDebug().noquote() << QJsonDocument(obj).toJson();
         undernameObj = obj.value(QLatin1String("underName")).toObject();
-        QCOMPARE(undernameObj.value(QLatin1String("name")), fullNameRentalCar);
+        QCOMPARE(undernameObj.value(QLatin1String("name")).toString(), fullNameRentalCar);
 
         auto pickupTimeObj = obj.value(QLatin1String("dropoffTime")).toObject();
         QCOMPARE(pickupTimeObj.value(QLatin1String("@value")).toString(), QLatin1String("2018-03-21T18:44:00+01:00"));
