@@ -106,7 +106,56 @@ private Q_SLOTS:
         QCOMPARE(resDtObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
         qDebug().noquote() << QJsonDocument(obj).toJson();
         auto undernameObj = obj.value(QLatin1String("underName")).toObject();
-        QCOMPARE(undernameObj.value(QLatin1String("name")).toString(), QLatin1String("John"));
+        QCOMPARE(undernameObj.value(QLatin1String("name")), QLatin1String("John"));
+
+        //Rental Car
+        RentalCarReservation rentalRes;
+        const QString reservationRentalNumber{QStringLiteral("OT1234567")};
+        rentalRes.setReservationNumber(reservationRentalNumber);
+        Person personRentalCal;
+        const QString fullNameRentalCar{QStringLiteral("John2")};
+
+        personRentalCal.setName(fullNameRentalCar);
+        rentalRes.setUnderName(personRentalCal);
+        rentalRes.setPickupTime(QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+        rentalRes.setDropoffTime(QDateTime(QDate(2018, 3, 21), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+
+        Place placeDropLocation;
+        placeDropLocation.setName(QStringLiteral("droplocation"));
+        KItinerary::PostalAddress placeDropPostalAddress;
+        placeDropPostalAddress.setStreeAddress(QStringLiteral("8 foo bla bla"));
+        placeDropPostalAddress.setAddressLocality(QStringLiteral("bli"));
+        placeDropLocation.setAddress(placeDropPostalAddress);
+
+        rentalRes.setDropOffLocation(placeDropLocation);
+
+        Place placePickupLocation;
+        placePickupLocation.setName(QStringLiteral("pickuplocation"));
+        KItinerary::PostalAddress placePickupPostalAddress;
+        placePickupPostalAddress.setStreeAddress(QStringLiteral("5 kde foo bla bla"));
+        placePickupPostalAddress.setAddressLocality(QStringLiteral("bli2"));
+        placePickupLocation.setAddress(placePickupPostalAddress);
+
+        rentalRes.setPickUpLocation(placePickupLocation);
+
+        array = JsonLdDocument::toJson({rentalRes});
+        QCOMPARE(array.size(), 1);
+        obj = array.at(0).toObject();
+        QCOMPARE(obj.value(QLatin1String("reservationNumber")).toString(), reservationRentalNumber);
+
+        qDebug().noquote() << QJsonDocument(obj).toJson();
+        undernameObj = obj.value(QLatin1String("underName")).toObject();
+        QCOMPARE(undernameObj.value(QLatin1String("name")), fullNameRentalCar);
+
+        auto pickupTimeObj = obj.value(QLatin1String("dropoffTime")).toObject();
+        QCOMPARE(pickupTimeObj.value(QLatin1String("@value")).toString(), QLatin1String("2018-03-21T18:44:00+01:00"));
+        QCOMPARE(pickupTimeObj.value(QLatin1String("@type")).toString(), QLatin1String("QDateTime"));
+        QCOMPARE(pickupTimeObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
+
+        auto droptimeObj = obj.value(QLatin1String("pickupTime")).toObject();
+        QCOMPARE(droptimeObj.value(QLatin1String("@value")).toString(), QLatin1String("2018-03-18T18:44:00+01:00"));
+        QCOMPARE(droptimeObj.value(QLatin1String("@type")).toString(), QLatin1String("QDateTime"));
+        QCOMPARE(droptimeObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
     }
 
     void testDeserialization()
@@ -169,6 +218,62 @@ private Q_SLOTS:
         QCOMPARE(res.reservationNumber(), QStringLiteral("0T44542"));
         QCOMPARE(res.underName().value<Person>().name(), QStringLiteral("John Smith"));
         QCOMPARE(res.underName().value<Person>().email(), QStringLiteral("foo@kde.org"));
+
+        //RentalCar
+        b = QByteArray("[{"
+            "\"@context\": \"http://schema.org\","
+            "\"@type\": \"RentalCarReservation\","
+            "\"reservationNumber\": \"0T445424\","
+            "\"underName\": {"
+            "    \"@type\": \"Person\","
+            "    \"name\": \"John Smith\","
+            "    \"email\": \"foo@kde.org\""
+            "},"
+            "\"pickUpLocation\": {"
+            "    \"@type\": \"Place\","
+            "    \"address\": {"
+            "       \"@type\": \"PostalAddress\","
+            "       \"addressLocality\": \"bli2\","
+            "       \"streetAddress\": \"5 kde foo bla bla\""
+            "},"
+            "\"name\": \"pickuplocation\""
+            "},"
+            "\"dropOffLocation\": {"
+            "    \"@type\": \"Place\","
+            "    \"address\": {"
+            "       \"@type\": \"PostalAddress\","
+            "       \"addressLocality\": \"bli3\","
+            "       \"streetAddress\": \"7 kde foo bla bla\""
+            "},"
+            "\"name\": \"droplocation\""
+            "},"
+            "\"pickupTime\": \"2018-03-18T18:44:00+01:00\","
+            "\"dropoffTime\": \"2018-03-21T18:44:00+01:00\""
+        "}]");
+
+        array = QJsonDocument::fromJson(b).array();
+        datas = JsonLdDocument::fromJson(array);
+        QCOMPARE(datas.size(), 1);
+        data = datas.at(0);
+        QVERIFY(data.canConvert<RentalCarReservation>());
+        auto resRentCar = data.value<RentalCarReservation>();
+        QCOMPARE(resRentCar.reservationNumber(), QStringLiteral("0T445424"));
+        QCOMPARE(resRentCar.underName().value<Person>().name(), QStringLiteral("John Smith"));
+        QCOMPARE(resRentCar.underName().value<Person>().email(), QStringLiteral("foo@kde.org"));
+        QCOMPARE(resRentCar.pickupTime(), QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+        QCOMPARE(resRentCar.dropoffTime(), QDateTime(QDate(2018, 3, 21), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+        const auto dropOffLocation = resRentCar.dropOffLocation();
+        QCOMPARE(dropOffLocation.name(), QStringLiteral("droplocation"));
+        const auto dropOffLocationAddress = dropOffLocation.address();
+        QCOMPARE(dropOffLocationAddress.streetAddress(), QStringLiteral("7 kde foo bla bla"));
+        QCOMPARE(dropOffLocationAddress.addressLocality(), QStringLiteral("bli3"));
+
+        const auto pickUpLocation = resRentCar.pickUpLocation();
+        QCOMPARE(pickUpLocation.name(), QStringLiteral("pickuplocation"));
+        const auto pickupLocationAddress = pickUpLocation.address();
+        QCOMPARE(pickupLocationAddress.streetAddress(), QStringLiteral("5 kde foo bla bla"));
+        QCOMPARE(pickupLocationAddress.addressLocality(), QStringLiteral("bli2"));
+
     }
 
     void testApply()

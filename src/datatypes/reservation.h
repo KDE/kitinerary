@@ -28,6 +28,7 @@ namespace KItinerary {
 class ReservationPrivate;
 
 class Organization;
+class Place;
 
 /** Abstract base class for reservations.
  *  @see https://schema.org/Reservation
@@ -126,6 +127,19 @@ class KITINERARY_EXPORT EventReservation : public Reservation
     KITINERARY_GADGET(EventReservation)
 };
 
+/** A Rental Car reservation.
+ *  @see https://developers.google.com/gmail/markup/reference/rental-car
+ */
+class KITINERARY_EXPORT RentalCarReservation : public Reservation
+{
+    KITINERARY_GADGET(RentalCarReservation)
+    KITINERARY_PROPERTY(QDateTime, dropoffTime, setDropoffTime)
+    KITINERARY_PROPERTY(QDateTime, pickupTime, setPickupTime)
+    KITINERARY_PROPERTY(KItinerary::Place, pickUpLocation, setPickUpLocation)
+    KITINERARY_PROPERTY(KItinerary::Place, dropOffLocation, setDropOffLocation)
+};
+
+
 }
 
 Q_DECLARE_METATYPE(KItinerary::FlightReservation)
@@ -134,6 +148,7 @@ Q_DECLARE_METATYPE(KItinerary::TrainReservation)
 Q_DECLARE_METATYPE(KItinerary::BusReservation)
 Q_DECLARE_METATYPE(KItinerary::FoodEstablishmentReservation)
 Q_DECLARE_METATYPE(KItinerary::EventReservation)
+Q_DECLARE_METATYPE(KItinerary::RentalCarReservation)
 
 #endif // KITINERARY_RESERVATION_H
 

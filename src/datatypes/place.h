@@ -138,5 +138,4 @@ Q_DECLARE_METATYPE(KItinerary::TrainStation)
 Q_DECLARE_METATYPE(KItinerary::BusStation)
 Q_DECLARE_METATYPE(KItinerary::TouristAttraction)
 
-
 #endif // KITINERARY_PLACE_H

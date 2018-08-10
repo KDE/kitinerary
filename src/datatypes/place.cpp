@@ -111,6 +111,7 @@ class TouristAttractionPrivate: public PlacePrivate
 };
 KITINERARY_MAKE_SUB_CLASS(TouristAttraction, Place)
 
+
 }
 
 template <>

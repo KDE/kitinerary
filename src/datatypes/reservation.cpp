@@ -113,6 +113,22 @@ class EventReservationPrivate : public ReservationPrivate
 };
 KITINERARY_MAKE_SUB_CLASS(EventReservation, Reservation)
 
+class RentalCarReservationPrivate : public ReservationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(RentalCarReservation)
+public:
+    QDateTime dropoffTime;
+    QDateTime pickupTime;
+    Place pickUpLocation;
+    Place dropOffLocation;
+};
+KITINERARY_MAKE_SUB_CLASS(RentalCarReservation, Reservation)
+KITINERARY_MAKE_PROPERTY(RentalCarReservation, QDateTime, dropoffTime, setDropoffTime)
+KITINERARY_MAKE_PROPERTY(RentalCarReservation, QDateTime, pickupTime, setPickupTime)
+KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, pickUpLocation, setPickUpLocation)
+KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, dropOffLocation, setDropOffLocation)
+
+
 }
 
 template <>
