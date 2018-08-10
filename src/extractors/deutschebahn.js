@@ -136,7 +136,7 @@ function parseTicket(text, uic918ticket) {
         }
 
         // for outward journeys we have station ids from the UIC 918-3 code
-        if (uic918ticket && header[1] == "Hin") {
+        if (uic918ticket && header[1] === "Hin") {
             reservations[0].reservationFor.departureStation.identifier = uic918ticket.outboundDepartureStationId;
             reservations[reservations.length - 1].reservationFor.arrivalStation.identifier = uic918ticket.outboundArrivalStationId;
             returnResIndex = reservations.length;
@@ -144,9 +144,9 @@ function parseTicket(text, uic918ticket) {
             // propagate station ids from outward to return journey
             for (var i = returnResIndex; i < reservations.length; ++i) {
                 for (var j = 0; j < returnResIndex; ++j) {
-                    if (reservations[i].reservationFor.departureStation.name == reservations[j].reservationFor.arrivalStation.name)
+                    if (reservations[i].reservationFor.departureStation.name === reservations[j].reservationFor.arrivalStation.name)
                         reservations[i].reservationFor.departureStation.identifier = reservations[j].reservationFor.arrivalStation.identifier;
-                    if (reservations[i].reservationFor.arrivalStation.name == reservations[j].reservationFor.departureStation.name)
+                    if (reservations[i].reservationFor.arrivalStation.name === reservations[j].reservationFor.departureStation.name)
                         reservations[i].reservationFor.arrivalStation.identifier = reservations[j].reservationFor.departureStation.identifier;
                 }
             }
@@ -171,7 +171,7 @@ function parsePdf(pdf) {
     var barcode = null;
     var uic918ticket = null;
     for (var i = 0; i < images.length && !barcode; ++i) {
-        if (images[i].width == images[i].height) {
+        if (images[i].width === images[i].height) {
             barcode = Barcode.decodeAztecBinary(images[i]);
             uic918ticket = Barcode.decodeUic9183(barcode);
             break;

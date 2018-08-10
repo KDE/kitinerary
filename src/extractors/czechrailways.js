@@ -60,7 +60,7 @@ function detectYear(tripDate, purchaseDate)
     var purchaseYear = parseInt(purchaseDate[4]);
 
     if ((purchaseMonth < tripMonth) ||
-        (purchaseMonth == tripMonth) && (purchaseDay <= tripDay)) {
+        (purchaseMonth === tripMonth) && (purchaseDay <= tripDay)) {
         return purchaseYear;
     } else {
         return purchaseYear + 1;

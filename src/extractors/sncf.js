@@ -100,7 +100,7 @@ function parsePdf(pdf) {
         for (var j = 0; j < images.length && !barcode; ++j) {
             if (Math.abs(images[j].width - images[j].height) < 10) {// almost square
                 barcode = Barcode.decodeAztec(images[j]);
-                if (barcode.substr(0, 4).toUpperCase() != "I0CV")
+                if (barcode.substr(0, 4).toUpperCase() !== "I0CV")
                     barcode = null;
             }
         }

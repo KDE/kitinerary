@@ -136,7 +136,7 @@ function parseTrip(trip, locale) {
 
         var departureTime = columnValue(text[i], columns, Columns.DepartureTime, locale);
         var departure = "";
-        if (departureTime != "") {
+        if (departureTime !== "") {
             departure = text[i];
         } else if (i > 0) {
             departure = text[i - 1];
@@ -184,7 +184,7 @@ function main(text) {
         var resUrl = text.match(/http(s)?:\/\/jizdenky\.(regiojet|studentagency)\.cz\/OnlineTicket\?pam1=[0-9]+\&pam2=[0-9]+/)
 
         var returnHeader = text.match(regExMap[locale]["returnTripHeader"]);
-        var isReturn = (returnHeader != null);
+        var isReturn = (returnHeader !== null);
         var routeHeader = text.match(regExMap[locale][isReturn ? "thereTripHeader" : "singleTripHeader"]);
         if (!routeHeader) {
             break;
@@ -192,7 +192,7 @@ function main(text) {
 
         var trip = text.substr(routeHeader.index + routeHeader[0].length + 1);
         var newRes = parseTrip(trip, locale);
-        if (newRes.length == 0) {
+        if (newRes.length === 0) {
             break;
         }
         reservations = reservations.concat(newRes);
