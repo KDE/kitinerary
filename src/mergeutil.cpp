@@ -26,6 +26,7 @@
 #include <KItinerary/Place>
 #include <KItinerary/Person>
 #include <KItinerary/Reservation>
+#include <KItinerary/Taxi>
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
 
@@ -68,6 +69,7 @@ static bool isSameTouristAttractionVisit(const TouristAttractionVisit &lhs, cons
 static bool isSameTouristAttraction(const TouristAttraction &lhs, const TouristAttraction &rhs);
 static bool isSameEvent(const Event &lhs, const Event &rhs);
 static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs);
+static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs);
 
 bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 {
@@ -161,6 +163,21 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         const auto lhsEv = lhs.value<RentalCar>();
         const auto rhsEv = rhs.value<RentalCar>();
         return isSameRentalCar(lhsEv, rhsEv);
+    }
+
+    // Taxi
+    if (JsonLd::isA<TaxiReservation>(lhs)) {
+        const auto lhsRes = lhs.value<TaxiReservation>();
+        const auto rhsRes = rhs.value<TaxiReservation>();
+        if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
+            return false;
+        }
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.pickupTime().date() == rhsRes.pickupTime().date();
+    }
+    if (JsonLd::isA<Taxi>(lhs)) {
+        const auto lhsEv = lhs.value<Taxi>();
+        const auto rhsEv = rhs.value<Taxi>();
+        return isSameTaxiTrip(lhsEv, rhsEv);
     }
 
     // restaurant reservation: same restaurant, same booking ref, same day
@@ -305,5 +322,11 @@ static bool isSameEvent(const Event &lhs, const Event &rhs)
 
 static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs)
 {
+    return lhs.name() == rhs.name();
+}
+
+static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs)
+{
+    //TODO verify
     return lhs.name() == rhs.name();
 }

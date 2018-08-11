@@ -13,10 +13,11 @@ set(kitinerary_lib_srcs
     datatypes/person.cpp
     datatypes/place.cpp
     datatypes/reservation.cpp
+    datatypes/taxi.cpp
     datatypes/ticket.cpp
     datatypes/traintrip.cpp
-    datatypes/visit.cpp
     datatypes/rentalcar.cpp
+    datatypes/visit.cpp
 
     jsapi/barcode.cpp
     jsapi/context.cpp
@@ -123,6 +124,7 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
         RentalCar
         Person
         Place
+        Taxi
         Ticket
         TrainTrip
         Visit

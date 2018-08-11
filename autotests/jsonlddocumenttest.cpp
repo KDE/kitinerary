@@ -274,6 +274,7 @@ private Q_SLOTS:
         QCOMPARE(pickupLocationAddress.streetAddress(), QStringLiteral("5 kde foo bla bla"));
         QCOMPARE(pickupLocationAddress.addressLocality(), QStringLiteral("bli2"));
 
+        //Taxi Reservation
     }
 
     void testApply()

@@ -66,7 +66,7 @@ static void fillEventReservation(const QVector<QVariant> &reservations, const KC
 static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
 static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillRentalCarReservation(const RentalCarReservation &reservation, const KCalCore::Event::Ptr &event);
-
+static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCore::Event::Ptr &event);
 #endif
 
 QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalCore::Calendar> &calendar, const QVariant &reservation)
@@ -133,6 +133,8 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
         fillFoodReservation(reservation.value<FoodEstablishmentReservation>(), event);
     } else if (JsonLd::isA<RentalCarReservation>(reservation)) {
         fillRentalCarReservation(reservation.value<RentalCarReservation>(), event);
+    } else if (JsonLd::isA<TaxiReservation>(reservation)) {
+        fillTaxiReservation(reservation.value<TaxiReservation>(), event);
     } else {
         return;
     }
@@ -414,6 +416,38 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
                                      reservation.underName().value<KItinerary::Person>().name(),
                                      pickUpAddress,
                                      dropAddress);
+
+    event->setDescription(description);
+}
+
+static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCore::Event::Ptr &event)
+{
+    const auto taxiPickup = reservation.pickUpLocation();
+    const auto addressPickUp = taxiPickup.address();
+    //TODO const auto rentalCar = reservation.reservationFor().value<RentalCar>();
+    //TODO event->setSummary(i18n("Rental Car reservation: %1", rentalCar.name()));
+#ifdef HAVE_KCONTACTS
+    event->setLocation(i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
+                             addressPickUp.streetAddress(), addressPickUp.postalCode(),
+                             addressPickUp.addressLocality(), KContacts::Address::ISOtoCountry(addressPickUp.addressCountry())));
+#endif
+    fillGeoPosition(taxiPickup, event);
+
+    event->setDtStart(reservation.pickupTime());
+    //TODO event->setDtEnd(reservation.dropoffTime());
+    event->setAllDay(false);
+    event->setTransparency(KCalCore::Event::Transparent);
+    //TODO event->setSummary(i18n("Rent car reservation: %1", rentalCar.name()));
+
+    const QString pickUpAddress = i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
+                                        addressPickUp.streetAddress(), addressPickUp.postalCode(),
+                                        addressPickUp.addressLocality(), KContacts::Address::ISOtoCountry(addressPickUp.addressCountry()));
+
+
+    const QString description = i18n("Reservation reference: %1\nUnder name: %2\nPickUp location: %3",
+                                     reservation.reservationNumber(),
+                                     reservation.underName().value<KItinerary::Person>().name(),
+                                     pickUpAddress);
 
     event->setDescription(description);
 }

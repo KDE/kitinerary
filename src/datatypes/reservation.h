@@ -138,6 +138,16 @@ class KITINERARY_EXPORT RentalCarReservation : public Reservation
     KITINERARY_PROPERTY(KItinerary::Place, dropOffLocation, setDropOffLocation)
 };
 
+/** A Taxi reservation.
+ *  @see https://schema.org/TaxiReservation
+ */
+class KITINERARY_EXPORT TaxiReservation : public Reservation
+{
+    KITINERARY_GADGET(TaxiReservation)
+    KITINERARY_PROPERTY(QDateTime, pickupTime, setPickupTime)
+    KITINERARY_PROPERTY(KItinerary::Place, pickUpLocation, setPickUpLocation)
+};
+
 
 }
 

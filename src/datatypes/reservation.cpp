@@ -129,6 +129,18 @@ KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, pickUpLocation, setPickUpL
 KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, dropOffLocation, setDropOffLocation)
 
 
+class TaxiReservationPrivate : public ReservationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(TaxiReservation)
+public:
+    QDateTime pickupTime;
+    Place pickUpLocation;
+};
+KITINERARY_MAKE_SUB_CLASS(TaxiReservation, Reservation)
+KITINERARY_MAKE_PROPERTY(TaxiReservation, QDateTime, pickupTime, setPickupTime)
+KITINERARY_MAKE_PROPERTY(TaxiReservation, Place, pickUpLocation, setPickUpLocation)
+
+
 }
 
 template <>
