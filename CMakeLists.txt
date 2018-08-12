@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-set(PIM_VERSION "5.9.44")
+set(PIM_VERSION "5.9.45")
 project(KItinerary VERSION ${PIM_VERSION})
 
 set(KF5_VERSION "5.48.0")
