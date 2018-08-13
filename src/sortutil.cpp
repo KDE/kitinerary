@@ -66,6 +66,9 @@ QDateTime SortUtil::startDateTime(const QVariant &res)
     if (JsonLd::isA<EventReservation>(res)) {
         return res.value<EventReservation>().reservationFor().value<Event>().startDate();
     }
+    if (JsonLd::isA<TaxiReservation>(res)) {
+        return res.value<TaxiReservation>().pickupTime();
+    }
 
     return {};
 }
