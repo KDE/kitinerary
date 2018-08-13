@@ -39,6 +39,9 @@ namespace BarcodeDecoder
 
     /** Decode an Aztec barcode containing binary data (such as UIC 918.3 codes). */
     KITINERARY_EXPORT QByteArray decodeAztecBinary(const QImage &img);
+
+    /** Decode an QRCode barcode containing text data. */
+    KITINERARY_EXPORT QString decodeQRCode(const QImage &img);
 }
 
 }

@@ -173,3 +173,25 @@ QByteArray BarcodeDecoder::decodeAztecBinary(const QImage &img)
 #endif
     return {};
 }
+
+QString BarcodeDecoder::decodeQRCode(const QImage &img)
+{
+#ifdef HAVE_ZXING
+    try {
+        const zxing::Ref<zxing::LuminanceSource> source(new QImageLuminanceSource(img));
+
+        const zxing::Ref<zxing::Binarizer> binarizer(new zxing::HybridBinarizer(source));
+        const zxing::Ref<zxing::BinaryBitmap> binary(new zxing::BinaryBitmap(binarizer));
+        const zxing::DecodeHints hints(zxing::DecodeHints::QR_CODE_HINT);
+
+        zxing::MultiFormatReader reader;
+        const auto result = reader.decode(binary, hints);
+        return QString::fromStdString(result->getText()->getText());
+    } catch (const std::exception &e) {
+        //qCDebug(Log) << e.what();
+    }
+#else
+    Q_UNUSED(img);
+#endif
+    return {};
+}

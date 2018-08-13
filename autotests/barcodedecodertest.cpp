@@ -72,6 +72,29 @@ private Q_SLOTS:
         QVERIFY(b.startsWith("OTI010080000020"));
 #endif
     }
+
+    void testQRCode_data()
+    {
+            QTest::addColumn<QString>("fileName");
+            QTest::addColumn<QString>("result");
+
+            QTest::newRow("1") << QStringLiteral("qrcode1.png") << QStringLiteral("M$K0YGV0G");
+            QTest::newRow("2") << QStringLiteral("qrcode2.png") << QStringLiteral("KZEXO4HRE");
+    }
+
+    void testQRCode()
+    {
+        QFETCH(QString, fileName);
+        QFETCH(QString, result);
+
+        QImage img(QStringLiteral(SOURCE_DIR "/barcodes/") + fileName);
+        QVERIFY(!img.isNull());
+
+#ifdef HAVE_ZXING
+        QCOMPARE(BarcodeDecoder::decodeQRCode(img), result);
+#endif
+
+    }
 };
 
 QTEST_APPLESS_MAIN(BarcodeDecoderTest)
