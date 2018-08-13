@@ -226,7 +226,7 @@ void Uic9183Parser::parse(const QByteArray &data)
     }
     // 4x compressed payload size as string
     // 2x zlib header 0x789C
-    if (data[68] != 0x78 || (uchar)data[69] != 0x9C) {
+    if (data[68] != 0x78 || ((uchar)data[69] != 0x9C && (uchar)data[69] != 0xDA)) {
         qCWarning(Log) << "UIC 918-3 payload has wrong zlib header.";
         return;
     }
