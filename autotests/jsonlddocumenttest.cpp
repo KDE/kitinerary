@@ -204,8 +204,19 @@ private Q_SLOTS:
             "    \"@type\": \"Person\","
             "    \"name\": \"John Smith\","
             "    \"email\": \"foo@kde.org\""
+            "},"
+            "\"reservationFor\": {"
+            "     \"@type\": \"FoodEstablishment\","
+            "     \"name\": \"Wagamama\","
+            "     \"address\": {"
+            "           \"@type\": \"PostalAddress\","
+            "           \"streetAddress\": \"1 Tavistock Street\","
+            "           \"addressLocality\": \"London\","
+            "           \"addressRegion\": \"Greater London\","
+            "           \"postalCode\": \"WC2E 7PG\","
+            "           \"addressCountry\": \"United Kingdom\""
+            "     }"
             "}"
-
         "}]");
 
         array = QJsonDocument::fromJson(b).array();
@@ -218,6 +229,14 @@ private Q_SLOTS:
         QCOMPARE(res.reservationNumber(), QStringLiteral("0T44542"));
         QCOMPARE(res.underName().value<Person>().name(), QStringLiteral("John Smith"));
         QCOMPARE(res.underName().value<Person>().email(), QStringLiteral("foo@kde.org"));
+
+        const auto foodEstablishment = res.reservationFor().value<FoodEstablishment>();
+        const auto address = foodEstablishment.address();
+        QCOMPARE(address.addressCountry(), QStringLiteral("United Kingdom"));
+        QCOMPARE(address.addressLocality(), QStringLiteral("London"));
+        QCOMPARE(address.postalCode(), QStringLiteral("WC2E 7PG"));
+        QCOMPARE(address.streetAddress(), QStringLiteral("1 Tavistock Street"));
+        QCOMPARE(address.addressRegion(), QStringLiteral("Greater London"));
 
         //RentalCar
         b = QByteArray("[{"
