@@ -395,10 +395,11 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
 
     event->setDtStart(reservation.pickupTime());
     event->setDtEnd(reservation.dropoffTime());
-    event->setAllDay(true);
+    event->setAllDay(false);
     event->setTransparency(KCalCore::Event::Transparent);
     event->setSummary(i18n("Rent car reservation: %1", rentalCar.name()));
 
+#ifdef HAVE_KCONTACTS
     const QString pickUpAddress = i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
                                         addressPickUp.streetAddress(), addressPickUp.postalCode(),
                                         addressPickUp.addressLocality(), KContacts::Address::ISOtoCountry(addressPickUp.addressCountry()));
@@ -406,18 +407,18 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
     const auto rentalCalDropOff = reservation.dropOffLocation();
     const auto addressDropOff = rentalCalDropOff.address();
 
-
     const QString dropAddress = i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
                                       addressDropOff.streetAddress(), addressDropOff.postalCode(),
                                       addressDropOff.addressLocality(), KContacts::Address::ISOtoCountry(addressDropOff.addressCountry()));
 
-    const QString description = i18n("Reservation reference: %1\nUnder name: %2\nPickUp location: %3\nDropoff Location: %4",
+    const QString description = i18n("Reservation reference: %1\nUnder name: %2\n\nPickUp location: %3\n\nDropoff Location: %4",
                                      reservation.reservationNumber(),
                                      reservation.underName().value<KItinerary::Person>().name(),
                                      pickUpAddress,
                                      dropAddress);
 
     event->setDescription(description);
+#endif
 }
 
 static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCore::Event::Ptr &event)
@@ -438,7 +439,7 @@ static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCo
     event->setAllDay(false);
     event->setTransparency(KCalCore::Event::Transparent);
     //TODO event->setSummary(i18n("Rent car reservation: %1", rentalCar.name()));
-
+#ifdef HAVE_KCONTACTS
     const QString pickUpAddress = i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
                                         addressPickUp.streetAddress(), addressPickUp.postalCode(),
                                         addressPickUp.addressLocality(), KContacts::Address::ISOtoCountry(addressPickUp.addressCountry()));
@@ -450,6 +451,7 @@ static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCo
                                      pickUpAddress);
 
     event->setDescription(description);
+#endif
 }
 
 #endif
