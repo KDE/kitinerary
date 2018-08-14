@@ -1,0 +1,7 @@
+{
+    "filter": [
+        { "header": "From", "match": "@booking.com" }
+
+    ],
+    "script": "booking.js"
+}
