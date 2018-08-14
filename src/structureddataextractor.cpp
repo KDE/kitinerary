@@ -164,7 +164,7 @@ bool StructuredDataExtractorPrivate::findLdJson(const QString &text)
 void StructuredDataExtractorPrivate::fixupHtml4Soft(QString &text) const
 {
     // fix value-less attributes
-    text.replace(QRegularExpression(QStringLiteral("(<[^>]+ )itemscope( [^>]*>)")), QStringLiteral("\\1itemscope=\"\"\\2"));
+    text.replace(QRegularExpression(QStringLiteral("(<[^>]+ )itemscope([ \n][^>]*>)")), QStringLiteral("\\1itemscope=\"\"\\2"));
 }
 
 void StructuredDataExtractorPrivate::fixupHtml4Desperate(QString &text) const
