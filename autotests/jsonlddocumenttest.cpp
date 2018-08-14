@@ -23,6 +23,7 @@
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
 #include <KItinerary/Person>
+#include <KItinerary/Taxi>
 
 #include <QDebug>
 #include <QJsonArray>
@@ -294,6 +295,49 @@ private Q_SLOTS:
         QCOMPARE(pickupLocationAddress.addressLocality(), QStringLiteral("bli2"));
 
         //Taxi Reservation
+        b = QByteArray("[{"
+            "\"@context\": \"http://schema.org\","
+            "\"@type\": \"TaxiReservation\","
+            "\"reservationId\": \"0T445424\","
+            "\"underName\": {"
+            "    \"@type\": \"Person\","
+            "    \"name\": \"John Smith2\","
+            "    \"email\": \"foo@kde.org\""
+            "},"
+            "\"pickUpLocation\": {"
+            "    \"@type\": \"Place\","
+            "    \"address\": {"
+            "       \"@type\": \"PostalAddress\","
+            "       \"addressLocality\": \"bli2\","
+            "       \"streetAddress\": \"5 kde foo bla bla\""
+            "     }"
+            "},"
+            "\"reservationFor\": {"
+            "    \"@type\": \"Taxi\","
+            "    \"provider\": {"
+            "       \"@type\": \"Organization\","
+            "       \"name\": \"Checker Cab\""
+            "    }"
+            "},"
+            "\"pickupTime\": \"2018-03-18T18:44:00+01:00\""
+        "}]");
+        array = QJsonDocument::fromJson(b).array();
+        datas = JsonLdDocument::fromJson(array);
+        QCOMPARE(datas.size(), 1);
+        data = datas.at(0);
+        QVERIFY(data.canConvert<TaxiReservation>());
+        auto resTaxi = data.value<TaxiReservation>();
+        QCOMPARE(resTaxi.reservationNumber(), QStringLiteral("0T445424"));
+        QCOMPARE(resTaxi.underName().value<Person>().name(), QStringLiteral("John Smith2"));
+        QCOMPARE(resTaxi.underName().value<Person>().email(), QStringLiteral("foo@kde.org"));
+
+        const auto pickUpLocationTaxi = resTaxi.pickUpLocation();
+        const auto pickupLocationAddressTaxi = pickUpLocationTaxi.address();
+        QCOMPARE(pickupLocationAddressTaxi.streetAddress(), QStringLiteral("5 kde foo bla bla"));
+        QCOMPARE(pickupLocationAddressTaxi.addressLocality(), QStringLiteral("bli2"));
+
+        QCOMPARE(resTaxi.pickupTime(), QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
+        QVERIFY(resTaxi.reservationFor().canConvert<Taxi>());
     }
 
     void testApply()

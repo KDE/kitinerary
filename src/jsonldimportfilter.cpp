@@ -75,6 +75,11 @@ static void filterLodgingReservation(QJsonObject &res)
     renameProperty(res, "checkoutDate", "checkoutTime");
 }
 
+static void filterTaxiReservation(QJsonObject &res)
+{
+    renameProperty(res, "reservationId", "reservationNumber");
+}
+
 static void filterFlight(QJsonObject &res)
 {
     // move incomplete departureTime (ie. just ISO date, no time) to departureDay
@@ -149,6 +154,8 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         if (!flight.isEmpty()) {
             res.insert(QLatin1String("reservationFor"), flight);
         }
+    } else if (type == QLatin1String("TaxiReservation")) {
+        filterTaxiReservation(res);
     }
 
     auto actions = res.value(QLatin1String("potentialAction"));
