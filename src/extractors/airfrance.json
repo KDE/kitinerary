@@ -1,8 +1,17 @@
-{
+[{
     "type": "pdf",
     "filter": [
         { "header": "From", "match": "airfrance.fr" },
         { "header": "From", "match": "airfrance.com" }
     ],
     "script": "airfrance.js"
-}
+},
+{
+    "type": "pdf",
+    "filter": [
+        { "header": "From", "match": "airfrance.fr" },
+        { "header": "From", "match": "airfrance.com" }
+    ],
+    "script": "generic.js",
+    "function": "parsePdfBoardingPass"
+}]
