@@ -93,6 +93,7 @@ public:
     template <typename T> bool filterTrainOrBusTrip(const T &trip) const;
     template <typename T> bool filterTrainOrBusStation(const T &station) const;
     bool filterEventReservation(const EventReservation &res) const;
+    bool filterFoodReservation(const FoodEstablishmentReservation &res) const;
 
     QVector<QVariant> m_data;
     QDateTime m_contextDate;
@@ -600,4 +601,10 @@ bool ExtractorPostprocessorPrivate::filterEventReservation(const EventReservatio
 {
     const auto event = res.reservationFor().value<Event>();
     return !event.name().isEmpty() && event.startDate().isValid();
+}
+
+bool ExtractorPostprocessorPrivate::filterFoodReservation(const FoodEstablishmentReservation &res) const
+{
+    const auto event = res.reservationFor().value<FoodEstablishmentReservation>();
+    return event.startTime().isValid();
 }
