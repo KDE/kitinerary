@@ -607,6 +607,5 @@ bool ExtractorPostprocessorPrivate::filterEventReservation(const EventReservatio
 
 bool ExtractorPostprocessorPrivate::filterFoodReservation(const FoodEstablishmentReservation &res) const
 {
-    const auto event = res.reservationFor().value<FoodEstablishmentReservation>();
-    return event.startTime().isValid();
+    return res.startTime().isValid();
 }
