@@ -551,10 +551,12 @@ bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
     if (JsonLd::isA<EventReservation>(res)) {
         return filterEventReservation(res.value<EventReservation>());
     }
+    if (JsonLd::isA<FoodEstablishmentReservation>(res)) {
+        return filterFoodReservation(res.value<FoodEstablishmentReservation>());
+    }
 
     // types without specific filters yet
     if (JsonLd::isA<TouristAttractionVisit>(res) ||
-            JsonLd::isA<FoodEstablishmentReservation>(res) ||
             JsonLd::isA<RentalCarReservation>(res) ||
             JsonLd::isA<TaxiReservation>(res)) {
         return true;
