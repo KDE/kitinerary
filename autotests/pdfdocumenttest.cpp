@@ -33,6 +33,7 @@ private Q_SLOTS:
     {
         QFile f(QStringLiteral(SOURCE_DIR "/misc/test.pdf"));
         QVERIFY(f.open(QFile::ReadOnly));
+#ifdef HAVE_POPPLER
         std::unique_ptr<PdfDocument> doc(PdfDocument::fromData(f.readAll()));
         QVERIFY(doc);
         QCOMPARE(doc->text(), QStringLiteral("This is the first page.\nIt contains a PDF 417 barcode.\nThis is the second page.\nIt contains an Aztec code.\n"));
@@ -64,6 +65,7 @@ private Q_SLOTS:
 
         QVERIFY(page.imagesInRect(0, 0, 0.5, 1).isEmpty());
         QCOMPARE(page.imagesInRect(0, 0.5, 1, 1).size(), 1);
+#endif
     }
 
     void testInvalidPdfDocument()
