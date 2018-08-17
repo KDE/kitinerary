@@ -124,7 +124,7 @@ class KITINERARY_EXPORT BusStation : public Place
 /** Tourist attraction (e.g. Museum, sight, etc.).
  * @see https://schema.org/TouristAttraction
  */
-class KITINERARY_EXPORT TouristAttraction: public Place
+class KITINERARY_EXPORT TouristAttraction : public Place
 {
     KITINERARY_GADGET(TouristAttraction)
 };
