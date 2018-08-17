@@ -49,6 +49,8 @@ public:
     void setupEngine();
     void executeScript();
     void extractPass();
+    void extractBoardingPass(QJsonObject &resFor);
+    void extractEventTicketPass(QJsonObject &resFor);
 
     const Extractor *m_extractor = nullptr;
     JsApi::Barcode *m_barcodeApi = nullptr;
@@ -56,7 +58,7 @@ public:
     JsApi::JsonLd *m_jsonLdApi = nullptr;
     QString m_text;
     PdfDocument *m_pdfDoc = nullptr;
-    KPkPass::BoardingPass *m_pass;
+    KPkPass::Pass *m_pass;
     QJsonArray m_result;
     QJSEngine m_engine;
 };
@@ -113,7 +115,7 @@ void ExtractorEngine::setPdfDocument(PdfDocument *pdfDoc)
 
 void ExtractorEngine::setPass(KPkPass::Pass *pass)
 {
-    d->m_pass = qobject_cast<KPkPass::BoardingPass*>(pass);
+    d->m_pass = pass;
 }
 
 void ExtractorEngine::setSenderDate(const QDateTime &dt)
@@ -223,14 +225,25 @@ void ExtractorEnginePrivate::extractPass()
     if (m_result.isEmpty()) { // no script run, so we need to create the top-level element ourselves
         QJsonObject res;
         QJsonObject resFor;
-        switch (m_pass->transitType()) {
-            case KPkPass::BoardingPass::Air:
-                res.insert(QLatin1String("@type"), QLatin1String("FlightReservation"));
-                resFor.insert(QLatin1String("@type"), QLatin1String("Flight"));
-                break;
-            // TODO expand once we have test files for train tickets
-            default:
-                return;
+        if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(m_pass)) {
+            switch (boardingPass->transitType()) {
+                case KPkPass::BoardingPass::Air:
+                    res.insert(QLatin1String("@type"), QLatin1String("FlightReservation"));
+                    resFor.insert(QLatin1String("@type"), QLatin1String("Flight"));
+                    break;
+                // TODO expand once we have test files for train tickets
+                default:
+                    return;
+            }
+        } else {
+            switch (m_pass->type()) {
+                case KPkPass::Pass::EventTicket:
+                    res.insert(QLatin1String("@type"), QLatin1String("EventReservation"));
+                    resFor.insert(QLatin1String("@type"), QLatin1String("Event"));
+                    break;
+                default:
+                    return;
+            }
         }
         res.insert(QLatin1String("reservationFor"), resFor);
         m_result.push_back(res);
@@ -239,7 +252,51 @@ void ExtractorEnginePrivate::extractPass()
     // extract structured data from a pkpass, if the extractor script hasn't done so already
     auto res = m_result.at(0).toObject();
     auto resFor = res.value(QLatin1String("reservationFor")).toObject();
+    switch (m_pass->type()) {
+        case KPkPass::Pass::BoardingPass:
+            extractBoardingPass(resFor);
+            break;
+        case KPkPass::Pass::EventTicket:
+            extractEventTicketPass(resFor);
+            break;
+        default:
+            return;
+    }
 
+    // barcode contains the ticket token
+    if (!m_pass->barcodes().isEmpty() && !res.contains(QLatin1String("reservedTicket"))) {
+        const auto barcode = m_pass->barcodes().at(0);
+        QString token;
+        switch (barcode.format()) {
+            case KPkPass::Barcode::QR:
+                token += QLatin1String("qrCode:");
+                break;
+            case KPkPass::Barcode::Aztec:
+                token += QLatin1String("aztecCode:");
+                break;
+            default:
+                break;
+        }
+        token += barcode.message();
+        QJsonObject ticket;
+        ticket.insert(QLatin1String("@type"), QLatin1String("Ticket"));
+        ticket.insert(QLatin1String("ticketToken"), token);
+        res.insert(QLatin1String("reservedTicket"), ticket);
+    }
+
+    res.insert(QLatin1String("reservationFor"), resFor);
+
+    // associate the pass with the result, so we can find the pass again for display
+    if (!m_pass->passTypeIdentifier().isEmpty() && !m_pass->serialNumber().isEmpty()) {
+        res.insert(QLatin1String("pkpassPassTypeIdentifier"), m_pass->passTypeIdentifier());
+        res.insert(QLatin1String("pkpassSerialNumber"), m_pass->serialNumber());
+    }
+
+    m_result[0] = res;
+}
+
+void ExtractorEnginePrivate::extractBoardingPass(QJsonObject &resFor)
+{
     // "relevantDate" is the best guess for the boarding time
     if (m_pass->relevantDate().isValid() && !resFor.contains(QLatin1String("boardingTime"))) {
         resFor.insert(QLatin1String("boardingTime"), m_pass->relevantDate().toString(Qt::ISODate));
@@ -273,35 +330,32 @@ void ExtractorEnginePrivate::extractPass()
         depAirport.insert(QLatin1String("geo"), depGeo);
         resFor.insert(QLatin1String("departureAirport"), depAirport);
     }
+}
 
-    // barcode contains the ticket token
-    if (!m_pass->barcodes().isEmpty() && !res.contains(QLatin1String("reservedTicket"))) {
-        const auto barcode = m_pass->barcodes().at(0);
-        QString token;
-        switch (barcode.format()) {
-            case KPkPass::Barcode::QR:
-                token += QLatin1String("qrCode:");
-                break;
-            case KPkPass::Barcode::Aztec:
-                token += QLatin1String("aztecCode:");
-                break;
-            default:
-                break;
-        }
-        token += barcode.message();
-        QJsonObject ticket;
-        ticket.insert(QLatin1String("@type"), QLatin1String("Ticket"));
-        ticket.insert(QLatin1String("ticketToken"), token);
-        res.insert(QLatin1String("reservedTicket"), ticket);
+void ExtractorEnginePrivate::extractEventTicketPass(QJsonObject &resFor)
+{
+    if (!resFor.contains(QLatin1String("name"))) {
+        resFor.insert(QLatin1String("name"), m_pass->description());
     }
 
-    res.insert(QLatin1String("reservationFor"), resFor);
-
-    // associate the pass with the result, so we can find the pass again for display
-    if (!m_pass->passTypeIdentifier().isEmpty() && !m_pass->serialNumber().isEmpty()) {
-        res.insert(QLatin1String("pkpassPassTypeIdentifier"), m_pass->passTypeIdentifier());
-        res.insert(QLatin1String("pkpassSerialNumber"), m_pass->serialNumber());
+    // "relevantDate" is the best guess for the start time
+    if (m_pass->relevantDate().isValid() && !resFor.contains(QLatin1String("startDate"))) {
+        resFor.insert(QLatin1String("startDate"), m_pass->relevantDate().toString(Qt::ISODate));
     }
 
-    m_result[0] = res;
+    // location is the best guess for the venue
+    auto venue = resFor.value(QLatin1String("location")).toObject();
+    if (venue.isEmpty()) {
+        venue.insert(QLatin1String("@type"), QLatin1String("Place"));
+    }
+    auto geo = venue.value(QLatin1String("geo")).toObject();
+    if (!m_pass->locations().isEmpty() && geo.isEmpty()) {
+        const auto loc = m_pass->locations().at(0);
+        geo.insert(QLatin1String("@type"), QLatin1String("GeoCoordinates"));
+        geo.insert(QLatin1String("latitude"), loc.latitude());
+        geo.insert(QLatin1String("longitude"), loc.longitude());
+        venue.insert(QLatin1String("geo"), geo);
+        venue.insert(QLatin1String("name"), loc.relevantText());
+        resFor.insert(QLatin1String("location"), venue);
+    }
 }

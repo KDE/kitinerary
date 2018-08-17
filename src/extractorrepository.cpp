@@ -24,7 +24,7 @@
 
 #include <KMime/Content>
 
-#include <KPkPass/BoardingPass>
+#include <KPkPass/Pass>
 
 #include <QDirIterator>
 #include <QJsonArray>
@@ -83,11 +83,10 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
     return v;
 }
 
-std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::Pass* pass) const
+std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::Pass *pass) const
 {
     std::vector<const Extractor *> v;
-    auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass);
-    if (!boardingPass) {
+    if (pass->type() != KPkPass::Pass::BoardingPass && pass->type() != KPkPass::Pass::EventTicket) {
         return v;
     }
 
@@ -98,7 +97,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::P
         for (const auto &filter : (*it).filters()) {
             QString value;
             if (strcmp(filter.headerName(), "passTypeIdentifier") == 0) {
-                value = boardingPass->passTypeIdentifier();
+                value = pass->passTypeIdentifier();
             } else {
                 continue;
             }
