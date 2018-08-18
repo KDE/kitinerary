@@ -37,16 +37,19 @@ namespace KItinerary {
 class PdfImagePrivate : public QSharedData {
 public:
 #ifdef HAVE_POPPLER
-    void load(Stream *str, int width, int height, GfxImageColorMap *colorMap);
+    void load(Stream *str, GfxImageColorMap *colorMap);
 #endif
 
-    int m_ref = -1;
+    int m_refNum = -1;
+    int m_refGen = -1;
     PdfPagePrivate *m_page = nullptr;
     QImage m_img;
     double m_x = NAN;
     double m_y = NAN;
     int m_width = 0;
     int m_height = 0;
+    int m_sourceWidth = 0;
+    int m_sourceHeight = 0;
     QImage::Format m_format = QImage::Format_Invalid;
 };
 
@@ -111,20 +114,20 @@ private:
 }
 
 #ifdef HAVE_POPPLER
-void PdfImagePrivate::load(Stream* str, int width, int height, GfxImageColorMap* colorMap)
+void PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
 {
-    m_img = QImage(width, height, m_format);
+    m_img = QImage(m_sourceWidth, m_sourceHeight, m_format);
     const auto bytesPerPixel = colorMap->getNumPixelComps();
-    std::unique_ptr<ImageStream> imgStream(new ImageStream(str, width, bytesPerPixel, colorMap->getBits()));
+    std::unique_ptr<ImageStream> imgStream(new ImageStream(str, m_sourceWidth, bytesPerPixel, colorMap->getBits()));
     imgStream->reset();
 
     switch (m_format) {
         case QImage::Format_RGB888:
-            for (int i = 0; i < height; ++i) {
+            for (int i = 0; i < m_sourceHeight; ++i) {
                 const auto row = imgStream->getLine();
                 auto imgData = m_img.scanLine(i);
                 GfxRGB rgb;
-                for (int j = 0; j < width; ++j) {
+                for (int j = 0; j < m_sourceWidth; ++j) {
                     colorMap->getRGB(row + (j * bytesPerPixel), &rgb);
                     *imgData++ = colToByte(rgb.r);
                     *imgData++ = colToByte(rgb.g);
@@ -133,11 +136,11 @@ void PdfImagePrivate::load(Stream* str, int width, int height, GfxImageColorMap*
             }
             break;
         case QImage::Format_Grayscale8:
-            for (int i = 0; i < height; ++i) {
+            for (int i = 0; i < m_sourceHeight; ++i) {
                 const auto row = imgStream->getLine();
                 auto imgData = m_img.scanLine(i);
                 GfxGray gray;
-                for (int j = 0; j < width; ++j) {
+                for (int j = 0; j < m_sourceWidth; ++j) {
                     colorMap->getGray(row + j, &gray);
                     *imgData++ = colToByte(gray);
                 }
@@ -148,7 +151,7 @@ void PdfImagePrivate::load(Stream* str, int width, int height, GfxImageColorMap*
     }
     imgStream->close();
 
-    if (m_width != width || m_height != height) {
+    if (m_width != m_sourceWidth || m_height != m_sourceHeight) {
         m_img = m_img.scaled(m_width, m_height);
     }
 }
@@ -174,7 +177,7 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     // check for duplicate occurances of ref->getRef().num
     if (ref->isRef()) {
         auto it = std::find_if(d->m_images.begin(), d->m_images.end(), [ref](const PdfImage &other) {
-            return other.d->m_ref == ref->getRef().num;
+            return other.d->m_refNum == ref->getRef().num;
         });
         if (it != d->m_images.end()) {
             m_images.push_back(*it);
@@ -195,9 +198,12 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
 
     PdfImage pdfImg;
     if (ref->isRef()) {
-        pdfImg.d->m_ref = ref->getRef().num;
+        pdfImg.d->m_refNum = ref->getRef().num;
+        pdfImg.d->m_refGen = ref->getRef().gen;
     }
 
+    pdfImg.d->m_sourceHeight = height;
+    pdfImg.d->m_sourceWidth = width;
     pdfImg.d->m_width = width;
     pdfImg.d->m_height = height;
     // deal with aspect-ratio changing scaling
@@ -224,6 +230,8 @@ ImageLoaderOutputDevice::ImageLoaderOutputDevice(PdfImagePrivate* dd)
 void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, GBool interpolate, int *maskColors, GBool inlineImg)
 {
     Q_UNUSED(state);
+    Q_UNUSED(height);
+    Q_UNUSED(width);
     Q_UNUSED(interpolate);
     Q_UNUSED(maskColors);
     Q_UNUSED(inlineImg);
@@ -232,11 +240,11 @@ void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *st
         return;
     }
 
-    if (ref->isRef() && d->m_ref != ref->getRef().num) {
+    if (ref->isRef() && d->m_refNum != ref->getRef().num) {
         return;
     }
 
-    d->load(str, width, height, colorMap);
+    d->load(str, colorMap);
 }
 #endif
 
@@ -261,7 +269,7 @@ int PdfImage::width() const
 
 QImage PdfImage::image() const
 {
-    if (!d->m_img.isNull() || d->m_ref < 0) {
+    if (!d->m_img.isNull() || d->m_refNum < 0) {
         return d->m_img;
     }
 
