@@ -36,6 +36,7 @@ namespace KItinerary {
 
 class Extractor;
 class ExtractorEnginePrivate;
+class HtmlDocument;
 class PdfDocument;
 
 /**
@@ -62,6 +63,10 @@ class PdfDocument;
  * The entry point to the script is specified in the meta-data, its argument depends
  * on the extractor type:
  * - Plain text extractors are passed a string.
+ *   If input is HTML or PDF, the string will be the text of the document stripped
+ *   of all formatting etc.
+ * - HTML extractors are passed a HtmlDocument instance allowing DOM-like access to
+ *   the document structure.
  * - PDF extractors are passed a PDFDocument instance allowing access to textual and
  *   image content.
  * - Apple Wallet pass extractors are passed a KPkPass::BoardingPass instance.
@@ -124,6 +129,10 @@ public:
      *  Only considered for text extractors.
      */
     void setText(const QString &text);
+    /** A HTML document to extract data from.
+     *  Only considered for HTML and text extractors.
+     */
+    void setHtmlDocument(HtmlDocument *htmlDoc);
     /** A PDF document to extract data from.
      *  Only considered for PDF or text extractors.
      */

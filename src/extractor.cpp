@@ -54,6 +54,8 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
         d->m_type = PkPass;
     } else if (type == QLatin1String("pdf")) {
         d->m_type = Pdf;
+    } else if (type == QLatin1String("html")) {
+        d->m_type = Html;
     }
 
     for (const auto &filterValue : obj.value(QLatin1String("filter")).toArray()) {

@@ -201,3 +201,5 @@ HtmlDocument* HtmlDocument::fromData(const QByteArray &data, QObject *parent)
     return nullptr;
 #endif
 }
+
+#include "moc_htmldocument.cpp"

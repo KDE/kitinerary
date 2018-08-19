@@ -49,6 +49,7 @@ class ExtractorPrivate;
  *
  * The following extractor types are supported:
  * - \c text: plain text, the argument to the script function is a single string.
+ * - \c html: HTML documents, the argument to the script function is a HtmlDocument instance.
  * - \c pdf: PDF documents, the argument to the script function is a PDFDocument instance.
  * - \c pkpass: Apple Wallet passes, the argument to the script function is a KPkPass::BoardingPass instance.
  *
@@ -90,6 +91,7 @@ public:
     /** Type of data this extractor can process. */
     enum Type {
         Text, ///< A plain-text extractor.
+        Html, ///< A HTML document extractor.
         Pdf, ///< A PDF document extractor.
         PkPass ///< A Apple Wallet pass extractor.
     };

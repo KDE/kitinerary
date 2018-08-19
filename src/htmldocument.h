@@ -35,6 +35,10 @@ class HtmlDocumentPrivate;
 class KITINERARY_EXPORT HtmlElement
 {
     Q_GADGET
+    Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(KItinerary::HtmlElement firstChild READ firstChild)
+    Q_PROPERTY(KItinerary::HtmlElement nextSibling READ nextSibling)
+    Q_PROPERTY(QString content READ content)
 public:
     HtmlElement();
     ~HtmlElement();
@@ -44,7 +48,7 @@ public:
     /** The element name. */
     QString name() const;
     /** Value of the attribute @p attr. */
-    QString attribute(const QString &attr) const;
+    Q_INVOKABLE QString attribute(const QString &attr) const;
     /** Returns the first child element of this node. */
     HtmlElement firstChild() const;
     /** Returns the next sibling element of this node. */
@@ -53,7 +57,7 @@ public:
     QString content() const;
 
     /** Evaluate an XPath expression relative to this node. */
-    QVariant eval(const QString &xpath) const;
+    Q_INVOKABLE QVariant eval(const QString &xpath) const;
 
 private:
     friend class HtmlDocument;
@@ -69,6 +73,7 @@ private:
 class KITINERARY_EXPORT HtmlDocument : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(KItinerary::HtmlElement root READ root)
 public:
     ~HtmlDocument();
 
@@ -81,7 +86,7 @@ public:
     HtmlElement root() const;
 
     /** Evaluate an XPath expression relative to the document root. */
-    QVariant eval(const QString &xpath) const;
+    Q_INVOKABLE QVariant eval(const QString &xpath) const;
 
 private:
     explicit HtmlDocument(QObject *parent = nullptr);

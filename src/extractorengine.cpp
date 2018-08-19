@@ -19,6 +19,7 @@
 
 #include "extractorengine.h"
 #include "extractor.h"
+#include "htmldocument.h"
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "pdfdocument.h"
@@ -57,6 +58,7 @@ public:
     JsApi::Context *m_context = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
     QString m_text;
+    HtmlDocument *m_htmlDoc = nullptr;
     PdfDocument *m_pdfDoc = nullptr;
     KPkPass::Pass *m_pass;
     QJsonArray m_result;
@@ -105,6 +107,11 @@ void ExtractorEngine::setText(const QString &text)
     d->m_text = text;
 }
 
+void ExtractorEngine::setHtmlDocument(HtmlDocument *htmlDoc)
+{
+    d->m_htmlDoc = htmlDoc;
+}
+
 void ExtractorEngine::setPdfDocument(PdfDocument *pdfDoc)
 {
     d->m_pdfDoc = pdfDoc;
@@ -133,6 +140,12 @@ QJsonArray ExtractorEngine::extract()
     switch (d->m_extractor->type()) {
         case Extractor::Text:
             if (d->m_text.isEmpty()) {
+                return {};
+            }
+            d->executeScript();
+            break;
+        case Extractor::Html:
+            if (!d->m_htmlDoc) {
                 return {};
             }
             d->executeScript();
@@ -185,6 +198,9 @@ void ExtractorEnginePrivate::executeScript()
     switch (m_extractor->type()) {
         case Extractor::Text:
             args = {m_text};
+            break;
+        case Extractor::Html:
+            args = {m_engine.toScriptValue<QObject*>(m_htmlDoc)};
             break;
         case Extractor::Pdf:
             args = {m_engine.toScriptValue<QObject*>(m_pdfDoc)};
