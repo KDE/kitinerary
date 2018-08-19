@@ -26,6 +26,8 @@
         <file>fcmtravel.js</file>
         <file>generic.json</file>
         <file>generic.js</file>
+        <file>hertz.js</file>
+        <file>hertz.json</file>
         <file>iberia.json</file>
         <file>iberia.js</file>
         <file>klm.json</file>
@@ -42,7 +44,7 @@
         <file>swiss.json</file>
         <file>swiss.js</file>
         <file>swiss-pkpass.js</file>
-        <file>hertz.js</file>
-        <file>hertz.json</file>
+        <file>vueling.json</file>
+        <file>vueling.js</file>
     </qresource>
 </RCC>

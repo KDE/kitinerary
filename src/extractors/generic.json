@@ -5,8 +5,7 @@
         { "header": "From", "match": "britishairways.com" },
         { "header": "From", "match": "finnair.com" },
         { "header": "From", "match": "tap.pt" },
-        { "header": "From", "match": "united.com" },
-        { "header": "From", "match": "vueling.com" }
+        { "header": "From", "match": "united.com" }
     ],
     "script": "generic.js",
     "function": "parsePdfBoardingPass"
