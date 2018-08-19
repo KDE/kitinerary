@@ -19,6 +19,7 @@
 #include <KItinerary/ExtractorPostprocessor>
 #include <KItinerary/ExtractorPreprocessor>
 #include <KItinerary/ExtractorRepository>
+#include <KItinerary/HtmlDocument>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/PdfDocument>
 #include <KItinerary/StructuredDataExtractor>
@@ -112,6 +113,7 @@ private Q_SLOTS:
         QVERIFY(inFile.open(QFile::ReadOnly));
 
         std::unique_ptr<KPkPass::Pass> pass;
+        std::unique_ptr<HtmlDocument> htmlDoc;
         std::unique_ptr<PdfDocument> pdfDoc;
         std::vector<const Extractor*> extractors = m_repo.extractorsForMessage(&contextMsg);
         QJsonArray jsonResult;
@@ -129,6 +131,10 @@ private Q_SLOTS:
             StructuredDataExtractor se;
             se.parse(html);
             jsonResult = se.data();
+
+            htmlDoc.reset(HtmlDocument::fromData(html.toUtf8()));
+            QVERIFY(htmlDoc);
+            m_engine.setHtmlDocument(htmlDoc.get());
 
             ExtractorPreprocessor preproc;
             preproc.preprocessHtml(html);
