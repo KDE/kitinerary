@@ -36,6 +36,7 @@ class KITINERARY_EXPORT HtmlElement
 {
     Q_GADGET
     Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(KItinerary::HtmlElement parent READ parent)
     Q_PROPERTY(KItinerary::HtmlElement firstChild READ firstChild)
     Q_PROPERTY(KItinerary::HtmlElement nextSibling READ nextSibling)
     Q_PROPERTY(QString content READ content)
@@ -49,6 +50,8 @@ public:
     QString name() const;
     /** Value of the attribute @p attr. */
     Q_INVOKABLE QString attribute(const QString &attr) const;
+    /** Returns the parent element of this node. */
+    HtmlElement parent() const;
     /** Returns the first child element of this node. */
     HtmlElement firstChild() const;
     /** Returns the next sibling element of this node. */

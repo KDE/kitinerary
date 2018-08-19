@@ -90,6 +90,16 @@ QString HtmlElement::attribute(const QString &attr) const
     return {};
 }
 
+HtmlElement HtmlElement::parent() const
+{
+#ifdef HAVE_LIBXML2
+    if (d && d->parent && d->parent->type == XML_ELEMENT_NODE) {
+        return HtmlElement(d->parent);
+    }
+#endif
+    return {};
+}
+
 HtmlElement HtmlElement::firstChild() const
 {
 #ifdef HAVE_LIBXML2

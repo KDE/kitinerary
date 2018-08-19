@@ -40,6 +40,7 @@ private Q_SLOTS:
         QCOMPARE(elem.name(), QLatin1String("html"));
         QCOMPARE(elem.attribute(QLatin1String("lang")), QLatin1String("de"));
         QVERIFY(elem.nextSibling().isNull());
+        QVERIFY(elem.parent().isNull());
 
         elem = elem.firstChild();
         QVERIFY(!elem.isNull());
@@ -47,6 +48,7 @@ private Q_SLOTS:
         elem = elem.nextSibling();
         QVERIFY(!elem.isNull());
         QCOMPARE(elem.name(), QLatin1String("body"));
+        QCOMPARE(elem.parent().name(), QLatin1String("html"));
 
         auto res = doc->eval(QLatin1String("/html"));
         auto nodes = res.toList();
