@@ -18,7 +18,7 @@
 #ifndef KITINERARY_HTMLDOCUMENT_H
 #define KITINERARY_HTMLDOCUMENT_H
 
-#include <kitinerary_export.h>
+#include "kitinerary_export.h"
 
 #include <QObject>
 
