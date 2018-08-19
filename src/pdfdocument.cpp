@@ -29,6 +29,9 @@
 #include <TextOutputDev.h>
 #endif
 
+// for direct image extraction we need https://bugs.freedesktop.org/show_bug.cgi?id=107617
+// #define HAVE_UNRELEASED_POPPLER 1
+
 #include <cmath>
 
 using namespace KItinerary;
@@ -38,6 +41,8 @@ class PdfImagePrivate : public QSharedData {
 public:
 #ifdef HAVE_POPPLER
     void load(Stream *str, GfxImageColorMap *colorMap);
+
+    std::unique_ptr<GfxImageColorMap> m_colorMap;
 #endif
 
     int m_refNum = -1;
@@ -94,6 +99,7 @@ private:
     PdfDocumentPrivate *d;
 };
 
+#ifndef HAVE_UNRELEASED_POPPLER
 class ImageLoaderOutputDevice : public OutputDev
 {
 public:
@@ -109,6 +115,7 @@ public:
 private:
     PdfImagePrivate *d;
 };
+#endif
 #endif
 
 }
@@ -202,6 +209,9 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
         pdfImg.d->m_refGen = ref->getRef().gen;
     }
 
+#ifdef HAVE_UNRELEASED_POPPLER
+    pdfImg.d->m_colorMap.reset(colorMap->copy());
+#endif
     pdfImg.d->m_sourceHeight = height;
     pdfImg.d->m_sourceWidth = width;
     pdfImg.d->m_width = width;
@@ -222,6 +232,7 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     m_images.push_back(pdfImg);
 }
 
+#ifndef HAVE_UNRELEASED_POPPLER
 ImageLoaderOutputDevice::ImageLoaderOutputDevice(PdfImagePrivate* dd)
     : d(dd)
 {
@@ -246,6 +257,7 @@ void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *st
 
     d->load(str, colorMap);
 }
+#endif
 #endif
 
 PdfImage::PdfImage()
@@ -276,8 +288,14 @@ QImage PdfImage::image() const
 #ifdef HAVE_POPPLER
     QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
 
+#ifdef HAVE_UNRELEASED_POPPLER
+    const auto xref = d->m_page->m_doc->m_popplerDoc->getXRef();
+    const auto obj = xref->fetch(d->m_refNum, d->m_refGen);
+    d->load(obj.getStream(), d->m_colorMap.get());
+#else
     std::unique_ptr<ImageLoaderOutputDevice> device(new ImageLoaderOutputDevice(d.data()));
     d->m_page->m_doc->m_popplerDoc->displayPageSlice(device.get(), d->m_page->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
+#endif
 #endif
     return d->m_img;
 }
