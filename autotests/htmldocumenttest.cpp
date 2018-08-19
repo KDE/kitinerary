@@ -1,0 +1,95 @@
+/*
+    Copyright (C) 2018 Volker Krause <vkrause@kde.org>
+
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Library General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or (at your
+    option) any later version.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public
+    License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include <KItinerary/HtmlDocument>
+#include <config-kitinerary.h>
+
+#include <QDebug>
+#include <QFile>
+#include <QTest>
+
+using namespace KItinerary;
+
+class HtmlDocumentTest : public QObject
+{
+    Q_OBJECT
+private Q_SLOTS:
+    void testElementWalking()
+    {
+        QFile f(QStringLiteral(SOURCE_DIR "/structureddata/os-two-leg-invalid-microdata.html"));
+        QVERIFY(f.open(QFile::ReadOnly));
+#ifdef HAVE_LIBXML2
+        std::unique_ptr<HtmlDocument> doc(HtmlDocument::fromData(f.readAll()));
+        QVERIFY(doc);
+        auto elem = doc->root();
+        QVERIFY(!elem.isNull());
+        QCOMPARE(elem.name(), QLatin1String("html"));
+        QCOMPARE(elem.attribute(QLatin1String("lang")), QLatin1String("de"));
+        QVERIFY(elem.nextSibling().isNull());
+
+        elem = elem.firstChild();
+        QVERIFY(!elem.isNull());
+        QCOMPARE(elem.name(), QLatin1String("head"));
+        elem = elem.nextSibling();
+        QVERIFY(!elem.isNull());
+        QCOMPARE(elem.name(), QLatin1String("body"));
+
+        auto res = doc->eval(QLatin1String("/html"));
+        auto nodes = res.toList();
+        QCOMPARE(nodes.size(), 1);
+        QCOMPARE(nodes.at(0).value<HtmlElement>().name(), QLatin1String("html"));
+        nodes = doc->eval(QLatin1String("//body")).toList();
+        QCOMPARE(nodes.size(), 1);
+        nodes = doc->eval(QLatin1String("//link")).toList();
+        QCOMPARE(nodes.size(), 6);
+
+        nodes = doc->eval(QLatin1String("/html/@lang")).toList();
+        QCOMPARE(nodes.at(0).value<HtmlElement>().content(), QLatin1String("de"));
+        nodes = doc->eval(QLatin1String("//div[@itemtype=\"http://schema.org/FlightReservation\"]")).toList();
+        QCOMPARE(nodes.size(), 2);
+        elem = nodes.at(0).value<HtmlElement>();
+        nodes = elem.eval(QLatin1String("./link")).toList();
+        QCOMPARE(nodes.size(), 3);
+#endif
+    }
+
+    void testContentAccess()
+    {
+        QFile f(QStringLiteral(SOURCE_DIR "/structureddata/hotel-json-ld-fallback.html"));
+        QVERIFY(f.open(QFile::ReadOnly));
+#ifdef HAVE_LIBXML2
+        std::unique_ptr<HtmlDocument> doc(HtmlDocument::fromData(f.readAll()));
+        QVERIFY(doc);
+        auto elem = doc->root();
+        QVERIFY(!elem.isNull());
+
+        elem = elem.firstChild().firstChild().nextSibling();
+        QCOMPARE(elem.name(), QLatin1String("script"));
+        QCOMPARE(elem.attribute(QLatin1String("type")), QLatin1String("application/ld+json"));
+        const auto s = elem.content();
+        QVERIFY(s.contains(QLatin1String("checkoutDate")));
+
+        elem = doc->root().firstChild().nextSibling().firstChild();
+        QCOMPARE(elem.name(), QLatin1String("p"));
+        QCOMPARE(elem.content(), QLatin1String("random contentcan be invalid\n\n"));
+#endif
+    }
+};
+
+QTEST_GUILESS_MAIN(HtmlDocumentTest)
+
+#include "htmldocumenttest.moc"

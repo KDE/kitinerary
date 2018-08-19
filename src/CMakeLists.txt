@@ -37,6 +37,7 @@ set(kitinerary_lib_srcs
     extractorpreprocessor.cpp
     extractorpostprocessor.cpp
     extractorrepository.cpp
+    htmldocument.cpp
     iatabcbpparser.cpp
     jsonlddocument.cpp
     jsonldimportfilter.cpp
@@ -82,6 +83,11 @@ endif()
 if (HAVE_KCONTACTS)
     target_link_libraries(KPimItinerary PRIVATE KF5::Contacts)
 endif()
+if (HAVE_LIBXML2)
+    target_compile_definitions(KPimItinerary PRIVATE ${LIBXML2_DEFINITIONS})
+    target_include_directories(KPimItinerary PRIVATE ${LIBXML2_INCLUDE_DIR})
+    target_link_libraries(KPimItinerary PRIVATE ${LIBXML2_LIBRARIES})
+endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS
     HEADER_NAMES
@@ -92,6 +98,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         ExtractorPreprocessor
         ExtractorPostprocessor
         ExtractorRepository
+        HtmlDocument
         IataBcbpParser
         JsonLdDocument
         MergeUtil

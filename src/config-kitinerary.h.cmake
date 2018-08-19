@@ -25,5 +25,6 @@
 #cmakedefine HAVE_ZXING
 #cmakedefine HAVE_KCAL
 #cmakedefine HAVE_KCONTACTS
+#cmakedefine HAVE_LIBXML2
 
 #endif
