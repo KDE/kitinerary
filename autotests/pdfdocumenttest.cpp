@@ -16,6 +16,7 @@
 */
 
 #include <KItinerary/PdfDocument>
+#include <config-kitinerary.h>
 
 #include <QDebug>
 #include <QFile>
