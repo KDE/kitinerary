@@ -38,17 +38,17 @@ function main(text) {
         return null;
     idx += renting.index + renting[0].length;
     var cityPickup = text.substr(idx).match(/City:\s+(.*)/);
-    res.pickUpLocation = JsonLd.newObject("Place");
-    res.pickUpLocation.address = JsonLd.newObject("PostalAddress");
-    res.pickUpLocation.address.addressLocality = cityPickup[1];
+    res.pickupLocation = JsonLd.newObject("Place");
+    res.pickupLocation.address = JsonLd.newObject("PostalAddress");
+    res.pickupLocation.address.addressLocality = cityPickup[1];
     idx += cityPickup.index + cityPickup[0].length;
 
     var locationPickup = text.substr(idx).match(/Location:\s+(.*)/);
-    res.pickUpLocation.name = locationPickup[1];
+    res.pickupLocation.name = locationPickup[1];
     idx += locationPickup.index + locationPickup[0].length;
 
     var addressPickup = text.substr(idx).match(/Address:\s+(.*)/);
-    res.pickUpLocation.address.streetAddress = addressPickup[1];
+    res.pickupLocation.address.streetAddress = addressPickup[1];
     idx += addressPickup.index + addressPickup[0].length;
 
     //Problem for parsing date/time !
@@ -66,17 +66,17 @@ function main(text) {
         return null;
     idx += returnCar.index + returnCar[0].length;
     var cityDropoff = text.substr(idx).match(/City:\s+(.*)/);
-    res.dropOffLocation = JsonLd.newObject("Place");
-    res.dropOffLocation.address = JsonLd.newObject("PostalAddress");
-    res.dropOffLocation.address.addressLocality = cityDropoff[1];
+    res.dropoffLocation = JsonLd.newObject("Place");
+    res.dropoffLocation.address = JsonLd.newObject("PostalAddress");
+    res.dropoffLocation.address.addressLocality = cityDropoff[1];
     idx += cityDropoff.index + cityDropoff[0].length;
 
     var locationDropOff = text.substr(idx).match(/Location:\s+(.*)/);
-    res.dropOffLocation.name = locationDropOff[1];
+    res.dropoffLocation.name = locationDropOff[1];
     idx += locationDropOff.index + locationDropOff[0].length;
 
     var addressDropOff = text.substr(idx).match(/Address:\s+(.*)/);
-    res.dropOffLocation.address.streetAddress = addressDropOff[1];
+    res.dropoffLocation.address.streetAddress = addressDropOff[1];
     idx += addressDropOff.index + addressDropOff[0].length;
 
     var dropOffDate = text.substr(idx).match(/Date\/Time:\s*(.*)/)

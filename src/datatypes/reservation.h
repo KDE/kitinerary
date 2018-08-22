@@ -134,8 +134,8 @@ class KITINERARY_EXPORT RentalCarReservation : public Reservation
     KITINERARY_GADGET(RentalCarReservation)
     KITINERARY_PROPERTY(QDateTime, dropoffTime, setDropoffTime)
     KITINERARY_PROPERTY(QDateTime, pickupTime, setPickupTime)
-    KITINERARY_PROPERTY(KItinerary::Place, pickUpLocation, setPickUpLocation)
-    KITINERARY_PROPERTY(KItinerary::Place, dropOffLocation, setDropOffLocation)
+    KITINERARY_PROPERTY(KItinerary::Place, pickupLocation, setPickupLocation)
+    KITINERARY_PROPERTY(KItinerary::Place, dropoffLocation, setDropoffLocation)
 };
 
 /** A Taxi reservation.
@@ -145,7 +145,7 @@ class KITINERARY_EXPORT TaxiReservation : public Reservation
 {
     KITINERARY_GADGET(TaxiReservation)
     KITINERARY_PROPERTY(QDateTime, pickupTime, setPickupTime)
-    KITINERARY_PROPERTY(KItinerary::Place, pickUpLocation, setPickUpLocation)
+    KITINERARY_PROPERTY(KItinerary::Place, pickupLocation, setPickupLocation)
 };
 
 

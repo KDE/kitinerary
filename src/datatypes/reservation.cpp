@@ -119,14 +119,14 @@ class RentalCarReservationPrivate : public ReservationPrivate
 public:
     QDateTime dropoffTime;
     QDateTime pickupTime;
-    Place pickUpLocation;
-    Place dropOffLocation;
+    Place pickupLocation;
+    Place dropoffLocation;
 };
 KITINERARY_MAKE_SUB_CLASS(RentalCarReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(RentalCarReservation, QDateTime, dropoffTime, setDropoffTime)
 KITINERARY_MAKE_PROPERTY(RentalCarReservation, QDateTime, pickupTime, setPickupTime)
-KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, pickUpLocation, setPickUpLocation)
-KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, dropOffLocation, setDropOffLocation)
+KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, pickupLocation, setPickupLocation)
+KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, dropoffLocation, setDropoffLocation)
 
 
 class TaxiReservationPrivate : public ReservationPrivate
@@ -134,11 +134,11 @@ class TaxiReservationPrivate : public ReservationPrivate
     KITINERARY_PRIVATE_GADGET(TaxiReservation)
 public:
     QDateTime pickupTime;
-    Place pickUpLocation;
+    Place pickupLocation;
 };
 KITINERARY_MAKE_SUB_CLASS(TaxiReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(TaxiReservation, QDateTime, pickupTime, setPickupTime)
-KITINERARY_MAKE_PROPERTY(TaxiReservation, Place, pickUpLocation, setPickUpLocation)
+KITINERARY_MAKE_PROPERTY(TaxiReservation, Place, pickupLocation, setPickupLocation)
 
 
 }

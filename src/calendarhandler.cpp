@@ -382,7 +382,7 @@ static void fillFoodReservation(const FoodEstablishmentReservation &reservation,
 
 static void fillRentalCarReservation(const RentalCarReservation &reservation, const KCalCore::Event::Ptr &event)
 {
-    const auto rentalCalPickup = reservation.pickUpLocation();
+    const auto rentalCalPickup = reservation.pickupLocation();
     const auto addressPickUp = rentalCalPickup.address();
     const auto rentalCar = reservation.reservationFor().value<RentalCar>();
     event->setSummary(i18n("Rental Car reservation: %1", rentalCar.name()));
@@ -404,7 +404,7 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
                                         addressPickUp.streetAddress(), addressPickUp.postalCode(),
                                         addressPickUp.addressLocality(), KContacts::Address::ISOtoCountry(addressPickUp.addressCountry()));
 
-    const auto rentalCalDropOff = reservation.dropOffLocation();
+    const auto rentalCalDropOff = reservation.dropoffLocation();
     const auto addressDropOff = rentalCalDropOff.address();
 
     const QString dropAddress = i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
@@ -423,7 +423,7 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
 
 static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCore::Event::Ptr &event)
 {
-    const auto taxiPickup = reservation.pickUpLocation();
+    const auto taxiPickup = reservation.pickupLocation();
     const auto addressPickUp = taxiPickup.address();
     //TODO const auto rentalCar = reservation.reservationFor().value<RentalCar>();
     //TODO event->setSummary(i18n("Rental Car reservation: %1", rentalCar.name()));

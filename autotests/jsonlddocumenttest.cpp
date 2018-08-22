@@ -128,7 +128,7 @@ private Q_SLOTS:
         placeDropPostalAddress.setAddressLocality(QStringLiteral("bli"));
         placeDropLocation.setAddress(placeDropPostalAddress);
 
-        rentalRes.setDropOffLocation(placeDropLocation);
+        rentalRes.setDropoffLocation(placeDropLocation);
 
         Place placePickupLocation;
         placePickupLocation.setName(QStringLiteral("pickuplocation"));
@@ -137,7 +137,7 @@ private Q_SLOTS:
         placePickupPostalAddress.setAddressLocality(QStringLiteral("bli2"));
         placePickupLocation.setAddress(placePickupPostalAddress);
 
-        rentalRes.setPickUpLocation(placePickupLocation);
+        rentalRes.setPickupLocation(placePickupLocation);
 
         array = JsonLdDocument::toJson({rentalRes});
         QCOMPARE(array.size(), 1);
@@ -249,7 +249,7 @@ private Q_SLOTS:
             "    \"name\": \"John Smith\","
             "    \"email\": \"foo@kde.org\""
             "},"
-            "\"pickUpLocation\": {"
+            "\"pickupLocation\": {"
             "    \"@type\": \"Place\","
             "    \"address\": {"
             "       \"@type\": \"PostalAddress\","
@@ -258,7 +258,7 @@ private Q_SLOTS:
             "},"
             "\"name\": \"pickuplocation\""
             "},"
-            "\"dropOffLocation\": {"
+            "\"dropoffLocation\": {"
             "    \"@type\": \"Place\","
             "    \"address\": {"
             "       \"@type\": \"PostalAddress\","
@@ -282,15 +282,15 @@ private Q_SLOTS:
         QCOMPARE(resRentCar.underName().value<Person>().email(), QStringLiteral("foo@kde.org"));
         QCOMPARE(resRentCar.pickupTime(), QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
         QCOMPARE(resRentCar.dropoffTime(), QDateTime(QDate(2018, 3, 21), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
-        const auto dropOffLocation = resRentCar.dropOffLocation();
-        QCOMPARE(dropOffLocation.name(), QStringLiteral("droplocation"));
-        const auto dropOffLocationAddress = dropOffLocation.address();
+        const auto dropoffLocation = resRentCar.dropoffLocation();
+        QCOMPARE(dropoffLocation.name(), QStringLiteral("droplocation"));
+        const auto dropOffLocationAddress = dropoffLocation.address();
         QCOMPARE(dropOffLocationAddress.streetAddress(), QStringLiteral("7 kde foo bla bla"));
         QCOMPARE(dropOffLocationAddress.addressLocality(), QStringLiteral("bli3"));
 
-        const auto pickUpLocation = resRentCar.pickUpLocation();
-        QCOMPARE(pickUpLocation.name(), QStringLiteral("pickuplocation"));
-        const auto pickupLocationAddress = pickUpLocation.address();
+        const auto pickupLocation = resRentCar.pickupLocation();
+        QCOMPARE(pickupLocation.name(), QStringLiteral("pickuplocation"));
+        const auto pickupLocationAddress = pickupLocation.address();
         QCOMPARE(pickupLocationAddress.streetAddress(), QStringLiteral("5 kde foo bla bla"));
         QCOMPARE(pickupLocationAddress.addressLocality(), QStringLiteral("bli2"));
 
@@ -304,7 +304,7 @@ private Q_SLOTS:
             "    \"name\": \"John Smith2\","
             "    \"email\": \"foo@kde.org\""
             "},"
-            "\"pickUpLocation\": {"
+            "\"pickupLocation\": {"
             "    \"@type\": \"Place\","
             "    \"address\": {"
             "       \"@type\": \"PostalAddress\","
@@ -331,7 +331,7 @@ private Q_SLOTS:
         QCOMPARE(resTaxi.underName().value<Person>().name(), QStringLiteral("John Smith2"));
         QCOMPARE(resTaxi.underName().value<Person>().email(), QStringLiteral("foo@kde.org"));
 
-        const auto pickUpLocationTaxi = resTaxi.pickUpLocation();
+        const auto pickUpLocationTaxi = resTaxi.pickupLocation();
         const auto pickupLocationAddressTaxi = pickUpLocationTaxi.address();
         QCOMPARE(pickupLocationAddressTaxi.streetAddress(), QStringLiteral("5 kde foo bla bla"));
         QCOMPARE(pickupLocationAddressTaxi.addressLocality(), QStringLiteral("bli2"));
