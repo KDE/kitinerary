@@ -51,7 +51,7 @@ qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
 kde_source_files_enable_exceptions(barcodedecoder.cpp)
 
-add_library(KPimItinerary SHARED ${kitinerary_lib_srcs})
+add_library(KPimItinerary ${kitinerary_lib_srcs})
 add_library(KPim::Itinerary ALIAS KPimItinerary)
 generate_export_header(KPimItinerary BASE_NAME KItinerary)
 set_target_properties(KPimItinerary PROPERTIES
