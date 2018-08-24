@@ -34,6 +34,11 @@
 
 using namespace KItinerary;
 
+static void initResources() // must be outside of a namespace
+{
+    Q_INIT_RESOURCE(extractors);
+}
+
 namespace KItinerary {
 class ExtractorRepositoryPrivate {
 public:
@@ -47,6 +52,7 @@ public:
 ExtractorRepository::ExtractorRepository()
     : d(new ExtractorRepositoryPrivate)
 {
+    initResources();
     d->loadExtractors();
 }
 
