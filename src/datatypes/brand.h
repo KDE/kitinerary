@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2018 Laurent Montel <montel@kde.org>
+    Copyright (C) 2018 Benjamin Port <benjamin.port@kde.org>
 
     This program is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -15,35 +15,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KITINERARY_RENTALCAR_H
-#define KITINERARY_RENTALCAR_H
+#ifndef KITINERARY_BRAND_H
+#define KITINERARY_BRAND_H
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
-#include "organization.h"
-#include "brand.h"
 
 namespace KItinerary {
 
-class RentalCarPrivate;
+class BrandPrivate;
 
-/** A car rental.
- *  @see https://developers.google.com/gmail/markup/reference/rental-car
+/** A brand
+ *  @see https://schema.org/Brand
  */
-class KITINERARY_EXPORT RentalCar
+class KITINERARY_EXPORT Brand
 {
-    KITINERARY_GADGET(RentalCar)
+    KITINERARY_GADGET(Brand)
     KITINERARY_PROPERTY(QString, name, setName)
-    KITINERARY_PROPERTY(QString, model, setModel)
-    KITINERARY_PROPERTY(KItinerary::Organization, rentalCompany, setRentalCompany)
-    KITINERARY_PROPERTY(KItinerary::Brand, brand, setBrand)
 
 private:
-    QExplicitlySharedDataPointer<RentalCarPrivate> d;
+    QExplicitlySharedDataPointer<BrandPrivate> d;
 };
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::RentalCar)
+Q_DECLARE_METATYPE(KItinerary::Brand)
 
-#endif // KITINERARY_RENTALCAR_H
+#endif // KITINERARY_BRAND_H

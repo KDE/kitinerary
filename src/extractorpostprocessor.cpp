@@ -111,12 +111,6 @@ ExtractorPostprocessor::~ExtractorPostprocessor() = default;
 
 void ExtractorPostprocessor::process(const QVector<QVariant> &data)
 {
-    qDebug() << "======";
-    qDebug() << JsonLdDocument::toJson(data);
-    qDebug() << "-----";
-    qDebug() << data;
-    qDebug() << "~~~~";
-
     d->m_resultFinalized = false;
     d->m_data.reserve(d->m_data.size() + data.size());
     for (auto elem : data) {
@@ -413,7 +407,6 @@ TaxiReservation ExtractorPostprocessorPrivate::processTaxiReservation(TaxiReserv
 
 RentalCarReservation ExtractorPostprocessorPrivate::processRentalCarReservation(RentalCarReservation res) const
 {
-    qDebug() << JsonLdDocument::toJson({res});
     res.setPickupLocation(processPlace(res.pickupLocation()));
     res.setDropoffLocation(processPlace(res.dropoffLocation()));
     return processReservation(res);

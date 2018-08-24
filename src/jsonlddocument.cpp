@@ -22,6 +22,7 @@
 #include "logging.h"
 
 #include <KItinerary/Action>
+#include <KItinerary/Brand>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
@@ -162,6 +163,7 @@ static QVariant createInstance(const QJsonObject &obj)
     MAKE_FACTORY(Action);
     MAKE_FACTORY(Airline);
     MAKE_FACTORY(Airport);
+    MAKE_FACTORY(Brand);
     MAKE_FACTORY(BusReservation);
     MAKE_FACTORY(BusStation);
     MAKE_FACTORY(BusTrip);

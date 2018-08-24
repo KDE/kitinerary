@@ -81,6 +81,7 @@ class KITINERARY_EXPORT Place
     KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(KItinerary::PostalAddress, address, setAddress)
     KITINERARY_PROPERTY(KItinerary::GeoCoordinates, geo, setGeo)
+    KITINERARY_PROPERTY(QString, telephone, setTelephone)
     /** Identifier.
      *  We use the following schemas currently:
      *  - 'uic:', UIC station code (see https://www.wikidata.org/wiki/Property:P722)

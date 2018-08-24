@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2018 Laurent Montel <montel@kde.org>
+    Copyright (C) 2018 Benjamin Port <benjamin.port@kde.org>
 
     This program is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -15,30 +15,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "rentalcar.h"
+#include "brand.h"
 #include "datatypes_p.h"
-
-#include <QDateTime>
-#include <QUrl>
 
 using namespace KItinerary;
 
 namespace KItinerary {
 
-class RentalCarPrivate: public QSharedData {
-
+class BrandPrivate : public QSharedData
+{
 public:
     QString name;
-    QString model;
-    Organization rentalCompany;
-    Brand brand;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(RentalCar)
-KITINERARY_MAKE_PROPERTY(RentalCar, QString, name, setName)
-KITINERARY_MAKE_PROPERTY(RentalCar, QString, model, setModel)
-KITINERARY_MAKE_PROPERTY(RentalCar, Organization, rentalCompany, setRentalCompany)
-KITINERARY_MAKE_PROPERTY(RentalCar, Brand, brand, setBrand)
+KITINERARY_MAKE_SIMPLE_CLASS(Brand)
+KITINERARY_MAKE_PROPERTY(Brand, QString, name, setName)
+
 }
 
-#include "moc_rentalcar.cpp"
+#include "moc_brand.cpp"

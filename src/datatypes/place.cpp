@@ -73,6 +73,7 @@ public:
     QString name;
     PostalAddress address;
     GeoCoordinates geo;
+    QString telephone;
     QString identifier;
 };
 
@@ -80,6 +81,7 @@ KITINERARY_MAKE_BASE_CLASS(Place)
 KITINERARY_MAKE_PROPERTY(Place, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Place, PostalAddress, address, setAddress)
 KITINERARY_MAKE_PROPERTY(Place, GeoCoordinates, geo, setGeo)
+KITINERARY_MAKE_PROPERTY(Place, QString, telephone, setTelephone)
 KITINERARY_MAKE_PROPERTY(Place, QString, identifier, setIdentifier)
 
 
