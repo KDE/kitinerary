@@ -22,6 +22,7 @@
 
 #cmakedefine HAVE_POPPLER
 #cmakedefine HAVE_POPPLER_0_58
+#cmakedefine HAVE_POPPLER_0_69
 #cmakedefine HAVE_ZXING
 #cmakedefine HAVE_KCAL
 #cmakedefine HAVE_KCONTACTS

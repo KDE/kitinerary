@@ -29,9 +29,6 @@
 #include <TextOutputDev.h>
 #endif
 
-// for direct image extraction we need https://bugs.freedesktop.org/show_bug.cgi?id=107617
-// #define HAVE_UNRELEASED_POPPLER 1
-
 #include <cmath>
 
 using namespace KItinerary;
@@ -99,7 +96,7 @@ private:
     PdfDocumentPrivate *d;
 };
 
-#ifndef HAVE_UNRELEASED_POPPLER
+#ifndef HAVE_POPPLER_0_69
 class ImageLoaderOutputDevice : public OutputDev
 {
 public:
@@ -209,7 +206,7 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
         pdfImg.d->m_refGen = ref->getRef().gen;
     }
 
-#ifdef HAVE_UNRELEASED_POPPLER
+#ifdef HAVE_POPPLER_0_69
     pdfImg.d->m_colorMap.reset(colorMap->copy());
 #endif
     pdfImg.d->m_sourceHeight = height;
@@ -232,7 +229,7 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     m_images.push_back(pdfImg);
 }
 
-#ifndef HAVE_UNRELEASED_POPPLER
+#ifndef HAVE_POPPLER_0_69
 ImageLoaderOutputDevice::ImageLoaderOutputDevice(PdfImagePrivate* dd)
     : d(dd)
 {
@@ -288,7 +285,7 @@ QImage PdfImage::image() const
 #ifdef HAVE_POPPLER
     QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
 
-#ifdef HAVE_UNRELEASED_POPPLER
+#ifdef HAVE_POPPLER_0_69
     const auto xref = d->m_page->m_doc->m_popplerDoc->getXRef();
     const auto obj = xref->fetch(d->m_refNum, d->m_refGen);
     d->load(obj.getStream(), d->m_colorMap.get());
