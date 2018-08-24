@@ -20,6 +20,7 @@
 #include <KItinerary/Extractor>
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPreprocessor>
+#include <KItinerary/ExtractorRepository>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Organization>
 
@@ -62,6 +63,9 @@ private Q_SLOTS:
     {
         // use some exotic locale to ensure the date/time parsing doesn't just work by luck
         QLocale::setDefault(QLocale(QStringLiteral("fr_FR")));
+
+        // make sure the qrc data is loaded in static builds
+        ExtractorRepository repo;
     }
 
     void testExtractText_data()
