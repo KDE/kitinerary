@@ -20,14 +20,12 @@
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
+#include "organization.h"
+#include "place.h"
 
 namespace KItinerary {
 
-class BusStation;
-
 class BusTripPrivate;
-
-class Organization;
 
 /** A bus trip.
  *  @see https://schema.org/BusTrip

@@ -20,14 +20,14 @@
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
+#include "organization.h"
 #include "place.h"
+
 class QUrl;
 
 namespace KItinerary {
 
 class ReservationPrivate;
-
-class Organization;
 
 /** Abstract base class for reservations.
  *  @see https://schema.org/Reservation
@@ -158,7 +158,6 @@ Q_DECLARE_METATYPE(KItinerary::BusReservation)
 Q_DECLARE_METATYPE(KItinerary::FoodEstablishmentReservation)
 Q_DECLARE_METATYPE(KItinerary::EventReservation)
 Q_DECLARE_METATYPE(KItinerary::RentalCarReservation)
-Q_DECLARE_METATYPE(KItinerary::Place)
 
 #endif // KITINERARY_RESERVATION_H
 

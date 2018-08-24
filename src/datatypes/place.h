@@ -131,6 +131,7 @@ class KITINERARY_EXPORT TouristAttraction : public Place
 
 }
 
+Q_DECLARE_METATYPE(KItinerary::Place)
 Q_DECLARE_METATYPE(KItinerary::GeoCoordinates)
 Q_DECLARE_METATYPE(KItinerary::PostalAddress)
 Q_DECLARE_METATYPE(KItinerary::Airport)

@@ -20,14 +20,12 @@
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
+#include "organization.h"
+#include "place.h"
 
 class QDateTime;
 
 namespace KItinerary {
-
-class Airline;
-class Airport;
-class Organization;
 
 class FlightPrivate;
 

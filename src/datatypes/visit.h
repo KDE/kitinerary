@@ -21,10 +21,10 @@
 #include "kitinerary_export.h"
 
 #include "datatypes.h"
+#include "place.h"
 
 namespace KItinerary {
 
-class TouristAttraction;
 class TouristAttractionVisitPrivate;
 
 class KITINERARY_EXPORT TouristAttractionVisit

@@ -6,7 +6,6 @@ configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kiti
 set(kitinerary_lib_srcs
     datatypes/action.cpp
     datatypes/bustrip.cpp
-    datatypes/datatypes.cpp
     datatypes/event.cpp
     datatypes/flight.cpp
     datatypes/organization.cpp

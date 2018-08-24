@@ -20,12 +20,13 @@
 
 #include "kitinerary_export.h"
 
+#include <KItinerary/Person>
+
 #include <QExplicitlySharedDataPointer>
 #include <QMetaType>
 
 namespace KItinerary {
 
-class Person;
 class Uic9183ParserPrivate;
 
 /** Parser for UIC 918-3 and 918-3* train tickets.

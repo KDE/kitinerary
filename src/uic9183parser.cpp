@@ -18,8 +18,6 @@
 #include "uic9183parser.h"
 #include "logging.h"
 
-#include <KItinerary/Person>
-
 #include <QDebug>
 
 #include <zlib.h>

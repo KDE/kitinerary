@@ -20,16 +20,14 @@
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
+#include "organization.h"
+#include "place.h"
 
 class QDateTime;
 
 namespace KItinerary {
 
-class TrainStation;
-
 class TrainTripPrivate;
-
-class Organization;
 
 /** A train trip.
  *  @see https://schema.org/TrainTrip
