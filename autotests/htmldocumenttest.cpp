@@ -81,6 +81,7 @@ private Q_SLOTS:
         QVERIFY(doc);
         auto elem = doc->root();
         QVERIFY(!elem.isNull());
+        QVERIFY(elem.content().isEmpty());
 
         elem = elem.firstChild().firstChild().nextSibling();
         QCOMPARE(elem.name(), QLatin1String("script"));

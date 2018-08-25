@@ -123,10 +123,31 @@ HtmlElement HtmlElement::nextSibling() const
 QString HtmlElement::content() const
 {
 #ifdef HAVE_LIBXML2
-    if (d) {
-        const auto val = std::unique_ptr<xmlChar, decltype(xmlFree)>(xmlNodeGetContent(d), xmlFree);
-        return QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
+    if (!d) {
+        return {};
     }
+
+    QString s;
+    auto node = d->children;
+    while (node) {
+        switch (node->type) {
+            case XML_TEXT_NODE:
+            case XML_CDATA_SECTION_NODE:
+                s += QString::fromUtf8(reinterpret_cast<const char*>(node->content));
+                break;
+            case XML_ENTITY_REF_NODE:
+            {
+                const auto val = std::unique_ptr<xmlChar, decltype(xmlFree)>(xmlNodeGetContent(node), xmlFree);
+                s += QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
+                break;
+            }
+            default:
+                break;
+
+        }
+        node = node->next;
+    }
+    return s;
 #endif
     return {};
 }
