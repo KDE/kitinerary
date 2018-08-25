@@ -65,8 +65,8 @@ private Q_SLOTS:
         QCOMPARE(nodes.size(), 2);
         elem = nodes.at(0).value<HtmlElement>();
         QCOMPARE(elem.attributes().size(), 2);
-        QVERIFY(elem.attributes().contains(QLatin1String("itemscope"));
-        QVERIFY(elem.attributes().contains(QLatin1String("itemtype"));
+        QVERIFY(elem.attributes().contains(QLatin1String("itemscope")));
+        QVERIFY(elem.attributes().contains(QLatin1String("itemtype")));
         nodes = elem.eval(QLatin1String("./link")).toList();
         QCOMPARE(nodes.size(), 3);
 #endif
