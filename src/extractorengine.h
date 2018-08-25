@@ -88,7 +88,7 @@ class PdfDocument;
  * Extractor meta data.
  *
  * Additionally, there's an interactive testing and inspection tool called @c kitinerary-workbench
- * (see https://cgit.kde.org/scratch/vkrause/kitinerary-workbench.git/).
+ * (see https://phabricator.kde.org/source/kitinerary-workbench/).
  *
  * @subsection extractor_testing Automated Testing
  *
