@@ -64,6 +64,9 @@ private Q_SLOTS:
         nodes = doc->eval(QLatin1String("//div[@itemtype=\"http://schema.org/FlightReservation\"]")).toList();
         QCOMPARE(nodes.size(), 2);
         elem = nodes.at(0).value<HtmlElement>();
+        QCOMPARE(elem.attributes().size(), 2);
+        QVERIFY(elem.attributes().contains(QLatin1String("itemscope"));
+        QVERIFY(elem.attributes().contains(QLatin1String("itemtype"));
         nodes = elem.eval(QLatin1String("./link")).toList();
         QCOMPARE(nodes.size(), 3);
 #endif
@@ -82,6 +85,8 @@ private Q_SLOTS:
         elem = elem.firstChild().firstChild().nextSibling();
         QCOMPARE(elem.name(), QLatin1String("script"));
         QCOMPARE(elem.attribute(QLatin1String("type")), QLatin1String("application/ld+json"));
+        QCOMPARE(elem.attributes().size(), 1);
+        QCOMPARE(elem.attributes().at(0), QLatin1String("type"));
         const auto s = elem.content();
         QVERIFY(s.contains(QLatin1String("checkoutDate")));
 

@@ -58,6 +58,8 @@ public:
     HtmlElement nextSibling() const;
     /** Returns the content of this element. */
     QString content() const;
+    /** Returns the list of all attributes of this node. */
+    QStringList attributes() const;
 
     /** Evaluate an XPath expression relative to this node. */
     Q_INVOKABLE QVariant eval(const QString &xpath) const;
