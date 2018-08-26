@@ -122,6 +122,9 @@ private Q_SLOTS:
         QCOMPARE(elems.at(0).value<HtmlElement>().name(), QLatin1String("p"));
         elems = doc->eval(QLatin1String("//*[text()='lots of spaces']")).toList();
         QCOMPARE(elems.size(), 0);
+
+        elem = elem.nextSibling();
+        QCOMPARE(elem.content(), QString::fromUtf8("인천공항"));
 #endif
     }
 };
