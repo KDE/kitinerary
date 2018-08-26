@@ -40,6 +40,7 @@ class KITINERARY_EXPORT HtmlElement
     Q_PROPERTY(KItinerary::HtmlElement firstChild READ firstChild)
     Q_PROPERTY(KItinerary::HtmlElement nextSibling READ nextSibling)
     Q_PROPERTY(QString content READ content)
+    Q_PROPERTY(QString recursiveContent READ recursiveContent)
 public:
     HtmlElement();
     ~HtmlElement();
@@ -56,8 +57,13 @@ public:
     HtmlElement firstChild() const;
     /** Returns the next sibling element of this node. */
     HtmlElement nextSibling() const;
-    /** Returns the content of this element. */
+    /** Returns the content of this element.
+     *  That is, all text nodes that are immediate children of this element.
+     *  The content is trimmed from leading or trailing whitespaces.
+     */
     QString content() const;
+    /** Returns the content of this element and all its children. */
+    QString recursiveContent() const;
     /** Returns the list of all attributes of this node. */
     QStringList attributes() const;
 

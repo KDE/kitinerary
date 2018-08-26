@@ -20,7 +20,7 @@
 function parseHtmlBooking(doc) {
     var reservations = new Array();
 
-    var bookingRef = doc.eval("//td[@class=\"vuelo_confirmado_header\"]")[0].firstChild.content.trim();
+    var bookingRef = doc.eval("//td[@class=\"vuelo_confirmado_header\"]")[0].firstChild.content;
     if (!bookingRef)
         return null;
 
@@ -36,17 +36,17 @@ function parseHtmlBooking(doc) {
         var airportName = detailsRoot.eval(".//td[@class=\"vuelo_confirmado_card_details--city salida\"]")[0];
         var iataCode = detailsRoot.eval(".//td[@class=\"vuelo_confirmado_card_details--iata\"]")[0];
         res.reservationFor.departureAirport = JsonLd.newObject("Airport");
-        res.reservationFor.departureAirport.iataCode = iataCode.content.trim();
-        res.reservationFor.departureAirport.name = airportName.content.trim();
+        res.reservationFor.departureAirport.iataCode = iataCode.content;
+        res.reservationFor.departureAirport.name = airportName.content;
         res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
-        res.reservationFor.arrivalAirport.iataCode = iataCode.nextSibling.content.trim();
-        res.reservationFor.arrivalAirport.name = airportName.nextSibling.content.trim();
+        res.reservationFor.arrivalAirport.iataCode = iataCode.nextSibling.content;
+        res.reservationFor.arrivalAirport.name = airportName.nextSibling.content;
 
         var time = detailsRoot.eval(".//td[@class=\"vuelo_confirmado_card_details--time\"]")[0];
-        res.reservationFor.departureTime = JsonLd.toDateTime(elem.content.trim() + ' ' + time.content.trim().replace('h', ''), "dddd, dd MMMM yyyy HH:mm", "es");
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(elem.content.trim() + ' ' + time.nextSibling.content.trim().replace('h', ''), "dddd, dd MMMM yyyy HH:mm", "es");
+        res.reservationFor.departureTime = JsonLd.toDateTime(elem.content + ' ' + time.content.replace('h', ''), "dddd, dd MMMM yyyy HH:mm", "es");
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(elem.content + ' ' + time.nextSibling.content.replace('h', ''), "dddd, dd MMMM yyyy HH:mm", "es");
 
-        var flightNum = detailsRoot.eval(".//td[@class=\"v-middle vuelo_confirmado_card_details--numVuelo\"]")[0].content.trim();
+        var flightNum = detailsRoot.eval(".//td[@class=\"v-middle vuelo_confirmado_card_details--numVuelo\"]")[0].content;
         res.reservationFor.flightNumber = flightNum.substr(2);
         res.reservationFor.airline = JsonLd.newObject("Airline");
         res.reservationFor.airline.iataCode = flightNum.substr(0, 2);

@@ -93,7 +93,35 @@ private Q_SLOTS:
 
         elem = doc->root().firstChild().nextSibling().firstChild();
         QCOMPARE(elem.name(), QLatin1String("p"));
-        QCOMPARE(elem.content(), QLatin1String("random contentcan be invalid\n\n"));
+        QCOMPARE(elem.content(), QLatin1String("random content\ncan be invalid"));
+#endif
+    }
+
+    void testContentProcessing()
+    {
+        QFile f(QStringLiteral(SOURCE_DIR "/misc/test.html"));
+        QVERIFY(f.open(QFile::ReadOnly));
+#ifdef HAVE_LIBXML2
+        std::unique_ptr<HtmlDocument> doc(HtmlDocument::fromData(f.readAll()));
+        QVERIFY(doc);
+        auto elem = doc->root();
+        QVERIFY(!elem.isNull());
+        QVERIFY(elem.content().isEmpty());
+        QVERIFY(elem.recursiveContent().contains(QLatin1String("spaces")));
+
+        elem = elem.firstChild().firstChild();
+        QCOMPARE(elem.name(), QLatin1String("p"));
+        QCOMPARE(elem.content(), QLatin1String("word1\nword2"));
+
+        elem = elem.nextSibling();
+        QCOMPARE(elem.name(), QLatin1String("p"));
+        QCOMPARE(elem.content(), QLatin1String("lots of spaces"));
+
+        auto elems = doc->eval(QLatin1String("//*[text()[normalize-space(.)='lots of spaces']]")).toList();
+        QCOMPARE(elems.size(), 1);
+        QCOMPARE(elems.at(0).value<HtmlElement>().name(), QLatin1String("p"));
+        elems = doc->eval(QLatin1String("//*[text()='lots of spaces']")).toList();
+        QCOMPARE(elems.size(), 0);
 #endif
     }
 };

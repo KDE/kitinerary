@@ -141,13 +141,29 @@ QString HtmlElement::content() const
                 s += QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
                 break;
             }
+            case XML_ELEMENT_NODE:
+                if (qstricmp(reinterpret_cast<const char*>(node->name), "br") == 0) {
+                    s += QLatin1Char('\n');
+                }
+                break;
             default:
                 break;
 
         }
         node = node->next;
     }
-    return s;
+    return s.trimmed();
+#endif
+    return {};
+}
+
+QString HtmlElement::recursiveContent() const
+{
+#ifdef HAVE_LIBXML2
+    if (d) {
+        const auto val = std::unique_ptr<xmlChar, decltype(xmlFree)>(xmlNodeGetContent(d), xmlFree);
+        return QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
+    }
 #endif
     return {};
 }
