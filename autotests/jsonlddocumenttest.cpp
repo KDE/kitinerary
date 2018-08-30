@@ -24,6 +24,8 @@
 #include <KItinerary/Reservation>
 #include <KItinerary/Person>
 #include <KItinerary/Taxi>
+#include <KItinerary/RentalCar>
+#include <KItinerary/Brand>
 
 #include <QDebug>
 #include <QJsonArray>
@@ -267,6 +269,19 @@ private Q_SLOTS:
             "},"
             "\"name\": \"droplocation\""
             "},"
+            "\"reservationFor\": {"
+            "    \"@type\": \"RentalCar\","
+            "    \"name\": \"Economy Class Car\","
+            "    \"model\": \"Civic\","
+            "    \"brand\": {"
+            "       \"@type\": \"Brand\","
+            "       \"name\": \"Honda\""
+            "    },"
+            "    \"rentalCompany\": {"
+            "          \"@type\": \"Organization\","
+            "          \"name\": \"Hertz\""
+            "    }"
+            "},"
             "\"pickupTime\": \"2018-03-18T18:44:00+01:00\","
             "\"dropoffTime\": \"2018-03-21T18:44:00+01:00\""
         "}]");
@@ -293,6 +308,15 @@ private Q_SLOTS:
         const auto pickupLocationAddress = pickupLocation.address();
         QCOMPARE(pickupLocationAddress.streetAddress(), QStringLiteral("5 kde foo bla bla"));
         QCOMPARE(pickupLocationAddress.addressLocality(), QStringLiteral("bli2"));
+
+        const auto reservationForRentalCar = resRentCar.reservationFor().value<RentalCar>();
+        QCOMPARE(reservationForRentalCar.name(), QStringLiteral("Economy Class Car"));
+        QCOMPARE(reservationForRentalCar.model(), QStringLiteral("Civic"));
+        const auto brand = reservationForRentalCar.brand();
+        QCOMPARE(brand.name(), QStringLiteral("Honda"));
+
+        const auto rentalCarOrganization = reservationForRentalCar.rentalCompany();
+        QCOMPARE(rentalCarOrganization.name(), QStringLiteral("Hertz"));
 
         //Taxi Reservation
         b = QByteArray("[{"
