@@ -54,6 +54,24 @@
 
 using namespace KItinerary;
 
+static QString formatAddress(const PostalAddress &addr)
+{
+#ifdef HAVE_KCONTACTS
+    KContacts::Address a;
+    a.setStreet(addr.streetAddress());
+    a.setPostalCode(addr.postalCode());
+    a.setLocality(addr.addressLocality());
+    a.setCountry(KContacts::Address::ISOtoCountry(addr.addressCountry()));
+    return a.formattedAddress();
+#endif
+    return {};
+}
+
+static QString formatAddressSingleLine(const PostalAddress &addr)
+{
+    return formatAddress(addr).replace(QLatin1String("\n\n"), QLatin1String("\n")).replace(QLatin1Char('\n'), QLatin1String(", "));
+}
+
 #ifdef HAVE_KCAL
 using namespace KCalCore;
 static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event);
@@ -271,14 +289,9 @@ static void fillBusReservation(const BusReservation &reservation, const KCalCore
 static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event)
 {
     const auto lodgingBusiness = reservation.reservationFor().value<LodgingBusiness>();
-    const auto address = lodgingBusiness.address();
 
     event->setSummary(i18n("Hotel reservation: %1", lodgingBusiness.name()));
-#ifdef HAVE_KCONTACTS
-    event->setLocation(i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
-                             address.streetAddress(), address.postalCode(),
-                             address.addressLocality(), KContacts::Address::ISOtoCountry(address.addressCountry())));
-#endif
+    event->setLocation(formatAddressSingleLine(lodgingBusiness.address()));
     fillGeoPosition(lodgingBusiness, event);
 
     event->setDtStart(QDateTime(reservation.checkinTime().date(), QTime()));
@@ -354,14 +367,9 @@ static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &e
 static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalCore::Event::Ptr &event)
 {
     const auto foodEstablishment = reservation.reservationFor().value<FoodEstablishment>();
-    const auto address = foodEstablishment.address();
 
     event->setSummary(i18n("Restaurant reservation: %1", foodEstablishment.name()));
-#ifdef HAVE_KCONTACTS
-    event->setLocation(i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
-                             address.streetAddress(), address.postalCode(),
-                             address.addressLocality(), KContacts::Address::ISOtoCountry(address.addressCountry())));
-#endif
+    event->setLocation(formatAddressSingleLine(foodEstablishment.address()));
     fillGeoPosition(foodEstablishment, event);
 
     event->setDtStart(reservation.startTime());
@@ -386,11 +394,7 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
     const auto addressPickUp = rentalCalPickup.address();
     const auto rentalCar = reservation.reservationFor().value<RentalCar>();
     event->setSummary(i18n("Rental Car reservation: %1", rentalCar.name()));
-#ifdef HAVE_KCONTACTS
-    event->setLocation(i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
-                             addressPickUp.streetAddress(), addressPickUp.postalCode(),
-                             addressPickUp.addressLocality(), KContacts::Address::ISOtoCountry(addressPickUp.addressCountry())));
-#endif
+    event->setLocation(formatAddressSingleLine(addressPickUp));
     fillGeoPosition(rentalCalPickup, event);
 
     event->setDtStart(reservation.pickupTime());
@@ -399,17 +403,10 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
     event->setTransparency(KCalCore::Event::Transparent);
     event->setSummary(i18n("Rent car reservation: %1", rentalCar.name()));
 
-#ifdef HAVE_KCONTACTS
-    const QString pickUpAddress = i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
-                                        addressPickUp.streetAddress(), addressPickUp.postalCode(),
-                                        addressPickUp.addressLocality(), KContacts::Address::ISOtoCountry(addressPickUp.addressCountry()));
-
+    const QString pickUpAddress = formatAddress(addressPickUp);
     const auto rentalCalDropOff = reservation.dropoffLocation();
     const auto addressDropOff = rentalCalDropOff.address();
-
-    const QString dropAddress = i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
-                                      addressDropOff.streetAddress(), addressDropOff.postalCode(),
-                                      addressDropOff.addressLocality(), KContacts::Address::ISOtoCountry(addressDropOff.addressCountry()));
+    const QString dropAddress = formatAddress(addressDropOff);
 
     const QString description = i18n("Reservation reference: %1\nUnder name: %2\n\nPickUp location: %3\n\nDropoff Location: %4",
                                      reservation.reservationNumber(),
@@ -418,7 +415,6 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
                                      dropAddress);
 
     event->setDescription(description);
-#endif
 }
 
 static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCore::Event::Ptr &event)
@@ -427,11 +423,7 @@ static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCo
     const auto addressPickUp = taxiPickup.address();
     //TODO const auto rentalCar = reservation.reservationFor().value<RentalCar>();
     //TODO event->setSummary(i18n("Rental Car reservation: %1", rentalCar.name()));
-#ifdef HAVE_KCONTACTS
-    event->setLocation(i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
-                             addressPickUp.streetAddress(), addressPickUp.postalCode(),
-                             addressPickUp.addressLocality(), KContacts::Address::ISOtoCountry(addressPickUp.addressCountry())));
-#endif
+    event->setLocation(formatAddressSingleLine(addressPickUp));
     fillGeoPosition(taxiPickup, event);
 
     event->setDtStart(reservation.pickupTime());
@@ -439,11 +431,7 @@ static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCo
     event->setAllDay(false);
     event->setTransparency(KCalCore::Event::Transparent);
     //TODO event->setSummary(i18n("Rent car reservation: %1", rentalCar.name()));
-#ifdef HAVE_KCONTACTS
-    const QString pickUpAddress = i18nc("<street>, <postal code> <city>, <country>", "%1, %2 %3, %4",
-                                        addressPickUp.streetAddress(), addressPickUp.postalCode(),
-                                        addressPickUp.addressLocality(), KContacts::Address::ISOtoCountry(addressPickUp.addressCountry()));
-
+    const QString pickUpAddress = formatAddress(addressPickUp);
 
     const QString description = i18n("Reservation reference: %1\nUnder name: %2\nPickUp location: %3",
                                      reservation.reservationNumber(),
@@ -451,7 +439,6 @@ static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCo
                                      pickUpAddress);
 
     event->setDescription(description);
-#endif
 }
 
 #endif
