@@ -42,9 +42,7 @@
 #include <KCalCore/Event>
 #endif
 
-#ifdef HAVE_KCONTACTS
 #include <KContacts/Address>
-#endif
 
 #include <KLocalizedString>
 
@@ -56,15 +54,12 @@ using namespace KItinerary;
 
 static QString formatAddress(const PostalAddress &addr)
 {
-#ifdef HAVE_KCONTACTS
     KContacts::Address a;
     a.setStreet(addr.streetAddress());
     a.setPostalCode(addr.postalCode());
     a.setLocality(addr.addressLocality());
     a.setCountry(KContacts::Address::ISOtoCountry(addr.addressCountry()));
     return a.formattedAddress();
-#endif
-    return {};
 }
 
 static QString formatAddressSingleLine(const PostalAddress &addr)

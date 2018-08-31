@@ -68,6 +68,7 @@ target_link_libraries(KPimItinerary
     PRIVATE
         Qt5::Qml
         KF5::I18n
+        KF5::Contacts
         KPim::PkPass
         ${ZLIB_LIBRARIES}
 )
@@ -79,9 +80,6 @@ if (HAVE_ZXING)
 endif()
 if (HAVE_KCAL)
     target_link_libraries(KPimItinerary PUBLIC KF5::CalendarCore)
-endif()
-if (HAVE_KCONTACTS)
-    target_link_libraries(KPimItinerary PRIVATE KF5::Contacts)
 endif()
 if (HAVE_LIBXML2)
     target_compile_definitions(KPimItinerary PRIVATE ${LIBXML2_DEFINITIONS})

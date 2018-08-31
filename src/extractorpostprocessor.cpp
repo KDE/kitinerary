@@ -40,9 +40,7 @@
 #include <KItinerary/TrainStationDb>
 #include <KItinerary/Visit>
 
-#ifdef HAVE_KCONTACTS
 #include <KContacts/Address>
-#endif
 
 #include <QDebug>
 #include <QJsonArray>
@@ -476,7 +474,6 @@ Person ExtractorPostprocessorPrivate::processPerson(Person person) const
 
 template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) const
 {
-#ifdef HAVE_KCONTACTS
     auto addr = place.address();
     if (!addr.addressCountry().isEmpty() && addr.addressCountry().size() != 2) {
         const auto isoCode = KContacts::Address::countryToISO(addr.addressCountry()).toUpper();
@@ -485,7 +482,6 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
             place.setAddress(addr);
         }
     }
-#endif
     return place;
 }
 
