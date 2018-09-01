@@ -208,7 +208,7 @@ Flight ExtractorPostprocessorPrivate::processFlight(Flight flight) const
 Airport ExtractorPostprocessorPrivate::processAirport(Airport airport) const
 {
     // clean up name
-    airport.setName(airport.name().trimmed());
+    airport.setName(airport.name().simplified());
 
     // complete missing IATA codes
     auto iataCode = airport.iataCode();
