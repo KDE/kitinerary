@@ -30,11 +30,11 @@ namespace KItinerary {
 class KITINERARY_EXPORT ExtractorPreprocessor
 {
 public:
-    void preprocessPlainText(const QString &input);
-    void preprocessHtml(const QString &input);
+    Q_DECL_DEPRECATED void preprocessPlainText(const QString &input);
+    Q_DECL_DEPRECATED void preprocessHtml(const QString &input);
     Q_DECL_DEPRECATED void preprocessPdf(const QByteArray &input);
 
-    QString text() const;
+    Q_DECL_DEPRECATED QString text() const;
 
 private:
     void replaceEntityAndAppend(const QStringRef &source);

@@ -17,7 +17,6 @@
 
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPostprocessor>
-#include <KItinerary/ExtractorPreprocessor>
 #include <KItinerary/ExtractorRepository>
 #include <KItinerary/HtmlDocument>
 #include <KItinerary/JsonLdDocument>
@@ -130,10 +129,6 @@ private Q_SLOTS:
             htmlDoc.reset(HtmlDocument::fromData(html.toUtf8()));
             QVERIFY(htmlDoc);
             m_engine.setHtmlDocument(htmlDoc.get());
-
-            ExtractorPreprocessor preproc;
-            preproc.preprocessHtml(html);
-            m_engine.setText(preproc.text());
         } else if (inputFile.endsWith(QLatin1String(".txt"))) {
             m_engine.setText(QString::fromUtf8(inFile.readAll()));
         }
