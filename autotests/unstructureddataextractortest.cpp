@@ -102,7 +102,7 @@ private Q_SLOTS:
         ExtractorEngine engine;
         engine.setText(QString::fromUtf8(f.readAll()));
         engine.setSenderDate(QDateTime(QDate(2017, 12, 29), QTime(18, 46, 2)));
-        engine.setExtractor(&extractor);
+        engine.setExtractors({&extractor});
         const auto data = JsonLdDocument::toJson(JsonLdDocument::fromJson(engine.extract()));
 
         QFile ref(jsonFile);
@@ -153,7 +153,7 @@ private Q_SLOTS:
         ExtractorEngine engine;
         engine.setText(preproc.text());
         engine.setSenderDate(QDateTime(QDate(2017, 12, 29), QTime(18, 46, 2)));
-        engine.setExtractor(&extractor);
+        engine.setExtractors({&extractor});
         const auto data = JsonLdDocument::toJson(JsonLdDocument::fromJson(engine.extract()));
 
         QFile ref(jsonFile);

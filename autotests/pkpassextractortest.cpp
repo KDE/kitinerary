@@ -72,12 +72,12 @@ private Q_SLOTS:
         QVERIFY(pass);
 
         ExtractorRepository repo;
-        const auto extractors = repo.extractorsForPass(pass);
+        auto extractors = repo.extractorsForPass(pass);
         QVERIFY(!extractors.empty());
 
         ExtractorEngine engine;
         engine.setSenderDate(QDateTime(QDate(2017, 12, 29), QTime(18, 46, 2)));
-        engine.setExtractor(extractors.at(0));
+        engine.setExtractors(std::move(extractors));
         engine.setPass(pass);
         auto result = JsonLdDocument::fromJson(engine.extract());
         QCOMPARE(result.size(), 1);
