@@ -34,7 +34,6 @@ set(kitinerary_lib_srcs
     extractor.cpp
     extractorengine.cpp
     extractorfilter.cpp
-    extractorpreprocessor.cpp
     extractorpostprocessor.cpp
     extractorrepository.cpp
     htmldocument.cpp
@@ -93,7 +92,6 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         CalendarHandler
         Extractor
         ExtractorEngine
-        ExtractorPreprocessor
         ExtractorPostprocessor
         ExtractorRepository
         HtmlDocument
