@@ -18,6 +18,7 @@
 #include "config-kitinerary.h"
 #include "htmldocument.h"
 
+#include <QDebug>
 #include <QVariant>
 
 #ifdef HAVE_LIBXML2
@@ -152,20 +153,70 @@ QString HtmlElement::content() const
         }
         node = node->next;
     }
+
+    // convert non-breaking spaces to normal ones, technically not correct
+    // but way too often this confuses our regular expressions
+    s.replace(QString::fromUtf8(" "), QLatin1String(" "));
+
     return s.trimmed();
 #endif
     return {};
 }
 
+#ifdef HAVE_LIBXML2
+static void recursiveContent(_xmlNode *node, QString &s)
+{
+    switch (node->type) {
+        case XML_TEXT_NODE:
+        case XML_CDATA_SECTION_NODE:
+            s += QString::fromUtf8(reinterpret_cast<const char*>(node->content));
+            return;
+        case XML_ENTITY_REF_NODE:
+        {
+            const auto val = std::unique_ptr<xmlChar, decltype(xmlFree)>(xmlNodeGetContent(node), xmlFree);
+            s += QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
+            break;
+        }
+        case XML_ELEMENT_NODE:
+        {
+            if (qstricmp(reinterpret_cast<const char*>(node->name), "br") == 0) {
+                s += QLatin1Char('\n');
+            } else {
+                s += QLatin1Char(' ');
+            }
+            break;
+        }
+        case XML_ATTRIBUTE_NODE:
+        case XML_COMMENT_NODE:
+            return;
+        default:
+            break;
+    }
+
+    auto child = node->children;
+    while (child) {
+        recursiveContent(child, s);
+        child = child->next;
+    }
+}
+#endif
+
 QString HtmlElement::recursiveContent() const
 {
 #ifdef HAVE_LIBXML2
-    if (d) {
-        const auto val = std::unique_ptr<xmlChar, decltype(xmlFree)>(xmlNodeGetContent(d), xmlFree);
-        return QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
+    if (!d) {
+        return {};
     }
-#endif
+
+    QString s;
+    ::recursiveContent(d, s);
+    // convert non-breaking spaces to normal ones, technically not correct
+    // but way too often this confuses our regular expressions
+    s.replace(QString::fromUtf8(" "), QLatin1String(" "));
+    return s.trimmed();
+#else
     return {};
+#endif
 }
 
 QVariant HtmlElement::eval(const QString &xpath) const
@@ -228,7 +279,8 @@ bool HtmlElement::hasAttribute(const QString& attr) const
         }
         attribute = attribute->next;
     }
-
+#else
+    Q_UNUSED(attr);
 #endif
     return false;
 }

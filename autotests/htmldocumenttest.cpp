@@ -112,10 +112,12 @@ private Q_SLOTS:
         elem = elem.firstChild().firstChild();
         QCOMPARE(elem.name(), QLatin1String("p"));
         QCOMPARE(elem.content(), QLatin1String("word1\nword2"));
+        QCOMPARE(elem.recursiveContent(), QLatin1String("word1\nword2"));
 
         elem = elem.nextSibling();
         QCOMPARE(elem.name(), QLatin1String("p"));
         QCOMPARE(elem.content(), QLatin1String("lots of spaces"));
+        QCOMPARE(elem.recursiveContent(), QLatin1String("lots of spaces"));
 
         auto elems = doc->eval(QLatin1String("//*[text()[normalize-space(.)='lots of spaces']]")).toList();
         QCOMPARE(elems.size(), 1);
@@ -125,6 +127,18 @@ private Q_SLOTS:
 
         elem = elem.nextSibling();
         QCOMPARE(elem.content(), QString::fromUtf8("인천공항"));
+        QCOMPARE(elem.recursiveContent(), QString::fromUtf8("인천공항"));
+
+        elem = elem.nextSibling();
+        QCOMPARE(elem.content(), QLatin1String("a b"));
+        QCOMPARE(elem.recursiveContent(), QLatin1String("a b"));
+
+        elem = elem.nextSibling();
+        QCOMPARE(elem.content(), QLatin1String("a&b"));
+        QCOMPARE(elem.recursiveContent(), QLatin1String("a&b"));
+        elem = elem.nextSibling();
+        QCOMPARE(elem.content(), QLatin1String("a&b"));
+        QCOMPARE(elem.recursiveContent(), QLatin1String("a&b"));
 #endif
     }
 };

@@ -35,6 +35,7 @@ class HtmlDocumentPrivate;
 class KITINERARY_EXPORT HtmlElement
 {
     Q_GADGET
+    Q_PROPERTY(bool isNull READ isNull)
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(KItinerary::HtmlElement parent READ parent)
     Q_PROPERTY(KItinerary::HtmlElement firstChild READ firstChild)
