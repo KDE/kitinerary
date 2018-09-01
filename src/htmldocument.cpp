@@ -213,6 +213,26 @@ QVariant HtmlElement::eval(const QString &xpath) const
     return {};
 }
 
+bool HtmlElement::hasAttribute(const QString& attr) const
+{
+#ifdef HAVE_LIBXML2
+    if (!d) {
+        return false;
+    }
+
+    auto attribute = d->properties;
+    while(attribute)
+    {
+        if (qstricmp(attr.toUtf8().constData(), reinterpret_cast<const char*>(attribute->name)) == 0) {
+            return true;
+        }
+        attribute = attribute->next;
+    }
+
+#endif
+    return false;
+}
+
 QStringList HtmlElement::attributes() const
 {
     QStringList l;
