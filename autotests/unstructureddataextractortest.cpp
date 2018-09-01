@@ -19,8 +19,8 @@
 
 #include <KItinerary/Extractor>
 #include <KItinerary/ExtractorEngine>
-#include <KItinerary/ExtractorPreprocessor>
 #include <KItinerary/ExtractorRepository>
+#include <KItinerary/HtmlDocument>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Organization>
 
@@ -39,7 +39,7 @@ class UnstructuredDataExtractorTest : public QObject
 {
     Q_OBJECT
 private:
-    bool loadExtractor(Extractor &extractor, const QString &extractorName)
+    bool loadExtractor(Extractor &extractor, const QString &extractorName, const QString &type)
     {
         QFile f(QLatin1String(":/org.kde.pim/kitinerary/extractors/") + extractorName + QLatin1String(".json"));
         if (!f.open(QFile::ReadOnly)) {
@@ -50,7 +50,7 @@ private:
             return extractor.load(doc.object(), QLatin1String(":/org.kde.pim/kitinerary/extractors/"));
         } else if (doc.isArray()) {
             for (const auto &v : doc.array()) {
-                if (v.toObject().value(QLatin1String("type")).toString(QStringLiteral("text")) == QLatin1String("text")) {
+                if (v.toObject().value(QLatin1String("type")).toString(QStringLiteral("text")) == type) {
                     return extractor.load(v.toObject(), QLatin1String(":/org.kde.pim/kitinerary/extractors/"));
                 }
             }
@@ -97,7 +97,7 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
 
         Extractor extractor;
-        QVERIFY(loadExtractor(extractor, extractorName));
+        QVERIFY(loadExtractor(extractor, extractorName, QLatin1String("text")));
 
         ExtractorEngine engine;
         engine.setText(QString::fromUtf8(f.readAll()));
@@ -143,17 +143,16 @@ private Q_SLOTS:
 
         QFile f(inputFile);
         QVERIFY(f.open(QFile::ReadOnly));
+        std::unique_ptr<HtmlDocument> htmlDoc(HtmlDocument::fromData(f.readAll()));
+        QVERIFY(htmlDoc);
 
         Extractor extractor;
-        QVERIFY(loadExtractor(extractor, extractorName));
-
-        ExtractorPreprocessor preproc;
-        preproc.preprocessHtml(QString::fromUtf8(f.readAll()));
+        QVERIFY(loadExtractor(extractor, extractorName, QLatin1String("html")));
 
         ExtractorEngine engine;
-        engine.setText(preproc.text());
         engine.setSenderDate(QDateTime(QDate(2017, 12, 29), QTime(18, 46, 2)));
         engine.setExtractors({&extractor});
+        engine.setHtmlDocument(htmlDoc.get());
         const auto data = JsonLdDocument::toJson(JsonLdDocument::fromJson(engine.extract()));
 
         QFile ref(jsonFile);

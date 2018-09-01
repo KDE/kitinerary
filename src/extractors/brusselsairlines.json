@@ -1,5 +1,6 @@
 [
     {
+        "type": "html",
         "filter": [
             { "header": "From", "match": "@brusselsairlines.com" }
         ],
