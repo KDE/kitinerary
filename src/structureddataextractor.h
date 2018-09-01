@@ -22,39 +22,22 @@
 
 #include "kitinerary_export.h"
 
-#include <memory>
-
 class QJsonArray;
-class QString;
 
 namespace KItinerary {
 
 class HtmlDocument;
-class StructuredDataExtractorPrivate;
 
 /** Extract schema.org structured data from HTML text.
  *  @see https://developers.google.com/gmail/markup/getting-started
  */
-class KITINERARY_EXPORT StructuredDataExtractor
+namespace StructuredDataExtractor
 {
-public:
-    [[deprecated("Use extract instead")]] StructuredDataExtractor();
-    StructuredDataExtractor(const StructuredDataExtractor&) = delete;
-    StructuredDataExtractor(StructuredDataExtractor&&);
-    ~StructuredDataExtractor();
-
-    /** Attempt to find JSON-LD data in the given HTML content. */
-    [[deprecated("Use extract instead")]] void parse(const QString &text);
-
-    /** Returns the extracted data. */
-    [[deprecated("Use extract instead")]] QJsonArray data() const;
-
-    /** Traverse the given HTML document and search for any embedded JSON-LD or Microdata. */
-    static QJsonArray extract(HtmlDocument *doc);
-
-private:
-    std::unique_ptr<StructuredDataExtractorPrivate> d;
-};
+    /** Traverse the given HTML document and search for any embedded JSON-LD or Microdata.
+     *  @internal only exported for unit tests
+     */
+    KITINERARY_EXPORT QJsonArray extract(HtmlDocument *doc);
+}
 
 }
 

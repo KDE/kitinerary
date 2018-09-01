@@ -102,7 +102,6 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         MergeUtil
         PdfDocument
         SortUtil
-        StructuredDataExtractor
         Uic9183Parser
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS

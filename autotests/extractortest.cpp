@@ -22,7 +22,6 @@
 #include <KItinerary/HtmlDocument>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/PdfDocument>
-#include <KItinerary/StructuredDataExtractor>
 
 #include <KPkPass/Pass>
 
