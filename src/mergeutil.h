@@ -51,6 +51,13 @@ KITINERARY_EXPORT bool isSame(const QVariant &lhs, const QVariant &rhs);
  * Essentially a case-insensitive comparisson of the name components.
  */
 KITINERARY_EXPORT bool isSamePerson(const Person &lhs, const Person &rhs);
+
+/**
+ * Merge the two given objects.
+ * This is the same as JsonLdDocument::apply in most cases, but if one side
+ * can be determined to be "better", that one is preferred.
+ */
+KITINERARY_EXPORT QVariant merge(const QVariant &lhs, const QVariant &rhs);
 }
 
 }

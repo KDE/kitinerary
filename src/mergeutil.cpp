@@ -16,6 +16,7 @@
 */
 
 #include "mergeutil.h"
+#include "logging.h"
 
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
@@ -32,6 +33,8 @@
 
 #include <QDate>
 #include <QDebug>
+#include <QMetaObject>
+#include <QMetaProperty>
 #include <QVariant>
 
 using namespace KItinerary;
@@ -329,4 +332,62 @@ static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs)
 {
     //TODO verify
     return lhs.name() == rhs.name();
+}
+
+
+static Airline mergeValue(const Airline &lhs, const Airline &rhs)
+{
+    auto a = JsonLdDocument::apply(lhs, rhs).value<Airline>();
+    // prefer the more detailed name
+    if (a.name().size() < lhs.name().size()) {
+        a.setName(lhs.name());
+    }
+    return a;
+}
+
+static QDateTime mergeValue(const QDateTime &lhs, const QDateTime &rhs)
+{
+    // prefer value with timezone
+    return lhs.isValid() && lhs.timeSpec() == Qt::TimeZone && rhs.timeSpec() != Qt::TimeZone ? lhs : rhs;
+}
+
+QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
+{
+    if (rhs.isNull()) {
+        return lhs;
+    }
+    if (lhs.isNull()) {
+        return rhs;
+    }
+    if (lhs.userType() != rhs.userType()) {
+        qCWarning(Log) << "type mismatch during merging:" << lhs << rhs;
+        return {};
+    }
+
+    auto res = lhs;
+    const auto mo = QMetaType(res.userType()).metaObject();
+    for (int i = 0; i < mo->propertyCount(); ++i) {
+        const auto prop = mo->property(i);
+        if (!prop.isStored()) {
+            continue;
+        }
+
+        auto lv = prop.readOnGadget(lhs.constData());
+        auto rv = prop.readOnGadget(rhs.constData());
+        auto mt = rv.userType();
+
+        if (mt == qMetaTypeId<Airline>()) {
+            rv = mergeValue(lv.value<Airline>(), rv.value<Airline>());
+        } else if (mt == qMetaTypeId<QDateTime>()) {
+            rv = mergeValue(lv.toDateTime(), rv.toDateTime());
+        } else if (QMetaType(mt).metaObject()) {
+            rv = merge(prop.readOnGadget(lhs.constData()), rv);
+        }
+
+        if (!rv.isNull()) {
+            prop.writeOnGadget(res.data(), rv);
+        }
+    }
+
+    return res;
 }

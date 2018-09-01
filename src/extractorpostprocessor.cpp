@@ -168,7 +168,7 @@ void ExtractorPostprocessorPrivate::mergeOrAppend(const QVariant &elem)
     if (it == m_data.end()) {
         m_data.push_back(elem);
     } else {
-        *it = JsonLdDocument::apply(*it, elem);
+        *it = MergeUtil::merge(*it, elem);
     }
 }
 
