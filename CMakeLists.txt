@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 set(PIM_VERSION "5.9.46")
 project(KItinerary VERSION ${PIM_VERSION})
 
+set(CMAKE_CXX_STANDARD 14)
 set(KF5_VERSION "5.49.0")
 
 find_package(ECM ${KF5_VERSION} REQUIRED NO_MODULE)
