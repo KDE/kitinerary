@@ -18,6 +18,7 @@
 */
 
 #include "structureddataextractor.h"
+#include "htmldocument.h"
 #include "logging.h"
 
 #include <QJsonArray>
@@ -29,6 +30,9 @@
 #include <QXmlStreamReader>
 
 using namespace KItinerary;
+
+static void parseJson(const QByteArray &data, QJsonArray &result);
+static QByteArray fixupJson(const QByteArray &data);
 
 namespace KItinerary {
 class StructuredDataExtractorPrivate {
@@ -48,8 +52,6 @@ public:
     QJsonObject parseMicroData(QXmlStreamReader &reader);
     /* Element-dependent Microdata property value. */
     QString valueForItemProperty(QXmlStreamReader &reader) const;
-    void parseJson(const QByteArray &data);
-    QByteArray fixupJson(const QByteArray &data) const;
 
     uint64_t m_parserOffset = 0;
     QJsonArray m_data;
@@ -111,7 +113,7 @@ bool StructuredDataExtractorPrivate::parseXml(const QString &text)
             // JSON-LD
             if (reader.name() == QLatin1String("script") && reader.attributes().value(QLatin1String("type")) == QLatin1String("application/ld+json")) {
                 const auto jsonData = reader.readElementText(QXmlStreamReader::IncludeChildElements);
-                parseJson(jsonData.toUtf8());
+                parseJson(jsonData.toUtf8(), m_data);
             }
 
             // Microdata
@@ -155,7 +157,7 @@ bool StructuredDataExtractorPrivate::findLdJson(const QString &text)
         }
         i = text.indexOf(QLatin1String("</script>"), begin, Qt::CaseInsensitive);
         const auto jsonData = text.mid(begin, i - begin);
-        parseJson(jsonData.toUtf8());
+        parseJson(jsonData.toUtf8(), m_data);
     }
 
     return !m_data.isEmpty();
@@ -289,7 +291,7 @@ QString StructuredDataExtractorPrivate::valueForItemProperty(QXmlStreamReader &r
     return v;
 }
 
-void StructuredDataExtractorPrivate::parseJson(const QByteArray &data)
+void parseJson(const QByteArray &data, QJsonArray &result)
 {
     QJsonParseError error;
     auto jsonDoc = QJsonDocument::fromJson(data, &error);
@@ -306,14 +308,14 @@ void StructuredDataExtractorPrivate::parseJson(const QByteArray &data)
     }
     if (jsonDoc.isArray()) {
         for (const auto &v : jsonDoc.array()) {
-            m_data.push_back(v);
+            result.push_back(v);
         }
     } else if (jsonDoc.isObject()) {
-        m_data.push_back(jsonDoc.object());
+        result.push_back(jsonDoc.object());
     }
 }
 
-QByteArray StructuredDataExtractorPrivate::fixupJson(const QByteArray &data) const
+QByteArray fixupJson(const QByteArray &data)
 {
     auto output(data);
 
@@ -321,4 +323,102 @@ QByteArray StructuredDataExtractorPrivate::fixupJson(const QByteArray &data) con
     output.replace("}{", "},{");
 
     return output;
+}
+
+static QString valueForItemProperty(HtmlElement elem)
+{
+    // TODO see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#Values
+    const auto elemName = elem.name();
+    if (elemName == QLatin1String("span")) {
+        return elem.recursiveContent();
+    }
+
+    QString v;
+    if (elemName == QLatin1String("meta")) {
+        v = elem.attribute(QLatin1String("content"));
+    } else if (elemName == QLatin1String("time")) {
+        v = elem.attribute(QLatin1String("datetime"));
+    } else if (elemName == QLatin1String("link") || elemName == QLatin1String("a")) {
+        if (elem.hasAttribute(QLatin1String("href"))) {
+            v = elem.attribute(QLatin1String("href"));
+        } else if (elem.hasAttribute(QLatin1String("content"))) {
+            v = elem.attribute(QLatin1String("content"));
+        }
+    } else {
+        qCDebug(Log) << "TODO:" << elemName;
+    }
+
+    return v;
+}
+
+static QJsonObject parseMicroData(HtmlElement elem)
+{
+    QJsonObject obj;
+    auto child = elem.firstChild();
+    while (!child.isNull()) {
+        const auto prop = child.attribute(QLatin1String("itemprop"));
+        const auto type = child.attribute(QLatin1String("itemtype"));
+        if (type.startsWith(QLatin1String("http://schema.org/"))) {
+            auto subObj = parseMicroData(child);
+            const QUrl typeUrl(type);
+            subObj.insert(QStringLiteral("@type"), typeUrl.fileName());
+            obj.insert(prop, subObj);
+        } else if (!prop.isEmpty()) {
+            obj.insert(prop, valueForItemProperty(child));
+        }
+        child = child.nextSibling();
+    }
+    return obj;
+}
+
+static void extractRecursive(HtmlElement elem, QJsonArray &result)
+{
+    // JSON-LD
+    if (elem.name() == QLatin1String("script") && elem.attribute(QLatin1String("type")) == QLatin1String("application/ld+json")) {
+        parseJson(elem.content().toUtf8(), result);
+        return;
+    }
+
+    // Microdata
+    const auto itemType = elem.attribute(QLatin1String("itemtype"));
+    if (itemType.startsWith(QLatin1String("http://schema.org/"))) {
+        auto obj = parseMicroData(elem);
+        if (obj.isEmpty()) {
+            return;
+        }
+
+        const QUrl typeUrl(itemType);
+        obj.insert(QStringLiteral("@type"), typeUrl.fileName());
+
+        const auto itemProp = elem.attribute(QLatin1String("itemprop"));
+        if (!itemProp.isEmpty() && !result.isEmpty()) {
+            // this is likely a child of our preceeding sibling, but broken XML put it here
+            auto parent = result.last().toObject();
+            parent.insert(itemProp, obj);
+            result[result.size() - 1] = parent;
+        } else {
+            obj.insert(QStringLiteral("@context"), QStringLiteral("http://schema.org"));
+            result.push_back(obj);
+        }
+        return;
+    }
+
+    // recurse otherwise
+    auto child = elem.firstChild();
+    while (!child.isNull()) {
+        extractRecursive(child, result);
+        child = child.nextSibling();
+    }
+}
+
+QJsonArray StructuredDataExtractor::extract(HtmlDocument *doc)
+{
+    Q_ASSERT(doc);
+
+    QJsonArray result;
+    if (doc->root().isNull()) {
+        return result;
+    }
+    extractRecursive(doc->root(), result);
+    return result;
 }

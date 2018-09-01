@@ -29,6 +29,7 @@ class QString;
 
 namespace KItinerary {
 
+class HtmlDocument;
 class StructuredDataExtractorPrivate;
 
 /** Extract schema.org structured data from HTML text.
@@ -37,16 +38,19 @@ class StructuredDataExtractorPrivate;
 class KITINERARY_EXPORT StructuredDataExtractor
 {
 public:
-    StructuredDataExtractor();
+    [[deprecated("Use extract instead")]] StructuredDataExtractor();
     StructuredDataExtractor(const StructuredDataExtractor&) = delete;
     StructuredDataExtractor(StructuredDataExtractor&&);
     ~StructuredDataExtractor();
 
     /** Attempt to find JSON-LD data in the given HTML content. */
-    void parse(const QString &text);
+    [[deprecated("Use extract instead")]] void parse(const QString &text);
 
     /** Returns the extracted data. */
-    QJsonArray data() const;
+    [[deprecated("Use extract instead")]] QJsonArray data() const;
+
+    /** Traverse the given HTML document and search for any embedded JSON-LD or Microdata. */
+    static QJsonArray extract(HtmlDocument *doc);
 
 private:
     std::unique_ptr<StructuredDataExtractorPrivate> d;

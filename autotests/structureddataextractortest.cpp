@@ -18,6 +18,7 @@
 */
 
 #include "structureddataextractor.h"
+#include <KItinerary/HtmlDocument>
 
 #include <QDebug>
 #include <QDir>
@@ -55,20 +56,21 @@ private Q_SLOTS:
         QFETCH(QString, inputFile);
         QFETCH(QString, jsonFile);
 
-        StructuredDataExtractor extractor;
         QFile f(inputFile);
         QVERIFY(f.open(QFile::ReadOnly));
-        extractor.parse(QString::fromUtf8(f.readAll()));
+        std::unique_ptr<HtmlDocument> htmlDoc(HtmlDocument::fromData(f.readAll()));
+        QVERIFY(htmlDoc);
 
         QFile ref(jsonFile);
         QVERIFY(ref.open(QFile::ReadOnly));
         const auto doc = QJsonDocument::fromJson(ref.readAll());
         QVERIFY(doc.isArray());
 
-        if (extractor.data() != doc.array()) {
-            qDebug().noquote() << QJsonDocument(extractor.data()).toJson();
+        auto data = StructuredDataExtractor::extract(htmlDoc.get());
+        if (data != doc.array()) {
+            qDebug().noquote() << QJsonDocument(data).toJson();
         }
-        QCOMPARE(extractor.data(), doc.array());
+        QCOMPARE(data, doc.array());
     }
 };
 
