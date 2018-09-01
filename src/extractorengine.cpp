@@ -48,12 +48,12 @@ namespace KItinerary {
 class ExtractorEnginePrivate {
 public:
     void setupEngine();
-    void executeScript();
+    void executeScript(const Extractor *extractor);
     void extractPass();
     void extractBoardingPass(QJsonObject &resFor);
     void extractEventTicketPass(QJsonObject &resFor);
 
-    const Extractor *m_extractor = nullptr;
+    std::vector<const Extractor*> m_extractors;
     JsApi::Barcode *m_barcodeApi = nullptr;
     JsApi::Context *m_context = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
@@ -98,9 +98,15 @@ void ExtractorEngine::clear()
     d->m_context->m_senderDate = {};
 }
 
+void ExtractorEngine::setExtractors(std::vector<const Extractor*> &&extractors)
+{
+    d->m_extractors = extractors;
+}
+
 void ExtractorEngine::setExtractor(const Extractor *extractor)
 {
-    d->m_extractor = extractor;
+    d->m_extractors.clear();
+    d->m_extractors.push_back(extractor);
 }
 
 void ExtractorEngine::setText(const QString &text)
@@ -135,48 +141,47 @@ void ExtractorEngine::setSenderDate(const QDateTime &dt)
 
 QJsonArray ExtractorEngine::extract()
 {
-    if (!d->m_extractor) {
-        return {};
-    }
-    switch (d->m_extractor->type()) {
-        case Extractor::Text:
-            if (d->m_text.isEmpty()) {
-                return {};
-            }
-            d->executeScript();
+    for (const auto extractor : d->m_extractors) {
+        switch (extractor->type()) {
+            case Extractor::Text:
+                if (!d->m_text.isEmpty()) {
+                    d->executeScript(extractor);
+                }
+                break;
+            case Extractor::Html:
+                if (d->m_htmlDoc) {
+                    d->executeScript(extractor);
+                }
+                break;
+            case Extractor::Pdf:
+                if (d->m_pdfDoc) {
+                    d->executeScript(extractor);
+                }
+                break;
+            case Extractor::PkPass:
+                if (d->m_pass) {
+                    d->executeScript(extractor);
+                    d->extractPass();
+                }
+                break;
+        }
+
+        if (!d->m_result.isEmpty()) {
             break;
-        case Extractor::Html:
-            if (!d->m_htmlDoc) {
-                return {};
-            }
-            d->executeScript();
-            break;
-        case Extractor::Pdf:
-            if (!d->m_pdfDoc) {
-                return {};
-            }
-            d->executeScript();
-            break;
-        case Extractor::PkPass:
-            if (!d->m_pass) {
-                return {};
-            }
-            d->executeScript();
-            d->extractPass();
-            break;
+        }
     }
 
     return d->m_result;
 }
 
-void ExtractorEnginePrivate::executeScript()
+void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
 {
-    Q_ASSERT(m_extractor);
-    if (m_extractor->scriptFileName().isEmpty()) {
+    Q_ASSERT(extractor);
+    if (extractor->scriptFileName().isEmpty()) {
         return;
     }
 
-    QFile f(m_extractor->scriptFileName());
+    QFile f(extractor->scriptFileName());
     if (!f.open(QFile::ReadOnly)) {
         qCWarning(Log) << "Failed to open extractor script" << f.fileName() << f.errorString();
         return;
@@ -189,14 +194,14 @@ void ExtractorEnginePrivate::executeScript()
         return;
     }
 
-    auto mainFunc = m_engine.globalObject().property(m_extractor->scriptFunction());
+    auto mainFunc = m_engine.globalObject().property(extractor->scriptFunction());
     if (!mainFunc.isCallable()) {
-        qCWarning(Log) << "Script entry point not found!" << m_extractor->scriptFunction();
+        qCWarning(Log) << "Script entry point not found!" << extractor->scriptFunction();
         return;
     }
 
     QJSValueList args;
-    switch (m_extractor->type()) {
+    switch (extractor->type()) {
         case Extractor::Text:
             args = {m_text};
             break;
@@ -227,7 +232,7 @@ void ExtractorEnginePrivate::executeScript()
             }
         }
     } else if (result.isObject()) {
-        m_result = { QJsonValue::fromVariant(result.toVariant()) };
+        m_result.push_back(QJsonValue::fromVariant(result.toVariant()));
     } else {
         qCWarning(Log) << "Invalid result type from script";
     }

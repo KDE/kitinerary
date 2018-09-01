@@ -143,11 +143,8 @@ private Q_SLOTS:
             m_engine.setText(QString::fromUtf8(inFile.readAll()));
         }
 
-        for (const auto &extractor : extractors) {
-            if (!jsonResult.isEmpty()) {
-                break;
-            }
-            m_engine.setExtractor(extractor);
+        if (jsonResult.isEmpty()) {
+            m_engine.setExtractors(std::move(extractors));
             jsonResult = m_engine.extract();
         }
 

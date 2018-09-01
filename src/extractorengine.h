@@ -23,6 +23,7 @@
 #include "kitinerary_export.h"
 
 #include <memory>
+#include <vector>
 
 namespace KPkPass {
 class Pass;
@@ -122,8 +123,9 @@ public:
     /** Resets the internal state, call before processing new input data. */
     void clear();
 
-    /** Set the extractor to be run on the current data. */
-    void setExtractor(const Extractor *extractor);
+    /** Set the extractors to be run on the current data. */
+    void setExtractors(std::vector<const Extractor*> &&extractors);
+    [[deprecated("use setExtractors instead")]] void setExtractor(const Extractor *extractor);
 
     /** The text to extract data from.
      *  Only considered for text extractors.

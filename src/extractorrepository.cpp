@@ -45,6 +45,7 @@ public:
     void loadExtractors();
 
     std::vector<Extractor> m_extractors;
+    Extractor m_genericHtmlExtractor;
     Extractor m_genericPkPassExtractor;
 };
 }
@@ -66,6 +67,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
         return v;
     }
 
+    v.push_back(&d->m_genericHtmlExtractor);
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
         if ((*it).type() == Extractor::PkPass) {
             continue;
@@ -165,6 +167,8 @@ void ExtractorRepositoryPrivate::loadExtractors()
     }
 
     QJsonObject dummy;
+    dummy.insert(QLatin1String("type"), QLatin1String("html"));
+    m_genericHtmlExtractor.load(dummy, {});
     dummy.insert(QLatin1String("type"), QLatin1String("pkpass"));
     m_genericPkPassExtractor.load(dummy, QString());
 }
