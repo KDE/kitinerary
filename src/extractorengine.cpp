@@ -123,9 +123,6 @@ void ExtractorEngine::setHtmlDocument(HtmlDocument *htmlDoc)
 void ExtractorEngine::setPdfDocument(PdfDocument *pdfDoc)
 {
     d->m_pdfDoc = pdfDoc;
-    if (pdfDoc) {
-        d->m_text = pdfDoc->text();
-    }
 }
 
 void ExtractorEngine::setPass(KPkPass::Pass *pass)
@@ -145,6 +142,15 @@ QJsonArray ExtractorEngine::extract()
     for (const auto extractor : d->m_extractors) {
         switch (extractor->type()) {
             case Extractor::Text:
+                // running text extractors on PDF or HTML docs is possible,
+                // but only extract the text when really needed
+                if (d->m_text.isEmpty() && d->m_pdfDoc) {
+                    d->m_text = d->m_pdfDoc->text();
+                }
+                if (d->m_text.isEmpty() && d->m_htmlDoc) {
+                    d->m_text = d->m_htmlDoc->root().recursiveContent();
+                }
+
                 if (!d->m_text.isEmpty()) {
                     d->executeScript(extractor);
                 }
