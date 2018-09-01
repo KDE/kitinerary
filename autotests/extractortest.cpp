@@ -128,10 +128,6 @@ private Q_SLOTS:
             m_engine.setPdfDocument(pdfDoc.get());
         } else if (inputFile.endsWith(QLatin1String(".html"))) {
             const auto html = QString::fromUtf8(inFile.readAll());
-            StructuredDataExtractor se;
-            se.parse(html);
-            jsonResult = se.data();
-
             htmlDoc.reset(HtmlDocument::fromData(html.toUtf8()));
             QVERIFY(htmlDoc);
             m_engine.setHtmlDocument(htmlDoc.get());
@@ -143,10 +139,8 @@ private Q_SLOTS:
             m_engine.setText(QString::fromUtf8(inFile.readAll()));
         }
 
-        if (jsonResult.isEmpty()) {
-            m_engine.setExtractors(std::move(extractors));
-            jsonResult = m_engine.extract();
-        }
+        m_engine.setExtractors(std::move(extractors));
+        jsonResult = m_engine.extract();
 
         const auto expectedSkip = QFile::exists(inputFile + QLatin1String(".skip"));
         if (jsonResult.isEmpty() && expectedSkip) {

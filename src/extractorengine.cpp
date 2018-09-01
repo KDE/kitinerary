@@ -23,6 +23,7 @@
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "pdfdocument.h"
+#include "structureddataextractor.h"
 
 #include "jsapi/barcode.h"
 #include "jsapi/context.h"
@@ -150,6 +151,11 @@ QJsonArray ExtractorEngine::extract()
                 break;
             case Extractor::Html:
                 if (d->m_htmlDoc) {
+                    if (extractor->scriptFileName().isEmpty()) {
+                        for (const auto &v : StructuredDataExtractor::extract(d->m_htmlDoc)) {
+                            d->m_result.push_back(v);
+                        }
+                    }
                     d->executeScript(extractor);
                 }
                 break;
