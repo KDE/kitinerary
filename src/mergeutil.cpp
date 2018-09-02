@@ -54,9 +54,9 @@ static bool equalAndPresent(const QDateTime &lhs, const QDateTime &rhs)
 }
 
 /* Checks that @p lhs and @p rhs are not non-equal if both values are set. */
-static bool conflictIfPresent(const QString &lhs, const QString &rhs)
+static bool conflictIfPresent(const QString &lhs, const QString &rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
 {
-    return !lhs.isEmpty() && !rhs.isEmpty() && lhs != rhs;
+    return !lhs.isEmpty() && !rhs.isEmpty() && lhs.compare(rhs, caseSensitive) != 0;
 }
 static bool conflictIfPresent(const QDateTime &lhs, const QDateTime &rhs)
 {
@@ -299,22 +299,56 @@ static bool isSameTouristAttraction(const TouristAttraction &lhs, const TouristA
     return lhs.name() == rhs.name();
 }
 
-bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)
+// compute the "difference" between @p lhs and @p rhs
+static QString diffString(const QString &lhs, const QString &rhs)
 {
-    if (lhs.name().compare(rhs.name(), Qt::CaseInsensitive) == 0) {
-        return true;
+    QString diff;
+    // this is just a basic linear-time heuristic, this would need to be more something like
+    // the Levenstein Distance algorithm
+    for (int i = 0, j = 0; i < lhs.size() || j < rhs.size();) {
+        if (i < lhs.size() && j < rhs.size() && lhs[i].toCaseFolded() == rhs[j].toCaseFolded()) {
+            ++i;
+            ++j;
+            continue;
+        }
+        if ((j < rhs.size() && (lhs.size() < rhs.size() || (lhs.size() == rhs.size() && j < i))) || i == lhs.size()) {
+            diff += rhs[j];
+            ++j;
+        } else {
+            diff += lhs[i];
+            ++i;
+        }
     }
+    return diff.trimmed();
+}
 
-    if (!equalAndPresent(lhs.familyName(), rhs.familyName(), Qt::CaseInsensitive)) {
+static bool isNameEqualish(const QString &lhs, const QString &rhs)
+{
+    if (lhs.isEmpty() || rhs.isEmpty()) {
         return false;
     }
 
-     // names from IATA BCBP can have "MS", "MR", "MRS" etc appended to the first name
-    return equalAndPresent(lhs.givenName(), rhs.givenName(), Qt::CaseInsensitive)
-        || lhs.givenName().startsWith(rhs.givenName(), Qt::CaseInsensitive)
-        || rhs.givenName().startsWith(rhs.givenName(), Qt::CaseInsensitive);
+    auto diff = diffString(lhs, rhs).toUpper();
 
-    // TODO deal with cases where on side has the name split, and the other side only has the full name
+    // remove honoric prefixes from the diff, in case the previous check didn't catch that
+    diff.remove(QLatin1String("MRS"));
+    diff.remove(QLatin1String("MR"));
+    diff.remove(QLatin1String("MS"));
+
+    // if there's letters in the diff, we assume this is different
+    for (const auto c : diff) {
+        if (c.isLetter()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)
+{
+    return isNameEqualish(lhs.name(), rhs.name()) ||
+        (isNameEqualish(lhs.givenName(), rhs.givenName()) && isNameEqualish(lhs.familyName(), rhs.familyName()));
 }
 
 static bool isSameEvent(const Event &lhs, const Event &rhs)

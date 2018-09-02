@@ -25,6 +25,8 @@
 #include <QObject>
 #include <QTest>
 
+#define _(x) QStringLiteral(x)
+
 using namespace KItinerary;
 
 class MergeUtilTest : public QObject
@@ -103,29 +105,98 @@ private Q_SLOTS:
         QVERIFY(MergeUtil::isSame(f1, f2));
     }
 
+    void testIsSamePerson_data()
+    {
+        // we do not need to consider cases here that ExtractorPostprocessor eliminates for us
+        // such as filling the full name or honoric prefixes
+        QTest::addColumn<QVector<QStringList>>("data");
+
+        QTest::newRow("simple name") << QVector<QStringList> {
+            {_("Volker Krause"), {}, {}},
+            {_("VOLKER KRAUSE"), {}, {}},
+            {_("VOLKER KRAUSE"), _("Volker"), _("Krause")},
+            {_("VOLKER KRAUSE"), {}, _("Krause")},
+            {_("VOLKER KRAUSE"), _("Volker"), {}},
+            // IATA BCBP artifacts
+            {_("VOLKERMR KRAUSE"), _("VOLKERMR"), _("KRAUSE")},
+            {_("VOLKER MR KRAUSE"), _("VOLKER MR"), _("KRAUSE")}
+        };
+
+        QTest::newRow("double family name") << QVector<QStringList> {
+            {_("Andreas Cord-Landwehr"), {}, {}},
+            {_("ANDREAS CORD-LANDWEHR"), {}, {}},
+            {_("ANDREAS CORD-LANDWEHR"), _("Andreas"), _("Cord-Landwehr")},
+            // IATA BCBP artifacts
+            {_("Andreas Cordlandwehr"), {}, {}},
+            {_("ANDREAS CORDLANDWEHR"), _("ANDREAS"), _("CORDLANDWEHR")},
+            {_("ANDREAS CORD LANDWEHR"), _("ANDREAS"), _("CORD LANDWEHR")},
+            {_("ANDREAS CORD LANDWEHR"), {}, {}}
+        };
+
+    }
+
     void testIsSamePerson()
     {
-        Person p1;
-        p1.setName(QLatin1String("VOLKER KRAUSE"));
-        QVERIFY(!MergeUtil::isSamePerson(p1, {}));
-        QVERIFY(!MergeUtil::isSamePerson({}, p1));
-        QVERIFY(MergeUtil::isSamePerson(p1, p1));
+        QFETCH(QVector<QStringList>, data);
 
-        Person p2;
-        p2.setName(QLatin1String("Volker Krause"));
-        QVERIFY(MergeUtil::isSamePerson(p1, p2));
+        for(int i = 0; i < data.size(); ++i) {
+            Person lhs;
+            lhs.setName(data[i][0]);
+            lhs.setGivenName(data[i][1]);
+            lhs.setFamilyName(data[i][2]);
 
-        Person p3;
-        p3.setName(QLatin1String("KRAUSE Volker"));
-        p3.setFamilyName(QLatin1String("KRAUSE"));
-        p3.setGivenName(QLatin1String("Volker"));
+            for (int j = 0; j < data.size(); ++j) {
+                Person rhs;
+                rhs.setName(data[j][0]);
+                rhs.setGivenName(data[j][1]);
+                rhs.setFamilyName(data[j][2]);
 
-        p1.setFamilyName(QLatin1String("Krause"));
-        p1.setGivenName(QLatin1String("VOLKER"));
-        QVERIFY(MergeUtil::isSamePerson(p1, p3));
+                QVERIFY(!MergeUtil::isSamePerson(lhs, {}));
+                QVERIFY(!MergeUtil::isSamePerson({}, lhs));
 
-        p1.setGivenName(QLatin1String("VOLKERMR")); // IATA BCBP names with titles attached
-        QVERIFY(MergeUtil::isSamePerson(p1, p3));
+                if (!MergeUtil::isSamePerson(lhs, rhs)) {
+                    qDebug() << "Left: " << lhs.name() << lhs.givenName() << lhs.familyName();
+                    qDebug() << "Right: " << rhs.name() << rhs.givenName() << rhs.familyName();
+                }
+                QVERIFY(MergeUtil::isSamePerson(lhs, rhs));
+            }
+        }
+    }
+
+    void testIsNotSamePerson()
+    {
+        QVector<QStringList> data {
+            { _("Volker Krause"), {}, {} },
+            { _("Andreas Cord-Landwehr"), _("Andread"), _("Cord-Landwehr") },
+            { _("GIVEN1 GIVEN2 FAMILY1"), {}, {} }
+        };
+
+        for(int i = 0; i < data.size(); ++i) {
+            Person lhs;
+            lhs.setName(data[i][0]);
+            lhs.setGivenName(data[i][1]);
+            lhs.setFamilyName(data[i][2]);
+
+            for (int j = 0; j < data.size(); ++j) {
+                if (i == j) {
+                    continue;
+                }
+
+                Person rhs;
+                rhs.setName(data[j][0]);
+                rhs.setGivenName(data[j][1]);
+                rhs.setFamilyName(data[j][2]);
+
+                QVERIFY(!MergeUtil::isSamePerson(lhs, {}));
+                QVERIFY(!MergeUtil::isSamePerson({}, lhs));
+
+                if (MergeUtil::isSamePerson(lhs, rhs)) {
+                    qDebug() << "Left: " << lhs.name() << lhs.givenName() << lhs.familyName();
+                    qDebug() << "Right: " << rhs.name() << rhs.givenName() << rhs.familyName();
+                }
+                QVERIFY(!MergeUtil::isSamePerson(lhs, rhs));
+            }
+        }
     }
 
     void testIsSameLodingReservation()
