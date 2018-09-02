@@ -67,10 +67,6 @@ static QString valueForItemProperty(HtmlElement elem)
 {
     // TODO see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#Values
     const auto elemName = elem.name();
-    if (elemName == QLatin1String("span")) {
-        return elem.recursiveContent();
-    }
-
     QString v;
     if (elemName == QLatin1String("meta")) {
         v = elem.attribute(QLatin1String("content"));
@@ -81,32 +77,36 @@ static QString valueForItemProperty(HtmlElement elem)
             v = elem.attribute(QLatin1String("href"));
         } else if (elem.hasAttribute(QLatin1String("content"))) {
             v = elem.attribute(QLatin1String("content"));
+        } else {
+            v = elem.recursiveContent();
         }
     } else {
-        qCDebug(Log) << "TODO:" << elemName;
+        v = elem.recursiveContent();
     }
 
     return v;
 }
 
-static QJsonObject parseMicroData(HtmlElement elem)
+static void parseMicroData(HtmlElement elem, QJsonObject &obj)
 {
-    QJsonObject obj;
     auto child = elem.firstChild();
     while (!child.isNull()) {
         const auto prop = child.attribute(QLatin1String("itemprop"));
         const auto type = child.attribute(QLatin1String("itemtype"));
         if (type.startsWith(QLatin1String("http://schema.org/"))) {
-            auto subObj = parseMicroData(child);
+            QJsonObject subObj;
+            parseMicroData(child, subObj);
             const QUrl typeUrl(type);
             subObj.insert(QStringLiteral("@type"), typeUrl.fileName());
             obj.insert(prop, subObj);
         } else if (!prop.isEmpty()) {
             obj.insert(prop, valueForItemProperty(child));
+        } else  {
+            // skip intermediate nodes without Microdata annotations
+            parseMicroData(child, obj);
         }
         child = child.nextSibling();
     }
-    return obj;
 }
 
 static void extractRecursive(HtmlElement elem, QJsonArray &result)
@@ -120,7 +120,8 @@ static void extractRecursive(HtmlElement elem, QJsonArray &result)
     // Microdata
     const auto itemType = elem.attribute(QLatin1String("itemtype"));
     if (itemType.startsWith(QLatin1String("http://schema.org/"))) {
-        auto obj = parseMicroData(elem);
+        QJsonObject obj;
+        parseMicroData(elem, obj);
         if (obj.isEmpty()) {
             return;
         }
