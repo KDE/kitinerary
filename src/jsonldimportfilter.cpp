@@ -33,6 +33,13 @@ static void renameProperty(QJsonObject &obj, const char *oldName, const char *ne
     }
 }
 
+static void renameType(QJsonObject &obj, const char *oldType, const char *newType)
+{
+    if (obj.value(QLatin1String("@type")) == QLatin1String(oldType)) {
+        obj.insert(QLatin1String("@type"), QLatin1String(newType));
+    }
+}
+
 static void migrateToAction(QJsonObject &obj, const char *propName, const char *typeName, bool remove)
 {
     const auto value = obj.value(QLatin1String(propName));
@@ -68,11 +75,21 @@ static void filterTrainTrip(QJsonObject &trip)
     renameProperty(trip, "trainCompany", "provider");
 }
 
+static void filterLodgingBusiness(QJsonObject &hotel)
+{
+    // convert LodgingBusiness sub-types we don't handle
+    renameType(hotel, "Hotel", "LodgingBusiness");
+}
+
 static void filterLodgingReservation(QJsonObject &res)
 {
     // check[in|out]Date -> check[in|out]Time (legacy Google format)
     renameProperty(res, "checkinDate", "checkinTime");
     renameProperty(res, "checkoutDate", "checkoutTime");
+
+    QJsonObject hotel = res.value(QLatin1String("reservationFor")).toObject();
+    filterLodgingBusiness(hotel);
+    res.insert(QLatin1String("reservationFor"), hotel);
 }
 
 static void filterTaxiReservation(QJsonObject &res)
@@ -123,9 +140,7 @@ static QJsonArray filterActions(const QJsonValue &v)
 
     for (auto it = actions.begin(); it != actions.end(); ++it) {
         auto action = (*it).toObject();
-        if (action.value(QLatin1String("@type")).toString() == QLatin1String("EditAction")) {
-            action.insert(QLatin1String("@type"), QLatin1String("UpdateAction"));
-        }
+        renameType(action, "EditAction", "UpdateAction");
         *it = action;
     }
 
