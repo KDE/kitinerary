@@ -125,8 +125,7 @@ private Q_SLOTS:
             QVERIFY(pdfDoc);
             m_engine.setPdfDocument(pdfDoc.get());
         } else if (inputFile.endsWith(QLatin1String(".html"))) {
-            const auto html = QString::fromUtf8(inFile.readAll());
-            htmlDoc.reset(HtmlDocument::fromData(html.toUtf8()));
+            htmlDoc.reset(HtmlDocument::fromData(inFile.readAll()));
             QVERIFY(htmlDoc);
             m_engine.setHtmlDocument(htmlDoc.get());
         } else if (inputFile.endsWith(QLatin1String(".txt"))) {
