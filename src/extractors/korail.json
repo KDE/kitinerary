@@ -1,0 +1,7 @@
+[{
+    "type": "html",
+    "filter": [
+        { "header": "From", "match": "korail.com" }
+    ],
+    "script": "korail.js"
+}]

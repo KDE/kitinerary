@@ -32,6 +32,8 @@
         <file>iberia.js</file>
         <file>klm.json</file>
         <file>klm.js</file>
+        <file>korail.json</file>
+        <file>korail.js</file>
         <file>lufthansa.json</file>
         <file>lufthansa-pkpass.js</file>
         <file>regiojet.json</file>
