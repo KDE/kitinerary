@@ -168,7 +168,8 @@ private Q_SLOTS:
         QVector<QStringList> data {
             { _("Volker Krause"), {}, {} },
             { _("Andreas Cord-Landwehr"), _("Andread"), _("Cord-Landwehr") },
-            { _("GIVEN1 GIVEN2 FAMILY1"), {}, {} }
+            { _("GIVEN1 GIVEN2 FAMILY1"), {}, {} },
+            { _("V K"), {}, {} }
         };
 
         for(int i = 0; i < data.size(); ++i) {
