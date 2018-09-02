@@ -121,6 +121,9 @@ static void filterReservation(QJsonObject &res)
         }
     }
 
+    // legacy potentialAction property
+    renameProperty(res, "action", "potentialAction");
+
     // move Google xxxUrl properties to Action instances
     migrateToAction(res, "cancelReservationUrl", "CancelAction", true);
     migrateToAction(res, "checkinUrl", "CheckInAction", true);
@@ -141,6 +144,7 @@ static QJsonArray filterActions(const QJsonValue &v)
     for (auto it = actions.begin(); it != actions.end(); ++it) {
         auto action = (*it).toObject();
         renameType(action, "EditAction", "UpdateAction");
+        renameProperty(action, "url", "target");
         *it = action;
     }
 
