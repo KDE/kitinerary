@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2017 Volker Krause <vkrause@kde.org>
+   Copyright (c) 2018 Volker Krause <vkrause@kde.org>
 
    This library is free software; you can redistribute it and/or modify it
    under the terms of the GNU Library General Public License as published by
