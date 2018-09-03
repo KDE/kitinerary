@@ -140,6 +140,7 @@ private Q_SLOTS:
             QSKIP("nothing extracted");
             return;
         }
+        QVERIFY(!jsonResult.isEmpty());
         const auto result = JsonLdDocument::fromJson(jsonResult);
         ExtractorPostprocessor postproc;
         postproc.setContextDate(contextMsg.date()->dateTime());
