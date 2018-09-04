@@ -35,8 +35,8 @@ class ExtractorPrivate;
 
 /** A single unstructured data extraction rule set.
  *
- * These rules are loaded from JSON meta-data files in a compiled-in qrc file
- * and from $XDG_DATA_DIRS/kitinerary/extractors.
+ * These rules are loaded from JSON meta-data files in a compiled-in qrc file,
+ * or from $XDG_DATA_DIRS/kitinerary/extractors.
  *
  * @section extractor_metadata Meta Data Format
  *
@@ -50,7 +50,7 @@ class ExtractorPrivate;
  * The following extractor types are supported:
  * - \c text: plain text, the argument to the script function is a single string.
  * - \c html: HTML documents, the argument to the script function is a HtmlDocument instance.
- * - \c pdf: PDF documents, the argument to the script function is a PDFDocument instance.
+ * - \c pdf: PDF documents, the argument to the script function is a PdfDocument instance.
  * - \c pkpass: Apple Wallet passes, the argument to the script function is a KPkPass::BoardingPass instance.
  *
  * Filter definitions have the following field:
@@ -74,6 +74,13 @@ class ExtractorPrivate;
  *   }
  * ]
  * @endcode
+ *
+ * @section extractor_development Development
+ *
+ * For development it's convenient to symlink the extractors source folder to
+ * $XDG_DATA_DIRS/kitinerary/extractors, so you can re-run a changed extractor
+ * script without recompiling or restarting the application.
+ *
  */
 class KITINERARY_EXPORT Extractor
 {

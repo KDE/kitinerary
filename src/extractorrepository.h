@@ -38,7 +38,10 @@ namespace KItinerary {
 class Extractor;
 class ExtractorRepositoryPrivate;
 
-/** Collection of all unstructured data extractor rule sets. */
+/** Collection of all unstructured data extractor rule sets.
+ *
+ *  See KItinerary::Extractor on where this loads its content from.
+ */
 class KITINERARY_EXPORT ExtractorRepository
 {
 public:
