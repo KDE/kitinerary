@@ -34,6 +34,7 @@
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
 #include <KItinerary/Place>
+#include <KItinerary/RentalCar>
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
@@ -76,6 +77,7 @@ public:
     TouristAttractionVisit processTouristAttractionVisit(TouristAttractionVisit visit) const;
     EventReservation processEventReservation(EventReservation res) const;
     RentalCarReservation processRentalCarReservation(RentalCarReservation res) const;
+    RentalCar processRentalCar(RentalCar car) const;
     TaxiReservation processTaxiReservation(TaxiReservation res) const;
     Event processEvent(Event event) const;
 
@@ -405,9 +407,16 @@ TaxiReservation ExtractorPostprocessorPrivate::processTaxiReservation(TaxiReserv
 
 RentalCarReservation ExtractorPostprocessorPrivate::processRentalCarReservation(RentalCarReservation res) const
 {
+    res.setReservationFor(processRentalCar(res.reservationFor().value<RentalCar>()));
     res.setPickupLocation(processPlace(res.pickupLocation()));
     res.setDropoffLocation(processPlace(res.dropoffLocation()));
     return processReservation(res);
+}
+
+RentalCar ExtractorPostprocessorPrivate::processRentalCar(RentalCar car) const
+{
+    car.setName(car.name().trimmed());
+    return car;
 }
 
 FoodEstablishmentReservation ExtractorPostprocessorPrivate::processFoodEstablishmentReservation(FoodEstablishmentReservation res) const
