@@ -104,12 +104,6 @@ void ExtractorEngine::setExtractors(std::vector<const Extractor*> &&extractors)
     d->m_extractors = extractors;
 }
 
-void ExtractorEngine::setExtractor(const Extractor *extractor)
-{
-    d->m_extractors.clear();
-    d->m_extractors.push_back(extractor);
-}
-
 void ExtractorEngine::setText(const QString &text)
 {
     d->m_text = text;

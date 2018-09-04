@@ -125,7 +125,6 @@ public:
 
     /** Set the extractors to be run on the current data. */
     void setExtractors(std::vector<const Extractor*> &&extractors);
-    [[deprecated("use setExtractors instead")]] void setExtractor(const Extractor *extractor);
 
     /** The text to extract data from.
      *  Only considered for text extractors.
