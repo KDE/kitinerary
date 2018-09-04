@@ -174,7 +174,7 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     Q_UNUSED(maskColors);
     Q_UNUSED(inlineImg);
 
-    if (!colorMap || !colorMap->isOk()) {
+    if (!colorMap || !colorMap->isOk() || !ref) {
         return;
     }
 
@@ -244,7 +244,7 @@ void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *st
     Q_UNUSED(maskColors);
     Q_UNUSED(inlineImg);
 
-    if (!colorMap || !colorMap->isOk()) {
+    if (!colorMap || !colorMap->isOk() || !ref) {
         return;
     }
 
