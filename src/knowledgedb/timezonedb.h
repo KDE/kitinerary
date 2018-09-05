@@ -38,9 +38,6 @@ namespace KnowledgeDb {
         inline constexpr Timezone(Tz tz)
             : offset(static_cast<uint16_t>(tz))
         {}
-        inline explicit constexpr Timezone(uint16_t o) // ### remove eventually
-            : offset(o)
-        {}
 
         /** Returns the corresponding QTimeZone. */
         KITINERARY_EXPORT QTimeZone toQTimeZone() const;
