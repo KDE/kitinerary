@@ -68,7 +68,7 @@ class PdfDocument;
  *   of all formatting etc.
  * - HTML extractors are passed a HtmlDocument instance allowing DOM-like access to
  *   the document structure.
- * - PDF extractors are passed a PDFDocument instance allowing access to textual and
+ * - PDF extractors are passed a PdfDocument instance allowing access to textual and
  *   image content.
  * - Apple Wallet pass extractors are passed a KPkPass::BoardingPass instance.
  *

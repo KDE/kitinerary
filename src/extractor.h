@@ -62,7 +62,7 @@ class ExtractorPrivate;
  * [
  *   {
  *     "type": "pdf",
- *     "filter": [ { "header": "From", "match": "@swiss.com" } ],,
+ *     "filter": [ { "header": "From", "match": "@swiss.com" } ],
  *     "script": "swiss.js",
  *     "function": "parsePdf"
  *   },
