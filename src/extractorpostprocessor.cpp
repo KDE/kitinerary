@@ -85,7 +85,7 @@ public:
     Person processPerson(Person person) const;
     template <typename T> T processPlace(T place) const;
     QVariantList processActions(QVariantList actions) const;
-    QDateTime processTimeForLocation(QDateTime dt, const Place &place) const;
+    template <typename T> QDateTime processTimeForLocation(QDateTime dt, const T &place) const;
 
     bool filterReservation(const QVariant &res) const;
     bool filterLodgingReservation(const LodgingReservation &res) const;
@@ -399,6 +399,8 @@ BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
 LodgingReservation ExtractorPostprocessorPrivate::processLodgingReservation(LodgingReservation res) const
 {
     res.setReservationFor(processPlace(res.reservationFor().value<LodgingBusiness>()));
+    res.setCheckinTime(processTimeForLocation(res.checkinTime(), res.reservationFor().value<LodgingBusiness>()));
+    res.setCheckoutTime(processTimeForLocation(res.checkoutTime(), res.reservationFor().value<LodgingBusiness>()));
     return processReservation(res);
 }
 
@@ -427,6 +429,8 @@ RentalCar ExtractorPostprocessorPrivate::processRentalCar(RentalCar car) const
 FoodEstablishmentReservation ExtractorPostprocessorPrivate::processFoodEstablishmentReservation(FoodEstablishmentReservation res) const
 {
     res.setReservationFor(processPlace(res.reservationFor().value<FoodEstablishment>()));
+    res.setStartTime(processTimeForLocation(res.startTime(), res.reservationFor().value<FoodEstablishment>()));
+    res.setEndTime(processTimeForLocation(res.endTime(), res.reservationFor().value<FoodEstablishment>()));
     return processReservation(res);
 }
 
@@ -558,7 +562,8 @@ QVariantList ExtractorPostprocessorPrivate::processActions(QVariantList actions)
     return actions;
 }
 
-QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, const Place &place) const
+template <typename T>
+QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, const T &place) const
 {
     if (!dt.isValid() || dt.timeSpec() == Qt::TimeZone) {
         return dt;
