@@ -143,7 +143,6 @@ private Q_SLOTS:
     {
         using namespace KnowledgeDb;
 
-        QEXPECT_FAIL("", "special cases not implemented yet", Continue);
         QCOMPARE(KnowledgeDb::timezoneForCountry(CountryId{"DE"}).toQTimeZone(), QTimeZone("Europe/Berlin"));
         QCOMPARE(KnowledgeDb::timezoneForCountry(CountryId{"FR"}).toQTimeZone(), QTimeZone("Europe/Paris"));
         QCOMPARE(KnowledgeDb::timezoneForCountry(CountryId{"BR"}).toQTimeZone(), QTimeZone());

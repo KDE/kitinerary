@@ -2,8 +2,7 @@
  * This code is auto-generated from Wikidata data. Licensed under CC0.
  */
 
-#include "countrydb.h"
-#include "timezonedb.h"
+#include "timezonedb_p.h"
 #include "timezonedb_data_p.h"
 
 namespace KItinerary {
@@ -426,12 +425,6 @@ static const char timezone_names[] =
     "Pacific/Wake\0"
     "Pacific/Wallis\0"
 ;
-
-// country to timezone mapping (for countries where this is unique)
-struct CountryTimezoneMap {
-    CountryId country;
-    Timezone timezone;
-};
 
 static constexpr const CountryTimezoneMap country_timezone_map[] = {
     { CountryId{"AD"}, Tz::Europe_Andorra },
