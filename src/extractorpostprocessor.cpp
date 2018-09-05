@@ -495,13 +495,21 @@ Person ExtractorPostprocessorPrivate::processPerson(Person person) const
 template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) const
 {
     auto addr = place.address();
-    if (!addr.addressCountry().isEmpty() && addr.addressCountry().size() != 2) {
+
+    // convert to ISO 3166-1 alpha-2 country codes
+    if (addr.addressCountry().size() > 2) {
         const auto isoCode = KContacts::Address::countryToISO(addr.addressCountry()).toUpper();
         if (!isoCode.isEmpty()) {
             addr.setAddressCountry(isoCode);
-            place.setAddress(addr);
         }
     }
+
+    // upper case country codes
+    if (addr.addressCountry().size() == 2) {
+        addr.setAddressCountry(addr.addressCountry().toUpper());
+    }
+
+    place.setAddress(addr);
     return place;
 }
 
@@ -566,6 +574,7 @@ QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, co
 
     // prefer our timezone over externally provided UTC offset, if they match
     if (dt.timeSpec() == Qt::OffsetFromUTC && tz.offsetFromUtc(dt) != dt.offsetFromUtc()) {
+        qCDebug(Log) << "UTC offset clashes with expected timezone!" << dt << dt.offsetFromUtc() << tz.id() << tz.offsetFromUtc(dt);
         return dt;
     }
 
