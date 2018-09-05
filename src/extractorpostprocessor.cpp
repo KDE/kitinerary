@@ -85,6 +85,7 @@ public:
     Person processPerson(Person person) const;
     template <typename T> T processPlace(T place) const;
     QVariantList processActions(QVariantList actions) const;
+    QDateTime processTimeForLocation(QDateTime dt, const Place &place) const;
 
     bool filterReservation(const QVariant &res) const;
     bool filterLodgingReservation(const LodgingReservation &res) const;
@@ -412,6 +413,8 @@ RentalCarReservation ExtractorPostprocessorPrivate::processRentalCarReservation(
     res.setReservationFor(processRentalCar(res.reservationFor().value<RentalCar>()));
     res.setPickupLocation(processPlace(res.pickupLocation()));
     res.setDropoffLocation(processPlace(res.dropoffLocation()));
+    res.setPickupTime(processTimeForLocation(res.pickupTime(), res.pickupLocation()));
+    res.setDropoffTime(processTimeForLocation(res.dropoffTime(), res.dropoffLocation()));
     return processReservation(res);
 }
 
@@ -450,7 +453,13 @@ Event ExtractorPostprocessorPrivate::processEvent(Event event) const
 
     if (JsonLd::isA<Place>(event.location())) {
         event.setLocation(processPlace(event.location().value<Place>()));
+
+        // try to obtain timezones if we have a location
+        event.setStartDate(processTimeForLocation(event.startDate(), event.location().value<Place>()));
+        event.setEndDate(processTimeForLocation(event.endDate(), event.location().value<Place>()));
+        event.setDoorTime(processTimeForLocation(event.doorTime(), event.location().value<Place>()));
     }
+
     return event;
 }
 
@@ -540,6 +549,35 @@ QVariantList ExtractorPostprocessorPrivate::processActions(QVariantList actions)
 
     return actions;
 }
+
+QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, const Place &place) const
+{
+    if (!dt.isValid() || dt.timeSpec() == Qt::TimeZone) {
+        return dt;
+    }
+
+    QTimeZone tz;
+    if (!place.address().addressCountry().isEmpty()) {
+        tz = KnowledgeDb::timezoneForCountry(KnowledgeDb::CountryId{place.address().addressCountry()}).toQTimeZone();
+    }
+    if (!tz.isValid()) {
+        return dt;
+    }
+
+    // prefer our timezone over externally provided UTC offset, if they match
+    if (dt.timeSpec() == Qt::OffsetFromUTC && tz.offsetFromUtc(dt) != dt.offsetFromUtc()) {
+        return dt;
+    }
+
+    if (dt.timeSpec() == Qt::OffsetFromUTC || dt.timeSpec() == Qt::LocalTime) {
+        dt.setTimeSpec(Qt::TimeZone);
+        dt.setTimeZone(tz);
+    } else if (dt.timeSpec() == Qt::UTC) {
+        dt = dt.toTimeZone(tz);
+    }
+    return dt;
+}
+
 
 bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
 {
