@@ -350,7 +350,7 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, cons
         return dt;
     }
 
-    if (dt.timeSpec() == Qt::TimeZone || station.identifier().isEmpty()) {
+    if (dt.timeSpec() == Qt::TimeZone) {
         return dt;
     }
 
@@ -361,6 +361,8 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, cons
     } else if (station.identifier().startsWith(QLatin1String("ibnr:"))) {
         const auto record = KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{station.identifier().mid(5).toUInt()});
         tz = record.timezone.toQTimeZone();
+    } else if (!station.address().addressCountry().isEmpty()) {
+        tz = KnowledgeDb::timezoneForCountry(KnowledgeDb::CountryId{station.address().addressCountry()}).toQTimeZone();
     }
     if (!tz.isValid()) {
         return dt;
