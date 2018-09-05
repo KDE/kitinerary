@@ -202,7 +202,8 @@ bool AirportDbGenerator::fetchCountries()
 void AirportDbGenerator::lookupTimezones()
 {
     for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
-        if (!(*it).coord.isValid()) {
+        (*it).tz = m_tzDb.timezoneForCountry((*it).country);
+        if (!(*it).tz.isEmpty() || !(*it).coord.isValid()) {
             continue;
         }
         (*it).tz = m_tzDb.timezoneForCoordinate((*it).coord);
