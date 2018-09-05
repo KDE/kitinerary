@@ -62,6 +62,29 @@ Timezones::Timezones()
         m_zoneOffsets.push_back(offset);
         offset += tz.size() + 1; // +1 of the trailing null byte
     }
+
+    // load zone.tab for country mapping
+    QFile zoneTab(QStringLiteral("/usr/share/zoneinfo/zone1970.tab"));
+    if (!zoneTab.open(QFile::ReadOnly)) {
+        qCritical() << "Unable to open zonetab file: " << zoneTab.errorString();
+        exit(1);
+    }
+
+    for (const auto &line : QString::fromUtf8(zoneTab.readAll()).split(QLatin1Char('\n'))) {
+        if (line.startsWith(QLatin1Char('#'))) {
+            continue;
+        }
+
+        const auto cols = line.split(QLatin1Char('\t'));
+        if (cols.size() < 3) {
+            continue;
+        }
+
+        const auto countries = cols.at(0).split(QLatin1Char(','));
+        for (const auto &country : countries) {
+            m_countryZones[country].push_back(cols.at(2).toUtf8());
+        }
+    }
 }
 
 Timezones::~Timezones() = default;
@@ -119,4 +142,14 @@ uint16_t Timezones::offset(const QByteArray& tz) const
         return std::numeric_limits<uint16_t>::max();
     }
     return m_zoneOffsets[std::distance(m_zones.begin(), it)];
+}
+
+QByteArray Timezones::timezoneForCountry(const QString &isoCode) const
+{
+    const auto it = m_countryZones.find(isoCode);
+    if (it != m_countryZones.end() && (*it).second.size() == 1) {
+        return (*it).second.at(0);
+    }
+
+    return {};
 }

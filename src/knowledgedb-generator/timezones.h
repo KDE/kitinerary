@@ -38,6 +38,7 @@ public:
     ~Timezones();
 
     QByteArray timezoneForCoordinate(const KnowledgeDb::Coordinate &coord) const;
+    QByteArray timezoneForCountry(const QString &isoCode) const;
 
     // the offset into the timezone string table
     uint16_t offset(const QByteArray &tz) const;
@@ -50,6 +51,8 @@ private:
     QHash<QRgb, QByteArray> m_colorMap;
     std::vector<QByteArray> m_zones;
     std::vector<uint16_t> m_zoneOffsets;
+
+    std::map<QString, std::vector<QByteArray>> m_countryZones;
 };
 
 }

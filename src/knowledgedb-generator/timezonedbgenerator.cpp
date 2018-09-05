@@ -31,6 +31,10 @@ void TimezoneDbGenerator::generate(QIODevice *out)
     Timezones tzDb;
 
     out->write(R"(
+#include "countrydb.h"
+#include "timezonedb.h"
+#include "timezonedb_data_p.h"
+
 namespace KItinerary {
 namespace KnowledgeDb {
 
@@ -45,6 +49,28 @@ static const char timezone_names[] =
         out->write("\\0\"\n");
     }
     out->write(R"(;
+
+// country to timezone mapping (for countries where this is unique)
+struct CountryTimezoneMap {
+    CountryId country;
+    Timezone timezone;
+};
+
+static constexpr const CountryTimezoneMap country_timezone_map[] = {
+)");
+
+    for (const auto &map : tzDb.m_countryZones) {
+        if (map.second.size() != 1) {
+            continue;
+        }
+        out->write("    { ");
+        CodeGen::writeCountryIsoCode(out, map.first);
+        out->write(", ");
+        CodeGen::writeTimezone(out, map.second.at(0));
+        out->write(" },\n");
+    }
+
+    out->write(R"(};
 
 }
 }
@@ -68,7 +94,7 @@ namespace KnowledgeDb {
 /** Enum representing all timezones, values match the offsets into the timezone name string table. */
 enum class Tz : uint16_t {
 )");
-    // TODO
+
     for (const auto &tz : tzDb.m_zones) {
         out->write("    ");
         CodeGen::writeTimezoneEnum(out, tz);

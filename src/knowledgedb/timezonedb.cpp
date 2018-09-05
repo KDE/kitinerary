@@ -29,3 +29,16 @@ QTimeZone Timezone::toQTimeZone() const
     }
     return QTimeZone(timezone_names + offset);
 }
+
+Timezone KItinerary::KnowledgeDb::timezoneForCountry(CountryId country)
+{
+    const auto it = std::lower_bound(std::begin(country_timezone_map), std::end(country_timezone_map), country, [](auto lhs, auto rhs) {
+        return lhs.country < rhs;
+    });
+
+    if (it != std::end(country_timezone_map) && (*it).country == country) {
+        return (*it).timezone;
+    }
+
+    return {};
+}

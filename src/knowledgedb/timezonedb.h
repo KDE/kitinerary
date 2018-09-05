@@ -27,6 +27,7 @@ class QTimeZone;
 
 namespace KItinerary {
 namespace KnowledgeDb {
+    class CountryId;
     enum class Tz : uint16_t;
 
     /** Timezone type as used in the database.
@@ -47,6 +48,11 @@ namespace KnowledgeDb {
         // offset into timezone name string table
         uint16_t offset = std::numeric_limits<uint16_t>::max();
     };
+
+    /** Returns the timezone for the given country, as long as there is exactly
+     *  one timezone used in that country.
+     */
+    KITINERARY_EXPORT Timezone timezoneForCountry(CountryId country);
 }
 }
 
