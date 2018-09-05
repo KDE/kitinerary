@@ -260,6 +260,7 @@ bool AirportDbGenerator::generate(QIODevice* out)
 #include "airportdb_p.h"
 #include "knowledgedb.h"
 #include "timezonedb.h"
+#include "timezonedb_data_p.h"
 
 #include <limits>
 
@@ -280,7 +281,7 @@ static constexpr Airport airport_table[] = {
         out->write("\"}, ");
         CodeGen::writeCountryIsoCode(out, m_airportMap.value(it.value()).country);
         out->write(", ");
-        CodeGen::writeTimezone(out, &m_tzDb, m_airportMap.value(it.value()).tz);
+        CodeGen::writeTimezone(out, m_airportMap.value(it.value()).tz);
         out->write("}, // ");
         out->write(m_airportMap.value(it.value()).label.toUtf8());
         out->write("\n");

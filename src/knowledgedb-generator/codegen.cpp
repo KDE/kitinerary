@@ -52,13 +52,18 @@ void CodeGen::writeCountryIsoCode(QIODevice *out, const QString &isoCode)
     out->write("}");
 }
 
-void CodeGen::writeTimezone(QIODevice *out, Timezones *tzDb, const QByteArray &tzName)
+void CodeGen::writeTimezone(QIODevice *out, const QByteArray &tzName)
 {
     if (tzName.isEmpty()) {
         out->write("Timezone{}");
     } else {
-        out->write("Timezone{");
-        out->write(QByteArray::number(tzDb->offset(tzName)));
-        out->write("}");
+        out->write("Tz::");
+        writeTimezoneEnum(out, tzName);
     }
+}
+
+void CodeGen::writeTimezoneEnum(QIODevice* out, const QByteArray& tzName)
+{
+    auto enumName(tzName);
+    out->write(enumName.replace("/", "_").replace("-", "_"));
 }

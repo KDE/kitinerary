@@ -59,6 +59,7 @@ bool TrainStationDbGenerator::generate(QIODevice *out)
 #include "knowledgedb.h"
 #include "timezonedb.h"
 #include "trainstationdb.h"
+#include "timezonedb_data_p.h"
 
 namespace KItinerary {
 namespace KnowledgeDb {
@@ -242,7 +243,7 @@ void TrainStationDbGenerator::writeStationData(QIODevice *out)
         out->write("    {");
         CodeGen::writeCoordinate(out, station.coord);
         out->write(", ");
-        CodeGen::writeTimezone(out, &m_tzDb, station.tz);
+        CodeGen::writeTimezone(out, station.tz);
         out->write(", ");
         CodeGen::writeCountryIsoCode(out, station.isoCode);
         out->write("}, // ");

@@ -28,6 +28,7 @@ class TimezoneDbGenerator
 {
 public:
     void generate(QIODevice *out);
+    void generateHeader(QIODevice *out);
 };
 
 }

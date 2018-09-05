@@ -53,6 +53,9 @@ int main(int argc, char **argv)
     } else if (parser.value(dbOpt) == QLatin1String("timezone")) {
         TimezoneDbGenerator gen;
         gen.generate(&out);
+    } else if (parser.value(dbOpt) == QLatin1String("timezoneheader")) {
+        TimezoneDbGenerator gen;
+        gen.generateHeader(&out);
     } else if (parser.value(dbOpt) == QLatin1String("trainstation")) {
         TrainStationDbGenerator gen;
         return gen.generate(&out) ? 0 : 1;

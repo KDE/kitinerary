@@ -50,3 +50,37 @@ static const char timezone_names[] =
 }
 )");
 }
+
+void TimezoneDbGenerator::generateHeader(QIODevice *out)
+{
+    CodeGen::writeLicenseHeader(out);
+
+    Timezones tzDb;
+    out->write(R"(
+#ifndef KITINERARY_KNOWLEDGEDB_TIMEZONEDB_DATA_P_H
+#define KITINERARY_KNOWLEDGEDB_TIMEZONEDB_DATA_P_H
+
+#include <cstdint>
+
+namespace KItinerary {
+namespace KnowledgeDb {
+
+/** Enum representing all timezones, values match the offsets into the timezone name string table. */
+enum class Tz : uint16_t {
+)");
+    // TODO
+    for (const auto &tz : tzDb.m_zones) {
+        out->write("    ");
+        CodeGen::writeTimezoneEnum(out, tz);
+        out->write(" = ");
+        out->write(QByteArray::number(tzDb.offset(tz)));
+        out->write(",\n");
+    }
+    out->write(R"(};
+
+}
+}
+
+#endif
+)");
+}

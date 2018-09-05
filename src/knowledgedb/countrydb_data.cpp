@@ -31,7 +31,7 @@ static const Country country_table[] = {
     {CountryId{"BN"}, DrivingSide::Left, {TypeG}}, // Brunei
     {CountryId{"BO"}, DrivingSide::Right, {TypeA|TypeC}}, // Bolivia
     {CountryId{"BR"}, DrivingSide::Right, {TypeC|TypeN}}, // Brazil
-    {CountryId{"BS"}, DrivingSide::Left, {TypeA|TypeB}}, // The Bahamas
+    {CountryId{"BS"}, DrivingSide::Left, {TypeA|TypeB}}, // Bahamas
     {CountryId{"BT"}, DrivingSide::Left, {TypeC|TypeD|TypeF|TypeG|TypeM}}, // Bhutan
     {CountryId{"BW"}, DrivingSide::Left, {TypeD|TypeG|TypeM}}, // Botswana
     {CountryId{"BY"}, DrivingSide::Right, {TypeC|TypeF}}, // Belarus
@@ -73,7 +73,6 @@ static const Country country_table[] = {
     {CountryId{"GB"}, DrivingSide::Left, {TypeG}}, // United Kingdom
     {CountryId{"GD"}, DrivingSide::Left, {TypeG}}, // Grenada
     {CountryId{"GE"}, DrivingSide::Right, {TypeC|TypeF}}, // Georgia
-    {CountryId{"GG"}, DrivingSide::Left, {TypeC|TypeG}}, // Guernsey
     {CountryId{"GH"}, DrivingSide::Right, {TypeD|TypeG}}, // Ghana
     {CountryId{"GM"}, DrivingSide::Right, {TypeG}}, // The Gambia
     {CountryId{"GN"}, DrivingSide::Right, {TypeC|TypeF|TypeK}}, // Guinea
@@ -89,7 +88,6 @@ static const Country country_table[] = {
     {CountryId{"ID"}, DrivingSide::Left, {TypeC|TypeF}}, // Indonesia
     {CountryId{"IE"}, DrivingSide::Left, {TypeG}}, // Ireland
     {CountryId{"IL"}, DrivingSide::Right, {TypeC|TypeH|TypeM}}, // Israel
-    {CountryId{"IM"}, DrivingSide::Left, {}}, // Isle of Man
     {CountryId{"IN"}, DrivingSide::Left, {TypeC|TypeD|TypeM}}, // India
     {CountryId{"IQ"}, DrivingSide::Right, {TypeC|TypeD|TypeG}}, // Iraq
     {CountryId{"IR"}, DrivingSide::Right, {TypeC|TypeF}}, // Iran
@@ -126,7 +124,7 @@ static const Country country_table[] = {
     {CountryId{"ME"}, DrivingSide::Right, {TypeC|TypeF}}, // Montenegro
     {CountryId{"MG"}, DrivingSide::Right, {TypeC|TypeD|TypeE|TypeJ|TypeK}}, // Madagascar
     {CountryId{"MH"}, DrivingSide::Right, {}}, // Marshall Islands
-    {CountryId{"MK"}, DrivingSide::Right, {TypeC|TypeF}}, // Republic of Macedonia
+    {CountryId{"MK"}, DrivingSide::Right, {TypeC|TypeF}}, // Macedonia
     {CountryId{"ML"}, DrivingSide::Left, {TypeC|TypeE}}, // Mali
     {CountryId{"MM"}, DrivingSide::Right, {TypeC|TypeD|TypeF|TypeG}}, // Myanmar
     {CountryId{"MN"}, DrivingSide::Right, {TypeC|TypeE}}, // Mongolia
@@ -136,7 +134,7 @@ static const Country country_table[] = {
     {CountryId{"MV"}, DrivingSide::Left, {TypeA|TypeC|TypeD|TypeG|TypeJ|TypeK|TypeL}}, // Maldives
     {CountryId{"MW"}, DrivingSide::Left, {TypeG}}, // Malawi
     {CountryId{"MX"}, DrivingSide::Right, {TypeA|TypeB}}, // Mexico
-    {CountryId{"MY"}, DrivingSide::Left, {TypeA|TypeC|TypeG|TypeM}}, // Malaysia
+    {CountryId{"MY"}, DrivingSide::Left, {TypeG}}, // Malaysia
     {CountryId{"MZ"}, DrivingSide::Left, {TypeC|TypeF|TypeM}}, // Mozambique
     {CountryId{"NA"}, DrivingSide::Left, {TypeD|TypeM}}, // Namibia
     {CountryId{"NE"}, DrivingSide::Right, {TypeA|TypeB|TypeC|TypeD|TypeE|TypeF}}, // Niger
@@ -169,7 +167,7 @@ static const Country country_table[] = {
     {CountryId{"SC"}, DrivingSide::Left, {TypeG}}, // Seychelles
     {CountryId{"SD"}, DrivingSide::Right, {TypeC|TypeD}}, // Sudan
     {CountryId{"SE"}, DrivingSide::Right, {TypeC|TypeF}}, // Sweden
-    {CountryId{"SG"}, DrivingSide::Left, {TypeC|TypeG|TypeM}}, // Singapore
+    {CountryId{"SG"}, DrivingSide::Left, {TypeG}}, // Singapore
     {CountryId{"SI"}, DrivingSide::Right, {TypeC|TypeF}}, // Slovenia
     {CountryId{"SK"}, DrivingSide::Right, {TypeC|TypeE}}, // Slovakia
     {CountryId{"SL"}, DrivingSide::Right, {TypeD|TypeG}}, // Sierra Leone
@@ -206,7 +204,6 @@ static const Country country_table[] = {
     {CountryId{"VN"}, DrivingSide::Right, {TypeA|TypeC|TypeF|TypeG}}, // Vietnam
     {CountryId{"VU"}, DrivingSide::Right, {TypeC|TypeG|TypeI}}, // Vanuatu
     {CountryId{"WS"}, DrivingSide::Left, {TypeI}}, // Samoa
-    {CountryId{"XK"}, DrivingSide::Right, {}}, // Kosovo
     {CountryId{"YE"}, DrivingSide::Right, {TypeA|TypeD|TypeG}}, // Yemen
     {CountryId{"ZA"}, DrivingSide::Left, {TypeC|TypeD|TypeM|TypeN}}, // South Africa
     {CountryId{"ZM"}, DrivingSide::Left, {TypeC|TypeD|TypeG}}, // Zambia

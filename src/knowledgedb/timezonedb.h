@@ -27,13 +27,17 @@ class QTimeZone;
 
 namespace KItinerary {
 namespace KnowledgeDb {
+    enum class Tz : uint16_t;
 
     /** Timezone type as used in the database.
      *  @note Do not use in API/ABI.
      */
     struct Timezone {
         inline constexpr Timezone() = default;
-        inline explicit constexpr Timezone(uint16_t o)
+        inline constexpr Timezone(Tz tz)
+            : offset(static_cast<uint16_t>(tz))
+        {}
+        inline explicit constexpr Timezone(uint16_t o) // ### remove eventually
             : offset(o)
         {}
 
