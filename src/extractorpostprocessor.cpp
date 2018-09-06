@@ -393,6 +393,8 @@ BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
 {
     trip.setDepartureStation(processPlace(trip.departureStation()));
     trip.setArrivalStation(processPlace(trip.arrivalStation()));
+    trip.setDepartureTime(processTimeForLocation(trip.departureTime(), trip.departureStation()));
+    trip.setArrivalTime(processTimeForLocation(trip.arrivalTime(), trip.arrivalStation()));
     return trip;
 }
 
@@ -407,6 +409,7 @@ LodgingReservation ExtractorPostprocessorPrivate::processLodgingReservation(Lodg
 TaxiReservation ExtractorPostprocessorPrivate::processTaxiReservation(TaxiReservation res) const
 {
     res.setPickupLocation(processPlace(res.pickupLocation()));
+    res.setPickupTime(processTimeForLocation(res.pickupTime(), res.pickupLocation()));
     return processReservation(res);
 }
 
@@ -437,6 +440,8 @@ FoodEstablishmentReservation ExtractorPostprocessorPrivate::processFoodEstablish
 TouristAttractionVisit ExtractorPostprocessorPrivate::processTouristAttractionVisit(TouristAttractionVisit visit) const
 {
     visit.setTouristAttraction(processPlace(visit.touristAttraction()));
+    visit.setArrivalTime(processTimeForLocation(visit.arrivalTime(), visit.touristAttraction()));
+    visit.setDepartureTime(processTimeForLocation(visit.departureTime(), visit.touristAttraction()));
     return visit;
 }
 
