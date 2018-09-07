@@ -52,6 +52,9 @@ Timezones::Timezones()
         c.setRed(split.at(0).toInt());
         c.setGreen(split.at(1).toInt());
         c.setBlue(split.at(2).toInt());
+        if (m_colorMap.contains(c.rgb())) {
+            qWarning() << "Color collision on timezones:" << m_colorMap.value(c.rgb()) << split.at(4).trimmed();
+        }
         m_colorMap.insert(c.rgb(), split.at(4).trimmed());
     }
 
