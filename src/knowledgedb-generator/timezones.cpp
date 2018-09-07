@@ -106,7 +106,7 @@ QByteArray Timezones::timezoneForCoordinate(const KnowledgeDb::Coordinate &coord
     const int x = qRound(m_map.width() * ((coord.longitude + 180.0f)/ 360.0f));
     const int y = qRound(-m_map.height() * ((coord.latitude - 90.0f) / 180.0f));
 
-    //qDebug() << x << y << m_map.width() << m_map.height() << longitude << latitude << QColor(m_map.pixel(x, y)) << m_zones.value(m_map.pixel(x, y));
+    //qDebug() << x << y << m_map.width() << m_map.height() << coord.longitude << coord.latitude << QColor(m_map.pixel(x, y)) << m_colorMap.value(m_map.pixel(x, y));
     const auto tz = timezoneForPixel(x, y);
     if (!tz.isEmpty()) {
         return m_colorMap.value(m_map.pixel(x, y));
