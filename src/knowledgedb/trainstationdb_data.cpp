@@ -179,7 +179,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{15.0203, 51.1531}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Zgorzelec Miasto
     {Coordinate{4.02472, 50.9483}, Tz::Europe_Brussels, CountryId{"BE"}}, // Aalst-Kerrebroek railway station
     {Coordinate{3.92238, 50.9071}, Tz::Europe_Brussels, CountryId{"BE"}}, // Burst railway station
-    {Coordinate{6.20143, 50.8345}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Eschweiler-St. Jöris station
+    {Coordinate{6.20143, 50.8345}, Tz::Europe_Berlin, CountryId{"DE"}}, // Eschweiler-St. Jöris station
     {Coordinate{4.90214, 51.174}, Tz::Europe_Brussels, CountryId{"BE"}}, // Olen railway station
     {Coordinate{4.65361, 50.8358}, Tz::Europe_Brussels, CountryId{"BE"}}, // Oud-Heverlee railway station
     {Coordinate{13.7513, 52.4296}, Tz::Europe_Berlin, CountryId{"DE"}}, // Erkner railway station
@@ -262,7 +262,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{7.64556, 50.6872}, Tz::Europe_Berlin, CountryId{"DE"}}, // Altenkirchen (Westerw) station
     {Coordinate{7.96625, 49.2053}, Tz::Europe_Berlin, CountryId{"DE"}}, // Annweiler am Trifels station
     {Coordinate{8.0028, 49.1031}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q15107129
-    {Coordinate{7.69807, 47.9197}, Tz::Europe_Paris, CountryId{"DE"}}, // Bad Krozingen station
+    {Coordinate{7.69807, 47.9197}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bad Krozingen station
     {Coordinate{13.4785, 52.5012}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin-Rummelsburg railway station
     {Coordinate{11.4085, 47.7235}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q15107135
     {Coordinate{13.22, 47.4173}, Tz::Europe_Vienna, CountryId{"AT"}}, // Bischofshofen railway station
@@ -431,7 +431,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.67521, 49.3799}, Tz::Europe_Berlin, CountryId{"DE"}}, // Heidelberg-Kirchheim/Rohrbach station
     {Coordinate{8.72357, 48.4823}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof Hochdorf (b Horb)
     {Coordinate{7.74978, 49.4475}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof Kaiserslautern West
-    {Coordinate{7.83509, 48.3403}, Tz::Europe_Paris, CountryId{"DE"}}, // Lahr (Schwarzw) station
+    {Coordinate{7.83509, 48.3403}, Tz::Europe_Berlin, CountryId{"DE"}}, // Lahr (Schwarzw) station
     {Coordinate{7.56602, 49.4163}, Tz::Europe_Berlin, CountryId{"DE"}}, // Landstuhl station
     {Coordinate{9.14595, 49.0764}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q15785185
     {Coordinate{8.13336, 50.3776}, Tz::Europe_Berlin, CountryId{"DE"}}, // Lindenholzhausen station
@@ -982,7 +982,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{9.79117, 48.4039}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q17148684
     {Coordinate{14.6355, 50.6816}, Tz::Europe_Prague, CountryId{"CZ"}}, // Zákupy (train station)
     {Coordinate{15.6506, 41.4081}, Tz::Europe_Rome, CountryId{"IT"}}, // Incoronata railway station
-    {Coordinate{8.06528, 48.6336}, Tz::Europe_Paris, CountryId{"DE"}}, // Achern station
+    {Coordinate{8.06528, 48.6336}, Tz::Europe_Berlin, CountryId{"DE"}}, // Achern station
     {Coordinate{8.99028, 49.3539}, Tz::Europe_Berlin, CountryId{"DE"}}, // Aglasterhausen station
     {Coordinate{7.72864, 50.3276}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bad Ems station
     {Coordinate{8.29456, 49.1883}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bellheim station
@@ -1013,7 +1013,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{13.3343, 52.597}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin-Wittenau station
     {Coordinate{12.8817, 47.7308}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof Bad Reichenhall
     {Coordinate{10.3301, 51.6439}, Tz::Europe_Berlin, CountryId{"DE"}}, // Herzberg (Harz) station
-    {Coordinate{7.03361, 49.1578}, Tz::Europe_Paris, CountryId{"DE"}}, // Q17521469
+    {Coordinate{7.03361, 49.1578}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q17521469
     {Coordinate{8.42117, 49.4617}, Tz::Europe_Berlin, CountryId{"DE"}}, // Ludwigshafen-Mundenheim station
     {Coordinate{8.36036, 49.195}, Tz::Europe_Berlin, CountryId{"DE"}}, // Sondernheim station
     {Coordinate{-8.43205, 40.2088}, Tz::Europe_Lisbon, CountryId{"PT"}}, // Coimbra-A railway station
@@ -1222,9 +1222,9 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{-2.7525, 47.6653}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Vannes
     {Coordinate{11.9975, 53.837}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bützow station
     {Coordinate{11.9863, 51.9934}, Tz::Europe_Berlin, CountryId{"DE"}}, // Güterglück railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q18681697
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q18681699
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q18681700
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q18681697
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q18681699
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q18681700
     {Coordinate{8.84099, 47.7589}, Tz::Europe_Berlin, CountryId{"DE"}}, // Singen (Hohentwiel) station
     {Coordinate{8.98453, 49.4654}, Tz::Europe_Berlin, CountryId{"DE"}}, // Eberbach railway station
     {Coordinate{9.27581, 48.747}, Tz::Europe_Berlin, CountryId{"DE"}}, // Esslingen-Mettingen
@@ -1331,7 +1331,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{7.95654, 51.6163}, Tz::Europe_Berlin, CountryId{"DE"}}, // Welver station
     {Coordinate{14.4056, 52.565}, Tz::Europe_Berlin, CountryId{"DE"}}, // Werbig station
     {Coordinate{10.5319, 52.1589}, Tz::Europe_Berlin, CountryId{"DE"}}, // Wolfenbüttel station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q19274531
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q19274531
     {Coordinate{6.68816, 51.5977}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q19274532
     {Coordinate{-0.34187, 47.8417}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Sablé
     {Coordinate{6.985, 51.589}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q19284709
@@ -1403,7 +1403,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{1.90462, 47.9078}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare d'Orléans
     {Coordinate{4.92556, 50.8061}, Tz::Europe_Brussels, CountryId{"BE"}}, // Tienen railway station
     {Coordinate{4.61694, 51.9653}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Nieuwerkerk aan den IJssel railway station
-    {Coordinate{6.11904, 50.8874}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Herzogenrath August-Schmidt-Platz station
+    {Coordinate{6.11904, 50.8874}, Tz::Europe_Berlin, CountryId{"DE"}}, // Herzogenrath August-Schmidt-Platz station
     {Coordinate{7.14361, 46.0278}, Tz::Europe_Zurich, CountryId{"CH"}}, // Q1968217
     {Coordinate{16.1506, 38.7264}, Tz::Europe_Rome, CountryId{"IT"}}, // Pizzo train station
     {Coordinate{7.05228, 48.7385}, Tz::Europe_Paris, CountryId{"FR"}}, // Q1968912
@@ -1421,7 +1421,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{3.18431, 51.3303}, Tz::Europe_Brussels, CountryId{"BE"}}, // Zeebrugge-Strand railway station
     {Coordinate{15.7561, 50.9028}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Q1978260
     {Coordinate{4.96472, 50.2106}, Tz::Europe_Brussels, CountryId{"BE"}}, // Gendron-Celles railway station
-    {Coordinate{7.5897, 48.0271}, Tz::Europe_Paris, CountryId{"DE"}}, // Q19787796
+    {Coordinate{7.5897, 48.0271}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q19787796
     {Coordinate{3.79528, 50.4358}, Tz::Europe_Brussels, CountryId{"BE"}}, // Boussu railway station
     {Coordinate{7.17667, 49.3531}, Tz::Europe_Berlin, CountryId{"DE"}}, // Neunkirchen Central Station
     {Coordinate{4.72099, 50.5514}, Tz::Europe_Brussels, CountryId{"BE"}}, // Lonzée railway station
@@ -1442,9 +1442,9 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{6.94433, 51.2186}, Tz::Europe_Berlin, CountryId{"DE"}}, // Hochdahl station
     {Coordinate{8.70806, 50.1128}, Tz::Europe_Berlin, CountryId{"DE"}}, // Frankfurt East station
     {Coordinate{8.6505, 49.9506}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q19835112
-    {Coordinate{7.05007, 49.1188}, Tz::Europe_Paris, CountryId{"DE"}}, // Q19835113
+    {Coordinate{7.05007, 49.1188}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q19835113
     {Coordinate{9.74, 52.4394}, Tz::Europe_Berlin, CountryId{"DE"}}, // Langenhagen Pferdemarkt station
-    {Coordinate{8.32381, 48.8895}, Tz::Europe_Paris, CountryId{"DE"}}, // Malsch station
+    {Coordinate{8.32381, 48.8895}, Tz::Europe_Berlin, CountryId{"DE"}}, // Malsch station
     {Coordinate{12.4503, 52.8531}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q19835119
     {Coordinate{11.2274, 52.0307}, Tz::Europe_Berlin, CountryId{"DE"}}, // Oschersleben
     {Coordinate{7.1629, 51.1691}, Tz::Europe_Berlin, CountryId{"DE"}}, // Remscheid-Güldenwerth station
@@ -1534,7 +1534,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{5.7875, 51.4561}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Deurne railway station
     {Coordinate{6.77167, 45.6181}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Bourg-Saint-Maurice
     {Coordinate{-1.10013, 49.1169}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Saint-Lô
-    {Coordinate{6.385, 49.4736}, Tz::Europe_Luxembourg, CountryId{"DE"}}, // Perl railway station
+    {Coordinate{6.385, 49.4736}, Tz::Europe_Berlin, CountryId{"DE"}}, // Perl railway station
     {Coordinate{4.24441, 50.8662}, Tz::Europe_Brussels, CountryId{"BE"}}, // Dilbeek railway station
     {Coordinate{2.32623, 49.1552}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2006647
     {Coordinate{4.32389, 52.0811}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Den Haag Centraal
@@ -1550,7 +1550,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{1.08934, 43.6172}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2016061
     {Coordinate{6.27401, 51.0331}, Tz::Europe_Berlin, CountryId{"DE"}}, // Hückelhoven-Baal station
     {Coordinate{15.2777, 41.2419}, Tz::Europe_Rome, CountryId{"IT"}}, // Q20165207
-    {Coordinate{6.25722, 51.8342}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Emmerich station
+    {Coordinate{6.25722, 51.8342}, Tz::Europe_Berlin, CountryId{"DE"}}, // Emmerich station
     {Coordinate{13.1411, 54.3228}, Tz::Europe_Berlin, CountryId{"DE"}}, // Altefähr railway station
     {Coordinate{8.33863, 48.9648}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q20170857
     {Coordinate{7.89989, 49.9013}, Tz::Europe_Berlin, CountryId{"DE"}}, // Langenlonsheim station
@@ -1564,7 +1564,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{4.81969, 44.1375}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2025211
     {Coordinate{5.39746, 50.6642}, Tz::Europe_Brussels, CountryId{"BE"}}, // Fexhe-le-Haut-Clocher railway station
     {Coordinate{4.53332, 50.7114}, Tz::Europe_Brussels, CountryId{"BE"}}, // Rixensart railway station
-    {Coordinate{7.15583, 52.3097}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Bad Bentheim station
+    {Coordinate{7.15583, 52.3097}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bad Bentheim station
     {Coordinate{3.46528, 43.3175}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare d'Agde
     {Coordinate{4.505, 50.8831}, Tz::Europe_Brussels, CountryId{"BE"}}, // Nossegem railway station
     {Coordinate{4.53097, 52.3758}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Zandvoort aan Zee railway station
@@ -1595,7 +1595,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{5.50095, 45.9228}, Tz::Europe_Paris, CountryId{"FR"}}, // Tenay - Hauteville
     {Coordinate{21.2975, 52.2408}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Sulejówek Miłosna train station
     {Coordinate{2.35278, 49.8642}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Longueau
-    {Coordinate{6.19685, 50.8558}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Alsdorf Poststraße station
+    {Coordinate{6.19685, 50.8558}, Tz::Europe_Berlin, CountryId{"DE"}}, // Alsdorf Poststraße station
     {Coordinate{6.58165, 48.0458}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2051806
     {Coordinate{4.26167, 50.3461}, Tz::Europe_Brussels, CountryId{"BE"}}, // Lobbes railway station
     {Coordinate{6.34225, 47.1498}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2052258
@@ -1618,7 +1618,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{12.1845, 53.1461}, Tz::Europe_Berlin, CountryId{"DE"}}, // Pritzwalk station
     {Coordinate{12.8578, 52.0919}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q20644102
     {Coordinate{4.63278, 52.4339}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Santpoort Noord railway station
-    {Coordinate{14.6458, 50.9864}, Tz::Europe_Prague, CountryId{"DE"}}, // Eibau station
+    {Coordinate{14.6458, 50.9864}, Tz::Europe_Berlin, CountryId{"DE"}}, // Eibau station
     {Coordinate{5.83278, 50.8692}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Valkenburg railway station
     {Coordinate{6.41694, 52.5097}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Ommen railway station
     {Coordinate{5.56861, 50.6983}, Tz::Europe_Brussels, CountryId{"BE"}}, // Liers railway station
@@ -1647,7 +1647,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{5.44995, 45.5601}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2082423
     {Coordinate{6.04333, 50.7089}, Tz::Europe_Brussels, CountryId{"BE"}}, // Hergenrath railway station
     {Coordinate{7.98806, 46.3194}, Tz::Europe_Zurich, CountryId{"CH"}}, // Brig railway station
-    {Coordinate{14.7088, 50.9661}, Tz::Europe_Prague, CountryId{"DE"}}, // Oberoderwitz station
+    {Coordinate{14.7088, 50.9661}, Tz::Europe_Berlin, CountryId{"DE"}}, // Oberoderwitz station
     {Coordinate{5.43855, 45.9474}, Tz::Europe_Paris, CountryId{"FR"}}, // Saint-Rambert-en-Bugey
     {Coordinate{3.96016, 49.0465}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare d'Épernay
     {Coordinate{4.12653, 50.4743}, Tz::Europe_Brussels, CountryId{"BE"}}, // Bracquegnies railway station
@@ -1967,7 +1967,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{5.03361, 52.1353}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Maarssen railway station
     {Coordinate{1.35263, 49.1747}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Gaillon - Aubevoye
     {Coordinate{8.46225, 50.1248}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q22677939
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q22682010
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q22682010
     {Coordinate{6.27778, 52.3917}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Raalte railway station
     {Coordinate{2.14056, 49.9461}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Picquigny
     {Coordinate{5.3446, 47.8771}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2268586
@@ -2142,13 +2142,13 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{}, Tz::Europe_Zurich, CountryId{"CH"}}, // Q23784034
     {Coordinate{6.66388, 51.373}, Tz::Europe_Berlin, CountryId{"DE"}}, // Krefeld-Hohenbudberg Chempark station
     {Coordinate{7.17335, 51.6676}, Tz::Europe_Berlin, CountryId{"DE"}}, // Marl-Sinsen station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q23787924
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q23787942
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q23787924
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q23787942
     {Coordinate{1.98578, 46.9488}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2379431
     {Coordinate{7.60346, 47.4534}, Tz::Europe_Zurich, CountryId{"CH"}}, // Q2381221
     {Coordinate{5.81312, 45.5363}, Tz::Europe_Paris, CountryId{"FR"}}, // Aiguebelette-le-Lac
     {Coordinate{4.81803, 45.6272}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2382041
-    {Coordinate{6.16738, 50.8675}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Alsdorf-Kellersberg station
+    {Coordinate{6.16738, 50.8675}, Tz::Europe_Berlin, CountryId{"DE"}}, // Alsdorf-Kellersberg station
     {Coordinate{1.09824, 49.7155}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2383414
     {Coordinate{3.16155, 45.7921}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare d'Aulnat-Aéroport
     {Coordinate{6.49402, 46.5111}, Tz::Europe_Zurich, CountryId{"CH"}}, // Morges railway station
@@ -2176,7 +2176,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{9.72673, 52.5811}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bennemühlen station
     {Coordinate{6.28133, 51.1451}, Tz::Europe_Berlin, CountryId{"DE"}}, // Wegberg
     {Coordinate{6.58096, 50.3448}, Tz::Europe_Berlin, CountryId{"DE"}}, // Jünkerath station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q23933722
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q23933722
     {Coordinate{5.24857, 50.6945}, Tz::Europe_Brussels, CountryId{"BE"}}, // Waremme railway station
     {Coordinate{3.92127, 50.8016}, Tz::Europe_Brussels, CountryId{"BE"}}, // Idegem railway station
     {Coordinate{4.99581, 50.3875}, Tz::Europe_Brussels, CountryId{"BE"}}, // Courrière railway station
@@ -2230,7 +2230,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{4.55361, 51.8544}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Barendrecht railway station
     {Coordinate{3.90944, 50.3414}, Tz::Europe_Brussels, CountryId{"BE"}}, // Quévy railway station
     {Coordinate{5.58356, 50.5705}, Tz::Europe_Brussels, CountryId{"BE"}}, // Tilff railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q24420931
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q24420931
     {Coordinate{6.00333, 52.2147}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Apeldoorn Osseveld railway station
     {Coordinate{4.35583, 51.0664}, Tz::Europe_Brussels, CountryId{"BE"}}, // Willebroek railway station
     {Coordinate{2.4611, 45.6452}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2442991
@@ -2322,7 +2322,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.544, 47.4186}, Tz::Europe_Zurich, CountryId{"CH"}}, // Zurich Seebach railway station
     {Coordinate{0.941325, 44.4865}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Monsempron-Libos
     {Coordinate{4.63604, 50.6205}, Tz::Europe_Brussels, CountryId{"BE"}}, // Blanmont railway station
-    {Coordinate{6.18844, 50.862}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Alsdorf-Mariadorf station
+    {Coordinate{6.18844, 50.862}, Tz::Europe_Berlin, CountryId{"DE"}}, // Alsdorf-Mariadorf station
     {Coordinate{3.83518, 50.7028}, Tz::Europe_Brussels, CountryId{"BE"}}, // Houraing railway station
     {Coordinate{3.60028, 50.8497}, Tz::Europe_Brussels, CountryId{"BE"}}, // Oudenaarde railway station
     {Coordinate{5.71004, 50.772}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Eijsden railway station
@@ -2504,7 +2504,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{5.48795, 47.0961}, Tz::Europe_Paris, CountryId{"FR"}}, // Dole-Ville railway station
     {Coordinate{7.4624, 49.5474}, Tz::Europe_Berlin, CountryId{"DE"}}, // Altenglan station
     {Coordinate{13.5797, 51.1231}, Tz::Europe_Berlin, CountryId{"DE"}}, // Coswig (b Dresden) station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Bahnhöfe in Feucht
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhöfe in Feucht
     {Coordinate{7.96444, 51.1728}, Tz::Europe_Berlin, CountryId{"DE"}}, // Finnentrop station
     {Coordinate{9.82771, 47.6463}, Tz::Europe_Berlin, CountryId{"DE"}}, // Hergatz station
     {Coordinate{12.2356, 50.5712}, Tz::Europe_Berlin, CountryId{"DE"}}, // Herlasgrün station
@@ -2530,7 +2530,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{4.67188, 50.4529}, Tz::Europe_Brussels, CountryId{"BE"}}, // Ham-sur-Sambre railway station
     {Coordinate{1.08333, 43.2128}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Cazères-sur-Garonne
     {Coordinate{6.90968, 51.2294}, Tz::Europe_Berlin, CountryId{"DE"}}, // Erkrath Nord station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q26714912
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q26714912
     {Coordinate{4.74689, 45.7728}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2672930
     {Coordinate{5.4225, 51.2156}, Tz::Europe_Brussels, CountryId{"BE"}}, // Overpelt railway station
     {Coordinate{3.32958, 50.9904}, Tz::Europe_Brussels, CountryId{"BE"}}, // Tielt railway station
@@ -2547,16 +2547,16 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{5.81779, 50.5299}, Tz::Europe_Brussels, CountryId{"BE"}}, // Franchimont railway station
     {Coordinate{3.76454, 51.0201}, Tz::Europe_Brussels, CountryId{"BE"}}, // Merelbeke railway station
     {Coordinate{5.12466, 50.2619}, Tz::Europe_Brussels, CountryId{"BE"}}, // Chapois railway station
-    {Coordinate{6.15642, 50.8706}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Alsdorf-Annapark station
+    {Coordinate{6.15642, 50.8706}, Tz::Europe_Berlin, CountryId{"DE"}}, // Alsdorf-Annapark station
     {Coordinate{4.61575, 50.6698}, Tz::Europe_Brussels, CountryId{"BE"}}, // Louvain-la-Neuve railway station
     {Coordinate{3.41861, 50.9844}, Tz::Europe_Brussels, CountryId{"BE"}}, // Aarsele railway station
     {Coordinate{-3.41507, 50.6218}, Tz::Europe_London, CountryId{"GB"}}, // Exmouth railway station
     {Coordinate{20.9408, 52.2061}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Warszawa Aleje Jerozolimskie railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Kreiensen station
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Kreiensen station
     {Coordinate{12.2472, 54.1767}, Tz::Europe_Berlin, CountryId{"DE"}}, // Rövershagen railway station
     {Coordinate{11.705, 50.1544}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q26821640
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q26821689
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Burg (bei Magdeburg) station
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q26821689
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Burg (bei Magdeburg) station
     {Coordinate{2.27167, 48.9806}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare d'Ermont - Eaubonne
     {Coordinate{5.92972, 43.1286}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Toulon
     {Coordinate{8.56889, 50.1436}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q26836599
@@ -2625,9 +2625,9 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{6.88828, 48.3271}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2747695
     {Coordinate{11.2448, 51.1802}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q27478676
     {Coordinate{6.95306, 50.7903}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q27478729
-    {Coordinate{7.72889, 48.0497}, Tz::Europe_Paris, CountryId{"DE"}}, // Q27478870
+    {Coordinate{7.72889, 48.0497}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q27478870
     {Coordinate{8.02722, 48.3386}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q27478874
-    {Coordinate{7.7694, 48.1523}, Tz::Europe_Paris, CountryId{"DE"}}, // Q27478896
+    {Coordinate{7.7694, 48.1523}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q27478896
     {Coordinate{11.7572, 47.7141}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q27478934
     {Coordinate{9.8307, 47.6891}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q27478957
     {Coordinate{9.17235, 48.7759}, Tz::Europe_Berlin, CountryId{"DE"}}, // Stuttgart Stadtmitte station
@@ -2645,7 +2645,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{21.0011, 52.2278}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Warszawa Śródmieście WKD railway station
     {Coordinate{3.13796, 50.6786}, Tz::Europe_Paris, CountryId{"FR"}}, // Croix - Wasquehal
     {Coordinate{4.74556, 52.0819}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Bodegraven railway station
-    {Coordinate{6.07461, 50.8319}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Kohlscheid railway station
+    {Coordinate{6.07461, 50.8319}, Tz::Europe_Berlin, CountryId{"DE"}}, // Kohlscheid railway station
     {Coordinate{6.3069, 45.5436}, Tz::Europe_Paris, CountryId{"FR"}}, // Aiguebelle
     {Coordinate{-1.14556, 46.1528}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de La Rochelle
     {Coordinate{7.7212, 48.6447}, Tz::Europe_Paris, CountryId{"FR"}}, // Mundolsheim
@@ -2670,7 +2670,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{}, Tz::Europe_Brussels, CountryId{"BE"}}, // Gouy-lez-Piéton railway station
     {Coordinate{4.67111, 52.3819}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Haarlem Spaarnwoude railway station
     {Coordinate{4.36167, 50.7481}, Tz::Europe_Brussels, CountryId{"BE"}}, // Sint-Genesius-Rode railway station
-    {Coordinate{6.14062, 50.8766}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Alsdorf-Busch station
+    {Coordinate{6.14062, 50.8766}, Tz::Europe_Berlin, CountryId{"DE"}}, // Alsdorf-Busch station
     {Coordinate{5.15056, 45.6275}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2781996
     {Coordinate{3.95646, 50.4719}, Tz::Europe_Brussels, CountryId{"BE"}}, // Nimy railway station
     {Coordinate{8.83732, 50.1194}, Tz::Europe_Berlin, CountryId{"DE"}}, // Mühlheim station
@@ -2684,18 +2684,18 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{6.92246, 51.1671}, Tz::Europe_Berlin, CountryId{"DE"}}, // Hilden station
     {Coordinate{20.9725, 52.3578}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Warszawa Choszczówka railway station
     {Coordinate{3.2852, 51.3399}, Tz::Europe_Brussels, CountryId{"BE"}}, // Knokke railway station
-    {Coordinate{6.15487, 50.7857}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Eilendorf station
+    {Coordinate{6.15487, 50.7857}, Tz::Europe_Berlin, CountryId{"DE"}}, // Eilendorf station
     {Coordinate{5.33075, 50.5538}, Tz::Europe_Brussels, CountryId{"BE"}}, // Haute-Flône railway station
     {Coordinate{6.75558, 43.4284}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2786235
     {Coordinate{2.22904, 43.598}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Castres
     {Coordinate{0.333056, 46.5822}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Poitiers
     {Coordinate{3.26442, 50.8244}, Tz::Europe_Brussels, CountryId{"BE"}}, // Kortrijk railway station
-    {Coordinate{7.55694, 47.7317}, Tz::Europe_Paris, CountryId{"DE"}}, // Q27869673
+    {Coordinate{7.55694, 47.7317}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q27869673
     {Coordinate{4.76579, 45.5852}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Givors-Ville
     {Coordinate{5.63778, 51.795}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Ravenstein railway station
     {Coordinate{1.10209, 49.343}, Tz::Europe_Paris, CountryId{"FR"}}, // Oissel
     {Coordinate{4.52455, 50.0958}, Tz::Europe_Brussels, CountryId{"BE"}}, // Mariembourg railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q27894893
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q27894893
     {Coordinate{-2.08861, 47.6517}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Redon
     {Coordinate{8.7884, 49.3937}, Tz::Europe_Berlin, CountryId{"DE"}}, // Neckargemünd
     {Coordinate{5.50667, 51.7583}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Oss West railway station
@@ -2705,7 +2705,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{5.66778, 52.0431}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Ede Centrum railway station
     {Coordinate{6.55611, 44.791}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2792896
     {Coordinate{}, Tz::Europe_Brussels, CountryId{"BE"}}, // Melsele railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Bahnhof (Löffingen)
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof (Löffingen)
     {Coordinate{5.84944, 50.9433}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Spaubeek railway station
     {Coordinate{16.2886, 48.1471}, Tz::Europe_Vienna, CountryId{"AT"}}, // Wien Atzgersdorf railway station
     {Coordinate{2.23028, 49.9147}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Dreuil-lès-Amiens
@@ -2713,7 +2713,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{6.14278, 52.1578}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Voorst-Empe railway station
     {Coordinate{3.85243, 50.5942}, Tz::Europe_Brussels, CountryId{"BE"}}, // Brugelette railway station
     {Coordinate{7.75267, 48.5636}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Krimmeri-Meinau
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q27996618
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q27996618
     {Coordinate{5.99667, 51.5922}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Vierlingsbeek railway station
     {Coordinate{-1.09089, 46.0784}, Tz::Europe_Paris, CountryId{"FR"}}, // Châtelaillon
     {Coordinate{6.07314, 49.3307}, Tz::Europe_Paris, CountryId{"FR"}}, // Hayange railway station
@@ -2764,7 +2764,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{4.51528, 50.7256}, Tz::Europe_Brussels, CountryId{"BE"}}, // Genval railway station
     {Coordinate{4.44694, 51.1822}, Tz::Europe_Brussels, CountryId{"BE"}}, // Mortsel-Deurnesteenweg railway station
     {Coordinate{4.74611, 51.1656}, Tz::Europe_Brussels, CountryId{"BE"}}, // Bouwel railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q28475391
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q28475391
     {Coordinate{5.76944, 49.5131}, Tz::Europe_Paris, CountryId{"FR"}}, // Longwy railway station
     {Coordinate{6.63002, 51.3377}, Tz::Europe_Berlin, CountryId{"DE"}}, // Krefeld-Linn station
     {Coordinate{11.0376, 48.1059}, Tz::Europe_Berlin, CountryId{"DE"}}, // Geltendorf station
@@ -2787,7 +2787,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.459, 49.645}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q28806098
     {Coordinate{5.78444, 45.1847}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Grenoble-Universités-Gières
     {Coordinate{10.038, 44.8498}, Tz::Europe_Rome, CountryId{"IT"}}, // Vaio-Ospedale railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q28859934
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q28859934
     {Coordinate{7.35939, 46.2274}, Tz::Europe_Zurich, CountryId{"CH"}}, // Sion railway station
     {Coordinate{5.81, 50.5447}, Tz::Europe_Brussels, CountryId{"BE"}}, // Juslenville railway station
     {Coordinate{3.8375, 50.8839}, Tz::Europe_Brussels, CountryId{"BE"}}, // Hillegem railway station
@@ -2799,7 +2799,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{1.04604, 46.1253}, Tz::Europe_Paris, CountryId{"FR"}}, // Q2898331
     {Coordinate{12.3673, 50.7257}, Tz::Europe_Berlin, CountryId{"DE"}}, // Werdau station
     {Coordinate{11.2814, 50.896}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q29043546
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Röthenbach (Allgäu) railway station
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Röthenbach (Allgäu) railway station
     {Coordinate{6.38167, 45.6731}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare d'Albertville
     {Coordinate{8.7075, 47.2083}, Tz::Europe_Zurich, CountryId{"CH"}}, // Richterswil railway station
     {Coordinate{5.71333, 53.13}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Mantgum railway station
@@ -2845,13 +2845,13 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{11.7799, 51.6741}, Tz::Europe_Berlin, CountryId{"DE"}}, // Könnern station
     {Coordinate{7.62817, 48.5469}, Tz::Europe_Paris, CountryId{"FR"}}, // Entzheim-Aéroport Station
     {Coordinate{4.11806, 51.0217}, Tz::Europe_Brussels, CountryId{"BE"}}, // Sint-Gillis railway station
-    {Coordinate{6.09111, 50.7681}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Aachen Central Station
+    {Coordinate{6.09111, 50.7681}, Tz::Europe_Berlin, CountryId{"DE"}}, // Aachen Central Station
     {Coordinate{7.35702, 46.9046}, Tz::Europe_Zurich, CountryId{"CH"}}, // Q30088642
     {Coordinate{7.66231, 47.5315}, Tz::Europe_Zurich, CountryId{"CH"}}, // Schweizerhalle Station
     {Coordinate{12.9774, 52.9055}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q30106124
     {Coordinate{4.36972, 52.0906}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Den Haag Mariahoeve
     {Coordinate{6.51917, 52.3117}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Rijssen railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Bahnhof Waghäusel
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof Waghäusel
     {Coordinate{4.35413, 50.7675}, Tz::Europe_Brussels, CountryId{"BE"}}, // Holleken railway station
     {Coordinate{8.25505, 50.2968}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q30238830
     {Coordinate{7.20163, 47.2198}, Tz::Europe_Zurich, CountryId{"CH"}}, // Tavannes Station
@@ -2861,10 +2861,10 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{7.52833, 51.5719}, Tz::Europe_Berlin, CountryId{"DE"}}, // Dortmund-Derne station
     {Coordinate{11.7588, 51.9057}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q30274649
     {Coordinate{13.3124, 52.4797}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin Heidelberger Platz station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q30303373
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q30303373
     {Coordinate{3.02306, 42.5464}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare d'Argelès-sur-Mer
     {Coordinate{4.37955, 50.8299}, Tz::Europe_Brussels, CountryId{"BE"}}, // Mouterij railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q30340466
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q30340466
     {Coordinate{8.78519, 50.008}, Tz::Europe_Berlin, CountryId{"DE"}}, // Dietzenbach station
     {Coordinate{7.79691, 48.7178}, Tz::Europe_Paris, CountryId{"FR"}}, // Q305421
     {Coordinate{4.06273, 46.0395}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Roanne
@@ -2876,7 +2876,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.2825, 50.0069}, Tz::Europe_Berlin, CountryId{"DE"}}, // Mainz-Kastel station
     {Coordinate{3.87914, 51.087}, Tz::Europe_Brussels, CountryId{"BE"}}, // Beervelde railway station
     {Coordinate{4.71987, 45.9394}, Tz::Europe_Paris, CountryId{"FR"}}, // Q3078253
-    {Coordinate{6.10139, 50.8856}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Herzogenrath-Alt-Merkstein station
+    {Coordinate{6.10139, 50.8856}, Tz::Europe_Berlin, CountryId{"DE"}}, // Herzogenrath-Alt-Merkstein station
     {Coordinate{4.72111, 51.6058}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Breda-Prinsenbeek railway station
     {Coordinate{1.09389, 49.4489}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Rouen-Rive-Droite
     {Coordinate{5.32, 50.5461}, Tz::Europe_Brussels, CountryId{"BE"}}, // Amay railway station
@@ -3128,7 +3128,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{7.11906, 48.0355}, Tz::Europe_Paris, CountryId{"FR"}}, // Luttenbach-près-Munster station
     {Coordinate{-1.16738, 46.4638}, Tz::Europe_Paris, CountryId{"FR"}}, // Luçon
     {Coordinate{7.85636, 47.3921}, Tz::Europe_Zurich, CountryId{"CH"}}, // Q3096933
-    {Coordinate{7.65917, 47.6011}, Tz::Europe_Paris, CountryId{"DE"}}, // Lörrach-Stetten
+    {Coordinate{7.65917, 47.6011}, Tz::Europe_Berlin, CountryId{"DE"}}, // Lörrach-Stetten
     {Coordinate{6.32809, 46.2513}, Tz::Europe_Paris, CountryId{"FR"}}, // Machilly
     {Coordinate{3.22948, 43.4676}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Magalas
     {Coordinate{6.62157, 46.0169}, Tz::Europe_Paris, CountryId{"FR"}}, // Q3096951
@@ -3174,11 +3174,11 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{1.15058, 43.6367}, Tz::Europe_Paris, CountryId{"FR"}}, // Mérenvielle train station
     {Coordinate{1.83667, 42.6589}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Mérens-les-Vals
     {Coordinate{7.83403, 47.5619}, Tz::Europe_Zurich, CountryId{"CH"}}, // Möhlin railway station
-    {Coordinate{7.59935, 47.8101}, Tz::Europe_Paris, CountryId{"DE"}}, // Müllheim (Baden) station
+    {Coordinate{7.59935, 47.8101}, Tz::Europe_Berlin, CountryId{"DE"}}, // Müllheim (Baden) station
     {Coordinate{7.61727, 47.5132}, Tz::Europe_Zurich, CountryId{"CH"}}, // Münchenstein
     {Coordinate{4.99756, 50.4701}, Tz::Europe_Brussels, CountryId{"BE"}}, // Namêche railway station
     {Coordinate{4.92981, 50.4196}, Tz::Europe_Brussels, CountryId{"BE"}}, // Naninne railway station
-    {Coordinate{7.56194, 47.8115}, Tz::Europe_Paris, CountryId{"DE"}}, // Neuenburg
+    {Coordinate{7.56194, 47.8115}, Tz::Europe_Berlin, CountryId{"DE"}}, // Neuenburg
     {Coordinate{5.45265, 49.8541}, Tz::Europe_Brussels, CountryId{"BE"}}, // Neufchâteau railway station
     {Coordinate{5.74167, 50.5719}, Tz::Europe_Brussels, CountryId{"BE"}}, // Nessonvaux railway station
     {Coordinate{5.11176, 47.2815}, Tz::Europe_Paris, CountryId{"FR"}}, // Q3097188
@@ -3316,9 +3316,9 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{2.40222, 48.8006}, Tz::Europe_Paris, CountryId{"FR"}}, // Vitry-sur-Seine
     {Coordinate{5.59466, 45.3639}, Tz::Europe_Paris, CountryId{"FR"}}, // gare de Voiron
     {Coordinate{7.23369, 48.0582}, Tz::Europe_Paris, CountryId{"FR"}}, // Q3098050
-    {Coordinate{7.60861, 47.5936}, Tz::Europe_Paris, CountryId{"DE"}}, // Weil am Rhein
-    {Coordinate{7.61622, 47.5887}, Tz::Europe_Paris, CountryId{"DE"}}, // Q3098066
-    {Coordinate{7.62707, 47.589}, Tz::Europe_Paris, CountryId{"DE"}}, // Q3098067
+    {Coordinate{7.60861, 47.5936}, Tz::Europe_Berlin, CountryId{"DE"}}, // Weil am Rhein
+    {Coordinate{7.61622, 47.5887}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q3098066
+    {Coordinate{7.62707, 47.589}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q3098067
     {Coordinate{4.74749, 50.956}, Tz::Europe_Brussels, CountryId{"BE"}}, // Wezemaal railway station
     {Coordinate{7.20956, 48.0463}, Tz::Europe_Paris, CountryId{"FR"}}, // Q3098081
     {Coordinate{6.15596, 49.1489}, Tz::Europe_Paris, CountryId{"FR"}}, // Q3098088
@@ -3543,7 +3543,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{11.4325, 48.7732}, Tz::Europe_Berlin, CountryId{"DE"}}, // Ingolstadt Nord station
     {Coordinate{12.13, 50.5053}, Tz::Europe_Berlin, CountryId{"DE"}}, // Plauen (Vogtland) Oberer Bahnhof
     {Coordinate{10.9483, 50.8417}, Tz::Europe_Berlin, CountryId{"DE"}}, // Arnstadt Central Station
-    {Coordinate{6.07111, 50.78}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Aachen West station
+    {Coordinate{6.07111, 50.78}, Tz::Europe_Berlin, CountryId{"DE"}}, // Aachen West station
     {Coordinate{11.5878, 50.925}, Tz::Europe_Berlin, CountryId{"DE"}}, // Jena Paradies station
     {Coordinate{8.66436, 52.1193}, Tz::Europe_Berlin, CountryId{"DE"}}, // Herford railway station
     {Coordinate{7.19556, 53.3689}, Tz::Europe_Berlin, CountryId{"DE"}}, // Emden Central Station
@@ -3604,7 +3604,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{13.2844, 52.5181}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin-Westend station
     {Coordinate{13.3292, 52.5344}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin Beusselstraße station
     {Coordinate{7.28929, 51.2906}, Tz::Europe_Berlin, CountryId{"DE"}}, // Schwelm station
-    {Coordinate{6.1163, 50.7703}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Aachen-Rothe Erde station
+    {Coordinate{6.1163, 50.7703}, Tz::Europe_Berlin, CountryId{"DE"}}, // Aachen-Rothe Erde station
     {Coordinate{6.86325, 51.2202}, Tz::Europe_Berlin, CountryId{"DE"}}, // Düsseldorf-Gerresheim station
     {Coordinate{7.44604, 50.7737}, Tz::Europe_Berlin, CountryId{"DE"}}, // Eitorf station
     {Coordinate{13.5164, 51.4592}, Tz::Europe_Berlin, CountryId{"DE"}}, // Elsterwerda railway station
@@ -3684,7 +3684,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{9.90667, 53.5958}, Tz::Europe_Berlin, CountryId{"DE"}}, // Eidelstedt station
     {Coordinate{5.79361, 52.0053}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Wolfheze railway station
     {Coordinate{9.1994, 49.232}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bad Friedrichshall-Jagstfeld station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q33216113
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q33216113
     {Coordinate{7.51301, 47.2179}, Tz::Europe_Zurich, CountryId{"CH"}}, // Langendorf station
     {Coordinate{7.75, 47.4511}, Tz::Europe_Zurich, CountryId{"CH"}}, // Talhaus station
     {Coordinate{7.74471, 47.4764}, Tz::Europe_Zurich, CountryId{"CH"}}, // Altmarkt station
@@ -4412,16 +4412,16 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{7.08222, 46.0786}, Tz::Europe_Zurich, CountryId{"CH"}}, // Q3366042
     {Coordinate{4.75444, 52.4949}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Krommenie-Assendelft railway station
     {Coordinate{20.2667, 63.8297}, Tz::Europe_Stockholm, CountryId{"SE"}}, // Umeå Central Station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q33747480
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q33747480
     {Coordinate{20.2931, 63.8175}, Tz::Europe_Stockholm, CountryId{"SE"}}, // Umeå East Station
     {Coordinate{8.69222, 50.1031}, Tz::Europe_Berlin, CountryId{"DE"}}, // Frankfurt Lokalbahnhof
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q33926963
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q33926963
     {Coordinate{9.10722, 45.6972}, Tz::Europe_Rome, CountryId{"IT"}}, // Carimate railway station
     {Coordinate{9.08194, 45.7408}, Tz::Europe_Rome, CountryId{"IT"}}, // Cucciago railway station
     {Coordinate{13.9656, 42.7517}, Tz::Europe_Rome, CountryId{"IT"}}, // Giulianova railway station
     {Coordinate{3.19514, 51.3264}, Tz::Europe_Brussels, CountryId{"BE"}}, // Zeebrugge-Dorp railway station
     {Coordinate{5.70444, 51.47}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Helmond Brouwhuis railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q34064533
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q34064533
     {Coordinate{3.96556, 50.7439}, Tz::Europe_Brussels, CountryId{"BE"}}, // Galmaarden railway station
     {Coordinate{6.14333, 51.3394}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Tegelen railway station
     {Coordinate{3.3914, 50.8336}, Tz::Europe_Brussels, CountryId{"BE"}}, // Vichte railway station
@@ -4433,20 +4433,20 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{7.98833, 46.5486}, Tz::Europe_Zurich, CountryId{"CH"}}, // Jungfraujoch railway station
     {Coordinate{5.38111, 43.3031}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Marseille-Saint-Charles
     {Coordinate{8.57, 50.0528}, Tz::Europe_Berlin, CountryId{"DE"}}, // Frankfurt Airport long-distance station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q37224158
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q37224161
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q37224158
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q37224161
     {Coordinate{11.1686, 49.4631}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q37224162
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q37224165
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q37224165
     {Coordinate{11.1686, 49.4631}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q37224169
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q37224173
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q37224173
     {Coordinate{1.45361, 43.6111}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Toulouse-Matabiau
     {Coordinate{11.505, 47.0019}, Tz::Europe_Rome, CountryId{"IT"}}, // Brenner railway station
     {Coordinate{5.36, 52.8867}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Stavoren railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q37380914
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q37380914
     {Coordinate{11.0458, 49.4344}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q37380916
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Nürnberg-Stein station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q37380928
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q37380930
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Nürnberg-Stein station
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q37380928
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q37380930
     {Coordinate{14.4399, 50.1097}, Tz::Europe_Prague, CountryId{"CZ"}}, // Praha-Holešovice railway station
     {Coordinate{13.3481, 52.52}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin Bellevue station
     {Coordinate{13.3644, 52.4756}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin Südkreuz
@@ -4465,7 +4465,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{4.39145, 50.3003}, Tz::Europe_Brussels, CountryId{"BE"}}, // Cour-sur-Heure railway station
     {Coordinate{14.1227, 40.8714}, Tz::Europe_Rome, CountryId{"IT"}}, // Quarto di Marano railway halt
     {Coordinate{4.49639, 51.07}, Tz::Europe_Brussels, CountryId{"BE"}}, // Sint-Katelijne-Waver railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q39214267
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q39214267
     {Coordinate{6.1, 52.2381}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Twello railway station
     {Coordinate{8.81556, 40.1267}, Tz::Europe_Rome, CountryId{"IT"}}, // Abbasanta railway station
     {Coordinate{14.3727, 40.9399}, Tz::Europe_Rome, CountryId{"IT"}}, // Acerra railway station
@@ -5421,7 +5421,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{11.2062, 43.8258}, Tz::Europe_Rome, CountryId{"IT"}}, // Q3971380
     {Coordinate{14.7032, 38.1169}, Tz::Europe_Rome, CountryId{"IT"}}, // Q3971381
     {Coordinate{9.26945, 44.3353}, Tz::Europe_Rome, CountryId{"IT"}}, // Zoagli
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q39878739
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q39878739
     {Coordinate{8.34056, 44.169}, Tz::Europe_Rome, CountryId{"IT"}}, // Finale Ligure Marina railway station
     {Coordinate{0.667761, 47.3543}, Tz::Europe_Paris, CountryId{"FR"}}, // Q405631
     {Coordinate{9.47334, 47.6533}, Tz::Europe_Berlin, CountryId{"DE"}}, // Friedrichshafen Stadt station
@@ -5431,26 +5431,26 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{10.9255, 49.1119}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q41372018
     {Coordinate{10.994, 48.8918}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q41372246
     {Coordinate{11.4727, 48.1776}, Tz::Europe_Berlin, CountryId{"DE"}}, // Munich Untermenzing station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Bahnhof Peißenberg
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q42073109
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q42301989
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q42313166
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof Peißenberg
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q42073109
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q42301989
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q42313166
     {Coordinate{}, Tz::Europe_Vienna, CountryId{"AT"}}, // Q42330661
     {Coordinate{13.2635, 52.7411}, Tz::Europe_Berlin, CountryId{"DE"}}, // Lehnitz station
     {Coordinate{5.98778, 53.2347}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Veenwouden railway station
     {Coordinate{16.4911, 48.0353}, Tz::Europe_Vienna, CountryId{"AT"}}, // Gramatneusiedl station
     {Coordinate{17.0365, 51.0988}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Wrocław Główny
     {Coordinate{5.92111, 52.5597}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Kampen railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q42871736
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q42871736
     {Coordinate{11.5369, 48.1169}, Tz::Europe_Berlin, CountryId{"DE"}}, // München Harras station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q43054353
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q43054353
     {Coordinate{4.4775, 52.0475}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Zoetermeer railway station
     {Coordinate{6.74417, 48.4522}, Tz::Europe_Paris, CountryId{"FR"}}, // Q430790
     {Coordinate{6.36844, 51.1049}, Tz::Europe_Berlin, CountryId{"DE"}}, // Station Herrath
     {Coordinate{11.6577, 51.1062}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q43109306
     {Coordinate{6.14447, 46.2226}, Tz::Europe_Zurich, CountryId{"CH"}}, // Genève-Sécheron
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q43161681
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q43202950
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q43161681
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q43202950
     {Coordinate{9.72121, 47.4935}, Tz::Europe_Vienna, CountryId{"AT"}}, // Bregenz Riedenburg station
     {Coordinate{9.66688, 47.4504}, Tz::Europe_Vienna, CountryId{"AT"}}, // Lustenau
     {Coordinate{6.11611, 52.7908}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Steenwijk railway station
@@ -5480,12 +5480,12 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.78444, 50.1027}, Tz::Europe_Berlin, CountryId{"DE"}}, // Offenbach Ost station
     {Coordinate{8.46242, 49.002}, Tz::Europe_Berlin, CountryId{"DE"}}, // Karlsruhe-Durlach station
     {Coordinate{7.59833, 49.2056}, Tz::Europe_Berlin, CountryId{"DE"}}, // Pirmasens Central Station
-    {Coordinate{8.19083, 48.7906}, Tz::Europe_Paris, CountryId{"DE"}}, // Baden-Baden station
+    {Coordinate{8.19083, 48.7906}, Tz::Europe_Berlin, CountryId{"DE"}}, // Baden-Baden station
     {Coordinate{8.42816, 49.3241}, Tz::Europe_Berlin, CountryId{"DE"}}, // Speyer Central Station
     {Coordinate{8.80862, 50.0903}, Tz::Europe_Berlin, CountryId{"DE"}}, // Offenbach-Bieber station
     {Coordinate{11.5072, 48.1803}, Tz::Europe_Berlin, CountryId{"DE"}}, // München Moosach station
     {Coordinate{8.84639, 48.9531}, Tz::Europe_Berlin, CountryId{"DE"}}, // Mühlacker station
-    {Coordinate{7.665, 47.6139}, Tz::Europe_Paris, CountryId{"DE"}}, // Lörrach Central Station
+    {Coordinate{7.665, 47.6139}, Tz::Europe_Berlin, CountryId{"DE"}}, // Lörrach Central Station
     {Coordinate{20.4675, 53.7781}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Q445351
     {Coordinate{14.5471, 52.3368}, Tz::Europe_Berlin, CountryId{"DE"}}, // Frankfurt (Oder) railway station
     {Coordinate{5.82444, 50.9753}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Geleen-Lutterade railway station
@@ -5540,24 +5540,24 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{12.3054, 54.1989}, Tz::Europe_Berlin, CountryId{"DE"}}, // Gelbensande railway station
     {Coordinate{7.58917, 50.3506}, Tz::Europe_Berlin, CountryId{"DE"}}, // Koblenz Central Station
     {Coordinate{13.3289, 52.43}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin-Lichterfelde Ost station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47004054
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47004054
     {Coordinate{10.0267, 49.7906}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47004071
     {Coordinate{8.57139, 50.0014}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47004091
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47004109
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47004109
     {Coordinate{7.32972, 51.4356}, Tz::Europe_Berlin, CountryId{"DE"}}, // Witten Central Station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47008895
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47008895
     {Coordinate{10.1179, 48.4301}, Tz::Europe_Berlin, CountryId{"DE"}}, // Nersingen station
-    {Coordinate{7.94572, 48.476}, Tz::Europe_Paris, CountryId{"DE"}}, // Offenburg station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47035084
+    {Coordinate{7.94572, 48.476}, Tz::Europe_Berlin, CountryId{"DE"}}, // Offenburg station
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47035084
     {Coordinate{8.4786, 49.5982}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47035086
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47035089
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47035165
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47035195
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47037433
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47035089
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47035165
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47035195
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47037433
     {Coordinate{6.76083, 52.2619}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Hengelo Gezondheidspark railway station
     {Coordinate{8.4089, 49.6595}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47093255
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47093264
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47093332
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47093264
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47093332
     {Coordinate{5.29222, 50.8869}, Tz::Europe_Brussels, CountryId{"BE"}}, // Alken railway station
     {Coordinate{7.00417, 51.1615}, Tz::Europe_Berlin, CountryId{"DE"}}, // Solingen Central Station
     {Coordinate{8.775, 50.82}, Tz::Europe_Berlin, CountryId{"DE"}}, // Marburg station
@@ -5599,7 +5599,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.74056, 51.7131}, Tz::Europe_Berlin, CountryId{"DE"}}, // Paderborn Central Station
     {Coordinate{8.23637, 50.0487}, Tz::Europe_Berlin, CountryId{"DE"}}, // Wiesbaden-Biebrich station
     {Coordinate{4.65861, 52.125}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Alphen aan den Rijn railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q47535836
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q47535836
     {Coordinate{8.67789, 47.5937}, Tz::Europe_Zurich, CountryId{"CH"}}, // Andelfingen railway station
     {Coordinate{8.59361, 46.6369}, Tz::Europe_Zurich, CountryId{"CH"}}, // Andermatt railway station
     {Coordinate{9.97988, 54.076}, Tz::Europe_Berlin, CountryId{"DE"}}, // Neumünster station
@@ -5677,7 +5677,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{5.18111, 52.2269}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Hilversum railway station
     {Coordinate{4.93639, 52.3233}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Duivendrecht
     {Coordinate{4.87306, 52.3389}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Amsterdam Zuid
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q49892242
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q49892242
     {Coordinate{4.48444, 52.2242}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Voorhout railway station
     {Coordinate{8.94835, 45.9557}, Tz::Europe_Zurich, CountryId{"CH"}}, // Melide railway station
     {Coordinate{7.97583, 46.6356}, Tz::Europe_Zurich, CountryId{"CH"}}, // Burglauenen railway station
@@ -5737,7 +5737,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{13.1503, 53.8248}, Tz::Europe_Berlin, CountryId{"DE"}}, // Sternfeld railway station
     {Coordinate{13.1743, 53.7935}, Tz::Europe_Berlin, CountryId{"DE"}}, // Gnevkow railway station
     {Coordinate{13.2428, 53.6922}, Tz::Europe_Berlin, CountryId{"DE"}}, // Altentreptow railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Annaberg-Buchholz unterer Bahnhof
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Annaberg-Buchholz unterer Bahnhof
     {Coordinate{13.5731, 53.518}, Tz::Europe_Berlin, CountryId{"DE"}}, // Oertzenhof railway station
     {Coordinate{13.5005, 53.5336}, Tz::Europe_Berlin, CountryId{"DE"}}, // Neetzka railway station
     {Coordinate{13.3674, 53.5639}, Tz::Europe_Berlin, CountryId{"DE"}}, // Sponholz railway station
@@ -5828,7 +5828,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{11.4708, 48.4103}, Tz::Europe_Berlin, CountryId{"DE"}}, // Petershausen station
     {Coordinate{11.468, 48.1897}, Tz::Europe_Berlin, CountryId{"DE"}}, // Allach station
     {Coordinate{11.1739, 48.2167}, Tz::Europe_Berlin, CountryId{"DE"}}, // Mammendorf station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q50714432
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q50714432
     {Coordinate{4.90056, 52.3789}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Amsterdam Centraal
     {Coordinate{4.91778, 52.3464}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Amsterdam Amstel
     {Coordinate{4.83806, 52.3892}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Amsterdam Sloterdijk
@@ -5855,7 +5855,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.92556, 50.1419}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q510283
     {Coordinate{19.0444, 49.8294}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Q5105319
     {Coordinate{5.3, 52.4031}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Almere Oostvaarders railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q51064122
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q51064122
     {Coordinate{3.39413, 46.3155}, Tz::Europe_Paris, CountryId{"FR"}}, // Q510695
     {Coordinate{-1.785, 50.738}, Tz::Europe_London, CountryId{"GB"}}, // Christchurch railway station
     {Coordinate{6.78662, 50.5975}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bad Münstereifel-Arloff station
@@ -5868,15 +5868,15 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.57778, 50.0519}, Tz::Europe_Berlin, CountryId{"DE"}}, // Frankfurt Airport regional station
     {Coordinate{16.3353, 48.175}, Tz::Europe_Vienna, CountryId{"AT"}}, // Wien Meidling
     {Coordinate{8.93639, 48.0317}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q51507704
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q51507707
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Finsterwalde (Niederlausitz) station
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q51507707
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Finsterwalde (Niederlausitz) station
     {Coordinate{8.4893, 49.8332}, Tz::Europe_Berlin, CountryId{"DE"}}, // Riedstadt-Goddelau station
     {Coordinate{9.65778, 51.4125}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q51607009
     {Coordinate{8.44782, 50.1376}, Tz::Europe_Berlin, CountryId{"DE"}}, // Kelkheim station
     {Coordinate{3.13046, 50.9489}, Tz::Europe_Brussels, CountryId{"BE"}}, // Roeselare railway station
     {Coordinate{12.7135, 51.0093}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof Narsdorf
     {Coordinate{11.5258, 48.1978}, Tz::Europe_Berlin, CountryId{"DE"}}, // Munich Fasanerie station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Gera-Liebschwitz train station
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Gera-Liebschwitz train station
     {Coordinate{6.15631, 49.3033}, Tz::Europe_Paris, CountryId{"FR"}}, // Uckange railway station
     {Coordinate{5.72056, 50.0064}, Tz::Europe_Brussels, CountryId{"BE"}}, // Bastogne-North railway station
     {Coordinate{8.61433, 47.6663}, Tz::Europe_Zurich, CountryId{"CH"}}, // Dachsen railway station
@@ -5887,7 +5887,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{11.4597, 48.2108}, Tz::Europe_Berlin, CountryId{"DE"}}, // Karlsfeld station
     {Coordinate{11.7642, 48.3522}, Tz::Europe_Berlin, CountryId{"DE"}}, // Munich Airport Besucherpark station
     {Coordinate{11.4342, 48.2603}, Tz::Europe_Berlin, CountryId{"DE"}}, // Dachau Stadt station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Eching station
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Eching station
     {Coordinate{11.9628, 48.0471}, Tz::Europe_Berlin, CountryId{"DE"}}, // Grafing Stadt station
     {Coordinate{19.0575, 47.5108}, Tz::Europe_Budapest, CountryId{"HU"}}, // Budapest Western Railway Terminal
     {Coordinate{9.84222, 46.8097}, Tz::Europe_Zurich, CountryId{"CH"}}, // Davos Dorf
@@ -5899,7 +5899,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{9.85472, 46.8317}, Tz::Europe_Zurich, CountryId{"CH"}}, // Davos Wolfgang
     {Coordinate{4.45639, 52.1472}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // De Vink railway station
     {Coordinate{11.5817, 48.2883}, Tz::Europe_Berlin, CountryId{"DE"}}, // Lohhof station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Markt Schwaben station
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Markt Schwaben station
     {Coordinate{11.5836, 48.0195}, Tz::Europe_Berlin, CountryId{"DE"}}, // Deisenhofen station
     {Coordinate{11.3903, 48.3211}, Tz::Europe_Berlin, CountryId{"DE"}}, // Niederroth station
     {Coordinate{11.5689, 48.2739}, Tz::Europe_Berlin, CountryId{"DE"}}, // Unterschleißheim station
@@ -5930,7 +5930,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{11.2201, 49.3762}, Tz::Europe_Berlin, CountryId{"DE"}}, // Feucht Ost station
     {Coordinate{8.59886, 53.5349}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bremerhaven Hauptbahnhof
     {Coordinate{8.86371, 47.4986}, Tz::Europe_Zurich, CountryId{"CH"}}, // Elgg railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Aichach station
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Aichach station
     {Coordinate{8.40142, 46.8196}, Tz::Europe_Zurich, CountryId{"CH"}}, // Engelberg railway station
     {Coordinate{9.18778, 48.8036}, Tz::Europe_Berlin, CountryId{"DE"}}, // Stuttgart North station
     {Coordinate{8.92972, 50.1214}, Tz::Europe_Berlin, CountryId{"DE"}}, // Hanau Central Station
@@ -5949,7 +5949,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.2225, 53.1436}, Tz::Europe_Berlin, CountryId{"DE"}}, // Oldenburg Central Station
     {Coordinate{13.3517, 52.4794}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin-Schöneberg station
     {Coordinate{1.88138, 45.3294}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Corrèze
-    {Coordinate{6.65194, 49.7569}, Tz::Europe_Luxembourg, CountryId{"DE"}}, // Trier Central Station
+    {Coordinate{6.65194, 49.7569}, Tz::Europe_Berlin, CountryId{"DE"}}, // Trier Central Station
     {Coordinate{8.78354, 47.2388}, Tz::Europe_Zurich, CountryId{"CH"}}, // Feldbach railway station
     {Coordinate{9.48139, 46.8431}, Tz::Europe_Zurich, CountryId{"CH"}}, // Felsberg station
     {Coordinate{8.13222, 46.4033}, Tz::Europe_Zurich, CountryId{"CH"}}, // Fiesch railway station
@@ -5960,16 +5960,16 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{7.76882, 49.4359}, Tz::Europe_Berlin, CountryId{"DE"}}, // Kaiserslautern Hauptbahnhof
     {Coordinate{6.44611, 51.1964}, Tz::Europe_Berlin, CountryId{"DE"}}, // Mönchengladbach Hauptbahnhof
     {Coordinate{8.68639, 50.1147}, Tz::Europe_Berlin, CountryId{"DE"}}, // Frankfurt Konstablerwache station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q54801974
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q54801974
     {Coordinate{8.94316, 47.5771}, Tz::Europe_Zurich, CountryId{"CH"}}, // Felben-Wellhausen railway station
     {Coordinate{11.3086, 49.3427}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof Burgthann
     {Coordinate{11.2036, 49.3821}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q54878964
     {Coordinate{8.68597, 47.1915}, Tz::Europe_Zurich, CountryId{"CH"}}, // Samstagern railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q55000745
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q55000745
     {Coordinate{13.0146, 51.0744}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q55000746
     {Coordinate{10.2581, 46.7878}, Tz::Europe_Zurich, CountryId{"CH"}}, // Ftan
     {Coordinate{8.42833, 46.5761}, Tz::Europe_Zurich, CountryId{"CH"}}, // Furka railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q55154742
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q55154742
     {Coordinate{8.83422, 47.2299}, Tz::Europe_Zurich, CountryId{"CH"}}, // Jona railway station
     {Coordinate{2.24, 44.5272}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare d'Aubin
     {Coordinate{2.27111, 44.5231}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Cransac
@@ -5982,7 +5982,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{2.21861, 44.5556}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Viviez-Decazeville
     {Coordinate{13.5752, 52.5126}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin Wuhletal station
     {Coordinate{13.4747, 52.5142}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin Frankfurter Allee station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Bahnhof Frohburg
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof Frohburg
     {Coordinate{7.05033, 51.5869}, Tz::Europe_Berlin, CountryId{"DE"}}, // Gelsenkirchen-Buer Nord station
     {Coordinate{9.01872, 45.9278}, Tz::Europe_Zurich, CountryId{"CH"}}, // Generoso Vetta railway station
     {Coordinate{7.09694, 50.7319}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bonn Hauptbahnhof
@@ -5996,12 +5996,12 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{6.8109, 50.6338}, Tz::Europe_Berlin, CountryId{"DE"}}, // Euskirchen-Stotzheim station
     {Coordinate{8.18619, 46.8362}, Tz::Europe_Zurich, CountryId{"CH"}}, // Giswil railway station
     {Coordinate{9.00343, 46.1741}, Tz::Europe_Zurich, CountryId{"CH"}}, // Giubiasco railway station
-    {Coordinate{6.59667, 49.7103}, Tz::Europe_Luxembourg, CountryId{"DE"}}, // Q55652449
+    {Coordinate{6.59667, 49.7103}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q55652449
     {Coordinate{6.97645, 51.5751}, Tz::Europe_Berlin, CountryId{"DE"}}, // Gladbeck West station
     {Coordinate{8.55904, 47.4305}, Tz::Europe_Zurich, CountryId{"CH"}}, // Glattbrugg railway station
     {Coordinate{8.52365, 47.5488}, Tz::Europe_Zurich, CountryId{"CH"}}, // Glattfelden railway station
     {Coordinate{8.36139, 46.5614}, Tz::Europe_Zurich, CountryId{"CH"}}, // Gletsch railway station
-    {Coordinate{}, Timezone{}, CountryId{"DE"}}, // Q55743881
+    {Coordinate{}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q55743881
     {Coordinate{8.37153, 46.8686}, Tz::Europe_Zurich, CountryId{"CH"}}, // Grafenort railway station
     {Coordinate{13.4618, 52.4938}, Tz::Europe_Berlin, CountryId{"DE"}}, // Berlin Treptower Park station
     {Coordinate{14.3478, 53.4172}, Tz::Europe_Berlin, CountryId{"DE"}}, // Grambow railway station
@@ -6204,7 +6204,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{2.88, 47.3369}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Tracy-Sancerre
     {Coordinate{8.41867, 47.5666}, Tz::Europe_Zurich, CountryId{"CH"}}, // Kaiserstuhl AG railway station
     {Coordinate{8.17542, 46.8143}, Tz::Europe_Zurich, CountryId{"CH"}}, // Kaiserstuhl OW railway station
-    {Coordinate{6.20279, 51.3272}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Kaldenkirchen station
+    {Coordinate{6.20279, 51.3272}, Tz::Europe_Berlin, CountryId{"DE"}}, // Kaldenkirchen station
     {Coordinate{14.4975, 50.1122}, Tz::Europe_Prague, CountryId{"CZ"}}, // Praha-Vysočany railway station
     {Coordinate{4.27337, 50.8683}, Tz::Europe_Brussels, CountryId{"BE"}}, // Groot-Bijgaarden railway station
     {Coordinate{8.25865, 50.0013}, Tz::Europe_Berlin, CountryId{"DE"}}, // Mainz Central Station
@@ -6285,7 +6285,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{13.7242, 51.0556}, Tz::Europe_Berlin, CountryId{"DE"}}, // Dresden Mitte railway station
     {Coordinate{8.56681, 47.6257}, Tz::Europe_Zurich, CountryId{"CH"}}, // Lottstetten railway station
     {Coordinate{6.62917, 46.5172}, Tz::Europe_Zurich, CountryId{"CH"}}, // Lausanne railway station
-    {Coordinate{7.80868, 48.5768}, Tz::Europe_Paris, CountryId{"DE"}}, // Kehl station
+    {Coordinate{7.80868, 48.5768}, Tz::Europe_Berlin, CountryId{"DE"}}, // Kehl station
     {Coordinate{8.16369, 46.7861}, Tz::Europe_Zurich, CountryId{"CH"}}, // Lungern railway station
     {Coordinate{14.2153, 53.4567}, Tz::Europe_Berlin, CountryId{"DE"}}, // Löcknitz railway station
     {Coordinate{7.949, 46.637}, Tz::Europe_Zurich, CountryId{"CH"}}, // Lütschental railway station
@@ -6528,7 +6528,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{7.96294, 48.9908}, Tz::Europe_Paris, CountryId{"FR"}}, // Riedseltz
     {Coordinate{14.6724, 40.7427}, Tz::Europe_Rome, CountryId{"IT"}}, // Q776522
     {Coordinate{16.1772, 53.2192}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Q776916
-    {Coordinate{6.68806, 49.3867}, Tz::Europe_Paris, CountryId{"DE"}}, // Beckingen
+    {Coordinate{6.68806, 49.3867}, Tz::Europe_Berlin, CountryId{"DE"}}, // Beckingen
     {Coordinate{9.44083, 46.6986}, Tz::Europe_Zurich, CountryId{"CH"}}, // Thusis
     {Coordinate{10.5725, 50.9303}, Tz::Europe_Berlin, CountryId{"DE"}}, // Fröttstädt station
     {Coordinate{8.46472, 46.5875}, Tz::Europe_Zurich, CountryId{"CH"}}, // Tiefenbach halting point
@@ -6572,7 +6572,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.84869, 47.4178}, Tz::Europe_Zurich, CountryId{"CH"}}, // Wila railway station
     {Coordinate{7.86972, 46.6661}, Tz::Europe_Zurich, CountryId{"CH"}}, // Wilderswil railway station
     {Coordinate{12.2607, 50.3243}, Tz::Europe_Berlin, CountryId{"DE"}}, // Adorf (Vogtl) station
-    {Coordinate{6.07373, 50.77}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Aachen Schanz station
+    {Coordinate{6.07373, 50.77}, Tz::Europe_Berlin, CountryId{"DE"}}, // Aachen Schanz station
     {Coordinate{7.74996, 47.0621}, Tz::Europe_Zurich, CountryId{"CH"}}, // Affoltern-Weier railway station
     {Coordinate{8.4357, 50.5458}, Tz::Europe_Berlin, CountryId{"DE"}}, // Albshausen station
     {Coordinate{13.5653, 52.5711}, Tz::Europe_Berlin, CountryId{"DE"}}, // Ahrensfelde station
@@ -6708,7 +6708,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{9.81472, 47.155}, Tz::Europe_Vienna, CountryId{"AT"}}, // Bludenz railway station
     {Coordinate{12.3346, 53.0763}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof Blumenthal (Mark)
     {Coordinate{13.4158, 52.3376}, Tz::Europe_Berlin, CountryId{"DE"}}, // Blankenfelde station
-    {Coordinate{6.62056, 51.8339}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Bocholt railway station
+    {Coordinate{6.62056, 51.8339}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bocholt railway station
     {Coordinate{8.3075, 52.3608}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bohmte railway station
     {Coordinate{7.0423, 50.7164}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q800549
     {Coordinate{7.12742, 50.7384}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bonn-Beuel station
@@ -6762,7 +6762,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{12.3928, 50.815}, Tz::Europe_Berlin, CountryId{"DE"}}, // Crimmitschau station
     {Coordinate{8.78764, 50.8483}, Tz::Europe_Berlin, CountryId{"DE"}}, // Cölbe station
     {Coordinate{8.70303, 53.861}, Tz::Europe_Berlin, CountryId{"DE"}}, // Cuxhaven railway station
-    {Coordinate{6.1786, 51.1492}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Dalheim station
+    {Coordinate{6.1786, 51.1492}, Tz::Europe_Berlin, CountryId{"DE"}}, // Dalheim station
     {Coordinate{11.118, 53.105}, Tz::Europe_Berlin, CountryId{"DE"}}, // Dannenberg Ost station
     {Coordinate{0.146381, 51.5261}, Tz::Europe_London, CountryId{"GB"}}, // Dagenham Dock railway station
     {Coordinate{8.67942, 49.9068}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q800644
@@ -6906,7 +6906,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{13.3706, 54.0928}, Tz::Europe_Berlin, CountryId{"DE"}}, // Greifswald railway station
     {Coordinate{7.39836, 47.1887}, Tz::Europe_Zurich, CountryId{"CH"}}, // Grenchen Süd
     {Coordinate{6.58056, 51.0931}, Tz::Europe_Berlin, CountryId{"DE"}}, // Grevenbroich station
-    {Coordinate{7.02194, 52.215}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Gronau (Westf) railway station
+    {Coordinate{7.02194, 52.215}, Tz::Europe_Berlin, CountryId{"DE"}}, // Gronau (Westf) railway station
     {Coordinate{8.75364, 50.2319}, Tz::Europe_Berlin, CountryId{"DE"}}, // Groß Karben station
     {Coordinate{8.48625, 49.9249}, Tz::Europe_Berlin, CountryId{"DE"}}, // Groß Gerau station
     {Coordinate{13.2844, 52.3506}, Tz::Europe_Berlin, CountryId{"DE"}}, // Großbeeren railway station
@@ -6945,14 +6945,14 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{5.97472, 50.8908}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Heerlen railway station
     {Coordinate{9.10098, 54.193}, Tz::Europe_Berlin, CountryId{"DE"}}, // Heide station
     {Coordinate{8.72, 49.4147}, Tz::Europe_Berlin, CountryId{"DE"}}, // Heidelberg-Altstadt station
-    {Coordinate{6.09956, 51.0647}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Heinsberg (Rheinland) station
+    {Coordinate{6.09956, 51.0647}, Tz::Europe_Berlin, CountryId{"DE"}}, // Heinsberg (Rheinland) station
     {Coordinate{13.2057, 52.638}, Tz::Europe_Berlin, CountryId{"DE"}}, // Hennigsdorf station
     {Coordinate{6.79417, 52.2619}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Hengelo railway station
     {Coordinate{8.3077, 50.6844}, Tz::Europe_Berlin, CountryId{"DE"}}, // Herborn station
     {Coordinate{11.8583, 50.9036}, Tz::Europe_Berlin, CountryId{"DE"}}, // Hermsdorf-Klosterlausnitz station
     {Coordinate{6.97423, 51.6717}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bahnhof Hervest-Dorsten
     {Coordinate{13.1288, 50.8401}, Tz::Europe_Berlin, CountryId{"DE"}}, // Hetzdorf (Flöhatal) railway station
-    {Coordinate{6.09464, 50.8708}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Herzogenrath station
+    {Coordinate{6.09464, 50.8708}, Tz::Europe_Berlin, CountryId{"DE"}}, // Herzogenrath station
     {Coordinate{9.96296, 52.1458}, Tz::Europe_Berlin, CountryId{"DE"}}, // Hildesheim Ost station
     {Coordinate{8.5372, 49.3174}, Tz::Europe_Berlin, CountryId{"DE"}}, // Hockenheim station
     {Coordinate{11.9046, 50.3214}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q800925
@@ -7214,7 +7214,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{13.6286, 51.1078}, Tz::Europe_Berlin, CountryId{"DE"}}, // Radebeul-Kötzschenbroda station
     {Coordinate{5.87778, 49.5539}, Tz::Europe_Luxembourg, CountryId{"LU"}}, // Pétange railway station
     {Coordinate{8.62389, 52.4331}, Tz::Europe_Berlin, CountryId{"DE"}}, // Rahden (Kreis Minden-Lübbecke) station
-    {Coordinate{8.21556, 48.8606}, Tz::Europe_Paris, CountryId{"DE"}}, // Rastatt station
+    {Coordinate{8.21556, 48.8606}, Tz::Europe_Berlin, CountryId{"DE"}}, // Rastatt station
     {Coordinate{13.4303, 52.2944}, Tz::Europe_Berlin, CountryId{"DE"}}, // Rangsdorf railway station
     {Coordinate{8.4551, 50.0101}, Tz::Europe_Berlin, CountryId{"DE"}}, // Raunheim station
     {Coordinate{6.86355, 51.2951}, Tz::Europe_Berlin, CountryId{"DE"}}, // Ratingen Ost station
@@ -7416,7 +7416,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.53361, 47.3475}, Tz::Europe_Zurich, CountryId{"CH"}}, // Zürich Wollishofen railway station
     {Coordinate{13.5483, 53.9739}, Tz::Europe_Berlin, CountryId{"DE"}}, // Züssow railway station
     {Coordinate{12.4873, 47.822}, Tz::Europe_Berlin, CountryId{"DE"}}, // Übersee station
-    {Coordinate{6.09765, 50.9242}, Tz::Europe_Amsterdam, CountryId{"DE"}}, // Übach-Palenberg station
+    {Coordinate{6.09765, 50.9242}, Tz::Europe_Berlin, CountryId{"DE"}}, // Übach-Palenberg station
     {Coordinate{14.2345, 53.9142}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Świnoujście Centrum
     {Coordinate{23.3157, 55.9226}, Tz::Europe_Vilnius, CountryId{"LT"}}, // Šiauliai railway station
     {Coordinate{18.7461, 49.2269}, Tz::Europe_Prague, CountryId{"SK"}}, // Žilina railway station
@@ -7554,7 +7554,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{9.54175, 47.2003}, Tz::Europe_Zurich, CountryId{"LI"}}, // Nendeln railway station
     {Coordinate{3.15778, 42.4247}, Tz::Europe_Madrid, CountryId{"ES"}}, // Portbou railway station
     {Coordinate{6.47106, 45.2173}, Tz::Europe_Paris, CountryId{"FR"}}, // Saint-Michel-Valloire railway station
-    {Coordinate{6.75022, 49.3278}, Tz::Europe_Paris, CountryId{"DE"}}, // Saarlouis Central Station
+    {Coordinate{6.75022, 49.3278}, Tz::Europe_Berlin, CountryId{"DE"}}, // Saarlouis Central Station
     {Coordinate{9.49649, 53.1657}, Tz::Europe_Berlin, CountryId{"DE"}}, // Scheeßel railway station
 };
 

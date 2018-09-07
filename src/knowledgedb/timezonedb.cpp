@@ -31,26 +31,9 @@ QTimeZone Timezone::toQTimeZone() const
     return QTimeZone(timezone_names + offset);
 }
 
-/* Manual overrides for countries that de-facto only have a single timezone,
- * even if the IANA database doesn't reflect that.
- *
- * Must be sorted by CountryId!
- */
-static constexpr const CountryTimezoneMap country_timezone_overrides[] = {
-    {CountryId{"CN"}, Tz::Asia_Shanghai },
-    {CountryId{"CY"}, Tz::Asia_Nicosia },
-    {CountryId{"DE"}, Tz::Europe_Berlin },
-    {CountryId{"MY"}, Tz::Asia_Kuala_Lumpur },
-};
-
 Timezone KItinerary::KnowledgeDb::timezoneForCountry(CountryId country)
 {
-    auto it = std::lower_bound(std::begin(country_timezone_overrides), std::end(country_timezone_overrides), country);
-    if (it != std::end(country_timezone_overrides) && (*it).country == country) {
-        return (*it).timezone;
-    }
-
-    it = std::lower_bound(std::begin(country_timezone_map), std::end(country_timezone_map), country);
+    const auto it = std::lower_bound(std::begin(country_timezone_map), std::end(country_timezone_map), country);
     if (it != std::end(country_timezone_map) && (*it).country == country) {
         return (*it).timezone;
     }

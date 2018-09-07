@@ -88,6 +88,14 @@ Timezones::Timezones()
             m_countryZones[country].push_back(cols.at(2).toUtf8());
         }
     }
+
+    /* Manual overrides for countries that de-facto only have a single timezone,
+     * even if the IANA database doesn't reflect that.
+    */
+    m_countryZones[QStringLiteral("CN")] = { "Asia/Shanghai" };
+    m_countryZones[QStringLiteral("CY")] = { "Asia/Nicosia" };
+    m_countryZones[QStringLiteral("DE")] = { "Europe/Berlin" };
+    m_countryZones[QStringLiteral("MY")] = { "Asia/Kuala_Lumpur" };
 }
 
 Timezones::~Timezones() = default;
