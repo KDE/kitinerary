@@ -222,11 +222,8 @@ void TrainStationDbGenerator::processStations()
             qDebug() << "Station has no geo coordinates:" << (*it).name << (*it).uri;
         }
 
-        (*it).tz = m_tzDb.timezoneForCountry((*it).isoCode);
-        if ((*it).tz.isEmpty()) {
-            (*it).tz = m_tzDb.timezoneForCoordinate((*it).coord);
-        }
-        if ((*it).tz.isEmpty() && (*it).coord.isValid()) {
+        (*it).tz = m_tzDb.timezoneForLocation((*it).isoCode, (*it).coord);
+        if ((*it).tz.isEmpty() && ((*it).coord.isValid() || !(*it).isoCode.isEmpty())) {
             ++m_timezoneLookupFailure;
             qWarning() << "Timezone lookup failure:" << (*it).name << (*it).uri;
         }

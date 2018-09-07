@@ -100,42 +100,61 @@ Timezones::Timezones()
 
 Timezones::~Timezones() = default;
 
-QByteArray Timezones::timezoneForCoordinate(const KnowledgeDb::Coordinate &coord) const
+QByteArray Timezones::timezoneForLocation(const QString &isoCode, const KnowledgeDb::Coordinate &coord) const
 {
-    if (!coord.isValid()) {
-        return {};
-    }
-
-    if (m_map.isNull() && !m_map.load(QStringLiteral("timezones.png"))) {
-        qCritical() << "Unable to open timezone map.";
-        exit(1);
-    }
-
-    const int x = qRound(m_map.width() * ((coord.longitude + 180.0f)/ 360.0f));
-    const int y = qRound(-m_map.height() * ((coord.latitude - 90.0f) / 180.0f));
-
-    //qDebug() << x << y << m_map.width() << m_map.height() << coord.longitude << coord.latitude << QColor(m_map.pixel(x, y)) << m_colorMap.value(m_map.pixel(x, y));
-    const auto tz = timezoneForPixel(x, y);
-    if (!tz.isEmpty()) {
-        return m_colorMap.value(m_map.pixel(x, y));
-    }
-
-    // search the vicinity, helps with costal/island airports
-    const struct {
-        int x;
-        int y;
-    } offsets[] = { {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1} };
-    QSet<QByteArray> tzs;
-    for (int i = 0; i < 8; ++i) {
-        const auto tz = timezoneForPixel(x + offsets[i].x, y + offsets[i].y);
-        if (!tz.isEmpty()) {
-            tzs.insert(tz);
+    // look up by country
+    QSet<QByteArray> countryTzs;
+    const auto it = m_countryZones.find(isoCode);
+    if (it != m_countryZones.end()) {
+        for (const auto &tz : (*it).second) {
+            countryTzs.insert(tz);
         }
     }
+
+    // look up by coordinate
+    QSet<QByteArray> coordTzs;
+    if (coord.isValid()) {
+        if (m_map.isNull() && !m_map.load(QStringLiteral("timezones.png"))) {
+            qCritical() << "Unable to open timezone map.";
+            exit(1);
+        }
+
+        const int x = qRound(m_map.width() * ((coord.longitude + 180.0f)/ 360.0f));
+        const int y = qRound(-m_map.height() * ((coord.latitude - 90.0f) / 180.0f));
+
+        //qDebug() << x << y << m_map.width() << m_map.height() << longitude << latitude << QColor(m_map.pixel(x, y)) << m_zones.value(m_map.pixel(x, y));
+        const auto tz = timezoneForPixel(x, y);
+        if (!tz.isEmpty()) {
+            coordTzs.insert(tz);
+        }
+
+        // search the vicinity, helps with costal/island airports
+        if (coordTzs.isEmpty()) {
+            const struct {
+                int x;
+                int y;
+            } offsets[] = { {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1} };
+            for (int i = 0; i < 8; ++i) {
+                const auto tz = timezoneForPixel(x + offsets[i].x, y + offsets[i].y);
+                if (!tz.isEmpty()) {
+                    coordTzs.insert(tz);
+                }
+            }
+        }
+    }
+
+    // determine the result: either just one method yieled a unique result, or both have a unique intersection
+    if (countryTzs.size() == 1) {
+        return *countryTzs.constBegin();
+    } else if (coordTzs.size() == 1) {
+        return *coordTzs.constBegin();
+    }
+    //qDebug() << "Timezone candidates:" << isoCode << coordTzs << countryTzs << coord.latitude << coord.longitude;
+
+    const auto tzs = coordTzs.intersect(countryTzs);
     if (tzs.size() == 1) {
         return *tzs.constBegin();
     }
-    //qDebug() << "Timezone candidates:" << tzs;
     return {};
 }
 
@@ -153,14 +172,4 @@ uint16_t Timezones::offset(const QByteArray& tz) const
         return std::numeric_limits<uint16_t>::max();
     }
     return m_zoneOffsets[std::distance(m_zones.begin(), it)];
-}
-
-QByteArray Timezones::timezoneForCountry(const QString &isoCode) const
-{
-    const auto it = m_countryZones.find(isoCode);
-    if (it != m_countryZones.end() && (*it).second.size() == 1) {
-        return (*it).second.at(0);
-    }
-
-    return {};
 }

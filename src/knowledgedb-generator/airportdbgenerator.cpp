@@ -202,13 +202,9 @@ bool AirportDbGenerator::fetchCountries()
 void AirportDbGenerator::lookupTimezones()
 {
     for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
-        (*it).tz = m_tzDb.timezoneForCountry((*it).country);
-        if (!(*it).tz.isEmpty() || !(*it).coord.isValid()) {
-            continue;
-        }
-        (*it).tz = m_tzDb.timezoneForCoordinate((*it).coord);
+        (*it).tz = m_tzDb.timezoneForLocation((*it).country, (*it).coord);
         if ((*it).tz.isEmpty()) {
-            qDebug() << "Failed to find timezone for" << (*it).iataCode << (*it).label << (*it).coord.latitude << (*it).coord.longitude << (*it).uri;
+            qDebug() << "Failed to find timezone for" << (*it).iataCode << (*it).label << (*it).country << (*it).coord.latitude << (*it).coord.longitude << (*it).uri;
             ++m_timezoneLoopupFails;
             continue;
         }

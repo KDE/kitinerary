@@ -37,8 +37,7 @@ public:
     Timezones();
     ~Timezones();
 
-    QByteArray timezoneForCoordinate(const KnowledgeDb::Coordinate &coord) const;
-    QByteArray timezoneForCountry(const QString &isoCode) const;
+    QByteArray timezoneForLocation(const QString &isoCode, const KnowledgeDb::Coordinate &coord) const;
 
     // the offset into the timezone string table
     uint16_t offset(const QByteArray &tz) const;
