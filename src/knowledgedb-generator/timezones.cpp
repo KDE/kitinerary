@@ -29,6 +29,7 @@ using namespace KItinerary::Generator;
 
 Timezones::Timezones()
 {
+    // load the color to timezone mapping file
     QFile colorMap(QStringLiteral("timezones.colormap"));
     if (!colorMap.open(QFile::ReadOnly)) {
         qCritical() << "Unable to open timezone colormap file: " << colorMap.errorString();
@@ -65,6 +66,27 @@ Timezones::Timezones()
         m_zoneOffsets.push_back(offset);
         offset += tz.size() + 1; // +1 of the trailing null byte
     }
+
+    // load the wold file for correcting the pixel to coordinate mapping in the timezone image
+    // see https://en.wikipedia.org/wiki/World_file for format and math behind this
+    QFile worldFile(QStringLiteral("timezones.pgw"));
+    if (!worldFile.open(QFile::ReadOnly|QFile::Text)) {
+        qCritical() << "Unable to open world file: " << worldFile.errorString();
+        exit(1);
+    }
+    const auto worldFileContent = worldFile.readAll().split('\n');
+    if (worldFileContent.size() < 6) {
+        qCritical() << "Invalid world map file format.";
+        exit(1);
+    }
+    if (worldFileContent[1].toDouble() != 0.0 || worldFileContent[2].toDouble() != 0.0) {
+        qCritical() << "Timezone map is rotated, that is not supported!";
+        exit(1);
+    }
+    m_xMapUnitsPerPixel = worldFileContent[0].toDouble();
+    m_yMapUnitsPerPixel = worldFileContent[3].toDouble();
+    m_topLeftMapUnitX = worldFileContent[4].toDouble();
+    m_topLeftMapUnitY = worldFileContent[5].toDouble();
 
     // load zone.tab for country mapping
     QFile zoneTab(QStringLiteral("/usr/share/zoneinfo/zone1970.tab"));
@@ -119,23 +141,18 @@ QByteArray Timezones::timezoneForLocation(const QString &isoCode, const Knowledg
             exit(1);
         }
 
-        const int x = qRound(m_map.width() * ((coord.longitude + 180.0f)/ 360.0f));
-        const int y = qRound(-m_map.height() * ((coord.latitude - 90.0f) / 180.0f));
-
-        //qDebug() << x << y << m_map.width() << m_map.height() << longitude << latitude << QColor(m_map.pixel(x, y)) << m_zones.value(m_map.pixel(x, y));
-        const auto tz = timezoneForPixel(x, y);
+        const auto p = coordinateToPixel(coord);
+        //qDebug() << p.x() << p.y() << m_map.width() << m_map.height() << coord.longitude << coord.latitude << QColor(m_map.pixel(p)) << m_colorMap.value(m_map.pixel(p));
+        const auto tz = timezoneForPixel(p.x(), p.y());
         if (!tz.isEmpty()) {
             coordTzs.insert(tz);
         }
 
         // search the vicinity, helps with costal/island airports
         if (coordTzs.isEmpty()) {
-            const struct {
-                int x;
-                int y;
-            } offsets[] = { {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1} };
-            for (int i = 0; i < 8; ++i) {
-                const auto tz = timezoneForPixel(x + offsets[i].x, y + offsets[i].y);
+            const QPoint offsets[] = { {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1} };
+            for (auto offset : offsets) {
+                const auto tz = timezoneForPixel(p.x() + offset.x(), p.y() + offset.y());
                 if (!tz.isEmpty()) {
                     coordTzs.insert(tz);
                 }
@@ -172,4 +189,13 @@ uint16_t Timezones::offset(const QByteArray& tz) const
         return std::numeric_limits<uint16_t>::max();
     }
     return m_zoneOffsets[std::distance(m_zones.begin(), it)];
+}
+
+QPoint Timezones::coordinateToPixel(const KnowledgeDb::Coordinate &coord) const
+{
+    QPoint p;
+    p.setX(qRound((coord.longitude - m_topLeftMapUnitX) / m_xMapUnitsPerPixel));
+    p.setY(qRound((coord.latitude - m_topLeftMapUnitY) / m_yMapUnitsPerPixel));
+    qDebug() << coord.longitude << coord.latitude << p;
+    return p;
 }

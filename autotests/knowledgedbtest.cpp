@@ -51,6 +51,12 @@ private Q_SLOTS:
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone("Europe/Zurich"));
         QCOMPARE(station.country, CountryId{"CH"});
+
+        // Aachen West, very close to the NL border, should be in DE timezone
+        station = KnowledgeDb::stationForIbnr(IBNR{8000404});
+        QVERIFY(station.coordinate.isValid());
+        QCOMPARE(station.timezone.toQTimeZone(), QTimeZone("Europe/Berlin"));
+        QCOMPARE(station.country, CountryId{"DE"});
     }
 
     void testGaresConnexionsIdLookup()

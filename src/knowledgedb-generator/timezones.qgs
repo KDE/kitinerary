@@ -9883,7 +9883,7 @@ def my_form_open(dialog, layer, feature):
   </projectMetadata>
   <Annotations/>
   <Layouts>
-    <Layout worldFileMap="" name="timezone_lookup_map" printResolution="300" units="mm">
+    <Layout worldFileMap="" name="timezone_lookup_map" printResolution="2400" units="mm">
       <Snapper snapToGuides="1" snapToItems="1" snapToGrid="0" tolerance="5"/>
       <Grid offsetY="0" resolution="10" offsetUnits="mm" offsetX="0" resUnits="mm"/>
       <PageCollection>

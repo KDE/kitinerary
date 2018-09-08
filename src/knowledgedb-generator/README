@@ -11,8 +11,8 @@ Extract the zip file into this folder.
 (2) Generate timezone lookup map
 
 Open timezones.qgs in QGIS. Select "Project" > "Layouts" > "timezone_lookup_map" and then
-"Layout" > "Export as Image". Choose "timezones.png" in this folder, 2400dpi and *no* anti-
-aliasing.
+"Layout" > "Export as Image". Choose "timezones.png" in this folder, 2400dpi, enable
+"Generate world file" and *disable* anti-aliasing.
 
 (3) Run the code generator
 

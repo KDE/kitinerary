@@ -909,7 +909,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{11.9361, 44.5404}, Tz::Europe_Rome, CountryId{"IT"}}, // Q16610093
     {Coordinate{20.8686, 52.1911}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Warszawa Ursus Niedźwiadek railway station
     {Coordinate{11.5933, 50.8838}, Tz::Europe_Berlin, CountryId{"DE"}}, // Jena-Göschwitz station
-    {Coordinate{22.6306, 48.2019}, Tz::Europe_Budapest, CountryId{"UA"}}, // Q16692574
+    {Coordinate{22.6306, 48.2019}, Tz::Europe_Uzhgorod, CountryId{"UA"}}, // Q16692574
     {Coordinate{}, Timezone{}, CountryId{"UA"}}, // Q16702723
     {Coordinate{5.65167, 53.0322}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Sneek railway station
     {Coordinate{8.26995, 47.3484}, Tz::Europe_Zurich, CountryId{"CH"}}, // Wohlen railway station

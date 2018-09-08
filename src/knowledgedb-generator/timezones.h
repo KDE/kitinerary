@@ -44,10 +44,16 @@ public:
 
 private:
     friend class TimezoneDbGenerator;
+    QPoint coordinateToPixel(const KnowledgeDb::Coordinate &coord) const;
     QByteArray timezoneForPixel(int x, int y) const;
 
     mutable QImage m_map;
     QHash<QRgb, QByteArray> m_colorMap;
+    double m_xMapUnitsPerPixel;
+    double m_yMapUnitsPerPixel;
+    double m_topLeftMapUnitX;
+    double m_topLeftMapUnitY;
+
     std::vector<QByteArray> m_zones;
     std::vector<uint16_t> m_zoneOffsets;
 
