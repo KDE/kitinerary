@@ -89,7 +89,7 @@ Timezones::Timezones()
     m_topLeftMapUnitY = worldFileContent[5].toDouble();
 
     // load zone.tab for country mapping
-    QFile zoneTab(QStringLiteral("/usr/share/zoneinfo/zone1970.tab"));
+    QFile zoneTab(QStringLiteral("/usr/share/zoneinfo/zone.tab"));
     if (!zoneTab.open(QFile::ReadOnly)) {
         qCritical() << "Unable to open zonetab file: " << zoneTab.errorString();
         exit(1);
@@ -196,6 +196,5 @@ QPoint Timezones::coordinateToPixel(const KnowledgeDb::Coordinate &coord) const
     QPoint p;
     p.setX(qRound((coord.longitude - m_topLeftMapUnitX) / m_xMapUnitsPerPixel));
     p.setY(qRound((coord.latitude - m_topLeftMapUnitY) / m_yMapUnitsPerPixel));
-    qDebug() << coord.longitude << coord.latitude << p;
     return p;
 }

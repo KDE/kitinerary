@@ -41,7 +41,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"AAV"}, CountryId{"PH"}, Tz::Asia_Manila}, // Allah Valley Airport
     Airport{IataCode{"AAW"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Abbottabad Airport
     Airport{IataCode{"AAX"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Araxá Airport
-    Airport{IataCode{"AAY"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Al Ghaydah Airport
+    Airport{IataCode{"AAY"}, CountryId{"YE"}, Tz::Asia_Aden}, // Al Ghaydah Airport
     Airport{IataCode{"AAZ"}, CountryId{"GT"}, Tz::America_Guatemala}, // Aeropuerto Internacional Los Altos
     Airport{IataCode{"ABA"}, CountryId{"RU"}, Tz::Asia_Krasnoyarsk}, // Abakan International Airport
     Airport{IataCode{"ABB"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Asaba International Airport
@@ -53,7 +53,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ABH"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Alpha Airport
     Airport{IataCode{"ABI"}, CountryId{"US"}, Tz::America_Chicago}, // Abilene Regional Airport
     Airport{IataCode{"ABJ"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Port Bouet Airport
-    Airport{IataCode{"ABK"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Kabri Dar Airport
+    Airport{IataCode{"ABK"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Kabri Dar Airport
     Airport{IataCode{"ABL"}, CountryId{"US"}, Tz::America_Anchorage}, // Ambler Airport
     Airport{IataCode{"ABM"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Northern Peninsula Airport
     Airport{IataCode{"ABN"}, CountryId{"SR"}, Tz::America_Paramaribo}, // Albina Airstrip
@@ -75,7 +75,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ACD"}, CountryId{"CO"}, Tz::America_Bogota}, // Alcides Fernández Airport
     Airport{IataCode{"ACE"}, CountryId{"ES"}, Tz::Atlantic_Canary}, // Lanzarote Airport
     Airport{IataCode{"ACH"}, CountryId{"CH"}, Tz::Europe_Zurich}, // St. Gallen-Altenrhein Airport
-    Airport{IataCode{"ACI"}, CountryId{"GG"}, Tz::Europe_London}, // Alderney Airport
+    Airport{IataCode{"ACI"}, CountryId{"GG"}, Tz::Europe_Guernsey}, // Alderney Airport
     Airport{IataCode{"ACK"}, CountryId{"US"}, Tz::America_New_York}, // Nantucket Memorial Airport
     Airport{IataCode{"ACL"}, CountryId{"CO"}, Tz::America_Bogota}, // Aguaclara Airport
     Airport{IataCode{"ACN"}, CountryId{"MX"}, Tz::America_Matamoros}, // Ciudad Acuña International Airport
@@ -91,8 +91,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ADA"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Adana Şakirpaşa Airport
     Airport{IataCode{"ADB"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Adnan Menderes Airport
     Airport{IataCode{"ADC"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Andakombe Airport
-    Airport{IataCode{"ADD"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Addis Ababa Bole International Airport
-    Airport{IataCode{"ADE"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Aden International Airport
+    Airport{IataCode{"ADD"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Addis Ababa Bole International Airport
+    Airport{IataCode{"ADE"}, CountryId{"YE"}, Tz::Asia_Aden}, // Aden International Airport
     Airport{IataCode{"ADF"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Adıyaman Airport
     Airport{IataCode{"ADG"}, CountryId{"US"}, Tz::America_Detroit}, // Lenawee County Airport
     Airport{IataCode{"ADH"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Aldan Airport
@@ -117,7 +117,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"AEI"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Algeciras Heliport
     Airport{IataCode{"AEK"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Aseki Airport
     Airport{IataCode{"AEL"}, CountryId{"US"}, Tz::America_Chicago}, // Albert Lea Municipal Airport
-    Airport{IataCode{"AEO"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Aioun el Atrouss Airport
+    Airport{IataCode{"AEO"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Aioun el Atrouss Airport
     Airport{IataCode{"AEP"}, CountryId{"AR"}, Tz::America_Argentina_Buenos_Aires}, // Aeroparque Jorge Newbery
     Airport{IataCode{"AER"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Sochi International Airport
     Airport{IataCode{"AES"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Ålesund Airport, Vigra
@@ -176,9 +176,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"AID"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Anderson Municipal Airport
     Airport{IataCode{"AIE"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Aiome Airport
     Airport{IataCode{"AIF"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Assis Airport
-    Airport{IataCode{"AIG"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Yalinga Airport
+    Airport{IataCode{"AIG"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Yalinga Airport
     Airport{IataCode{"AIH"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Aiambak Airport
-    Airport{IataCode{"AII"}, CountryId{"DJ"}, Tz::Africa_Nairobi}, // Ali-Sabieh Airport
+    Airport{IataCode{"AII"}, CountryId{"DJ"}, Tz::Africa_Djibouti}, // Ali-Sabieh Airport
     Airport{IataCode{"AIK"}, CountryId{"US"}, Tz::America_New_York}, // Aiken Municipal Airport
     Airport{IataCode{"AIM"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Ailuk Airport
     Airport{IataCode{"AIN"}, CountryId{"US"}, Tz::America_Anchorage}, // Wainwright Airport
@@ -193,19 +193,19 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"AJA"}, CountryId{"FR"}, Tz::Europe_Paris}, // Ajaccio Napoleon Bonaparte Airport
     Airport{IataCode{"AJF"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Al-Jawf Domestic Airport
     Airport{IataCode{"AJI"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Ağrı Ahmed-i Hani Airport
-    Airport{IataCode{"AJJ"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Akjoujt Airport
+    Airport{IataCode{"AJJ"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Akjoujt Airport
     Airport{IataCode{"AJK"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Arak Airport
     Airport{IataCode{"AJL"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Lengpui Airport
-    Airport{IataCode{"AJN"}, CountryId{"KM"}, Tz::Africa_Nairobi}, // Ouani Airport
+    Airport{IataCode{"AJN"}, CountryId{"KM"}, Tz::Indian_Comoro}, // Ouani Airport
     Airport{IataCode{"AJR"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Arvidsjaur Airport
     Airport{IataCode{"AJS"}, CountryId{"MX"}, Tz::America_Mazatlan}, // Punta Abreojos Airstrip
     Airport{IataCode{"AJU"}, CountryId{"BR"}, Tz::America_Maceio}, // Santa Maria Airport
-    Airport{IataCode{"AJY"}, CountryId{"NE"}, Tz::Africa_Lagos}, // Mano Dayak International Airport
+    Airport{IataCode{"AJY"}, CountryId{"NE"}, Tz::Africa_Niamey}, // Mano Dayak International Airport
     Airport{IataCode{"AKA"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Ankang Wulipu Airport
     Airport{IataCode{"AKB"}, CountryId{"US"}, Tz::America_Adak}, // Atka Airport
     Airport{IataCode{"AKC"}, CountryId{"US"}, Tz::America_New_York}, // Akron Fulton International Airport
     Airport{IataCode{"AKD"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Akola Airport
-    Airport{IataCode{"AKE"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Akieni Airport
+    Airport{IataCode{"AKE"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Akieni Airport
     Airport{IataCode{"AKF"}, CountryId{"LY"}, Tz::Africa_Tripoli}, // Kufra Airport
     Airport{IataCode{"AKG"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Anguganak Airport
     Airport{IataCode{"AKI"}, CountryId{"US"}, Tz::America_Anchorage}, // Akiak Airport
@@ -241,23 +241,23 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ALQ"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Alegrete Airport
     Airport{IataCode{"ALR"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Alexandra Aerodrome
     Airport{IataCode{"ALS"}, CountryId{"US"}, Tz::America_Denver}, // San Luis Valley Regional Airport
-    Airport{IataCode{"ALU"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Alula Airport
+    Airport{IataCode{"ALU"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Alula Airport
     Airport{IataCode{"ALW"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Walla Walla Regional Airport
     Airport{IataCode{"ALX"}, CountryId{"US"}, Tz::America_Chicago}, // Thomas C. Russell Field
     Airport{IataCode{"ALY"}, CountryId{"EG"}, Tz::Africa_Cairo}, // El Nouzha Airport
     Airport{IataCode{"ALZ"}, CountryId{"US"}, Tz::America_Anchorage}, // Alitak Seaplane Base
     Airport{IataCode{"AMA"}, CountryId{"US"}, Tz::America_Chicago}, // Rick Husband Amarillo International Airport
-    Airport{IataCode{"AMB"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Ambilobe Airport
+    Airport{IataCode{"AMB"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Ambilobe Airport
     Airport{IataCode{"AMC"}, CountryId{"TD"}, Tz::Africa_Ndjamena}, // Am Timan Airport
     Airport{IataCode{"AMD"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Sardar Vallabhbhai Patel International Airport
     Airport{IataCode{"AMF"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Ama Airport
-    Airport{IataCode{"AMH"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Arba Minch Airport
+    Airport{IataCode{"AMH"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Arba Minch Airport
     Airport{IataCode{"AMI"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Selaparang Airport
     Airport{IataCode{"AMK"}, CountryId{"US"}, Tz::America_Denver}, // Animas Air Park
     Airport{IataCode{"AMM"}, CountryId{"JO"}, Tz::Asia_Amman}, // Queen Alia International Airport
     Airport{IataCode{"AMN"}, CountryId{"US"}, Tz::America_Detroit}, // Gratiot Community Airport
     Airport{IataCode{"AMO"}, CountryId{"TD"}, Tz::Africa_Ndjamena}, // Mao Airport
-    Airport{IataCode{"AMP"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Ampanihy Airport
+    Airport{IataCode{"AMP"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Ampanihy Airport
     Airport{IataCode{"AMQ"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Pattimura Airport
     Airport{IataCode{"AMS"}, CountryId{"NL"}, Tz::Europe_Amsterdam}, // Amsterdam Airport Schiphol
     Airport{IataCode{"AMU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Amanab Airport
@@ -272,16 +272,16 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ANF"}, CountryId{"CL"}, Tz::America_Santiago}, // Andrés Sabella Airport
     Airport{IataCode{"ANG"}, CountryId{"FR"}, Tz::Europe_Paris}, // Angoulême – Brie – Champniers Airport
     Airport{IataCode{"ANI"}, CountryId{"US"}, Tz::America_Anchorage}, // Aniak Airport
-    Airport{IataCode{"ANJ"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Zanaga Airport
-    Airport{IataCode{"ANL"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Andulo Airport
-    Airport{IataCode{"ANM"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Antsirabato Airport
+    Airport{IataCode{"ANJ"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Zanaga Airport
+    Airport{IataCode{"ANL"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Andulo Airport
+    Airport{IataCode{"ANM"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Antsirabato Airport
     Airport{IataCode{"ANN"}, CountryId{"US"}, Tz::America_Metlakatla}, // Annette Island Airport
     Airport{IataCode{"ANO"}, CountryId{"MZ"}, Tz::Africa_Maputo}, // Angoche Airport
     Airport{IataCode{"ANP"}, CountryId{"US"}, Tz::America_New_York}, // Lee Airport
     Airport{IataCode{"ANQ"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Tri-State Steuben County Airport
     Airport{IataCode{"ANR"}, CountryId{"BE"}, Tz::Europe_Brussels}, // Antwerp International Airport
     Airport{IataCode{"ANS"}, CountryId{"PE"}, Tz::America_Lima}, // Andahuaylas Airport
-    Airport{IataCode{"ANU"}, CountryId{"AG"}, Tz::America_Port_of_Spain}, // V. C. Bird International Airport
+    Airport{IataCode{"ANU"}, CountryId{"AG"}, Tz::America_Antigua}, // V. C. Bird International Airport
     Airport{IataCode{"ANV"}, CountryId{"US"}, Tz::America_Anchorage}, // Anvik Airport
     Airport{IataCode{"ANW"}, CountryId{"US"}, Tz::America_Chicago}, // Ainsworth Regional Airport
     Airport{IataCode{"ANX"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Andøya Airport
@@ -294,13 +294,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"AOJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Aomori Airport
     Airport{IataCode{"AOK"}, CountryId{"GR"}, Tz::Europe_Athens}, // Karpathos Island National Airport
     Airport{IataCode{"AOL"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Paso de los Libres Airport
-    Airport{IataCode{"AOM"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Adam Airport
+    Airport{IataCode{"AOM"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Adam Airport
     Airport{IataCode{"AOO"}, CountryId{"US"}, Tz::America_New_York}, // Altoona–Blair County Airport
     Airport{IataCode{"AOP"}, CountryId{"PE"}, Tz::America_Lima}, // Alférez FAP Alfredo Vladimir Sara Bauer Airport
     Airport{IataCode{"AOR"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Sultan Abdul Halim Airport
     Airport{IataCode{"AOS"}, CountryId{"US"}, Tz::America_Anchorage}, // Amook Bay Seaplane Base
     Airport{IataCode{"AOT"}, CountryId{"IT"}, Tz::Europe_Rome}, // Aosta Airport
-    Airport{IataCode{"AOU"}, CountryId{"LA"}, Tz::Asia_Bangkok}, // Attapeu International Airport
+    Airport{IataCode{"AOU"}, CountryId{"LA"}, Tz::Asia_Vientiane}, // Attapeu International Airport
     Airport{IataCode{"APA"}, CountryId{"US"}, Tz::America_Denver}, // Centennial Airport
     Airport{IataCode{"APB"}, CountryId{"BO"}, Tz::America_La_Paz}, // Apolo Airport
     Airport{IataCode{"APC"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Napa County Airport
@@ -337,8 +337,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ARH"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Talagi Airport
     Airport{IataCode{"ARI"}, CountryId{"CL"}, Tz::America_Santiago}, // Chacalluta International Airport
     Airport{IataCode{"ARJ"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Arso Airport
-    Airport{IataCode{"ARK"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Arusha Airport
-    Airport{IataCode{"ARL"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Arly Airport
+    Airport{IataCode{"ARK"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Arusha Airport
+    Airport{IataCode{"ARL"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Arly Airport
     Airport{IataCode{"ARM"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Armidale Airport
     Airport{IataCode{"ARN"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Stockholm Arlanda Airport
     Airport{IataCode{"ARP"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Aragip Airport
@@ -349,8 +349,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ARV"}, CountryId{"US"}, Tz::America_Chicago}, // Lakeland Airport
     Airport{IataCode{"ARW"}, CountryId{"RO"}, Tz::Europe_Bucharest}, // Arad International Airport
     Airport{IataCode{"ARY"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Ararat airport
-    Airport{IataCode{"ARZ"}, CountryId{"AO"}, Tz::Africa_Lagos}, // N'zeto Airport
-    Airport{IataCode{"ASA"}, CountryId{"ER"}, Tz::Africa_Nairobi}, // Assab International Airport
+    Airport{IataCode{"ARZ"}, CountryId{"AO"}, Tz::Africa_Luanda}, // N'zeto Airport
+    Airport{IataCode{"ASA"}, CountryId{"ER"}, Tz::Africa_Asmara}, // Assab International Airport
     Airport{IataCode{"ASB"}, CountryId{"TM"}, Tz::Asia_Ashgabat}, // Ashgabat International Airport
     Airport{IataCode{"ASC"}, CountryId{"BO"}, Tz::America_La_Paz}, // Ascencion De Guarayos Airport
     Airport{IataCode{"ASD"}, CountryId{"BS"}, Tz::America_Nassau}, // Andros Town International Airport
@@ -361,9 +361,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ASJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Amami Airport
     Airport{IataCode{"ASK"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Yamoussoukro Airport
     Airport{IataCode{"ASL"}, CountryId{"US"}, Tz::America_Chicago}, // Harrison County Airport
-    Airport{IataCode{"ASM"}, CountryId{"ER"}, Tz::Africa_Nairobi}, // Asmara International Airport
+    Airport{IataCode{"ASM"}, CountryId{"ER"}, Tz::Africa_Asmara}, // Asmara International Airport
     Airport{IataCode{"ASN"}, CountryId{"US"}, Tz::America_Chicago}, // Talladega Municipal Airport
-    Airport{IataCode{"ASO"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Asosa Airport
+    Airport{IataCode{"ASO"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Asosa Airport
     Airport{IataCode{"ASP"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Alice Springs Airport
     Airport{IataCode{"ASQ"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Austin Airport
     Airport{IataCode{"ASR"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Erkilet International Airport
@@ -383,7 +383,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ATG"}, CountryId{"PE"}, Tz::America_Lima}, // Tnte. Gral. Gerardo Pérez Pinedo Airport
     Airport{IataCode{"ATH"}, CountryId{"GR"}, Tz::Europe_Athens}, // Athens International Airport
     Airport{IataCode{"ATI"}, CountryId{"UY"}, Tz::America_Montevideo}, // Artigas Airport
-    Airport{IataCode{"ATJ"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Antsirabe Airport
+    Airport{IataCode{"ATJ"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Antsirabe Airport
     Airport{IataCode{"ATK"}, CountryId{"US"}, Tz::America_Anchorage}, // Atqasuk Edward Burnell Sr. Memorial Airport
     Airport{IataCode{"ATL"}, CountryId{"US"}, Tz::America_New_York}, // Hartsfield–Jackson Atlanta International Airport
     Airport{IataCode{"ATM"}, CountryId{"BR"}, Tz::America_Santarem}, // Altamira Airport
@@ -391,7 +391,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ATO"}, CountryId{"US"}, Tz::America_New_York}, // Ohio University Airport
     Airport{IataCode{"ATP"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Aitape Airport
     Airport{IataCode{"ATQ"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Sri Guru Ram Dass Jee International Airport
-    Airport{IataCode{"ATR"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Atar International Airport
+    Airport{IataCode{"ATR"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Atar International Airport
     Airport{IataCode{"ATS"}, CountryId{"US"}, Tz::America_Denver}, // Artesia Municipal Airport
     Airport{IataCode{"ATT"}, CountryId{"US"}, Tz::America_Nome}, // Atmautluak Airport
     Airport{IataCode{"ATU"}, CountryId{"US"}, Tz::America_Adak}, // Casco Cove Coast Guard Station
@@ -434,7 +434,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"AVV"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Avalon Airport
     Airport{IataCode{"AVW"}, CountryId{"US"}, Tz::America_Phoenix}, // Marana Regional Airport
     Airport{IataCode{"AVX"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Catalina Airport
-    Airport{IataCode{"AWA"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Awasa Airport
+    Airport{IataCode{"AWA"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Awasa Airport
     Airport{IataCode{"AWB"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Awaba Airport
     Airport{IataCode{"AWD"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Aniwa Airport
     Airport{IataCode{"AWK"}, CountryId{"US"}, Tz::Pacific_Wake}, // Wake Island Airfield
@@ -449,13 +449,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"AXF"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Alxa Left Banner Bayanhot Airport
     Airport{IataCode{"AXG"}, CountryId{"US"}, Tz::America_Chicago}, // Algona Municipal Airport
     Airport{IataCode{"AXJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Amakusa Airfield
-    Airport{IataCode{"AXK"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Ataq Airport
+    Airport{IataCode{"AXK"}, CountryId{"YE"}, Tz::Asia_Aden}, // Ataq Airport
     Airport{IataCode{"AXM"}, CountryId{"CO"}, Tz::America_Bogota}, // El Edén International Airport
     Airport{IataCode{"AXN"}, CountryId{"US"}, Tz::America_Chicago}, // Alexandria Municipal Airport
     Airport{IataCode{"AXP"}, CountryId{"BS"}, Tz::America_Nassau}, // Spring Point Airport
     Airport{IataCode{"AXS"}, CountryId{"US"}, Tz::America_Chicago}, // Altus/Quartz Mountain Regional Airport
     Airport{IataCode{"AXT"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Akita Airport
-    Airport{IataCode{"AXU"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Axum Airport
+    Airport{IataCode{"AXU"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Axum Airport
     Airport{IataCode{"AXV"}, CountryId{"US"}, Tz::America_New_York}, // Neil Armstrong Airport
     Airport{IataCode{"AYA"}, CountryId{"CO"}, Tz::America_Bogota}, // Ayapel Airport
     Airport{IataCode{"AYK"}, CountryId{"KZ"}, Tz::Asia_Qyzylorda}, // Arkalyk Airport
@@ -477,12 +477,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"AZO"}, CountryId{"US"}, Tz::America_Detroit}, // Kalamazoo/Battle Creek International Airport
     Airport{IataCode{"AZR"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Touat-Cheikh Sidi Mohamed Belkebir Airport
     Airport{IataCode{"AZS"}, CountryId{"DO"}, Tz::America_Santo_Domingo}, // Samaná El Catey International Airport
-    Airport{IataCode{"AZZ"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Ambriz Airport
+    Airport{IataCode{"AZZ"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Ambriz Airport
     Airport{IataCode{"BAA"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Bialla Airport
     Airport{IataCode{"BAE"}, CountryId{"FR"}, Tz::Europe_Paris}, // Barcelonnette – Saint-Pons Airport
     Airport{IataCode{"BAF"}, CountryId{"US"}, Tz::America_New_York}, // Barnes Municipal Airport
     Airport{IataCode{"BAG"}, CountryId{"PH"}, Tz::Asia_Manila}, // Loakan Airport
-    Airport{IataCode{"BAH"}, CountryId{"BH"}, Tz::Asia_Qatar}, // Bahrain International Airport
+    Airport{IataCode{"BAH"}, CountryId{"BH"}, Tz::Asia_Bahrain}, // Bahrain International Airport
     Airport{IataCode{"BAI"}, CountryId{"CR"}, Tz::America_Costa_Rica}, // Buenos Aires Airport, Costa Rica
     Airport{IataCode{"BAJ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Bali
     Airport{IataCode{"BAM"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Battle Mountain Airport
@@ -504,35 +504,35 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BBG"}, CountryId{"KI"}, Tz::Pacific_Tarawa}, // Butaritari Atoll Airport
     Airport{IataCode{"BBH"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Stralsund Barth Airport
     Airport{IataCode{"BBI"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Biju Patnaik Airport
-    Airport{IataCode{"BBK"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Kasane Airport
+    Airport{IataCode{"BBK"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Kasane Airport
     Airport{IataCode{"BBL"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Ballera Airport
-    Airport{IataCode{"BBM"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Battambang Airport
+    Airport{IataCode{"BBM"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Battambang Airport
     Airport{IataCode{"BBN"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Bario Airport
     Airport{IataCode{"BBO"}, CountryId{}, Tz::Africa_Mogadishu}, // Berbera Airport
     Airport{IataCode{"BBP"}, CountryId{"GB"}, Tz::Europe_London}, // Bembridge Airport
-    Airport{IataCode{"BBQ"}, CountryId{"AG"}, Tz::America_Port_of_Spain}, // Codrington Airport
+    Airport{IataCode{"BBQ"}, CountryId{"AG"}, Tz::America_Antigua}, // Codrington Airport
     Airport{IataCode{"BBR"}, CountryId{"FR"}, Tz::Europe_Paris}, // Baillif Airport
     Airport{IataCode{"BBS"}, CountryId{"GB"}, Tz::Europe_London}, // Blackbushe Airport
-    Airport{IataCode{"BBT"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Berbérati Airport
+    Airport{IataCode{"BBT"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Berbérati Airport
     Airport{IataCode{"BBU"}, CountryId{"RO"}, Tz::Europe_Bucharest}, // Aurel Vlaicu International Airport
     Airport{IataCode{"BBV"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Nero-Mer Airport
     Airport{IataCode{"BBW"}, CountryId{"US"}, Tz::America_Chicago}, // Broken Bow Municipal Airport
     Airport{IataCode{"BBX"}, CountryId{"US"}, Tz::America_New_York}, // Wings Field
-    Airport{IataCode{"BBY"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Bambari Airport
-    Airport{IataCode{"BBZ"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Zambezi Airport
+    Airport{IataCode{"BBY"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Bambari Airport
+    Airport{IataCode{"BBZ"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Zambezi Airport
     Airport{IataCode{"BCA"}, CountryId{"CU"}, Tz::America_Havana}, // Gustavo Rizo Airport
     Airport{IataCode{"BCB"}, CountryId{"US"}, Tz::America_New_York}, // Virginia Tech Montgomery Executive Airport
     Airport{IataCode{"BCC"}, CountryId{"US"}, Tz::America_Anchorage}, // Bear Creek 3 Airport
     Airport{IataCode{"BCD"}, CountryId{"PH"}, Tz::Asia_Manila}, // Bacolod-Silay International Airport
     Airport{IataCode{"BCE"}, CountryId{"US"}, Tz::America_Denver}, // Bryce Canyon Airport
-    Airport{IataCode{"BCF"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Bouca Airport
+    Airport{IataCode{"BCF"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Bouca Airport
     Airport{IataCode{"BCH"}, CountryId{"TL"}, Tz::Asia_Dili}, // Baucau Airport
     Airport{IataCode{"BCI"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Barcaldine Airport
     Airport{IataCode{"BCK"}, CountryId{"US"}, Tz::America_Chicago}, // Black River Falls Area Airport
     Airport{IataCode{"BCL"}, CountryId{"CR"}, Tz::America_Costa_Rica}, // Barra del Colorado Airport
     Airport{IataCode{"BCM"}, CountryId{"RO"}, Tz::Europe_Bucharest}, // Bacău International Airport
     Airport{IataCode{"BCN"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Barcelona–El Prat Airport
-    Airport{IataCode{"BCO"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Baco Airport
+    Airport{IataCode{"BCO"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Baco Airport
     Airport{IataCode{"BCQ"}, CountryId{"LY"}, Tz::Africa_Tripoli}, // Brak Airport
     Airport{IataCode{"BCR"}, CountryId{"RS"}, Tz::Europe_Belgrade}, // Bela Crkva Airport
     Airport{IataCode{"BCS"}, CountryId{"US"}, Tz::America_Chicago}, // Southern Seaplane Airport
@@ -570,7 +570,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BEF"}, CountryId{"NI"}, Tz::America_Managua}, // Bluefields Airport
     Airport{IataCode{"BEG"}, CountryId{"RS"}, Tz::Europe_Belgrade}, // Belgrade Nikola Tesla Airport
     Airport{IataCode{"BEH"}, CountryId{"US"}, Tz::America_Detroit}, // Southwest Michigan Regional Airport
-    Airport{IataCode{"BEI"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Beica Airport
+    Airport{IataCode{"BEI"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Beica Airport
     Airport{IataCode{"BEJ"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Kalimarau Airport
     Airport{IataCode{"BEK"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Bareilly Airport
     Airport{IataCode{"BEL"}, CountryId{"BR"}, Tz::America_Belem}, // Val de Cans International Airport
@@ -596,7 +596,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BFL"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Meadows Field Airport
     Airport{IataCode{"BFM"}, CountryId{"US"}, Tz::America_Chicago}, // Mobile Downtown Airport
     Airport{IataCode{"BFN"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Bloemfontein Airport
-    Airport{IataCode{"BFO"}, CountryId{"ZW"}, Tz::Africa_Maputo}, // Buffalo Range Airport
+    Airport{IataCode{"BFO"}, CountryId{"ZW"}, Tz::Africa_Harare}, // Buffalo Range Airport
     Airport{IataCode{"BFP"}, CountryId{"US"}, Tz::America_New_York}, // Beaver County Airport
     Airport{IataCode{"BFQ"}, CountryId{"PA"}, Tz::America_Panama}, // Bahía Piña Airport
     Airport{IataCode{"BFR"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Virgil I. Grissom Municipal Airport
@@ -605,15 +605,15 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BFU"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Bengbu Airport
     Airport{IataCode{"BFV"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Buriram Airport
     Airport{IataCode{"BFW"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Sidi Bel Abbes Airport
-    Airport{IataCode{"BFX"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Bafoussam Airport
+    Airport{IataCode{"BFX"}, CountryId{"CM"}, Tz::Africa_Douala}, // Bafoussam Airport
     Airport{IataCode{"BGA"}, CountryId{"CO"}, Tz::America_Bogota}, // Palonegro International Airport
-    Airport{IataCode{"BGB"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Booue Airport
+    Airport{IataCode{"BGB"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Booue Airport
     Airport{IataCode{"BGC"}, CountryId{"PT"}, Tz::Europe_Lisbon}, // Bragança Airport
     Airport{IataCode{"BGD"}, CountryId{"US"}, Tz::America_Chicago}, // Hutchinson County Airport
     Airport{IataCode{"BGE"}, CountryId{"US"}, Tz::America_New_York}, // Decatur County Industrial Air Park
-    Airport{IataCode{"BGF"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Bangui M'Poko International Airport
+    Airport{IataCode{"BGF"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Bangui M'Poko International Airport
     Airport{IataCode{"BGG"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Bingöl Airport
-    Airport{IataCode{"BGH"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Abbaye Airport
+    Airport{IataCode{"BGH"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Abbaye Airport
     Airport{IataCode{"BGI"}, CountryId{"BB"}, Tz::America_Barbados}, // Grantley Adams International Airport
     Airport{IataCode{"BGK"}, CountryId{"BZ"}, Tz::America_Belize}, // Big Creek Airport
     Airport{IataCode{"BGM"}, CountryId{"US"}, Tz::America_New_York}, // Greater Binghamton Airport
@@ -622,7 +622,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BGQ"}, CountryId{"US"}, Tz::America_Anchorage}, // Big Lake Airport
     Airport{IataCode{"BGR"}, CountryId{"US"}, Tz::America_New_York}, // Bangor International Airport
     Airport{IataCode{"BGT"}, CountryId{"US"}, Tz::America_Phoenix}, // Bagdad Airport
-    Airport{IataCode{"BGU"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Bangassou Airport
+    Airport{IataCode{"BGU"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Bangassou Airport
     Airport{IataCode{"BGV"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Bento Gonçalves Airport
     Airport{IataCode{"BGW"}, CountryId{"IQ"}, Tz::Asia_Baghdad}, // Baghdad International Airport
     Airport{IataCode{"BGX"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Comandante Gustavo Kraemer Airport
@@ -638,7 +638,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BHJ"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Bhuj Airport
     Airport{IataCode{"BHK"}, CountryId{"UZ"}, Tz::Asia_Samarkand}, // Bukhara International Airport
     Airport{IataCode{"BHM"}, CountryId{"US"}, Tz::America_Chicago}, // Birmingham-Shuttlesworth International Airport
-    Airport{IataCode{"BHN"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Beihan Airport
+    Airport{IataCode{"BHN"}, CountryId{"YE"}, Tz::Asia_Aden}, // Beihan Airport
     Airport{IataCode{"BHO"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Raja Bhoj Airport
     Airport{IataCode{"BHP"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Bhojpur Airport
     Airport{IataCode{"BHQ"}, CountryId{"AU"}, Tz::Australia_Broken_Hill}, // Broken Hill Airport
@@ -649,7 +649,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BHX"}, CountryId{"GB"}, Tz::Europe_London}, // Birmingham Airport
     Airport{IataCode{"BHY"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Beihai Fucheng Airport
     Airport{IataCode{"BIA"}, CountryId{"FR"}, Tz::Europe_Paris}, // Bastia – Poretta Airport
-    Airport{IataCode{"BIB"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Baidoa Airport
+    Airport{IataCode{"BIB"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Baidoa Airport
     Airport{IataCode{"BID"}, CountryId{"US"}, Tz::America_New_York}, // Block Island State Airport
     Airport{IataCode{"BII"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Bikini Atoll Airport
     Airport{IataCode{"BIJ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Biliau
@@ -662,7 +662,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BIR"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Biratnagar Airport
     Airport{IataCode{"BIS"}, CountryId{"US"}, Tz::America_Chicago}, // Bismarck Municipal Airport
     Airport{IataCode{"BIU"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Bíldudalur Airport
-    Airport{IataCode{"BIV"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Bria Airport
+    Airport{IataCode{"BIV"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Bria Airport
     Airport{IataCode{"BIY"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Bisho Airport
     Airport{IataCode{"BJA"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Soummam – Abane Ramdane Airport
     Airport{IataCode{"BJB"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Bojnord Airport
@@ -674,11 +674,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BJI"}, CountryId{"US"}, Tz::America_Chicago}, // Bemidji Regional Airport
     Airport{IataCode{"BJJ"}, CountryId{"US"}, Tz::America_New_York}, // Wayne County Airport
     Airport{IataCode{"BJK"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Benjina Airport
-    Airport{IataCode{"BJL"}, CountryId{"GM"}, Tz::Africa_Abidjan}, // Banjul International Airport
-    Airport{IataCode{"BJM"}, CountryId{"BI"}, Tz::Africa_Maputo}, // Bujumbura International Airport
+    Airport{IataCode{"BJL"}, CountryId{"GM"}, Tz::Africa_Banjul}, // Banjul International Airport
+    Airport{IataCode{"BJM"}, CountryId{"BI"}, Tz::Africa_Bujumbura}, // Bujumbura International Airport
     Airport{IataCode{"BJO"}, CountryId{"BO"}, Tz::America_La_Paz}, // Bermejo Airport
     Airport{IataCode{"BJP"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Bragança Paulista Airport
-    Airport{IataCode{"BJR"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Bahir Dar Airport
+    Airport{IataCode{"BJR"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Bahir Dar Airport
     Airport{IataCode{"BJT"}, CountryId{"LK"}, Tz::Asia_Colombo}, // Bentota River Airport
     Airport{IataCode{"BJU"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Bajura Airport
     Airport{IataCode{"BJV"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Milas-Bodrum Airport
@@ -692,22 +692,22 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BKF"}, CountryId{"US"}, Tz::America_Anchorage}, // Lake Brooks Seaplane Base
     Airport{IataCode{"BKG"}, CountryId{"US"}, Tz::America_Chicago}, // Branson Airport
     Airport{IataCode{"BKI"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Kota Kinabalu International Airport
-    Airport{IataCode{"BKJ"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Boké Baralande Airport
+    Airport{IataCode{"BKJ"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Boké Baralande Airport
     Airport{IataCode{"BKK"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Suvarnabhumi Airport
     Airport{IataCode{"BKL"}, CountryId{"US"}, Tz::America_New_York}, // Cleveland Burke Lakefront Airport
     Airport{IataCode{"BKM"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Ba'kelalan Airport
     Airport{IataCode{"BKN"}, CountryId{"TM"}, Tz::Asia_Ashgabat}, // Balkanabat Airport
-    Airport{IataCode{"BKO"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Bamako-Sénou International Airport
+    Airport{IataCode{"BKO"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Bamako-Sénou International Airport
     Airport{IataCode{"BKQ"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Blackall Airport
     Airport{IataCode{"BKR"}, CountryId{"TD"}, Tz::Africa_Ndjamena}, // Bokoro Airport
     Airport{IataCode{"BKS"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Fatmawati Soekarno Airport
     Airport{IataCode{"BKW"}, CountryId{"US"}, Tz::America_New_York}, // Raleigh County Memorial Airport
     Airport{IataCode{"BKX"}, CountryId{"US"}, Tz::America_Chicago}, // Brookings Regional Airport
     Airport{IataCode{"BKY"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Kavumu Airport
-    Airport{IataCode{"BKZ"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Bukoba Airport
+    Airport{IataCode{"BKZ"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Bukoba Airport
     Airport{IataCode{"BLA"}, CountryId{"VE"}, Tz::America_Caracas}, // General José Antonio Anzoátegui International Airport
     Airport{IataCode{"BLB"}, CountryId{"PA"}, Tz::America_Panama}, // Panamá Pacífico International Airport
-    Airport{IataCode{"BLC"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Bali Airport
+    Airport{IataCode{"BLC"}, CountryId{"CM"}, Tz::Africa_Douala}, // Bali Airport
     Airport{IataCode{"BLD"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Boulder City Municipal Airport
     Airport{IataCode{"BLE"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Dala Airport
     Airport{IataCode{"BLF"}, CountryId{"US"}, Tz::America_New_York}, // Mercer County Airport
@@ -725,19 +725,19 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BLU"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Blue Canyon–Nyack Airport
     Airport{IataCode{"BLX"}, CountryId{"IT"}, Tz::Europe_Rome}, // Belluno Airport
     Airport{IataCode{"BLY"}, CountryId{"IE"}, Tz::Europe_Dublin}, // Belmullet Aerodrome
-    Airport{IataCode{"BLZ"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Chileka International Airport
+    Airport{IataCode{"BLZ"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Chileka International Airport
     Airport{IataCode{"BMA"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Stockholm Bromma Airport
     Airport{IataCode{"BMB"}, CountryId{"CD"}, Tz::Africa_Kinshasa}, // Bumba Airport
     Airport{IataCode{"BMC"}, CountryId{"US"}, Tz::America_Denver}, // Brigham City Airport
-    Airport{IataCode{"BMD"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Belo sur Tsiribihina Airport
+    Airport{IataCode{"BMD"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Belo sur Tsiribihina Airport
     Airport{IataCode{"BME"}, CountryId{"AU"}, Tz::Australia_Perth}, // Broome International Airport
-    Airport{IataCode{"BMF"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Bakouma Airport
+    Airport{IataCode{"BMF"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Bakouma Airport
     Airport{IataCode{"BMG"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Monroe County Airport
     Airport{IataCode{"BMH"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Bomai
     Airport{IataCode{"BMI"}, CountryId{"US"}, Tz::America_Chicago}, // Central Illinois Regional Airport
     Airport{IataCode{"BMJ"}, CountryId{"GY"}, Tz::America_Guyana}, // Baramita Airport
     Airport{IataCode{"BML"}, CountryId{"US"}, Tz::America_New_York}, // Berlin Regional Airport
-    Airport{IataCode{"BMM"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Bitam Airport
+    Airport{IataCode{"BMM"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Bitam Airport
     Airport{IataCode{"BMO"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Bhamo Airport
     Airport{IataCode{"BMP"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Berhampur Airport
     Airport{IataCode{"BMQ"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Bamburi Airport
@@ -758,18 +758,18 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BNN"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Brønnøysund Airport, Brønnøy
     Airport{IataCode{"BNO"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Burns Municipal Airport
     Airport{IataCode{"BNP"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Bannu Airport
-    Airport{IataCode{"BNR"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Banfora Airport
+    Airport{IataCode{"BNR"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Banfora Airport
     Airport{IataCode{"BNS"}, CountryId{"VE"}, Tz::America_Caracas}, // Barinas Airport
     Airport{IataCode{"BNU"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Blumenau Airport
     Airport{IataCode{"BNW"}, CountryId{"US"}, Tz::America_Chicago}, // Boone Municipal Airport
-    Airport{IataCode{"BNX"}, CountryId{"BA"}, Tz::Europe_Belgrade}, // Banja Luka International Airport
+    Airport{IataCode{"BNX"}, CountryId{"BA"}, Tz::Europe_Sarajevo}, // Banja Luka International Airport
     Airport{IataCode{"BNY"}, CountryId{"SB"}, Tz::Pacific_Guadalcanal}, // Bellona/Anua Airport
     Airport{IataCode{"BNZ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Banz Airport
     Airport{IataCode{"BOA"}, CountryId{"CD"}, Tz::Africa_Luanda}, // Boma Airport
     Airport{IataCode{"BOB"}, CountryId{"FR"}, Tz::Europe_Paris}, // Bora Bora Airport
     Airport{IataCode{"BOC"}, CountryId{"PA"}, Tz::America_Panama}, // Bocas del Toro "Isla Colón" International Airport
     Airport{IataCode{"BOD"}, CountryId{"FR"}, Tz::Europe_Paris}, // Bordeaux–Mérignac Airport
-    Airport{IataCode{"BOE"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Boundji Airport
+    Airport{IataCode{"BOE"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Boundji Airport
     Airport{IataCode{"BOG"}, CountryId{"CO"}, Tz::America_Bogota}, // El Dorado International Airport
     Airport{IataCode{"BOH"}, CountryId{"GB"}, Tz::Europe_London}, // Bournemouth Airport
     Airport{IataCode{"BOI"}, CountryId{"US"}, Tz::America_Boise}, // Boise Airport
@@ -779,7 +779,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BOM"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Chhatrapati Shivaji International Airport
     Airport{IataCode{"BON"}, CountryId{"NL"}, Tz::Europe_Amsterdam}, // Flamingo International Airport
     Airport{IataCode{"BOO"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Bodø Airport
-    Airport{IataCode{"BOP"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Bouar Airport
+    Airport{IataCode{"BOP"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Bouar Airport
     Airport{IataCode{"BOQ"}, CountryId{"PG"}, Tz::Pacific_Bougainville}, // Boku Airport
     Airport{IataCode{"BOS"}, CountryId{"US"}, Tz::America_New_York}, // Logan International Airport
     Airport{IataCode{"BOT"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Bosset Airport
@@ -787,9 +787,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BOV"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Boang
     Airport{IataCode{"BOW"}, CountryId{"US"}, Tz::America_New_York}, // Bartow Municipal Airport
     Airport{IataCode{"BOX"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Borroloola Airport
-    Airport{IataCode{"BOY"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Bobo Dioulasso Airport
-    Airport{IataCode{"BOZ"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Bozoum Airport
-    Airport{IataCode{"BPC"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Bamenda Airport
+    Airport{IataCode{"BOY"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Bobo Dioulasso Airport
+    Airport{IataCode{"BOZ"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Bozoum Airport
+    Airport{IataCode{"BPC"}, CountryId{"CM"}, Tz::Africa_Douala}, // Bamenda Airport
     Airport{IataCode{"BPD"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Bapi
     Airport{IataCode{"BPE"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Qinhuangdao Beidaihe Airport
     Airport{IataCode{"BPF"}, CountryId{"SB"}, Tz::Pacific_Guadalcanal}, // Batuna Airport
@@ -803,7 +803,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BPS"}, CountryId{"BR"}, Tz::America_Bahia}, // Porto Seguro Airport
     Airport{IataCode{"BPT"}, CountryId{"US"}, Tz::America_Chicago}, // Jack Brooks Regional Airport
     Airport{IataCode{"BPX"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Qamdo Bamda Airport
-    Airport{IataCode{"BPY"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Besalampy Airport
+    Airport{IataCode{"BPY"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Besalampy Airport
     Airport{IataCode{"BQA"}, CountryId{"PH"}, Tz::Asia_Manila}, // Dr. Juan C. Angara Airport
     Airport{IataCode{"BQB"}, CountryId{"AU"}, Tz::Australia_Perth}, // Busselton Regional Airport
     Airport{IataCode{"BQE"}, CountryId{"GW"}, Tz::Africa_Bissau}, // Bubaque Airport
@@ -817,7 +817,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BQQ"}, CountryId{"BR"}, Tz::America_Bahia}, // Barra Airport
     Airport{IataCode{"BQS"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Ignatyevo Airport
     Airport{IataCode{"BQT"}, CountryId{"BY"}, Tz::Europe_Minsk}, // Brest Airport
-    Airport{IataCode{"BQU"}, CountryId{"VC"}, Tz::America_Port_of_Spain}, // J. F. Mitchell Airport
+    Airport{IataCode{"BQU"}, CountryId{"VC"}, Tz::America_St_Vincent}, // J. F. Mitchell Airport
     Airport{IataCode{"BQW"}, CountryId{"AU"}, Tz::Australia_Perth}, // Balgo Hill Airport
     Airport{IataCode{"BRA"}, CountryId{"BR"}, Tz::America_Bahia}, // Barreiras Airport
     Airport{IataCode{"BRB"}, CountryId{"BR"}, Tz::America_Fortaleza}, // Barreirinhas Airport
@@ -839,16 +839,16 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BRW"}, CountryId{"US"}, Tz::America_Anchorage}, // Wiley Post–Will Rogers Memorial Airport
     Airport{IataCode{"BRX"}, CountryId{"DO"}, Tz::America_Santo_Domingo}, // María Montez International Airport
     Airport{IataCode{"BRY"}, CountryId{"US"}, Tz::America_New_York}, // Samuels Field
-    Airport{IataCode{"BSA"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Bender Qassim International Airport
+    Airport{IataCode{"BSA"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Bender Qassim International Airport
     Airport{IataCode{"BSB"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Brasília International Airport
     Airport{IataCode{"BSC"}, CountryId{"CO"}, Tz::America_Bogota}, // José Celestino Mutis Airport
     Airport{IataCode{"BSD"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Baoshan Yunduan Airport
     Airport{IataCode{"BSE"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Sematan Airport
-    Airport{IataCode{"BSG"}, CountryId{"GQ"}, Tz::Africa_Lagos}, // Bata Airport
+    Airport{IataCode{"BSG"}, CountryId{"GQ"}, Tz::Africa_Malabo}, // Bata Airport
     Airport{IataCode{"BSJ"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Bairnsdale Airport
     Airport{IataCode{"BSK"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Biskra Airport
     Airport{IataCode{"BSL"}, CountryId{"FR"}, Tz::Europe_Paris}, // EuroAirport Basel-Mulhouse-Freiburg
-    Airport{IataCode{"BSN"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Bossangoa Airport
+    Airport{IataCode{"BSN"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Bossangoa Airport
     Airport{IataCode{"BSO"}, CountryId{"PH"}, Tz::Asia_Manila}, // Basco Airport
     Airport{IataCode{"BSP"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Bensbach Airport
     Airport{IataCode{"BSQ"}, CountryId{"US"}, Tz::America_Phoenix}, // Bisbee Municipal Airport
@@ -858,12 +858,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BSU"}, CountryId{"CD"}, Tz::Africa_Kinshasa}, // Basankusu Airport
     Airport{IataCode{"BSW"}, CountryId{"US"}, Tz::America_Anchorage}, // Boswell Bay Airport
     Airport{IataCode{"BSX"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Pathein Airport
-    Airport{IataCode{"BSY"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Bardera Airport
-    Airport{IataCode{"BTA"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Bertoua Airport
-    Airport{IataCode{"BTB"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Bétou Airport
-    Airport{IataCode{"BTE"}, CountryId{"SL"}, Tz::Africa_Abidjan}, // Sherbro International Airport
+    Airport{IataCode{"BSY"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Bardera Airport
+    Airport{IataCode{"BTA"}, CountryId{"CM"}, Tz::Africa_Douala}, // Bertoua Airport
+    Airport{IataCode{"BTB"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Bétou Airport
+    Airport{IataCode{"BTE"}, CountryId{"SL"}, Tz::Africa_Freetown}, // Sherbro International Airport
     Airport{IataCode{"BTF"}, CountryId{"US"}, Tz::America_Denver}, // Skypark Airport
-    Airport{IataCode{"BTG"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Batangafo Airport
+    Airport{IataCode{"BTG"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Batangafo Airport
     Airport{IataCode{"BTH"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Hang Nadim Airport
     Airport{IataCode{"BTI"}, CountryId{"US"}, Tz::America_Anchorage}, // Barter Island LRRS Airport
     Airport{IataCode{"BTJ"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Sultan Iskandar Muda Airport
@@ -872,9 +872,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BTM"}, CountryId{"US"}, Tz::America_Denver}, // Bert Mooney Airport
     Airport{IataCode{"BTN"}, CountryId{"US"}, Tz::America_New_York}, // Marlboro County Jetport
     Airport{IataCode{"BTP"}, CountryId{"US"}, Tz::America_New_York}, // Butler County Airport
-    Airport{IataCode{"BTQ"}, CountryId{"RW"}, Tz::Africa_Maputo}, // Butare Airport
+    Airport{IataCode{"BTQ"}, CountryId{"RW"}, Tz::Africa_Kigali}, // Butare Airport
     Airport{IataCode{"BTR"}, CountryId{"US"}, Tz::America_Chicago}, // Baton Rouge Metropolitan Airport
-    Airport{IataCode{"BTS"}, CountryId{"SK"}, Tz::Europe_Prague}, // M. R. Štefánik Airport
+    Airport{IataCode{"BTS"}, CountryId{"SK"}, Tz::Europe_Bratislava}, // M. R. Štefánik Airport
     Airport{IataCode{"BTT"}, CountryId{"US"}, Tz::America_Anchorage}, // Bettles Airport
     Airport{IataCode{"BTU"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Bintulu Airport
     Airport{IataCode{"BTV"}, CountryId{"US"}, Tz::America_New_York}, // Burlington International Airport
@@ -884,15 +884,15 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BUC"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Burketown Airport
     Airport{IataCode{"BUD"}, CountryId{"HU"}, Tz::Europe_Budapest}, // Budapest Ferenc Liszt International Airport
     Airport{IataCode{"BUF"}, CountryId{"US"}, Tz::America_New_York}, // Buffalo Niagara International Airport
-    Airport{IataCode{"BUG"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Benguela Airport
+    Airport{IataCode{"BUG"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Benguela Airport
     Airport{IataCode{"BUI"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Bokondini Airport
     Airport{IataCode{"BUJ"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Ain Eddis Airport
-    Airport{IataCode{"BUK"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Albuq Airport
+    Airport{IataCode{"BUK"}, CountryId{"YE"}, Tz::Asia_Aden}, // Albuq Airport
     Airport{IataCode{"BUL"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Bulolo Airport
     Airport{IataCode{"BUN"}, CountryId{"CO"}, Tz::America_Bogota}, // Gerardo Tobar López Airport
-    Airport{IataCode{"BUO"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Burao Airport
+    Airport{IataCode{"BUO"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Burao Airport
     Airport{IataCode{"BUP"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Bathinda Airport
-    Airport{IataCode{"BUQ"}, CountryId{"ZW"}, Tz::Africa_Maputo}, // Joshua Mqabuko Nkomo International Airport
+    Airport{IataCode{"BUQ"}, CountryId{"ZW"}, Tz::Africa_Harare}, // Joshua Mqabuko Nkomo International Airport
     Airport{IataCode{"BUR"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Bob Hope Airport
     Airport{IataCode{"BUS"}, CountryId{"GE"}, Tz::Asia_Tbilisi}, // Batumi International Airport
     Airport{IataCode{"BUT"}, CountryId{"BT"}, Tz::Asia_Thimphu}, // Bathpalathang Airport
@@ -928,7 +928,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BWH"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // RMAF Butterworth
     Airport{IataCode{"BWI"}, CountryId{"US"}, Tz::America_New_York}, // Baltimore/Washington International Thurgood Marshall Airport
     Airport{IataCode{"BWJ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Bawan
-    Airport{IataCode{"BWK"}, CountryId{"HR"}, Tz::Europe_Belgrade}, // Bol Airport
+    Airport{IataCode{"BWK"}, CountryId{"HR"}, Tz::Europe_Zagreb}, // Bol Airport
     Airport{IataCode{"BWL"}, CountryId{"US"}, Tz::America_Chicago}, // Blackwell–Tonkawa Municipal Airport
     Airport{IataCode{"BWM"}, CountryId{"US"}, Tz::America_Denver}, // Bowman Municipal Airport
     Airport{IataCode{"BWN"}, CountryId{"BN"}, Tz::Asia_Brunei}, // Brunei International Airport
@@ -941,7 +941,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BWX"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Blimbingsari Airport
     Airport{IataCode{"BXB"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Babo Airport
     Airport{IataCode{"BXD"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Bade Airport
-    Airport{IataCode{"BXE"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Bakel Airport
+    Airport{IataCode{"BXE"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Bakel Airport
     Airport{IataCode{"BXG"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Bendigo Airport
     Airport{IataCode{"BXH"}, CountryId{"KZ"}, Tz::Asia_Almaty}, // Balkhash Airport
     Airport{IataCode{"BXI"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Boundiali Airport
@@ -957,12 +957,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BXU"}, CountryId{"PH"}, Tz::Asia_Manila}, // Bancasi Airport
     Airport{IataCode{"BXV"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Breiðdalsvík Airport
     Airport{IataCode{"BXW"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Bawean Airport
-    Airport{IataCode{"BXX"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Boorama Airport
+    Airport{IataCode{"BXX"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Boorama Airport
     Airport{IataCode{"BXY"}, CountryId{"KZ"}, Tz::Asia_Qyzylorda}, // Krayniy Airport
     Airport{IataCode{"BXZ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Bunsil
-    Airport{IataCode{"BYB"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Dibba Airport
+    Airport{IataCode{"BYB"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Dibba Airport
     Airport{IataCode{"BYC"}, CountryId{"BO"}, Tz::America_La_Paz}, // Yacuiba Airport
-    Airport{IataCode{"BYD"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Al Bayda' Airport
+    Airport{IataCode{"BYD"}, CountryId{"YE"}, Tz::Asia_Aden}, // Al Bayda' Airport
     Airport{IataCode{"BYF"}, CountryId{"FR"}, Tz::Europe_Paris}, // Albert – Picardie Airport
     Airport{IataCode{"BYH"}, CountryId{"US"}, Tz::America_Chicago}, // Arkansas International Airport
     Airport{IataCode{"BYI"}, CountryId{"US"}, Tz::America_Boise}, // Burley Municipal Airport
@@ -989,10 +989,10 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"BZO"}, CountryId{"IT"}, Tz::Europe_Rome}, // Bolzano airport
     Airport{IataCode{"BZR"}, CountryId{"FR"}, Tz::Europe_Paris}, // Béziers Cap d'Agde Airport
     Airport{IataCode{"BZU"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Buta Zega Airport
-    Airport{IataCode{"BZV"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Maya-Maya Airport
+    Airport{IataCode{"BZV"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Maya-Maya Airport
     Airport{IataCode{"BZY"}, CountryId{"MD"}, Tz::Europe_Chisinau}, // Bălți International Airport
     Airport{IataCode{"CAA"}, CountryId{"HN"}, Tz::America_Tegucigalpa}, // El Aguacate Airport
-    Airport{IataCode{"CAB"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Cabinda Airport
+    Airport{IataCode{"CAB"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Cabinda Airport
     Airport{IataCode{"CAC"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Cascavel Airport
     Airport{IataCode{"CAD"}, CountryId{"US"}, Tz::America_Detroit}, // Wexford County Airport
     Airport{IataCode{"CAE"}, CountryId{"US"}, Tz::America_New_York}, // Columbia Metropolitan Airport
@@ -1011,7 +1011,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CAS"}, CountryId{"MA"}, Tz::Africa_Casablanca}, // Casablanca-Anfa Airport
     Airport{IataCode{"CAT"}, CountryId{"PT"}, Tz::Europe_Lisbon}, // Cascais Municipal Aerodrome
     Airport{IataCode{"CAU"}, CountryId{"BR"}, Tz::America_Recife}, // Caruaru Airport
-    Airport{IataCode{"CAV"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Cazombo Airport
+    Airport{IataCode{"CAV"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Cazombo Airport
     Airport{IataCode{"CAW"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Bartolomeu Lysandro Airport
     Airport{IataCode{"CAX"}, CountryId{"GB"}, Tz::Europe_London}, // Carlisle Lake District Airport
     Airport{IataCode{"CAY"}, CountryId{"FR"}, Tz::Europe_Paris}, // Cayenne – Félix Eboué Airport
@@ -1030,7 +1030,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CBQ"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Margaret Ekpo International Airport
     Airport{IataCode{"CBR"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Canberra International Airport
     Airport{IataCode{"CBS"}, CountryId{"VE"}, Tz::America_Caracas}, // Oro Negro Airport
-    Airport{IataCode{"CBT"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Catumbela Airport
+    Airport{IataCode{"CBT"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Catumbela Airport
     Airport{IataCode{"CBV"}, CountryId{"GT"}, Tz::America_Guatemala}, // Cobán Airport
     Airport{IataCode{"CBW"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Campo Mourão Airport
     Airport{IataCode{"CBX"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Condobolin Airport
@@ -1082,14 +1082,14 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CEE"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Cherepovets Airport
     Airport{IataCode{"CEF"}, CountryId{"US"}, Tz::America_New_York}, // Westover Metropolitan Airport
     Airport{IataCode{"CEG"}, CountryId{"GB"}, Tz::Europe_London}, // Hawarden Airport
-    Airport{IataCode{"CEH"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Chelinda Airport
+    Airport{IataCode{"CEH"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Chelinda Airport
     Airport{IataCode{"CEI"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Mae Fah Luang – Chiang Rai International Airport
     Airport{IataCode{"CEJ"}, CountryId{"UA"}, Tz::Europe_Kiev}, // Chernihiv Shestovitsa Airport
     Airport{IataCode{"CEK"}, CountryId{"RU"}, Tz::Asia_Yekaterinburg}, // Chelyabinsk Airport
     Airport{IataCode{"CEL"}, CountryId{"BS"}, Tz::America_Nassau}, // Cape Eleuthera Airport
     Airport{IataCode{"CEM"}, CountryId{"US"}, Tz::America_Anchorage}, // Central Airport
     Airport{IataCode{"CEN"}, CountryId{"MX"}, Tz::America_Hermosillo}, // Ciudad Obregón International Airport
-    Airport{IataCode{"CEO"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Waco Kungo Airport
+    Airport{IataCode{"CEO"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Waco Kungo Airport
     Airport{IataCode{"CEP"}, CountryId{"BO"}, Tz::America_La_Paz}, // Concepcion Airport
     Airport{IataCode{"CEQ"}, CountryId{"FR"}, Tz::Europe_Paris}, // Cannes – Mandelieu Airport
     Airport{IataCode{"CER"}, CountryId{"FR"}, Tz::Europe_Paris}, // Cherbourg – Maupertus Airport
@@ -1103,7 +1103,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CFC"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Caçador Airport
     Airport{IataCode{"CFD"}, CountryId{"US"}, Tz::America_Chicago}, // Coulter Field
     Airport{IataCode{"CFE"}, CountryId{"FR"}, Tz::Europe_Paris}, // Clermont-Ferrand Auvergne Airport
-    Airport{IataCode{"CFF"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Cafunfo Airport
+    Airport{IataCode{"CFF"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Cafunfo Airport
     Airport{IataCode{"CFG"}, CountryId{"CU"}, Tz::America_Havana}, // Jaime González Airport
     Airport{IataCode{"CFN"}, CountryId{"IE"}, Tz::Europe_Dublin}, // Donegal Airport
     Airport{IataCode{"CFO"}, CountryId{"BR"}, Tz::America_Cuiaba}, // Confresa Airport
@@ -1121,7 +1121,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CGF"}, CountryId{"US"}, Tz::America_New_York}, // Cuyahoga County Airport
     Airport{IataCode{"CGH"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Congonhas-São Paulo Airport
     Airport{IataCode{"CGI"}, CountryId{"US"}, Tz::America_Chicago}, // Cape Girardeau Regional Airport
-    Airport{IataCode{"CGJ"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Kasompe Airport
+    Airport{IataCode{"CGJ"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Kasompe Airport
     Airport{IataCode{"CGK"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Soekarno–Hatta International Airport
     Airport{IataCode{"CGM"}, CountryId{"PH"}, Tz::Asia_Manila}, // Camiguin Airport
     Airport{IataCode{"CGN"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Cologne Bonn Airport
@@ -1138,7 +1138,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CHF"}, CountryId{"KR"}, Tz::Asia_Seoul}, // Jinhae Airport
     Airport{IataCode{"CHG"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Chaoyang Airport
     Airport{IataCode{"CHH"}, CountryId{"PE"}, Tz::America_Lima}, // Chachapoyas Airport
-    Airport{IataCode{"CHJ"}, CountryId{"ZW"}, Tz::Africa_Maputo}, // Chipinge Airport
+    Airport{IataCode{"CHJ"}, CountryId{"ZW"}, Tz::Africa_Harare}, // Chipinge Airport
     Airport{IataCode{"CHK"}, CountryId{"US"}, Tz::America_Chicago}, // Chickasaw Municipal Airport
     Airport{IataCode{"CHL"}, CountryId{"US"}, Tz::America_Boise}, // Challis Airport
     Airport{IataCode{"CHM"}, CountryId{"PE"}, Tz::America_Lima}, // Tnte. FAP Jaime Montreuil Morales Airport
@@ -1167,12 +1167,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CIM"}, CountryId{"CO"}, Tz::America_Bogota}, // Cimitarra Airport
     Airport{IataCode{"CIN"}, CountryId{"US"}, Tz::America_Chicago}, // Arthur N. Neu Airport
     Airport{IataCode{"CIO"}, CountryId{"PY"}, Tz::America_Asuncion}, // Teniente Coronel Carmelo Peralta Airport
-    Airport{IataCode{"CIP"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Chipata Airport
+    Airport{IataCode{"CIP"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Chipata Airport
     Airport{IataCode{"CIQ"}, CountryId{"GT"}, Tz::America_Guatemala}, // Chiquimula Airport
     Airport{IataCode{"CIS"}, CountryId{"KI"}, Tz::Pacific_Enderbury}, // Canton Island Airport
     Airport{IataCode{"CIT"}, CountryId{"KZ"}, Tz::Asia_Almaty}, // Shymkent International Airport
     Airport{IataCode{"CIU"}, CountryId{"US"}, Tz::America_Detroit}, // Chippewa County International Airport
-    Airport{IataCode{"CIW"}, CountryId{"VC"}, Tz::America_Port_of_Spain}, // Canouan Airport
+    Airport{IataCode{"CIW"}, CountryId{"VC"}, Tz::America_St_Vincent}, // Canouan Airport
     Airport{IataCode{"CIX"}, CountryId{"PE"}, Tz::America_Lima}, // Cap. FAP José A. Quiñones Gonzáles International Airport
     Airport{IataCode{"CIY"}, CountryId{"IT"}, Tz::Europe_Rome}, // Comiso Airport
     Airport{IataCode{"CIZ"}, CountryId{"BR"}, Tz::America_Manaus}, // Coari Airport
@@ -1205,7 +1205,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CKV"}, CountryId{"US"}, Tz::America_Chicago}, // Clarksville-Montgomery County Regional Airport
     Airport{IataCode{"CKW"}, CountryId{"AU"}, Tz::Australia_Perth}, // Graeme Rowley Aerodrome
     Airport{IataCode{"CKX"}, CountryId{"US"}, Tz::America_Anchorage}, // Chicken Airport
-    Airport{IataCode{"CKY"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Conakry International Airport
+    Airport{IataCode{"CKY"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Conakry International Airport
     Airport{IataCode{"CLA"}, CountryId{"BD"}, Tz::Asia_Dhaka}, // Comilla Airport
     Airport{IataCode{"CLD"}, CountryId{"US"}, Tz::America_Los_Angeles}, // McClellan–Palomar Airport
     Airport{IataCode{"CLE"}, CountryId{"US"}, Tz::America_New_York}, // Cleveland Hopkins International Airport
@@ -1237,15 +1237,15 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CMH"}, CountryId{"US"}, Tz::America_New_York}, // John Glenn Columbus International Airport
     Airport{IataCode{"CMI"}, CountryId{"US"}, Tz::America_Chicago}, // University of Illinois Willard Airport
     Airport{IataCode{"CMJ"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Qimei Airport
-    Airport{IataCode{"CMK"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Club Makokola Airport
+    Airport{IataCode{"CMK"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Club Makokola Airport
     Airport{IataCode{"CML"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Camooweal Airport
     Airport{IataCode{"CMM"}, CountryId{"GT"}, Tz::America_Guatemala}, // Carmelita Airport
     Airport{IataCode{"CMN"}, CountryId{"MA"}, Tz::Africa_Casablanca}, // Mohammed V International Airport
-    Airport{IataCode{"CMO"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Obbia Airport
+    Airport{IataCode{"CMO"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Obbia Airport
     Airport{IataCode{"CMP"}, CountryId{"BR"}, Tz::America_Belem}, // Santana do Araguaia Airport
     Airport{IataCode{"CMQ"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Clermont Airport
     Airport{IataCode{"CMR"}, CountryId{"FR"}, Tz::Europe_Paris}, // Colmar Airport
-    Airport{IataCode{"CMS"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Scusciuban Airport
+    Airport{IataCode{"CMS"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Scusciuban Airport
     Airport{IataCode{"CMU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Chimbu Airport
     Airport{IataCode{"CMV"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Coromandel Aerodrome
     Airport{IataCode{"CMW"}, CountryId{"CU"}, Tz::America_Havana}, // Ignacio Agramonte International Airport
@@ -1272,7 +1272,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CNW"}, CountryId{"US"}, Tz::America_Chicago}, // TSTC Waco Airport
     Airport{IataCode{"CNX"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Chiang Mai International Airport
     Airport{IataCode{"CNY"}, CountryId{"US"}, Tz::America_Denver}, // Canyonlands Field
-    Airport{IataCode{"CNZ"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Cangamba Airport
+    Airport{IataCode{"CNZ"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Cangamba Airport
     Airport{IataCode{"COA"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Columbia Airport
     Airport{IataCode{"COC"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Comodoro Pierrestegui Airport
     Airport{IataCode{"COD"}, CountryId{"US"}, Tz::America_Denver}, // Yellowstone Regional Airport
@@ -1285,7 +1285,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"COL"}, CountryId{"GB"}, Tz::Europe_London}, // Coll Airport
     Airport{IataCode{"COM"}, CountryId{"US"}, Tz::America_Chicago}, // Coleman Municipal Airport
     Airport{IataCode{"CON"}, CountryId{"US"}, Tz::America_New_York}, // Concord Municipal Airport
-    Airport{IataCode{"COO"}, CountryId{"BJ"}, Tz::Africa_Lagos}, // Cadjehoun Airport
+    Airport{IataCode{"COO"}, CountryId{"BJ"}, Tz::Africa_Porto_Novo}, // Cadjehoun Airport
     Airport{IataCode{"COP"}, CountryId{"US"}, Tz::America_New_York}, // Cooperstown-Westville Airport
     Airport{IataCode{"COQ"}, CountryId{"MN"}, Tz::Asia_Choibalsan}, // Choibalsan Airport
     Airport{IataCode{"COR"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Ingeniero Aeronáutico Ambrosio L.V. Taravella International Airport
@@ -1323,7 +1323,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CRC"}, CountryId{"CO"}, Tz::America_Bogota}, // Santa Ana Airport
     Airport{IataCode{"CRD"}, CountryId{"AR"}, Tz::America_Argentina_Catamarca}, // General Enrique Mosconi International Airport
     Airport{IataCode{"CRE"}, CountryId{"US"}, Tz::America_New_York}, // Grand Strand Airport
-    Airport{IataCode{"CRF"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Carnot Airport
+    Airport{IataCode{"CRF"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Carnot Airport
     Airport{IataCode{"CRG"}, CountryId{"US"}, Tz::America_New_York}, // Jacksonville Executive at Craig Airport
     Airport{IataCode{"CRI"}, CountryId{"BS"}, Tz::America_Nassau}, // Colonel Hill Airport
     Airport{IataCode{"CRK"}, CountryId{"PH"}, Tz::Asia_Manila}, // Clark International Airport
@@ -1335,7 +1335,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CRR"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Ceres Airport
     Airport{IataCode{"CRS"}, CountryId{"US"}, Tz::America_Chicago}, // C. David Campbell Field
     Airport{IataCode{"CRT"}, CountryId{"US"}, Tz::America_Chicago}, // Z. M. Jack Stell Field
-    Airport{IataCode{"CRU"}, CountryId{"GD"}, Tz::America_Port_of_Spain}, // Lauriston Airport
+    Airport{IataCode{"CRU"}, CountryId{"GD"}, Tz::America_Grenada}, // Lauriston Airport
     Airport{IataCode{"CRV"}, CountryId{"IT"}, Tz::Europe_Rome}, // Crotone Airport
     Airport{IataCode{"CRW"}, CountryId{"US"}, Tz::America_New_York}, // Yeager Airport
     Airport{IataCode{"CRX"}, CountryId{"US"}, Tz::America_Chicago}, // Roscoe Turner Airport
@@ -1346,7 +1346,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CSG"}, CountryId{"US"}, Tz::America_New_York}, // Columbus Airport
     Airport{IataCode{"CSH"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Solovki Airport
     Airport{IataCode{"CSI"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Casino Airport
-    Airport{IataCode{"CSK"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Cap Skirring Airport
+    Airport{IataCode{"CSK"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Cap Skirring Airport
     Airport{IataCode{"CSM"}, CountryId{"US"}, Tz::America_Chicago}, // Clinton-Sherman Industrial Airpark
     Airport{IataCode{"CSN"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Carson Airport
     Airport{IataCode{"CSO"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Magdeburg-Cochstedt Airport
@@ -1364,7 +1364,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CTF"}, CountryId{"GT"}, Tz::America_Guatemala}, // Coatepeque Airport
     Airport{IataCode{"CTG"}, CountryId{"CO"}, Tz::America_Bogota}, // Rafael Núñez International Airport
     Airport{IataCode{"CTH"}, CountryId{"US"}, Tz::America_New_York}, // Chester County G. O. Carlson Airport
-    Airport{IataCode{"CTI"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Cuito Cuanavale Airport
+    Airport{IataCode{"CTI"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Cuito Cuanavale Airport
     Airport{IataCode{"CTL"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Charleville Airport
     Airport{IataCode{"CTM"}, CountryId{"MX"}, Tz::America_Cancun}, // Chetumal International Airport
     Airport{IataCode{"CTN"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Cooktown Airport
@@ -1427,8 +1427,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CXI"}, CountryId{"KI"}, Tz::Pacific_Kiritimati}, // Cassidy International Airport
     Airport{IataCode{"CXJ"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Caxias do Sul Airport
     Airport{IataCode{"CXL"}, CountryId{"US"}, Tz::America_Tijuana}, // Calexico International Airport
-    Airport{IataCode{"CXM"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Camaxilo Airport
-    Airport{IataCode{"CXN"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Candala Airport
+    Airport{IataCode{"CXM"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Camaxilo Airport
+    Airport{IataCode{"CXN"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Candala Airport
     Airport{IataCode{"CXO"}, CountryId{"US"}, Tz::America_Chicago}, // Lone Star Executive Airport
     Airport{IataCode{"CXP"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Tunggul Wulung Airport
     Airport{IataCode{"CXQ"}, CountryId{"AU"}, Tz::Australia_Perth}, // Christmas Creek Airport
@@ -1436,7 +1436,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"CXT"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Charters Towers Airport
     Airport{IataCode{"CXY"}, CountryId{"BS"}, Tz::America_Nassau}, // Cat Cay Airport
     Airport{IataCode{"CYA"}, CountryId{"HT"}, Tz::America_Port_au_Prince}, // Antoine-Simon Airport
-    Airport{IataCode{"CYB"}, CountryId{"KY"}, Tz::America_Panama}, // Charles Kirkconnell International Airport
+    Airport{IataCode{"CYB"}, CountryId{"KY"}, Tz::America_Cayman}, // Charles Kirkconnell International Airport
     Airport{IataCode{"CYC"}, CountryId{"BZ"}, Tz::America_Belize}, // Caye Chapel Airport
     Airport{IataCode{"CYF"}, CountryId{"US"}, Tz::America_Nome}, // Chefornak Airport
     Airport{IataCode{"CYG"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Corryong Airport
@@ -1474,7 +1474,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DAL"}, CountryId{"US"}, Tz::America_Chicago}, // Dallas Love Field
     Airport{IataCode{"DAM"}, CountryId{"SY"}, Tz::Asia_Damascus}, // Damascus International Airport
     Airport{IataCode{"DAN"}, CountryId{"US"}, Tz::America_New_York}, // Danville Regional Airport
-    Airport{IataCode{"DAR"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Julius Nyerere International Airport
+    Airport{IataCode{"DAR"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Julius Nyerere International Airport
     Airport{IataCode{"DAS"}, CountryId{"CA"}, Tz::America_Yellowknife}, // Great Bear Lake Airport
     Airport{IataCode{"DAT"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Datong Yungang Airport
     Airport{IataCode{"DAU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Daru Airport
@@ -1486,17 +1486,17 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DBB"}, CountryId{"EG"}, Tz::Africa_Cairo}, // El Alamein International Airport
     Airport{IataCode{"DBC"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Baicheng Chang'an Airport
     Airport{IataCode{"DBD"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Dhanbad Airport
-    Airport{IataCode{"DBM"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Debre Marqos Airport
+    Airport{IataCode{"DBM"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Debre Marqos Airport
     Airport{IataCode{"DBN"}, CountryId{"US"}, Tz::America_New_York}, // W. H. 'Bud' Barron Airport
     Airport{IataCode{"DBO"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Dubbo City Airport
     Airport{IataCode{"DBP"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Debepare
     Airport{IataCode{"DBQ"}, CountryId{"US"}, Tz::America_Chicago}, // Dubuque Regional Airport
     Airport{IataCode{"DBS"}, CountryId{"US"}, Tz::America_Boise}, // Dubois Municipal Airport
-    Airport{IataCode{"DBT"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Debre Tabor Airport
-    Airport{IataCode{"DBV"}, CountryId{"HR"}, Tz::Europe_Belgrade}, // Dubrovnik Airport
+    Airport{IataCode{"DBT"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Debre Tabor Airport
+    Airport{IataCode{"DBV"}, CountryId{"HR"}, Tz::Europe_Zagreb}, // Dubrovnik Airport
     Airport{IataCode{"DBY"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Dalby Airport
     Airport{IataCode{"DCA"}, CountryId{"US"}, Tz::America_New_York}, // Ronald Reagan Washington National Airport
-    Airport{IataCode{"DCF"}, CountryId{"DM"}, Tz::America_Port_of_Spain}, // Canefield Airport
+    Airport{IataCode{"DCF"}, CountryId{"DM"}, Tz::America_Dominica}, // Canefield Airport
     Airport{IataCode{"DCK"}, CountryId{"US"}, Tz::America_Anchorage}, // Dahl Creek Airport
     Airport{IataCode{"DCM"}, CountryId{"FR"}, Tz::Europe_Paris}, // Castres–Mazamet Airport
     Airport{IataCode{"DCR"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Decatur Hi-Way Airport
@@ -1517,7 +1517,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DEH"}, CountryId{"US"}, Tz::America_Chicago}, // Decorah Municipal Airport
     Airport{IataCode{"DEI"}, CountryId{"SC"}, Tz::Indian_Mahe}, // Denis Island Airport
     Airport{IataCode{"DEL"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Indira Gandhi International Airport
-    Airport{IataCode{"DEM"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Dembidolo Airport
+    Airport{IataCode{"DEM"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Dembidolo Airport
     Airport{IataCode{"DEN"}, CountryId{"US"}, Tz::America_Denver}, // Denver International Airport
     Airport{IataCode{"DEP"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Daporijo Airport
     Airport{IataCode{"DEQ"}, CountryId{"US"}, Tz::America_Chicago}, // J. Lynn Helms Sevier County Airport
@@ -1534,7 +1534,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DGP"}, CountryId{"LV"}, Tz::Europe_Riga}, // Daugavpils International Airport
     Airport{IataCode{"DGR"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Dargaville Aerodrome
     Airport{IataCode{"DGT"}, CountryId{"PH"}, Tz::Asia_Manila}, // Sibulan Airport
-    Airport{IataCode{"DGU"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Dedougou Airport
+    Airport{IataCode{"DGU"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Dedougou Airport
     Airport{IataCode{"DGW"}, CountryId{"US"}, Tz::America_Denver}, // Converse County Airport
     Airport{IataCode{"DHI"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Dhangadhi Airport
     Airport{IataCode{"DHM"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Gaggal Airport
@@ -1542,33 +1542,33 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DHR"}, CountryId{"NL"}, Tz::Europe_Amsterdam}, // De Kooy Airfield
     Airport{IataCode{"DHT"}, CountryId{"US"}, Tz::America_Chicago}, // Dalhart Municipal Airport
     Airport{IataCode{"DIB"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Dibrugarh Airport
-    Airport{IataCode{"DIE"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Arrachart Airport
+    Airport{IataCode{"DIE"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Arrachart Airport
     Airport{IataCode{"DIG"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Dêqên Shangri-La Airport
     Airport{IataCode{"DIK"}, CountryId{"US"}, Tz::America_Denver}, // Dickinson Theodore Roosevelt Regional Airport
     Airport{IataCode{"DIL"}, CountryId{"TL"}, Tz::Asia_Dili}, // Presidente Nicolau Lobato International Airport
     Airport{IataCode{"DIM"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Dimbokro Airport
     Airport{IataCode{"DIN"}, CountryId{"VN"}, Tz::Asia_Ho_Chi_Minh}, // Dien Bien Phu Airport
-    Airport{IataCode{"DIP"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Diapaga Airport
+    Airport{IataCode{"DIP"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Diapaga Airport
     Airport{IataCode{"DIQ"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Divinópolis Airport
-    Airport{IataCode{"DIR"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Aba Tenna Dejazmach Yilma International Airport
-    Airport{IataCode{"DIS"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Dolisie Airport
+    Airport{IataCode{"DIR"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Aba Tenna Dejazmach Yilma International Airport
+    Airport{IataCode{"DIS"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Dolisie Airport
     Airport{IataCode{"DIU"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Diu Airport
     Airport{IataCode{"DIV"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Divo Airport
     Airport{IataCode{"DIY"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Diyarbakır Airport
-    Airport{IataCode{"DJA"}, CountryId{"BJ"}, Tz::Africa_Lagos}, // Djougou Airport
+    Airport{IataCode{"DJA"}, CountryId{"BJ"}, Tz::Africa_Porto_Novo}, // Djougou Airport
     Airport{IataCode{"DJB"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Sultan Thaha Airport
     Airport{IataCode{"DJE"}, CountryId{"TN"}, Tz::Africa_Tunis}, // Djerba–Zarzis International Airport
     Airport{IataCode{"DJG"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Djanet Inedbirene Airport
     Airport{IataCode{"DJJ"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Sentani Airport
-    Airport{IataCode{"DJM"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Djambala Airport
+    Airport{IataCode{"DJM"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Djambala Airport
     Airport{IataCode{"DJN"}, CountryId{"US"}, Tz::America_Anchorage}, // Delta Junction Airport
     Airport{IataCode{"DJO"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Daloa Airport
     Airport{IataCode{"DKA"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Katsina Airport
     Airport{IataCode{"DKI"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Dunk Island Airport
     Airport{IataCode{"DKK"}, CountryId{"US"}, Tz::America_New_York}, // Chautauqua County/Dunkirk Airport
-    Airport{IataCode{"DKR"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Léopold Sédar Senghor International Airport
+    Airport{IataCode{"DKR"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Léopold Sédar Senghor International Airport
     Airport{IataCode{"DKS"}, CountryId{"RU"}, Tz::Asia_Krasnoyarsk}, // Dikson Airport
-    Airport{IataCode{"DLA"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Douala International Airport
+    Airport{IataCode{"DLA"}, CountryId{"CM"}, Tz::Africa_Douala}, // Douala International Airport
     Airport{IataCode{"DLC"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Dalian Zhoushuizi International Airport
     Airport{IataCode{"DLD"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Geilo Airport
     Airport{IataCode{"DLE"}, CountryId{"FR"}, Tz::Europe_Paris}, // Dole–Jura Airport
@@ -1605,17 +1605,17 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DNV"}, CountryId{"US"}, Tz::America_Chicago}, // Vermilion Regional Airport
     Airport{IataCode{"DNX"}, CountryId{"SD"}, Tz::Africa_Khartoum}, // Galegu Airport
     Airport{IataCode{"DOB"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Dobo Airport
-    Airport{IataCode{"DOD"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Dodoma Airport
+    Airport{IataCode{"DOD"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Dodoma Airport
     Airport{IataCode{"DOE"}, CountryId{"SR"}, Tz::America_Paramaribo}, // Djoemoe Airstrip
     Airport{IataCode{"DOG"}, CountryId{"SD"}, Tz::Africa_Khartoum}, // Dongola Airport
     Airport{IataCode{"DOH"}, CountryId{"QA"}, Tz::Asia_Qatar}, // Hamad International Airport
     Airport{IataCode{"DOI"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Doini
     Airport{IataCode{"DOL"}, CountryId{"FR"}, Tz::Europe_Paris}, // Deauville – Saint-Gatien Airport
-    Airport{IataCode{"DOM"}, CountryId{"DM"}, Tz::America_Port_of_Spain}, // Douglas–Charles Airport
+    Airport{IataCode{"DOM"}, CountryId{"DM"}, Tz::America_Dominica}, // Douglas–Charles Airport
     Airport{IataCode{"DON"}, CountryId{"GT"}, Tz::America_Guatemala}, // Dos Lagunas Airport
     Airport{IataCode{"DOO"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Dorobisoro
     Airport{IataCode{"DOP"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Dolpa Airport
-    Airport{IataCode{"DOR"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Dori Airport
+    Airport{IataCode{"DOR"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Dori Airport
     Airport{IataCode{"DOU"}, CountryId{"BR"}, Tz::America_Campo_Grande}, // Dourados Airport
     Airport{IataCode{"DOY"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Dongying Shengli Airport
     Airport{IataCode{"DPA"}, CountryId{"US"}, Tz::America_Chicago}, // DuPage Airport
@@ -1627,7 +1627,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DQH"}, CountryId{"US"}, Tz::America_Anchorage}, // Alpine Airstrip
     Airport{IataCode{"DRA"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Desert Rock Airport
     Airport{IataCode{"DRB"}, CountryId{"AU"}, Tz::Australia_Perth}, // Derby Airport
-    Airport{IataCode{"DRC"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Dirico Airport
+    Airport{IataCode{"DRC"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Dirico Airport
     Airport{IataCode{"DRE"}, CountryId{"US"}, Tz::America_Detroit}, // Drummond Island Airport
     Airport{IataCode{"DRG"}, CountryId{"US"}, Tz::America_Nome}, // Deering Airport
     Airport{IataCode{"DRH"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Dabra Airport
@@ -1640,14 +1640,14 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DRT"}, CountryId{"US"}, Tz::America_Chicago}, // Del Rio International Airport
     Airport{IataCode{"DRV"}, CountryId{"MV"}, Tz::Indian_Maldives}, // Dharavandhoo Airport
     Airport{IataCode{"DSA"}, CountryId{"GB"}, Tz::Europe_London}, // Doncaster Sheffield Airport
-    Airport{IataCode{"DSC"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Dschang Airport
-    Airport{IataCode{"DSE"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Combolcha Airport
+    Airport{IataCode{"DSC"}, CountryId{"CM"}, Tz::Africa_Douala}, // Dschang Airport
+    Airport{IataCode{"DSE"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Combolcha Airport
     Airport{IataCode{"DSI"}, CountryId{"US"}, Tz::America_Chicago}, // Destin Executive Airport
     Airport{IataCode{"DSK"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Dera Ismail Khan Airport
     Airport{IataCode{"DSM"}, CountryId{"US"}, Tz::America_Chicago}, // Des Moines International Airport
     Airport{IataCode{"DSN"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Ordos Ejin Horo Airport
     Airport{IataCode{"DSO"}, CountryId{"KP"}, Tz::Asia_Pyongyang}, // Sondok Airport
-    Airport{IataCode{"DSS"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Blaise Diagne International Airport
+    Airport{IataCode{"DSS"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Blaise Diagne International Airport
     Airport{IataCode{"DSV"}, CountryId{"US"}, Tz::America_New_York}, // Dansville Municipal Airport
     Airport{IataCode{"DSX"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Dongsha Island Airport
     Airport{IataCode{"DTA"}, CountryId{"US"}, Tz::America_Denver}, // Delta Municipal Airport
@@ -1665,7 +1665,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DUB"}, CountryId{"IE"}, Tz::Europe_Dublin}, // Dublin Airport
     Airport{IataCode{"DUC"}, CountryId{"US"}, Tz::America_Chicago}, // Halliburton Field (airport)
     Airport{IataCode{"DUD"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Dunedin International Airport
-    Airport{IataCode{"DUE"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Dundo Airport
+    Airport{IataCode{"DUE"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Dundo Airport
     Airport{IataCode{"DUF"}, CountryId{"US"}, Tz::America_New_York}, // Pine Island Airport
     Airport{IataCode{"DUG"}, CountryId{"US"}, Tz::America_Phoenix}, // Bisbee-Douglas International Airport
     Airport{IataCode{"DUJ"}, CountryId{"US"}, Tz::America_New_York}, // DuBois Regional Airport
@@ -1674,14 +1674,14 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DUR"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // King Shaka International Airport
     Airport{IataCode{"DUS"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Düsseldorf International Airport
     Airport{IataCode{"DUT"}, CountryId{"US"}, Tz::America_Nome}, // Unalaska Airport
-    Airport{IataCode{"DVD"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Andavadoaka Airport
+    Airport{IataCode{"DVD"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Andavadoaka Airport
     Airport{IataCode{"DVK"}, CountryId{"CA"}, Tz::America_Yellowknife}, // Diavik Airport
     Airport{IataCode{"DVL"}, CountryId{"US"}, Tz::America_Chicago}, // Devils Lake Regional Airport
     Airport{IataCode{"DVN"}, CountryId{"US"}, Tz::America_Chicago}, // Davenport Municipal Airport
     Airport{IataCode{"DVO"}, CountryId{"PH"}, Tz::Asia_Manila}, // Francisco Bangoy International Airport
     Airport{IataCode{"DVT"}, CountryId{"US"}, Tz::America_Phoenix}, // Phoenix Deer Valley Airport
-    Airport{IataCode{"DWA"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Dwangwa Airport
-    Airport{IataCode{"DWB"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Soalala Airport
+    Airport{IataCode{"DWA"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Dwangwa Airport
+    Airport{IataCode{"DWB"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Soalala Airport
     Airport{IataCode{"DWC"}, CountryId{"AE"}, Tz::Asia_Dubai}, // Al Maktoum International Airport
     Airport{IataCode{"DWD"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Dawadmi Domestic Airport
     Airport{IataCode{"DWH"}, CountryId{"US"}, Tz::America_Chicago}, // David Wayne Hooks Memorial Airport
@@ -1698,7 +1698,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"DZN"}, CountryId{"KZ"}, Tz::Asia_Almaty}, // Zhezkazgan Airport
     Airport{IataCode{"DZO"}, CountryId{"UY"}, Tz::America_Montevideo}, // Santa Bernardina International Airport
     Airport{IataCode{"EAA"}, CountryId{"US"}, Tz::America_Anchorage}, // Eagle Airport
-    Airport{IataCode{"EAB"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Abbs Airport
+    Airport{IataCode{"EAB"}, CountryId{"YE"}, Tz::Asia_Aden}, // Abbs Airport
     Airport{IataCode{"EAE"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Siwo Airport
     Airport{IataCode{"EAL"}, CountryId{"MH"}, Tz::Pacific_Kwajalein}, // Elenak Airport
     Airport{IataCode{"EAM"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Najran Domestic Airport
@@ -1708,7 +1708,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"EAT"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Pangborn Memorial Airport
     Airport{IataCode{"EAU"}, CountryId{"US"}, Tz::America_Chicago}, // Chippewa Valley Regional Airport
     Airport{IataCode{"EBA"}, CountryId{"IT"}, Tz::Europe_Rome}, // Marina di Campo Airport
-    Airport{IataCode{"EBB"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Entebbe International Airport
+    Airport{IataCode{"EBB"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Entebbe International Airport
     Airport{IataCode{"EBD"}, CountryId{"SD"}, Tz::Africa_Khartoum}, // El Obeid Airport
     Airport{IataCode{"EBG"}, CountryId{"CO"}, Tz::America_Bogota}, // El Bagre Airport
     Airport{IataCode{"EBJ"}, CountryId{"DK"}, Tz::Europe_Copenhagen}, // Esbjerg Airport
@@ -1717,7 +1717,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"EBO"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Ebon Airport
     Airport{IataCode{"EBS"}, CountryId{"US"}, Tz::America_Chicago}, // Webster City Municipal Airport
     Airport{IataCode{"EBU"}, CountryId{"FR"}, Tz::Europe_Paris}, // Saint-Étienne – Bouthéon Airport
-    Airport{IataCode{"EBW"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Ebolowa Airport
+    Airport{IataCode{"EBW"}, CountryId{"CM"}, Tz::Africa_Douala}, // Ebolowa Airport
     Airport{IataCode{"ECG"}, CountryId{"US"}, Tz::America_New_York}, // Elizabeth City Regional Airport
     Airport{IataCode{"ECH"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Echuca Airport
     Airport{IataCode{"ECI"}, CountryId{"NI"}, Tz::America_Managua}, // Costa Esmeralda Airport
@@ -1744,7 +1744,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"EGE"}, CountryId{"US"}, Tz::America_Denver}, // Eagle County Regional Airport
     Airport{IataCode{"EGH"}, CountryId{"EG"}, Tz::Africa_Cairo}, // El Gora Airport
     Airport{IataCode{"EGI"}, CountryId{"US"}, Tz::America_Chicago}, // Duke Field
-    Airport{IataCode{"EGL"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Neghelle Airport
+    Airport{IataCode{"EGL"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Neghelle Airport
     Airport{IataCode{"EGM"}, CountryId{"SB"}, Tz::Pacific_Guadalcanal}, // Seghe Airport
     Airport{IataCode{"EGN"}, CountryId{"SD"}, Tz::Africa_Khartoum}, // Geneina Airport
     Airport{IataCode{"EGO"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Belgorod International Airport
@@ -1796,7 +1796,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"EMI"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Emirau Airport
     Airport{IataCode{"EMK"}, CountryId{"US"}, Tz::America_Nome}, // Emmonak Airport
     Airport{IataCode{"EMM"}, CountryId{"US"}, Tz::America_Denver}, // Kemmerer Municipal Airport
-    Airport{IataCode{"EMN"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Néma Airport
+    Airport{IataCode{"EMN"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Néma Airport
     Airport{IataCode{"EMO"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Emo
     Airport{IataCode{"EMP"}, CountryId{"US"}, Tz::America_Chicago}, // Emporia Municipal Airport
     Airport{IataCode{"EMT"}, CountryId{"US"}, Tz::America_Los_Angeles}, // San Gabriel Valley Airport
@@ -1832,7 +1832,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"EPT"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Eliptamin
     Airport{IataCode{"EPU"}, CountryId{"EE"}, Tz::Europe_Tallinn}, // Pärnu Airport
     Airport{IataCode{"EQS"}, CountryId{"AR"}, Tz::America_Argentina_Catamarca}, // Esquel Airport
-    Airport{IataCode{"ERA"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Erigavo Airport
+    Airport{IataCode{"ERA"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Erigavo Airport
     Airport{IataCode{"ERC"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Erzincan Airport
     Airport{IataCode{"ERD"}, CountryId{"UA"}, Tz::Europe_Zaporozhye}, // Berdyansk Airport
     Airport{IataCode{"ERE"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Erave Airport
@@ -1889,19 +1889,19 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"EWI"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Enarotali Airport
     Airport{IataCode{"EWK"}, CountryId{"US"}, Tz::America_Chicago}, // Newton City/County Airport
     Airport{IataCode{"EWN"}, CountryId{"US"}, Tz::America_New_York}, // Coastal Carolina Regional Airport
-    Airport{IataCode{"EWO"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Ewo Airport
+    Airport{IataCode{"EWO"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Ewo Airport
     Airport{IataCode{"EWR"}, CountryId{"US"}, Tz::America_New_York}, // Newark Liberty International Airport
     Airport{IataCode{"EXI"}, CountryId{"US"}, Tz::America_Juneau}, // Excursion Inlet Seaplane Base
     Airport{IataCode{"EXT"}, CountryId{"GB"}, Tz::Europe_London}, // Exeter International Airport
     Airport{IataCode{"EYK"}, CountryId{"RU"}, Tz::Asia_Yekaterinburg}, // Beloyarsk Airport
-    Airport{IataCode{"EYL"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Yélimané Airport
+    Airport{IataCode{"EYL"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Yélimané Airport
     Airport{IataCode{"EYP"}, CountryId{"CO"}, Tz::America_Bogota}, // El Alcaraván Airport
     Airport{IataCode{"EYR"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Yerington Municipal Airport
     Airport{IataCode{"EYS"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Eliye Springs Airport
     Airport{IataCode{"EYW"}, CountryId{"US"}, Tz::America_New_York}, // Key West International Airport
     Airport{IataCode{"EZE"}, CountryId{"AR"}, Tz::America_Argentina_Buenos_Aires}, // Ministro Pistarini International Airport
     Airport{IataCode{"EZS"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Elazığ Airport
-    Airport{IataCode{"FAA"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Faranah Airport
+    Airport{IataCode{"FAA"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Faranah Airport
     Airport{IataCode{"FAB"}, CountryId{"GB"}, Tz::Europe_London}, // Farnborough Airport
     Airport{IataCode{"FAC"}, CountryId{"FR"}, Tz::Europe_Paris}, // Faaite Airport
     Airport{IataCode{"FAE"}, CountryId{"FO"}, Tz::Atlantic_Faroe}, // Vágar Airport
@@ -1915,7 +1915,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"FAR"}, CountryId{"US"}, Tz::America_Chicago}, // Hector International Airport
     Airport{IataCode{"FAS"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Fáskrúðsfjörður Airport
     Airport{IataCode{"FAT"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Fresno Yosemite International Airport
-    Airport{IataCode{"FAU"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Fahud Airport Airport
+    Airport{IataCode{"FAU"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Fahud Airport Airport
     Airport{IataCode{"FAV"}, CountryId{"FR"}, Tz::Europe_Paris}, // Fakarava Airport
     Airport{IataCode{"FAY"}, CountryId{"US"}, Tz::America_New_York}, // Fayetteville Regional Airport
     Airport{IataCode{"FAZ"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Fasa Airport
@@ -1953,13 +1953,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"FFM"}, CountryId{"US"}, Tz::America_Chicago}, // Fergus Falls Municipal Airport
     Airport{IataCode{"FFT"}, CountryId{"US"}, Tz::America_New_York}, // Capital City Airport
     Airport{IataCode{"FFU"}, CountryId{"CL"}, Tz::America_Santiago}, // Futaleufu Airport
-    Airport{IataCode{"FGD"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Fderik Airport
+    Airport{IataCode{"FGD"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Fderik Airport
     Airport{IataCode{"FGI"}, CountryId{"WS"}, Tz::Pacific_Apia}, // Fagali'i Airport
     Airport{IataCode{"FGL"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Fox Glacier Heliport
     Airport{IataCode{"FGU"}, CountryId{"FR"}, Tz::Europe_Paris}, // Fangatau Airport
     Airport{IataCode{"FID"}, CountryId{"US"}, Tz::America_New_York}, // Elizabeth Field
     Airport{IataCode{"FIE"}, CountryId{"GB"}, Tz::Europe_London}, // Fair Isle Airport
-    Airport{IataCode{"FIG"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Fria Airport
+    Airport{IataCode{"FIG"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Fria Airport
     Airport{IataCode{"FIH"}, CountryId{"CD"}, Tz::Africa_Kinshasa}, // N'djili Airport
     Airport{IataCode{"FIL"}, CountryId{"US"}, Tz::America_Denver}, // Fillmore Municipal Airport
     Airport{IataCode{"FIN"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Finschhafen Airport
@@ -1996,12 +1996,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"FMO"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Münster Osnabrück International Airport
     Airport{IataCode{"FMU"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Florence Municipal Airport
     Airport{IataCode{"FMY"}, CountryId{"US"}, Tz::America_New_York}, // Page Field
-    Airport{IataCode{"FNA"}, CountryId{"SL"}, Tz::Africa_Abidjan}, // Lungi International Airport
+    Airport{IataCode{"FNA"}, CountryId{"SL"}, Tz::Africa_Freetown}, // Lungi International Airport
     Airport{IataCode{"FNB"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Neubrandenburg Airport
     Airport{IataCode{"FNC"}, CountryId{"PT"}, Tz::Atlantic_Madeira}, // Madeira Airport
     Airport{IataCode{"FNE"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Fane Airport
-    Airport{IataCode{"FNG"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Fada N'gourma Airport
-    Airport{IataCode{"FNH"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Fincha Airport
+    Airport{IataCode{"FNG"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Fada N'gourma Airport
+    Airport{IataCode{"FNH"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Fincha Airport
     Airport{IataCode{"FNI"}, CountryId{"FR"}, Tz::Europe_Paris}, // Nîmes-Alès-Camargue-Cévennes Airport
     Airport{IataCode{"FNJ"}, CountryId{"KP"}, Tz::Asia_Pyongyang}, // Pyongyang International Airport
     Airport{IataCode{"FNL"}, CountryId{"US"}, Tz::America_Denver}, // Fort Collins–Loveland Municipal Airport
@@ -2019,7 +2019,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"FOR"}, CountryId{"BR"}, Tz::America_Fortaleza}, // Pinto Martins – Fortaleza International Airport
     Airport{IataCode{"FOS"}, CountryId{"AU"}, Tz::Australia_Perth}, // Forrest Airport
     Airport{IataCode{"FOT"}, CountryId{"AU"}, Timezone{}}, // Forster (Wallis Island) Airport
-    Airport{IataCode{"FOU"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Fougamou Airport
+    Airport{IataCode{"FOU"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Fougamou Airport
     Airport{IataCode{"FOY"}, CountryId{"LR"}, Tz::Africa_Monrovia}, // Foya Airport
     Airport{IataCode{"FPO"}, CountryId{"BS"}, Tz::America_Nassau}, // Grand Bahama International Airport
     Airport{IataCode{"FPR"}, CountryId{"US"}, Tz::America_New_York}, // Treasure Coast International Airport
@@ -2041,7 +2041,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"FRS"}, CountryId{"GT"}, Tz::America_Guatemala}, // Mundo Maya International Airport
     Airport{IataCode{"FRT"}, CountryId{"CL"}, Tz::America_Santiago}, // Frutillar Airport
     Airport{IataCode{"FRU"}, CountryId{"KG"}, Tz::Asia_Bishkek}, // Manas International Airport
-    Airport{IataCode{"FRW"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Francistown Airport
+    Airport{IataCode{"FRW"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Francistown Airport
     Airport{IataCode{"FRY"}, CountryId{"US"}, Tz::America_New_York}, // Eastern Slopes Regional Airport
     Airport{IataCode{"FSC"}, CountryId{"FR"}, Tz::Europe_Paris}, // Figari Sud-Corse Airport
     Airport{IataCode{"FSD"}, CountryId{"US"}, Tz::America_Chicago}, // Sioux Falls Regional Airport
@@ -2054,9 +2054,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"FTA"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Futuna Airport
     Airport{IataCode{"FTE"}, CountryId{"AR"}, Tz::America_Argentina_Rio_Gallegos}, // Comandante Armando Tola International Airport
     Airport{IataCode{"FTI"}, CountryId{"US"}, Tz::Pacific_Pago_Pago}, // Fitiuta Airport
-    Airport{IataCode{"FTU"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Tôlanaro Airport
+    Airport{IataCode{"FTU"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Tôlanaro Airport
     Airport{IataCode{"FTW"}, CountryId{"US"}, Tz::America_Chicago}, // Fort Worth Meacham International Airport
-    Airport{IataCode{"FTX"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Owando Airport
+    Airport{IataCode{"FTX"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Owando Airport
     Airport{IataCode{"FTY"}, CountryId{"US"}, Tz::America_New_York}, // Fulton County Airport
     Airport{IataCode{"FUE"}, CountryId{"ES"}, Tz::Atlantic_Canary}, // Fuerteventura Airport
     Airport{IataCode{"FUG"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Fuyang Xiguan Airport
@@ -2094,28 +2094,28 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GAN"}, CountryId{"MV"}, Tz::Indian_Maldives}, // Gan International Airport
     Airport{IataCode{"GAO"}, CountryId{"CU"}, Tz::America_Havana}, // Mariana Grajales Airport
     Airport{IataCode{"GAP"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Gusap Airport
-    Airport{IataCode{"GAQ"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Gao International Airport
+    Airport{IataCode{"GAQ"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Gao International Airport
     Airport{IataCode{"GAR"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Garaina
     Airport{IataCode{"GAS"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Garissa Airport
     Airport{IataCode{"GAT"}, CountryId{"FR"}, Tz::Europe_Paris}, // Gap – Tallard Airport
     Airport{IataCode{"GAU"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Lokpriya Gopinath Bordoloi International Airport
     Airport{IataCode{"GAW"}, CountryId{"AU"}, Tz::Australia_Adelaide}, // Gawler Aerodrome
-    Airport{IataCode{"GAX"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Gamba Airport
+    Airport{IataCode{"GAX"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Gamba Airport
     Airport{IataCode{"GAY"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Gaya Airport
     Airport{IataCode{"GAZ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Guasopa Airport
     Airport{IataCode{"GBA"}, CountryId{"GB"}, Tz::Europe_London}, // Cotswold Airport
     Airport{IataCode{"GBB"}, CountryId{"AZ"}, Tz::Asia_Baku}, // Qabala Airport
     Airport{IataCode{"GBC"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Gasuke
     Airport{IataCode{"GBD"}, CountryId{"US"}, Tz::America_Chicago}, // Great Bend Municipal Airport
-    Airport{IataCode{"GBE"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Sir Seretse Khama International Airport
+    Airport{IataCode{"GBE"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Sir Seretse Khama International Airport
     Airport{IataCode{"GBF"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Negarbo
     Airport{IataCode{"GBG"}, CountryId{"US"}, Tz::America_Chicago}, // Galesburg Municipal Airport
     Airport{IataCode{"GBH"}, CountryId{"US"}, Tz::America_Anchorage}, // Galbraith Lake Airport
     Airport{IataCode{"GBI"}, CountryId{"BS"}, Tz::America_Nassau}, // Grand Bahama Airport
     Airport{IataCode{"GBJ"}, CountryId{"FR"}, Tz::Europe_Paris}, // Marie-Galante Airport
-    Airport{IataCode{"GBK"}, CountryId{"SL"}, Tz::Africa_Abidjan}, // Gbangbatoke Airport
+    Airport{IataCode{"GBK"}, CountryId{"SL"}, Tz::Africa_Freetown}, // Gbangbatoke Airport
     Airport{IataCode{"GBL"}, CountryId{"AU"}, Tz::Australia_Darwin}, // South Goulburn Island Airport
-    Airport{IataCode{"GBM"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Garbaharey Airport
+    Airport{IataCode{"GBM"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Garbaharey Airport
     Airport{IataCode{"GBR"}, CountryId{"US"}, Tz::America_New_York}, // Walter J. Koladza Airport
     Airport{IataCode{"GBT"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Gorgan Airport
     Airport{IataCode{"GBU"}, CountryId{"SD"}, Tz::Africa_Khartoum}, // Khashm El Girba Airport
@@ -2123,7 +2123,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GBZ"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Great Barrier Aerodrome
     Airport{IataCode{"GCC"}, CountryId{"US"}, Tz::America_Denver}, // Gillette–Campbell County Airport
     Airport{IataCode{"GCH"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Gachsaran Airport
-    Airport{IataCode{"GCI"}, CountryId{"GG"}, Tz::Europe_London}, // Guernsey Airport
+    Airport{IataCode{"GCI"}, CountryId{"GG"}, Tz::Europe_Guernsey}, // Guernsey Airport
     Airport{IataCode{"GCJ"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Grand Central Airport
     Airport{IataCode{"GCK"}, CountryId{"US"}, Tz::America_Chicago}, // Garden City Regional Airport
     Airport{IataCode{"GCM"}, CountryId{"GB"}, Tz::Europe_London}, // Owen Roberts International Airport
@@ -2132,7 +2132,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GCW"}, CountryId{"US"}, Tz::America_Phoenix}, // Grand Canyon West Airport
     Airport{IataCode{"GCY"}, CountryId{"US"}, Tz::America_New_York}, // Greeneville-Greene County Municipal Airport
     Airport{IataCode{"GDC"}, CountryId{"US"}, Tz::America_New_York}, // Donaldson Center Airport
-    Airport{IataCode{"GDE"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Gode Airport
+    Airport{IataCode{"GDE"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Gode Airport
     Airport{IataCode{"GDG"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Magdagachi Airport
     Airport{IataCode{"GDJ"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Gandajika Airport
     Airport{IataCode{"GDL"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Miguel Hidalgo y Costilla Guadalajara International Airport
@@ -2140,7 +2140,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GDN"}, CountryId{"PL"}, Tz::Europe_Warsaw}, // Gdańsk Lech Wałęsa Airport
     Airport{IataCode{"GDO"}, CountryId{"VE"}, Tz::America_Caracas}, // Guasdualito Airport
     Airport{IataCode{"GDP"}, CountryId{"BR"}, Tz::America_Fortaleza}, // Guadalupe Airport
-    Airport{IataCode{"GDQ"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Gondar Airport
+    Airport{IataCode{"GDQ"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Gondar Airport
     Airport{IataCode{"GDT"}, CountryId{"TC"}, Tz::America_Grand_Turk}, // JAGS McCartney International Airport
     Airport{IataCode{"GDV"}, CountryId{"US"}, Tz::America_Denver}, // Dawson Community Airport
     Airport{IataCode{"GDW"}, CountryId{"US"}, Tz::America_Detroit}, // Gladwin Zettel Memorial Airport
@@ -2164,13 +2164,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GFO"}, CountryId{"GY"}, Tz::America_Guyana}, // Bartica Airport
     Airport{IataCode{"GFR"}, CountryId{"FR"}, Tz::Europe_Paris}, // Granville-Mont-Saint-Michel Airport
     Airport{IataCode{"GFY"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Grootfontein Airport
-    Airport{IataCode{"GGC"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Lumbala Airport
+    Airport{IataCode{"GGC"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Lumbala Airport
     Airport{IataCode{"GGE"}, CountryId{"US"}, Tz::America_New_York}, // Georgetown County Airport
     Airport{IataCode{"GGG"}, CountryId{"US"}, Tz::America_Chicago}, // East Texas Regional Airport
     Airport{IataCode{"GGM"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Kakamega Airport
     Airport{IataCode{"GGN"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Gagnoa Airport
     Airport{IataCode{"GGO"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Guiglo Airport
-    Airport{IataCode{"GGR"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Garowe International Airport
+    Airport{IataCode{"GGR"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Garowe International Airport
     Airport{IataCode{"GGS"}, CountryId{"AR"}, Tz::America_Argentina_Rio_Gallegos}, // Gobernador Gregores Airport
     Airport{IataCode{"GGT"}, CountryId{"BS"}, Tz::America_Nassau}, // Exuma International Airport
     Airport{IataCode{"GGW"}, CountryId{"US"}, Tz::America_Denver}, // Glasgow Airport
@@ -2184,10 +2184,10 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GHU"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Gualeguaychú Airport
     Airport{IataCode{"GIB"}, CountryId{"GB"}, Tz::Europe_London}, // Gibraltar International Airport
     Airport{IataCode{"GIC"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Boigu Island Airport
-    Airport{IataCode{"GID"}, CountryId{"BI"}, Tz::Africa_Maputo}, // Gitega Airport
+    Airport{IataCode{"GID"}, CountryId{"BI"}, Tz::Africa_Bujumbura}, // Gitega Airport
     Airport{IataCode{"GIF"}, CountryId{"US"}, Tz::America_New_York}, // Winter Haven's Gilbert Airport
     Airport{IataCode{"GIG"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Rio de Janeiro-Galeão International Airport
-    Airport{IataCode{"GII"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Siguiri Airport
+    Airport{IataCode{"GII"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Siguiri Airport
     Airport{IataCode{"GIL"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Gilgit Airport
     Airport{IataCode{"GIR"}, CountryId{"CO"}, Tz::America_Bogota}, // Santiago Vila Airport
     Airport{IataCode{"GIS"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Gisborne Airport
@@ -2210,7 +2210,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GLF"}, CountryId{"CR"}, Tz::America_Costa_Rica}, // Golfito Airport
     Airport{IataCode{"GLH"}, CountryId{"US"}, Tz::America_Chicago}, // Mid Delta Regional Airport
     Airport{IataCode{"GLI"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Glen Innes Airport
-    Airport{IataCode{"GLK"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Abdullahi Yusuf International Airport
+    Airport{IataCode{"GLK"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Abdullahi Yusuf International Airport
     Airport{IataCode{"GLL"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Gol Airport
     Airport{IataCode{"GLN"}, CountryId{"MA"}, Tz::Africa_Casablanca}, // Guelmim Airport
     Airport{IataCode{"GLO"}, CountryId{"GB"}, Tz::Europe_London}, // Gloucestershire Airport
@@ -2223,12 +2223,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GLW"}, CountryId{"US"}, Tz::America_Chicago}, // Glasgow Municipal Airport
     Airport{IataCode{"GLX"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Garmalamo Airport
     Airport{IataCode{"GMA"}, CountryId{"CD"}, Tz::Africa_Kinshasa}, // Gemena Airport
-    Airport{IataCode{"GMB"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Gambela Airport
+    Airport{IataCode{"GMB"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Gambela Airport
     Airport{IataCode{"GMD"}, CountryId{"MA"}, Tz::Africa_Casablanca}, // Ben Slimane Airport
     Airport{IataCode{"GME"}, CountryId{"BY"}, Tz::Europe_Minsk}, // Gomel Airport
     Airport{IataCode{"GMI"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Gasmata Airport
     Airport{IataCode{"GML"}, CountryId{"UA"}, Tz::Europe_Kiev}, // Gostomel Airport
-    Airport{IataCode{"GMM"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Gamboma Airport
+    Airport{IataCode{"GMM"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Gamboma Airport
     Airport{IataCode{"GMN"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Greymouth Airport
     Airport{IataCode{"GMO"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Gombe Lawanti International Airport
     Airport{IataCode{"GMP"}, CountryId{"KR"}, Tz::Asia_Seoul}, // Gimpo International Airport
@@ -2238,20 +2238,20 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GMZ"}, CountryId{"ES"}, Tz::Atlantic_Canary}, // La Gomera Airport
     Airport{IataCode{"GNA"}, CountryId{"BY"}, Tz::Europe_Minsk}, // Hrodna Airport
     Airport{IataCode{"GNB"}, CountryId{"FR"}, Tz::Europe_Paris}, // Grenoble-Isère Airport
-    Airport{IataCode{"GND"}, CountryId{"GD"}, Tz::America_Port_of_Spain}, // Maurice Bishop International Airport
+    Airport{IataCode{"GND"}, CountryId{"GD"}, Tz::America_Grenada}, // Maurice Bishop International Airport
     Airport{IataCode{"GNF"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Gansner Field
     Airport{IataCode{"GNI"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Lyudao Airport
     Airport{IataCode{"GNM"}, CountryId{"BR"}, Tz::America_Bahia}, // Guanambi Airport
-    Airport{IataCode{"GNN"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Ghinnir Airport
+    Airport{IataCode{"GNN"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Ghinnir Airport
     Airport{IataCode{"GNR"}, CountryId{"AR"}, Tz::America_Argentina_Salta}, // Dr. Arturo Umberto Illia Airport
     Airport{IataCode{"GNS"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Binaka Airport
     Airport{IataCode{"GNT"}, CountryId{"US"}, Tz::America_Denver}, // Grants-Milan Municipal Airport
     Airport{IataCode{"GNU"}, CountryId{"US"}, Tz::America_Anchorage}, // Goodnews Airport
     Airport{IataCode{"GNV"}, CountryId{"US"}, Tz::America_New_York}, // Gainesville Regional Airport
     Airport{IataCode{"GNY"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Şanlıurfa GAP Airport
-    Airport{IataCode{"GNZ"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Ghanzi Airport
+    Airport{IataCode{"GNZ"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Ghanzi Airport
     Airport{IataCode{"GOA"}, CountryId{"IT"}, Tz::Europe_Rome}, // Genoa Cristoforo Colombo Airport
-    Airport{IataCode{"GOB"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Robe Airport
+    Airport{IataCode{"GOB"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Robe Airport
     Airport{IataCode{"GOC"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Gora
     Airport{IataCode{"GOE"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Gonalia
     Airport{IataCode{"GOG"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Gobabis Airport
@@ -2264,9 +2264,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GOO"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Goondiwindi Airport
     Airport{IataCode{"GOP"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Gorakhpur Airport
     Airport{IataCode{"GOQ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Golmud Airport
-    Airport{IataCode{"GOR"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Gore Airport
+    Airport{IataCode{"GOR"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Gore Airport
     Airport{IataCode{"GOT"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Gothenburg-Landvetter Airport
-    Airport{IataCode{"GOU"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Garoua International Airport
+    Airport{IataCode{"GOU"}, CountryId{"CM"}, Tz::Africa_Douala}, // Garoua International Airport
     Airport{IataCode{"GOV"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Gove Airport
     Airport{IataCode{"GOZ"}, CountryId{"BG"}, Tz::Europe_Sofia}, // Gorna Oryahovitsa Airport
     Airport{IataCode{"GPA"}, CountryId{"GR"}, Tz::Europe_Athens}, // Araxos Airport
@@ -2312,7 +2312,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GSO"}, CountryId{"US"}, Tz::America_New_York}, // Piedmont Triad International Airport
     Airport{IataCode{"GSP"}, CountryId{"US"}, Tz::America_New_York}, // Greenville-Spartanburg International Airport
     Airport{IataCode{"GSQ"}, CountryId{"EG"}, Tz::Africa_Cairo}, // Sharq Al-Owainat Airport
-    Airport{IataCode{"GSR"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Gardo Airport
+    Airport{IataCode{"GSR"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Gardo Airport
     Airport{IataCode{"GST"}, CountryId{"US"}, Tz::America_Juneau}, // Gustavus Airport
     Airport{IataCode{"GSU"}, CountryId{"SD"}, Tz::Africa_Khartoum}, // Gedaref Airport
     Airport{IataCode{"GSW"}, CountryId{"US"}, Tz::America_Chicago}, // Greater Southwest International Airport
@@ -2332,7 +2332,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GUA"}, CountryId{"GT"}, Tz::America_Guatemala}, // La Aurora International Airport
     Airport{IataCode{"GUB"}, CountryId{"MX"}, Tz::America_Tijuana}, // Guerrero Negro Airport
     Airport{IataCode{"GUC"}, CountryId{"US"}, Tz::America_Denver}, // Gunnison–Crested Butte Regional Airport
-    Airport{IataCode{"GUD"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Goundam Airport
+    Airport{IataCode{"GUD"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Goundam Airport
     Airport{IataCode{"GUF"}, CountryId{"US"}, Tz::America_Chicago}, // Jack Edwards Airport
     Airport{IataCode{"GUG"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Guari
     Airport{IataCode{"GUH"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Gunnedah Airport
@@ -2365,17 +2365,17 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GWT"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Sylt Airport
     Airport{IataCode{"GWW"}, CountryId{"US"}, Tz::America_New_York}, // Wayne Executive Jetport
     Airport{IataCode{"GWY"}, CountryId{"IE"}, Tz::Europe_Dublin}, // Galway Airport
-    Airport{IataCode{"GXF"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Sayun Airport
-    Airport{IataCode{"GXG"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Negage Airport
+    Airport{IataCode{"GXF"}, CountryId{"YE"}, Tz::Asia_Aden}, // Sayun Airport
+    Airport{IataCode{"GXG"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Negage Airport
     Airport{IataCode{"GXH"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Gannan Xiahe Airport
     Airport{IataCode{"GXQ"}, CountryId{"CL"}, Tz::America_Santiago}, // Teniente Vidal Airport
-    Airport{IataCode{"GXX"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Yagoua Airport
+    Airport{IataCode{"GXX"}, CountryId{"CM"}, Tz::Africa_Douala}, // Yagoua Airport
     Airport{IataCode{"GXY"}, CountryId{"US"}, Tz::America_Denver}, // Greeley–Weld County Airport
     Airport{IataCode{"GYA"}, CountryId{"BO"}, Tz::America_La_Paz}, // Guayaramerín Airport
     Airport{IataCode{"GYD"}, CountryId{"AZ"}, Tz::Asia_Baku}, // Heydar Aliyev International Airport
     Airport{IataCode{"GYE"}, CountryId{"EC"}, Tz::America_Guayaquil}, // José Joaquín de Olmedo International Airport
     Airport{IataCode{"GYG"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Magan Airport
-    Airport{IataCode{"GYI"}, CountryId{"RW"}, Tz::Africa_Maputo}, // Gisenyi Airport
+    Airport{IataCode{"GYI"}, CountryId{"RW"}, Tz::Africa_Kigali}, // Gisenyi Airport
     Airport{IataCode{"GYL"}, CountryId{"AU"}, Tz::Australia_Perth}, // Argyle Airport
     Airport{IataCode{"GYM"}, CountryId{"MX"}, Tz::America_Hermosillo}, // General José María Yáñez International Airport
     Airport{IataCode{"GYN"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Santa Genoveva Airport
@@ -2396,7 +2396,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"HAD"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Halmstad Airport
     Airport{IataCode{"HAE"}, CountryId{"KP"}, Tz::Asia_Pyongyang}, // Haeju Airport
     Airport{IataCode{"HAF"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Half Moon Bay Airport
-    Airport{IataCode{"HAH"}, CountryId{"KM"}, Tz::Africa_Nairobi}, // Prince Said Ibrahim International Airport
+    Airport{IataCode{"HAH"}, CountryId{"KM"}, Tz::Indian_Comoro}, // Prince Said Ibrahim International Airport
     Airport{IataCode{"HAJ"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Hannover Airport
     Airport{IataCode{"HAK"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Haikou Meilan International Airport
     Airport{IataCode{"HAL"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Halali aerodrome
@@ -2422,7 +2422,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"HCA"}, CountryId{"US"}, Tz::America_Chicago}, // Big Spring McMahon-Wrinkle Airport
     Airport{IataCode{"HCC"}, CountryId{"US"}, Tz::America_New_York}, // Columbia County Airport
     Airport{IataCode{"HCJ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Hechi Jinchengjiang Airport
-    Airport{IataCode{"HCM"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Eyl Airport
+    Airport{IataCode{"HCM"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Eyl Airport
     Airport{IataCode{"HCN"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Hengchun Airport
     Airport{IataCode{"HCQ"}, CountryId{"AU"}, Tz::Australia_Perth}, // Halls Creek Airport
     Airport{IataCode{"HCR"}, CountryId{"US"}, Tz::America_Anchorage}, // Holy Cross Airport
@@ -2451,7 +2451,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"HFN"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Hornafjörður Airport
     Airport{IataCode{"HFS"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Hagfors Airport
     Airport{IataCode{"HFT"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Hammerfest Airport
-    Airport{IataCode{"HGA"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Hargeisa International Airport
+    Airport{IataCode{"HGA"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Hargeisa International Airport
     Airport{IataCode{"HGD"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Hughenden Airport
     Airport{IataCode{"HGE"}, CountryId{"VE"}, Tz::America_Caracas}, // Higuerote Airport
     Airport{IataCode{"HGH"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Hangzhou Xiaoshan International Airport
@@ -2459,7 +2459,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"HGN"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Mae Hong Son Airport
     Airport{IataCode{"HGO"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Korhogo Airport
     Airport{IataCode{"HGR"}, CountryId{"US"}, Tz::America_New_York}, // Hagerstown Regional Airport
-    Airport{IataCode{"HGS"}, CountryId{"SL"}, Tz::Africa_Abidjan}, // Hastings Airport
+    Airport{IataCode{"HGS"}, CountryId{"SL"}, Tz::Africa_Freetown}, // Hastings Airport
     Airport{IataCode{"HGU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Mount Hagen Airport
     Airport{IataCode{"HHH"}, CountryId{"US"}, Tz::America_New_York}, // Hilton Head Airport
     Airport{IataCode{"HHN"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Frankfurt-Hahn Airport
@@ -2472,7 +2472,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"HIE"}, CountryId{"US"}, Tz::America_New_York}, // Mount Washington Regional Airport
     Airport{IataCode{"HII"}, CountryId{"US"}, Tz::America_Phoenix}, // Lake Havasu City Airport
     Airport{IataCode{"HIJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Hiroshima Airport
-    Airport{IataCode{"HIL"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Shilavo Airport
+    Airport{IataCode{"HIL"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Shilavo Airport
     Airport{IataCode{"HIM"}, CountryId{"LK"}, Tz::Asia_Colombo}, // SLAF Hingurakgoda
     Airport{IataCode{"HIN"}, CountryId{"KR"}, Tz::Asia_Seoul}, // Sacheon Airport
     Airport{IataCode{"HIO"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Hillsboro Airport
@@ -2528,8 +2528,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"HNY"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Hengyang Nanyue Airport
     Airport{IataCode{"HOA"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Hola Airport
     Airport{IataCode{"HOB"}, CountryId{"US"}, Tz::America_Denver}, // Lea County Regional Airport
-    Airport{IataCode{"HOD"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Hodeida International Airport
-    Airport{IataCode{"HOE"}, CountryId{"LA"}, Tz::Asia_Bangkok}, // Ban Huoeisay Airport
+    Airport{IataCode{"HOD"}, CountryId{"YE"}, Tz::Asia_Aden}, // Hodeida International Airport
+    Airport{IataCode{"HOE"}, CountryId{"LA"}, Tz::Asia_Vientiane}, // Ban Huoeisay Airport
     Airport{IataCode{"HOF"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Al-Ahsa Domestic Airport
     Airport{IataCode{"HOG"}, CountryId{"CU"}, Tz::America_Havana}, // Frank País Airport
     Airport{IataCode{"HOH"}, CountryId{"AT"}, Tz::Europe_Vienna}, // Hohenems-Dornbirn Airport
@@ -2552,7 +2552,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"HPY"}, CountryId{"US"}, Tz::America_Chicago}, // Baytown Airport
     Airport{IataCode{"HQM"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Bowerman Airport
     Airport{IataCode{"HRB"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Harbin Taiping International Airport
-    Airport{IataCode{"HRE"}, CountryId{"ZW"}, Tz::Africa_Maputo}, // Harare International Airport
+    Airport{IataCode{"HRE"}, CountryId{"ZW"}, Tz::Africa_Harare}, // Harare International Airport
     Airport{IataCode{"HRG"}, CountryId{"EG"}, Tz::Africa_Cairo}, // Hurghada International Airport
     Airport{IataCode{"HRI"}, CountryId{"LK"}, Tz::Asia_Colombo}, // Mattala Rajapaksa International Airport
     Airport{IataCode{"HRK"}, CountryId{"UA"}, Tz::Europe_Kiev}, // Kharkiv International Airport
@@ -2590,13 +2590,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"HUB"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Humbert River Airport
     Airport{IataCode{"HUC"}, CountryId{"US"}, Tz::America_Puerto_Rico}, // Humacao Airport
     Airport{IataCode{"HUD"}, CountryId{"US"}, Tz::America_Chicago}, // Humboldt Municipal Airport
-    Airport{IataCode{"HUE"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Humera Airport
+    Airport{IataCode{"HUE"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Humera Airport
     Airport{IataCode{"HUF"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Terre Haute International Airport
     Airport{IataCode{"HUG"}, CountryId{"GT"}, Tz::America_Guatemala}, // Huehuetenango Airport
     Airport{IataCode{"HUH"}, CountryId{"FR"}, Tz::Europe_Paris}, // Huahine – Fare Airport
     Airport{IataCode{"HUI"}, CountryId{"VN"}, Tz::Asia_Ho_Chi_Minh}, // Phu Bai International Airport
     Airport{IataCode{"HUJ"}, CountryId{"US"}, Tz::America_Chicago}, // Stan Stamper Municipal Airport
-    Airport{IataCode{"HUK"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Hukuntsi Airport
+    Airport{IataCode{"HUK"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Hukuntsi Airport
     Airport{IataCode{"HUL"}, CountryId{"US"}, Tz::America_New_York}, // Houlton International Airport
     Airport{IataCode{"HUM"}, CountryId{"US"}, Tz::America_Chicago}, // Houma-Terrebonne Airport
     Airport{IataCode{"HUN"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Hualien Airport
@@ -2610,7 +2610,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"HUX"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Bahías de Huatulco International Airport
     Airport{IataCode{"HUY"}, CountryId{"GB"}, Tz::Europe_London}, // Humberside Airport
     Airport{IataCode{"HUZ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Huizhou Airport
-    Airport{IataCode{"HVA"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Analalava Airport
+    Airport{IataCode{"HVA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Analalava Airport
     Airport{IataCode{"HVB"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Hervey Bay Airport
     Airport{IataCode{"HVD"}, CountryId{"MN"}, Tz::Asia_Hovd}, // Khovd Airport
     Airport{IataCode{"HVG"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Honningsvåg Airport, Valan
@@ -2619,7 +2619,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"HVR"}, CountryId{"US"}, Tz::America_Denver}, // Havre City-County Airport
     Airport{IataCode{"HVS"}, CountryId{"US"}, Tz::America_New_York}, // Hartsville Regional Airport
     Airport{IataCode{"HWA"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Hawabango
-    Airport{IataCode{"HWN"}, CountryId{"ZW"}, Tz::Africa_Maputo}, // Hwange National Park Airport
+    Airport{IataCode{"HWN"}, CountryId{"ZW"}, Tz::Africa_Harare}, // Hwange National Park Airport
     Airport{IataCode{"HWO"}, CountryId{"US"}, Tz::America_New_York}, // North Perry Airport
     Airport{IataCode{"HXD"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Delingha Airport
     Airport{IataCode{"HXX"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Hay Airport
@@ -2680,7 +2680,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"IGA"}, CountryId{"BS"}, Tz::America_Nassau}, // Inagua Airport
     Airport{IataCode{"IGB"}, CountryId{"AR"}, Tz::America_Argentina_Salta}, // Ingeniero Jacobacci Airport
     Airport{IataCode{"IGD"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Iğdır Airport
-    Airport{IataCode{"IGE"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Tchongorove Airport
+    Airport{IataCode{"IGE"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Tchongorove Airport
     Airport{IataCode{"IGG"}, CountryId{"US"}, Tz::America_Anchorage}, // Igiugig Airport
     Airport{IataCode{"IGH"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Ingham Airport
     Airport{IataCode{"IGM"}, CountryId{"US"}, Tz::America_Phoenix}, // Kingman Airport
@@ -2690,8 +2690,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"IGT"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Magas Airport
     Airport{IataCode{"IGU"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Foz do Iguaçu International Airport
     Airport{IataCode{"IHC"}, CountryId{"MZ"}, Tz::Africa_Maputo}, // Inhaca Airport
-    Airport{IataCode{"IHN"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Qishn Airport
-    Airport{IataCode{"IHO"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Ihosy Airport
+    Airport{IataCode{"IHN"}, CountryId{"YE"}, Tz::Asia_Aden}, // Qishn Airport
+    Airport{IataCode{"IHO"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Ihosy Airport
     Airport{IataCode{"IHR"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Iranshahr Airport
     Airport{IataCode{"IHU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Ihu Airport
     Airport{IataCode{"IIA"}, CountryId{"IE"}, Tz::Europe_Dublin}, // Inishmaan Aerodrome
@@ -2712,7 +2712,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ILF"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Ilford Airport
     Airport{IataCode{"ILG"}, CountryId{"US"}, Tz::America_New_York}, // New Castle Airport
     Airport{IataCode{"ILI"}, CountryId{"US"}, Tz::America_Anchorage}, // Iliamna Airport
-    Airport{IataCode{"ILK"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Atsinanana Airport
+    Airport{IataCode{"ILK"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Atsinanana Airport
     Airport{IataCode{"ILL"}, CountryId{"US"}, Tz::America_Chicago}, // Willmar Municipal Airport
     Airport{IataCode{"ILM"}, CountryId{"US"}, Tz::America_New_York}, // Wilmington International Airport
     Airport{IataCode{"ILN"}, CountryId{"US"}, Tz::America_New_York}, // Airborne Airpark
@@ -2723,13 +2723,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ILU"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Kilaguni Airport
     Airport{IataCode{"ILX"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Ileg
     Airport{IataCode{"ILY"}, CountryId{"GB"}, Tz::Europe_London}, // Islay Airport
-    Airport{IataCode{"ILZ"}, CountryId{"SK"}, Tz::Europe_Prague}, // Žilina Airport
+    Airport{IataCode{"ILZ"}, CountryId{"SK"}, Tz::Europe_Bratislava}, // Žilina Airport
     Airport{IataCode{"IMA"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Iamalele
     Airport{IataCode{"IMB"}, CountryId{"GY"}, Tz::America_Guyana}, // Imbaimadai Airport
     Airport{IataCode{"IMI"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Ine Airport
     Airport{IataCode{"IMK"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Simikot Airport
     Airport{IataCode{"IMM"}, CountryId{"US"}, Tz::America_New_York}, // Immokalee Airport
-    Airport{IataCode{"IMO"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Zemio Airport
+    Airport{IataCode{"IMO"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Zemio Airport
     Airport{IataCode{"IMP"}, CountryId{"BR"}, Tz::America_Fortaleza}, // Imperatriz Airport
     Airport{IataCode{"IMT"}, CountryId{"US"}, Tz::America_Menominee}, // Ford Airport
     Airport{IataCode{"INA"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Inta Airport
@@ -2752,8 +2752,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"INW"}, CountryId{"US"}, Tz::America_Phoenix}, // Winslow-Lindbergh Regional Airport
     Airport{IataCode{"INZ"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // In Salah Airport
     Airport{IataCode{"IOA"}, CountryId{"GR"}, Tz::Europe_Athens}, // Ioannina National Airport
-    Airport{IataCode{"IOM"}, CountryId{"IM"}, Tz::Europe_London}, // Isle of Man Airport
-    Airport{IataCode{"ION"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Impfondo Airport
+    Airport{IataCode{"IOM"}, CountryId{"IM"}, Tz::Europe_Isle_of_Man}, // Isle of Man Airport
+    Airport{IataCode{"ION"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Impfondo Airport
     Airport{IataCode{"IOR"}, CountryId{"IE"}, Tz::Europe_Dublin}, // Inishmore Aerodrome
     Airport{IataCode{"IOS"}, CountryId{"BR"}, Tz::America_Bahia}, // Ilhéus Jorge Amado Airport
     Airport{IataCode{"IOW"}, CountryId{"US"}, Tz::America_Chicago}, // Iowa City Municipal Airport
@@ -2773,10 +2773,10 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"IRC"}, CountryId{"US"}, Tz::America_Anchorage}, // Circle City Airport
     Airport{IataCode{"IRD"}, CountryId{"BD"}, Tz::Asia_Dhaka}, // Ishurdi Airport
     Airport{IataCode{"IRG"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Lockhart River Airport
-    Airport{IataCode{"IRI"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Iringa Airport
+    Airport{IataCode{"IRI"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Iringa Airport
     Airport{IataCode{"IRJ"}, CountryId{"AR"}, Tz::America_Argentina_La_Rioja}, // Capitán Vicente Almandos Almonacid Airport
     Airport{IataCode{"IRK"}, CountryId{"US"}, Tz::America_Chicago}, // Kirksville Regional Airport
-    Airport{IataCode{"IRO"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Birao Airport
+    Airport{IataCode{"IRO"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Birao Airport
     Airport{IataCode{"IRP"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Matari Airport
     Airport{IataCode{"IRZ"}, CountryId{"BR"}, Tz::America_Manaus}, // Tapuruquara Airport
     Airport{IataCode{"ISA"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Mount Isa Airport
@@ -2808,7 +2808,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ITU"}, CountryId{"RU"}, Tz::Asia_Ust_Nera}, // Iturup Airport
     Airport{IataCode{"IUE"}, CountryId{"NU"}, Tz::Pacific_Niue}, // Niue International Airport
     Airport{IataCode{"IUS"}, CountryId{"PG"}, Tz::Pacific_Bougainville}, // Inus Airport
-    Airport{IataCode{"IVA"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Ambanja Airport
+    Airport{IataCode{"IVA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Ambanja Airport
     Airport{IataCode{"IVC"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Invercargill Airport
     Airport{IataCode{"IVL"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Ivalo Airport
     Airport{IataCode{"IVR"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Inverell Airport
@@ -2881,7 +2881,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JEG"}, CountryId{"GL"}, Tz::America_Godthab}, // Aasiaat Airport
     Airport{IataCode{"JEJ"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Jeh Airport
     Airport{IataCode{"JEQ"}, CountryId{"BR"}, Tz::America_Bahia}, // Jequié Airport
-    Airport{IataCode{"JER"}, CountryId{"JE"}, Tz::Europe_London}, // Jersey Airport
+    Airport{IataCode{"JER"}, CountryId{"JE"}, Tz::Europe_Jersey}, // Jersey Airport
     Airport{IataCode{"JFK"}, CountryId{"US"}, Tz::America_New_York}, // John F. Kennedy International Airport
     Airport{IataCode{"JFN"}, CountryId{"US"}, Tz::America_New_York}, // Northeast Ohio Regional Airport
     Airport{IataCode{"JFR"}, CountryId{"GL"}, Tz::America_Godthab}, // Paamiut Airport
@@ -2899,13 +2899,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JHS"}, CountryId{"GL"}, Tz::America_Godthab}, // Sisimiut Airport
     Airport{IataCode{"JHW"}, CountryId{"US"}, Tz::America_New_York}, // Chautauqua County-Jamestown Airport
     Airport{IataCode{"JIA"}, CountryId{"BR"}, Tz::America_Cuiaba}, // Juína Airport
-    Airport{IataCode{"JIB"}, CountryId{"DJ"}, Tz::Africa_Nairobi}, // Djibouti-Ambouli International Airport
+    Airport{IataCode{"JIB"}, CountryId{"DJ"}, Tz::Africa_Djibouti}, // Djibouti-Ambouli International Airport
     Airport{IataCode{"JIC"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Jinchang Jinchuan Airport
-    Airport{IataCode{"JIJ"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Jijiga Airport
+    Airport{IataCode{"JIJ"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Jijiga Airport
     Airport{IataCode{"JIK"}, CountryId{"GR"}, Tz::Europe_Athens}, // Ikaria Island National Airport
     Airport{IataCode{"JIL"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Jilin Ertaizi Airport
-    Airport{IataCode{"JIM"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Aba Segud Airport
-    Airport{IataCode{"JIN"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Jinja Airport
+    Airport{IataCode{"JIM"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Aba Segud Airport
+    Airport{IataCode{"JIN"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Jinja Airport
     Airport{IataCode{"JIO"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Jos Orno Imsula Airport
     Airport{IataCode{"JIQ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Qianjiang Wulingshan Airport
     Airport{IataCode{"JIU"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Jiujiang Lushan Airport
@@ -2921,7 +2921,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JKV"}, CountryId{"US"}, Tz::America_Chicago}, // Cherokee County Airport
     Airport{IataCode{"JLN"}, CountryId{"US"}, Tz::America_Chicago}, // Joplin Regional Airport
     Airport{IataCode{"JLR"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Jabalpur Airport
-    Airport{IataCode{"JMB"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Jamba Airport
+    Airport{IataCode{"JMB"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Jamba Airport
     Airport{IataCode{"JMJ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Lancang Airport
     Airport{IataCode{"JMK"}, CountryId{"GR"}, Tz::Europe_Athens}, // Mykonos Island National Airport
     Airport{IataCode{"JMO"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Jomsom Airport
@@ -2931,7 +2931,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JNB"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // OR Tambo International Airport
     Airport{IataCode{"JNG"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Jining Qufu Airport
     Airport{IataCode{"JNI"}, CountryId{"AR"}, Tz::America_Argentina_Buenos_Aires}, // Junín Airport
-    Airport{IataCode{"JNJ"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Duqm Jaaluni Airport
+    Airport{IataCode{"JNJ"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Duqm Jaaluni Airport
     Airport{IataCode{"JNU"}, CountryId{"US"}, Tz::America_Juneau}, // Juneau International Airport
     Airport{IataCode{"JNX"}, CountryId{"GR"}, Tz::Europe_Athens}, // Naxos Island National Airport
     Airport{IataCode{"JNZ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Jinzhou Bay Airport
@@ -2951,7 +2951,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JRF"}, CountryId{"US"}, Tz::Pacific_Honolulu}, // Kalaeloa Airport
     Airport{IataCode{"JRH"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Jorhat Airport
     Airport{IataCode{"JRN"}, CountryId{"BR"}, Tz::America_Cuiaba}, // Juruena Airport
-    Airport{IataCode{"JRO"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Kilimanjaro International Airport
+    Airport{IataCode{"JRO"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Kilimanjaro International Airport
     Airport{IataCode{"JSA"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Jaisalmer Airport
     Airport{IataCode{"JSH"}, CountryId{"GR"}, Tz::Europe_Athens}, // Sitia Public Airport
     Airport{IataCode{"JSI"}, CountryId{"GR"}, Tz::Europe_Athens}, // Skiathos Island National Airport
@@ -2974,18 +2974,18 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JUR"}, CountryId{"AU"}, Tz::Australia_Perth}, // Jurien Bay Airport
     Airport{IataCode{"JUV"}, CountryId{"GL"}, Tz::America_Godthab}, // Upernavik Airport
     Airport{IataCode{"JUZ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Quzhou Airport
-    Airport{IataCode{"JVA"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Ankavandra Airport
+    Airport{IataCode{"JVA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Ankavandra Airport
     Airport{IataCode{"JVI"}, CountryId{"US"}, Tz::America_New_York}, // Central Jersey Regional Airport
     Airport{IataCode{"JVL"}, CountryId{"US"}, Tz::America_Chicago}, // Southern Wisconsin Regional Airport
-    Airport{IataCode{"JWA"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Jwaneng Airport
+    Airport{IataCode{"JWA"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Jwaneng Airport
     Airport{IataCode{"JWN"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Zanjan Airport
     Airport{IataCode{"JXA"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Jixi Xingkaihu Airport
     Airport{IataCode{"JXN"}, CountryId{"US"}, Tz::America_Detroit}, // Jackson County Airport
     Airport{IataCode{"JYR"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Jiroft Airport
     Airport{IataCode{"JYV"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Jyväskylä Airport
     Airport{IataCode{"JZH"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Jiuzhai Huanglong Airport
-    Airport{IataCode{"KAA"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Kasama Airport
-    Airport{IataCode{"KAB"}, CountryId{"ZW"}, Tz::Africa_Maputo}, // Kariba Airport
+    Airport{IataCode{"KAA"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Kasama Airport
+    Airport{IataCode{"KAB"}, CountryId{"ZW"}, Tz::Africa_Harare}, // Kariba Airport
     Airport{IataCode{"KAC"}, CountryId{"SY"}, Tz::Asia_Damascus}, // Qamishli Airport
     Airport{IataCode{"KAD"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Kaduna Airport
     Airport{IataCode{"KAE"}, CountryId{"US"}, Tz::America_Sitka}, // Kake Seaplane Base
@@ -2993,7 +2993,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KAI"}, CountryId{"GY"}, Tz::America_Guyana}, // Kaieteur International Airport
     Airport{IataCode{"KAJ"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Kajaani Airport
     Airport{IataCode{"KAL"}, CountryId{"US"}, Tz::America_Anchorage}, // Kaltag Airport
-    Airport{IataCode{"KAM"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Kamaran Airport
+    Airport{IataCode{"KAM"}, CountryId{"YE"}, Tz::Asia_Aden}, // Kamaran Airport
     Airport{IataCode{"KAN"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Mallam Aminu Kano International Airport
     Airport{IataCode{"KAO"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Kuusamo Airport
     Airport{IataCode{"KAP"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Kapanga Airport
@@ -3003,18 +3003,18 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KAW"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Kawthaung Airport
     Airport{IataCode{"KAX"}, CountryId{"AU"}, Tz::Australia_Perth}, // Kalbarri Airport
     Airport{IataCode{"KAY"}, CountryId{"FJ"}, Tz::Pacific_Fiji}, // Wakaya Island Airport
-    Airport{IataCode{"KBA"}, CountryId{"SL"}, Tz::Africa_Abidjan}, // Kabala Airport
+    Airport{IataCode{"KBA"}, CountryId{"SL"}, Tz::Africa_Freetown}, // Kabala Airport
     Airport{IataCode{"KBC"}, CountryId{"US"}, Tz::America_Anchorage}, // Birch Creek Airport
-    Airport{IataCode{"KBG"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Kabalega Falls Airport
-    Airport{IataCode{"KBI"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Kribi Airport
+    Airport{IataCode{"KBG"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Kabalega Falls Airport
+    Airport{IataCode{"KBI"}, CountryId{"CM"}, Tz::Africa_Douala}, // Kribi Airport
     Airport{IataCode{"KBL"}, CountryId{"AF"}, Tz::Asia_Kabul}, // Hamid Karzai International Airport
     Airport{IataCode{"KBM"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kabwum Airport
     Airport{IataCode{"KBN"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Tunta Airport
     Airport{IataCode{"KBO"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Kabalo Airport
     Airport{IataCode{"KBP"}, CountryId{"UA"}, Tz::Europe_Kiev}, // Boryspil International Airport
-    Airport{IataCode{"KBQ"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Kasungu Airport
+    Airport{IataCode{"KBQ"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Kasungu Airport
     Airport{IataCode{"KBR"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Sultan Ismail Petra Airport
-    Airport{IataCode{"KBS"}, CountryId{"SL"}, Tz::Africa_Abidjan}, // Bo Airport
+    Airport{IataCode{"KBS"}, CountryId{"SL"}, Tz::Africa_Freetown}, // Bo Airport
     Airport{IataCode{"KBU"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Gusti Syamsir Alam Airport
     Airport{IataCode{"KBV"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Krabi Airport
     Airport{IataCode{"KBW"}, CountryId{"US"}, Tz::America_Anchorage}, // Chignik Bay Seaplane Base
@@ -3031,20 +3031,20 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KCM"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Kahramanmaraş Airport
     Airport{IataCode{"KCQ"}, CountryId{"US"}, Tz::America_Anchorage}, // Chignik Lake Airport
     Airport{IataCode{"KCT"}, CountryId{"LK"}, Tz::Asia_Colombo}, // SLAF Koggala
-    Airport{IataCode{"KCU"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Masindi Airport
+    Airport{IataCode{"KCU"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Masindi Airport
     Airport{IataCode{"KCZ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Kōchi Airport
-    Airport{IataCode{"KDA"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Kolda North Airport
+    Airport{IataCode{"KDA"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Kolda North Airport
     Airport{IataCode{"KDB"}, CountryId{"AU"}, Tz::Australia_Perth}, // Kambalda Airport
-    Airport{IataCode{"KDC"}, CountryId{"BJ"}, Tz::Africa_Lagos}, // Kandi Airport
+    Airport{IataCode{"KDC"}, CountryId{"BJ"}, Tz::Africa_Porto_Novo}, // Kandi Airport
     Airport{IataCode{"KDD"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Khuzdar Airport
     Airport{IataCode{"KDE"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Koroba Airport
     Airport{IataCode{"KDH"}, CountryId{"AF"}, Tz::Asia_Kabul}, // Kandahar International Airport
     Airport{IataCode{"KDI"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Haluoleo Airport
-    Airport{IataCode{"KDJ"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Ndjolé Ville Airport
+    Airport{IataCode{"KDJ"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Ndjolé Ville Airport
     Airport{IataCode{"KDK"}, CountryId{"US"}, Tz::America_Anchorage}, // Kodiak Municipal Airport
     Airport{IataCode{"KDL"}, CountryId{"EE"}, Tz::Europe_Tallinn}, // Kärdla Airport
     Airport{IataCode{"KDM"}, CountryId{"MV"}, Tz::Indian_Maldives}, // Kaadedhdhoo Airport
-    Airport{IataCode{"KDN"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Ndendé Airport
+    Airport{IataCode{"KDN"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Ndendé Airport
     Airport{IataCode{"KDO"}, CountryId{"MV"}, Tz::Indian_Maldives}, // Kadhdhoo Airport
     Airport{IataCode{"KDP"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kandep Airport
     Airport{IataCode{"KDQ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kamberatoro Airport
@@ -3054,15 +3054,15 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KDX"}, CountryId{"SD"}, Tz::Africa_Khartoum}, // Kadugli Airport
     Airport{IataCode{"KDY"}, CountryId{"RU"}, Tz::Asia_Khandyga}, // Teply Klyuch Airport
     Airport{IataCode{"KEB"}, CountryId{"US"}, Tz::America_Anchorage}, // Nanwalek Airport
-    Airport{IataCode{"KED"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Kaédi Airport
-    Airport{IataCode{"KEE"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Kelle Airport
+    Airport{IataCode{"KED"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Kaédi Airport
+    Airport{IataCode{"KEE"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Kelle Airport
     Airport{IataCode{"KEF"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Keflavík International Airport
     Airport{IataCode{"KEG"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Keglsugl Airport
     Airport{IataCode{"KEH"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Kenmore Air Harbor
     Airport{IataCode{"KEJ"}, CountryId{"RU"}, Tz::Asia_Novokuznetsk}, // Kemerovo International Airport
     Airport{IataCode{"KEK"}, CountryId{"US"}, Tz::America_Anchorage}, // Ekwok Airport
     Airport{IataCode{"KEM"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Kemi-Tornio Airport
-    Airport{IataCode{"KEN"}, CountryId{"SL"}, Tz::Africa_Abidjan}, // Kenema Airport
+    Airport{IataCode{"KEN"}, CountryId{"SL"}, Tz::Africa_Freetown}, // Kenema Airport
     Airport{IataCode{"KEO"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Odienné Airport
     Airport{IataCode{"KEP"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Nepalgunj Airport
     Airport{IataCode{"KER"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Kerman Airport
@@ -3071,7 +3071,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KEW"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Keewaywin Airport
     Airport{IataCode{"KEX"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kanabea Airport
     Airport{IataCode{"KEY"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Kericho Airport
-    Airport{IataCode{"KFA"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Kiffa Airport
+    Airport{IataCode{"KFA"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Kiffa Airport
     Airport{IataCode{"KFE"}, CountryId{"AU"}, Tz::Australia_Perth}, // Fortescue Dave Forrest Airport
     Airport{IataCode{"KFG"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Kalkgurung Airport
     Airport{IataCode{"KFP"}, CountryId{"US"}, Tz::America_Nome}, // False Pass Airport
@@ -3082,12 +3082,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KGD"}, CountryId{"RU"}, Tz::Europe_Kaliningrad}, // Khrabrovo Airport
     Airport{IataCode{"KGE"}, CountryId{"SB"}, Tz::Pacific_Guadalcanal}, // Kaghau Airport
     Airport{IataCode{"KGF"}, CountryId{"KZ"}, Tz::Asia_Almaty}, // Sary-Arka Airport
-    Airport{IataCode{"KGG"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Kédougou Airport
+    Airport{IataCode{"KGG"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Kédougou Airport
     Airport{IataCode{"KGH"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Yongai Airport
     Airport{IataCode{"KGI"}, CountryId{"AU"}, Tz::Australia_Perth}, // Kalgoorlie-Boulder Airport
-    Airport{IataCode{"KGJ"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Karonga Airport
+    Airport{IataCode{"KGJ"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Karonga Airport
     Airport{IataCode{"KGK"}, CountryId{"US"}, Tz::America_Anchorage}, // Koliganek Airport
-    Airport{IataCode{"KGL"}, CountryId{"RW"}, Tz::Africa_Maputo}, // Kigali International Airport
+    Airport{IataCode{"KGL"}, CountryId{"RW"}, Tz::Africa_Kigali}, // Kigali International Airport
     Airport{IataCode{"KGM"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kungim Airstrip
     Airport{IataCode{"KGP"}, CountryId{"RU"}, Tz::Asia_Yekaterinburg}, // Kogalym International Airport
     Airport{IataCode{"KGS"}, CountryId{"GR"}, Tz::Europe_Athens}, // Kos Island International Airport
@@ -3105,11 +3105,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KHM"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Khamti Airport
     Airport{IataCode{"KHN"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Nanchang Changbei International Airport
     Airport{IataCode{"KHR"}, CountryId{"MN"}, Tz::Asia_Ulaanbaatar}, // Kharkhorin Airport
-    Airport{IataCode{"KHS"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Khasab Airport
+    Airport{IataCode{"KHS"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Khasab Airport
     Airport{IataCode{"KHT"}, CountryId{"AF"}, Tz::Asia_Kabul}, // Khost Airfield
     Airport{IataCode{"KHU"}, CountryId{"UA"}, Tz::Europe_Kiev}, // Kremenchuk Airport
     Airport{IataCode{"KHV"}, CountryId{"RU"}, Tz::Asia_Vladivostok}, // Khabarovsk Novy Airport
-    Airport{IataCode{"KHW"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Khwai River Airport
+    Airport{IataCode{"KHW"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Khwai River Airport
     Airport{IataCode{"KHY"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Khoy Airport
     Airport{IataCode{"KIC"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Mesa Del Rey Airport
     Airport{IataCode{"KID"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Kristianstad Airport
@@ -3125,9 +3125,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KIS"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Kisumu International Airport
     Airport{IataCode{"KIT"}, CountryId{"GR"}, Tz::Europe_Athens}, // Kithira Island National Airport "Alexandros Aristotelous Onassis"
     Airport{IataCode{"KIV"}, CountryId{"MD"}, Tz::Europe_Chisinau}, // Chișinău International Airport
-    Airport{IataCode{"KIW"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Southdowns Airport
+    Airport{IataCode{"KIW"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Southdowns Airport
     Airport{IataCode{"KIX"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Kansai International Airport
-    Airport{IataCode{"KIY"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Kilwa Masoko Airport
+    Airport{IataCode{"KIY"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Kilwa Masoko Airport
     Airport{IataCode{"KJA"}, CountryId{"RU"}, Tz::Asia_Krasnoyarsk}, // Yemelyanovo International Airport
     Airport{IataCode{"KJH"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Kaili Huangping Airport
     Airport{IataCode{"KJI"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Kanas Airport
@@ -3149,12 +3149,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KKW"}, CountryId{"CD"}, Tz::Africa_Kinshasa}, // Kikwit Airport
     Airport{IataCode{"KKX"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Kikai Airport
     Airport{IataCode{"KKY"}, CountryId{"IE"}, Tz::Europe_Dublin}, // Kilkenny Airport
-    Airport{IataCode{"KKZ"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Koh Kong Airport
-    Airport{IataCode{"KLA"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Kampala Airport
-    Airport{IataCode{"KLB"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Kalabo Airport
-    Airport{IataCode{"KLC"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Kaolack Airport
+    Airport{IataCode{"KKZ"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Koh Kong Airport
+    Airport{IataCode{"KLA"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Kampala Airport
+    Airport{IataCode{"KLB"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Kalabo Airport
+    Airport{IataCode{"KLC"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Kaolack Airport
     Airport{IataCode{"KLD"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Migalovo
-    Airport{IataCode{"KLE"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Kaélé Airport
+    Airport{IataCode{"KLE"}, CountryId{"CM"}, Tz::Africa_Douala}, // Kaélé Airport
     Airport{IataCode{"KLF"}, CountryId{"RU"}, Tz::Europe_Moscow}, // "Kaluga" (Grabtsevo) Airport
     Airport{IataCode{"KLG"}, CountryId{"US"}, Tz::America_Anchorage}, // Kalskag Airport
     Airport{IataCode{"KLH"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Kolhapur Airport
@@ -3175,22 +3175,22 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KMA"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kerema Airport
     Airport{IataCode{"KMB"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Koinambe Airport
     Airport{IataCode{"KMC"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Hafar Al-Batin Domestic Airport
-    Airport{IataCode{"KME"}, CountryId{"RW"}, Tz::Africa_Maputo}, // Kamembe Airport
+    Airport{IataCode{"KME"}, CountryId{"RW"}, Tz::Africa_Kigali}, // Kamembe Airport
     Airport{IataCode{"KMG"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Kunming Changshui International Airport
     Airport{IataCode{"KMH"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Johan Pienaar Airport
     Airport{IataCode{"KMI"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Miyazaki Airport
     Airport{IataCode{"KMJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Kumamoto Airport
-    Airport{IataCode{"KMK"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Makabana Airport
+    Airport{IataCode{"KMK"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Makabana Airport
     Airport{IataCode{"KMN"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Kamina Airport
     Airport{IataCode{"KMO"}, CountryId{"US"}, Tz::America_Anchorage}, // Manokotak Airport
     Airport{IataCode{"KMP"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Keetmanshoop Airport
     Airport{IataCode{"KMQ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Komatsu Airport
     Airport{IataCode{"KMS"}, CountryId{"GH"}, Tz::Africa_Accra}, // Kumasi Airport
-    Airport{IataCode{"KMT"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Kampot Airport
-    Airport{IataCode{"KMU"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Kismayo Airport
+    Airport{IataCode{"KMT"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Kampot Airport
+    Airport{IataCode{"KMU"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Kismayo Airport
     Airport{IataCode{"KMV"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Kalaymyo Airport
     Airport{IataCode{"KMW"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Kostroma Airport
-    Airport{IataCode{"KMZ"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Kaoma Airport
+    Airport{IataCode{"KMZ"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Kaoma Airport
     Airport{IataCode{"KNA"}, CountryId{"CL"}, Tz::America_Santiago}, // Viña del Mar Airport
     Airport{IataCode{"KNB"}, CountryId{"US"}, Tz::America_Phoenix}, // Kanab Municipal Airport
     Airport{IataCode{"KND"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Kindu Airport
@@ -3198,31 +3198,31 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KNG"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Kaimana Airport
     Airport{IataCode{"KNH"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Kinmen Airport
     Airport{IataCode{"KNI"}, CountryId{"AU"}, Tz::Australia_Perth}, // Katanning Airport
-    Airport{IataCode{"KNJ"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Kindamba Airport
+    Airport{IataCode{"KNJ"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Kindamba Airport
     Airport{IataCode{"KNK"}, CountryId{"US"}, Tz::America_Anchorage}, // Kokhanok Airport
     Airport{IataCode{"KNM"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Kaniama Airport
-    Airport{IataCode{"KNN"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Kankan Airport
+    Airport{IataCode{"KNN"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Kankan Airport
     Airport{IataCode{"KNO"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Kualanamu International Airport
-    Airport{IataCode{"KNP"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Kapanda Airport
+    Airport{IataCode{"KNP"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Kapanda Airport
     Airport{IataCode{"KNQ"}, CountryId{"FR"}, Tz::Europe_Paris}, // Koné Airport
     Airport{IataCode{"KNS"}, CountryId{"AU"}, Tz::Australia_Currie}, // King Island Airport
     Airport{IataCode{"KNT"}, CountryId{"US"}, Tz::America_Chicago}, // Kennett Memorial Airport
     Airport{IataCode{"KNU"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Kanpur Airport
     Airport{IataCode{"KNW"}, CountryId{"US"}, Tz::America_Anchorage}, // New Stuyahok Airport
     Airport{IataCode{"KNX"}, CountryId{"AU"}, Tz::Australia_Perth}, // Kununurra Airport
-    Airport{IataCode{"KNZ"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Kéniéba Airport
+    Airport{IataCode{"KNZ"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Kéniéba Airport
     Airport{IataCode{"KOA"}, CountryId{"US"}, Tz::Pacific_Honolulu}, // Kona International Airport
     Airport{IataCode{"KOE"}, CountryId{"ID"}, Tz::Asia_Makassar}, // El Tari Airport
     Airport{IataCode{"KOI"}, CountryId{"GB"}, Tz::Europe_London}, // Kirkwall Airport
     Airport{IataCode{"KOJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Kagoshima Airport
     Airport{IataCode{"KOK"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Kokkola-Pietarsaari Airport
-    Airport{IataCode{"KOL"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Koumala Airport
+    Airport{IataCode{"KOL"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Koumala Airport
     Airport{IataCode{"KOO"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Kongolo Airport
     Airport{IataCode{"KOP"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Nakhon Phanom Airport
     Airport{IataCode{"KOR"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kokoro
-    Airport{IataCode{"KOS"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Sihanoukville International Airport
+    Airport{IataCode{"KOS"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Sihanoukville International Airport
     Airport{IataCode{"KOT"}, CountryId{"US"}, Tz::America_Nome}, // Kotlik Airport
-    Airport{IataCode{"KOU"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Koulamoutou Airport
+    Airport{IataCode{"KOU"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Koulamoutou Airport
     Airport{IataCode{"KOV"}, CountryId{"KZ"}, Tz::Asia_Almaty}, // Kokshetau Airport
     Airport{IataCode{"KOW"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Ganzhou Huangjin Airport
     Airport{IataCode{"KOY"}, CountryId{"US"}, Tz::America_Anchorage}, // Olga Bay Seaplane Base
@@ -3247,7 +3247,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KRA"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Kerang Airport
     Airport{IataCode{"KRB"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Karumba Airport
     Airport{IataCode{"KRC"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Depati Parbo Airport
-    Airport{IataCode{"KRE"}, CountryId{"BI"}, Tz::Africa_Maputo}, // Kirundo Airport
+    Airport{IataCode{"KRE"}, CountryId{"BI"}, Tz::Africa_Bujumbura}, // Kirundo Airport
     Airport{IataCode{"KRF"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Kramfors-Sollefteå Airport
     Airport{IataCode{"KRG"}, CountryId{"GY"}, Tz::America_Guyana}, // Karasabai Airport
     Airport{IataCode{"KRH"}, CountryId{"GB"}, Tz::Europe_London}, // Redhill Aerodrome
@@ -3270,13 +3270,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KRY"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Karamay Airport
     Airport{IataCode{"KRZ"}, CountryId{"CD"}, Tz::Africa_Kinshasa}, // Basango Mboliasa Airport
     Airport{IataCode{"KSA"}, CountryId{"FM"}, Tz::Pacific_Kosrae}, // Kosrae International Airport
-    Airport{IataCode{"KSC"}, CountryId{"SK"}, Tz::Europe_Prague}, // Košice International Airport
+    Airport{IataCode{"KSC"}, CountryId{"SK"}, Tz::Europe_Bratislava}, // Košice International Airport
     Airport{IataCode{"KSD"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Karlstad Airport
-    Airport{IataCode{"KSE"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Kasese Airport
+    Airport{IataCode{"KSE"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Kasese Airport
     Airport{IataCode{"KSF"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Kassel Airport
     Airport{IataCode{"KSG"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kisengan
     Airport{IataCode{"KSH"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Kermanshah Airport
-    Airport{IataCode{"KSI"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Kissidougou Airport
+    Airport{IataCode{"KSI"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Kissidougou Airport
     Airport{IataCode{"KSJ"}, CountryId{"GR"}, Tz::Europe_Athens}, // Kassos Island Public Airport
     Airport{IataCode{"KSK"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Karlskoga Airport
     Airport{IataCode{"KSL"}, CountryId{"SD"}, Tz::Africa_Khartoum}, // Kassala Airport
@@ -3285,7 +3285,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KSO"}, CountryId{"GR"}, Tz::Europe_Athens}, // Kastoria National Airport
     Airport{IataCode{"KSQ"}, CountryId{"UZ"}, Tz::Asia_Samarkand}, // Karshi Airport
     Airport{IataCode{"KSR"}, CountryId{"ID"}, Tz::Asia_Makassar}, // H. Aroeppala Airport
-    Airport{IataCode{"KSS"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Sikasso Airport
+    Airport{IataCode{"KSS"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Sikasso Airport
     Airport{IataCode{"KST"}, CountryId{"SD"}, Tz::Africa_Khartoum}, // Rabak Airport
     Airport{IataCode{"KSU"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Kristiansund Airport, Kvernberget
     Airport{IataCode{"KSV"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Springvale Airport
@@ -3299,7 +3299,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KTE"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Kerteh Airport
     Airport{IataCode{"KTF"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Takaka Aerodrome
     Airport{IataCode{"KTG"}, CountryId{"ID"}, Tz::Asia_Pontianak}, // Ketapang Airport
-    Airport{IataCode{"KTI"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Kratié Airport
+    Airport{IataCode{"KTI"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Kratié Airport
     Airport{IataCode{"KTK"}, CountryId{"PG"}, Tz::Pacific_Bougainville}, // Kanua
     Airport{IataCode{"KTL"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Kitale Airport
     Airport{IataCode{"KTM"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Tribhuvan International Airport
@@ -3311,7 +3311,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KTU"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Kota Airport
     Airport{IataCode{"KTV"}, CountryId{"VE"}, Tz::America_Caracas}, // Kamarata Airport
     Airport{IataCode{"KTW"}, CountryId{"PL"}, Tz::Europe_Warsaw}, // Katowice International Airport
-    Airport{IataCode{"KTX"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Koutiala Airport
+    Airport{IataCode{"KTX"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Koutiala Airport
     Airport{IataCode{"KUA"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Sultan Haji Ahmad Shah Airport
     Airport{IataCode{"KUC"}, CountryId{"KI"}, Tz::Pacific_Tarawa}, // Kuria Airport
     Airport{IataCode{"KUD"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Kudat Airport
@@ -3347,7 +3347,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KWF"}, CountryId{"US"}, Tz::America_Sitka}, // Waterfall Seaplane Base
     Airport{IataCode{"KWG"}, CountryId{"UA"}, Tz::Europe_Kiev}, // Kryvyi Rih International Airport
     Airport{IataCode{"KWH"}, CountryId{"AF"}, Tz::Asia_Kabul}, // Khwahan Airport
-    Airport{IataCode{"KWI"}, CountryId{"KW"}, Tz::Asia_Riyadh}, // Kuwait International Airport
+    Airport{IataCode{"KWI"}, CountryId{"KW"}, Tz::Asia_Kuwait}, // Kuwait International Airport
     Airport{IataCode{"KWJ"}, CountryId{"KR"}, Tz::Asia_Seoul}, // Gwangju Airport
     Airport{IataCode{"KWK"}, CountryId{"US"}, Tz::America_Nome}, // Kwigillingok Airport
     Airport{IataCode{"KWL"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Guilin Liangjiang International Airport
@@ -3367,13 +3367,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KYD"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Lanyu Airport
     Airport{IataCode{"KYK"}, CountryId{"US"}, Tz::America_Anchorage}, // Karluk Airport
     Airport{IataCode{"KYP"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Kyaukpyu Airport
-    Airport{IataCode{"KYS"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Kayes Airport
+    Airport{IataCode{"KYS"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Kayes Airport
     Airport{IataCode{"KYU"}, CountryId{"US"}, Tz::America_Anchorage}, // Koyukuk Airport
     Airport{IataCode{"KYX"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Yalumet
     Airport{IataCode{"KYZ"}, CountryId{"RU"}, Tz::Asia_Krasnoyarsk}, // Kyzyl Airport
     Airport{IataCode{"KZB"}, CountryId{"US"}, Tz::America_Anchorage}, // Zachar Bay Seaplane Base
-    Airport{IataCode{"KZC"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Kampong Chhnang Airport
-    Airport{IataCode{"KZD"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Krakor Airport
+    Airport{IataCode{"KZC"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Kampong Chhnang Airport
+    Airport{IataCode{"KZD"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Krakor Airport
     Airport{IataCode{"KZI"}, CountryId{"GR"}, Tz::Europe_Athens}, // Kozani National Airport
     Airport{IataCode{"KZN"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Kazan International Airport
     Airport{IataCode{"KZO"}, CountryId{"KZ"}, Tz::Asia_Qyzylorda}, // Kyzylorda Airport
@@ -3381,7 +3381,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KZS"}, CountryId{"GR"}, Tz::Europe_Athens}, // Kastellorizo Airport
     Airport{IataCode{"LAA"}, CountryId{"US"}, Tz::America_Denver}, // Lamar Municipal Airport (Colorado)
     Airport{IataCode{"LAC"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Layang-Layang Airport
-    Airport{IataCode{"LAD"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Quatro de Fevereiro Airport
+    Airport{IataCode{"LAD"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Quatro de Fevereiro Airport
     Airport{IataCode{"LAE"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Lae Nadzab Airport
     Airport{IataCode{"LAF"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Purdue University Airport
     Airport{IataCode{"LAH"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Oesman Sadik Airport
@@ -3414,15 +3414,15 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LBN"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Lake Baringo Airport
     Airport{IataCode{"LBO"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Lusambo Airport
     Airport{IataCode{"LBP"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Long Banga Airport
-    Airport{IataCode{"LBQ"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Lambaréné Airport
+    Airport{IataCode{"LBQ"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Lambaréné Airport
     Airport{IataCode{"LBR"}, CountryId{"BR"}, Tz::America_Manaus}, // Lábrea Airport
     Airport{IataCode{"LBS"}, CountryId{"FJ"}, Tz::Pacific_Fiji}, // Labasa Airport
     Airport{IataCode{"LBT"}, CountryId{"US"}, Tz::America_New_York}, // Lumberton Municipal Airport
     Airport{IataCode{"LBU"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Labuan Airport
-    Airport{IataCode{"LBV"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Libreville International Airport
+    Airport{IataCode{"LBV"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Libreville International Airport
     Airport{IataCode{"LBW"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Juvai Semaring Airport
     Airport{IataCode{"LBX"}, CountryId{"PH"}, Tz::Asia_Manila}, // Lubang Airport
-    Airport{IataCode{"LBZ"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Lucapa Airport
+    Airport{IataCode{"LBZ"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Lucapa Airport
     Airport{IataCode{"LCA"}, CountryId{"CY"}, Tz::Asia_Nicosia}, // Larnaca International Airport
     Airport{IataCode{"LCB"}, CountryId{"BR"}, Tz::America_Cuiaba}, // Pontes e Lacerda Airport
     Airport{IataCode{"LCE"}, CountryId{"HN"}, Tz::America_Tegucigalpa}, // Golosón International Airport
@@ -3434,7 +3434,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LCK"}, CountryId{"US"}, Tz::America_New_York}, // Rickenbacker International Airport
     Airport{IataCode{"LCL"}, CountryId{"CU"}, Tz::America_Havana}, // La Coloma Airport
     Airport{IataCode{"LCM"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // La Cumbre Airport
-    Airport{IataCode{"LCO"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Lague Airport
+    Airport{IataCode{"LCO"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Lague Airport
     Airport{IataCode{"LCQ"}, CountryId{"US"}, Tz::America_New_York}, // Lake City Gateway Airport
     Airport{IataCode{"LCR"}, CountryId{"CO"}, Tz::America_Bogota}, // La Chorrera Airport
     Airport{IataCode{"LCV"}, CountryId{"IT"}, Tz::Europe_Rome}, // Lucca-Tassignano Airport
@@ -3445,7 +3445,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LDE"}, CountryId{"FR"}, Tz::Europe_Paris}, // Tarbes-Lourdes-Pyrénées Airport
     Airport{IataCode{"LDG"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Leshukonskoye Airport
     Airport{IataCode{"LDH"}, CountryId{"AU"}, Tz::Australia_Lord_Howe}, // Lord Howe Island Airport
-    Airport{IataCode{"LDI"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Lindi Airport
+    Airport{IataCode{"LDI"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Lindi Airport
     Airport{IataCode{"LDJ"}, CountryId{"US"}, Tz::America_New_York}, // Linden Airport
     Airport{IataCode{"LDK"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Lidköping-Hovby Airport
     Airport{IataCode{"LDM"}, CountryId{"US"}, Tz::America_Detroit}, // Mason County Airport
@@ -3460,17 +3460,17 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LEC"}, CountryId{"BR"}, Tz::America_Bahia}, // Lençóis Airport
     Airport{IataCode{"LED"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Pulkovo Airport
     Airport{IataCode{"LEE"}, CountryId{"US"}, Tz::America_New_York}, // Leesburg International Airport
-    Airport{IataCode{"LEF"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Lebakeng Airport
+    Airport{IataCode{"LEF"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Lebakeng Airport
     Airport{IataCode{"LEH"}, CountryId{"FR"}, Tz::Europe_Paris}, // Le Havre – Octeville Airport
     Airport{IataCode{"LEI"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Almería Airport
     Airport{IataCode{"LEJ"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Leipzig/Halle Airport
-    Airport{IataCode{"LEK"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Tata Airport
+    Airport{IataCode{"LEK"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Tata Airport
     Airport{IataCode{"LEL"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Lake Evella Airport
     Airport{IataCode{"LEN"}, CountryId{"ES"}, Tz::Europe_Madrid}, // León Airport
     Airport{IataCode{"LEP"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Leopoldina Airport
     Airport{IataCode{"LEQ"}, CountryId{"GB"}, Tz::Europe_London}, // Land's End Airport
     Airport{IataCode{"LER"}, CountryId{"AU"}, Tz::Australia_Perth}, // Leinster Airport
-    Airport{IataCode{"LES"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Lesobeng Airport
+    Airport{IataCode{"LES"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Lesobeng Airport
     Airport{IataCode{"LET"}, CountryId{"CO"}, Tz::America_Bogota}, // Alfredo Vásquez Cobo International Airport
     Airport{IataCode{"LEU"}, CountryId{"ES"}, Tz::Europe_Madrid}, // La Seu d'Urgell Airport
     Airport{IataCode{"LEV"}, CountryId{"FJ"}, Tz::Pacific_Fiji}, // Levuka Airfield
@@ -3482,11 +3482,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LFK"}, CountryId{"US"}, Tz::America_Chicago}, // Angelina County Airport
     Airport{IataCode{"LFM"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Lamerd Airport
     Airport{IataCode{"LFN"}, CountryId{"US"}, Tz::America_New_York}, // Triangle North Executive Airport
-    Airport{IataCode{"LFO"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Kelafo East Airport
+    Airport{IataCode{"LFO"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Kelafo East Airport
     Airport{IataCode{"LFQ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Linfen Qiaoli Airport
     Airport{IataCode{"LFR"}, CountryId{"VE"}, Tz::America_Caracas}, // La Fría Airport
     Airport{IataCode{"LFT"}, CountryId{"US"}, Tz::America_Chicago}, // Lafayette Regional Airport
-    Airport{IataCode{"LFW"}, CountryId{"TG"}, Tz::Africa_Abidjan}, // Lomé-Tokoin Airport
+    Airport{IataCode{"LFW"}, CountryId{"TG"}, Tz::Africa_Lome}, // Lomé-Tokoin Airport
     Airport{IataCode{"LGA"}, CountryId{"US"}, Tz::America_New_York}, // LaGuardia Airport
     Airport{IataCode{"LGB"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Long Beach Airport
     Airport{IataCode{"LGC"}, CountryId{"US"}, Tz::America_New_York}, // LaGrange-Callaway Airport
@@ -3506,7 +3506,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LGT"}, CountryId{"CO"}, Tz::America_Bogota}, // Las Gaviotas Airport
     Airport{IataCode{"LGU"}, CountryId{"US"}, Tz::America_Denver}, // Logan-Cache Airport
     Airport{IataCode{"LGW"}, CountryId{"GB"}, Tz::Europe_London}, // Gatwick Airport
-    Airport{IataCode{"LGX"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Lugh Ganane Airport
+    Airport{IataCode{"LGX"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Lugh Ganane Airport
     Airport{IataCode{"LHC"}, CountryId{"PE"}, Tz::America_Lima}, // Caballococha Airport
     Airport{IataCode{"LHE"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Allama Iqbal International Airport
     Airport{IataCode{"LHG"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Lightning Ridge Airport
@@ -3530,12 +3530,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LIS"}, CountryId{"PT"}, Tz::Europe_Lisbon}, // Lisbon Airport
     Airport{IataCode{"LIT"}, CountryId{"US"}, Tz::America_Chicago}, // Bill and Hillary Clinton National Airport
     Airport{IataCode{"LIW"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Loikaw Airport
-    Airport{IataCode{"LIX"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Likoma Airport
+    Airport{IataCode{"LIX"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Likoma Airport
     Airport{IataCode{"LIZ"}, CountryId{"US"}, Tz::America_New_York}, // Loring International Airport
     Airport{IataCode{"LJA"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Lodja Airport
     Airport{IataCode{"LJG"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Lijiang Sanyi Airport
     Airport{IataCode{"LJN"}, CountryId{"US"}, Tz::America_Chicago}, // Texas Gulf Coast Regional Airport
-    Airport{IataCode{"LJU"}, CountryId{"SI"}, Tz::Europe_Belgrade}, // Ljubljana Jože Pučnik Airport
+    Airport{IataCode{"LJU"}, CountryId{"SI"}, Tz::Europe_Ljubljana}, // Ljubljana Jože Pučnik Airport
     Airport{IataCode{"LKA"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Gewayantana Airport
     Airport{IataCode{"LKB"}, CountryId{"FJ"}, Tz::Pacific_Fiji}, // Lakeba Airport
     Airport{IataCode{"LKE"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Kenmore Air Harbor Seaplane Base
@@ -3547,27 +3547,27 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LKO"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Chaudhary Charan Singh Airport
     Airport{IataCode{"LKP"}, CountryId{"US"}, Tz::America_New_York}, // Lake Placid Airport
     Airport{IataCode{"LKV"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Lake County Airport
-    Airport{IataCode{"LKW"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Lekhwair Airport
-    Airport{IataCode{"LKY"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Lake Manyara Airport
+    Airport{IataCode{"LKW"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Lekhwair Airport
+    Airport{IataCode{"LKY"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Lake Manyara Airport
     Airport{IataCode{"LLA"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Luleå Airport
     Airport{IataCode{"LLB"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Libo Airport
     Airport{IataCode{"LLE"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Malelane Airport
     Airport{IataCode{"LLF"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Yongzhou Lingling Airport
     Airport{IataCode{"LLG"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Chillagoe Airport
     Airport{IataCode{"LLH"}, CountryId{"HN"}, Tz::America_Tegucigalpa}, // La Lima Airport
-    Airport{IataCode{"LLI"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Lalibela Airport
+    Airport{IataCode{"LLI"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Lalibela Airport
     Airport{IataCode{"LLJ"}, CountryId{"BD"}, Tz::Asia_Dhaka}, // Lalmonirhat Airport
     Airport{IataCode{"LLK"}, CountryId{"AZ"}, Tz::Asia_Baku}, // Lankaran International Airport
     Airport{IataCode{"LLO"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Palopo Lagaligo Airport
     Airport{IataCode{"LLS"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Alférez Armando Rodríguez Airport
-    Airport{IataCode{"LLT"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Lobito Airport
+    Airport{IataCode{"LLT"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Lobito Airport
     Airport{IataCode{"LLU"}, CountryId{"US"}, Tz::America_Chicago}, // Lamar Municipal Airport
     Airport{IataCode{"LLV"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Lüliang Airport
-    Airport{IataCode{"LLW"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Lilongwe International Airport
+    Airport{IataCode{"LLW"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Lilongwe International Airport
     Airport{IataCode{"LLX"}, CountryId{"US"}, Tz::America_New_York}, // Caledonia County Airport
     Airport{IataCode{"LLY"}, CountryId{"US"}, Tz::America_New_York}, // South Jersey Regional Airport
     Airport{IataCode{"LMA"}, CountryId{"US"}, Tz::America_Anchorage}, // Minchumina Airport
-    Airport{IataCode{"LMB"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Salima Airport
+    Airport{IataCode{"LMB"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Salima Airport
     Airport{IataCode{"LMC"}, CountryId{"CO"}, Tz::America_Bogota}, // La Macarena Airport
     Airport{IataCode{"LMI"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Lumi Airport
     Airport{IataCode{"LML"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Lae Airport
@@ -3608,7 +3608,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LOM"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Francisco Primo de Verdad National Airport
     Airport{IataCode{"LOO"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // L'Mekrareg Airport
     Airport{IataCode{"LOP"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Lombok International Airport
-    Airport{IataCode{"LOQ"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Lobatse Airport
+    Airport{IataCode{"LOQ"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Lobatse Airport
     Airport{IataCode{"LOS"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Murtala Muhammed International Airport
     Airport{IataCode{"LOT"}, CountryId{"US"}, Tz::America_Chicago}, // Lewis University Airport
     Airport{IataCode{"LOU"}, CountryId{"US"}, Tz::America_Kentucky_Louisville}, // Bowman Field
@@ -3630,7 +3630,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LPN"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Leron Plains Airport
     Airport{IataCode{"LPO"}, CountryId{"US"}, Tz::America_Chicago}, // La Porte Municipal Airport
     Airport{IataCode{"LPP"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Lappeenranta Airport
-    Airport{IataCode{"LPQ"}, CountryId{"LA"}, Tz::Asia_Bangkok}, // Luang Prabang International Airport
+    Airport{IataCode{"LPQ"}, CountryId{"LA"}, Tz::Asia_Vientiane}, // Luang Prabang International Airport
     Airport{IataCode{"LPR"}, CountryId{"US"}, Tz::America_New_York}, // Lorain County Regional Airport
     Airport{IataCode{"LPS"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Fishermans Bay/LPS Seaplane Base
     Airport{IataCode{"LPT"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Lampang Airport
@@ -3641,13 +3641,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LQM"}, CountryId{"CO"}, Tz::America_Bogota}, // Caucayá Airport
     Airport{IataCode{"LQN"}, CountryId{"AF"}, Tz::Asia_Kabul}, // Qala i Naw Airport
     Airport{IataCode{"LRA"}, CountryId{"GR"}, Tz::Europe_Athens}, // Larissa National Airport
-    Airport{IataCode{"LRB"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Leribe Airport
+    Airport{IataCode{"LRB"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Leribe Airport
     Airport{IataCode{"LRD"}, CountryId{"US"}, Tz::America_Chicago}, // Laredo International Airport
     Airport{IataCode{"LRE"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Longreach Airport
     Airport{IataCode{"LRG"}, CountryId{"US"}, Tz::America_New_York}, // Lincoln Regional Airport
     Airport{IataCode{"LRH"}, CountryId{"FR"}, Tz::Europe_Paris}, // La Rochelle – Île de Ré Airport
     Airport{IataCode{"LRJ"}, CountryId{"US"}, Tz::America_Chicago}, // Le Mars Municipal Airport
-    Airport{IataCode{"LRL"}, CountryId{"TG"}, Tz::Africa_Abidjan}, // Niamtougou International Airport
+    Airport{IataCode{"LRL"}, CountryId{"TG"}, Tz::Africa_Lome}, // Niamtougou International Airport
     Airport{IataCode{"LRM"}, CountryId{"DO"}, Tz::America_Santo_Domingo}, // La Romana International Airport
     Airport{IataCode{"LRO"}, CountryId{"US"}, Tz::America_New_York}, // Mount Pleasant Regional Airport
     Airport{IataCode{"LRQ"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Laurie River Airport
@@ -3673,13 +3673,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LSW"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Malikus Saleh Airport
     Airport{IataCode{"LSX"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Lhok Sukon Airport
     Airport{IataCode{"LSY"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Lismore Airport
-    Airport{IataCode{"LSZ"}, CountryId{"HR"}, Tz::Europe_Belgrade}, // Lošinj Airport
+    Airport{IataCode{"LSZ"}, CountryId{"HR"}, Tz::Europe_Zagreb}, // Lošinj Airport
     Airport{IataCode{"LTA"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Tzaneen Airport
     Airport{IataCode{"LTC"}, CountryId{"TD"}, Tz::Africa_Ndjamena}, // Laï Airport
     Airport{IataCode{"LTD"}, CountryId{"LY"}, Tz::Africa_Tripoli}, // Ghadames Airport
     Airport{IataCode{"LTI"}, CountryId{"MN"}, Tz::Asia_Hovd}, // Altai Airport
     Airport{IataCode{"LTK"}, CountryId{"SY"}, Tz::Asia_Damascus}, // Bassel Al-Assad International Airport
-    Airport{IataCode{"LTL"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Lastoursville Airport
+    Airport{IataCode{"LTL"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Lastoursville Airport
     Airport{IataCode{"LTM"}, CountryId{"GY"}, Tz::America_Guyana}, // Lethem Airport
     Airport{IataCode{"LTN"}, CountryId{"GB"}, Tz::Europe_London}, // Luton Airport
     Airport{IataCode{"LTO"}, CountryId{"MX"}, Tz::America_Mazatlan}, // Loreto International Airport
@@ -3698,8 +3698,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LUK"}, CountryId{"US"}, Tz::America_New_York}, // Cincinnati Municipal Lunken Airport
     Airport{IataCode{"LUL"}, CountryId{"US"}, Tz::America_Chicago}, // Hesler-Noble Field
     Airport{IataCode{"LUM"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Dehong Mangshi Airport
-    Airport{IataCode{"LUN"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Kenneth Kaunda International Airport
-    Airport{IataCode{"LUO"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Luena Airport
+    Airport{IataCode{"LUN"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Kenneth Kaunda International Airport
+    Airport{IataCode{"LUO"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Luena Airport
     Airport{IataCode{"LUP"}, CountryId{"US"}, Tz::Pacific_Honolulu}, // Kalaupapa Airport
     Airport{IataCode{"LUQ"}, CountryId{"AR"}, Tz::America_Argentina_San_Luis}, // Brigadier Mayor César Raúl Ojeda Airport
     Airport{IataCode{"LUR"}, CountryId{"US"}, Tz::America_Nome}, // Cape Lisburne LRRS Airport
@@ -3710,7 +3710,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LUX"}, CountryId{"LU"}, Tz::Europe_Luxembourg}, // Luxembourg Airport
     Airport{IataCode{"LUZ"}, CountryId{"PL"}, Tz::Europe_Warsaw}, // Lublin Airport
     Airport{IataCode{"LVB"}, CountryId{"BR"}, Tz::America_Montevideo}, // Santana do Livramento Airport
-    Airport{IataCode{"LVI"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Harry Mwanga Nkumbula International Airport
+    Airport{IataCode{"LVI"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Harry Mwanga Nkumbula International Airport
     Airport{IataCode{"LVK"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Livermore Municipal Airport
     Airport{IataCode{"LVM"}, CountryId{"US"}, Tz::America_Denver}, // Mission Field
     Airport{IataCode{"LVO"}, CountryId{"AU"}, Tz::Australia_Perth}, // Laverton Airport
@@ -3730,11 +3730,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LWV"}, CountryId{"US"}, Tz::America_Chicago}, // Lawrenceville-Vincennes International Airport
     Airport{IataCode{"LWY"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Lawas Airport
     Airport{IataCode{"LXA"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Lhasa Gonggar Airport
-    Airport{IataCode{"LXG"}, CountryId{"LA"}, Tz::Asia_Bangkok}, // Louangnamtha Airport
+    Airport{IataCode{"LXG"}, CountryId{"LA"}, Tz::Asia_Vientiane}, // Louangnamtha Airport
     Airport{IataCode{"LXN"}, CountryId{"US"}, Tz::America_Chicago}, // Jim Kelly Field
     Airport{IataCode{"LXR"}, CountryId{"EG"}, Tz::Africa_Cairo}, // Luxor International Airport
     Airport{IataCode{"LXS"}, CountryId{"GR"}, Tz::Europe_Athens}, // Lemnos International Airport
-    Airport{IataCode{"LXU"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Lukulu Airport
+    Airport{IataCode{"LXU"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Lukulu Airport
     Airport{IataCode{"LXV"}, CountryId{"US"}, Tz::America_Denver}, // Lake County Airport
     Airport{IataCode{"LYA"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Luoyang Beijiao Airport
     Airport{IataCode{"LYB"}, CountryId{"GB"}, Tz::Europe_London}, // Edward Bodden Airfield
@@ -3752,7 +3752,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"LZA"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Luiza Airport
     Airport{IataCode{"LZC"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Lázaro Cárdenas Airport
     Airport{IataCode{"LZH"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Liuzhou Bailian Airport
-    Airport{IataCode{"LZM"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Luzamba Airport
+    Airport{IataCode{"LZM"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Luzamba Airport
     Airport{IataCode{"LZN"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Matsu Nangan Airport
     Airport{IataCode{"LZO"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Luzhou Lantian Airport
     Airport{IataCode{"LZR"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Lizard Island Airport
@@ -3766,7 +3766,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MAF"}, CountryId{"US"}, Tz::America_Chicago}, // Midland International Airport
     Airport{IataCode{"MAG"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Madang Airport
     Airport{IataCode{"MAH"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Menorca Airport
-    Airport{IataCode{"MAI"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Mangochi Airport
+    Airport{IataCode{"MAI"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Mangochi Airport
     Airport{IataCode{"MAJ"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Marshall Islands International Airport
     Airport{IataCode{"MAK"}, CountryId{"SS"}, Tz::Africa_Juba}, // Malakal Airport
     Airport{IataCode{"MAL"}, CountryId{"US"}, Tz::America_New_York}, // Malone-Dufort Airport
@@ -3784,25 +3784,25 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MAY"}, CountryId{"BS"}, Tz::America_Nassau}, // Clarence A. Bain Airport
     Airport{IataCode{"MAZ"}, CountryId{"US"}, Tz::America_Puerto_Rico}, // Eugenio María de Hostos Airport
     Airport{IataCode{"MBA"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Moi International Airport
-    Airport{IataCode{"MBC"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Mbigou Airport
+    Airport{IataCode{"MBC"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Mbigou Airport
     Airport{IataCode{"MBD"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Mafikeng Airport
     Airport{IataCode{"MBE"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Monbetsu Airport
     Airport{IataCode{"MBG"}, CountryId{"US"}, Tz::America_Chicago}, // Mobridge Municipal Airport
     Airport{IataCode{"MBH"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Maryborough Airport
-    Airport{IataCode{"MBI"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Mbeya Airport
+    Airport{IataCode{"MBI"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Mbeya Airport
     Airport{IataCode{"MBJ"}, CountryId{"JM"}, Tz::America_Jamaica}, // Sangster International Airport
     Airport{IataCode{"MBK"}, CountryId{"BR"}, Tz::America_Cuiaba}, // Matupá Airport
     Airport{IataCode{"MBL"}, CountryId{"US"}, Tz::America_Detroit}, // Manistee County Blacker Airport
     Airport{IataCode{"MBO"}, CountryId{"PH"}, Tz::Asia_Manila}, // Mamburao Airport
     Airport{IataCode{"MBP"}, CountryId{"PE"}, Tz::America_Lima}, // Moyobamba Airport
-    Airport{IataCode{"MBQ"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Mbarara Airport
+    Airport{IataCode{"MBQ"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Mbarara Airport
     Airport{IataCode{"MBS"}, CountryId{"US"}, Tz::America_Detroit}, // MBS International Airport
     Airport{IataCode{"MBT"}, CountryId{"PH"}, Tz::Asia_Manila}, // Moises R. Espinosa Airport
     Airport{IataCode{"MBU"}, CountryId{"SB"}, Tz::Pacific_Guadalcanal}, // Mbambanakira Airport
     Airport{IataCode{"MBW"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Moorabbin Airport
-    Airport{IataCode{"MBX"}, CountryId{"SI"}, Tz::Europe_Belgrade}, // Maribor Edvard Rusjan Airport
+    Airport{IataCode{"MBX"}, CountryId{"SI"}, Tz::Europe_Ljubljana}, // Maribor Edvard Rusjan Airport
     Airport{IataCode{"MBZ"}, CountryId{"BR"}, Tz::America_Manaus}, // Maués Airport
-    Airport{IataCode{"MCA"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Macenta Airport
+    Airport{IataCode{"MCA"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Macenta Airport
     Airport{IataCode{"MCB"}, CountryId{"US"}, Tz::America_Chicago}, // McComb-Pike County Airport
     Airport{IataCode{"MCC"}, CountryId{"US"}, Tz::America_Los_Angeles}, // McClellan Airfield
     Airport{IataCode{"MCD"}, CountryId{"US"}, Tz::America_Detroit}, // Mackinac Island Airport
@@ -3818,7 +3818,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MCP"}, CountryId{"BR"}, Tz::America_Belem}, // Macapá International Airport
     Airport{IataCode{"MCQ"}, CountryId{"HU"}, Tz::Europe_Budapest}, // Miskolc Airport
     Airport{IataCode{"MCS"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Monte Caseros Airport
-    Airport{IataCode{"MCT"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Muscat International Airport
+    Airport{IataCode{"MCT"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Muscat International Airport
     Airport{IataCode{"MCU"}, CountryId{"FR"}, Tz::Europe_Paris}, // Montluçon – Guéret Airport
     Airport{IataCode{"MCV"}, CountryId{"AU"}, Tz::Australia_Darwin}, // McArthur River Mine Airport
     Airport{IataCode{"MCW"}, CountryId{"US"}, Tz::America_Chicago}, // Mason City Municipal Airport
@@ -3843,7 +3843,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MDS"}, CountryId{"GB"}, Tz::Europe_London}, // Middle Caicos Airport
     Airport{IataCode{"MDT"}, CountryId{"US"}, Tz::America_New_York}, // Harrisburg International Airport
     Airport{IataCode{"MDU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Mendi Airport
-    Airport{IataCode{"MDV"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Médouneu Airport
+    Airport{IataCode{"MDV"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Médouneu Airport
     Airport{IataCode{"MDW"}, CountryId{"US"}, Tz::America_Chicago}, // Chicago Midway International Airport
     Airport{IataCode{"MDX"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Mercedes Airport
     Airport{IataCode{"MDY"}, CountryId{"US"}, Tz::Pacific_Midway}, // Henderson Field
@@ -3854,7 +3854,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MED"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Prince Mohammad Bin Abdulaziz Airport
     Airport{IataCode{"MEE"}, CountryId{"FR"}, Tz::Europe_Paris}, // Maré Airport
     Airport{IataCode{"MEF"}, CountryId{"TD"}, Tz::Africa_Ndjamena}, // Melfi Airport
-    Airport{IataCode{"MEG"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Malanje Airport
+    Airport{IataCode{"MEG"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Malanje Airport
     Airport{IataCode{"MEH"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Mehamn Airport
     Airport{IataCode{"MEI"}, CountryId{"US"}, Tz::America_Chicago}, // Meridian Regional Airport
     Airport{IataCode{"MEJ"}, CountryId{"US"}, Tz::America_New_York}, // Port Meadville Airport
@@ -3871,11 +3871,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MEX"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Mexico City International Airport
     Airport{IataCode{"MEY"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Meghauli Airport
     Airport{IataCode{"MEZ"}, CountryId{"US"}, Tz::America_Chicago}, // Mena Intermountain Municipal Airport
-    Airport{IataCode{"MFA"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Mafia Airport
-    Airport{IataCode{"MFC"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Mafeteng Airport
+    Airport{IataCode{"MFA"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Mafia Airport
+    Airport{IataCode{"MFC"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Mafeteng Airport
     Airport{IataCode{"MFD"}, CountryId{"US"}, Tz::America_New_York}, // Mansfield Lahm Regional Airport
     Airport{IataCode{"MFE"}, CountryId{"US"}, Tz::America_Chicago}, // McAllen-Miller International Airport
-    Airport{IataCode{"MFF"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Moanda Airport
+    Airport{IataCode{"MFF"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Moanda Airport
     Airport{IataCode{"MFG"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Muzaffarabad Airport
     Airport{IataCode{"MFH"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Mesquite Airport
     Airport{IataCode{"MFI"}, CountryId{"US"}, Tz::America_Chicago}, // Marshfield Municipal Airport
@@ -3884,10 +3884,10 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MFM"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Macau International Airport
     Airport{IataCode{"MFN"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Milford Sound Airport
     Airport{IataCode{"MFO"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Manguna Airport
-    Airport{IataCode{"MFQ"}, CountryId{"NE"}, Tz::Africa_Lagos}, // Maradi Airport
+    Airport{IataCode{"MFQ"}, CountryId{"NE"}, Tz::Africa_Niamey}, // Maradi Airport
     Airport{IataCode{"MFR"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Rogue Valley International-Medford Airport
     Airport{IataCode{"MFS"}, CountryId{"CO"}, Tz::America_Bogota}, // Miraflores Airport
-    Airport{IataCode{"MFU"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Mfuwe Airport
+    Airport{IataCode{"MFU"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Mfuwe Airport
     Airport{IataCode{"MFV"}, CountryId{"US"}, Tz::America_New_York}, // Accomack County Airport
     Airport{IataCode{"MFZ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Meselia Airport
     Airport{IataCode{"MGA"}, CountryId{"NI"}, Tz::America_Managua}, // Augusto C. Sandino International Airport
@@ -3901,12 +3901,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MGJ"}, CountryId{"US"}, Tz::America_New_York}, // Orange County Airport
     Airport{IataCode{"MGM"}, CountryId{"US"}, Tz::America_Chicago}, // Montgomery Regional Airport
     Airport{IataCode{"MGN"}, CountryId{"CO"}, Tz::America_Bogota}, // Baracoa Regional Airport
-    Airport{IataCode{"MGQ"}, CountryId{"SO"}, Tz::Africa_Nairobi}, // Aden Adde International Airport
+    Airport{IataCode{"MGQ"}, CountryId{"SO"}, Tz::Africa_Mogadishu}, // Aden Adde International Airport
     Airport{IataCode{"MGR"}, CountryId{"US"}, Tz::America_New_York}, // Moultrie Municipal Airport
     Airport{IataCode{"MGT"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Milingimbi Airport
     Airport{IataCode{"MGV"}, CountryId{"AU"}, Tz::Australia_Perth}, // Margaret River Station Airport
     Airport{IataCode{"MGW"}, CountryId{"US"}, Tz::America_New_York}, // Morgantown Municipal Airport
-    Airport{IataCode{"MGX"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Moabi Airport
+    Airport{IataCode{"MGX"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Moabi Airport
     Airport{IataCode{"MGY"}, CountryId{"US"}, Tz::America_New_York}, // Dayton–Wright Brothers Airport
     Airport{IataCode{"MGZ"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Myeik Airport
     Airport{IataCode{"MHA"}, CountryId{"GY"}, Tz::America_Guyana}, // Mahdia Airport
@@ -3914,7 +3914,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MHD"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Mashhad International Airport
     Airport{IataCode{"MHE"}, CountryId{"US"}, Tz::America_Chicago}, // Mitchell Municipal Airport
     Airport{IataCode{"MHH"}, CountryId{"BS"}, Tz::America_Nassau}, // Leonard M. Thompson International Airport
-    Airport{IataCode{"MHI"}, CountryId{"DJ"}, Tz::Africa_Nairobi}, // Moucha Airport
+    Airport{IataCode{"MHI"}, CountryId{"DJ"}, Tz::Africa_Djibouti}, // Moucha Airport
     Airport{IataCode{"MHK"}, CountryId{"US"}, Tz::America_Chicago}, // Manhattan Regional Airport
     Airport{IataCode{"MHL"}, CountryId{"US"}, Tz::America_Chicago}, // Marshall Memorial Municipal Airport
     Airport{IataCode{"MHP"}, CountryId{"BY"}, Tz::Europe_Minsk}, // Minsk-1 Airport
@@ -3943,7 +3943,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MIT"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Shafter Airport
     Airport{IataCode{"MIU"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Maiduguri International Airport
     Airport{IataCode{"MIV"}, CountryId{"US"}, Tz::America_New_York}, // Millville Municipal Airport
-    Airport{IataCode{"MJA"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Manja Airport
+    Airport{IataCode{"MJA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Manja Airport
     Airport{IataCode{"MJB"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Mejit Airport
     Airport{IataCode{"MJC"}, CountryId{"CI"}, Tz::Africa_Abidjan}, // Man Airport
     Airport{IataCode{"MJD"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Moenjodaro Airport
@@ -3952,9 +3952,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MJI"}, CountryId{"LY"}, Tz::Africa_Tripoli}, // Mitiga International Airport
     Airport{IataCode{"MJJ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Moki
     Airport{IataCode{"MJK"}, CountryId{"AU"}, Tz::Australia_Perth}, // Shark Bay Airport
-    Airport{IataCode{"MJL"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Mouila Airport
+    Airport{IataCode{"MJL"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Mouila Airport
     Airport{IataCode{"MJM"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Mbuji Mayi Airport
-    Airport{IataCode{"MJN"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Amborovy Airport
+    Airport{IataCode{"MJN"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Amborovy Airport
     Airport{IataCode{"MJO"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Mount Etjo Airport
     Airport{IataCode{"MJP"}, CountryId{"AU"}, Tz::Australia_Perth}, // Manjimup Airport
     Airport{IataCode{"MJQ"}, CountryId{"US"}, Tz::America_Chicago}, // Jackson Municipal Airport
@@ -3965,13 +3965,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MJX"}, CountryId{"US"}, Tz::America_New_York}, // Robert J. Miller Air Park
     Airport{IataCode{"MJZ"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Mirny Airport
     Airport{IataCode{"MKA"}, CountryId{"CZ"}, Tz::Europe_Prague}, // Marianske Lazne Airport
-    Airport{IataCode{"MKB"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Mékambo Airport
+    Airport{IataCode{"MKB"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Mékambo Airport
     Airport{IataCode{"MKC"}, CountryId{"US"}, Tz::America_Chicago}, // Charles B. Wheeler Downtown Airport
     Airport{IataCode{"MKE"}, CountryId{"US"}, Tz::America_Chicago}, // General Mitchell International Airport
     Airport{IataCode{"MKG"}, CountryId{"US"}, Tz::America_Detroit}, // Muskegon County Airport
-    Airport{IataCode{"MKH"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Mokhotlong Airport
-    Airport{IataCode{"MKI"}, CountryId{"CF"}, Tz::Africa_Lagos}, // M'Boki Airport
-    Airport{IataCode{"MKJ"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Makoua Airport
+    Airport{IataCode{"MKH"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Mokhotlong Airport
+    Airport{IataCode{"MKI"}, CountryId{"CF"}, Tz::Africa_Bangui}, // M'Boki Airport
+    Airport{IataCode{"MKJ"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Makoua Airport
     Airport{IataCode{"MKK"}, CountryId{"US"}, Tz::Pacific_Honolulu}, // Molokai Airport
     Airport{IataCode{"MKL"}, CountryId{"US"}, Tz::America_Chicago}, // McKellar-Sipes Regional Airport
     Airport{IataCode{"MKM"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Mukah Airport
@@ -3979,9 +3979,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MKO"}, CountryId{"US"}, Tz::America_Chicago}, // Davis Field
     Airport{IataCode{"MKQ"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Mopah Airport
     Airport{IataCode{"MKR"}, CountryId{"AU"}, Tz::Australia_Perth}, // Meekatharra Airport
-    Airport{IataCode{"MKS"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Mekane Selam Airport
+    Airport{IataCode{"MKS"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Mekane Selam Airport
     Airport{IataCode{"MKT"}, CountryId{"US"}, Tz::America_Chicago}, // Mankato Regional Airport
-    Airport{IataCode{"MKU"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Makokou Airport
+    Airport{IataCode{"MKU"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Makokou Airport
     Airport{IataCode{"MKW"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Rendani Airport
     Airport{IataCode{"MKY"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Mackay Airport
     Airport{IataCode{"MKZ"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Malacca International Airport
@@ -4009,7 +4009,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MMC"}, CountryId{"MX"}, Tz::America_Monterrey}, // Ciudad Mante National Airport
     Airport{IataCode{"MMD"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Minami-Daito Airport
     Airport{IataCode{"MME"}, CountryId{"GB"}, Tz::Europe_London}, // Durham Tees Valley Airport
-    Airport{IataCode{"MMF"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Mamfe Airport
+    Airport{IataCode{"MMF"}, CountryId{"CM"}, Tz::Africa_Douala}, // Mamfe Airport
     Airport{IataCode{"MMG"}, CountryId{"AU"}, Tz::Australia_Perth}, // Mount Magnet Airport
     Airport{IataCode{"MMH"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Mammoth Yosemite Airport
     Airport{IataCode{"MMI"}, CountryId{"US"}, Tz::America_New_York}, // McMinn County Airport
@@ -4020,7 +4020,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MMN"}, CountryId{"US"}, Tz::America_New_York}, // Minute Man Air Field
     Airport{IataCode{"MMO"}, CountryId{"CV"}, Tz::Atlantic_Cape_Verde}, // Maio Airport
     Airport{IataCode{"MMP"}, CountryId{"CO"}, Tz::America_Bogota}, // San Bernardo Airport
-    Airport{IataCode{"MMQ"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Mbala Airport
+    Airport{IataCode{"MMQ"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Mbala Airport
     Airport{IataCode{"MMT"}, CountryId{"US"}, Tz::America_New_York}, // McEntire Joint National Guard Base
     Airport{IataCode{"MMU"}, CountryId{"US"}, Tz::America_New_York}, // Morristown Municipal Airport
     Airport{IataCode{"MMV"}, CountryId{"US"}, Tz::America_Los_Angeles}, // McMinnville Municipal Airport
@@ -4032,16 +4032,16 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MNC"}, CountryId{"MZ"}, Tz::Africa_Maputo}, // Nacala Airport
     Airport{IataCode{"MNF"}, CountryId{"FJ"}, Tz::Pacific_Fiji}, // Mana Island Airport
     Airport{IataCode{"MNG"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Maningrida Airport
-    Airport{IataCode{"MNH"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Rustaq Airport
+    Airport{IataCode{"MNH"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Rustaq Airport
     Airport{IataCode{"MNI"}, CountryId{"GB"}, Tz::Europe_London}, // John A. Osborne Airport
-    Airport{IataCode{"MNJ"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Mananjary Airport
+    Airport{IataCode{"MNJ"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Mananjary Airport
     Airport{IataCode{"MNK"}, CountryId{"KI"}, Tz::Pacific_Tarawa}, // Maiana Airport
     Airport{IataCode{"MNL"}, CountryId{"PH"}, Tz::Asia_Manila}, // Ninoy Aquino International Airport
     Airport{IataCode{"MNM"}, CountryId{"US"}, Tz::America_Menominee}, // Menominee-Marinette Twin County Airport
     Airport{IataCode{"MNN"}, CountryId{"US"}, Tz::America_New_York}, // Marion Municipal Airport
     Airport{IataCode{"MNQ"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Monto Airport
-    Airport{IataCode{"MNR"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Mongu Airport
-    Airport{IataCode{"MNS"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Mansa Airport
+    Airport{IataCode{"MNR"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Mongu Airport
+    Airport{IataCode{"MNS"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Mansa Airport
     Airport{IataCode{"MNT"}, CountryId{"US"}, Tz::America_Anchorage}, // Minto Al Wright Airport
     Airport{IataCode{"MNU"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Mawlamyaing Airport
     Airport{IataCode{"MNX"}, CountryId{"BR"}, Tz::America_Manaus}, // Manicoré Airport
@@ -4057,11 +4057,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MOI"}, CountryId{"NZ"}, Tz::Pacific_Rarotonga}, // Mitiaro Airport
     Airport{IataCode{"MOJ"}, CountryId{"SR"}, Tz::America_Paramaribo}, // Moengo Airstrip
     Airport{IataCode{"MOL"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Molde Airport
-    Airport{IataCode{"MOM"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Letfotar Airport
+    Airport{IataCode{"MOM"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Letfotar Airport
     Airport{IataCode{"MON"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Glentanner Aerodrome
     Airport{IataCode{"MOO"}, CountryId{"AU"}, Tz::Australia_Adelaide}, // Moomba Airport
     Airport{IataCode{"MOP"}, CountryId{"US"}, Tz::America_Detroit}, // Mount Pleasant Municipal Airport
-    Airport{IataCode{"MOQ"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Morondava Airport
+    Airport{IataCode{"MOQ"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Morondava Airport
     Airport{IataCode{"MOR"}, CountryId{"US"}, Tz::America_New_York}, // Morristown Regional Airport
     Airport{IataCode{"MOS"}, CountryId{"US"}, Tz::America_Nome}, // Moses Point Airport
     Airport{IataCode{"MOT"}, CountryId{"US"}, Tz::America_Chicago}, // Minot International Airport
@@ -4098,12 +4098,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MQN"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Mo i Rana Airport
     Airport{IataCode{"MQP"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Kruger Mpumalanga International Airport
     Airport{IataCode{"MQQ"}, CountryId{"TD"}, Tz::Africa_Ndjamena}, // Moundou Airport
-    Airport{IataCode{"MQS"}, CountryId{"VC"}, Tz::America_Port_of_Spain}, // Mustique Airport
+    Airport{IataCode{"MQS"}, CountryId{"VC"}, Tz::America_St_Vincent}, // Mustique Airport
     Airport{IataCode{"MQT"}, CountryId{"US"}, Tz::America_Detroit}, // Sawyer International Airport
     Airport{IataCode{"MQU"}, CountryId{"CO"}, Tz::America_Bogota}, // Mariquita Airport
     Airport{IataCode{"MQV"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Mostaganem Airport
     Airport{IataCode{"MQW"}, CountryId{"US"}, Tz::America_New_York}, // Telfair-Wheeler Airport
-    Airport{IataCode{"MQX"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Alula Aba Nega Airport
+    Airport{IataCode{"MQX"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Alula Aba Nega Airport
     Airport{IataCode{"MQY"}, CountryId{"US"}, Tz::America_Chicago}, // Smyrna Airport
     Airport{IataCode{"MQZ"}, CountryId{"AU"}, Tz::Australia_Perth}, // Margaret River Airport
     Airport{IataCode{"MRA"}, CountryId{"LY"}, Tz::Africa_Tripoli}, // Misrata Airport
@@ -4134,7 +4134,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MSD"}, CountryId{"US"}, Tz::America_Denver}, // Mount Pleasant Airport (Utah)
     Airport{IataCode{"MSE"}, CountryId{"GB"}, Tz::Europe_London}, // Manston Airport
     Airport{IataCode{"MSF"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Mount Swan Airport
-    Airport{IataCode{"MSG"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Matsaile Airport
+    Airport{IataCode{"MSG"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Matsaile Airport
     Airport{IataCode{"MSJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Misawa Airport
     Airport{IataCode{"MSL"}, CountryId{"US"}, Tz::America_Chicago}, // Northwest Alabama Regional Airport
     Airport{IataCode{"MSM"}, CountryId{"CD"}, Tz::Africa_Kinshasa}, // Masi-Manimba Airport
@@ -4144,15 +4144,15 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MSQ"}, CountryId{"BY"}, Tz::Europe_Minsk}, // Minsk National Airport
     Airport{IataCode{"MSS"}, CountryId{"US"}, Tz::America_New_York}, // Massena International Airport
     Airport{IataCode{"MST"}, CountryId{"NL"}, Tz::Europe_Amsterdam}, // Maastricht Aachen Airport
-    Airport{IataCode{"MSU"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Moshoeshoe I International Airport
+    Airport{IataCode{"MSU"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Moshoeshoe I International Airport
     Airport{IataCode{"MSV"}, CountryId{"US"}, Tz::America_New_York}, // Sullivan County International Airport
-    Airport{IataCode{"MSW"}, CountryId{"ER"}, Tz::Africa_Nairobi}, // Massawa International Airport
-    Airport{IataCode{"MSX"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Mossendjo Airport
+    Airport{IataCode{"MSW"}, CountryId{"ER"}, Tz::Africa_Asmara}, // Massawa International Airport
+    Airport{IataCode{"MSX"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Mossendjo Airport
     Airport{IataCode{"MSY"}, CountryId{"US"}, Tz::America_Chicago}, // Louis Armstrong New Orleans International Airport
-    Airport{IataCode{"MSZ"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Namibe Airport
+    Airport{IataCode{"MSZ"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Namibe Airport
     Airport{IataCode{"MTA"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Matamata Airport
     Airport{IataCode{"MTB"}, CountryId{"CO"}, Tz::America_Bogota}, // El Pindo Airport
-    Airport{IataCode{"MTF"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Mizan Teferi Airport
+    Airport{IataCode{"MTF"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Mizan Teferi Airport
     Airport{IataCode{"MTG"}, CountryId{"BR"}, Tz::America_Cuiaba}, // Vila Bela da Santíssima Trindade Airport
     Airport{IataCode{"MTH"}, CountryId{"US"}, Tz::America_New_York}, // Florida Keys Marathon Airport
     Airport{IataCode{"MTI"}, CountryId{"CV"}, Tz::Atlantic_Cape_Verde}, // Mosteiros Airport
@@ -4164,20 +4164,20 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MTP"}, CountryId{"US"}, Tz::America_New_York}, // Montauk Airport
     Airport{IataCode{"MTQ"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Mitchell Airport
     Airport{IataCode{"MTR"}, CountryId{"CO"}, Tz::America_Bogota}, // Los Garzones Airport
-    Airport{IataCode{"MTS"}, CountryId{"SZ"}, Tz::Africa_Johannesburg}, // Matsapha Airport
+    Airport{IataCode{"MTS"}, CountryId{"SZ"}, Tz::Africa_Mbabane}, // Matsapha Airport
     Airport{IataCode{"MTT"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Minatitlán/Coatzacoalcos National Airport
     Airport{IataCode{"MTV"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Mota Lava Airport
     Airport{IataCode{"MTW"}, CountryId{"US"}, Tz::America_Chicago}, // Manitowoc County Airport
     Airport{IataCode{"MTY"}, CountryId{"MX"}, Tz::America_Monterrey}, // Monterrey International Airport
     Airport{IataCode{"MTZ"}, CountryId{"IL"}, Tz::Asia_Jerusalem}, // Bar Yehuda Airfield
     Airport{IataCode{"MUA"}, CountryId{"SB"}, Tz::Pacific_Guadalcanal}, // Munda Airport
-    Airport{IataCode{"MUB"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Maun Airport
+    Airport{IataCode{"MUB"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Maun Airport
     Airport{IataCode{"MUC"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Munich Airport
     Airport{IataCode{"MUD"}, CountryId{"MZ"}, Tz::Africa_Maputo}, // Mueda Airport
     Airport{IataCode{"MUE"}, CountryId{"US"}, Tz::Pacific_Honolulu}, // Waimea-Kohala Airport
     Airport{IataCode{"MUG"}, CountryId{"MX"}, Tz::America_Mazatlan}, // Mulegé Airstrip
     Airport{IataCode{"MUH"}, CountryId{"EG"}, Tz::Africa_Cairo}, // Marsa Matruh International Airport
-    Airport{IataCode{"MUJ"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Mui Airport
+    Airport{IataCode{"MUJ"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Mui Airport
     Airport{IataCode{"MUK"}, CountryId{"NZ"}, Tz::Pacific_Rarotonga}, // Mauke Airport
     Airport{IataCode{"MUL"}, CountryId{"US"}, Tz::America_New_York}, // Spence Airport
     Airport{IataCode{"MUN"}, CountryId{"VE"}, Tz::America_Caracas}, // José Tadeo Monagas International Airport
@@ -4186,10 +4186,10 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MUT"}, CountryId{"US"}, Tz::America_Chicago}, // Muscatine Municipal Airport
     Airport{IataCode{"MUW"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Ghriss Airport
     Airport{IataCode{"MUX"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Multan International Airport
-    Airport{IataCode{"MUY"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Mouyondzi Airport
-    Airport{IataCode{"MUZ"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Musoma Airport
+    Airport{IataCode{"MUY"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Mouyondzi Airport
+    Airport{IataCode{"MUZ"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Musoma Airport
     Airport{IataCode{"MVA"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Mývatn Airport
-    Airport{IataCode{"MVB"}, CountryId{"GA"}, Tz::Africa_Lagos}, // M'Vengue El Hadj Omar Bongo Ondimba International Airport
+    Airport{IataCode{"MVB"}, CountryId{"GA"}, Tz::Africa_Libreville}, // M'Vengue El Hadj Omar Bongo Ondimba International Airport
     Airport{IataCode{"MVC"}, CountryId{"US"}, Tz::America_Chicago}, // Monroe County Airport
     Airport{IataCode{"MVD"}, CountryId{"UY"}, Tz::America_Montevideo}, // Carrasco International Airport
     Airport{IataCode{"MVE"}, CountryId{"US"}, Tz::America_Chicago}, // Montevideo–Chippewa County Airport
@@ -4201,12 +4201,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MVO"}, CountryId{"TD"}, Tz::Africa_Ndjamena}, // Mongo Airport
     Airport{IataCode{"MVP"}, CountryId{"CO"}, Tz::America_Bogota}, // Fabio Alberto León Bentley Airport
     Airport{IataCode{"MVQ"}, CountryId{"BY"}, Tz::Europe_Minsk}, // Mogilev Airport
-    Airport{IataCode{"MVR"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Salak Airport
+    Airport{IataCode{"MVR"}, CountryId{"CM"}, Tz::Africa_Douala}, // Salak Airport
     Airport{IataCode{"MVS"}, CountryId{"BR"}, Tz::America_Bahia}, // Mucuri Airport
     Airport{IataCode{"MVW"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Skagit Regional Airport
-    Airport{IataCode{"MVX"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Minvoul Airport
+    Airport{IataCode{"MVX"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Minvoul Airport
     Airport{IataCode{"MVY"}, CountryId{"US"}, Tz::America_New_York}, // Martha's Vineyard Airport
-    Airport{IataCode{"MVZ"}, CountryId{"ZW"}, Tz::Africa_Maputo}, // Masvingo Airport
+    Airport{IataCode{"MVZ"}, CountryId{"ZW"}, Tz::Africa_Harare}, // Masvingo Airport
     Airport{IataCode{"MWA"}, CountryId{"US"}, Tz::America_Chicago}, // Williamson County Regional Airport
     Airport{IataCode{"MWB"}, CountryId{"AU"}, Tz::Australia_Perth}, // Morawa Airport
     Airport{IataCode{"MWC"}, CountryId{"US"}, Tz::America_Chicago}, // Lawrence J. Timmerman Airport
@@ -4217,12 +4217,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MWI"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Maramuni Airport
     Airport{IataCode{"MWK"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Matak Airport
     Airport{IataCode{"MWL"}, CountryId{"US"}, Tz::America_Chicago}, // Mineral Wells Airport
-    Airport{IataCode{"MWN"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Mwadui Airport
+    Airport{IataCode{"MWN"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Mwadui Airport
     Airport{IataCode{"MWO"}, CountryId{"US"}, Tz::America_New_York}, // Middletown Regional Airport
     Airport{IataCode{"MWQ"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Magway Airport
-    Airport{IataCode{"MWV"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Mondulkiri Airport
+    Airport{IataCode{"MWV"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Mondulkiri Airport
     Airport{IataCode{"MWX"}, CountryId{"KR"}, Tz::Asia_Seoul}, // Muan International Airport
-    Airport{IataCode{"MWZ"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Mwanza Airport
+    Airport{IataCode{"MWZ"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Mwanza Airport
     Airport{IataCode{"MXA"}, CountryId{"US"}, Tz::America_Chicago}, // Manila Municipal Airport
     Airport{IataCode{"MXB"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Andi Jemma Airport
     Airport{IataCode{"MXC"}, CountryId{"US"}, Tz::America_Denver}, // Monticello Airport
@@ -4232,12 +4232,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MXI"}, CountryId{"PH"}, Tz::Asia_Manila}, // Imelda R. Marcos Airport
     Airport{IataCode{"MXJ"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Minna Airport
     Airport{IataCode{"MXL"}, CountryId{"MX"}, Tz::America_Tijuana}, // General Rodolfo Sánchez Taboada International Airport
-    Airport{IataCode{"MXM"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Morombe Airport
+    Airport{IataCode{"MXM"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Morombe Airport
     Airport{IataCode{"MXN"}, CountryId{"FR"}, Tz::Europe_Paris}, // Morlaix – Ploujean Airport
     Airport{IataCode{"MXO"}, CountryId{"US"}, Tz::America_Chicago}, // Monticello Regional Airport
     Airport{IataCode{"MXP"}, CountryId{"IT"}, Tz::Europe_Rome}, // Milan–Malpensa Airport
     Airport{IataCode{"MXS"}, CountryId{"WS"}, Tz::Pacific_Apia}, // Maota Airport
-    Airport{IataCode{"MXT"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Maintirano Airport
+    Airport{IataCode{"MXT"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Maintirano Airport
     Airport{IataCode{"MXU"}, CountryId{"AU"}, Tz::Australia_Perth}, // Mullewa Airport
     Airport{IataCode{"MXV"}, CountryId{"MN"}, Tz::Asia_Ulaanbaatar}, // Mörön Airport
     Airport{IataCode{"MXW"}, CountryId{"MN"}, Tz::Asia_Ulaanbaatar}, // Mandalgovi Airport
@@ -4245,7 +4245,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MXY"}, CountryId{"US"}, Tz::America_Anchorage}, // McCarthy Airport
     Airport{IataCode{"MXZ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Meixian Airport
     Airport{IataCode{"MYA"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Moruya Airport
-    Airport{IataCode{"MYB"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Mayumba Airport
+    Airport{IataCode{"MYB"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Mayumba Airport
     Airport{IataCode{"MYC"}, CountryId{"VE"}, Tz::America_Caracas}, // Mariscal Sucre Airport
     Airport{IataCode{"MYD"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Malindi Airport
     Airport{IataCode{"MYE"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Miyakejima Airport
@@ -4257,22 +4257,22 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MYK"}, CountryId{"US"}, Tz::America_Anchorage}, // May Creek Airport
     Airport{IataCode{"MYL"}, CountryId{"US"}, Tz::America_Boise}, // McCall Municipal Airport
     Airport{IataCode{"MYM"}, CountryId{"GY"}, Tz::America_Guyana}, // Monkey Mountain Airport
-    Airport{IataCode{"MYN"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Marib Airport
+    Airport{IataCode{"MYN"}, CountryId{"YE"}, Tz::Asia_Aden}, // Marib Airport
     Airport{IataCode{"MYP"}, CountryId{"TM"}, Tz::Asia_Ashgabat}, // Mary Airport
     Airport{IataCode{"MYQ"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Mysore Airport
     Airport{IataCode{"MYR"}, CountryId{"US"}, Tz::America_New_York}, // Myrtle Beach International Airport
     Airport{IataCode{"MYT"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Myitkyina Airport
     Airport{IataCode{"MYU"}, CountryId{"US"}, Tz::America_Nome}, // Mekoryuk Airport
     Airport{IataCode{"MYV"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Yuba County Airport
-    Airport{IataCode{"MYW"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Mtwara Airport
+    Airport{IataCode{"MYW"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Mtwara Airport
     Airport{IataCode{"MYX"}, CountryId{"BS"}, Tz::America_Nassau}, // Big Whale Cay Airport
     Airport{IataCode{"MYY"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Miri Airport
-    Airport{IataCode{"MYZ"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Monkey Bay Airport
+    Airport{IataCode{"MYZ"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Monkey Bay Airport
     Airport{IataCode{"MZA"}, CountryId{"PE"}, Tz::America_Lima}, // Manuel Prado Airport
     Airport{IataCode{"MZB"}, CountryId{"MZ"}, Tz::Africa_Maputo}, // Mocímboa da Praia Airport
-    Airport{IataCode{"MZC"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Mitzic Airport
+    Airport{IataCode{"MZC"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Mitzic Airport
     Airport{IataCode{"MZE"}, CountryId{"BZ"}, Tz::America_Belize}, // Manatee Airport
-    Airport{IataCode{"MZI"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Mopti Airport
+    Airport{IataCode{"MZI"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Mopti Airport
     Airport{IataCode{"MZJ"}, CountryId{"US"}, Tz::America_Phoenix}, // Pinal Airpark
     Airport{IataCode{"MZK"}, CountryId{"KI"}, Tz::Pacific_Tarawa}, // Marakei Airport
     Airport{IataCode{"MZL"}, CountryId{"CO"}, Tz::America_Bogota}, // La Nubia Airport
@@ -4287,7 +4287,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"MZZ"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Marion Municipal Airport
     Airport{IataCode{"NAA"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Narrabri Airport
     Airport{IataCode{"NAC"}, CountryId{"AU"}, Tz::Australia_Adelaide}, // Naracoorte Airport
-    Airport{IataCode{"NAE"}, CountryId{"BJ"}, Tz::Africa_Lagos}, // Natitingou Airport
+    Airport{IataCode{"NAE"}, CountryId{"BJ"}, Tz::Africa_Porto_Novo}, // Natitingou Airport
     Airport{IataCode{"NAG"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Dr. Babasaheb Ambedkar International Airport
     Airport{IataCode{"NAH"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Naha Airport
     Airport{IataCode{"NAI"}, CountryId{"GY"}, Tz::America_Guyana}, // Annai Airport
@@ -4310,7 +4310,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"NBC"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Begishevo Airport
     Airport{IataCode{"NBE"}, CountryId{"TN"}, Tz::Africa_Tunis}, // Enfidha – Hammamet International Airport
     Airport{IataCode{"NBL"}, CountryId{"PA"}, Tz::America_Panama}, // Wannukandi Airport
-    Airport{IataCode{"NBN"}, CountryId{"GQ"}, Tz::Africa_Lagos}, // Annobon Airport
+    Airport{IataCode{"NBN"}, CountryId{"GQ"}, Tz::Africa_Malabo}, // Annobon Airport
     Airport{IataCode{"NBO"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Jomo Kenyatta International Airport
     Airport{IataCode{"NBS"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Changbaishan Airport
     Airport{IataCode{"NBW"}, CountryId{"CU"}, Tz::America_Havana}, // Leeward Point Field
@@ -4318,7 +4318,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"NCA"}, CountryId{"GB"}, Tz::Europe_London}, // North Caicos Airport
     Airport{IataCode{"NCE"}, CountryId{"FR"}, Tz::Europe_Paris}, // Nice Côte d'Azur Airport
     Airport{IataCode{"NCG"}, CountryId{"MX"}, Tz::America_Chihuahua}, // Nuevo Casas Grandes Airport
-    Airport{IataCode{"NCH"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Nachingwea Airport
+    Airport{IataCode{"NCH"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Nachingwea Airport
     Airport{IataCode{"NCI"}, CountryId{"CO"}, Tz::America_Bogota}, // Necoclí Airport
     Airport{IataCode{"NCJ"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Sunchales Airport
     Airport{IataCode{"NCL"}, CountryId{"GB"}, Tz::Europe_London}, // Newcastle Airport
@@ -4329,16 +4329,16 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"NCU"}, CountryId{"UZ"}, Tz::Asia_Samarkand}, // Nukus Airport
     Airport{IataCode{"NCY"}, CountryId{"FR"}, Tz::Europe_Paris}, // Annecy – Haute-Savoie – Mont Blanc Airport
     Airport{IataCode{"NDA"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Bandanaira Airport
-    Airport{IataCode{"NDB"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Nouadhibou International Airport
+    Airport{IataCode{"NDB"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Nouadhibou International Airport
     Airport{IataCode{"NDC"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Shri Guru Gobind Singh Ji Airport
-    Airport{IataCode{"NDD"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Sumbe Airport
+    Airport{IataCode{"NDD"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Sumbe Airport
     Airport{IataCode{"NDE"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Mandera Airport
-    Airport{IataCode{"NDF"}, CountryId{"AO"}, Tz::Africa_Lagos}, // N'dalatando Airport
+    Airport{IataCode{"NDF"}, CountryId{"AO"}, Tz::Africa_Luanda}, // N'dalatando Airport
     Airport{IataCode{"NDG"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Qiqihar Sanjiazi Airport
     Airport{IataCode{"NDJ"}, CountryId{"TD"}, Tz::Africa_Ndjamena}, // N'Djamena International Airport
     Airport{IataCode{"NDK"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Namorik Airport
-    Airport{IataCode{"NDL"}, CountryId{"CF"}, Tz::Africa_Lagos}, // N'Délé Airport
-    Airport{IataCode{"NDM"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Mendi, Ethiopia Airport
+    Airport{IataCode{"NDL"}, CountryId{"CF"}, Tz::Africa_Bangui}, // N'Délé Airport
+    Airport{IataCode{"NDM"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Mendi, Ethiopia Airport
     Airport{IataCode{"NDN"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Nadunumu
     Airport{IataCode{"NDR"}, CountryId{"MA"}, Tz::Africa_Casablanca}, // Nador International Airport
     Airport{IataCode{"NDU"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Rundu Airport
@@ -4346,15 +4346,15 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"NEC"}, CountryId{"AR"}, Tz::America_Argentina_Buenos_Aires}, // Necochea Airport
     Airport{IataCode{"NEF"}, CountryId{"RU"}, Tz::Asia_Yekaterinburg}, // Neftekamsk Airport
     Airport{IataCode{"NEG"}, CountryId{"JM"}, Tz::America_Jamaica}, // Negril Aerodrome
-    Airport{IataCode{"NEK"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Nekemte Airport
+    Airport{IataCode{"NEK"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Nekemte Airport
     Airport{IataCode{"NER"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Chulman Airport
-    Airport{IataCode{"NEV"}, CountryId{"KN"}, Tz::America_Port_of_Spain}, // Vance W. Amory International Airport
+    Airport{IataCode{"NEV"}, CountryId{"KN"}, Tz::America_St_Kitts}, // Vance W. Amory International Airport
     Airport{IataCode{"NFG"}, CountryId{"RU"}, Tz::Asia_Yekaterinburg}, // Nefteyugansk Airport
     Airport{IataCode{"NFO"}, CountryId{"TO"}, Tz::Pacific_Tongatapu}, // Mata'aho Airport
     Airport{IataCode{"NGA"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Young Airport
     Airport{IataCode{"NGB"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Ningbo Lishe International Airport
     Airport{IataCode{"NGD"}, CountryId{"GB"}, Tz::Europe_London}, // Auguste George Airport
-    Airport{IataCode{"NGE"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Ngaoundéré Airport
+    Airport{IataCode{"NGE"}, CountryId{"CM"}, Tz::Africa_Douala}, // Ngaoundéré Airport
     Airport{IataCode{"NGI"}, CountryId{"FJ"}, Tz::Pacific_Fiji}, // Ngau Airport
     Airport{IataCode{"NGK"}, CountryId{"RU"}, Tz::Asia_Sakhalin}, // Nogliki Airport
     Airport{IataCode{"NGO"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Chubu Centrair International Airport
@@ -4369,22 +4369,22 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"NIC"}, CountryId{"CY"}, Tz::Asia_Nicosia}, // Nicosia International Airport
     Airport{IataCode{"NIF"}, CountryId{"AU"}, Tz::Australia_Perth}, // Nifty Airport
     Airport{IataCode{"NIG"}, CountryId{"KI"}, Tz::Pacific_Tarawa}, // Nikunau Airport
-    Airport{IataCode{"NIM"}, CountryId{"NE"}, Tz::Africa_Lagos}, // Diori Hamani International Airport
+    Airport{IataCode{"NIM"}, CountryId{"NE"}, Tz::Africa_Niamey}, // Diori Hamani International Airport
     Airport{IataCode{"NIO"}, CountryId{"CD"}, Tz::Africa_Kinshasa}, // Nioki Airport
     Airport{IataCode{"NIU"}, CountryId{"FR"}, Tz::Europe_Paris}, // Niau Airport
-    Airport{IataCode{"NIX"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Nioro Airport
+    Airport{IataCode{"NIX"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Nioro Airport
     Airport{IataCode{"NJC"}, CountryId{"RU"}, Tz::Asia_Yekaterinburg}, // Nizhnevartovsk Airport
     Airport{IataCode{"NJF"}, CountryId{"IQ"}, Tz::Asia_Baghdad}, // Al Najaf International Airport
-    Airport{IataCode{"NKC"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Nouakchott–Oumtounsy International Airport
+    Airport{IataCode{"NKC"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Nouakchott–Oumtounsy International Airport
     Airport{IataCode{"NKG"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Nanjing Lukou International Airport
     Airport{IataCode{"NKL"}, CountryId{"CD"}, Tz::Africa_Kinshasa}, // Nkolo-Fuma Airport
     Airport{IataCode{"NKM"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Nagoya Airfield
     Airport{IataCode{"NKN"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Nankina
-    Airport{IataCode{"NKS"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Nkongsamba Airport
+    Airport{IataCode{"NKS"}, CountryId{"CM"}, Tz::Africa_Douala}, // Nkongsamba Airport
     Airport{IataCode{"NKT"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Şırnak Airport
-    Airport{IataCode{"NKU"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Nkaus Airport
-    Airport{IataCode{"NKY"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Yokangassi Airport
-    Airport{IataCode{"NLA"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Simon Mwansa Kapwepwe International Airport
+    Airport{IataCode{"NKU"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Nkaus Airport
+    Airport{IataCode{"NKY"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Yokangassi Airport
+    Airport{IataCode{"NLA"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Simon Mwansa Kapwepwe International Airport
     Airport{IataCode{"NLD"}, CountryId{"MX"}, Tz::America_Matamoros}, // Quetzalcóatl International Airport
     Airport{IataCode{"NLE"}, CountryId{"US"}, Tz::America_Detroit}, // Jerry Tyler Memorial Airport
     Airport{IataCode{"NLF"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Darnley Island Airport
@@ -4425,10 +4425,10 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"NON"}, CountryId{"KI"}, Tz::Pacific_Tarawa}, // Nonouti Airport
     Airport{IataCode{"NOP"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Sinop Airport
     Airport{IataCode{"NOR"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Norðfjörður Airport
-    Airport{IataCode{"NOS"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Fascene Airport
+    Airport{IataCode{"NOS"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Fascene Airport
     Airport{IataCode{"NOT"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Marin County Airport
     Airport{IataCode{"NOU"}, CountryId{"FR"}, Tz::Europe_Paris}, // La Tontouta International Airport
-    Airport{IataCode{"NOV"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Albano Machado Airport
+    Airport{IataCode{"NOV"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Albano Machado Airport
     Airport{IataCode{"NOZ"}, CountryId{"RU"}, Tz::Asia_Novokuznetsk}, // Spichenkovo Airport
     Airport{IataCode{"NPE"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Hawke's Bay Airport
     Airport{IataCode{"NPL"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // New Plymouth Airport
@@ -4447,13 +4447,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"NRI"}, CountryId{"US"}, Tz::America_Chicago}, // Grand Lake Regional Airport
     Airport{IataCode{"NRK"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Norrköping Airport
     Airport{IataCode{"NRL"}, CountryId{"GB"}, Tz::Europe_London}, // North Ronaldsay Airport
-    Airport{IataCode{"NRM"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Keibane Airport
+    Airport{IataCode{"NRM"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Keibane Airport
     Airport{IataCode{"NRN"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Weeze Airport
     Airport{IataCode{"NRR"}, CountryId{"US"}, Tz::America_Puerto_Rico}, // José Aponte de la Torre Airport
     Airport{IataCode{"NRT"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Narita International Airport
     Airport{IataCode{"NSB"}, CountryId{"BS"}, Tz::America_Nassau}, // North Bimini Airport
     Airport{IataCode{"NSH"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Noshahr Airport
-    Airport{IataCode{"NSI"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Yaoundé Nsimalen International Airport
+    Airport{IataCode{"NSI"}, CountryId{"CM"}, Tz::Africa_Douala}, // Yaoundé Nsimalen International Airport
     Airport{IataCode{"NSK"}, CountryId{"RU"}, Tz::Asia_Krasnoyarsk}, // Alykel Airport
     Airport{IataCode{"NSM"}, CountryId{"AU"}, Tz::Australia_Perth}, // Norseman Airport
     Airport{IataCode{"NSN"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Nelson Airport, New Zealand
@@ -4488,7 +4488,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"NVN"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Nervino Airport
     Airport{IataCode{"NVR"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Novgorod Airport
     Airport{IataCode{"NVT"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Ministro Victor Konder International Airport
-    Airport{IataCode{"NWA"}, CountryId{"KM"}, Tz::Africa_Nairobi}, // Mohéli Bandar Es Eslam Airport
+    Airport{IataCode{"NWA"}, CountryId{"KM"}, Tz::Indian_Comoro}, // Mohéli Bandar Es Eslam Airport
     Airport{IataCode{"NWH"}, CountryId{"US"}, Tz::America_New_York}, // Parlin Field
     Airport{IataCode{"NWI"}, CountryId{"GB"}, Tz::Europe_London}, // Norwich International Airport
     Airport{IataCode{"NWT"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Nowata
@@ -4502,9 +4502,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"NYR"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Nyurba Airport
     Airport{IataCode{"NYT"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Nay Pyi Taw International Airport
     Airport{IataCode{"NYU"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Nyaung U Airport
-    Airport{IataCode{"NZA"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Nzagi Airport
+    Airport{IataCode{"NZA"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Nzagi Airport
     Airport{IataCode{"NZC"}, CountryId{"PE"}, Tz::America_Lima}, // Maria Reiche Neuman Airport
-    Airport{IataCode{"NZE"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Nzérékoré Airport
+    Airport{IataCode{"NZE"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Nzérékoré Airport
     Airport{IataCode{"NZH"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Manzhouli Xijiao Airport
     Airport{IataCode{"NZL"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Zhalantun Airport
     Airport{IataCode{"OAG"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Orange Airport
@@ -4516,7 +4516,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"OAR"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Marina Municipal Airport
     Airport{IataCode{"OAS"}, CountryId{"AF"}, Tz::Asia_Kabul}, // Sharana Airstrip
     Airport{IataCode{"OAX"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Xoxocotlán International Airport
-    Airport{IataCode{"OBC"}, CountryId{"DJ"}, Tz::Africa_Nairobi}, // Obock Airport
+    Airport{IataCode{"OBC"}, CountryId{"DJ"}, Tz::Africa_Djibouti}, // Obock Airport
     Airport{IataCode{"OBE"}, CountryId{"US"}, Tz::America_New_York}, // Okeechobee County Airport
     Airport{IataCode{"OBF"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Oberpfaffenhofen Airport
     Airport{IataCode{"OBI"}, CountryId{"BR"}, Tz::America_Santarem}, // Tirios Airport
@@ -4532,19 +4532,19 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"OCJ"}, CountryId{"JM"}, Tz::America_Jamaica}, // Ian Fleming International Airport
     Airport{IataCode{"OCM"}, CountryId{"AU"}, Tz::Australia_Perth}, // Boolgeeda Airport
     Airport{IataCode{"OCN"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Oceanside Municipal Airport
-    Airport{IataCode{"OCS"}, CountryId{"GQ"}, Tz::Africa_Lagos}, // Corisco International Airport
+    Airport{IataCode{"OCS"}, CountryId{"GQ"}, Tz::Africa_Malabo}, // Corisco International Airport
     Airport{IataCode{"OCV"}, CountryId{"CO"}, Tz::America_Bogota}, // Aguas Claras Airport
-    Airport{IataCode{"ODA"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Ouadda Airport
+    Airport{IataCode{"ODA"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Ouadda Airport
     Airport{IataCode{"ODB"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Córdoba Airport
     Airport{IataCode{"ODC"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Oakdale Airport
     Airport{IataCode{"ODE"}, CountryId{"DK"}, Tz::Europe_Copenhagen}, // Hans Christian Andersen Airport
-    Airport{IataCode{"ODJ"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Ouanda Djallé Airport
+    Airport{IataCode{"ODJ"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Ouanda Djallé Airport
     Airport{IataCode{"ODM"}, CountryId{"US"}, Tz::America_New_York}, // Garrett County Airport
     Airport{IataCode{"ODN"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Long Seridan Airport
     Airport{IataCode{"ODO"}, CountryId{"RU"}, Tz::Asia_Irkutsk}, // Bodaybo Airport
     Airport{IataCode{"ODS"}, CountryId{"UA"}, Tz::Europe_Kiev}, // Odessa International Airport
     Airport{IataCode{"ODW"}, CountryId{"US"}, Tz::America_Los_Angeles}, // A.J. Eisenberg Airport
-    Airport{IataCode{"ODY"}, CountryId{"LA"}, Tz::Asia_Bangkok}, // Oudomsay Airport
+    Airport{IataCode{"ODY"}, CountryId{"LA"}, Tz::Asia_Vientiane}, // Oudomsay Airport
     Airport{IataCode{"OEA"}, CountryId{"US"}, Tz::America_Chicago}, // O'Neal Airport
     Airport{IataCode{"OEB"}, CountryId{"US"}, Tz::America_Detroit}, // Branch County Memorial Airport
     Airport{IataCode{"OEC"}, CountryId{"TL"}, Tz::Asia_Dili}, // Oecusse Airport
@@ -4571,11 +4571,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"OGX"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Ain Beida Airport
     Airport{IataCode{"OGZ"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Beslan Airport
     Airport{IataCode{"OHA"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // RNZAF Base Ohakea
-    Airport{IataCode{"OHD"}, CountryId{"MK"}, Tz::Europe_Belgrade}, // Ohrid "St. Paul the Apostle" Airport
+    Airport{IataCode{"OHD"}, CountryId{"MK"}, Tz::Europe_Skopje}, // Ohrid "St. Paul the Apostle" Airport
     Airport{IataCode{"OHE"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Mohe Gulian Airport
     Airport{IataCode{"OHH"}, CountryId{"RU"}, Tz::Asia_Sakhalin}, // Okha Airport
     Airport{IataCode{"OHI"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Oshakati
-    Airport{IataCode{"OHS"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Sohar Airport
+    Airport{IataCode{"OHS"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Sohar Airport
     Airport{IataCode{"OIA"}, CountryId{"BR"}, Tz::America_Belem}, // Ourilândia do Norte Airport
     Airport{IataCode{"OIC"}, CountryId{"US"}, Tz::America_New_York}, // Lt. Warren Eaton Airport
     Airport{IataCode{"OIM"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Oshima Airport
@@ -4588,13 +4588,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"OKD"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Okadama Airport
     Airport{IataCode{"OKE"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Okinoerabu Airport
     Airport{IataCode{"OKF"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Okaukuejo Airport
-    Airport{IataCode{"OKG"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Okoyo Airport
+    Airport{IataCode{"OKG"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Okoyo Airport
     Airport{IataCode{"OKI"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Oki Airport
     Airport{IataCode{"OKJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Okayama Airport
     Airport{IataCode{"OKK"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Kokomo Municipal Airport
     Airport{IataCode{"OKL"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Oksibil Airport
     Airport{IataCode{"OKM"}, CountryId{"US"}, Tz::America_Chicago}, // Okmulgee Regional Airport
-    Airport{IataCode{"OKN"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Okondja Airport
+    Airport{IataCode{"OKN"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Okondja Airport
     Airport{IataCode{"OKP"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Oksapmin
     Airport{IataCode{"OKR"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Yorke Island Airport
     Airport{IataCode{"OKS"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Kōnan Airport
@@ -4611,7 +4611,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"OLI"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Rif Airport
     Airport{IataCode{"OLJ"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Olpoi Airport
     Airport{IataCode{"OLK"}, CountryId{"PY"}, Tz::America_Asuncion}, // Fuerte Olimpo Airport
-    Airport{IataCode{"OLL"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Oyo Ollombo Airport
+    Airport{IataCode{"OLL"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Oyo Ollombo Airport
     Airport{IataCode{"OLM"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Olympia Regional Airport
     Airport{IataCode{"OLN"}, CountryId{"AR"}, Tz::America_Argentina_Catamarca}, // Sarmiento Airport
     Airport{IataCode{"OLO"}, CountryId{"CZ"}, Tz::Europe_Prague}, // Olomouc Airport
@@ -4621,18 +4621,18 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"OLV"}, CountryId{"US"}, Tz::America_Chicago}, // Olive Branch Airport
     Airport{IataCode{"OLZ"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Olyokminsk Airport
     Airport{IataCode{"OMA"}, CountryId{"US"}, Tz::America_Chicago}, // Eppley Airfield
-    Airport{IataCode{"OMB"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Omboue Hospital Airport
+    Airport{IataCode{"OMB"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Omboue Hospital Airport
     Airport{IataCode{"OMC"}, CountryId{"PH"}, Tz::Asia_Manila}, // Ormoc Airport
     Airport{IataCode{"OMD"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Oranjemund Airport
     Airport{IataCode{"OME"}, CountryId{"US"}, Tz::America_Nome}, // Nome Airport
     Airport{IataCode{"OMG"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Omega Airport
     Airport{IataCode{"OMH"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Urmia Airport
     Airport{IataCode{"OMK"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Omak Airport
-    Airport{IataCode{"OMM"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Marmul, OOMX Airport
-    Airport{IataCode{"OMO"}, CountryId{"BA"}, Tz::Europe_Belgrade}, // Mostar International Airport
+    Airport{IataCode{"OMM"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Marmul, OOMX Airport
+    Airport{IataCode{"OMO"}, CountryId{"BA"}, Tz::Europe_Sarajevo}, // Mostar International Airport
     Airport{IataCode{"OMR"}, CountryId{"RO"}, Tz::Europe_Bucharest}, // Oradea International Airport
     Airport{IataCode{"OMS"}, CountryId{"RU"}, Tz::Asia_Omsk}, // Omsk Tsentralny Airport
-    Airport{IataCode{"OMY"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Thbeng Meanchey Airport
+    Airport{IataCode{"OMY"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Thbeng Meanchey Airport
     Airport{IataCode{"ONA"}, CountryId{"US"}, Tz::America_Chicago}, // Winona Municipal Airport
     Airport{IataCode{"OND"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Ondangwa Airport
     Airport{IataCode{"ONG"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Mornington Island Airport
@@ -4676,7 +4676,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ORK"}, CountryId{"IE"}, Tz::Europe_Dublin}, // Cork Airport
     Airport{IataCode{"ORN"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Oran Es Sénia Airport
     Airport{IataCode{"ORO"}, CountryId{"HN"}, Tz::America_Tegucigalpa}, // Yoro Airport
-    Airport{IataCode{"ORP"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Orapa Airport
+    Airport{IataCode{"ORP"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Orapa Airport
     Airport{IataCode{"ORT"}, CountryId{"US"}, Tz::America_Anchorage}, // Northway Airport
     Airport{IataCode{"ORU"}, CountryId{"BO"}, Tz::America_La_Paz}, // Juan Mendoza Airport
     Airport{IataCode{"ORV"}, CountryId{"US"}, Tz::America_Anchorage}, // Robert (Bob) Curtis Memorial Airport
@@ -4688,7 +4688,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"OSE"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Omora
     Airport{IataCode{"OSF"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Ostafyevo International Airport
     Airport{IataCode{"OSH"}, CountryId{"US"}, Tz::America_Chicago}, // Wittman Regional Airport
-    Airport{IataCode{"OSI"}, CountryId{"HR"}, Tz::Europe_Belgrade}, // Osijek Airport
+    Airport{IataCode{"OSI"}, CountryId{"HR"}, Tz::Europe_Zagreb}, // Osijek Airport
     Airport{IataCode{"OSL"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Oslo Airport
     Airport{IataCode{"OSM"}, CountryId{"IQ"}, Tz::Asia_Baghdad}, // Mosul International Airport
     Airport{IataCode{"OSO"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Osborne Mine Airport
@@ -4705,7 +4705,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"OTH"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Southwest Oregon Regional Airport
     Airport{IataCode{"OTI"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Pitu Airport
     Airport{IataCode{"OTJ"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Otjiwarongo Airport
-    Airport{IataCode{"OTL"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Boutilimit Airport
+    Airport{IataCode{"OTL"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Boutilimit Airport
     Airport{IataCode{"OTM"}, CountryId{"US"}, Tz::America_Chicago}, // Ottumwa Regional Airport
     Airport{IataCode{"OTN"}, CountryId{"US"}, Tz::America_Indiana_Vincennes}, // Ed-Air Airport
     Airport{IataCode{"OTP"}, CountryId{"RO"}, Tz::Europe_Bucharest}, // Henri Coandă International Airport
@@ -4714,17 +4714,17 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"OTU"}, CountryId{"CO"}, Tz::America_Bogota}, // Otú Airport
     Airport{IataCode{"OTY"}, CountryId{"PG"}, Tz::Pacific_Bougainville}, // Oria
     Airport{IataCode{"OTZ"}, CountryId{"US"}, Tz::America_Nome}, // Ralph Wien Memorial Airport
-    Airport{IataCode{"OUA"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Ouagadougou Airport
+    Airport{IataCode{"OUA"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Ouagadougou Airport
     Airport{IataCode{"OUD"}, CountryId{"MA"}, Tz::Africa_Casablanca}, // Angads Airport
-    Airport{IataCode{"OUE"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Ouésso Airport
-    Airport{IataCode{"OUG"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Ouahigouya Airport
+    Airport{IataCode{"OUE"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Ouésso Airport
+    Airport{IataCode{"OUG"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Ouahigouya Airport
     Airport{IataCode{"OUL"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Oulu Airport
     Airport{IataCode{"OUM"}, CountryId{"TD"}, Tz::Africa_Ndjamena}, // Oum Hadjer Airport
     Airport{IataCode{"OUN"}, CountryId{"US"}, Tz::America_Chicago}, // University of Oklahoma Westheimer Airport
-    Airport{IataCode{"OUR"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Batouri Airport
+    Airport{IataCode{"OUR"}, CountryId{"CM"}, Tz::Africa_Douala}, // Batouri Airport
     Airport{IataCode{"OUS"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Ourinhos Airport
     Airport{IataCode{"OUT"}, CountryId{"TD"}, Tz::Africa_Ndjamena}, // Bousso Airport
-    Airport{IataCode{"OUZ"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Tazadit Airport
+    Airport{IataCode{"OUZ"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Tazadit Airport
     Airport{IataCode{"OVB"}, CountryId{"RU"}, Tz::Asia_Novosibirsk}, // Tolmachevo Airport
     Airport{IataCode{"OVD"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Asturias Airport
     Airport{IataCode{"OVE"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Oroville Municipal Airport
@@ -4741,8 +4741,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"OXD"}, CountryId{"US"}, Tz::America_New_York}, // Miami University Airport
     Airport{IataCode{"OXF"}, CountryId{"GB"}, Tz::Europe_London}, // London Oxford Airport
     Airport{IataCode{"OYA"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Goya Airport
-    Airport{IataCode{"OYE"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Oyem Airport
-    Airport{IataCode{"OYG"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Moyo Airport
+    Airport{IataCode{"OYE"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Oyem Airport
+    Airport{IataCode{"OYG"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Moyo Airport
     Airport{IataCode{"OYK"}, CountryId{"BR"}, Tz::America_Belem}, // Oiapoque Airport
     Airport{IataCode{"OYL"}, CountryId{"KE"}, Tz::Africa_Nairobi}, // Moyale Airport
     Airport{IataCode{"OYO"}, CountryId{"AR"}, Tz::America_Argentina_Buenos_Aires}, // Tres Arroyos Airport
@@ -4758,7 +4758,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PAC"}, CountryId{"PA"}, Tz::America_Panama}, // Albrook "Marcos A. Gelabert" International Airport
     Airport{IataCode{"PAD"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Paderborn Lippstadt Airport
     Airport{IataCode{"PAE"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Paine Field
-    Airport{IataCode{"PAF"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Pakuba Airport
+    Airport{IataCode{"PAF"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Pakuba Airport
     Airport{IataCode{"PAG"}, CountryId{"PH"}, Tz::Asia_Manila}, // Pagadian Airport
     Airport{IataCode{"PAH"}, CountryId{"US"}, Tz::America_Chicago}, // Barkley Regional Airport
     Airport{IataCode{"PAJ"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Parachinar Airport
@@ -4782,7 +4782,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PBJ"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Paama Airport
     Airport{IataCode{"PBL"}, CountryId{"VE"}, Tz::America_Caracas}, // General Bartolomé Salom Airport
     Airport{IataCode{"PBM"}, CountryId{"SR"}, Tz::America_Paramaribo}, // Johan Adolf Pengel International Airport
-    Airport{IataCode{"PBN"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Porto Amboim Airport
+    Airport{IataCode{"PBN"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Porto Amboim Airport
     Airport{IataCode{"PBO"}, CountryId{"AU"}, Tz::Australia_Perth}, // Paraburdoo Airport
     Airport{IataCode{"PBP"}, CountryId{"CR"}, Tz::America_Costa_Rica}, // Punta Islita Airport
     Airport{IataCode{"PBQ"}, CountryId{"BR"}, Tz::America_Porto_Velho}, // Pimenta Bueno Airport
@@ -4822,7 +4822,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PEH"}, CountryId{"AR"}, Tz::America_Argentina_Buenos_Aires}, // Comodoro P. Zanni Airport
     Airport{IataCode{"PEI"}, CountryId{"CO"}, Tz::America_Bogota}, // Matecaña International Airport
     Airport{IataCode{"PEK"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Beijing Capital International Airport
-    Airport{IataCode{"PEL"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Pelaneng Airport
+    Airport{IataCode{"PEL"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Pelaneng Airport
     Airport{IataCode{"PEM"}, CountryId{"PE"}, Tz::America_Lima}, // Padre Aldamiz International Airport
     Airport{IataCode{"PEN"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Penang International Airport
     Airport{IataCode{"PEO"}, CountryId{"US"}, Tz::America_New_York}, // Penn Yan Airport
@@ -4848,7 +4848,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PGE"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Yegepa
     Airport{IataCode{"PGF"}, CountryId{"FR"}, Tz::Europe_Paris}, // Perpignan–Rivesaltes Airport
     Airport{IataCode{"PGH"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Pantnagar Airport
-    Airport{IataCode{"PGI"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Chitato Airport
+    Airport{IataCode{"PGI"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Chitato Airport
     Airport{IataCode{"PGK"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Depati Amir Airport
     Airport{IataCode{"PGL"}, CountryId{"US"}, Tz::America_Chicago}, // Trent Lott International Airport
     Airport{IataCode{"PGM"}, CountryId{"US"}, Tz::America_Anchorage}, // Port Graham Airport
@@ -4913,15 +4913,15 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PKJ"}, CountryId{"GT"}, Tz::America_Guatemala}, // Playa Grande Airport
     Airport{IataCode{"PKK"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Pakokku Airport
     Airport{IataCode{"PKN"}, CountryId{"ID"}, Tz::Asia_Pontianak}, // Iskandar Airport
-    Airport{IataCode{"PKO"}, CountryId{"BJ"}, Tz::Africa_Lagos}, // Parakou Airport
+    Airport{IataCode{"PKO"}, CountryId{"BJ"}, Tz::Africa_Porto_Novo}, // Parakou Airport
     Airport{IataCode{"PKP"}, CountryId{"FR"}, Tz::Europe_Paris}, // Puka-Puka Airport
     Airport{IataCode{"PKR"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Pokhara Airport
     Airport{IataCode{"PKT"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Port Keats Airfield
     Airport{IataCode{"PKU"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Sultan Syarif Kasim II Airport
     Airport{IataCode{"PKV"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Pskov Airport
-    Airport{IataCode{"PKW"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Selebi-Phikwe Airport
+    Airport{IataCode{"PKW"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Selebi-Phikwe Airport
     Airport{IataCode{"PKY"}, CountryId{"ID"}, Tz::Asia_Pontianak}, // Tjilik Riwut Airport
-    Airport{IataCode{"PKZ"}, CountryId{"LA"}, Tz::Asia_Bangkok}, // Pakse International Airport
+    Airport{IataCode{"PKZ"}, CountryId{"LA"}, Tz::Asia_Vientiane}, // Pakse International Airport
     Airport{IataCode{"PLB"}, CountryId{"US"}, Tz::America_New_York}, // Clinton County Airport
     Airport{IataCode{"PLD"}, CountryId{"CR"}, Tz::America_Costa_Rica}, // Carrillo Airport
     Airport{IataCode{"PLE"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Paiela Airport
@@ -4943,7 +4943,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PLX"}, CountryId{"KZ"}, Tz::Asia_Almaty}, // Semey Airport
     Airport{IataCode{"PLY"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Plymouth Municipal Airport (Indiana)
     Airport{IataCode{"PLZ"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Port Elizabeth Airport
-    Airport{IataCode{"PMA"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Pemba Airport
+    Airport{IataCode{"PMA"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Pemba Airport
     Airport{IataCode{"PMB"}, CountryId{"US"}, Tz::America_Chicago}, // Pembina Municipal Airport
     Airport{IataCode{"PMC"}, CountryId{"CL"}, Tz::America_Santiago}, // El Tepual Airport
     Airport{IataCode{"PMD"}, CountryId{"US"}, Tz::America_Los_Angeles}, // LA/Palmdale Regional Airport
@@ -4970,7 +4970,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PND"}, CountryId{"BZ"}, Tz::America_Belize}, // Punta Gorda Airport
     Airport{IataCode{"PNE"}, CountryId{"US"}, Tz::America_New_York}, // Northeast Philadelphia Airport
     Airport{IataCode{"PNG"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Paranaguá Airport
-    Airport{IataCode{"PNH"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Phnom Penh International Airport
+    Airport{IataCode{"PNH"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Phnom Penh International Airport
     Airport{IataCode{"PNI"}, CountryId{"FM"}, Tz::Pacific_Pohnpei}, // Pohnpei International Airport
     Airport{IataCode{"PNK"}, CountryId{"ID"}, Tz::Asia_Pontianak}, // Supadio Airport
     Airport{IataCode{"PNL"}, CountryId{"IT"}, Tz::Europe_Rome}, // Pantelleria Airport
@@ -4978,7 +4978,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PNN"}, CountryId{"US"}, Tz::America_New_York}, // Princeton Municipal Airport (Maine)
     Airport{IataCode{"PNP"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Girua Airport
     Airport{IataCode{"PNQ"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Pune Airport
-    Airport{IataCode{"PNR"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Pointe Noire Airport
+    Airport{IataCode{"PNR"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Pointe Noire Airport
     Airport{IataCode{"PNS"}, CountryId{"US"}, Tz::America_Chicago}, // Pensacola International Airport
     Airport{IataCode{"PNT"}, CountryId{"CL"}, Tz::America_Punta_Arenas}, // Teniente Julio Gallardo Airport
     Airport{IataCode{"PNU"}, CountryId{"US"}, Tz::America_Denver}, // Panguitch Municipal Airport
@@ -4987,8 +4987,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PNZ"}, CountryId{"BR"}, Tz::America_Recife}, // Petrolina Airport
     Airport{IataCode{"POA"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Salgado Filho International Airport
     Airport{IataCode{"POC"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Brackett Field
-    Airport{IataCode{"POD"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Podor Airport
-    Airport{IataCode{"POG"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Port-Gentil International Airport
+    Airport{IataCode{"POD"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Podor Airport
+    Airport{IataCode{"POG"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Port-Gentil International Airport
     Airport{IataCode{"POI"}, CountryId{"BO"}, Tz::America_La_Paz}, // Captain Nicolas Rojas Airport
     Airport{IataCode{"POJ"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Patos de Minas Airport
     Airport{IataCode{"POL"}, CountryId{"MZ"}, Tz::Africa_Maputo}, // Pemba Airport
@@ -5001,7 +5001,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"POT"}, CountryId{"JM"}, Tz::America_Jamaica}, // Ken Jones Aerodrome
     Airport{IataCode{"POU"}, CountryId{"US"}, Tz::America_New_York}, // Hudson Valley Regional Airport
     Airport{IataCode{"POV"}, CountryId{"US"}, Tz::America_New_York}, // Portage County Regional Airport
-    Airport{IataCode{"POW"}, CountryId{"SI"}, Tz::Europe_Belgrade}, // Portorož Airport
+    Airport{IataCode{"POW"}, CountryId{"SI"}, Tz::Europe_Ljubljana}, // Portorož Airport
     Airport{IataCode{"POZ"}, CountryId{"PL"}, Tz::Europe_Warsaw}, // Poznań-Ławica Airport
     Airport{IataCode{"PPB"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Presidente Prudente Airport
     Airport{IataCode{"PPC"}, CountryId{"US"}, Tz::America_Anchorage}, // Prospect Creek Airport
@@ -5096,7 +5096,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PUK"}, CountryId{"FR"}, Tz::Europe_Paris}, // Pukarua Airport
     Airport{IataCode{"PUM"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Sangia Nibandera Airport
     Airport{IataCode{"PUN"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Punia Airport
-    Airport{IataCode{"PUP"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Pô Airport
+    Airport{IataCode{"PUP"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Pô Airport
     Airport{IataCode{"PUQ"}, CountryId{"CL"}, Tz::America_Punta_Arenas}, // Presidente Carlos Ibáñez del Campo International Airport
     Airport{IataCode{"PUR"}, CountryId{"BO"}, Tz::America_La_Paz}, // Puerto Rico Airport
     Airport{IataCode{"PUS"}, CountryId{"KR"}, Tz::Asia_Seoul}, // Gimhae International Airport
@@ -5104,7 +5104,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PUU"}, CountryId{"CO"}, Tz::America_Bogota}, // Tres de Mayo Airport
     Airport{IataCode{"PUW"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Pullman-Moscow Regional Airport
     Airport{IataCode{"PUX"}, CountryId{"CL"}, Tz::America_Santiago}, // El Mirador Airport
-    Airport{IataCode{"PUY"}, CountryId{"HR"}, Tz::Europe_Belgrade}, // Pula Airport
+    Airport{IataCode{"PUY"}, CountryId{"HR"}, Tz::Europe_Zagreb}, // Pula Airport
     Airport{IataCode{"PUZ"}, CountryId{"NI"}, Tz::America_Managua}, // Puerto Cabezas Airport
     Airport{IataCode{"PVA"}, CountryId{"CO"}, Tz::America_Bogota}, // El Embrujo Airport
     Airport{IataCode{"PVB"}, CountryId{"US"}, Tz::America_Chicago}, // Platteville Municipal Airport
@@ -5161,7 +5161,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"PZO"}, CountryId{"VE"}, Tz::America_Caracas}, // Manuel Carlos Piar Guayana Airport
     Airport{IataCode{"PZS"}, CountryId{"CL"}, Tz::America_Santiago}, // Maquehue Airport
     Airport{IataCode{"PZU"}, CountryId{"SD"}, Tz::Africa_Khartoum}, // Port Sudan New International Airport
-    Airport{IataCode{"PZY"}, CountryId{"SK"}, Tz::Europe_Prague}, // Piešťany Airport
+    Airport{IataCode{"PZY"}, CountryId{"SK"}, Tz::Europe_Bratislava}, // Piešťany Airport
     Airport{IataCode{"QAK"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Maj Brig Doorgal Borges Airport
     Airport{IataCode{"QAM"}, CountryId{"FR"}, Tz::Europe_Paris}, // Amiens – Glisy Aerodrome
     Airport{IataCode{"QAQ"}, CountryId{"IT"}, Tz::Europe_Rome}, // L'Aquila Preturo Airport
@@ -5186,11 +5186,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"QGY"}, CountryId{"HU"}, Tz::Europe_Budapest}, // Győr-Pér International Airport
     Airport{IataCode{"QHB"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Pedro Morganti Airport
     Airport{IataCode{"QHP"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Base De Aviacao De Taubate Airport
-    Airport{IataCode{"QHR"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Harar Meda Airport
+    Airport{IataCode{"QHR"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Harar Meda Airport
     Airport{IataCode{"QJB"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Jubail Airport
     Airport{IataCode{"QJH"}, CountryId{"GL"}, Tz::America_Godthab}, // Qassimiut Heliport
     Airport{IataCode{"QJL"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Kjøllefjord Airport
-    Airport{IataCode{"QKE"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Milliken Airport
+    Airport{IataCode{"QKE"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Milliken Airport
     Airport{IataCode{"QKR"}, CountryId{"FR"}, Tz::Europe_Paris}, // Kourou Airport
     Airport{IataCode{"QKX"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Kautokeino Airport
     Airport{IataCode{"QLA"}, CountryId{"GB"}, Tz::Europe_London}, // Lasham Airfield
@@ -5207,7 +5207,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"QOW"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Sam Mbakwe Airport
     Airport{IataCode{"QPA"}, CountryId{"IT"}, Tz::Europe_Rome}, // Padua Airport
     Airport{IataCode{"QPD"}, CountryId{"CU"}, Tz::America_Havana}, // Pinar del Río Airport
-    Airport{IataCode{"QPH"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Palapye Airport
+    Airport{IataCode{"QPH"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Palapye Airport
     Airport{IataCode{"QPS"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Campo Fontenelle Airport
     Airport{IataCode{"QRA"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Rand Airport
     Airport{IataCode{"QRC"}, CountryId{"CL"}, Tz::America_Santiago}, // Independencia Airport
@@ -5220,7 +5220,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"QSA"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Sabadell Airport
     Airport{IataCode{"QSC"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // São Carlos Airport
     Airport{IataCode{"QSF"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Ain Arnat Airport
-    Airport{IataCode{"QSI"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Moshi Airport
+    Airport{IataCode{"QSI"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Moshi Airport
     Airport{IataCode{"QSN"}, CountryId{"CU"}, Tz::America_Havana}, // San Nicolás de Bari Airport
     Airport{IataCode{"QSR"}, CountryId{"IT"}, Tz::Europe_Rome}, // Salerno Costa d'Amalfi Airport
     Airport{IataCode{"QSX"}, CountryId{"GY"}, Tz::America_Guyana}, // New Amsterdam Airport
@@ -5264,7 +5264,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"RBB"}, CountryId{"BR"}, Tz::America_Manaus}, // Borba Airport
     Airport{IataCode{"RBC"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Robinvale Airport
     Airport{IataCode{"RBD"}, CountryId{"US"}, Tz::America_Chicago}, // Dallas Executive Airport
-    Airport{IataCode{"RBE"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Ratanakiri Airport
+    Airport{IataCode{"RBE"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Ratanakiri Airport
     Airport{IataCode{"RBF"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Big Bear City Airport
     Airport{IataCode{"RBG"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Roseburg Regional Airport
     Airport{IataCode{"RBJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Rebun Airport
@@ -5303,7 +5303,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"RDO"}, CountryId{"PL"}, Tz::Europe_Warsaw}, // Radom-Sadków Airport
     Airport{IataCode{"RDP"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Kazi Nazrul Islam Airport
     Airport{IataCode{"RDS"}, CountryId{"AR"}, Tz::America_Argentina_Salta}, // Rincón de los Sauces Airport
-    Airport{IataCode{"RDT"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Richard Toll Airport
+    Airport{IataCode{"RDT"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Richard Toll Airport
     Airport{IataCode{"RDU"}, CountryId{"US"}, Tz::America_New_York}, // Raleigh–Durham International Airport
     Airport{IataCode{"RDV"}, CountryId{"US"}, Tz::America_Anchorage}, // Red Devil Airport
     Airport{IataCode{"RDZ"}, CountryId{"FR"}, Tz::Europe_Paris}, // Rodez-Aveyron Airport
@@ -5314,7 +5314,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"REL"}, CountryId{"AR"}, Tz::America_Argentina_Catamarca}, // Almirante Marcos A. Zar Airport
     Airport{IataCode{"REN"}, CountryId{"RU"}, Tz::Asia_Yekaterinburg}, // Orenburg Tsentralny Airport
     Airport{IataCode{"REO"}, CountryId{"US"}, Tz::America_Boise}, // Rome State Airport
-    Airport{IataCode{"REP"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Siem Reap International Airport
+    Airport{IataCode{"REP"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Siem Reap International Airport
     Airport{IataCode{"RER"}, CountryId{"GT"}, Tz::America_Guatemala}, // Retalhuleu Airport
     Airport{IataCode{"RES"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Resistencia International Airport
     Airport{IataCode{"RET"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Røst Airport
@@ -5322,7 +5322,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"REX"}, CountryId{"MX"}, Tz::America_Matamoros}, // General Lucio Blanco International Airport
     Airport{IataCode{"REY"}, CountryId{"BO"}, Tz::America_La_Paz}, // Reyes Airport
     Airport{IataCode{"REZ"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Resende Airport
-    Airport{IataCode{"RFA"}, CountryId{"CF"}, Tz::Africa_Lagos}, // Rafaï Airport
+    Airport{IataCode{"RFA"}, CountryId{"CF"}, Tz::Africa_Bangui}, // Rafaï Airport
     Airport{IataCode{"RFD"}, CountryId{"US"}, Tz::America_Chicago}, // Chicago Rockford International Airport
     Airport{IataCode{"RFI"}, CountryId{"US"}, Tz::America_Chicago}, // Rusk County Airport
     Airport{IataCode{"RFN"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Raufarhöfn Airport
@@ -5338,7 +5338,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"RGS"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Burgos Airport
     Airport{IataCode{"RGT"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Japura Airport
     Airport{IataCode{"RHD"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Las Termas Airport
-    Airport{IataCode{"RHG"}, CountryId{"RW"}, Tz::Africa_Maputo}, // Ruhengeri Airport
+    Airport{IataCode{"RHG"}, CountryId{"RW"}, Tz::Africa_Kigali}, // Ruhengeri Airport
     Airport{IataCode{"RHI"}, CountryId{"US"}, Tz::America_Chicago}, // Rhinelander–Oneida County Airport
     Airport{IataCode{"RHO"}, CountryId{"GR"}, Tz::Europe_Athens}, // Rhodes International Airport
     Airport{IataCode{"RHP"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Ramechhap Airport
@@ -5359,12 +5359,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"RIU"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Rancho Murieta Airport
     Airport{IataCode{"RIW"}, CountryId{"US"}, Tz::America_Denver}, // Riverton Regional Airport
     Airport{IataCode{"RIX"}, CountryId{"LV"}, Tz::Europe_Riga}, // Riga International Airport
-    Airport{IataCode{"RIY"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Riyan Airport
+    Airport{IataCode{"RIY"}, CountryId{"YE"}, Tz::Asia_Aden}, // Riyan Airport
     Airport{IataCode{"RIZ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Rizhao Shanzihe Airport
     Airport{IataCode{"RJA"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Rajahmundry Airport
     Airport{IataCode{"RJB"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Rajbiraj Airport
     Airport{IataCode{"RJH"}, CountryId{"BD"}, Tz::Asia_Dhaka}, // Shah Makhdum Airport
-    Airport{IataCode{"RJK"}, CountryId{"HR"}, Tz::Europe_Belgrade}, // Rijeka Airport
+    Airport{IataCode{"RJK"}, CountryId{"HR"}, Tz::Europe_Zagreb}, // Rijeka Airport
     Airport{IataCode{"RJL"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Logroño-Agoncillo Airport
     Airport{IataCode{"RJN"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Rafsanjan Airport
     Airport{IataCode{"RKC"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Montague Airport
@@ -5384,9 +5384,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"RLG"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Rostock Airport
     Airport{IataCode{"RLK"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Bayannur Tianjitai Airport
     Airport{IataCode{"RLO"}, CountryId{"AR"}, Tz::America_Argentina_San_Luis}, // Sta. Rosa De Conlara Airport
-    Airport{IataCode{"RLT"}, CountryId{"NE"}, Tz::Africa_Lagos}, // Arlit Airport
+    Airport{IataCode{"RLT"}, CountryId{"NE"}, Tz::Africa_Niamey}, // Arlit Airport
     Airport{IataCode{"RMA"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Roma Airport
-    Airport{IataCode{"RMB"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Buraimi Airport
+    Airport{IataCode{"RMB"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Buraimi Airport
     Airport{IataCode{"RMD"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Ramagundam Airport
     Airport{IataCode{"RME"}, CountryId{"US"}, Tz::America_New_York}, // Griffiss International Airport
     Airport{IataCode{"RMF"}, CountryId{"EG"}, Tz::Africa_Cairo}, // Marsa Alam International Airport
@@ -5406,7 +5406,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"RNI"}, CountryId{"NI"}, Tz::America_Managua}, // Corn Island Airport
     Airport{IataCode{"RNJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Yoron Airport
     Airport{IataCode{"RNL"}, CountryId{"SB"}, Tz::Pacific_Guadalcanal}, // Rennell/Tingoa Airport
-    Airport{IataCode{"RNM"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Qarn Alam Airport
+    Airport{IataCode{"RNM"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Qarn Alam Airport
     Airport{IataCode{"RNN"}, CountryId{"DK"}, Tz::Europe_Copenhagen}, // Bornholm Airport
     Airport{IataCode{"RNO"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Reno–Tahoe International Airport
     Airport{IataCode{"RNP"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Rongelap Airport
@@ -5464,7 +5464,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"RTN"}, CountryId{"US"}, Tz::America_Denver}, // Raton Municipal Airport
     Airport{IataCode{"RTS"}, CountryId{"AU"}, Tz::Australia_Perth}, // Rottnest Island Airport
     Airport{IataCode{"RTW"}, CountryId{"RU"}, Tz::Europe_Saratov}, // Saratov Tsentralny Airport
-    Airport{IataCode{"RUA"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Arua Airport
+    Airport{IataCode{"RUA"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Arua Airport
     Airport{IataCode{"RUD"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Shahroud Airport
     Airport{IataCode{"RUE"}, CountryId{"US"}, Tz::America_Chicago}, // Russellville Regional Airport
     Airport{IataCode{"RUG"}, CountryId{"US"}, Tz::America_Chicago}, // Rugby Municipal Airport
@@ -5480,7 +5480,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"RUU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Ruti
     Airport{IataCode{"RUV"}, CountryId{"GT"}, Tz::America_Guatemala}, // Rubelsanto Airport
     Airport{IataCode{"RUY"}, CountryId{"HN"}, Tz::America_Tegucigalpa}, // Copán Ruinas Airport
-    Airport{IataCode{"RVA"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Farafangana Airport
+    Airport{IataCode{"RVA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Farafangana Airport
     Airport{IataCode{"RVD"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Rio Verde Airport
     Airport{IataCode{"RVE"}, CountryId{"CO"}, Tz::America_Bogota}, // Los Colonizadores Airport
     Airport{IataCode{"RVH"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Rzhevka Airport
@@ -5517,7 +5517,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SAD"}, CountryId{"US"}, Tz::America_Phoenix}, // Safford Regional Airport
     Airport{IataCode{"SAF"}, CountryId{"US"}, Tz::America_Denver}, // Santa Fe Municipal Airport
     Airport{IataCode{"SAG"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Shirdi Airport
-    Airport{IataCode{"SAH"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Sana'a International Airport
+    Airport{IataCode{"SAH"}, CountryId{"YE"}, Tz::Asia_Aden}, // Sana'a International Airport
     Airport{IataCode{"SAK"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Sauðárkrókur Airport
     Airport{IataCode{"SAL"}, CountryId{"SV"}, Tz::America_El_Salvador}, // Monseñor Óscar Arnulfo Romero International Airport
     Airport{IataCode{"SAM"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Salamo Airport
@@ -5537,7 +5537,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SBF"}, CountryId{"AF"}, Tz::Asia_Kabul}, // Sardeh Band Airport
     Airport{IataCode{"SBG"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Maimun Saleh Airport
     Airport{IataCode{"SBH"}, CountryId{"FR"}, Tz::Europe_Paris}, // Gustaf III Airport
-    Airport{IataCode{"SBI"}, CountryId{"GN"}, Tz::Africa_Abidjan}, // Sambailo Airport
+    Airport{IataCode{"SBI"}, CountryId{"GN"}, Tz::Africa_Conakry}, // Sambailo Airport
     Airport{IataCode{"SBJ"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Sao Mateus Airport
     Airport{IataCode{"SBK"}, CountryId{"FR"}, Tz::Europe_Paris}, // Saint-Brieuc – Armor Airport
     Airport{IataCode{"SBM"}, CountryId{"US"}, Tz::America_Chicago}, // Sheboygan County Memorial Airport
@@ -5567,7 +5567,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SCO"}, CountryId{"KZ"}, Tz::Asia_Aqtau}, // Aktau Airport
     Airport{IataCode{"SCQ"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Santiago de Compostela Airport
     Airport{IataCode{"SCS"}, CountryId{"GB"}, Tz::Europe_London}, // Scatsta Airport
-    Airport{IataCode{"SCT"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Socotra Airport
+    Airport{IataCode{"SCT"}, CountryId{"YE"}, Tz::Asia_Aden}, // Socotra Airport
     Airport{IataCode{"SCU"}, CountryId{"CU"}, Tz::America_Havana}, // Antonio Maceo Airport
     Airport{IataCode{"SCV"}, CountryId{"RO"}, Tz::Europe_Bucharest}, // Suceava Airport
     Airport{IataCode{"SCW"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Syktyvkar Airport
@@ -5575,7 +5575,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SCY"}, CountryId{"EC"}, Tz::Pacific_Galapagos}, // San Cristóbal Airport
     Airport{IataCode{"SCZ"}, CountryId{"SB"}, Tz::Pacific_Guadalcanal}, // Santa Cruz/Graciosa Bay/Luova Airport
     Airport{IataCode{"SDC"}, CountryId{"US"}, Tz::America_New_York}, // Williamson–Sodus Airport
-    Airport{IataCode{"SDD"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Lubango Airport
+    Airport{IataCode{"SDD"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Lubango Airport
     Airport{IataCode{"SDE"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Vicecomodoro Ángel de la Paz Aragonés Airport
     Airport{IataCode{"SDF"}, CountryId{"US"}, Tz::America_Kentucky_Louisville}, // Louisville International Airport
     Airport{IataCode{"SDG"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Sanandaj Airport
@@ -5608,9 +5608,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SEQ"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Sungai Pakning
     Airport{IataCode{"SER"}, CountryId{"US"}, Tz::America_Indiana_Indianapolis}, // Freeman Municipal Airport
     Airport{IataCode{"SES"}, CountryId{"US"}, Tz::America_Chicago}, // Selma Municipal Airport
-    Airport{IataCode{"SEU"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Seronera Airstrip
+    Airport{IataCode{"SEU"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Seronera Airstrip
     Airport{IataCode{"SEW"}, CountryId{"EG"}, Tz::Africa_Cairo}, // Siwa Oasis North Airport
-    Airport{IataCode{"SEY"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Sélibaby Airport
+    Airport{IataCode{"SEY"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Sélibaby Airport
     Airport{IataCode{"SEZ"}, CountryId{"SC"}, Tz::Indian_Mahe}, // Seychelles International Airport
     Airport{IataCode{"SFA"}, CountryId{"TN"}, Tz::Africa_Tunis}, // Sfax–Thyna International Airport
     Airport{IataCode{"SFB"}, CountryId{"US"}, Tz::America_New_York}, // Orlando Sanford International Airport
@@ -5648,12 +5648,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SGU"}, CountryId{"US"}, Tz::America_Denver}, // St. George Regional Airport
     Airport{IataCode{"SGV"}, CountryId{"AR"}, Tz::America_Argentina_Salta}, // Sierra Grande Airport
     Airport{IataCode{"SGW"}, CountryId{"US"}, Tz::America_Sitka}, // Saginaw Seaplane Base
-    Airport{IataCode{"SGX"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Songea Airport
+    Airport{IataCode{"SGX"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Songea Airport
     Airport{IataCode{"SGY"}, CountryId{"US"}, Tz::America_Juneau}, // Skagway Airport
     Airport{IataCode{"SGZ"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Songkhla Airport
     Airport{IataCode{"SHA"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Shanghai Hongqiao International Airport
     Airport{IataCode{"SHB"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Nakashibetsu Airport
-    Airport{IataCode{"SHC"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Shire Airport
+    Airport{IataCode{"SHC"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Shire Airport
     Airport{IataCode{"SHD"}, CountryId{"US"}, Tz::America_New_York}, // Shenandoah Valley Regional Airport
     Airport{IataCode{"SHE"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Shenyang Taoxian International Airport
     Airport{IataCode{"SHF"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Shihezi Huayuan Airport
@@ -5661,11 +5661,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SHH"}, CountryId{"US"}, Tz::America_Nome}, // Shishmaref Airport
     Airport{IataCode{"SHI"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Shimojishima Airport
     Airport{IataCode{"SHJ"}, CountryId{"AE"}, Tz::Asia_Dubai}, // Sharjah International Airport
-    Airport{IataCode{"SHK"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Sehonghong Airport
+    Airport{IataCode{"SHK"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Sehonghong Airport
     Airport{IataCode{"SHL"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Shillong Airport
     Airport{IataCode{"SHM"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Nanki-Shirahama Airport
     Airport{IataCode{"SHN"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Sanderson Field
-    Airport{IataCode{"SHO"}, CountryId{"SZ"}, Tz::Africa_Johannesburg}, // Sikhuphe International Airport
+    Airport{IataCode{"SHO"}, CountryId{"SZ"}, Tz::Africa_Mbabane}, // Sikhuphe International Airport
     Airport{IataCode{"SHQ"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Southport Airport
     Airport{IataCode{"SHR"}, CountryId{"US"}, Tz::America_Denver}, // Sheridan County Airport
     Airport{IataCode{"SHS"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Shashi Airport
@@ -5674,10 +5674,10 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SHV"}, CountryId{"US"}, Tz::America_Chicago}, // Shreveport Regional Airport
     Airport{IataCode{"SHW"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Sharurah Domestic Airport
     Airport{IataCode{"SHX"}, CountryId{"US"}, Tz::America_Anchorage}, // Shageluk Airport
-    Airport{IataCode{"SHY"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Shinyanga Airport
-    Airport{IataCode{"SHZ"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Seshutes Airport
+    Airport{IataCode{"SHY"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Shinyanga Airport
+    Airport{IataCode{"SHZ"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Seshutes Airport
     Airport{IataCode{"SIA"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Xi'an Xiguan Airport
-    Airport{IataCode{"SIB"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Sibiti Airport
+    Airport{IataCode{"SIB"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Sibiti Airport
     Airport{IataCode{"SIC"}, CountryId{"PA"}, Tz::America_Panama}, // San José Airport, Las Perlas
     Airport{IataCode{"SID"}, CountryId{"CV"}, Tz::Atlantic_Cape_Verde}, // Amílcar Cabral International Airport
     Airport{IataCode{"SIF"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Simara Airport
@@ -5704,13 +5704,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SJD"}, CountryId{"MX"}, Tz::America_Mazatlan}, // Los Cabos International Airport
     Airport{IataCode{"SJE"}, CountryId{"CO"}, Tz::America_Bogota}, // Jorge Enrique González Torres Airport
     Airport{IataCode{"SJI"}, CountryId{"PH"}, Tz::Asia_Manila}, // San Jose Airport
-    Airport{IataCode{"SJJ"}, CountryId{"BA"}, Tz::Europe_Belgrade}, // Sarajevo International Airport
+    Airport{IataCode{"SJJ"}, CountryId{"BA"}, Tz::Europe_Sarajevo}, // Sarajevo International Airport
     Airport{IataCode{"SJK"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // São José dos Campos Airport
     Airport{IataCode{"SJL"}, CountryId{"BR"}, Tz::America_Manaus}, // São Gabriel da Cachoeira Airport
     Airport{IataCode{"SJN"}, CountryId{"US"}, Tz::America_Phoenix}, // St. Johns Industrial Air Park
     Airport{IataCode{"SJO"}, CountryId{"CR"}, Tz::America_Costa_Rica}, // Juan Santamaría International Airport
     Airport{IataCode{"SJP"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // São José do Rio Preto Airport
-    Airport{IataCode{"SJQ"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Sesheke Airport
+    Airport{IataCode{"SJQ"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Sesheke Airport
     Airport{IataCode{"SJS"}, CountryId{"BO"}, Tz::America_La_Paz}, // San José de Chiquitos Airport
     Airport{IataCode{"SJT"}, CountryId{"US"}, Tz::America_Chicago}, // San Angelo Regional Airport
     Airport{IataCode{"SJU"}, CountryId{"US"}, Tz::America_Puerto_Rico}, // Luis Muñoz Marín International Airport
@@ -5719,7 +5719,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SJX"}, CountryId{"BZ"}, Tz::America_Belize}, // Sarteneja Airport
     Airport{IataCode{"SJY"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Seinäjoki Airport
     Airport{IataCode{"SJZ"}, CountryId{"PT"}, Tz::Atlantic_Azores}, // São Jorge Airport
-    Airport{IataCode{"SKB"}, CountryId{"KN"}, Tz::America_Port_of_Spain}, // Robert L. Bradshaw International Airport
+    Airport{IataCode{"SKB"}, CountryId{"KN"}, Tz::America_St_Kitts}, // Robert L. Bradshaw International Airport
     Airport{IataCode{"SKC"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Suki Airport
     Airport{IataCode{"SKD"}, CountryId{"UZ"}, Tz::Asia_Samarkand}, // Samarkand International Airport
     Airport{IataCode{"SKE"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Skien Airport, Geiteryggen
@@ -5730,9 +5730,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SKL"}, CountryId{"GB"}, Tz::Europe_London}, // Broadford Airfield
     Airport{IataCode{"SKN"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Stokmarknes Airport
     Airport{IataCode{"SKO"}, CountryId{"NG"}, Tz::Africa_Lagos}, // Sadiq Abubakar III International Airport
-    Airport{IataCode{"SKP"}, CountryId{"MK"}, Tz::Europe_Belgrade}, // Skopje Airport
-    Airport{IataCode{"SKQ"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Sekake Airport
-    Airport{IataCode{"SKR"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Shakiso Airport
+    Airport{IataCode{"SKP"}, CountryId{"MK"}, Tz::Europe_Skopje}, // Skopje Airport
+    Airport{IataCode{"SKQ"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Sekake Airport
+    Airport{IataCode{"SKR"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Shakiso Airport
     Airport{IataCode{"SKS"}, CountryId{"DK"}, Tz::Europe_Copenhagen}, // Vojens Airport
     Airport{IataCode{"SKT"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Sialkot International Airport
     Airport{IataCode{"SKU"}, CountryId{"GR"}, Tz::Europe_Athens}, // Skyros Island National Airport
@@ -5744,14 +5744,14 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SLA"}, CountryId{"AR"}, Tz::America_Argentina_Salta}, // Martín Miguel de Güemes International Airport
     Airport{IataCode{"SLB"}, CountryId{"US"}, Tz::America_Chicago}, // Storm Lake Municipal Airport
     Airport{IataCode{"SLC"}, CountryId{"US"}, Tz::America_Denver}, // Salt Lake City International Airport
-    Airport{IataCode{"SLD"}, CountryId{"SK"}, Tz::Europe_Prague}, // Sliač Airport
+    Airport{IataCode{"SLD"}, CountryId{"SK"}, Tz::Europe_Bratislava}, // Sliač Airport
     Airport{IataCode{"SLE"}, CountryId{"US"}, Tz::America_Los_Angeles}, // McNary Field
     Airport{IataCode{"SLG"}, CountryId{"US"}, Tz::America_Chicago}, // Smith Field
     Airport{IataCode{"SLH"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Vanua Lava Airport
-    Airport{IataCode{"SLI"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Solwezi Airport
+    Airport{IataCode{"SLI"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Solwezi Airport
     Airport{IataCode{"SLJ"}, CountryId{"AU"}, Tz::Australia_Perth}, // Solomon Airport
     Airport{IataCode{"SLK"}, CountryId{"US"}, Tz::America_New_York}, // Adirondack Regional Airport
-    Airport{IataCode{"SLL"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Salalah Airport
+    Airport{IataCode{"SLL"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Salalah Airport
     Airport{IataCode{"SLM"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Salamanca Airport
     Airport{IataCode{"SLN"}, CountryId{"US"}, Tz::America_Chicago}, // Salina Regional Airport
     Airport{IataCode{"SLO"}, CountryId{"US"}, Tz::America_Chicago}, // Salem-Leckrone Airport
@@ -5760,7 +5760,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SLR"}, CountryId{"US"}, Tz::America_Chicago}, // Sulphur Springs Municipal Airport
     Airport{IataCode{"SLS"}, CountryId{"BG"}, Tz::Europe_Sofia}, // Silistra Airfield
     Airport{IataCode{"SLT"}, CountryId{"US"}, Tz::America_Denver}, // Harriet Alexander Field
-    Airport{IataCode{"SLU"}, CountryId{"LC"}, Tz::America_Port_of_Spain}, // George F. L. Charles Airport
+    Airport{IataCode{"SLU"}, CountryId{"LC"}, Tz::America_St_Lucia}, // George F. L. Charles Airport
     Airport{IataCode{"SLV"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Shimla Airport
     Airport{IataCode{"SLW"}, CountryId{"MX"}, Tz::America_Monterrey}, // Plan de Guadalupe International Airport
     Airport{IataCode{"SLX"}, CountryId{"GB"}, Tz::Europe_London}, // Salt Cay Airport
@@ -5784,11 +5784,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SMP"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Stockholm Airport
     Airport{IataCode{"SMQ"}, CountryId{"ID"}, Tz::Asia_Pontianak}, // Sampit Airport
     Airport{IataCode{"SMR"}, CountryId{"CO"}, Tz::America_Bogota}, // Simón Bolívar International Airport
-    Airport{IataCode{"SMS"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Sainte Marie Airport
+    Airport{IataCode{"SMS"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Sainte Marie Airport
     Airport{IataCode{"SMV"}, CountryId{"CH"}, Tz::Europe_Zurich}, // Samedan Airport
     Airport{IataCode{"SMW"}, CountryId{"MA"}, Tz::Africa_Casablanca}, // Smara Airport
     Airport{IataCode{"SMX"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Santa Maria Public Airport
-    Airport{IataCode{"SMY"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Simenti Airport
+    Airport{IataCode{"SMY"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Simenti Airport
     Airport{IataCode{"SMZ"}, CountryId{"SR"}, Tz::America_Paramaribo}, // Stoelmans Eiland Airstrip
     Airport{IataCode{"SNA"}, CountryId{"US"}, Tz::America_Los_Angeles}, // John Wayne Airport
     Airport{IataCode{"SNB"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Snake Bay Airport
@@ -5816,11 +5816,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SOB"}, CountryId{"HU"}, Tz::Europe_Budapest}, // Sármellék International Airport
     Airport{IataCode{"SOC"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Adisumarmo International Airport
     Airport{IataCode{"SOD"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Sorocaba Airport
-    Airport{IataCode{"SOE"}, CountryId{"CG"}, Tz::Africa_Lagos}, // Souanké Airport
+    Airport{IataCode{"SOE"}, CountryId{"CG"}, Tz::Africa_Brazzaville}, // Souanké Airport
     Airport{IataCode{"SOF"}, CountryId{"BG"}, Tz::Europe_Sofia}, // Sofia Airport
     Airport{IataCode{"SOG"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Sogndal Airport, Haukåsen
     Airport{IataCode{"SOJ"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Sørkjosen Airport
-    Airport{IataCode{"SOK"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Semonkong Airport
+    Airport{IataCode{"SOK"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Semonkong Airport
     Airport{IataCode{"SOM"}, CountryId{"VE"}, Tz::America_Caracas}, // San Tomé Airport
     Airport{IataCode{"SON"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Santo-Pekoa International Airport
     Airport{IataCode{"SOO"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Söderhamn Airport
@@ -5842,10 +5842,10 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SPJ"}, CountryId{"GR"}, Tz::Europe_Athens}, // Sparti Airport
     Airport{IataCode{"SPL"}, CountryId{"RS"}, Tz::Europe_Belgrade}, // Smederevska Palanka Airport
     Airport{IataCode{"SPN"}, CountryId{"US"}, Tz::Pacific_Saipan}, // Saipan International Airport
-    Airport{IataCode{"SPP"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Menongue Airport
+    Airport{IataCode{"SPP"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Menongue Airport
     Airport{IataCode{"SPR"}, CountryId{"BZ"}, Tz::America_Belize}, // John Greif II Airport
     Airport{IataCode{"SPS"}, CountryId{"US"}, Tz::America_Chicago}, // Wichita Falls Municipal Airport
-    Airport{IataCode{"SPU"}, CountryId{"HR"}, Tz::Europe_Belgrade}, // Split Airport
+    Airport{IataCode{"SPU"}, CountryId{"HR"}, Tz::Europe_Zagreb}, // Split Airport
     Airport{IataCode{"SPV"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Sepik Plains
     Airport{IataCode{"SPW"}, CountryId{"US"}, Tz::America_Chicago}, // Spencer Municipal Airport
     Airport{IataCode{"SPX"}, CountryId{"EG"}, Tz::Africa_Cairo}, // Sphinx International Airport
@@ -5878,7 +5878,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SRN"}, CountryId{"AU"}, Tz::Australia_Hobart}, // Strahan Airport
     Airport{IataCode{"SRP"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Stord Airport
     Airport{IataCode{"SRQ"}, CountryId{"US"}, Tz::America_New_York}, // Sarasota–Bradenton International Airport
-    Airport{IataCode{"SRT"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Soroti Airport
+    Airport{IataCode{"SRT"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Soroti Airport
     Airport{IataCode{"SRV"}, CountryId{"US"}, Tz::America_Anchorage}, // Stony River Airport
     Airport{IataCode{"SRW"}, CountryId{"US"}, Tz::America_New_York}, // Mid-Carolina Regional Airport
     Airport{IataCode{"SRY"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Dasht-e Naz Airport
@@ -5888,7 +5888,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SSD"}, CountryId{"CL"}, Tz::America_Santiago}, // Víctor Lafón Airport
     Airport{IataCode{"SSE"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Solapur Airport
     Airport{IataCode{"SSF"}, CountryId{"US"}, Tz::America_Chicago}, // Stinson Municipal Airport
-    Airport{IataCode{"SSG"}, CountryId{"GQ"}, Tz::Africa_Lagos}, // Malabo International Airport
+    Airport{IataCode{"SSG"}, CountryId{"GQ"}, Tz::Africa_Malabo}, // Malabo International Airport
     Airport{IataCode{"SSH"}, CountryId{"EG"}, Tz::Africa_Cairo}, // Sharm el-Sheikh International Airport
     Airport{IataCode{"SSI"}, CountryId{"US"}, Tz::America_New_York}, // Malcolm McKinnon Airport
     Airport{IataCode{"SSJ"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Sandnessjøen Airport
@@ -5899,7 +5899,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SSR"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Sara Airport
     Airport{IataCode{"SSS"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Siassi
     Airport{IataCode{"SST"}, CountryId{"AR"}, Tz::America_Argentina_Buenos_Aires}, // Santa Teresita Airport
-    Airport{IataCode{"SSY"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Mbanza Congo Airport
+    Airport{IataCode{"SSY"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Mbanza Congo Airport
     Airport{IataCode{"STA"}, CountryId{"DK"}, Tz::Europe_Copenhagen}, // Stauning Vestjylland Airport
     Airport{IataCode{"STB"}, CountryId{"VE"}, Tz::America_Caracas}, // Miguel Urdaneta Fernández Airport
     Airport{IataCode{"STC"}, CountryId{"US"}, Tz::America_Chicago}, // St. Cloud Regional Airport
@@ -5927,7 +5927,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SUE"}, CountryId{"US"}, Tz::America_Chicago}, // Door County Cherryland Airport
     Airport{IataCode{"SUF"}, CountryId{"IT"}, Tz::Europe_Rome}, // Lamezia Terme International Airport
     Airport{IataCode{"SUG"}, CountryId{"PH"}, Tz::Asia_Manila}, // Surigao Airport
-    Airport{IataCode{"SUH"}, CountryId{"OM"}, Tz::Asia_Dubai}, // Sur Airport
+    Airport{IataCode{"SUH"}, CountryId{"OM"}, Tz::Asia_Muscat}, // Sur Airport
     Airport{IataCode{"SUI"}, CountryId{}, Tz::Asia_Tbilisi}, // Sukhumi Babushara Airport
     Airport{IataCode{"SUJ"}, CountryId{"RO"}, Tz::Europe_Bucharest}, // Satu Mare International Airport
     Airport{IataCode{"SUK"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Sakkyryr Airport
@@ -5939,28 +5939,28 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SUQ"}, CountryId{"EC"}, Tz::America_Guayaquil}, // Sucúa Airport
     Airport{IataCode{"SUR"}, CountryId{"CA"}, Tz::America_Toronto}, // Summer Beaver Airport
     Airport{IataCode{"SUS"}, CountryId{"US"}, Tz::America_Chicago}, // Spirit of St. Louis Airport
-    Airport{IataCode{"SUT"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Sumbawanga Airport
+    Airport{IataCode{"SUT"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Sumbawanga Airport
     Airport{IataCode{"SUV"}, CountryId{"FJ"}, Tz::Pacific_Fiji}, // Nausori International Airport
     Airport{IataCode{"SUW"}, CountryId{"US"}, Tz::America_Chicago}, // Richard I. Bong Airport
     Airport{IataCode{"SUX"}, CountryId{"US"}, Tz::America_Chicago}, // Sioux Gateway Airport
     Airport{IataCode{"SUY"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Suntar Airport
     Airport{IataCode{"SUZ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Suria aerodrome
     Airport{IataCode{"SVA"}, CountryId{"US"}, Tz::America_Nome}, // Savoonga Airport
-    Airport{IataCode{"SVB"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Sambava Airport
+    Airport{IataCode{"SVB"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Sambava Airport
     Airport{IataCode{"SVC"}, CountryId{"US"}, Tz::America_Denver}, // Grant County Airport
-    Airport{IataCode{"SVD"}, CountryId{"VC"}, Tz::America_Port_of_Spain}, // Argyle International Airport
+    Airport{IataCode{"SVD"}, CountryId{"VC"}, Tz::America_St_Vincent}, // Argyle International Airport
     Airport{IataCode{"SVE"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Susanville Municipal Airport
-    Airport{IataCode{"SVF"}, CountryId{"BJ"}, Tz::Africa_Lagos}, // Savé Airport
+    Airport{IataCode{"SVF"}, CountryId{"BJ"}, Tz::Africa_Porto_Novo}, // Savé Airport
     Airport{IataCode{"SVG"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Stavanger Airport
     Airport{IataCode{"SVI"}, CountryId{"CO"}, Tz::America_Bogota}, // Eduardo Falla Solano Airport
     Airport{IataCode{"SVJ"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Svolvær Airport
     Airport{IataCode{"SVK"}, CountryId{"BZ"}, Tz::America_Belize}, // Silver Creek Airport
     Airport{IataCode{"SVL"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Savonlinna Airport
     Airport{IataCode{"SVO"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Sheremetyevo International Airport
-    Airport{IataCode{"SVP"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Kuito Airport
+    Airport{IataCode{"SVP"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Kuito Airport
     Airport{IataCode{"SVQ"}, CountryId{"ES"}, Tz::Europe_Madrid}, // San Pablo Airport
     Airport{IataCode{"SVS"}, CountryId{"US"}, Tz::America_Anchorage}, // Stevens Village Airport
-    Airport{IataCode{"SVT"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Savuti Airport
+    Airport{IataCode{"SVT"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Savuti Airport
     Airport{IataCode{"SVU"}, CountryId{"FJ"}, Tz::Pacific_Fiji}, // Savusavu Airport
     Airport{IataCode{"SVW"}, CountryId{"US"}, Tz::America_Anchorage}, // Sparrevohn LRRS Airport
     Airport{IataCode{"SVX"}, CountryId{"RU"}, Tz::Asia_Yekaterinburg}, // Koltsovo Airport
@@ -5981,28 +5981,28 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SWT"}, CountryId{"RU"}, Tz::Asia_Tomsk}, // Strezhevoy Airport
     Airport{IataCode{"SWV"}, CountryId{"RU"}, Tz::Asia_Magadan}, // Severo-Evensk Airport
     Airport{IataCode{"SWW"}, CountryId{"US"}, Tz::America_Chicago}, // Avenger Field
-    Airport{IataCode{"SWX"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Shakawe Airport
+    Airport{IataCode{"SWX"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Shakawe Airport
     Airport{IataCode{"SWY"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Sitiawan Airport
     Airport{IataCode{"SXB"}, CountryId{"FR"}, Tz::Europe_Paris}, // Strasbourg Airport
     Airport{IataCode{"SXE"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // West Sale Airport
     Airport{IataCode{"SXF"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Berlin Schönefeld Airport
-    Airport{IataCode{"SXG"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Senanga Airport
+    Airport{IataCode{"SXG"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Senanga Airport
     Airport{IataCode{"SXI"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Sirri Island Airport
     Airport{IataCode{"SXL"}, CountryId{"IE"}, Tz::Europe_Dublin}, // Sligo Airport
     Airport{IataCode{"SXM"}, CountryId{"NL"}, Tz::Europe_Amsterdam}, // Princess Juliana International Airport
-    Airport{IataCode{"SXN"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Sua Pan Airport
+    Airport{IataCode{"SXN"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Sua Pan Airport
     Airport{IataCode{"SXO"}, CountryId{"BR"}, Tz::America_Cuiaba}, // São Félix do Araguaia Airport
     Airport{IataCode{"SXP"}, CountryId{"US"}, Tz::America_Nome}, // Sheldon Point Airport
     Airport{IataCode{"SXQ"}, CountryId{"US"}, Tz::America_Anchorage}, // Soldotna Airport
     Airport{IataCode{"SXR"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Srinagar Airport
-    Airport{IataCode{"SXU"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Soddo Airport
+    Airport{IataCode{"SXU"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Soddo Airport
     Airport{IataCode{"SXV"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Salem Airport
     Airport{IataCode{"SXX"}, CountryId{"BR"}, Tz::America_Belem}, // São Félix do Xingu Airport
     Airport{IataCode{"SXY"}, CountryId{"US"}, Tz::America_New_York}, // Sidney Municipal Airport (New York)
     Airport{IataCode{"SXZ"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Siirt Airport
     Airport{IataCode{"SYB"}, CountryId{"US"}, Tz::America_Anchorage}, // Seal Bay Seaplane Base
     Airport{IataCode{"SYD"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Sydney Airport
-    Airport{IataCode{"SYE"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Saadah Airport
+    Airport{IataCode{"SYE"}, CountryId{"YE"}, Tz::Asia_Aden}, // Saadah Airport
     Airport{IataCode{"SYH"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Syangboche Airport
     Airport{IataCode{"SYI"}, CountryId{"US"}, Tz::America_Chicago}, // Shelbyville Municipal Airport
     Airport{IataCode{"SYJ"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Sirjan Airport
@@ -6020,9 +6020,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"SYX"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Sanya Phoenix International Airport
     Airport{IataCode{"SYY"}, CountryId{"GB"}, Tz::Europe_London}, // Stornoway Airport
     Airport{IataCode{"SYZ"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Shiraz International Airport, Iran
-    Airport{IataCode{"SZA"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Soyo Airport
+    Airport{IataCode{"SZA"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Soyo Airport
     Airport{IataCode{"SZB"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Sultan Abdul Aziz Shah Airport
-    Airport{IataCode{"SZE"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Semera Airport
+    Airport{IataCode{"SZE"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Semera Airport
     Airport{IataCode{"SZF"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Samsun-Çarşamba Airport
     Airport{IataCode{"SZG"}, CountryId{"AT"}, Tz::Europe_Vienna}, // Salzburg Airport
     Airport{IataCode{"SZJ"}, CountryId{"CU"}, Tz::America_Havana}, // Siguanea Airport
@@ -6044,7 +6044,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TAF"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Oran Tafraoui Airport
     Airport{IataCode{"TAG"}, CountryId{"PH"}, Tz::Asia_Manila}, // Tagbilaran Airport
     Airport{IataCode{"TAH"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Whitegrass Airport
-    Airport{IataCode{"TAI"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Ta'izz International Airport
+    Airport{IataCode{"TAI"}, CountryId{"YE"}, Tz::Asia_Aden}, // Ta'izz International Airport
     Airport{IataCode{"TAJ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Tadji Airport
     Airport{IataCode{"TAK"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Takamatsu Airport
     Airport{IataCode{"TAL"}, CountryId{"US"}, Tz::America_Anchorage}, // Ralph M. Calhoun Memorial Airport
@@ -6054,7 +6054,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TAP"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Tapachula International Airport
     Airport{IataCode{"TAR"}, CountryId{"IT"}, Tz::Europe_Rome}, // Taranto-Grottaglie Airport
     Airport{IataCode{"TAS"}, CountryId{"UZ"}, Tz::Asia_Tashkent}, // Tashkent International Airport
-    Airport{IataCode{"TAT"}, CountryId{"SK"}, Tz::Europe_Prague}, // Poprad-Tatry Airport
+    Airport{IataCode{"TAT"}, CountryId{"SK"}, Tz::Europe_Bratislava}, // Poprad-Tatry Airport
     Airport{IataCode{"TAV"}, CountryId{"US"}, Tz::Pacific_Pago_Pago}, // Tau Airport
     Airport{IataCode{"TAW"}, CountryId{"UY"}, Tz::America_Montevideo}, // Tacuarembó Airport
     Airport{IataCode{"TAY"}, CountryId{"EE"}, Tz::Europe_Tallinn}, // Tartu Airport
@@ -6068,14 +6068,14 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TBI"}, CountryId{"BS"}, Tz::America_Nassau}, // New Bight Airport
     Airport{IataCode{"TBJ"}, CountryId{"TN"}, Tz::Africa_Tunis}, // Tabarka-Ain Draham International Airport
     Airport{IataCode{"TBN"}, CountryId{"US"}, Tz::America_Chicago}, // Waynesville-St. Robert Regional Airport
-    Airport{IataCode{"TBO"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Tabora Airport
+    Airport{IataCode{"TBO"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Tabora Airport
     Airport{IataCode{"TBP"}, CountryId{"PE"}, Tz::America_Lima}, // Cap. FAP Pedro Canga Rodríguez Airport
     Airport{IataCode{"TBR"}, CountryId{"US"}, Tz::America_New_York}, // Statesboro-Bulloch County Airport
     Airport{IataCode{"TBS"}, CountryId{"GE"}, Tz::Asia_Tbilisi}, // Tbilisi International Airport
     Airport{IataCode{"TBT"}, CountryId{"BR"}, Tz::America_Eirunepe}, // Tabatinga International Airport
     Airport{IataCode{"TBU"}, CountryId{"TO"}, Tz::Pacific_Tongatapu}, // Fuaʻamotu International Airport
     Airport{IataCode{"TBW"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Tambov Donskoye Airport
-    Airport{IataCode{"TBY"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Tshabong Airport
+    Airport{IataCode{"TBY"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Tshabong Airport
     Airport{IataCode{"TBZ"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Tabriz International Airport
     Airport{IataCode{"TCA"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Tennant Creek Airport
     Airport{IataCode{"TCB"}, CountryId{"BS"}, Tz::America_Nassau}, // Treasure Cay Airport
@@ -6083,7 +6083,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TCD"}, CountryId{"CO"}, Tz::America_Bogota}, // Tarapacá Airport
     Airport{IataCode{"TCE"}, CountryId{"RO"}, Tz::Europe_Bucharest}, // Tulcea Airport
     Airport{IataCode{"TCG"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Tacheng Airport
-    Airport{IataCode{"TCH"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Tchibanga Airport
+    Airport{IataCode{"TCH"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Tchibanga Airport
     Airport{IataCode{"TCL"}, CountryId{"US"}, Tz::America_Chicago}, // Tuscaloosa Regional Airport
     Airport{IataCode{"TCN"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Tehuacán Airport
     Airport{IataCode{"TCO"}, CountryId{"CO"}, Tz::America_Bogota}, // La Florida Airport
@@ -6101,7 +6101,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TDD"}, CountryId{"BO"}, Tz::America_La_Paz}, // Teniente Jorge Henrich Arauz Airport
     Airport{IataCode{"TDF"}, CountryId{"US"}, Tz::America_New_York}, // Person County Airport
     Airport{IataCode{"TDG"}, CountryId{"PH"}, Tz::Asia_Manila}, // Tandag Airport
-    Airport{IataCode{"TDJ"}, CountryId{"DJ"}, Tz::Africa_Nairobi}, // Tadjoura Airport
+    Airport{IataCode{"TDJ"}, CountryId{"DJ"}, Tz::Africa_Djibouti}, // Tadjoura Airport
     Airport{IataCode{"TDL"}, CountryId{"AR"}, Tz::America_Argentina_Buenos_Aires}, // Tandil Airport
     Airport{IataCode{"TDO"}, CountryId{"US"}, Tz::America_Los_Angeles}, // South Lewis County Airport
     Airport{IataCode{"TDS"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Sasereme Airport
@@ -6114,7 +6114,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TED"}, CountryId{"DK"}, Tz::Europe_Copenhagen}, // Thisted Airport
     Airport{IataCode{"TEE"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Cheikh Larbi Tébessi Airport
     Airport{IataCode{"TEF"}, CountryId{"AU"}, Tz::Australia_Perth}, // Telfer Airport
-    Airport{IataCode{"TEG"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Tenkodogo Airport
+    Airport{IataCode{"TEG"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Tenkodogo Airport
     Airport{IataCode{"TEI"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Tezu Airport
     Airport{IataCode{"TEK"}, CountryId{"US"}, Tz::America_Anchorage}, // Tatitlek Airport
     Airport{IataCode{"TEL"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Telupid Airport
@@ -6136,7 +6136,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TFN"}, CountryId{"ES"}, Tz::Atlantic_Canary}, // Tenerife North Airport
     Airport{IataCode{"TFS"}, CountryId{"ES"}, Tz::Atlantic_Canary}, // Tenerife South Airport
     Airport{IataCode{"TGC"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Tanjung Manis Airport
-    Airport{IataCode{"TGD"}, CountryId{"ME"}, Tz::Europe_Belgrade}, // Podgorica Airport
+    Airport{IataCode{"TGD"}, CountryId{"ME"}, Tz::Europe_Podgorica}, // Podgorica Airport
     Airport{IataCode{"TGG"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Sultan Mahmud Airport
     Airport{IataCode{"TGH"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Tongoa Airport
     Airport{IataCode{"TGI"}, CountryId{"PE"}, Tz::America_Lima}, // Tingo María Airport
@@ -6149,17 +6149,17 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TGQ"}, CountryId{"BR"}, Tz::America_Cuiaba}, // Tangará da Serra Airport
     Airport{IataCode{"TGR"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Sidi Mahdi Airport
     Airport{IataCode{"TGS"}, CountryId{"MZ"}, Tz::Africa_Maputo}, // Chókwè airport
-    Airport{IataCode{"TGT"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Tanga Airport
+    Airport{IataCode{"TGT"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Tanga Airport
     Airport{IataCode{"TGU"}, CountryId{"HN"}, Tz::America_Tegucigalpa}, // Toncontín International Airport
     Airport{IataCode{"TGV"}, CountryId{"BG"}, Tz::Europe_Sofia}, // Targovishte Airport
     Airport{IataCode{"TGZ"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Ángel Albino Corzo International Airport
     Airport{IataCode{"THA"}, CountryId{"US"}, Tz::America_Chicago}, // Tullahoma Regional Airport
-    Airport{IataCode{"THB"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Thaba Tseka Airport
+    Airport{IataCode{"THB"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Thaba Tseka Airport
     Airport{IataCode{"THC"}, CountryId{"LR"}, Tz::Africa_Monrovia}, // Tchien Airport
     Airport{IataCode{"THD"}, CountryId{"VN"}, Tz::Asia_Ho_Chi_Minh}, // Tho Xuan Airport
     Airport{IataCode{"THE"}, CountryId{"BR"}, Tz::America_Fortaleza}, // Teresina Airport
     Airport{IataCode{"THG"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Thangool Airport
-    Airport{IataCode{"THI"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Tichitt Airport
+    Airport{IataCode{"THI"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Tichitt Airport
     Airport{IataCode{"THL"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Tachilek Airport
     Airport{IataCode{"THM"}, CountryId{"US"}, Tz::America_Denver}, // Thompson Falls Airport
     Airport{IataCode{"THN"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Trollhättan-Vänersborg Airport
@@ -6168,15 +6168,15 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"THQ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Tianshui Maijishan Airport
     Airport{IataCode{"THR"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Mehrabad International Airport
     Airport{IataCode{"THS"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Sukhothai Airport
-    Airport{IataCode{"THT"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Tamchakett Airport
+    Airport{IataCode{"THT"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Tamchakett Airport
     Airport{IataCode{"THV"}, CountryId{"US"}, Tz::America_New_York}, // York Airport (Pennsylvania)
     Airport{IataCode{"THX"}, CountryId{"RU"}, Tz::Asia_Krasnoyarsk}, // Turukhansk Airport
-    Airport{IataCode{"THZ"}, CountryId{"NE"}, Tz::Africa_Lagos}, // Tahoua Airport
+    Airport{IataCode{"THZ"}, CountryId{"NE"}, Tz::Africa_Niamey}, // Tahoua Airport
     Airport{IataCode{"TIA"}, CountryId{"AL"}, Tz::Europe_Tirane}, // Tirana International Airport Nënë Tereza
     Airport{IataCode{"TIB"}, CountryId{"CO"}, Tz::America_Bogota}, // Tibu Airport
     Airport{IataCode{"TIC"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Tinak Airport
     Airport{IataCode{"TID"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Tiaret - Abdelhafid Boussouf Bou Chekif Airport
-    Airport{IataCode{"TIE"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Tippi Airport
+    Airport{IataCode{"TIE"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Tippi Airport
     Airport{IataCode{"TIF"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Ta’if Regional Airport
     Airport{IataCode{"TIG"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Tingwon
     Airport{IataCode{"TIH"}, CountryId{"FR"}, Tz::Europe_Paris}, // Tikehau Airport
@@ -6189,10 +6189,10 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TIQ"}, CountryId{"US"}, Tz::Pacific_Saipan}, // Tinian International Airport
     Airport{IataCode{"TIR"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Tirupati Airport
     Airport{IataCode{"TIU"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Richard Pearse Airport
-    Airport{IataCode{"TIV"}, CountryId{"ME"}, Tz::Europe_Belgrade}, // Tivat Airport
+    Airport{IataCode{"TIV"}, CountryId{"ME"}, Tz::Europe_Podgorica}, // Tivat Airport
     Airport{IataCode{"TIW"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Tacoma Narrows Airport
     Airport{IataCode{"TIX"}, CountryId{"US"}, Tz::America_New_York}, // Space Coast Regional Airport
-    Airport{IataCode{"TIY"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Tidjikja Airport
+    Airport{IataCode{"TIY"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Tidjikja Airport
     Airport{IataCode{"TIZ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Tari Airport
     Airport{IataCode{"TJA"}, CountryId{"BO"}, Tz::America_La_Paz}, // Capitán Oriel Lea Plaza Airport
     Airport{IataCode{"TJB"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Sei Bati Airport
@@ -6207,7 +6207,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TJU"}, CountryId{"TJ"}, Tz::Asia_Dushanbe}, // Kulob Airport
     Airport{IataCode{"TKA"}, CountryId{"US"}, Tz::America_Anchorage}, // Talkeetna Airport
     Airport{IataCode{"TKB"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Tekadu
-    Airport{IataCode{"TKC"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Tiko Airport
+    Airport{IataCode{"TKC"}, CountryId{"CM"}, Tz::Africa_Douala}, // Tiko Airport
     Airport{IataCode{"TKD"}, CountryId{"GH"}, Tz::Africa_Accra}, // Takoradi Airport
     Airport{IataCode{"TKF"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Truckee Tahoe Airport
     Airport{IataCode{"TKG"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Radin Inten II Airport
@@ -6217,8 +6217,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TKK"}, CountryId{"FM"}, Tz::Pacific_Chuuk}, // Chuuk International Airport
     Airport{IataCode{"TKM"}, CountryId{"GT"}, Tz::America_Guatemala}, // El Peten Airport
     Airport{IataCode{"TKN"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Tokunoshima Airport
-    Airport{IataCode{"TKO"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Tlokoeng Airport
-    Airport{IataCode{"TKQ"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Kigoma Airport
+    Airport{IataCode{"TKO"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Tlokoeng Airport
+    Airport{IataCode{"TKQ"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Kigoma Airport
     Airport{IataCode{"TKR"}, CountryId{"BD"}, Tz::Asia_Dhaka}, // Thakurgaon STOLport
     Airport{IataCode{"TKS"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Tokushima Airport
     Airport{IataCode{"TKT"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Tak Airport
@@ -6230,7 +6230,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TLA"}, CountryId{"US"}, Tz::America_Nome}, // Teller Airport
     Airport{IataCode{"TLB"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Tarbela Dam Airport
     Airport{IataCode{"TLC"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Lic. Adolfo López Mateos International Airport
-    Airport{IataCode{"TLD"}, CountryId{"BW"}, Tz::Africa_Maputo}, // Tuli Lodge Airport
+    Airport{IataCode{"TLD"}, CountryId{"BW"}, Tz::Africa_Gaborone}, // Tuli Lodge Airport
     Airport{IataCode{"TLF"}, CountryId{"US"}, Tz::America_Anchorage}, // Telida Airport
     Airport{IataCode{"TLH"}, CountryId{"US"}, Tz::America_New_York}, // Tallahassee International Airport
     Airport{IataCode{"TLI"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Sultan Bantilan Airport
@@ -6252,7 +6252,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TMA"}, CountryId{"US"}, Tz::America_New_York}, // Henry Tift Myers Airport
     Airport{IataCode{"TMB"}, CountryId{"US"}, Tz::America_New_York}, // Miami Executive Airport
     Airport{IataCode{"TMC"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Tambolaka Airport
-    Airport{IataCode{"TMD"}, CountryId{"MR"}, Tz::Africa_Abidjan}, // Timbedra Airport
+    Airport{IataCode{"TMD"}, CountryId{"MR"}, Tz::Africa_Nouakchott}, // Timbedra Airport
     Airport{IataCode{"TME"}, CountryId{"CO"}, Tz::America_Bogota}, // Gabriel Vargas Santos Airport
     Airport{IataCode{"TMF"}, CountryId{"MV"}, Tz::Indian_Maldives}, // Thimarafushi Airport
     Airport{IataCode{"TMG"}, CountryId{"MY"}, Tz::Asia_Kuala_Lumpur}, // Tommanggong Airport
@@ -6263,7 +6263,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TMN"}, CountryId{"KI"}, Tz::Pacific_Tarawa}, // Tamana Airport
     Airport{IataCode{"TMO"}, CountryId{"VE"}, Tz::America_Caracas}, // Tumeremo Airport
     Airport{IataCode{"TMP"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Tampere-Pirkkala Airport
-    Airport{IataCode{"TMQ"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Tambao Airport
+    Airport{IataCode{"TMQ"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Tambao Airport
     Airport{IataCode{"TMR"}, CountryId{"DZ"}, Tz::Africa_Algiers}, // Aguenar–Hadj Bey Akhamok Airport
     Airport{IataCode{"TMS"}, CountryId{"ST"}, Tz::Africa_Sao_Tome}, // São Tomé International Airport
     Airport{IataCode{"TMT"}, CountryId{"BR"}, Tz::America_Santarem}, // Porto Trombetas Airport
@@ -6285,13 +6285,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TNN"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Tainan Airport
     Airport{IataCode{"TNO"}, CountryId{"CR"}, Tz::America_Costa_Rica}, // Tamarindo Airport
     Airport{IataCode{"TNP"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Twentynine Palms Airport
-    Airport{IataCode{"TNR"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Ivato Airport
+    Airport{IataCode{"TNR"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Ivato Airport
     Airport{IataCode{"TNS"}, CountryId{"CA"}, Tz::America_Yellowknife}, // Tungsten (Cantung) Airport
     Airport{IataCode{"TNT"}, CountryId{"US"}, Tz::America_New_York}, // Dade-Collier Training and Transition Airport
     Airport{IataCode{"TNU"}, CountryId{"US"}, Tz::America_Chicago}, // Newton Municipal Airport (Iowa)
     Airport{IataCode{"TNV"}, CountryId{"KI"}, Tz::Pacific_Kiritimati}, // Q11824770
     Airport{IataCode{"TNW"}, CountryId{"EC"}, Tz::America_Guayaquil}, // Jumandy Airport
-    Airport{IataCode{"TNX"}, CountryId{"KH"}, Tz::Asia_Bangkok}, // Stung Treng Airport
+    Airport{IataCode{"TNX"}, CountryId{"KH"}, Tz::Asia_Phnom_Penh}, // Stung Treng Airport
     Airport{IataCode{"TOA"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Zamperini Field
     Airport{IataCode{"TOB"}, CountryId{"LY"}, Tz::Africa_Tripoli}, // Tobruk Airport
     Airport{IataCode{"TOC"}, CountryId{"US"}, Tz::America_New_York}, // Toccoa Airport
@@ -6303,7 +6303,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TOI"}, CountryId{"US"}, Tz::America_Chicago}, // Troy Municipal Airport
     Airport{IataCode{"TOK"}, CountryId{"PG"}, Tz::Pacific_Bougainville}, // Torokina Airport
     Airport{IataCode{"TOL"}, CountryId{"US"}, Tz::America_New_York}, // Toledo Express Airport
-    Airport{IataCode{"TOM"}, CountryId{"ML"}, Tz::Africa_Abidjan}, // Timbuktu Airport
+    Airport{IataCode{"TOM"}, CountryId{"ML"}, Tz::Africa_Bamako}, // Timbuktu Airport
     Airport{IataCode{"TON"}, CountryId{"PG"}, Tz::Pacific_Bougainville}, // Tonu
     Airport{IataCode{"TOO"}, CountryId{"CR"}, Tz::America_Costa_Rica}, // San Vito de Java Airport
     Airport{IataCode{"TOP"}, CountryId{"US"}, Tz::America_Chicago}, // Philip Billard Municipal Airport
@@ -6355,7 +6355,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TRV"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Trivandrum International Airport
     Airport{IataCode{"TRW"}, CountryId{"KI"}, Tz::Pacific_Tarawa}, // Bonriki International Airport
     Airport{IataCode{"TRX"}, CountryId{"US"}, Tz::America_Chicago}, // Trenton Municipal Airport
-    Airport{IataCode{"TRY"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Tororo Airport
+    Airport{IataCode{"TRY"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Tororo Airport
     Airport{IataCode{"TRZ"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Tiruchirapalli Airport
     Airport{IataCode{"TSB"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Tsumeb Airport
     Airport{IataCode{"TSC"}, CountryId{"EC"}, Tz::America_Guayaquil}, // Taisha Airport
@@ -6391,30 +6391,30 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TTO"}, CountryId{"US"}, Tz::America_Chicago}, // Britton Municipal Airport
     Airport{IataCode{"TTQ"}, CountryId{"CR"}, Tz::America_Costa_Rica}, // Tortuguero Airport
     Airport{IataCode{"TTR"}, CountryId{"ID"}, Tz::Asia_Makassar}, // Pongtiku Airport
-    Airport{IataCode{"TTS"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Tsaratanana Airport
+    Airport{IataCode{"TTS"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Tsaratanana Airport
     Airport{IataCode{"TTT"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Taitung Airport
     Airport{IataCode{"TTU"}, CountryId{"MA"}, Tz::Africa_Casablanca}, // Sania Ramel Airport
     Airport{IataCode{"TUA"}, CountryId{"EC"}, Tz::America_Guayaquil}, // Teniente Coronel Luis a Mantilla International Airport
     Airport{IataCode{"TUB"}, CountryId{"FR"}, Tz::Europe_Paris}, // Tubuai – Mataura Airport
     Airport{IataCode{"TUC"}, CountryId{"AR"}, Tz::America_Argentina_Tucuman}, // Teniente Benjamín Matienzo International Airport
-    Airport{IataCode{"TUD"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Tambacounda Airport
+    Airport{IataCode{"TUD"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Tambacounda Airport
     Airport{IataCode{"TUF"}, CountryId{"FR"}, Tz::Europe_Paris}, // Tours Val de Loire Airport
     Airport{IataCode{"TUG"}, CountryId{"PH"}, Tz::Asia_Manila}, // Tuguegarao Airport
     Airport{IataCode{"TUI"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Turaif Domestic Airport
-    Airport{IataCode{"TUJ"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Tum Airport
+    Airport{IataCode{"TUJ"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Tum Airport
     Airport{IataCode{"TUK"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Turbat International Airport
     Airport{IataCode{"TUL"}, CountryId{"US"}, Tz::America_Chicago}, // Tulsa International Airport
     Airport{IataCode{"TUM"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Tumut Airport
     Airport{IataCode{"TUN"}, CountryId{"TN"}, Tz::Africa_Tunis}, // Tunis–Carthage International Airport
     Airport{IataCode{"TUO"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Taupo Airport
     Airport{IataCode{"TUP"}, CountryId{"US"}, Tz::America_Chicago}, // Tupelo Regional Airport
-    Airport{IataCode{"TUQ"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Tougan Airport
+    Airport{IataCode{"TUQ"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Tougan Airport
     Airport{IataCode{"TUR"}, CountryId{"BR"}, Tz::America_Belem}, // Tucuruí Airport
     Airport{IataCode{"TUS"}, CountryId{"US"}, Tz::America_Phoenix}, // Tucson International Airport
     Airport{IataCode{"TUU"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Tabuk Regional Airport
     Airport{IataCode{"TUV"}, CountryId{"VE"}, Tz::America_Caracas}, // San Rafael Airport (Venezuela)
     Airport{IataCode{"TUX"}, CountryId{"CA"}, Tz::America_Dawson_Creek}, // Tumbler Ridge Airport
-    Airport{IataCode{"TVA"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Morafenobe Airport
+    Airport{IataCode{"TVA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Morafenobe Airport
     Airport{IataCode{"TVC"}, CountryId{"US"}, Tz::America_Detroit}, // Cherry Capital Airport
     Airport{IataCode{"TVF"}, CountryId{"US"}, Tz::America_Chicago}, // Thief River Falls Regional Airport
     Airport{IataCode{"TVI"}, CountryId{"US"}, Tz::America_New_York}, // Thomasville Regional Airport
@@ -6451,14 +6451,14 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"TYZ"}, CountryId{"US"}, Tz::America_Phoenix}, // Taylor Airport
     Airport{IataCode{"TZA"}, CountryId{"BZ"}, Tz::America_Belize}, // Belize City Municipal Airport
     Airport{IataCode{"TZC"}, CountryId{"US"}, Tz::America_Detroit}, // Tuscola Area Airport
-    Airport{IataCode{"TZL"}, CountryId{"BA"}, Tz::Europe_Belgrade}, // Tuzla International Airport
+    Airport{IataCode{"TZL"}, CountryId{"BA"}, Tz::Europe_Sarajevo}, // Tuzla International Airport
     Airport{IataCode{"TZR"}, CountryId{"US"}, Tz::America_New_York}, // Bolton Field
     Airport{IataCode{"TZX"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Trabzon Airport
     Airport{IataCode{"UAC"}, CountryId{"MX"}, Tz::America_Hermosillo}, // San Luis Río Colorado Airport
     Airport{IataCode{"UAE"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Mount Aue
     Airport{IataCode{"UAI"}, CountryId{"TL"}, Tz::Asia_Dili}, // Suai Airport
     Airport{IataCode{"UAK"}, CountryId{"GL"}, Tz::America_Godthab}, // Narsarsuaq Airport
-    Airport{IataCode{"UAL"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Luau Airport
+    Airport{IataCode{"UAL"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Luau Airport
     Airport{IataCode{"UAO"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Aurora State Airport
     Airport{IataCode{"UAQ"}, CountryId{"AR"}, Tz::America_Argentina_San_Juan}, // Domingo Faustino Sarmiento Airport
     Airport{IataCode{"UAR"}, CountryId{"MA"}, Tz::Africa_Casablanca}, // Bouarfa Airport
@@ -6498,7 +6498,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"UGB"}, CountryId{"US"}, Tz::America_Anchorage}, // Ugashik Bay Airport
     Airport{IataCode{"UGC"}, CountryId{"UZ"}, Tz::Asia_Samarkand}, // Urgench International Airport
     Airport{IataCode{"UGN"}, CountryId{"US"}, Tz::America_Chicago}, // Waukegan Regional Airport
-    Airport{IataCode{"UGO"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Uíge Airport
+    Airport{IataCode{"UGO"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Uíge Airport
     Airport{IataCode{"UGS"}, CountryId{"US"}, Tz::America_Anchorage}, // Ugashik Airport
     Airport{IataCode{"UHE"}, CountryId{"CZ"}, Tz::Europe_Prague}, // Kunovice Airport
     Airport{IataCode{"UIB"}, CountryId{"CO"}, Tz::America_Bogota}, // El Caraño Airport
@@ -6520,7 +6520,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"UKI"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Ukiah Municipal Airport
     Airport{IataCode{"UKK"}, CountryId{"KZ"}, Tz::Asia_Almaty}, // Oskemen Airport
     Airport{IataCode{"UKL"}, CountryId{"US"}, Tz::America_Chicago}, // Coffey County Airport
-    Airport{IataCode{"UKR"}, CountryId{"YE"}, Tz::Asia_Riyadh}, // Mukeiras Airport
+    Airport{IataCode{"UKR"}, CountryId{"YE"}, Tz::Asia_Aden}, // Mukeiras Airport
     Airport{IataCode{"UKS"}, CountryId{"RU"}, Tz::Europe_Simferopol}, // Sevastopol International Airport
     Airport{IataCode{"UKT"}, CountryId{"US"}, Tz::America_New_York}, // Quakertown Airport
     Airport{IataCode{"UKU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Nuku Airport
@@ -6538,7 +6538,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ULO"}, CountryId{"MN"}, Tz::Asia_Hovd}, // Ulaangom Airport
     Airport{IataCode{"ULP"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Quilpie Airport
     Airport{IataCode{"ULQ"}, CountryId{"CO"}, Tz::America_Bogota}, // Heriberto Gíl Martínez Airport
-    Airport{IataCode{"ULU"}, CountryId{"UG"}, Tz::Africa_Nairobi}, // Gulu Airport
+    Airport{IataCode{"ULU"}, CountryId{"UG"}, Tz::Africa_Kampala}, // Gulu Airport
     Airport{IataCode{"ULV"}, CountryId{"RU"}, Tz::Europe_Ulyanovsk}, // Ulyanovsk Baratayevka Airport
     Airport{IataCode{"ULY"}, CountryId{"RU"}, Tz::Europe_Ulyanovsk}, // Ulyanovsk Vostochny Airport
     Airport{IataCode{"ULZ"}, CountryId{"MN"}, Tz::Asia_Hovd}, // Donoi Airport
@@ -6552,9 +6552,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"UMY"}, CountryId{"UA"}, Tz::Europe_Kiev}, // Sumy Airport
     Airport{IataCode{"UNA"}, CountryId{"BR"}, Tz::America_Bahia}, // Una-Comandatuba Airport
     Airport{IataCode{"UND"}, CountryId{"AF"}, Tz::Asia_Kabul}, // Kunduz Airport
-    Airport{IataCode{"UNE"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Qacha's Nek Airport
+    Airport{IataCode{"UNE"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Qacha's Nek Airport
     Airport{IataCode{"UNG"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kiunga Airport
-    Airport{IataCode{"UNI"}, CountryId{"VC"}, Tz::America_Port_of_Spain}, // Union Island Airport
+    Airport{IataCode{"UNI"}, CountryId{"VC"}, Tz::America_St_Vincent}, // Union Island Airport
     Airport{IataCode{"UNK"}, CountryId{"US"}, Tz::America_Anchorage}, // Unalakleet Airport
     Airport{IataCode{"UNN"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Ranong Airport
     Airport{IataCode{"UNO"}, CountryId{"US"}, Tz::America_Chicago}, // West Plains Regional Airport
@@ -6588,9 +6588,9 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"USS"}, CountryId{"CU"}, Tz::America_Havana}, // Sancti Spíritus Airport
     Airport{IataCode{"UST"}, CountryId{"US"}, Tz::America_New_York}, // Northeast Florida Regional Airport
     Airport{IataCode{"USU"}, CountryId{"PH"}, Tz::Asia_Manila}, // Francisco B. Reyes Airport
-    Airport{IataCode{"UTA"}, CountryId{"ZW"}, Tz::Africa_Maputo}, // Mutare Airport
+    Airport{IataCode{"UTA"}, CountryId{"ZW"}, Tz::Africa_Harare}, // Mutare Airport
     Airport{IataCode{"UTB"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Muttaburra Airport
-    Airport{IataCode{"UTG"}, CountryId{"LS"}, Tz::Africa_Johannesburg}, // Quthing Airport
+    Airport{IataCode{"UTG"}, CountryId{"LS"}, Tz::Africa_Maseru}, // Quthing Airport
     Airport{IataCode{"UTH"}, CountryId{"TH"}, Tz::Asia_Bangkok}, // Udon Thani International Airport
     Airport{IataCode{"UTK"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Utirik Airport
     Airport{IataCode{"UTM"}, CountryId{"US"}, Tz::America_Chicago}, // Tunica Municipal Airport
@@ -6608,7 +6608,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"UUU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Manumu Airport
     Airport{IataCode{"UVA"}, CountryId{"US"}, Tz::America_Chicago}, // Garner Field
     Airport{IataCode{"UVE"}, CountryId{"FR"}, Tz::Europe_Paris}, // Ouvéa Airport
-    Airport{IataCode{"UVF"}, CountryId{"LC"}, Tz::America_Port_of_Spain}, // Hewanorra International Airport
+    Airport{IataCode{"UVF"}, CountryId{"LC"}, Tz::America_St_Lucia}, // Hewanorra International Airport
     Airport{IataCode{"UVL"}, CountryId{"EG"}, Tz::Africa_Cairo}, // El Kharga Airport
     Airport{IataCode{"UWA"}, CountryId{"US"}, Tz::America_New_York}, // Ware Airport
     Airport{IataCode{"UXL"}, CountryId{"US"}, Tz::America_Chicago}, // Southland Field
@@ -6632,7 +6632,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"VAP"}, CountryId{"CL"}, Tz::America_Santiago}, // Viñamar Airport
     Airport{IataCode{"VAR"}, CountryId{"BG"}, Tz::Europe_Sofia}, // Varna Airport
     Airport{IataCode{"VAS"}, CountryId{"TR"}, Tz::Europe_Istanbul}, // Sivas Airport
-    Airport{IataCode{"VAT"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Vatomandry Airport
+    Airport{IataCode{"VAT"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Vatomandry Airport
     Airport{IataCode{"VAV"}, CountryId{"TO"}, Tz::Pacific_Tongatapu}, // Vava'u International Airport
     Airport{IataCode{"VAW"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Vardø Airport, Svartnes
     Airport{IataCode{"VBC"}, CountryId{"MM"}, Tz::Asia_Yangon}, // Mandalay Chanmyathazi Airport
@@ -6642,7 +6642,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"VBY"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Visby Airport
     Airport{IataCode{"VCA"}, CountryId{"VN"}, Tz::Asia_Ho_Chi_Minh}, // Can Tho International Airport
     Airport{IataCode{"VCB"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Nut Tree Airport
-    Airport{IataCode{"VCC"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Limbe Airport
+    Airport{IataCode{"VCC"}, CountryId{"CM"}, Tz::Africa_Douala}, // Limbe Airport
     Airport{IataCode{"VCD"}, CountryId{"AU"}, Tz::Australia_Darwin}, // Victoria River Downs Airport
     Airport{IataCode{"VCE"}, CountryId{"IT"}, Tz::Europe_Rome}, // Venice Marco Polo Airport
     Airport{IataCode{"VCF"}, CountryId{"AR"}, Tz::America_Argentina_Salta}, // Valcheta Airport
@@ -6671,7 +6671,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"VER"}, CountryId{"MX"}, Tz::America_Mexico_City}, // General Heriberto Jara International Airport
     Airport{IataCode{"VES"}, CountryId{"US"}, Tz::America_New_York}, // Darke County Airport
     Airport{IataCode{"VEY"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Vestmannaeyjar Airport
-    Airport{IataCode{"VFA"}, CountryId{"ZW"}, Tz::Africa_Maputo}, // Victoria Falls Airport
+    Airport{IataCode{"VFA"}, CountryId{"ZW"}, Tz::Africa_Harare}, // Victoria Falls Airport
     Airport{IataCode{"VGA"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Vijayawada Airport
     Airport{IataCode{"VGC"}, CountryId{"US"}, Tz::America_New_York}, // Hamilton Municipal Airport
     Airport{IataCode{"VGD"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Vologda Airport
@@ -6679,7 +6679,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"VGO"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Vigo Airport
     Airport{IataCode{"VGT"}, CountryId{"US"}, Tz::America_Los_Angeles}, // North Las Vegas Airport
     Airport{IataCode{"VGZ"}, CountryId{"CO"}, Tz::America_Bogota}, // Villa Garzón Airport
-    Airport{IataCode{"VHC"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Saurimo Airport
+    Airport{IataCode{"VHC"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Saurimo Airport
     Airport{IataCode{"VHM"}, CountryId{"SE"}, Tz::Europe_Stockholm}, // Vilhelmina Airport
     Airport{IataCode{"VHN"}, CountryId{"US"}, Tz::America_Chicago}, // Culberson County Airport
     Airport{IataCode{"VHV"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Verkhnevilyuysk Airport
@@ -6725,7 +6725,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"VMR"}, CountryId{"AR"}, Tz::America_Argentina_Cordoba}, // Presidente Néstor Kirchner Airport
     Airport{IataCode{"VMU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Baimuru Airport
     Airport{IataCode{"VNC"}, CountryId{"US"}, Tz::America_New_York}, // Venice Municipal Airport
-    Airport{IataCode{"VND"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Vangaindrano Airport
+    Airport{IataCode{"VND"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Vangaindrano Airport
     Airport{IataCode{"VNE"}, CountryId{"FR"}, Tz::Europe_Paris}, // Meucon Airport
     Airport{IataCode{"VNO"}, CountryId{"LT"}, Tz::Europe_Vilnius}, // Vilnius Airport
     Airport{IataCode{"VNS"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Lal Bahadur Shastri Airport
@@ -6740,7 +6740,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"VOZ"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Voronezh International Airport
     Airport{IataCode{"VPA"}, CountryId{"CL"}, Tz::America_Santiago}, // Rodelillo Airfield
     Airport{IataCode{"VPC"}, CountryId{"US"}, Tz::America_New_York}, // Cartersville Airport
-    Airport{IataCode{"VPE"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Ondjiva Pereira Airport
+    Airport{IataCode{"VPE"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Ondjiva Pereira Airport
     Airport{IataCode{"VPN"}, CountryId{"IS"}, Tz::Atlantic_Reykjavik}, // Vopnafjörður Airport
     Airport{IataCode{"VPS"}, CountryId{"US"}, Tz::America_Chicago}, // Destin–Fort Walton Beach Airport
     Airport{IataCode{"VPY"}, CountryId{"MZ"}, Tz::Africa_Maputo}, // Chimoio Airport
@@ -6762,7 +6762,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"VSF"}, CountryId{"US"}, Tz::America_New_York}, // Hartness State Airport
     Airport{IataCode{"VSK"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Vista Field
     Airport{IataCode{"VTB"}, CountryId{"BY"}, Tz::Europe_Minsk}, // Vitebsk Vostochny Airport
-    Airport{IataCode{"VTE"}, CountryId{"LA"}, Tz::Asia_Bangkok}, // Wattay International Airport
+    Airport{IataCode{"VTE"}, CountryId{"LA"}, Tz::Asia_Vientiane}, // Wattay International Airport
     Airport{IataCode{"VTG"}, CountryId{"VN"}, Tz::Asia_Ho_Chi_Minh}, // Vung Tau Airport
     Airport{IataCode{"VTN"}, CountryId{"US"}, Tz::America_Chicago}, // Miller Field
     Airport{IataCode{"VTR"}, CountryId{"IT"}, Tz::Europe_Rome}, // Rome Viterbo Airport
@@ -6782,16 +6782,16 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"VYI"}, CountryId{"RU"}, Tz::Asia_Yakutsk}, // Vilyuisk Airport
     Airport{IataCode{"VYS"}, CountryId{"US"}, Tz::America_Chicago}, // Illinois Valley Regional Airport
     Airport{IataCode{"WAA"}, CountryId{"US"}, Tz::America_Nome}, // Wales Airport
-    Airport{IataCode{"WAC"}, CountryId{"ET"}, Tz::Africa_Nairobi}, // Wacca Airport
+    Airport{IataCode{"WAC"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Wacca Airport
     Airport{IataCode{"WAE"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // Wadi al-Dawasir Domestic Airport
     Airport{IataCode{"WAG"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Wanganui Airport
     Airport{IataCode{"WAH"}, CountryId{"US"}, Tz::America_Chicago}, // Harry Stern Airport
-    Airport{IataCode{"WAI"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Ambalabe Airport
+    Airport{IataCode{"WAI"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Ambalabe Airport
     Airport{IataCode{"WAJ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Wawoi Falls
-    Airport{IataCode{"WAM"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Ambatondrazaka Airport
+    Airport{IataCode{"WAM"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Ambatondrazaka Airport
     Airport{IataCode{"WAO"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Wabo
     Airport{IataCode{"WAP"}, CountryId{"CL"}, Tz::America_Santiago}, // Alto Palena Airport
-    Airport{IataCode{"WAQ"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Antsalova Airport
+    Airport{IataCode{"WAQ"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Antsalova Airport
     Airport{IataCode{"WAT"}, CountryId{"IE"}, Tz::Europe_Dublin}, // Waterford Airport
     Airport{IataCode{"WAW"}, CountryId{"PL"}, Tz::Europe_Warsaw}, // Warsaw Chopin Airport
     Airport{IataCode{"WAX"}, CountryId{"LY"}, Tz::Africa_Tripoli}, // Zuwarah Airport
@@ -6800,7 +6800,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"WBB"}, CountryId{"US"}, Tz::America_Nome}, // Stebbins Airport
     Airport{IataCode{"WBC"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Wapolu
     Airport{IataCode{"WBM"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Wapenamanda Airport
-    Airport{IataCode{"WBO"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Antsoa Airport
+    Airport{IataCode{"WBO"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Antsoa Airport
     Airport{IataCode{"WBQ"}, CountryId{"US"}, Tz::America_Anchorage}, // Beaver Airport
     Airport{IataCode{"WBR"}, CountryId{"US"}, Tz::America_Detroit}, // Roben-Hood Airport
     Airport{IataCode{"WBU"}, CountryId{"US"}, Tz::America_Denver}, // Boulder Municipal Airport
@@ -6817,7 +6817,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"WEH"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Weihai Dashuibo Airport
     Airport{IataCode{"WEI"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Weipa Airport
     Airport{IataCode{"WEL"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Welkom Airport
-    Airport{IataCode{"WFI"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Fianarantsoa Airport
+    Airport{IataCode{"WFI"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Fianarantsoa Airport
     Airport{IataCode{"WFK"}, CountryId{"US"}, Tz::America_New_York}, // Northern Aroostook Regional Airport
     Airport{IataCode{"WGC"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Warangal Airport
     Airport{IataCode{"WGE"}, CountryId{"AU"}, Tz::Australia_Sydney}, // Walgett Airport
@@ -6846,7 +6846,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"WJU"}, CountryId{"KR"}, Tz::Asia_Seoul}, // Wonju Airport
     Airport{IataCode{"WKA"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Wanaka Airport
     Airport{IataCode{"WKB"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Warracknabeal Airport
-    Airport{IataCode{"WKI"}, CountryId{"ZW"}, Tz::Africa_Maputo}, // Hwange Town Airport
+    Airport{IataCode{"WKI"}, CountryId{"ZW"}, Tz::Africa_Harare}, // Hwange Town Airport
     Airport{IataCode{"WKJ"}, CountryId{"JP"}, Tz::Asia_Tokyo}, // Wakkanai Airport
     Airport{IataCode{"WKK"}, CountryId{"US"}, Tz::America_Anchorage}, // Aleknagik Airport
     Airport{IataCode{"WKN"}, CountryId{"PG"}, Tz::Pacific_Bougainville}, // Wakunai Airport
@@ -6858,18 +6858,18 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"WLK"}, CountryId{"US"}, Tz::America_Anchorage}, // Selawik Airport
     Airport{IataCode{"WLS"}, CountryId{"FR"}, Tz::Europe_Paris}, // Hihifo Airport
     Airport{IataCode{"WLW"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Willows-Glenn County Airport
-    Airport{IataCode{"WMA"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Mandritsara Airport
+    Airport{IataCode{"WMA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Mandritsara Airport
     Airport{IataCode{"WMB"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Warrnambool Airport
     Airport{IataCode{"WMC"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Winnemucca Municipal Airport
-    Airport{IataCode{"WMD"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Mandabe Airport
+    Airport{IataCode{"WMD"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Mandabe Airport
     Airport{IataCode{"WME"}, CountryId{"AU"}, Tz::Australia_Perth}, // Mount Keith Airport
     Airport{IataCode{"WMH"}, CountryId{"US"}, Tz::America_Chicago}, // Ozark Regional Airport
     Airport{IataCode{"WMI"}, CountryId{"PL"}, Tz::Europe_Warsaw}, // Warsaw-Modlin Mazovia Airport
     Airport{IataCode{"WML"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // West Melton Aerodrome
-    Airport{IataCode{"WMN"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Maroantsetra Airport
+    Airport{IataCode{"WMN"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Maroantsetra Airport
     Airport{IataCode{"WMO"}, CountryId{"US"}, Tz::America_Nome}, // White Mountain Airport
-    Airport{IataCode{"WMP"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Mampikony Airport
-    Airport{IataCode{"WMR"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Mananara Nord Airport
+    Airport{IataCode{"WMP"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Mampikony Airport
+    Airport{IataCode{"WMR"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Mananara Nord Airport
     Airport{IataCode{"WMX"}, CountryId{"ID"}, Tz::Asia_Jayapura}, // Wamena Airport
     Airport{IataCode{"WNA"}, CountryId{"US"}, Tz::America_Anchorage}, // Napakiak Airport
     Airport{IataCode{"WNC"}, CountryId{"US"}, Tz::America_Sitka}, // Naukati Bay Seaplane Base
@@ -6887,7 +6887,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"WOT"}, CountryId{"TW"}, Tz::Asia_Taipei}, // Wang-an Airport
     Airport{IataCode{"WOW"}, CountryId{"US"}, Tz::America_Anchorage}, // Willow Airport
     Airport{IataCode{"WPA"}, CountryId{"CL"}, Tz::America_Santiago}, // Cabo Juan Román Airfield
-    Airport{IataCode{"WPB"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Port Bergé Airport
+    Airport{IataCode{"WPB"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Port Bergé Airport
     Airport{IataCode{"WPC"}, CountryId{"CA"}, Tz::America_Edmonton}, // Pincher Creek Airport
     Airport{IataCode{"WPL"}, CountryId{"CA"}, Tz::America_Vancouver}, // Powell Lake Water Aerodrome
     Airport{IataCode{"WPR"}, CountryId{"CL"}, Tz::America_Punta_Arenas}, // Capitan Fuentes Martinez Airport
@@ -6912,7 +6912,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"WSU"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Wasu
     Airport{IataCode{"WSX"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Westsound/WSX Seaplane Base
     Airport{IataCode{"WSZ"}, CountryId{"NZ"}, Tz::Pacific_Auckland}, // Westport Airport, New Zealand
-    Airport{IataCode{"WTA"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Tambohorano Airport
+    Airport{IataCode{"WTA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Tambohorano Airport
     Airport{IataCode{"WTB"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Brisbane West Wellcamp Airport
     Airport{IataCode{"WTD"}, CountryId{"BS"}, Tz::America_Nassau}, // West End Airport
     Airport{IataCode{"WTE"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Wotje Airport
@@ -6938,7 +6938,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"WUZ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Wuzhou Changzhoudao Airport
     Airport{IataCode{"WVB"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Walvis Bay Airport
     Airport{IataCode{"WVI"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Watsonville Municipal Airport
-    Airport{IataCode{"WVK"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Manakara Airport
+    Airport{IataCode{"WVK"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Manakara Airport
     Airport{IataCode{"WVL"}, CountryId{"US"}, Tz::America_New_York}, // Waterville Robert LaFleur Airport
     Airport{IataCode{"WWA"}, CountryId{"US"}, Tz::America_Anchorage}, // Wasilla Airport
     Airport{IataCode{"WWD"}, CountryId{"US"}, Tz::America_New_York}, // Cape May Airport
@@ -6949,18 +6949,18 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"WWY"}, CountryId{"AU"}, Tz::Australia_Sydney}, // West Wyalong Airport
     Airport{IataCode{"WXN"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Wanzhou Wuqiao Airport
     Airport{IataCode{"WYA"}, CountryId{"AU"}, Tz::Australia_Adelaide}, // Whyalla Airport
-    Airport{IataCode{"WYE"}, CountryId{"SL"}, Tz::Africa_Abidjan}, // Yengema Airport
+    Airport{IataCode{"WYE"}, CountryId{"SL"}, Tz::Africa_Freetown}, // Yengema Airport
     Airport{IataCode{"WYN"}, CountryId{"AU"}, Tz::Australia_Perth}, // Wyndham Airport
     Airport{IataCode{"WYS"}, CountryId{"US"}, Tz::America_Denver}, // Yellowstone Airport
     Airport{IataCode{"XAB"}, CountryId{"FR"}, Tz::Europe_Paris}, // Aerodrome Abbeville
     Airport{IataCode{"XAP"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Chapecó Airport
-    Airport{IataCode{"XAR"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Aribinda Airport
+    Airport{IataCode{"XAR"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Aribinda Airport
     Airport{IataCode{"XAU"}, CountryId{"FR"}, Tz::Europe_Paris}, // Saül Airport
     Airport{IataCode{"XBE"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Bearskin Lake Airport
-    Airport{IataCode{"XBG"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Bogande Airport
+    Airport{IataCode{"XBG"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Bogande Airport
     Airport{IataCode{"XBJ"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Birjand International Airport
     Airport{IataCode{"XBK"}, CountryId{"FR"}, Tz::Europe_Paris}, // Bourg – Ceyzériat Airport
-    Airport{IataCode{"XBO"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Boulsa Airport
+    Airport{IataCode{"XBO"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Boulsa Airport
     Airport{IataCode{"XBP"}, CountryId{"US"}, Tz::America_Chicago}, // Bridgeport Municipal Airport
     Airport{IataCode{"XBR"}, CountryId{"CA"}, Tz::America_Toronto}, // Brockville-Thousand Islands Regional Tackaberry Airport
     Airport{IataCode{"XCD"}, CountryId{"FR"}, Tz::Europe_Paris}, // Chalon – Champforgeuil Airport
@@ -6969,33 +6969,33 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"XCM"}, CountryId{"CA"}, Tz::America_Toronto}, // Chatham-Kent Airport
     Airport{IataCode{"XCR"}, CountryId{"FR"}, Tz::Europe_Paris}, // Châlons Vatry Airport
     Airport{IataCode{"XCY"}, CountryId{"FR"}, Tz::Europe_Paris}, // Château-Thierry – Belleau Aerodrome
-    Airport{IataCode{"XDE"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Diebougou Airport
-    Airport{IataCode{"XDJ"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Djibo Airport
+    Airport{IataCode{"XDE"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Diebougou Airport
+    Airport{IataCode{"XDJ"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Djibo Airport
     Airport{IataCode{"XES"}, CountryId{"US"}, Tz::America_Chicago}, // Grand Geneva Resort Airport
     Airport{IataCode{"XFN"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Xiangyang Liuji Airport
-    Airport{IataCode{"XGA"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Gaoua Airport
-    Airport{IataCode{"XGG"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Gorom Gorom Airport
-    Airport{IataCode{"XGN"}, CountryId{"AO"}, Tz::Africa_Lagos}, // Xangongo Airport
+    Airport{IataCode{"XGA"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Gaoua Airport
+    Airport{IataCode{"XGG"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Gorom Gorom Airport
+    Airport{IataCode{"XGN"}, CountryId{"AO"}, Tz::Africa_Luanda}, // Xangongo Airport
     Airport{IataCode{"XGR"}, CountryId{"CA"}, Tz::America_Toronto}, // Kangiqsualujjuaq (Georges River) Airport
     Airport{IataCode{"XIC"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Xichang Qingshan Airport
     Airport{IataCode{"XIL"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Xilinhot Airport
     Airport{IataCode{"XIY"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Xi'an Xianyang International Airport
     Airport{IataCode{"XJM"}, CountryId{"PK"}, Tz::Asia_Karachi}, // Mangla Airport
-    Airport{IataCode{"XKA"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Kantchari Airport
-    Airport{IataCode{"XKH"}, CountryId{"LA"}, Tz::Asia_Bangkok}, // Xieng Khouang Airport
+    Airport{IataCode{"XKA"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Kantchari Airport
+    Airport{IataCode{"XKH"}, CountryId{"LA"}, Tz::Asia_Vientiane}, // Xieng Khouang Airport
     Airport{IataCode{"XKS"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Kasabonika Airport
-    Airport{IataCode{"XKY"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Kaya Airport
+    Airport{IataCode{"XKY"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Kaya Airport
     Airport{IataCode{"XLB"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Lac Brochet Airport
     Airport{IataCode{"XLG"}, CountryId{"FR"}, Tz::Europe_Paris}, // Lognes-Émerainville Aerodrome
     Airport{IataCode{"XLL"}, CountryId{"US"}, Tz::America_New_York}, // Greensboro North Airport
-    Airport{IataCode{"XLS"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Saint-Louis Airport
-    Airport{IataCode{"XLU"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Leo Airport
+    Airport{IataCode{"XLS"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Saint-Louis Airport
+    Airport{IataCode{"XLU"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Leo Airport
     Airport{IataCode{"XMC"}, CountryId{"AU"}, Tz::Australia_Melbourne}, // Mallacoota Airport
     Airport{IataCode{"XMD"}, CountryId{"US"}, Tz::America_Chicago}, // Madison Municipal Airport
     Airport{IataCode{"XMF"}, CountryId{"FR"}, Tz::Europe_Paris}, // Montbéliard – Courcelles Aerodrome
     Airport{IataCode{"XMG"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Mahendranagar Airport
     Airport{IataCode{"XMH"}, CountryId{"FR"}, Tz::Europe_Paris}, // Manihi Airport
-    Airport{IataCode{"XMI"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Masasi Airport
+    Airport{IataCode{"XMI"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Masasi Airport
     Airport{IataCode{"XMN"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Xiamen Gaoqi International Airport
     Airport{IataCode{"XMP"}, CountryId{"CA"}, Tz::America_Whitehorse}, // Macmillian Pass Airport
     Airport{IataCode{"XMS"}, CountryId{"EC"}, Tz::America_Guayaquil}, // Edmundo Carvajal Airport
@@ -7005,8 +7005,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"XNN"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Xining Caojiabao Airport
     Airport{IataCode{"XNO"}, CountryId{"US"}, Tz::America_New_York}, // North Auxiliary Airfield
     Airport{IataCode{"XNT"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Xingtai Dalian Airport
-    Airport{IataCode{"XNU"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Nouna Airport
-    Airport{IataCode{"XPA"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Pama Airport
+    Airport{IataCode{"XNU"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Nouna Airport
+    Airport{IataCode{"XPA"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Pama Airport
     Airport{IataCode{"XPK"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Pukatawagan Airport
     Airport{IataCode{"XPP"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Poplar River Airport
     Airport{IataCode{"XPR"}, CountryId{"US"}, Tz::America_Denver}, // Pine Ridge Airport
@@ -7018,7 +7018,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"XSB"}, CountryId{"AE"}, Tz::Asia_Dubai}, // Sir Bani Yas Airport
     Airport{IataCode{"XSC"}, CountryId{"GB"}, Tz::Europe_London}, // South Caicos Airport
     Airport{IataCode{"XSD"}, CountryId{"US"}, Tz::America_Los_Angeles}, // Tonopah Test Range Airport
-    Airport{IataCode{"XSE"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Sebba Airport
+    Airport{IataCode{"XSE"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Sebba Airport
     Airport{IataCode{"XSI"}, CountryId{"CA"}, Tz::America_Winnipeg}, // South Indian Lake Airport
     Airport{IataCode{"XSJ"}, CountryId{"FR"}, Tz::Europe_Paris}, // Peronne-St Quentin Airport
     Airport{IataCode{"XSN"}, CountryId{"FR"}, Tz::Europe_Paris}, // Sallanches Aerodrome
@@ -7034,7 +7034,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"XWA"}, CountryId{"US"}, Tz::America_Chicago}, // Williston Basin International Airport
     Airport{IataCode{"XYA"}, CountryId{"SB"}, Tz::Pacific_Guadalcanal}, // Yandina Airport
     Airport{IataCode{"XYR"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Yellow River
-    Airport{IataCode{"XZA"}, CountryId{"BF"}, Tz::Africa_Abidjan}, // Zabré Airport
+    Airport{IataCode{"XZA"}, CountryId{"BF"}, Tz::Africa_Ouagadougou}, // Zabré Airport
     Airport{IataCode{"YAA"}, CountryId{"CA"}, Tz::America_Vancouver}, // Anahim Lake Airport
     Airport{IataCode{"YAB"}, CountryId{"CA"}, Tz::America_Rankin_Inlet}, // Arctic Bay Airport
     Airport{IataCode{"YAC"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Cat Lake Airport
@@ -7045,7 +7045,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"YAL"}, CountryId{"CA"}, Tz::America_Vancouver}, // Alert Bay Airport
     Airport{IataCode{"YAM"}, CountryId{"CA"}, Tz::America_Toronto}, // Sault Ste. Marie Airport
     Airport{IataCode{"YAN"}, CountryId{"CD"}, Tz::Africa_Lubumbashi}, // Yangambi Airport
-    Airport{IataCode{"YAO"}, CountryId{"CM"}, Tz::Africa_Lagos}, // Yaoundé Airport
+    Airport{IataCode{"YAO"}, CountryId{"CM"}, Tz::Africa_Douala}, // Yaoundé Airport
     Airport{IataCode{"YAP"}, CountryId{"FM"}, Tz::Pacific_Chuuk}, // Yap International Airport
     Airport{IataCode{"YAR"}, CountryId{"CA"}, Tz::America_Toronto}, // La Grande-3 Airport
     Airport{IataCode{"YAS"}, CountryId{"FJ"}, Tz::Pacific_Fiji}, // Yasawa Island Airport
@@ -7390,7 +7390,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"YUT"}, CountryId{"CA"}, Tz::America_Rankin_Inlet}, // Repulse Bay Airport
     Airport{IataCode{"YUX"}, CountryId{"CA"}, Tz::America_Iqaluit}, // Hall Beach Airport
     Airport{IataCode{"YUY"}, CountryId{"CA"}, Tz::America_Toronto}, // Rouyn-Noranda Airport
-    Airport{IataCode{"YVA"}, CountryId{"KM"}, Tz::Africa_Nairobi}, // Iconi Airport
+    Airport{IataCode{"YVA"}, CountryId{"KM"}, Tz::Indian_Comoro}, // Iconi Airport
     Airport{IataCode{"YVB"}, CountryId{"CA"}, Tz::America_Toronto}, // Bonaventure Airport
     Airport{IataCode{"YVC"}, CountryId{"CA"}, Tz::America_Regina}, // La Ronge (Barber Field) Airport
     Airport{IataCode{"YVD"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Yeva
@@ -7472,8 +7472,8 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"YZZ"}, CountryId{"CA"}, Tz::America_Vancouver}, // Trail Airport
     Airport{IataCode{"ZAA"}, CountryId{"CA"}, Tz::America_Vancouver}, // Alice Arm/Silver City Water Aerodrome
     Airport{IataCode{"ZAC"}, CountryId{"CA"}, Tz::America_Winnipeg}, // York Landing Airport
-    Airport{IataCode{"ZAD"}, CountryId{"HR"}, Tz::Europe_Belgrade}, // Zadar Airport
-    Airport{IataCode{"ZAG"}, CountryId{"HR"}, Tz::Europe_Belgrade}, // Zagreb Airport
+    Airport{IataCode{"ZAD"}, CountryId{"HR"}, Tz::Europe_Zagreb}, // Zadar Airport
+    Airport{IataCode{"ZAG"}, CountryId{"HR"}, Tz::Europe_Zagreb}, // Zagreb Airport
     Airport{IataCode{"ZAH"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Zahedan Airport
     Airport{IataCode{"ZAJ"}, CountryId{"AF"}, Tz::Asia_Kabul}, // Zaranj Airport
     Airport{IataCode{"ZAL"}, CountryId{"CL"}, Tz::America_Santiago}, // Pichoy Airport
@@ -7483,12 +7483,12 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ZAZ"}, CountryId{"ES"}, Tz::Europe_Madrid}, // Zaragoza Airport
     Airport{IataCode{"ZBF"}, CountryId{"CA"}, Tz::America_Moncton}, // Bathurst Airport
     Airport{IataCode{"ZBG"}, CountryId{"PL"}, Tz::Europe_Warsaw}, // Elbląg Airport
-    Airport{IataCode{"ZBK"}, CountryId{"ME"}, Tz::Europe_Belgrade}, // Žabljak Airport
+    Airport{IataCode{"ZBK"}, CountryId{"ME"}, Tz::Europe_Podgorica}, // Žabljak Airport
     Airport{IataCode{"ZBL"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Biloela Airport
     Airport{IataCode{"ZBM"}, CountryId{"CA"}, Tz::America_Toronto}, // Roland-Désourdy Airport
     Airport{IataCode{"ZBO"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Bowen Airport
     Airport{IataCode{"ZBR"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Konarak Airport
-    Airport{IataCode{"ZBY"}, CountryId{"LA"}, Tz::Asia_Bangkok}, // Sayaboury Airport
+    Airport{IataCode{"ZBY"}, CountryId{"LA"}, Tz::Asia_Vientiane}, // Sayaboury Airport
     Airport{IataCode{"ZCC"}, CountryId{"DE"}, Tz::Europe_Berlin}, // Oos Airport
     Airport{IataCode{"ZCL"}, CountryId{"MX"}, Tz::America_Mexico_City}, // General Leobardo C. Ruiz International Airport
     Airport{IataCode{"ZCO"}, CountryId{"CL"}, Tz::America_Santiago}, // Aeropuerto La Araucanía
@@ -7506,7 +7506,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ZGF"}, CountryId{"CA"}, Tz::America_Vancouver}, // Grand Forks Airport
     Airport{IataCode{"ZGI"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Gods River Airport
     Airport{IataCode{"ZGL"}, CountryId{"AU"}, Timezone{}}, // South Galway Airport
-    Airport{IataCode{"ZGM"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Ngoma Airport
+    Airport{IataCode{"ZGM"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Ngoma Airport
     Airport{IataCode{"ZGR"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Little Grand Rapids Airport
     Airport{IataCode{"ZGS"}, CountryId{"CA"}, Tz::America_Blanc_Sablon}, // La Romaine Airport
     Airport{IataCode{"ZGU"}, CountryId{"VU"}, Tz::Pacific_Efate}, // Gaua Airport
@@ -7516,7 +7516,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ZHY"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Zhongwei Shapotou Airport
     Airport{IataCode{"ZIA"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Zhukovsky International Airport
     Airport{IataCode{"ZIC"}, CountryId{"CL"}, Tz::America_Santiago}, // Victoria Airport
-    Airport{IataCode{"ZIG"}, CountryId{"SN"}, Tz::Africa_Abidjan}, // Ziguinchor Airport
+    Airport{IataCode{"ZIG"}, CountryId{"SN"}, Tz::Africa_Dakar}, // Ziguinchor Airport
     Airport{IataCode{"ZIH"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Ixtapa-Zihuatanejo International Airport
     Airport{IataCode{"ZIN"}, CountryId{"CH"}, Tz::Europe_Zurich}, // Interlaken Airport
     Airport{IataCode{"ZIS"}, CountryId{"LY"}, Tz::Africa_Tripoli}, // Alzintan Airport
@@ -7524,10 +7524,10 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ZJG"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Jenpeg Airport
     Airport{IataCode{"ZJI"}, CountryId{"CH"}, Tz::Europe_Zurich}, // Locarno Airport
     Airport{IataCode{"ZJN"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Swan River Airport
-    Airport{IataCode{"ZKB"}, CountryId{"ZM"}, Tz::Africa_Maputo}, // Kasaba Bay Airport
+    Airport{IataCode{"ZKB"}, CountryId{"ZM"}, Tz::Africa_Lusaka}, // Kasaba Bay Airport
     Airport{IataCode{"ZKE"}, CountryId{"CA"}, Tz::America_Toronto}, // Kashechewan Airport
     Airport{IataCode{"ZKG"}, CountryId{"CA"}, Tz::America_Toronto}, // Kegaska Airport
-    Airport{IataCode{"ZKM"}, CountryId{"GA"}, Tz::Africa_Lagos}, // Sette-Cama Airport
+    Airport{IataCode{"ZKM"}, CountryId{"GA"}, Tz::Africa_Libreville}, // Sette-Cama Airport
     Airport{IataCode{"ZKP"}, CountryId{"RU"}, Tz::Asia_Srednekolymsk}, // Zyryanka Airport
     Airport{IataCode{"ZLG"}, CountryId{"MA"}, Tz::Africa_Casablanca}, // La Güera Airport
     Airport{IataCode{"ZLO"}, CountryId{"MX"}, Tz::America_Mexico_City}, // Playa de Oro International Airport
@@ -7540,11 +7540,11 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ZMT"}, CountryId{"CA"}, Tz::America_Vancouver}, // Masset Airport
     Airport{IataCode{"ZNA"}, CountryId{"CA"}, Tz::America_Vancouver}, // Nanaimo Harbour Water Airport
     Airport{IataCode{"ZNC"}, CountryId{"US"}, Tz::America_Anchorage}, // Nyac Airport
-    Airport{IataCode{"ZND"}, CountryId{"NE"}, Tz::Africa_Lagos}, // Zinder Airport
+    Airport{IataCode{"ZND"}, CountryId{"NE"}, Tz::Africa_Niamey}, // Zinder Airport
     Airport{IataCode{"ZNE"}, CountryId{"AU"}, Tz::Australia_Perth}, // Newman Airport
     Airport{IataCode{"ZNJ"}, CountryId{"ZA"}, Tz::Africa_Johannesburg}, // Heilbron Airport
     Airport{IataCode{"ZNL"}, CountryId{"CA"}, Tz::America_Vancouver}, // Nelson Airport
-    Airport{IataCode{"ZNZ"}, CountryId{"TZ"}, Tz::Africa_Nairobi}, // Abeid Amani Karume International Airport
+    Airport{IataCode{"ZNZ"}, CountryId{"TZ"}, Tz::Africa_Dar_es_Salaam}, // Abeid Amani Karume International Airport
     Airport{IataCode{"ZOF"}, CountryId{"CA"}, Tz::America_Vancouver}, // Ocean Falls Water Aerodrome
     Airport{IataCode{"ZOS"}, CountryId{"CL"}, Tz::America_Santiago}, // Cañal Bajo Carlos Hott Siebert Airport
     Airport{IataCode{"ZPB"}, CountryId{"CA"}, Tz::America_Winnipeg}, // Sachigo Lake Airport
@@ -7580,17 +7580,17 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"ZUL"}, CountryId{"AR"}, Tz::America_Argentina_Buenos_Aires}, // Azul Airport
     Airport{IataCode{"ZUM"}, CountryId{"CA"}, Tz::America_Goose_Bay}, // Churchill Falls Airport
     Airport{IataCode{"ZUN"}, CountryId{"US"}, Tz::America_Denver}, // Black Rock Airport
-    Airport{IataCode{"ZVA"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Miandrivazo Airport
+    Airport{IataCode{"ZVA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Miandrivazo Airport
     Airport{IataCode{"ZVG"}, CountryId{"AU"}, Tz::Australia_Perth}, // Springvale Airport
-    Airport{IataCode{"ZVK"}, CountryId{"LA"}, Tz::Asia_Bangkok}, // Savannakhet Airport
-    Airport{IataCode{"ZWA"}, CountryId{"MG"}, Tz::Africa_Nairobi}, // Andapa Airport
+    Airport{IataCode{"ZVK"}, CountryId{"LA"}, Tz::Asia_Vientiane}, // Savannakhet Airport
+    Airport{IataCode{"ZWA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Andapa Airport
     Airport{IataCode{"ZWL"}, CountryId{"CA"}, Tz::America_Regina}, // Wollaston Lake Airport
     Airport{IataCode{"ZXB"}, CountryId{"NO"}, Tz::Europe_Oslo}, // Jan Mayensfield
     Airport{IataCode{"ZXT"}, CountryId{"AZ"}, Tz::Asia_Baku}, // Zabrat Airport
     Airport{IataCode{"ZYI"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Zunyi Xinzhou Airport
     Airport{IataCode{"ZYL"}, CountryId{"BD"}, Tz::Asia_Dhaka}, // Osmani International Airport
     Airport{IataCode{"ZZO"}, CountryId{"RU"}, Tz::Asia_Sakhalin}, // Zonalnoye Airport
-    Airport{IataCode{"ZZU"}, CountryId{"MW"}, Tz::Africa_Maputo}, // Mzuzu Airport
+    Airport{IataCode{"ZZU"}, CountryId{"MW"}, Tz::Africa_Blantyre}, // Mzuzu Airport
     Airport{IataCode{"ZZV"}, CountryId{"US"}, Tz::America_New_York}, // Zanesville Municipal Airport
 };
 

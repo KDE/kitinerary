@@ -3277,7 +3277,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{4.33108, 50.8635}, Tz::Europe_Brussels, CountryId{"BE"}}, // Simonis railway station
     {Coordinate{5.42608, 43.4347}, Tz::Europe_Paris, CountryId{"FR"}}, // Q3097749
     {Coordinate{7.81214, 47.4627}, Tz::Europe_Zurich, CountryId{"CH"}}, // Q3097750
-    {Coordinate{21.4458, 41.9912}, Tz::Europe_Belgrade, CountryId{"MK"}}, // Skopje Main railway station
+    {Coordinate{21.4458, 41.9912}, Tz::Europe_Skopje, CountryId{"MK"}}, // Skopje Main railway station
     {Coordinate{7.85168, 47.439}, Tz::Europe_Zurich, CountryId{"CH"}}, // Q3097761
     {Coordinate{6.66582, 46.655}, Tz::Europe_Zurich, CountryId{"CH"}}, // Sugnens railway station
     {Coordinate{0.134453, 48.6648}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Surdon
@@ -7015,7 +7015,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{7.99194, 50.9561}, Tz::Europe_Berlin, CountryId{"DE"}}, // Kreuztal station
     {Coordinate{4.03722, 51.4653}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Kruiningen-Yerseke railway station
     {Coordinate{12.1658, 47.5831}, Tz::Europe_Vienna, CountryId{"AT"}}, // Kufstein railway station
-    {Coordinate{21.2239, 48.8528}, Tz::Europe_Prague, CountryId{"SK"}}, // Kysak railway station
+    {Coordinate{21.2239, 48.8528}, Tz::Europe_Bratislava, CountryId{"SK"}}, // Kysak railway station
     {Coordinate{6.93393, 50.9436}, Tz::Europe_Berlin, CountryId{"DE"}}, // Köln West station
     {Coordinate{7.19312, 50.6788}, Tz::Europe_Berlin, CountryId{"DE"}}, // Königswinter station
     {Coordinate{6.93777, 50.9275}, Tz::Europe_Berlin, CountryId{"DE"}}, // Köln Süd station
@@ -7196,7 +7196,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{-8.91314, 38.6301}, Tz::Europe_Lisbon, CountryId{"PT"}}, // Pinhal Novo railway station
     {Coordinate{10.9086, 50.7783}, Tz::Europe_Berlin, CountryId{"DE"}}, // Plaue station
     {Coordinate{12.8636, 48.7801}, Tz::Europe_Berlin, CountryId{"DE"}}, // Plattling station
-    {Coordinate{20.2964, 49.0597}, Tz::Europe_Prague, CountryId{"SK"}}, // Poprad-Tatry railway station
+    {Coordinate{20.2964, 49.0597}, Tz::Europe_Bratislava, CountryId{"SK"}}, // Poprad-Tatry railway station
     {Coordinate{8.92085, 52.2435}, Tz::Europe_Berlin, CountryId{"DE"}}, // Porta Westfalica railway station
     {Coordinate{13.0139, 52.3944}, Tz::Europe_Berlin, CountryId{"DE"}}, // Potsdam Park Sanssouci railway station
     {Coordinate{13.0928, 52.3914}, Tz::Europe_Berlin, CountryId{"DE"}}, // Potsdam-Babelsberg station
@@ -7243,7 +7243,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{13.8661, 51.4531}, Tz::Europe_Berlin, CountryId{"DE"}}, // Ruhland station
     {Coordinate{4.55278, 51.9519}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Rotterdam Alexander railway station
     {Coordinate{14.5481, 50.9567}, Tz::Europe_Prague, CountryId{"CZ"}}, // Rumburk (train station)
-    {Coordinate{19.3092, 49.0831}, Tz::Europe_Prague, CountryId{"SK"}}, // Ružomberok
+    {Coordinate{19.3092, 49.0831}, Tz::Europe_Bratislava, CountryId{"SK"}}, // Ružomberok
     {Coordinate{14.8142, 52.3497}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Rzepin
     {Coordinate{13.5136, 52.6487}, Tz::Europe_Berlin, CountryId{"DE"}}, // Röntgental station
     {Coordinate{7.91561, 49.9771}, Tz::Europe_Berlin, CountryId{"DE"}}, // Rüdesheim (Rhein) station
@@ -7255,7 +7255,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{8.76933, 50.8726}, Tz::Europe_Berlin, CountryId{"DE"}}, // Q801398
     {Coordinate{7.06859, 49.1072}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Sarreguemines
     {Coordinate{7.53275, 51.2406}, Tz::Europe_Berlin, CountryId{"DE"}}, // Schalksmühle station
-    {Coordinate{9.50833, 47.1686}, Tz::Europe_Zurich, CountryId{"LI"}}, // Schaan-Vaduz railway station
+    {Coordinate{9.50833, 47.1686}, Tz::Europe_Vaduz, CountryId{"LI"}}, // Schaan-Vaduz railway station
     {Coordinate{4.41, 51.9219}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // Schiedam Centrum railway station
     {Coordinate{10.6777, 51.7651}, Tz::Europe_Berlin, CountryId{"DE"}}, // Schierke station
     {Coordinate{8.36444, 49.3919}, Tz::Europe_Berlin, CountryId{"DE"}}, // Schifferstadt station
@@ -7419,7 +7419,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{6.09765, 50.9242}, Tz::Europe_Berlin, CountryId{"DE"}}, // Übach-Palenberg station
     {Coordinate{14.2345, 53.9142}, Tz::Europe_Warsaw, CountryId{"PL"}}, // Świnoujście Centrum
     {Coordinate{23.3157, 55.9226}, Tz::Europe_Vilnius, CountryId{"LT"}}, // Šiauliai railway station
-    {Coordinate{18.7461, 49.2269}, Tz::Europe_Prague, CountryId{"SK"}}, // Žilina railway station
+    {Coordinate{18.7461, 49.2269}, Tz::Europe_Bratislava, CountryId{"SK"}}, // Žilina railway station
     {Coordinate{5.29333, 51.6903}, Tz::Europe_Amsterdam, CountryId{"NL"}}, // 's-Hertogenbosch railway station
     {Coordinate{9.5311, 46.8475}, Tz::Europe_Zurich, CountryId{"CH"}}, // Chur Stadt station
     {Coordinate{13.8925, 53.1114}, Tz::Europe_Berlin, CountryId{"DE"}}, // Wilmersdorf (b Angermünde) railway station
@@ -7551,7 +7551,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{7.08061, 51.3905}, Tz::Europe_Berlin, CountryId{"DE"}}, // Essen-Kupferdreh station
     {Coordinate{3.16336, 42.4415}, Tz::Europe_Paris, CountryId{"FR"}}, // Cerbère railway station
     {Coordinate{4.63083, 50.4494}, Tz::Europe_Brussels, CountryId{"BE"}}, // Auvelais railway station
-    {Coordinate{9.54175, 47.2003}, Tz::Europe_Zurich, CountryId{"LI"}}, // Nendeln railway station
+    {Coordinate{9.54175, 47.2003}, Tz::Europe_Vaduz, CountryId{"LI"}}, // Nendeln railway station
     {Coordinate{3.15778, 42.4247}, Tz::Europe_Madrid, CountryId{"ES"}}, // Portbou railway station
     {Coordinate{6.47106, 45.2173}, Tz::Europe_Paris, CountryId{"FR"}}, // Saint-Michel-Valloire railway station
     {Coordinate{6.75022, 49.3278}, Tz::Europe_Berlin, CountryId{"DE"}}, // Saarlouis Central Station
