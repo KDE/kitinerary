@@ -133,6 +133,12 @@ private Q_SLOTS:
             {_("ANDREAS CORD LANDWEHR"), {}, {}}
         };
 
+        QTest::newRow("diacritic") << QVector<QStringList> {
+            {_("Daniel Vrátil"), {}, {} },
+            {_("Daniel Vrátil"), _("Daniel"), _("Vrátil") },
+            {_("DANIEL VRATIL"), {}, {} },
+            {_("DANIEL VRATIL"), _("DANIEL"), _("VRATIL") }
+        };
     }
 
     void testIsSamePerson()
@@ -169,7 +175,8 @@ private Q_SLOTS:
             { _("Volker Krause"), {}, {} },
             { _("Andreas Cord-Landwehr"), _("Andread"), _("Cord-Landwehr") },
             { _("GIVEN1 GIVEN2 FAMILY1"), {}, {} },
-            { _("V K"), {}, {} }
+            { _("V K"), {}, {} },
+            {_("Daniel Vrátil"), _("Daniel"), _("Vrátil") },
         };
 
         for(int i = 0; i < data.size(); ++i) {

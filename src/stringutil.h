@@ -20,6 +20,7 @@
 
 #include "kitinerary_export.h"
 
+class QChar;
 class QString;
 
 namespace KItinerary {
@@ -27,6 +28,9 @@ namespace KItinerary {
 /** String normalization and comparison utilities. */
 namespace StringUtil
 {
+    /** Convert @p c to case-folded form and remove diacritic marks. */
+    QChar normalize(QChar c);
+
     /** Strips out diacritics and converts to case-folded form.
      *  @internal only exported for unit tests
      */

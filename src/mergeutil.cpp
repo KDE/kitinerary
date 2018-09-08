@@ -17,6 +17,7 @@
 
 #include "mergeutil.h"
 #include "logging.h"
+#include "stringutil.h"
 
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
@@ -306,7 +307,7 @@ static QString diffString(const QString &lhs, const QString &rhs)
     // this is just a basic linear-time heuristic, this would need to be more something like
     // the Levenstein Distance algorithm
     for (int i = 0, j = 0; i < lhs.size() || j < rhs.size();) {
-        if (i < lhs.size() && j < rhs.size() && lhs[i].toCaseFolded() == rhs[j].toCaseFolded()) {
+        if (i < lhs.size() && j < rhs.size() && StringUtil::normalize(lhs[i]) == StringUtil::normalize(rhs[j])) {
             ++i;
             ++j;
             continue;
