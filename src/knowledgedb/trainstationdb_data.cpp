@@ -6192,7 +6192,7 @@ static const TrainStation trainstation_table[] = {
     {Coordinate{14.2594, 37.0727}, Tz::Europe_Rome, CountryId{"IT"}}, // Gela railway station
     {Coordinate{13.2589, 54.1644}, Tz::Europe_Berlin, CountryId{"DE"}}, // Jeeser railway station
     {Coordinate{9.71833, 46.93}, Tz::Europe_Zurich, CountryId{"CH"}}, // Jenaz
-    {Coordinate{8.57327, 47.6544}, Tz::Europe_Zurich, CountryId{"CH"}}, // Jestetten railway station
+    {Coordinate{8.57327, 47.6544}, Tz::Europe_Berlin, CountryId{"CH"}}, // Jestetten railway station
     {Coordinate{2.38278, 48.6892}, Tz::Europe_Paris, CountryId{"FR"}}, // Gare de Juvisy
     {Coordinate{5.60444, 49.4436}, Tz::Europe_Paris, CountryId{"FR"}}, // Q628887
     {Coordinate{8.81361, 53.0831}, Tz::Europe_Berlin, CountryId{"DE"}}, // Bremen main station

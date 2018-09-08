@@ -134,7 +134,8 @@ QByteArray Timezones::timezoneForLocation(const QString &isoCode, const Knowledg
     }
 
     // look up by coordinate
-    QSet<QByteArray> coordTzs;
+    QByteArray coordTz; // search radius 0
+    QSet<QByteArray> coordTzs; // search radius 1
     if (coord.isValid()) {
         if (m_map.isNull() && !m_map.load(QStringLiteral("timezones.png"))) {
             qCritical() << "Unable to open timezone map.";
@@ -143,36 +144,37 @@ QByteArray Timezones::timezoneForLocation(const QString &isoCode, const Knowledg
 
         const auto p = coordinateToPixel(coord);
         //qDebug() << p.x() << p.y() << m_map.width() << m_map.height() << coord.longitude << coord.latitude << QColor(m_map.pixel(p)) << m_colorMap.value(m_map.pixel(p));
-        const auto tz = timezoneForPixel(p.x(), p.y());
-        if (!tz.isEmpty()) {
-            coordTzs.insert(tz);
-        }
+        coordTz = timezoneForPixel(p.x(), p.y());
 
-        // search the vicinity, helps with costal/island airports
-        if (coordTzs.isEmpty()) {
-            const QPoint offsets[] = { {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1} };
-            for (auto offset : offsets) {
-                const auto tz = timezoneForPixel(p.x() + offset.x(), p.y() + offset.y());
-                if (!tz.isEmpty()) {
-                    coordTzs.insert(tz);
-                }
+        // search the vicinity, helps with islands/costal regions or border regions
+        const QPoint offsets[] = { {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1} };
+        for (auto offset : offsets) {
+            const auto tz = timezoneForPixel(p.x() + offset.x(), p.y() + offset.y());
+            if (!tz.isEmpty()) {
+                coordTzs.insert(tz);
             }
         }
     }
 
     // determine the result: either just one method yieled a unique result, or both have a unique intersection
-    if (countryTzs.size() == 1) {
+    if (coordTz.isEmpty() && countryTzs.size() == 1) {
         return *countryTzs.constBegin();
-    } else if (coordTzs.size() == 1) {
-        return *coordTzs.constBegin();
     }
-    //qDebug() << "Timezone candidates:" << isoCode << coordTzs << countryTzs << coord.latitude << coord.longitude;
+    if (!coordTz.isEmpty() && (countryTzs.isEmpty() || countryTzs.contains(coordTz))) {
+        return coordTz;
+    }
 
+    // if the above wasn't the case, look for a unique intersection in the vicinity of the coordinate
+    // this covers cases of locations within the 1.5km resolution of the timezone image
+    coordTzs.insert(coordTz);
     const auto tzs = coordTzs.intersect(countryTzs);
     if (tzs.size() == 1) {
         return *tzs.constBegin();
     }
-    return {};
+
+    // if the above still doesn't help, we take the coodinate-based result, can't be entirely wrong
+    //qDebug() << "Timezone candidates:" << isoCode << coordTz << coordTzs << countryTzs << coord.latitude << coord.longitude;
+    return coordTz;
 }
 
 QByteArray Timezones::timezoneForPixel(int x, int y) const
