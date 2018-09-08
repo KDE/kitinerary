@@ -78,7 +78,7 @@ function parseArrival(res, line, year) {
 function parseLegs(text, year, compact) {
     var reservations = new Array();
     var lines = text.split('\n');
-    var offset = lines[0].match(/^ +/);
+    var offset = lines[0].match(/^ */);
     for (var i = 0; compact && i < lines.length; ++i)
         lines[i] = lines[i].substr(offset[0].length);
 
