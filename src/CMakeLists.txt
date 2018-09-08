@@ -43,6 +43,7 @@ set(kitinerary_lib_srcs
     mergeutil.cpp
     pdfdocument.cpp
     sortutil.cpp
+    stringutil.cpp
     structureddataextractor.cpp
     uic9183parser.cpp
 )

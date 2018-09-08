@@ -8,8 +8,13 @@ add_executable(generate-knowledgedb
     timezonedbgenerator.cpp
     trainstationdbgenerator.cpp
     util.cpp
+    ../stringutil.cpp
 )
-target_include_directories(generate-knowledgedb PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../knowledgedb)
+target_compile_definitions(generate-knowledgedb PRIVATE "KITINERARY_STATIC_DEFINE")
+target_include_directories(generate-knowledgedb PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../knowledgedb
+    ${CMAKE_CURRENT_BINARY_DIR}/..
+)
 target_link_libraries(generate-knowledgedb PRIVATE Qt5::Network Qt5::Gui)
 
 find_program(XSLTPROC_EXECUTABLE xsltproc)

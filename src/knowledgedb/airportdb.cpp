@@ -20,6 +20,7 @@
 #include "airportdb.h"
 #include "airportdb_p.h"
 #include "airportdb_data.cpp"
+#include "stringutil.h"
 #include "timezonedb.h"
 
 #include <QDebug>
@@ -176,7 +177,7 @@ static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
 
 IataCode iataCodeFromName(const QString &name)
 {
-    const auto fragments = name.toCaseFolded().split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
+    const auto fragments = StringUtil::normalize(name).split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
     const IataCode code = iataCodeForUniqueFragment(fragments);
     if (code.isValid()) {
         return code;

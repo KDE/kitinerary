@@ -141,6 +141,16 @@ private Q_SLOTS:
         QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Charles de Gaulle Orly")).isValid());
         QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Brussels Airport, BE")).isValid());
         QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Frankfurt")).isValid());
+
+        // string normalization
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Sao Paulo-Guarulhos International")), KnowledgeDb::IataCode{"GRU"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("São Paulo-Guarulhos International")), KnowledgeDb::IataCode{"GRU"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Zurich")), KnowledgeDb::IataCode{"ZRH"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Dusseldorf International")), KnowledgeDb::IataCode{"DUS"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Almeria")), KnowledgeDb::IataCode{"LEI"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("ALMERÍA")), KnowledgeDb::IataCode{"LEI"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Keflavík")), KnowledgeDb::IataCode{"KEF"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Keflavik")), KnowledgeDb::IataCode{"KEF"});
     }
 
     void countryDataTest()

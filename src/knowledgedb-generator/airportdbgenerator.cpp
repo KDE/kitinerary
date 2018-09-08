@@ -18,6 +18,7 @@
 #include "airportdbgenerator.h"
 #include "codegen.h"
 #include "wikidata.h"
+#include "../stringutil.h"
 
 #include <airportdb_p.h>
 
@@ -214,7 +215,7 @@ void AirportDbGenerator::lookupTimezones()
 void KItinerary::Generator::AirportDbGenerator::indexNames()
 {
     for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
-        auto l = QString(it.value().label + QLatin1Char(' ') + it.value().alias)
+        auto l = StringUtil::normalize(it.value().label + QLatin1Char(' ') + it.value().alias)
                  .split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
         std::for_each(l.begin(), l.end(), [](QString &s) {
             s = s.toCaseFolded();
