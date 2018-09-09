@@ -522,6 +522,18 @@ Person Uic9183Parser::person() const
             return p;
         }
     }
+
+    // RCT2 tickets
+    const auto rct2 = rct2Ticket();
+    if (rct2.isValid()) {
+        const auto name = rct2.d->fieldText(0, 52, 19);
+        if (!name.isEmpty()) {
+            Person p;
+            p.setName(name);
+            return p;
+        }
+    }
+
     return {};
 }
 
