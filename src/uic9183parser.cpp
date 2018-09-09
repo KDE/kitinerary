@@ -126,8 +126,8 @@ public:
     // size of the field data, not size of the text content
     int size() const;
 
-    int x() const;
-    int y() const;
+    int row() const;
+    int column() const;
     int height() const;
     int width() const;
     QString text() const;
@@ -139,7 +139,7 @@ private:
 class Rct2TicketPrivate : public QSharedData
 {
 public:
-    QString fieldText(int x, int y, int w, int h = 1) const;
+    QString fieldText(int row, int column, int width, int height = 1) const;
     QDate firstDayOfValidity() const;
     QDateTime parseTime(const QString &dateStr, const QString &timeStr) const;
 
@@ -244,12 +244,12 @@ int Rct2TicketField::size() const
     return asciiToInt(m_data + 9, 4) + 13;
 }
 
-int Rct2TicketField::x() const
+int Rct2TicketField::row() const
 {
     return asciiToInt(m_data, 2);
 }
 
-int Rct2TicketField::y() const
+int Rct2TicketField::column() const
 {
     return asciiToInt(m_data + 2, 2);
 }
@@ -269,20 +269,20 @@ QString Rct2TicketField::text() const
     return QString::fromUtf8(m_data + 13, asciiToInt(m_data + 9, 4));
 }
 
-QString Rct2TicketPrivate::fieldText(int x, int y, int w, int h) const
+QString Rct2TicketPrivate::fieldText(int row, int column, int width, int height) const
 {
     QString s;
     for (int i = 20; i < block.size();) {
         Rct2TicketField f(block.data() + i);
         i += f.size();
 
-        if (f.x() + f.height() - 1 < x || f.x() > x + h - 1) {
+        if (f.row() + f.height() - 1 < row || f.row() > row + height - 1) {
             continue;
         }
-        if (f.y() + f.width() - 1 < y || f.y() > y + w - 1) {
+        if (f.column() + f.width() - 1 < column || f.column() > column + width - 1) {
             continue;
         }
-        //qDebug() << "Field:" << f.x() << f.y() << f.height() << f.width() << f.size() << f.text();
+        //qDebug() << "Field:" << f.height() << f.column() << f.height() << f.width() << f.size() << f.text();
 
         // split field into lines
         // TODO this needs to follow the RCT2 word-wrapping algorithm?
@@ -290,20 +290,20 @@ QString Rct2TicketPrivate::fieldText(int x, int y, int w, int h) const
         const auto lines = content.splitRef(QLatin1Char('\n'));
 
         // cut out the right part of the line
-        for (int row = 0; row < lines.size(); ++row) {
-            if (f.x() + row < x) {
+        for (int i = 0; i < lines.size(); ++i) {
+            if (f.row() + i < row) {
                 continue;
             }
-            if (f.x() + row > x + h - 1) {
+            if (f.row() + i > row + height - 1) {
                 break;
             }
 
             // TODO also truncate by w
-            const auto offset = y - f.y();
+            const auto offset = column - f.column();
             if (offset >= 0) {
-                s += lines.at(row).mid(offset).left(w);
+                s += lines.at(i).mid(offset).left(width);
             } else {
-                s += lines.at(row); // TODO left padding by offset, truncate by w + offset
+                s += lines.at(i); // TODO left padding by offset, truncate by width + offset
             }
         }
     }
