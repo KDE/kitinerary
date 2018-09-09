@@ -18,6 +18,7 @@
 #include "uic9183parser.h"
 #include "logging.h"
 
+#include <QDateTime>
 #include <QDebug>
 
 #include <zlib.h>
@@ -26,6 +27,20 @@
 #include <cstring>
 
 using namespace KItinerary;
+
+static int asciiToInt(const char *s, int size)
+{
+    if (!s) {
+        return 0;
+    }
+
+    int v = 0;
+    for (int i = 0; i < size; ++i) {
+        v *= 10;
+        v += (*(s + i)) - '0';
+    }
+    return v;
+}
 
 namespace KItinerary {
 
@@ -94,6 +109,41 @@ public:
     Uic9183Block findBlock(const char name[6]) const;
 
     QByteArray m_payload;
+};
+
+// 2x field line, number as ascii text
+// 2x field column
+// 2x field height
+// 2x field width
+// 1x field format
+// 4x text length
+// Nx text content
+class Rct2TicketField
+{
+public:
+    Rct2TicketField() = default;
+    Rct2TicketField(const char *data);
+    // size of the field data, not size of the text content
+    int size() const;
+
+    int x() const;
+    int y() const;
+    int height() const;
+    int width() const;
+    QString text() const;
+
+private:
+    const char *m_data = nullptr;
+};
+
+class Rct2TicketPrivate : public QSharedData
+{
+public:
+    QString fieldText(int x, int y, int w, int h = 1) const;
+    QDate firstDayOfValidity() const;
+    QDateTime parseTime(const QString &dateStr, const QString &timeStr) const;
+
+    Uic9183Block block;
 };
 }
 
@@ -181,6 +231,175 @@ Uic9183Block Uic9183ParserPrivate::findBlock(const char name[6]) const
         i += blockSize;
     }
     return {};
+}
+
+
+Rct2TicketField::Rct2TicketField(const char *data)
+    : m_data(data)
+{
+}
+
+int Rct2TicketField::size() const
+{
+    return asciiToInt(m_data + 9, 4) + 13;
+}
+
+int Rct2TicketField::x() const
+{
+    return asciiToInt(m_data, 2);
+}
+
+int Rct2TicketField::y() const
+{
+    return asciiToInt(m_data + 2, 2);
+}
+
+int Rct2TicketField::height() const
+{
+    return asciiToInt(m_data + 4, 2);
+}
+
+int Rct2TicketField::width() const
+{
+    return asciiToInt(m_data + 6, 2);
+}
+
+QString Rct2TicketField::text() const
+{
+    return QString::fromUtf8(m_data + 13, asciiToInt(m_data + 9, 4));
+}
+
+QString Rct2TicketPrivate::fieldText(int x, int y, int w, int h) const
+{
+    QString s;
+    for (int i = 20; i < block.size();) {
+        Rct2TicketField f(block.data() + i);
+        i += f.size();
+
+        if (f.x() + f.height() - 1 < x || f.x() > x + h - 1) {
+            continue;
+        }
+        if (f.y() + f.width() - 1 < y || f.y() > y + w - 1) {
+            continue;
+        }
+        //qDebug() << "Field:" << f.x() << f.y() << f.height() << f.width() << f.size() << f.text();
+
+        // split field into lines
+        // TODO this needs to follow the RCT2 word-wrapping algorithm?
+        const auto content = f.text();
+        const auto lines = content.splitRef(QLatin1Char('\n'));
+
+        // cut out the right part of the line
+        for (int row = 0; row < lines.size(); ++row) {
+            if (f.x() + row < x) {
+                continue;
+            }
+            if (f.x() + row > x + h - 1) {
+                break;
+            }
+
+            // TODO also truncate by w
+            const auto offset = y - f.y();
+            if (offset >= 0) {
+                s += lines.at(row).mid(offset).left(w);
+            } else {
+                s += lines.at(row); // TODO left padding by offset, truncate by w + offset
+            }
+        }
+    }
+    //qDebug() << "Result:" << x << y << w << h << s;
+    return s;
+}
+
+QDate Rct2TicketPrivate::firstDayOfValidity() const
+{
+    const auto f = fieldText(3, 1, 48);
+    const auto it = std::find_if(f.begin(), f.end(), [](QChar c) { return c.isDigit(); });
+    if (it == f.end()) {
+        return {};
+    }
+
+    const auto dtStr = f.midRef(std::distance(f.begin(), it));
+    auto dt = QDate::fromString(dtStr.left(10).toString(), QStringLiteral("dd.MM.yyyy"));
+    if (dt.isValid()) {
+        return dt;
+    }
+    dt = QDate::fromString(dtStr.left(8).toString(), QStringLiteral("dd.MM.yy"));
+    if (dt.isValid()) {
+        if (dt.year() < 2000) {
+            dt.setDate(dt.year() + 100, dt.month(), dt.day());
+        }
+        return dt;
+    }
+    dt = QDate::fromString(dtStr.left(4).toString(), QStringLiteral("yyyy"));
+    return dt;
+}
+
+QDateTime Rct2TicketPrivate::parseTime(const QString &dateStr, const QString &timeStr) const
+{
+    const auto d = QDate::fromString(dateStr, QStringLiteral("dd.MM"));
+    const auto t = QTime::fromString(timeStr, QStringLiteral("hh:mm"));
+    return QDateTime({firstDayOfValidity().year(), d.month(), d.day()}, t);
+}
+
+
+// 6x "U_TLAY"
+// 2x version (always "01")
+// 4x record length, numbers as ASCII text
+// 4x ticket layout type ("RCT2")
+// 4x field count
+// Nx fields (see Rct2TicketField)
+Rct2Ticket::Rct2Ticket()
+    : d(new Rct2TicketPrivate)
+{
+}
+
+Rct2Ticket::Rct2Ticket(Uic9183Block block)
+    : d(new Rct2TicketPrivate)
+{
+    d->block = block;
+    qDebug() << QByteArray(block.data(), block.size());
+}
+
+Rct2Ticket::Rct2Ticket(const Rct2Ticket&) = default;
+Rct2Ticket::~Rct2Ticket() = default;
+Rct2Ticket& Rct2Ticket::operator=(const Rct2Ticket&) = default;
+
+bool Rct2Ticket::isValid() const
+{
+    return !d->block.isNull() && d->block.size() > 34
+        && std::strncmp(d->block.data() + 6, "01", 2) == 0
+        && std::strncmp(d->block.data() + 12, "RCT2", 4) == 0;
+}
+
+QDate Rct2Ticket::firstDayOfValidity() const
+{
+    return d->firstDayOfValidity();
+}
+
+QDateTime Rct2Ticket::outboundDepartureTime() const
+{
+    return d->parseTime(d->fieldText(6, 1, 5), d->fieldText(6, 7, 5));
+}
+
+QDateTime Rct2Ticket::outboundArrivalTime() const
+{
+    return d->parseTime(d->fieldText(6, 52, 5), d->fieldText(6, 58, 5));
+}
+
+QString Rct2Ticket::outboundDepartureStation() const
+{
+    return d->fieldText(6, 13, 17).trimmed();
+}
+
+QString Rct2Ticket::outboundArrivalStation() const
+{
+    return d->fieldText(6, 34, 17).trimmed();
+}
+
+QString Rct2Ticket::outboundClass() const
+{
+    return d->fieldText(6, 66, 5).trimmed();
 }
 
 
@@ -335,5 +554,20 @@ QString Uic9183Parser::outboundArrivalStationId() const
     }
     return {};
 }
+
+Rct2Ticket Uic9183Parser::rct2Ticket() const
+{
+    return Rct2Ticket(d->findBlock("U_TLAY"));
+}
+
+QVariant Uic9183Parser::rct2TicketVariant() const
+{
+    const auto rct2 = rct2Ticket();
+    if (rct2.isValid()) {
+        return QVariant::fromValue(rct2);
+    }
+    return {};
+}
+
 
 #include "moc_uic9183parser.cpp"

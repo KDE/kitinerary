@@ -25,11 +25,56 @@
 #include <QExplicitlySharedDataPointer>
 #include <QMetaType>
 
+class QDateTime;
+
 namespace KItinerary {
+
+class Rct2TicketPrivate;
+class Uic9183Block;
+class Uic9183Parser;
+
+/** RCT2 ticket layout payload of an UIC 918.3 ticket token. */
+class KITINERARY_EXPORT Rct2Ticket
+{
+    Q_GADGET
+    Q_PROPERTY(QDate firstDayOfValidity READ firstDayOfValidity)
+    Q_PROPERTY(QDateTime outboundDepartureTime READ outboundDepartureTime)
+    Q_PROPERTY(QDateTime outboundArrivalTime READ outboundArrivalTime)
+    Q_PROPERTY(QString outboundDepartureStation READ outboundDepartureStation)
+    Q_PROPERTY(QString outboundArrivalStation READ outboundArrivalStation)
+    Q_PROPERTY(QString outboundClass READ outboundClass)
+
+public:
+    Rct2Ticket();
+    Rct2Ticket(const Rct2Ticket&);
+    ~Rct2Ticket();
+    Rct2Ticket& operator=(const Rct2Ticket&);
+
+    /** Returns whether this is a valid RCT2 ticket layout block. */
+    bool isValid() const;
+
+    /** First day the ticket is valid. */
+    QDate firstDayOfValidity() const;
+    /** Departure time of the outbound segment. */
+    QDateTime outboundDepartureTime() const;
+    /** Arrival time of the outbound segment. */
+    QDateTime outboundArrivalTime() const;
+    /** Departure station of the outbound segment. */
+    QString outboundDepartureStation() const;
+    /** Arrival station of the outbound segement. */
+    QString outboundArrivalStation() const;
+    /** Class of the outbound segment. */
+    QString outboundClass() const;
+
+private:
+    friend class Uic9183Parser;
+    Rct2Ticket(Uic9183Block block);
+    QExplicitlySharedDataPointer<Rct2TicketPrivate> d;
+};
 
 class Uic9183ParserPrivate;
 
-/** Parser for UIC 918-3 and 918-3* train tickets.
+/** Parser for UIC 918.3 and 918.3* train tickets.
  *
  *  @see http://www.era.europa.eu/Document-Register/Documents/ERA_Technical_Document_TAP_B_7_v1.2.pdf
  *    for information about the general UIC 918-3 structure
@@ -45,6 +90,8 @@ class KITINERARY_EXPORT Uic9183Parser
     Q_PROPERTY(KItinerary::Person person READ person)
     Q_PROPERTY(QString outboundDepartureStationId READ outboundDepartureStationId)
     Q_PROPERTY(QString outboundArrivalStationId READ outboundArrivalStationId)
+    /** RCT2 ticket layout block, if present, @c null otherwise. */
+    Q_PROPERTY(QVariant rct2Ticket READ rct2TicketVariant)
 
 public:
     Uic9183Parser();
@@ -65,12 +112,17 @@ public:
     /** Station identifier for the arrival station of the outbound trip. */
     QString outboundArrivalStationId() const;
 
+    /** RCT2 ticket layout, if present. */
+    Rct2Ticket rct2Ticket() const;
+
 private:
+    QVariant rct2TicketVariant() const;
     QExplicitlySharedDataPointer<Uic9183ParserPrivate> d;
 };
 
 }
 
+Q_DECLARE_METATYPE(KItinerary::Rct2Ticket)
 Q_DECLARE_METATYPE(KItinerary::Uic9183Parser)
 
 #endif // KITINERARY_UIC9183PARSER_H
