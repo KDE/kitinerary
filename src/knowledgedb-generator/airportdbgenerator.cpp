@@ -22,6 +22,7 @@
 
 #include <airportdb_p.h>
 
+#include <QDateTime>
 #include <QDebug>
 #include <QIODevice>
 #include <QJsonArray>
@@ -106,7 +107,7 @@ bool AirportDbGenerator::fetchAirports()
 {
     // sorted by URI to stabilize the result in case of conflicts
     const auto airportArray = WikiData::query(R"(
-        SELECT DISTINCT ?airport ?airportLabel ?airportAltLabel ?iataCode ?icaoCode ?coord ?endDate ?demolished ?iataEndDate WHERE {
+        SELECT DISTINCT ?airport ?airportLabel ?airportAltLabel ?iataCode ?icaoCode ?coord ?endDate ?demolished ?openingDate ?iataEndDate WHERE {
             ?airport (wdt:P31/wdt:P279*) wd:Q1248784.
             ?airport p:P238 ?iataStmt.
             ?iataStmt ps:P238 ?iataCode.
@@ -114,6 +115,7 @@ bool AirportDbGenerator::fetchAirports()
             OPTIONAL { ?airport wdt:P625 ?coord. }
             OPTIONAL { ?airport wdt:P582 ?endDate. }
             OPTIONAL { ?airport wdt:P576 ?demolished. }
+            OPTIONAL { ?airport wdt:P1619 ?openingDate. }
             OPTIONAL { ?iataStmt pq:P582 ?iataEndDate. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
         } ORDER BY (?airport))", "wikidata_airports.json");
@@ -130,6 +132,12 @@ bool AirportDbGenerator::fetchAirports()
 
         if (obj.contains(QLatin1String("endDate")) || obj.contains(QLatin1String("demolished")) || obj.contains(QLatin1String("iataEndDate"))) {
             // skip closed airports or those with expired IATA codes
+            continue;
+        }
+
+        const auto openingdDt = QDateTime::fromString(obj.value(QLatin1String("openingDate")).toObject().value(QLatin1String("value")).toString(), Qt::ISODate);
+        if (openingdDt.isValid() && openingdDt > QDateTime::currentDateTime().addDays(120)) {
+            // skip future airports
             continue;
         }
 
