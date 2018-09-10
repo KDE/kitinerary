@@ -24,8 +24,9 @@ regExMap['en_US']['bookingRef'] = /Booking number +([0-9]*)\s+/;
 regExMap['en_US']['hotelInformation'] = / *(.+), (.+), (.+), (.+) -\s+Phone: (\+[0-9]*)\s+/;
 regExMap['en_US']['hotelName'] = /\[checkmark\.png\] (.*) is expecting you on/;
 regExMap['en_US']['arrivalDate'] = /Check-in *([A-z]+ [0-9]{1,2} [A-z]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['en_US']['departureDate'] = /Check-out *([1-z]+ [0-9]{1,2} [A-z]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/;
+regExMap['en_US']['departureDate'] = /Check-out *([1-z]+ [0-9]{1,2} [A-z]+ [0-9]+) \([0-9]{1,2}:[0-9]{2} - ([0-9]{1,2}:[0-9]{2})\)/;
 regExMap['en_US']['person'] = /Guest name +(.*) Edit guest name/;
+regExMap['en_US']['dateFormat'] = "dddd d MMMM yyyy hh:mm";
 
 regExMap['fr_FR'] = [];
 regExMap['fr_FR']['bookingRef'] = /Numéro de réservation : ([0-9]*)\s+/;
@@ -33,8 +34,19 @@ regExMap['fr_FR']['bookingRef'] = /Numéro de réservation : ([0-9]*)\s+/;
 regExMap['fr_FR']['hotelInformation'] = /(.+), (.+), (.+), (.+) -\s+Téléphone : (\+[0-9]*)\s+/;
 regExMap['fr_FR']['hotelName'] = /L'établissement (.*) vous attend le/;
 regExMap['fr_FR']['arrivalDate'] = /Arrivée  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['fr_FR']['departureDate'] = /Départ  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/;
+regExMap['fr_FR']['departureDate'] = /Départ  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \([0-9]{1,2}:[0-9]{2} - ([0-9]{1,2}:[0-9]{2})\)/;
 regExMap['fr_FR']['person'] = /Clients +(.*) Modifier le nom du client/;
+regExMap['fr_FR']['dateFormat'] = "dddd d MMMM yyyy hh:mm";
+
+regExMap['de_DE'] = [];
+regExMap['de_DE']['bookingRef'] = /Buchungsnummer: ([0-9]*)\s+/;
+// 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
+regExMap['de_DE']['hotelInformation'] = /(.+), (.+), (.+), (.+) -\s+Telefon: (\+[0-9 \-]+)\n/;
+regExMap['de_DE']['hotelName'] = /\[checkmark.png\] Die Unterkunft (.*)\s+erwartet Sie/;
+regExMap['de_DE']['arrivalDate'] = /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. [A-Z][a-z]+ [0-9]{4}) \(ab ([0-9]{1,2}:[0-9]{2})\)/;
+regExMap['de_DE']['departureDate'] = /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. [A-Z][a-z]+ [0-9]{4}) \(bis ([0-9]{1,2}:[0-9]{2})\)/;
+regExMap['de_DE']['person'] = /Name des Gastes +(.*) Name des Gastes bearbeiten/;
+regExMap['de_DE']['dateFormat'] = "dddd, d. MMMM yyyy hh:mm";
 
 function main(text) {
     var res = JsonLd.newObject("LodgingReservation");
@@ -71,15 +83,15 @@ function main(text) {
         if (!arrivalDate)
             return null;
 
-        res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], "dddd d MMMM yyyy hh:mm", locale);
+        res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], regExMap[locale]['dateFormat'], locale);
 
         idx += arrivalDate.index + arrivalDate[0].length;
 
         var departureDate = text.substr(idx).match(regExMap[locale]['departureDate']);
-
+        console.log(departureDate);
         if (!departureDate)
             return null;
-        res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[3], "dddd d MMMM yyyy hh:mm", locale);
+        res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], regExMap[locale]['dateFormat'], locale);
         idx += departureDate.index + departureDate[0].length;
 
 
