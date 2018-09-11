@@ -23,8 +23,8 @@ regExMap['en_US']['bookingRef'] = /Booking number +([0-9]*)\s+/;
 // 1: adress, 2: city, 3:postal code, 4: country, 5: phone
 regExMap['en_US']['hotelInformation'] = / *(.+), (.+), (.+), (.+) -\s+Phone: (\+[0-9]*)\s+/;
 regExMap['en_US']['hotelName'] = /\[checkmark\.png\] (.*) is expecting you on/;
-regExMap['en_US']['arrivalDate'] = /Check-in *([A-z]+ [0-9]{1,2} [A-z]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['en_US']['departureDate'] = /Check-out *([1-z]+ [0-9]{1,2} [A-z]+ [0-9]+) \([0-9]{1,2}:[0-9]{2} - ([0-9]{1,2}:[0-9]{2})\)/;
+regExMap['en_US']['arrivalDate'] = /Check-in *([A-z]+ [0-9]{1,2} [A-z]+ [0-9]+) \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2})[^\)]*\)/;
+regExMap['en_US']['departureDate'] = /Check-out *([1-z]+ [0-9]{1,2} [A-z]+ [0-9]+) \(.* ([0-9]{1,2}:[0-9]{2})\)/;
 regExMap['en_US']['person'] = /Guest name +(.*) Edit guest name/;
 regExMap['en_US']['dateFormat'] = "dddd d MMMM yyyy hh:mm";
 
