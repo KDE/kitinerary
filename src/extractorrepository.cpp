@@ -74,8 +74,10 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
         }
         for (const auto &filter : (*it).filters()) {
             auto header = part->headerByType(filter.headerName());
-            if (!header && part->topLevel()) {
-                header = part->topLevel()->headerByType(filter.headerName());
+            auto ancestor = part;
+            while (!header && ancestor->parent()) {
+                ancestor = ancestor->parent();
+                header = ancestor->headerByType(filter.headerName());
             }
             if (!header) {
                 continue;
