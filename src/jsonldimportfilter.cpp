@@ -130,6 +130,22 @@ static void filterReservation(QJsonObject &res)
     migrateToAction(res, "modifyReservationUrl", "UpdateAction", true);
     migrateToAction(res, "ticketDownloadUrl", "DownloadAction", true);
     migrateToAction(res, "url", "ViewAction", false);
+
+    // "typos"
+    renameProperty(res, "Url", "url");
+}
+
+static void filterEvent(QJsonObject &hotel)
+{
+    // convert Event sub-types we don't handle
+    renameType(hotel, "MusicEvent", "Event");
+}
+
+static void filterEventReservation(QJsonObject &res)
+{
+    QJsonObject event = res.value(QLatin1String("reservationFor")).toObject();
+    filterEvent(event);
+    res.insert(QLatin1String("reservationFor"), event);
 }
 
 static QJsonArray filterActions(const QJsonValue &v)
@@ -175,6 +191,8 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         }
     } else if (type == QLatin1String("TaxiReservation")) {
         filterTaxiReservation(res);
+    } else if (type == QLatin1String("EventReservation")) {
+        filterEventReservation(res);
     }
 
     auto actions = res.value(QLatin1String("potentialAction"));
