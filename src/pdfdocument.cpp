@@ -178,7 +178,7 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
         return;
     }
 
-    // check for duplicate occurances of ref->getRef().num
+    // check for duplicate occurancies of ref->getRef().num
     if (ref->isRef()) {
         auto it = std::find_if(d->m_images.begin(), d->m_images.end(), [ref](const PdfImage &other) {
             return other.d->m_refNum == ref->getRef().num;

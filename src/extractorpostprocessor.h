@@ -66,7 +66,7 @@ class ExtractorPostprocessorPrivate;
  *  @section postproc_sort Sorting
  *
  *  Finally the remaining elements are sorted based on their relevant date (see SortUtil). This
- *  makes the data usable for basic display right away, but it for example doesn't do multi-traveller
+ *  makes the data usable for basic display right away, but it for example doesn't do multi-traveler
  *  aggregation, that's still left for the display layer.
  */
 class KITINERARY_EXPORT ExtractorPostprocessor

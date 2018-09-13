@@ -276,7 +276,7 @@ namespace KItinerary {
 namespace KnowledgeDb {
 
 // airport data sorted by IATA code
-// the corresponding index is used to acces data the following tables
+// the corresponding index is used to access data the following tables
 static constexpr Airport airport_table[] = {
 )");
 

@@ -131,7 +131,7 @@ static void extractRecursive(HtmlElement elem, QJsonArray &result)
 
         const auto itemProp = elem.attribute(QLatin1String("itemprop"));
         if (!itemProp.isEmpty() && !result.isEmpty()) {
-            // this is likely a child of our preceeding sibling, but broken XML put it here
+            // this is likely a child of our preceding sibling, but broken XML put it here
             auto parent = result.last().toObject();
             parent.insert(itemProp, obj);
             result[result.size() - 1] = parent;

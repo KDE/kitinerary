@@ -65,7 +65,7 @@ public:
     QString content() const;
     /** Returns the content of this element and all its children. */
     QString recursiveContent() const;
-    /** Checks wether an attribute with name @p attr exists. */
+    /** Checks whether an attribute with name @p attr exists. */
     bool hasAttribute(const QString &attr) const;
     /** Returns the list of all attributes of this node. */
     QStringList attributes() const;
