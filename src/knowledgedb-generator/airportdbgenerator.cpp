@@ -95,7 +95,7 @@ void AirportDbGenerator::merge(Airport &lhs, const Airport &rhs)
     } else if (rhs.coord.isValid()) {
         if (std::abs(lhs.coord.latitude - rhs.coord.latitude) > 0.2f || std::abs(lhs.coord.longitude - rhs.coord.longitude) > 0.2f) {
             ++m_coordinateConflicts;
-            qDebug() << lhs.uri << "has multiple conflicting coordinates";
+            qDebug() << lhs.label << lhs.iataCode << lhs.uri << "has multiple conflicting coordinates";
         }
         // pick always the same independent of the input order, so stabilize generated output
         lhs.coord.latitude = std::min(lhs.coord.latitude, rhs.coord.latitude);
@@ -211,6 +211,9 @@ bool AirportDbGenerator::fetchCountries()
 void AirportDbGenerator::lookupTimezones()
 {
     for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
+        if (!(*it).coord.isValid()) {
+            qDebug() << "Airport has no geo coordinate:" << (*it).label << (*it).iataCode << (*it).uri;
+        }
         (*it).tz = m_tzDb.timezoneForLocation((*it).country, (*it).coord);
         if ((*it).tz.isEmpty()) {
             qDebug() << "Failed to find timezone for" << (*it).iataCode << (*it).label << (*it).country << (*it).coord.latitude << (*it).coord.longitude << (*it).uri;
