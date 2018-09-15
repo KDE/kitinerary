@@ -61,7 +61,8 @@ public:
     /** The type of content in the ticketToken property. */
     enum TicketTokenType {
         QRCode, ///< QR code
-        AztecCode, ///< Aztec bar code
+        AztecCode, ///< Aztec code
+        Code128, ///< Code 128 barcode
         Url, ///< A download URL
         Unknown ///< Unknown or empty ticket token
     };

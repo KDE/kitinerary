@@ -54,6 +54,8 @@ Ticket::TicketTokenType Ticket::ticketTokenType() const
         return QRCode;
     } else if (d->ticketToken.startsWith(QLatin1String("aztec"), Qt::CaseInsensitive)) {
         return AztecCode;
+    } else if (d->ticketToken.startsWith(QLatin1String("barcode128:"), Qt::CaseInsensitive)) {
+        return Code128;
     } else if (d->ticketToken.startsWith(QLatin1String("http"), Qt::CaseInsensitive)) {
         return Url;
     }
@@ -69,6 +71,8 @@ QString Ticket::ticketTokenData() const
     } else if (d->ticketToken.startsWith(QLatin1String("aztecbin:"), Qt::CaseInsensitive)) {
         const auto b = QByteArray::fromBase64(d->ticketToken.midRef(9).toLatin1());
         return QString::fromLatin1(b.constData(), b.size());
+    } else if (d->ticketToken.startsWith(QLatin1String("barcode128:"), Qt::CaseInsensitive)) {
+        return ticketToken().mid(11);
     }
     return ticketToken();
 }
