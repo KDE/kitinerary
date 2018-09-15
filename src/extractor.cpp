@@ -56,6 +56,8 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
         d->m_type = Pdf;
     } else if (type == QLatin1String("html")) {
         d->m_type = Html;
+    } else if (type == QLatin1String("ical")) {
+        d->m_type = ICal;
     }
 
     for (const auto &filterValue : obj.value(QLatin1String("filter")).toArray()) {

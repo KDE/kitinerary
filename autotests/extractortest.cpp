@@ -26,6 +26,9 @@
 
 #include <KMime/Message>
 
+#include <KCalCore/MemoryCalendar>
+#include <KCalCore/ICalFormat>
+
 #include <QDebug>
 #include <QDir>
 #include <QDirIterator>
@@ -75,7 +78,7 @@ private Q_SLOTS:
         QDirIterator dirIt(baseDir.path(), {QStringLiteral("context.eml")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
         while (dirIt.hasNext()) {
             QFileInfo contextFi(dirIt.next());
-            QDirIterator fileIt(contextFi.absolutePath(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass")}, QDir::Files | QDir::Readable | QDir::NoSymLinks);
+            QDirIterator fileIt(contextFi.absolutePath(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass"), QStringLiteral("*.ics")}, QDir::Files | QDir::Readable | QDir::NoSymLinks);
             while (fileIt.hasNext()) {
                 fileIt.next();
                 someTestsFound = true;
@@ -113,6 +116,7 @@ private Q_SLOTS:
         std::unique_ptr<KPkPass::Pass> pass;
         std::unique_ptr<HtmlDocument> htmlDoc;
         std::unique_ptr<PdfDocument> pdfDoc;
+        KCalCore::Calendar::Ptr calendar;
         std::vector<const Extractor*> extractors = m_repo.extractorsForMessage(&contextMsg);
         QJsonArray jsonResult;
 
@@ -130,6 +134,11 @@ private Q_SLOTS:
             m_engine.setHtmlDocument(htmlDoc.get());
         } else if (inputFile.endsWith(QLatin1String(".txt"))) {
             m_engine.setText(QString::fromUtf8(inFile.readAll()));
+        } else if (inputFile.endsWith(QLatin1String(".ics"))) {
+            calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
+            KCalCore::ICalFormat format;
+            QVERIFY(format.fromRawString(calendar, inFile.readAll()));
+            m_engine.setCalendar(calendar);
         }
 
         m_engine.setExtractors(std::move(extractors));

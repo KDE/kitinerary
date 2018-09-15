@@ -1,6 +1,13 @@
-{
-    "filter": [
-        { "header": "From", "match": "@amadeus.com" }
-    ],
-    "script": "amadeus.js"
-}
+[
+    {
+        "type": "text",
+        "filter": [ { "header": "From", "match": "@amadeus.com" } ],
+        "script": "amadeus.js"
+    },
+    {
+        "type": "ical",
+        "filter": [ { "header": "From", "match": "@amadeus.com" } ],
+        "script": "amadeus.js",
+        "function": "parseEvent"
+    }
+]

@@ -18,5 +18,5 @@ ecm_add_test(pkpassextractortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary KP
 ecm_add_test(postprocessortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 if (TARGET KF5::CalendarCore)
     ecm_add_test(calendarhandlertest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
+    ecm_add_test(extractortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary KPim::PkPass)
 endif()
-ecm_add_test(extractortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary KPim::PkPass)

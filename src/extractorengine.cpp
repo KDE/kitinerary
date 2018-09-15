@@ -17,6 +17,7 @@
    02110-1301, USA.
 */
 
+#include "config-kitinerary.h"
 #include "extractorengine.h"
 #include "extractor.h"
 #include "htmldocument.h"
@@ -28,6 +29,11 @@
 #include "jsapi/barcode.h"
 #include "jsapi/context.h"
 #include "jsapi/jsonld.h"
+
+#ifdef HAVE_KCAL
+#include <KCalCore/Calendar>
+#include <KCalCore/Event>
+#endif
 
 #include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>
@@ -50,6 +56,7 @@ class ExtractorEnginePrivate {
 public:
     void setupEngine();
     void executeScript(const Extractor *extractor);
+    void processScriptResult(const QJSValue &result);
     void extractPass();
     void extractBoardingPass(QJsonObject &resFor);
     void extractEventTicketPass(QJsonObject &resFor);
@@ -62,6 +69,9 @@ public:
     HtmlDocument *m_htmlDoc = nullptr;
     PdfDocument *m_pdfDoc = nullptr;
     KPkPass::Pass *m_pass;
+#ifdef HAVE_KCAL
+    KCalCore::Calendar::Ptr m_calendar;
+#endif
     QJsonArray m_result;
     QJSEngine m_engine;
 };
@@ -95,6 +105,9 @@ void ExtractorEngine::clear()
     d->m_pdfDoc = nullptr;
     d->m_htmlDoc = nullptr;
     d->m_pass = nullptr;
+#ifdef HAVE_KCAL
+    d->m_calendar.reset();
+#endif
     d->m_result = {};
     d->m_context->m_senderDate = {};
 }
@@ -122,6 +135,15 @@ void ExtractorEngine::setPdfDocument(PdfDocument *pdfDoc)
 void ExtractorEngine::setPass(KPkPass::Pass *pass)
 {
     d->m_pass = pass;
+}
+
+void ExtractorEngine::setCalendar(const QSharedPointer<KCalCore::Calendar> &calendar)
+{
+#ifdef HAVE_KCAL
+    d->m_calendar = calendar;
+#else
+    Q_UNUSED(calendar);
+#endif
 }
 
 void ExtractorEngine::setSenderDate(const QDateTime &dt)
@@ -169,6 +191,13 @@ QJsonArray ExtractorEngine::extract()
                     d->executeScript(extractor);
                     d->extractPass();
                 }
+                break;
+            case Extractor::ICal:
+#ifdef HAVE_KCAL
+                if (d->m_calendar) {
+                    d->executeScript(extractor);
+                }
+#endif
                 break;
         }
 
@@ -220,9 +249,22 @@ void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
         case Extractor::PkPass:
             args = {m_engine.toScriptValue<QObject*>(m_pass)};
             break;
+        case Extractor::ICal:
+#ifdef HAVE_KCAL
+            for (const auto &event : m_calendar->events()) {
+                processScriptResult(mainFunc.call({m_engine.toScriptValue(*event.get())}));
+            }
+#endif
+            break;
     }
 
-    result = mainFunc.call(args);
+    if (!args.isEmpty()) {
+        processScriptResult(mainFunc.call(args));
+    }
+}
+
+void ExtractorEnginePrivate::processScriptResult(const QJSValue &result)
+{
     if (result.isError()) {
         qCWarning(Log) << "Script execution error in" << result.property(QLatin1String("fileName")).toString()
                                 << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();

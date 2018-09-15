@@ -24,6 +24,11 @@
 
 #include <memory>
 #include <vector>
+template <typename T> class QSharedPointer;
+
+namespace KCalCore {
+class Calendar;
+}
 
 namespace KPkPass {
 class Pass;
@@ -71,6 +76,7 @@ class PdfDocument;
  * - PDF extractors are passed a PdfDocument instance allowing access to textual and
  *   image content.
  * - Apple Wallet pass extractors are passed a KPkPass::BoardingPass instance.
+ * - iCalendar event extractors are passed KCalCore::Event instances.
  *
  * These functions should return an object or an array of objects following the JSON-LD
  * format defined on schema.org. JsApi::JsonLd provides helper functions to build such
@@ -106,7 +112,7 @@ class PdfDocument;
  *   was received. This typically only needs a @c From: and @c Date: line, but can even be
  *   entirely empty (but existing) for structured data that does not need a custom extractor.
  *   This context information is applied to all tests in this folder.
- * - @c <testname>.[txt|html|pdf|pkpass]: The input test data.
+ * - @c <testname>.[txt|html|pdf|pkpass|ics]: The input test data.
  * - @c <testname.extension>.json: The expected JSON-LD output. If this file doesn't
  *   exists it is created by the test program.
  * - @c <testname.extension>.skip: If this file is present the corresponding test
@@ -142,6 +148,10 @@ public:
      *  Only considered for pkpass extractors.
      */
     void setPass(KPkPass::Pass *pass);
+    /** The iCalendar to extract data from.
+     *  Only considered for ical extractors.
+     */
+    void setCalendar(const QSharedPointer<KCalCore::Calendar> &calendar);
 
     /** The date the email containing the processed text was sent. */
     void setSenderDate(const QDateTime &dt);

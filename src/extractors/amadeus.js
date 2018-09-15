@@ -61,3 +61,30 @@ function main(text) {
 
     return reservations;
 }
+
+function parseEvent(event)
+{
+    var res = JsonLd.newObject("FlightReservation");
+    res.reservationFor = JsonLd.newObject("Flight");
+    res.reservationFor.airline = JsonLd.newObject("Airline");
+    res.reservationFor.departureAirport = JsonLd.newObject("Airport");
+    res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
+
+    // force UTC, otherwise we lose the timezone due to JS converting to the local TZ
+    res.reservationFor.departureTime = event.dtStart.toJSON();
+    res.reservationFor.arrivalTime = event.dtEnd.toJSON();
+    res.reservationNumber = event.uid.substr(0, 6);
+
+    var flight = event.description.match(/Flight: (.*) - (\S{2}) (\S{1,4})\n/);
+    res.reservationFor.airline.name = flight[1];
+    res.reservationFor.airline.iataCode = flight[2];
+    res.reservationFor.flightNumber = flight[3];
+
+    var from = event.description.match(/From: (.*)\n/);
+    res.reservationFor.departureAirport.name = from[1];
+
+    var to = event.description.match(/To: (.*)\n/);
+    res.reservationFor.arrivalAirport.name = to[1];
+
+    return res;
+}

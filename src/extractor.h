@@ -52,6 +52,7 @@ class ExtractorPrivate;
  * - \c html: HTML documents, the argument to the script function is a HtmlDocument instance.
  * - \c pdf: PDF documents, the argument to the script function is a PdfDocument instance.
  * - \c pkpass: Apple Wallet passes, the argument to the script function is a KPkPass::BoardingPass instance.
+ * - \c ical: iCalendar events, the argument to the script function is a KCalCore::Event instance.
  *
  * Filter definitions have the following field:
  * - \c header: A MIME message header name or field id in a Apple Wallet pass.
@@ -100,7 +101,8 @@ public:
         Text, ///< A plain-text extractor.
         Html, ///< A HTML document extractor.
         Pdf, ///< A PDF document extractor.
-        PkPass ///< A Apple Wallet pass extractor.
+        PkPass, ///< A Apple Wallet pass extractor.
+        ICal ///< iCalendar events extractor.
     };
     /** Returns the type of this extractor. */
     Type type() const;
