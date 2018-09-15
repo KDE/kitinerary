@@ -252,7 +252,7 @@ void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
         case Extractor::ICal:
 #ifdef HAVE_KCAL
             for (const auto &event : m_calendar->events()) {
-                processScriptResult(mainFunc.call({m_engine.toScriptValue(*event.get())}));
+                processScriptResult(mainFunc.call({m_engine.toScriptValue(*event.data())}));
             }
 #endif
             break;
