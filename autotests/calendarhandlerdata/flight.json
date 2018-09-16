@@ -9,7 +9,6 @@
         },
         "boardingGroup": "C",
         "boardingPolicy": "GroupBoardingPolicy",
-        "modifiedTime": "2017-09-20T08:14:39+02:00",
         "modifyReservationUrl": "https://www.airberlin.com/de-DE/cockpit/index/index/bookingNo/XXX007/lastname/DOE/submit/1",
         "reservationFor": {
             "@type": "Flight",

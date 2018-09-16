@@ -9,7 +9,6 @@
         },
         "bookingTime": "2017-09-19T13:42:00+02:00",
         "cancelReservationUrl": "https://www.trainline.fr/tickets",
-        "modifiedTime": "2017-09-21T09:19:38+02:00",
         "modifyReservationUrl": "https://www.trainline.fr/tickets",
         "reservationFor": {
             "@type": "TrainTrip",

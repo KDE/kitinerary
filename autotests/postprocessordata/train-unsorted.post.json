@@ -2,6 +2,7 @@
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "modifiedTime": "2017-09-21T09:19:38+02:00",
         "potentialAction": [
             {
                 "@type": "ViewAction",
@@ -56,6 +57,7 @@
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "modifiedTime": "2017-09-21T09:19:38+02:00",
         "potentialAction": [
             {
                 "@type": "ViewAction",

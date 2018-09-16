@@ -12,7 +12,6 @@
         "checkinDate": "2017-09-19T15:00:00+03:00",
         "checkoutDate": "2017-09-20T12:00:00+03:00",
         "confirmReservationUrl": "/confirmation.en-gb.html?aid=123456;auth_key=magic&&source=conf_metadata",
-        "modifiedTime": "2017-09-08T14:38:31+03:00",
         "modifyReservationUrl": "https://secure.booking.com/mybooking.en-gb.html?aid=123456;auth_key=magic&&source=conf_metadata&pbsource=conf_email_modify",
         "numAdults": 2,
         "priceCurrency": "EUR",

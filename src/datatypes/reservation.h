@@ -42,6 +42,7 @@ class KITINERARY_EXPORT Reservation
     KITINERARY_PROPERTY(KItinerary::Organization, provider, setProvider)
     KITINERARY_PROPERTY(QUrl, url, setUrl)
     KITINERARY_PROPERTY(QVariantList, potentialAction, setPotentialAction)
+    KITINERARY_PROPERTY(QDateTime, modifiedTime, setModifiedTime)
 
     // KDE extensions
     /** Pass type identifier of an associated Apple Wallet boarding pass.
@@ -112,7 +113,6 @@ class KITINERARY_EXPORT FoodEstablishmentReservation : public Reservation
 {
     KITINERARY_GADGET(FoodEstablishmentReservation)
     KITINERARY_PROPERTY(QDateTime, endTime, setEndTime)
-    KITINERARY_PROPERTY(QDateTime, modifiedTime, setModifiedTime)
     KITINERARY_PROPERTY(int, partySize, setPartySize)
     KITINERARY_PROPERTY(QDateTime, startTime, setStartTime)
 };

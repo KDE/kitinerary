@@ -41,6 +41,7 @@ public:
     QString pkpassSerialNumber;
     Organization provider;
     QVariantList potentialAction;
+    QDateTime modifiedTime;
 };
 
 KITINERARY_MAKE_BASE_CLASS(Reservation)
@@ -53,6 +54,7 @@ KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassPassTypeIdentifier, setPkpa
 KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassSerialNumber, setPkpassSerialNumber)
 KITINERARY_MAKE_PROPERTY(Reservation, Organization, provider, setProvider)
 KITINERARY_MAKE_PROPERTY(Reservation, QVariantList, potentialAction, setPotentialAction)
+KITINERARY_MAKE_PROPERTY(Reservation, QDateTime, modifiedTime, setModifiedTime)
 
 class LodgingReservationPrivate : public ReservationPrivate
 {
@@ -97,12 +99,10 @@ class FoodEstablishmentReservationPrivate : public ReservationPrivate
     KITINERARY_PRIVATE_GADGET(FoodEstablishmentReservation)
 public:
     QDateTime endTime;
-    QDateTime modifiedTime;
     QDateTime startTime;
     int partySize = 0;
 };
 KITINERARY_MAKE_SUB_CLASS(FoodEstablishmentReservation, Reservation)
-KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, modifiedTime, setModifiedTime)
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, endTime, setEndTime)
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, int, partySize, setPartySize)
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, startTime, setStartTime)

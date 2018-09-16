@@ -4,6 +4,7 @@
         "@type": "FlightReservation",
         "airplaneSeat": "9A",
         "boardingGroup": "B",
+        "modifiedTime": "2027-03-14T13:05:00-05:00",
         "potentialAction": [
             {
                 "@type": "CancelAction",
