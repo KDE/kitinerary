@@ -53,6 +53,12 @@ public:
     /** The source image with display transformations applied. */
     QImage image() const;
 
+    /** PDF-internal unique identifier of this image.
+     *  Use this to detect multiple occurrences of the same image in different
+     *  places, if that reduces e.g. computation cost.
+     */
+    int objectId() const;
+
 private:
     friend class ExtractorOutputDevice;
     friend class PdfPagePrivate;
@@ -126,6 +132,9 @@ public:
 
     /** The n-thj page in this document. */
     PdfPage page(int index) const;
+
+    /** File size of the entire document in bytes. */
+    int fileSize() const;
 
     /** Creates a PdfDocument from the given raw data.
      *  @returns @c nullptr if loading fails or Poppler was not found.

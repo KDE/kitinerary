@@ -306,6 +306,11 @@ QImage PdfImage::image() const
     return img;
 }
 
+int PdfImage::objectId() const
+{
+    return d->m_refNum;
+}
+
 
 void PdfPagePrivate::load()
 {
@@ -444,6 +449,11 @@ int PdfDocument::pageCount() const
 PdfPage PdfDocument::page(int index) const
 {
     return d->m_pages[index];
+}
+
+int PdfDocument::fileSize() const
+{
+    return d->m_pdfData.size();
 }
 
 QVariantList PdfDocument::pagesVariant() const
