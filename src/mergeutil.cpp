@@ -98,7 +98,7 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
     if (JsonLd::isA<FlightReservation>(lhs)) {
         const auto lhsRes = lhs.value<FlightReservation>();
         const auto rhsRes = rhs.value<FlightReservation>();
-        if (lhsRes.reservationNumber() != rhsRes.reservationNumber() || lhsRes.reservationNumber().isEmpty()) {
+        if (conflictIfPresent(lhsRes.reservationNumber(), rhsRes.reservationNumber()) || conflictIfPresent(lhsRes.passengerSequenceNumber(), rhsRes.passengerSequenceNumber())) {
             return false;
         }
         return isSame(lhsRes.reservationFor(), rhsRes.reservationFor());
