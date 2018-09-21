@@ -94,12 +94,8 @@ static int parseRepeatedMandatorySection(const QStringRef& msg, FlightReservatio
 
 QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &externalIssueDate)
 {
-    if (message.size() < UniqueMandatorySize) {
-        qCWarning(Log) << "IATA BCBP code too short for unique mandatory section";
-        return {};
-    }
-    if (message.at(0) != QLatin1Char(FormatCode) || !message.at(1).isDigit()) {
-        qCWarning(Log) << "IATA BCBP code invalid unique mandatory section format";
+    if (!IataBcbpParser::maybeIataBcbp(message)) {
+        qCWarning(Log) << "IATA BCBP code too short for unique mandatory section, or invalid mandatory section format";
         return {};
     }
 
@@ -236,4 +232,16 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &ext
     }
 
     return result;
+}
+
+bool IataBcbpParser::maybeIataBcbp(const QString &message)
+{
+    if (message.size() < UniqueMandatorySize) {
+        return false;
+    }
+    if (message.at(0) != QLatin1Char(FormatCode) || !message.at(1).isDigit()) {
+        return false;
+    }
+
+    return true;
 }

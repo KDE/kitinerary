@@ -417,21 +417,13 @@ void Uic9183Parser::parse(const QByteArray &data)
     d->m_payload.clear();
 
     // header and signature block (64 byte total)
-    if (data.size() < 64) {
-        qCWarning(Log) << "UIC 918-3 ticket too short.";
+    if (!Uic9183Parser::maybeUic9183(data)) {
+        qCWarning(Log) << "UIC 918-3 ticket too short or has wrong header/version.";
         return;
     }
 
     // 3x header
-    if (!data.startsWith("#UT") && !data.startsWith("OTI")) {
-        qCWarning(Log) << "Data does not contain a UIC 918-3 ticket.";
-        return;
-    }
     // 2x version
-    if (data.at(3) != '0' || data.at(4) != '1') {
-        qCWarning(Log) << "Unsupported UIC918-3 ticket version.";
-        return;
-    }
     // 4x issuer UIC carrier code
     // 5x signature key id
     // 50x ASN.1 signature
@@ -581,5 +573,21 @@ QVariant Uic9183Parser::rct2TicketVariant() const
     return {};
 }
 
+bool Uic9183Parser::maybeUic9183(const QByteArray& data)
+{
+    if (data.size() < 64) {
+        return false;
+    }
+
+    if (!data.startsWith("#UT") && !data.startsWith("OTI")) {
+        return false;
+    }
+
+    if (data.at(3) != '0' || data.at(4) != '1') {
+        return false;
+    }
+
+    return true;
+}
 
 #include "moc_uic9183parser.cpp"

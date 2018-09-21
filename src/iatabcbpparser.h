@@ -39,10 +39,15 @@ namespace IataBcbpParser
 {
 /** Parses the bar coded boarding pass message @p message into
  *  a list of FlightReservation instances.
- *  @param issueDate The date the boarding pass was issued (or a sufficiently close approximation).
+ *  @param externalIssueDate The date the boarding pass was issued (or a sufficiently close approximation).
  *  This is necessary as by default the BCBP data only contains day and month of the flight, not the year.
  */
-KITINERARY_EXPORT QVector<QVariant> parse(const QString &message, const QDate &issueDate = QDate());
+KITINERARY_EXPORT QVector<QVariant> parse(const QString &message, const QDate &externalIssueDate = QDate());
+
+/** Quickly test if @p message could be a IATA BCBP code.
+ *  This optimizes for speed rather than correctness, for use in barcode content auto-detection.
+ */
+bool maybeIataBcbp(const QString &message);
 }
 
 }

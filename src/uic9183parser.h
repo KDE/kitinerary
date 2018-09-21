@@ -115,6 +115,11 @@ public:
     /** RCT2 ticket layout, if present. */
     Rct2Ticket rct2Ticket() const;
 
+    /** Quickly checks if @p might be UIC 918.3 content.
+     *  This priorizes speed over correctness and is used in barcode content auto-detection.
+     */
+    static bool maybeUic9183(const QByteArray &data);
+
 private:
     QVariant rct2TicketVariant() const;
     QExplicitlySharedDataPointer<Uic9183ParserPrivate> d;
