@@ -57,7 +57,10 @@ public:
 
 class PdfPagePrivate : public QSharedData {
 public:
+    void load();
+
     int m_pageNum = -1;
+    bool m_loaded = false;
     QString m_text;
     std::vector<PdfImage> m_images;
     PdfDocumentPrivate *m_doc;
@@ -127,7 +130,6 @@ private:
 #ifdef HAVE_POPPLER
 QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
 {
-    qDebug();
     auto img = QImage(m_sourceWidth, m_sourceHeight, m_format);
     const auto bytesPerPixel = colorMap->getNumPixelComps();
     std::unique_ptr<ImageStream> imgStream(new ImageStream(str, m_sourceWidth, bytesPerPixel, colorMap->getBits()));
@@ -305,6 +307,28 @@ QImage PdfImage::image() const
 }
 
 
+void PdfPagePrivate::load()
+{
+    if (m_loaded) {
+        return;
+    }
+
+#ifdef HAVE_POPPLER
+    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
+    ExtractorOutputDevice device(m_doc);
+    m_doc->m_popplerDoc->displayPageSlice(&device, m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
+    const auto pageRect = m_doc->m_popplerDoc->getPage(m_pageNum + 1)->getCropBox();
+    std::unique_ptr<GooString> s(device.getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
+
+    m_text = QString::fromUtf8(s->getCString());
+    m_images = std::move(device.m_images);
+    for (auto it = m_images.begin(); it != m_images.end(); ++it) {
+        (*it).d->m_page = this;
+    }
+#endif
+    m_loaded = true;
+}
+
 PdfPage::PdfPage()
     : d(new PdfPagePrivate)
 {
@@ -316,6 +340,7 @@ PdfPage& PdfPage::operator=(const PdfPage&) = default;
 
 QString PdfPage::text() const
 {
+    d->load();
     return d->m_text;
 }
 
@@ -348,16 +373,19 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
 
 int PdfPage::imageCount() const
 {
+    d->load();
     return d->m_images.size();
 }
 
 PdfImage PdfPage::image(int index) const
 {
+    d->load();
     return d->m_images[index];
 }
 
 QVariantList PdfPage::imagesVariant() const
 {
+    d->load();
     QVariantList l;
     l.reserve(imageCount());
     std::for_each(d->m_images.begin(), d->m_images.end(), [&l](const PdfImage& img) { l.push_back(QVariant::fromValue(img)); });
@@ -366,6 +394,7 @@ QVariantList PdfPage::imagesVariant() const
 
 QVariantList PdfPage::imagesInRect(double left, double top, double right, double bottom) const
 {
+    d->load();
     QVariantList l;
 #ifdef HAVE_POPPLER
     QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
@@ -445,21 +474,11 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
         return nullptr;
     }
 
-    std::unique_ptr<ExtractorOutputDevice> device(new ExtractorOutputDevice(doc->d.get()));
     doc->d->m_pages.reserve(popplerDoc->getNumPages());
     for (int i = 0; i < popplerDoc->getNumPages(); ++i) {
-        popplerDoc->displayPageSlice(device.get(), i + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
-        const auto pageRect = popplerDoc->getPage(i + 1)->getCropBox();
-        std::unique_ptr<GooString> s(device->getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
-
         PdfPage page;
         page.d->m_pageNum = i;
         page.d->m_doc = doc->d.get();
-        page.d->m_text = QString::fromUtf8(s->getCString());
-        page.d->m_images = std::move(device->m_images);
-        for (auto it = page.d->m_images.begin(); it != page.d->m_images.end(); ++it) {
-            (*it).d->m_page = page.d.data();
-        }
         doc->d->m_pages.push_back(page);
     }
 

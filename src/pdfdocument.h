@@ -31,6 +31,7 @@ class QImage;
 namespace KItinerary {
 
 class PdfImagePrivate;
+class PdfPagePrivate;
 
 /** An image in a PDF document.
  */
@@ -54,13 +55,11 @@ public:
 
 private:
     friend class ExtractorOutputDevice;
-    friend class PdfDocument;
+    friend class PdfPagePrivate;
     friend class PdfPage;
     QExplicitlySharedDataPointer<PdfImagePrivate> d;
 };
 
-
-class PdfPagePrivate;
 
 /** A page in a PDF document.
  */
