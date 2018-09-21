@@ -36,6 +36,7 @@ set(kitinerary_lib_srcs
     extractorfilter.cpp
     extractorpostprocessor.cpp
     extractorrepository.cpp
+    genericpdfextractor.cpp
     htmldocument.cpp
     iatabcbpparser.cpp
     jsonlddocument.cpp

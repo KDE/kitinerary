@@ -20,6 +20,7 @@
 #include "config-kitinerary.h"
 #include "extractorengine.h"
 #include "extractor.h"
+#include "genericpdfextractor.h"
 #include "htmldocument.h"
 #include "jsonlddocument.h"
 #include "logging.h"
@@ -72,6 +73,7 @@ public:
 #ifdef HAVE_KCAL
     KCalCore::Calendar::Ptr m_calendar;
 #endif
+    GenericPdfExtractor m_genericPdfExtractor;
     QJsonArray m_result;
     QJSEngine m_engine;
 };
@@ -151,6 +153,7 @@ void ExtractorEngine::setSenderDate(const QDateTime &dt)
     d->m_context->m_senderDate = dt;
     d->m_jsonLdApi->setContextDate(dt);
     d->m_barcodeApi->setContextDate(dt.date());
+    d->m_genericPdfExtractor.setContextDate(dt);
 }
 
 QJsonArray ExtractorEngine::extract()
@@ -183,7 +186,11 @@ QJsonArray ExtractorEngine::extract()
                 break;
             case Extractor::Pdf:
                 if (d->m_pdfDoc) {
-                    d->executeScript(extractor);
+                    if (extractor->scriptFileName().isEmpty()) {
+                        d->m_genericPdfExtractor.extract(d->m_pdfDoc, d->m_result);
+                    } else {
+                        d->executeScript(extractor);
+                    }
                 }
                 break;
             case Extractor::PkPass:

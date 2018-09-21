@@ -77,10 +77,6 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
         qCWarning(Log) << "Script file not found:" << d->m_scriptName;
         return false;
     }
-    if (d->m_type != PkPass && d->m_scriptName.isEmpty()) {
-        qCWarning(Log) << "Script file required for text, HTML or PDF extractors!";
-        return false;
-    }
     d->m_scriptFunction = obj.value(QLatin1String("function")).toString(QStringLiteral("main"));
 
     return !d->m_filters.empty();
