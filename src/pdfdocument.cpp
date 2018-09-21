@@ -30,6 +30,7 @@
 #endif
 
 #include <cmath>
+#include <unordered_map>
 
 using namespace KItinerary;
 
@@ -37,7 +38,7 @@ namespace KItinerary {
 class PdfImagePrivate : public QSharedData {
 public:
 #ifdef HAVE_POPPLER
-    void load(Stream *str, GfxImageColorMap *colorMap);
+    QImage load(Stream *str, GfxImageColorMap *colorMap);
 
     std::unique_ptr<GfxImageColorMap> m_colorMap;
 #endif
@@ -45,7 +46,6 @@ public:
     int m_refNum = -1;
     int m_refGen = -1;
     PdfPagePrivate *m_page = nullptr;
-    QImage m_img;
     double m_x = NAN;
     double m_y = NAN;
     int m_width = 0;
@@ -65,8 +65,13 @@ public:
 
 class PdfDocumentPrivate {
 public:
-    QByteArray m_pdfData; // needs to be kept alive as long as the Poppler::PdfDoc instance lives
-    std::vector<PdfImage> m_images;
+    // needs to be kept alive as long as the Poppler::PdfDoc instance lives
+    QByteArray m_pdfData;
+    // this contains the actually loaded/decoded image data
+    // and is referenced by the object id from PdfImage to avoid
+    // expensive loading/decoding of multiple occurrences of the same image
+    // image data in here is stored in its source form, without applied transformations
+    std::unordered_map<int, QImage> m_imageData;
     std::vector<PdfPage> m_pages;
 #ifdef HAVE_POPPLER
     std::unique_ptr<PDFDoc> m_popplerDoc;
@@ -108,9 +113,11 @@ public:
     GBool useDrawChar() override { return false; }
 
     void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, GBool interpolate, int *maskColors, GBool inlineImg) override;
+    QImage image() const { return m_image; }
 
 private:
     PdfImagePrivate *d;
+    QImage m_image;
 };
 #endif
 #endif
@@ -118,9 +125,10 @@ private:
 }
 
 #ifdef HAVE_POPPLER
-void PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
+QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
 {
-    m_img = QImage(m_sourceWidth, m_sourceHeight, m_format);
+    qDebug();
+    auto img = QImage(m_sourceWidth, m_sourceHeight, m_format);
     const auto bytesPerPixel = colorMap->getNumPixelComps();
     std::unique_ptr<ImageStream> imgStream(new ImageStream(str, m_sourceWidth, bytesPerPixel, colorMap->getBits()));
     imgStream->reset();
@@ -129,7 +137,7 @@ void PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
         case QImage::Format_RGB888:
             for (int i = 0; i < m_sourceHeight; ++i) {
                 const auto row = imgStream->getLine();
-                auto imgData = m_img.scanLine(i);
+                auto imgData = img.scanLine(i);
                 GfxRGB rgb;
                 for (int j = 0; j < m_sourceWidth; ++j) {
                     colorMap->getRGB(row + (j * bytesPerPixel), &rgb);
@@ -142,7 +150,7 @@ void PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
         case QImage::Format_Grayscale8:
             for (int i = 0; i < m_sourceHeight; ++i) {
                 const auto row = imgStream->getLine();
-                auto imgData = m_img.scanLine(i);
+                auto imgData = img.scanLine(i);
                 GfxGray gray;
                 for (int j = 0; j < m_sourceWidth; ++j) {
                     colorMap->getGray(row + j, &gray);
@@ -155,9 +163,8 @@ void PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
     }
     imgStream->close();
 
-    if (m_width != m_sourceWidth || m_height != m_sourceHeight) {
-        m_img = m_img.scaled(m_width, m_height);
-    }
+    m_page->m_doc->m_imageData[m_refNum] = img;
+    return img;
 }
 
 
@@ -174,19 +181,8 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     Q_UNUSED(maskColors);
     Q_UNUSED(inlineImg);
 
-    if (!colorMap || !colorMap->isOk() || !ref) {
+    if (!colorMap || !colorMap->isOk() || !ref || !ref->isRef()) {
         return;
-    }
-
-    // check for duplicate occurancies of ref->getRef().num
-    if (ref->isRef()) {
-        auto it = std::find_if(d->m_images.begin(), d->m_images.end(), [ref](const PdfImage &other) {
-            return other.d->m_refNum == ref->getRef().num;
-        });
-        if (it != d->m_images.end()) {
-            m_images.push_back(*it);
-            return;
-        }
     }
 
     QImage::Format format;
@@ -201,10 +197,8 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     }
 
     PdfImage pdfImg;
-    if (ref->isRef()) {
-        pdfImg.d->m_refNum = ref->getRef().num;
-        pdfImg.d->m_refGen = ref->getRef().gen;
-    }
+    pdfImg.d->m_refNum = ref->getRef().num;
+    pdfImg.d->m_refGen = ref->getRef().gen;
 
 #ifdef HAVE_POPPLER_0_69
     pdfImg.d->m_colorMap.reset(colorMap->copy());
@@ -252,7 +246,7 @@ void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *st
         return;
     }
 
-    d->load(str, colorMap);
+    m_image = d->load(str, colorMap);
 }
 #endif
 #endif
@@ -276,10 +270,11 @@ int PdfImage::width() const
     return d->m_width;
 }
 
-QImage PdfImage::image() const
+QImage PdfImage::sourceImage() const
 {
-    if (!d->m_img.isNull() || d->m_refNum < 0) {
-        return d->m_img;
+    const auto it = d->m_page->m_doc->m_imageData.find(d->m_refNum);
+    if (it != d->m_page->m_doc->m_imageData.end()) {
+        return (*it).second;
     }
 
 #ifdef HAVE_POPPLER
@@ -288,13 +283,25 @@ QImage PdfImage::image() const
 #ifdef HAVE_POPPLER_0_69
     const auto xref = d->m_page->m_doc->m_popplerDoc->getXRef();
     const auto obj = xref->fetch(d->m_refNum, d->m_refGen);
-    d->load(obj.getStream(), d->m_colorMap.get());
+    return d->load(obj.getStream(), d->m_colorMap.get());
 #else
     std::unique_ptr<ImageLoaderOutputDevice> device(new ImageLoaderOutputDevice(d.data()));
     d->m_page->m_doc->m_popplerDoc->displayPageSlice(device.get(), d->m_page->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
+    return device->image();
 #endif
+
+#else
+    return {};
 #endif
-    return d->m_img;
+}
+
+QImage PdfImage::image() const
+{
+    const auto img = sourceImage();
+    if (d->m_width != d->m_sourceWidth || d->m_height != d->m_sourceHeight) {
+        return img.scaled(d->m_width, d->m_height);
+    }
+    return img;
 }
 
 
@@ -444,7 +451,6 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
         popplerDoc->displayPageSlice(device.get(), i + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
         const auto pageRect = popplerDoc->getPage(i + 1)->getCropBox();
         std::unique_ptr<GooString> s(device->getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
-        std::copy(device->m_images.begin(), device->m_images.end(), std::back_inserter(doc->d->m_images));
 
         PdfPage page;
         page.d->m_pageNum = i;
