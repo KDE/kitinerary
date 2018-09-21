@@ -38,10 +38,8 @@ private Q_SLOTS:
         std::unique_ptr<PdfDocument> doc(PdfDocument::fromData(f.readAll()));
         QVERIFY(doc);
         QCOMPARE(doc->text(), QStringLiteral("This is the first page.\nIt contains a PDF 417 barcode.\nThis is the second page.\nIt contains an Aztec code.\n"));
-        QCOMPARE(doc->imageCount(), 2);
         QCOMPARE(doc->pageCount(), 2);
         QCOMPARE(doc->property("pages").toList().size(), 2);
-        QCOMPARE(doc->property("images").toList().size(), 2);
 
         auto page = doc->page(0);
         QCOMPARE(page.text(), QStringLiteral("This is the first page.\nIt contains a PDF 417 barcode.\n"));

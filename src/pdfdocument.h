@@ -110,8 +110,6 @@ class KITINERARY_EXPORT PdfDocument : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString text READ text CONSTANT)
-    Q_PROPERTY(int imageCount READ imageCount CONSTANT)
-    Q_PROPERTY(QVariantList images READ imagesVariant)
     Q_PROPERTY(int pageCount READ pageCount CONSTANT)
     Q_PROPERTY(QVariantList pages READ pagesVariant CONSTANT)
 public:
@@ -120,12 +118,6 @@ public:
 
     /** The entire text extracted from the PDF document. */
     QString text() const;
-
-    /** The number of images found in this document. */
-    int imageCount() const;
-
-    /** The n-th image found in this document. */
-    PdfImage image(int index) const;
 
     /** The number of pages in this document. */
     int pageCount() const;
@@ -139,7 +131,6 @@ public:
     static PdfDocument* fromData(const QByteArray &data, QObject *parent = nullptr);
 
 private:
-    QVariantList imagesVariant() const;
     QVariantList pagesVariant() const;
 
     std::unique_ptr<PdfDocumentPrivate> d;

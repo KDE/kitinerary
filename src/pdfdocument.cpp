@@ -396,24 +396,6 @@ QString PdfDocument::text() const
     return text;
 }
 
-int PdfDocument::imageCount() const
-{
-    return d->m_images.size();
-}
-
-PdfImage PdfDocument::image(int index) const
-{
-    return d->m_images[index];
-}
-
-QVariantList PdfDocument::imagesVariant() const
-{
-    QVariantList l;
-    l.reserve(imageCount());
-    std::for_each(d->m_images.begin(), d->m_images.end(), [&l](const PdfImage& img) { l.push_back(QVariant::fromValue(img)); });
-    return l;
-}
-
 int PdfDocument::pageCount() const
 {
     return d->m_pages.size();
