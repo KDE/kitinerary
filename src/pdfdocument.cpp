@@ -398,7 +398,11 @@ QString PdfDocument::text() const
 
 int PdfDocument::pageCount() const
 {
-    return d->m_pages.size();
+#ifdef HAVE_POPPLER
+    return d->m_popplerDoc->getNumPages();
+#else
+    return 0;
+#endif
 }
 
 PdfPage PdfDocument::page(int index) const
