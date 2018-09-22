@@ -20,6 +20,7 @@
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
+#include <KItinerary/MergeUtil>
 #include <KItinerary/Person>
 #include <KItinerary/Place>
 #include <KItinerary/RentalCar>
@@ -120,7 +121,7 @@ bool SortUtil::isBefore(const QVariant &lhs, const QVariant &rhs)
         // for multi-traveler reservations, sort by traveler name to achieve a stable result
         const auto lhsRes = JsonLd::convert<Reservation>(lhs);
         const auto rhsRes = JsonLd::convert<Reservation>(rhs);
-        if (!lhsRes.underName().isNull() && !rhsRes.underName().isNull()) {
+        if (!lhsRes.underName().isNull() && !rhsRes.underName().isNull() && MergeUtil::isSame(lhsRes.reservationFor(), rhsRes.reservationFor())) {
             const auto lhsUN = lhsRes.underName().value<Person>();
             const auto rhsUN = rhsRes.underName().value<Person>();
             return lhsUN.name() < rhsUN.name();
