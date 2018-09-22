@@ -10,11 +10,5 @@
         "type": "pdf",
         "filter": [ { "header": "From", "match": "brusselsairlines.com" } ],
         "script": "brusselsairlines-receipt.js"
-    },
-    {
-        "type": "pdf",
-        "filter": [{ "header": "From", "match": "brusselsairlines.com" }],
-        "script": "generic.js",
-        "function": "parsePdfBoardingPass"
     }
 ]

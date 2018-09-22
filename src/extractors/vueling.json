@@ -4,11 +4,5 @@
         "filter": [ { "header": "From", "match": "@vueling.com" } ],
         "script": "vueling.js",
         "function": "parseHtmlBooking"
-    },
-    {
-        "type": "pdf",
-        "filter": [{ "header": "From", "match": "@vueling.com" }],
-        "script": "generic.js",
-        "function": "parsePdfBoardingPass"
     }
 ]

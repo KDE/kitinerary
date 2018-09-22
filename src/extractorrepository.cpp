@@ -92,9 +92,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
     }
 
     // ### we probably want to check for the part mimetype here (but note the test data doesn't have that set!)
-    if (v.size() == 1) {
-        v.push_back(&d->m_genericPdfExtractor);
-    }
+    v.push_back(&d->m_genericPdfExtractor);
 
     return v;
 }
