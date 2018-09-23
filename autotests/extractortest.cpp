@@ -17,7 +17,6 @@
 
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPostprocessor>
-#include <KItinerary/ExtractorRepository>
 #include <KItinerary/HtmlDocument>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/PdfDocument>
@@ -52,7 +51,6 @@ class ExtractorTest : public QObject
     Q_OBJECT
 private:
     ExtractorEngine m_engine;
-    ExtractorRepository m_repo;
 
 private Q_SLOTS:
     void initTestCase()
@@ -108,7 +106,7 @@ private Q_SLOTS:
         KMime::Message contextMsg;
         contextMsg.setContent(cf.readAll());
         contextMsg.parse();
-        m_engine.setSenderDate(contextMsg.date()->dateTime());
+        m_engine.setContext(&contextMsg);
 
         QFile inFile(inputFile);
         QVERIFY(inFile.open(QFile::ReadOnly));
@@ -117,12 +115,10 @@ private Q_SLOTS:
         std::unique_ptr<HtmlDocument> htmlDoc;
         std::unique_ptr<PdfDocument> pdfDoc;
         KCalCore::Calendar::Ptr calendar;
-        std::vector<const Extractor*> extractors = m_repo.extractorsForMessage(&contextMsg);
         QJsonArray jsonResult;
 
         if (inputFile.endsWith(QLatin1String(".pkpass"))) {
             pass.reset(KPkPass::Pass::fromData(inFile.readAll()));
-            extractors = m_repo.extractorsForPass(pass.get());
             m_engine.setPass(pass.get());
         } else if (inputFile.endsWith(QLatin1String(".pdf"))) {
             pdfDoc.reset(PdfDocument::fromData(inFile.readAll()));
@@ -141,7 +137,6 @@ private Q_SLOTS:
             m_engine.setCalendar(calendar);
         }
 
-        m_engine.setExtractors(std::move(extractors));
         jsonResult = m_engine.extract();
 
         const auto expectedSkip = QFile::exists(inputFile + QLatin1String(".skip"));

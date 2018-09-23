@@ -18,7 +18,6 @@
 #include <KItinerary/Extractor>
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPostprocessor>
-#include <KItinerary/ExtractorRepository>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Organization>
 #include <KItinerary/Place>
@@ -71,13 +70,8 @@ private Q_SLOTS:
         const auto pass = KPkPass::Pass::fromFile(inputFile, this);
         QVERIFY(pass);
 
-        ExtractorRepository repo;
-        auto extractors = repo.extractorsForPass(pass);
-        QVERIFY(!extractors.empty());
-
         ExtractorEngine engine;
-        engine.setSenderDate(QDateTime(QDate(2017, 12, 29), QTime(18, 46, 2)));
-        engine.setExtractors(std::move(extractors));
+        engine.setContextDate(QDateTime(QDate(2017, 12, 29), QTime(18, 46, 2)));
         engine.setPass(pass);
         auto result = JsonLdDocument::fromJson(engine.extract());
         QCOMPARE(result.size(), 1);
