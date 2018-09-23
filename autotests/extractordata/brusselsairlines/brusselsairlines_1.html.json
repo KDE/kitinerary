@@ -1,0 +1,108 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "SN",
+                "name": "Brussels Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "BE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.90140151977539,
+                    "longitude": 4.484439849853516
+                },
+                "iataCode": "BRU",
+                "name": "Brussels Airport, BE"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-02-03T19:45:00+01:00",
+                "timezone": "Europe/Brussels"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Berlin, Tegel Airport, DE"
+            },
+            "departureDay": "2017-02-03",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-02-03T18:25:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "2588"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "SN",
+                "name": "Brussels Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Berlin, Tegel Airport, DE"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-02-05T22:00:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "BE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.90140151977539,
+                    "longitude": 4.484439849853516
+                },
+                "iataCode": "BRU",
+                "name": "Brussels Airport, BE"
+            },
+            "departureDay": "2017-02-05",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-02-05T20:40:00+01:00",
+                "timezone": "Europe/Brussels"
+            },
+            "flightNumber": "2591"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

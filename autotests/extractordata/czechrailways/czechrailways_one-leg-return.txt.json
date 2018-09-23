@@ -1,7 +1,7 @@
 [
     {
-       "@context": "http://schema.org",
-       "@type": "TrainReservation",
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {

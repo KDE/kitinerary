@@ -1,0 +1,213 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "Iberia Express"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 40.472198486328125,
+                    "longitude": -3.5608301162719727
+                },
+                "iataCode": "MAD",
+                "name": "Madrid"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2018-07-20T15:35:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Berlin"
+            },
+            "departureDay": "2018-07-20",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2018-07-20T12:25:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "3677"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "Iberia Regional Air Nostrum"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 36.84389877319336,
+                    "longitude": -2.369999885559082
+                },
+                "iataCode": "LEI",
+                "name": "Almeria"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2018-07-20T19:00:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 40.472198486328125,
+                    "longitude": -3.5608301162719727
+                },
+                "iataCode": "MAD",
+                "name": "Madrid"
+            },
+            "departureDay": "2018-07-20",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2018-07-20T17:50:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "flightNumber": "8588"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "Iberia Regional Air Nostrum"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 40.472198486328125,
+                    "longitude": -3.5608301162719727
+                },
+                "iataCode": "MAD",
+                "name": "Madrid"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2018-07-28T08:25:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 36.84389877319336,
+                    "longitude": -2.369999885559082
+                },
+                "iataCode": "LEI",
+                "name": "Almeria"
+            },
+            "departureDay": "2018-07-28",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2018-07-28T07:15:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "flightNumber": "8603"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Berlin"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2018-07-28T15:00:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 40.472198486328125,
+                    "longitude": -3.5608301162719727
+                },
+                "iataCode": "MAD",
+                "name": "Madrid"
+            },
+            "departureDay": "2018-07-28",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2018-07-28T12:00:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "flightNumber": "3186"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

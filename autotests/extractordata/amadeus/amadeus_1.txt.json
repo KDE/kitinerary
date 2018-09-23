@@ -1,0 +1,214 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "DL",
+                "name": "DELTA AIR LINES"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "NL"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.308101654052734,
+                    "longitude": 4.760280132293701
+                },
+                "iataCode": "AMS",
+                "name": "AMSTERDAM, NL (SCHIPHOL AIRPORT)"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-06-07T13:30:00+02:00",
+                "timezone": "Europe/Amsterdam"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "BERLIN, DE (TEGEL)"
+            },
+            "departureDay": "2016-06-07",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-06-07T12:10:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "9520"
+        },
+        "reservationNumber": "123456"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "DL",
+                "name": "DELTA AIR LINES"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 42.212501525878906,
+                    "longitude": -83.35330200195312
+                },
+                "iataCode": "DTW",
+                "name": "DETROIT, MI (METROPOLITAN WAYNE CO), TERMINAL EM"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-06-07T17:40:00-04:00",
+                "timezone": "America/Detroit"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "NL"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.308101654052734,
+                    "longitude": 4.760280132293701
+                },
+                "iataCode": "AMS",
+                "name": "AMSTERDAM, NL (SCHIPHOL AIRPORT)"
+            },
+            "departureDay": "2016-06-07",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-06-07T15:00:00+02:00",
+                "timezone": "Europe/Amsterdam"
+            },
+            "flightNumber": "139"
+        },
+        "reservationNumber": "123456"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "DL",
+                "name": "DELTA AIR LINES"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 49.009700775146484,
+                    "longitude": 2.5477800369262695
+                },
+                "iataCode": "CDG",
+                "name": "PARIS, FR (CHARLES DE GAULLE), TERMINAL 2E"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-06-10T11:30:00+02:00",
+                "timezone": "Europe/Paris"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 42.212501525878906,
+                    "longitude": -83.35330200195312
+                },
+                "iataCode": "DTW",
+                "name": "DETROIT, MI (METROPOLITAN WAYNE CO), TERMINAL EM"
+            },
+            "departureDay": "2016-06-09",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-06-09T21:40:00-04:00",
+                "timezone": "America/Detroit"
+            },
+            "flightNumber": "8573"
+        },
+        "reservationNumber": "123456"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "DL",
+                "name": "DELTA AIR LINES"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "BERLIN, DE (TEGEL)"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-06-10T14:40:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 49.009700775146484,
+                    "longitude": 2.5477800369262695
+                },
+                "iataCode": "CDG",
+                "name": "PARIS, FR (CHARLES DE GAULLE), TERMINAL 2F"
+            },
+            "departureDay": "2016-06-10",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-06-10T13:00:00+02:00",
+                "timezone": "Europe/Paris"
+            },
+            "flightNumber": "8680"
+        },
+        "reservationNumber": "123456"
+    }
+]

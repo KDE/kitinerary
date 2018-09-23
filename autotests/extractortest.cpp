@@ -64,30 +64,22 @@ private Q_SLOTS:
         QTest::addColumn<QString>("contextFile");
         QTest::addColumn<QString>("inputFile");
 
-        QDir baseDir(QStringLiteral(SOURCE_DIR "/../../kitinerary-tests"));
-        // test data not available: add dummy entry to not fail the test
-        if (!baseDir.exists()) {
-            QTest::newRow("test data not available") << QString() << QString();
-            return;
-        }
-
-        bool someTestsFound = false;
-
-        QDirIterator dirIt(baseDir.path(), {QStringLiteral("context.eml")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
-        while (dirIt.hasNext()) {
-            QFileInfo contextFi(dirIt.next());
-            QDirIterator fileIt(contextFi.absolutePath(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass"), QStringLiteral("*.ics")}, QDir::Files | QDir::Readable | QDir::NoSymLinks);
-            while (fileIt.hasNext()) {
-                fileIt.next();
-                someTestsFound = true;
-                QTest::newRow((contextFi.dir().dirName() + QLatin1Char('-') + fileIt.fileName()).toLatin1().constData())
-                    << contextFi.absoluteFilePath()
-                    << fileIt.fileInfo().absoluteFilePath();
+        for (const QDir &baseDir :  {QStringLiteral(SOURCE_DIR "/extractordata"), QStringLiteral(SOURCE_DIR "/../../kitinerary-tests")}) {
+            if (!baseDir.exists()) {
+                continue;
             }
-        }
-        if (!someTestsFound) {
-            QTest::newRow("no tests found in test dir") << QString() << QString();
-            return;
+
+            QDirIterator dirIt(baseDir.path(), {QStringLiteral("context.eml")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
+            while (dirIt.hasNext()) {
+                QFileInfo contextFi(dirIt.next());
+                QDirIterator fileIt(contextFi.absolutePath(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass"), QStringLiteral("*.ics")}, QDir::Files | QDir::Readable | QDir::NoSymLinks);
+                while (fileIt.hasNext()) {
+                    fileIt.next();
+                    QTest::newRow((contextFi.dir().dirName() + QLatin1Char('-') + fileIt.fileName()).toLatin1().constData())
+                        << contextFi.absoluteFilePath()
+                        << fileIt.fileInfo().absoluteFilePath();
+                }
+            }
         }
     }
 

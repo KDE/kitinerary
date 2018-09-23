@@ -1,0 +1,458 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB",
+                "name": "Air Berlin"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 51.289398193359375,
+                    "longitude": 6.766670227050781
+                },
+                "iataCode": "DUS",
+                "name": "International Airport"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-17T12:00:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Tegel"
+            },
+            "departureDay": "2016-10-17",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-17T10:50:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "6439"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "Jane Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB",
+                "name": "Air Berlin"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 51.289398193359375,
+                    "longitude": 6.766670227050781
+                },
+                "iataCode": "DUS",
+                "name": "International Airport"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-17T12:00:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Tegel"
+            },
+            "departureDay": "2016-10-17",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-17T10:50:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "6439"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB",
+                "name": "Air Berlin"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 37.618900299072266,
+                    "longitude": -122.375
+                },
+                "iataCode": "SFO",
+                "name": "San Francisco International"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-17T15:55:00-07:00",
+                "timezone": "America/Los_Angeles"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 51.289398193359375,
+                    "longitude": 6.766670227050781
+                },
+                "iataCode": "DUS",
+                "name": "International Airport"
+            },
+            "departureDay": "2016-10-17",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-17T13:20:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "7392"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "Jane Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB",
+                "name": "Air Berlin"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 37.618900299072266,
+                    "longitude": -122.375
+                },
+                "iataCode": "SFO",
+                "name": "San Francisco International"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-17T15:55:00-07:00",
+                "timezone": "America/Los_Angeles"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 51.289398193359375,
+                    "longitude": 6.766670227050781
+                },
+                "iataCode": "DUS",
+                "name": "International Airport"
+            },
+            "departureDay": "2016-10-17",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-17T13:20:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "7392"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AA",
+                "name": "American Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.978599548339844,
+                    "longitude": -87.90470123291016
+                },
+                "iataCode": "ORD",
+                "name": "O Hare International"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-22T14:00:00-05:00",
+                "timezone": "America/Chicago"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 45.588600158691406,
+                    "longitude": -122.5979995727539
+                },
+                "iataCode": "PDX",
+                "name": "Portland International"
+            },
+            "departureDay": "2016-10-22",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-22T08:00:00-07:00",
+                "timezone": "America/Los_Angeles"
+            },
+            "flightNumber": "086"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "Jane Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AA",
+                "name": "American Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.978599548339844,
+                    "longitude": -87.90470123291016
+                },
+                "iataCode": "ORD",
+                "name": "O Hare International"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-22T14:00:00-05:00",
+                "timezone": "America/Chicago"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 45.588600158691406,
+                    "longitude": -122.5979995727539
+                },
+                "iataCode": "PDX",
+                "name": "Portland International"
+            },
+            "departureDay": "2016-10-22",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-22T08:00:00-07:00",
+                "timezone": "America/Los_Angeles"
+            },
+            "flightNumber": "086"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB",
+                "name": "Air Berlin"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Tegel"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-23T07:00:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.978599548339844,
+                    "longitude": -87.90470123291016
+                },
+                "iataCode": "ORD",
+                "name": "O Hare International"
+            },
+            "departureDay": "2016-10-22",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-22T15:25:00-05:00",
+                "timezone": "America/Chicago"
+            },
+            "flightNumber": "7421"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "Jane Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB",
+                "name": "Air Berlin"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Tegel"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-23T07:00:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.978599548339844,
+                    "longitude": -87.90470123291016
+                },
+                "iataCode": "ORD",
+                "name": "O Hare International"
+            },
+            "departureDay": "2016-10-22",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2016-10-22T15:25:00-05:00",
+                "timezone": "America/Chicago"
+            },
+            "flightNumber": "7421"
+        },
+        "reservationNumber": "XXX007",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    }
+]

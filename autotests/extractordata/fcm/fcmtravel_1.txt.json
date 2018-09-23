@@ -1,0 +1,116 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "BT",
+                "name": "Air Baltic"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "LV"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 56.92359924316406,
+                    "longitude": 23.971099853515625
+                },
+                "iataCode": "RIX",
+                "name": "Riga"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-11-05T11:35:00+02:00",
+                "timezone": "Europe/Riga"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Tegel"
+            },
+            "departureDay": "2017-11-05",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-11-05T08:55:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "212"
+        },
+        "reservationNumber": "ABCDEF",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "BT",
+                "name": "Air Baltic"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Tegel"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-11-10T08:20:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "LV"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 56.92359924316406,
+                    "longitude": 23.971099853515625
+                },
+                "iataCode": "RIX",
+                "name": "Riga"
+            },
+            "departureDay": "2017-11-10",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-11-10T07:35:00+02:00",
+                "timezone": "Europe/Riga"
+            },
+            "flightNumber": "211"
+        },
+        "reservationNumber": "ABCDEF",
+        "underName": {
+            "@type": "Person",
+            "name": "John Doe"
+        }
+    }
+]

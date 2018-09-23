@@ -1,0 +1,106 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LX"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "CH"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 47.464698791503906,
+                    "longitude": 8.549169540405273
+                },
+                "iataCode": "ZRH",
+                "name": "Zürich"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-09-10T08:15:00+02:00",
+                "timezone": "Europe/Zurich"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Berlin"
+            },
+            "departureDay": "2017-09-10",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-09-10T06:45:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "963"
+        },
+        "reservationNumber": "XXX007"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LX"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55970001220703,
+                    "longitude": 13.287799835205078
+                },
+                "iataCode": "TXL",
+                "name": "Berlin"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-09-15T22:15:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "CH"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 47.464698791503906,
+                    "longitude": 8.549169540405273
+                },
+                "iataCode": "ZRH",
+                "name": "Zürich"
+            },
+            "departureDay": "2017-09-15",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-09-15T20:50:00+02:00",
+                "timezone": "Europe/Zurich"
+            },
+            "flightNumber": "962"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

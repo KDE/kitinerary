@@ -13,7 +13,6 @@ ecm_add_test(structureddataextractortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itin
 ecm_add_test(pdfdocumenttest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary Qt5::Gui)
 ecm_add_test(htmldocumenttest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 ecm_add_test(barcodedecodertest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary Qt5::Gui)
-ecm_add_test(unstructureddataextractortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 ecm_add_test(pkpassextractortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary KPim::PkPass)
 ecm_add_test(postprocessortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 if (TARGET KF5::CalendarCore)
