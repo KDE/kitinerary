@@ -25,6 +25,7 @@
 
 #include <QImage>
 #include <QJsonArray>
+#include <QJsonObject>
 
 using namespace KItinerary;
 
@@ -84,7 +85,7 @@ void GenericPdfExtractor::extractImage(const PdfImage &img, QJsonArray &result)
     if (aspectRatio < 1.2f) {
         const auto b = BarcodeDecoder::decodeAztecBinary(img.image());
         if (Uic9183Parser::maybeUic9183(b)) {
-            // TODO
+            extractUic9183(b, result);
         } else {
             extractBarcode(QString::fromUtf8(b), result);
         }
@@ -104,4 +105,27 @@ void GenericPdfExtractor::extractBarcode(const QString &code, QJsonArray &result
         const auto jsonLd = JsonLdDocument::toJson(res);
         std::copy(jsonLd.begin(), jsonLd.end(), std::back_inserter(result));
     }
+}
+
+void GenericPdfExtractor::extractUic9183(const QByteArray &data, QJsonArray &result)
+{
+    Uic9183Parser p;
+    p.parse(data);
+    if (!p.isValid()) {
+        return;
+    }
+
+    // TODO: add RCT2 ticket data
+    QJsonObject org;
+    org.insert(QLatin1String("@type"), QLatin1String("Organization"));
+    org.insert(QLatin1String("identifier"), QString(QLatin1String("uic:") + p.carrierId()));
+    QJsonObject trip;
+    trip.insert(QLatin1String("@type"), QLatin1String("TrainTrip"));
+    trip.insert(QLatin1String("provider"), org);
+    QJsonObject res;
+    res.insert(QLatin1String("@type"), QLatin1String("TrainReservation"));
+    res.insert(QLatin1String("reservationFor"), trip);
+    res.insert(QLatin1String("reservationNumber"), p.pnr());
+
+    result.push_back(res);
 }
