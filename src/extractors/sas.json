@@ -1,7 +1,10 @@
 [
     {
         "type": "pdf",
-        "filter": [ { "header": "From", "match": "no-reply@flysas.com" } ],
+        "filter": [
+            { "header": "From", "match": "no-reply@flysas.com" },
+            { "header": "provider", "match": "SK" }
+        ],
         "script": "sas-boardingpass.js"
     },
     {

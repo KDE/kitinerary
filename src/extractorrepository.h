@@ -33,6 +33,8 @@ namespace KPkPass {
 class Pass;
 }
 
+class QJsonArray;
+
 namespace KItinerary {
 
 class Extractor;
@@ -54,6 +56,8 @@ public:
     std::vector<const Extractor *> extractorsForMessage(KMime::Content *part) const;
     /** Finds matching extractors for the given pkpass boarding pass. */
     std::vector<const Extractor *> extractorsForPass(KPkPass::Pass *pass) const;
+    /** Finds matching extractors for the given JSON-LD data provided by generic extractors. */
+    std::vector<const Extractor *> extractorsForJsonLd(const QJsonArray &data) const;
 
 private:
     ExtractorRepositoryPrivate* d;

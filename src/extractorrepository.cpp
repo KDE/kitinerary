@@ -136,6 +136,41 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::P
     return v;
 }
 
+static QString providerId(const QJsonObject &res)
+{
+    if (res.value(QLatin1String("@type")).toString() == QLatin1String("FlightReservation")) {
+        return res.value(QLatin1String("reservationFor")).toObject().value(QLatin1String("airline")).toObject().value(QLatin1String("iataCode")).toString();
+    }
+    if (res.value(QLatin1String("@type")).toString() == QLatin1String("TrainReservation")) {
+        return res.value(QLatin1String("reservationFor")).toObject().value(QLatin1String("provider")).toObject().value(QLatin1String("identifier")).toString();
+    }
+
+    return {};
+}
+
+std::vector<const Extractor *> ExtractorRepository::extractorsForJsonLd(const QJsonArray &data) const
+{
+    std::vector<const Extractor *> v;
+
+    for (const auto &val : data) {
+        const auto id = providerId(val.toObject());
+        for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
+            for (const auto &filter : (*it).filters()) {
+                QString value;
+                if (strcmp(filter.headerName(), "provider") != 0) {
+                    continue;
+                }
+                if (filter.matches(id)) {
+                    v.push_back(&(*it));
+                    break;
+                }
+            }
+        }
+    }
+
+    return v;
+}
+
 void ExtractorRepositoryPrivate::loadExtractors()
 {
     auto searchDirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
@@ -179,6 +214,7 @@ void ExtractorRepositoryPrivate::loadExtractors()
         }
     }
 
+    // TODO: remove once all users are ported away from this
     QJsonObject dummy;
     dummy.insert(QLatin1String("type"), QLatin1String("html"));
     m_genericHtmlExtractor.load(dummy, {});

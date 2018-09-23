@@ -1,5 +1,8 @@
 {
     "type": "pdf",
-    "filter": [ { "header": "From", "match": "@airbaltic.com" } ],
+    "filter": [
+        { "header": "From", "match": "@airbaltic.com" },
+        { "header": "provider", "match": "BT" }
+    ],
     "script": "airbaltic.js"
 }
