@@ -42,6 +42,7 @@ static void initResources() // must be outside of a namespace
 namespace KItinerary {
 class ExtractorRepositoryPrivate {
 public:
+    ExtractorRepositoryPrivate();
     void loadExtractors();
 
     std::vector<Extractor> m_extractors;
@@ -51,11 +52,17 @@ public:
 };
 }
 
-ExtractorRepository::ExtractorRepository()
-    : d(new ExtractorRepositoryPrivate)
+ExtractorRepositoryPrivate::ExtractorRepositoryPrivate()
 {
     initResources();
-    d->loadExtractors();
+    loadExtractors();
+}
+
+
+ExtractorRepository::ExtractorRepository()
+{
+    static ExtractorRepositoryPrivate repo;
+    d = &repo;
 }
 
 ExtractorRepository::~ExtractorRepository() = default;

@@ -56,7 +56,7 @@ public:
     std::vector<const Extractor *> extractorsForPass(KPkPass::Pass *pass) const;
 
 private:
-    std::unique_ptr<ExtractorRepositoryPrivate> d;
+    ExtractorRepositoryPrivate* d;
 };
 
 }
