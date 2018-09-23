@@ -87,6 +87,7 @@ class KITINERARY_EXPORT Uic9183Parser
 {
     Q_GADGET
     Q_PROPERTY(QString pnr READ pnr)
+    Q_PROPERTY(QString carrierId READ carrierId)
     Q_PROPERTY(KItinerary::Person person READ person)
     Q_PROPERTY(QString outboundDepartureStationId READ outboundDepartureStationId)
     Q_PROPERTY(QString outboundArrivalStationId READ outboundArrivalStationId)
@@ -104,6 +105,8 @@ public:
 
     /** The booking reference. */
     QString pnr() const;
+    /** The UIC carrier code. */
+    QString carrierId() const;
     /** The person this ticket is issued to. */
     Person person() const;
 

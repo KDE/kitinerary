@@ -424,7 +424,7 @@ void Uic9183Parser::parse(const QByteArray &data)
 
     // 3x header
     // 2x version
-    // 4x issuer UIC carrier code
+    // 4x UIC code of the signing carrier
     // 5x signature key id
     // 50x ASN.1 signature
 
@@ -486,6 +486,15 @@ QString Uic9183Parser::pnr() const
         return {};
     }
     return QString::fromUtf8(b.data() + 16, 6);
+}
+
+QString Uic9183Parser::carrierId() const
+{
+    const auto b = d->findBlock("U_HEAD");
+    if (b.isNull() || b.version() != 1 || b.size() != 53) {
+        return {};
+    }
+    return QString::fromUtf8(b.data() + 12, 4);
 }
 
 Person Uic9183Parser::person() const

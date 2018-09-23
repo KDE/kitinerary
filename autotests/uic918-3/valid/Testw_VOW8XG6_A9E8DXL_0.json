@@ -2,6 +2,7 @@
     {
         "@context": "http://schema.org",
         "@type": "",
+        "carrierId": "0080",
         "person": {
             "@type": "Person",
             "familyName": "häöür Räß",
