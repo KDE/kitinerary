@@ -34,6 +34,10 @@ namespace KPkPass {
 class Pass;
 }
 
+namespace KMime {
+class Content;
+}
+
 class QDateTime;
 class QJsonArray;
 class QString;
@@ -130,7 +134,7 @@ public:
     void clear();
 
     /** Set the extractors to be run on the current data. */
-    void setExtractors(std::vector<const Extractor*> &&extractors);
+    [[deprecated]] void setExtractors(std::vector<const Extractor*> &&extractors);
 
     /** The text to extract data from.
      *  Only considered for text extractors.
@@ -152,9 +156,30 @@ public:
      *  Only considered for ical extractors.
      */
     void setCalendar(const QSharedPointer<KCalCore::Calendar> &calendar);
+    /** A MIME part to extract from.
+     *  This is assumed to contain one of the supported mime types.
+     *  @p content is also set as extraction context (see setContext).
+     */
+    void setContent(KMime::Content *content);
+
+    /** Sets the MIME part the document we try to extract comes from.
+     *  Use this for documents received by email, to provide additional
+     *  hints for the extraction.
+     *  Calling this method is not necessary when using setContent,
+     *  only when using any of the other content setter methods directly.
+     */
+    void setContext(KMime::Content *context);
+
+    /** Set the date the extracted document has been issued at.
+     *  This does not need to be perfectly accurate and is used to
+     *  complete incomplete date information in the document (typically
+     *  a missing year).
+     *  This method does not need to be called when setContext is used.
+     */
+    void setContextDate(const QDateTime &dt);
 
     /** The date the email containing the processed text was sent. */
-    void setSenderDate(const QDateTime &dt);
+    [[deprecated("Use setContextDate")]] void setSenderDate(const QDateTime &dt);
 
     /** Perform the actual extration, and return the JSON-LD data
      *  that has been found.

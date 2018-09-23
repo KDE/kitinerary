@@ -20,6 +20,7 @@
 #include "config-kitinerary.h"
 #include "extractorengine.h"
 #include "extractor.h"
+#include "extractorrepository.h"
 #include "genericpdfextractor.h"
 #include "htmldocument.h"
 #include "jsonlddocument.h"
@@ -40,6 +41,8 @@
 #include <KPkPass/BoardingPass>
 #include <KPkPass/Location>
 
+#include <KMime/Content>
+
 #include <QDateTime>
 #include <QFile>
 #include <QJsonArray>
@@ -56,6 +59,11 @@ namespace KItinerary {
 class ExtractorEnginePrivate {
 public:
     void setupEngine();
+
+    void extractStructured();
+    void extractCustom();
+    void extractGeneric();
+
     void executeScript(const Extractor *extractor);
     void processScriptResult(const QJSValue &result);
     void extractPass();
@@ -73,9 +81,11 @@ public:
 #ifdef HAVE_KCAL
     KCalCore::Calendar::Ptr m_calendar;
 #endif
+    KMime::Content *m_mimeContext = nullptr;
     GenericPdfExtractor m_genericPdfExtractor;
     QJsonArray m_result;
     QJSEngine m_engine;
+    ExtractorRepository m_repo;
 };
 
 }
@@ -111,6 +121,7 @@ void ExtractorEngine::clear()
     d->m_calendar.reset();
 #endif
     d->m_result = {};
+    d->m_mimeContext = nullptr;
     d->m_context->m_senderDate = {};
 }
 
@@ -148,7 +159,26 @@ void ExtractorEngine::setCalendar(const QSharedPointer<KCalCore::Calendar> &cale
 #endif
 }
 
-void ExtractorEngine::setSenderDate(const QDateTime &dt)
+void ExtractorEngine::setContent(KMime::Content *content)
+{
+    // TODO for each type, create the corresponding document
+    setContext(content);
+}
+
+void ExtractorEngine::setContext(KMime::Content *context)
+{
+    d->m_mimeContext = context;
+    auto dateHdr = context->header<KMime::Headers::Date>();
+    while (!dateHdr && context->parent()) {
+        context = context->parent();
+        dateHdr = context->header<KMime::Headers::Date>();
+    }
+    if (dateHdr) {
+        setContextDate(dateHdr->dateTime());
+    }
+}
+
+void ExtractorEngine::setContextDate(const QDateTime &dt)
 {
     d->m_context->m_senderDate = dt;
     d->m_jsonLdApi->setContextDate(dt);
@@ -156,64 +186,101 @@ void ExtractorEngine::setSenderDate(const QDateTime &dt)
     d->m_genericPdfExtractor.setContextDate(dt);
 }
 
+void ExtractorEngine::setSenderDate(const QDateTime &dt)
+{
+    setContextDate(dt);
+}
+
 QJsonArray ExtractorEngine::extract()
 {
-    for (const auto extractor : d->m_extractors) {
+    // structured content
+    d->extractStructured();
+    if (!d->m_result.isEmpty()) {
+        return d->m_result;
+    }
+
+    // custom extractors
+    if (d->m_pass) {
+        d->m_extractors = d->m_repo.extractorsForPass(d->m_pass);
+    } else if (d->m_mimeContext) {
+        d->m_extractors = d->m_repo.extractorsForMessage(d->m_mimeContext);
+    }
+    d->extractCustom();
+
+    // generic extractors
+    d->extractGeneric();
+
+    // check if generic extractors identified documents we have custom extractors for
+    d->m_extractors = d->m_repo.extractorsForJsonLd(d->m_result);
+    d->extractCustom();
+
+    return d->m_result;
+}
+
+void ExtractorEnginePrivate::extractStructured()
+{
+    if (m_htmlDoc) {
+        for (const auto &v : StructuredDataExtractor::extract(m_htmlDoc)) {
+            m_result.push_back(v);
+        }
+    }
+}
+
+void ExtractorEnginePrivate::extractCustom()
+{
+    for (const auto extractor : m_extractors) {
         switch (extractor->type()) {
             case Extractor::Text:
                 // running text extractors on PDF or HTML docs is possible,
                 // but only extract the text when really needed
-                if (d->m_text.isEmpty() && d->m_pdfDoc) {
-                    d->m_text = d->m_pdfDoc->text();
+                if (m_text.isEmpty() && m_pdfDoc) {
+                    m_text = m_pdfDoc->text();
                 }
-                if (d->m_text.isEmpty() && d->m_htmlDoc) {
-                    d->m_text = d->m_htmlDoc->root().recursiveContent();
+                if (m_text.isEmpty() && m_htmlDoc) {
+                    m_text = m_htmlDoc->root().recursiveContent();
                 }
 
-                if (!d->m_text.isEmpty()) {
-                    d->executeScript(extractor);
+                if (!m_text.isEmpty()) {
+                    executeScript(extractor);
                 }
                 break;
             case Extractor::Html:
-                if (d->m_htmlDoc) {
-                    if (extractor->scriptFileName().isEmpty()) {
-                        for (const auto &v : StructuredDataExtractor::extract(d->m_htmlDoc)) {
-                            d->m_result.push_back(v);
-                        }
-                    }
-                    d->executeScript(extractor);
+                if (m_htmlDoc) {
+                    executeScript(extractor);
                 }
                 break;
             case Extractor::Pdf:
-                if (d->m_pdfDoc) {
-                    if (extractor->scriptFileName().isEmpty()) {
-                        d->m_genericPdfExtractor.extract(d->m_pdfDoc, d->m_result);
-                    } else {
-                        d->executeScript(extractor);
-                    }
+                if (m_pdfDoc) {
+                    executeScript(extractor);
                 }
                 break;
             case Extractor::PkPass:
-                if (d->m_pass) {
-                    d->executeScript(extractor);
-                    d->extractPass();
+                if (m_pass) {
+                    executeScript(extractor);
                 }
                 break;
             case Extractor::ICal:
 #ifdef HAVE_KCAL
-                if (d->m_calendar) {
-                    d->executeScript(extractor);
+                if (m_calendar) {
+                    executeScript(extractor);
                 }
 #endif
                 break;
         }
 
-        if (!d->m_result.isEmpty()) {
+        if (!m_result.isEmpty()) {
             break;
         }
     }
+}
 
-    return d->m_result;
+void ExtractorEnginePrivate::extractGeneric()
+{
+    if (m_pass) {
+        extractPass();
+    } else if (m_pdfDoc && m_result.isEmpty()) {
+        m_genericPdfExtractor.extract(m_pdfDoc, m_result);
+    }
 }
 
 void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
