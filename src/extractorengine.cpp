@@ -69,7 +69,7 @@ public:
     QString m_text;
     HtmlDocument *m_htmlDoc = nullptr;
     PdfDocument *m_pdfDoc = nullptr;
-    KPkPass::Pass *m_pass;
+    KPkPass::Pass *m_pass = nullptr;
 #ifdef HAVE_KCAL
     KCalCore::Calendar::Ptr m_calendar;
 #endif
