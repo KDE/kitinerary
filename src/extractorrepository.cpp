@@ -46,9 +46,6 @@ public:
     void loadExtractors();
 
     std::vector<Extractor> m_extractors;
-    Extractor m_genericHtmlExtractor;
-    Extractor m_genericPdfExtractor;
-    Extractor m_genericPkPassExtractor;
 };
 }
 
@@ -75,7 +72,6 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
         return v;
     }
 
-    v.push_back(&d->m_genericHtmlExtractor);
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
         if ((*it).type() == Extractor::PkPass) {
             continue;
@@ -97,9 +93,6 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
             }
         }
     }
-
-    // ### we probably want to check for the part mimetype here (but note the test data doesn't have that set!)
-    v.push_back(&d->m_genericPdfExtractor);
 
     return v;
 }
@@ -127,10 +120,6 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::P
                 break;
             }
         }
-    }
-
-    if (v.empty()) {
-        v.push_back(&d->m_genericPkPassExtractor);
     }
 
     return v;
@@ -213,13 +202,4 @@ void ExtractorRepositoryPrivate::loadExtractors()
             }
         }
     }
-
-    // TODO: remove once all users are ported away from this
-    QJsonObject dummy;
-    dummy.insert(QLatin1String("type"), QLatin1String("html"));
-    m_genericHtmlExtractor.load(dummy, {});
-    dummy.insert(QLatin1String("type"), QLatin1String("pdf"));
-    m_genericPdfExtractor.load(dummy, QString());
-    dummy.insert(QLatin1String("type"), QLatin1String("pkpass"));
-    m_genericPkPassExtractor.load(dummy, QString());
 }
