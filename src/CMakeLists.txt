@@ -95,7 +95,6 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         Extractor
         ExtractorEngine
         ExtractorPostprocessor
-        ExtractorRepository
         HtmlDocument
         IataBcbpParser
         JsonLdDocument

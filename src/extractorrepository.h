@@ -44,7 +44,7 @@ class ExtractorRepositoryPrivate;
  *
  *  See KItinerary::Extractor on where this loads its content from.
  */
-class KITINERARY_EXPORT ExtractorRepository
+class ExtractorRepository
 {
 public:
     ExtractorRepository();
