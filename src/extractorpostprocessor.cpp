@@ -392,10 +392,10 @@ BusReservation ExtractorPostprocessorPrivate::processBusReservation(BusReservati
 
 BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
 {
-    trip.setDepartureStation(processPlace(trip.departureStation()));
-    trip.setArrivalStation(processPlace(trip.arrivalStation()));
-    trip.setDepartureTime(processTimeForLocation(trip.departureTime(), trip.departureStation()));
-    trip.setArrivalTime(processTimeForLocation(trip.arrivalTime(), trip.arrivalStation()));
+    trip.setDepartureBusStop(processPlace(trip.departureBusStop()));
+    trip.setArrivalBusStop(processPlace(trip.arrivalBusStop()));
+    trip.setDepartureTime(processTimeForLocation(trip.departureTime(), trip.departureBusStop()));
+    trip.setArrivalTime(processTimeForLocation(trip.arrivalTime(), trip.arrivalBusStop()));
     return trip;
 }
 
@@ -659,8 +659,8 @@ bool ExtractorPostprocessorPrivate::filterTrainTrip(const TrainTrip &trip) const
 
 bool ExtractorPostprocessorPrivate::filterBusTrip(const BusTrip &trip) const
 {
-    return filterTrainOrBusStation(trip.departureStation())
-           && filterTrainOrBusStation(trip.arrivalStation())
+    return filterTrainOrBusStation(trip.departureBusStop())
+           && filterTrainOrBusStation(trip.arrivalBusStop())
            && trip.departureTime().isValid() && trip.arrivalTime().isValid();
 }
 

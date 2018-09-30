@@ -148,6 +148,33 @@ static void filterEventReservation(QJsonObject &res)
     res.insert(QLatin1String("reservationFor"), event);
 }
 
+static void filterBusStop(QJsonObject &station)
+{
+    renameType(station, "BusStop", "BusStation");
+}
+
+static void filterBusTrip(QJsonObject &trip)
+{
+    renameProperty(trip, "arrivalStation", "arrivalBusStop");
+    renameProperty(trip, "departureStation", "departureBusStop");
+    renameProperty(trip, "busCompany", "provider");
+
+    auto station = trip.value(QLatin1String("arrivalBusStop")).toObject();
+    filterBusStop(station);
+    trip.insert(QLatin1String("arrivalBusStop"), station);
+
+    station = trip.value(QLatin1String("departureBusStop")).toObject();
+    filterBusStop(station);
+    trip.insert(QLatin1String("departureBusStop"), station);
+}
+
+static void filterBusReservation(QJsonObject &res)
+{
+    QJsonObject trip = res.value(QLatin1String("reservationFor")).toObject();
+    filterBusTrip(trip);
+    res.insert(QLatin1String("reservationFor"), trip);
+}
+
 static QJsonArray filterActions(const QJsonValue &v)
 {
     QJsonArray actions;
@@ -193,6 +220,8 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         filterTaxiReservation(res);
     } else if (type == QLatin1String("EventReservation")) {
         filterEventReservation(res);
+    } else if (type == QLatin1String("BusReservation")) {
+        filterBusReservation(res);
     }
 
     auto actions = res.value(QLatin1String("potentialAction"));

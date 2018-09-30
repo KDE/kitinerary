@@ -10,14 +10,14 @@
         ],
         "reservationFor": {
             "@type": "BusTrip",
-            "arrivalStation": {
+            "arrivalBusStop": {
                 "@type": "BusStation",
                 "name": "Wien, Lassallestr./Praterstern"
             },
             "arrivalTime": "2012-08-11T11:20:00",
             "busName": "Praha → Vídeň",
             "busNumber": "SA",
-            "departureStation": {
+            "departureBusStop": {
                 "@type": "BusStation",
                 "name": "Brno, AN u hotelu Grand"
             },
@@ -43,14 +43,14 @@
         ],
         "reservationFor": {
             "@type": "BusTrip",
-            "arrivalStation": {
+            "arrivalBusStop": {
                 "@type": "BusStation",
                 "name": "Brno, AN u hotelu Grand"
             },
             "arrivalTime": "2012-08-12T00:30:00",
             "busName": "Vídeň → Praha",
             "busNumber": "SA",
-            "departureStation": {
+            "departureBusStop": {
                 "@type": "BusStation",
                 "name": "Wien, Lassallestr./Praterstern"
             },

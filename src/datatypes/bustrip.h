@@ -34,15 +34,19 @@ class KITINERARY_EXPORT BusTrip
 {
     KITINERARY_GADGET(BusTrip)
     KITINERARY_PROPERTY(QString, arrivalPlatform, setArrivalPlatform) // ### is this used? it's not in the schema
-    KITINERARY_PROPERTY(KItinerary::BusStation, arrivalStation, setArrivalStation) // ### the schema calls this arrivalBusStop?
+    KITINERARY_PROPERTY(KItinerary::BusStation, arrivalBusStop, setArrivalBusStop)
     KITINERARY_PROPERTY(QDateTime, arrivalTime, setArrivalTime)
     KITINERARY_PROPERTY(QString, departurePlatform, setDeparturePlatform) // ### not in the schema
-    KITINERARY_PROPERTY(KItinerary::BusStation, departureStation, setDepartureStation) // ### see above
+    KITINERARY_PROPERTY(KItinerary::BusStation, departureBusStop, setDepartureBusStop)
     KITINERARY_PROPERTY(QDateTime, departureTime, setDepartureTime)
     KITINERARY_PROPERTY(QString, busName, setBusName)
     KITINERARY_PROPERTY(QString, busNumber, setBusNumber)
     KITINERARY_PROPERTY(KItinerary::Organization, provider, setProvider)
 
+    [[deprecated]] inline KItinerary::BusStation arrivalStation() const { return arrivalBusStop(); }
+    [[deprecated]] inline KItinerary::BusStation departureStation() const { return departureBusStop(); }
+    Q_PROPERTY(KItinerary::BusStation arrivalStation READ arrivalStation STORED false)
+    Q_PROPERTY(KItinerary::BusStation departureStation READ departureStation STORED false)
 private:
     QExplicitlySharedDataPointer<BusTripPrivate> d;
 };

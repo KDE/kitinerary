@@ -10,18 +10,18 @@
         ],
         "reservationFor": {
             "@type": "BusTrip",
-            "arrivalStation": {
+            "arrivalBusStop": {
                 "@type": "BusStation",
                 "name": "Brno, AN u hotelu Grand"
             },
             "arrivalTime": "2015-08-01T00:30:00",
             "busName": "Vienna → Prague",
             "busNumber": "SA",
-            "departurePlatform": "2",
-            "departureStation": {
+            "departureBusStop": {
                 "@type": "BusStation",
                 "name": "Wien, Schwechat Airport Bbf."
             },
+            "departurePlatform": "2",
             "departureTime": "2015-07-31T22:10:00"
         },
         "reservationNumber": "0123456789",

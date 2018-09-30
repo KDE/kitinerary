@@ -263,8 +263,8 @@ static void fillTrainReservation(const TrainReservation &reservation, const KCal
 static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event)
 {
     const auto trip = reservation.reservationFor().value<BusTrip>();
-    const auto depStation = trip.departureStation();
-    const auto arrStation = trip.arrivalStation();
+    const auto depStation = trip.departureBusStop();
+    const auto arrStation = trip.arrivalBusStop();
 
     event->setSummary(i18n("Bus %1 from %2 to %3", trip.busNumber(), depStation.name(), arrStation.name()));
     event->setLocation(depStation.name());

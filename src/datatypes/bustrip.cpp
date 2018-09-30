@@ -28,10 +28,10 @@ class BusTripPrivate : public QSharedData
 {
 public:
     QString arrivalPlatform;
-    BusStation arrivalStation;
+    BusStation arrivalBusStop;
     QDateTime arrivalTime;
     QString departurePlatform;
-    BusStation departureStation;
+    BusStation departureBusStop;
     QDateTime departureTime;
     QString busName;
     QString busNumber;
@@ -40,10 +40,10 @@ public:
 
 KITINERARY_MAKE_SIMPLE_CLASS(BusTrip)
 KITINERARY_MAKE_PROPERTY(BusTrip, QString, arrivalPlatform, setArrivalPlatform)
-KITINERARY_MAKE_PROPERTY(BusTrip, BusStation, arrivalStation, setArrivalStation)
+KITINERARY_MAKE_PROPERTY(BusTrip, BusStation, arrivalBusStop, setArrivalBusStop)
 KITINERARY_MAKE_PROPERTY(BusTrip, QDateTime, arrivalTime, setArrivalTime)
 KITINERARY_MAKE_PROPERTY(BusTrip, QString, departurePlatform, setDeparturePlatform)
-KITINERARY_MAKE_PROPERTY(BusTrip, BusStation, departureStation, setDepartureStation)
+KITINERARY_MAKE_PROPERTY(BusTrip, BusStation, departureBusStop, setDepartureBusStop)
 KITINERARY_MAKE_PROPERTY(BusTrip, QDateTime, departureTime, setDepartureTime)
 KITINERARY_MAKE_PROPERTY(BusTrip, QString, busName, setBusName)
 KITINERARY_MAKE_PROPERTY(BusTrip, QString, busNumber, setBusNumber)
