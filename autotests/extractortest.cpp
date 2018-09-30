@@ -69,16 +69,18 @@ private Q_SLOTS:
                 continue;
             }
 
-            QDirIterator dirIt(baseDir.path(), {QStringLiteral("context.eml")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
-            while (dirIt.hasNext()) {
-                QFileInfo contextFi(dirIt.next());
-                QDirIterator fileIt(contextFi.absolutePath(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass"), QStringLiteral("*.ics")}, QDir::Files | QDir::Readable | QDir::NoSymLinks);
-                while (fileIt.hasNext()) {
-                    fileIt.next();
-                    QTest::newRow((contextFi.dir().dirName() + QLatin1Char('-') + fileIt.fileName()).toLatin1().constData())
-                        << contextFi.absoluteFilePath()
-                        << fileIt.fileInfo().absoluteFilePath();
+            QDirIterator it(baseDir.path(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass"), QStringLiteral("*.ics"), QStringLiteral("*.eml"), QStringLiteral("*.mbox")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
+            while (it.hasNext()) {
+                it.next();
+                // ignore context files
+                if (it.fileName() == QLatin1String("context.eml")) {
+                    continue;
                 }
+
+                QFileInfo contextFi(it.fileInfo().absolutePath() + QLatin1String("/context.eml"));
+                QTest::newRow((contextFi.dir().dirName() + QLatin1Char('-') + it.fileName()).toLatin1().constData())
+                    << contextFi.absoluteFilePath()
+                    << it.fileInfo().absoluteFilePath();
             }
         }
     }
@@ -94,11 +96,12 @@ private Q_SLOTS:
         m_engine.clear();
 
         QFile cf(contextFile);
-        QVERIFY(cf.open(QFile::ReadOnly));
         KMime::Message contextMsg;
-        contextMsg.setContent(cf.readAll());
-        contextMsg.parse();
-        m_engine.setContext(&contextMsg);
+        if (cf.open(QFile::ReadOnly)) {
+            contextMsg.setContent(cf.readAll());
+            contextMsg.parse();
+            m_engine.setContext(&contextMsg);
+        }
 
         QFile inFile(inputFile);
         QVERIFY(inFile.open(QFile::ReadOnly));
@@ -107,6 +110,7 @@ private Q_SLOTS:
         std::unique_ptr<HtmlDocument> htmlDoc;
         std::unique_ptr<PdfDocument> pdfDoc;
         KCalCore::Calendar::Ptr calendar;
+        std::unique_ptr<KMime::Message> mimeMsg;
         QJsonArray jsonResult;
 
         if (inputFile.endsWith(QLatin1String(".pkpass"))) {
@@ -127,6 +131,11 @@ private Q_SLOTS:
             KCalCore::ICalFormat format;
             QVERIFY(format.fromRawString(calendar, inFile.readAll()));
             m_engine.setCalendar(calendar);
+        } else if (inputFile.endsWith(QLatin1String(".eml")) || inputFile.endsWith(QLatin1String(".mbox"))) {
+            mimeMsg.reset(new KMime::Message);
+            mimeMsg->setContent(inFile.readAll());
+            mimeMsg->parse();
+            m_engine.setContent(mimeMsg.get());
         }
 
         jsonResult = m_engine.extract();
