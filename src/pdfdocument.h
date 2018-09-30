@@ -27,6 +27,7 @@
 #include <memory>
 
 class QImage;
+class QTransform;
 
 namespace KItinerary {
 
@@ -48,6 +49,17 @@ public:
 
     int width() const;
     int height() const;
+
+    /** Height of the source image. */
+    int sourceHeight() const;
+    /** Width of the source image. */
+    int sourceWidth() const;
+
+    /** Transformation from source image to final size/position on the page.
+     *  Values are 1/72 inch.
+     */
+    QTransform transform() const;
+
     /** The image as loaded from PDF, without transformations applied. */
     QImage sourceImage() const;
     /** The source image with display transformations applied. */

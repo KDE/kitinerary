@@ -46,8 +46,7 @@ public:
     int m_refNum = -1;
     int m_refGen = -1;
     PdfPagePrivate *m_page = nullptr;
-    double m_x = NAN;
-    double m_y = NAN;
+    QTransform m_transform;
     int m_width = 0;
     int m_height = 0;
     int m_sourceWidth = 0;
@@ -94,14 +93,14 @@ static GlobalParams* popplerGlobalParams()
 class ExtractorOutputDevice : public TextOutputDev
 {
 public:
-    ExtractorOutputDevice(PdfDocumentPrivate *dd);
+    ExtractorOutputDevice();
     GBool needNonText() override { return true; }
     void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, GBool interpolate, int *maskColors, GBool inlineImg) override;
 
     std::vector<PdfImage> m_images;
 
 private:
-    PdfDocumentPrivate *d;
+    QTransform m_transform;
 };
 
 #ifndef HAVE_POPPLER_0_69
@@ -170,9 +169,8 @@ QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
 }
 
 
-ExtractorOutputDevice::ExtractorOutputDevice(PdfDocumentPrivate *dd)
+ExtractorOutputDevice::ExtractorOutputDevice()
     : TextOutputDev(nullptr, false, 0, false, false)
-    , d(dd)
 {
 }
 
@@ -219,8 +217,8 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
             pdfImg.d->m_height = width * -state->getCTM()[3] / state->getCTM()[0];
         }
     }
-    pdfImg.d->m_x = state->getCTM()[4];
-    pdfImg.d->m_y = state->getCTM()[5];
+    const auto ctm = state->getCTM();
+    pdfImg.d->m_transform = QTransform(ctm[0], ctm[1], ctm[2], ctm[3], ctm[4], ctm[5]);
     pdfImg.d->m_format = format;
     m_images.push_back(pdfImg);
 }
@@ -272,6 +270,21 @@ int PdfImage::width() const
     return d->m_width;
 }
 
+int PdfImage::sourceHeight() const
+{
+    return d->m_sourceHeight;
+}
+
+int PdfImage::sourceWidth() const
+{
+    return d->m_sourceWidth;
+}
+
+QTransform PdfImage::transform() const
+{
+    return d->m_transform;
+}
+
 QImage PdfImage::sourceImage() const
 {
     const auto it = d->m_page->m_doc->m_imageData.find(d->m_refNum);
@@ -320,7 +333,7 @@ void PdfPagePrivate::load()
 
 #ifdef HAVE_POPPLER
     QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
-    ExtractorOutputDevice device(m_doc);
+    ExtractorOutputDevice device;
     m_doc->m_popplerDoc->displayPageSlice(&device, m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
     const auto pageRect = m_doc->m_popplerDoc->getPage(m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
@@ -361,11 +374,11 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
 #ifdef HAVE_POPPLER
     QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
 
-    std::unique_ptr<ExtractorOutputDevice> device(new ExtractorOutputDevice(d->m_doc));
-    d->m_doc->m_popplerDoc->displayPageSlice(device.get(), d->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
+    ExtractorOutputDevice device;
+    d->m_doc->m_popplerDoc->displayPageSlice(&device, d->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
     const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
-    std::unique_ptr<GooString> s(device->getText(ratio(pageRect->x1, pageRect->x2, left), ratio(pageRect->y1, pageRect->y2, top),
-                                                 ratio(pageRect->x1, pageRect->x2, right), ratio(pageRect->y1, pageRect->y2, bottom)));
+    std::unique_ptr<GooString> s(device.getText(ratio(pageRect->x1, pageRect->x2, left), ratio(pageRect->y1, pageRect->y2, top),
+                                                ratio(pageRect->x1, pageRect->x2, right), ratio(pageRect->y1, pageRect->y2, bottom)));
     return QString::fromUtf8(s->getCString());
 #else
     Q_UNUSED(left);
@@ -406,8 +419,8 @@ QVariantList PdfPage::imagesInRect(double left, double top, double right, double
     const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
 
     for (const auto &img : d->m_images) {
-        if ((img.d->m_x >= ratio(pageRect->x1, pageRect->x2, left) && img.d->m_x <= ratio(pageRect->x1, pageRect->x2, right)) &&
-            (img.d->m_y >= ratio(pageRect->y1, pageRect->y2, top)  && img.d->m_y <= ratio(pageRect->y1, pageRect->y2, bottom)))
+        if ((img.d->m_transform.dx() >= ratio(pageRect->x1, pageRect->x2, left) && img.d->m_transform.dx() <= ratio(pageRect->x1, pageRect->x2, right)) &&
+            (img.d->m_transform.dy() >= ratio(pageRect->y1, pageRect->y2, top)  && img.d->m_transform.dy() <= ratio(pageRect->y1, pageRect->y2, bottom)))
         {
             l.push_back(QVariant::fromValue(img));
         }

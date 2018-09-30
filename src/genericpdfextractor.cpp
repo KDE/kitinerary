@@ -23,19 +23,27 @@
 #include <KItinerary/PdfDocument>
 #include <KItinerary/Uic9183Parser>
 
+#include <QDebug>
 #include <QImage>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QTransform>
 
 using namespace KItinerary;
 
 enum {
     MaxPageCount = 10, // maximum in the current test set is 6
     MaxFileSize = 4000000, // maximum in the current test set is 980kB
-    MinImageHeight = 10,
-    MinImageWidth = 30,
-    MaxImageHeight = 1000, // TODO what's a realisitic value here?
-    MaxImageWidth = 1000
+    // unit is pixels, assuming landscape orientation
+    MinSourceImageHeight = 10,
+    MinSourceImageWidth = 30,
+    MaxSourceImageHeight = 1000, // TODO what's a realisitic value here?
+    MaxSourceImageWidth = 2000,
+    // unit is 1/72 inch, assuming landscape orientation
+    MinTargetImageHeight = 30,
+    MinTargetImageWidth = 72,
+    MaxTargetImageHeight = 252,
+    MaxTargetImageWidth = 252,
 };
 
 GenericPdfExtractor::GenericPdfExtractor() = default;
@@ -60,12 +68,24 @@ void GenericPdfExtractor::extract(PdfDocument *doc, QJsonArray &result)
 
         for (int j = 0; j < page.imageCount(); ++j) {
             const auto img = page.image(j);
-            // image size sanity checks
-            if (img.height() < MinImageHeight || img.height() > MaxImageHeight || img.width() < MinImageWidth || img.height() > MaxImageWidth) {
+            if (m_imageIds.find(img.objectId()) != m_imageIds.end()) {
                 continue;
             }
 
-            if (m_imageIds.find(img.objectId()) != m_imageIds.end()) {
+            // image source size sanity checks
+            if (std::min(img.sourceWidth(), img.sourceHeight()) < MinSourceImageHeight
+             || std::max(img.sourceWidth(), img.sourceHeight()) < MinSourceImageWidth
+             || img.sourceHeight() > MaxSourceImageHeight
+             || img.sourceWidth() > MaxSourceImageWidth) {
+                continue;
+            }
+
+            // image target size checks
+            const auto targetRect = img.transform().map(QRectF(0, 0, 1, -1)).boundingRect();
+            if (std::min(targetRect.width(), targetRect.height()) < MinTargetImageHeight
+             || std::max(targetRect.width(), targetRect.height()) < MinTargetImageWidth
+             || targetRect.height() > MaxTargetImageHeight
+             || targetRect.width() > MaxTargetImageWidth) {
                 continue;
             }
 
