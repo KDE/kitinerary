@@ -91,7 +91,8 @@ public:
     bool filterLodgingReservation(const LodgingReservation &res) const;
     bool filterFlight(const Flight &flight) const;
     bool filterAirport(const Airport &airport) const;
-    template <typename T> bool filterTrainOrBusTrip(const T &trip) const;
+    bool filterTrainTrip(const TrainTrip &trip) const;
+    bool filterBusTrip(const BusTrip &trip) const;
     template <typename T> bool filterTrainOrBusStation(const T &station) const;
     bool filterEventReservation(const EventReservation &res) const;
     bool filterFoodReservation(const FoodEstablishmentReservation &res) const;
@@ -604,10 +605,10 @@ bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
         return filterFlight(res.value<FlightReservation>().reservationFor().value<Flight>());
     }
     if (JsonLd::isA<TrainReservation>(res)) {
-        return filterTrainOrBusTrip(res.value<TrainReservation>().reservationFor().value<TrainTrip>());
+        return filterTrainTrip(res.value<TrainReservation>().reservationFor().value<TrainTrip>());
     }
     if (JsonLd::isA<BusReservation>(res)) {
-        return filterTrainOrBusTrip(res.value<BusReservation>().reservationFor().value<BusTrip>());
+        return filterBusTrip(res.value<BusReservation>().reservationFor().value<BusTrip>());
     }
     if (JsonLd::isA<LodgingReservation>(res)) {
         return filterLodgingReservation(res.value<LodgingReservation>());
@@ -649,8 +650,14 @@ bool ExtractorPostprocessorPrivate::filterAirport(const Airport &airport) const
     return !airport.iataCode().isEmpty() || !airport.name().isEmpty();
 }
 
-template <typename T>
-bool ExtractorPostprocessorPrivate::filterTrainOrBusTrip(const T &trip) const
+bool ExtractorPostprocessorPrivate::filterTrainTrip(const TrainTrip &trip) const
+{
+    return filterTrainOrBusStation(trip.departureStation())
+           && filterTrainOrBusStation(trip.arrivalStation())
+           && trip.departureTime().isValid() && trip.arrivalTime().isValid();
+}
+
+bool ExtractorPostprocessorPrivate::filterBusTrip(const BusTrip &trip) const
 {
     return filterTrainOrBusStation(trip.departureStation())
            && filterTrainOrBusStation(trip.arrivalStation())

@@ -70,8 +70,6 @@ static QString formatAddressSingleLine(const PostalAddress &addr)
 #ifdef HAVE_KCAL
 using namespace KCalCore;
 static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event);
-template <typename Trip, typename Res>
-static void fillTripReservation(const Res &reservation, const KCalCore::Event::Ptr &event);
 static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event);
 static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event);
@@ -228,12 +226,13 @@ static void fillFlightReservation(const QVector<QVariant> &reservations, const K
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-template <typename Trip, typename Res>
-static void fillTripReservation(const Res &reservation, const KCalCore::Event::Ptr &event)
+static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event)
 {
-    const auto trip = reservation.reservationFor().template value<Trip>();
+    const auto trip = reservation.reservationFor().value<TrainTrip>();
     const auto depStation = trip.departureStation();
+    const auto arrStation = trip.arrivalStation();
 
+    event->setSummary(i18n("Train %1 from %2 to %3", trip.trainNumber(), depStation.name(), arrStation.name()));
     event->setLocation(depStation.name());
     fillGeoPosition(depStation, event);
     event->setDtStart(trip.departureTime());
@@ -244,7 +243,7 @@ static void fillTripReservation(const Res &reservation, const KCalCore::Event::P
     if (!trip.departurePlatform().isEmpty()) {
         desc.push_back(i18n("Departure platform: %1", trip.departurePlatform()));
     }
-    const auto ticket = reservation.reservedTicket().template value<Ticket>();
+    const auto ticket = reservation.reservedTicket().value<Ticket>();
     const auto seat = ticket.ticketedSeat();
     if (!seat.seatSection().isEmpty()) {
         desc.push_back(i18n("Coach: %1", seat.seatSection()));
@@ -261,16 +260,6 @@ static void fillTripReservation(const Res &reservation, const KCalCore::Event::P
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event)
-{
-    const auto trip = reservation.reservationFor().value<TrainTrip>();
-    const auto depStation = trip.departureStation();
-    const auto arrStation = trip.arrivalStation();
-
-    event->setSummary(i18n("Train %1 from %2 to %3", trip.trainNumber(), depStation.name(), arrStation.name()));
-    fillTripReservation<TrainTrip>(reservation, event);
-}
-
 static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event)
 {
     const auto trip = reservation.reservationFor().value<BusTrip>();
@@ -278,7 +267,22 @@ static void fillBusReservation(const BusReservation &reservation, const KCalCore
     const auto arrStation = trip.arrivalStation();
 
     event->setSummary(i18n("Bus %1 from %2 to %3", trip.busNumber(), depStation.name(), arrStation.name()));
-    fillTripReservation<BusTrip>(reservation, event);
+    event->setLocation(depStation.name());
+    fillGeoPosition(depStation, event);
+    event->setDtStart(trip.departureTime());
+    event->setDtEnd(trip.arrivalTime());
+    event->setAllDay(false);
+
+    QStringList desc;
+    const auto ticket = reservation.reservedTicket().value<Ticket>();
+    const auto seat = ticket.ticketedSeat();
+    if (!seat.seatNumber().isEmpty()) {
+        desc.push_back(i18n("Seat: %1", seat.seatNumber()));
+    }
+    if (!reservation.reservationNumber().isEmpty()) {
+        desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
+    }
+    event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
 static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event)
