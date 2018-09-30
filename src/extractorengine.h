@@ -178,9 +178,6 @@ public:
      */
     void setContextDate(const QDateTime &dt);
 
-    /** The date the email containing the processed text was sent. */
-    [[deprecated("Use setContextDate")]] void setSenderDate(const QDateTime &dt);
-
     /** Perform the actual extration, and return the JSON-LD data
      *  that has been found.
      */

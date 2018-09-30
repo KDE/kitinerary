@@ -33,8 +33,9 @@
 #include "jsapi/jsonld.h"
 
 #ifdef HAVE_KCAL
-#include <KCalCore/Calendar>
+#include <KCalCore/MemoryCalendar>
 #include <KCalCore/Event>
+#include <KCalCore/ICalFormat>
 #endif
 
 #include <KPkPass/Barcode>
@@ -59,7 +60,14 @@ namespace KItinerary {
 class ExtractorEnginePrivate {
 public:
     void setupEngine();
+    void resetContent();
 
+    void setContent(KMime::Content *content);
+    void setContext(KMime::Content *context);
+    void setContextDate(const QDateTime &dt);
+
+    void extractRecursive(KMime::Content *content);
+    void extractDocument();
     void extractStructured();
     void extractCustom();
     void extractGeneric();
@@ -75,18 +83,31 @@ public:
     JsApi::Context *m_context = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
     QString m_text;
-    HtmlDocument *m_htmlDoc = nullptr;
-    PdfDocument *m_pdfDoc = nullptr;
-    KPkPass::Pass *m_pass = nullptr;
+    std::unique_ptr<HtmlDocument, std::function<void(HtmlDocument*)>> m_htmlDoc;
+    std::unique_ptr<PdfDocument, std::function<void(PdfDocument*)>> m_pdfDoc;
+    std::unique_ptr<KPkPass::Pass, std::function<void(KPkPass::Pass*)>> m_pass;
 #ifdef HAVE_KCAL
     KCalCore::Calendar::Ptr m_calendar;
 #endif
+    KMime::Content *m_mimeContent = nullptr;
     KMime::Content *m_mimeContext = nullptr;
     GenericPdfExtractor m_genericPdfExtractor;
     QJsonArray m_result;
     QJSEngine m_engine;
     ExtractorRepository m_repo;
 };
+
+template <typename T>
+static std::unique_ptr<T, std::function<void(T*)>> make_owning_ptr(T *ptr)
+{
+    return std::unique_ptr<T, std::function<void(T*)>>(ptr, [](T *ptr){ delete ptr; });
+}
+
+template <typename T>
+static std::unique_ptr<T, std::function<void(T*)>> make_nonowning_ptr(T *ptr)
+{
+    return std::unique_ptr<T, std::function<void(T*)>>(ptr, [](T*){});
+}
 
 }
 
@@ -113,16 +134,22 @@ ExtractorEngine::~ExtractorEngine() = default;
 
 void ExtractorEngine::clear()
 {
-    d->m_text.clear();
-    d->m_pdfDoc = nullptr;
-    d->m_htmlDoc = nullptr;
-    d->m_pass = nullptr;
-#ifdef HAVE_KCAL
-    d->m_calendar.reset();
-#endif
+    d->resetContent();
     d->m_result = {};
     d->m_mimeContext = nullptr;
     d->m_context->m_senderDate = {};
+}
+
+void ExtractorEnginePrivate::resetContent()
+{
+    m_text.clear();
+    m_pdfDoc.reset();
+    m_htmlDoc.reset();
+    m_pass.reset();
+#ifdef HAVE_KCAL
+    m_calendar.reset();
+#endif
+    m_mimeContent = nullptr;
 }
 
 void ExtractorEngine::setExtractors(std::vector<const Extractor*> &&extractors)
@@ -137,17 +164,17 @@ void ExtractorEngine::setText(const QString &text)
 
 void ExtractorEngine::setHtmlDocument(HtmlDocument *htmlDoc)
 {
-    d->m_htmlDoc = htmlDoc;
+    d->m_htmlDoc = make_nonowning_ptr(htmlDoc);
 }
 
 void ExtractorEngine::setPdfDocument(PdfDocument *pdfDoc)
 {
-    d->m_pdfDoc = pdfDoc;
+    d->m_pdfDoc = make_nonowning_ptr(pdfDoc);
 }
 
 void ExtractorEngine::setPass(KPkPass::Pass *pass)
 {
-    d->m_pass = pass;
+    d->m_pass = make_nonowning_ptr(pass);
 }
 
 void ExtractorEngine::setCalendar(const QSharedPointer<KCalCore::Calendar> &calendar)
@@ -159,15 +186,47 @@ void ExtractorEngine::setCalendar(const QSharedPointer<KCalCore::Calendar> &cale
 #endif
 }
 
-void ExtractorEngine::setContent(KMime::Content *content)
+static bool isContentType(KMime::Content *content, KMime::Headers::ContentType *ct, const char *mimeType, const char *ext)
 {
-    // TODO for each type, create the corresponding document
-    setContext(content);
+    if (ct && ct->mimeType() == mimeType) {
+        return true;
+    }
+    if (ct && ct->name().endsWith(QLatin1String(ext))) {
+        return true;
+    }
+    const auto cd = content->contentDisposition(false);
+    return cd && cd->filename().endsWith(QLatin1String(ext));
 }
 
-void ExtractorEngine::setContext(KMime::Content *context)
+void ExtractorEnginePrivate::setContent(KMime::Content *content)
 {
-    d->m_mimeContext = context;
+    setContext(content);
+
+    const auto ct = content->contentType(false);
+    if (isContentType(content, ct, "application/vnd.apple.pkpass", ".pkpass")) {
+        m_pass = make_owning_ptr(KPkPass::Pass::fromData(content->decodedContent()));
+    } else if (isContentType(content, ct, "text/calendar", ".ics")) {
+#ifdef HAVE_KCAL
+        m_calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
+        KCalCore::ICalFormat format;
+        if (!format.fromRawString(m_calendar, content->decodedContent())) {
+            m_calendar.reset();
+        }
+#endif
+    } else if (isContentType(content, ct, "application/pdf", ".pdf")) {
+        m_pdfDoc = make_owning_ptr(PdfDocument::fromData(content->decodedContent()));
+    } else if (ct && ct->isHTMLText()) {
+        m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(content->decodedContent()));
+    } else if ( (ct && ct->isPlainText()) || (!ct && content->isTopLevel())) {
+        m_text = content->decodedText();
+    }
+
+    m_mimeContent = (ct && ct->isMultipart()) ? content : nullptr;
+}
+
+void ExtractorEnginePrivate::setContext(KMime::Content *context)
+{
+    m_mimeContext = context;
     auto dateHdr = context->header<KMime::Headers::Date>();
     while (!dateHdr && context->parent()) {
         context = context->parent();
@@ -178,49 +237,82 @@ void ExtractorEngine::setContext(KMime::Content *context)
     }
 }
 
-void ExtractorEngine::setContextDate(const QDateTime &dt)
+void ExtractorEnginePrivate::setContextDate(const QDateTime &dt)
 {
-    d->m_context->m_senderDate = dt;
-    d->m_jsonLdApi->setContextDate(dt);
-    d->m_barcodeApi->setContextDate(dt.date());
-    d->m_genericPdfExtractor.setContextDate(dt);
+    m_context->m_senderDate = dt;
+    m_jsonLdApi->setContextDate(dt);
+    m_barcodeApi->setContextDate(dt.date());
+    m_genericPdfExtractor.setContextDate(dt);
 }
 
-void ExtractorEngine::setSenderDate(const QDateTime &dt)
+void ExtractorEngine::setContent(KMime::Content *content)
 {
-    setContextDate(dt);
+    d->setContent(content);
+}
+
+void ExtractorEngine::setContext(KMime::Content *context)
+{
+    d->setContext(context);
+}
+
+void ExtractorEngine::setContextDate(const QDateTime &dt)
+{
+    d->setContextDate(dt);
 }
 
 QJsonArray ExtractorEngine::extract()
 {
+    if (d->m_mimeContent) {
+        d->extractRecursive(d->m_mimeContent);
+    } else {
+        d->extractDocument();
+    }
+
+    return d->m_result;
+}
+
+void ExtractorEnginePrivate::extractRecursive(KMime::Content *content)
+{
+    for (const auto child : content->contents()) {
+        resetContent();
+        setContent(child);
+        if (m_mimeContent) {
+            extractRecursive(m_mimeContent);
+        } else {
+            extractDocument();
+        }
+    }
+}
+
+void ExtractorEnginePrivate::extractDocument()
+{
     // structured content
-    d->extractStructured();
-    if (!d->m_result.isEmpty()) {
-        return d->m_result;
+    extractStructured();
+    if (!m_result.isEmpty()) {
+        return;
     }
 
     // custom extractors
-    if (d->m_pass) {
-        d->m_extractors = d->m_repo.extractorsForPass(d->m_pass);
-    } else if (d->m_mimeContext) {
-        d->m_extractors = d->m_repo.extractorsForMessage(d->m_mimeContext);
+    if (m_pass) {
+        m_extractors = m_repo.extractorsForPass(m_pass.get());
+    } else if (m_mimeContext) {
+        m_extractors = m_repo.extractorsForMessage(m_mimeContext);
     }
-    d->extractCustom();
+    extractCustom();
 
     // generic extractors
-    d->extractGeneric();
+    extractGeneric();
 
     // check if generic extractors identified documents we have custom extractors for
-    d->m_extractors = d->m_repo.extractorsForJsonLd(d->m_result);
-    d->extractCustom();
-
-    return d->m_result;
+    m_extractors = m_repo.extractorsForJsonLd(m_result);
+    extractCustom();
 }
 
 void ExtractorEnginePrivate::extractStructured()
 {
     if (m_htmlDoc) {
-        for (const auto &v : StructuredDataExtractor::extract(m_htmlDoc)) {
+        qCDebug(Log) << "Looking for structured annotations...";
+        for (const auto &v : StructuredDataExtractor::extract(m_htmlDoc.get())) {
             m_result.push_back(v);
         }
     }
@@ -279,7 +371,7 @@ void ExtractorEnginePrivate::extractGeneric()
     if (m_pass) {
         extractPass();
     } else if (m_pdfDoc && m_result.isEmpty()) {
-        m_genericPdfExtractor.extract(m_pdfDoc, m_result);
+        m_genericPdfExtractor.extract(m_pdfDoc.get(), m_result);
     }
 }
 
@@ -309,19 +401,20 @@ void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
         return;
     }
 
+    qCDebug(Log) << "Running custom extractor" << extractor->scriptFileName() << extractor->scriptFunction();
     QJSValueList args;
     switch (extractor->type()) {
         case Extractor::Text:
             args = {m_text};
             break;
         case Extractor::Html:
-            args = {m_engine.toScriptValue<QObject*>(m_htmlDoc)};
+            args = {m_engine.toScriptValue<QObject*>(m_htmlDoc.get())};
             break;
         case Extractor::Pdf:
-            args = {m_engine.toScriptValue<QObject*>(m_pdfDoc)};
+            args = {m_engine.toScriptValue<QObject*>(m_pdfDoc.get())};
             break;
         case Extractor::PkPass:
-            args = {m_engine.toScriptValue<QObject*>(m_pass)};
+            args = {m_engine.toScriptValue<QObject*>(m_pass.get())};
             break;
         case Extractor::ICal:
 #ifdef HAVE_KCAL
@@ -369,7 +462,7 @@ void ExtractorEnginePrivate::extractPass()
     if (m_result.isEmpty()) { // no script run, so we need to create the top-level element ourselves
         QJsonObject res;
         QJsonObject resFor;
-        if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(m_pass)) {
+        if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(m_pass.get())) {
             switch (boardingPass->transitType()) {
                 case KPkPass::BoardingPass::Air:
                     res.insert(QLatin1String("@type"), QLatin1String("FlightReservation"));
