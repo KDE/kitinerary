@@ -38,18 +38,34 @@
 using namespace KItinerary;
 
 #ifdef HAVE_ZXING
-static QString decodePdf417Internal(const QImage &img)
+static QString decodeString(const QImage &img, zxing::BarcodeFormat format)
 {
     try {
         const zxing::Ref<zxing::LuminanceSource> source(new QImageLuminanceSource(img));
-
         const zxing::Ref<zxing::Binarizer> binarizer(new zxing::HybridBinarizer(source));
         const zxing::Ref<zxing::BinaryBitmap> binary(new zxing::BinaryBitmap(binarizer));
-        const zxing::DecodeHints hints(zxing::DecodeHints::PDF_417_HINT);
+        const zxing::DecodeHints hints(1 << format);
 
         zxing::MultiFormatReader reader;
         const auto result = reader.decode(binary, hints);
         return QString::fromStdString(result->getText()->getText());
+    } catch (const std::exception &e) {
+        //qCDebug(Log) << e.what();
+    }
+    return {};
+}
+
+static QByteArray decodeBinary(const QImage &img, zxing::BarcodeFormat format)
+{
+    try {
+        const zxing::Ref<zxing::LuminanceSource> source(new QImageLuminanceSource(img));
+        const zxing::Ref<zxing::Binarizer> binarizer(new zxing::HybridBinarizer(source));
+        const zxing::Ref<zxing::BinaryBitmap> binary(new zxing::BinaryBitmap(binarizer));
+        const zxing::DecodeHints hints(1 << format);
+
+        zxing::MultiFormatReader reader;
+        const auto result = reader.decode(binary, hints);
+        return QByteArray(result->getText()->getText().c_str(), result->getText()->getText().size());
     } catch (const std::exception &e) {
         //qCDebug(Log) << e.what();
     }
@@ -67,39 +83,32 @@ QString BarcodeDecoder::decodePdf417(const QImage &img)
         normalizedImg = normalizedImg.transformed(tf);
     }
 
-    const auto result = decodePdf417Internal(normalizedImg);
+    const auto result = decodeString(normalizedImg, zxing::BarcodeFormat::PDF_417);
     if (!result.isEmpty()) {
         return result;
     }
     // try flipped around the x axis, zxing doesn't detect that, but it's e.g. encountered in SAS passes
-    return decodePdf417Internal(normalizedImg.transformed(QTransform{1, 0, 0, -1, 0, 0}));
+    return decodeString(normalizedImg.transformed(QTransform{1, 0, 0, -1, 0, 0}), zxing::BarcodeFormat::PDF_417);
 #else
     Q_UNUSED(img);
-#endif
     return {};
+#endif
 }
 
 QString BarcodeDecoder::decodeAztec(const QImage &img)
 {
-    return QString::fromUtf8(decodeAztecBinary(img));
+#ifdef HAVE_ZXING
+    return decodeString(img, zxing::BarcodeFormat::AZTEC);
+#else
+    Q_UNUSED(img);
+    return {};
+#endif
 }
 
 QByteArray BarcodeDecoder::decodeAztecBinary(const QImage &img)
 {
 #ifdef HAVE_ZXING
-    try {
-        const zxing::Ref<zxing::LuminanceSource> source(new QImageLuminanceSource(img));
-
-        const zxing::Ref<zxing::Binarizer> binarizer(new zxing::HybridBinarizer(source));
-        const zxing::Ref<zxing::BinaryBitmap> binary(new zxing::BinaryBitmap(binarizer));
-        const zxing::DecodeHints hints(zxing::DecodeHints::AZTEC_HINT);
-
-        zxing::MultiFormatReader reader;
-        const auto result = reader.decode(binary, hints);
-        return QByteArray(result->getText()->getText().c_str(), result->getText()->getText().size());
-    } catch (const std::exception &e) {
-        //qCDebug(Log) << e.what();
-    }
+    return decodeBinary(img, zxing::BarcodeFormat::AZTEC);
 #else
     Q_UNUSED(img);
 #endif
@@ -109,21 +118,9 @@ QByteArray BarcodeDecoder::decodeAztecBinary(const QImage &img)
 QString BarcodeDecoder::decodeQRCode(const QImage &img)
 {
 #ifdef HAVE_ZXING
-    try {
-        const zxing::Ref<zxing::LuminanceSource> source(new QImageLuminanceSource(img));
-
-        const zxing::Ref<zxing::Binarizer> binarizer(new zxing::HybridBinarizer(source));
-        const zxing::Ref<zxing::BinaryBitmap> binary(new zxing::BinaryBitmap(binarizer));
-        const zxing::DecodeHints hints(zxing::DecodeHints::QR_CODE_HINT);
-
-        zxing::MultiFormatReader reader;
-        const auto result = reader.decode(binary, hints);
-        return QString::fromStdString(result->getText()->getText());
-    } catch (const std::exception &e) {
-        //qCDebug(Log) << e.what();
-    }
+    return decodeString(img, zxing::BarcodeFormat::QR_CODE);
 #else
     Q_UNUSED(img);
-#endif
     return {};
+#endif
 }
