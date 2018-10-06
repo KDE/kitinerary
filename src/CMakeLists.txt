@@ -44,6 +44,7 @@ set(kitinerary_lib_srcs
     mergeutil.cpp
     pdfdocument.cpp
     qimageluminancesource.cpp
+    qimagepurebinarizer.cpp
     sortutil.cpp
     stringutil.cpp
     structureddataextractor.cpp
@@ -77,9 +78,13 @@ target_link_libraries(KPimItinerary
 if (HAVE_POPPLER)
     target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
 endif()
+
 if (HAVE_ZXING)
+    target_link_libraries(KPimItinerary PRIVATE ZXing::Core)
+elseif (HAVE_ZXING_OLD)
     target_link_libraries(KPimItinerary PRIVATE zxing::libzxing)
 endif()
+
 if (HAVE_KCAL)
     target_link_libraries(KPimItinerary PUBLIC KF5::CalendarCore)
 endif()

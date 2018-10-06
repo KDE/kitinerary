@@ -19,7 +19,7 @@
 #define KITINERARY_QIMAGELUMINANCESOURCE_H
 
 #include "config-kitinerary.h"
-#ifdef HAVE_ZXING
+#ifdef HAVE_ZXING_OLD
 
 #include <QImage>
 

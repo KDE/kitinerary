@@ -20,12 +20,17 @@
 #include "barcodedecoder.h"
 #include "logging.h"
 #include "qimageluminancesource.h"
+#include "qimagepurebinarizer.h"
 
 #include <QDebug>
 #include <QImage>
 #include <QString>
 
 #ifdef HAVE_ZXING
+#include <ZXing/DecodeHints.h>
+#include <ZXing/MultiFormatReader.h>
+#include <ZXing/Result.h>
+#elif defined(HAVE_ZXING_OLD)
 #include <zxing/BinaryBitmap.h>
 #include <zxing/DecodeHints.h>
 #include <zxing/MultiFormatReader.h>
@@ -38,6 +43,40 @@
 using namespace KItinerary;
 
 #ifdef HAVE_ZXING
+using ZXing::BarcodeFormat;
+
+static QString decodeString(const QImage &img, ZXing::BarcodeFormat format)
+{
+    QImagePureBinarizer binarizer(img);
+    ZXing::DecodeHints hints;
+    hints.setPossibleFormats({format});
+    ZXing::MultiFormatReader reader(hints);
+    const auto result = reader.read(binarizer);
+    if (result.isValid()) {
+        return QString::fromStdWString(result.text());
+    }
+    return {};
+}
+
+static QByteArray decodeBinary(const QImage &img, ZXing::BarcodeFormat format)
+{
+    QImagePureBinarizer binarizer(img);
+    ZXing::DecodeHints hints;
+    hints.setPossibleFormats({format});
+    ZXing::MultiFormatReader reader(hints);
+    auto result = reader.read(binarizer);
+    if (result.isValid()) {
+        QByteArray b;
+        b.resize(result.text().size());
+        std::copy(result.text().begin(), result.text().end(), b.begin());
+        return b;
+    }
+    return  {};
+}
+
+#elif defined(HAVE_ZXING_OLD)
+using zxing::BarcodeFormat;
+
 static QString decodeString(const QImage &img, zxing::BarcodeFormat format)
 {
     try {
@@ -75,7 +114,7 @@ static QByteArray decodeBinary(const QImage &img, zxing::BarcodeFormat format)
 
 QString BarcodeDecoder::decodePdf417(const QImage &img)
 {
-#ifdef HAVE_ZXING
+#ifdef HAVE_ZXING_ANY
     auto normalizedImg = img;
     if (normalizedImg.width() < normalizedImg.height()) {
         QTransform tf;
@@ -83,12 +122,12 @@ QString BarcodeDecoder::decodePdf417(const QImage &img)
         normalizedImg = normalizedImg.transformed(tf);
     }
 
-    const auto result = decodeString(normalizedImg, zxing::BarcodeFormat::PDF_417);
+    const auto result = decodeString(normalizedImg, BarcodeFormat::PDF_417);
     if (!result.isEmpty()) {
         return result;
     }
     // try flipped around the x axis, zxing doesn't detect that, but it's e.g. encountered in SAS passes
-    return decodeString(normalizedImg.transformed(QTransform{1, 0, 0, -1, 0, 0}), zxing::BarcodeFormat::PDF_417);
+    return decodeString(normalizedImg.transformed(QTransform{1, 0, 0, -1, 0, 0}), BarcodeFormat::PDF_417);
 #else
     Q_UNUSED(img);
     return {};
@@ -97,8 +136,8 @@ QString BarcodeDecoder::decodePdf417(const QImage &img)
 
 QString BarcodeDecoder::decodeAztec(const QImage &img)
 {
-#ifdef HAVE_ZXING
-    return decodeString(img, zxing::BarcodeFormat::AZTEC);
+#ifdef HAVE_ZXING_ANY
+    return decodeString(img, BarcodeFormat::AZTEC);
 #else
     Q_UNUSED(img);
     return {};
@@ -107,8 +146,8 @@ QString BarcodeDecoder::decodeAztec(const QImage &img)
 
 QByteArray BarcodeDecoder::decodeAztecBinary(const QImage &img)
 {
-#ifdef HAVE_ZXING
-    return decodeBinary(img, zxing::BarcodeFormat::AZTEC);
+#ifdef HAVE_ZXING_ANY
+    return decodeBinary(img, BarcodeFormat::AZTEC);
 #else
     Q_UNUSED(img);
 #endif
@@ -117,8 +156,8 @@ QByteArray BarcodeDecoder::decodeAztecBinary(const QImage &img)
 
 QString BarcodeDecoder::decodeQRCode(const QImage &img)
 {
-#ifdef HAVE_ZXING
-    return decodeString(img, zxing::BarcodeFormat::QR_CODE);
+#ifdef HAVE_ZXING_ANY
+    return decodeString(img, BarcodeFormat::QR_CODE);
 #else
     Q_UNUSED(img);
     return {};

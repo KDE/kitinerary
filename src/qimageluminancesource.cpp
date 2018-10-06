@@ -16,7 +16,7 @@
 */
 
 #include "qimageluminancesource.h"
-#ifdef HAVE_ZXING
+#ifdef HAVE_ZXING_OLD
 
 using namespace KItinerary;
 
