@@ -43,6 +43,7 @@ set(kitinerary_lib_srcs
     jsonldimportfilter.cpp
     mergeutil.cpp
     pdfdocument.cpp
+    qimageluminancesource.cpp
     sortutil.cpp
     stringutil.cpp
     structureddataextractor.cpp

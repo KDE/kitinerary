@@ -19,6 +19,7 @@
 
 #include "barcodedecoder.h"
 #include "logging.h"
+#include "qimageluminancesource.h"
 
 #include <QDebug>
 #include <QImage>
@@ -27,7 +28,6 @@
 #ifdef HAVE_ZXING
 #include <zxing/BinaryBitmap.h>
 #include <zxing/DecodeHints.h>
-#include <zxing/LuminanceSource.h>
 #include <zxing/MultiFormatReader.h>
 #include <zxing/Result.h>
 #include <zxing/common/HybridBinarizer.h>
@@ -37,75 +37,7 @@
 
 using namespace KItinerary;
 
-namespace KItinerary {
 #ifdef HAVE_ZXING
-class QImageLuminanceSource : public zxing::LuminanceSource
-{
-public:
-    explicit QImageLuminanceSource(const QImage &img);
-
-    zxing::ArrayRef<char> getRow(int y, zxing::ArrayRef<char> row) const override;
-    zxing::ArrayRef<char> getMatrix() const override;
-
-private:
-    char luminance(int x, int y) const;
-
-    QImage m_img;
-};
-
-#endif
-}
-
-#ifdef HAVE_ZXING
-// this automatically adds a 1px quiet zone around the content
-QImageLuminanceSource::QImageLuminanceSource(const QImage &img)
-    : zxing::LuminanceSource(img.width() + 2, img.height() + 2)
-    , m_img(img)
-{
-}
-
-zxing::ArrayRef<char> QImageLuminanceSource::getRow(int y, zxing::ArrayRef<char> row) const
-{
-    if (!row) {
-        row = zxing::ArrayRef<char>(getWidth());
-    }
-
-    if (y == 0 || y == getHeight() - 1) {
-        memset(&row[0], 0xff, getWidth());
-        return row;
-    }
-
-    row[0] = (char)0xff;
-    for (int i = 1; i < getWidth() - 1; ++i) {
-        row[i] = luminance(i - 1, y);
-    }
-    row[getWidth() - 1] = (char)0xff;
-
-    return row;
-}
-
-zxing::ArrayRef<char> QImageLuminanceSource::getMatrix() const
-{
-    zxing::ArrayRef<char> matrix(getWidth() * getHeight());
-
-    memset(&matrix[0], 0xff, getWidth());
-    for (int i = 1; i < getHeight() - 1; ++i) {
-        matrix[i * getWidth()] = (char)0xff;
-        for (int j = 1; j < getWidth() - 1; ++j) {
-            matrix[i * getWidth() + j] = luminance(j - 1, i - 1);
-        }
-        matrix[(i + 1) * getWidth() - 1] = (char)0xff;
-    }
-    memset(&matrix[(getHeight() - 1) * getWidth()], 0xff, getWidth());
-
-    return matrix;
-}
-
-char QImageLuminanceSource::luminance(int x, int y) const
-{
-    return qGray(m_img.pixel(x, y));
-}
-
 static QString decodePdf417Internal(const QImage &img)
 {
     try {
