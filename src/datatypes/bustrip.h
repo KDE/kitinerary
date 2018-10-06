@@ -43,10 +43,6 @@ class KITINERARY_EXPORT BusTrip
     KITINERARY_PROPERTY(QString, busNumber, setBusNumber)
     KITINERARY_PROPERTY(KItinerary::Organization, provider, setProvider)
 
-    [[deprecated]] inline KItinerary::BusStation arrivalStation() const { return arrivalBusStop(); }
-    [[deprecated]] inline KItinerary::BusStation departureStation() const { return departureBusStop(); }
-    Q_PROPERTY(KItinerary::BusStation arrivalStation READ arrivalStation STORED false)
-    Q_PROPERTY(KItinerary::BusStation departureStation READ departureStation STORED false)
 private:
     QExplicitlySharedDataPointer<BusTripPrivate> d;
 };
