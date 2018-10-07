@@ -212,9 +212,9 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
     const auto targetAspectRatio = state->getCTM()[0] / -state->getCTM()[3];
     if (!qFuzzyCompare(sourceAspectRatio, targetAspectRatio) && qFuzzyIsNull(state->getCTM()[1]) && qFuzzyIsNull(state->getCTM()[2])) {
         if (targetAspectRatio > sourceAspectRatio) {
-            pdfImg.d->m_width = height * state->getCTM()[0] / -state->getCTM()[3];
+            pdfImg.d->m_width = width * targetAspectRatio / sourceAspectRatio;
         } else {
-            pdfImg.d->m_height = width * -state->getCTM()[3] / state->getCTM()[0];
+            pdfImg.d->m_height = height * sourceAspectRatio / targetAspectRatio;
         }
     }
     const auto ctm = state->getCTM();
