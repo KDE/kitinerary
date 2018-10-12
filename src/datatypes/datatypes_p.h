@@ -37,6 +37,7 @@ inline base_type* clone() const override { \
 private:
 
 #define KITINERARY_MAKE_CLASS_IMPL(Class) \
+Q_GLOBAL_STATIC_WITH_ARGS(QExplicitlySharedDataPointer<Class ## Private>, s_ ## Class ## _shared_null, (new Class ## Private)) \
 Class::Class(const Class&) = default; \
 Class::~Class() = default; \
 Class& Class::operator=(const Class &other) { d = other.d; return *this; } \
@@ -45,17 +46,17 @@ Class::operator QVariant() const { return QVariant::fromValue(*this); } \
 static_assert(sizeof(Class) == sizeof(void*), "dptr must be the only member!"); \
 
 #define KITINERARY_MAKE_SIMPLE_CLASS(Class) \
-Class::Class() : d(new Class ## Private) {} \
-KITINERARY_MAKE_CLASS_IMPL(Class)
+KITINERARY_MAKE_CLASS_IMPL(Class) \
+Class::Class() : d(*s_ ## Class ## _shared_null()) {}
 
 #define KITINERARY_MAKE_BASE_CLASS(Class) \
-Class::Class() : d(new Class ## Private) {} \
-Class::Class(Class ## Private *dd) : d(dd) {} \
-KITINERARY_MAKE_CLASS_IMPL(Class)
+KITINERARY_MAKE_CLASS_IMPL(Class) \
+Class::Class() : d(*s_ ## Class ## _shared_null()) {} \
+Class::Class(Class ## Private *dd) : d(dd) {}
 
 #define KITINERARY_MAKE_SUB_CLASS(Class, Base) \
-Class::Class() : Base(new Class ## Private) {} \
-KITINERARY_MAKE_CLASS_IMPL(Class)
+KITINERARY_MAKE_CLASS_IMPL(Class) \
+Class::Class() : Base(s_ ## Class ## _shared_null()->data()) {}
 
 #define K_D(Class) auto d = static_cast<Class ## Private *>(this->d.data())
 
