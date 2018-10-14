@@ -1,7 +1,7 @@
 [
     {
         "@context": "http://schema.org",
-        "@type": "",
+        "@type": "Uic9183Parser",
         "carrierId": "0080",
         "person": {
             "@type": "Person",

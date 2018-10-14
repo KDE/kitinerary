@@ -226,6 +226,19 @@ static bool valueIsNull(const QVariant &v)
     return v.isNull();
 }
 
+static QString typeName(const QMetaObject *mo, const QVariant &v)
+{
+    const auto n = JsonLdDocument::readProperty(v, "className").toString();
+    if (!n.isEmpty()) {
+        return n;
+    }
+
+    if (auto c = strstr(mo->className(), "::")) {
+        return QString::fromUtf8(c + 2);
+    }
+    return QString::fromUtf8(mo->className());
+}
+
 static QJsonValue toJson(const QVariant &v)
 {
     const auto mo = QMetaType(v.userType()).metaObject();
@@ -281,7 +294,7 @@ static QJsonValue toJson(const QVariant &v)
 
     // composite types
     QJsonObject obj;
-    obj.insert(QStringLiteral("@type"), JsonLdDocument::readProperty(v, "className").toString());
+    obj.insert(QStringLiteral("@type"), typeName(mo, v));
     for (int i = 0; i < mo->propertyCount(); ++i) {
         const auto prop = mo->property(i);
         if (!prop.isStored()) {
