@@ -39,6 +39,8 @@ class KITINERARY_EXPORT GeoCoordinates
 
     Q_PROPERTY(bool isValid READ isValid STORED false)
 public:
+    GeoCoordinates(float latitude, float longitude);
+
     /** Returns @c true if both latitude and longitude are set and within
      *  the valid range.
      */

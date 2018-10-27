@@ -41,6 +41,7 @@ set(kitinerary_lib_srcs
     iatabcbpparser.cpp
     jsonlddocument.cpp
     jsonldimportfilter.cpp
+    locationutil.cpp
     mergeutil.cpp
     pdfdocument.cpp
     qimageluminancesource.cpp
@@ -104,6 +105,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         HtmlDocument
         IataBcbpParser
         JsonLdDocument
+        LocationUtil
         MergeUtil
         PdfDocument
         SortUtil

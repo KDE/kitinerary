@@ -35,6 +35,14 @@ KITINERARY_MAKE_SIMPLE_CLASS(GeoCoordinates)
 KITINERARY_MAKE_PROPERTY(GeoCoordinates, float, latitude, setLatitude)
 KITINERARY_MAKE_PROPERTY(GeoCoordinates, float, longitude, setLongitude)
 
+GeoCoordinates::GeoCoordinates(float latitude, float longitude) :
+    d(*s_GeoCoordinates_shared_null())
+{
+    d.detach();
+    d->latitude = latitude;
+    d->longitude = longitude;
+}
+
 bool GeoCoordinates::isValid() const
 {
     return !std::isnan(d->latitude) && !std::isnan(d->longitude);
