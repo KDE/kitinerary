@@ -145,7 +145,6 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForJsonLd(const QJ
         const auto id = providerId(val.toObject());
         for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
             for (const auto &filter : (*it).filters()) {
-                QString value;
                 if (strcmp(filter.headerName(), "provider") != 0) {
                     continue;
                 }
