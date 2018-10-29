@@ -82,8 +82,8 @@ class ExtractorOutputDevice : public TextOutputDev
 {
 public:
     ExtractorOutputDevice(PdfDocumentPrivate *dd);
-    GBool needNonText() override { return true; }
-    void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, GBool interpolate, int *maskColors, GBool inlineImg) override;
+    bool needNonText() override { return true; }
+    void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, int *maskColors, bool inlineImg) override;
 
     std::vector<PdfImage> m_images;
 
@@ -96,12 +96,12 @@ class ImageLoaderOutputDevice : public OutputDev
 public:
     ImageLoaderOutputDevice(PdfImagePrivate *dd);
 
-    GBool interpretType3Chars() override { return false; }
-    GBool needNonText() override { return true; }
-    GBool upsideDown() override { return false; }
-    GBool useDrawChar() override { return false; }
+    bool interpretType3Chars() override { return false; }
+    bool needNonText() override { return true; }
+    bool upsideDown() override { return false; }
+    bool useDrawChar() override { return false; }
 
-    void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, GBool interpolate, int *maskColors, GBool inlineImg) override;
+    void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, int *maskColors, bool inlineImg) override;
 
 private:
     PdfImagePrivate *d;
@@ -160,7 +160,7 @@ ExtractorOutputDevice::ExtractorOutputDevice(PdfDocumentPrivate *dd)
 {
 }
 
-void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str, int width, int height, GfxImageColorMap* colorMap, GBool interpolate, int* maskColors, GBool inlineImg)
+void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str, int width, int height, GfxImageColorMap* colorMap, bool interpolate, int* maskColors, bool inlineImg)
 {
     Q_UNUSED(str);
     Q_UNUSED(interpolate);
@@ -221,7 +221,7 @@ ImageLoaderOutputDevice::ImageLoaderOutputDevice(PdfImagePrivate* dd)
 {
 }
 
-void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, GBool interpolate, int *maskColors, GBool inlineImg)
+void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, int *maskColors, bool inlineImg)
 {
     Q_UNUSED(state);
     Q_UNUSED(interpolate);
