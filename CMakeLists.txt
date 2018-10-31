@@ -77,7 +77,7 @@ if (LIBXML2_FOUND)
 endif()
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kitinerary\")
-add_definitions(-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT)
+
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
 
 add_subdirectory(src)
