@@ -18,10 +18,12 @@
 #include "locationutil.h"
 
 #include <KItinerary/BusTrip>
+#include <KItinerary/Event>
 #include <KItinerary/Flight>
 #include <KItinerary/Place>
 #include <KItinerary/Reservation>
 #include <KItinerary/TrainTrip>
+#include <KItinerary/Visit>
 
 #include <QDebug>
 
@@ -66,6 +68,27 @@ QVariant LocationUtil::departureLocation(const QVariant &res)
     if (JsonLd::isA<RentalCarReservation>(res)) {
         return res.value<RentalCarReservation>().pickupLocation();
     }
+    return {};
+}
+
+QVariant LocationUtil::location(const QVariant &res)
+{
+    if (JsonLd::isA<LodgingReservation>(res)) {
+        return res.value<LodgingReservation>().reservationFor();
+    }
+    if (JsonLd::isA<FoodEstablishmentReservation>(res)) {
+        return res.value<FoodEstablishmentReservation>().reservationFor();
+    }
+    if (JsonLd::isA<TouristAttractionVisit>(res)) {
+        return res.value<TouristAttractionVisit>().touristAttraction();
+    }
+    if (JsonLd::isA<EventReservation>(res)) {
+        return res.value<EventReservation>().reservationFor().value<Event>().location();
+    }
+    if (JsonLd::isA<RentalCarReservation>(res)) {
+        return res.value<RentalCarReservation>().pickupLocation();
+    }
+
     return {};
 }
 

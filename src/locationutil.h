@@ -48,6 +48,11 @@ QVariant KITINERARY_EXPORT departureLocation(const QVariant &res);
  */
 QVariant KITINERARY_EXPORT arrivalLocation(const QVariant &res);
 
+/** Returns the location of a non-transport reservation.
+ *  This assumes isLocationChange(res) == false.
+ */
+QVariant KITINERARY_EXPORT location(const QVariant &res);
+
 /** Returns the geo coordinates of a given location. */
 GeoCoordinates KITINERARY_EXPORT geo(const QVariant &location);
 
