@@ -55,6 +55,7 @@ KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassSerialNumber, setPkpassSeri
 KITINERARY_MAKE_PROPERTY(Reservation, Organization, provider, setProvider)
 KITINERARY_MAKE_PROPERTY(Reservation, QVariantList, potentialAction, setPotentialAction)
 KITINERARY_MAKE_PROPERTY(Reservation, QDateTime, modifiedTime, setModifiedTime)
+KITINERARY_MAKE_OPERATOR(Reservation)
 
 class LodgingReservationPrivate : public ReservationPrivate
 {
@@ -66,6 +67,7 @@ public:
 KITINERARY_MAKE_SUB_CLASS(LodgingReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkinTime, setCheckinTime)
 KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkoutTime, setCheckoutTime)
+KITINERARY_MAKE_OPERATOR(LodgingReservation)
 
 
 class FlightReservationPrivate : public ReservationPrivate
@@ -81,6 +83,7 @@ KITINERARY_MAKE_SUB_CLASS(FlightReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(FlightReservation, QString, passengerSequenceNumber, setPassengerSequenceNumber)
 KITINERARY_MAKE_PROPERTY(FlightReservation, QString, airplaneSeat, setAirplaneSeat)
 KITINERARY_MAKE_PROPERTY(FlightReservation, QString, boardingGroup, setBoardingGroup)
+KITINERARY_MAKE_OPERATOR(FlightReservation)
 
 class TrainReservationPrivate : public ReservationPrivate
 {
@@ -106,6 +109,7 @@ KITINERARY_MAKE_SUB_CLASS(FoodEstablishmentReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, endTime, setEndTime)
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, int, partySize, setPartySize)
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, startTime, setStartTime)
+KITINERARY_MAKE_OPERATOR(FoodEstablishmentReservation)
 
 class EventReservationPrivate : public ReservationPrivate
 {
@@ -127,6 +131,7 @@ KITINERARY_MAKE_PROPERTY(RentalCarReservation, QDateTime, dropoffTime, setDropof
 KITINERARY_MAKE_PROPERTY(RentalCarReservation, QDateTime, pickupTime, setPickupTime)
 KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, pickupLocation, setPickupLocation)
 KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, dropoffLocation, setDropoffLocation)
+KITINERARY_MAKE_OPERATOR(RentalCarReservation)
 
 
 class TaxiReservationPrivate : public ReservationPrivate
@@ -139,6 +144,7 @@ public:
 KITINERARY_MAKE_SUB_CLASS(TaxiReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(TaxiReservation, QDateTime, pickupTime, setPickupTime)
 KITINERARY_MAKE_PROPERTY(TaxiReservation, Place, pickupLocation, setPickupLocation)
+KITINERARY_MAKE_OPERATOR(TaxiReservation)
 
 
 }

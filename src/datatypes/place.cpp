@@ -48,6 +48,14 @@ bool GeoCoordinates::isValid() const
     return !std::isnan(d->latitude) && !std::isnan(d->longitude);
 }
 
+// implemented manually, as NAN != NAN
+bool GeoCoordinates::operator==(const GeoCoordinates &other) const
+{
+    if (!isValid() && !other.isValid()) {
+        return true;
+    }
+    return qFuzzyCompare(d->latitude, other.d->latitude) && qFuzzyCompare(d->longitude, other.d->longitude);
+}
 
 class PostalAddressPrivate : public QSharedData
 {
@@ -65,6 +73,7 @@ KITINERARY_MAKE_PROPERTY(PostalAddress, QString, addressLocality, setAddressLoca
 KITINERARY_MAKE_PROPERTY(PostalAddress, QString, postalCode, setPostalCode)
 KITINERARY_MAKE_PROPERTY(PostalAddress, QString, addressRegion, setAddressRegion)
 KITINERARY_MAKE_PROPERTY(PostalAddress, QString, addressCountry, setAddressCountry)
+KITINERARY_MAKE_OPERATOR(PostalAddress)
 
 bool PostalAddress::isEmpty() const
 {
@@ -91,6 +100,7 @@ KITINERARY_MAKE_PROPERTY(Place, PostalAddress, address, setAddress)
 KITINERARY_MAKE_PROPERTY(Place, GeoCoordinates, geo, setGeo)
 KITINERARY_MAKE_PROPERTY(Place, QString, telephone, setTelephone)
 KITINERARY_MAKE_PROPERTY(Place, QString, identifier, setIdentifier)
+KITINERARY_MAKE_OPERATOR(Place)
 
 
 class AirportPrivate : public PlacePrivate
@@ -102,25 +112,28 @@ public:
 
 KITINERARY_MAKE_SUB_CLASS(Airport, Place)
 KITINERARY_MAKE_PROPERTY(Airport, QString, iataCode, setIataCode)
+KITINERARY_MAKE_OPERATOR(Airport)
 
 class TrainStationPrivate : public PlacePrivate
 {
     KITINERARY_PRIVATE_GADGET(TrainStation)
 };
 KITINERARY_MAKE_SUB_CLASS(TrainStation, Place)
+KITINERARY_MAKE_OPERATOR(TrainStation)
 
 class BusStationPrivate : public PlacePrivate
 {
     KITINERARY_PRIVATE_GADGET(BusStation)
 };
 KITINERARY_MAKE_SUB_CLASS(BusStation, Place)
+KITINERARY_MAKE_OPERATOR(BusStation)
 
 class TouristAttractionPrivate: public PlacePrivate
 {
     KITINERARY_PRIVATE_GADGET(TouristAttraction)
 };
 KITINERARY_MAKE_SUB_CLASS(TouristAttraction, Place)
-
+KITINERARY_MAKE_OPERATOR(TouristAttraction)
 
 }
 

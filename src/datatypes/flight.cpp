@@ -54,6 +54,7 @@ KITINERARY_MAKE_PROPERTY(Flight, Airport, arrivalAirport, setArrivalAirport)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, arrivalTime, setArrivalTime)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, boardingTime, setBoardingTime)
 KITINERARY_MAKE_PROPERTY(Flight, Organization, provider, setProvider)
+KITINERARY_MAKE_OPERATOR(Flight)
 
 QDate Flight::departureDay() const
 {

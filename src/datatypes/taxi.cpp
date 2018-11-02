@@ -33,6 +33,7 @@ public:
 
 KITINERARY_MAKE_SIMPLE_CLASS(Taxi)
 KITINERARY_MAKE_PROPERTY(Taxi, QString, name, setName)
+KITINERARY_MAKE_OPERATOR(Taxi)
 }
 
 #include "moc_taxi.cpp"

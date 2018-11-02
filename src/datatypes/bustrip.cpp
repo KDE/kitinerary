@@ -48,6 +48,7 @@ KITINERARY_MAKE_PROPERTY(BusTrip, QDateTime, departureTime, setDepartureTime)
 KITINERARY_MAKE_PROPERTY(BusTrip, QString, busName, setBusName)
 KITINERARY_MAKE_PROPERTY(BusTrip, QString, busNumber, setBusNumber)
 KITINERARY_MAKE_PROPERTY(BusTrip, Organization, provider, setProvider)
+KITINERARY_MAKE_OPERATOR(BusTrip)
 
 }
 

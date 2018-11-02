@@ -36,6 +36,7 @@ KITINERARY_MAKE_SIMPLE_CLASS(Seat)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatNumber, setSeatNumber)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatRow, setSeatRow)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatSection, setSeatSection)
+KITINERARY_MAKE_OPERATOR(Seat)
 
 class TicketPrivate : public QSharedData
 {
@@ -47,6 +48,7 @@ public:
 KITINERARY_MAKE_SIMPLE_CLASS(Ticket)
 KITINERARY_MAKE_PROPERTY(Ticket, Seat, ticketedSeat, setTicketedSeat)
 KITINERARY_MAKE_PROPERTY(Ticket, QString, ticketToken, setTicketToken)
+KITINERARY_MAKE_OPERATOR(Ticket)
 
 Ticket::TicketTokenType Ticket::ticketTokenType() const
 {

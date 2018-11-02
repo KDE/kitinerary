@@ -30,6 +30,7 @@ public:
 
 KITINERARY_MAKE_SIMPLE_CLASS(Brand)
 KITINERARY_MAKE_PROPERTY(Brand, QString, name, setName)
+KITINERARY_MAKE_OPERATOR(Brand)
 
 }
 

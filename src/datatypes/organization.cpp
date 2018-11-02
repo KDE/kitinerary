@@ -43,6 +43,7 @@ KITINERARY_MAKE_PROPERTY(Organization, QString, telephone, setTelephone)
 KITINERARY_MAKE_PROPERTY(Organization, QUrl, url, setUrl)
 KITINERARY_MAKE_PROPERTY(Organization, PostalAddress, address, setAddress)
 KITINERARY_MAKE_PROPERTY(Organization, KItinerary::GeoCoordinates, geo, setGeo)
+KITINERARY_MAKE_OPERATOR(Organization)
 
 class AirlinePrivate : public OrganizationPrivate
 {
@@ -53,18 +54,21 @@ public:
 
 KITINERARY_MAKE_SUB_CLASS(Airline, Organization)
 KITINERARY_MAKE_PROPERTY(Airline, QString, iataCode, setIataCode)
+KITINERARY_MAKE_OPERATOR(Airline)
 
 class FoodEstablishmentPrivate: public OrganizationPrivate
 {
     KITINERARY_PRIVATE_GADGET(FoodEstablishment)
 };
 KITINERARY_MAKE_SUB_CLASS(FoodEstablishment, Organization)
+KITINERARY_MAKE_OPERATOR(FoodEstablishment)
 
 class LodgingBusinessPrivate : public OrganizationPrivate
 {
     KITINERARY_PRIVATE_GADGET(LodgingBusiness)
 };
 KITINERARY_MAKE_SUB_CLASS(LodgingBusiness, Organization)
+KITINERARY_MAKE_OPERATOR(LodgingBusiness)
 
 }
 

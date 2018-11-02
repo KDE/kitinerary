@@ -50,6 +50,7 @@ KITINERARY_MAKE_PROPERTY(TrainTrip, QDateTime, departureTime, setDepartureTime)
 KITINERARY_MAKE_PROPERTY(TrainTrip, Organization, provider, setProvider)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QString, trainName, setTrainName)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QString, trainNumber, setTrainNumber)
+KITINERARY_MAKE_OPERATOR(TrainTrip)
 
 }
 

@@ -162,6 +162,39 @@ private Q_SLOTS:
         p = JsonLd::convert<Place>(a);
         QCOMPARE(p.name(), QLatin1String("Berlin Tegel"));
     }
+
+    void testCompare()
+    {
+        Place p1, p2; // base type
+        QCOMPARE(p1, p2);
+        QCOMPARE(p1, p1);
+        p1.setName(QLatin1String("Berlin"));
+        QVERIFY(!(p1 == p2));
+        QVERIFY(p1 != p2);
+        QCOMPARE(p1, p1);
+        p2.setName(QLatin1String("Berlin"));
+        QCOMPARE(p1, p2);
+
+        GeoCoordinates coord1, coord2; // primitive types
+        QCOMPARE(coord1, coord2);
+        QCOMPARE(coord1, coord1);
+        coord1 = { 52.5, 13.8 };
+        QVERIFY(!(coord1 == coord2));
+
+        p1.setGeo(coord1);
+        p2.setGeo({52.5, 13.8});
+        QCOMPARE(p1, p2);
+
+        Airport a1, a2; // polymorphic types
+        a1.setIataCode(QLatin1String("TXL"));
+        a2.setIataCode(QLatin1String("TXL"));
+        QCOMPARE(a1, a2);
+        a1.setName(QLatin1String("Berlin Tegel"));
+        QVERIFY(a1 != a2);
+        a2.setName(QLatin1String("Berlin Tegel"));
+        QCOMPARE(a1, a2);
+        QCOMPARE(a1, a1);
+    }
 };
 
 QTEST_MAIN(DatatypesTest)

@@ -39,6 +39,7 @@ KITINERARY_MAKE_PROPERTY(RentalCar, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(RentalCar, QString, model, setModel)
 KITINERARY_MAKE_PROPERTY(RentalCar, Organization, rentalCompany, setRentalCompany)
 KITINERARY_MAKE_PROPERTY(RentalCar, Brand, brand, setBrand)
+KITINERARY_MAKE_OPERATOR(RentalCar)
 }
 
 #include "moc_rentalcar.cpp"
