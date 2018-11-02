@@ -121,6 +121,7 @@ Class::Class() : Base(s_ ## Class ## _shared_null()->data()) {}
 #define KITINERARY_MAKE_PROPERTY(Class, Type, Name, SetName) \
 Type Class::Name() const { return static_cast<const Class ## Private*>(d.data())->Name; } \
 void Class::SetName(detail::parameter_type<Type>::type value) { \
+    if (detail::equals<Type>(static_cast<Class ## Private*>(d.data())->Name, value)) { return; } \
     d.detach(); \
     static_cast<Class ## Private*>(d.data())->Name = value; \
 } \
