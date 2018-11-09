@@ -70,9 +70,10 @@ namespace KnowledgeDb {
 bool CountryDbGenerator::fetchCountryList()
 {
     const auto countryArray = WikiData::query(R"(
-        SELECT DISTINCT ?country ?countryLabel ?isoCode ?drivingSide ?drivingSideEndTime WHERE {
-            ?country wdt:P31 wd:Q6256.
+        SELECT DISTINCT ?country ?countryLabel ?isoCode ?demolished WHERE {
+            ?country (wdt:P31/wdt:P279*) wd:Q6256.
             ?country wdt:P297 ?isoCode.
+            OPTIONAL { ?country wdt:P576 ?demolished. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
         } ORDER BY (?country))", "wikidata_country.json");
     if (countryArray.isEmpty()) {
@@ -82,6 +83,9 @@ bool CountryDbGenerator::fetchCountryList()
 
     for (const auto &countryData : countryArray) {
         const auto countryObj = countryData.toObject();
+        if (countryObj.contains(QLatin1String("demolished"))) {
+            continue;
+        }
         const auto uri = insertOrMerge(countryObj);
 
         const auto isoCode = countryObj.value(QLatin1String("isoCode")).toObject().value(QLatin1String("value")).toString().toUpper();
@@ -106,7 +110,7 @@ bool CountryDbGenerator::fetchDrivingDirections()
 {
     const auto countryArray = WikiData::query(R"(
         SELECT DISTINCT ?country ?drivingSide ?drivingSideEndTime WHERE {
-            ?country wdt:P31 wd:Q6256.
+            ?country (wdt:P31/wdt:P279*) wd:Q6256.
             ?country p:P1622 ?drivingSideStmt.
             ?drivingSideStmt ps:P1622 ?drivingSide.
             OPTIONAL { ?drivingSideStmt pq:P582 ?drivingSideEndTime. }
@@ -128,7 +132,7 @@ bool CountryDbGenerator::fetchPowerPlugTypes()
 {
     const auto countryArray = WikiData::query(R"(
         SELECT DISTINCT ?country ?plugType ?plugTypeEndTime WHERE {
-            ?country wdt:P31 wd:Q6256.
+            ?country (wdt:P31/wdt:P279*) wd:Q6256.
             ?country p:P2853 ?plugTypeStmt.
             ?plugTypeStmt ps:P2853 ?plugType.
             OPTIONAL { ?plugTypeStmt pq:P582 ?plugTypeEndTime. }
