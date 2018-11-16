@@ -43,6 +43,7 @@ class KITINERARY_EXPORT Flight
     KITINERARY_PROPERTY(QString, departureTerminal, setDepartureTerminal)
     KITINERARY_PROPERTY(QDateTime, departureTime, setDepartureTime)
     KITINERARY_PROPERTY(KItinerary::Airport, arrivalAirport, setArrivalAirport)
+    KITINERARY_PROPERTY(QString, arrivalTerminal, setArrivalTerminal)
     KITINERARY_PROPERTY(QDateTime, arrivalTime, setArrivalTime)
     KITINERARY_PROPERTY(KItinerary::Organization, provider, setProvider)
 

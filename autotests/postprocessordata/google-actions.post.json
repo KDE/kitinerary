@@ -48,6 +48,7 @@
                 "iataCode": "JFK",
                 "name": "John F. Kennedy International Airport"
             },
+            "arrivalTerminal": "B",
             "arrivalTime": {
                 "@type": "QDateTime",
                 "@value": "2027-03-05T06:30:00-05:00",

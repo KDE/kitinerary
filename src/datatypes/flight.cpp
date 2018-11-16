@@ -37,6 +37,7 @@ public:
     QString departureTerminal;
     QDateTime departureTime;
     Airport arrivalAirport;
+    QString arrivalTerminal;
     QDateTime arrivalTime;
     QDateTime boardingTime;
     QDate departureDay;
@@ -52,6 +53,7 @@ KITINERARY_MAKE_PROPERTY(Flight, QString, departureTerminal, setDepartureTermina
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, departureTime, setDepartureTime)
 KITINERARY_MAKE_PROPERTY(Flight, Airport, arrivalAirport, setArrivalAirport)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, arrivalTime, setArrivalTime)
+KITINERARY_MAKE_PROPERTY(Flight, QString, arrivalTerminal, setArrivalTerminal)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, boardingTime, setBoardingTime)
 KITINERARY_MAKE_PROPERTY(Flight, Organization, provider, setProvider)
 KITINERARY_MAKE_OPERATOR(Flight)
