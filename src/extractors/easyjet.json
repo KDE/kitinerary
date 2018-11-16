@@ -1,0 +1,8 @@
+[
+    {
+        "type": "html",
+        "filter": [ { "header": "From", "match": "@easyjet.com" } ],
+        "script": "easyjet.js",
+        "function": "parseHtmlBooking"
+    }
+]
