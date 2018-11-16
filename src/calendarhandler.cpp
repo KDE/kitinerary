@@ -162,6 +162,11 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
 }
 
 #ifdef HAVE_KCAL
+static QString airportDisplayCode(const Airport &airport)
+{
+    return airport.iataCode().isEmpty() ? airport.name() : airport.iataCode();
+}
+
 static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event)
 {
     const auto flight = reservations.at(0).value<FlightReservation>().reservationFor().value<Flight>();
@@ -171,7 +176,7 @@ static void fillFlightReservation(const QVector<QVariant> &reservations, const K
 
     const QString flightNumber = airline.iataCode() + QLatin1Char(' ') + flight.flightNumber();
 
-    event->setSummary(i18n("Flight %1 from %2 to %3", flightNumber, depPort.iataCode(), arrPort.iataCode()));
+    event->setSummary(i18n("Flight %1 from %2 to %3", flightNumber, airportDisplayCode(depPort), airportDisplayCode(arrPort)));
     event->setLocation(depPort.name());
     fillGeoPosition(depPort, event);
     event->setDtStart(flight.departureTime());
