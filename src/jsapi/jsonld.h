@@ -60,6 +60,11 @@ public:
      *  That is, create a deep copy of @p v.
      */
     Q_INVOKABLE QJSValue clone(const QJSValue &v) const;
+    /** Parses geo coordinates from a given mapping service URLs.
+     *  This consumes for example Google Maps links and returns a JSON-LD
+     *  GeoCoordinates object.
+     */
+    Q_INVOKABLE QJSValue toGeoCoordinates(const QString &mapUrl);
 
     ///@cond internal
     void setContextDate(const QDateTime &dt);

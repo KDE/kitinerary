@@ -39,12 +39,8 @@ function main(text) {
     idx += departureDate.index + departureDate[0].length;
 
     res.reservationFor = JsonLd.newObject("LodgingBusiness");
-    res.reservationFor.geo = JsonLd.newObject("GeoCoordinates");
-    var geo = text.substr(idx).match(/google.com\/maps\/place\/([0-9\.]+),([0-9\.]+)>/);
-    if (geo) {
-        res.reservationFor.geo.latitude = geo[1];
-        res.reservationFor.geo.longitude = geo[2];
-    }
+    var geo = text.substr(idx).match(/<(http[^>]*google.com\/maps[^>]*)>/);
+    res.reservationFor.geo = JsonLd.toGeoCoordinates(geo[1]);
 
     res.underName = JsonLd.newObject("Person");
     var name = text.substr(idx).match(/\*First name\*\s+([^\s{2}]+)\s{2,}/);

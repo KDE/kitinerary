@@ -20,8 +20,12 @@
 #include <../src/jsapi/jsonld.h>
 
 #include <QDebug>
+#include <QJSEngine>
+#include <QJSValue>
 #include <QObject>
 #include <QTest>
+
+#include <cmath>
 
 using namespace KItinerary;
 
@@ -66,8 +70,42 @@ private Q_SLOTS:
         jsonLd.setContextDate({{2018, 4, 1}, {}});
         QCOMPARE(jsonLd.toDateTime(input, format, locale), result);
     }
+
+    void testToGeoCoordinates_data()
+    {
+        QTest::addColumn<QString>("url");
+        QTest::addColumn<double>("latitude");
+        QTest::addColumn<double>("longitude");
+
+        QTest::newRow("empty") << s("") << (double)NAN << (double)NAN;
+        QTest::newRow("non-map") << s("http://www.kde.org") << (double)NAN << (double)NAN;
+        QTest::newRow("google maps 1") << s("https://www.google.com/maps/place/48.182849,16.378636") << 48.182849 << 16.378636;
+        QTest::newRow("google maps 1 no ssl") << s("http://www.google.com/maps/place/48.182849,16.378636") << 48.182849 << 16.378636;
+        QTest::newRow("google maps 2") << s("http://maps.google.fr/?ll=-48.8471603393555,-2.37761735916138&z=19") << -48.8471603393555 << -2.37761735916138;
+        QTest::newRow("google maps 3") << s("https://maps.google.com/maps?f=q&hl=en&q=52.434788,-13.544329") << 52.434788 << -13.544329;
+        QTest::newRow("google maps api 1") << s("http://maps.googleapis.com/maps/api/staticmap?language=en-gb&size=280x120&center=69.54363918781344,31.028996706008911&sensor=false&markers=color:0x0896FF%7C69.54363918781344,31.028996706008911&zoom=14&client=gme-booking&signature=xxxxxxxxxxxxxxxxxxxxxx") << 69.54363918781344 << 31.028996706008911;
+    }
+
+    void testToGeoCoordinates()
+    {
+        QFETCH(QString, url);
+        QFETCH(double, latitude);
+        QFETCH(double, longitude);
+        QCOMPARE(std::isnan(latitude), std::isnan(longitude));
+
+        QJSEngine engine;
+        JsApi::JsonLd api(&engine);
+        const auto geo = api.toGeoCoordinates(url);
+        QVERIFY((geo.isUndefined() && std::isnan(latitude)) || (!geo.isUndefined() && !std::isnan(latitude)));
+        if (geo.isUndefined()) {
+            return;
+        }
+
+        QCOMPARE(geo.property(s("latitude")).toNumber(), latitude);
+        QCOMPARE(geo.property(s("longitude")).toNumber(), longitude);
+    }
 };
 
-QTEST_APPLESS_MAIN(JsApiTest)
+QTEST_GUILESS_MAIN(JsApiTest)
 
 #include "jsapitest.moc"

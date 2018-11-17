@@ -24,6 +24,8 @@
 #include <QJSEngine>
 #include <QJsonArray>
 #include <QLocale>
+#include <QRegularExpression>
+#include <QUrl>
 
 using namespace KItinerary;
 
@@ -106,6 +108,28 @@ QJSValue JsApi::JsonLd::toJson(const QVariant &v) const
 QJSValue JsApi::JsonLd::clone(const QJSValue& v) const
 {
     return m_engine->toScriptValue(v.toVariant());
+}
+
+QJSValue JsApi::JsonLd::toGeoCoordinates(const QString &mapUrl)
+{
+    QUrl url(mapUrl);
+    if (url.host().contains(QLatin1String("google"))) {
+        QRegularExpression regExp(QStringLiteral("[/=](-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"));
+        auto match = regExp.match(url.path());
+        if (!match.hasMatch()) {
+            match = regExp.match(url.query());
+        }
+
+        if (match.hasMatch()) {
+            auto geo = m_engine->newObject();
+            geo.setProperty(QStringLiteral("@type"), QStringLiteral("GeoCoordinates"));
+            geo.setProperty(QStringLiteral("latitude"), match.capturedRef(1).toDouble());
+            geo.setProperty(QStringLiteral("longitude"), match.capturedRef(2).toDouble());
+            return geo;
+        }
+    }
+
+    return {};
 }
 
 void JsApi::JsonLd::setContextDate(const QDateTime& dt)
