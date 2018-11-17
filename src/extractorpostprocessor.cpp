@@ -50,8 +50,6 @@
 #include <QUrl>
 
 #ifdef HAVE_PHONENUMBER
-#include <phonenumbers/phonenumbermatch.h>
-#include <phonenumbers/phonenumbermatcher.h>
 #include <phonenumbers/phonenumberutil.h>
 #endif
 
@@ -529,13 +527,28 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
     // recover country from phone number, if we have that
     if (!place.telephone().isEmpty() && addr.addressCountry().size() != 2) {
         const auto phoneStr = place.telephone().toStdString();
-        std::string isoCode;
-        i18n::phonenumbers::PhoneNumberMatcher matcher(phoneStr, isoCode);
-        i18n::phonenumbers::PhoneNumberMatch match;
-        if (matcher.Next(&match)) {
-            i18n::phonenumbers::PhoneNumberUtil::GetInstance()->GetRegionCodeForNumber(match.number(), &isoCode);
+        const auto util = i18n::phonenumbers::PhoneNumberUtil::GetInstance();
+        i18n::phonenumbers::PhoneNumber number;
+        if (util->ParseAndKeepRawInput(phoneStr, "ZZ", &number) == i18n::phonenumbers::PhoneNumberUtil::NO_PARSING_ERROR) {
+            std::string isoCode;
+            util->GetRegionCodeForNumber(number, &isoCode);
             if (!isoCode.empty()) {
                 addr.setAddressCountry(QString::fromStdString(isoCode));
+            }
+        }
+    }
+
+    // or complete the phone number if we know the country
+    else if (!place.telephone().isEmpty() && addr.addressCountry().size() == 2) {
+        auto phoneStr = place.telephone().toStdString();
+        const auto isoCode = addr.addressCountry().toStdString();
+        const auto util = i18n::phonenumbers::PhoneNumberUtil::GetInstance();
+        i18n::phonenumbers::PhoneNumber number;
+        if (util->ParseAndKeepRawInput(phoneStr, isoCode, &number) == i18n::phonenumbers::PhoneNumberUtil::NO_PARSING_ERROR) {
+            qDebug() << number.country_code_source() << isoCode.c_str();
+            if (number.country_code_source() == i18n::phonenumbers::PhoneNumber_CountryCodeSource_FROM_DEFAULT_COUNTRY) {
+                util->Format(number, i18n::phonenumbers::PhoneNumberUtil::INTERNATIONAL, &phoneStr);
+                place.setTelephone(QString::fromStdString(phoneStr));
             }
         }
     }
