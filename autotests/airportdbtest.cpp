@@ -151,6 +151,11 @@ private Q_SLOTS:
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("ALMERÍA")), KnowledgeDb::IataCode{"LEI"});
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Keflavík")), KnowledgeDb::IataCode{"KEF"});
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Keflavik")), KnowledgeDb::IataCode{"KEF"});
+
+        // alternative transliterations
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Duesseldorf International")), KnowledgeDb::IataCode{"DUS"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Berlin Schoenefeld")), KnowledgeDb::IataCode{"SXF"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Zuerich")), KnowledgeDb::IataCode{"ZRH"});
     }
 
     void countryDataTest()

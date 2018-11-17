@@ -125,6 +125,18 @@ KnowledgeDb::CountryId countryForAirport(IataCode iataCode)
     return (*it).country;
 }
 
+static void applyTransliterations(QStringList &fragments)
+{
+    // note that the output has the corresponding diacritic markers already stripped,
+    // as StringUtil::normalize has already been applied to fragments
+    // similarly, the input is already case-folded
+    for (auto &fragment : fragments) {
+        fragment.replace(QLatin1String("ae"), QLatin1String("a"));
+        fragment.replace(QLatin1String("oe"), QLatin1String("o"));
+        fragment.replace(QLatin1String("ue"), QLatin1String("u"));
+    }
+}
+
 static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
 {
     int iataIdx = -1;
@@ -151,14 +163,8 @@ static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
     return {};
 }
 
-IataCode iataCodeFromName(const QString &name)
+static IataCode iataCodeForNonUniqueFragments(const QStringList &fragments)
 {
-    const auto fragments = StringUtil::normalize(name).split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
-    const IataCode code = iataCodeForUniqueFragment(fragments);
-    if (code.isValid()) {
-        return code;
-    }
-
     // we we didn't find a unique name fragment, try the non-unique index
     QSet<uint16_t> iataIdxs;
     for (const auto &s : fragments) {
@@ -194,6 +200,29 @@ IataCode iataCodeFromName(const QString &name)
     }
 
     return {};
+}
+
+static IataCode iataCodeForNameFragments(const QStringList &fragments)
+{
+    IataCode code = iataCodeForUniqueFragment(fragments);
+    if (code.isValid()) {
+        return code;
+    }
+    return iataCodeForNonUniqueFragments(fragments);
+}
+
+IataCode iataCodeFromName(const QString &name)
+{
+    auto fragments = StringUtil::normalize(name).split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
+
+    IataCode code = iataCodeForNameFragments(fragments);
+    if (code.isValid()) {
+        return code;
+    }
+
+    // try again, with alternative translitarations of e.g. umlauts replaced
+    applyTransliterations(fragments);
+    return iataCodeForNameFragments(fragments);
 }
 }
 }
