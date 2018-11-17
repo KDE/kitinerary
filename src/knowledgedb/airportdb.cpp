@@ -125,42 +125,30 @@ KnowledgeDb::CountryId countryForAirport(IataCode iataCode)
     return (*it).country;
 }
 
-static const auto name1_string_index_size = sizeof(name1_string_index) / sizeof(Name1Index);
-
-static const Name1Index *name1IndexBegin()
+static void applyTransliterations(QStringList &fragments)
 {
-    return name1_string_index;
-}
-
-static const Name1Index *name1IndexEnd()
-{
-    return name1_string_index + name1_string_index_size;
-}
-
-static const auto nameN_string_index_size = sizeof(nameN_string_index) / sizeof(NameNIndex);
-
-static const NameNIndex *nameNIndexBegin()
-{
-    return nameN_string_index;
-}
-
-static const NameNIndex *nameNIndexEnd()
-{
-    return nameN_string_index + nameN_string_index_size;
+    // note that the output has the corresponding diacritic markers already stripped,
+    // as StringUtil::normalize has already been applied to fragments
+    // similarly, the input is already case-folded
+    for (auto &fragment : fragments) {
+        fragment.replace(QLatin1String("ae"), QLatin1String("a"));
+        fragment.replace(QLatin1String("oe"), QLatin1String("o"));
+        fragment.replace(QLatin1String("ue"), QLatin1String("u"));
+    }
 }
 
 static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
 {
     int iataIdx = -1;
     for (const auto &s : fragments) {
-        const auto it = std::lower_bound(name1IndexBegin(), name1IndexEnd(), s.toUtf8(), [](const Name1Index &lhs, const QByteArray &rhs) {
+        const auto it = std::lower_bound(std::begin(name1_string_index), std::end(name1_string_index), s.toUtf8(), [](const Name1Index &lhs, const QByteArray &rhs) {
                 const auto cmp = strncmp(name1_string_table + lhs.offset(), rhs.constData(), std::min<int>(lhs.length, rhs.size()));
                 if (cmp == 0) {
                     return lhs.length < rhs.size();
                 }
                 return cmp < 0;
             });
-        if (it == name1IndexEnd() || it->length != s.toUtf8().size() || strncmp(name1_string_table + it->offset(), s.toUtf8().constData(), it->length) != 0) {
+        if (it == std::end(name1_string_index) || it->length != s.toUtf8().size() || strncmp(name1_string_table + it->offset(), s.toUtf8().constData(), it->length) != 0) {
             continue;
         }
         if (iataIdx >= 0 && iataIdx != it->iataIndex) {
@@ -175,25 +163,19 @@ static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
     return {};
 }
 
-IataCode iataCodeFromName(const QString &name)
+static IataCode iataCodeForNonUniqueFragments(const QStringList &fragments)
 {
-    const auto fragments = StringUtil::normalize(name).split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
-    const IataCode code = iataCodeForUniqueFragment(fragments);
-    if (code.isValid()) {
-        return code;
-    }
-
     // we we didn't find a unique name fragment, try the non-unique index
     QSet<uint16_t> iataIdxs;
     for (const auto &s : fragments) {
-        const auto it = std::lower_bound(nameNIndexBegin(), nameNIndexEnd(), s.toUtf8(), [](const NameNIndex &lhs, const QByteArray &rhs) {
+        const auto it = std::lower_bound(std::begin(nameN_string_index), std::end(nameN_string_index), s.toUtf8(), [](const NameNIndex &lhs, const QByteArray &rhs) {
                 const auto cmp = strncmp(nameN_string_table + lhs.strOffset, rhs.constData(), std::min<int>(lhs.strLength, rhs.size()));
                 if (cmp == 0) {
                     return lhs.strLength < rhs.size();
                 }
                 return cmp < 0;
             });
-        if (it == nameNIndexEnd() || it->strLength != s.toUtf8().size() || strncmp(nameN_string_table + it->strOffset, s.toUtf8().constData(), it->strLength) != 0) {
+        if (it == std::end(nameN_string_index) || it->strLength != s.toUtf8().size() || strncmp(nameN_string_table + it->strOffset, s.toUtf8().constData(), it->strLength) != 0) {
             continue;
         }
 
@@ -218,6 +200,29 @@ IataCode iataCodeFromName(const QString &name)
     }
 
     return {};
+}
+
+static IataCode iataCodeForNameFragments(const QStringList &fragments)
+{
+    IataCode code = iataCodeForUniqueFragment(fragments);
+    if (code.isValid()) {
+        return code;
+    }
+    return iataCodeForNonUniqueFragments(fragments);
+}
+
+IataCode iataCodeFromName(const QString &name)
+{
+    auto fragments = StringUtil::normalize(name).split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
+
+    IataCode code = iataCodeForNameFragments(fragments);
+    if (code.isValid()) {
+        return code;
+    }
+
+    // try again, with alternative translitarations of e.g. umlauts replaced
+    applyTransliterations(fragments);
+    return iataCodeForNameFragments(fragments);
 }
 }
 }
