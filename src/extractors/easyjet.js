@@ -65,7 +65,6 @@ function parseHtmlBooking(doc) {
             cell = cell.nextSibling.firstChild.nextSibling;
             res.reservationFor.airplaneSeat = cell.content.match(/auto/) ? null : cell.content;
         }
-        // TODO terminal data
         reservations.push(res);
     }
 
