@@ -32,5 +32,6 @@
 
 #cmakedefine HAVE_KCAL
 #cmakedefine HAVE_LIBXML2
+#cmakedefine HAVE_PHONENUMBER
 
 #endif

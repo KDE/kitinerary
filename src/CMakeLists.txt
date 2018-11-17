@@ -94,6 +94,9 @@ if (HAVE_LIBXML2)
     target_include_directories(KPimItinerary PRIVATE ${LIBXML2_INCLUDE_DIR})
     target_link_libraries(KPimItinerary PRIVATE ${LIBXML2_LIBRARIES})
 endif()
+if (HAVE_PHONENUMBER)
+    target_link_libraries(KPimItinerary PRIVATE PhoneNumber::PhoneNumber)
+endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS
     HEADER_NAMES

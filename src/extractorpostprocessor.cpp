@@ -49,6 +49,12 @@
 #include <QTimeZone>
 #include <QUrl>
 
+#ifdef HAVE_PHONENUMBER
+#include <phonenumbers/phonenumbermatch.h>
+#include <phonenumbers/phonenumbermatcher.h>
+#include <phonenumbers/phonenumberutil.h>
+#endif
+
 #include <algorithm>
 
 using namespace KItinerary;
@@ -518,6 +524,22 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
     if (addr.addressCountry().size() == 2) {
         addr.setAddressCountry(addr.addressCountry().toUpper());
     }
+
+#ifdef HAVE_PHONENUMBER
+    // recover country from phone number, if we have that
+    if (!place.telephone().isEmpty() && addr.addressCountry().size() != 2) {
+        const auto phoneStr = place.telephone().toStdString();
+        std::string isoCode;
+        i18n::phonenumbers::PhoneNumberMatcher matcher(phoneStr, isoCode);
+        i18n::phonenumbers::PhoneNumberMatch match;
+        if (matcher.Next(&match)) {
+            i18n::phonenumbers::PhoneNumberUtil::GetInstance()->GetRegionCodeForNumber(match.number(), &isoCode);
+            if (!isoCode.empty()) {
+                addr.setAddressCountry(QString::fromStdString(isoCode));
+            }
+        }
+    }
+#endif
 
     // normalize strings
     addr.setStreetAddress(addr.streetAddress().simplified());
