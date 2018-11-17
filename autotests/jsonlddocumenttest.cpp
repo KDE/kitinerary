@@ -126,7 +126,7 @@ private Q_SLOTS:
         Place placeDropLocation;
         placeDropLocation.setName(QStringLiteral("droplocation"));
         KItinerary::PostalAddress placeDropPostalAddress;
-        placeDropPostalAddress.setStreeAddress(QStringLiteral("8 foo bla bla"));
+        placeDropPostalAddress.setStreetAddress(QStringLiteral("8 foo bla bla"));
         placeDropPostalAddress.setAddressLocality(QStringLiteral("bli"));
         placeDropLocation.setAddress(placeDropPostalAddress);
 
@@ -135,7 +135,7 @@ private Q_SLOTS:
         Place placePickupLocation;
         placePickupLocation.setName(QStringLiteral("pickuplocation"));
         KItinerary::PostalAddress placePickupPostalAddress;
-        placePickupPostalAddress.setStreeAddress(QStringLiteral("5 kde foo bla bla"));
+        placePickupPostalAddress.setStreetAddress(QStringLiteral("5 kde foo bla bla"));
         placePickupPostalAddress.setAddressLocality(QStringLiteral("bli2"));
         placePickupLocation.setAddress(placePickupPostalAddress);
 

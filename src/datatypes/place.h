@@ -57,7 +57,7 @@ class PostalAddressPrivate;
 class KITINERARY_EXPORT PostalAddress
 {
     KITINERARY_GADGET(PostalAddress)
-    KITINERARY_PROPERTY(QString, streetAddress, setStreeAddress)
+    KITINERARY_PROPERTY(QString, streetAddress, setStreetAddress)
     KITINERARY_PROPERTY(QString, addressLocality, setAddressLocality)
     KITINERARY_PROPERTY(QString, postalCode, setPostalCode)
     KITINERARY_PROPERTY(QString, addressRegion, setAddressRegion)

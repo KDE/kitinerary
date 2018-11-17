@@ -68,7 +68,7 @@ public:
 };
 
 KITINERARY_MAKE_SIMPLE_CLASS(PostalAddress)
-KITINERARY_MAKE_PROPERTY(PostalAddress, QString, streetAddress, setStreeAddress)
+KITINERARY_MAKE_PROPERTY(PostalAddress, QString, streetAddress, setStreetAddress)
 KITINERARY_MAKE_PROPERTY(PostalAddress, QString, addressLocality, setAddressLocality)
 KITINERARY_MAKE_PROPERTY(PostalAddress, QString, postalCode, setPostalCode)
 KITINERARY_MAKE_PROPERTY(PostalAddress, QString, addressRegion, setAddressRegion)

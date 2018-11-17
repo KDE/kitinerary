@@ -519,6 +519,10 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
         addr.setAddressCountry(addr.addressCountry().toUpper());
     }
 
+    // normalize strings
+    addr.setStreetAddress(addr.streetAddress().simplified());
+    addr.setAddressLocality(addr.addressLocality().simplified());
+
     place.setAddress(addr);
     return place;
 }
