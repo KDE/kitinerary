@@ -545,7 +545,6 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
         const auto util = i18n::phonenumbers::PhoneNumberUtil::GetInstance();
         i18n::phonenumbers::PhoneNumber number;
         if (util->ParseAndKeepRawInput(phoneStr, isoCode, &number) == i18n::phonenumbers::PhoneNumberUtil::NO_PARSING_ERROR) {
-            qDebug() << number.country_code_source() << isoCode.c_str();
             if (number.country_code_source() == i18n::phonenumbers::PhoneNumber_CountryCodeSource_FROM_DEFAULT_COUNTRY) {
                 util->Format(number, i18n::phonenumbers::PhoneNumberUtil::INTERNATIONAL, &phoneStr);
                 place.setTelephone(QString::fromStdString(phoneStr));
@@ -557,6 +556,7 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
     // normalize strings
     addr.setStreetAddress(addr.streetAddress().simplified());
     addr.setAddressLocality(addr.addressLocality().simplified());
+    addr.setAddressRegion(addr.addressRegion().simplified());
 
     place.setAddress(addr);
     return place;
