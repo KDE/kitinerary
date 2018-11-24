@@ -338,7 +338,11 @@ void PdfPagePrivate::load()
     const auto pageRect = m_doc->m_popplerDoc->getPage(m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
 
+#ifdef HAVE_POPPLER_0_72
+    m_text = QString::fromUtf8(s->c_str());
+#else
     m_text = QString::fromUtf8(s->getCString());
+#endif
     m_images = std::move(device.m_images);
     for (auto it = m_images.begin(); it != m_images.end(); ++it) {
         (*it).d->m_page = this;
@@ -379,7 +383,11 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
     const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(ratio(pageRect->x1, pageRect->x2, left), ratio(pageRect->y1, pageRect->y2, top),
                                                 ratio(pageRect->x1, pageRect->x2, right), ratio(pageRect->y1, pageRect->y2, bottom)));
+#ifdef HAVE_POPPLER_0_72
+    return QString::fromUtf8(s->c_str());
+#else
     return QString::fromUtf8(s->getCString());
+#endif
 #else
     Q_UNUSED(left);
     Q_UNUSED(top);

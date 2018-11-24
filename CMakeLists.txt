@@ -29,9 +29,9 @@ set(QT_REQUIRED_VERSION "5.9.0")
 find_package(Qt5 ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Test Gui Qml)
 find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n)
 
-set(KMIME_VERSION "5.9.80")
-set(KCALENDARCORE_LIB_VERSION "5.9.80")
-set(KCONTACTS_LIB_VERSION "5.9.80")
+set(KMIME_VERSION "5.9.90")
+set(KCALENDARCORE_LIB_VERSION "5.9.90")
+set(KCONTACTS_LIB_VERSION "5.9.90")
 
 
 find_package(KF5Mime ${KMIME_VERSION} CONFIG REQUIRED)
@@ -61,6 +61,9 @@ if(TARGET Poppler::Core)
     endif()
     if (${Poppler_VERSION} VERSION_GREATER 0.68)
         set(HAVE_POPPLER_0_69 ON)
+    endif()
+    if (${Poppler_VERSION} VERSION_GREATER 0.71)
+        set(HAVE_POPPLER_0_72 ON)
     endif()
 endif()
 
