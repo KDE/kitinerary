@@ -10,7 +10,8 @@
             "@type": "Flight",
             "airline": {
                 "@type": "Airline",
-                "iataCode": "LX"
+                "iataCode": "LX",
+                "name": "SWISS"
             },
             "arrivalAirport": {
                 "@type": "Airport",

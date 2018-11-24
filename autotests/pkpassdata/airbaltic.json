@@ -8,7 +8,8 @@
             "@type": "Flight",
             "airline": {
                 "@type": "Airline",
-                "iataCode": "BT"
+                "iataCode": "BT",
+                "name": "airBaltic"
             },
             "arrivalAirport": {
                 "@type": "Airport",

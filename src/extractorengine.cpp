@@ -573,7 +573,9 @@ void ExtractorEnginePrivate::extractBoardingPass(QJsonObject &resFor)
     if (airline.isEmpty()) {
         airline.insert(QLatin1String("@type"), QLatin1String("Airline"));
     }
-    airline.insert(QLatin1String("name"), m_pass->organizationName());
+    if (!airline.contains(QLatin1String("name"))) {
+        airline.insert(QLatin1String("name"), m_pass->organizationName());
+    }
     resFor.insert(QLatin1String("airline"), airline);
 }
 

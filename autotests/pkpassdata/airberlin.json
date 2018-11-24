@@ -8,7 +8,8 @@
             "@type": "Flight",
             "airline": {
                 "@type": "Airline",
-                "iataCode": "AB"
+                "iataCode": "AB",
+                "name": "airberlin"
             },
             "arrivalAirport": {
                 "@type": "Airport",
