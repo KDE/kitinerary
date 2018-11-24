@@ -567,6 +567,14 @@ void ExtractorEnginePrivate::extractBoardingPass(QJsonObject &resFor)
         depAirport.insert(QLatin1String("geo"), depGeo);
         resFor.insert(QLatin1String("departureAirport"), depAirport);
     }
+
+    // organizationName is the best guess for airline name
+    auto airline = resFor.value(QLatin1String("airline")).toObject();
+    if (airline.isEmpty()) {
+        airline.insert(QLatin1String("@type"), QLatin1String("Airline"));
+    }
+    airline.insert(QLatin1String("name"), m_pass->organizationName());
+    resFor.insert(QLatin1String("airline"), airline);
 }
 
 void ExtractorEnginePrivate::extractEventTicketPass(QJsonObject &resFor)
