@@ -166,6 +166,22 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForJsonLd(const QJ
     return v;
 }
 
+std::vector<const Extractor *> ExtractorRepository::extractorsForBarcode(const QString &code) const
+{
+    std::vector<const Extractor *> v;
+
+    for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
+        for (const auto &filter : (*it).filters()) {
+            if (filter.type() == ExtractorFilter::Barcode && filter.matches(code)) {
+                v.push_back(&(*it));
+                break;
+            }
+        }
+    }
+
+    return v;
+}
+
 void ExtractorRepositoryPrivate::loadExtractors()
 {
     auto searchDirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);

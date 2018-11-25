@@ -34,6 +34,7 @@ class Pass;
 }
 
 class QJsonArray;
+class QString;
 
 namespace KItinerary {
 
@@ -58,6 +59,8 @@ public:
     std::vector<const Extractor *> extractorsForPass(KPkPass::Pass *pass) const;
     /** Finds matching extractors for the given JSON-LD data provided by generic extractors. */
     std::vector<const Extractor *> extractorsForJsonLd(const QJsonArray &data) const;
+    /** Finds matching extractors for the given barcode string. */
+    std::vector<const Extractor *> extractorsForBarcode(const QString &code) const;
 
 private:
     ExtractorRepositoryPrivate* d;
