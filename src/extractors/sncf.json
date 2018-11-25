@@ -1,7 +1,10 @@
 [
     {
         "type": "pdf",
-        "filter": [ { "header": "From", "match": "e-billet@sncf.fr" } ],
+        "filter": [
+            { "header": "From", "match": "e-billet@sncf.fr" },
+            { "type": "Barcode", "match": "^i0CV" }
+        ],
         "script": "sncf.js",
         "function": "parsePdf"
     },

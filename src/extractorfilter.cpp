@@ -36,9 +36,9 @@ const char *ExtractorFilter::fieldName() const
     return m_fieldName.constData();
 }
 
-bool ExtractorFilter::matches(const QString &headerData) const
+bool ExtractorFilter::matches(const QString &data) const
 {
-    return m_exp.match(headerData).hasMatch();
+    return m_exp.match(data).hasMatch();
 }
 
 bool ExtractorFilter::load(const QJsonObject &obj)

@@ -306,6 +306,15 @@ void ExtractorEnginePrivate::extractDocument()
     // check if generic extractors identified documents we have custom extractors for
     m_extractors = m_repo.extractorsForJsonLd(m_result);
     extractCustom();
+
+    // check the unrecognized (vendor-specific) barcodes, if any
+    if (m_pdfDoc) {
+        for (const auto &code : m_genericPdfExtractor.unrecognizedBarcodes()) {
+            m_extractors = m_repo.extractorsForBarcode(code);
+            qDebug() << code << m_extractors.size();
+            extractCustom();
+        }
+    }
 }
 
 void ExtractorEnginePrivate::extractStructured()
