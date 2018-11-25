@@ -26,9 +26,14 @@ using namespace KItinerary;
 ExtractorFilter::ExtractorFilter() = default;
 ExtractorFilter::~ExtractorFilter() = default;
 
-const char *ExtractorFilter::headerName() const
+ExtractorFilter::Type ExtractorFilter::type() const
 {
-    return m_headerName.constData();
+    return m_type;
+}
+
+const char *ExtractorFilter::fieldName() const
+{
+    return m_fieldName.constData();
 }
 
 bool ExtractorFilter::matches(const QString &headerData) const
@@ -38,7 +43,31 @@ bool ExtractorFilter::matches(const QString &headerData) const
 
 bool ExtractorFilter::load(const QJsonObject &obj)
 {
-    m_headerName = obj.value(QLatin1String("header")).toString().toUtf8();
+    auto it = obj.find(QLatin1String("header"));
+    if (it != obj.end()) {
+        m_fieldName = it.value().toString().toUtf8();
+        m_type = Mime;
+    }
+
+    it = obj.find(QLatin1String("field"));
+    if (it != obj.end()) {
+        m_fieldName = it.value().toString().toUtf8();
+        m_type = PkPass;
+    }
+
+    it = obj.find(QLatin1String("property"));
+    if (it != obj.end()) {
+        m_fieldName = it.value().toString().toUtf8();
+        m_type = JsonLd;
+    }
+
+    if (m_type == Undefined) {
+        const auto typeName = obj.value(QLatin1String("type"));
+        if (typeName == QLatin1String("Barcode")) {
+            m_type = Barcode;
+        }
+    }
+
     m_exp.setPattern(obj.value(QLatin1String("match")).toString());
-    return !m_headerName.isEmpty() && m_exp.isValid();
+    return m_type != Undefined && (!m_fieldName.isEmpty() || m_type == Barcode) && m_exp.isValid();
 }

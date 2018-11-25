@@ -1,5 +1,5 @@
 [{
     "type": "pkpass",
-    "filter": [ { "header": "passTypeIdentifier", "match": "pass.com.lufthansa.mbp" } ],
+    "filter": [ { "field": "passTypeIdentifier", "match": "pass.com.lufthansa.mbp" } ],
     "script": "lufthansa-pkpass.js"
 }]

@@ -6,6 +6,6 @@
     "script": "eurowings.js"
 }, {
     "type": "pkpass",
-    "filter": [ { "header": "passTypeIdentifier", "match": "pass.wings.boardingpass" } ],
+    "filter": [ { "field": "passTypeIdentifier", "match": "pass.wings.boardingpass" } ],
     "script": "eurowings-pkpass.js"
 }]

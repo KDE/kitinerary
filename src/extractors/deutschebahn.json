@@ -3,7 +3,7 @@
         "type": "pdf",
         "filter": [
             { "header": "From", "match": "buchungsbestaetigung@bahn.de" },
-            { "header": "provider", "match": "0080" }
+            { "property": "provider", "match": "0080" }
         ],
         "script": "deutschebahn.js",
         "function": "parsePdf"

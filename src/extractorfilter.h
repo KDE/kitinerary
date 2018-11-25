@@ -34,13 +34,28 @@ public:
     ExtractorFilter();
     ~ExtractorFilter();
 
-    const char *headerName() const;
-    bool matches(const QString &headerData) const;
+    /** Filter type. */
+    enum Type {
+        Undefined,
+        Mime,
+        PkPass,
+        JsonLd,
+        Barcode
+    };
+
+    /** The filter type. */
+    Type type() const;
+    /** The field to filter on. */
+    const char *fieldName() const;
+    /** Check if @p data matches this filter. */
+    bool matches(const QString &data) const;
+    /** Load filter from @p obj. */
     bool load(const QJsonObject &obj);
 
 private:
-    QByteArray m_headerName;
+    QByteArray m_fieldName;
     QRegularExpression m_exp;
+    Type m_type = Undefined;
 };
 
 }

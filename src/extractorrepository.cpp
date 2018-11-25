@@ -73,15 +73,15 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
     }
 
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
-        if ((*it).type() == Extractor::PkPass) {
-            continue;
-        }
         for (const auto &filter : (*it).filters()) {
-            auto header = part->headerByType(filter.headerName());
+            if (filter.type() != ExtractorFilter::Mime) {
+                continue;
+            }
+            auto header = part->headerByType(filter.fieldName());
             auto ancestor = part;
             while (!header && ancestor->parent()) {
                 ancestor = ancestor->parent();
-                header = ancestor->headerByType(filter.headerName());
+                header = ancestor->headerByType(filter.fieldName());
             }
             if (!header) {
                 continue;
@@ -109,8 +109,12 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::P
             continue;
         }
         for (const auto &filter : (*it).filters()) {
+            if (filter.type() != ExtractorFilter::PkPass) {
+                continue;
+            }
+
             QString value;
-            if (strcmp(filter.headerName(), "passTypeIdentifier") == 0) {
+            if (strcmp(filter.fieldName(), "passTypeIdentifier") == 0) {
                 value = pass->passTypeIdentifier();
             } else {
                 continue;
@@ -145,7 +149,10 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForJsonLd(const QJ
         const auto id = providerId(val.toObject());
         for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
             for (const auto &filter : (*it).filters()) {
-                if (strcmp(filter.headerName(), "provider") != 0) {
+                if (filter.type() != ExtractorFilter::JsonLd) {
+                    continue;
+                }
+                if (strcmp(filter.fieldName(), "provider") != 0) {
                     continue;
                 }
                 if (filter.matches(id)) {

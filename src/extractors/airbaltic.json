@@ -2,7 +2,7 @@
     "type": "pdf",
     "filter": [
         { "header": "From", "match": "@airbaltic.com" },
-        { "header": "provider", "match": "BT" }
+        { "property": "provider", "match": "BT" }
     ],
     "script": "airbaltic.js"
 }

@@ -55,8 +55,12 @@ class ExtractorPrivate;
  * - \c ical: iCalendar events, the argument to the script function is a KCalCore::Event instance.
  *
  * Filter definitions have the following field:
- * - \c header: A MIME message header name or field id in a Apple Wallet pass.
- * - \c match: A regular expression that is matched against the header value (see QRegularExpression).
+ * - \c type: The type of data this filter applies to, one of: @c Mime, @c PkPass, @c JsonLd, @c Barcode.
+ *            Can often be omitted as it's auto-detected based on the following fields.
+ * - \c header: A MIME message header name (valid and mandatory for type @c Mime).
+ * - \c field: A field id in a Apple Wallet pass (valid and mandatory for type @c PkPass).
+ * - \c property: A property on a Json-LD object (valid and mandatory for type @c JsonLd).
+ * - \c match: A regular expression that is matched against the specified value (see QRegularExpression).
  *
  * Example:
  * @code
@@ -69,7 +73,7 @@ class ExtractorPrivate;
  *   },
  *   {
  *     "type": "pkpass",
- *     "filter": [ { "header": "passTypeIdentifier", "match": "pass.booking.swiss.com" } ],
+ *     "filter": [ { "field": "passTypeIdentifier", "match": "pass.booking.swiss.com" } ],
  *     "script": "swiss.js",
  *     "function": "parsePkPass"
  *   }
