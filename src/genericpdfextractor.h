@@ -21,6 +21,7 @@
 #include <unordered_set>
 
 #include <QDateTime>
+#include <QStringList>
 
 class QJsonArray;
 class QString;
@@ -49,12 +50,16 @@ public:
     /** Try to extract the given document. */
     void extract(PdfDocument *doc, QJsonArray &result);
 
+    /** Barcodes that we couldn't recognize, for use with custom extractors. */
+    QStringList unrecognizedBarcodes() const;
+
 private:
     void extractImage(const PdfImage &img, QJsonArray &result);
     void extractBarcode(const QString &code, QJsonArray &result);
     void extractUic9183(const QByteArray &data, QJsonArray &result);
 
     QDateTime m_contextDate;
+    QStringList m_unrecognizedBarcodes;
     std::unordered_set<int> m_imageIds;
 };
 

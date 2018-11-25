@@ -56,6 +56,8 @@ void GenericPdfExtractor::setContextDate(const QDateTime &dt)
 
 void GenericPdfExtractor::extract(PdfDocument *doc, QJsonArray &result)
 {
+    m_unrecognizedBarcodes.clear();
+
     // stay away from documents that are atypically large for what we are looking for
     // that's just unecessarily eating up resources
     if (doc->pageCount() > MaxPageCount || doc->fileSize() > MaxFileSize) {
@@ -95,6 +97,11 @@ void GenericPdfExtractor::extract(PdfDocument *doc, QJsonArray &result)
     }
 }
 
+QStringList GenericPdfExtractor::unrecognizedBarcodes() const
+{
+    return m_unrecognizedBarcodes;
+}
+
 void GenericPdfExtractor::extractImage(const PdfImage &img, QJsonArray &result)
 {
     const auto aspectRatio = img.width() < img.height() ?
@@ -125,6 +132,8 @@ void GenericPdfExtractor::extractBarcode(const QString &code, QJsonArray &result
         const auto jsonLd = JsonLdDocument::toJson(res);
         std::copy(jsonLd.begin(), jsonLd.end(), std::back_inserter(result));
     }
+
+    m_unrecognizedBarcodes.push_back(code);
 }
 
 void GenericPdfExtractor::extractUic9183(const QByteArray &data, QJsonArray &result)
