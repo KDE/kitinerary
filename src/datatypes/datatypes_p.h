@@ -137,6 +137,7 @@ namespace detail { \
 #define KITINERARY_MAKE_OPERATOR(Class) \
 bool Class::operator==(const Class &other) const \
 { \
+    static_assert(detail::property_counter(detail::num<0>(), detail::tag<Class>()) == 1, "silence unused function warnings"); \
     typedef Class ## Private this_type; \
     const auto lhs = static_cast<const this_type *>(d.data()); \
     const auto rhs = static_cast<const this_type*>(other.d.data()); \
