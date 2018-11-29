@@ -63,7 +63,7 @@ static void parseJson(const QByteArray &data, QJsonArray &result)
     }
 }
 
-static QString valueForItemProperty(HtmlElement elem)
+static QString valueForItemProperty(const HtmlElement &elem)
 {
     // TODO see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#Values
     const auto elemName = elem.name();
@@ -87,7 +87,7 @@ static QString valueForItemProperty(HtmlElement elem)
     return v;
 }
 
-static void parseMicroData(HtmlElement elem, QJsonObject &obj)
+static void parseMicroData(const HtmlElement &elem, QJsonObject &obj)
 {
     auto child = elem.firstChild();
     while (!child.isNull()) {
@@ -109,7 +109,7 @@ static void parseMicroData(HtmlElement elem, QJsonObject &obj)
     }
 }
 
-static void extractRecursive(HtmlElement elem, QJsonArray &result)
+static void extractRecursive(const HtmlElement &elem, QJsonArray &result)
 {
     // JSON-LD
     if (elem.name() == QLatin1String("script") && elem.attribute(QLatin1String("type")) == QLatin1String("application/ld+json")) {

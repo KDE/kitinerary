@@ -90,7 +90,7 @@ private Q_SLOTS:
             CalendarHandler::fillEvent(postproc.result(), newEvent);
 
             // sync volatile fields, we only care for differences elsewhere
-            const auto refEvent = refEvents.at(i);
+            const auto &refEvent = refEvents.at(i);
             newEvent->setUid(refEvent->uid());
             newEvent->setLastModified(refEvent->lastModified());
             newEvent->setCreated(refEvent->created());

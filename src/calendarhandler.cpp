@@ -128,7 +128,7 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
 
 #ifdef HAVE_KCAL
     // TODO pass reservationS into all functions below for multi-traveler support
-    const auto reservation = reservations.at(0);
+    const auto &reservation = reservations.at(0);
     const int typeId = reservation.userType();
     if (typeId == qMetaTypeId<FlightReservation>()) {
         fillFlightReservation(reservations, event);
