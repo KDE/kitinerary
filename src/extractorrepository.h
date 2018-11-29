@@ -50,7 +50,7 @@ class ExtractorRepository
 public:
     ExtractorRepository();
     ~ExtractorRepository();
-    ExtractorRepository(ExtractorRepository &&);
+    ExtractorRepository(ExtractorRepository &&) noexcept;
     ExtractorRepository(const ExtractorRepository &) = delete;
 
     /** Finds matching extractors for the given message part. */

@@ -63,7 +63,7 @@ ExtractorRepository::ExtractorRepository()
 }
 
 ExtractorRepository::~ExtractorRepository() = default;
-ExtractorRepository::ExtractorRepository(KItinerary::ExtractorRepository &&) = default;
+ExtractorRepository::ExtractorRepository(KItinerary::ExtractorRepository &&) noexcept = default;
 
 std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::Content *part) const
 {

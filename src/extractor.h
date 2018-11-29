@@ -93,7 +93,7 @@ public:
     ///@cond internal
     Extractor();
     Extractor(const Extractor &) = delete;
-    Extractor(Extractor &&);
+    Extractor(Extractor &&) noexcept;
     ~Extractor();
     ///@endcond
 
