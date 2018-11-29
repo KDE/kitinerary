@@ -90,12 +90,14 @@ class TrainReservationPrivate : public ReservationPrivate
     KITINERARY_PRIVATE_GADGET(TrainReservation)
 };
 KITINERARY_MAKE_SUB_CLASS(TrainReservation, Reservation)
+KITINERARY_MAKE_OPERATOR(TrainReservation)
 
 class BusReservationPrivate : public ReservationPrivate
 {
     KITINERARY_PRIVATE_GADGET(BusReservation)
 };
 KITINERARY_MAKE_SUB_CLASS(BusReservation, Reservation)
+KITINERARY_MAKE_OPERATOR(BusReservation)
 
 class FoodEstablishmentReservationPrivate : public ReservationPrivate
 {
@@ -116,6 +118,7 @@ class EventReservationPrivate : public ReservationPrivate
     KITINERARY_PRIVATE_GADGET(EventReservation)
 };
 KITINERARY_MAKE_SUB_CLASS(EventReservation, Reservation)
+KITINERARY_MAKE_OPERATOR(EventReservation)
 
 class RentalCarReservationPrivate : public ReservationPrivate
 {
