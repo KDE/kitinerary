@@ -248,7 +248,7 @@ Rct2TicketField::Rct2TicketField(const char *data, int size)
     , m_size(size)
 {
     if (size <= 13) { // too small
-        qCWarning(Log) << "Found too small RCT2 field";
+        qCWarning(Log) << "Found too small RCT2 field:" << size;
         m_data = nullptr;
         return;
     }
@@ -262,7 +262,7 @@ Rct2TicketField::Rct2TicketField(const char *data, int size)
 
     // size is too large
     if (this->size() > m_size) {
-        qCWarning(Log) << "Found RCT2 field with invalid size";
+        qCWarning(Log) << "Found RCT2 field with invalid size" << this->size() << m_size;
         m_data = nullptr;
         return;
     }
@@ -305,9 +305,22 @@ QString Rct2TicketField::text() const
 
 Rct2TicketField Rct2TicketField::next() const
 {
-    if (m_size > size()) {
-        return Rct2TicketField(m_data + size(), m_size - size());
+    const auto thisSize = size();
+    const auto remaining = m_size - size();
+    if (remaining < 0) {
+        return {};
     }
+
+    // search for the next field
+    // in theory this should always trigger at i == 0, unless
+    // the size field is wrong, which happens unfortunately
+    for (int i = 0; i < remaining - 13; ++i) {
+        Rct2TicketField f(m_data + thisSize + i, remaining - i);
+        if (!f.isNull()) {
+            return f;
+        }
+    }
+
     return {};
 }
 
