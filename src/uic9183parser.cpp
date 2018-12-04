@@ -122,7 +122,11 @@ class Rct2TicketField
 {
 public:
     Rct2TicketField() = default;
-    Rct2TicketField(const char *data);
+    /** Create a new RCT2 field starting at @p data.
+     *  @param size The size of the remaining RCT2 field array (not just this field!).
+     */
+    Rct2TicketField(const char *data, int size);
+    bool isNull() const;
     // size of the field data, not size of the text content
     int size() const;
 
@@ -132,8 +136,11 @@ public:
     int width() const;
     QString text() const;
 
+    Rct2TicketField next() const;
+
 private:
     const char *m_data = nullptr;
+    int m_size = 0;
 };
 
 class Rct2TicketPrivate : public QSharedData
@@ -142,6 +149,8 @@ public:
     QString fieldText(int row, int column, int width, int height = 1) const;
     QDate firstDayOfValidity() const;
     QDateTime parseTime(const QString &dateStr, const QString &timeStr) const;
+
+    Rct2TicketField firstField() const;
 
     Uic9183Block block;
 };
@@ -234,9 +243,34 @@ Uic9183Block Uic9183ParserPrivate::findBlock(const char name[6]) const
 }
 
 
-Rct2TicketField::Rct2TicketField(const char *data)
+Rct2TicketField::Rct2TicketField(const char *data, int size)
     : m_data(data)
+    , m_size(size)
 {
+    if (size <= 13) { // too small
+        qCWarning(Log) << "Found too small RCT2 field";
+        m_data = nullptr;
+        return;
+    }
+
+    // invalid format
+    if (!std::all_of(data, data + 8, isdigit) || !std::all_of(data + 9, data + 13, isdigit)) {
+        qCWarning(Log) << "Found RCT2 field with invalid format";
+        m_data = nullptr;
+        return;
+    }
+
+    // size is too large
+    if (this->size() > m_size) {
+        qCWarning(Log) << "Found RCT2 field with invalid size";
+        m_data = nullptr;
+        return;
+    }
+}
+
+bool Rct2TicketField::isNull() const
+{
+    return !m_data || m_size <= 13;
 }
 
 int Rct2TicketField::size() const
@@ -269,13 +303,26 @@ QString Rct2TicketField::text() const
     return QString::fromUtf8(m_data + 13, asciiToInt(m_data + 9, 4));
 }
 
+Rct2TicketField Rct2TicketField::next() const
+{
+    if (m_size > size()) {
+        return Rct2TicketField(m_data + size(), m_size - size());
+    }
+    return {};
+}
+
+Rct2TicketField Rct2TicketPrivate::firstField() const
+{
+    if (block.size() > 20) {
+        return Rct2TicketField(block.data() + 20, block.size() - 20);
+    }
+    return {};
+}
+
 QString Rct2TicketPrivate::fieldText(int row, int column, int width, int height) const
 {
     QString s;
-    for (int i = 20; i < block.size();) {
-        Rct2TicketField f(block.data() + i);
-        i += f.size();
-
+    for (auto f = firstField(); !f.isNull(); f = f.next()) {
         if (f.row() + f.height() - 1 < row || f.row() > row + height - 1) {
             continue;
         }
