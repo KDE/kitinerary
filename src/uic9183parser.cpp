@@ -369,7 +369,7 @@ QString Rct2TicketPrivate::fieldText(int row, int column, int width, int height)
             }
         }
     }
-    //qDebug() << "Result:" << x << y << w << h << s;
+    //qDebug() << "Result:" << row << column << width << height << s;
     return s;
 }
 
@@ -428,6 +428,16 @@ Rct2Ticket::Rct2Ticket(Uic9183Block block)
 {
     d->block = block;
     qDebug() << QByteArray(block.data(), block.size());
+    std::vector<QString> out;
+    for (auto f = d->firstField(); !f.isNull(); f = f.next()) {
+        qDebug() << "Field:" << f.row() << f.column() << f.width() << f.height() << f.text() << f.size();
+        out.resize(std::max<int>(f.row() + 1, out.size()));
+        out[f.row()].resize(std::max(out[f.row()].size(), f.column() + f.width() + 1), QLatin1Char(' '));
+        out[f.row()].replace(f.column(), f.width(), f.text());
+    }
+    for (const auto &line : out) {
+        qDebug() << line;
+    }
 }
 
 Rct2Ticket::Rct2Ticket(const Rct2Ticket&) = default;
