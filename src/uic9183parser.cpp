@@ -400,8 +400,15 @@ QDate Rct2TicketPrivate::firstDayOfValidity() const
 QDateTime Rct2TicketPrivate::parseTime(const QString &dateStr, const QString &timeStr) const
 {
     const auto d = QDate::fromString(dateStr, QStringLiteral("dd.MM"));
-    const auto t = QTime::fromString(timeStr, QStringLiteral("hh:mm"));
-    return QDateTime({firstDayOfValidity().year(), d.month(), d.day()}, t);
+    auto t = QTime::fromString(timeStr, QStringLiteral("hh:mm"));
+    if (!t.isValid()) {
+        t = QTime::fromString(timeStr, QStringLiteral("hh.mm"));
+    }
+
+    const auto validDt = firstDayOfValidity();
+    const auto year = validDt.isValid() ? validDt.year() : contextDt.date().year();
+
+    return QDateTime({year, d.month(), d.day()}, t);
 }
 
 
