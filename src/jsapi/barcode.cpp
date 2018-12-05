@@ -54,13 +54,14 @@ QVariant JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
 QVariant JsApi::Barcode::decodeUic9183(const QVariant &s) const
 {
     Uic9183Parser p;
+    p.setContextDate(m_contextDate);
     p.parse(s.toByteArray());
     return QVariant::fromValue(p);
 }
 
 QVariant JsApi::Barcode::decodeIataBcbp(const QString &s) const
 {
-    return QVariant::fromValue(IataBcbpParser::parse(s, m_contextDate));
+    return QVariant::fromValue(IataBcbpParser::parse(s, m_contextDate.date()));
 }
 
 QString JsApi::Barcode::toBase64(const QVariant &b) const
@@ -68,9 +69,9 @@ QString JsApi::Barcode::toBase64(const QVariant &b) const
     return QString::fromUtf8(b.toByteArray().toBase64());
 }
 
-void JsApi::Barcode::setContextDate(const QDate& date)
+void JsApi::Barcode::setContextDate(const QDateTime &dt)
 {
-    m_contextDate = date;
+    m_contextDate = dt;
 }
 
 #include "moc_barcode.cpp"

@@ -241,7 +241,7 @@ void ExtractorEnginePrivate::setContextDate(const QDateTime &dt)
 {
     m_context->m_senderDate = dt;
     m_jsonLdApi->setContextDate(dt);
-    m_barcodeApi->setContextDate(dt.date());
+    m_barcodeApi->setContextDate(dt);
     m_genericPdfExtractor.setContextDate(dt);
 }
 

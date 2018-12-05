@@ -18,7 +18,7 @@
 #ifndef KITINERARY_JSAPI_BARCODE_H
 #define KITINERARY_JSAPI_BARCODE_H
 
-#include <QDate>
+#include <QDateTime>
 #include <QObject>
 
 namespace KItinerary {
@@ -55,11 +55,11 @@ public:
     Q_INVOKABLE QString toBase64(const QVariant &b) const;
 
     ///@cond internal
-    void setContextDate(const QDate &date);
+    void setContextDate(const QDateTime &dt);
     ///@endcond
 
 private:
-    QDate m_contextDate;
+    QDateTime m_contextDate;
 };
 
 }

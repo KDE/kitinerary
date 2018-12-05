@@ -109,6 +109,7 @@ public:
     Uic9183Block findBlock(const char name[6]) const;
 
     QByteArray m_payload;
+    QDateTime m_contextDt;
 };
 
 // 2x field line, number as ascii text
@@ -153,6 +154,7 @@ public:
     Rct2TicketField firstField() const;
 
     Uic9183Block block;
+    QDateTime contextDt;
 };
 }
 
@@ -432,6 +434,11 @@ bool Rct2Ticket::isValid() const
         && std::strncmp(d->block.data() + 12, "RCT2", 4) == 0;
 }
 
+void Rct2Ticket::setContextDate(const QDateTime &contextDt)
+{
+    d->contextDt = contextDt;
+}
+
 QDate Rct2Ticket::firstDayOfValidity() const
 {
     return d->firstDayOfValidity();
@@ -471,6 +478,11 @@ Uic9183Parser::Uic9183Parser()
 Uic9183Parser::Uic9183Parser(const Uic9183Parser&) = default;
 Uic9183Parser::~Uic9183Parser() = default;
 Uic9183Parser& Uic9183Parser::operator=(const Uic9183Parser&) = default;
+
+void Uic9183Parser::setContextDate(const QDateTime &contextDt)
+{
+    d->m_contextDt = contextDt;
+}
 
 void Uic9183Parser::parse(const QByteArray &data)
 {
@@ -630,7 +642,9 @@ QString Uic9183Parser::outboundArrivalStationId() const
 
 Rct2Ticket Uic9183Parser::rct2Ticket() const
 {
-    return Rct2Ticket(d->findBlock("U_TLAY"));
+    Rct2Ticket rct2(d->findBlock("U_TLAY"));
+    rct2.setContextDate(d->m_contextDt);
+    return rct2;
 }
 
 QVariant Uic9183Parser::rct2TicketVariant() const

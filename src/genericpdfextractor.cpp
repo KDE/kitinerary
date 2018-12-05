@@ -139,6 +139,7 @@ void GenericPdfExtractor::extractBarcode(const QString &code, QJsonArray &result
 void GenericPdfExtractor::extractUic9183(const QByteArray &data, QJsonArray &result)
 {
     Uic9183Parser p;
+    p.setContextDate(m_contextDate);
     p.parse(data);
     if (!p.isValid()) {
         return;

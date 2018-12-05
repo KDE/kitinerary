@@ -53,6 +53,9 @@ public:
     /** Returns whether this is a valid RCT2 ticket layout block. */
     bool isValid() const;
 
+    /** Date/time this ticket was first encounted, to recover possibly missing year numbers. */
+    void setContextDate(const QDateTime &contextDt);
+
     /** First day the ticket is valid. */
     QDate firstDayOfValidity() const;
     /** Departure time of the outbound segment. */
@@ -99,6 +102,11 @@ public:
     Uic9183Parser(const Uic9183Parser&);
     ~Uic9183Parser();
     Uic9183Parser& operator=(const Uic9183Parser&);
+
+    /** Date/time this ticket was first encountered.
+     *  This is used to recover a missing year in the ticket data.
+     */
+    void setContextDate(const QDateTime &contextDt);
 
     void parse(const QByteArray &data);
     bool isValid() const;
