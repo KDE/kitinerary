@@ -145,17 +145,51 @@ void GenericPdfExtractor::extractUic9183(const QByteArray &data, QJsonArray &res
         return;
     }
 
-    // TODO: add RCT2 ticket data
     QJsonObject org;
     org.insert(QLatin1String("@type"), QLatin1String("Organization"));
     org.insert(QLatin1String("identifier"), QString(QLatin1String("uic:") + p.carrierId()));
     QJsonObject trip;
     trip.insert(QLatin1String("@type"), QLatin1String("TrainTrip"));
     trip.insert(QLatin1String("provider"), org);
+    QJsonObject seat;
+    seat.insert(QLatin1String("@type"), QLatin1String("Seat"));
+
+    const auto rct2 = p.rct2Ticket();
+    if (rct2.isValid()) {
+        switch (rct2.type()) {
+            case Rct2Ticket::Reservation:
+            {
+                QJsonObject dep;
+                dep.insert(QLatin1String("@type"), QLatin1String("TrainStation"));
+                dep.insert(QLatin1String("name"), rct2.outboundDepartureStation());
+                trip.insert(QLatin1String("departureStation"), dep);
+                trip.insert(QLatin1String("departureTime"), rct2.outboundDepartureTime().toString(Qt::ISODate));
+
+                QJsonObject arr;
+                arr.insert(QLatin1String("@type"), QLatin1String("TrainStation"));
+                arr.insert(QLatin1String("name"), rct2.outboundArrivalStation());
+                trip.insert(QLatin1String("arrivalStation"), arr);
+                trip.insert(QLatin1String("arrivalTime"), rct2.outboundArrivalTime().toString(Qt::ISODate));
+
+                trip.insert(QLatin1String("trainNumber"), rct2.trainNumber());
+                seat.insert(QLatin1String("seatSection"), rct2.coachNumber());
+                seat.insert(QLatin1String("seatNumber"), rct2.seatNumber());
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    QJsonObject ticket;
+    ticket.insert(QLatin1String("@type"), QLatin1String("Ticket"));
+    ticket.insert(QLatin1String("ticketedSeat"), seat);
+
     QJsonObject res;
     res.insert(QLatin1String("@type"), QLatin1String("TrainReservation"));
     res.insert(QLatin1String("reservationFor"), trip);
     res.insert(QLatin1String("reservationNumber"), p.pnr());
+    res.insert(QLatin1String("reservedTicket"), ticket);
 
     result.push_back(res);
 }

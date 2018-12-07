@@ -38,11 +38,15 @@ class KITINERARY_EXPORT Rct2Ticket
 {
     Q_GADGET
     Q_PROPERTY(QDate firstDayOfValidity READ firstDayOfValidity)
+    Q_PROPERTY(Type type READ type)
     Q_PROPERTY(QDateTime outboundDepartureTime READ outboundDepartureTime)
     Q_PROPERTY(QDateTime outboundArrivalTime READ outboundArrivalTime)
     Q_PROPERTY(QString outboundDepartureStation READ outboundDepartureStation)
     Q_PROPERTY(QString outboundArrivalStation READ outboundArrivalStation)
     Q_PROPERTY(QString outboundClass READ outboundClass)
+    Q_PROPERTY(QString trainNumber READ trainNumber)
+    Q_PROPERTY(QString coachNumber READ coachNumber)
+    Q_PROPERTY(QString seatNumber READ seatNumber)
 
 public:
     Rct2Ticket();
@@ -58,6 +62,18 @@ public:
 
     /** First day the ticket is valid. */
     QDate firstDayOfValidity() const;
+
+    /** Type of RCT2 ticket.
+     *  @see ERA TAP TSI Annex B.6.
+     */
+    enum Type {
+        Reservation, ///< an reservation-only ticket (RES)
+        Unknown ///< ticket type could not be detected, or ticket type not supported yet
+    };
+    Q_ENUM(Type);
+    /** Returns the ticket type. */
+    Type type() const;
+
     /** Departure time of the outbound segment. */
     QDateTime outboundDepartureTime() const;
     /** Arrival time of the outbound segment. */
@@ -68,6 +84,13 @@ public:
     QString outboundArrivalStation() const;
     /** Class of the outbound segment. */
     QString outboundClass() const;
+
+    /** Train number (for reservation tickets). */
+    QString trainNumber() const;
+    /** Coach number (for reservation tickets). */
+    QString coachNumber() const;
+    /** Seat number (for reservation tickets). */
+    QString seatNumber() const;
 
 private:
     friend class Uic9183Parser;

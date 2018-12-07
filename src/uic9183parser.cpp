@@ -461,6 +461,15 @@ QDate Rct2Ticket::firstDayOfValidity() const
     return d->firstDayOfValidity();
 }
 
+Rct2Ticket::Type Rct2Ticket::type() const
+{
+    // ### this field can theoretically be translated
+    if (d->fieldText(0, 18, 51).trimmed().compare(QLatin1String("RESERVATION"), Qt::CaseInsensitive) == 0) {
+        return Reservation;
+    }
+    return Unknown;
+}
+
 QDateTime Rct2Ticket::outboundDepartureTime() const
 {
     return d->parseTime(d->fieldText(6, 1, 5), d->fieldText(6, 7, 5));
@@ -484,6 +493,30 @@ QString Rct2Ticket::outboundArrivalStation() const
 QString Rct2Ticket::outboundClass() const
 {
     return d->fieldText(6, 66, 5).trimmed();
+}
+
+QString Rct2Ticket::trainNumber() const
+{
+    if (type() == Reservation) {
+        return d->fieldText(8, 7, 5).trimmed();
+    }
+    return {};
+}
+
+QString Rct2Ticket::coachNumber() const
+{
+    if (type() == Reservation) {
+        return d->fieldText(8, 26, 3).trimmed();
+    }
+    return {};
+}
+
+QString Rct2Ticket::seatNumber() const
+{
+    if (type() == Reservation) {
+        return d->fieldText(8, 48, 23).trimmed();
+    }
+    return {};
 }
 
 
