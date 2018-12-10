@@ -8,4 +8,4 @@ callgrind.*
 heaptrack.*
 *.qmlc
 perf.data*
-/build/
+/build*/
