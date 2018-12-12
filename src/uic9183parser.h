@@ -67,7 +67,9 @@ public:
      *  @see ERA TAP TSI Annex B.6.
      */
     enum Type {
-        Reservation, ///< an reservation-only ticket (RES)
+        Transport, ///< Non-integrated Reservation Ticket (NRT)
+        TransportReservation, ///< Integration Reservation Ticket (IRT)
+        Reservation, ///< Reservation Only Document (RES)
         Unknown ///< ticket type could not be detected, or ticket type not supported yet
     };
     Q_ENUM(Type);

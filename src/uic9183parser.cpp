@@ -461,12 +461,35 @@ QDate Rct2Ticket::firstDayOfValidity() const
     return d->firstDayOfValidity();
 }
 
+static const struct {
+    const char *name; // case folded
+    Rct2Ticket::Type type;
+} rct2_ticket_type_map[] = {
+    { "ticket + reservation", Rct2Ticket::TransportReservation },
+    { "ticket", Rct2Ticket::Transport },
+    { "billet", Rct2Ticket::Transport },
+    { "fahrkarte", Rct2Ticket::Transport },
+    { "fahrschein", Rct2Ticket::Transport },
+    { "reservation", Rct2Ticket::Reservation }
+};
+
 Rct2Ticket::Type Rct2Ticket::type() const
 {
-    // ### this field can theoretically be translated
-    if (d->fieldText(0, 18, 51).trimmed().compare(QLatin1String("RESERVATION"), Qt::CaseInsensitive) == 0) {
-        return Reservation;
+    const auto typeName1 = d->fieldText(0, 18, 51).trimmed().toCaseFolded();
+    const auto typeName2 = d->fieldText(1, 18, 51).trimmed().toCaseFolded(); // used for alternative language type name
+
+    // prefer exact matches
+    for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
+        if (typeName1 == QLatin1String(it->name) || typeName2 == QLatin1String(it->name)) {
+            return it->type;
+        }
     }
+    for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
+        if (typeName1.contains(QLatin1String(it->name)) || typeName2.contains(QLatin1String(it->name))) {
+            return it->type;
+        }
+    }
+
     return Unknown;
 }
 
