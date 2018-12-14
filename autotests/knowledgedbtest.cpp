@@ -18,7 +18,8 @@
 */
 
 #include <KItinerary/CountryDb>
-#include <KItinerary/TrainStationDb>
+
+#include <knowledgedb/trainstationdb.h>
 
 #include <QDebug>
 #include <QObject>

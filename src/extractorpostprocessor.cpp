@@ -26,8 +26,10 @@
 #include "mergeutil.h"
 #include "sortutil.h"
 
+#include "knowledgedb/airportdb.h"
+#include "knowledgedb/trainstationdb.h"
+
 #include <KItinerary/Action>
-#include <KItinerary/AirportDb>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
@@ -38,7 +40,6 @@
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
-#include <KItinerary/TrainStationDb>
 #include <KItinerary/Visit>
 
 #include <KContacts/Address>

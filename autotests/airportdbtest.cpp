@@ -17,7 +17,7 @@
    02110-1301, USA.
 */
 
-#include <KItinerary/AirportDb>
+#include <knowledgedb/airportdb.h>
 
 #include <QDebug>
 #include <QObject>

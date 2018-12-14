@@ -118,10 +118,8 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
 )
 ecm_generate_headers(KItinerary_KnowledgeDb_FORWARDING_HEADERS
     HEADER_NAMES
-        AirportDb
         CountryDb
         KnowledgeDb
-        TrainStationDb
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_KnowledgeDb_HEADERS
     RELATIVE knowledgedb
