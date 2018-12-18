@@ -344,7 +344,7 @@ QString Rct2TicketPrivate::fieldText(int row, int column, int width, int height)
         if (f.column() + f.width() - 1 < column || f.column() > column + width - 1) {
             continue;
         }
-        //qDebug() << "Field:" << f.height() << f.column() << f.height() << f.width() << f.size() << f.text();
+        //qDebug() << "Field:" << f.row() << f.column() << f.height() << f.width() << f.size() << f.text();
 
         // split field into lines
         // TODO this needs to follow the RCT2 word-wrapping algorithm?
@@ -475,8 +475,11 @@ static const struct {
 
 Rct2Ticket::Type Rct2Ticket::type() const
 {
-    const auto typeName1 = d->fieldText(0, 18, 51).trimmed().toCaseFolded();
-    const auto typeName2 = d->fieldText(1, 18, 51).trimmed().toCaseFolded(); // used for alternative language type name
+    // in theory: columns 15 - 18 blank, columns 19 - 51 ticket type (1-based indices!)
+    // however, some providers overrun and also use the blank columns, so consider those too
+    // if they are really empty, we trim them anyway.
+    const auto typeName1 = d->fieldText(0, 14, 38).trimmed().toCaseFolded();
+    const auto typeName2 = d->fieldText(1, 14, 38).trimmed().toCaseFolded(); // used for alternative language type name
 
     // prefer exact matches
     for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
