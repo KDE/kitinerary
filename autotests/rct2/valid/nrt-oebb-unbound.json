@@ -1,0 +1,12 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Rct2Ticket",
+        "firstDayOfValidity": "2017-09-10",
+        "outboundArrivalStation": "WIEN",
+        "outboundClass": "1",
+        "outboundDepartureStation": "GRAZ",
+        "passengerName": "Lastname Name",
+        "type": 0
+    }
+]
