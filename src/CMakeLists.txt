@@ -46,6 +46,7 @@ set(kitinerary_lib_srcs
     pdfdocument.cpp
     qimageluminancesource.cpp
     qimagepurebinarizer.cpp
+    rct2ticket.cpp
     sortutil.cpp
     stringutil.cpp
     structureddataextractor.cpp
@@ -111,6 +112,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         LocationUtil
         MergeUtil
         PdfDocument
+        Rct2Ticket
         SortUtil
         Uic9183Parser
     PREFIX KItinerary

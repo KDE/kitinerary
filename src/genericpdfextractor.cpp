@@ -21,6 +21,7 @@
 #include <KItinerary/IataBcbpParser>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/PdfDocument>
+#include <KItinerary/Rct2Ticket>
 #include <KItinerary/Uic9183Parser>
 
 #include <QDebug>
