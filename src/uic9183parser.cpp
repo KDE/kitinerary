@@ -153,7 +153,8 @@ public:
 
     Rct2TicketField firstField() const;
 
-    Uic9183Block block;
+    int size = 0;
+    const char *data = nullptr;
     QDateTime contextDt;
 };
 }
@@ -328,8 +329,8 @@ Rct2TicketField Rct2TicketField::next() const
 
 Rct2TicketField Rct2TicketPrivate::firstField() const
 {
-    if (block.size() > 20) {
-        return Rct2TicketField(block.data() + 20, block.size() - 20);
+    if (size > 20) {
+        return Rct2TicketField(data + 20, size - 20);
     }
     return {};
 }
@@ -423,11 +424,13 @@ Rct2Ticket::Rct2Ticket()
 {
 }
 
-Rct2Ticket::Rct2Ticket(Uic9183Block block)
+Rct2Ticket::Rct2Ticket(const char *data, int size)
     : d(new Rct2TicketPrivate)
 {
-    d->block = block;
-    qDebug() << QByteArray(block.data(), block.size());
+    d->data = data;
+    d->size = size;
+
+    qDebug() << QByteArray(data, size);
     std::vector<QString> out;
     for (auto f = d->firstField(); !f.isNull(); f = f.next()) {
         qDebug() << "Field:" << f.row() << f.column() << f.width() << f.height() << f.text() << f.size();
@@ -446,9 +449,9 @@ Rct2Ticket& Rct2Ticket::operator=(const Rct2Ticket&) = default;
 
 bool Rct2Ticket::isValid() const
 {
-    return !d->block.isNull() && d->block.size() > 34
-        && std::strncmp(d->block.data() + 6, "01", 2) == 0
-        && std::strncmp(d->block.data() + 12, "RCT2", 4) == 0;
+    return d->data && d->size > 34
+        && std::strncmp(d->data + 6, "01", 2) == 0
+        && std::strncmp(d->data + 12, "RCT2", 4) == 0;
 }
 
 void Rct2Ticket::setContextDate(const QDateTime &contextDt)
@@ -718,7 +721,8 @@ QString Uic9183Parser::outboundArrivalStationId() const
 
 Rct2Ticket Uic9183Parser::rct2Ticket() const
 {
-    Rct2Ticket rct2(d->findBlock("U_TLAY"));
+    const auto block = d->findBlock("U_TLAY");
+    Rct2Ticket rct2(block.data(), block.size());
     rct2.setContextDate(d->m_contextDt);
     return rct2;
 }
