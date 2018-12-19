@@ -499,6 +499,11 @@ Rct2Ticket::Type Rct2Ticket::type() const
     return Unknown;
 }
 
+QString Rct2Ticket::passengerName() const
+{
+    return d->fieldText(0, 52, 19).trimmed();
+}
+
 QDateTime Rct2Ticket::outboundDepartureTime() const
 {
     return d->parseTime(d->fieldText(6, 1, 5), d->fieldText(6, 7, 5));
@@ -678,7 +683,7 @@ Person Uic9183Parser::person() const
     // RCT2 tickets
     const auto rct2 = rct2Ticket();
     if (rct2.isValid()) {
-        const auto name = rct2.d->fieldText(0, 52, 19);
+        const auto name = rct2.passengerName();
         if (!name.isEmpty()) {
             Person p;
             p.setName(name);

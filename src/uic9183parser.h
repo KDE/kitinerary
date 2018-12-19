@@ -83,6 +83,9 @@ public:
     /** Returns the ticket type. */
     Type type() const;
 
+    /** Name of the passenger this ticket is for. */
+    QString passengerName() const;
+
     /** Departure time of the outbound segment. */
     QDateTime outboundDepartureTime() const;
     /** Arrival time of the outbound segment. */
@@ -102,7 +105,6 @@ public:
     QString seatNumber() const;
 
 private:
-    friend class Uic9183Parser; // FIXME - remove this
     QExplicitlySharedDataPointer<Rct2TicketPrivate> d;
 };
 
