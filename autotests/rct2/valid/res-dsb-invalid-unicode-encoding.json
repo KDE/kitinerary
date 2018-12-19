@@ -1,0 +1,15 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Rct2Ticket",
+        "coachNumber": "062",
+        "outboundArrivalStation": "Odense",
+        "outboundArrivalTime": "2018-12-08T18:50:00",
+        "outboundClass": "2",
+        "outboundDepartureStation": "København",
+        "outboundDepartureTime": "2018-12-08T17:22:00",
+        "seatNumber": "103",
+        "trainNumber": "267",
+        "type": 2
+    }
+]

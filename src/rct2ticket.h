@@ -35,6 +35,7 @@ class KITINERARY_EXPORT Rct2Ticket
     Q_GADGET
     Q_PROPERTY(QDate firstDayOfValidity READ firstDayOfValidity)
     Q_PROPERTY(Type type READ type)
+    Q_PROPERTY(QString passengerName READ passengerName)
     Q_PROPERTY(QDateTime outboundDepartureTime READ outboundDepartureTime)
     Q_PROPERTY(QDateTime outboundArrivalTime READ outboundArrivalTime)
     Q_PROPERTY(QString outboundDepartureStation READ outboundDepartureStation)
