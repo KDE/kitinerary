@@ -38,7 +38,8 @@ enum {
     // unit is pixels, assuming landscape orientation
     MinSourceImageHeight = 10,
     MinSourceImageWidth = 30,
-    MaxSourceImageHeight = 1000, // TODO what's a realisitic value here?
+    // OEBB uses 1044x1044 for its UIC 918.3 Aztec code
+    MaxSourceImageHeight = 1100, // TODO what's a realisitic value here?
     MaxSourceImageWidth = 2000,
     // unit is 1/72 inch, assuming landscape orientation
     MinTargetImageHeight = 30,
