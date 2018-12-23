@@ -1,0 +1,16 @@
+[
+    {
+       "@context": "http://schema.org",
+       "@type": "Rct2Ticket",
+       "coachNumber": "280",
+       "firstDayOfValidity": "2018-01-01",
+       "outboundArrivalStation": "NUERNBERG",
+       "outboundArrivalTime": "2018-12-29T02:37:00",
+       "outboundClass": "2",
+       "outboundDepartureStation": "SOMEWHERE HBF",
+       "outboundDepartureTime": "2018-12-29T01:37:00",
+       "passengerName": "Lastname Firs",
+       "trainNumber": "NJ 1",
+       "type": 1
+   }
+]

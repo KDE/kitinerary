@@ -313,6 +313,7 @@ static const struct {
     Rct2Ticket::Type type;
 } rct2_ticket_type_map[] = {
     { "ticket + reservation", Rct2Ticket::TransportReservation },
+    { "fahrschein + reservierung", Rct2Ticket::TransportReservation },
     { "ticket", Rct2Ticket::Transport },
     { "billet", Rct2Ticket::Transport },
     { "fahrkarte", Rct2Ticket::Transport },
@@ -375,15 +376,22 @@ QString Rct2Ticket::outboundClass() const
 
 QString Rct2Ticket::trainNumber() const
 {
-    if (type() == Reservation) {
-        return d->fieldText(8, 7, 5).trimmed();
+    const auto t = type();
+    if (t == Reservation || t == TransportReservation) {
+        const auto cat = d->fieldText(8, 13, 3).trimmed();
+        const auto num = d->fieldText(8, 7, 5).trimmed();
+        if (!cat.isEmpty()) {
+            return cat + QLatin1Char(' ') + num;
+        }
+        return num;
     }
     return {};
 }
 
 QString Rct2Ticket::coachNumber() const
 {
-    if (type() == Reservation) {
+    const auto t = type();
+    if (t == Reservation || t == TransportReservation) {
         return d->fieldText(8, 26, 3).trimmed();
     }
     return {};
@@ -391,7 +399,8 @@ QString Rct2Ticket::coachNumber() const
 
 QString Rct2Ticket::seatNumber() const
 {
-    if (type() == Reservation) {
+    const auto t = type();
+    if (t == Reservation || t == TransportReservation) {
         return d->fieldText(8, 48, 23).trimmed();
     }
     return {};
