@@ -159,6 +159,7 @@ void GenericPdfExtractor::extractUic9183(const QByteArray &data, QJsonArray &res
     if (rct2.isValid()) {
         switch (rct2.type()) {
             case Rct2Ticket::Reservation:
+            case Rct2Ticket::TransportReservation:
             {
                 QJsonObject dep;
                 dep.insert(QLatin1String("@type"), QLatin1String("TrainStation"));
