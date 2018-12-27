@@ -116,10 +116,10 @@ class PdfDocument;
  *   was received. This typically only needs a @c From: and @c Date: line, but can even be
  *   entirely empty (or non-existing) for structured data that does not need a custom extractor.
  *   This context information is applied to all tests in this folder.
- * - @c <testname>.[txt|html|pdf|pkpass|ics|eml|mbox]: The input test data.
- * - @c <testname.extension>.json: The expected JSON-LD output. If this file doesn't
+ * - @c \<testname\>.[txt|html|pdf|pkpass|ics|eml|mbox]: The input test data.
+ * - @c \<testname.extension\>.json: The expected JSON-LD output. If this file doesn't
  *   exists it is created by the test program.
- * - @c <testname.extension>.skip: If this file is present the corresponding test
+ * - @c \<testname.extension\>.skip: If this file is present the corresponding test
  *   is skipped.
  */
 class KITINERARY_EXPORT ExtractorEngine
@@ -178,7 +178,7 @@ public:
      */
     void setContextDate(const QDateTime &dt);
 
-    /** Perform the actual extration, and return the JSON-LD data
+    /** Perform the actual extraction, and return the JSON-LD data
      *  that has been found.
      */
     QJsonArray extract();

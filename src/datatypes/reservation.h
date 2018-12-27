@@ -77,7 +77,7 @@ class KITINERARY_EXPORT LodgingReservation : public Reservation
 class KITINERARY_EXPORT FlightReservation : public Reservation
 {
     KITINERARY_GADGET(FlightReservation)
-    /** Passenger sequnce number
+    /** Passenger sequence number
      *  Despite the name, do not expect this to be a number, infants without
      *  their own seat get vendor-defined codes here for example.
      *  @see https://schema.org/passengerSequenceNumber

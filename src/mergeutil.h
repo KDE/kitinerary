@@ -48,7 +48,7 @@ KITINERARY_EXPORT bool isSame(const QVariant &lhs, const QVariant &rhs);
 /**
  * Checks if two Person objects refer to the same person.
  *
- * Essentially a case-insensitive comparisson of the name components.
+ * Essentially a case-insensitive comparison of the name components.
  */
 KITINERARY_EXPORT bool isSamePerson(const Person &lhs, const Person &rhs);
 

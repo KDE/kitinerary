@@ -39,7 +39,7 @@ enum {
     MinSourceImageHeight = 10,
     MinSourceImageWidth = 30,
     // OEBB uses 1044x1044 for its UIC 918.3 Aztec code
-    MaxSourceImageHeight = 1100, // TODO what's a realisitic value here?
+    MaxSourceImageHeight = 1100, // TODO what's a realistic value here?
     MaxSourceImageWidth = 2000,
     // unit is 1/72 inch, assuming landscape orientation
     MinTargetImageHeight = 30,
@@ -61,7 +61,7 @@ void GenericPdfExtractor::extract(PdfDocument *doc, QJsonArray &result)
     m_unrecognizedBarcodes.clear();
 
     // stay away from documents that are atypically large for what we are looking for
-    // that's just unecessarily eating up resources
+    // that's just unnecessarily eating up resources
     if (doc->pageCount() > MaxPageCount || doc->fileSize() > MaxFileSize) {
         return;
     }

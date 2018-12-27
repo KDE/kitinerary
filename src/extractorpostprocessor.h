@@ -57,7 +57,7 @@ class ExtractorPostprocessorPrivate;
  *
  *  @section postproc_validation Validation
  *
- *  At this point, all invalid elements are discared. The definition of invalid is fairly loose though,
+ *  At this point, all invalid elements are discarded. The definition of invalid is fairly loose though,
  *  and typically only covers elements that are explicitly considered unusable. Examples:
  *  - A Flight missing a departure day or destination.
  *  - A LodigingReservation without an attached LodgingBusiness.

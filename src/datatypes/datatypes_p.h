@@ -46,7 +46,7 @@ struct base_type {
     static constexpr const bool is_valid = !std::is_same<type, T>::value;
 };
 
-// customization hook for comparisson for certain types
+// customization hook for comparison for certain types
 template <typename T> inline bool equals(typename parameter_type<T>::type lhs, typename parameter_type<T>::type rhs)
 {
     return lhs == rhs;

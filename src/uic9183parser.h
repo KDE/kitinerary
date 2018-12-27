@@ -82,7 +82,7 @@ public:
     Rct2Ticket rct2Ticket() const;
 
     /** Quickly checks if @p might be UIC 918.3 content.
-     *  This priorizes speed over correctness and is used in barcode content auto-detection.
+     *  This prioritizes speed over correctness and is used in barcode content auto-detection.
      */
     static bool maybeUic9183(const QByteArray &data);
 

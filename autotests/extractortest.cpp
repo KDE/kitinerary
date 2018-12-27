@@ -152,7 +152,7 @@ private Q_SLOTS:
         postproc.process(result);
         const auto postProcResult = JsonLdDocument::toJson(postproc.result());
         if (postProcResult.isEmpty()) {
-            qDebug() << "Result discared in post processing:";
+            qDebug() << "Result discarded in post processing:";
             qDebug().noquote() << QJsonDocument(jsonResult).toJson();
         }
         QVERIFY(!postProcResult.isEmpty());

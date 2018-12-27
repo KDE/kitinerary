@@ -165,7 +165,7 @@ static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
 
 static IataCode iataCodeForNonUniqueFragments(const QStringList &fragments)
 {
-    // we we didn't find a unique name fragment, try the non-unique index
+    // we didn't find a unique name fragment, try the non-unique index
     QSet<uint16_t> iataIdxs;
     for (const auto &s : fragments) {
         const auto it = std::lower_bound(std::begin(nameN_string_index), std::end(nameN_string_index), s.toUtf8(), [](const NameNIndex &lhs, const QByteArray &rhs) {

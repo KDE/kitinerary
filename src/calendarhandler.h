@@ -49,6 +49,7 @@ namespace CalendarHandler
     /** Fills @p event with details of @p reservations.
      *  Can be used on new events or to update existing ones.
      *  @param reservations When passing more than one reservation here, those most be for the same multi-traveler trip.
+     *  @param event The event.
      *  That is, MergeUtil::isSame() returns true for Reservation::reservationFor for each pair of values.
      */
     KITINERARY_EXPORT void fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalCore::Event> &event);

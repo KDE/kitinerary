@@ -72,6 +72,8 @@ enum Accuracy {
 };
 
 /** Returns @c true if the given locations are the same.
+ *  @param lhs The left hand side in the location condition.
+ *  @param rhs The right hand side in the location condition.
  *  @param accuracy Defines how closely the locations have to match.
  */
 bool KITINERARY_EXPORT isSameLocation(const QVariant &lhs, const QVariant &rhs, Accuracy accuracy = Exact);

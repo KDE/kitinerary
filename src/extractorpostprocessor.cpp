@@ -585,7 +585,7 @@ QVariantList ExtractorPostprocessorPrivate::processActions(QVariantList actions)
         ++it;
     }
 
-    // normalize the order, so JSON comparisson still yields correct results
+    // normalize the order, so JSON comparison still yields correct results
     std::sort(actions.begin(), actions.end(), [](const QVariant &lhs, const QVariant &rhs) {
         return strcmp(lhs.typeName(), rhs.typeName()) < 0;
     });

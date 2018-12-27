@@ -61,7 +61,7 @@ public:
     /** Returns whether this is a valid RCT2 ticket layout block. */
     bool isValid() const;
 
-    /** Date/time this ticket was first encounted, to recover possibly missing year numbers. */
+    /** Date/time this ticket was first encountered, to recover possibly missing year numbers. */
     void setContextDate(const QDateTime &contextDt);
 
     /** First day the ticket is valid. */
@@ -89,7 +89,7 @@ public:
     QDateTime outboundArrivalTime() const;
     /** Departure station of the outbound segment. */
     QString outboundDepartureStation() const;
-    /** Arrival station of the outbound segement. */
+    /** Arrival station of the outbound segment. */
     QString outboundArrivalStation() const;
     /** Class of the outbound segment. */
     QString outboundClass() const;
