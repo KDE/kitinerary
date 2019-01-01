@@ -162,21 +162,33 @@ void GenericPdfExtractor::extractUic9183(const QByteArray &data, QJsonArray &res
             case Rct2Ticket::Reservation:
             case Rct2Ticket::TransportReservation:
             {
+                trip.insert(QLatin1String("trainNumber"), rct2.trainNumber());
+                seat.insert(QLatin1String("seatSection"), rct2.coachNumber());
+                seat.insert(QLatin1String("seatNumber"), rct2.seatNumber());
+                Q_FALLTHROUGH();
+            }
+            case Rct2Ticket::Transport:
+            {
                 QJsonObject dep;
                 dep.insert(QLatin1String("@type"), QLatin1String("TrainStation"));
                 dep.insert(QLatin1String("name"), rct2.outboundDepartureStation());
                 trip.insert(QLatin1String("departureStation"), dep);
-                trip.insert(QLatin1String("departureTime"), rct2.outboundDepartureTime().toString(Qt::ISODate));
 
                 QJsonObject arr;
                 arr.insert(QLatin1String("@type"), QLatin1String("TrainStation"));
                 arr.insert(QLatin1String("name"), rct2.outboundArrivalStation());
                 trip.insert(QLatin1String("arrivalStation"), arr);
-                trip.insert(QLatin1String("arrivalTime"), rct2.outboundArrivalTime().toString(Qt::ISODate));
 
-                trip.insert(QLatin1String("trainNumber"), rct2.trainNumber());
-                seat.insert(QLatin1String("seatSection"), rct2.coachNumber());
-                seat.insert(QLatin1String("seatNumber"), rct2.seatNumber());
+                if (rct2.outboundDepartureTime().isValid()) {
+                    trip.insert(QLatin1String("departureDay"), rct2.outboundDepartureTime().date().toString(Qt::ISODate));
+                } else {
+                    trip.insert(QLatin1String("departureDay"), rct2.firstDayOfValidity().toString(Qt::ISODate));
+                }
+
+                if (rct2.outboundDepartureTime() != rct2.outboundArrivalTime()) {
+                    trip.insert(QLatin1String("departureTime"), rct2.outboundDepartureTime().toString(Qt::ISODate));
+                    trip.insert(QLatin1String("arrivalTime"), rct2.outboundArrivalTime().toString(Qt::ISODate));
+                }
                 break;
             }
             default:
