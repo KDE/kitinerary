@@ -361,12 +361,20 @@ QDateTime Rct2Ticket::outboundArrivalTime() const
 
 QString Rct2Ticket::outboundDepartureStation() const
 {
-    return d->fieldText(6, 13, 17).trimmed();
+    const auto s = d->fieldText(6, 13, 17).trimmed();
+    if (s == QLatin1Char('*')) { // * is used to mark unset fields
+        return {};
+    }
+    return s;
 }
 
 QString Rct2Ticket::outboundArrivalStation() const
 {
-    return d->fieldText(6, 34, 17).trimmed();
+    const auto s = d->fieldText(6, 34, 17).trimmed();
+    if (s == QLatin1Char('*')) { // * is used to mark unset fields
+        return {};
+    }
+    return s;
 }
 
 QString Rct2Ticket::outboundClass() const
