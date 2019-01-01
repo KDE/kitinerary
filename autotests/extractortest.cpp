@@ -151,6 +151,10 @@ private Q_SLOTS:
         postproc.setContextDate(contextMsg.date()->dateTime());
         postproc.process(result);
         const auto postProcResult = JsonLdDocument::toJson(postproc.result());
+        if (postProcResult.isEmpty() && expectedSkip) {
+            QSKIP("result filtered");
+            return;
+        }
         if (postProcResult.isEmpty()) {
             qDebug() << "Result discarded in post processing:";
             qDebug().noquote() << QJsonDocument(jsonResult).toJson();
