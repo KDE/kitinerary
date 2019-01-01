@@ -9,6 +9,7 @@
                 "name": "MONTPELLIER ST-RO"
             },
             "arrivalTime": "2018-07-15T19:58:00",
+            "departureDay": "2018-07-15",
             "departureStation": {
                 "@type": "TrainStation",
                 "name": "TOULOUSE MATABIAU"

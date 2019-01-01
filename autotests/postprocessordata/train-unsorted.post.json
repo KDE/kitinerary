@@ -21,6 +21,7 @@
                 "name": "Nîmes Gare"
             },
             "arrivalTime": "2017-09-24T20:33:00+02:00",
+            "departureDay": "2017-09-24",
             "departureStation": {
                 "@type": "TrainStation",
                 "geo": {
@@ -76,6 +77,7 @@
                 "name": "Lyon Part-Dieu"
             },
             "arrivalTime": "2017-09-29T19:52:00+02:00",
+            "departureDay": "2017-09-29",
             "departureStation": {
                 "@type": "TrainStation",
                 "geo": {

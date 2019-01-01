@@ -10,6 +10,7 @@
                 "name": "Brno hl.n."
             },
             "arrivalTime": "2027-11-15T14:19:00",
+            "departureDay": "2027-11-15",
             "departurePlatform": "2",
             "departureStation": {
                 "@type": "TrainStation",
@@ -39,6 +40,7 @@
                 "name": "Berlin Hbf (tief)"
             },
             "arrivalTime": "2027-11-17T21:15:00",
+            "departureDay": "2027-11-17",
             "departurePlatform": "",
             "departureStation": {
                 "@type": "TrainStation",

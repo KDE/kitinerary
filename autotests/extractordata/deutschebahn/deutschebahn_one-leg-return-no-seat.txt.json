@@ -10,6 +10,7 @@
                 "name": "Osnabrück Hbf"
             },
             "arrivalTime": "2027-02-10T11:51:00",
+            "departureDay": "2027-02-10",
             "departurePlatform": "13",
             "departureStation": {
                 "@type": "TrainStation",
@@ -31,6 +32,7 @@
                 "name": "Berlin Hbf"
             },
             "arrivalTime": "2027-02-12T19:19:00",
+            "departureDay": "2027-02-12",
             "departurePlatform": "11",
             "departureStation": {
                 "@type": "TrainStation",

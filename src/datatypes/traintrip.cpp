@@ -36,6 +36,7 @@ public:
     TrainStation departureStation;
     Organization provider;
     QDateTime departureTime;
+    QDate departureDay;
     QString trainName;
     QString trainNumber;
 };
@@ -51,6 +52,22 @@ KITINERARY_MAKE_PROPERTY(TrainTrip, Organization, provider, setProvider)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QString, trainName, setTrainName)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QString, trainNumber, setTrainNumber)
 KITINERARY_MAKE_OPERATOR(TrainTrip)
+
+QDate TrainTrip::departureDay() const
+{
+    if (d->departureTime.isValid()) {
+        return d->departureTime.date();
+    }
+    return d->departureDay;
+}
+
+void TrainTrip::setDepartureDay(const QDate &value)
+{
+    if (departureDay() != value) {
+        d.detach();
+        d->departureDay = value;
+    }
+}
 
 }
 

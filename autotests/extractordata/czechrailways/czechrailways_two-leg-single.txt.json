@@ -9,6 +9,7 @@
                 "name": "Hradec Králové hl.n."
             },
             "arrivalTime": "2017-08-09T10:51:00",
+            "departureDay": "2017-08-09",
             "departureStation": {
                 "@type": "TrainStation",
                 "name": "Praha hl.n."
@@ -36,6 +37,7 @@
                 "name": "Jaroměř"
             },
             "arrivalTime": "2017-08-09T11:16:00",
+            "departureDay": "2017-08-09",
             "departureStation": {
                 "@type": "TrainStation",
                 "name": "Hradec Králové hl.n."

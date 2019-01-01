@@ -9,6 +9,7 @@
                 "name": "Brno hl.n."
             },
             "arrivalTime": "2017-12-31T16:20:00",
+            "departureDay": "2017-12-31",
             "departureStation": {
                 "@type": "TrainStation",
                 "name": "Praha hl.n."
@@ -35,6 +36,7 @@
                 "name": "Praha hl.n."
             },
             "arrivalTime": "2018-01-01T13:07:00",
+            "departureDay": "2018-01-01",
             "departureStation": {
                 "@type": "TrainStation",
                 "name": "Brno hl.n."

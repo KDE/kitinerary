@@ -45,6 +45,14 @@ class KITINERARY_EXPORT TrainTrip
     KITINERARY_PROPERTY(QString, trainNumber, setTrainNumber)
     KITINERARY_PROPERTY(KItinerary::Organization, provider, setProvider)
 
+    // KDE extensions
+    /** The scheduled day of departure.
+     *  This is needed for unbound train reservations where we don't know the
+     *  exact travel details yet.
+     *  @see Flight
+     */
+    KITINERARY_PROPERTY(QDate, departureDay, setDepartureDay)
+
 private:
     QExplicitlySharedDataPointer<TrainTripPrivate> d;
 };

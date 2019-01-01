@@ -694,7 +694,7 @@ bool ExtractorPostprocessorPrivate::filterTrainTrip(const TrainTrip &trip) const
 {
     return filterTrainOrBusStation(trip.departureStation())
            && filterTrainOrBusStation(trip.arrivalStation())
-           && trip.departureTime().isValid() && trip.arrivalTime().isValid();
+           && trip.departureDay().isValid();
 }
 
 bool ExtractorPostprocessorPrivate::filterBusTrip(const BusTrip &trip) const

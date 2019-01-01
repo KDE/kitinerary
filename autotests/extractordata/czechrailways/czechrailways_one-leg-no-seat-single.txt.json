@@ -9,6 +9,7 @@
                 "name": "Praha Masarykovo n."
             },
             "arrivalTime": "2017-01-01T17:33:00",
+            "departureDay": "2017-01-01",
             "departureStation": {
                 "@type": "TrainStation",
                 "name": "Lysá n.Labem"

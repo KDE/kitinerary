@@ -20,7 +20,7 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "TrainTrip"\,"arrivalStation":{"@type":"TrainStation"\,"geo":{"@type":
  "GeoCoordinates"\,"latitude":45.76055908203125\,"longitude":
  4.8593549728393555}\,"name":"Lyon Part-Dieu"}\,"arrivalTime":
- "2017-09-29T19:52:00+02:00"\,"departureStation":{"@type":
+ "2017-09-29T19:52:00+02:00"\,"departureDay":"2017-09-29"\,"departureStation":{"@type":
  "TrainStation"\,"geo":{"@type":"GeoCoordinates"\,"latitude":
  43.83229064941406\,"longitude":4.365845203399658}\,"name":"Nîmes Gare"}\,"departureTime":"2017-09-29T18:26:00+02:00"\,"provider":{"@type":
  "Organization"\,"name":"SNCF"}\,"trainName":"TGV"\,"trainNumber":

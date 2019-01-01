@@ -45,7 +45,11 @@ QDateTime SortUtil::startDateTime(const QVariant &res)
         return QDateTime(flight.departureDay(), QTime(23, 59, 59));
     }
     if (JsonLd::isA<TrainReservation>(res)) {
-        return res.value<TrainReservation>().reservationFor().value<TrainTrip>().departureTime();
+        const auto trip = res.value<TrainReservation>().reservationFor().value<TrainTrip>();
+        if (trip.departureTime().isValid()) {
+            return trip.departureTime();
+        }
+        return QDateTime(trip.departureDay(), QTime(23, 59, 59));
     }
     if (JsonLd::isA<BusReservation>(res)) {
         return res.value<BusReservation>().reservationFor().value<BusTrip>().departureTime();
@@ -84,7 +88,11 @@ QDateTime SortUtil::endtDateTime(const QVariant &res)
         return QDateTime(flight.departureDay(), QTime(23, 59, 59));
     }
     if (JsonLd::isA<TrainReservation>(res)) {
-        return res.value<TrainReservation>().reservationFor().value<TrainTrip>().arrivalTime();
+        const auto trip = res.value<TrainReservation>().reservationFor().value<TrainTrip>();
+        if (trip.arrivalTime().isValid()) {
+            return trip.arrivalTime();
+        }
+        return QDateTime(trip.departureDay(), QTime(23, 59, 59));
     }
     if (JsonLd::isA<BusReservation>(res)) {
         return res.value<BusReservation>().reservationFor().value<BusTrip>().arrivalTime();

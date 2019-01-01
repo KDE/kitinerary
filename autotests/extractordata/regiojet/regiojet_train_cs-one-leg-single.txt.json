@@ -15,6 +15,7 @@
                 "name": "Praha, hl.n."
             },
             "arrivalTime": "2017-07-02T14:12:00",
+            "departureDay": "2017-07-02",
             "departureStation": {
                 "@type": "TrainStation",
                 "name": "Olomouc, hl.n."

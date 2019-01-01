@@ -10,6 +10,7 @@
                 "name": "Köln Hbf"
             },
             "arrivalTime": "2027-11-03T12:09:00",
+            "departureDay": "2027-11-03",
             "departurePlatform": "4A-D",
             "departureStation": {
                 "@type": "TrainStation",
@@ -39,6 +40,7 @@
                 "name": "Somewhere(Specific)"
             },
             "arrivalTime": "2027-11-03T12:45:00",
+            "departureDay": "2027-11-03",
             "departurePlatform": "10 A-B",
             "departureStation": {
                 "@type": "TrainStation",
@@ -60,6 +62,7 @@
                 "name": "Düsseldorf Hbf"
             },
             "arrivalTime": "2027-11-04T14:28:00",
+            "departureDay": "2027-11-04",
             "departurePlatform": "3",
             "departureStation": {
                 "@type": "TrainStation",
@@ -81,6 +84,7 @@
                 "name": "Berlin Hbf (tief)"
             },
             "arrivalTime": "2027-11-04T19:27:00",
+            "departureDay": "2027-11-04",
             "departurePlatform": "19",
             "departureStation": {
                 "@type": "TrainStation",

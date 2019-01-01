@@ -10,6 +10,7 @@
                 "name": "Düsseldorf Hbf"
             },
             "arrivalTime": "2026-12-28T15:28:00",
+            "departureDay": "2026-12-28",
             "departurePlatform": "3",
             "departureStation": {
                 "@type": "TrainStation",
@@ -31,6 +32,7 @@
                 "name": "Berlin Hbf (tief)"
             },
             "arrivalTime": "2026-12-28T20:09:00",
+            "departureDay": "2026-12-28",
             "departurePlatform": "19",
             "departureStation": {
                 "@type": "TrainStation",
