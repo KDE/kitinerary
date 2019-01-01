@@ -45,6 +45,8 @@
         <file>sas-receipt.js</file>
         <file>sncf.json</file>
         <file>sncf.js</file>
+        <file>stansted-express.json</file>
+        <file>stansted-express.js</file>
         <file>swiss.json</file>
         <file>swiss.js</file>
         <file>swiss-pkpass.js</file>

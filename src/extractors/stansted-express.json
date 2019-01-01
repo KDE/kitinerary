@@ -1,0 +1,8 @@
+[
+    {
+        "type": "pkpass",
+        "filter": [ { "field": "passTypeIdentifier", "match": "pass.com.stanstedexpress.ticket" } ],
+        "script": "stansted-express.js",
+        "function": "parsePkPass"
+    }
+]
