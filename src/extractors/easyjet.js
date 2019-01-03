@@ -17,12 +17,33 @@
    02110-1301, USA.
 */
 
+var localeMap = new Array();
+localeMap['en_US'] = new Array();
+localeMap['en_US']['localeMatch'] = /thank you/;
+localeMap['en_US']['airportRegExp'] = /(.*) to (.*)/;
+localeMap['de_DE'] = new Array();
+localeMap['de_DE']['localeMatch'] = /danke/;
+localeMap['de_DE']['airportRegExp'] = /(.*) nach (.*)/;
+
 function parseHtmlBooking(doc) {
     var reservations = new Array();
 
     var bookingRef = doc.eval("//title")[0].content.match(/\((\w+)\)/);
     if (!bookingRef)
         return null;
+
+    // determine locale
+    var introElem = doc.eval("//table[@class=\"email-wrapper\"]/tr[2]/td");
+    console.log(introElem[0].content, introElem[0].name);
+    var locale = "";
+    for (var l in localeMap) {
+        var m = introElem[0].content.match(localeMap[l]['localeMatch']);
+        if (m) {
+            locale = l;
+            break;
+        }
+    }
+    console.debug("Detected locale:", locale);
 
     var elems = doc.eval("//table[@class=\"ej-flight\"]");
     for (var i = 0; i < elems.length; ++i) {
@@ -32,7 +53,7 @@ function parseHtmlBooking(doc) {
         res.reservationNumber = bookingRef[1];
         res.reservationFor = JsonLd.newObject("Flight");
 
-        var airports = row.recursiveContent.match(/(.+) to (.+)/);
+        var airports = row.recursiveContent.match(localeMap[locale]['airportRegExp']);
         var airportName = airports[1].match(/^(.*?)( \(Terminal (.*)\))?( \((.*) Terminal\))?$/);
         console.log(airportName);
         res.reservationFor.departureAirport = JsonLd.newObject("Airport");
@@ -53,8 +74,8 @@ function parseHtmlBooking(doc) {
 
         var timeCell = row.eval(".//table/tr/td");
         console.debug(timeCell[1].content, timeCell[3].content);
-        res.reservationFor.departureTime = JsonLd.toDateTime(timeCell[1].content, "ddd dd MMM HH:mm", "en");
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(timeCell[3].content, "ddd dd MMM HH:mm", "en");
+        res.reservationFor.departureTime = JsonLd.toDateTime(timeCell[1].content.match(/\W* (.*)/)[1], "dd MMM HH:mm", locale);
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(timeCell[3].content.match(/\W* (.*)/)[1], "dd MMM HH:mm", locale);
 
         elem = elem.nextSibling;
         if (elem.attribute("class") == "ej-pax") {
