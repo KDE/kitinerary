@@ -227,14 +227,19 @@ void ExtractorEnginePrivate::setContent(KMime::Content *content)
 void ExtractorEnginePrivate::setContext(KMime::Content *context)
 {
     m_mimeContext = context;
-    auto dateHdr = context->header<KMime::Headers::Date>();
-    while (!dateHdr && context->parent()) {
-        context = context->parent();
-        dateHdr = context->header<KMime::Headers::Date>();
+    if (context) {
+        auto dateHdr = context->header<KMime::Headers::Date>();
+        while (!dateHdr && context->parent()) {
+            context = context->parent();
+            dateHdr = context->header<KMime::Headers::Date>();
+        }
+        if (dateHdr) {
+            setContextDate(dateHdr->dateTime());
+            return;
+        }
     }
-    if (dateHdr) {
-        setContextDate(dateHdr->dateTime());
-    }
+
+    setContextDate({});
 }
 
 void ExtractorEnginePrivate::setContextDate(const QDateTime &dt)

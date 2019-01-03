@@ -101,6 +101,9 @@ private Q_SLOTS:
             contextMsg.setContent(cf.readAll());
             contextMsg.parse();
             m_engine.setContext(&contextMsg);
+        } else {
+            m_engine.setContext(nullptr);
+            m_engine.setContextDate(QDateTime({2018, 1, 1}, {0, 0}));
         }
 
         QFile inFile(inputFile);
