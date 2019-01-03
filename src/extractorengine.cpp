@@ -302,19 +302,6 @@ void ExtractorEnginePrivate::extractDocument()
 
     // generic extractors
     extractGeneric();
-
-    // check if generic extractors identified documents we have custom extractors for
-    m_extractors = m_repo.extractorsForJsonLd(m_result);
-    extractCustom();
-
-    // check the unrecognized (vendor-specific) barcodes, if any
-    if (m_pdfDoc) {
-        for (const auto &code : m_genericPdfExtractor.unrecognizedBarcodes()) {
-            m_extractors = m_repo.extractorsForBarcode(code);
-            qDebug() << code << m_extractors.size();
-            extractCustom();
-        }
-    }
 }
 
 void ExtractorEnginePrivate::extractStructured()
@@ -380,7 +367,23 @@ void ExtractorEnginePrivate::extractGeneric()
     if (m_pass) {
         extractPass();
     } else if (m_pdfDoc && m_result.isEmpty()) {
-        m_genericPdfExtractor.extract(m_pdfDoc.get(), m_result);
+        QJsonArray genericResult;
+        m_genericPdfExtractor.extract(m_pdfDoc.get(), genericResult);
+
+        // check if generic extractors identified documents we have custom extractors for
+        m_extractors = m_repo.extractorsForJsonLd(genericResult);
+        extractCustom();
+
+        // check the unrecognized (vendor-specific) barcodes, if any
+        for (const auto &code : m_genericPdfExtractor.unrecognizedBarcodes()) {
+            m_extractors = m_repo.extractorsForBarcode(code);
+            extractCustom();
+        }
+
+        // if none of that found something, take the generic extractor result as-is
+        if (m_result.isEmpty()) {
+            m_result = genericResult;
+        }
     }
 }
 
