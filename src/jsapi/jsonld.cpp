@@ -62,6 +62,32 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
         dt = locale.toDateTime(dtStrFixed, format);
     }
 
+    // try even harder for "MMM" month format
+    // in the de_DE locale we encounter sometimes almost arbitrary abbreviations for month
+    // names (eg. Mrz, Mär for März). So try to identify those and replace them with what QLocale
+    // expects
+    if (!dt.isValid() && format.contains(QLatin1String("MMM"))) {
+        auto dtStrFixed = dtStr;
+        for (int i = 1; i <= 12; ++i) {
+            const auto monthName = locale.monthName(i, QLocale::LongFormat);
+            const auto beginIdx = dtStr.indexOf(monthName.at(0));
+            if (beginIdx < 0) {
+                continue;
+            }
+            auto endIdx = beginIdx;
+            for (auto nameIdx = 0; endIdx < dtStr.size() && nameIdx < monthName.size(); ++nameIdx) {
+                if (dtStr.at(endIdx).toCaseFolded() == monthName.at(nameIdx).toCaseFolded()) {
+                    ++endIdx;
+                }
+            }
+            if (endIdx - beginIdx >= 3) {
+                dtStrFixed = dtStrFixed.replace(beginIdx, endIdx - beginIdx, locale.monthName(i, QLocale::ShortFormat));
+                break;
+            }
+        }
+        dt = locale.toDateTime(dtStrFixed, format);
+    }
+
     if (!dt.isValid()) {
         return dt;
     }
