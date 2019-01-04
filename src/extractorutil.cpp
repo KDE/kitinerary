@@ -1,0 +1,84 @@
+/*
+    Copyright (C) 2019 Volker Krause <vkrause@kde.org>
+
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Library General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or (at your
+    option) any later version.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public
+    License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#include "extractorutil.h"
+
+#include <KItinerary/Flight>
+
+#include <QDebug>
+#include <QRegularExpression>
+
+using namespace KItinerary;
+
+static QString trimAirportName(const QStringRef &in)
+{
+    QString out = in.toString();
+    while (!out.isEmpty()) {
+        const auto c = out.at(out.size() - 1);
+        if (c.isSpace() || c == QLatin1Char('-') || c == QLatin1Char(',')) {
+            out.chop(1);
+        } else {
+            break;
+        }
+    }
+
+    return out;
+}
+
+static std::tuple<QString, QString> splitAirportName(const QString &name)
+{
+    static QRegularExpression patterns[] = {
+        QRegularExpression(QStringLiteral("^(.*) \\(terminal (.*)\\)$"), QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression(QStringLiteral("^(.*) \\((.*) terminal\\)$"), QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression(QStringLiteral("^(.*)[ -]terminal (.*)$"), QRegularExpression::CaseInsensitiveOption),
+    };
+
+    for (const auto &re : patterns) {
+        const auto match = re.match(name);
+        if (match.hasMatch()) {
+            return std::make_tuple(trimAirportName(match.capturedRef(1)), match.captured(2));
+            break;
+        }
+    }
+
+    return std::make_tuple(name, QString());
+}
+
+Flight ExtractorUtil::extractTerminals(const Flight &flight)
+{
+    Flight result(flight);
+
+    if (flight.departureTerminal().isEmpty()) {
+        auto a = flight.departureAirport();
+        QString name, terminal;
+        std::tie(name, terminal) = splitAirportName(a.name());
+        a.setName(name);
+        result.setDepartureAirport(a);
+        result.setDepartureTerminal(terminal);
+    }
+
+    if (flight.arrivalTerminal().isEmpty()) {
+        auto a = flight.arrivalAirport();
+        QString name, terminal;
+        std::tie(name, terminal) = splitAirportName(a.name());
+        a.setName(name);
+        result.setArrivalAirport(a);
+        result.setArrivalTerminal(terminal);
+    }
+
+    return result;
+}

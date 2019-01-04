@@ -54,16 +54,11 @@ function parseHtmlBooking(doc) {
         res.reservationFor = JsonLd.newObject("Flight");
 
         var airports = row.recursiveContent.match(localeMap[locale]['airportRegExp']);
-        var airportName = airports[1].match(/^(.*?)( \(Terminal (.*)\))?( \((.*) Terminal\))?$/);
-        console.log(airportName);
         res.reservationFor.departureAirport = JsonLd.newObject("Airport");
-        res.reservationFor.departureAirport.name = airportName[1];
-        res.reservationFor.departureTerminal = airportName[3] ? airportName[3] : airportName[5];
+        res.reservationFor.departureAirport.name = airports[1];
 
         res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
-        airportName = airports[2].match(/^(.*?)( \(Terminal (.*)\))?( \((.*) Terminal\))?$/);
-        res.reservationFor.arrivalAirport.name = airportName[1];
-        res.reservationFor.arrivalTerminal = airportName[3] ? airportName[3] : airportName[5];
+        res.reservationFor.arrivalAirport.name = airports[2];
         row = row.nextSibling;
 
         var flightNum = row.recursiveContent.match(/([A-Z0-9]{2,3}) ?(\d{1,4})/);

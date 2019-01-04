@@ -20,6 +20,7 @@
 #include "config-kitinerary.h"
 #include "extractorpostprocessor.h"
 
+#include "extractorutil.h"
 #include "iatabcbpparser.h"
 #include "jsonlddocument.h"
 #include "logging.h"
@@ -211,6 +212,7 @@ Flight ExtractorPostprocessorPrivate::processFlight(Flight flight) const
     flight.setBoardingTime(processFlightTime(flight.boardingTime(), flight, flight.departureAirport()));
     flight.setDepartureTime(processFlightTime(flight.departureTime(), flight, flight.departureAirport()));
     flight.setArrivalTime(processFlightTime(flight.arrivalTime(), flight, flight.arrivalAirport()));
+    flight = ExtractorUtil::extractTerminals(flight);
     return flight;
 }
 

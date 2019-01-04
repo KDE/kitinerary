@@ -74,8 +74,9 @@
                     "longitude": -83.35330200195312
                 },
                 "iataCode": "DTW",
-                "name": "DETROIT, MI (METROPOLITAN WAYNE CO), TERMINAL EM"
+                "name": "DETROIT, MI (METROPOLITAN WAYNE CO)"
             },
+            "arrivalTerminal": "EM",
             "arrivalTime": {
                 "@type": "QDateTime",
                 "@value": "2016-06-07T17:40:00-04:00",
@@ -127,8 +128,9 @@
                     "longitude": 2.5477800369262695
                 },
                 "iataCode": "CDG",
-                "name": "PARIS, FR (CHARLES DE GAULLE), TERMINAL 2E"
+                "name": "PARIS, FR (CHARLES DE GAULLE)"
             },
+            "arrivalTerminal": "2E",
             "arrivalTime": {
                 "@type": "QDateTime",
                 "@value": "2016-06-10T11:30:00+02:00",
@@ -146,9 +148,10 @@
                     "longitude": -83.35330200195312
                 },
                 "iataCode": "DTW",
-                "name": "DETROIT, MI (METROPOLITAN WAYNE CO), TERMINAL EM"
+                "name": "DETROIT, MI (METROPOLITAN WAYNE CO)"
             },
             "departureDay": "2016-06-09",
+            "departureTerminal": "EM",
             "departureTime": {
                 "@type": "QDateTime",
                 "@value": "2016-06-09T21:40:00-04:00",
@@ -199,9 +202,10 @@
                     "longitude": 2.5477800369262695
                 },
                 "iataCode": "CDG",
-                "name": "PARIS, FR (CHARLES DE GAULLE), TERMINAL 2F"
+                "name": "PARIS, FR (CHARLES DE GAULLE)"
             },
             "departureDay": "2016-06-10",
+            "departureTerminal": "2F",
             "departureTime": {
                 "@type": "QDateTime",
                 "@value": "2016-06-10T13:00:00+02:00",

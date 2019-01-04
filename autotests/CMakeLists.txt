@@ -16,6 +16,7 @@ ecm_add_test(pdfdocumenttest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary Qt5::G
 ecm_add_test(htmldocumenttest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 ecm_add_test(barcodedecodertest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary Qt5::Gui)
 ecm_add_test(pkpassextractortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary KPim::PkPass)
+ecm_add_test(extractorutiltest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 ecm_add_test(postprocessortest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 if (TARGET KF5::CalendarCore)
     ecm_add_test(calendarhandlertest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
