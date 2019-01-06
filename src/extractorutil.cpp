@@ -18,6 +18,7 @@
 #include "extractorutil.h"
 
 #include <KItinerary/Flight>
+#include <KItinerary/Place>
 
 #include <QDebug>
 #include <QRegularExpression>
@@ -58,17 +59,15 @@ static std::tuple<QString, QString> splitAirportName(const QString &name)
     return std::make_tuple(name, QString());
 }
 
-Flight ExtractorUtil::extractTerminals(const Flight &flight)
+Flight ExtractorUtil::extractTerminals(Flight flight)
 {
-    Flight result(flight);
-
     if (flight.departureTerminal().isEmpty()) {
         auto a = flight.departureAirport();
         QString name, terminal;
         std::tie(name, terminal) = splitAirportName(a.name());
         a.setName(name);
-        result.setDepartureAirport(a);
-        result.setDepartureTerminal(terminal);
+        flight.setDepartureAirport(a);
+        flight.setDepartureTerminal(terminal);
     }
 
     if (flight.arrivalTerminal().isEmpty()) {
@@ -76,9 +75,34 @@ Flight ExtractorUtil::extractTerminals(const Flight &flight)
         QString name, terminal;
         std::tie(name, terminal) = splitAirportName(a.name());
         a.setName(name);
-        result.setArrivalAirport(a);
-        result.setArrivalTerminal(terminal);
+        flight.setArrivalAirport(a);
+        flight.setArrivalTerminal(terminal);
     }
 
-    return result;
+    return flight;
+}
+
+PostalAddress ExtractorUtil::extractPostalCode(PostalAddress addr)
+{
+    if (!addr.postalCode().isEmpty() || addr.addressLocality().isEmpty()) {
+        return addr;
+    }
+
+    // ### this so far only covers the typical European numerical prefix case, we probably want
+    // something for alpha-numeric and suffix cases too, if necessary we can also make this
+    // conditional on addr.addressCountry()
+    static QRegularExpression patterns[] = {
+        QRegularExpression(QStringLiteral("^(\\d{4,8}) (.*)$"), QRegularExpression::CaseInsensitiveOption),
+    };
+
+    for (const auto &re : patterns) {
+        const auto match = re.match(addr.addressLocality());
+        if (match.hasMatch()) {
+            addr.setAddressLocality(match.captured(2));
+            addr.setPostalCode(match.captured(1));
+            break;
+        }
+    }
+
+    return addr;
 }

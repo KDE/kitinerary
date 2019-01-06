@@ -561,6 +561,7 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
     addr.setAddressLocality(addr.addressLocality().simplified());
     addr.setAddressRegion(addr.addressRegion().simplified());
 
+    addr = ExtractorUtil::extractPostalCode(addr);
     place.setAddress(addr);
     return place;
 }
