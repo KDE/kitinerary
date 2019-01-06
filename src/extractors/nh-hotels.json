@@ -1,0 +1,8 @@
+{
+    "type": "html",
+    "filter": [
+        { "header": "From", "match": "@nh-hotels.com" }
+    ],
+    "script": "nh-hotels.js",
+    "function": "parseHtml"
+}

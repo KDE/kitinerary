@@ -38,6 +38,8 @@
         <file>korail.js</file>
         <file>lufthansa.json</file>
         <file>lufthansa-pkpass.js</file>
+        <file>nh-hotels.json</file>
+        <file>nh-hotels.js</file>
         <file>regiojet.json</file>
         <file>regiojet.js</file>
         <file>sas.json</file>
