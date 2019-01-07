@@ -50,24 +50,24 @@ private Q_SLOTS:
         QCOMPARE(elem.name(), QLatin1String("body"));
         QCOMPARE(elem.parent().name(), QLatin1String("html"));
 
-        auto res = doc->eval(QLatin1String("/html"));
+        auto res = doc->eval(QStringLiteral("/html"));
         auto nodes = res.toList();
         QCOMPARE(nodes.size(), 1);
         QCOMPARE(nodes.at(0).value<HtmlElement>().name(), QLatin1String("html"));
-        nodes = doc->eval(QLatin1String("//body")).toList();
+        nodes = doc->eval(QStringLiteral("//body")).toList();
         QCOMPARE(nodes.size(), 1);
-        nodes = doc->eval(QLatin1String("//link")).toList();
+        nodes = doc->eval(QStringLiteral("//link")).toList();
         QCOMPARE(nodes.size(), 6);
 
-        nodes = doc->eval(QLatin1String("/html/@lang")).toList();
+        nodes = doc->eval(QStringLiteral("/html/@lang")).toList();
         QCOMPARE(nodes.at(0).value<HtmlElement>().content(), QLatin1String("de"));
-        nodes = doc->eval(QLatin1String("//div[@itemtype=\"http://schema.org/FlightReservation\"]")).toList();
+        nodes = doc->eval(QStringLiteral("//div[@itemtype=\"http://schema.org/FlightReservation\"]")).toList();
         QCOMPARE(nodes.size(), 2);
         elem = nodes.at(0).value<HtmlElement>();
         QCOMPARE(elem.attributes().size(), 2);
         QVERIFY(elem.attributes().contains(QLatin1String("itemscope")));
         QVERIFY(elem.attributes().contains(QLatin1String("itemtype")));
-        nodes = elem.eval(QLatin1String("./link")).toList();
+        nodes = elem.eval(QStringLiteral("./link")).toList();
         QCOMPARE(nodes.size(), 3);
 #endif
     }
@@ -119,10 +119,10 @@ private Q_SLOTS:
         QCOMPARE(elem.content(), QLatin1String("lots of spaces"));
         QCOMPARE(elem.recursiveContent(), QLatin1String("lots of spaces"));
 
-        auto elems = doc->eval(QLatin1String("//*[text()[normalize-space(.)='lots of spaces']]")).toList();
+        auto elems = doc->eval(QStringLiteral("//*[text()[normalize-space(.)='lots of spaces']]")).toList();
         QCOMPARE(elems.size(), 1);
         QCOMPARE(elems.at(0).value<HtmlElement>().name(), QLatin1String("p"));
-        elems = doc->eval(QLatin1String("//*[text()='lots of spaces']")).toList();
+        elems = doc->eval(QStringLiteral("//*[text()='lots of spaces']")).toList();
         QCOMPARE(elems.size(), 0);
 
         elem = elem.nextSibling();

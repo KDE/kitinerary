@@ -148,13 +148,13 @@ void GenericPdfExtractor::extractUic9183(const QByteArray &data, QJsonArray &res
     }
 
     QJsonObject org;
-    org.insert(QLatin1String("@type"), QLatin1String("Organization"));
-    org.insert(QLatin1String("identifier"), QString(QLatin1String("uic:") + p.carrierId()));
+    org.insert(QStringLiteral("@type"), QLatin1String("Organization"));
+    org.insert(QStringLiteral("identifier"), QString(QLatin1String("uic:") + p.carrierId()));
     QJsonObject trip;
-    trip.insert(QLatin1String("@type"), QLatin1String("TrainTrip"));
-    trip.insert(QLatin1String("provider"), org);
+    trip.insert(QStringLiteral("@type"), QLatin1String("TrainTrip"));
+    trip.insert(QStringLiteral("provider"), org);
     QJsonObject seat;
-    seat.insert(QLatin1String("@type"), QLatin1String("Seat"));
+    seat.insert(QStringLiteral("@type"), QLatin1String("Seat"));
 
     const auto rct2 = p.rct2Ticket();
     if (rct2.isValid()) {
@@ -162,32 +162,32 @@ void GenericPdfExtractor::extractUic9183(const QByteArray &data, QJsonArray &res
             case Rct2Ticket::Reservation:
             case Rct2Ticket::TransportReservation:
             {
-                trip.insert(QLatin1String("trainNumber"), rct2.trainNumber());
-                seat.insert(QLatin1String("seatSection"), rct2.coachNumber());
-                seat.insert(QLatin1String("seatNumber"), rct2.seatNumber());
+                trip.insert(QStringLiteral("trainNumber"), rct2.trainNumber());
+                seat.insert(QStringLiteral("seatSection"), rct2.coachNumber());
+                seat.insert(QStringLiteral("seatNumber"), rct2.seatNumber());
                 Q_FALLTHROUGH();
             }
             case Rct2Ticket::Transport:
             {
                 QJsonObject dep;
-                dep.insert(QLatin1String("@type"), QLatin1String("TrainStation"));
-                dep.insert(QLatin1String("name"), rct2.outboundDepartureStation());
-                trip.insert(QLatin1String("departureStation"), dep);
+                dep.insert(QStringLiteral("@type"), QLatin1String("TrainStation"));
+                dep.insert(QStringLiteral("name"), rct2.outboundDepartureStation());
+                trip.insert(QStringLiteral("departureStation"), dep);
 
                 QJsonObject arr;
-                arr.insert(QLatin1String("@type"), QLatin1String("TrainStation"));
-                arr.insert(QLatin1String("name"), rct2.outboundArrivalStation());
-                trip.insert(QLatin1String("arrivalStation"), arr);
+                arr.insert(QStringLiteral("@type"), QLatin1String("TrainStation"));
+                arr.insert(QStringLiteral("name"), rct2.outboundArrivalStation());
+                trip.insert(QStringLiteral("arrivalStation"), arr);
 
                 if (rct2.outboundDepartureTime().isValid()) {
-                    trip.insert(QLatin1String("departureDay"), rct2.outboundDepartureTime().date().toString(Qt::ISODate));
+                    trip.insert(QStringLiteral("departureDay"), rct2.outboundDepartureTime().date().toString(Qt::ISODate));
                 } else {
-                    trip.insert(QLatin1String("departureDay"), rct2.firstDayOfValidity().toString(Qt::ISODate));
+                    trip.insert(QStringLiteral("departureDay"), rct2.firstDayOfValidity().toString(Qt::ISODate));
                 }
 
                 if (rct2.outboundDepartureTime() != rct2.outboundArrivalTime()) {
-                    trip.insert(QLatin1String("departureTime"), rct2.outboundDepartureTime().toString(Qt::ISODate));
-                    trip.insert(QLatin1String("arrivalTime"), rct2.outboundArrivalTime().toString(Qt::ISODate));
+                    trip.insert(QStringLiteral("departureTime"), rct2.outboundDepartureTime().toString(Qt::ISODate));
+                    trip.insert(QStringLiteral("arrivalTime"), rct2.outboundArrivalTime().toString(Qt::ISODate));
                 }
                 break;
             }
@@ -197,14 +197,14 @@ void GenericPdfExtractor::extractUic9183(const QByteArray &data, QJsonArray &res
     }
 
     QJsonObject ticket;
-    ticket.insert(QLatin1String("@type"), QLatin1String("Ticket"));
-    ticket.insert(QLatin1String("ticketedSeat"), seat);
+    ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
+    ticket.insert(QStringLiteral("ticketedSeat"), seat);
 
     QJsonObject res;
-    res.insert(QLatin1String("@type"), QLatin1String("TrainReservation"));
-    res.insert(QLatin1String("reservationFor"), trip);
-    res.insert(QLatin1String("reservationNumber"), p.pnr());
-    res.insert(QLatin1String("reservedTicket"), ticket);
+    res.insert(QStringLiteral("@type"), QLatin1String("TrainReservation"));
+    res.insert(QStringLiteral("reservationFor"), trip);
+    res.insert(QStringLiteral("reservationNumber"), p.pnr());
+    res.insert(QStringLiteral("reservedTicket"), ticket);
 
     result.push_back(res);
 }

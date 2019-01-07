@@ -48,7 +48,7 @@ KnowledgeDb::Coordinate WikiData::parseCoordinate(const QString& value)
 
 QJsonArray WikiData::query(const char *sparqlQuery, const char *cacheFileName)
 {
-    QDir().mkdir(QLatin1String("data"));
+    QDir().mkdir(QStringLiteral("data"));
     QFile cacheFile(QLatin1String("data/") + QString::fromUtf8(cacheFileName));
     QByteArray data;
     if (cacheFile.exists() && qEnvironmentVariableIsSet("KITINERARY_USE_WIKIDATA_CACHE")) {

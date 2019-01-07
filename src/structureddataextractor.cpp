@@ -69,14 +69,14 @@ static QString valueForItemProperty(const HtmlElement &elem)
     const auto elemName = elem.name();
     QString v;
     if (elemName == QLatin1String("meta")) {
-        v = elem.attribute(QLatin1String("content"));
+        v = elem.attribute(QStringLiteral("content"));
     } else if (elemName == QLatin1String("time")) {
-        v = elem.attribute(QLatin1String("datetime"));
+        v = elem.attribute(QStringLiteral("datetime"));
     } else if (elemName == QLatin1String("link") || elemName == QLatin1String("a")) {
-        if (elem.hasAttribute(QLatin1String("href"))) {
-            v = elem.attribute(QLatin1String("href"));
-        } else if (elem.hasAttribute(QLatin1String("content"))) {
-            v = elem.attribute(QLatin1String("content"));
+        if (elem.hasAttribute(QStringLiteral("href"))) {
+            v = elem.attribute(QStringLiteral("href"));
+        } else if (elem.hasAttribute(QStringLiteral("content"))) {
+            v = elem.attribute(QStringLiteral("content"));
         } else {
             v = elem.recursiveContent();
         }
@@ -91,8 +91,8 @@ static void parseMicroData(const HtmlElement &elem, QJsonObject &obj)
 {
     auto child = elem.firstChild();
     while (!child.isNull()) {
-        const auto prop = child.attribute(QLatin1String("itemprop"));
-        const auto type = child.attribute(QLatin1String("itemtype"));
+        const auto prop = child.attribute(QStringLiteral("itemprop"));
+        const auto type = child.attribute(QStringLiteral("itemtype"));
         if (type.startsWith(QLatin1String("http://schema.org/"))) {
             QJsonObject subObj;
             parseMicroData(child, subObj);
@@ -112,13 +112,13 @@ static void parseMicroData(const HtmlElement &elem, QJsonObject &obj)
 static void extractRecursive(const HtmlElement &elem, QJsonArray &result)
 {
     // JSON-LD
-    if (elem.name() == QLatin1String("script") && elem.attribute(QLatin1String("type")) == QLatin1String("application/ld+json")) {
+    if (elem.name() == QLatin1String("script") && elem.attribute(QStringLiteral("type")) == QLatin1String("application/ld+json")) {
         parseJson(elem.content().toUtf8(), result);
         return;
     }
 
     // Microdata
-    const auto itemType = elem.attribute(QLatin1String("itemtype"));
+    const auto itemType = elem.attribute(QStringLiteral("itemtype"));
     if (itemType.startsWith(QLatin1String("http://schema.org/"))) {
         QJsonObject obj;
         parseMicroData(elem, obj);
@@ -129,7 +129,7 @@ static void extractRecursive(const HtmlElement &elem, QJsonArray &result)
         const QUrl typeUrl(itemType);
         obj.insert(QStringLiteral("@type"), typeUrl.fileName());
 
-        const auto itemProp = elem.attribute(QLatin1String("itemprop"));
+        const auto itemProp = elem.attribute(QStringLiteral("itemprop"));
         if (!itemProp.isEmpty() && !result.isEmpty()) {
             // this is likely a child of our preceding sibling, but broken XML put it here
             auto parent = result.last().toObject();

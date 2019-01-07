@@ -156,7 +156,7 @@ QString HtmlElement::content() const
 
     // convert non-breaking spaces to normal ones, technically not correct
     // but way too often this confuses our regular expressions
-    s.replace(QString::fromUtf8(" "), QLatin1String(" "));
+    s.replace(QStringLiteral(" "), QLatin1String(" "));
 
     return s.trimmed();
 #endif
@@ -212,7 +212,7 @@ QString HtmlElement::recursiveContent() const
     ::recursiveContent(d, s);
     // convert non-breaking spaces to normal ones, technically not correct
     // but way too often this confuses our regular expressions
-    s.replace(QString::fromUtf8(" "), QLatin1String(" "));
+    s.replace(QStringLiteral(" "), QLatin1String(" "));
     return s.trimmed();
 #else
     return {};

@@ -40,16 +40,16 @@ private Q_SLOTS:
         QVERIFY(!MergeUtil::isSame(res1, {}));
         QVERIFY(!MergeUtil::isSame({}, res1));
 
-        res1.setReservationNumber(QLatin1String("XXX007"));
+        res1.setReservationNumber(QStringLiteral("XXX007"));
         Flight flight1;
-        flight1.setFlightNumber(QLatin1String("1234"));
+        flight1.setFlightNumber(QStringLiteral("1234"));
         flight1.setDepartureDay(QDate(2018, 4, 21));
         res1.setReservationFor(flight1);
 
         FlightReservation res2;
-        res2.setReservationNumber(QLatin1String("YYY008"));
+        res2.setReservationNumber(QStringLiteral("YYY008"));
         Flight flight2;
-        flight2.setFlightNumber(QLatin1String("1234"));
+        flight2.setFlightNumber(QStringLiteral("1234"));
         res2.setReservationFor(flight2);
         QVERIFY(!MergeUtil::isSame(res1, res2));
 
@@ -57,30 +57,30 @@ private Q_SLOTS:
         res2.setReservationFor(flight2);
         QVERIFY(!MergeUtil::isSame(res1, res2));
 
-        res2.setReservationNumber(QLatin1String("XXX007"));
+        res2.setReservationNumber(QStringLiteral("XXX007"));
         QVERIFY(MergeUtil::isSame(res1, res2));
     }
 
     void testIsSameFlight()
     {
         Airline airline1;
-        airline1.setIataCode(QLatin1String("KL"));
+        airline1.setIataCode(QStringLiteral("KL"));
         Flight f1;
         f1.setAirline(airline1);
-        f1.setFlightNumber(QLatin1String("8457"));
+        f1.setFlightNumber(QStringLiteral("8457"));
         f1.setDepartureTime(QDateTime(QDate(2018, 4, 2), QTime(17, 51, 0)));
 
         Flight f2;
         QVERIFY(!MergeUtil::isSame(f1, f2));
 
-        f2.setFlightNumber(QLatin1String("8457"));
+        f2.setFlightNumber(QStringLiteral("8457"));
         QVERIFY(!MergeUtil::isSame(f1, f2));
 
         Airline airline2;
-        airline2.setIataCode(QLatin1String("AF"));
+        airline2.setIataCode(QStringLiteral("AF"));
         f2.setAirline(airline2);
         QVERIFY(!MergeUtil::isSame(f1, f2));
-        airline2.setIataCode(QLatin1String("KL"));
+        airline2.setIataCode(QStringLiteral("KL"));
         f2.setAirline(airline2);
         QVERIFY(!MergeUtil::isSame(f1, f2));
 
@@ -91,14 +91,14 @@ private Q_SLOTS:
     void testCodeShareFlight()
     {
         Airline a1;
-        a1.setIataCode(QLatin1String("4U"));
+        a1.setIataCode(QStringLiteral("4U"));
         Flight f1;
         f1.setAirline(a1);
-        f1.setFlightNumber(QLatin1String("42"));
+        f1.setFlightNumber(QStringLiteral("42"));
         f1.setDepartureDay(QDate(2018, 04, 21));
 
         Airline a2;
-        a2.setIataCode(QLatin1String("EW"));
+        a2.setIataCode(QStringLiteral("EW"));
         Flight f2(f1);
         f2.setAirline(a2);
 
@@ -211,19 +211,19 @@ private Q_SLOTS:
     {
         LodgingReservation res1;
         LodgingBusiness hotel1;
-        hotel1.setName(QLatin1String("Haus Randa"));
+        hotel1.setName(QStringLiteral("Haus Randa"));
         res1.setReservationFor(hotel1);
         res1.setCheckinTime(QDateTime(QDate(2018, 4, 9), QTime(10, 0)));
-        res1.setReservationNumber(QLatin1String("1234"));
+        res1.setReservationNumber(QStringLiteral("1234"));
 
         LodgingReservation res2;
         QVERIFY(!MergeUtil::isSame(res1, res2));
-        res2.setReservationNumber(QLatin1String("1234"));
+        res2.setReservationNumber(QStringLiteral("1234"));
         QVERIFY(!MergeUtil::isSame(res1, res2));
         res2.setCheckinTime(QDateTime(QDate(2018, 4, 9), QTime(15, 0)));
         QVERIFY(!MergeUtil::isSame(res1, res2));
         LodgingBusiness hotel2;
-        hotel2.setName(QLatin1String("Haus Randa"));
+        hotel2.setName(QStringLiteral("Haus Randa"));
         res2.setReservationFor(hotel2);
         QVERIFY(MergeUtil::isSame(res1, res2));
     }

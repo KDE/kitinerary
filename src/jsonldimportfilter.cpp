@@ -36,7 +36,7 @@ static void renameProperty(QJsonObject &obj, const char *oldName, const char *ne
 static void renameType(QJsonObject &obj, const char *oldType, const char *newType)
 {
     if (obj.value(QLatin1String("@type")) == QLatin1String(oldType)) {
-        obj.insert(QLatin1String("@type"), QLatin1String(newType));
+        obj.insert(QStringLiteral("@type"), QLatin1String(newType));
     }
 }
 
@@ -58,10 +58,10 @@ static void migrateToAction(QJsonObject &obj, const char *propName, const char *
     action.insert(QStringLiteral("@type"), QLatin1String(typeName));
     action.insert(QStringLiteral("target"), value);
     actions.push_back(action);
-    obj.insert(QLatin1String("potentialAction"), actions);
+    obj.insert(QStringLiteral("potentialAction"), actions);
 
     if (remove) {
-        obj.remove(QLatin1String("propName"));
+        obj.remove(QStringLiteral("propName"));
     }
 }
 
@@ -89,7 +89,7 @@ static void filterLodgingReservation(QJsonObject &res)
 
     QJsonObject hotel = res.value(QLatin1String("reservationFor")).toObject();
     filterLodgingBusiness(hotel);
-    res.insert(QLatin1String("reservationFor"), hotel);
+    res.insert(QStringLiteral("reservationFor"), hotel);
 }
 
 static void filterTaxiReservation(QJsonObject &res)
@@ -112,12 +112,12 @@ static void filterReservation(QJsonObject &res)
     if (!token.isEmpty()) {
         auto ticket = res.value(QLatin1String("reservedTicket")).toObject();
         if (ticket.isEmpty()) {
-            ticket.insert(QLatin1String("@type"), QLatin1String("Ticket"));
+            ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
         }
         if (!ticket.contains(QLatin1String("ticketToken"))) {
-            ticket.insert(QLatin1String("ticketToken"), token);
-            res.insert(QLatin1String("reservedTicket"), ticket);
-            res.remove(QLatin1String("ticketToken"));
+            ticket.insert(QStringLiteral("ticketToken"), token);
+            res.insert(QStringLiteral("reservedTicket"), ticket);
+            res.remove(QStringLiteral("ticketToken"));
         }
     }
 
@@ -145,7 +145,7 @@ static void filterEventReservation(QJsonObject &res)
 {
     QJsonObject event = res.value(QLatin1String("reservationFor")).toObject();
     filterEvent(event);
-    res.insert(QLatin1String("reservationFor"), event);
+    res.insert(QStringLiteral("reservationFor"), event);
 }
 
 static void filterBusStop(QJsonObject &station)
@@ -161,18 +161,18 @@ static void filterBusTrip(QJsonObject &trip)
 
     auto station = trip.value(QLatin1String("arrivalBusStop")).toObject();
     filterBusStop(station);
-    trip.insert(QLatin1String("arrivalBusStop"), station);
+    trip.insert(QStringLiteral("arrivalBusStop"), station);
 
     station = trip.value(QLatin1String("departureBusStop")).toObject();
     filterBusStop(station);
-    trip.insert(QLatin1String("departureBusStop"), station);
+    trip.insert(QStringLiteral("departureBusStop"), station);
 }
 
 static void filterBusReservation(QJsonObject &res)
 {
     QJsonObject trip = res.value(QLatin1String("reservationFor")).toObject();
     filterBusTrip(trip);
-    res.insert(QLatin1String("reservationFor"), trip);
+    res.insert(QStringLiteral("reservationFor"), trip);
 }
 
 static QJsonArray filterActions(const QJsonValue &v)
@@ -206,7 +206,7 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         auto train = obj.value(QLatin1String("reservationFor")).toObject();
         filterTrainTrip(train);
         if (!train.isEmpty()) {
-            res.insert(QLatin1String("reservationFor"), train);
+            res.insert(QStringLiteral("reservationFor"), train);
         }
     } else if (type == QLatin1String("LodgingReservation")) {
         filterLodgingReservation(res);
@@ -214,7 +214,7 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         auto flight = obj.value(QLatin1String("reservationFor")).toObject();
         filterFlight(flight);
         if (!flight.isEmpty()) {
-            res.insert(QLatin1String("reservationFor"), flight);
+            res.insert(QStringLiteral("reservationFor"), flight);
         }
     } else if (type == QLatin1String("TaxiReservation")) {
         filterTaxiReservation(res);
@@ -226,7 +226,7 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
 
     auto actions = res.value(QLatin1String("potentialAction"));
     if (!actions.isUndefined()) {
-        res.insert(QLatin1String("potentialAction"), filterActions(actions));
+        res.insert(QStringLiteral("potentialAction"), filterActions(actions));
     }
 
     return res;

@@ -49,17 +49,17 @@ private Q_SLOTS:
     void testSerialization()
     {
         Flight f;
-        f.setFlightNumber(QLatin1String("1234"));
+        f.setFlightNumber(QStringLiteral("1234"));
         f.setDepartureTime(QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
         f.setDepartureDay(QDate(2018, 3, 18));
         f.setArrivalTime(QDateTime(QDate(2018, 3, 18), QTime(19, 44, 0), Qt::UTC));
         Airport ap;
-        ap.setName(QLatin1String("Berlin Tegel"));
-        ap.setIataCode(QLatin1String("TXL"));
+        ap.setName(QStringLiteral("Berlin Tegel"));
+        ap.setIataCode(QStringLiteral("TXL"));
         f.setDepartureAirport(ap);
         f.setDepartureGate(QLatin1String(""));
         Airline airline;
-        airline.setIataCode(QLatin1String("LH"));
+        airline.setIataCode(QStringLiteral("LH"));
         f.setAirline(airline);
 
         auto array = JsonLdDocument::toJson({QVariant::fromValue(f)});
@@ -367,15 +367,15 @@ private Q_SLOTS:
     void testApply()
     {
         Flight f1;
-        f1.setDepartureGate(QLatin1String("38"));
+        f1.setDepartureGate(QStringLiteral("38"));
         Airline a1;
-        a1.setIataCode(QLatin1String("AB"));
+        a1.setIataCode(QStringLiteral("AB"));
         f1.setAirline(a1);
 
         Flight f2;
-        f2.setDepartureTerminal(QLatin1String("A"));
+        f2.setDepartureTerminal(QStringLiteral("A"));
         Airline a2;
-        a2.setName(QLatin1String("Air Berlin"));
+        a2.setName(QStringLiteral("Air Berlin"));
         f2.setAirline(a2);
 
         f1 = JsonLdDocument::apply(f1, f2).value<Flight>();

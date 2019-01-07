@@ -407,8 +407,8 @@ void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
 
     auto result = m_engine.evaluate(QString::fromUtf8(f.readAll()), f.fileName());
     if (result.isError()) {
-        qCWarning(Log) << "Script parsing error in" << result.property(QLatin1String("fileName")).toString()
-                                << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
+        qCWarning(Log) << "Script parsing error in" << result.property(QStringLiteral("fileName")).toString()
+                                << ':' << result.property(QStringLiteral("lineNumber")).toInt() << result.toString();
         return;
     }
 
@@ -450,8 +450,8 @@ void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
 void ExtractorEnginePrivate::processScriptResult(const QJSValue &result)
 {
     if (result.isError()) {
-        qCWarning(Log) << "Script execution error in" << result.property(QLatin1String("fileName")).toString()
-                                << ':' << result.property(QLatin1String("lineNumber")).toInt() << result.toString();
+        qCWarning(Log) << "Script execution error in" << result.property(QStringLiteral("fileName")).toString()
+                                << ':' << result.property(QStringLiteral("lineNumber")).toInt() << result.toString();
         return;
     }
 
@@ -482,8 +482,8 @@ void ExtractorEnginePrivate::extractPass()
         if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(m_pass.get())) {
             switch (boardingPass->transitType()) {
                 case KPkPass::BoardingPass::Air:
-                    res.insert(QLatin1String("@type"), QLatin1String("FlightReservation"));
-                    resFor.insert(QLatin1String("@type"), QLatin1String("Flight"));
+                    res.insert(QStringLiteral("@type"), QLatin1String("FlightReservation"));
+                    resFor.insert(QStringLiteral("@type"), QLatin1String("Flight"));
                     break;
                 // TODO expand once we have test files for train tickets
                 default:
@@ -492,14 +492,14 @@ void ExtractorEnginePrivate::extractPass()
         } else {
             switch (m_pass->type()) {
                 case KPkPass::Pass::EventTicket:
-                    res.insert(QLatin1String("@type"), QLatin1String("EventReservation"));
-                    resFor.insert(QLatin1String("@type"), QLatin1String("Event"));
+                    res.insert(QStringLiteral("@type"), QLatin1String("EventReservation"));
+                    resFor.insert(QStringLiteral("@type"), QLatin1String("Event"));
                     break;
                 default:
                     return;
             }
         }
-        res.insert(QLatin1String("reservationFor"), resFor);
+        res.insert(QStringLiteral("reservationFor"), resFor);
         m_result.push_back(res);
     }
 
@@ -533,17 +533,17 @@ void ExtractorEnginePrivate::extractPass()
         }
         token += barcode.message();
         QJsonObject ticket;
-        ticket.insert(QLatin1String("@type"), QLatin1String("Ticket"));
-        ticket.insert(QLatin1String("ticketToken"), token);
-        res.insert(QLatin1String("reservedTicket"), ticket);
+        ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
+        ticket.insert(QStringLiteral("ticketToken"), token);
+        res.insert(QStringLiteral("reservedTicket"), ticket);
     }
 
-    res.insert(QLatin1String("reservationFor"), resFor);
+    res.insert(QStringLiteral("reservationFor"), resFor);
 
     // associate the pass with the result, so we can find the pass again for display
     if (!m_pass->passTypeIdentifier().isEmpty() && !m_pass->serialNumber().isEmpty()) {
-        res.insert(QLatin1String("pkpassPassTypeIdentifier"), m_pass->passTypeIdentifier());
-        res.insert(QLatin1String("pkpassSerialNumber"), m_pass->serialNumber());
+        res.insert(QStringLiteral("pkpassPassTypeIdentifier"), m_pass->passTypeIdentifier());
+        res.insert(QStringLiteral("pkpassSerialNumber"), m_pass->serialNumber());
     }
 
     m_result[0] = res;
@@ -553,7 +553,7 @@ void ExtractorEnginePrivate::extractBoardingPass(QJsonObject &resFor)
 {
     // "relevantDate" is the best guess for the boarding time
     if (m_pass->relevantDate().isValid() && !resFor.contains(QLatin1String("boardingTime"))) {
-        resFor.insert(QLatin1String("boardingTime"), m_pass->relevantDate().toString(Qt::ISODate));
+        resFor.insert(QStringLiteral("boardingTime"), m_pass->relevantDate().toString(Qt::ISODate));
     }
     // look for common field names containing the boarding time, if we still have no idea
     if (!resFor.contains(QLatin1String("boardingTime"))) {
@@ -564,7 +564,7 @@ void ExtractorEnginePrivate::extractBoardingPass(QJsonObject &resFor)
             const auto time = QTime::fromString(field.value().toString());
             if (time.isValid()) {
                 // this misses date, but the postprocessor will fill that in
-                resFor.insert(QLatin1String("boardingTime"), QDateTime(QDate(1, 1, 1), time).toString(Qt::ISODate));
+                resFor.insert(QStringLiteral("boardingTime"), QDateTime(QDate(1, 1, 1), time).toString(Qt::ISODate));
                 break;
             }
         }
@@ -573,53 +573,53 @@ void ExtractorEnginePrivate::extractBoardingPass(QJsonObject &resFor)
     // location is the best guess for the departure airport geo coordinates
     auto depAirport = resFor.value(QLatin1String("departureAirport")).toObject();
     if (depAirport.isEmpty()) {
-        depAirport.insert(QLatin1String("@type"), QLatin1String("Airport"));
+        depAirport.insert(QStringLiteral("@type"), QLatin1String("Airport"));
     }
     auto depGeo = depAirport.value(QLatin1String("geo")).toObject();
     if (m_pass->locations().size() == 1 && depGeo.isEmpty()) {
         const auto loc = m_pass->locations().at(0);
-        depGeo.insert(QLatin1String("@type"), QLatin1String("GeoCoordinates"));
-        depGeo.insert(QLatin1String("latitude"), loc.latitude());
-        depGeo.insert(QLatin1String("longitude"), loc.longitude());
-        depAirport.insert(QLatin1String("geo"), depGeo);
-        resFor.insert(QLatin1String("departureAirport"), depAirport);
+        depGeo.insert(QStringLiteral("@type"), QLatin1String("GeoCoordinates"));
+        depGeo.insert(QStringLiteral("latitude"), loc.latitude());
+        depGeo.insert(QStringLiteral("longitude"), loc.longitude());
+        depAirport.insert(QStringLiteral("geo"), depGeo);
+        resFor.insert(QStringLiteral("departureAirport"), depAirport);
     }
 
     // organizationName is the best guess for airline name
     auto airline = resFor.value(QLatin1String("airline")).toObject();
     if (airline.isEmpty()) {
-        airline.insert(QLatin1String("@type"), QLatin1String("Airline"));
+        airline.insert(QStringLiteral("@type"), QLatin1String("Airline"));
     }
     if (!airline.contains(QLatin1String("name"))) {
-        airline.insert(QLatin1String("name"), m_pass->organizationName());
+        airline.insert(QStringLiteral("name"), m_pass->organizationName());
     }
-    resFor.insert(QLatin1String("airline"), airline);
+    resFor.insert(QStringLiteral("airline"), airline);
 }
 
 void ExtractorEnginePrivate::extractEventTicketPass(QJsonObject &resFor)
 {
     if (!resFor.contains(QLatin1String("name"))) {
-        resFor.insert(QLatin1String("name"), m_pass->description());
+        resFor.insert(QStringLiteral("name"), m_pass->description());
     }
 
     // "relevantDate" is the best guess for the start time
     if (m_pass->relevantDate().isValid() && !resFor.contains(QLatin1String("startDate"))) {
-        resFor.insert(QLatin1String("startDate"), m_pass->relevantDate().toString(Qt::ISODate));
+        resFor.insert(QStringLiteral("startDate"), m_pass->relevantDate().toString(Qt::ISODate));
     }
 
     // location is the best guess for the venue
     auto venue = resFor.value(QLatin1String("location")).toObject();
     if (venue.isEmpty()) {
-        venue.insert(QLatin1String("@type"), QLatin1String("Place"));
+        venue.insert(QStringLiteral("@type"), QLatin1String("Place"));
     }
     auto geo = venue.value(QLatin1String("geo")).toObject();
     if (!m_pass->locations().isEmpty() && geo.isEmpty()) {
         const auto loc = m_pass->locations().at(0);
-        geo.insert(QLatin1String("@type"), QLatin1String("GeoCoordinates"));
-        geo.insert(QLatin1String("latitude"), loc.latitude());
-        geo.insert(QLatin1String("longitude"), loc.longitude());
-        venue.insert(QLatin1String("geo"), geo);
-        venue.insert(QLatin1String("name"), loc.relevantText());
-        resFor.insert(QLatin1String("location"), venue);
+        geo.insert(QStringLiteral("@type"), QLatin1String("GeoCoordinates"));
+        geo.insert(QStringLiteral("latitude"), loc.latitude());
+        geo.insert(QStringLiteral("longitude"), loc.longitude());
+        venue.insert(QStringLiteral("geo"), geo);
+        venue.insert(QStringLiteral("name"), loc.relevantText());
+        resFor.insert(QStringLiteral("location"), venue);
     }
 }

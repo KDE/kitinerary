@@ -61,17 +61,17 @@ static bool soundsMilitaryish(const QString &s)
 static void stripAirportAllLanguages(QStringList &s)
 {
     // only languages used in the English (sic!) wikidata labels and description matter here
-    s.removeAll(QLatin1String("aeroport"));
-    s.removeAll(QLatin1String("aeroporto"));
-    s.removeAll(QLatin1String("aeropuerto"));
-    s.removeAll(QLatin1String("air"));
-    s.removeAll(QLatin1String("airfield"));
-    s.removeAll(QLatin1String("airpark"));
-    s.removeAll(QLatin1String("airport"));
-    s.removeAll(QLatin1String("airstrip"));
-    s.removeAll(QLatin1String("flughafen"));
-    s.removeAll(QLatin1String("lufthavn"));
-    s.removeAll(QLatin1String("terminal"));
+    s.removeAll(QStringLiteral("aeroport"));
+    s.removeAll(QStringLiteral("aeroporto"));
+    s.removeAll(QStringLiteral("aeropuerto"));
+    s.removeAll(QStringLiteral("air"));
+    s.removeAll(QStringLiteral("airfield"));
+    s.removeAll(QStringLiteral("airpark"));
+    s.removeAll(QStringLiteral("airport"));
+    s.removeAll(QStringLiteral("airstrip"));
+    s.removeAll(QStringLiteral("flughafen"));
+    s.removeAll(QStringLiteral("lufthavn"));
+    s.removeAll(QStringLiteral("terminal"));
 }
 
 void AirportDbGenerator::merge(Airport &lhs, const Airport &rhs)

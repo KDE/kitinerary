@@ -44,16 +44,16 @@ private Q_SLOTS:
     void testValueTypeSemantics()
     {
         Airport airport;
-        airport.setName(QLatin1String("Berlin Tegel"));
+        airport.setName(QStringLiteral("Berlin Tegel"));
         {
             auto ap2 = airport;
             QCOMPARE(ap2.name(), QLatin1String("Berlin Tegel"));
-            ap2.setIataCode(QLatin1String("TXL"));
+            ap2.setIataCode(QStringLiteral("TXL"));
             QVERIFY(airport.iataCode().isEmpty());
         }
         Place place = airport; // assignment to base class works, but cannot be reversed
         QCOMPARE(place.name(), QLatin1String("Berlin Tegel"));
-        place.setName(QLatin1String("London Heathrow")); // changing a value degenerated to its base class will detach but not slice
+        place.setName(QStringLiteral("London Heathrow")); // changing a value degenerated to its base class will detach but not slice
         QCOMPARE(place.name(), QLatin1String("London Heathrow"));
         QCOMPARE(JsonLdDocument::readProperty(place, "className").toString(), QLatin1String("Place")); // className is not polymorphic
 
@@ -64,11 +64,11 @@ private Q_SLOTS:
         // detach on base properties must not slice
         FlightReservation res;
         QCOMPARE(JsonLdDocument::readProperty(res, "className").toString(), QLatin1String("FlightReservation"));
-        res.setAirplaneSeat(QLatin1String("10E"));
+        res.setAirplaneSeat(QStringLiteral("10E"));
         QCOMPARE(res.airplaneSeat(), QLatin1String("10E"));
         auto res2 = res;
         QCOMPARE(res2.airplaneSeat(), QLatin1String("10E"));
-        res2.setReservationNumber(QLatin1String("XXX007"));
+        res2.setReservationNumber(QStringLiteral("XXX007"));
         QCOMPARE(res2.airplaneSeat(), QLatin1String("10E"));
 
         // changing default-created properties should not leak
@@ -89,10 +89,10 @@ private Q_SLOTS:
         QCOMPARE(JsonLdDocument::readProperty(ticket.ticketedSeat(), "className").toString(), QLatin1String("Seat"));
 
         Organization org;
-        org.setName(QLatin1String("JR East"));
-        org.setEmail(QLatin1String("nowhere@nowhere.com"));
-        org.setTelephone(QLatin1String("+55-1234-345"));
-        org.setUrl(QUrl(QLatin1String("http://www.jreast.co.jp/e/")));
+        org.setName(QStringLiteral("JR East"));
+        org.setEmail(QStringLiteral("nowhere@nowhere.com"));
+        org.setTelephone(QStringLiteral("+55-1234-345"));
+        org.setUrl(QUrl(QStringLiteral("http://www.jreast.co.jp/e/")));
         QCOMPARE(JsonLdDocument::readProperty(org, "className").toString(), QLatin1String("Organization"));
         QCOMPARE(org.name(), QLatin1String("JR East"));
         QCOMPARE(org.email(), QLatin1String("nowhere@nowhere.com"));
@@ -113,7 +113,7 @@ private Q_SLOTS:
         QCOMPARE(bus.provider().email(), QLatin1String("nowhere@nowhere.com"));
 
         Airline airline;
-        airline.setIataCode(QLatin1String("LH"));
+        airline.setIataCode(QStringLiteral("LH"));
         flight.setAirline(airline);
         QCOMPARE(flight.airline().iataCode(), QLatin1String("LH"));
         {
@@ -130,12 +130,12 @@ private Q_SLOTS:
         FlightReservation res;
         Flight flight;
         Airport airport;
-        airport.setName(QLatin1String("Berlin Tegel"));
+        airport.setName(QStringLiteral("Berlin Tegel"));
         flight.setDepartureAirport(airport);
         res.setReservationFor(flight);
 
         QQmlEngine engine;
-        engine.rootContext()->setContextProperty(QLatin1String("_res"), res);
+        engine.rootContext()->setContextProperty(QStringLiteral("_res"), res);
         QQmlComponent component(&engine);
         component.setData("import QtQml 2.2\nQtObject { Component.onCompleted: console.log(_res.reservationFor.departureAirport.name); }", QUrl());
         if (component.status() == QQmlComponent::Error) {
@@ -151,8 +151,8 @@ private Q_SLOTS:
         Place p;
         FoodEstablishment r;
         Airport a;
-        a.setName(QLatin1String("Berlin Tegel"));
-        a.setIataCode(QLatin1String("TXL"));
+        a.setName(QStringLiteral("Berlin Tegel"));
+        a.setIataCode(QStringLiteral("TXL"));
 
         QVERIFY(JsonLd::canConvert<Place>(a));
         QVERIFY(JsonLd::canConvert<Airport>(a));
@@ -168,11 +168,11 @@ private Q_SLOTS:
         Place p1, p2; // base type
         QCOMPARE(p1, p2);
         QCOMPARE(p1, p1);
-        p1.setName(QLatin1String("Berlin"));
+        p1.setName(QStringLiteral("Berlin"));
         QVERIFY(!(p1 == p2));
         QVERIFY(p1 != p2);
         QCOMPARE(p1, p1);
-        p2.setName(QLatin1String("Berlin"));
+        p2.setName(QStringLiteral("Berlin"));
         QCOMPARE(p1, p2);
 
         GeoCoordinates coord1, coord2; // primitive types
@@ -186,12 +186,12 @@ private Q_SLOTS:
         QCOMPARE(p1, p2);
 
         Airport a1, a2; // polymorphic types
-        a1.setIataCode(QLatin1String("TXL"));
-        a2.setIataCode(QLatin1String("TXL"));
+        a1.setIataCode(QStringLiteral("TXL"));
+        a2.setIataCode(QStringLiteral("TXL"));
         QCOMPARE(a1, a2);
-        a1.setName(QLatin1String("Berlin Tegel"));
+        a1.setName(QStringLiteral("Berlin Tegel"));
         QVERIFY(a1 != a2);
-        a2.setName(QLatin1String("Berlin Tegel"));
+        a2.setName(QStringLiteral("Berlin Tegel"));
         QCOMPARE(a1, a2);
         QCOMPARE(a1, a1);
     }
