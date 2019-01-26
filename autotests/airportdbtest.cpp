@@ -156,6 +156,10 @@ private Q_SLOTS:
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Duesseldorf International")), KnowledgeDb::IataCode{"DUS"});
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Berlin Schoenefeld")), KnowledgeDb::IataCode{"SXF"});
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Zuerich")), KnowledgeDb::IataCode{"ZRH"});
+
+        // IATA code contained in name
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Frankfurt")), KnowledgeDb::IataCode{});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Frankfurt FRA")), KnowledgeDb::IataCode{"FRA"});
     }
 
     void countryDataTest()

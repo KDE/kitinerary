@@ -202,6 +202,28 @@ static IataCode iataCodeForNonUniqueFragments(const QStringList &fragments)
     return {};
 }
 
+static IataCode iataCodeForIataCodeFragment(const QStringList &fragments)
+{
+    IataCode code;
+    for (const auto &s : fragments) {
+        if (s.size() != 3) {
+            continue;
+        }
+        if (!std::all_of(s.begin(), s.end(), std::mem_fn(&QChar::isUpper))) {
+            continue;
+        }
+        const IataCode searchCode{s};
+        if (code.isValid() && searchCode != code) {
+            return {};
+        }
+        const auto it = std::lower_bound(std::begin(airport_table), std::end(airport_table), searchCode);
+        if (it != std::end(airport_table) && (*it).iataCode == searchCode) {
+            code = searchCode;
+        }
+    }
+    return code;
+}
+
 static IataCode iataCodeForNameFragments(const QStringList &fragments)
 {
     IataCode code = iataCodeForUniqueFragment(fragments);
@@ -213,16 +235,25 @@ static IataCode iataCodeForNameFragments(const QStringList &fragments)
 
 IataCode iataCodeFromName(const QString &name)
 {
-    auto fragments = StringUtil::normalize(name).split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
+    const auto fragments = name.split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
+    QStringList normalizedFragments;
+    normalizedFragments.reserve(fragments.size());
+    std::transform(fragments.begin(), fragments.end(), std::back_inserter(normalizedFragments), [](const auto &s) { return StringUtil::normalize(s); });
 
-    IataCode code = iataCodeForNameFragments(fragments);
+    IataCode code = iataCodeForNameFragments(normalizedFragments);
     if (code.isValid()) {
         return code;
     }
 
     // try again, with alternative translitarations of e.g. umlauts replaced
-    applyTransliterations(fragments);
-    return iataCodeForNameFragments(fragments);
+    applyTransliterations(normalizedFragments);
+    code = iataCodeForNameFragments(normalizedFragments);
+    if (code.isValid()) {
+        return code;
+    }
+
+    // check if the name contained the IATA code as disambiguation already
+    return iataCodeForIataCodeFragment(fragments);
 }
 }
 }
