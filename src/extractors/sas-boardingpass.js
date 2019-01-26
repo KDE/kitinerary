@@ -91,6 +91,8 @@ function extractInformation(page) {
     if (lastFlight) {
         res.reservationFor.departureTime = JsonLd.toDateTime(lastFlight.daymonth + " " + lastFlight.year + " " + lastFlight.departureTime, "dd MMM yyyy hh:mm", "en");
         res.reservationFor.boardingTime  = JsonLd.toDateTime(lastFlight.daymonth + " " + lastFlight.year + " " + lastFlight.boardingTime , "dd MMM yyyy hh:mm", "en");
+    } else {
+        return null;
     }
 
     return res;
