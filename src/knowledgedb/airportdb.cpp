@@ -209,7 +209,7 @@ static IataCode iataCodeForIataCodeFragment(const QStringList &fragments)
         if (s.size() != 3) {
             continue;
         }
-        if (!std::all_of(s.begin(), s.end(), std::mem_fn(&QChar::isUpper))) {
+        if (!std::all_of(s.begin(), s.end(), [](const auto c) { return c.isUpper(); })) {
             continue;
         }
         const IataCode searchCode{s};
