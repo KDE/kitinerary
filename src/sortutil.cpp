@@ -29,6 +29,7 @@
 #include <KItinerary/Visit>
 
 #include <QDateTime>
+#include <QTimeZone>
 
 using namespace KItinerary;
 
@@ -63,7 +64,11 @@ QDateTime SortUtil::startDateTime(const QVariant &res)
     if (JsonLd::isA<LodgingReservation>(res)) {
         const auto hotel = res.value<LodgingReservation>();
         // hotel checkin/checkout is always considered the first/last thing of the day
-        return QDateTime(hotel.checkinTime().date(), QTime(23, 59, 59));
+        auto dt = QDateTime(hotel.checkinTime().date(), QTime(23, 59, 59));
+        if (hotel.checkinTime().timeSpec() == Qt::TimeZone) {
+            dt.setTimeZone(hotel.checkinTime().timeZone());
+        }
+        return dt;
     }
     if (JsonLd::isA<TouristAttractionVisit>(res)) {
         return res.value<TouristAttractionVisit>().arrivalTime();
@@ -111,7 +116,11 @@ QDateTime SortUtil::endtDateTime(const QVariant &res)
     if (JsonLd::isA<LodgingReservation>(res)) {
         const auto hotel = res.value<LodgingReservation>();
         // hotel checkin/checkout is always considered the first/last thing of the day
-        return QDateTime(hotel.checkoutTime().date(), QTime(0, 0, 0));
+        auto dt = QDateTime(hotel.checkoutTime().date(), QTime(0, 0, 0));
+        if (hotel.checkoutTime().timeSpec() == Qt::TimeZone) {
+            dt.setTimeZone(hotel.checkoutTime().timeZone());
+        }
+        return dt;
     }
     if (JsonLd::isA<TouristAttractionVisit>(res)) {
         return res.value<TouristAttractionVisit>().departureTime();
