@@ -1,0 +1,8 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "reservedTicket": {
+        "@type": "Ticket",
+        "ticketToken": "https://airline.com/download-your-boarding-pass-here.html"
+    }
+}]

@@ -1,0 +1,8 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "reservedTicket": {
+        "@type": "Ticket",
+        "ticketToken": "aztecCode:M1DOE/JOHN            EXXX007 TXLBRUSN 2592 110"
+    }
+}]

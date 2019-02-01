@@ -29,6 +29,7 @@
 #include <KItinerary/Person>
 #include <KItinerary/Reservation>
 #include <KItinerary/Taxi>
+#include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
 
@@ -386,6 +387,16 @@ static QDateTime mergeValue(const QDateTime &lhs, const QDateTime &rhs)
     return lhs.isValid() && lhs.timeSpec() == Qt::TimeZone && rhs.timeSpec() != Qt::TimeZone ? lhs : rhs;
 }
 
+static Ticket mergeValue(const Ticket &lhs, const Ticket &rhs)
+{
+    auto t = JsonLdDocument::apply(lhs, rhs).value<Ticket>();
+    // prefer barcode ticket tokens over URLs
+    if (t.ticketTokenType() == Ticket::Url && lhs.ticketTokenType() != Ticket::Url && lhs.ticketTokenType() != Ticket::Unknown) {
+        t.setTicketToken(lhs.ticketToken());
+    }
+    return t;
+}
+
 QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
 {
     if (rhs.isNull()) {
@@ -415,6 +426,8 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
             rv = mergeValue(lv.value<Airline>(), rv.value<Airline>());
         } else if (mt == qMetaTypeId<QDateTime>()) {
             rv = mergeValue(lv.toDateTime(), rv.toDateTime());
+        } else if (mt == qMetaTypeId<Ticket>()) {
+            rv = mergeValue(lv.value<Ticket>(), rv.value<Ticket>());
         } else if (QMetaType(mt).metaObject()) {
             rv = merge(prop.readOnGadget(lhs.constData()), rv);
         }
