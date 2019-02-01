@@ -1,0 +1,9 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "Flight",
+    "arrivalTime": {
+        "@type": "QDateTime",
+        "@value": "2019-02-01T19:45:00+01:00",
+        "timezone": "Europe/Brussels"
+    }
+}]

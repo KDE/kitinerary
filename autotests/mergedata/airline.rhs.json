@@ -1,0 +1,10 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "Airline",
+    "@type": "Flight",
+    "airline": {
+        "@type": "Airline",
+        "name": "LH",
+        "iataCode": "LH"
+    }
+}]

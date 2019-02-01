@@ -16,12 +16,17 @@
 */
 
 #include <KItinerary/Flight>
+#include <KItinerary/JsonLdDocument>
 #include <KItinerary/MergeUtil>
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
 #include <KItinerary/Reservation>
 
 #include <QDebug>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QObject>
 #include <QTest>
 
@@ -32,6 +37,14 @@ using namespace KItinerary;
 class MergeUtilTest : public QObject
 {
     Q_OBJECT
+private:
+    QByteArray readFile(const QString &fn) const
+    {
+        QFile f(fn);
+        f.open(QFile::ReadOnly);
+        return f.readAll();
+    }
+
 private Q_SLOTS:
     void testIsSameReservation()
     {
@@ -226,6 +239,35 @@ private Q_SLOTS:
         hotel2.setName(QStringLiteral("Haus Randa"));
         res2.setReservationFor(hotel2);
         QVERIFY(MergeUtil::isSame(res1, res2));
+    }
+
+    void testMerge_data()
+    {
+        QTest::addColumn<QString>("baseName");
+
+        QDir dir(QStringLiteral(SOURCE_DIR "/mergedata"));
+        const auto lst = dir.entryList(QStringList(QStringLiteral("*.merged.json")), QDir::Files | QDir::Readable | QDir::NoSymLinks);
+        for (const auto &file : lst) {
+            const auto base = file.left(file.size() - 12);
+            QTest::newRow(base.toLatin1().constData()) << (dir.path() + QLatin1Char('/') + base);
+        }
+    }
+
+    void testMerge()
+    {
+        QFETCH(QString, baseName);
+
+        const auto lhs = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(baseName + QLatin1String(".lhs.json"))).array()).first();
+        const auto rhs = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(baseName + QLatin1String(".rhs.json"))).array()).first();
+        const auto expected = QJsonDocument::fromJson(readFile(baseName + QLatin1String(".merged.json")));
+
+        const auto mergedL2R = MergeUtil::merge(lhs, rhs);
+        //qDebug().noquote() << QJsonDocument(JsonLdDocument::toJson({mergedL2R})).toJson();
+        QCOMPARE(QJsonDocument(JsonLdDocument::toJson({mergedL2R})), expected);
+
+        const auto mergedR2L = MergeUtil::merge(rhs, lhs);
+        //qDebug().noquote() << QJsonDocument(JsonLdDocument::toJson({mergedR2L})).toJson();
+        QCOMPARE(QJsonDocument(JsonLdDocument::toJson({mergedR2L})), expected);
     }
 };
 
