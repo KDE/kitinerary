@@ -43,8 +43,8 @@ regExMap['de_DE']['bookingRef'] = /Buchungsnummer: ([0-9]*)\s+/;
 // 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
 regExMap['de_DE']['hotelInformation'] = /(.+), (.+), (.+), (.+) -\s+Telefon: (\+[0-9 \-]+)\n/;
 regExMap['de_DE']['hotelName'] = /\[checkmark.png\] Die Unterkunft (.*)\s+erwartet Sie/;
-regExMap['de_DE']['arrivalDate'] = /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. [A-Z][a-z]+ [0-9]{4}) \(ab ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['de_DE']['departureDate'] = /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. [A-Z][a-z]+ [0-9]{4}) \(bis ([0-9]{1,2}:[0-9]{2})\)/;
+regExMap['de_DE']['arrivalDate'] = /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(ab ([0-9]{1,2}:[0-9]{2})\)/;
+regExMap['de_DE']['departureDate'] = /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(bis ([0-9]{1,2}:[0-9]{2})\)/;
 regExMap['de_DE']['person'] = /Name des Gastes +(.*) Name des Gastes bearbeiten/;
 regExMap['de_DE']['dateFormat'] = "dddd, d. MMMM yyyy hh:mm";
 
