@@ -280,6 +280,7 @@ QJsonArray ExtractorEngine::extract()
 
 void ExtractorEnginePrivate::extractRecursive(KMime::Content *content)
 {
+    QJsonArray aggregatedResult;
     for (const auto child : content->contents()) {
         resetContent();
         setContent(child);
@@ -288,7 +289,13 @@ void ExtractorEnginePrivate::extractRecursive(KMime::Content *content)
         } else {
             extractDocument();
         }
+
+        // the extractor takes early exits if data has been found, so make it look like that isn't the case
+        std::copy(m_result.begin(), m_result.end(), std::back_inserter(aggregatedResult));
+        m_result = {};
     }
+
+    m_result = std::move(aggregatedResult);
 }
 
 void ExtractorEnginePrivate::extractDocument()
