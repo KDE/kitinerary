@@ -307,9 +307,15 @@ void ExtractorEnginePrivate::extractDocument()
     }
 
     // custom extractors
+    m_extractors.clear();
     if (m_pass) {
         m_extractors = m_repo.extractorsForPass(m_pass.get());
-    } else if (m_mimeContext) {
+#ifdef HAVE_KCAL
+    } else if (m_calendar) {
+        m_extractors = m_repo.extractorsForCalendar(m_calendar);
+#endif
+    }
+    if (m_extractors.empty() && m_mimeContext) {
         m_extractors = m_repo.extractorsForMessage(m_mimeContext);
     }
     extractCustom();

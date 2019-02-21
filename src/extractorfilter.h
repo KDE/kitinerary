@@ -40,7 +40,8 @@ public:
         Mime,
         PkPass,
         JsonLd,
-        Barcode
+        Barcode,
+        ICal
     };
 
     /** The filter type. */

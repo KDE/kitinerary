@@ -55,11 +55,11 @@ class ExtractorPrivate;
  * - \c ical: iCalendar events, the argument to the script function is a KCalCore::Event instance.
  *
  * Filter definitions have the following field:
- * - \c type: The type of data this filter applies to, one of: @c Mime, @c PkPass, @c JsonLd, @c Barcode.
+ * - \c type: The type of data this filter applies to, one of: @c Mime, @c PkPass, @c JsonLd, @c Barcode, @c ICal.
  *            Can often be omitted as it's auto-detected based on the following fields.
  * - \c header: A MIME message header name (valid and mandatory for type @c Mime).
  * - \c field: A field id in a Apple Wallet pass (valid and mandatory for type @c PkPass).
- * - \c property: A property on a Json-LD object (valid and mandatory for type @c JsonLd).
+ * - \c property: A property on a Json-LD object (valid and mandatory for type @c JsonLd and @c ICal).
  * - \c match: A regular expression that is matched against the specified value (see QRegularExpression).
  *
  * Example:

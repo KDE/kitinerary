@@ -17,10 +17,15 @@
    02110-1301, USA.
 */
 
+#include "config-kitinerary.h"
 #include "extractorrepository.h"
 #include "extractor.h"
 #include "extractorfilter.h"
 #include "logging.h"
+
+#ifdef HAVE_KCAL
+#include <KCalCore/Calendar>
+#endif
 
 #include <KMime/Content>
 
@@ -181,6 +186,27 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForBarcode(const Q
 
     return v;
 }
+
+#ifdef HAVE_KCAL
+std::vector<const Extractor *> ExtractorRepository::extractorsForCalendar(const QSharedPointer<KCalCore::Calendar> &cal) const
+{
+    std::vector<const Extractor *> v;
+    for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
+        for (const auto &filter : (*it).filters()) {
+            if (filter.type() != ExtractorFilter::ICal) {
+                continue;
+            }
+
+            const auto value = cal->property(filter.fieldName());
+            if (filter.matches(value.toString())) {
+                v.push_back(&(*it));
+                break;
+            }
+        }
+    }
+    return v;
+}
+#endif
 
 void ExtractorRepositoryPrivate::loadExtractors()
 {

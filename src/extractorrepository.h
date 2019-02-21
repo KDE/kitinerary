@@ -22,8 +22,14 @@
 
 #include "kitinerary_export.h"
 
+#include <QSharedPointer>
+
 #include <memory>
 #include <vector>
+
+namespace KCalCore {
+class Calendar;
+}
 
 namespace KMime {
 class Content;
@@ -61,6 +67,8 @@ public:
     std::vector<const Extractor *> extractorsForJsonLd(const QJsonArray &data) const;
     /** Finds matching extractors for the given barcode string. */
     std::vector<const Extractor *> extractorsForBarcode(const QString &code) const;
+    /** Find matching extractors for the given iCal calendar. */
+    std::vector<const Extractor *> extractorsForCalendar(const QSharedPointer<KCalCore::Calendar> &cal) const;
 
 private:
     ExtractorRepositoryPrivate* d;

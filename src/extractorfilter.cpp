@@ -43,6 +43,15 @@ bool ExtractorFilter::matches(const QString &data) const
 
 bool ExtractorFilter::load(const QJsonObject &obj)
 {
+    const auto typeName = obj.value(QLatin1String("type"));
+    if (typeName == QLatin1String("Barcode")) {
+        m_type = Barcode;
+    } else if (typeName == QLatin1String("ICal")) {
+        m_type = ICal;
+    } else if (typeName == QLatin1String("JsonLd")) {
+        m_type = JsonLd;
+    }
+
     auto it = obj.find(QLatin1String("header"));
     if (it != obj.end()) {
         m_fieldName = it.value().toString().toUtf8();
@@ -58,13 +67,8 @@ bool ExtractorFilter::load(const QJsonObject &obj)
     it = obj.find(QLatin1String("property"));
     if (it != obj.end()) {
         m_fieldName = it.value().toString().toUtf8();
-        m_type = JsonLd;
-    }
-
-    if (m_type == Undefined) {
-        const auto typeName = obj.value(QLatin1String("type"));
-        if (typeName == QLatin1String("Barcode")) {
-            m_type = Barcode;
+        if (m_type == Undefined) { // backward compat, can be removed once all extractors are adjusted
+            m_type = JsonLd;
         }
     }
 
