@@ -209,7 +209,9 @@ void ExtractorEnginePrivate::setContent(KMime::Content *content)
 #ifdef HAVE_KCAL
         m_calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
         KCalCore::ICalFormat format;
-        if (!format.fromRawString(m_calendar, content->decodedContent())) {
+        if (format.fromRawString(m_calendar, content->decodedContent())) {
+            m_calendar->setProductId(format.loadedProductId());
+        } else {
             m_calendar.reset();
         }
 #endif

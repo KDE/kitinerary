@@ -133,6 +133,7 @@ private Q_SLOTS:
             calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
             KCalCore::ICalFormat format;
             QVERIFY(format.fromRawString(calendar, inFile.readAll()));
+            calendar->setProductId(format.loadedProductId());
             m_engine.setCalendar(calendar);
         } else if (inputFile.endsWith(QLatin1String(".eml")) || inputFile.endsWith(QLatin1String(".mbox"))) {
             mimeMsg.reset(new KMime::Message);
