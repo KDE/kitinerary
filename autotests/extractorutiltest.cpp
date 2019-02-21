@@ -41,6 +41,7 @@ private Q_SLOTS:
         QTest::newRow("no terminal") << s("Paris Charles de Gaulle") << s("Paris Charles de Gaulle") << s("");
         QTest::newRow("CDG 1") << s("PARIS, FR (CHARLES DE GAULLE), TERMINAL 2E") << s("PARIS, FR (CHARLES DE GAULLE)") << s("2E");
         QTest::newRow("CDG 2") << s("Paris Charles de Gaulle (Terminal 2D)") << s("Paris Charles de Gaulle") << s("2D");
+        QTest::newRow("CDG 3") << s("PARIS FR CHARLES DE GAULLE TERMINAL 2G - AEROGARE 2 TERMINAL G") << s("PARIS FR CHARLES DE GAULLE") << s("2G");
         QTest::newRow("LHR") << s("London/Heathrow-Terminal 2") << s("London/Heathrow") << s("2");
         QTest::newRow("MAD") << s("MADRID, ES (BARAJAS), TERMINAL 4S") << s("MADRID, ES (BARAJAS)") << s("4S");
         QTest::newRow("DTW") << s("DETROIT, MI (METROPOLITAN WAYNE CO), TERMINAL EM") << s("DETROIT, MI (METROPOLITAN WAYNE CO)") << s("EM");

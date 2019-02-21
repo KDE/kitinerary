@@ -43,15 +43,24 @@ static QString trimAirportName(const QStringRef &in)
 static std::tuple<QString, QString> splitAirportName(const QString &name)
 {
     static QRegularExpression patterns[] = {
-        QRegularExpression(QStringLiteral("^(.*) \\(terminal (.*)\\)$"), QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression(QStringLiteral("^(.*) \\((.*) terminal\\)$"), QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression(QStringLiteral("^(.*)[ -]terminal (.*)$"), QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression(QStringLiteral("^(.*) \\((?:terminal|aerogare) (.*)\\)$"), QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression(QStringLiteral("^(.*) \\((.*) (?:terminal|aerogare)\\)$"), QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression(QStringLiteral("^(.*)[ -](?:terminal|aerogare) (.*)$"), QRegularExpression::CaseInsensitiveOption),
     };
 
     for (const auto &re : patterns) {
         const auto match = re.match(name);
         if (match.hasMatch()) {
-            return std::make_tuple(trimAirportName(match.capturedRef(1)), match.captured(2));
+            const auto name = trimAirportName(match.capturedRef(1));
+
+            // try to recurse, sometimes this is indeed repeated...
+            QString recName, recTerminal;
+            std::tie(recName, recTerminal) = splitAirportName(name);
+            if (recName == name || recTerminal.isEmpty()) {
+                return std::make_tuple(trimAirportName(match.capturedRef(1)), match.captured(2));
+            } else {
+                return std::make_tuple(recName, recTerminal);
+            }
             break;
         }
     }
