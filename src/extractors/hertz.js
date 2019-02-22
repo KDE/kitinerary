@@ -95,5 +95,8 @@ function main(text) {
     res.reservationFor.model = vehiculeType[1];
     idx += vehiculeType.index + vehiculeType[0].length;
 
+    res.reservationFor.rentalCompany = JsonLd.newObject("Organization");
+    res.reservationFor.rentalCompany.name = "Hertz"
+
     return res;
 }
