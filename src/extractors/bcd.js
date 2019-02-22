@@ -45,6 +45,7 @@ function parseEvent(event)
     } else if (event.summary.startsWith("Mietwagen")) {
         res = JsonLd.newObject("RentalCarReservation");
         res.reservationFor = JsonLd.newObject("RentalCar");
+        res.reservationFor.rentalCompany = JsonLd.newObject("Organization");
 
         res.pickupLocation = JsonLd.newObject("Place");
         var pickup = event.description.match(/Abgabeort:\s*(.*)\n/);
@@ -59,7 +60,7 @@ function parseEvent(event)
         res.dropoffTime = event.dtEnd.toJSON();
 
         var provider = event.description.match(/Mietwagenfirma:\s*(.*)\n/);
-        res.reservationFor.rentalCompany = provider[1];
+        res.reservationFor.rentalCompany.name = provider[1];
         var model = event.description.match(/Wagenkl.\/Typ:\s*(.*)\n/);
         res.reservationFor.name = model[1];
     } else {
