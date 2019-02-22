@@ -160,6 +160,10 @@ private Q_SLOTS:
         // IATA code contained in name
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Frankfurt")), KnowledgeDb::IataCode{});
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Frankfurt FRA")), KnowledgeDb::IataCode{"FRA"});
+
+        // multiple unique hits / unique hit on valid (but wrong) IATA code
+        // TODO should actually be GMP
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SEOUL KR GIMPO INTERNATIONAL TERMINAL I - SKY CITY INTERNATIONAL TERMINAL")), KnowledgeDb::IataCode{});
     }
 
     void countryDataTest()

@@ -137,30 +137,37 @@ static void applyTransliterations(QStringList &fragments)
     }
 }
 
+static IataCode iataCodeForUniqueFragment(const QString &s)
+{
+    const auto it = std::lower_bound(std::begin(name1_string_index), std::end(name1_string_index), s.toUtf8(), [](const Name1Index &lhs, const QByteArray &rhs) {
+        const auto cmp = strncmp(name1_string_table + lhs.offset(), rhs.constData(), std::min<int>(lhs.length, rhs.size()));
+        if (cmp == 0) {
+            return lhs.length < rhs.size();
+        }
+        return cmp < 0;
+    });
+    if (it == std::end(name1_string_index) || it->length != s.toUtf8().size() || strncmp(name1_string_table + it->offset(), s.toUtf8().constData(), it->length) != 0) {
+        return {};
+    }
+    return airport_table[it->iataIndex].iataCode;
+}
+
 static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
 {
-    int iataIdx = -1;
+    IataCode resultCode;
     for (const auto &s : fragments) {
-        const auto it = std::lower_bound(std::begin(name1_string_index), std::end(name1_string_index), s.toUtf8(), [](const Name1Index &lhs, const QByteArray &rhs) {
-                const auto cmp = strncmp(name1_string_table + lhs.offset(), rhs.constData(), std::min<int>(lhs.length, rhs.size()));
-                if (cmp == 0) {
-                    return lhs.length < rhs.size();
-                }
-                return cmp < 0;
-            });
-        if (it == std::end(name1_string_index) || it->length != s.toUtf8().size() || strncmp(name1_string_table + it->offset(), s.toUtf8().constData(), it->length) != 0) {
+        const auto foundCode = iataCodeForUniqueFragment(s);
+        if (!foundCode.isValid()) {
             continue;
         }
-        if (iataIdx >= 0 && iataIdx != it->iataIndex) {
+
+        if (resultCode.isValid() && resultCode != foundCode) {
             return {}; // not unique
         }
-        iataIdx = it->iataIndex;
+        resultCode = foundCode;
     }
 
-    if (iataIdx > 0) {
-        return airport_table[iataIdx].iataCode;
-    }
-    return {};
+    return resultCode;
 }
 
 static IataCode iataCodeForNonUniqueFragments(const QStringList &fragments)
@@ -219,6 +226,11 @@ static IataCode iataCodeForIataCodeFragment(const QStringList &fragments)
         const auto it = std::lower_bound(std::begin(airport_table), std::end(airport_table), searchCode);
         if (it != std::end(airport_table) && (*it).iataCode == searchCode) {
             code = searchCode;
+        }
+        // check that this is only a IATA code, not also a (conflicting) name fragment
+        const auto uniqueFragmentCode = iataCodeForUniqueFragment(StringUtil::normalize(s));
+        if (uniqueFragmentCode.isValid() && code.isValid() && uniqueFragmentCode != code) {
+            return {};
         }
     }
     return code;
