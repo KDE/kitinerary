@@ -235,15 +235,31 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
         l.removeAll(it.value().icaoCode.toCaseFolded());
         stripAirportAllLanguages(l);
         l.removeDuplicates();
-        for (const auto &s : l) {
-            if (s.size() <= 2) {
-                continue;
-            }
+        l.erase(std::remove_if(l.begin(), l.end(), [](const auto &s) { return s.size() <= 2; }), l.end());
+        for (const auto &s : qAsConst(l)) {
+            (*it).fragments.push_back(s);
             m_labelMap[s].push_back(it.value().iataCode);
         }
     }
     for (auto it = m_labelMap.begin(); it != m_labelMap.end(); ++it) {
         std::sort(it.value().begin(), it.value().end());
+
+        if (it.value().size() == 2) { // TODO generalize this from 2 to N
+            const auto lhsAirport = m_airportMap.value(m_iataMap.value(it.value().at(0)));
+            const auto rhsAirport = m_airportMap.value(m_iataMap.value(it.value().at(1)));
+
+            // if the fragments are exactly identical, this will never be unique
+            // removing the current fragment from the index is fine, but we can't do that elsewhere if the collision set is > 2
+            if (lhsAirport.fragments == rhsAirport.fragments) {
+                qDebug() << "Unresolvable index collision for" << lhsAirport.iataCode << lhsAirport.label << lhsAirport.uri << rhsAirport.iataCode << rhsAirport.label << rhsAirport.uri;
+                // TODO remove this fragment from the index
+                continue;
+            }
+
+            // TODO check if one fragment set is a subset of the other, in which case the set difference
+            // can be used for the exclusion index
+//             qDebug() << m_airportMap[m_iataMap[it.value()[0]]].fragments << m_airportMap[m_iataMap[it.value()[1]]].fragments;
+        }
     }
 }
 
