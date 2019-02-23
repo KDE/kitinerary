@@ -107,7 +107,7 @@ bool AirportDbGenerator::fetchAirports()
 {
     // sorted by URI to stabilize the result in case of conflicts
     const auto airportArray = WikiData::query(R"(
-        SELECT DISTINCT ?airport ?airportLabel ?airportAltLabel ?iataCode ?icaoCode ?coord ?endDate ?demolished ?openingDate ?iataEndDate WHERE {
+        SELECT DISTINCT ?airport ?airportLabel ?airportAltLabel ?iataCode ?icaoCode ?coord ?endDate ?demolished ?officialClosure ?openingDate ?iataEndDate WHERE {
             ?airport (wdt:P31/wdt:P279*) wd:Q1248784.
             ?airport p:P238 ?iataStmt.
             ?iataStmt ps:P238 ?iataCode.
@@ -115,6 +115,7 @@ bool AirportDbGenerator::fetchAirports()
             OPTIONAL { ?airport wdt:P625 ?coord. }
             OPTIONAL { ?airport wdt:P582 ?endDate. }
             OPTIONAL { ?airport wdt:P576 ?demolished. }
+            OPTIONAL { ?airport wdt:P3999 ?officialClosure. }
             OPTIONAL { ?airport wdt:P1619 ?openingDate. }
             OPTIONAL { ?iataStmt pq:P582 ?iataEndDate. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
@@ -130,7 +131,8 @@ bool AirportDbGenerator::fetchAirports()
             continue;
         }
 
-        if (obj.contains(QLatin1String("endDate")) || obj.contains(QLatin1String("demolished")) || obj.contains(QLatin1String("iataEndDate"))) {
+        if (obj.contains(QLatin1String("endDate")) || obj.contains(QLatin1String("demolished"))
+            || obj.contains(QLatin1String("officialClosure")) || obj.contains(QLatin1String("iataEndDate"))) {
             // skip closed airports or those with expired IATA codes
             continue;
         }
