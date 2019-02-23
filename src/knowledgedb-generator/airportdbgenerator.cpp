@@ -241,7 +241,7 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
             m_labelMap[s].push_back(it.value().iataCode);
         }
     }
-    for (auto it = m_labelMap.begin(); it != m_labelMap.end(); ++it) {
+    for (auto it = m_labelMap.begin(); it != m_labelMap.end();) {
         std::sort(it.value().begin(), it.value().end());
 
         if (it.value().size() == 2) { // TODO generalize this from 2 to N
@@ -252,7 +252,7 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
             // removing the current fragment from the index is fine, but we can't do that elsewhere if the collision set is > 2
             if (lhsAirport.fragments == rhsAirport.fragments) {
                 qDebug() << "Unresolvable index collision for" << lhsAirport.iataCode << lhsAirport.label << lhsAirport.uri << rhsAirport.iataCode << rhsAirport.label << rhsAirport.uri;
-                // TODO remove this fragment from the index
+                it = m_labelMap.erase(it);
                 continue;
             }
 
@@ -260,6 +260,8 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
             // can be used for the exclusion index
 //             qDebug() << m_airportMap[m_iataMap[it.value()[0]]].fragments << m_airportMap[m_iataMap[it.value()[1]]].fragments;
         }
+
+        ++it;
     }
 }
 
