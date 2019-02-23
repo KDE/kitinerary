@@ -231,10 +231,11 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
         std::for_each(l.begin(), l.end(), [](QString &s) {
             s = s.toCaseFolded();
         });
+        std::sort(l.begin(), l.end());
         l.removeAll(it.value().iataCode.toCaseFolded());
         l.removeAll(it.value().icaoCode.toCaseFolded());
         stripAirportAllLanguages(l);
-        l.removeDuplicates();
+        l.erase(std::unique(l.begin(), l.end()), l.end());
         l.erase(std::remove_if(l.begin(), l.end(), [](const auto &s) { return s.size() <= 2; }), l.end());
         for (const auto &s : qAsConst(l)) {
             (*it).fragments.push_back(s);
@@ -258,7 +259,14 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
 
             // TODO check if one fragment set is a subset of the other, in which case the set difference
             // can be used for the exclusion index
-//             qDebug() << m_airportMap[m_iataMap[it.value()[0]]].fragments << m_airportMap[m_iataMap[it.value()[1]]].fragments;
+            std::vector<QString> leftDiff, rightDiff;
+            std::set_difference(lhsAirport.fragments.begin(), lhsAirport.fragments.end(), rhsAirport.fragments.begin(), rhsAirport.fragments.end(), std::back_inserter(leftDiff));
+            std::set_difference(rhsAirport.fragments.begin(), rhsAirport.fragments.end(), lhsAirport.fragments.begin(), lhsAirport.fragments.end(), std::back_inserter(rightDiff));
+            if (leftDiff.empty() || rightDiff.empty()) {
+                qDebug() << "Subset fragments:" << leftDiff << rightDiff << lhsAirport.fragments << rhsAirport.fragments;
+            } else {
+                //qDebug() << "Overlapping fragments:" << lhsAirport.fragments << rhsAirport.fragments;
+            }
         }
 
         ++it;
