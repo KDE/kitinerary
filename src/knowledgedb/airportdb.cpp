@@ -125,6 +125,15 @@ KnowledgeDb::CountryId countryForAirport(IataCode iataCode)
     return (*it).country;
 }
 
+static QString normalizeFragment(const QString &s)
+{
+    auto res = StringUtil::normalize(s);
+    // resolve abbreviations
+    if (res == QLatin1String("intl")) return QStringLiteral("international");
+
+    return res;
+}
+
 static void applyTransliterations(QStringList &fragments)
 {
     // note that the output has the corresponding diacritic markers already stripped,
@@ -228,7 +237,7 @@ static IataCode iataCodeForIataCodeFragment(const QStringList &fragments)
             code = searchCode;
         }
         // check that this is only a IATA code, not also a (conflicting) name fragment
-        const auto uniqueFragmentCode = iataCodeForUniqueFragment(StringUtil::normalize(s));
+        const auto uniqueFragmentCode = iataCodeForUniqueFragment(normalizeFragment(s));
         if (uniqueFragmentCode.isValid() && code.isValid() && uniqueFragmentCode != code) {
             return {};
         }
@@ -250,7 +259,7 @@ IataCode iataCodeFromName(const QString &name)
     const auto fragments = name.split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
     QStringList normalizedFragments;
     normalizedFragments.reserve(fragments.size());
-    std::transform(fragments.begin(), fragments.end(), std::back_inserter(normalizedFragments), [](const auto &s) { return StringUtil::normalize(s); });
+    std::transform(fragments.begin(), fragments.end(), std::back_inserter(normalizedFragments), [](const auto &s) { return normalizeFragment(s); });
 
     IataCode code = iataCodeForNameFragments(normalizedFragments);
     if (code.isValid()) {

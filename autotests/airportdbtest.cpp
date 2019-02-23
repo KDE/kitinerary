@@ -28,6 +28,14 @@
 
 using namespace KItinerary;
 
+namespace KItinerary { namespace KnowledgeDb {
+char *toString(const IataCode &code)
+{
+    using QTest::toString;
+    return toString(code.toString());
+}
+}}
+
 class AirportDbTest : public QObject
 {
     Q_OBJECT
@@ -164,6 +172,12 @@ private Q_SLOTS:
         // multiple unique hits / unique hit on valid (but wrong) IATA code
         // TODO should actually be GMP
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SEOUL KR GIMPO INTERNATIONAL TERMINAL I - SKY CITY INTERNATIONAL TERMINAL")), KnowledgeDb::IataCode{});
+
+        // Amadeus/BCD airport names containing city/country data too, and using "INTL" abbrevation
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SAN FRANCISCO CA SAN FRANCISCO INTL")), KnowledgeDb::IataCode{"SFO"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("BEIJING CN CAPITAL INTL")), KnowledgeDb::IataCode{"PEK"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("FRANKFURT DE - FRANKFURT INTL")), KnowledgeDb::IataCode{}); // ambigious with Frankfurt Hahn
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SEATTLE US - SEATTLE TACOMA INTL")), KnowledgeDb::IataCode{"SEA"});
     }
 
     void countryDataTest()

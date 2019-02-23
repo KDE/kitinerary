@@ -74,6 +74,13 @@ static void stripAirportAllLanguages(QStringList &s)
     s.removeAll(QStringLiteral("terminal"));
 }
 
+static void normalizeAbbreviations(QStringList &l)
+{
+    for (auto &s : l) {
+        if (s == QLatin1String("intl")) { s = QStringLiteral("international"); }
+    }
+}
+
 void AirportDbGenerator::merge(Airport &lhs, const Airport &rhs)
 {
     if (lhs.iataCode != rhs.iataCode) {
@@ -233,6 +240,7 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
         std::for_each(l.begin(), l.end(), [](QString &s) {
             s = s.toCaseFolded();
         });
+        normalizeAbbreviations(l);
         std::sort(l.begin(), l.end());
         l.removeAll(it.value().iataCode.toCaseFolded());
         l.removeAll(it.value().icaoCode.toCaseFolded());
