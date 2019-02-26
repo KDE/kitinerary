@@ -274,7 +274,19 @@ IataCode iataCodeFromName(const QString &name)
     }
 
     // check if the name contained the IATA code as disambiguation already
-    return iataCodeForIataCodeFragment(fragments);
+    code = iataCodeForIataCodeFragment(fragments);
+    if (code.isValid()) {
+        return code;
+    }
+
+    // attempt to cut off possibly confusing fancy terminal names
+    auto it = std::find(normalizedFragments.begin(), normalizedFragments.end(), QStringLiteral("terminal"));
+    if (it != normalizedFragments.end()) {
+        normalizedFragments.erase(it, normalizedFragments.end());
+        code = iataCodeForNameFragments(normalizedFragments);
+    }
+    return code;
 }
+
 }
 }
