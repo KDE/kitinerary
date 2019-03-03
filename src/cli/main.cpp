@@ -15,6 +15,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <kitinerary_version.h>
+
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPostprocessor>
 #include <KItinerary/HtmlDocument>
@@ -49,7 +51,7 @@ static void printCapabilities()
 int main(int argc, char** argv)
 {
     QCoreApplication::setApplicationName(QStringLiteral("kitinerary-extractor"));
-    QCoreApplication::setApplicationVersion(QStringLiteral("TODO"));
+    QCoreApplication::setApplicationVersion(QStringLiteral(KITINERARY_VERSION_STRING));
     QCoreApplication::setOrganizationDomain(QStringLiteral("kde.org"));
     QCoreApplication::setOrganizationName(QStringLiteral("KDE"));
     QCoreApplication app(argc, argv);
