@@ -105,7 +105,10 @@ int main(int argc, char** argv)
     } else if (f.fileName().endsWith(QLatin1String(".ics")) || parser.value(typeOpt) == QLatin1String("ical")) {
         calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
         KCalCore::ICalFormat format;
-        format.fromRawString(calendar, f.readAll());
+        if (!format.fromRawString(calendar, f.readAll())) {
+            std::cerr << "Failed to parse iCal file." << std::endl;
+            return 1;
+        }
         calendar->setProductId(format.loadedProductId());
         engine.setCalendar(calendar);
     } else if (f.fileName().endsWith(QLatin1String(".eml")) || f.fileName().endsWith(QLatin1String(".mbox")) || parser.value(typeOpt) == QLatin1String("mime")) {
