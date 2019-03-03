@@ -15,6 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <config-kitinerary.h>
 #include <kitinerary_version.h>
 
 #include <KItinerary/ExtractorEngine>
@@ -45,7 +46,47 @@ using namespace KItinerary;
 
 static void printCapabilities()
 {
-    // TODO
+    std::cout << "HTML support        : "
+#ifdef HAVE_LIBXML2
+              << "libxml2"
+#else
+              << "not available"
+#endif
+              << std::endl;
+
+    std::cout << "PDF support         : "
+#ifdef HAVE_POPPLER
+              << "poppler"
+#else
+              << "not available"
+#endif
+              << std::endl;
+
+    std::cout << "iCal support        : "
+#ifdef HAVE_KCAL
+              << "kcal"
+#else
+              << "not available"
+#endif
+              << std::endl;
+
+    std::cout << "Barcode decoder     : "
+#ifdef HAVE_ZXING
+              << "zxing"
+#elif defined(HAVE_ZXING_OLD)
+              << "legacy zxing"
+#else
+              << "not available"
+#endif
+              << std::endl;
+
+    std::cout << "Phone number decoder: "
+#ifdef HAVE_PHONENUMBER
+              << "libphonenumber"
+#else
+              << "not available"
+#endif
+              << std::endl;
 }
 
 int main(int argc, char** argv)
