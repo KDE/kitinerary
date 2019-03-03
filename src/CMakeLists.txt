@@ -1,5 +1,6 @@
 set(KDE_INSTALL_INCLUDEDIR_PIM ${KDE_INSTALL_INCLUDEDIR}/KPim)
 
+add_subdirectory(cli)
 add_subdirectory(knowledgedb-generator)
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
