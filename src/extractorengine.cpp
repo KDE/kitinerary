@@ -152,11 +152,6 @@ void ExtractorEnginePrivate::resetContent()
     m_mimeContent = nullptr;
 }
 
-void ExtractorEngine::setExtractors(std::vector<const Extractor*> &&extractors)
-{
-    d->m_extractors = extractors;
-}
-
 void ExtractorEngine::setText(const QString &text)
 {
     d->m_text = text;

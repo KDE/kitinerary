@@ -133,9 +133,6 @@ public:
     /** Resets the internal state, call before processing new input data. */
     void clear();
 
-    /** Set the extractors to be run on the current data. */
-    [[deprecated]] void setExtractors(std::vector<const Extractor*> &&extractors);
-
     /** The text to extract data from.
      *  Only considered for text extractors.
      */
