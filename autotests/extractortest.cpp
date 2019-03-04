@@ -108,41 +108,8 @@ private Q_SLOTS:
 
         QFile inFile(inputFile);
         QVERIFY(inFile.open(QFile::ReadOnly));
-
-        std::unique_ptr<KPkPass::Pass> pass;
-        std::unique_ptr<HtmlDocument> htmlDoc;
-        std::unique_ptr<PdfDocument> pdfDoc;
-        KCalCore::Calendar::Ptr calendar;
-        std::unique_ptr<KMime::Message> mimeMsg;
-        QJsonArray jsonResult;
-
-        if (inputFile.endsWith(QLatin1String(".pkpass"))) {
-            pass.reset(KPkPass::Pass::fromData(inFile.readAll()));
-            m_engine.setPass(pass.get());
-        } else if (inputFile.endsWith(QLatin1String(".pdf"))) {
-            pdfDoc.reset(PdfDocument::fromData(inFile.readAll()));
-            QVERIFY(pdfDoc);
-            m_engine.setPdfDocument(pdfDoc.get());
-        } else if (inputFile.endsWith(QLatin1String(".html"))) {
-            htmlDoc.reset(HtmlDocument::fromData(inFile.readAll()));
-            QVERIFY(htmlDoc);
-            m_engine.setHtmlDocument(htmlDoc.get());
-        } else if (inputFile.endsWith(QLatin1String(".txt"))) {
-            m_engine.setText(QString::fromUtf8(inFile.readAll()));
-        } else if (inputFile.endsWith(QLatin1String(".ics"))) {
-            calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
-            KCalCore::ICalFormat format;
-            QVERIFY(format.fromRawString(calendar, inFile.readAll()));
-            calendar->setProductId(format.loadedProductId());
-            m_engine.setCalendar(calendar);
-        } else if (inputFile.endsWith(QLatin1String(".eml")) || inputFile.endsWith(QLatin1String(".mbox"))) {
-            mimeMsg.reset(new KMime::Message);
-            mimeMsg->setContent(inFile.readAll());
-            mimeMsg->parse();
-            m_engine.setContent(mimeMsg.get());
-        }
-
-        jsonResult = m_engine.extract();
+        m_engine.setData(inFile.readAll(), inputFile);
+        auto jsonResult = m_engine.extract();
 
         const auto expectedSkip = QFile::exists(inputFile + QLatin1String(".skip"));
         if (jsonResult.isEmpty() && expectedSkip) {

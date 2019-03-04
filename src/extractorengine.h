@@ -22,8 +22,11 @@
 
 #include "kitinerary_export.h"
 
+#include <QString>
+
 #include <memory>
 #include <vector>
+
 template <typename T> class QSharedPointer;
 
 namespace KCalCore {
@@ -38,9 +41,9 @@ namespace KMime {
 class Content;
 }
 
+class QByteArray;
 class QDateTime;
 class QJsonArray;
-class QString;
 
 namespace KItinerary {
 
@@ -158,6 +161,13 @@ public:
      *  @p content is also set as extraction context (see setContext).
      */
     void setContent(KMime::Content *content);
+    /** Any kind of data to extract from.
+     *  ExtractorEngine tries to auto-detect what type of data this is
+     *  and pick one of the above methods accordingly.
+     *  Avoid using this if you know exactly what data you have.
+     *  @param fileName Used as a hint to determine the type, optional.
+     */
+    void setData(const QByteArray &data, const QString &fileName = {});
 
     /** Sets the MIME part the document we try to extract comes from.
      *  Use this for documents received by email, to provide additional

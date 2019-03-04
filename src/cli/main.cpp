@@ -134,18 +134,16 @@ int main(int argc, char** argv)
     std::unique_ptr<KMime::Message> mimeMsg;
     QJsonArray jsonResult;
 
-    if (f.fileName().endsWith(QLatin1String(".pkpass")) || parser.value(typeOpt) == QLatin1String("pkpass")) {
+    if (parser.value(typeOpt) == QLatin1String("pkpass")) {
         pass.reset(KPkPass::Pass::fromData(f.readAll()));
         engine.setPass(pass.get());
-    } else if (f.fileName().endsWith(QLatin1String(".pdf")) || parser.value(typeOpt) == QLatin1String("pdf")) {
+    } else if (parser.value(typeOpt) == QLatin1String("pdf")) {
         pdfDoc.reset(PdfDocument::fromData(f.readAll()));
         engine.setPdfDocument(pdfDoc.get());
-    } else if (f.fileName().endsWith(QLatin1String(".html")) || parser.value(typeOpt) == QLatin1String("html")) {
+    } else if (parser.value(typeOpt) == QLatin1String("html")) {
         htmlDoc.reset(HtmlDocument::fromData(f.readAll()));
         engine.setHtmlDocument(htmlDoc.get());
-    } else if (f.fileName().endsWith(QLatin1String(".txt"))) {
-        engine.setText(QString::fromUtf8(f.readAll()));
-    } else if (f.fileName().endsWith(QLatin1String(".ics")) || parser.value(typeOpt) == QLatin1String("ical")) {
+    } else if (parser.value(typeOpt) == QLatin1String("ical")) {
         calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
         KCalCore::ICalFormat format;
         if (!format.fromRawString(calendar, f.readAll())) {
@@ -154,11 +152,13 @@ int main(int argc, char** argv)
         }
         calendar->setProductId(format.loadedProductId());
         engine.setCalendar(calendar);
-    } else if (f.fileName().endsWith(QLatin1String(".eml")) || f.fileName().endsWith(QLatin1String(".mbox")) || parser.value(typeOpt) == QLatin1String("mime")) {
+    } else if (parser.value(typeOpt) == QLatin1String("mime")) {
         mimeMsg.reset(new KMime::Message);
         mimeMsg->setContent(f.readAll());
         mimeMsg->parse();
         engine.setContent(mimeMsg.get());
+    } else {
+        engine.setData(f.readAll(), f.fileName());
     }
 
     jsonResult = engine.extract();

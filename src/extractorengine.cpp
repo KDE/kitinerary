@@ -42,6 +42,7 @@
 #include <KPkPass/Pass>
 
 #include <KMime/Content>
+#include <KMime/Message>
 
 #include <QDateTime>
 #include <QFile>
@@ -51,6 +52,8 @@
 #include <QLocale>
 #include <QJSEngine>
 #include <QJSValueIterator>
+
+#include <cstring>
 
 using namespace KItinerary;
 
@@ -85,8 +88,9 @@ public:
 #ifdef HAVE_KCAL
     KCalCore::Calendar::Ptr m_calendar;
 #endif
-    KMime::Content *m_mimeContent = nullptr;
+    KMime::Content *m_mimeContent;
     KMime::Content *m_mimeContext = nullptr;
+    std::unique_ptr<KMime::Content> m_ownedMimeContent;
     GenericPdfExtractor m_genericPdfExtractor;
     QJsonArray m_result;
     QJSEngine m_engine;
@@ -134,6 +138,7 @@ void ExtractorEngine::clear()
     d->m_result = {};
     d->m_mimeContext = nullptr;
     d->m_context->m_senderDate = {};
+    d->m_ownedMimeContent.reset();
 }
 
 void ExtractorEnginePrivate::resetContent()
@@ -215,6 +220,43 @@ void ExtractorEnginePrivate::setContent(KMime::Content *content)
     }
 
     m_mimeContent = (ct && ct->isMultipart()) ? content : nullptr;
+}
+
+void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
+{
+    // let's not even try to parse anything with implausible size
+    if (data.size() <= 4 || data.size() > 4000000) {
+        return;
+    }
+
+    if (fileName.endsWith(QLatin1String(".pkpass"), Qt::CaseInsensitive) || strncmp(data.constData(), "PK\x03\x04", 4) == 0) {
+        d->m_pass = make_owning_ptr(KPkPass::Pass::fromData(data));
+    } else if (fileName.endsWith(QLatin1String(".pdf"), Qt::CaseInsensitive) ||  strncmp(data.constData(), "%PDF", 4) == 0) {
+        d->m_pdfDoc = make_owning_ptr(PdfDocument::fromData(data));
+    } else if (fileName.endsWith(QLatin1String(".html"), Qt::CaseInsensitive)) { // TODO content check
+        d->m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(data));
+    } else if (fileName.endsWith(QLatin1String(".ics"), Qt::CaseInsensitive)) { // TODO content check
+#ifdef HAVE_KCAL
+        d->m_calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
+        KCalCore::ICalFormat format;
+        if (!format.fromRawString(d->m_calendar, data)) {
+            qCDebug(Log) << "Failed to parse iCal content.";
+            d->m_calendar.reset();
+        }
+        d->m_calendar->setProductId(format.loadedProductId());
+#else
+        qCDebug(Log) << "Trying to exctract ical file, but ical support is not enabled.";
+#endif
+    } else if (fileName.endsWith(QLatin1String(".eml"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive)) { // TODO how can we check content for being MIME?
+        d->m_ownedMimeContent.reset(new KMime::Message);
+        d->m_ownedMimeContent->setContent(data);
+        d->m_ownedMimeContent->parse();
+        setContent(d->m_ownedMimeContent.get());
+    } else if (fileName.endsWith(QLatin1String(".txt"), Qt::CaseInsensitive)) {
+        d->m_text = QString::fromUtf8(data);
+    } else {
+        qCDebug(Log) << "Failed to detect data type!";
+    }
 }
 
 void ExtractorEnginePrivate::setContext(KMime::Content *context)
