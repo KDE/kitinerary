@@ -285,6 +285,22 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
         d->m_ownedMimeContent->setContent(data);
         d->m_ownedMimeContent->parse();
         setContent(d->m_ownedMimeContent.get());
+    } else if (fileName.endsWith(QLatin1String(".json"), Qt::CaseInsensitive)
+            || fileName.endsWith(QLatin1String(".jsonld"), Qt::CaseInsensitive)
+            || contentStartsWith(data, '{') || contentStartsWith(data, '['))
+    {
+        // pass through JSON data, so the using code can apply post-processing to that
+        QJsonParseError error;
+        const auto doc = QJsonDocument::fromJson(data, &error);
+        if (error.error == QJsonParseError::NoError) {
+            if (doc.isObject()) {
+                d->m_result.push_back(doc.object());
+            } else if (doc.isArray()) {
+                d->m_result = doc.array();
+            }
+        } else {
+            d->m_text = QString::fromUtf8(data); // TODO handle fallback on parse errors due to wrong type guesses a bit more generically here
+        }
     } else if (fileName.endsWith(QLatin1String(".txt"), Qt::CaseInsensitive)) {
         d->m_text = QString::fromUtf8(data);
     } else {
