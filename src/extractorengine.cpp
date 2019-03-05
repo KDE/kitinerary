@@ -222,6 +222,31 @@ void ExtractorEnginePrivate::setContent(KMime::Content *content)
     m_mimeContent = (ct && ct->isMultipart()) ? content : nullptr;
 }
 
+static bool contentStartsWith(const QByteArray &data, char s)
+{
+    for (const auto c : data) {
+        if (std::isspace(c)) {
+            continue;
+        }
+        return c == s;
+    }
+    return false;
+}
+
+static bool contentStartsWith(const QByteArray &data, const char *str)
+{
+    auto it = data.begin();
+    while (it != data.end() && std::isspace(*it)) {
+        ++it;
+    }
+
+    const auto len = std::strlen(str);
+    if ((int)len >= std::distance(it, data.end())) {
+        return false;
+    }
+    return std::strncmp(it, str, len) == 0;
+}
+
 void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
 {
     // let's not even try to parse anything with implausible size
@@ -233,9 +258,14 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
         d->m_pass = make_owning_ptr(KPkPass::Pass::fromData(data));
     } else if (fileName.endsWith(QLatin1String(".pdf"), Qt::CaseInsensitive) ||  strncmp(data.constData(), "%PDF", 4) == 0) {
         d->m_pdfDoc = make_owning_ptr(PdfDocument::fromData(data));
-    } else if (fileName.endsWith(QLatin1String(".html"), Qt::CaseInsensitive)) { // TODO content check
+    } else if (fileName.endsWith(QLatin1String(".html"), Qt::CaseInsensitive)
+            || fileName.endsWith(QLatin1String(".htm"), Qt::CaseInsensitive)
+            || contentStartsWith(data, '<'))
+    {
         d->m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(data));
-    } else if (fileName.endsWith(QLatin1String(".ics"), Qt::CaseInsensitive)) { // TODO content check
+    } else if (fileName.endsWith(QLatin1String(".ics"), Qt::CaseInsensitive)
+            || contentStartsWith(data, "BEGIN:VCALENDAR"))
+    {
 #ifdef HAVE_KCAL
         d->m_calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
         KCalCore::ICalFormat format;
@@ -247,7 +277,9 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
 #else
         qCDebug(Log) << "Trying to exctract ical file, but ical support is not enabled.";
 #endif
-    } else if (fileName.endsWith(QLatin1String(".eml"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive)) { // TODO how can we check content for being MIME?
+    } else if (fileName.endsWith(QLatin1String(".eml"), Qt::CaseInsensitive)
+            || fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive)) // TODO how can we check content for being MIME?
+    {
         d->m_ownedMimeContent.reset(new KMime::Message);
         d->m_ownedMimeContent->setContent(data);
         d->m_ownedMimeContent->parse();
