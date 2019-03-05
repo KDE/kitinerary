@@ -88,7 +88,7 @@ public:
 #ifdef HAVE_KCAL
     KCalCore::Calendar::Ptr m_calendar;
 #endif
-    KMime::Content *m_mimeContent;
+    KMime::Content *m_mimeContent = nullptr;
     KMime::Content *m_mimeContext = nullptr;
     std::unique_ptr<KMime::Content> m_ownedMimeContent;
     GenericPdfExtractor m_genericPdfExtractor;
