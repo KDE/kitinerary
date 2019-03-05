@@ -6,7 +6,10 @@
     },
     {
         "type": "ical",
-        "filter": [ { "header": "From", "match": "@amadeus.com" } ],
+        "filter": [
+            { "header": "From", "match": "@amadeus.com" },
+            { "property": "productId", "match": "//AMADEUS//", "type": "ICal" }
+        ],
         "script": "amadeus.js",
         "function": "parseEvent"
     }
