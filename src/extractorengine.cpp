@@ -272,8 +272,9 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
         if (!format.fromRawString(d->m_calendar, data)) {
             qCDebug(Log) << "Failed to parse iCal content.";
             d->m_calendar.reset();
+        } else {
+            d->m_calendar->setProductId(format.loadedProductId());
         }
-        d->m_calendar->setProductId(format.loadedProductId());
 #else
         qCDebug(Log) << "Trying to exctract ical file, but ical support is not enabled.";
 #endif
