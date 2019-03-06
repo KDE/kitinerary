@@ -256,56 +256,70 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
 
     if (fileName.endsWith(QLatin1String(".pkpass"), Qt::CaseInsensitive) || strncmp(data.constData(), "PK\x03\x04", 4) == 0) {
         d->m_pass = make_owning_ptr(KPkPass::Pass::fromData(data));
-    } else if (fileName.endsWith(QLatin1String(".pdf"), Qt::CaseInsensitive) ||  strncmp(data.constData(), "%PDF", 4) == 0) {
+        return;
+    }
+
+    if (fileName.endsWith(QLatin1String(".pdf"), Qt::CaseInsensitive) ||  strncmp(data.constData(), "%PDF", 4) == 0) {
         d->m_pdfDoc = make_owning_ptr(PdfDocument::fromData(data));
-    } else if (fileName.endsWith(QLatin1String(".html"), Qt::CaseInsensitive)
-            || fileName.endsWith(QLatin1String(".htm"), Qt::CaseInsensitive)
-            || contentStartsWith(data, '<'))
+        return;
+    }
+
+    if (fileName.endsWith(QLatin1String(".html"), Qt::CaseInsensitive)
+        || fileName.endsWith(QLatin1String(".htm"), Qt::CaseInsensitive)
+        || contentStartsWith(data, '<'))
     {
         d->m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(data));
-    } else if (fileName.endsWith(QLatin1String(".ics"), Qt::CaseInsensitive)
-            || contentStartsWith(data, "BEGIN:VCALENDAR"))
+        return;
+    }
+
+    if (fileName.endsWith(QLatin1String(".ics"), Qt::CaseInsensitive)
+        || contentStartsWith(data, "BEGIN:VCALENDAR"))
     {
 #ifdef HAVE_KCAL
         d->m_calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
         KCalCore::ICalFormat format;
-        if (!format.fromRawString(d->m_calendar, data)) {
-            qCDebug(Log) << "Failed to parse iCal content.";
-            d->m_calendar.reset();
-        } else {
+        if (format.fromRawString(d->m_calendar, data)) {
             d->m_calendar->setProductId(format.loadedProductId());
+            return;
         }
+        qCDebug(Log) << "Failed to parse iCal content.";
+        d->m_calendar.reset();
 #else
         qCDebug(Log) << "Trying to exctract ical file, but ical support is not enabled.";
 #endif
-    } else if (fileName.endsWith(QLatin1String(".eml"), Qt::CaseInsensitive)
-            || fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive)) // TODO how can we check content for being MIME?
+    }
+
+    if (fileName.endsWith(QLatin1String(".txt"), Qt::CaseInsensitive)) {
+        d->m_text = QString::fromUtf8(data);
+        return;
+    }
+
+    if (fileName.endsWith(QLatin1String(".eml"), Qt::CaseInsensitive)
+        || fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive)) // TODO how can we check content for being MIME?
     {
         d->m_ownedMimeContent.reset(new KMime::Message);
         d->m_ownedMimeContent->setContent(data);
         d->m_ownedMimeContent->parse();
         setContent(d->m_ownedMimeContent.get());
-    } else if (fileName.endsWith(QLatin1String(".json"), Qt::CaseInsensitive)
-            || fileName.endsWith(QLatin1String(".jsonld"), Qt::CaseInsensitive)
-            || contentStartsWith(data, '{') || contentStartsWith(data, '['))
+        return;
+    }
+
+    if (fileName.endsWith(QLatin1String(".json"), Qt::CaseInsensitive)
+        || fileName.endsWith(QLatin1String(".jsonld"), Qt::CaseInsensitive)
+        || contentStartsWith(data, '{') || contentStartsWith(data, '['))
     {
         // pass through JSON data, so the using code can apply post-processing to that
-        QJsonParseError error;
-        const auto doc = QJsonDocument::fromJson(data, &error);
-        if (error.error == QJsonParseError::NoError) {
-            if (doc.isObject()) {
-                d->m_result.push_back(doc.object());
-            } else if (doc.isArray()) {
-                d->m_result = doc.array();
-            }
-        } else {
-            d->m_text = QString::fromUtf8(data); // TODO handle fallback on parse errors due to wrong type guesses a bit more generically here
+        const auto doc = QJsonDocument::fromJson(data);
+        if (doc.isObject()) {
+            d->m_result.push_back(doc.object());
+            return;
+        } else if (doc.isArray()) {
+            d->m_result = doc.array();
+            return;
         }
-    } else if (fileName.endsWith(QLatin1String(".txt"), Qt::CaseInsensitive)) {
-        d->m_text = QString::fromUtf8(data);
-    } else {
-        qCDebug(Log) << "Failed to detect data type!";
     }
+
+    qCDebug(Log) << "Failed to detect data type!";
 }
 
 void ExtractorEnginePrivate::setContext(KMime::Content *context)
