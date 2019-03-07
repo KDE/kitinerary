@@ -247,6 +247,17 @@ static bool contentStartsWith(const QByteArray &data, const char *str)
     return std::strncmp(it, str, len) == 0;
 }
 
+static bool contentMightBeEmail(const QByteArray &data)
+{
+    for (const auto c : data) {
+        if (std::isalpha(c) || c == '-') {
+            continue;
+        }
+        return c == ':';
+    }
+    return false;
+}
+
 void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
 {
     // let's not even try to parse anything with implausible size
@@ -296,7 +307,8 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
     }
 
     if (fileName.endsWith(QLatin1String(".eml"), Qt::CaseInsensitive)
-        || fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive)) // TODO how can we check content for being MIME?
+        || fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive)
+        || contentMightBeEmail(data))
     {
         d->m_ownedMimeContent.reset(new KMime::Message);
         d->m_ownedMimeContent->setContent(data);
