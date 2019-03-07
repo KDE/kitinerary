@@ -273,6 +273,7 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
     }
 
     if (fileName.endsWith(QLatin1String(".ics"), Qt::CaseInsensitive)
+        || fileName.endsWith(QLatin1String(".ical"), Qt::CaseInsensitive)
         || contentStartsWith(data, "BEGIN:VCALENDAR"))
     {
 #ifdef HAVE_KCAL

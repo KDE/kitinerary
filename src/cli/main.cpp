@@ -20,19 +20,11 @@
 
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPostprocessor>
-#include <KItinerary/HtmlDocument>
 #include <KItinerary/JsonLdDocument>
-#include <KItinerary/PdfDocument>
-
-#include <KPkPass/Pass>
-
-#include <KMime/Message>
-
-#include <KCalCore/MemoryCalendar>
-#include <KCalCore/ICalFormat>
 
 #include <QCommandLineParser>
 #include <QCoreApplication>
+#include <QDateTime>
 #include <QDebug>
 #include <QFile>
 #include <QJsonArray>
@@ -135,42 +127,18 @@ int main(int argc, char** argv)
     ExtractorEngine engine;
     engine.setContextDate(contextDt);
 
-    std::unique_ptr<KPkPass::Pass> pass;
-    std::unique_ptr<HtmlDocument> htmlDoc;
-    std::unique_ptr<PdfDocument> pdfDoc;
-    KCalCore::Calendar::Ptr calendar;
-    std::unique_ptr<KMime::Message> mimeMsg;
-    QJsonArray jsonResult;
-
-    if (parser.value(typeOpt) == QLatin1String("pkpass")) {
-        pass.reset(KPkPass::Pass::fromData(f.readAll()));
-        engine.setPass(pass.get());
-    } else if (parser.value(typeOpt) == QLatin1String("pdf")) {
-        pdfDoc.reset(PdfDocument::fromData(f.readAll()));
-        engine.setPdfDocument(pdfDoc.get());
-    } else if (parser.value(typeOpt) == QLatin1String("html")) {
-        htmlDoc.reset(HtmlDocument::fromData(f.readAll()));
-        engine.setHtmlDocument(htmlDoc.get());
-    } else if (parser.value(typeOpt) == QLatin1String("ical")) {
-        calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
-        KCalCore::ICalFormat format;
-        if (!format.fromRawString(calendar, f.readAll())) {
-            std::cerr << "Failed to parse iCal file." << std::endl;
-            return 1;
+    auto fileName = f.fileName();
+    const auto typeArg = parser.value(typeOpt);
+    if (!typeArg.isEmpty()) {
+        if (typeArg == QLatin1String("mime")) {
+            fileName = QStringLiteral("dummy.eml");
+        } else {
+            fileName = QLatin1String("dummy.") + typeArg;
         }
-        calendar->setProductId(format.loadedProductId());
-        engine.setCalendar(calendar);
-    } else if (parser.value(typeOpt) == QLatin1String("mime")) {
-        mimeMsg.reset(new KMime::Message);
-        mimeMsg->setContent(f.readAll());
-        mimeMsg->parse();
-        engine.setContent(mimeMsg.get());
-    } else {
-        engine.setData(f.readAll(), f.fileName());
     }
 
-    jsonResult = engine.extract();
-    const auto result = JsonLdDocument::fromJson(jsonResult);
+    engine.setData(f.readAll(), fileName);
+    const auto result = JsonLdDocument::fromJson(engine.extract());
     ExtractorPostprocessor postproc;
     postproc.setContextDate(contextDt);
     postproc.process(result);
