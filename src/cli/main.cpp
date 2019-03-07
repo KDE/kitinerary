@@ -103,6 +103,8 @@ int main(int argc, char** argv)
     parser.addVersionOption();
     QCommandLineOption capOpt({QStringLiteral("capabilities")}, QStringLiteral("Show available extraction capabilities."));
     parser.addOption(capOpt);
+    QCommandLineOption ctxOpt({QStringLiteral("c"), QStringLiteral("context-date")}, QStringLiteral("ISO date/time for when this data has been received."), QStringLiteral("date"));
+    parser.addOption(ctxOpt);
     QCommandLineOption typeOpt({QStringLiteral("t"), QStringLiteral("type")}, QStringLiteral("Type of the input data [mime, pdf, pkpass, ical, html]."), QStringLiteral("type"));
     parser.addOption(typeOpt);
 
@@ -125,7 +127,13 @@ int main(int argc, char** argv)
         f.open(stdin, QFile::ReadOnly);
     }
 
+    auto contextDt = QDateTime::fromString(parser.value(ctxOpt), Qt::ISODate);
+    if (!contextDt.isValid()) {
+        contextDt = QDateTime::currentDateTime();
+    }
+
     ExtractorEngine engine;
+    engine.setContextDate(contextDt);
 
     std::unique_ptr<KPkPass::Pass> pass;
     std::unique_ptr<HtmlDocument> htmlDoc;
@@ -164,8 +172,7 @@ int main(int argc, char** argv)
     jsonResult = engine.extract();
     const auto result = JsonLdDocument::fromJson(jsonResult);
     ExtractorPostprocessor postproc;
-    // TODO extra option to set this, or retrieve from mime message
-//     postproc.setContextDate(contextMsg.date()->dateTime());
+    postproc.setContextDate(contextDt);
     postproc.process(result);
     const auto postProcResult = JsonLdDocument::toJson(postproc.result());
     std::cout << QJsonDocument(postProcResult).toJson().constData() << std::endl;
