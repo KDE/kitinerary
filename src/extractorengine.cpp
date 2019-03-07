@@ -24,6 +24,7 @@
 #include "genericpdfextractor.h"
 #include "genericpkpassextractor_p.h"
 #include "htmldocument.h"
+#include "iatabcbpparser.h"
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "pdfdocument.h"
@@ -332,7 +333,7 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
         }
     }
 
-    qCDebug(Log) << "Failed to detect data type!";
+    d->m_text = QString::fromUtf8(data);
 }
 
 void ExtractorEnginePrivate::setContext(KMime::Content *context)
@@ -521,6 +522,11 @@ void ExtractorEnginePrivate::extractGeneric()
         // if none of that found something, take the generic extractor result as-is
         if (m_result.isEmpty()) {
             m_result = genericResult;
+        }
+    } else if (!m_text.isEmpty() && m_result.isEmpty()) {
+        if (IataBcbpParser::maybeIataBcbp(m_text)) {
+            const auto res = IataBcbpParser::parse(m_text, m_context->m_senderDate.date());
+            m_result = JsonLdDocument::toJson(res);
         }
     }
 }
