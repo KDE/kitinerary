@@ -391,7 +391,8 @@ QJsonArray ExtractorEngine::extract()
 void ExtractorEnginePrivate::extractRecursive(KMime::Content *content)
 {
     QJsonArray aggregatedResult;
-    for (const auto child : content->contents()) {
+    const auto children = content->contents();
+    for (const auto child : children) {
         resetContent();
         setContent(child);
         if (m_mimeContent) {
@@ -438,9 +439,8 @@ void ExtractorEnginePrivate::extractStructured()
 {
     if (m_htmlDoc) {
         qCDebug(Log) << "Looking for structured annotations...";
-        for (const auto &v : StructuredDataExtractor::extract(m_htmlDoc.get())) {
-            m_result.push_back(v);
-        }
+        const auto res = StructuredDataExtractor::extract(m_htmlDoc.get());
+        std::copy(res.begin(), res.end(), std::back_inserter(m_result));
     }
 }
 
@@ -514,7 +514,8 @@ void ExtractorEnginePrivate::extractGeneric()
         extractCustom();
 
         // check the unrecognized (vendor-specific) barcodes, if any
-        for (const auto &code : m_genericPdfExtractor.unrecognizedBarcodes()) {
+        const auto unrecognizedCodes = m_genericPdfExtractor.unrecognizedBarcodes();
+        for (const auto &code : unrecognizedCodes) {
             m_extractors = m_repo.extractorsForBarcode(code);
             extractCustom();
         }
@@ -574,7 +575,8 @@ void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
             break;
         case Extractor::ICal:
 #ifdef HAVE_KCAL
-            for (const auto &event : m_calendar->events()) {
+            const auto events = m_calendar->events();
+            for (const auto &event : events) {
                 processScriptResult(mainFunc.call({m_engine.toScriptValue(*event.data())}));
             }
 #endif

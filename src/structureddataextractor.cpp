@@ -55,9 +55,8 @@ static void parseJson(const QByteArray &data, QJsonArray &result)
         }
     }
     if (jsonDoc.isArray()) {
-        for (const auto &v : jsonDoc.array()) {
-            result.push_back(v);
-        }
+        const auto jsonArray = jsonDoc.array();
+        std::copy(jsonArray.begin(), jsonArray.end(), std::back_inserter(result));
     } else if (jsonDoc.isObject()) {
         result.push_back(jsonDoc.object());
     }

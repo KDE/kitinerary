@@ -238,8 +238,9 @@ void ExtractorRepositoryPrivate::loadExtractors()
                     m_extractors.push_back(std::move(e));
                 }
             } else if (doc.isArray()) {
-                for (const auto &v : doc.array()) {
-                Extractor e;
+                const auto extractorArray = doc.array();
+                for (const auto &v : extractorArray) {
+                    Extractor e;
                     if (e.load(v.toObject(), fi.absolutePath())) {
                         m_extractors.push_back(std::move(e));
                     }

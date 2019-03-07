@@ -60,7 +60,8 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
         d->m_type = ICal;
     }
 
-    for (const auto &filterValue : obj.value(QLatin1String("filter")).toArray()) {
+    const auto filterArray = obj.value(QLatin1String("filter")).toArray();
+    for (const auto &filterValue : filterArray) {
         ExtractorFilter f;
         if (!f.load(filterValue.toObject())) {
             return false;

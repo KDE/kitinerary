@@ -38,7 +38,8 @@ static void extractBoardingPass(KPkPass::Pass *pass, QJsonObject &resFor)
     }
     // look for common field names containing the boarding time, if we still have no idea
     if (!resFor.contains(QLatin1String("boardingTime"))) {
-        for (const auto &field : pass->fields()) {
+        const auto fields = pass->fields();
+        for (const auto &field : fields) {
             if (!field.key().contains(QLatin1String("boarding"), Qt::CaseInsensitive)) {
                 continue;
             }
