@@ -23,12 +23,14 @@
 #include "extractorrepository.h"
 #include "genericpdfextractor.h"
 #include "genericpkpassextractor_p.h"
+#include "genericuic918extractor_p.h"
 #include "htmldocument.h"
 #include "iatabcbpparser.h"
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "pdfdocument.h"
 #include "structureddataextractor.h"
+#include "uic9183parser.h"
 
 #include "jsapi/barcode.h"
 #include "jsapi/context.h"
@@ -83,6 +85,7 @@ public:
     JsApi::Context *m_context = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
     QString m_text;
+    QByteArray m_data;
     std::unique_ptr<HtmlDocument, std::function<void(HtmlDocument*)>> m_htmlDoc;
     std::unique_ptr<PdfDocument, std::function<void(PdfDocument*)>> m_pdfDoc;
     std::unique_ptr<KPkPass::Pass, std::function<void(KPkPass::Pass*)>> m_pass;
@@ -145,6 +148,7 @@ void ExtractorEngine::clear()
 void ExtractorEnginePrivate::resetContent()
 {
     m_text.clear();
+    m_data.clear();
     m_pdfDoc.reset();
     m_htmlDoc.reset();
     m_pass.reset();
@@ -333,7 +337,7 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
         }
     }
 
-    d->m_text = QString::fromUtf8(data);
+    d->m_data = data;
 }
 
 void ExtractorEnginePrivate::setContext(KMime::Content *context)
@@ -457,6 +461,9 @@ void ExtractorEnginePrivate::extractCustom()
                 if (m_text.isEmpty() && m_htmlDoc) {
                     m_text = m_htmlDoc->root().recursiveContent();
                 }
+                if (m_text.isEmpty() && !m_data.isEmpty()) {
+                    m_text = QString::fromUtf8(m_data);
+                }
 
                 if (!m_text.isEmpty()) {
                     executeScript(extractor);
@@ -529,6 +536,14 @@ void ExtractorEnginePrivate::extractGeneric()
             const auto res = IataBcbpParser::parse(m_text, m_context->m_senderDate.date());
             m_result = JsonLdDocument::toJson(res);
         }
+    } else if (!m_data.isEmpty() && m_result.isEmpty()) {
+        if (Uic9183Parser::maybeUic9183(m_data)) {
+            GenericUic918Extractor::extract(m_data, m_result, m_context->m_senderDate);
+            return;
+        }
+        // try again as text
+        m_text = QString::fromUtf8(m_data);
+        extractGeneric();
     }
 }
 

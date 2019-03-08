@@ -56,7 +56,6 @@ public:
 private:
     void extractImage(const PdfImage &img, QJsonArray &result);
     void extractBarcode(const QString &code, QJsonArray &result);
-    void extractUic9183(const QByteArray &data, QJsonArray &result);
 
     QDateTime m_contextDate;
     QStringList m_unrecognizedBarcodes;

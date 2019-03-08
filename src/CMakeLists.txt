@@ -40,6 +40,7 @@ set(kitinerary_lib_srcs
     extractorutil.cpp
     genericpdfextractor.cpp
     genericpkpassextractor.cpp
+    genericuic918extractor.cpp
     htmldocument.cpp
     iatabcbpparser.cpp
     jsonlddocument.cpp
