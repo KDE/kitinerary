@@ -88,7 +88,6 @@ function main(text) {
         idx += arrivalDate.index + arrivalDate[0].length;
 
         var departureDate = text.substr(idx).match(regExMap[locale]['departureDate']);
-        console.log(departureDate);
         if (!departureDate)
             return null;
         res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], regExMap[locale]['dateFormat'], locale);

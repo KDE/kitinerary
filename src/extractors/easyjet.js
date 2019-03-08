@@ -34,7 +34,6 @@ function parseHtmlBooking(doc) {
 
     // determine locale
     var introElem = doc.eval("//table[@class=\"email-wrapper\"]/tr[2]/td");
-    console.log(introElem[0].content, introElem[0].name);
     var locale = "";
     for (var l in localeMap) {
         var m = introElem[0].content.match(localeMap[l]['localeMatch']);
@@ -43,7 +42,6 @@ function parseHtmlBooking(doc) {
             break;
         }
     }
-    console.debug("Detected locale:", locale);
 
     var elems = doc.eval("//table[@class=\"ej-flight\"]");
     for (var i = 0; i < elems.length; ++i) {
@@ -68,7 +66,6 @@ function parseHtmlBooking(doc) {
         row = row.nextSibling;
 
         var timeCell = row.eval(".//table/tr/td");
-        console.debug(timeCell[1].content, timeCell[3].content);
         res.reservationFor.departureTime = JsonLd.toDateTime(timeCell[1].content.match(/\W* (.*)/)[1], "dd MMM HH:mm", locale);
         res.reservationFor.arrivalTime = JsonLd.toDateTime(timeCell[3].content.match(/\W* (.*)/)[1], "dd MMM HH:mm", locale);
 

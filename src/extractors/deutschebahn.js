@@ -179,7 +179,6 @@ function parsePdf(pdf) {
         }
     }
 
-    console.log(barcode, uic918ticket, !barcode);
     var reservations = parseTicket(pdf.text, uic918ticket);
     for (var i = 0; i < reservations.length && barcode; ++i) {
         reservations[i].reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(barcode);
