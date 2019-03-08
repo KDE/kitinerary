@@ -108,40 +108,46 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    QFile f;
-    if (parser.positionalArguments().size() == 1) {
-        f.setFileName(parser.positionalArguments().at(0));
-        if (!f.open(QFile::ReadOnly)) {
-            std::cerr << qPrintable(f.errorString()) << std::endl;
-            return 1;
-        }
-    } else {
-        f.open(stdin, QFile::ReadOnly);
-    }
+    ExtractorEngine engine;
+    ExtractorPostprocessor postproc;
 
     auto contextDt = QDateTime::fromString(parser.value(ctxOpt), Qt::ISODate);
     if (!contextDt.isValid()) {
         contextDt = QDateTime::currentDateTime();
     }
+    postproc.setContextDate(contextDt);
 
-    ExtractorEngine engine;
-    engine.setContextDate(contextDt);
-
-    auto fileName = f.fileName();
-    const auto typeArg = parser.value(typeOpt);
-    if (!typeArg.isEmpty()) {
-        if (typeArg == QLatin1String("mime")) {
-            fileName = QStringLiteral("dummy.eml");
+    const auto files = parser.positionalArguments().isEmpty() ? QStringList(QString()) : parser.positionalArguments();
+    for (const auto arg : files) {
+        QFile f;
+        if (!arg.isEmpty()) {
+            f.setFileName(arg);
+            if (!f.open(QFile::ReadOnly)) {
+                std::cerr << qPrintable(f.errorString()) << std::endl;
+                return 1;
+            }
         } else {
-            fileName = QLatin1String("dummy.") + typeArg;
+            f.open(stdin, QFile::ReadOnly);
         }
+
+        auto fileName = f.fileName();
+        const auto typeArg = parser.value(typeOpt);
+        if (!typeArg.isEmpty()) {
+            if (typeArg == QLatin1String("mime")) {
+                fileName = QStringLiteral("dummy.eml");
+            } else {
+                fileName = QLatin1String("dummy.") + typeArg;
+            }
+        }
+
+        engine.clear();
+        engine.setContextDate(contextDt);
+        engine.setData(f.readAll(), fileName);
+
+        const auto result = JsonLdDocument::fromJson(engine.extract());
+        postproc.process(result);
     }
 
-    engine.setData(f.readAll(), fileName);
-    const auto result = JsonLdDocument::fromJson(engine.extract());
-    ExtractorPostprocessor postproc;
-    postproc.setContextDate(contextDt);
-    postproc.process(result);
     const auto postProcResult = JsonLdDocument::toJson(postproc.result());
     std::cout << QJsonDocument(postProcResult).toJson().constData() << std::endl;
 }
