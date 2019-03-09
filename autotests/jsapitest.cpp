@@ -84,7 +84,7 @@ private Q_SLOTS:
         QTest::addColumn<double>("latitude");
         QTest::addColumn<double>("longitude");
 
-        QTest::newRow("empty") << s("") << (double)NAN << (double)NAN;
+        QTest::newRow("empty") << QString() << (double)NAN << (double)NAN;
         QTest::newRow("non-map") << s("http://www.kde.org") << (double)NAN << (double)NAN;
         QTest::newRow("google maps 1") << s("https://www.google.com/maps/place/48.182849,16.378636") << 48.182849 << 16.378636;
         QTest::newRow("google maps 1 no ssl") << s("http://www.google.com/maps/place/48.182849,16.378636") << 48.182849 << 16.378636;

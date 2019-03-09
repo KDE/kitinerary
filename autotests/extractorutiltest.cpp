@@ -38,7 +38,7 @@ private Q_SLOTS:
         QTest::addColumn<QString>("terminalName");
 
         QTest::newRow("empty") << QString() << QString() << QString();
-        QTest::newRow("no terminal") << s("Paris Charles de Gaulle") << s("Paris Charles de Gaulle") << s("");
+        QTest::newRow("no terminal") << s("Paris Charles de Gaulle") << s("Paris Charles de Gaulle") << QString();
         QTest::newRow("CDG 1") << s("PARIS, FR (CHARLES DE GAULLE), TERMINAL 2E") << s("PARIS, FR (CHARLES DE GAULLE)") << s("2E");
         QTest::newRow("CDG 2") << s("Paris Charles de Gaulle (Terminal 2D)") << s("Paris Charles de Gaulle") << s("2D");
         QTest::newRow("CDG 3") << s("PARIS FR CHARLES DE GAULLE TERMINAL 2G - AEROGARE 2 TERMINAL G") << s("PARIS FR CHARLES DE GAULLE") << s("2G");
@@ -81,7 +81,7 @@ private Q_SLOTS:
         QTest::addColumn<QString>("postalCode");
 
         QTest::newRow("empty") << QString() << QString() << QString();
-        QTest::newRow("no code") << s("PARIS") << s("PARIS") << s("");
+        QTest::newRow("no code") << s("PARIS") << s("PARIS") << QString();
         QTest::newRow("prefix 1") << s("1060 Brussels") << s("Brussels") << s("1060");
         QTest::newRow("prefix 2") << s("171060 Brussels") << s("Brussels") << s("171060");
         QTest::newRow("prefix 3") << s("75012 Paris Some Suffix") << s("Paris Some Suffix") << s("75012");
