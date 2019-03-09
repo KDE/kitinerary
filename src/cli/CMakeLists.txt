@@ -8,4 +8,4 @@ target_link_libraries(kitinerary-extractor
     KPimItinerary
     KPim::PkPass
 )
-install(TARGETS kitinerary-extractor ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kitinerary-extractor DESTINATION ${KF5_LIBEXEC_INSTALL_DIR})
