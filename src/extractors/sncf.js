@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2017 Volker Krause <vkrause@kde.org>
+   Copyright (c) 2017-2019 Volker Krause <vkrause@kde.org>
 
    This library is free software; you can redistribute it and/or modify it
    under the terms of the GNU Library General Public License as published by
@@ -121,6 +121,53 @@ function parsePdf(pdf) {
                 legs[j].reservationFor.arrivalStation.identifier = "sncf:" + barcode.substr(j == 0 ? 38 : 121, 5);
             }
             reservations.push(legs[j]);
+        }
+    }
+
+    return reservations;
+}
+
+function parseHtmlConfirmation(html)
+{
+    var reservations = new Array();
+
+    var pnr = html.eval("//*[@class=\"pnr-ref\"]/*[@class=\"pnr-info\"]")[0].content;
+
+    var productDts = html.eval("//*[@class=\"product-travel-date\"]");
+    var productDetails = html.eval("//table[@class=\"product-details\"]");
+    for (productDetailIdx in productDetails) {
+        // date is in the table before us
+        var dt = productDts[productDetailIdx].content.replace(/\S+ (.*)/, "$1");
+
+        var segmentDetail = productDetails[productDetailIdx].eval(".//td")[0];
+        var res = null;
+        while (segmentDetail && !segmentDetail.isNull) {
+            var cls = segmentDetail.attribute("class");
+            if (cls.includes("segment-departure")) {
+                res = JsonLd.newObject("TrainReservation");
+                res.reservationFor = JsonLd.newObject("TrainTrip");
+                res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
+                res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
+                res.reservationNumber = pnr;
+
+                res.reservationFor.departureTime = JsonLd.toDateTime(dt + segmentDetail.content, "dd MMMMhh'h'mm", "fr");
+                segmentDetail = segmentDetail.nextSibling;
+                res.reservationFor.departureStation.name = segmentDetail.content;
+            }
+            else if (cls.includes("segment-arrival")) {
+                res.reservationFor.arrivalTime = JsonLd.toDateTime(dt + segmentDetail.content, "dd MMMMhh'h'mm", "fr");
+                segmentDetail = segmentDetail.nextSibling;
+                res.reservationFor.arrivalStation.name = segmentDetail.content;
+                reservations.push(res);
+            }
+            else if (cls === "segment") {
+                res.reservationFor.trainName = segmentDetail.content;
+            }
+            else if (cls === "segment-ref-train") {
+                res.reservationFor.trainNumber = segmentDetail.content;
+            }
+
+            segmentDetail = segmentDetail.nextSibling.isNull ? segmentDetail.parent.nextSibling.firstChild : segmentDetail.nextSibling;
         }
     }
 

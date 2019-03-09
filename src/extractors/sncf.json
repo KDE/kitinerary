@@ -13,5 +13,11 @@
         "filter": [ { "header": "From", "match": "e-billet@sncf.fr" } ],
         "script": "sncf.js",
         "function": "parseText"
+    },
+    {
+        "type": "html",
+        "filter": [ { "header": "From", "match": "@oui.sncf" } ],
+        "script": "sncf.js",
+        "function": "parseHtmlConfirmation"
     }
 ]
