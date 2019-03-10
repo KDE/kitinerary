@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "genericpdfextractor.h"
+#include "genericpdfextractor_p.h"
 #include "genericuic918extractor_p.h"
 
 #include <KItinerary/BarcodeDecoder>

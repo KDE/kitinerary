@@ -15,8 +15,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef KITINERARY_GENERICPDFEXTRACTOR_H
-#define KITINERARY_GENERICPDFEXTRACTOR_H
+#ifndef KITINERARY_GENERICPDFEXTRACTOR_P_H
+#define KITINERARY_GENERICPDFEXTRACTOR_P_H
 
 #include <unordered_set>
 
@@ -64,4 +64,4 @@ private:
 
 }
 
-#endif // KITINERARY_GENERICPDFEXTRACTOR_H
+#endif // KITINERARY_GENERICPDFEXTRACTOR_P_H

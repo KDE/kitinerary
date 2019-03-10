@@ -21,7 +21,7 @@
 #include "extractorengine.h"
 #include "extractor.h"
 #include "extractorrepository.h"
-#include "genericpdfextractor.h"
+#include "genericpdfextractor_p.h"
 #include "genericpkpassextractor_p.h"
 #include "genericuic918extractor_p.h"
 #include "htmldocument.h"
