@@ -26,6 +26,7 @@ set(kitinerary_lib_srcs
 
     knowledgedb/airportdb.cpp
     knowledgedb/countrydb.cpp
+    knowledgedb/iatacode.cpp
     knowledgedb/knowledgedb.cpp
     knowledgedb/timezonedb.cpp
     knowledgedb/trainstationdb.cpp
