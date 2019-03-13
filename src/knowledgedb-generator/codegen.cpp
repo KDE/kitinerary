@@ -30,7 +30,7 @@ void CodeGen::writeLicenseHeader(QIODevice *out)
 )");
 }
 
-void CodeGen::writeCoordinate(QIODevice* out, const KnowledgeDb::Coordinate& coord)
+void CodeGen::writeCoordinate(QIODevice* out, KnowledgeDb::Coordinate coord)
 {
     out->write("Coordinate{");
     if (coord.isValid()) {

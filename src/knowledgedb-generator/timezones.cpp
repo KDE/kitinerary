@@ -122,7 +122,7 @@ Timezones::Timezones()
 
 Timezones::~Timezones() = default;
 
-QByteArray Timezones::timezoneForLocation(const QString &isoCode, const KnowledgeDb::Coordinate &coord) const
+QByteArray Timezones::timezoneForLocation(const QString &isoCode, KnowledgeDb::Coordinate coord) const
 {
     // look up by country
     QSet<QByteArray> countryTzs;
@@ -193,7 +193,7 @@ uint16_t Timezones::offset(const QByteArray& tz) const
     return m_zoneOffsets[std::distance(m_zones.begin(), it)];
 }
 
-QPoint Timezones::coordinateToPixel(const KnowledgeDb::Coordinate &coord) const
+QPoint Timezones::coordinateToPixel(KnowledgeDb::Coordinate coord) const
 {
     QPoint p;
     p.setX(qRound((coord.longitude - m_topLeftMapUnitX) / m_xMapUnitsPerPixel));

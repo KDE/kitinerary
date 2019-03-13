@@ -37,14 +37,14 @@ public:
     Timezones();
     ~Timezones();
 
-    QByteArray timezoneForLocation(const QString &isoCode, const KnowledgeDb::Coordinate &coord) const;
+    QByteArray timezoneForLocation(const QString &isoCode, KnowledgeDb::Coordinate coord) const;
 
     // the offset into the timezone string table
     uint16_t offset(const QByteArray &tz) const;
 
 private:
     friend class TimezoneDbGenerator;
-    QPoint coordinateToPixel(const KnowledgeDb::Coordinate &coord) const;
+    QPoint coordinateToPixel(KnowledgeDb::Coordinate coord) const;
     QByteArray timezoneForPixel(int x, int y) const;
 
     mutable QImage m_map;

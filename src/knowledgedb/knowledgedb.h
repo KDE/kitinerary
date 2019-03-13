@@ -53,7 +53,7 @@ struct Coordinate {
         return !std::isnan(latitude) && !std::isnan(longitude);
     }
 
-    inline constexpr bool operator==(const Coordinate &other) const
+    inline constexpr bool operator==(Coordinate other) const
     {
         return latitude == other.latitude && longitude == other.longitude;
     }

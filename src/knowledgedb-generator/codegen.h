@@ -33,7 +33,7 @@ class Timezones;
 namespace CodeGen
 {
     void writeLicenseHeader(QIODevice *out);
-    void writeCoordinate(QIODevice *out, const KnowledgeDb::Coordinate &coord);
+    void writeCoordinate(QIODevice *out, KnowledgeDb::Coordinate coord);
     void writeCountryIsoCode(QIODevice *out, const QString &isoCode);
     void writeTimezone(QIODevice *out, const QByteArray &tzName);
     void writeTimezoneEnum(QIODevice *out, const QByteArray &tzName);
