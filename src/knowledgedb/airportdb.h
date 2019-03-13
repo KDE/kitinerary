@@ -52,6 +52,8 @@ KITINERARY_EXPORT CountryId countryForAirport(IataCode iataCode);
 
 /** Attempts to find the unique IATA code for the given airport name. */
 KITINERARY_EXPORT IataCode iataCodeFromName(const QString &name);
+/** Returns all possible IATA code candidates for the given airport name. */
+KITINERARY_EXPORT std::vector<IataCode> iataCodesFromName(const QString &name);
 }
 
 }

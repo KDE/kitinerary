@@ -109,25 +109,22 @@ static IataCode iataCodeForUniqueFragment(const QString &s)
     return airport_table[it->iataIndex].iataCode;
 }
 
-static IataCode iataCodeForUniqueFragment(const QStringList &fragments)
+static void iataCodeForUniqueFragment(const QStringList &fragments, std::vector<IataCode> &codes)
 {
-    IataCode resultCode;
     for (const auto &s : fragments) {
         const auto foundCode = iataCodeForUniqueFragment(s);
         if (!foundCode.isValid()) {
             continue;
         }
 
-        if (resultCode.isValid() && resultCode != foundCode) {
-            return {}; // not unique
+        auto it = std::lower_bound(codes.begin(), codes.end(), foundCode);
+        if (it == codes.end() || (*it) != foundCode) {
+            codes.insert(it, foundCode);
         }
-        resultCode = foundCode;
     }
-
-    return resultCode;
 }
 
-static IataCode iataCodeForNonUniqueFragments(const QStringList &fragments)
+static void iataCodeForNonUniqueFragments(const QStringList &fragments, std::vector<IataCode> &codes)
 {
     // we didn't find a unique name fragment, try the non-unique index
     QSet<uint16_t> iataIdxs;
@@ -143,6 +140,7 @@ static IataCode iataCodeForNonUniqueFragments(const QStringList &fragments)
             continue;
         }
 
+        // TODO we can do this in-place in codes
         QSet<uint16_t> candidates;
         candidates.reserve(it->iataCount);
         for (auto i = 0; i < it->iataCount; ++i) {
@@ -159,11 +157,8 @@ static IataCode iataCodeForNonUniqueFragments(const QStringList &fragments)
         }
     }
 
-    if (iataIdxs.size() == 1) {
-        return airport_table[*iataIdxs.constBegin()].iataCode;
-    }
-
-    return {};
+    std::transform(iataIdxs.begin(), iataIdxs.end(), std::back_inserter(codes), [](const auto idx) { return airport_table[idx].iataCode; });
+    std::sort(codes.begin(), codes.end());
 }
 
 static IataCode iataCodeForIataCodeFragment(const QStringList &fragments)
@@ -193,48 +188,95 @@ static IataCode iataCodeForIataCodeFragment(const QStringList &fragments)
     return code;
 }
 
-static IataCode iataCodeForNameFragments(const QStringList &fragments)
+static void iataCodeForNameFragments(const QStringList &fragments, std::vector<IataCode> &codes)
 {
-    IataCode code = iataCodeForUniqueFragment(fragments);
-    if (code.isValid()) {
-        return code;
+    iataCodeForUniqueFragment(fragments, codes);
+    if (!codes.empty()) {
+        return;
     }
-    return iataCodeForNonUniqueFragments(fragments);
+    iataCodeForNonUniqueFragments(fragments, codes);
 }
 
-IataCode iataCodeFromName(const QString &name)
+static QStringList splitToFragments(const QString &name)
 {
-    const auto fragments = name.split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
+    return name.split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")), QString::SkipEmptyParts);
+}
+
+}
+
+std::vector<KnowledgeDb::IataCode> KnowledgeDb::iataCodesFromName(const QString &name)
+{
+    const auto fragments = splitToFragments(name);
     QStringList normalizedFragments;
     normalizedFragments.reserve(fragments.size());
     std::transform(fragments.begin(), fragments.end(), std::back_inserter(normalizedFragments), [](const auto &s) { return normalizeFragment(s); });
 
-    IataCode code = iataCodeForNameFragments(normalizedFragments);
-    if (code.isValid()) {
-        return code;
+    std::vector<IataCode> codes;
+    iataCodeForNameFragments(normalizedFragments, codes);
+    if (!codes.empty()) {
+        return codes;
     }
 
     // try again, with alternative translitarations of e.g. umlauts replaced
     applyTransliterations(normalizedFragments);
-    code = iataCodeForNameFragments(normalizedFragments);
-    if (code.isValid()) {
-        return code;
+    iataCodeForNameFragments(normalizedFragments, codes);
+    if (!codes.empty()) {
+        return codes;
     }
 
     // check if the name contained the IATA code as disambiguation already
-    code = iataCodeForIataCodeFragment(fragments);
+    const auto code = iataCodeForIataCodeFragment(fragments);
     if (code.isValid()) {
-        return code;
+        return {code};
     }
 
     // attempt to cut off possibly confusing fancy terminal names
     auto it = std::find(normalizedFragments.begin(), normalizedFragments.end(), QStringLiteral("terminal"));
     if (it != normalizedFragments.end()) {
         normalizedFragments.erase(it, normalizedFragments.end());
-        code = iataCodeForNameFragments(normalizedFragments);
+        iataCodeForNameFragments(normalizedFragments, codes);
     }
-    return code;
+    return codes;
 }
 
+KnowledgeDb::IataCode KnowledgeDb::iataCodeFromName(const QString &name)
+{
+    const auto fragments = splitToFragments(name);
+    QStringList normalizedFragments;
+    normalizedFragments.reserve(fragments.size());
+    std::transform(fragments.begin(), fragments.end(), std::back_inserter(normalizedFragments), [](const auto &s) { return normalizeFragment(s); });
+
+    std::vector<IataCode> codes;
+    iataCodeForNameFragments(normalizedFragments, codes);
+    if (codes.size() == 1) {
+        return codes[0];
+    }
+    codes.clear();
+
+    // try again, with alternative translitarations of e.g. umlauts replaced
+    applyTransliterations(normalizedFragments);
+    iataCodeForNameFragments(normalizedFragments, codes);
+    if (codes.size() == 1) {
+        return codes[0];
+    }
+    codes.clear();
+
+    // check if the name contained the IATA code as disambiguation already
+    const auto code = iataCodeForIataCodeFragment(fragments);
+    if (code.isValid()) {
+        return {code};
+    }
+
+    // attempt to cut off possibly confusing fancy terminal names
+    auto it = std::find(normalizedFragments.begin(), normalizedFragments.end(), QStringLiteral("terminal"));
+    if (it != normalizedFragments.end()) {
+        normalizedFragments.erase(it, normalizedFragments.end());
+        iataCodeForNameFragments(normalizedFragments, codes);
+    }
+    if (codes.size() == 1) {
+        return codes[0];
+    }
+    return {};
 }
+
 }

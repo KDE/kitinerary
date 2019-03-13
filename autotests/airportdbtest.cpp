@@ -27,6 +27,7 @@
 #include <cmath>
 
 using namespace KItinerary;
+using namespace KItinerary::KnowledgeDb;
 
 namespace KItinerary { namespace KnowledgeDb {
 char *toString(const IataCode &code)
@@ -177,6 +178,17 @@ private Q_SLOTS:
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("BEIJING CN CAPITAL INTL")), KnowledgeDb::IataCode{"PEK"});
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("FRANKFURT DE - FRANKFURT INTL")), KnowledgeDb::IataCode{}); // ambigious with Frankfurt Hahn
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SEATTLE US - SEATTLE TACOMA INTL")), KnowledgeDb::IataCode{"SEA"});
+    }
+
+    void iataCodeMultiLookupTest()
+    {
+        // duplicate unique fragments
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("OSAKA JP KANSAI INTERNATIONAL")), (std::vector<IataCode>{IataCode{"ITM"}, IataCode{"KIX"}}));
+
+        // insufficient non-unique fragments
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("Stuttgart")), (std::vector<IataCode>{IataCode{"SGT"}, IataCode{"STR"}}));
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("Frankfurt")), (std::vector<IataCode>{IataCode{"FRA"}, IataCode{"HHN"}}));
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("Brussels")), (std::vector<IataCode>{IataCode{"BRU"}, IataCode{"CRL"}}));
     }
 
     void countryDataTest()
