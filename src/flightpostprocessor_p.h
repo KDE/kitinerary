@@ -20,6 +20,10 @@
 #ifndef KITINERARY_FLIGHTPOSTPROCESSOR_P_H
 #define KITINERARY_FLIGHTPOSTPROCESSOR_P_H
 
+#include "knowledgedb/iatacode.h"
+
+#include <vector>
+
 class QDateTime;
 
 namespace KItinerary {
@@ -32,12 +36,17 @@ class Flight;
 class FlightPostProcessor
 {
 public:
-    Flight processFlight(Flight flight) const;
+    Flight processFlight(Flight flight);
 
 private:
-    Airport processAirport(Airport airport) const;
+    Airport processAirport(Airport airport, const std::vector<KnowledgeDb::IataCode> &codes) const;
     Airline processAirline(Airline airline) const;
     QDateTime processFlightTime(QDateTime dt, const Flight &flight, const Airport &airport) const;
+
+    void lookupAirportCodes(const Airport &airport, std::vector<KnowledgeDb::IataCode> &codes) const;
+
+    std::vector<KnowledgeDb::IataCode> m_departureCodes;
+    std::vector<KnowledgeDb::IataCode> m_arrivalCodes;
 };
 
 }

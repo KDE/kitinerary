@@ -27,14 +27,18 @@
 #include <KItinerary/Organization>
 
 #include <QDateTime>
+#include <QDebug>
 #include <QTimeZone>
 
 using namespace KItinerary;
 
-Flight FlightPostProcessor::processFlight(Flight flight) const
+Flight FlightPostProcessor::processFlight(Flight flight)
 {
-    flight.setDepartureAirport(processAirport(flight.departureAirport()));
-    flight.setArrivalAirport(processAirport(flight.arrivalAirport()));
+    lookupAirportCodes(flight.departureAirport(), m_departureCodes);
+    lookupAirportCodes(flight.arrivalAirport(), m_arrivalCodes);
+
+    flight.setDepartureAirport(processAirport(flight.departureAirport(), m_departureCodes));
+    flight.setArrivalAirport(processAirport(flight.arrivalAirport(), m_arrivalCodes));
     flight.setAirline(processAirline(flight.airline()));
     flight.setBoardingTime(processFlightTime(flight.boardingTime(), flight, flight.departureAirport()));
     flight.setDepartureTime(processFlightTime(flight.departureTime(), flight, flight.departureAirport()));
@@ -43,24 +47,20 @@ Flight FlightPostProcessor::processFlight(Flight flight) const
     return flight;
 }
 
-Airport FlightPostProcessor::processAirport(Airport airport) const
+Airport FlightPostProcessor::processAirport(Airport airport, const std::vector<KnowledgeDb::IataCode> &codes) const
 {
     // clean up name
     airport.setName(airport.name().simplified());
 
     // complete missing IATA codes
-    auto iataCode = airport.iataCode();
-    if (iataCode.isEmpty()) {
-        iataCode = KnowledgeDb::iataCodeFromName(airport.name()).toString();
-        if (!iataCode.isEmpty()) {
-            airport.setIataCode(iataCode);
-        }
+    if (airport.iataCode().isEmpty() && codes.size() == 1) {
+        airport.setIataCode(codes[0].toString());
     }
 
     // complete missing geo coordinates
     auto geo = airport.geo();
-    if (!geo.isValid()) {
-        const auto coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{iataCode});
+    if (!geo.isValid() && codes.size() == 1) {
+        const auto coord = KnowledgeDb::coordinateForAirport(codes[0]);
         if (coord.isValid()) {
             geo.setLatitude(coord.latitude);
             geo.setLongitude(coord.longitude);
@@ -68,11 +68,11 @@ Airport FlightPostProcessor::processAirport(Airport airport) const
         }
     }
 
-    // add country
+    // add country, if all candidates are from the same country
     auto addr = airport.address();
-    if (addr.addressCountry().isEmpty()) {
-        const auto isoCode = KnowledgeDb::countryForAirport(KnowledgeDb::IataCode{iataCode});
-        if (isoCode.isValid()) {
+    if (addr.addressCountry().isEmpty() && codes.size() >= 1) {
+        const auto isoCode = KnowledgeDb::countryForAirport(codes[0]);
+        if (isoCode.isValid() && std::all_of(codes.begin(), codes.end(), [isoCode](const auto iataCode) { return KnowledgeDb::countryForAirport(iataCode) == isoCode; })) {
             addr.setAddressCountry(isoCode.toString());
             airport.setAddress(addr);
         }
@@ -119,4 +119,20 @@ QDateTime FlightPostProcessor::processFlightTime(QDateTime dt, const Flight &fli
     }
 
     return dt;
+}
+
+void FlightPostProcessor::lookupAirportCodes(const Airport &airport, std::vector<KnowledgeDb::IataCode>& codes) const
+{
+    if (!airport.iataCode().isEmpty()) {
+        codes.push_back(KnowledgeDb::IataCode(airport.iataCode()));
+        return;
+    }
+
+    // TODO if we don't need this elsewhere, maybe merge those two methods and do this logic internally more efficently?
+    const auto code = KnowledgeDb::iataCodeFromName(airport.name());
+    if (code.isValid()) {
+        codes.push_back(code);
+    } else {
+        codes = KnowledgeDb::iataCodesFromName(airport.name());
+    }
 }
