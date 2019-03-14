@@ -39,6 +39,7 @@ set(kitinerary_lib_srcs
     extractorpostprocessor.cpp
     extractorrepository.cpp
     extractorutil.cpp
+    flightpostprocessor.cpp
     genericpdfextractor.cpp
     genericpkpassextractor.cpp
     genericuic918extractor.cpp

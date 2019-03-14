@@ -19,6 +19,8 @@
 
 #include "config-kitinerary.h"
 #include "extractorpostprocessor.h"
+#include "extractorpostprocessor_p.h"
+#include "flightpostprocessor_p.h"
 
 #include "extractorutil.h"
 #include "iatabcbpparser.h"
@@ -27,7 +29,6 @@
 #include "mergeutil.h"
 #include "sortutil.h"
 
-#include "knowledgedb/airportdb.h"
 #include "knowledgedb/trainstationdb.h"
 
 #include <KItinerary/Action>
@@ -58,56 +59,6 @@
 #include <algorithm>
 
 using namespace KItinerary;
-namespace KItinerary {
-class ExtractorPostprocessorPrivate
-{
-public:
-    void mergeOrAppend(const QVariant &elem);
-
-    QVariant processFlightReservation(FlightReservation res) const;
-    Flight processFlight(Flight flight) const;
-    Airport processAirport(Airport airport) const;
-    Airline processAirline(Airline airline) const;
-    QDateTime processFlightTime(QDateTime dt, const Flight &flight, const Airport &airport) const;
-
-    TrainReservation processTrainReservation(TrainReservation res) const;
-    TrainTrip processTrainTrip(TrainTrip trip) const;
-    TrainStation processTrainStation(TrainStation station) const;
-    QDateTime processTrainTripTime(QDateTime dt, const TrainStation &station) const;
-
-    BusReservation processBusReservation(BusReservation res) const;
-    BusTrip processBusTrip(BusTrip trip) const;
-
-    LodgingReservation processLodgingReservation(LodgingReservation res) const;
-    FoodEstablishmentReservation processFoodEstablishmentReservation(FoodEstablishmentReservation res) const;
-    TouristAttractionVisit processTouristAttractionVisit(TouristAttractionVisit visit) const;
-    EventReservation processEventReservation(EventReservation res) const;
-    RentalCarReservation processRentalCarReservation(RentalCarReservation res) const;
-    RentalCar processRentalCar(RentalCar car) const;
-    TaxiReservation processTaxiReservation(TaxiReservation res) const;
-    Event processEvent(Event event) const;
-
-    template <typename T> T processReservation(T res) const;
-    Person processPerson(Person person) const;
-    template <typename T> T processPlace(T place) const;
-    QVariantList processActions(QVariantList actions) const;
-    template <typename T> QDateTime processTimeForLocation(QDateTime dt, const T &place) const;
-
-    bool filterReservation(const QVariant &res) const;
-    bool filterLodgingReservation(const LodgingReservation &res) const;
-    bool filterFlight(const Flight &flight) const;
-    bool filterAirport(const Airport &airport) const;
-    bool filterTrainTrip(const TrainTrip &trip) const;
-    bool filterBusTrip(const BusTrip &trip) const;
-    template <typename T> bool filterTrainOrBusStation(const T &station) const;
-    bool filterEventReservation(const EventReservation &res) const;
-    bool filterFoodReservation(const FoodEstablishmentReservation &res) const;
-
-    QVector<QVariant> m_data;
-    QDateTime m_contextDate;
-    bool m_resultFinalized = false;
-};
-}
 
 ExtractorPostprocessor::ExtractorPostprocessor()
     : d(new ExtractorPostprocessorPrivate)
@@ -200,98 +151,9 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
         }
     }
 
-    res.setReservationFor(processFlight(res.reservationFor().value<Flight>()));
+    FlightPostProcessor p;
+    res.setReservationFor(p.processFlight(res.reservationFor().value<Flight>()));
     return processReservation(res);
-}
-
-Flight ExtractorPostprocessorPrivate::processFlight(Flight flight) const
-{
-    flight.setDepartureAirport(processAirport(flight.departureAirport()));
-    flight.setArrivalAirport(processAirport(flight.arrivalAirport()));
-    flight.setAirline(processAirline(flight.airline()));
-    flight.setBoardingTime(processFlightTime(flight.boardingTime(), flight, flight.departureAirport()));
-    flight.setDepartureTime(processFlightTime(flight.departureTime(), flight, flight.departureAirport()));
-    flight.setArrivalTime(processFlightTime(flight.arrivalTime(), flight, flight.arrivalAirport()));
-    flight = ExtractorUtil::extractTerminals(flight);
-    return flight;
-}
-
-Airport ExtractorPostprocessorPrivate::processAirport(Airport airport) const
-{
-    // clean up name
-    airport.setName(airport.name().simplified());
-
-    // complete missing IATA codes
-    auto iataCode = airport.iataCode();
-    if (iataCode.isEmpty()) {
-        iataCode = KnowledgeDb::iataCodeFromName(airport.name()).toString();
-        if (!iataCode.isEmpty()) {
-            airport.setIataCode(iataCode);
-        }
-    }
-
-    // complete missing geo coordinates
-    auto geo = airport.geo();
-    if (!geo.isValid()) {
-        const auto coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{iataCode});
-        if (coord.isValid()) {
-            geo.setLatitude(coord.latitude);
-            geo.setLongitude(coord.longitude);
-            airport.setGeo(geo);
-        }
-    }
-
-    // add country
-    auto addr = airport.address();
-    if (addr.addressCountry().isEmpty()) {
-        const auto isoCode = KnowledgeDb::countryForAirport(KnowledgeDb::IataCode{iataCode});
-        if (isoCode.isValid()) {
-            addr.setAddressCountry(isoCode.toString());
-            airport.setAddress(addr);
-        }
-    }
-
-    return processPlace(airport);
-}
-
-Airline ExtractorPostprocessorPrivate::processAirline(Airline airline) const
-{
-    airline.setName(airline.name().trimmed());
-    return airline;
-}
-
-QDateTime ExtractorPostprocessorPrivate::processFlightTime(QDateTime dt, const Flight &flight, const Airport &airport) const
-{
-    if (!dt.isValid()) {
-        return dt;
-    }
-
-    if (dt.date().year() <= 1970 && flight.departureDay().isValid()) { // we just have the time, but not the day
-        dt.setDate(flight.departureDay());
-    }
-
-    if (dt.timeSpec() == Qt::TimeZone || airport.iataCode().isEmpty()) {
-        return dt;
-    }
-
-    const auto tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{airport.iataCode()});
-    if (!tz.isValid()) {
-        return dt;
-    }
-
-    // prefer our timezone over externally provided UTC offset, if they match
-    if (dt.timeSpec() == Qt::OffsetFromUTC && tz.offsetFromUtc(dt) != dt.offsetFromUtc()) {
-        return dt;
-    }
-
-    if (dt.timeSpec() == Qt::OffsetFromUTC || dt.timeSpec() == Qt::LocalTime) {
-        dt.setTimeSpec(Qt::TimeZone);
-        dt.setTimeZone(tz);
-    } else if (dt.timeSpec() == Qt::UTC) {
-        dt = dt.toTimeZone(tz);
-    }
-
-    return dt;
 }
 
 TrainReservation ExtractorPostprocessorPrivate::processTrainReservation(TrainReservation res) const
@@ -509,10 +371,8 @@ Person ExtractorPostprocessorPrivate::processPerson(Person person) const
     return person;
 }
 
-template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) const
+PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, const QString &phoneNumber)
 {
-    auto addr = place.address();
-
     // convert to ISO 3166-1 alpha-2 country codes
     if (addr.addressCountry().size() > 2) {
         const auto isoCode = KContacts::Address::countryToISO(addr.addressCountry()).toUpper();
@@ -526,10 +386,15 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
         addr.setAddressCountry(addr.addressCountry().toUpper());
     }
 
+    // normalize strings
+    addr.setStreetAddress(addr.streetAddress().simplified());
+    addr.setAddressLocality(addr.addressLocality().simplified());
+    addr.setAddressRegion(addr.addressRegion().simplified());
+
 #ifdef HAVE_PHONENUMBER
     // recover country from phone number, if we have that
-    if (!place.telephone().isEmpty() && addr.addressCountry().size() != 2) {
-        const auto phoneStr = place.telephone().toStdString();
+    if (!phoneNumber.isEmpty() && addr.addressCountry().size() != 2) {
+        const auto phoneStr = phoneNumber.toStdString();
         const auto util = i18n::phonenumbers::PhoneNumberUtil::GetInstance();
         i18n::phonenumbers::PhoneNumber number;
         if (util->ParseAndKeepRawInput(phoneStr, "ZZ", &number) == i18n::phonenumbers::PhoneNumberUtil::NO_PARSING_ERROR) {
@@ -540,30 +405,32 @@ template<typename T> T ExtractorPostprocessorPrivate::processPlace(T place) cons
             }
         }
     }
+#endif
 
+    addr = ExtractorUtil::extractPostalCode(addr);
+    return addr;
+}
+
+QString ExtractorPostprocessorPrivate::processPhoneNumber(const QString &phoneNumber, const PostalAddress &addr)
+{
+#ifdef HAVE_PHONENUMBER
     // or complete the phone number if we know the country
-    else if (!place.telephone().isEmpty() && addr.addressCountry().size() == 2) {
-        auto phoneStr = place.telephone().toStdString();
+    if (!phoneNumber.isEmpty() && addr.addressCountry().size() == 2) {
+        auto phoneStr = phoneNumber.toStdString();
         const auto isoCode = addr.addressCountry().toStdString();
         const auto util = i18n::phonenumbers::PhoneNumberUtil::GetInstance();
         i18n::phonenumbers::PhoneNumber number;
         if (util->ParseAndKeepRawInput(phoneStr, isoCode, &number) == i18n::phonenumbers::PhoneNumberUtil::NO_PARSING_ERROR) {
             if (number.country_code_source() == i18n::phonenumbers::PhoneNumber_CountryCodeSource_FROM_DEFAULT_COUNTRY) {
                 util->Format(number, i18n::phonenumbers::PhoneNumberUtil::INTERNATIONAL, &phoneStr);
-                place.setTelephone(QString::fromStdString(phoneStr));
+                return QString::fromStdString(phoneStr);
             }
         }
     }
+#else
+    Q_UNUSED(addr);
 #endif
-
-    // normalize strings
-    addr.setStreetAddress(addr.streetAddress().simplified());
-    addr.setAddressLocality(addr.addressLocality().simplified());
-    addr.setAddressRegion(addr.addressRegion().simplified());
-
-    addr = ExtractorUtil::extractPostalCode(addr);
-    place.setAddress(addr);
-    return place;
+    return phoneNumber;
 }
 
 QVariantList ExtractorPostprocessorPrivate::processActions(QVariantList actions) const
