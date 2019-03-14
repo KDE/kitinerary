@@ -40,9 +40,9 @@ Flight FlightPostProcessor::processFlight(Flight flight)
     flight.setDepartureAirport(processAirport(flight.departureAirport(), m_departureCodes));
     flight.setArrivalAirport(processAirport(flight.arrivalAirport(), m_arrivalCodes));
     flight.setAirline(processAirline(flight.airline()));
-    flight.setBoardingTime(processFlightTime(flight.boardingTime(), flight, flight.departureAirport()));
-    flight.setDepartureTime(processFlightTime(flight.departureTime(), flight, flight.departureAirport()));
-    flight.setArrivalTime(processFlightTime(flight.arrivalTime(), flight, flight.arrivalAirport()));
+    flight.setBoardingTime(processFlightTime(flight.boardingTime(), flight, m_departureCodes));
+    flight.setDepartureTime(processFlightTime(flight.departureTime(), flight, m_departureCodes));
+    flight.setArrivalTime(processFlightTime(flight.arrivalTime(), flight, m_arrivalCodes));
     flight = ExtractorUtil::extractTerminals(flight);
     return flight;
 }
@@ -87,7 +87,7 @@ Airline FlightPostProcessor::processAirline(Airline airline) const
     return airline;
 }
 
-QDateTime FlightPostProcessor::processFlightTime(QDateTime dt, const Flight &flight, const Airport &airport) const
+QDateTime FlightPostProcessor::processFlightTime(QDateTime dt, const Flight &flight, const std::vector<KnowledgeDb::IataCode> &codes) const
 {
     if (!dt.isValid()) {
         return dt;
@@ -97,12 +97,12 @@ QDateTime FlightPostProcessor::processFlightTime(QDateTime dt, const Flight &fli
         dt.setDate(flight.departureDay());
     }
 
-    if (dt.timeSpec() == Qt::TimeZone || airport.iataCode().isEmpty()) {
+    if (dt.timeSpec() == Qt::TimeZone || codes.empty()) {
         return dt;
     }
 
-    const auto tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{airport.iataCode()});
-    if (!tz.isValid()) {
+    const auto tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{codes[0]});
+    if (!tz.isValid() || !std::all_of(codes.begin(), codes.end(), [tz](const auto &iataCode) { return KnowledgeDb::timezoneForAirport(iataCode) == tz; })) {
         return dt;
     }
 

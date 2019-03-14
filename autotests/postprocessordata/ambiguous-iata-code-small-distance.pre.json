@@ -1,0 +1,28 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "CA",
+                "name": "AIR CHINA"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "name": "OSAKA JP KANSAI INTERNATIONAL"
+            },
+            "arrivalTime": "2010-01-01T11:30:00Z",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "PVG",
+                "name": "SHANGHAI CN PUDONG INTL"
+            },
+            "departureDay": "2010-01-01",
+            "departureTime": "2018-01-01T17:30:00+08:00",
+            "flightNumber": "123"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

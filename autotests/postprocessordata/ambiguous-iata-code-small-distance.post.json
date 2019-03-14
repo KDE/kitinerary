@@ -1,0 +1,49 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "CA",
+                "name": "AIR CHINA"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "JP"
+                },
+                "name": "OSAKA JP KANSAI INTERNATIONAL"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2010-01-01T20:30:00+09:00",
+                "timezone": "Asia/Tokyo"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "CN"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 31.143299102783203,
+                    "longitude": 121.80500030517578
+                },
+                "iataCode": "PVG",
+                "name": "SHANGHAI CN PUDONG INTL"
+            },
+            "departureDay": "2010-01-01",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2018-01-01T17:30:00+08:00",
+                "timezone": "Asia/Shanghai"
+            },
+            "flightNumber": "123"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

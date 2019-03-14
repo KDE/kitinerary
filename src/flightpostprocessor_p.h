@@ -41,7 +41,7 @@ public:
 private:
     Airport processAirport(Airport airport, const std::vector<KnowledgeDb::IataCode> &codes) const;
     Airline processAirline(Airline airline) const;
-    QDateTime processFlightTime(QDateTime dt, const Flight &flight, const Airport &airport) const;
+    QDateTime processFlightTime(QDateTime dt, const Flight &flight, const std::vector<KnowledgeDb::IataCode> &codes) const;
 
     void lookupAirportCodes(const Airport &airport, std::vector<KnowledgeDb::IataCode> &codes) const;
 
