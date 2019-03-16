@@ -29,7 +29,7 @@
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "pdfdocument.h"
-#include "structureddataextractor.h"
+#include "structureddataextractor_p.h"
 #include "uic9183parser.h"
 
 #include "jsapi/barcode.h"

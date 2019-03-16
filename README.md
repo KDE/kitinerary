@@ -11,18 +11,20 @@ De/serialization is provided via KItinerary::JsonLdDocument.
 
 ## Data Extraction
 
-There's a number of ways to extract reservation or itinerary data:
+The entry point for data extraction is KItinerary::ExtractorEngine. Depending on the provided
+input, this will look for:
 
 * Structured data in JSON-LD or XML microdata format, from HTML emails,
-  provided by KItinerary::StructuredDataExtractor.
+  implemented by KItinerary::StructuredDataExtractor.
 * Structured data from IATA bar coded boarding passes (BCBP), provided by
   KItinerary::IataBcbpParser.
 * Structured data from UIC 918.3 train ticket passes, provided by
   KItinerary::Uic9183Parser.
-* Unstructured data from plain text, HTML or PDF email parts, using
+* Unstructured data from plain text, HTML, iCal, PDF or email documents, using
   vendor-specific scripts, provided by KItinerary::ExtractorEngine.
 * Unstructured data from Apple Wallet boarding passes, using
   vendor-specific scripts.
+* Any of the above in email or PDF documents.
 
 ## Data Augmentation
 
