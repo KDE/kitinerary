@@ -101,7 +101,7 @@ private Q_SLOTS:
         country = KnowledgeDb::countryForId(CountryId{"GB"});
         QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Left);
         QCOMPARE(country.powerPlugTypes, {TypeG});
-        country = KnowledgeDb::countryForId(CountryId{"CK"});
+        country = KnowledgeDb::countryForId(CountryId{"GL"});
         QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Unknown);
     }
 
