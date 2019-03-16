@@ -20,11 +20,13 @@
 #include "flightpostprocessor_p.h"
 #include "extractorpostprocessor_p.h"
 #include "extractorutil.h"
+#include "locationutil.h"
 
 #include "knowledgedb/airportdb.h"
 
 #include <KItinerary/Flight>
 #include <KItinerary/Organization>
+#include <KItinerary/Place>
 
 #include <QDateTime>
 #include <QDebug>
@@ -32,10 +34,24 @@
 
 using namespace KItinerary;
 
+enum {
+    AirplaneSpeedLowerBound = 250, // km/h, turboprop aircraft, and a bit lower than average cruise speed to account for takeoff/landing
+    AirplaneSpeedUpperBound = 2140, // km/h, Concorde, so a bit excessive
+};
+
 Flight FlightPostProcessor::processFlight(Flight flight)
 {
     lookupAirportCodes(flight.departureAirport(), m_departureCodes);
     lookupAirportCodes(flight.arrivalAirport(), m_arrivalCodes);
+
+    // if we have an ambiguous airport on one end, see if we can pick based on the travel time
+    const auto duration = flight.departureTime().secsTo(flight.arrivalTime());
+    if (m_departureCodes.size() == 1 && m_arrivalCodes.size() > 1) {
+        pickAirportByDistance(duration, m_departureCodes, m_arrivalCodes);
+    }
+    if (m_arrivalCodes.size() == 1 && m_departureCodes.size() > 1) {
+        pickAirportByDistance(duration, m_arrivalCodes, m_departureCodes);
+    }
 
     flight.setDepartureAirport(processAirport(flight.departureAirport(), m_departureCodes));
     flight.setArrivalAirport(processAirport(flight.arrivalAirport(), m_arrivalCodes));
@@ -134,5 +150,37 @@ void FlightPostProcessor::lookupAirportCodes(const Airport &airport, std::vector
         codes.push_back(code);
     } else {
         codes = KnowledgeDb::iataCodesFromName(airport.name());
+    }
+}
+
+void FlightPostProcessor::pickAirportByDistance(int duration, const std::vector<KnowledgeDb::IataCode>& startCode, std::vector<KnowledgeDb::IataCode>& codes) const
+{
+    if (duration <= 0) {
+        return;
+    }
+
+    Q_ASSERT(startCode.size() == 1);
+    Q_ASSERT(codes.size() > 1);
+
+    const auto startCoord = KnowledgeDb::coordinateForAirport(startCode[0]);
+    if (!startCoord.isValid()) {
+        return;
+    }
+
+    const int lowerBoundDistance = AirplaneSpeedLowerBound * (duration / 3.6);
+    const int upperBoundDistance = AirplaneSpeedUpperBound * (duration / 3.6);
+
+    for (auto it = codes.begin(); it != codes.end();) {
+        const auto destCoord = KnowledgeDb::coordinateForAirport(*it);
+        if (!destCoord.isValid()) {
+            continue;
+        }
+
+        const auto dist = LocationUtil::distance({startCoord.latitude, startCoord.longitude}, {destCoord.latitude, destCoord.longitude});
+        if (dist > upperBoundDistance || dist < lowerBoundDistance) {
+            it = codes.erase(it);
+        } else {
+            ++it;
+        }
     }
 }

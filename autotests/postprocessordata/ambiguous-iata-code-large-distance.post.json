@@ -1,0 +1,54 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "SK"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DK"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 55.618099212646484,
+                    "longitude": 12.656100273132324
+                },
+                "iataCode": "CPH",
+                "name": "COPENHAGEN DK KASTRUP"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2010-01-01T11:35:00+01:00",
+                "timezone": "Europe/Copenhagen"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 48.689998626708984,
+                    "longitude": 9.221940040588379
+                },
+                "iataCode": "STR",
+                "name": "STUTTGART AIRPORT"
+            },
+            "departureDay": "2010-01-01",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2010-01-01T10:05:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "123"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

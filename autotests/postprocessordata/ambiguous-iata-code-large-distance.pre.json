@@ -1,0 +1,25 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "SK"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "name": "COPENHAGEN DK KASTRUP"
+            },
+            "arrivalTime": "2010-01-01T11:35:00+01:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "name": "STUTTGART AIRPORT"
+            },
+            "departureTime": "2010-01-01T09:05:00Z",
+            "flightNumber": "123"
+        },
+        "reservationNumber": "XXX007"
+    }
+]
