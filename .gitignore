@@ -9,3 +9,4 @@ heaptrack.*
 *.qmlc
 perf.data*
 /build*/
+*.fail

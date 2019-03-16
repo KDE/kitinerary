@@ -257,6 +257,8 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
     for (auto it = m_labelMap.begin(); it != m_labelMap.end();) {
         std::sort(it.value().begin(), it.value().end());
 
+        // TODO revisit this when we have experience with the higher level IATA code disambiguation in FlightPostProcessor
+#if 0
         if (it.value().size() == 2) { // TODO generalize this from 2 to N
             const auto lhsAirport = m_airportMap.value(m_iataMap.value(it.value().at(0)));
             const auto rhsAirport = m_airportMap.value(m_iataMap.value(it.value().at(1)));
@@ -280,6 +282,7 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
                 //qDebug() << "Overlapping fragments:" << lhsAirport.fragments << rhsAirport.fragments;
             }
         }
+#endif
 
         ++it;
     }
