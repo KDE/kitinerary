@@ -95,7 +95,8 @@ Timezones::Timezones()
         exit(1);
     }
 
-    for (const auto &line : QString::fromUtf8(zoneTab.readAll()).split(QLatin1Char('\n'))) {
+    const auto lines = QString::fromUtf8(zoneTab.readAll()).split(QLatin1Char('\n'));
+    for (const auto &line : lines) {
         if (line.startsWith(QLatin1Char('#'))) {
             continue;
         }

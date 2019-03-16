@@ -358,7 +358,7 @@ static const char name1_string_table[] =
     std::vector<Name1Index> string_offsets;
     string_offsets.reserve(m_labelMap.size());
     uint32_t label_offset = 0;
-    for (auto it = m_labelMap.begin(); it != m_labelMap.end(); ++it) {
+    for (auto it = m_labelMap.constBegin(); it != m_labelMap.constEnd(); ++it) {
         if (it.value().size() > 1) {
             continue;
         }
@@ -400,7 +400,7 @@ static const char nameN_string_table[] =
     stringN_offsets.reserve(m_labelMap.size() - string_offsets.size());
     uint16_t string_offset = 0;
     uint16_t iata_map_offset = 0;
-    for (auto it = m_labelMap.begin(); it != m_labelMap.end(); ++it) {
+    for (auto it = m_labelMap.constBegin(); it != m_labelMap.constEnd(); ++it) {
         if (it.value().size() == 1) {
             continue;
         }
@@ -419,7 +419,7 @@ static const uint16_t nameN_iata_table[] = {
     for (const auto &offset : stringN_offsets) {
         out->write("    ");
         for (const auto &iataCode : offset.iataList) {
-            out->write(QByteArray::number(std::distance(m_iataMap.begin(), m_iataMap.find(iataCode))));
+            out->write(QByteArray::number(std::distance(m_iataMap.constBegin(), m_iataMap.constFind(iataCode))));
             out->write(", ");
         }
         out->write(" // ");
