@@ -211,17 +211,14 @@ std::vector<KnowledgeDb::IataCode> KnowledgeDb::iataCodesFromName(const QString 
     normalizedFragments.reserve(fragments.size());
     std::transform(fragments.begin(), fragments.end(), std::back_inserter(normalizedFragments), [](const auto &s) { return normalizeFragment(s); });
 
-    std::vector<IataCode> codes;
+    std::vector<IataCode> codes, candidates;
     iataCodeForNameFragments(normalizedFragments, codes);
-    if (!codes.empty()) {
-        return codes;
-    }
 
     // try again, with alternative translitarations of e.g. umlauts replaced
     applyTransliterations(normalizedFragments);
-    iataCodeForNameFragments(normalizedFragments, codes);
-    if (!codes.empty()) {
-        return codes;
+    iataCodeForNameFragments(normalizedFragments, candidates);
+    if (!candidates.empty() && (codes.empty() || candidates.size() < codes.size())) {
+        codes = std::move(candidates);
     }
 
     // check if the name contained the IATA code as disambiguation already
@@ -234,7 +231,11 @@ std::vector<KnowledgeDb::IataCode> KnowledgeDb::iataCodesFromName(const QString 
     auto it = std::find(normalizedFragments.begin(), normalizedFragments.end(), QStringLiteral("terminal"));
     if (it != normalizedFragments.end()) {
         normalizedFragments.erase(it, normalizedFragments.end());
-        iataCodeForNameFragments(normalizedFragments, codes);
+        candidates.clear();
+        iataCodeForNameFragments(normalizedFragments, candidates);
+        if (!candidates.empty() && (codes.empty() || candidates.size() < codes.size())) {
+            codes = std::move(candidates);
+        }
     }
     return codes;
 }

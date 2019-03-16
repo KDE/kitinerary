@@ -171,7 +171,7 @@ private Q_SLOTS:
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Frankfurt FRA")), KnowledgeDb::IataCode{"FRA"});
 
         // multiple unique hits / unique hit on valid (but wrong) IATA code
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SEOUL KR GIMPO INTERNATIONAL TERMINAL I - SKY CITY INTERNATIONAL TERMINAL")), KnowledgeDb::IataCode{"GMP"});
+        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("GIMPO INTERNATIONAL TERMINAL I - SKY CITY INTERNATIONAL TERMINAL")), KnowledgeDb::IataCode{"GMP"});
 
         // Amadeus/BCD airport names containing city/country data too, and using "INTL" abbrevation
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SAN FRANCISCO CA SAN FRANCISCO INTL")), KnowledgeDb::IataCode{"SFO"});
@@ -189,6 +189,9 @@ private Q_SLOTS:
         QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("Stuttgart")), (std::vector<IataCode>{IataCode{"SGT"}, IataCode{"STR"}}));
         QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("Frankfurt")), (std::vector<IataCode>{IataCode{"FRA"}, IataCode{"HHN"}}));
         QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("Brussels")), (std::vector<IataCode>{IataCode{"BRU"}, IataCode{"CRL"}}));
+
+        // multiple unique hits / unique hit on valid (but wrong) IATA code
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("SEOUL KR GIMPO INTERNATIONAL TERMINAL I - SKY CITY INTERNATIONAL TERMINAL")), (std::vector<IataCode>{IataCode{"GMP"}, IataCode{"ICN"}}));
     }
 
     void countryDataTest()
