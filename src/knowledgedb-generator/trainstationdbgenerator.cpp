@@ -79,10 +79,11 @@ namespace KnowledgeDb {
 bool TrainStationDbGenerator::fetchIBNR()
 {
     const auto stationArray = WikiData::query(R"(
-        SELECT DISTINCT ?station ?stationLabel ?ibnr ?coord WHERE {
+        SELECT DISTINCT ?station ?stationLabel ?ibnr ?coord ?replacedBy WHERE {
             ?station (wdt:P31/wdt:P279*) wd:Q55488.
             ?station wdt:P954 ?ibnr.
             OPTIONAL { ?station wdt:P625 ?coord. }
+            OPTIONAL { ?station wdt:P1366 ?replacedBy. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
         } ORDER BY (?station))", "wikidata_trainstation_ibnr.json");
     if (stationArray.isEmpty()) {
@@ -92,6 +93,10 @@ bool TrainStationDbGenerator::fetchIBNR()
 
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
+        if (stationObj.contains(QLatin1String("replacedBy"))) {
+            continue;
+        }
+
         const auto uri = insertOrMerge(stationObj);
 
         const auto id = stationObj.value(QLatin1String("ibnr")).toObject().value(QLatin1String("value")).toString().toUInt();
