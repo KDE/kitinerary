@@ -20,7 +20,7 @@
 function parseEvent(event)
 {
     var res;
-    if (event.summary.startsWith("Flug")) {
+    if (event.summary.match(/(?:Flight|Flug)/i)) {
         res = JsonLd.newObject("FlightReservation");
         res.reservationFor = JsonLd.newObject("Flight");
         res.reservationFor.airline = JsonLd.newObject("Airline");
@@ -31,15 +31,15 @@ function parseEvent(event)
         res.reservationFor.departureTime = event.dtStart.toJSON();
         res.reservationFor.arrivalTime = event.dtEnd.toJSON();
 
-        var flight = event.description.match(/Flugnr.:\s*(\w{2}) (\d{1,4}).*von: (.+)\n/);
+        var flight = event.description.match(/(?:Flight no|Flugnr.):\s*(\w{2}) (\d{1,4})\n?.*(?:by|von): (.+)\n/);
         res.reservationFor.airline.name = flight[3];
         res.reservationFor.airline.iataCode = flight[1];
         res.reservationFor.flightNumber = flight[2];
 
-        var from = event.description.match(/Von:\s+(.*)\n/);
+        var from = event.description.match(/(?:From|Von):\s+(.*)\n/);
         res.reservationFor.departureAirport.name = from[1];
 
-        var to = event.description.match(/Nach:\s+(.*)\n/);
+        var to = event.description.match(/(?:To|Nach):\s+(.*)\n/);
         res.reservationFor.arrivalAirport.name = to[1];
 
     } else if (event.summary.startsWith("Mietwagen")) {
@@ -67,7 +67,7 @@ function parseEvent(event)
         return null;
     }
 
-    var refNum = event.description.match(/Buchungsnummer:\s(\w+)\n/);
+    var refNum = event.description.match(/(?:Reservation code|Buchungsnummer):\s(\w+)\n/);
     res.reservationNumber = refNum[1];
 
     return res;
