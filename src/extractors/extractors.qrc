@@ -12,8 +12,6 @@
         <file>aohostels.js</file>
         <file>availpro.json</file>
         <file>availpro.js</file>
-        <file>bcd.json</file>
-        <file>bcd.js</file>
         <file>booking.json</file>
         <file>booking.js</file>
         <file>brusselsairlines.json</file>
@@ -42,6 +40,8 @@
         <file>lufthansa-pkpass.js</file>
         <file>nh-hotels.json</file>
         <file>nh-hotels.js</file>
+        <file>np4.json</file>
+        <file>np4.js</file>
         <file>regiojet.json</file>
         <file>regiojet.js</file>
         <file>sas.json</file>
