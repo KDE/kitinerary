@@ -316,7 +316,7 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
         || contentMightBeEmail(data))
     {
         d->m_ownedMimeContent.reset(new KMime::Message);
-        d->m_ownedMimeContent->setContent(data);
+        d->m_ownedMimeContent->setContent(KMime::CRLFtoLF(data));
         d->m_ownedMimeContent->parse();
         setContent(d->m_ownedMimeContent.get());
         return;
