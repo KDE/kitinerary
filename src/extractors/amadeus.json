@@ -1,7 +1,10 @@
 [
     {
         "type": "text",
-        "filter": [ { "header": "From", "match": "@amadeus.com" } ],
+        "filter": [
+            { "header": "From", "match": "@amadeus.com" },
+            { "header": "Message-ID",  "match": "amadeus.com" }
+        ],
         "script": "amadeus.js"
     },
     {
