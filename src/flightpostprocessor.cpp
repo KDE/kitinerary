@@ -65,9 +65,6 @@ Flight FlightPostProcessor::processFlight(Flight flight)
 
 Airport FlightPostProcessor::processAirport(Airport airport, const std::vector<KnowledgeDb::IataCode> &codes) const
 {
-    // clean up name
-    airport.setName(airport.name().simplified());
-
     // complete missing IATA codes
     if (airport.iataCode().isEmpty() && codes.size() == 1) {
         airport.setIataCode(codes[0].toString());

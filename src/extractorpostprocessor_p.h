@@ -94,6 +94,7 @@ public:
 
 template<typename T> inline T ExtractorPostprocessorPrivate::processPlace(T place)
 {
+    place.setName(place.name().simplified());
     auto addr = processAddress(place.address(), place.telephone());
     place.setAddress(addr);
     place.setTelephone(processPhoneNumber(place.telephone(), place.address()));
