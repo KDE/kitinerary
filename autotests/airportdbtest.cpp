@@ -192,6 +192,9 @@ private Q_SLOTS:
 
         // multiple unique hits / unique hit on valid (but wrong) IATA code
         QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("SEOUL KR GIMPO INTERNATIONAL TERMINAL I - SKY CITY INTERNATIONAL TERMINAL")), (std::vector<IataCode>{IataCode{"GMP"}, IataCode{"ICN"}}));
+
+        // "wrong" us of "international"
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("FRANKFURT DE - FRANKFURT INTL")), (std::vector<IataCode>{IataCode{"FRA"}, IataCode{"HHN"}}));
     }
 
     void countryDataTest()

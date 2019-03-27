@@ -151,6 +151,11 @@ static void iataCodeForNonUniqueFragments(const QStringList &fragments, std::vec
             continue;
         }
 
+        // ignore the imprecisely used "international" if it results in an empty set here
+        if (s == QLatin1String("international") && !iataIdxs.intersects(candidates)) {
+            continue;
+        }
+
         iataIdxs &= candidates;
         if (iataIdxs.isEmpty()) {
             break;
