@@ -8,7 +8,10 @@
     },
     {
         "type": "pdf",
-        "filter": [ { "header": "From", "match": "brusselsairlines.com" } ],
+        "filter": [
+            { "header": "From", "match": "brusselsairlines.com" },
+            { "property": "provider", "match": "SN" }
+        ],
         "script": "brusselsairlines-receipt.js"
     }
 ]
