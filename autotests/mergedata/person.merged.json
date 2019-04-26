@@ -1,0 +1,10 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "underName": {
+        "@type": "Person",
+        "familyName": "Ottens",
+        "givenName": "Kévin",
+        "name": "Kevîn Ottens"
+    }
+}]

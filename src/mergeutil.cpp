@@ -370,14 +370,65 @@ static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs)
     return lhs.name() == rhs.name();
 }
 
+static bool containsNonAscii(const QString &s)
+{
+    for (const auto c : s) {
+        if (c.row() != 0 || c.cell() > 127) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static bool isMixedCase(const QString &s)
+{
+    const auto upperCount = std::count_if(s.begin(), s.end(), [](auto c) { return c.isUpper(); });
+    return upperCount != s.size() && upperCount != 0;
+}
+
+/** Assuming both sides refer to the same thing, this tries to find the "better" one. */
+static QString mergeString(const QString &lhs, const QString &rhs)
+{
+    // prefer the one that exists at all
+    if (lhs.isEmpty()) {
+        return rhs;
+    }
+    if (rhs.isEmpty()) {
+        return lhs;
+    }
+
+    // prefer Unicode over ASCII normalization
+    const auto lhsNonAscii = containsNonAscii(lhs);
+    const auto rhsNonAscii = containsNonAscii(rhs);
+    if (lhsNonAscii && !rhsNonAscii) {
+        return lhs;
+    }
+    if (!lhsNonAscii && rhsNonAscii) {
+        return rhs;
+    }
+
+    // prefer better casing
+    const auto lhsMixedCase = isMixedCase(lhs);
+    const auto rhsMixedCase = isMixedCase(rhs);
+    if (lhsMixedCase && !rhsMixedCase) {
+        return lhs;
+    }
+    if (!lhsMixedCase && rhsMixedCase) {
+        return rhs;
+    }
+
+    // prefer longer == more detailed version
+    if (rhs.size() < lhs.size()) {
+        return lhs;
+    }
+    return rhs;
+}
 
 static Airline mergeValue(const Airline &lhs, const Airline &rhs)
 {
     auto a = JsonLdDocument::apply(lhs, rhs).value<Airline>();
-    // prefer the more detailed name
-    if (a.name().size() < lhs.name().size()) {
-        a.setName(lhs.name());
-    }
+    a.setName(mergeString(lhs.name(), rhs.name()));
     return a;
 }
 
@@ -385,6 +436,15 @@ static QDateTime mergeValue(const QDateTime &lhs, const QDateTime &rhs)
 {
     // prefer value with timezone
     return lhs.isValid() && lhs.timeSpec() == Qt::TimeZone && rhs.timeSpec() != Qt::TimeZone ? lhs : rhs;
+}
+
+static Person mergeValue(const Person &lhs, const Person &rhs)
+{
+    auto p = JsonLdDocument::apply(lhs, rhs).value<Person>();
+    p.setFamilyName(mergeString(lhs.familyName(), rhs.familyName()));
+    p.setGivenName(mergeString(lhs.givenName(), rhs.givenName()));
+    p.setName(mergeString(lhs.name(), rhs.name()));
+    return p;
 }
 
 static Ticket mergeValue(const Ticket &lhs, const Ticket &rhs)
@@ -424,6 +484,8 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
 
         if (mt == qMetaTypeId<Airline>()) {
             rv = mergeValue(lv.value<Airline>(), rv.value<Airline>());
+        } else if (mt == qMetaTypeId<Person>()) {
+            rv = mergeValue(lv.value<Person>(), rv.value<Person>());
         } else if (mt == qMetaTypeId<QDateTime>()) {
             rv = mergeValue(lv.toDateTime(), rv.toDateTime());
         } else if (mt == qMetaTypeId<Ticket>()) {
