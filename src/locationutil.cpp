@@ -33,7 +33,14 @@ using namespace KItinerary;
 
 bool LocationUtil::isLocationChange(const QVariant &res)
 {
-    // TODO rental car if pickup != dropoff
+    if (JsonLd::isA<RentalCarReservation>(res)) {
+        const auto pickup = departureLocation(res);
+        const auto dropoff = arrivalLocation(res);
+        if (dropoff.value<Place>().name().isEmpty()) {
+            return false;
+        }
+        return !isSameLocation(pickup, dropoff);
+    }
     return JsonLd::isA<FlightReservation>(res) || JsonLd::isA<TrainReservation>(res) || JsonLd::isA<BusReservation>(res);
 }
 
