@@ -17,6 +17,7 @@
 
 #include "config-kitinerary.h"
 #include "pdfdocument.h"
+#include "logging.h"
 
 #include <QDebug>
 #include <QImage>
@@ -502,6 +503,7 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
 #endif
     std::unique_ptr<PDFDoc> popplerDoc(new PDFDoc(stream, nullptr, nullptr));
     if (!popplerDoc->isOk()) {
+        qCWarning(Log) << "Got invalid PDF document!" << popplerDoc->getErrorCode();
         return nullptr;
     }
 
