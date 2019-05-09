@@ -170,6 +170,8 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
     trip.setArrivalStation(processTrainStation(trip.arrivalStation()));
     trip.setDepartureTime(processTrainTripTime(trip.departureTime(), trip.departureStation()));
     trip.setArrivalTime(processTrainTripTime(trip.arrivalTime(), trip.arrivalStation()));
+    trip.setTrainNumber(trip.trainNumber().simplified());
+    trip.setTrainName(trip.trainName().simplified());
     return trip;
 }
 
