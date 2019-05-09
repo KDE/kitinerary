@@ -18,6 +18,7 @@
 */
 
 #include "extractorfilter.h"
+#include "logging.h"
 
 #include <QJsonObject>
 
@@ -38,6 +39,9 @@ const char *ExtractorFilter::fieldName() const
 
 bool ExtractorFilter::matches(const QString &data) const
 {
+    if (!m_exp.isValid()) {
+        qCDebug(Log) << m_exp.errorString() << m_exp.pattern();
+    }
     return m_exp.match(data).hasMatch();
 }
 
