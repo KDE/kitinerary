@@ -1,0 +1,10 @@
+[
+    {
+        "type": "pdf",
+        "filter": [
+            { "type": "Barcode", "match": "^ \\x{14}" }
+        ],
+        "script": "trenitalia.js",
+        "function": "parsePdf"
+    }
+]
