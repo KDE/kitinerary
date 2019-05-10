@@ -16,6 +16,7 @@
 */
 
 #include "barcode.h"
+#include "bitarray.h"
 
 #include <KItinerary/BarcodeDecoder>
 #include <KItinerary/IataBcbpParser>
@@ -67,6 +68,11 @@ QVariant JsApi::Barcode::decodeIataBcbp(const QString &s) const
 QString JsApi::Barcode::toBase64(const QVariant &b) const
 {
     return QString::fromUtf8(b.toByteArray().toBase64());
+}
+
+QVariant JsApi::Barcode::toBitArray(const QVariant &b) const
+{
+    return QVariant::fromValue(JsApi::BitArray(b.toByteArray()));
 }
 
 void JsApi::Barcode::setContextDate(const QDateTime &dt)

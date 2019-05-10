@@ -56,12 +56,13 @@ function parsePdf(pdf) {
             if (Math.abs(images[j].width - images[j].height) > 10) // almost square
                 continue;
 
-            var barcode = Barcode.toBase64(Barcode.decodeAztecBinary(images[j]));
-            if (!barcode)
+            var barcode = Barcode.decodeAztecBinary(images[j]);
+            var barcodeB64 = Barcode.toBase64(barcode);
+            if (!barcodeB64)
                 continue;
 
             var personalRes = JsonLd.clone(res);
-            personalRes.reservedTicket.ticketToken = "aztecbin:" + barcode;
+            personalRes.reservedTicket.ticketToken = "aztecbin:" + barcodeB64;
 
             var name = text.substr(offset).match(/(?:Passenger Name|Nome Passeggero(?:\/Passenger\n name)?).*\n(?:    .*\n)* ?((?:\w+|\-\-).*?)(?:  |\n)/);
             offset += name.index + name[0].length;
@@ -71,6 +72,12 @@ function parsePdf(pdf) {
             } else {
                 personalRes.underName.name = "Passenger " + j;
             }
+
+            // see https://community.kde.org/KDE_PIM/KItinerary/Trenitalia_Barcode
+            var bitArray = Barcode.toBitArray(barcode);
+            personalRes.reservationFor.departureStation.identifier = "uic:" + bitArray.readNumberMSB(14*8 + 4, 24);
+            personalRes.reservationFor.arrivalStation.identifier = "uic:" + bitArray.readNumberMSB(18*8 + 3, 24);
+
             reservations.push(personalRes);
         }
     }

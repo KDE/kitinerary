@@ -53,6 +53,8 @@ public:
     Q_INVOKABLE QVariant decodeIataBcbp(const QString &s) const;
     /** Converts the given QByteArray into an base64 encoded string. */
     Q_INVOKABLE QString toBase64(const QVariant &b) const;
+    /** Converts the given QByteArray into a BitArray. */
+    Q_INVOKABLE QVariant toBitArray(const QVariant &b) const;
 
     ///@cond internal
     void setContextDate(const QDateTime &dt);
