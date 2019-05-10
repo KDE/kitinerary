@@ -44,13 +44,35 @@ function parsePdf(pdf) {
         res.reservationFor.arrivalTime = JsonLd.toDateTime(times[4] + times[3], "dd/MM/yyyyhh:mm", "it");
 
         var header = text.match(/(?:Stazione di Arrivo|Arrival station)/);
-        var dest = text.substr(header.index + header[0].length).match(/\n *((?:\w+\.? )*\w+\.?)  +((?:\w+.? )*\w+\.?)(?:  |\n)/);
+        var dest = text.substr(header.index + header[0].length).match(/\n *((?:\w+\.? )*\w+\.?)  +((?:\w+\.? )*\w+\.?)(?:  |\n)/);
         res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
         res.reservationFor.departureStation.name = dest[1];
         res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
         res.reservationFor.arrivalStation.name = dest[2];
 
-        reservations.push(res);
+        var images = page.images;
+        var offset = 0;
+        for (var j = 0; j < images.length; ++j) {
+            if (Math.abs(images[j].width - images[j].height) > 10) // almost square
+                continue;
+
+            var barcode = Barcode.toBase64(Barcode.decodeAztecBinary(images[j]));
+            if (!barcode)
+                continue;
+
+            var personalRes = JsonLd.clone(res);
+            personalRes.reservedTicket.ticketToken = "aztecbin:" + barcode;
+
+            var name = text.substr(offset).match(/(?:Passenger Name|Nome Passeggero(?:\/Passenger\n name)?).*\n(?:    .*\n)* ?((?:\w+|\-\-).*?)(?:  |\n)/);
+            offset += name.index + name[0].length;
+            personalRes.underName = JsonLd.newObject("Person");
+            if (name[1] !== "--") {
+                personalRes.underName.name = name[1];
+            } else {
+                personalRes.underName.name = "Passenger " + j;
+            }
+            reservations.push(personalRes);
+        }
     }
 
     return reservations;
