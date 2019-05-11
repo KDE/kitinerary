@@ -51,6 +51,7 @@ public:
 
 private:
     bool fetchIBNR();
+    bool fetchUIC();
     bool fetchGaresConnexions();
     bool fetchCountryInformation();
     QUrl insertOrMerge(const QJsonObject &obj, bool mergeOnly = false);
@@ -62,6 +63,7 @@ private:
 
     std::vector<Station> m_stations;
     std::map<uint32_t, QUrl> m_ibnrMap;
+    std::map<uint32_t, QUrl> m_uicMap;
     std::map<QString, QUrl> m_garesConnexionsIdMap;
     Timezones m_tzDb;
 

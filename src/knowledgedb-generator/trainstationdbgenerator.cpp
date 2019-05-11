@@ -46,7 +46,7 @@ static bool operator<(const TrainStationDbGenerator::Station &lhs, const QUrl &r
 bool TrainStationDbGenerator::generate(QIODevice *out)
 {
     // retrieve content from Wikidata
-    if (!fetchIBNR() || !fetchGaresConnexions() || !fetchCountryInformation()) {
+    if (!fetchIBNR() || !fetchUIC() || !fetchGaresConnexions() || !fetchCountryInformation()) {
         return false;
     }
 
@@ -112,6 +112,46 @@ bool TrainStationDbGenerator::fetchIBNR()
             qWarning() << "Conflict on IBNR" << id << uri << m_ibnrMap[id];
         } else {
             m_ibnrMap[id] = uri;
+        }
+    }
+
+    return true;
+}
+
+bool TrainStationDbGenerator::fetchUIC()
+{
+    const auto stationArray = WikiData::query(R"(
+        SELECT DISTINCT ?station ?stationLabel ?uic ?coord WHERE {
+            ?station (wdt:P31/wdt:P279*) wd:Q55488.
+            ?station wdt:P722 ?uic.
+            OPTIONAL { ?station wdt:P625 ?coord. }
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        } ORDER BY (?station))", "wikidata_trainstation_ibnr.json");
+    if (stationArray.isEmpty()) {
+        qWarning() << "Empty query result!";
+        return false;
+    }
+
+    for (const auto &stationData : stationArray) {
+        const auto stationObj = stationData.toObject();
+        const auto uri = insertOrMerge(stationObj);
+
+        auto id = stationObj.value(QLatin1String("uic")).toObject().value(QLatin1String("value")).toString().toUInt();
+        if (id > 9999999) {
+            id /= 10; // strip off check digit if present
+        }
+        if (id < 1000000 || id > 9999999) {
+            ++m_idFormatViolations;
+            qWarning() << "UIC format violation" << id << uri;
+            continue;
+        }
+
+        const auto it = m_uicMap.find(id);
+        if (it != m_uicMap.end() && (*it).second != uri) {
+            ++m_idConflicts;
+            qWarning() << "Conflict on UIC" << id << uri << m_uicMap[id];
+        } else {
+            m_uicMap[id] = uri;
         }
     }
 
@@ -328,6 +368,7 @@ void TrainStationDbGenerator::printSummary()
 {
     qDebug() << "Generated database containing" << m_stations.size() << "train stations";
     qDebug() << "IBNR index:" << m_ibnrMap.size() << "elements";
+    qDebug() << "UIC index:" << m_uicMap.size() << "elements";
     qDebug() << "Gares & Connexions ID index:" << m_garesConnexionsIdMap.size() << "elements";
     qDebug() << "Identifier collisions:" << m_idConflicts;
     qDebug() << "Identifier format violations:" << m_idFormatViolations;
