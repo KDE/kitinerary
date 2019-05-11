@@ -189,7 +189,7 @@ static const plug_type_mapping plug_type_table[] = {
     { "Q24288454", "TypeA" },
     { "Q24288456", "TypeB" },
     { "Q1378312",  "TypeC" },
-    { "Q2335524",  "TypeD" },
+    { "Q60740126",  "TypeD" },
     { "Q2335536",  "TypeE" },
     { "Q1123613",  "TypeF" },
     { "Q1528507",  "TypeG" },
