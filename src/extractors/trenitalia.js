@@ -26,6 +26,7 @@ function parsePdf(pdf) {
 
         var res = JsonLd.newObject("TrainReservation");
         res.reservedTicket = JsonLd.newObject("Ticket");
+        res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
         res.reservationFor = JsonLd.newObject("TrainTrip");
 
         var pnr = text.match(/PNR: (\S+)/);
@@ -75,8 +76,26 @@ function parsePdf(pdf) {
 
             // see https://community.kde.org/KDE_PIM/KItinerary/Trenitalia_Barcode
             var bitArray = Barcode.toBitArray(barcode);
-            personalRes.reservationFor.departureStation.identifier = "uic:" + bitArray.readNumberMSB(14*8 + 4, 24);
-            personalRes.reservationFor.arrivalStation.identifier = "uic:" + bitArray.readNumberMSB(18*8 + 3, 24);
+
+            var depUic = bitArray.readNumberMSB(14*8 + 4, 24);
+            var arrUic = bitArray.readNumberMSB(18*8 + 3, 24);
+            if (depUic != arrUic) {
+                if (bitArray.readNumberMSB(14*8, 4) == 0) {
+                    personalRes.reservationFor.departureStation.identifier = "uic:" + depUic;
+                }
+                if (bitArray.readNumberMSB(17*8 + 7, 4) == 0) {
+                    personalRes.reservationFor.arrivalStation.identifier = "uic:" + arrUic;
+                }
+            }
+
+            var seatNum = bitArray.readNumberMSB(31*8 + 2, 7);
+            if (seatNum > 0) {
+                personalRes.reservedTicket.ticketedSeat.seatNumber = "" + seatNum;
+                var seatCol = bitArray.readNumberMSB(32*8 + 3, 4);
+                if (seatCol > 0) {
+                    personalRes.reservedTicket.ticketedSeat.seatNumber += seatCol.toString(16).toUpperCase();
+                }
+            }
 
             reservations.push(personalRes);
         }
