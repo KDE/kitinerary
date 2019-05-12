@@ -95,6 +95,9 @@ function parsePdf(pdf) {
                 if (seatCol > 0) {
                     personalRes.reservedTicket.ticketedSeat.seatNumber += seatCol.toString(16).toUpperCase();
                 }
+
+                var coach = text.match(/(?:Coaches|Carrozza(?:\/Coach)?): +(\S+)/);
+                personalRes.reservedTicket.ticketedSeat.seatSection = coach[1];
             }
 
             reservations.push(personalRes);
