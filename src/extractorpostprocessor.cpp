@@ -175,6 +175,21 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
     return trip;
 }
 
+static void applyStationData(const KnowledgeDb::TrainStation &record, TrainStation &station)
+{
+    if (!station.geo().isValid() && record.coordinate.isValid()) {
+        GeoCoordinates geo;
+        geo.setLatitude(record.coordinate.latitude);
+        geo.setLongitude(record.coordinate.longitude);
+        station.setGeo(geo);
+    }
+    auto addr = station.address();
+    if (addr.addressCountry().isEmpty() && record.country.isValid()) {
+        addr.setAddressCountry(record.country.toString());
+        station.setAddress(addr);
+    }
+}
+
 TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation station) const
 {
     const auto id = station.identifier();
@@ -187,31 +202,14 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
             addr.setAddressCountry(id.mid(5, 2).toUpper());
             station.setAddress(addr);
         }
-
         const auto record = KnowledgeDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{id.mid(5)});
-        if (!station.geo().isValid() && record.coordinate.isValid()) {
-            GeoCoordinates geo;
-            geo.setLatitude(record.coordinate.latitude);
-            geo.setLongitude(record.coordinate.longitude);
-            station.setGeo(geo);
-        }
-        if (addr.addressCountry().isEmpty() && record.country.isValid()) {
-            addr.setAddressCountry(record.country.toString());
-            station.setAddress(addr);
-        }
+        applyStationData(record, station);
     } else if (id.startsWith(QLatin1String("ibnr:")) && id.size() == 12) {
         const auto record = KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{id.mid(5).toUInt()});
-        if (!station.geo().isValid() && record.coordinate.isValid()) {
-            GeoCoordinates geo;
-            geo.setLatitude(record.coordinate.latitude);
-            geo.setLongitude(record.coordinate.longitude);
-            station.setGeo(geo);
-        }
-        auto addr = station.address();
-        if (addr.addressCountry().isEmpty() && record.country.isValid()) {
-            addr.setAddressCountry(record.country.toString());
-            station.setAddress(addr);
-        }
+        applyStationData(record, station);
+    } else if (id.startsWith(QLatin1String("uic:")) && id.size() == 11) {
+        const auto record = KnowledgeDb::stationForUic(KnowledgeDb::UICStation{id.mid(4).toUInt()});
+        applyStationData(record, station);
     }
 
     return processPlace(station);
