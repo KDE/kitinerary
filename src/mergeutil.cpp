@@ -85,13 +85,24 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         return false;
     }
 
-    // for all reservations check underName
+    // for all reservations check underName and ticket
     if (JsonLd::canConvert<Reservation>(lhs)) {
         // for all: underName either matches or is not set
         const auto lhsUN = JsonLd::convert<Reservation>(lhs).underName().value<Person>();
         const auto rhsUN = JsonLd::convert<Reservation>(rhs).underName().value<Person>();
         if (!lhsUN.name().isEmpty() && !rhsUN.name().isEmpty() &&  !isSamePerson(lhsUN, rhsUN)) {
             return false;
+        }
+
+        const auto lhsTicket = JsonLd::convert<Reservation>(lhs).reservedTicket().value<Ticket>();
+        const auto rhsTicket = JsonLd::convert<Reservation>(rhs).reservedTicket().value<Ticket>();
+        if (conflictIfPresent(lhsTicket.ticketedSeat().seatNumber(), rhsTicket.ticketedSeat().seatNumber(), Qt::CaseInsensitive)) {
+            return false;
+        }
+        if (lhsTicket.ticketTokenType() == rhsTicket.ticketTokenType()) {
+            if (conflictIfPresent(lhsTicket.ticketToken(), rhsTicket.ticketToken())) {
+                return false;
+            }
         }
     }
 
