@@ -32,7 +32,25 @@ namespace KItinerary {
 namespace KnowledgeDb {
 
 /** Position in the train station database. */
-typedef uint16_t TrainStationIndex;
+class TrainStationIndex : public UnalignedNumber<2> {
+    using UnalignedNumber<2>::UnalignedNumber;
+};
+
+/** Train station id to station index lookup table strcuture. */
+template <typename T>
+struct TrainStationIdIndex {
+    constexpr bool operator<(const TrainStationIdIndex &other) const
+    {
+        return stationId < other.stationId;
+    }
+    constexpr bool operator<(T otherId) const
+    {
+        return stationId < otherId;
+    }
+
+    T stationId;
+    TrainStationIndex stationIndex;
+};
 
 /** Train station entry in the station table.
  *  @note This is not for use in APIs/ABIs, but matches the binary layout of the database.
@@ -82,6 +100,9 @@ private:
 
 /** Lookup train station data by IBNR. */
 KITINERARY_EXPORT TrainStation stationForIbnr(IBNR ibnr);
+
+/** Lookup train station data by UIC station id. */
+KITINERARY_EXPORT TrainStation stationForUic(UICStation uic);
 
 /** Lookup train station data by Gares & Connexions ID. */
 KITINERARY_EXPORT TrainStation stationForGaresConnexionsId(GaresConnexionsId garesConnexionsId);

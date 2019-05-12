@@ -58,6 +58,7 @@ private:
     void processStations();
     void writeStationData(QIODevice *out);
     void writeIBNRMap(QIODevice *out);
+    void writeUICMap(QIODevice *out);
     void writeGareConnexionMap(QIODevice *out);
     void printSummary();
 

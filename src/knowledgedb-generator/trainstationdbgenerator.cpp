@@ -66,6 +66,7 @@ namespace KnowledgeDb {
 )");
     writeStationData(out);
     writeIBNRMap(out);
+    writeUICMap(out);
     writeGareConnexionMap(out);
     out->write(R"(
 }
@@ -300,31 +301,36 @@ void TrainStationDbGenerator::writeStationData(QIODevice *out)
 
 void TrainStationDbGenerator::writeIBNRMap(QIODevice *out)
 {
-    out->write("static const IBNR ibnr_table[] = {\n");
+    out->write("static constexpr const TrainStationIdIndex<IBNR> ibnr_table[] = {\n");
     for (const auto &it : m_ibnrMap) {
         const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it.second);
         if (station == m_stations.end() || (*station).uri != it.second) {
             continue;
         }
-        out->write("    IBNR{");
+        out->write("    { IBNR{");
         out->write(QByteArray::number(it.first));
-        out->write("}, // ");
+        out->write("}, TrainStationIndex{");
+        out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
+        out->write("} }, // ");
         out->write((*station).name.toUtf8());
         out->write("\n");
     }
     out->write("};\n\n");
+}
 
-    out->write("static const TrainStationIndex ibnr_index[] = {\n");
-    for (const auto &it : m_ibnrMap) {
+void TrainStationDbGenerator::writeUICMap(QIODevice* out)
+{
+    out->write("static constexpr const TrainStationIdIndex<UICStation> uic_table[] = {\n");
+    for (const auto &it : m_uicMap) {
         const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it.second);
         if (station == m_stations.end() || (*station).uri != it.second) {
             continue;
         }
-        out->write("    ");
-        out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
-        out->write(", // ");
+        out->write("    { UICStation{");
         out->write(QByteArray::number(it.first));
-        out->write(" -> ");
+        out->write("}, TrainStationIndex{");
+        out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
+        out->write("} }, // ");
         out->write((*station).name.toUtf8());
         out->write("\n");
     }
@@ -333,31 +339,17 @@ void TrainStationDbGenerator::writeIBNRMap(QIODevice *out)
 
 void TrainStationDbGenerator::writeGareConnexionMap(QIODevice *out)
 {
-    out->write("static const GaresConnexionsId garesConnexionsId_table[] = {\n");
+    out->write("static constexpr const TrainStationIdIndex<GaresConnexionsId> garesConnexionsId_table[] = {\n");
     for (const auto &it : m_garesConnexionsIdMap) {
         const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it.second);
         if (station == m_stations.end() || (*station).uri != it.second) {
             continue;
         }
-        out->write("    GaresConnexionsId{\"");
+        out->write("    { GaresConnexionsId{\"");
         out->write(it.first.toUtf8());
-        out->write("\"}, // ");
-        out->write((*station).name.toUtf8());
-        out->write("\n");
-    }
-    out->write("};\n\n");
-
-    out->write("static const TrainStationIndex garesConnexionsId_index[] = {\n");
-    for (const auto &it : m_garesConnexionsIdMap) {
-        const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it.second);
-        if (station == m_stations.end() || (*station).uri != it.second) {
-            continue;
-        }
-        out->write("    ");
+        out->write("\"}, TrainStationIndex{");
         out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
-        out->write(", // ");
-        out->write(it.first.toUtf8());
-        out->write(" -> ");
+        out->write("} }, // ");
         out->write((*station).name.toUtf8());
         out->write("\n");
     }

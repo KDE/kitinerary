@@ -87,6 +87,22 @@ private Q_SLOTS:
         QCOMPARE(station.country, CountryId{"DE"});
     }
 
+    void testUICLookup()
+    {
+        auto station = KnowledgeDb::stationForUic(UICStation{1234567});
+        QVERIFY(!station.coordinate.isValid());
+        QCOMPARE(station.timezone.toQTimeZone(), QTimeZone());
+
+        station = KnowledgeDb::stationForUic({});
+        QVERIFY(!station.coordinate.isValid());
+        QCOMPARE(station.timezone.toQTimeZone(), QTimeZone());
+
+        station = KnowledgeDb::stationForUic(UICStation{1001332});
+        QVERIFY(station.coordinate.isValid());
+        QCOMPARE(station.timezone.toQTimeZone(), QTimeZone("Europe/Helsinki"));
+        QCOMPARE(station.country, CountryId{"FI"});
+    }
+
     void testGaresConnexionsIdLookup()
     {
         auto station = KnowledgeDb::stationForGaresConnexionsId({});
