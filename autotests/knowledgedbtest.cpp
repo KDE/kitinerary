@@ -33,6 +33,33 @@ class KnowledgeDbTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void testUnalignedNumber()
+    {
+        constexpr UnalignedNumber<3> uic1(8001337);
+        constexpr UnalignedNumber<3> uic2(8001330);
+        static_assert(sizeof(uic1) == 3, "");
+        static_assert(alignof(UnalignedNumber<3>) == 1, "");
+        QVERIFY(!(uic1 < uic2));
+        QVERIFY(uic2 < uic1);
+        QVERIFY(uic1 != uic2);
+        QVERIFY(!(uic1 == uic2));
+
+        constexpr UnalignedNumber<3> uic3(9899776);
+        constexpr UnalignedNumber<3> uic4(1000191);
+        QVERIFY(!(uic3 < uic4));
+        QVERIFY(uic4 < uic3);
+        QVERIFY(uic3 != uic4);
+        QVERIFY(!(uic3 == uic4));
+        QCOMPARE(uic3.value(), 9899776);
+        QCOMPARE(uic4.value(), 1000191);
+
+        constexpr UnalignedNumber<3> uic[2] = { UnalignedNumber<3>(8301700), UnalignedNumber<3>(8301701) };
+        static_assert(sizeof(uic) == 6, "");
+        QVERIFY(uic[0] < uic[1]);
+        QVERIFY(uic[0] == uic[0]);
+        QVERIFY(uic[0] != uic[1]);
+    }
+
     void testIBNRLookup()
     {
         auto station = KnowledgeDb::stationForIbnr(IBNR{1234567});

@@ -39,7 +39,7 @@ GaresConnexionsId::GaresConnexionsId(const QString& id)
     if (id.size() != 5) {
         return;
     }
-    m_id = fromChars(id.toUpper().toLatin1().constData());
+    setValue(fromChars(id.toUpper().toLatin1().constData()));
 }
 
 TrainStation KnowledgeDb::stationForIbnr(IBNR ibnr)

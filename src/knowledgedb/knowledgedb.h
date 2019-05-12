@@ -19,6 +19,7 @@
 #define KITINERARY_KNOWLEDGEDB_H
 
 #include <cmath>
+#include <cstdint>
 
 namespace KItinerary {
 
@@ -60,6 +61,92 @@ struct Coordinate {
 
     float longitude;
     float latitude;
+};
+
+/** Unalinged storage of a numerical value.
+ *  This is optimized for a compact memory layout, at the expense of slightly more
+ *  expensive comparison operations.
+ *  @tparam N the size in byte, at this point limited to at most 4
+ */
+template <int N> class UnalignedNumber : private UnalignedNumber<N-1> {
+public:
+    inline constexpr UnalignedNumber() = default;
+    inline explicit constexpr UnalignedNumber(uint32_t num)
+        : UnalignedNumber<N-1>(num)
+        , m_value((num & (0xFF << (N-1)*8)) >> (N-1)*8)
+    {}
+
+    inline constexpr bool operator==(UnalignedNumber<N> other) const
+    {
+        if (m_value == other.m_value) {
+            return UnalignedNumber<N-1>::operator==(other);
+        }
+        return false;
+    }
+    inline constexpr bool operator!=(UnalignedNumber<N> other) const
+    {
+        if (m_value == other.m_value) {
+            return UnalignedNumber<N-1>::operator!=(other);
+        }
+        return true;
+    }
+    inline constexpr bool operator<(UnalignedNumber<N> other) const
+    {
+        if (m_value == other.m_value) {
+            return UnalignedNumber<N-1>::operator<(other);
+        }
+        return m_value < other.m_value;
+    }
+
+    inline constexpr uint32_t value() const
+    {
+        return UnalignedNumber<N-1>::value() | (m_value << (N-1)*8);
+    }
+
+protected:
+    inline void setValue(uint32_t num)
+    {
+        m_value = (num & (0xFF << (N-1)*8)) >> (N-1)*8;
+        UnalignedNumber<N-1>::setValue(num);
+    }
+
+private:
+    uint8_t m_value = 0;
+};
+
+template <> class UnalignedNumber<1> {
+public:
+    inline constexpr UnalignedNumber() = default;
+    inline explicit constexpr UnalignedNumber(uint32_t num)
+        : m_value(num & 0xFF)
+    {}
+
+    inline constexpr bool operator==(UnalignedNumber<1> other) const
+    {
+        return m_value == other.m_value;
+    }
+    inline constexpr bool operator!=(UnalignedNumber<1> other) const
+    {
+        return m_value != other.m_value;
+    }
+    inline constexpr bool operator<(UnalignedNumber<1> other) const
+    {
+        return m_value < other.m_value;
+    }
+
+    inline constexpr uint32_t value() const
+    {
+        return m_value;
+    }
+
+protected:
+    inline void setValue(uint32_t num)
+    {
+        m_value = num & 0xFF;
+    }
+
+private:
+    uint8_t m_value = 0;
 };
 
 }

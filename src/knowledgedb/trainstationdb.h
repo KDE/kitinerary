@@ -44,57 +44,40 @@ struct TrainStation {
 };
 
 /** IBNR station id.
- *  2 digits UIC country code, 5 digits station id
+ *  2 digits UIC country code, 5 digits station id.
+ *  Same format as UICStation, but nevertheless different values.
  */
-struct IBNR {
-    inline constexpr IBNR() = default;
-    inline explicit constexpr IBNR(uint32_t ibnr)
-        : id(ibnr)
-    {}
+class IBNR : public UnalignedNumber<3> {
+    using UnalignedNumber<3>::UnalignedNumber;
+};
 
-    inline constexpr bool operator!=(IBNR other) const
-    {
-        return id != other.id;
-    }
-    inline constexpr bool operator<(IBNR other) const
-    {
-        return id < other.id;
-    }
-
-    uint32_t id = 0; // TODO 24bit would be enough
+/** UIC station id.
+ *  2 digits UIC country code, 5 digits station id.
+ *  Same format as IBNR, but nevertheless different values.
+ */
+class UICStation : public UnalignedNumber<3> {
+    using UnalignedNumber<3>::UnalignedNumber;
 };
 
 /** Gares & Connexion ID.
  *  2 letters ISO country code, 5 letters station id, expected to be in upper case.
  */
-class GaresConnexionsId
+class GaresConnexionsId : public UnalignedNumber<3>
 {
 public:
     inline constexpr GaresConnexionsId() = default;
     inline explicit constexpr GaresConnexionsId(const char s[5])
-        : m_id(fromChars(s))
+        : UnalignedNumber<3>(fromChars(s))
     {
     }
 
     KITINERARY_EXPORT explicit GaresConnexionsId(const QString &id);
-
-    inline constexpr bool operator!=(GaresConnexionsId other) const
-    {
-        return m_id != other.m_id;
-    }
-    inline constexpr bool operator<(GaresConnexionsId other) const
-    {
-        return m_id < other.m_id;
-    }
 
 private:
     static inline constexpr uint32_t fromChars(const char s[5])
     {
         return (s[4] - '@') + 26 * ((s[3] - '@') + 26 * ((s[2] - '@') + 26 * ((s[1] - '@') + 26 * (s[0] - '@'))));
     }
-
-    // TODO 24bit would be enough
-    uint32_t m_id = 0;
 };
 
 /** Lookup train station data by IBNR. */
