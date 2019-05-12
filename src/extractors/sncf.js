@@ -131,7 +131,7 @@ function parseHtmlConfirmation(html)
 {
     var reservations = new Array();
 
-    var pnr = html.eval("//*[@class=\"pnr-ref\"]/*[@class=\"pnr-info\"]")[0].content;
+    var pnr = html.eval("//*[@class=\"pnr-ref\"]/*[@class=\"pnr-info\"]");
 
     var productDts = html.eval("//*[@class=\"product-travel-date\"]");
     var productDetails = html.eval("//table[@class=\"product-details\"]");
@@ -148,7 +148,9 @@ function parseHtmlConfirmation(html)
                 res.reservationFor = JsonLd.newObject("TrainTrip");
                 res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
                 res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
-                res.reservationNumber = pnr;
+                if (pnr.length > 0) {
+                    res.reservationNumber = pnr[0].content;
+                }
 
                 res.reservationFor.departureTime = JsonLd.toDateTime(dt + segmentDetail.content, "dd MMMMhh'h'mm", "fr");
                 segmentDetail = segmentDetail.nextSibling;
