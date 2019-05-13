@@ -1,0 +1,10 @@
+[
+    {
+        "type": "pdf",
+        "filter": [
+            { "type": "Barcode", "match": "docType.:.INTERNATIONAL_ID" }
+        ],
+        "script": "koleje-malopolskie.js",
+        "function": "parsePdf"
+    }
+]
