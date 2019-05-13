@@ -42,6 +42,10 @@ public:
      *  @return a QByteArray, which from the JS perspective is essentially an opque handle.
      */
     Q_INVOKABLE QVariant decodeAztecBinary(const QVariant &img) const;
+    /** Decode as QR barcode image.
+     *  @param img An image containing the barcode, e.g. a PdfImage instance.
+     */
+    Q_INVOKABLE QString decodeQR(const QVariant &img) const;
     /** Decode an UIC 918.3 message from a train ticket Aztec code.
      *  @param s A QByteArray containing the raw data from the barcode.
      *  @returns An instance of Uic9183Parser.

@@ -52,6 +52,14 @@ QVariant JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
     return {};
 }
 
+QString JsApi::Barcode::decodeQR(const QVariant &img) const
+{
+    if (img.userType() == qMetaTypeId<PdfImage>()) {
+        return BarcodeDecoder::decodeQRCode(img.value<PdfImage>().image());
+    }
+    return {};
+}
+
 QVariant JsApi::Barcode::decodeUic9183(const QVariant &s) const
 {
     Uic9183Parser p;
