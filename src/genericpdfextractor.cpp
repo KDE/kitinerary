@@ -113,10 +113,17 @@ void GenericPdfExtractor::extractImage(const PdfImage &img, QJsonArray &result)
     // almost square, assume Aztec (or QR, which we don't handle here yet)
     if (aspectRatio < 1.2f) {
         const auto b = BarcodeDecoder::decodeAztecBinary(img.image());
-        if (Uic9183Parser::maybeUic9183(b)) {
-            GenericUic918Extractor::extract(b, result, m_contextDate);
+        if (!b.isEmpty()) {
+            if (Uic9183Parser::maybeUic9183(b)) {
+                GenericUic918Extractor::extract(b, result, m_contextDate);
+            } else {
+                extractBarcode(QString::fromUtf8(b), result);
+            }
         } else {
-            extractBarcode(QString::fromUtf8(b), result);
+            const auto qr = BarcodeDecoder::decodeQRCode(img.image()); // ### is it cheaper if we do that in one go?
+            if (!qr.isEmpty()) {
+                extractBarcode(qr, result);
+            }
         }
     }
 
