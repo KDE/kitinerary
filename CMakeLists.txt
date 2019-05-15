@@ -77,9 +77,6 @@ endif()
 
 if (TARGET ZXing::Core)
     set(HAVE_ZXING ON)
-elseif (TARGET zxing::libzxing)
-    message(WARNING "Old zxing-cpp variant from https://github.com/glassechidna/zxing-cpp found - support for this will be removed eventually!")
-    set(HAVE_ZXING_OLD ON)
 endif()
 
 if (TARGET KF5::CalendarCore)

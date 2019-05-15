@@ -51,7 +51,6 @@ set(kitinerary_lib_srcs
     locationutil.cpp
     mergeutil.cpp
     pdfdocument.cpp
-    qimageluminancesource.cpp
     qimagepurebinarizer.cpp
     rct2ticket.cpp
     sortutil.cpp
@@ -61,7 +60,6 @@ set(kitinerary_lib_srcs
 )
 qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
-kde_source_files_enable_exceptions(barcodedecoder.cpp)
 
 add_library(KPimItinerary ${kitinerary_lib_srcs})
 add_library(KPim::Itinerary ALIAS KPimItinerary)
@@ -90,8 +88,6 @@ endif()
 
 if (HAVE_ZXING)
     target_link_libraries(KPimItinerary PRIVATE ZXing::Core)
-elseif (HAVE_ZXING_OLD)
-    target_link_libraries(KPimItinerary PRIVATE zxing::libzxing)
 endif()
 
 if (HAVE_KCAL)

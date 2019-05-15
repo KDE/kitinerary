@@ -26,10 +26,6 @@
 #cmakedefine HAVE_POPPLER_0_72
 
 #cmakedefine HAVE_ZXING
-#cmakedefine HAVE_ZXING_OLD
-#if defined(HAVE_ZXING) || defined(HAVE_ZXING_OLD)
-#define HAVE_ZXING_ANY
-#endif
 
 #cmakedefine HAVE_KCAL
 #cmakedefine HAVE_LIBXML2

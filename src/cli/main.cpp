@@ -65,8 +65,6 @@ static void printCapabilities()
     std::cout << "Barcode decoder     : "
 #ifdef HAVE_ZXING
               << "zxing"
-#elif defined(HAVE_ZXING_OLD)
-              << "legacy zxing"
 #else
               << "not available"
 #endif

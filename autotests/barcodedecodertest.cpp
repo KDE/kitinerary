@@ -51,7 +51,7 @@ private Q_SLOTS:
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/") + fileName);
         QVERIFY(!img.isNull());
 
-#ifdef HAVE_ZXING_ANY
+#ifdef HAVE_ZXING
         QCOMPARE(BarcodeDecoder::decodePdf417(img), QStringLiteral("PDF417 is a stacked linear barcode symbol format used in a variety of applications, primarily transport, identification cards, and inventory management."));
 #endif
     }
@@ -60,13 +60,13 @@ private Q_SLOTS:
     {
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/aztec.png"));
         QVERIFY(!img.isNull());
-#ifdef HAVE_ZXING_ANY
+#ifdef HAVE_ZXING
         QCOMPARE(BarcodeDecoder::decodeAztec(img), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
 #endif
 
         img.load(QStringLiteral(SOURCE_DIR "/barcodes/uic918-3star.png"));
         QVERIFY(!img.isNull());
-#ifdef HAVE_ZXING_ANY
+#ifdef HAVE_ZXING
         const auto b = BarcodeDecoder::decodeAztecBinary(img);
         QCOMPARE(b.size(), 351);
         QVERIFY(b.startsWith("OTI010080000020"));
@@ -90,7 +90,7 @@ private Q_SLOTS:
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/") + fileName);
         QVERIFY(!img.isNull());
 
-#ifdef HAVE_ZXING_ANY
+#ifdef HAVE_ZXING
         QCOMPARE(BarcodeDecoder::decodeQRCode(img), result);
 #endif
 
