@@ -17,7 +17,7 @@
 
 #include "barcode.h"
 #include "bitarray.h"
-#include <barcodedecoder.h>
+#include <barcodedecoder_p.h>
 
 #include <KItinerary/IataBcbpParser>
 #include <KItinerary/PdfDocument>

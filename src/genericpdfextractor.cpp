@@ -17,7 +17,7 @@
 
 #include "genericpdfextractor_p.h"
 #include "genericuic918extractor_p.h"
-#include "barcodedecoder.h"
+#include "barcodedecoder_p.h"
 
 #include <KItinerary/IataBcbpParser>
 #include <KItinerary/JsonLdDocument>

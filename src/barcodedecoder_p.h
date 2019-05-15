@@ -28,6 +28,7 @@ namespace KItinerary {
 
 /** Barcode decoding functions.
  *  @note These functions are only functional if zxing is available.
+ *  @internal Only exported for unit tests.
  */
 namespace BarcodeDecoder
 {

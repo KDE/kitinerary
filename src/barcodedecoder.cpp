@@ -17,7 +17,7 @@
 
 #include "config-kitinerary.h"
 
-#include "barcodedecoder.h"
+#include "barcodedecoder_p.h"
 #include "logging.h"
 #include "qimagepurebinarizer.h"
 
