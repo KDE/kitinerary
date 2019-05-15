@@ -104,7 +104,6 @@ endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS
     HEADER_NAMES
-        BarcodeDecoder
         CalendarHandler
         Extractor
         ExtractorEngine
