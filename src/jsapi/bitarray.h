@@ -34,7 +34,7 @@ public:
     ~BitArray();
 
     /** Reads a @p size bit long numerical value in most significant bit first format starting at bit offset @p startBit. */
-    Q_INVOKABLE int readNumberMSB(int startBit, int size) const;
+    Q_INVOKABLE quint64 readNumberMSB(int startBit, int size) const;
 
 private:
     QByteArray m_data;
