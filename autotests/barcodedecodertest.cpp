@@ -16,7 +16,7 @@
 */
 
 #include <config-kitinerary.h>
-#include <../src/barcodedecoder.h>
+#include <KItinerary/BarcodeDecoder>
 
 #include <QDebug>
 #include <QImage>
