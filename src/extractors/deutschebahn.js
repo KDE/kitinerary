@@ -160,7 +160,7 @@ function parseTicket(text, uic918ticket) {
 
     // international tickets have the booking reference somewhere on the side, so we don't really know
     // where it is relative to the itinerary
-    var bookingRef = text.match(/Auftragsnummer:\s*([A-Z0-9]{6})\n/);
+    var bookingRef = text.match(/(?:Auftragsnummer|Auftrag \(NVS\)):\s*([A-Z0-9]{6,9})\n/);
     for (var i = 0; i < reservations.length; ++i)
         reservations[i].reservationNumber = bookingRef[1];
     return reservations;
