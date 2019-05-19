@@ -54,9 +54,6 @@ function parsePdf(pdf) {
         var images = page.images;
         var offset = 0;
         for (var j = 0; j < images.length; ++j) {
-            if (Math.abs(images[j].width - images[j].height) > 10) // almost square
-                continue;
-
             var barcode = Barcode.decodeAztecBinary(images[j]);
             var barcodeB64 = Barcode.toBase64(barcode);
             if (!barcodeB64)

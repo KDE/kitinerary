@@ -24,10 +24,9 @@ function parsePdf(pdf) {
         var page = pdf.pages[i];
         var images = page.images;
         for (var j = 0; j < images.length; ++j) {
-            if (Math.abs(images[j].width - images[j].height) > 10) // almost square
-                continue;
-
             var barcode = Barcode.decodeQR(images[j]);
+            if (!barcode)
+                continue;
             var obj = JSON.parse(barcode);
             if (!obj)
                 continue;

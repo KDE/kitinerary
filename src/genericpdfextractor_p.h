@@ -18,16 +18,19 @@
 #ifndef KITINERARY_GENERICPDFEXTRACTOR_P_H
 #define KITINERARY_GENERICPDFEXTRACTOR_P_H
 
-#include <unordered_set>
+#include <KItinerary/BarcodeDecoder>
 
 #include <QDateTime>
 #include <QStringList>
+
+#include <unordered_set>
 
 class QJsonArray;
 class QString;
 
 namespace KItinerary {
 
+class BarcodeDecoder;
 class PdfDocument;
 class PdfImage;
 
@@ -43,6 +46,7 @@ public:
     GenericPdfExtractor();
     ~GenericPdfExtractor();
     GenericPdfExtractor(const GenericPdfExtractor&) = delete;
+    void setBarcodeDecoder(BarcodeDecoder *decoder);
 
     /** Set the context date used for extraction. */
     void setContextDate(const QDateTime &dt);
@@ -53,6 +57,9 @@ public:
     /** Barcodes that we couldn't recognize, for use with custom extractors. */
     QStringList unrecognizedBarcodes() const;
 
+    /** Quick pre-check without image decoding if @p img might be a barcode. */
+    static bool maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint = BarcodeDecoder::Any);
+
 private:
     void extractImage(const PdfImage &img, QJsonArray &result);
     void extractBarcode(const QString &code, QJsonArray &result);
@@ -60,6 +67,7 @@ private:
     QDateTime m_contextDate;
     QStringList m_unrecognizedBarcodes;
     std::unordered_set<int> m_imageIds;
+    BarcodeDecoder *m_barcodeDecoder = nullptr;
 };
 
 }

@@ -17,6 +17,7 @@
 
 #include "barcode.h"
 #include "bitarray.h"
+#include <genericpdfextractor_p.h>
 
 #include <KItinerary/BarcodeDecoder>
 #include <KItinerary/IataBcbpParser>
@@ -27,10 +28,19 @@
 
 using namespace KItinerary;
 
+void JsApi::Barcode::setDecoder(BarcodeDecoder *decoder)
+{
+    m_decoder = decoder;
+}
+
 QString JsApi::Barcode::decodePdf417(const QVariant &img) const
 {
     if (img.userType() == qMetaTypeId<PdfImage>()) {
-        return BarcodeDecoder::decodePdf417(img.value<PdfImage>().image());
+        const auto pdfImg = img.value<PdfImage>();
+        if (!GenericPdfExtractor::maybeBarcode(pdfImg, BarcodeDecoder::PDF417)) {
+            return {};
+        }
+        return m_decoder->decodeString(pdfImg.image(), BarcodeDecoder::PDF417);
     }
     return {};
 }
@@ -38,7 +48,11 @@ QString JsApi::Barcode::decodePdf417(const QVariant &img) const
 QString JsApi::Barcode::decodeAztec(const QVariant &img) const
 {
     if (img.userType() == qMetaTypeId<PdfImage>()) {
-        return BarcodeDecoder::decodeAztec(img.value<PdfImage>().image());
+        const auto pdfImg = img.value<PdfImage>();
+        if (!GenericPdfExtractor::maybeBarcode(pdfImg, BarcodeDecoder::Aztec)) {
+            return {};
+        }
+        return m_decoder->decodeString(pdfImg.image(), BarcodeDecoder::Aztec);
     }
     return {};
 }
@@ -46,8 +60,11 @@ QString JsApi::Barcode::decodeAztec(const QVariant &img) const
 QVariant JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
 {
     if (img.userType() == qMetaTypeId<PdfImage>()) {
-        const auto b = BarcodeDecoder::decodeAztecBinary(img.value<PdfImage>().image());
-        return QVariant::fromValue(b);
+        const auto pdfImg = img.value<PdfImage>();
+        if (!GenericPdfExtractor::maybeBarcode(pdfImg, BarcodeDecoder::Aztec)) {
+            return {};
+        }
+        return m_decoder->decodeBinary(pdfImg.image(), BarcodeDecoder::Aztec);
     }
     return {};
 }
@@ -55,7 +72,11 @@ QVariant JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
 QString JsApi::Barcode::decodeQR(const QVariant &img) const
 {
     if (img.userType() == qMetaTypeId<PdfImage>()) {
-        return BarcodeDecoder::decodeQRCode(img.value<PdfImage>().image());
+        const auto pdfImg = img.value<PdfImage>();
+        if (!GenericPdfExtractor::maybeBarcode(pdfImg, BarcodeDecoder::QRCode)) {
+            return {};
+        }
+        return m_decoder->decodeString(pdfImg.image(), BarcodeDecoder::QRCode);
     }
     return {};
 }

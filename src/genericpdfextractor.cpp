@@ -35,12 +35,6 @@ using namespace KItinerary;
 enum {
     MaxPageCount = 10, // maximum in the current test set is 6
     MaxFileSize = 4000000, // maximum in the current test set is 980kB
-    // unit is pixels, assuming landscape orientation
-    MinSourceImageHeight = 10,
-    MinSourceImageWidth = 30,
-    // OEBB uses 1044x1044 for its UIC 918.3 Aztec code
-    MaxSourceImageHeight = 1100, // TODO what's a realistic value here?
-    MaxSourceImageWidth = 2000,
     // unit is 1/72 inch, assuming landscape orientation
     MinTargetImageHeight = 30,
     MinTargetImageWidth = 72,
@@ -50,6 +44,11 @@ enum {
 
 GenericPdfExtractor::GenericPdfExtractor() = default;
 GenericPdfExtractor::~GenericPdfExtractor() = default;
+
+void GenericPdfExtractor::setBarcodeDecoder(BarcodeDecoder *decoder)
+{
+    m_barcodeDecoder = decoder;
+}
 
 void GenericPdfExtractor::setContextDate(const QDateTime &dt)
 {
@@ -76,20 +75,7 @@ void GenericPdfExtractor::extract(PdfDocument *doc, QJsonArray &result)
                 continue;
             }
 
-            // image source size sanity checks
-            if (std::min(img.sourceWidth(), img.sourceHeight()) < MinSourceImageHeight
-             || std::max(img.sourceWidth(), img.sourceHeight()) < MinSourceImageWidth
-             || img.sourceHeight() > MaxSourceImageHeight
-             || img.sourceWidth() > MaxSourceImageWidth) {
-                continue;
-            }
-
-            // image target size checks
-            const auto targetRect = img.transform().map(QRectF(0, 0, 1, -1)).boundingRect();
-            if (std::min(targetRect.width(), targetRect.height()) < MinTargetImageHeight
-             || std::max(targetRect.width(), targetRect.height()) < MinTargetImageWidth
-             || targetRect.height() > MaxTargetImageHeight
-             || targetRect.width() > MaxTargetImageWidth) {
+            if (!maybeBarcode(img)) {
                 continue;
             }
 
@@ -106,31 +92,16 @@ QStringList GenericPdfExtractor::unrecognizedBarcodes() const
 
 void GenericPdfExtractor::extractImage(const PdfImage &img, QJsonArray &result)
 {
-    const auto aspectRatio = img.width() < img.height() ?
-        (float)img.height() / (float)img.width() :
-        (float)img.width() / (float)img.height();
-
-    // almost square, assume Aztec (or QR, which we don't handle here yet)
-    if (aspectRatio < 1.2f) {
-        const auto b = BarcodeDecoder::decodeAztecBinary(img.image());
-        if (!b.isEmpty()) {
-            if (Uic9183Parser::maybeUic9183(b)) {
-                GenericUic918Extractor::extract(b, result, m_contextDate);
-            } else {
-                extractBarcode(QString::fromUtf8(b), result);
-            }
-        } else {
-            const auto qr = BarcodeDecoder::decodeQRCode(img.image()); // ### is it cheaper if we do that in one go?
-            if (!qr.isEmpty()) {
-                extractBarcode(qr, result);
-            }
-        }
+    const auto b = m_barcodeDecoder->decodeBinary(img.image());
+    if (Uic9183Parser::maybeUic9183(b)) {
+        GenericUic918Extractor::extract(b, result, m_contextDate);
+        return;
     }
 
-    // rectangular with medium aspect ratio, assume PDF 417
-    if (aspectRatio > 1.5 && aspectRatio < 6) {
-        const auto s = BarcodeDecoder::decodePdf417(img.image());
-        extractBarcode(s, result);
+    if (b.isEmpty()) {
+        extractBarcode(m_barcodeDecoder->decodeString(img.image()), result);
+    } else {
+        extractBarcode(QString::fromUtf8(b), result);
     }
 }
 
@@ -143,4 +114,22 @@ void GenericPdfExtractor::extractBarcode(const QString &code, QJsonArray &result
     }
 
     m_unrecognizedBarcodes.push_back(code);
+}
+
+bool GenericPdfExtractor::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint)
+{
+    if (!BarcodeDecoder::isPlausibleSize(img.sourceWidth(), img.sourceHeight()) || !BarcodeDecoder::isPlausibleAspectRatio(img.width(), img.height(), hint)) {
+        return false;
+    }
+
+    // image target size checks
+    const auto targetRect = img.transform().map(QRectF(0, 0, 1, -1)).boundingRect();
+    if (std::min(targetRect.width(), targetRect.height()) < MinTargetImageHeight
+        || std::max(targetRect.width(), targetRect.height()) < MinTargetImageWidth
+        || targetRect.height() > MaxTargetImageHeight
+        || targetRect.width() > MaxTargetImageWidth) {
+        return false;
+    }
+
+    return true;
 }

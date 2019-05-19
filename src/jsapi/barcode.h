@@ -22,6 +22,9 @@
 #include <QObject>
 
 namespace KItinerary {
+
+class BarcodeDecoder;
+
 namespace JsApi {
 
 /** Barcode decoding functions. */
@@ -62,10 +65,12 @@ public:
 
     ///@cond internal
     void setContextDate(const QDateTime &dt);
+    void setDecoder(BarcodeDecoder *decoder);
     ///@endcond
 
 private:
     QDateTime m_contextDate;
+    BarcodeDecoder *m_decoder = nullptr;
 };
 
 }

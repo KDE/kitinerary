@@ -18,6 +18,7 @@
 */
 
 #include "config-kitinerary.h"
+#include "barcodedecoder.h"
 #include "extractorengine.h"
 #include "extractor.h"
 #include "extractorrepository.h"
@@ -99,6 +100,7 @@ public:
     QJsonArray m_result;
     QJSEngine m_engine;
     ExtractorRepository m_repo;
+    BarcodeDecoder m_barcodeDecoder;
 };
 
 template <typename T>
@@ -122,14 +124,15 @@ void ExtractorEnginePrivate::setupEngine()
     m_jsonLdApi = new JsApi::JsonLd(&m_engine);
     m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), m_engine.newQObject(m_jsonLdApi));
     m_barcodeApi = new JsApi::Barcode;
+    m_barcodeApi->setDecoder(&m_barcodeDecoder);
     m_engine.globalObject().setProperty(QStringLiteral("Barcode"), m_engine.newQObject(m_barcodeApi));
     m_engine.globalObject().setProperty(QStringLiteral("Context"), m_engine.newQObject(m_context));
 }
 
-
 ExtractorEngine::ExtractorEngine()
     : d(new ExtractorEnginePrivate)
 {
+    d->m_genericPdfExtractor.setBarcodeDecoder(&d->m_barcodeDecoder);
     d->setupEngine();
 }
 
@@ -143,6 +146,7 @@ void ExtractorEngine::clear()
     d->m_mimeContext = nullptr;
     d->m_context->m_senderDate = {};
     d->m_ownedMimeContent.reset();
+    d->m_barcodeDecoder.clearCache();
 }
 
 void ExtractorEnginePrivate::resetContent()

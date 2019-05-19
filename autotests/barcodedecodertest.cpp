@@ -51,8 +51,9 @@ private Q_SLOTS:
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/") + fileName);
         QVERIFY(!img.isNull());
 
+        BarcodeDecoder decoder;
 #ifdef HAVE_ZXING
-        QCOMPARE(BarcodeDecoder::decodePdf417(img), QStringLiteral("PDF417 is a stacked linear barcode symbol format used in a variety of applications, primarily transport, identification cards, and inventory management."));
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::PDF417), QStringLiteral("PDF417 is a stacked linear barcode symbol format used in a variety of applications, primarily transport, identification cards, and inventory management."));
 #endif
     }
 
@@ -60,14 +61,15 @@ private Q_SLOTS:
     {
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/aztec.png"));
         QVERIFY(!img.isNull());
+        BarcodeDecoder decoder;
 #ifdef HAVE_ZXING
-        QCOMPARE(BarcodeDecoder::decodeAztec(img), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
 #endif
 
         img.load(QStringLiteral(SOURCE_DIR "/barcodes/uic918-3star.png"));
         QVERIFY(!img.isNull());
 #ifdef HAVE_ZXING
-        const auto b = BarcodeDecoder::decodeAztecBinary(img);
+        const auto b = decoder.decodeBinary(img, BarcodeDecoder::Aztec);
         QCOMPARE(b.size(), 351);
         QVERIFY(b.startsWith("OTI010080000020"));
 #endif
@@ -90,10 +92,80 @@ private Q_SLOTS:
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/") + fileName);
         QVERIFY(!img.isNull());
 
+        BarcodeDecoder decoder;
 #ifdef HAVE_ZXING
-        QCOMPARE(BarcodeDecoder::decodeQRCode(img), result);
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::QRCode), result);
 #endif
 
+    }
+
+    void testPlausibilityCheck()
+    {
+        QVERIFY(!BarcodeDecoder::maybeBarcode(10, 10));
+        QVERIFY(BarcodeDecoder::maybeBarcode(100, 100));
+        QVERIFY(!BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::PDF417));
+        QVERIFY(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::Aztec));
+        QVERIFY(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::AnySquare));
+        QVERIFY(BarcodeDecoder::maybeBarcode(100, 180, BarcodeDecoder::PDF417));
+        QVERIFY(BarcodeDecoder::maybeBarcode(180, 100, BarcodeDecoder::PDF417));
+        QVERIFY(!BarcodeDecoder::maybeBarcode(180, 100, BarcodeDecoder::AnySquare));
+    }
+
+    void testNoCode()
+    {
+        BarcodeDecoder decoder;
+        QVERIFY(!decoder.isBarcode({}));
+        QCOMPARE(decoder.decodeBinary({}), QByteArray());
+        QCOMPARE(decoder.decodeString({}), QString());
+
+        QImage img(10, 10, QImage::Format_ARGB32);
+        img.fill(Qt::black);
+        QVERIFY(!decoder.isBarcode(img));
+        QCOMPARE(decoder.decodeBinary(img), QByteArray());
+        QCOMPARE(decoder.decodeString(img), QString());
+
+        img = QImage(200, 200, QImage::Format_ARGB32);
+        img.fill(Qt::red);
+        img.fill(Qt::black);
+        QVERIFY(!decoder.isBarcode(img));
+        QCOMPARE(decoder.decodeBinary(img), QByteArray());
+        QCOMPARE(decoder.decodeString(img), QString());
+    }
+
+    void testDecoderHints()
+    {
+        BarcodeDecoder decoder;
+        QImage img(QStringLiteral(SOURCE_DIR "/barcodes/aztec.png"));
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::PDF417), QString());
+#ifdef HAVE_ZXING
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::AnySquare), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::QRCode), QString());
+
+        decoder.clearCache();
+        QVERIFY(decoder.isBarcode(img));
+        QVERIFY(!decoder.isBarcode(img, BarcodeDecoder::PDF417));
+        QVERIFY(!decoder.isBarcode(img, BarcodeDecoder::QRCode));
+        QVERIFY(decoder.isBarcode(img, BarcodeDecoder::Aztec));
+        QVERIFY(decoder.isBarcode(img, BarcodeDecoder::AnySquare));
+#endif
+    }
+
+    void testContentTypeDetection()
+    {
+        BarcodeDecoder decoder;
+        QImage img(QStringLiteral(SOURCE_DIR "/barcodes/aztec.png"));
+#ifdef HAVE_ZXING
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decodeBinary(img, BarcodeDecoder::Any), QByteArray("This is an example Aztec symbol for Wikipedia."));
+
+        img.load(QStringLiteral(SOURCE_DIR "/barcodes/uic918-3star.png"));
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QString());
+        const auto ba = decoder.decodeBinary(img, BarcodeDecoder::Any);
+        QCOMPARE(ba.size(), 351);
+        QVERIFY(ba.startsWith("OTI010080000020"));
+#endif
     }
 };
 
