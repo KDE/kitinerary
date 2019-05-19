@@ -77,7 +77,7 @@ function parseLegs(text, year, compact) {
     for (var i = 0; compact && i < lines.length; ++i)
         lines[i] = lines[i].substr(offset[0].length);
 
-    for (var i = 0; i < lines.length; ++i) {
+    for (var i = 0; i < lines.length;) {
         // stop when reaching the footer or the next itinerary header
         if (isHeaderOrFooter(lines[i]))
             return reservations;
@@ -87,19 +87,43 @@ function parseLegs(text, year, compact) {
         res.reservedTicket = JsonLd.newObject("Ticket");
         res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
 
-        // TODO deal with line continuations!
         while (i < lines.length && !isHeaderOrFooter(lines[i])) {
-            if (parseDeparture(res, lines[i], year, compact))
+            if (parseDeparture(res, lines[i++], year, compact))
                 break;
-            ++i;
         }
         while (i < lines.length && !isHeaderOrFooter(lines[i])) {
-            if (parseArrival(res, lines[i], year))
+            if (parseArrival(res, lines[i], year)) {
+                ++i;
                 break;
+            }
+
+            // continuation of departure line
+            var depStation = lines[i].match(/^(\S.*?)(?:  |\n|$)/)
+            if (depStation)
+                res.reservationFor.departureStation.name = res.reservationFor.departureStation.name +  " " + depStation[1];
+            parseSeat(res, lines[i]);
+
             ++i;
         }
-        if (res.reservationFor.arrivalStation != undefined)
+        // handle continuations of the arrival line
+        while (i < lines.length && !isHeaderOrFooter(lines[i])) {
+            if (lines[i].match(/^\S.+? *[0-9]{2}\.[0-9]{2}\. +ab [0-9]{2}:[0-9]{2}/)) // next departure line
+                break;
+
+            // continuation of arrival line
+            var arrStation = lines[i].match(/^(\S.*?)(?:  |\n|$)/)
+            if (arrStation)
+                res.reservationFor.arrivalStation.name = res.reservationFor.arrivalStation.name +  " " + arrStation[1];
+            parseSeat(res, lines[i]);
+
+            ++i;
+        }
+
+        if (res.reservationFor.arrivalStation != undefined) {
             reservations.push(res);
+        } else {
+            ++i;
+        }
     }
 
     return reservations;
