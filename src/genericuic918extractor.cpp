@@ -85,6 +85,7 @@ void GenericUic918Extractor::extract(const QByteArray &data, QJsonArray &result,
 
     QJsonObject ticket;
     ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
+    ticket.insert(QStringLiteral("ticketToken"), QString(QLatin1String("aztecbin:") + QString::fromLatin1(data.toBase64())));
     ticket.insert(QStringLiteral("ticketedSeat"), seat);
 
     QJsonObject res;
