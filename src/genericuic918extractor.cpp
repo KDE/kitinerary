@@ -87,11 +87,18 @@ void GenericUic918Extractor::extract(const QByteArray &data, QJsonArray &result,
     ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
     ticket.insert(QStringLiteral("ticketedSeat"), seat);
 
+    QJsonObject person;
+    person.insert(QStringLiteral("@type"), QLatin1String("Person"));
+    if (!rct2.passengerName().isEmpty()) {
+        person.insert(QStringLiteral("name"), rct2.passengerName());
+    }
+
     QJsonObject res;
     res.insert(QStringLiteral("@type"), QLatin1String("TrainReservation"));
     res.insert(QStringLiteral("reservationFor"), trip);
     res.insert(QStringLiteral("reservationNumber"), p.pnr());
     res.insert(QStringLiteral("reservedTicket"), ticket);
+    res.insert(QStringLiteral("underName"), person);
 
     result.push_back(res);
 }
