@@ -414,7 +414,12 @@ QString Rct2Ticket::seatNumber() const
 {
     const auto t = type();
     if (t == Reservation || t == TransportReservation) {
-        return d->fieldText(8, 48, 23).trimmed();
+        const auto row8 = d->fieldText(8, 48, 23).trimmed();
+        if (!row8.isEmpty()) {
+            return row8;
+        }
+        // rows 9/10 can contain seating details, let's use those as fallback if we don't find a number in the right field
+        return d->fieldText(9, 1, 70, 2).simplified();
     }
     return {};
 }

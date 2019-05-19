@@ -10,6 +10,7 @@
        "outboundDepartureStation": "SOMEWHERE HBF",
        "outboundDepartureTime": "2018-12-29T01:37:00",
        "passengerName": "Lastname Firs",
+       "seatNumber": "FENSTER ABTEILWAGEN 046",
        "trainNumber": "NJ 1",
        "type": 1
    }
