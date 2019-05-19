@@ -31,17 +31,14 @@ function parseSeat(res, text) {
 }
 
 function parseDeparture(res, line, year, compact) {
+    var dep = line.match(/^(.+?) *([0-9]{2})\.([0-9]{2})\. +ab ([0-9]{2}:[0-9]{2})/);
+    if (!dep)
+        return false;
+
     res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
-    var station = line.match(/^(.+?)  /);
-    if (!station)
-        return;
-    var idx = station.index + station[0].length;
-    res.reservationFor.departureStation.name = station[1];
-    var dt = line.substr(idx).match(/([0-9]{2})\.([0-9]{2})\. +ab ([0-9]{2}:[0-9]{2})/);
-    if (dt) {
-        idx += dt.index + dt[0].length;
-        res.reservationFor.departureTime = JsonLd.toDateTime(dt[1] + ' ' + dt[2] + ' ' + year + ' ' + dt[3], "dd MM yyyy hh:mm", "de");
-    }
+    res.reservationFor.departureStation.name = dep[1];
+    res.reservationFor.departureTime = JsonLd.toDateTime(dep[2] + ' ' + dep[3] + ' ' + year + ' ' + dep[4], "dd MM yyyy hh:mm", "de");
+    var idx = dep.index + dep[0].length;
     var platform = line.substr(idx).match(/^ {1,3}(.*?)(?=(  | IC|$))/);
     if (platform) {
         idx += platform.index + platform[0].length;
@@ -53,26 +50,24 @@ function parseDeparture(res, line, year, compact) {
         res.reservationFor.trainNumber = trainId[1];
     }
     parseSeat(res, line.substr(idx));
+    return true;
 }
 
 function parseArrival(res, line, year) {
+    var arr = line.match(/^(.+?) *([0-9]{2})\.([0-9]{2})\. +an ([0-9]{2}:[0-9]{2})/);
+    if (!arr)
+        return false;
     res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
-    var station = line.match(/^(.+?)  /);
-    if (!station)
-        return;
-    var idx = station.index + station[0].length;
-    res.reservationFor.arrivalStation.name = station[1];
-    var dt = line.substr(idx).match(/([0-9]{2})\.([0-9]{2})\. +an ([0-9]{2}:[0-9]{2})/);
-    if (dt) {
-        idx += dt.index + dt[0].length;
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(dt[1] + ' ' + dt[2] + ' ' + year + ' ' + dt[3], "dd MM yyyy hh:mm", "de");
-    }
+    res.reservationFor.arrivalStation.name = arr[1];
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2] + ' ' + arr[3] + ' ' + year + ' ' + arr[4], "dd MM yyyy hh:mm", "de");
+    var idx = arr.index + arr[0].length;
     var platform = line.substr(idx).match(/^ {1,3}(.*?)(?=(  | IC|$))/);
     if (platform) {
         idx += platform.index + platform[0].length;
         res.reservationFor.arrivalPlatform = platform[1];
     }
     parseSeat(res, line.substr(idx));
+    return true;
 }
 
 function parseLegs(text, year, compact) {
@@ -82,26 +77,29 @@ function parseLegs(text, year, compact) {
     for (var i = 0; compact && i < lines.length; ++i)
         lines[i] = lines[i].substr(offset[0].length);
 
-    var depIdx = 0, arrIdx = 1;
-    while (depIdx < lines.length) {
+    for (var i = 0; i < lines.length; ++i) {
+        // stop when reaching the footer or the next itinerary header
+        if (isHeaderOrFooter(lines[i]))
+            return reservations;
+
         var res = JsonLd.newObject("TrainReservation");
         res.reservationFor = JsonLd.newObject("TrainTrip");
         res.reservedTicket = JsonLd.newObject("Ticket");
         res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
 
-        // stop when reaching the footer or the next itinerary header
-        if (isHeaderOrFooter(lines[depIdx]))
-            return reservations;
-
-        arrIdx = depIdx + 1;
-        while (arrIdx < lines.length && lines[arrIdx].startsWith(' ')) // line continuations for departure, we still need to handle that correctly
-            ++arrIdx;
-        parseDeparture(res, lines[depIdx], year, compact);
-        parseArrival(res, lines[arrIdx], year);
-        depIdx = arrIdx + 1;
-        while (depIdx < lines.length && lines[depIdx].startsWith(' ') && !isHeaderOrFooter(lines[depIdx])) // line continuations for arrival, dito
-            ++depIdx;
-        reservations.push(res);
+        // TODO deal with line continuations!
+        while (i < lines.length && !isHeaderOrFooter(lines[i])) {
+            if (parseDeparture(res, lines[i], year, compact))
+                break;
+            ++i;
+        }
+        while (i < lines.length && !isHeaderOrFooter(lines[i])) {
+            if (parseArrival(res, lines[i], year))
+                break;
+            ++i;
+        }
+        if (res.reservationFor.arrivalStation != undefined)
+            reservations.push(res);
     }
 
     return reservations;
