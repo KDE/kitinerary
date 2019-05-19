@@ -181,7 +181,12 @@ Rct2TicketField Rct2TicketPrivate::firstField() const
 
 QString Rct2TicketPrivate::fieldText(int row, int column, int width, int height) const
 {
-    QString s;
+    QStringList s;
+    s.reserve(height);
+    for (int i = 0; i < height; ++i) {
+        s.push_back({});
+    }
+
     for (auto f = firstField(); !f.isNull(); f = f.next()) {
         if (f.row() + f.height() - 1 < row || f.row() > row + height - 1) {
             continue;
@@ -208,14 +213,14 @@ QString Rct2TicketPrivate::fieldText(int row, int column, int width, int height)
             // TODO also truncate by w
             const auto offset = column - f.column();
             if (offset >= 0) {
-                s += lines.at(i).mid(offset).left(width);
+                s[f.row() + i - row] += lines.at(i).mid(offset).left(width);
             } else {
-                s += lines.at(i); // TODO left padding by offset, truncate by width + offset
+                s[f.row() + i - row] += lines.at(i); // TODO left padding by offset, truncate by width + offset
             }
         }
     }
     //qDebug() << "Result:" << row << column << width << height << s;
-    return s;
+    return s.join(QLatin1Char('\n'));
 }
 
 QDate Rct2TicketPrivate::firstDayOfValidity() const
