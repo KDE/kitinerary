@@ -20,19 +20,19 @@
 function main(text) {
     var res = JsonLd.newObject("LodgingReservation");
 
-    var bookingRef = text.match(/Booking no\.\s+([A-Z0-9-]+)\s+/);
+    var bookingRef = text.match(/(?:Booking no\.|Buchungs-Nr\.)\s+([A-Z0-9-]+)\s+/);
     if (!bookingRef)
         return null;
     res.reservationNumber = bookingRef[1];
     var idx = bookingRef.index + bookingRef[0].length;
 
-    var arrivalDate = text.substr(idx).match(/Arrival\s+(\d{1,2}\.\d{1,2}\.\d{4})\s+/)
+    var arrivalDate = text.substr(idx).match(/(?:Arrival|Anreise)\s+(\d{1,2}\.\d{1,2}\.\d{4})\s+/)
     if (!arrivalDate)
         return null;
     res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " 15:00", "dd.MM.yyyy hh:mm", "en");
     idx += arrivalDate.index + arrivalDate[0].length;
 
-    var departureDate = text.substr(idx).match(/Departure\s+(\d{1,2}\.\d{1,2}\.\d{4})\s+/)
+    var departureDate = text.substr(idx).match(/(?:Departure|Abreise)\s+(\d{1,2}\.\d{1,2}\.\d{4})\s+/)
     if (!departureDate)
         return null;
     res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " 10:00", "dd.MM.yyyy hh:mm", "en");
@@ -43,18 +43,18 @@ function main(text) {
     res.reservationFor.geo = JsonLd.toGeoCoordinates(geo[1]);
 
     res.underName = JsonLd.newObject("Person");
-    var name = text.substr(idx).match(/\*First name\*\s+([^\s{2}]+)\s{2,}/);
+    var name = text.substr(idx).match(/\*(?:First name|Vorname)\*\s+([^\s{2}]+)\s{2,}/);
     if (!name)
         return null;
     res.underName.name = name[1];
     idx += name.index + name[0].length;
-    name = text.substr(idx).match(/\*Last name\*\s+([^\s{2}]+)\s{2,}/);
+    name = text.substr(idx).match(/\*(?:Last name|Nachname)\*\s+([^\s{2}]+)\s{2,}/);
     if (!name)
         return null;
     res.underName.name += ' ' + name[1];
     idx += name.index + name[0].length;
 
-    var hotel = text.substr(idx).match(/Your booked house\s+/);
+    var hotel = text.substr(idx).match(/(?:Your booked house|Ihr gebuchtes Haus)\s+/);
     if (!hotel)
         return null;
     idx += hotel.index + hotel[0].length;
