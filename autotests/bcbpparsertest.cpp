@@ -90,12 +90,16 @@ private Q_SLOTS:
         QTest::newRow("too short") << QStringLiteral("M1DESMARAIS/LUC       ");
         QTest::newRow("wrong leg count") << QStringLiteral("M2DESMARAIS/LUC       EABC123 YULFRAAC 0834 326J001A0025 100");
         QTest::newRow("too short repeated mandatory section") << QStringLiteral("M1DOE/JOHN            EXXX007 TXLBRUSN 2592 11");
+        QTest::newRow("bug 407895") << QStringLiteral("M2Mobi Lab / ML-586 [In Progress]\nSplit Fooo.Config from main Fooo\n\n========================================================");
     }
 
     void testParserInvalid()
     {
         QFETCH(QString, message);
         const auto res = IataBcbpParser::parse(message);
+        if (!res.isEmpty()) {
+            qDebug().noquote() << QJsonDocument(JsonLdDocument::toJson(res)).toJson();
+        }
         QVERIFY(res.isEmpty());
     }
 };

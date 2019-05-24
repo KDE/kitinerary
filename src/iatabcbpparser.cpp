@@ -50,6 +50,11 @@ static int readHexValue(const QStringRef &s, int width)
     return s.mid(0, width).toInt(nullptr, 16);
 }
 
+static bool isValidAirportCode(const QString &s)
+{
+    return std::all_of(s.begin(), s.end(), [](const QChar c) { return c.isLetter() && c.isUpper(); });
+}
+
 static int parseRepeatedMandatorySection(const QStringRef& msg, FlightReservation& res)
 {
     if (msg.size() < 24) { // pre-checking data, technically incomplete, but we can make use of this nevertheless
@@ -64,6 +69,10 @@ static int parseRepeatedMandatorySection(const QStringRef& msg, FlightReservatio
     flight.setDepartureAirport(airport);
     airport.setIataCode(msg.mid(10, 3).toString());
     flight.setArrivalAirport(airport);
+    if (!isValidAirportCode(flight.departureAirport().iataCode()) || !isValidAirportCode(flight.arrivalAirport().iataCode())) {
+        qCWarning(Log) << "IATA airport code format violation";
+        return -1;
+    }
 
     Airline airline;
     airline.setIataCode(msg.mid(13, 3).trimmed().toString());
