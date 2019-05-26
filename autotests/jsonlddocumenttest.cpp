@@ -62,7 +62,7 @@ private Q_SLOTS:
         airline.setIataCode(QStringLiteral("LH"));
         f.setAirline(airline);
 
-        auto array = JsonLdDocument::toJson({QVariant::fromValue(f)});
+        auto array = JsonLdDocument::toJson(QVector<QVariant>({QVariant::fromValue(f)}));
         QCOMPARE(array.size(), 1);
         auto obj = array.at(0).toObject();
         QCOMPARE(obj.value(QLatin1String("@context")).toString(), QLatin1String("http://schema.org"));
@@ -98,7 +98,7 @@ private Q_SLOTS:
         person.setName(fullName);
         res.setUnderName(person);
 
-        array = JsonLdDocument::toJson({res});
+        array = JsonLdDocument::toJson(QVector<QVariant>({res}));
         QCOMPARE(array.size(), 1);
         obj = array.at(0).toObject();
         QCOMPARE(obj.value(QLatin1String("partySize")).toInt(), 2);
@@ -141,9 +141,7 @@ private Q_SLOTS:
 
         rentalRes.setPickupLocation(placePickupLocation);
 
-        array = JsonLdDocument::toJson({rentalRes});
-        QCOMPARE(array.size(), 1);
-        obj = array.at(0).toObject();
+        obj = JsonLdDocument::toJson(rentalRes);
         QCOMPARE(obj.value(QLatin1String("reservationNumber")).toString(), reservationRentalNumber);
 
         qDebug().noquote() << QJsonDocument(obj).toJson();

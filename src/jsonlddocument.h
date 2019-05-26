@@ -26,6 +26,7 @@
 #include <QVector>
 
 class QJsonArray;
+class QJsonObject;
 struct QMetaObject;
 
 namespace KItinerary {
@@ -36,10 +37,15 @@ namespace KItinerary {
 class JsonLdDocument {
 
 public:
-    /** Convert JSON-LD data into instantiated data types. */
+    /** Convert JSON-LD array into instantiated data types. */
     static KITINERARY_EXPORT QVector<QVariant> fromJson(const QJsonArray &array);
-    /** Serialize instantiated data types to JSON. */
+    /** Convert JSON-LD object into an instantiated data type. */
+    static KITINERARY_EXPORT QVariant fromJson(const QJsonObject &obj);
+
+    /** Serialize instantiated data types to JSON-LD. */
     static KITINERARY_EXPORT QJsonArray toJson(const QVector<QVariant> &data);
+    /** Serialize instantiated data type to JSON-LD. */
+    static KITINERARY_EXPORT QJsonObject toJson(const QVariant &data);
 
     /** Read property @p name on object @p obj. */
     static KITINERARY_EXPORT QVariant readProperty(const QVariant &obj, const char *name);

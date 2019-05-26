@@ -263,11 +263,11 @@ private Q_SLOTS:
 
         const auto mergedL2R = MergeUtil::merge(lhs, rhs);
         //qDebug().noquote() << QJsonDocument(JsonLdDocument::toJson({mergedL2R})).toJson();
-        QCOMPARE(QJsonDocument(JsonLdDocument::toJson({mergedL2R})), expected);
+        QCOMPARE(QJsonDocument(JsonLdDocument::toJson(QVector<QVariant>({mergedL2R}))), expected);
 
         const auto mergedR2L = MergeUtil::merge(rhs, lhs);
-        //qDebug().noquote() << QJsonDocument(JsonLdDocument::toJson({mergedR2L})).toJson();
-        QCOMPARE(QJsonDocument(JsonLdDocument::toJson({mergedR2L})), expected);
+        //qDebug().noquote() << QJsonDocument(JsonLdDocument::toJson({m5ergedR2L})).toJson();
+        QCOMPARE(QJsonDocument(JsonLdDocument::toJson(QVector<QVariant>({mergedR2L}))), expected);
     }
 };
 

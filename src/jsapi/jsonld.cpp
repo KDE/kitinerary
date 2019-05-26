@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QJSEngine>
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QLocale>
 #include <QRegularExpression>
 #include <QUrl>
@@ -124,11 +125,8 @@ QJSValue JsApi::JsonLd::toJson(const QVariant &v) const
         return m_engine->toScriptValue(JsonLdDocument::toJson(v.value<QVector<QVariant>>()));
     }
 
-    const auto json = JsonLdDocument::toJson({v});
-    if (json.isEmpty()) {
-        return {};
-    }
-    return m_engine->toScriptValue(json.at(0));
+    const auto json = JsonLdDocument::toJson(v);
+    return m_engine->toScriptValue(json);
 }
 
 QJSValue JsApi::JsonLd::clone(const QJSValue& v) const

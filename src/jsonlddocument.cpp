@@ -207,12 +207,17 @@ QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
     QVector<QVariant> l;
     l.reserve(array.size());
     for (const auto &obj : array) {
-        const auto v = createInstance(JsonLdImportFilter::filterObject(obj.toObject()));
+        const auto v = fromJson(obj.toObject());
         if (!v.isNull()) {
             l.push_back(v);
         }
     }
     return l;
+}
+
+QVariant JsonLdDocument::fromJson(const QJsonObject& obj)
+{
+    return createInstance(JsonLdImportFilter::filterObject(obj));
 }
 
 static bool valueIsNull(const QVariant &v)
@@ -239,7 +244,7 @@ static QString typeName(const QMetaObject *mo, const QVariant &v)
     return QString::fromUtf8(mo->className());
 }
 
-static QJsonValue toJson(const QVariant &v)
+static QJsonValue toJsonValue(const QVariant &v)
 {
     const auto mo = QMetaType(v.userType()).metaObject();
     if (!mo) {
@@ -283,7 +288,7 @@ static QJsonValue toJson(const QVariant &v)
             }
             QJsonArray array;
             for (const auto &var : iterable) {
-                array.push_back(toJson(var));
+                array.push_back(toJsonValue(var));
             }
             return array;
         }
@@ -302,7 +307,7 @@ static QJsonValue toJson(const QVariant &v)
         }
         const auto value = prop.readOnGadget(v.constData());
         if (!valueIsNull(value)) {
-            const auto jsVal = toJson(value);
+            const auto jsVal = toJsonValue(value);
             if (jsVal.type() != QJsonValue::Null) {
                 obj.insert(QString::fromUtf8(prop.name()), jsVal);
             }
@@ -319,7 +324,7 @@ QJsonArray JsonLdDocument::toJson(const QVector<QVariant> &data)
 {
     QJsonArray a;
     for (const auto &d : data) {
-        const auto value = ::toJson(d);
+        const auto value = ::toJsonValue(d);
         if (!value.isObject()) {
             continue;
         }
@@ -328,6 +333,15 @@ QJsonArray JsonLdDocument::toJson(const QVector<QVariant> &data)
         a.push_back(obj);
     }
     return a;
+}
+
+QJsonObject JsonLdDocument::toJson(const QVariant& data)
+{
+    const auto value = ::toJsonValue(data);
+    if (value.isObject()) {
+        return value.toObject();
+    }
+    return {};
 }
 
 QVariant JsonLdDocument::readProperty(const QVariant &obj, const char *name)

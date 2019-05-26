@@ -66,7 +66,7 @@ private Q_SLOTS:
         const auto refArray = QJsonDocument::fromJson(ref.readAll()).array();
         QVERIFY(!refArray.isEmpty());
 
-        const auto resJson = JsonLdDocument::toJson({QVariant::fromValue(rct2)});
+        const auto resJson = JsonLdDocument::toJson(QVector<QVariant>({QVariant::fromValue(rct2)}));
         if (refArray != resJson) {
             qWarning().noquote() << QJsonDocument(resJson).toJson();
         }
