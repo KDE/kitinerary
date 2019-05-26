@@ -24,6 +24,7 @@ namespace KPkPass {
 class Pass;
 }
 
+class QDateTime;
 class QJsonObject;
 
 namespace KItinerary {
@@ -31,7 +32,7 @@ namespace KItinerary {
 /** Generic extractor for PkPass files. */
 namespace GenericPkPassExtractor
 {
-    void extract(KPkPass::Pass *pass, QJsonObject &result);
+    QJsonObject extract(KPkPass::Pass *pass, const QJsonObject &extracted, const QDateTime &contextDate);
 }
 
 }

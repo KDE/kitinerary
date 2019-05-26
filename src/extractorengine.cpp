@@ -514,7 +514,7 @@ void ExtractorEnginePrivate::extractGeneric()
         }
 
         auto res = m_result.at(0).toObject();
-        GenericPkPassExtractor::extract(m_pass.get(), res);
+        res = GenericPkPassExtractor::extract(m_pass.get(), res, m_context->m_senderDate);
         m_result[0] = res;
     } else if (m_pdfDoc && m_result.isEmpty()) {
         QJsonArray genericResult;

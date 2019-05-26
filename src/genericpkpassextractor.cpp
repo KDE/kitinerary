@@ -19,6 +19,13 @@
 
 #include "genericpkpassextractor_p.h"
 
+#include <KItinerary/Event>
+#include <KItinerary/Flight>
+#include <KItinerary/IataBcbpParser>
+#include <KItinerary/JsonLdDocument>
+#include <KItinerary/Reservation>
+#include <KItinerary/Ticket>
+
 #include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>
 #include <KPkPass/Location>
@@ -30,14 +37,14 @@
 
 using namespace KItinerary;
 
-static void extractBoardingPass(KPkPass::Pass *pass, QJsonObject &resFor)
+static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
 {
     // "relevantDate" is the best guess for the boarding time
-    if (pass->relevantDate().isValid() && !resFor.contains(QLatin1String("boardingTime"))) {
-        resFor.insert(QStringLiteral("boardingTime"), pass->relevantDate().toString(Qt::ISODate));
+    if (pass->relevantDate().isValid() && !flight.boardingTime().isValid()) {
+        flight.setBoardingTime(pass->relevantDate());
     }
     // look for common field names containing the boarding time, if we still have no idea
-    if (!resFor.contains(QLatin1String("boardingTime"))) {
+    if (!flight.boardingTime().isValid()) {
         const auto fields = pass->fields();
         for (const auto &field : fields) {
             if (!field.key().contains(QLatin1String("boarding"), Qt::CaseInsensitive)) {
@@ -46,104 +53,88 @@ static void extractBoardingPass(KPkPass::Pass *pass, QJsonObject &resFor)
             const auto time = QTime::fromString(field.value().toString());
             if (time.isValid()) {
                 // this misses date, but the postprocessor will fill that in
-                resFor.insert(QStringLiteral("boardingTime"), QDateTime(QDate(1, 1, 1), time).toString(Qt::ISODate));
+                flight.setBoardingTime(QDateTime(QDate(1, 1, 1), time));
                 break;
             }
         }
     }
 
     // location is the best guess for the departure airport geo coordinates
-    auto depAirport = resFor.value(QLatin1String("departureAirport")).toObject();
-    if (depAirport.isEmpty()) {
-        depAirport.insert(QStringLiteral("@type"), QLatin1String("Airport"));
-    }
-    auto depGeo = depAirport.value(QLatin1String("geo")).toObject();
-    if (pass->locations().size() == 1 && depGeo.isEmpty()) {
+    auto depAirport = flight.departureAirport();
+    auto depGeo = depAirport.geo();
+    if (pass->locations().size() == 1 && !depGeo.isValid()) {
         const auto loc = pass->locations().at(0);
-        depGeo.insert(QStringLiteral("@type"), QLatin1String("GeoCoordinates"));
-        depGeo.insert(QStringLiteral("latitude"), loc.latitude());
-        depGeo.insert(QStringLiteral("longitude"), loc.longitude());
-        depAirport.insert(QStringLiteral("geo"), depGeo);
-        resFor.insert(QStringLiteral("departureAirport"), depAirport);
+        depGeo.setLatitude(loc.latitude());
+        depGeo.setLongitude(loc.longitude());
+        depAirport.setGeo(depGeo);
+        flight.setDepartureAirport(depAirport);
     }
 
     // organizationName is the best guess for airline name
-    auto airline = resFor.value(QLatin1String("airline")).toObject();
-    if (airline.isEmpty()) {
-        airline.insert(QStringLiteral("@type"), QLatin1String("Airline"));
+    auto airline = flight.airline();
+    if (airline.name().isEmpty()) {
+        airline.setName(pass->organizationName());
+        flight.setAirline(airline);
     }
-    if (!airline.contains(QLatin1String("name"))) {
-        airline.insert(QStringLiteral("name"), pass->organizationName());
-    }
-    resFor.insert(QStringLiteral("airline"), airline);
+
+    return flight;
 }
 
-static void extractEventTicketPass(KPkPass::Pass *pass, QJsonObject &resFor)
+static Event extractEventTicketPass(KPkPass::Pass *pass, Event event)
 {
-    if (!resFor.contains(QLatin1String("name"))) {
-        resFor.insert(QStringLiteral("name"), pass->description());
+    if (event.name().isEmpty()) {
+        event.setName(pass->description());
     }
 
     // "relevantDate" is the best guess for the start time
-    if (pass->relevantDate().isValid() && !resFor.contains(QLatin1String("startDate"))) {
-        resFor.insert(QStringLiteral("startDate"), pass->relevantDate().toString(Qt::ISODate));
+    if (pass->relevantDate().isValid() && !event.startDate().isValid()) {
+        event.setStartDate(pass->relevantDate());
     }
 
     // location is the best guess for the venue
-    auto venue = resFor.value(QLatin1String("location")).toObject();
-    if (venue.isEmpty()) {
-        venue.insert(QStringLiteral("@type"), QLatin1String("Place"));
-    }
-    auto geo = venue.value(QLatin1String("geo")).toObject();
-    if (!pass->locations().isEmpty() && geo.isEmpty()) {
+    auto venue = event.location().value<Place>();
+    auto geo = venue.geo();
+    if (!pass->locations().isEmpty() && !geo.isValid()) {
         const auto loc = pass->locations().at(0);
-        geo.insert(QStringLiteral("@type"), QLatin1String("GeoCoordinates"));
-        geo.insert(QStringLiteral("latitude"), loc.latitude());
-        geo.insert(QStringLiteral("longitude"), loc.longitude());
-        venue.insert(QStringLiteral("geo"), geo);
-        venue.insert(QStringLiteral("name"), loc.relevantText());
-        resFor.insert(QStringLiteral("location"), venue);
+        geo.setLatitude(loc.latitude());
+        geo.setLongitude(loc.longitude());
+        venue.setGeo(geo);
+        venue.setName(loc.relevantText());
+        event.setLocation(venue);
     }
+    return event;
 }
 
-void GenericPkPassExtractor::extract(KPkPass::Pass *pass, QJsonObject &result)
+static QDateTime iataContextDate(KPkPass::Pass *pass, const QDateTime &context)
 {
+    if (!pass->relevantDate().isValid()) {
+        return context;
+    }
+    return pass->relevantDate().addDays(-1); // go a bit back, to compensate for unknown departure timezone at this point
+}
+
+QJsonObject GenericPkPassExtractor::extract(KPkPass::Pass *pass, const QJsonObject &extracted, const QDateTime &contextDate)
+{
+    auto result = extracted;
     if (result.isEmpty()) { // no previous extractor ran, so we need to create the top-level element ourselves
-        QJsonObject resFor;
         if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass)) {
             switch (boardingPass->transitType()) {
                 case KPkPass::BoardingPass::Air:
                     result.insert(QStringLiteral("@type"), QLatin1String("FlightReservation"));
-                    resFor.insert(QStringLiteral("@type"), QLatin1String("Flight"));
                     break;
                 // TODO expand once we have test files for train tickets
                 default:
-                    return;
+                    break;
             }
         } else {
             switch (pass->type()) {
                 case KPkPass::Pass::EventTicket:
                     result.insert(QStringLiteral("@type"), QLatin1String("EventReservation"));
-                    resFor.insert(QStringLiteral("@type"), QLatin1String("Event"));
                     break;
                 default:
-                    return;
+                    return result;
             }
         }
-        result.insert(QStringLiteral("reservationFor"), resFor);
-    }
-
-    // extract structured data from a pkpass, if the extractor script hasn't done so already
-    auto resFor = result.value(QLatin1String("reservationFor")).toObject();
-    switch (pass->type()) {
-        case KPkPass::Pass::BoardingPass:
-            extractBoardingPass(pass, resFor);
-            break;
-        case KPkPass::Pass::EventTicket:
-            extractEventTicketPass(pass, resFor);
-            break;
-        default:
-            return;
     }
 
     // barcode contains the ticket token
@@ -167,11 +158,53 @@ void GenericPkPassExtractor::extract(KPkPass::Pass *pass, QJsonObject &result)
         result.insert(QStringLiteral("reservedTicket"), ticket);
     }
 
-    result.insert(QStringLiteral("reservationFor"), resFor);
+    // decode the barcode here already, so we have more information available for the following steps
+    // also, we have additional context time information here
+    auto res = JsonLdDocument::fromJson(result);
+    if (JsonLd::isA<FlightReservation>(res)) {
+        const auto bcbp = res.value<FlightReservation>().reservedTicket().value<Ticket>().ticketTokenData();
+        const auto bcbpData = IataBcbpParser::parse(bcbp, iataContextDate(pass, contextDate).date());
+        if (bcbpData.size() == 1) {
+            res = JsonLdDocument::apply(bcbpData.at(0), res).value<FlightReservation>();
+        }
+    }
+
+    // extract structured data from a pkpass, if the extractor script hasn't done so already
+    switch (pass->type()) {
+        case KPkPass::Pass::BoardingPass:
+        {
+            if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass)) {
+                switch (boardingPass->transitType()) {
+                    case KPkPass::BoardingPass::Air:
+                    {
+                        auto flightRes = res.value<FlightReservation>();
+                        flightRes.setReservationFor(extractBoardingPass(pass, flightRes.reservationFor().value<Flight>()));
+                        res = flightRes;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+            break;
+        }
+        case KPkPass::Pass::EventTicket:
+        {
+            auto evRes = res.value<EventReservation>();
+            evRes.setReservationFor(extractEventTicketPass(pass, evRes.reservationFor().value<Event>()));
+            res = evRes;
+            break;
+        }
+        default:
+            break;
+    }
 
     // associate the pass with the result, so we can find the pass again for display
+    result = JsonLdDocument::toJson(res);
     if (!pass->passTypeIdentifier().isEmpty() && !pass->serialNumber().isEmpty()) {
         result.insert(QStringLiteral("pkpassPassTypeIdentifier"), pass->passTypeIdentifier());
         result.insert(QStringLiteral("pkpassSerialNumber"), pass->serialNumber());
     }
+
+    return result;
 }
