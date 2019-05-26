@@ -1,0 +1,63 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "1A",
+        "passengerSequenceNumber": "1",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LH",
+                "name": "Lufthansa"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.03329849243164,
+                    "longitude": 8.570560455322266
+                },
+                "iataCode": "FRA",
+                "name": "FRANKFURT"
+            },
+            "boardingTime": {
+                "@type": "QDateTime",
+                "@value": "2019-05-21T18:20:00-04:00",
+                "timezone": "America/Toronto"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "CA"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 45.47060012817383,
+                    "longitude": -73.74079895019531
+                },
+                "iataCode": "YUL",
+                "name": "MONTREAL"
+            },
+            "departureDay": "2019-05-21",
+            "departureGate": "....",
+            "flightNumber": "489"
+        },
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1JOHN/DOE            EXXX007 YULFRALH 0489 141M001A0001 300"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "JOHN",
+            "givenName": "DOE",
+            "name": "DOE JOHN"
+        }
+    }
+]

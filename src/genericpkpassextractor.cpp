@@ -26,6 +26,8 @@
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
 
+#include <knowledgedb/airportdb.h>
+
 #include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>
 #include <KPkPass/Location>
@@ -33,6 +35,7 @@
 
 #include <QJsonObject>
 #include <QTime>
+#include <QTimeZone>
 #include <QVariant>
 
 using namespace KItinerary;
@@ -41,7 +44,12 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
 {
     // "relevantDate" is the best guess for the boarding time
     if (pass->relevantDate().isValid() && !flight.boardingTime().isValid()) {
-        flight.setBoardingTime(pass->relevantDate());
+        const auto tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{flight.departureAirport().iataCode()});
+        if (tz.isValid()) {
+            flight.setBoardingTime(pass->relevantDate().toTimeZone(tz));
+        } else {
+            flight.setBoardingTime(pass->relevantDate());
+        }
     }
     // look for common field names containing the boarding time, if we still have no idea
     if (!flight.boardingTime().isValid()) {
