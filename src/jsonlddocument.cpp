@@ -338,10 +338,12 @@ QJsonArray JsonLdDocument::toJson(const QVector<QVariant> &data)
 QJsonObject JsonLdDocument::toJson(const QVariant& data)
 {
     const auto value = ::toJsonValue(data);
-    if (value.isObject()) {
-        return value.toObject();
+    if (!value.isObject()) {
+        return {};
     }
-    return {};
+    auto obj = value.toObject();
+    obj.insert(QStringLiteral("@context"), QStringLiteral("http://schema.org"));
+    return obj;
 }
 
 QVariant JsonLdDocument::readProperty(const QVariant &obj, const char *name)
