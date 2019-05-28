@@ -49,6 +49,7 @@ class KITINERARY_EXPORT Uic9183Parser
     Q_PROPERTY(KItinerary::Person person READ person)
     Q_PROPERTY(QString outboundDepartureStationId READ outboundDepartureStationId)
     Q_PROPERTY(QString outboundArrivalStationId READ outboundArrivalStationId)
+    Q_PROPERTY(QString seatingType READ seatingType)
     /** RCT2 ticket layout block, if present, @c null otherwise. */
     Q_PROPERTY(QVariant rct2Ticket READ rct2TicketVariant)
 
@@ -77,6 +78,9 @@ public:
     QString outboundDepartureStationId() const;
     /** Station identifier for the arrival station of the outbound trip. */
     QString outboundArrivalStationId() const;
+
+    /** @see Ticket::seatingType */
+    QString seatingType() const;
 
     /** RCT2 ticket layout, if present. */
     Rct2Ticket rct2Ticket() const;

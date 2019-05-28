@@ -204,6 +204,7 @@ function parsePdf(pdf) {
     var reservations = parseTicket(pdf.text, uic918ticket);
     for (var i = 0; i < reservations.length && barcode; ++i) {
         reservations[i].reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(barcode);
+        reservations[i].reservedTicket.ticketedSeat.seatingType = uic918ticket.seatingType;
         reservations[i].underName = JsonLd.toJson(uic918ticket.person);
     }
     return reservations;

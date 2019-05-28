@@ -357,6 +357,25 @@ QString Uic9183Parser::outboundArrivalStationId() const
     return {};
 }
 
+QString Uic9183Parser::seatingType() const
+{
+    const auto b = Vendor0080BLBlock(d->findBlock("0080BL"));
+    if (b.isValid()) {
+        // S014 contains the class, possibly with a leading 'S' for some reason
+        const auto sblock = b.findSubBlock("014");
+        if (!sblock.isNull()) {
+            const auto s = sblock.toString();
+            return s.startsWith(QLatin1Char('S')) ? s.right(1) : s;
+        }
+    }
+
+    const auto rct2 = rct2Ticket();
+    if (rct2.isValid()) {
+        return rct2.outboundClass();
+    }
+    return {};
+}
+
 Rct2Ticket Uic9183Parser::rct2Ticket() const
 {
     const auto block = d->findBlock("U_TLAY");
