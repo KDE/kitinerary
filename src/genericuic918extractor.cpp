@@ -76,6 +76,8 @@ void GenericUic918Extractor::extract(const QByteArray &data, QJsonArray &result,
                     trip.insert(QStringLiteral("departureTime"), rct2.outboundDepartureTime().toString(Qt::ISODate));
                     trip.insert(QStringLiteral("arrivalTime"), rct2.outboundArrivalTime().toString(Qt::ISODate));
                 }
+
+                seat.insert(QStringLiteral("seatingType"), rct2.outboundClass());
                 break;
             }
             default:
