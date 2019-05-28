@@ -30,6 +30,7 @@ function parseText(text) {
 
         var res = JsonLd.newObject("TrainReservation");
         res.reservedTicket = JsonLd.newObject("Ticket");
+        res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
         res.reservationNumber = bookingRef[1];
         res.reservationFor = JsonLd.newObject("TrainTrip");
 
@@ -58,7 +59,6 @@ function parseText(text) {
             res.reservationFor.trainNumber = trainNumber[1];
         var seatRes = legText.match(/(VOITURE|COACH) (\d+) - PLACE (\d+)/);
         if (seatRes) {
-            res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
             res.reservedTicket.ticketedSeat.seatSection = seatRes[2];
             res.reservedTicket.ticketedSeat.seatNumber = seatRes[3];
         }
@@ -117,6 +117,7 @@ function parsePdf(pdf) {
                 legs[j].reservedTicket.ticketToken = "aztecCode:" + barcode;
                 legs[j].reservationFor.departureStation.identifier = "sncf:" + barcode.substr(j == 0 ? 33 : 116, 5);
                 legs[j].reservationFor.arrivalStation.identifier = "sncf:" + barcode.substr(j == 0 ? 38 : 121, 5);
+                legs[j].reservedTicket.ticketedSeat.seatingType = barcode.substring(110, 111);
             }
             reservations.push(legs[j]);
         }
