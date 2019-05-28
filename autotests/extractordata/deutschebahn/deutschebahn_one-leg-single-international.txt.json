@@ -24,7 +24,7 @@
             "@type": "Ticket",
             "ticketedSeat": {
                 "@type": "Seat",
-                "seatNumber": "71",
+                "seatNumber": "71 73",
                 "seatSection": "256"
             }
         }

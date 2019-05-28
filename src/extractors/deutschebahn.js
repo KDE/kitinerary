@@ -25,7 +25,7 @@ function parseSeat(res, text) {
     var coach = text.match(/Wg. (\d+)/);
     if (coach)
         res.reservedTicket.ticketedSeat.seatSection = coach[1];
-    var seat = text.match(/Pl. (\d+)/);
+    var seat = text.match(/Pl. ([\d ]+\d)/);
     if (seat)
         res.reservedTicket.ticketedSeat.seatNumber = seat[1];
 }
