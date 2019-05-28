@@ -30,12 +30,14 @@ public:
     QString seatNumber;
     QString seatRow;
     QString seatSection;
+    QString seatingType;
 };
 
 KITINERARY_MAKE_SIMPLE_CLASS(Seat)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatNumber, setSeatNumber)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatRow, setSeatRow)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatSection, setSeatSection)
+KITINERARY_MAKE_PROPERTY(Seat, QString, seatingType, setSeatingType)
 KITINERARY_MAKE_OPERATOR(Seat)
 
 class TicketPrivate : public QSharedData

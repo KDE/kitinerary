@@ -26,7 +26,7 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "Organization"\,"name":"SNCF"}\,"trainName":"TGV"\,"trainNumber":
  "5186"}\,"reservationNumber":"XXX007"\,"reservedTicket":{"@type":
  "Ticket"\,"ticketToken":"aztecCode:somerandomdata            DOE             JOHN111110          00000"\,"ticketedSeat":{"@type":
- "Seat"\,"seatNumber":"62"\,"seatSection":"17"}}\,"underName":{"@type":
+ "Seat"\,"seatNumber":"62"\,"seatSection":"17","seatingType":"Economy"}}\,"underName":{"@type":
  "Person"\,"name":"John Doe"}\,"url":"https://www.trainline.fr/tickets"}]
 END:VEVENT
 END:VCALENDAR

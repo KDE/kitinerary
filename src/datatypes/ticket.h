@@ -34,6 +34,7 @@ class KITINERARY_EXPORT Seat
     KITINERARY_PROPERTY(QString, seatNumber, setSeatNumber)
     KITINERARY_PROPERTY(QString, seatRow, setSeatRow)
     KITINERARY_PROPERTY(QString, seatSection, setSeatSection)
+    KITINERARY_PROPERTY(QString, seatingType, setSeatingType)
 private:
     QExplicitlySharedDataPointer<SeatPrivate> d;
 };
