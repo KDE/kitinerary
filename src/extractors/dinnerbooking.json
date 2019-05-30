@@ -1,0 +1,8 @@
+[
+    {
+        "type": "ical",
+        "filter": [ { "property": "productId", "match": "//DinnerBooking//", "type": "ICal" } ],
+        "script": "dinnerbooking.js",
+        "function": "parseEvent"
+    }
+]
