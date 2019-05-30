@@ -383,13 +383,19 @@ static void fillFoodReservation(const FoodEstablishmentReservation &reservation,
     }
     event->setDtEnd(endTime);
     event->setAllDay(false);
-    event->setTransparency(KCalCore::Event::Transparent);
-    event->setSummary(i18n("Restaurant reservation: %1", foodEstablishment.name()));
-    event->setDescription(i18n("Number Of People: %1\nReservation reference: %2\nUnder name: %3",
-                               reservation.partySize(),
-                               reservation.reservationNumber(),
-                               reservation.underName().value<KItinerary::Person>().name()));
 
+    QStringList desc;
+    if (reservation.partySize() > 0) {
+        desc.push_back(i18n("Number Of People: %1", reservation.partySize()));
+    }
+    if (!reservation.reservationNumber().isEmpty()) {
+        desc.push_back(i18n("Reservation reference: %1", reservation.reservationNumber()));
+    }
+    const auto person = reservation.underName().value<KItinerary::Person>();
+    if (!person.name().isEmpty()) {
+        desc.push_back(i18n("Under name: %1", person.name()));
+    }
+    event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
 static void fillRentalCarReservation(const RentalCarReservation &reservation, const KCalCore::Event::Ptr &event)
