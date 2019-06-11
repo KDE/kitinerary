@@ -119,4 +119,8 @@ install(EXPORT KPimItineraryTargets
         FILE KPimItineraryTargets.cmake
         NAMESPACE KPim::
 )
-install(FILES org_kde_kitinerary.categories DESTINATION ${KDE_INSTALL_CONFDIR})
+if (${ECM_VERSION} STRGREATER "5.58.0")
+    install(FILES org_kde_kitinerary.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+else()
+    install(FILES org_kde_kitinerary.categories  DESTINATION ${KDE_INSTALL_CONFDIR})
+endif()
