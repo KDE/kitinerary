@@ -50,6 +50,8 @@ private Q_SLOTS:
 
         QCOMPARE(b.readNumberMSB(58*8 + 4, 32), 1059177703);
         QCOMPARE(b.readNumberMSB(58*8, 36), 1059177703);
+
+        QCOMPARE(b.readNumberMSB(32*8 + 7, 49), 1592464900416);
     }
 };
 

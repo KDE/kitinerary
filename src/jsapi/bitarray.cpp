@@ -50,7 +50,7 @@ quint64 BitArray::readNumberMSB(int startBit, int size) const
         for (auto i = bitIdx; i < 8 && outIdx >= 0; ++i, --outIdx) {
             const auto bit = (byte & (1 << (7 - i))) > 0;
             if (bit) {
-                result |= (1 << outIdx);
+                result |= (1ull << outIdx);
             }
         }
         bitIdx = 0;
