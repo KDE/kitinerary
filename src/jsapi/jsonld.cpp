@@ -45,6 +45,23 @@ QJSValue JsApi::JsonLd::newObject(const QString &typeName) const
     return v;
 }
 
+QJSValue JsApi::JsonLd::newLodgingReservation() const
+{
+    const auto addr = newObject(QStringLiteral("PostalAddress"));
+    const auto geo = newObject(QStringLiteral("GeoCoordinates"));
+    const auto person = newObject(QStringLiteral("Person"));
+
+    auto resFor = newObject(QStringLiteral("LodgingBusiness"));
+    resFor.setProperty(QStringLiteral("address"), addr);
+    resFor.setProperty(QStringLiteral("geo"), geo);
+
+    auto res = newObject(QStringLiteral("LodgingReservation"));
+    res.setProperty(QStringLiteral("reservationFor"), resFor);
+    res.setProperty(QStringLiteral("underName"), person);
+
+    return res;
+}
+
 QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const
 {
     QLocale locale(localeName);

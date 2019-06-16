@@ -18,7 +18,7 @@
 */
 
 function main(text) {
-    var res = JsonLd.newObject("LodgingReservation");
+    var res = JsonLd.newLodgingReservation();
 
     var bookingRef = text.match(/(?:Booking no\.|Buchungs-Nr\.)\s+([A-Z0-9-]+)\s+/);
     if (!bookingRef)
@@ -38,11 +38,9 @@ function main(text) {
     res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " 10:00", "dd.MM.yyyy hh:mm", "en");
     idx += departureDate.index + departureDate[0].length;
 
-    res.reservationFor = JsonLd.newObject("LodgingBusiness");
     var geo = text.substr(idx).match(/<(http[^>]*google.com\/maps[^>]*)>/);
     res.reservationFor.geo = JsonLd.toGeoCoordinates(geo[1]);
 
-    res.underName = JsonLd.newObject("Person");
     var name = text.substr(idx).match(/\*(?:First name|Vorname)\*\s+([^\s{2}]+)\s{2,}/);
     if (!name)
         return null;
@@ -60,7 +58,6 @@ function main(text) {
     idx += hotel.index + hotel[0].length;
     hotel = text.substr(idx).split(/\s{2,}/);
     res.reservationFor.name = hotel[0];
-    res.reservationFor.address = JsonLd.newObject("PostalAddress");
     res.reservationFor.address.streetAddress = hotel[1];
     var city = hotel[2].match(/(\d+)\s(.*)/);
     if (city) {

@@ -49,28 +49,24 @@ regExMap['de_DE']['person'] = /Name des Gastes +(.*) Name des Gastes bearbeiten/
 regExMap['de_DE']['dateFormat'] = "dddd, d. MMMM yyyy hh:mm";
 
 function main(text) {
-    var res = JsonLd.newObject("LodgingReservation");
+    var res = JsonLd.newLodgingReservation();
 
     for (var locale in regExMap) {
         var bookingRef = text.match(regExMap[locale]['bookingRef']);
         // If no booking reference go to the next locale
         if (!bookingRef)
             continue;
-
         res.reservationNumber = bookingRef[1];
 
         var hotelName = text.match(regExMap[locale]['hotelName']);
         if (!hotelName)
             return null;
-
-        res.reservationFor = JsonLd.newObject("LodgingBusiness");
         res.reservationFor.name = hotelName[1];
 
         var hotel = text.match(regExMap[locale]['hotelInformation']);
         if (!hotel)
             return null;
 
-        res.reservationFor.address = JsonLd.newObject("PostalAddress");
         res.reservationFor.address.streetAddress = hotel[1];
         res.reservationFor.address.postalCode = hotel[3];
         res.reservationFor.address.addressLocality = hotel[2];
@@ -93,13 +89,10 @@ function main(text) {
         res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], regExMap[locale]['dateFormat'], locale);
         idx += departureDate.index + departureDate[0].length;
 
-
-        res.underName = JsonLd.newObject("Person");
         var name = text.substr(idx).match(regExMap[locale]['person']);
         if (!name)
             return null;
         res.underName.name = name[1];
-
 
         return res;
     }

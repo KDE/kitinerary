@@ -24,15 +24,13 @@ function parseHtml(doc) {
     if (!bookingRef)
         return null;
 
-    var res = JsonLd.newObject("LodgingReservation");
+    var res = JsonLd.newLodgingReservation();
     res.reservationNumber = bookingRef[1];
 
     var hotelInfo = elems[3].eval(".//table//table");
     var row = hotelInfo[0].firstChild;
     var addr = row.recursiveContent.match(/([^\n]+)\n\s+([^\n]+)\n\s+([^\n]+)/);
-    res.reservationFor = JsonLd.newObject("LodgingBusiness");
     res.reservationFor.name = addr[1];
-    res.reservationFor.address = JsonLd.newObject("PostalAddress");
     res.reservationFor.address.streetAddress = addr[2];
     res.reservationFor.address.addressLocality = addr[3];
     row = row.nextSibling;
@@ -51,7 +49,6 @@ function parseHtml(doc) {
 
     var booking = elems[5].firstChild.firstChild.firstChild;
     row = booking.firstChild;
-    res.underName = JsonLd.newObject("Person");
     res.underName.name = row.firstChild.nextSibling.content;
     row = row.nextSibling.nextSibling.nextSibling;
 
