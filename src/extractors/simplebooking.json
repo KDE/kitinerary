@@ -1,0 +1,8 @@
+[
+    {
+        "type": "html",
+        "filter": [ { "header": "From", "match": "@simplebooking.it" } ],
+        "script": "simplebooking.js",
+        "function": "parseHtml"
+    }
+]

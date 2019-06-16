@@ -51,6 +51,8 @@
         <file>sas.json</file>
         <file>sas-boardingpass.js</file>
         <file>sas-receipt.js</file>
+        <file>simplebooking.json</file>
+        <file>simplebooking.js</file>
         <file>sncf.json</file>
         <file>sncf.js</file>
         <file>stansted-express.json</file>
