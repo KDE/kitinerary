@@ -121,6 +121,42 @@ HtmlElement HtmlElement::nextSibling() const
     return {};
 }
 
+static QString normalizeSpaces(const QString &in)
+{
+    QString out;
+    out.reserve(in.size());
+
+    // convert non-breaking spaces and windows line break to normal ones, technically not correct
+    // but way too often this confuses our regular expressions
+    bool leadingTrim = true, foundCR = false;
+    for (const auto c : in) {
+        // trim leading spaces while we are at it
+        if (leadingTrim && c.isSpace()) {
+            continue;
+        }
+        leadingTrim = false;
+
+        // normalize CRs
+        if (c == QChar::CarriageReturn) {
+            foundCR = true;
+            continue;
+        }
+        if (foundCR && c != QChar::LineFeed) {
+            out.push_back(QChar::LineFeed);
+        }
+        foundCR = false;
+
+        // normalize space variations
+        if (c == QChar::Nbsp) {
+            out.push_back(QChar::Space);
+        } else {
+            out.push_back(c);
+        }
+    }
+
+    return out.trimmed(); // trailing trim can be done without copying
+}
+
 QString HtmlElement::content() const
 {
 #ifdef HAVE_LIBXML2
@@ -154,11 +190,7 @@ QString HtmlElement::content() const
         node = node->next;
     }
 
-    // convert non-breaking spaces to normal ones, technically not correct
-    // but way too often this confuses our regular expressions
-    s.replace(QStringLiteral(" "), QLatin1String(" "));
-
-    return s.trimmed();
+    return normalizeSpaces(s);
 #endif
     return {};
 }
@@ -212,10 +244,7 @@ QString HtmlElement::recursiveContent() const
 
     QString s;
     ::recursiveContent(d, s);
-    // convert non-breaking spaces to normal ones, technically not correct
-    // but way too often this confuses our regular expressions
-    s.replace(QStringLiteral(" "), QLatin1String(" "));
-    return s.trimmed();
+    return normalizeSpaces(s);
 #else
     return {};
 #endif

@@ -102,7 +102,7 @@ private Q_SLOTS:
         QFile f(QStringLiteral(SOURCE_DIR "/misc/test.html"));
         QVERIFY(f.open(QFile::ReadOnly));
 #ifdef HAVE_LIBXML2
-        std::unique_ptr<HtmlDocument> doc(HtmlDocument::fromData(f.readAll()));
+        std::unique_ptr<HtmlDocument> doc(HtmlDocument::fromData(f.readAll().replace("<CR>", "\r")));
         QVERIFY(doc);
         auto elem = doc->root();
         QVERIFY(!elem.isNull());
@@ -139,6 +139,13 @@ private Q_SLOTS:
         elem = elem.nextSibling();
         QCOMPARE(elem.content(), QLatin1String("a&b"));
         QCOMPARE(elem.recursiveContent(), QLatin1String("a&b"));
+
+        elem = elem.nextSibling();
+        QCOMPARE(elem.content(), QLatin1String("non breaking"));
+        QCOMPARE(elem.recursiveContent(), QLatin1String("non breaking"));
+        elem = elem.nextSibling();
+        QCOMPARE(elem.content(), QLatin1String("windows\nline\nbreaks"));
+        QCOMPARE(elem.recursiveContent(), QLatin1String("windows\nline\nbreaks"));
 #endif
     }
 };
