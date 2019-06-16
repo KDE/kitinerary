@@ -19,7 +19,7 @@
 
 var localeMap = new Array();
 localeMap['en_US'] = new Array();
-localeMap['en_US']['localeMatch'] = /thank you/;
+localeMap['en_US']['localeMatch'] = /(?:thank you|details for booking)/;
 localeMap['en_US']['airportRegExp'] = /(.*) to (.*)/;
 localeMap['de_DE'] = new Array();
 localeMap['de_DE']['localeMatch'] = /danke/;
