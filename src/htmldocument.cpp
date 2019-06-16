@@ -181,6 +181,8 @@ static void recursiveContent(_xmlNode *node, QString &s)
         {
             if (qstricmp(reinterpret_cast<const char*>(node->name), "br") == 0) {
                 s += QLatin1Char('\n');
+            } else if (qstricmp(reinterpret_cast<const char*>(node->name), "style") == 0) {
+                return;
             } else {
                 s += QLatin1Char(' ');
             }
