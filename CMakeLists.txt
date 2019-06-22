@@ -3,7 +3,7 @@ set(PIM_VERSION "5.11.40")
 project(KItinerary VERSION ${PIM_VERSION})
 
 set(CMAKE_CXX_STANDARD 14)
-set(KF5_MIN_VERSION "5.58.0")
+set(KF5_MIN_VERSION "5.59.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DIR}/cmake)
@@ -119,8 +119,4 @@ install(EXPORT KPimItineraryTargets
         FILE KPimItineraryTargets.cmake
         NAMESPACE KPim::
 )
-if (${ECM_VERSION} STRGREATER "5.58.0")
-    install(FILES org_kde_kitinerary.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
-else()
-    install(FILES org_kde_kitinerary.categories  DESTINATION ${KDE_INSTALL_CONFDIR})
-endif()
+install(FILES org_kde_kitinerary.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
