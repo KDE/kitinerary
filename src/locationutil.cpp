@@ -152,6 +152,80 @@ int LocationUtil::distance(const GeoCoordinates &coord1, const GeoCoordinates &c
     return 2.0 * earthRadius * atan2(sqrt(a), sqrt(1.0 - a));
 }
 
+// if the character has a canonical decomposition use that and skip the combining diacritic markers following it
+// see https://en.wikipedia.org/wiki/Unicode_equivalence
+// see https://en.wikipedia.org/wiki/Combining_character
+static QString stripDiacritics(const QString &s)
+{
+    QString res;
+    res.reserve(s.size());
+    for (const auto &c : s) {
+        if (c.decompositionTag() == QChar::Canonical) {
+            res.push_back(c.decomposition().at(0));
+        } else {
+            res.push_back(c);
+        }
+    }
+    return res;
+}
+
+// keep this ordered (see https://en.wikipedia.org/wiki/List_of_Unicode_characters)
+struct {
+    ushort key;
+    const char* replacement;
+} static const transliteration_map[] = {
+    { u'ä', "ae" },
+    { u'ö', "oe" },
+    { u'ø', "oe" },
+    { u'ü', "ue" }
+};
+
+static QString applyTransliterations(const QString &s)
+{
+    QString res;
+    res.reserve(s.size());
+
+    for (const auto c : s) {
+        const auto it = std::lower_bound(std::begin(transliteration_map), std::end(transliteration_map), c, [](const auto &lhs, const auto rhs) {
+            return QChar(lhs.key) < rhs;
+        });
+        if (it != std::end(transliteration_map) && QChar((*it).key) == c) {
+            res += QString::fromUtf8((*it).replacement);
+            continue;
+        }
+
+        if (c.decompositionTag() == QChar::Canonical) { // see above
+            res += c.decomposition().at(0);
+        } else {
+            res += c;
+        }
+    }
+
+    return res;
+}
+
+static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationUtil::Accuracy accuracy)
+{
+    Q_UNUSED(accuracy); // TODO for city level we can strip station or airport suffixes for example
+
+    if (lhs.isEmpty() || rhs.isEmpty()) {
+        return false;
+    }
+
+    // actually equal
+    if (lhs.compare(rhs, Qt::CaseInsensitive) == 0) {
+        return true;
+    }
+
+    // check if any of the unicode normalization approaches helps
+    const auto lhsNormalized = stripDiacritics(lhs);
+    const auto rhsNormalized = stripDiacritics(rhs);
+    const auto lhsTransliterated = applyTransliterations(lhs);
+    const auto rhsTransliterated = applyTransliterations(rhs);
+    return lhsNormalized.compare(rhsNormalized, Qt::CaseInsensitive) == 0 || lhsNormalized.compare(rhsTransliterated, Qt::CaseInsensitive) == 0
+        || lhsTransliterated.compare(rhsNormalized, Qt::CaseInsensitive) == 0 || lhsTransliterated.compare(rhsTransliterated, Qt::CaseInsensitive) == 0;
+}
+
 bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, LocationUtil::Accuracy accuracy)
 {
     const auto lhsGeo = geo(lhs);
@@ -183,6 +257,5 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
             break;
     }
 
-    const auto lhsName = name(lhs);
-    return !lhsName.isEmpty() && lhsName == name(rhs);
+    return isSameLocationName(name(lhs), name(rhs), accuracy);
 }
