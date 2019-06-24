@@ -1,7 +1,13 @@
-{
-    "filter": [
-        { "header": "From", "match": "@booking.com" }
-
-    ],
-    "script": "booking.js"
-}
+[
+    {
+        "type": "text",
+        "filter": [ { "header": "From", "match": "@booking.com" } ],
+        "script": "booking.js"
+    },
+    {
+        "type": "html",
+        "filter": [ { "header": "From", "match": "@booking.com" } ],
+        "script": "booking.js",
+        "function": "parseHtml"
+    }
+]

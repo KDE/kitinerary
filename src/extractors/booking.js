@@ -97,3 +97,32 @@ function main(text) {
         return res;
     }
 }
+
+function parseHtml(doc)
+{
+    var res = JsonLd.newLodgingReservation();
+    var elem = doc.eval("//table[@class=\"mg_conf_hotel_preview\"]")[0];
+    res.reservationFor.name = elem.eval(".//b")[0].content;
+
+    var fullAddr = elem.eval(".//tr")[1].recursiveContent;
+    var addr = fullAddr.match(/^(.*), (.*?), (.*?), (.*?)[\n$]/);
+    res.reservationFor.address.streetAddress = addr[1];
+    res.reservationFor.address.addressLocality = addr[2];
+    res.reservationFor.address.postalCode = addr[3];
+    res.reservationFor.address.addressCountry = addr[4];
+
+    res.reservationFor.telephone = elem.eval(".//*[@class=\"u-phone\"]")[0].content;
+
+    // reservation id is the prefix in the mailto link, unlike other occurences this seems most reliably present
+    var email = elem.eval(".//tr/td/a")[1].attribute("href").match(/mailto:(\d+)-/);
+    if (email) {
+        res.reservationNumber = email[1]
+    }
+
+    elem = doc.eval("//table[@class=\"mg_conf_booking_summary\"]")[0];
+    var times = elem.eval(".//time");
+    res.checkinTime = times[0].attribute("datetime");
+    res.checkoutTime = times[1].attribute("datetime");
+
+    return res;
+}
