@@ -28,12 +28,10 @@ function main(text) {
             break;
         var idx = flightLine.index + flightLine[0].length;
 
-        var res = JsonLd.newObject("FlightReservation");
+        var res = JsonLd.newFlightReservation();
         res.reservationNumber = bookingRef[1];
-        res.reservationFor = JsonLd.newObject("Flight");
         res.reservationFor.flightNumber = flightLine[3];
 
-        res.reservationFor.airline = JsonLd.newObject("Airline");
         res.reservationFor.airline.iataCode = flightLine[2];
 
         var opByLine = text.substr(pos + idx).match(/^\s*\* operated by (.*)\n/);
@@ -47,7 +45,6 @@ function main(text) {
             break;
         idx += depLine.index + depLine[0].length;
         res.reservationFor.departureTime = JsonLd.toDateTime(flightLine[1] + ' ' + depLine[1], "dd.MM.yyyy hh:mm", "en");
-        res.reservationFor.departureAirport = JsonLd.newObject("Airport");
         res.reservationFor.departureAirport.name = depLine[2];
 
         var arrLine = text.substr(pos + idx).match(/Arrival:\s*([0-9]{2}:[0-9]{2})\s+(.*)\n/);
@@ -55,7 +52,6 @@ function main(text) {
             break;
         idx += arrLine.index + arrLine[0].length;
         res.reservationFor.arrivalTime = JsonLd.toDateTime(flightLine[1] + ' ' + arrLine[1], "dd.MM.yyyy hh:mm", "en");
-        res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
         res.reservationFor.arrivalAirport.name = arrLine[2];
 
         reservations.push(res);

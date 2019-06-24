@@ -34,10 +34,7 @@ function extractInformation(page) {
     if (!text.match(/BOARDING PASS/))
         return null;
 
-    var res = JsonLd.newObject("FlightReservation");
-    res.reservationFor = JsonLd.newObject("Flight");
-    res.reservedTicket = JsonLd.newObject("Ticket");
-
+    var res = JsonLd.newFlightReservation();
     var images = page.imagesInRect(0.5, 0, 1, 0.5);
     for (var i = 0; i < images.length; ++i) {
         if (images[i].height < 300 && images[i].width < images[i].height)

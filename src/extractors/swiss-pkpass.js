@@ -19,8 +19,7 @@
 
 function main(pass)
 {
-    var res = JsonLd.newObject("FlightReservation");
-    res.reservationFor = JsonLd.newObject("Flight");
+    var res = JsonLd.newFlightReservation();
     res.reservationFor.departureGate = pass.field["gate"].value;
 
     return res;

@@ -29,16 +29,13 @@ function parseHtmlBooking(doc) {
         var elem = elems[i];
         var detailsRoot = elem.parent.nextSibling;
 
-        var res = JsonLd.newObject("FlightReservation");
+        var res = JsonLd.newFlightReservation();
         res.reservationNumber = bookingRef;
-        res.reservationFor = JsonLd.newObject("Flight");
 
         var airportName = detailsRoot.eval(".//td[@class=\"vuelo_confirmado_card_details--city salida\"]")[0];
         var iataCode = detailsRoot.eval(".//td[@class=\"vuelo_confirmado_card_details--iata\"]")[0];
-        res.reservationFor.departureAirport = JsonLd.newObject("Airport");
         res.reservationFor.departureAirport.iataCode = iataCode.content;
         res.reservationFor.departureAirport.name = airportName.content;
-        res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
         res.reservationFor.arrivalAirport.iataCode = iataCode.nextSibling.content;
         res.reservationFor.arrivalAirport.name = airportName.nextSibling.content;
 
@@ -48,7 +45,6 @@ function parseHtmlBooking(doc) {
 
         var flightNum = detailsRoot.eval(".//td[@class=\"v-middle vuelo_confirmado_card_details--numVuelo\"]")[0].content;
         res.reservationFor.flightNumber = flightNum.substr(2);
-        res.reservationFor.airline = JsonLd.newObject("Airline");
         res.reservationFor.airline.iataCode = flightNum.substr(0, 2);
 
         reservations.push(res);

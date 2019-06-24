@@ -28,9 +28,7 @@ function main(pdf) {
             if (!bcbp)
                 continue;
 
-            var res = JsonLd.newObject("FlightReservation");
-            res.reservationFor = JsonLd.newObject("Flight");
-            res.reservedTicket = JsonLd.newObject("Ticket");
+            var res = JsonLd.newFlightReservation();
             res.reservedTicket.ticketToken = "aztecCode:" + bcbp;
 
             var time = page.text.match(/Departing at\s+(\d{1,2}:\d{2}[AP]M)/);

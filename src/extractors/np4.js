@@ -21,11 +21,7 @@ function parseEvent(event)
 {
     var res;
     if (event.summary.match(/(?:Flight|Flug)/i)) {
-        res = JsonLd.newObject("FlightReservation");
-        res.reservationFor = JsonLd.newObject("Flight");
-        res.reservationFor.airline = JsonLd.newObject("Airline");
-        res.reservationFor.departureAirport = JsonLd.newObject("Airport");
-        res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
+        res = JsonLd.newFlightReservation();
 
         // force UTC, otherwise we lose the timezone due to JS converting to the local TZ
         res.reservationFor.departureTime = event.dtStart.toJSON();

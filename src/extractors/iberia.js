@@ -31,11 +31,9 @@ function main(text) {
             break;
         var index = firstLine.index + firstLine[0].length;
 
-        var res = JsonLd.newObject("FlightReservation");
+        var res = JsonLd.newFlightReservation();
         res.reservationNumber = bookingRef[1];
-        res.reservationFor = JsonLd.newObject("Flight");
         res.reservationFor.flightNumber = firstLine[2];
-        res.reservationFor.airline = JsonLd.newObject("Airline");
         res.reservationFor.airline.iataCode = firstLine[1];
 
         var secondLine = text.substr(pos + index).match(/^ (\w+) \(([A-Z]{3})\) +(\d{2}:\d{2}) + (\d{2}:\d{2}) .*\n/);
@@ -43,7 +41,6 @@ function main(text) {
             break;
         index += secondLine.index + secondLine[0].length;
 
-        res.reservationFor.departureAirport = JsonLd.newObject("Airport");
         res.reservationFor.departureAirport.name = secondLine[1];
         res.reservationFor.departureAirport.iataCode = secondLine[2];
         res.reservationFor.departureTime = JsonLd.toDateTime(firstLine[3] + " " + secondLine[3], "dd-MMM hh:mm", "en");
@@ -54,7 +51,6 @@ function main(text) {
             break;
         index += fourthLine.index + fourthLine[0].length;
 
-        res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
         res.reservationFor.arrivalAirport.name = fourthLine[1];
         res.reservationFor.arrivalAirport.iataCode = fourthLine[2];
 

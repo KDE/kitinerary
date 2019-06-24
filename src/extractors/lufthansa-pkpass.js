@@ -23,12 +23,9 @@ function main(pass)
 //         return null;
 //     }
 
-    var res = JsonLd.newObject("FlightReservation");
-    res.reservationFor = JsonLd.newObject("Flight");
+    var res = JsonLd.newFlightReservation();
     res.reservationFor.departureGate = pass.field["gate"].value;
-    res.reservationFor.departureAirport = JsonLd.newObject("Airport");
     res.reservationFor.departureAirport.name = pass.field["origin"].label;
-    res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
 
     return res;

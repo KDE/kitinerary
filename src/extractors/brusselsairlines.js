@@ -17,9 +17,8 @@
    02110-1301, USA.
 */
 
-function makeAirport(name)
+function parseAirport(airport, name)
 {
-    var airport = JsonLd.newObject("Airport");
     airport.name = name;
     if (name.startsWith("Brussels Airport"))
         airport.iataCode = "BRU"; // disambiguate Brussel airports
@@ -46,17 +45,16 @@ function main(html) {
             if (cell.firstChild.isNull)
                 continue;
 
-            var res = JsonLd.newObject("FlightReservation");
+            var res = JsonLd.newFlightReservation();
             res.reservationNumber = bookingRef;
-            res.reservationFor = JsonLd.newObject("Flight");
-            res.reservationFor.departureAirport = makeAirport(cell.firstChild.content);
+            parseAirport(res.reservationFor.departureAirport, cell.firstChild.content);
             var depTime = cell.recursiveContent.match(/([0-9]{2} [A-Za-z]{3} [0-9]{4}),\s*([0-9]{2}:[0-9]{2})/);
             if (!depTime)
                 continue;
             res.reservationFor.departureTime = JsonLd.toDateTime(depTime[1] + ' ' + depTime[2], "dd MMM yyyy hh:mm", "en");
 
             cell = cell.nextSibling;
-            res.reservationFor.arrivalAirport= makeAirport(cell.firstChild.content);
+            parseAirport(res.reservationFor.arrivalAirport, cell.firstChild.content);
             var arrTime = cell.recursiveContent.match(/([0-9]{2} [A-Za-z]{3} [0-9]{4}),\s*([0-9]{2}:[0-9]{2})/);
             if (!arrTime)
                 continue;
@@ -66,7 +64,6 @@ function main(html) {
             var airline = cell.recursiveContent.match(/([A-Z0-9]{2}) ([0-9]{3,4})\s*([A-Z][A-Za-z0-9 ]*)/);
             if (!airline)
                 continue;
-            res.reservationFor.airline = JsonLd.newObject("Airline");
             res.reservationFor.airline.iataCode = airline[1];
             res.reservationFor.airline.name = airline[3];
             res.reservationFor.flightNumber = airline[2];

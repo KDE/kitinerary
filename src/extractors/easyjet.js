@@ -47,21 +47,17 @@ function parseHtmlBooking(doc) {
     for (var i = 0; i < elems.length; ++i) {
         var elem = elems[i];
         var row = elem.firstChild;
-        var res = JsonLd.newObject("FlightReservation");
+        var res = JsonLd.newFlightReservation();
         res.reservationNumber = bookingRef[1];
-        res.reservationFor = JsonLd.newObject("Flight");
 
         var airports = row.recursiveContent.match(localeMap[locale]['airportRegExp']);
-        res.reservationFor.departureAirport = JsonLd.newObject("Airport");
         res.reservationFor.departureAirport.name = airports[1];
 
-        res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
         res.reservationFor.arrivalAirport.name = airports[2];
         row = row.nextSibling;
 
         var flightNum = row.recursiveContent.match(/([A-Z0-9]{2,3}) ?(\d{1,4})/);
         res.reservationFor.flightNumber = flightNum[2];
-        res.reservationFor.airline = JsonLd.newObject("Airline");
         res.reservationFor.airline.iataCode = flightNum[1];
         row = row.nextSibling;
 
@@ -72,7 +68,6 @@ function parseHtmlBooking(doc) {
         elem = elem.nextSibling;
         if (elem.attribute("class") == "ej-pax") {
             var cell = elem.firstChild.firstChild;
-            res.underName = JsonLd.newObject("Person");
             res.underName.name = cell.content;
 
             cell = cell.nextSibling.firstChild.nextSibling;

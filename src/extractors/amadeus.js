@@ -28,10 +28,8 @@ function main(text) {
             break;
         var idx = flightHeader.index + flightHeader[0].length;
 
-        var res = JsonLd.newObject("FlightReservation");
+        var res = JsonLd.newFlightReservation();
         res.reservationNumber = bookingRef[1];
-        res.reservationFor = JsonLd.newObject("Flight");
-        res.reservationFor.airline = JsonLd.newObject("Airline");
         res.reservationFor.airline.iataCode = flightHeader[1];
         res.reservationFor.airline.name = flightHeader[3];
         res.reservationFor.flightNumber = flightHeader[2];
@@ -41,7 +39,6 @@ function main(text) {
         if (!depLine)
             break;
         idx = depLine.index + depLine[0].length;
-        res.reservationFor.departureAirport = JsonLd.newObject("Airport");
         res.reservationFor.departureAirport.name = depLine[1];
         res.reservationFor.departureTime = JsonLd.toDateTime(depLine[2] + ' ' + flightHeader[4] + ' ' + depLine[3], "dd MMM yyyy hh:mm", "en");
 
@@ -49,7 +46,6 @@ function main(text) {
         if (!arrLine)
             break;
         idx = arrLine.index + arrLine[0].length;
-        res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
         res.reservationFor.arrivalAirport.name = arrLine[1];
         res.reservationFor.arrivalTime = JsonLd.toDateTime(arrLine[2] + ' ' + flightHeader[4] + ' ' + arrLine[3], "dd MMM yyyy hh:mm", "en");
 
@@ -64,11 +60,7 @@ function main(text) {
 
 function parseEvent(event)
 {
-    var res = JsonLd.newObject("FlightReservation");
-    res.reservationFor = JsonLd.newObject("Flight");
-    res.reservationFor.airline = JsonLd.newObject("Airline");
-    res.reservationFor.departureAirport = JsonLd.newObject("Airport");
-    res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
+    var res = JsonLd.newFlightReservation();
 
     // force UTC, otherwise we lose the timezone due to JS converting to the local TZ
     res.reservationFor.departureTime = event.dtStart.toJSON();

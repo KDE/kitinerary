@@ -45,6 +45,28 @@ QJSValue JsApi::JsonLd::newObject(const QString &typeName) const
     return v;
 }
 
+QJSValue JsApi::JsonLd::newFlightReservation() const
+{
+    const auto dep = newObject(QStringLiteral("Airport"));
+    const auto arr = newObject(QStringLiteral("Airport"));
+    const auto airline = newObject(QStringLiteral("Airline"));
+    const auto person = newObject(QStringLiteral("Person"));
+
+    auto resFor = newObject(QStringLiteral("Flight"));
+    resFor.setProperty(QStringLiteral("departureAirport"), dep);
+    resFor.setProperty(QStringLiteral("arrivalAirport"), arr);
+    resFor.setProperty(QStringLiteral("airline"), airline);
+
+    const auto ticket = newObject(QStringLiteral("Ticket"));
+
+    auto res = newObject(QStringLiteral("FlightReservation"));
+    res.setProperty(QStringLiteral("reservationFor"), resFor);
+    res.setProperty(QStringLiteral("underName"), person);
+    res.setProperty(QStringLiteral("reservedTicket"), ticket);
+
+    return res;
+}
+
 QJSValue JsApi::JsonLd::newLodgingReservation() const
 {
     const auto addr = newObject(QStringLiteral("PostalAddress"));

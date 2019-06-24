@@ -60,19 +60,15 @@ function extractInformation(page) {
                 //  SK 675 / 27DEC Copenhagen Kastrup - Frankfurt FRA                        13:40    15:15         12:40 Terminal 3         1PC
                 var flightLine = lines[i].match(/([A-Z0-9]{2}) ([0-9]{1,4}) \/ ([0-9]{2}[A-Z]{3})\s+([^0-9]+)([0-9]{2}:[0-9]{2})\s+([0-9]{2}:[0-9]{2})\s+([0-9]{2}:[0-9]{2})?.*/)
                 if (flightLine) {
-                    var flight = JsonLd.newObject("FlightReservation");
+                    var flight = JsonLd.newFlightReservation();
                     flight.reservationNumber = bookingRef[1];
-                    flight.reservationFor = JsonLd.newObject("Flight");
                     flight.reservationFor.flightNumber = flightLine[2];
-                    flight.reservationFor.airline = JsonLd.newObject("Airline");
                     flight.reservationFor.airline.iataCode = flightLine[1];
                     flight.reservationFor.airline.name = operatedBy;
                     flight.reservationFor.departureTime = parseDate(flightLine[3], flightLine[5], issueDate[1] );
                     var airports = flightLine[4].split(" - ");
-                    flight.reservationFor.departureAirport = JsonLd.newObject("Airport");
                     flight.reservationFor.departureAirport.name = airports[0].trim();;
                     flight.reservationFor.arrivalTime = parseDate(flightLine[3], flightLine[6], issueDate[1] );
-                    flight.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
                     flight.reservationFor.arrivalAirport.name = airports[1].trim();
                     res.push(flight);
                 }

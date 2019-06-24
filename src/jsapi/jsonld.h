@@ -40,6 +40,10 @@ public:
     /** Create a new JSON-LD object of type @p typeName. */
     Q_INVOKABLE QJSValue newObject(const QString &typeName) const;
 
+    /** Convenience method that generates a full FlightReservation JS object.
+     *  This can be used by extractor scripts to fill in the extracted information.
+     */
+    Q_INVOKABLE QJSValue newFlightReservation() const;
     /** Convenience method that generates a full LodgingReservation JS object.
      *  This can be used by extractor scripts to fill in the extracted information.
      */

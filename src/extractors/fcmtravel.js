@@ -53,11 +53,9 @@ function main(text) {
                 break;
             var index = flightLine.index + flightLine[0].length;
 
-            var res = JsonLd.newObject("FlightReservation");
+            var res = JsonLd.newFlightReservation();
             res.reservationNumber = bookingRef[1];
-            res.reservationFor = JsonLd.newObject("Flight");
             res.reservationFor.flightNumber = flightLine[2];
-            res.reservationFor.airline = JsonLd.newObject("Airline");
             res.reservationFor.airline.iataCode = flightLine[1];
             res.reservationFor.airline.name = flightLine[3];
 
@@ -69,7 +67,6 @@ function main(text) {
                 break;
             index += depLine.index + depLine[0].length;
             res.reservationFor.departureTime = JsonLd.toDateTime(depDate[1] + " " + depLine[1], "d MMM yyyy hh:mm", locale);
-            res.reservationFor.departureAirport = JsonLd.newObject("Airport");
             res.reservationFor.departureAirport.name = depLine[2];
             res.reservationFor.departureAirport.iataCode = depLine[3];
 
@@ -81,7 +78,6 @@ function main(text) {
                 arrDate = depDate;
             index += arrLine.index + arrLine[0].length;
             res.reservationFor.arrivalTime = JsonLd.toDateTime(arrDate[1] + " " + arrLine[1], "d MMM yyyy hh:mm", locale);
-            res.reservationFor.arrivalAirport = JsonLd.newObject("Airport");
             res.reservationFor.arrivalAirport.name = arrLine[2];
             res.reservationFor.arrivalAirport.iataCode = arrLine[3];
 
@@ -113,7 +109,6 @@ function main(text) {
             // urgh, but apparently that's the way to clone objects in JS
             // without that we only have one reference that then will end up all with the same person name
             var r = JsonLd.clone(reservations[i]);
-            r.underName = JsonLd.newObject("Person");
             r.underName.name = traveler[j];
             result.push(r);
         }
