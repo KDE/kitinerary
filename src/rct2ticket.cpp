@@ -392,7 +392,21 @@ QString Rct2Ticket::trainNumber() const
     const auto t = type();
     if (t == Reservation || t == TransportReservation) {
         const auto cat = d->fieldText(8, 13, 3).trimmed();
-        const auto num = d->fieldText(8, 7, 5).trimmed();
+        auto num = d->fieldText(8, 7, 5);
+
+        // check for train number bleeding into our left neighbour field (happens e.g. on ÖBB IRT tickets)
+        if (!num.isEmpty() && num.at(0).isDigit()) {
+            const auto numPrefix = d->fieldText(8, 1, 6);
+            for (int i = numPrefix.size() - 1; i >= 0; --i) {
+                if (numPrefix.at(i).isDigit()) {
+                    num.prepend(numPrefix.at(i));
+                } else {
+                    break;
+                }
+            }
+        }
+        num = num.trimmed();
+
         if (!cat.isEmpty()) {
             return cat + QLatin1Char(' ') + num;
         }
