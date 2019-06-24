@@ -146,7 +146,7 @@ QJsonObject GenericPkPassExtractor::extract(KPkPass::Pass *pass, const QJsonObje
     }
 
     // barcode contains the ticket token
-    if (!pass->barcodes().isEmpty() && !result.contains(QLatin1String("reservedTicket"))) {
+    if (!pass->barcodes().isEmpty()) {
         const auto barcode = pass->barcodes().at(0);
         QString token;
         switch (barcode.format()) {
@@ -160,9 +160,11 @@ QJsonObject GenericPkPassExtractor::extract(KPkPass::Pass *pass, const QJsonObje
                 break;
         }
         token += barcode.message();
-        QJsonObject ticket;
+        QJsonObject ticket = result.value(QLatin1String("reservedTicket")).toObject();
         ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
-        ticket.insert(QStringLiteral("ticketToken"), token);
+        if (!ticket.contains(QLatin1String("ticketToken"))) {
+            ticket.insert(QStringLiteral("ticketToken"), token);
+        }
         result.insert(QStringLiteral("reservedTicket"), ticket);
     }
 
