@@ -102,10 +102,10 @@ function parseHtml(doc)
 {
     var res = JsonLd.newLodgingReservation();
     var elem = doc.eval("//table[@class=\"mg_conf_hotel_preview\"]")[0];
-    res.reservationFor.name = elem.eval(".//b")[0].content;
+    res.reservationFor.name = elem.eval("(.//b|.//strong)")[0].content;
 
     var fullAddr = elem.eval(".//tr")[1].recursiveContent;
-    var addr = fullAddr.match(/^(.*), (.*?), (.*?), (.*?)[\n$]/);
+    var addr = fullAddr.match(/^(.*), (.*?), (.*?), ([^,]*?)\s*-?\s*$/);
     res.reservationFor.address.streetAddress = addr[1];
     res.reservationFor.address.addressLocality = addr[2];
     res.reservationFor.address.postalCode = addr[3];
