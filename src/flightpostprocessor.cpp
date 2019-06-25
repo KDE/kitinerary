@@ -164,7 +164,10 @@ void FlightPostProcessor::pickAirportByDistance(int duration, const std::vector<
         return;
     }
 
-    const int lowerBoundDistance = AirplaneSpeedLowerBound * (duration / 3.6);
+    int lowerBoundDistance = AirplaneSpeedLowerBound * (duration / 3.6);
+    if (duration < 3600) { // for ultra short flights the takeoff/landing overhead is so big that our expected speed range doesn't work reliable anymore
+        lowerBoundDistance /= 2;
+    }
     const int upperBoundDistance = AirplaneSpeedUpperBound * (duration / 3.6);
 
     for (auto it = codes.begin(); it != codes.end();) {
