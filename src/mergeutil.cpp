@@ -39,6 +39,8 @@
 #include <QMetaProperty>
 #include <QVariant>
 
+#include <cmath>
+
 using namespace KItinerary;
 
 /* Checks that @p lhs and @p rhs are non-empty and equal. */
@@ -468,6 +470,14 @@ static Ticket mergeValue(const Ticket &lhs, const Ticket &rhs)
     return t;
 }
 
+static bool valueIsNull(const QVariant &v)
+{
+    if (v.type() == qMetaTypeId<float>()) {
+        return std::isnan(v.toFloat());
+    }
+    return v.isNull();
+}
+
 QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
 {
     if (rhs.isNull()) {
@@ -505,7 +515,7 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
             rv = merge(prop.readOnGadget(lhs.constData()), rv);
         }
 
-        if (!rv.isNull()) {
+        if (!valueIsNull(rv)) {
             prop.writeOnGadget(res.data(), rv);
         }
     }
