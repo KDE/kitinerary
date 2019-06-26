@@ -73,6 +73,9 @@ public:
     /** Evaluate an XPath expression relative to this node. */
     Q_INVOKABLE QVariant eval(const QString &xpath) const;
 
+    /** Checks if two HtmlElement instances refer to the same DOM node. */
+    bool operator==(const HtmlElement &other) const;
+
 private:
     friend class HtmlDocument;
     HtmlElement(_xmlNode *dd);

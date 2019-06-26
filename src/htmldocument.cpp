@@ -334,6 +334,11 @@ QStringList HtmlElement::attributes() const
     return l;
 }
 
+bool HtmlElement::operator==(const HtmlElement &other) const
+{
+    return d == other.d;
+}
+
 
 HtmlElement HtmlDocument::root() const
 {
