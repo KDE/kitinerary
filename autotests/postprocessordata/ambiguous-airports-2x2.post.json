@@ -1,0 +1,48 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "XY"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "FRANKFURT DE FRANKFURT INTL"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2018-07-26T18:50:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 39.48939895629883,
+                    "longitude": -0.48166701197624207
+                },
+                "iataCode": "VLC",
+                "name": "VALENCIA ES VALENCIA AIRPORT"
+            },
+            "departureDay": "2018-07-26",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2018-07-26T16:25:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "flightNumber": "1234"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

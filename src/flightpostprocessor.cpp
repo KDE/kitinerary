@@ -46,12 +46,8 @@ Flight FlightPostProcessor::processFlight(Flight flight)
 
     // if we have an ambiguous airport on one end, see if we can pick based on the travel time
     const auto duration = flight.departureTime().secsTo(flight.arrivalTime());
-    if (m_departureCodes.size() == 1 && m_arrivalCodes.size() > 1) {
-        pickAirportByDistance(duration, m_departureCodes, m_arrivalCodes);
-    }
-    if (m_arrivalCodes.size() == 1 && m_departureCodes.size() > 1) {
-        pickAirportByDistance(duration, m_arrivalCodes, m_departureCodes);
-    }
+    pickAirportByDistance(duration, m_departureCodes, m_arrivalCodes);
+    pickAirportByDistance(duration, m_arrivalCodes, m_departureCodes);
 
     flight.setDepartureAirport(processAirport(flight.departureAirport(), m_departureCodes));
     flight.setArrivalAirport(processAirport(flight.arrivalAirport(), m_arrivalCodes));
@@ -150,17 +146,14 @@ void FlightPostProcessor::lookupAirportCodes(const Airport &airport, std::vector
     }
 }
 
-void FlightPostProcessor::pickAirportByDistance(int duration, const std::vector<KnowledgeDb::IataCode>& startCode, std::vector<KnowledgeDb::IataCode>& codes) const
+void FlightPostProcessor::pickAirportByDistance(int duration, const std::vector<KnowledgeDb::IataCode>& startCodes, std::vector<KnowledgeDb::IataCode>& codes) const
 {
-    if (duration <= 0) {
+    if (duration <= 0 || startCodes.empty() || codes.size() <= 1) {
         return;
     }
 
-    Q_ASSERT(startCode.size() == 1);
-    Q_ASSERT(codes.size() > 1);
-
-    const auto startCoord = KnowledgeDb::coordinateForAirport(startCode[0]);
-    if (!startCoord.isValid()) {
+    // ensure we have coordinates for all start points
+    if (!std::all_of(startCodes.begin(), startCodes.end(), [](const auto code) { return KnowledgeDb::coordinateForAirport(code).isValid(); })) {
         return;
     }
 
@@ -176,8 +169,13 @@ void FlightPostProcessor::pickAirportByDistance(int duration, const std::vector<
             continue;
         }
 
-        const auto dist = LocationUtil::distance({startCoord.latitude, startCoord.longitude}, {destCoord.latitude, destCoord.longitude});
-        if (dist > upperBoundDistance || dist < lowerBoundDistance) {
+        bool outOfRange = true;
+        for (const auto startCode : startCodes) {
+            const auto startCoord =  KnowledgeDb::coordinateForAirport(startCode);
+            const auto dist = LocationUtil::distance({startCoord.latitude, startCoord.longitude}, {destCoord.latitude, destCoord.longitude});
+            outOfRange = outOfRange && (dist > upperBoundDistance || dist < lowerBoundDistance);
+        }
+        if (outOfRange) {
             it = codes.erase(it);
         } else {
             ++it;

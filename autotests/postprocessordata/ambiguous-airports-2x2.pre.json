@@ -1,0 +1,26 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "XY"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "name": "FRANKFURT DE FRANKFURT INTL"
+            },
+            "arrivalTime": "2018-07-26T18:50:00+02:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "name": "VALENCIA ES VALENCIA AIRPORT"
+            },
+            "departureDay": "2018-07-26",
+            "departureTime": "2018-07-26T16:25:00+02:00",
+            "flightNumber": "1234"
+        },
+        "reservationNumber": "XXX007"
+    }
+]
