@@ -1,0 +1,10 @@
+[
+    {
+        "type": "text",
+        "filter": [
+            { "header": "From", "match": "@via.com" }
+        ],
+        "script": "travelport-galileo.js",
+        "function": "parsePNR"
+    }
+]

@@ -1,0 +1,334 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "EY"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "AE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 24.4330997467041,
+                    "longitude": 54.651100158691406
+                },
+                "iataCode": "AUH"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-09T07:00:00+04:00",
+                "timezone": "Asia/Dubai"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IN"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 23.077199935913086,
+                    "longitude": 72.63469696044922
+                },
+                "iataCode": "AMD"
+            },
+            "departureDay": "2017-01-09",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-09T05:05:00+05:30",
+                "timezone": "Asia/Kolkata"
+            },
+            "flightNumber": "289"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHNMR",
+            "name": "JOHNMR DOE"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "EY"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IT"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.80030059814453,
+                    "longitude": 12.238900184631348
+                },
+                "iataCode": "FCO"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-09T13:00:00+01:00",
+                "timezone": "Europe/Rome"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "AE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 24.4330997467041,
+                    "longitude": 54.651100158691406
+                },
+                "iataCode": "AUH"
+            },
+            "departureDay": "2017-01-09",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-09T08:50:00+04:00",
+                "timezone": "Asia/Dubai"
+            },
+            "flightNumber": "83"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHNMR",
+            "name": "JOHNMR DOE"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "EY",
+                "name": "ALITALIA S.P.A"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 39.48939895629883,
+                    "longitude": -0.48166701197624207
+                },
+                "iataCode": "VLC"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-09T17:05:00+01:00",
+                "timezone": "Europe/Madrid"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IT"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.80030059814453,
+                    "longitude": 12.238900184631348
+                },
+                "iataCode": "FCO"
+            },
+            "departureDay": "2017-01-09",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-09T15:00:00+01:00",
+                "timezone": "Europe/Rome"
+            },
+            "flightNumber": "3000"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHNMR",
+            "name": "JOHNMR DOE"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "EY",
+                "name": "ALITALIA S.P.A"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IT"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.80030059814453,
+                    "longitude": 12.238900184631348
+                },
+                "iataCode": "FCO"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-16T19:55:00+01:00",
+                "timezone": "Europe/Rome"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 39.48939895629883,
+                    "longitude": -0.48166701197624207
+                },
+                "iataCode": "VLC"
+            },
+            "departureDay": "2017-01-16",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-16T17:55:00+01:00",
+                "timezone": "Europe/Madrid"
+            },
+            "flightNumber": "3001"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHNMR",
+            "name": "JOHNMR DOE"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "EY"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "AE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 24.4330997467041,
+                    "longitude": 54.651100158691406
+                },
+                "iataCode": "AUH"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-17T06:05:00+04:00",
+                "timezone": "Asia/Dubai"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IT"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.80030059814453,
+                    "longitude": 12.238900184631348
+                },
+                "iataCode": "FCO"
+            },
+            "departureDay": "2017-01-16",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-16T22:00:00+01:00",
+                "timezone": "Europe/Rome"
+            },
+            "flightNumber": "84"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHNMR",
+            "name": "JOHNMR DOE"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "EY"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IN"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 23.077199935913086,
+                    "longitude": 72.63469696044922
+                },
+                "iataCode": "AMD"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-17T14:45:00+05:30",
+                "timezone": "Asia/Kolkata"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "AE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 24.4330997467041,
+                    "longitude": 54.651100158691406
+                },
+                "iataCode": "AUH"
+            },
+            "departureDay": "2017-01-17",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-01-17T10:00:00+04:00",
+                "timezone": "Asia/Dubai"
+            },
+            "flightNumber": "226"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHNMR",
+            "name": "JOHNMR DOE"
+        }
+    }
+]
