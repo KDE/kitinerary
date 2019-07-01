@@ -1,0 +1,25 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AF"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "BLR"
+            },
+            "arrivalTime": "2007-12-03T00:35:00+05:30",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "CDG"
+            },
+            "departureTime": "2007-12-03T11:00:00+01:00",
+            "flightNumber": "192"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

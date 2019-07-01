@@ -56,6 +56,12 @@ Flight FlightPostProcessor::processFlight(Flight flight)
     flight.setDepartureTime(processFlightTime(flight.departureTime(), flight, m_departureCodes));
     flight.setArrivalTime(processFlightTime(flight.arrivalTime(), flight, m_arrivalCodes));
     flight = ExtractorUtil::extractTerminals(flight);
+
+    // arrival less than a day before departure is an indication of the extractor failing to detect day rollover
+    if (duration < 0 && duration > -3600*24) {
+        flight.setArrivalTime(flight.arrivalTime().addDays(1));
+    }
+
     return flight;
 }
 
