@@ -35,6 +35,7 @@ class PdfPagePrivate;
 
 class PdfImagePrivate : public QSharedData {
 public:
+    QImage load();
 #ifdef HAVE_POPPLER
     QImage load(Stream *str, GfxImageColorMap *colorMap);
 

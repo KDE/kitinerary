@@ -27,54 +27,15 @@
 #include <GlobalParams.h>
 #include <PDFDoc.h>
 #include <Stream.h>
+#include <OutputDev.h>
 #endif
 
 using namespace KItinerary;
 
 #ifdef HAVE_POPPLER
-QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
-{
-    auto img = QImage(m_sourceWidth, m_sourceHeight, m_format);
-    const auto bytesPerPixel = colorMap->getNumPixelComps();
-    std::unique_ptr<ImageStream> imgStream(new ImageStream(str, m_sourceWidth, bytesPerPixel, colorMap->getBits()));
-    imgStream->reset();
-
-    switch (m_format) {
-        case QImage::Format_RGB888:
-            for (int i = 0; i < m_sourceHeight; ++i) {
-                const auto row = imgStream->getLine();
-                auto imgData = img.scanLine(i);
-                GfxRGB rgb;
-                for (int j = 0; j < m_sourceWidth; ++j) {
-                    colorMap->getRGB(row + (j * bytesPerPixel), &rgb);
-                    *imgData++ = colToByte(rgb.r);
-                    *imgData++ = colToByte(rgb.g);
-                    *imgData++ = colToByte(rgb.b);
-                }
-            }
-            break;
-        case QImage::Format_Grayscale8:
-            for (int i = 0; i < m_sourceHeight; ++i) {
-                const auto row = imgStream->getLine();
-                auto imgData = img.scanLine(i);
-                GfxGray gray;
-                for (int j = 0; j < m_sourceWidth; ++j) {
-                    colorMap->getGray(row + j, &gray);
-                    *imgData++ = colToByte(gray);
-                }
-            }
-            break;
-        default:
-            break;
-    }
-    imgStream->close();
-
-    m_page->m_doc->m_imageData[m_refNum] = img;
-    return img;
-}
-
 // legacy image loading
 #ifndef HAVE_POPPLER_0_69
+namespace KItinerary {
 class ImageLoaderOutputDevice : public OutputDev
 {
 public:
@@ -117,8 +78,76 @@ void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *st
 
     m_image = d->load(str, colorMap);
 }
+}
 #endif
+
+QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
+{
+    auto img = QImage(m_sourceWidth, m_sourceHeight, m_format);
+    const auto bytesPerPixel = colorMap->getNumPixelComps();
+    std::unique_ptr<ImageStream> imgStream(new ImageStream(str, m_sourceWidth, bytesPerPixel, colorMap->getBits()));
+    imgStream->reset();
+
+    switch (m_format) {
+        case QImage::Format_RGB888:
+            for (int i = 0; i < m_sourceHeight; ++i) {
+                const auto row = imgStream->getLine();
+                auto imgData = img.scanLine(i);
+                GfxRGB rgb;
+                for (int j = 0; j < m_sourceWidth; ++j) {
+                    colorMap->getRGB(row + (j * bytesPerPixel), &rgb);
+                    *imgData++ = colToByte(rgb.r);
+                    *imgData++ = colToByte(rgb.g);
+                    *imgData++ = colToByte(rgb.b);
+                }
+            }
+            break;
+        case QImage::Format_Grayscale8:
+            for (int i = 0; i < m_sourceHeight; ++i) {
+                const auto row = imgStream->getLine();
+                auto imgData = img.scanLine(i);
+                GfxGray gray;
+                for (int j = 0; j < m_sourceWidth; ++j) {
+                    colorMap->getGray(row + j, &gray);
+                    *imgData++ = colToByte(gray);
+                }
+            }
+            break;
+        default:
+            break;
+    }
+    imgStream->close();
+
+    m_page->m_doc->m_imageData[m_refNum] = img;
+    return img;
+}
 #endif
+
+QImage PdfImagePrivate::load()
+{
+    const auto it = m_page->m_doc->m_imageData.find(m_refNum);
+    if (it != m_page->m_doc->m_imageData.end()) {
+        return (*it).second;
+    }
+
+#ifdef HAVE_POPPLER
+    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
+
+#ifdef HAVE_POPPLER_0_69
+    const auto xref = m_page->m_doc->m_popplerDoc->getXRef();
+    const auto obj = xref->fetch(m_refNum, m_refGen);
+    return load(obj.getStream(), m_colorMap.get());
+#else
+    std::unique_ptr<ImageLoaderOutputDevice> device(new ImageLoaderOutputDevice(this));
+    m_page->m_doc->m_popplerDoc->displayPageSlice(device.get(), m_page->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
+    return device->image();
+#endif
+
+#else
+    return {};
+#endif
+}
+
 
 PdfImage::PdfImage()
     : d(new PdfImagePrivate)
@@ -154,34 +183,9 @@ QTransform PdfImage::transform() const
     return d->m_transform;
 }
 
-QImage PdfImage::sourceImage() const
-{
-    const auto it = d->m_page->m_doc->m_imageData.find(d->m_refNum);
-    if (it != d->m_page->m_doc->m_imageData.end()) {
-        return (*it).second;
-    }
-
-#ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
-
-#ifdef HAVE_POPPLER_0_69
-    const auto xref = d->m_page->m_doc->m_popplerDoc->getXRef();
-    const auto obj = xref->fetch(d->m_refNum, d->m_refGen);
-    return d->load(obj.getStream(), d->m_colorMap.get());
-#else
-    std::unique_ptr<ImageLoaderOutputDevice> device(new ImageLoaderOutputDevice(d.data()));
-    d->m_page->m_doc->m_popplerDoc->displayPageSlice(device.get(), d->m_page->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
-    return device->image();
-#endif
-
-#else
-    return {};
-#endif
-}
-
 QImage PdfImage::image() const
 {
-    const auto img = sourceImage();
+    const auto img = d->load();
     if (d->m_width != d->m_sourceWidth || d->m_height != d->m_sourceHeight) {
         return img.scaled(d->m_width, d->m_height);
     }

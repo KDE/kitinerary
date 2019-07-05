@@ -58,8 +58,6 @@ public:
      */
     QTransform transform() const;
 
-    /** The image as loaded from PDF, without transformations applied. */
-    QImage sourceImage() const;
     /** The source image with display transformations applied. */
     QImage image() const;
 
