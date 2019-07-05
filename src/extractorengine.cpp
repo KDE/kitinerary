@@ -29,7 +29,7 @@
 #include "iatabcbpparser.h"
 #include "jsonlddocument.h"
 #include "logging.h"
-#include "pdfdocument.h"
+#include "pdf/pdfdocument.h"
 #include "structureddataextractor_p.h"
 #include "uic9183parser.h"
 

@@ -32,6 +32,7 @@ set(kitinerary_lib_srcs
     knowledgedb/timezonedb.cpp
     knowledgedb/trainstationdb.cpp
 
+    pdf/pdfdocument.cpp
     pdf/pdfextractoroutputdevice.cpp
     pdf/pdfimage.cpp
     pdf/pdfvectorpicture.cpp
@@ -55,7 +56,6 @@ set(kitinerary_lib_srcs
     jsonldimportfilter.cpp
     locationutil.cpp
     mergeutil.cpp
-    pdfdocument.cpp
     qimagepurebinarizer.cpp
     rct2ticket.cpp
     sortutil.cpp
@@ -119,7 +119,6 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         JsonLdDocument
         LocationUtil
         MergeUtil
-        PdfDocument
         Rct2Ticket
         SortUtil
         Uic9183Parser
@@ -157,6 +156,7 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
 )
 ecm_generate_headers(KItinerary_Pdf_FORWARDING_HEADERS
     HEADER_NAMES
+        PdfDocument
         PdfImage
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_Pdf_HEADERS

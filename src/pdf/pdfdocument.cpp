@@ -17,10 +17,10 @@
 
 #include "config-kitinerary.h"
 #include "pdfdocument.h"
-#include "pdf/pdfdocument_p.h"
-#include "pdf/pdfextractoroutputdevice_p.h"
-#include "pdf/pdfimage_p.h"
-#include "pdf/popplerutils_p.h"
+#include "pdfdocument_p.h"
+#include "pdfextractoroutputdevice_p.h"
+#include "pdfimage_p.h"
+#include "popplerutils_p.h"
 #include "logging.h"
 
 #include <QDebug>
