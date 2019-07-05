@@ -71,7 +71,7 @@ void GenericPdfExtractor::extract(PdfDocument *doc, QJsonArray &result)
 
         for (int j = 0; j < page.imageCount(); ++j) {
             const auto img = page.image(j);
-            if (m_imageIds.find(img.objectId()) != m_imageIds.end()) {
+            if (img.hasObjectId() &&  m_imageIds.find(img.objectId()) != m_imageIds.end()) {
                 continue;
             }
 
@@ -80,7 +80,9 @@ void GenericPdfExtractor::extract(PdfDocument *doc, QJsonArray &result)
             }
 
             extractImage(img, result);
-            m_imageIds.insert(img.objectId());
+            if (img.hasObjectId()) {
+                m_imageIds.insert(img.objectId());
+            }
         }
     }
 }

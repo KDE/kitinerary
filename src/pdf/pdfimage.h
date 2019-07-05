@@ -61,6 +61,11 @@ public:
     /** The source image with display transformations applied. */
     QImage image() const;
 
+    /** Returns whether this image has an object id.
+     *  Vector graphic "images" don't have that.
+     */
+    bool hasObjectId() const;
+
     /** PDF-internal unique identifier of this image.
      *  Use this to detect multiple occurrences of the same image in different
      *  places, if that reduces e.g. computation cost.

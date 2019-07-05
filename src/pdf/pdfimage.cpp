@@ -188,6 +188,11 @@ QImage PdfImage::image() const
     return img;
 }
 
+bool PdfImage::hasObjectId() const
+{
+    return d->m_refNum >= 0;
+}
+
 int PdfImage::objectId() const
 {
     return d->m_refNum;
