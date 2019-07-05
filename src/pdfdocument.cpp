@@ -17,6 +17,8 @@
 
 #include "config-kitinerary.h"
 #include "pdfdocument.h"
+#include "pdf/pdfdocument_p.h"
+#include "pdf/pdfimage_p.h"
 #include "pdf/popplerutils_p.h"
 #include "logging.h"
 
@@ -32,55 +34,10 @@
 #endif
 
 #include <cmath>
-#include <unordered_map>
 
 using namespace KItinerary;
 
 namespace KItinerary {
-class PdfImagePrivate : public QSharedData {
-public:
-#ifdef HAVE_POPPLER
-    QImage load(Stream *str, GfxImageColorMap *colorMap);
-
-    std::unique_ptr<GfxImageColorMap> m_colorMap;
-#endif
-
-    int m_refNum = -1;
-    int m_refGen = -1;
-    PdfPagePrivate *m_page = nullptr;
-    QTransform m_transform;
-    int m_width = 0;
-    int m_height = 0;
-    int m_sourceWidth = 0;
-    int m_sourceHeight = 0;
-    QImage::Format m_format = QImage::Format_Invalid;
-};
-
-class PdfPagePrivate : public QSharedData {
-public:
-    void load();
-
-    int m_pageNum = -1;
-    bool m_loaded = false;
-    QString m_text;
-    std::vector<PdfImage> m_images;
-    PdfDocumentPrivate *m_doc;
-};
-
-class PdfDocumentPrivate {
-public:
-    // needs to be kept alive as long as the Poppler::PdfDoc instance lives
-    QByteArray m_pdfData;
-    // this contains the actually loaded/decoded image data
-    // and is referenced by the object id from PdfImage to avoid
-    // expensive loading/decoding of multiple occurrences of the same image
-    // image data in here is stored in its source form, without applied transformations
-    std::unordered_map<int, QImage> m_imageData;
-    std::vector<PdfPage> m_pages;
-#ifdef HAVE_POPPLER
-    std::unique_ptr<PDFDoc> m_popplerDoc;
-#endif
-};
 
 #ifdef HAVE_POPPLER
 class ExtractorOutputDevice : public TextOutputDev
