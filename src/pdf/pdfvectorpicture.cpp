@@ -33,6 +33,7 @@ public:
     std::vector<PdfVectorPicture::PathStroke> strokes;
     QRectF boundingRect;
     QImage image;
+    QTransform transform;
 };
 }
 
@@ -51,6 +52,12 @@ void PdfVectorPicture::setStrokes(std::vector<PdfVectorPicture::PathStroke> &&st
     d->strokes = std::move(strokes);
     d->image = QImage();
     d->boundingRect = QRectF();
+}
+
+void PdfVectorPicture::setTransform(const QTransform &t)
+{
+    d.detach();
+    d->transform = t;
 }
 
 QRectF PdfVectorPicture::boundingRect() const
@@ -76,10 +83,27 @@ int PdfVectorPicture::pathElementsCount() const
     return c;
 }
 
-QImage PdfVectorPicture::renderToImage(int dpi) const
+static double scaleFromTransform(QTransform t)
+{
+    if (t.isRotating()) {
+        t.rotate(90);
+        if (t.isRotating()) {
+            qDebug() << "non-90° rotation, likely not a barcode";
+            return 1.0;
+        }
+    }
+
+    if (std::abs(std::abs(t.m11()) - std::abs(t.m22())) < 0.1) {
+        return std::max(std::abs(t.m11()), std::abs(t.m22()));
+    }
+    qDebug() << "asymetric scale not supported yet" << t;
+    return 1.0;
+}
+
+QImage PdfVectorPicture::renderToImage() const
 {
     if (d->image.isNull()) {
-        const auto scale = dpi / 72; // 1/72 dpi is the unit for the vector coordinates
+        const double scale = (RenderDPI / 72.0) * scaleFromTransform(d->transform); // 1/72 dpi is the unit for the vector coordinates
         const int width = boundingRect().width() * scale;
         const int height = boundingRect().height() * scale;
         d->image = QImage(width, height, QImage::Format_Grayscale8);
@@ -96,4 +120,26 @@ QImage PdfVectorPicture::renderToImage(int dpi) const
     }
 
     return d->image;
+}
+
+int PdfVectorPicture::sourceWidth() const
+{
+    // 1/72 dpi is the unit for the vector coordinates
+    return boundingRect().width() * (RenderDPI / 72.0);
+}
+
+int PdfVectorPicture::sourceHeight() const
+{
+    // 1/72 dpi is the unit for the vector coordinates
+    return boundingRect().width() * (RenderDPI / 72.0);
+}
+
+int PdfVectorPicture::width() const
+{
+    return boundingRect().width() * scaleFromTransform(d->transform);
+}
+
+int PdfVectorPicture::height() const
+{
+    return boundingRect().height() * scaleFromTransform(d->transform);
 }

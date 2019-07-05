@@ -24,6 +24,8 @@
 #include <QPen>
 #include <QBrush>
 
+class QTransform;
+
 namespace KItinerary {
 
 class PdfVectorPicturePrivate;
@@ -44,9 +46,17 @@ public:
     };
 
     void setStrokes(std::vector<PathStroke> &&strokes);
+    void setTransform(const QTransform &t);
     QRectF boundingRect() const;
     int pathElementsCount() const;
-    QImage renderToImage(int dpi) const;
+    QImage renderToImage() const;
+
+    // size of the rendered image
+    int sourceWidth() const;
+    int sourceHeight() const;
+    // size of the image in PDF 1/72 dpi coordinates
+    int width() const;
+    int height() const;
 
 private:
     QExplicitlySharedDataPointer<PdfVectorPicturePrivate> d;
