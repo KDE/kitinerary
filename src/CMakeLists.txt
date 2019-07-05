@@ -32,6 +32,8 @@ set(kitinerary_lib_srcs
     knowledgedb/timezonedb.cpp
     knowledgedb/trainstationdb.cpp
 
+    pdf/popplerutils.cpp
+
     barcodedecoder.cpp
     calendarhandler.cpp
     extractor.cpp

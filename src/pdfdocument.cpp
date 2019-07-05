@@ -17,6 +17,7 @@
 
 #include "config-kitinerary.h"
 #include "pdfdocument.h"
+#include "pdf/popplerutils_p.h"
 #include "logging.h"
 
 #include <QDebug>
@@ -218,8 +219,7 @@ void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str,
             pdfImg.d->m_height = height * sourceAspectRatio / targetAspectRatio;
         }
     }
-    const auto ctm = state->getCTM();
-    pdfImg.d->m_transform = QTransform(ctm[0], ctm[1], ctm[2], ctm[3], ctm[4], ctm[5]);
+    pdfImg.d->m_transform = PopplerUtils::currentTransform(state);
     pdfImg.d->m_format = format;
     m_images.push_back(pdfImg);
 }
