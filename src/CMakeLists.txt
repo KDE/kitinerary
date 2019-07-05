@@ -32,6 +32,7 @@ set(kitinerary_lib_srcs
     knowledgedb/timezonedb.cpp
     knowledgedb/trainstationdb.cpp
 
+    pdf/pdfimage.cpp
     pdf/pdfvectorpicture.cpp
     pdf/popplerutils.cpp
 
@@ -153,12 +154,20 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
     REQUIRED_HEADERS KItinerary_Datatypes_HEADERS
     RELATIVE datatypes
 )
+ecm_generate_headers(KItinerary_Pdf_FORWARDING_HEADERS
+    HEADER_NAMES
+        PdfImage
+    PREFIX KItinerary
+    REQUIRED_HEADERS KItinerary_Pdf_HEADERS
+    RELATIVE pdf
+)
 
 install(TARGETS KPimItinerary EXPORT KPimItineraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
     ${KItinerary_FORWARDING_HEADERS}
     ${KItinerary_KnowledgeDb_FORWARDING_HEADERS}
     ${KItinerary_Datatypes_FORWARDING_HEADERS}
+    ${KItinerary_Pdf_FORWARDING_HEADERS}
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/KItinerary
 )
 install(FILES
@@ -166,6 +175,7 @@ install(FILES
     ${KItinerary_AirportDb_HEADERS}
     ${KItinerary_Datatypes_HEADERS}
     ${KItinerary_KnowledgeDb_HEADERS}
+    ${KItinerary_Pdf_HEADERS}
     ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/kitinerary
 )

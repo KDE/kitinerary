@@ -20,6 +20,8 @@
 
 #include "kitinerary_export.h"
 
+#include <KItinerary/PdfImage>
+
 #include <QExplicitlySharedDataPointer>
 #include <QObject>
 #include <QVariant>
@@ -31,53 +33,7 @@ class QTransform;
 
 namespace KItinerary {
 
-class PdfImagePrivate;
 class PdfPagePrivate;
-
-/** An image in a PDF document.
- */
-class KITINERARY_EXPORT PdfImage
-{
-    Q_GADGET
-    Q_PROPERTY(int width READ width)
-    Q_PROPERTY(int height READ height)
-public:
-    PdfImage();
-    PdfImage(const PdfImage&);
-    ~PdfImage();
-    PdfImage& operator=(const PdfImage&);
-
-    int width() const;
-    int height() const;
-
-    /** Height of the source image. */
-    int sourceHeight() const;
-    /** Width of the source image. */
-    int sourceWidth() const;
-
-    /** Transformation from source image to final size/position on the page.
-     *  Values are 1/72 inch.
-     */
-    QTransform transform() const;
-
-    /** The image as loaded from PDF, without transformations applied. */
-    QImage sourceImage() const;
-    /** The source image with display transformations applied. */
-    QImage image() const;
-
-    /** PDF-internal unique identifier of this image.
-     *  Use this to detect multiple occurrences of the same image in different
-     *  places, if that reduces e.g. computation cost.
-     */
-    int objectId() const;
-
-private:
-    friend class ExtractorOutputDevice;
-    friend class PdfPagePrivate;
-    friend class PdfPage;
-    QExplicitlySharedDataPointer<PdfImagePrivate> d;
-};
-
 
 /** A page in a PDF document.
  */
@@ -161,7 +117,6 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::PdfImage)
 Q_DECLARE_METATYPE(KItinerary::PdfPage)
 
 #endif // KITINERARY_PDFDOCUMENT_H
