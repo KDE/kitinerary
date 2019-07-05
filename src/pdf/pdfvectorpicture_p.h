@@ -46,7 +46,11 @@ public:
     };
 
     void setStrokes(std::vector<PathStroke> &&strokes);
+
+    // transform applied to this for displaying
+    QTransform transform() const;
     void setTransform(const QTransform &t);
+
     QRectF boundingRect() const;
     int pathElementsCount() const;
     QImage renderToImage() const;

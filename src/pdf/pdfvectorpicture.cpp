@@ -54,6 +54,11 @@ void PdfVectorPicture::setStrokes(std::vector<PdfVectorPicture::PathStroke> &&st
     d->boundingRect = QRectF();
 }
 
+QTransform PdfVectorPicture::transform() const
+{
+    return d->transform;
+}
+
 void PdfVectorPicture::setTransform(const QTransform &t)
 {
     d.detach();

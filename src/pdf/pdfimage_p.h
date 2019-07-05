@@ -20,6 +20,8 @@
 
 #include <config-kitinerary.h>
 
+#include "pdfvectorpicture_p.h"
+
 #include <QImage>
 #include <QSharedData>
 #include <QTransform>
@@ -38,19 +40,26 @@ public:
     QImage load();
 #ifdef HAVE_POPPLER
     QImage load(Stream *str, GfxImageColorMap *colorMap);
+#endif
 
+    // pixel data
+    int m_refNum = -1;
+    int m_refGen = -1;
+    QImage::Format m_format = QImage::Format_Invalid;
+    PdfPagePrivate *m_page = nullptr;
+#ifdef HAVE_POPPLER
     std::unique_ptr<GfxImageColorMap> m_colorMap;
 #endif
 
-    int m_refNum = -1;
-    int m_refGen = -1;
-    PdfPagePrivate *m_page = nullptr;
+    // vector data
+    PdfVectorPicture m_vectorPicture;
+
+    // common
     QTransform m_transform;
     int m_width = 0;
     int m_height = 0;
     int m_sourceWidth = 0;
     int m_sourceHeight = 0;
-    QImage::Format m_format = QImage::Format_Invalid;
 };
 
 }

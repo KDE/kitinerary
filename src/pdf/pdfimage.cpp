@@ -160,11 +160,17 @@ PdfImage& PdfImage::operator=(const PdfImage&) = default;
 
 int PdfImage::height() const
 {
+    if (d->m_format == QImage::Format_Invalid) {
+        return d->m_height;
+    }
     return d->m_transform.map(QRectF(0, 0, 1, -1)).boundingRect().height();
 }
 
 int PdfImage::width() const
 {
+    if (d->m_format == QImage::Format_Invalid) {
+        return d->m_width;
+    }
     return d->m_transform.map(QRectF(0, 0, 1, -1)).boundingRect().width();
 }
 
@@ -185,6 +191,10 @@ QTransform PdfImage::transform() const
 
 QImage PdfImage::image() const
 {
+    if (d->m_format == QImage::Format_Invalid) {
+        return d->m_vectorPicture.renderToImage();
+    }
+
     const auto img = d->load();
     if (d->m_width != d->m_sourceWidth || d->m_height != d->m_sourceHeight) {
         return img.scaled(d->m_width, d->m_height);

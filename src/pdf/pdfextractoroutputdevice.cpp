@@ -204,7 +204,14 @@ void PdfExtractorOutputDevice::addVectorImage(const PdfVectorPicture &pic)
         return;
     }
 
-    // TODO add PdfImage for this
+    PdfImage img;
+    img.d->m_height = pic.height();
+    img.d->m_width = pic.width();
+    img.d->m_sourceHeight = pic.sourceHeight();
+    img.d->m_sourceWidth = pic.sourceWidth();
+    img.d->m_transform = pic.transform();
+    img.d->m_vectorPicture = pic;
+    m_images.push_back(img);
 }
 
 #endif
