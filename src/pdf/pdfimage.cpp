@@ -131,12 +131,12 @@ PdfImage& PdfImage::operator=(const PdfImage&) = default;
 
 int PdfImage::height() const
 {
-    return d->m_height;
+    return d->m_transform.map(QRectF(0, 0, 1, -1)).boundingRect().height();
 }
 
 int PdfImage::width() const
 {
-    return d->m_width;
+    return d->m_transform.map(QRectF(0, 0, 1, -1)).boundingRect().width();
 }
 
 int PdfImage::sourceHeight() const

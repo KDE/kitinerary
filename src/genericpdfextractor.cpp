@@ -120,16 +120,15 @@ void GenericPdfExtractor::extractBarcode(const QString &code, QJsonArray &result
 
 bool GenericPdfExtractor::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint)
 {
-    if (!BarcodeDecoder::isPlausibleSize(img.sourceWidth(), img.sourceHeight()) || !BarcodeDecoder::isPlausibleAspectRatio(img.width(), img.height(), hint)) {
+    const auto w = img.width();
+    const auto h = img.height();
+
+    if (!BarcodeDecoder::isPlausibleSize(img.sourceWidth(), img.sourceHeight()) || !BarcodeDecoder::isPlausibleAspectRatio(w, h, hint)) {
         return false;
     }
 
     // image target size checks
-    const auto targetRect = img.transform().map(QRectF(0, 0, 1, -1)).boundingRect();
-    if (std::min(targetRect.width(), targetRect.height()) < MinTargetImageHeight
-        || std::max(targetRect.width(), targetRect.height()) < MinTargetImageWidth
-        || targetRect.height() > MaxTargetImageHeight
-        || targetRect.width() > MaxTargetImageWidth) {
+    if (std::min(w, h) < MinTargetImageHeight || std::max(w, h) < MinTargetImageWidth || h > MaxTargetImageHeight || w > MaxTargetImageWidth) {
         return false;
     }
 

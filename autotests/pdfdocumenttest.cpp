@@ -50,17 +50,23 @@ private Q_SLOTS:
         QCOMPARE(page.textInRect(0, 0.5, 1, 1), QString());
 
         auto img = page.image(0);
-        QCOMPARE(img.width(), 350);
-        QCOMPARE(img.height(), 152);
-        QCOMPARE(img.image().width(), img.width());
-        QCOMPARE(img.image().height(), img.height());
+        QCOMPARE(img.width(), 212);
+        QCOMPARE(img.height(), 92);
+        QCOMPARE(img.sourceHeight(), 152);
+        QCOMPARE(img.sourceWidth(), 350);
+        QCOMPARE(img.image().width(), 350);
+        QCOMPARE(img.image().height(), 152);
 
         page = doc->page(1);
         QCOMPARE(page.text(), QStringLiteral("This is the second page.\nIt contains an Aztec code.\n"));
         QCOMPARE(page.imageCount(), 1);
         img = page.image(0);
-        QCOMPARE(img.width(), 276);
-        QCOMPARE(img.height(), 276);
+        QCOMPARE(img.width(), 93);
+        QCOMPARE(img.height(), 93);
+        QCOMPARE(img.image().width(), 276);
+        QCOMPARE(img.image().height(), 276);
+        QCOMPARE(img.sourceHeight(), 276);
+        QCOMPARE(img.sourceWidth(), 276);
 
         QVERIFY(page.imagesInRect(0, 0, 0.5, 1).isEmpty());
         QCOMPARE(page.imagesInRect(0, 0.5, 1, 1).size(), 1);

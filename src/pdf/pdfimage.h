@@ -43,7 +43,9 @@ public:
     ~PdfImage();
     PdfImage& operator=(const PdfImage&);
 
+    /** Width of the image in PDF 1/72 dpi coordinates. */
     int width() const;
+    /** Height of the image in PDF 1/72 dpi coordinates. */
     int height() const;
 
     /** Height of the source image. */
