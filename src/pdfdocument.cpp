@@ -18,6 +18,7 @@
 #include "config-kitinerary.h"
 #include "pdfdocument.h"
 #include "pdf/pdfdocument_p.h"
+#include "pdf/pdfextractoroutputdevice_p.h"
 #include "pdf/pdfimage_p.h"
 #include "pdf/popplerutils_p.h"
 #include "logging.h"
@@ -30,90 +31,11 @@
 #include <GlobalParams.h>
 #include <PDFDoc.h>
 #include <Stream.h>
-#include <TextOutputDev.h>
 #endif
 
 #include <cmath>
 
 using namespace KItinerary;
-
-namespace KItinerary {
-
-#ifdef HAVE_POPPLER
-class ExtractorOutputDevice : public TextOutputDev
-{
-public:
-    ExtractorOutputDevice();
-    bool needNonText() override { return true; }
-    void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, int *maskColors, bool inlineImg) override;
-
-    std::vector<PdfImage> m_images;
-
-private:
-    QTransform m_transform;
-};
-
-#endif
-
-}
-
-#ifdef HAVE_POPPLER
-ExtractorOutputDevice::ExtractorOutputDevice()
-    : TextOutputDev(nullptr, false, 0, false, false)
-{
-}
-
-void ExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str, int width, int height, GfxImageColorMap* colorMap, bool interpolate, int* maskColors, bool inlineImg)
-{
-    Q_UNUSED(str);
-    Q_UNUSED(interpolate);
-    Q_UNUSED(maskColors);
-    Q_UNUSED(inlineImg);
-
-    if (!colorMap || !colorMap->isOk() || !ref || !ref->isRef()) {
-        return;
-    }
-
-    QImage::Format format;
-    if (colorMap->getColorSpace()->getMode() == csIndexed) {
-        format = QImage::Format_RGB888;
-    } else if (colorMap->getNumPixelComps() == 1 && (colorMap->getBits() >= 1 && colorMap->getBits() <= 8)) {
-        format = QImage::Format_Grayscale8;
-    } else if (colorMap->getNumPixelComps() == 3 && colorMap->getBits() == 8) {
-        format = QImage::Format_RGB888;
-    } else {
-        return;
-    }
-
-    PdfImage pdfImg;
-    pdfImg.d->m_refNum = ref->getRef().num;
-    pdfImg.d->m_refGen = ref->getRef().gen;
-
-#ifdef HAVE_POPPLER_0_69
-    pdfImg.d->m_colorMap.reset(colorMap->copy());
-#endif
-    pdfImg.d->m_sourceHeight = height;
-    pdfImg.d->m_sourceWidth = width;
-    pdfImg.d->m_width = width;
-    pdfImg.d->m_height = height;
-    // deal with aspect-ratio changing scaling
-    const auto sourceAspectRatio = (double)width / (double)height;
-    const auto targetAspectRatio = state->getCTM()[0] / -state->getCTM()[3];
-    if (!qFuzzyCompare(sourceAspectRatio, targetAspectRatio) && qFuzzyIsNull(state->getCTM()[1]) && qFuzzyIsNull(state->getCTM()[2])) {
-        if (targetAspectRatio > sourceAspectRatio) {
-            pdfImg.d->m_width = width * targetAspectRatio / sourceAspectRatio;
-        } else {
-            pdfImg.d->m_height = height * sourceAspectRatio / targetAspectRatio;
-        }
-    }
-    pdfImg.d->m_transform = PopplerUtils::currentTransform(state);
-    pdfImg.d->m_format = format;
-    m_images.push_back(pdfImg);
-}
-
-#endif
-
-
 
 void PdfPagePrivate::load()
 {
@@ -123,8 +45,9 @@ void PdfPagePrivate::load()
 
 #ifdef HAVE_POPPLER
     QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
-    ExtractorOutputDevice device;
+    PdfExtractorOutputDevice device;
     m_doc->m_popplerDoc->displayPageSlice(&device, m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
+    device.finalize();
     const auto pageRect = m_doc->m_popplerDoc->getPage(m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
 
@@ -168,7 +91,7 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
 #ifdef HAVE_POPPLER
     QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
 
-    ExtractorOutputDevice device;
+    TextOutputDev device(nullptr, false, 0, false, false);
     d->m_doc->m_popplerDoc->displayPageSlice(&device, d->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
     const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(ratio(pageRect->x1, pageRect->x2, left), ratio(pageRect->y1, pageRect->y2, top),

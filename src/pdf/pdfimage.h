@@ -68,7 +68,7 @@ public:
     int objectId() const;
 
 private:
-    friend class ExtractorOutputDevice;
+    friend class PdfExtractorOutputDevice;
     friend class PdfPagePrivate;
     friend class PdfPage;
     QExplicitlySharedDataPointer<PdfImagePrivate> d;

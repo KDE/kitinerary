@@ -32,6 +32,7 @@ set(kitinerary_lib_srcs
     knowledgedb/timezonedb.cpp
     knowledgedb/trainstationdb.cpp
 
+    pdf/pdfextractoroutputdevice.cpp
     pdf/pdfimage.cpp
     pdf/pdfvectorpicture.cpp
     pdf/popplerutils.cpp
