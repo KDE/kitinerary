@@ -22,6 +22,7 @@
 
 class GfxPath;
 class GfxState;
+class GlobalParams;
 
 class QBrush;
 class QPainterPath;
@@ -42,6 +43,8 @@ namespace PopplerUtils
 
     /** Convets a Poppler path into a Qt path. */
     QPainterPath convertPath(GfxPath *path, Qt::FillRule fillRule);
+
+    GlobalParams* globalParams();
 }
 
 }

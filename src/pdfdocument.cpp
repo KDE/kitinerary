@@ -83,15 +83,6 @@ public:
 };
 
 #ifdef HAVE_POPPLER
-static std::unique_ptr<GlobalParams> s_globalParams;
-static GlobalParams* popplerGlobalParams()
-{
-    if (!s_globalParams) {
-        s_globalParams.reset(new GlobalParams);
-    }
-    return s_globalParams.get();
-}
-
 class ExtractorOutputDevice : public TextOutputDev
 {
 public:
@@ -294,7 +285,7 @@ QImage PdfImage::sourceImage() const
     }
 
 #ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
+    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
 
 #ifdef HAVE_POPPLER_0_69
     const auto xref = d->m_page->m_doc->m_popplerDoc->getXRef();
@@ -333,7 +324,7 @@ void PdfPagePrivate::load()
     }
 
 #ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
+    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
     ExtractorOutputDevice device;
     m_doc->m_popplerDoc->displayPageSlice(&device, m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
     const auto pageRect = m_doc->m_popplerDoc->getPage(m_pageNum + 1)->getCropBox();
@@ -377,7 +368,7 @@ static double ratio(double begin, double end, double ratio)
 QString PdfPage::textInRect(double left, double top, double right, double bottom) const
 {
 #ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
+    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
 
     ExtractorOutputDevice device;
     d->m_doc->m_popplerDoc->displayPageSlice(&device, d->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
@@ -424,7 +415,7 @@ QVariantList PdfPage::imagesInRect(double left, double top, double right, double
     d->load();
     QVariantList l;
 #ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
+    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
     const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
 
     for (const auto &img : d->m_images) {
@@ -489,7 +480,7 @@ QVariantList PdfDocument::pagesVariant() const
 PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
 {
 #ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, popplerGlobalParams());
+    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
 
     std::unique_ptr<PdfDocument> doc(new PdfDocument(parent));
     doc->d->m_pdfData = data;

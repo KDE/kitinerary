@@ -23,9 +23,12 @@
 #include <QPainterPath>
 #include <QPen>
 
+#include <memory>
+
 #ifdef HAVE_POPPLER
 
 #include <GfxState.h>
+#include <GlobalParams.h>
 
 using namespace KItinerary;
 
@@ -102,6 +105,15 @@ QPainterPath PopplerUtils::convertPath(GfxPath *path, Qt::FillRule fillRule)
         }
     }
     return qpp;
+}
+
+GlobalParams* PopplerUtils::globalParams()
+{
+    static std::unique_ptr<GlobalParams> s_globalParams;
+    if (!s_globalParams) {
+        s_globalParams.reset(new GlobalParams);
+    }
+    return s_globalParams.get();
 }
 
 #endif
