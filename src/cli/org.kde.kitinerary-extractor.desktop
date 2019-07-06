@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=KItinerary Extractor
+GenericName=KItinerary command line extractor
+Exec=kitinerary-extractor %f
+Icon=map-globe
+Type=Application
+Comment=Command line reservation data extractor.
+Terminal=true
+MimeType=application/vnd.apple.pkpass;application/ld+json;application/pdf;text/calendar;text/html;application/json;message/rfc822;
+Categories=Qt;KDE;
