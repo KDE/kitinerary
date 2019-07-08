@@ -4,11 +4,29 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.0+</project_license>
   <name>KItinerary Command Line Extractor</name>
+  <name xml:lang="ca">Extractor de la línia d'ordres del KItinerary</name>
+  <name xml:lang="nl">Extractor van opdrachtregel van KItinerary</name>
+  <name xml:lang="pt">Extracção da Linha de Comandos do KItinerary</name>
+  <name xml:lang="sv">Kitinerary extrahering på kommandoraden</name>
+  <name xml:lang="uk">Командний засіб видобування KItinerary</name>
+  <name xml:lang="x-test">xxKItinerary Command Line Extractorxx</name>
   <summary>Command line reservation data extractor.</summary>
+  <summary xml:lang="ca">Extractor de dades de reserves de la línia d'ordres.</summary>
+  <summary xml:lang="nl">Gegevensextractor van reservering op de opdrachtregel.</summary>
+  <summary xml:lang="pt">Extracção de dados de reservas na linha de comandos.</summary>
+  <summary xml:lang="sv">Extrahering av reservationsdata på kommandoraden</summary>
+  <summary xml:lang="uk">Програма для видобування даних бронювання, керування якою відбувається з командного рядка.</summary>
+  <summary xml:lang="x-test">xxCommand line reservation data extractor.xx</summary>
   <description>
     <p>
     Command line extractor for itinerary data, for integrating into 3rd party applications.
     </p>
+    <p xml:lang="ca">Extractor de dades d'itineraris de la línia d'ordres, per a la integració en aplicacions de tercers.</p>
+    <p xml:lang="nl">Extractor van reisgegevens op de opdrachtregel, voor integratie in toepassingen van derden.</p>
+    <p xml:lang="pt">Extracção pela linha de comandos de dados de itinerários, para se integrar com aplicações de terceiros.</p>
+    <p xml:lang="sv">Extrahering av reseinformation på kommandoraden, för att integrera med tredjepartsprogram.</p>
+    <p xml:lang="uk">Програма, керування якою відбувається з командного рядка, для видобування даних бронювання. Призначено для інтеграції зі сторонніми програмами.</p>
+    <p xml:lang="x-test">xxCommand line extractor for itinerary data, for integrating into 3rd party applications.xx</p>
   </description>
   <url type="homepage">https://pim.kde.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=KDE+Itinerary</url>
