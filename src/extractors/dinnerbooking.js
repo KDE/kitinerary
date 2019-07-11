@@ -44,5 +44,11 @@ function parseEvent(event)
     if (url)
         res.reservationFor.url = url[1];
 
+    if (event.attendees.length > 0) {
+        res.underName = JsonLd.newObject("Person");
+        res.underName.name = event.attendees[0].name;
+        res.underName.email = event.attendees[0].email;
+    }
+
     return res;
 }
