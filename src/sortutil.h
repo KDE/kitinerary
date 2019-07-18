@@ -32,7 +32,7 @@ namespace SortUtil
     KITINERARY_EXPORT QDateTime startDateTime(const QVariant &res);
 
     /** Returns the (end) time associated with the given reservation. */
-    KITINERARY_EXPORT QDateTime endtDateTime(const QVariant &res);
+    KITINERARY_EXPORT QDateTime endDateTime(const QVariant &res);
 
     /** Sorting function for top-level reservation/visit/event elements. */
     KITINERARY_EXPORT bool isBefore(const QVariant &lhs, const QVariant &rhs);

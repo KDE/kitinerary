@@ -83,7 +83,7 @@ QDateTime SortUtil::startDateTime(const QVariant &res)
     return {};
 }
 
-QDateTime SortUtil::endtDateTime(const QVariant &res)
+QDateTime SortUtil::endDateTime(const QVariant &res)
 {
     if (JsonLd::isA<FlightReservation>(res)) {
         const auto flight = res.value<FlightReservation>().reservationFor().value<Flight>();
