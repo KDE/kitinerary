@@ -8,6 +8,7 @@
   <name xml:lang="it">Estrattore a riga di comando di KItinerary</name>
   <name xml:lang="nl">Extractor van opdrachtregel van KItinerary</name>
   <name xml:lang="pt">Extracção da Linha de Comandos do KItinerary</name>
+  <name xml:lang="pt-BR">Extrator em linha de comando do KItinerary</name>
   <name xml:lang="sk">Extraktor cez príkazový riadok pre KItinerary</name>
   <name xml:lang="sv">Kitinerary extrahering på kommandoraden</name>
   <name xml:lang="uk">Командний засіб видобування KItinerary</name>
@@ -17,6 +18,7 @@
   <summary xml:lang="it">Estrattore di dati di prenotazioni a riga di comando.</summary>
   <summary xml:lang="nl">Gegevensextractor van reservering op de opdrachtregel.</summary>
   <summary xml:lang="pt">Extracção de dados de reservas na linha de comandos.</summary>
+  <summary xml:lang="pt-BR">Extrator em linha de comando de dados de reservas.</summary>
   <summary xml:lang="sk">Extraktor dát pre rezerváciu cez príkazový riadok.</summary>
   <summary xml:lang="sv">Extrahering av reservationsdata på kommandoraden</summary>
   <summary xml:lang="uk">Програма для видобування даних бронювання, керування якою відбувається з командного рядка.</summary>
@@ -29,6 +31,7 @@
     <p xml:lang="it">Estrattore a riga di comando per dati di itinerari, per l'integrazione con applicazioni di terze parti.</p>
     <p xml:lang="nl">Extractor van reisgegevens op de opdrachtregel, voor integratie in toepassingen van derden.</p>
     <p xml:lang="pt">Extracção pela linha de comandos de dados de itinerários, para se integrar com aplicações de terceiros.</p>
+    <p xml:lang="pt-BR">Extrator em linha de comando para dados de itinerários, para integração em aplicativos de terceiros.</p>
     <p xml:lang="sk">Extraktor cez príkazový riadok pre dáta itinerára na integráciu do aplikácií tretích strán.</p>
     <p xml:lang="sv">Extrahering av reseinformation på kommandoraden, för att integrera med tredjepartsprogram.</p>
     <p xml:lang="uk">Програма, керування якою відбувається з командного рядка, для видобування даних бронювання. Призначено для інтеграції зі сторонніми програмами.</p>
