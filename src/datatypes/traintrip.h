@@ -39,7 +39,7 @@ class KITINERARY_EXPORT TrainTrip
     KITINERARY_PROPERTY(KItinerary::TrainStation, arrivalStation, setArrivalStation)
     KITINERARY_PROPERTY(QDateTime, arrivalTime, setArrivalTime)
     KITINERARY_PROPERTY(QString, departurePlatform, setDeparturePlatform)
-    KITINERARY_PROPERTY(KItinerary::TrainStation, departureStation, setDeparatureStation)
+    KITINERARY_PROPERTY(KItinerary::TrainStation, departureStation, setDepartureStation)
     KITINERARY_PROPERTY(QDateTime, departureTime, setDepartureTime)
     KITINERARY_PROPERTY(QString, trainName, setTrainName)
     KITINERARY_PROPERTY(QString, trainNumber, setTrainNumber)
