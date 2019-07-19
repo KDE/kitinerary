@@ -166,7 +166,7 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
 {
     trip.setArrivalPlatform(trip.arrivalPlatform().trimmed());
     trip.setDeparturePlatform(trip.departurePlatform().trimmed());
-    trip.setDeparatureStation(processTrainStation(trip.departureStation()));
+    trip.setDepartureStation(processTrainStation(trip.departureStation()));
     trip.setArrivalStation(processTrainStation(trip.arrivalStation()));
     trip.setDepartureTime(processTrainTripTime(trip.departureTime(), trip.departureStation()));
     trip.setArrivalTime(processTrainTripTime(trip.arrivalTime(), trip.arrivalStation()));
