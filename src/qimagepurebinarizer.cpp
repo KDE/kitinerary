@@ -41,7 +41,11 @@ int QImagePureBinarizer::width() const
 
 bool QImagePureBinarizer::isPureBarcode() const
 {
-    return true;
+    // until ZXing 1.0.6 returning true here works, after d57cbe2121bcc761474b0f605bdfe0fa1fec676a in zxing
+    // this however breaks QR decoding
+    // the performance gain seems minimal though (not used by PDF417 and Aztec decoding),
+    // so we can just set this to false unconditioanlly
+    return false;
 }
 
 bool QImagePureBinarizer::getBlackRow(int y, ZXing::BitArray &row) const
