@@ -14,7 +14,7 @@ static const Country country_table[] = {
     {CountryId{"AG"}, DrivingSide::Left, {TypeA|TypeB}}, // Antigua and Barbuda
     {CountryId{"AL"}, DrivingSide::Right, {TypeC|TypeF}}, // Albania
     {CountryId{"AM"}, DrivingSide::Right, {TypeC|TypeF}}, // Armenia
-    {CountryId{"AO"}, DrivingSide::Left, {TypeC}}, // Angola
+    {CountryId{"AO"}, DrivingSide::Right, {TypeC}}, // Angola
     {CountryId{"AR"}, DrivingSide::Right, {TypeC|TypeI}}, // Argentina
     {CountryId{"AT"}, DrivingSide::Right, {TypeC|TypeF}}, // Austria
     {CountryId{"AU"}, DrivingSide::Left, {TypeI}}, // Australia
@@ -63,6 +63,7 @@ static const Country country_table[] = {
     {CountryId{"EC"}, DrivingSide::Right, {TypeA|TypeB}}, // Ecuador
     {CountryId{"EE"}, DrivingSide::Right, {TypeC|TypeF}}, // Estonia
     {CountryId{"EG"}, DrivingSide::Right, {TypeC|TypeF}}, // Egypt
+    {CountryId{"EH"}, DrivingSide::Unknown, {}}, // Sahrawi Arab Democratic Republic
     {CountryId{"ER"}, DrivingSide::Right, {TypeC|TypeL}}, // Eritrea
     {CountryId{"ES"}, DrivingSide::Right, {TypeC|TypeF}}, // Spain
     {CountryId{"ET"}, DrivingSide::Right, {TypeC|TypeD|TypeE|TypeF|TypeJ|TypeL}}, // Ethiopia
