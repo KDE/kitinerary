@@ -18,7 +18,7 @@
                 "geo": {
                     "@type": "GeoCoordinates",
                     "latitude": 52.308101654052734,
-                    "longitude": 4.760280132293701
+                    "longitude": 4.764170169830322
                 },
                 "iataCode": "AMS",
                 "name": "AMSTERDAM, NL (SCHIPHOL AIRPORT)"
@@ -91,7 +91,7 @@
                 "geo": {
                     "@type": "GeoCoordinates",
                     "latitude": 52.308101654052734,
-                    "longitude": 4.760280132293701
+                    "longitude": 4.764170169830322
                 },
                 "iataCode": "AMS",
                 "name": "AMSTERDAM, NL (SCHIPHOL AIRPORT)"
