@@ -46,6 +46,7 @@ set(kitinerary_lib_srcs
     extractorpostprocessor.cpp
     extractorrepository.cpp
     extractorutil.cpp
+    file.cpp
     flightpostprocessor.cpp
     genericpdfextractor.cpp
     genericpkpassextractor.cpp
@@ -82,6 +83,7 @@ target_link_libraries(KPimItinerary
         KF5::Mime
     PRIVATE
         Qt5::Qml
+        KF5::Archive
         KF5::I18n
         KF5::Contacts
         KPim::PkPass
@@ -114,6 +116,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         Extractor
         ExtractorEngine
         ExtractorPostprocessor
+        File
         HtmlDocument
         IataBcbpParser
         JsonLdDocument
