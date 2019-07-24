@@ -17,6 +17,7 @@
 
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Rct2Ticket>
+#include <KItinerary/Uic9183TicketLayout>
 
 #include <QDebug>
 #include <QFile>
@@ -57,8 +58,11 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
 
         const auto data = f.readAll();
-        Rct2Ticket rct2(data.data(), data.size());
+        Uic9183TicketLayout layout(data.data(), data.size());
+        Rct2Ticket rct2(layout);
         rct2.setContextDate({{2018, 12, 19}, {18, 35}});
+        QVERIFY(layout.isValid());
+        QCOMPARE(layout.type(), QLatin1String("RCT2"));
         QVERIFY(rct2.isValid());
 
         QFile ref(refFile);

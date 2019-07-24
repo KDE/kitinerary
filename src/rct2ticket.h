@@ -28,6 +28,7 @@ class QDateTime;
 namespace KItinerary {
 
 class Rct2TicketPrivate;
+class Uic9183TicketLayout;
 
 /** RCT2 ticket layout payload of an UIC 918.3 ticket token. */
 class KITINERARY_EXPORT Rct2Ticket
@@ -47,13 +48,8 @@ class KITINERARY_EXPORT Rct2Ticket
 
 public:
     Rct2Ticket();
-    /** Parse RCT2 ticket information in @p data.
-     *  It's the callers responsibility to ensure @p data outlives this instance, the data
-     *  is not copied.
-     *  @param data RCT2 ticket information as UIC 918.3 U_TLAY data block
-     *  @param size The length of the RCT2 data block
-     */
-    Rct2Ticket(const char *data, int size);
+    /** Parse RCT2 ticket information from a U_TLAY layout block. */
+    Rct2Ticket(const Uic9183TicketLayout &layout);
     Rct2Ticket(const Rct2Ticket&);
     ~Rct2Ticket();
     Rct2Ticket& operator=(const Rct2Ticket&);

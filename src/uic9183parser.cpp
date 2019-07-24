@@ -18,6 +18,7 @@
 #include "uic9183parser.h"
 #include "logging.h"
 #include "rct2ticket.h"
+#include "uic9183ticketlayout.h"
 
 #include <QDateTime>
 #include <QDebug>
@@ -376,10 +377,22 @@ QString Uic9183Parser::seatingType() const
     return {};
 }
 
-Rct2Ticket Uic9183Parser::rct2Ticket() const
+Uic9183TicketLayout Uic9183Parser::ticketLayout() const
 {
     const auto block = d->findBlock("U_TLAY");
-    Rct2Ticket rct2(block.data(), block.size());
+    Uic9183TicketLayout layout(block.data(), block.size());
+    return layout;
+}
+
+QVariant Uic9183Parser::ticketLayoutVariant() const
+{
+    const auto layout = ticketLayout();
+    return layout.isValid() ? QVariant::fromValue(layout) : QVariant();
+}
+
+Rct2Ticket Uic9183Parser::rct2Ticket() const
+{
+    Rct2Ticket rct2(ticketLayout());
     rct2.setContextDate(d->m_contextDt);
     return rct2;
 }

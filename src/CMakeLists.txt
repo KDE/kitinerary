@@ -63,6 +63,7 @@ set(kitinerary_lib_srcs
     stringutil.cpp
     structureddataextractor.cpp
     uic9183parser.cpp
+    uic9183ticketlayout.cpp
 )
 qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
@@ -125,6 +126,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         Rct2Ticket
         SortUtil
         Uic9183Parser
+        Uic9183TicketLayout
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS
 )

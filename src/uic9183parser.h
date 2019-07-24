@@ -31,6 +31,7 @@ namespace KItinerary {
 
 class Rct2Ticket;
 class Uic9183ParserPrivate;
+class Uic9183TicketLayout;
 
 /** Parser for UIC 918.3 and 918.3* train tickets.
  *
@@ -50,6 +51,8 @@ class KITINERARY_EXPORT Uic9183Parser
     Q_PROPERTY(QString outboundDepartureStationId READ outboundDepartureStationId)
     Q_PROPERTY(QString outboundArrivalStationId READ outboundArrivalStationId)
     Q_PROPERTY(QString seatingType READ seatingType)
+    /** U_TLAY ticket layout block, if present, @c null otherwise. */
+    Q_PROPERTY(QVariant ticketLayout READ ticketLayoutVariant)
     /** RCT2 ticket layout block, if present, @c null otherwise. */
     Q_PROPERTY(QVariant rct2Ticket READ rct2TicketVariant)
 
@@ -82,6 +85,9 @@ public:
     /** @see Ticket::seatingType */
     QString seatingType() const;
 
+    /** U_TLAY ticket layout block. */
+    Uic9183TicketLayout ticketLayout() const;
+
     /** RCT2 ticket layout, if present. */
     Rct2Ticket rct2Ticket() const;
 
@@ -91,6 +97,7 @@ public:
     static bool maybeUic9183(const QByteArray &data);
 
 private:
+    QVariant ticketLayoutVariant() const;
     QVariant rct2TicketVariant() const;
     QExplicitlySharedDataPointer<Uic9183ParserPrivate> d;
 };
