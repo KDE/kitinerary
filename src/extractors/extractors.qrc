@@ -64,6 +64,8 @@
         <file>travelport-galileo.js</file>
         <file>trenitalia.json</file>
         <file>trenitalia.js</file>
+        <file>vgn.json</file>
+        <file>vgn.js</file>
         <file>vueling.json</file>
         <file>vueling.js</file>
     </qresource>

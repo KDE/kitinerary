@@ -1,0 +1,10 @@
+[
+    {
+        "type": "pdf",
+        "filter": [
+            { "property": "provider", "match": "3415" }
+        ],
+        "script": "vgn.js",
+        "function": "parsePdf"
+    }
+]
