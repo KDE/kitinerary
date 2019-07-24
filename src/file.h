@@ -38,6 +38,12 @@ class FilePrivate;
 /** A file containing a bundle of reservations and associated documents.
  *  This is used to export or transfer a set of reservation-related documents
  *  while keeping the associations between them.
+ *
+ *  A KItinerary::File can contain the following elements:
+ *  - JSON-LD reservation objects (see KItinerary::Reservation). Each reservation has a UUID.
+ *  - PkPass files. Their idenfifier is determined by their pass type idenfifier and their serial number.
+ *  - JSON-LD document objects (see KItinerary::CreativeWork) and their associated file content. Each document has a UUID.
+ *  - Application-specific data in custom namespaces.
  */
 class KITINERARY_EXPORT File
 {
@@ -81,6 +87,13 @@ public:
     void addPass(KPkPass::Pass *pass, const QByteArray &rawData);
 
     // TODO documents
+
+    /** List custom data in the given namespace. */
+    QVector<QString> listCustomData(const QString &scope) const;
+    /** Returns the custom data in the given namespace and with the given id. */
+    QByteArray customData(const QString &scope, const QString &id) const;
+    /** Adds a custom data element with identifier @p id in to namespace @p scope. */
+    void addCustomData(const QString &scope, const QString &id, const QByteArray &data);
 
 private:
     std::unique_ptr<FilePrivate> d;

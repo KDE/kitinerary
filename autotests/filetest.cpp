@@ -60,6 +60,10 @@ private Q_SLOTS:
             std::unique_ptr<KPkPass::Pass> pass(KPkPass::Pass::fromData(passData));
             QVERIFY(pass);
             out.addPass(pass.get(), passData);
+
+            out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"), QStringLiteral("element1"), QByteArray("hello world"));
+            out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"), QStringLiteral("element 2"), QByteArray("hello again"));
+            out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest2"), QStringLiteral("element1"), QByteArray("something else"));
         }
         out.close();
 
@@ -78,6 +82,18 @@ private Q_SLOTS:
         QCOMPARE(passId, QLatin1String("pass.booking.swiss.com/MTIzNDU2Nzg5"));
         QVERIFY(!in.passData(passId).isEmpty());
         QCOMPARE(File::passId(res.pkpassPassTypeIdentifier(), res.pkpassSerialNumber()), passId);
+
+        auto customData = in.listCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"));
+        QCOMPARE(customData.size(), 2);
+        QVERIFY(customData.contains(QLatin1String("element1")));
+        QVERIFY(customData.contains(QLatin1String("element 2")));
+        QCOMPARE(in.customData(QStringLiteral("org.kde.kitinerary/UnitTest"), QStringLiteral("element1")), QByteArray("hello world"));
+        QCOMPARE(in.customData(QStringLiteral("org.kde.kitinerary/UnitTest"), QStringLiteral("element 2")), QByteArray("hello again"));
+
+        customData = in.listCustomData(QStringLiteral("org.kde.kitinerary/UnitTest2"));
+        QCOMPARE(customData.size(), 1);
+        QVERIFY(customData.contains(QLatin1String("element1")));
+        QCOMPARE(in.customData(QStringLiteral("org.kde.kitinerary/UnitTest2"), QStringLiteral("element1")), QByteArray("something else"));
     }
 
     void testMistakes()
@@ -99,6 +115,10 @@ private Q_SLOTS:
         QCOMPARE(f.reservations(), QVector<QString>());
         QCOMPARE(f.passData(QStringLiteral("1234")), QByteArray());
         QCOMPARE(f.reservation(QStringLiteral("1234")), QVariant());
+
+        QCOMPARE(f.listCustomData(QStringLiteral("foo")), QVector<QString>());
+        QCOMPARE(f.customData(QStringLiteral("a / b"), QStringLiteral("c")), QByteArray());
+        QCOMPARE(f.customData(QString(), QString()), QByteArray());
     }
 };
 

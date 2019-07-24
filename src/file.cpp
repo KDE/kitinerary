@@ -204,3 +204,40 @@ void File::addPass(KPkPass::Pass* pass, const QByteArray& rawData)
     const auto id = passId(pass);
     d->zipFile->writeFile(QLatin1String("passes/") + id + QLatin1String(".pkpass"), rawData);
 }
+
+QVector<QString> File::listCustomData(const QString &scope) const
+{
+    Q_ASSERT(d->zipFile);
+    const auto dir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("custom/") + scope));
+    if (!dir) {
+        return {};
+    }
+
+    const auto entries = dir->entries();
+    QVector<QString> res;
+    res.reserve(entries.size());
+    std::copy(entries.begin(), entries.end(), std::back_inserter(res));
+    return res;
+}
+
+QByteArray File::customData(const QString& scope, const QString &id) const
+{
+    Q_ASSERT(d->zipFile);
+    const auto dir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("custom/") + scope));
+    if (!dir) {
+        return {};
+    }
+
+    const auto file = dir->file(id);
+    if (!file) {
+        qCDebug(Log) << "custom data not found" << scope << id;
+        return {};
+    }
+    return file->data();
+}
+
+void File::addCustomData(const QString &scope, const QString &id, const QByteArray &data)
+{
+    Q_ASSERT(d->zipFile);
+    d->zipFile->writeFile(QLatin1String("custom/") + scope + QLatin1Char('/') + id, data);
+}
