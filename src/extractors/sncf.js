@@ -28,17 +28,13 @@ function parseText(text) {
             break;
         var index = header.index + header[0].length;
 
-        var res = JsonLd.newObject("TrainReservation");
-        res.reservedTicket = JsonLd.newObject("Ticket");
-        res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
+        var res = JsonLd.newTrainReservation();
         res.reservationNumber = bookingRef[1];
-        res.reservationFor = JsonLd.newObject("TrainTrip");
 
         var depLine = text.substr(pos + index).match(/\n {2,3}([\w -]+?)  +(\d{2}\/\d{2}) à (\d{2}h\d{2})/);
         if (!depLine)
             break;
         index += depLine.index + depLine[0].length;
-        res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
         res.reservationFor.departureStation.name = depLine[1];
         res.reservationFor.departureTime = JsonLd.toDateTime(depLine[2] + " " + depLine[3], "dd/MM hh'h'mm", "fr");
 
@@ -46,7 +42,6 @@ function parseText(text) {
         if (!arrLine)
             break;
         index += arrLine.index + arrLine[0].length;
-        res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
         res.reservationFor.arrivalStation.name = arrLine[1];
         res.reservationFor.arrivalTime = JsonLd.toDateTime(arrLine[2] + " " + arrLine[3], "dd/MM hh'h'mm", "fr");
 
@@ -143,10 +138,7 @@ function parseHtmlConfirmation(html)
         while (segmentDetail && !segmentDetail.isNull) {
             var cls = segmentDetail.attribute("class");
             if (cls.includes("segment-departure")) {
-                res = JsonLd.newObject("TrainReservation");
-                res.reservationFor = JsonLd.newObject("TrainTrip");
-                res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
-                res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
+                res = JsonLd.newTrainReservation();
                 if (pnr.length > 0) {
                     res.reservationNumber = pnr[0].content;
                 }

@@ -35,7 +35,6 @@ function parseDeparture(res, line, year, compact) {
     if (!dep)
         return false;
 
-    res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
     res.reservationFor.departureStation.name = dep[1];
     res.reservationFor.departureTime = JsonLd.toDateTime(dep[2] + ' ' + dep[3] + ' ' + year + ' ' + dep[4], "dd MM yyyy hh:mm", "de");
     var idx = dep.index + dep[0].length;
@@ -57,7 +56,6 @@ function parseArrival(res, line, year) {
     var arr = line.match(/^(.+?) *([0-9]{2})\.([0-9]{2})\. +an ([0-9]{2}:[0-9]{2})/);
     if (!arr)
         return false;
-    res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2] + ' ' + arr[3] + ' ' + year + ' ' + arr[4], "dd MM yyyy hh:mm", "de");
     var idx = arr.index + arr[0].length;
@@ -82,11 +80,7 @@ function parseLegs(text, year, compact) {
         if (isHeaderOrFooter(lines[i]))
             return reservations;
 
-        var res = JsonLd.newObject("TrainReservation");
-        res.reservationFor = JsonLd.newObject("TrainTrip");
-        res.reservedTicket = JsonLd.newObject("Ticket");
-        res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
-
+        var res = JsonLd.newTrainReservation();
         while (i < lines.length && !isHeaderOrFooter(lines[i])) {
             if (parseDeparture(res, lines[i++], year, compact))
                 break;

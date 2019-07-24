@@ -44,6 +44,10 @@ public:
      *  This can be used by extractor scripts to fill in the extracted information.
      */
     Q_INVOKABLE QJSValue newFlightReservation() const;
+    /** Convenience method that generates a full TrainReservation JS object.
+     *  This can be used by extractor scripts to fill in the extracted information.
+     */
+    Q_INVOKABLE QJSValue newTrainReservation() const;
     /** Convenience method that generates a full LodgingReservation JS object.
      *  This can be used by extractor scripts to fill in the extracted information.
      */

@@ -24,11 +24,7 @@ function parsePdf(pdf) {
         var page = pdf.pages[i];
         var text = page.text;
 
-        var res = JsonLd.newObject("TrainReservation");
-        res.reservedTicket = JsonLd.newObject("Ticket");
-        res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
-        res.reservationFor = JsonLd.newObject("TrainTrip");
-
+        var res = JsonLd.newTrainReservation();
         var pnr = text.match(/PNR: (\S+)/);
         if (pnr) {
             res.reservationNumber = pnr[1];
@@ -46,9 +42,7 @@ function parsePdf(pdf) {
 
         var header = text.match(/(?:Stazione di Arrivo|Arrival station)/);
         var dest = text.substr(header.index + header[0].length).match(/\n *((?:\w+\.? )*\w+\.?)  +((?:\w+\.? )*\w+\.?)(?:  |\n)/);
-        res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
         res.reservationFor.departureStation.name = dest[1];
-        res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
         res.reservationFor.arrivalStation.name = dest[2];
 
         var images = page.images;
@@ -64,7 +58,6 @@ function parsePdf(pdf) {
 
             var name = text.substr(offset).match(/(?:Passenger Name|Nome Passeggero(?:\/Passenger\n name)?).*\n(?:    .*\n)* ?((?:\w+|\-\-).*?)(?:  |\n)/);
             offset += name.index + name[0].length;
-            personalRes.underName = JsonLd.newObject("Person");
             if (name[1] !== "--") {
                 personalRes.underName.name = name[1];
             } else {

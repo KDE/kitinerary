@@ -31,13 +31,7 @@ function parsePdf(pdf) {
             if (!obj)
                 continue;
 
-            var res = JsonLd.newObject("TrainReservation");
-            res.reservedTicket = JsonLd.newObject("Ticket");
-            res.reservationFor = JsonLd.newObject("TrainTrip");
-            res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
-            res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
-            res.underName = JsonLd.newObject("Person");
-
+            var res = JsonLd.newTrainReservation();
             res.underName.givenName = obj.name;
             res.underName.familyName = obj.surname
             res.reservationNumber = obj.idDocValue;
