@@ -24,6 +24,7 @@
 #include <KItinerary/Action>
 #include <KItinerary/Brand>
 #include <KItinerary/BusTrip>
+#include <KItinerary/CreativeWork>
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
 #include <KItinerary/Organization>
@@ -170,7 +171,10 @@ static QVariant createInstance(const QJsonObject &obj)
     MAKE_FACTORY(BusTrip);
     MAKE_FACTORY(CancelAction);
     MAKE_FACTORY(CheckInAction);
+    MAKE_FACTORY(CreativeWork);
+    MAKE_FACTORY(DigitalDocument);
     MAKE_FACTORY(DownloadAction);
+    MAKE_FACTORY(EmailMessage);
     MAKE_FACTORY(Event);
     MAKE_FACTORY(EventReservation);
     MAKE_FACTORY(Flight);

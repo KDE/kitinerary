@@ -86,7 +86,14 @@ public:
     /** Add a pkpass file to this file. */
     void addPass(KPkPass::Pass *pass, const QByteArray &rawData);
 
-    // TODO documents
+    /** Lists all document identifiers. */
+    QVector<QString> documents() const;
+    /** Loads the document meta data of document @p id. */
+    QVariant documentInfo(const QString &id) const;
+    /** Loads the content of document @p id. */
+    QByteArray documentData(const QString &id) const;
+    /** Adds a document and associated meta data to the file. */
+    void addDocument(const QString &id, const QVariant &docInfo, const QByteArray &docData);
 
     /** List custom data in the given namespace. */
     QVector<QString> listCustomData(const QString &scope) const;

@@ -19,6 +19,8 @@
 #include "jsonlddocument.h"
 #include "logging.h"
 
+#include <KItinerary/CreativeWork>
+
 #include <KPkPass/Pass>
 
 #include <KArchive/KZip>
@@ -203,6 +205,104 @@ void File::addPass(KPkPass::Pass* pass, const QByteArray& rawData)
     Q_ASSERT(d->zipFile);
     const auto id = passId(pass);
     d->zipFile->writeFile(QLatin1String("passes/") + id + QLatin1String(".pkpass"), rawData);
+}
+
+QVector<QString> File::documents() const
+{
+    const auto docDir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("documents")));
+    if (!docDir) {
+        return {};
+    }
+
+    const auto entries = docDir->entries();
+    QVector<QString> res;
+    res.reserve(entries.size());
+    for (const auto &entry : entries) {
+        if (docDir->entry(entry)->isDirectory()) {
+            res.push_back(entry);
+        }
+    }
+
+    return res;
+}
+
+QVariant File::documentInfo(const QString &id) const
+{
+    Q_ASSERT(d->zipFile);
+    const auto dir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("documents/") + id));
+    if (!dir) {
+        return {};
+    }
+
+    const auto file = dir->file(QStringLiteral("meta.json"));
+    if (!file) {
+        qCDebug(Log) << "document meta data not found" << id;
+        return {};
+    }
+
+    const auto doc = QJsonDocument::fromJson(file->data());
+    if (doc.isArray()) {
+        const auto array = JsonLdDocument::fromJson(doc.array());
+        if (array.size() != 1) {
+            qCWarning(Log) << "document meta data for" << id << "contains" << array.size() << "elements!";
+            return {};
+        }
+        return array.at(0);
+    } else if (doc.isObject()) {
+        return JsonLdDocument::fromJson(doc.object());
+    }
+    return {};
+}
+
+QByteArray File::documentData(const QString &id) const
+{
+    const auto meta = documentInfo(id);
+    if (!JsonLd::canConvert<CreativeWork>(meta)) {
+        return {};
+    }
+    const auto fileName = JsonLd::convert<CreativeWork>(meta).name();
+
+    const auto dir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("documents/") + id));
+    Q_ASSERT(dir); // checked by documentInfo already
+    const auto file = dir->file(fileName);
+    if (!file) {
+        qCWarning(Log) << "document data not found" << id << fileName;
+        return {};
+    }
+    return file->data();
+}
+
+void File::addDocument(const QString &id, const QVariant &docInfo, const QByteArray &docData)
+{
+    Q_ASSERT(d->zipFile);
+    if (!JsonLd::canConvert<CreativeWork>(docInfo)) {
+        qCWarning(Log) << "Invalid document meta data" << docInfo;
+        return;
+    }
+    if (id.isEmpty()) {
+        qCWarning(Log) << "Trying to add a document with an empty identifier!";
+        return;
+    }
+
+    auto fileName = JsonLdDocument::readProperty(docInfo, "name").toString();
+    // normalize the filename to something we can safely deal with
+    auto idx = fileName.lastIndexOf(QLatin1Char('/'));
+    if (idx >= 0) {
+        fileName = fileName.mid(idx + 1);
+    }
+    fileName.replace(QLatin1Char('?'), QLatin1Char('_'));
+    fileName.replace(QLatin1Char('*'), QLatin1Char('_'));
+    fileName.replace(QLatin1Char(' '), QLatin1Char('_'));
+    fileName.replace(QLatin1Char('\\'), QLatin1Char('_'));
+    if (fileName.isEmpty() || fileName == QLatin1String("meta.json")) {
+        fileName = QStringLiteral("file");
+    }
+    auto normalizedDocInfo = docInfo;
+    JsonLdDocument::writeProperty(normalizedDocInfo, "name", fileName);
+
+    d->zipFile->writeFile(QLatin1String("documents/") + id + QLatin1String("/meta.json"),
+                          QJsonDocument(JsonLdDocument::toJson(normalizedDocInfo)).toJson());
+    d->zipFile->writeFile(QLatin1String("documents/") + id + QLatin1Char('/') + fileName, docData);
 }
 
 QVector<QString> File::listCustomData(const QString &scope) const

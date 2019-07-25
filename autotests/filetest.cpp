@@ -17,6 +17,7 @@
     02110-1301, USA.
 */
 
+#include <KItinerary/CreativeWork>
 #include <KItinerary/File>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Reservation>
@@ -61,6 +62,12 @@ private Q_SLOTS:
             QVERIFY(pass);
             out.addPass(pass.get(), passData);
 
+            DigitalDocument doc;
+            doc.setDescription(QStringLiteral("Ticket"));
+            doc.setName(QStringLiteral("../?/../boarding *pass.pdf"));
+            doc.setEncodingFormat(QStringLiteral("application/pdf"));
+            out.addDocument(QStringLiteral("docid1"), doc, QByteArray("%PDF12345"));
+
             out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"), QStringLiteral("element1"), QByteArray("hello world"));
             out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"), QStringLiteral("element 2"), QByteArray("hello again"));
             out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest2"), QStringLiteral("element1"), QByteArray("something else"));
@@ -82,6 +89,15 @@ private Q_SLOTS:
         QCOMPARE(passId, QLatin1String("pass.booking.swiss.com/MTIzNDU2Nzg5"));
         QVERIFY(!in.passData(passId).isEmpty());
         QCOMPARE(File::passId(res.pkpassPassTypeIdentifier(), res.pkpassSerialNumber()), passId);
+
+        const auto docs = in.documents();
+        QCOMPARE(docs.size(), 1);
+        QCOMPARE(docs.at(0), QLatin1String("docid1"));
+        const auto docMeta = in.documentInfo(docs.at(0)).value<DigitalDocument>();
+        QCOMPARE(docMeta.name(), QLatin1String("boarding__pass.pdf"));
+        QCOMPARE(docMeta.description(), QLatin1String("Ticket"));
+        QCOMPARE(docMeta.encodingFormat(), QLatin1String("application/pdf"));
+        QCOMPARE(in.documentData(docs.at(0)), QByteArray("%PDF12345"));
 
         auto customData = in.listCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"));
         QCOMPARE(customData.size(), 2);
@@ -115,6 +131,12 @@ private Q_SLOTS:
         QCOMPARE(f.reservations(), QVector<QString>());
         QCOMPARE(f.passData(QStringLiteral("1234")), QByteArray());
         QCOMPARE(f.reservation(QStringLiteral("1234")), QVariant());
+
+        f.addDocument(QString(), QVariant(), QByteArray());
+        f.addDocument(QStringLiteral("docid"), QVariant(), QByteArray());
+        QCOMPARE(f.documents().size(), 0);
+        QCOMPARE(f.documentInfo(QStringLiteral("foo")), QVariant());
+        QCOMPARE(f.documentData(QStringLiteral("foo")), QByteArray());
 
         QCOMPARE(f.listCustomData(QStringLiteral("foo")), QVector<QString>());
         QCOMPARE(f.customData(QStringLiteral("a / b"), QStringLiteral("c")), QByteArray());

@@ -8,6 +8,7 @@ set(kitinerary_lib_srcs
     datatypes/action.cpp
     datatypes/brand.cpp
     datatypes/bustrip.cpp
+    datatypes/creativework.cpp
     datatypes/event.cpp
     datatypes/flight.cpp
     datatypes/organization.cpp
@@ -143,6 +144,7 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
         Action
         Brand
         BusTrip
+        CreativeWork
         Datatypes
         Event
         Flight
