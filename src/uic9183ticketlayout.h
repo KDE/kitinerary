@@ -23,6 +23,8 @@
 #include <QExplicitlySharedDataPointer>
 #include <QMetaType>
 
+class QSize;
+
 namespace KItinerary {
 
 class Uic9183TicketLayoutPrivate;
@@ -57,6 +59,9 @@ public:
      *  @note @p row and @p column are 0-based unlike the U_TLAY spec, which is 1-based!
      */
     Q_INVOKABLE QString text(int row, int column, int width, int height) const;
+
+    /** The size of the layout, as width and height in layout coordinates. */
+    QSize size() const;
 
 private:
     QExplicitlySharedDataPointer<Uic9183TicketLayoutPrivate> d;
