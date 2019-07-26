@@ -215,9 +215,13 @@ QByteArray File::passData(const QString& passId) const
 
 void File::addPass(KPkPass::Pass* pass, const QByteArray& rawData)
 {
+    addPass(passId(pass), rawData);
+}
+
+void File::addPass(const QString &passId, const QByteArray& rawData)
+{
     Q_ASSERT(d->zipFile);
-    const auto id = passId(pass);
-    d->zipFile->writeFile(QLatin1String("passes/") + id + QLatin1String(".pkpass"), rawData);
+    d->zipFile->writeFile(QLatin1String("passes/") + passId + QLatin1String(".pkpass"), rawData);
 }
 
 QVector<QString> File::documents() const

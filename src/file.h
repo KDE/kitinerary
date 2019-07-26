@@ -89,6 +89,8 @@ public:
     QByteArray passData(const QString &passId) const;
     /** Add a pkpass file to this file. */
     void addPass(KPkPass::Pass *pass, const QByteArray &rawData);
+    /** Add a pkpass file with the given pass id. */
+    void addPass(const QString &passId, const QByteArray &rawData);
 
     /** Lists all document identifiers. */
     QVector<QString> documents() const;
