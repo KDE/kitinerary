@@ -28,6 +28,7 @@ namespace KPkPass {
 class Pass;
 }
 
+class QIODevice;
 class QString;
 class QVariant;
 
@@ -51,6 +52,8 @@ public:
     explicit File();
     /** Create a File instance for the file named @p fileName. */
     explicit File(const QString &fileName);
+    /** Create a File instance for the given i/o device. */
+    explicit File(QIODevice *device);
     File(const File&) = delete;
     File(File&&);
     ~File();

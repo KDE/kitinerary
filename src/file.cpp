@@ -39,6 +39,7 @@ class FilePrivate
 {
 public:
     QString fileName;
+    QIODevice *device = nullptr;
     std::unique_ptr<KZip> zipFile;
 };
 }
@@ -52,6 +53,12 @@ File::File(const QString &fileName)
     : d(new FilePrivate)
 {
     d->fileName = fileName;
+}
+
+File::File(QIODevice* device)
+    : d(new FilePrivate)
+{
+    d->device = device;
 }
 
 File::File(KItinerary::File &&) = default;
@@ -70,7 +77,12 @@ void File::setFileName(const QString &fileName)
 
 bool File::open(File::OpenMode mode) const
 {
-    d->zipFile.reset(new KZip(d->fileName));
+    if (d->device) {
+        d->zipFile.reset(new KZip(d->device));
+    } else {
+        d->zipFile.reset(new KZip(d->fileName));
+    }
+
     if (!d->zipFile->open(mode == File::Write ? QIODevice::WriteOnly : QIODevice::ReadOnly)) {
         qCWarning(Log) << d->zipFile->errorString() << d->fileName;
         return false;
