@@ -65,6 +65,8 @@ public:
      *  All read/write operations require the file to be open as a precondition.
      */
     bool open(OpenMode mode) const;
+    /** Error message in case opening the file failed. */
+    QString errorString() const;
     /** Save and close the file. Automatically called from the dtor. */
     void close();
 

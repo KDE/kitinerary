@@ -79,6 +79,14 @@ bool File::open(File::OpenMode mode) const
     return true;
 }
 
+QString File::errorString() const
+{
+    if (d->zipFile && !d->zipFile->isOpen()) {
+        return d->zipFile->errorString();
+    }
+    return {};
+}
+
 void File::close()
 {
     if (d->zipFile) {

@@ -48,6 +48,7 @@ private Q_SLOTS:
         File out;
         out.setFileName(tmp.fileName());
         QVERIFY(out.open(File::Write));
+        QCOMPARE(out.errorString(), QString());
         {
             QFile resFile(QLatin1String(SOURCE_DIR "/pkpassdata/swiss.json"));
             QVERIFY(resFile.open(QFile::ReadOnly));
@@ -77,6 +78,7 @@ private Q_SLOTS:
         File in;
         in.setFileName(tmp.fileName());
         QVERIFY(in.open(File::Read));
+        QVERIFY(in.errorString().isEmpty());
         QCOMPARE(in.reservations().size(), 1);
         const auto resId = in.reservations().at(0);
         QVERIFY(!resId.isEmpty());
@@ -120,12 +122,14 @@ private Q_SLOTS:
         QVERIFY(!f.open(File::Read));
         f.setFileName(QLatin1String("foo.itinerary"));
         QVERIFY(!f.open(File::Read));
+        QVERIFY(!f.errorString().isEmpty());
 
         QTemporaryFile tmp;
         QVERIFY(tmp.open());
         tmp.close();
         f.setFileName(tmp.fileName());
         QVERIFY(f.open(File::Write));
+        QVERIFY(f.errorString().isEmpty());
 
         QCOMPARE(f.passes(), QVector<QString>());
         QCOMPARE(f.reservations(), QVector<QString>());
