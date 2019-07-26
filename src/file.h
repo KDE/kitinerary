@@ -74,8 +74,10 @@ public:
     QVector<QString> reservations() const;
     /** Loads the reservation with the given identifier. */
     QVariant reservation(const QString &resId) const;
-    /** Add a reservation to this file. */
+    /** Add a reservation to this file. A new unique idenfifier will be generated for the reservation. */
     void addReservation(const QVariant &res);
+    /** Add a reservation to this file. The given idenfifier will be used. */
+    void addReservation(const QString &id, const QVariant &res);
 
     /** Returns the pass identifier used in here for @p pass. */
     static QString passId(const KPkPass::Pass *pass);

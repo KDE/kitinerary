@@ -146,8 +146,13 @@ QVariant File::reservation(const QString &resId) const
 
 void File::addReservation(const QVariant &res)
 {
+    addReservation(QUuid::createUuid().toString(), res);
+}
+
+void File::addReservation(const QString &id, const QVariant &res)
+{
     Q_ASSERT(d->zipFile);
-    d->zipFile->writeFile(QLatin1String("reservations/") + QUuid::createUuid().toString() + QLatin1String(".json"),
+    d->zipFile->writeFile(QLatin1String("reservations/") + id + QLatin1String(".json"),
                           QJsonDocument(JsonLdDocument::toJson(res)).toJson());
 }
 
