@@ -43,6 +43,7 @@ class KITINERARY_EXPORT Reservation
     KITINERARY_PROPERTY(QUrl, url, setUrl)
     KITINERARY_PROPERTY(QVariantList, potentialAction, setPotentialAction)
     KITINERARY_PROPERTY(QDateTime, modifiedTime, setModifiedTime)
+    KITINERARY_PROPERTY(QVariantList, subjectOf, setSubjectOf)
 
     // KDE extensions
     /** Pass type identifier of an associated Apple Wallet boarding pass.

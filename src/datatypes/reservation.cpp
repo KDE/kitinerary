@@ -42,6 +42,7 @@ public:
     Organization provider;
     QVariantList potentialAction;
     QDateTime modifiedTime;
+    QVariantList subjectOf;
 };
 
 KITINERARY_MAKE_BASE_CLASS(Reservation)
@@ -55,6 +56,7 @@ KITINERARY_MAKE_PROPERTY(Reservation, QString, pkpassSerialNumber, setPkpassSeri
 KITINERARY_MAKE_PROPERTY(Reservation, Organization, provider, setProvider)
 KITINERARY_MAKE_PROPERTY(Reservation, QVariantList, potentialAction, setPotentialAction)
 KITINERARY_MAKE_PROPERTY(Reservation, QDateTime, modifiedTime, setModifiedTime)
+KITINERARY_MAKE_PROPERTY(Reservation, QVariantList, subjectOf, setSubjectOf)
 KITINERARY_MAKE_OPERATOR(Reservation)
 
 class LodgingReservationPrivate : public ReservationPrivate
