@@ -118,9 +118,13 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
             const auto array = v.toArray();
             l.reserve(array.size());
             for (const auto &elem : array) {
-                const auto var = createInstance(elem.toObject());
-                if (!var.isNull()) {
-                    l.push_back(var);
+                if (elem.isObject()) {
+                    const auto var = createInstance(elem.toObject());
+                    if (!var.isNull()) {
+                        l.push_back(var);
+                    }
+                } else if (elem.isString()) {
+                    l.push_back(elem.toString());
                 }
             }
         }
