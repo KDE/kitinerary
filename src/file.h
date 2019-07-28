@@ -95,6 +95,11 @@ public:
     /** Add a pkpass file with the given pass id. */
     void addPass(const QString &passId, const QByteArray &rawData);
 
+    /** Makes sure the resulting file name is something that can safely be used without messing up the
+     *  file system or archive structure.
+     */
+    static QString normalizeDocumentFileName(const QString &name);
+
     /** Lists all document identifiers. */
     QVector<QString> documents() const;
     /** Loads the document meta data of document @p id. */

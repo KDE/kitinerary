@@ -146,6 +146,25 @@ private Q_SLOTS:
         QCOMPARE(f.customData(QStringLiteral("a / b"), QStringLiteral("c")), QByteArray());
         QCOMPARE(f.customData(QString(), QString()), QByteArray());
     }
+
+    void testNormalizeDocFileName_data()
+    {
+        QTest::addColumn<QString>("in");
+        QTest::addColumn<QString>("out");
+
+        QTest::newRow("empty") << QString() << QStringLiteral("file");
+        QTest::newRow("meta") << QStringLiteral("meta.json") << QStringLiteral("file");
+        QTest::newRow("path") << QStringLiteral("a/b/c.pdf") << QStringLiteral("c.pdf");
+        QTest::newRow("star") << QStringLiteral("a*b.pdf") << QStringLiteral("a_b.pdf");
+        QTest::newRow("questionmark") << QStringLiteral("a?b.pdf") << QStringLiteral("a_b.pdf");
+    }
+
+    void testNormalizeDocFileName()
+    {
+        QFETCH(QString, in);
+        QFETCH(QString, out);
+        QCOMPARE(File::normalizeDocumentFileName(in), out);
+    }
 };
 
 QTEST_GUILESS_MAIN(FileTest)

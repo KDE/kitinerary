@@ -301,19 +301,9 @@ QByteArray File::documentData(const QString &id) const
     return file->data();
 }
 
-void File::addDocument(const QString &id, const QVariant &docInfo, const QByteArray &docData)
+QString File::normalizeDocumentFileName(const QString &name)
 {
-    Q_ASSERT(d->zipFile);
-    if (!JsonLd::canConvert<CreativeWork>(docInfo)) {
-        qCWarning(Log) << "Invalid document meta data" << docInfo;
-        return;
-    }
-    if (id.isEmpty()) {
-        qCWarning(Log) << "Trying to add a document with an empty identifier!";
-        return;
-    }
-
-    auto fileName = JsonLdDocument::readProperty(docInfo, "name").toString();
+    auto fileName = name;
     // normalize the filename to something we can safely deal with
     auto idx = fileName.lastIndexOf(QLatin1Char('/'));
     if (idx >= 0) {
@@ -326,6 +316,22 @@ void File::addDocument(const QString &id, const QVariant &docInfo, const QByteAr
     if (fileName.isEmpty() || fileName == QLatin1String("meta.json")) {
         fileName = QStringLiteral("file");
     }
+    return fileName;
+}
+
+void File::addDocument(const QString &id, const QVariant &docInfo, const QByteArray &docData)
+{
+    Q_ASSERT(d->zipFile);
+    if (!JsonLd::canConvert<CreativeWork>(docInfo)) {
+        qCWarning(Log) << "Invalid document meta data" << docInfo;
+        return;
+    }
+    if (id.isEmpty()) {
+        qCWarning(Log) << "Trying to add a document with an empty identifier!";
+        return;
+    }
+
+    const auto fileName = normalizeDocumentFileName(JsonLdDocument::readProperty(docInfo, "name").toString());
     auto normalizedDocInfo = docInfo;
     JsonLdDocument::writeProperty(normalizedDocInfo, "name", fileName);
 
