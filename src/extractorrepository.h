@@ -27,7 +27,7 @@
 #include <memory>
 #include <vector>
 
-namespace KCalCore {
+namespace KCalendarCore {
 class Calendar;
 }
 
@@ -68,7 +68,7 @@ public:
     /** Finds matching extractors for the given barcode string. */
     std::vector<const Extractor *> extractorsForBarcode(const QString &code) const;
     /** Find matching extractors for the given iCal calendar. */
-    std::vector<const Extractor *> extractorsForCalendar(const QSharedPointer<KCalCore::Calendar> &cal) const;
+    std::vector<const Extractor *> extractorsForCalendar(const QSharedPointer<KCalendarCore::Calendar> &cal) const;
 
 private:
     ExtractorRepositoryPrivate* d;

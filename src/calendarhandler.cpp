@@ -37,9 +37,9 @@
 #include <KItinerary/Visit>
 
 #ifdef HAVE_KCAL
-#include <KCalCore/Alarm>
-#include <KCalCore/Calendar>
-#include <KCalCore/Event>
+#include <KCalendarCore/Alarm>
+#include <KCalendarCore/Calendar>
+#include <KCalendarCore/Event>
 #endif
 
 #include <KContacts/Address>
@@ -68,19 +68,19 @@ static QString formatAddressSingleLine(const PostalAddress &addr)
 }
 
 #ifdef HAVE_KCAL
-using namespace KCalCore;
-static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event);
-static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event);
-static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event);
-static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event);
-static void fillEventReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event);
-static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event);
-static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalCore::Event::Ptr &event);
-static void fillRentalCarReservation(const RentalCarReservation &reservation, const KCalCore::Event::Ptr &event);
-static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCore::Event::Ptr &event);
+using namespace KCalendarCore;
+static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
+static void fillTrainReservation(const TrainReservation &reservation, const KCalendarCore::Event::Ptr &event);
+static void fillBusReservation(const BusReservation &reservation, const KCalendarCore::Event::Ptr &event);
+static void fillLodgingReservation(const LodgingReservation &reservation, const KCalendarCore::Event::Ptr &event);
+static void fillEventReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
+static void fillGeoPosition(const QVariant &place, const KCalendarCore::Event::Ptr &event);
+static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalendarCore::Event::Ptr &event);
+static void fillRentalCarReservation(const RentalCarReservation &reservation, const KCalendarCore::Event::Ptr &event);
+static void fillTaxiReservation(const TaxiReservation &reservation, const KCalendarCore::Event::Ptr &event);
 #endif
 
-QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalCore::Calendar> &calendar, const QVariant &reservation)
+QSharedPointer<KCalendarCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation)
 {
 #ifdef HAVE_KCAL
     if (!JsonLd::canConvert<Reservation>(reservation)) {
@@ -108,7 +108,7 @@ QSharedPointer<KCalCore::Event> CalendarHandler::findEvent(const QSharedPointer<
     return {};
 }
 
-QVector<QVariant> CalendarHandler::reservationsForEvent(const QSharedPointer<KCalCore::Event> &event)
+QVector<QVariant> CalendarHandler::reservationsForEvent(const QSharedPointer<KCalendarCore::Event> &event)
 {
 #ifdef HAVE_KCAL
     const auto payload = event->customProperty("KITINERARY", "RESERVATION").toUtf8();
@@ -120,7 +120,7 @@ QVector<QVariant> CalendarHandler::reservationsForEvent(const QSharedPointer<KCa
 #endif
 }
 
-void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalCore::Event> &event)
+void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalendarCore::Event> &event)
 {
     if (reservations.isEmpty()) {
         return;
@@ -167,7 +167,7 @@ static QString airportDisplayCode(const Airport &airport)
     return airport.iataCode().isEmpty() ? airport.name() : airport.iataCode();
 }
 
-static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event)
+static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event)
 {
     const auto flight = reservations.at(0).value<FlightReservation>().reservationFor().value<Flight>();
     const auto airline = flight.airline();
@@ -231,7 +231,7 @@ static void fillFlightReservation(const QVector<QVariant> &reservations, const K
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillTrainReservation(const TrainReservation &reservation, const KCalCore::Event::Ptr &event)
+static void fillTrainReservation(const TrainReservation &reservation, const KCalendarCore::Event::Ptr &event)
 {
     const auto trip = reservation.reservationFor().value<TrainTrip>();
     const auto depStation = trip.departureStation();
@@ -265,7 +265,7 @@ static void fillTrainReservation(const TrainReservation &reservation, const KCal
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillBusReservation(const BusReservation &reservation, const KCalCore::Event::Ptr &event)
+static void fillBusReservation(const BusReservation &reservation, const KCalendarCore::Event::Ptr &event)
 {
     const auto trip = reservation.reservationFor().value<BusTrip>();
     const auto depStation = trip.departureBusStop();
@@ -290,7 +290,7 @@ static void fillBusReservation(const BusReservation &reservation, const KCalCore
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillLodgingReservation(const LodgingReservation &reservation, const KCalCore::Event::Ptr &event)
+static void fillLodgingReservation(const LodgingReservation &reservation, const KCalendarCore::Event::Ptr &event)
 {
     const auto lodgingBusiness = reservation.reservationFor().value<LodgingBusiness>();
 
@@ -305,10 +305,10 @@ static void fillLodgingReservation(const LodgingReservation &reservation, const 
                                QLocale().toString(reservation.checkinTime().time(), QLocale::ShortFormat),
                                QLocale().toString(reservation.checkoutTime().time(), QLocale::ShortFormat),
                                reservation.reservationNumber()));
-    event->setTransparency(KCalCore::Event::Transparent);
+    event->setTransparency(KCalendarCore::Event::Transparent);
 }
 
-static void fillEventReservation(const QVector<QVariant> &reservations, const KCalCore::Event::Ptr &event)
+static void fillEventReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event)
 {
     const auto ev = reservations.at(0).value<EventReservation>().reservationFor().value<KItinerary::Event>();
     Place location;
@@ -353,7 +353,7 @@ static void fillEventReservation(const QVector<QVariant> &reservations, const KC
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &event)
+static void fillGeoPosition(const QVariant &place, const KCalendarCore::Event::Ptr &event)
 {
     if (!JsonLd::canConvert<Place>(place)) {
         return;
@@ -368,7 +368,7 @@ static void fillGeoPosition(const QVariant &place, const KCalCore::Event::Ptr &e
     event->setGeoLongitude(geo.longitude());
 }
 
-static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalCore::Event::Ptr &event)
+static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalendarCore::Event::Ptr &event)
 {
     const auto foodEstablishment = reservation.reservationFor().value<FoodEstablishment>();
 
@@ -398,7 +398,7 @@ static void fillFoodReservation(const FoodEstablishmentReservation &reservation,
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillRentalCarReservation(const RentalCarReservation &reservation, const KCalCore::Event::Ptr &event)
+static void fillRentalCarReservation(const RentalCarReservation &reservation, const KCalendarCore::Event::Ptr &event)
 {
     const auto rentalCalPickup = reservation.pickupLocation();
     const auto addressPickUp = rentalCalPickup.address();
@@ -410,7 +410,7 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
     event->setDtStart(reservation.pickupTime());
     event->setDtEnd(reservation.dropoffTime());
     event->setAllDay(false);
-    event->setTransparency(KCalCore::Event::Transparent);
+    event->setTransparency(KCalendarCore::Event::Transparent);
     event->setSummary(i18n("Rent car reservation: %1", rentalCar.name()));
 
     const QString pickUpAddress = formatAddress(addressPickUp);
@@ -427,7 +427,7 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
     event->setDescription(description);
 }
 
-static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCore::Event::Ptr &event)
+static void fillTaxiReservation(const TaxiReservation &reservation, const KCalendarCore::Event::Ptr &event)
 {
     const auto taxiPickup = reservation.pickupLocation();
     const auto addressPickUp = taxiPickup.address();
@@ -439,7 +439,7 @@ static void fillTaxiReservation(const TaxiReservation &reservation, const KCalCo
     event->setDtStart(reservation.pickupTime());
     //TODO event->setDtEnd(reservation.dropoffTime());
     event->setAllDay(false);
-    event->setTransparency(KCalCore::Event::Transparent);
+    event->setTransparency(KCalendarCore::Event::Transparent);
     //TODO event->setSummary(i18n("Rent car reservation: %1", rentalCar.name()));
     const QString pickUpAddress = formatAddress(addressPickUp);
 

@@ -28,7 +28,7 @@ template <typename T> class QVector;
 class QDateTime;
 class QVariant;
 
-namespace KCalCore {
+namespace KCalendarCore {
 class Calendar;
 class Event;
 }
@@ -39,12 +39,12 @@ namespace KItinerary {
 namespace CalendarHandler
 {
     /** Attempts to find an event in @p calendar for @p reservation. */
-    KITINERARY_EXPORT QSharedPointer<KCalCore::Event> findEvent(const QSharedPointer<KCalCore::Calendar> &calendar, const QVariant &reservation);
+    KITINERARY_EXPORT QSharedPointer<KCalendarCore::Event> findEvent(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation);
 
     /** Returns the reservations for this event.
      *  In case of a mult-travler trip, the result contains more than one reservation.
      */
-    KITINERARY_EXPORT QVector<QVariant> reservationsForEvent(const QSharedPointer<KCalCore::Event> &event);
+    KITINERARY_EXPORT QVector<QVariant> reservationsForEvent(const QSharedPointer<KCalendarCore::Event> &event);
 
     /** Fills @p event with details of @p reservations.
      *  Can be used on new events or to update existing ones.
@@ -52,7 +52,7 @@ namespace CalendarHandler
      *  @param event The event.
      *  That is, MergeUtil::isSame() returns true for Reservation::reservationFor for each pair of values.
      */
-    KITINERARY_EXPORT void fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalCore::Event> &event);
+    KITINERARY_EXPORT void fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalendarCore::Event> &event);
 }
 
 }

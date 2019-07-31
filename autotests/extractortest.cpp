@@ -25,8 +25,8 @@
 
 #include <KMime/Message>
 
-#include <KCalCore/MemoryCalendar>
-#include <KCalCore/ICalFormat>
+#include <KCalendarCore/MemoryCalendar>
+#include <KCalendarCore/ICalFormat>
 
 #include <QDebug>
 #include <QDir>

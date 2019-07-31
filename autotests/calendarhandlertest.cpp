@@ -21,8 +21,8 @@
 #include "extractorpostprocessor.h"
 #include "jsonlddocument.h"
 
-#include <KCalCore/ICalFormat>
-#include <KCalCore/MemoryCalendar>
+#include <KCalendarCore/ICalFormat>
+#include <KCalendarCore/MemoryCalendar>
 
 #include <QDebug>
 #include <QFile>
@@ -31,7 +31,7 @@
 #include <QObject>
 #include <QTest>
 
-using namespace KCalCore;
+using namespace KCalendarCore;
 using namespace KItinerary;
 
 void initLocale()
@@ -83,7 +83,7 @@ private Q_SLOTS:
         ICalFormat format;
         format.load(refCal, icalFile);
 
-        const auto refEvents = refCal->rawEvents(KCalCore::EventSortStartDate, KCalCore::SortDirectionAscending);
+        const auto refEvents = refCal->rawEvents(KCalendarCore::EventSortStartDate, KCalendarCore::SortDirectionAscending);
         QCOMPARE(refEvents.size(), inArray.size());
         for (int i = 0; i < inArray.size(); ++i) {
             Event::Ptr newEvent(new Event);
