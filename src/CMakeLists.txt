@@ -41,6 +41,7 @@ set(kitinerary_lib_srcs
 
     barcodedecoder.cpp
     calendarhandler.cpp
+    documentutil.cpp
     extractor.cpp
     extractorengine.cpp
     extractorfilter.cpp
@@ -115,6 +116,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
     HEADER_NAMES
         BarcodeDecoder
         CalendarHandler
+        DocumentUtil
         Extractor
         ExtractorEngine
         ExtractorPostprocessor
