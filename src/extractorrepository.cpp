@@ -24,7 +24,7 @@
 #include "logging.h"
 
 #ifdef HAVE_KCAL
-#include <KCalCore/Calendar>
+#include <KCalendarCore/Calendar>
 #endif
 
 #include <KMime/Content>
@@ -188,7 +188,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForBarcode(const Q
 }
 
 #ifdef HAVE_KCAL
-std::vector<const Extractor *> ExtractorRepository::extractorsForCalendar(const QSharedPointer<KCalCore::Calendar> &cal) const
+std::vector<const Extractor *> ExtractorRepository::extractorsForCalendar(const QSharedPointer<KCalendarCore::Calendar> &cal) const
 {
     std::vector<const Extractor *> v;
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {

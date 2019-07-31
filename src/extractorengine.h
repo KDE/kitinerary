@@ -29,7 +29,7 @@
 
 template <typename T> class QSharedPointer;
 
-namespace KCalCore {
+namespace KCalendarCore {
 class Calendar;
 }
 
@@ -83,7 +83,7 @@ class PdfDocument;
  * - PDF extractors are passed a PdfDocument instance allowing access to textual and
  *   image content.
  * - Apple Wallet pass extractors are passed a KPkPass::BoardingPass instance.
- * - iCalendar event extractors are passed KCalCore::Event instances.
+ * - iCalendar event extractors are passed KCalendarCore::Event instances.
  *
  * These functions should return an object or an array of objects following the JSON-LD
  * format defined on schema.org. JsApi::JsonLd provides helper functions to build such
@@ -155,7 +155,7 @@ public:
     /** The iCalendar to extract data from.
      *  Only considered for ical extractors.
      */
-    void setCalendar(const QSharedPointer<KCalCore::Calendar> &calendar);
+    void setCalendar(const QSharedPointer<KCalendarCore::Calendar> &calendar);
     /** A MIME part to extract from.
      *  This is assumed to contain one of the supported mime types.
      *  @p content is also set as extraction context (see setContext).

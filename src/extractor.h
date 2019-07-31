@@ -52,7 +52,7 @@ class ExtractorPrivate;
  * - \c html: HTML documents, the argument to the script function is a HtmlDocument instance.
  * - \c pdf: PDF documents, the argument to the script function is a PdfDocument instance.
  * - \c pkpass: Apple Wallet passes, the argument to the script function is a KPkPass::BoardingPass instance.
- * - \c ical: iCalendar events, the argument to the script function is a KCalCore::Event instance.
+ * - \c ical: iCalendar events, the argument to the script function is a KCalendarCore::Event instance.
  *
  * Filter definitions have the following field:
  * - \c type: The type of data this filter applies to, one of: @c Mime, @c PkPass, @c JsonLd, @c Barcode, @c ICal.

@@ -38,9 +38,9 @@
 #include "jsapi/jsonld.h"
 
 #ifdef HAVE_KCAL
-#include <KCalCore/MemoryCalendar>
-#include <KCalCore/Event>
-#include <KCalCore/ICalFormat>
+#include <KCalendarCore/MemoryCalendar>
+#include <KCalendarCore/Event>
+#include <KCalendarCore/ICalFormat>
 #endif
 
 #include <KPkPass/Pass>
@@ -91,7 +91,7 @@ public:
     std::unique_ptr<PdfDocument, std::function<void(PdfDocument*)>> m_pdfDoc;
     std::unique_ptr<KPkPass::Pass, std::function<void(KPkPass::Pass*)>> m_pass;
 #ifdef HAVE_KCAL
-    KCalCore::Calendar::Ptr m_calendar;
+    KCalendarCore::Calendar::Ptr m_calendar;
 #endif
     KMime::Content *m_mimeContent = nullptr;
     KMime::Content *m_mimeContext = nullptr;
@@ -182,7 +182,7 @@ void ExtractorEngine::setPass(KPkPass::Pass *pass)
     d->m_pass = make_nonowning_ptr(pass);
 }
 
-void ExtractorEngine::setCalendar(const QSharedPointer<KCalCore::Calendar> &calendar)
+void ExtractorEngine::setCalendar(const QSharedPointer<KCalendarCore::Calendar> &calendar)
 {
 #ifdef HAVE_KCAL
     d->m_calendar = calendar;
@@ -212,8 +212,8 @@ void ExtractorEnginePrivate::setContent(KMime::Content *content)
         m_pass = make_owning_ptr(KPkPass::Pass::fromData(content->decodedContent()));
     } else if (isContentType(content, ct, "text/calendar", ".ics")) {
 #ifdef HAVE_KCAL
-        m_calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
-        KCalCore::ICalFormat format;
+        m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone()));
+        KCalendarCore::ICalFormat format;
         if (format.fromRawString(m_calendar, content->decodedContent())) {
             m_calendar->setProductId(format.loadedProductId());
         } else {
@@ -297,8 +297,8 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
         || contentStartsWith(data, "BEGIN:VCALENDAR"))
     {
 #ifdef HAVE_KCAL
-        d->m_calendar.reset(new KCalCore::MemoryCalendar(QTimeZone()));
-        KCalCore::ICalFormat format;
+        d->m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone()));
+        KCalendarCore::ICalFormat format;
         if (format.fromRawString(d->m_calendar, data)) {
             d->m_calendar->setProductId(format.loadedProductId());
             return;
