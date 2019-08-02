@@ -101,6 +101,14 @@ function parseArrival(res, line, purchaseDate) {
     }
 }
 
+function findNextStationLineIndex(lines, start) {
+    var pos = start;
+    while (pos < lines.length && (lines[pos].startsWith(" ") || lines[pos].startsWith("Ref:"))) {
+        pos += 1;
+    }
+    return pos;
+}
+
 function parseLegs(text, purchaseDate) {
     var reservations = new Array();
     var lines = text.split('\n');
@@ -113,14 +121,12 @@ function parseLegs(text, purchaseDate) {
         var res = JsonLd.newObject("TrainReservation");
         res.reservationFor = JsonLd.newObject("TrainTrip");
 
-        arrIdx = depIdx + 1;
+        arrIdx = findNextStationLineIndex(lines, depIdx + 1)
         parseDeparture(res, lines[depIdx], purchaseDate);
         parseArrival(res, lines[arrIdx], purchaseDate);
-        depIdx = arrIdx + 1;
+
         // Find the next leg
-        while (lines[depIdx].startsWith(" ")) {
-            depIdx += 1;
-        }
+        depIdx = findNextStationLineIndex(lines, arrIdx + 1);
 
         reservations.push(res);
     }

@@ -1,0 +1,75 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Pardubice hl.n."
+            },
+            "arrivalTime": "2019-08-06T18:46:00",
+            "departureDay": "2019-08-06",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Praha hl.n."
+            },
+            "departureTime": "2019-08-06T17:50:00",
+            "trainNumber": "EC 283"
+        },
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "41",
+                "seatSection": "258"
+            }
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Hradec Králové hl.n."
+            },
+            "arrivalTime": "2019-08-06T19:23:00",
+            "departureDay": "2019-08-06",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Pardubice hl.n."
+            },
+            "departureTime": "2019-08-06T19:03:00",
+            "trainNumber": "R 1262"
+        },
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "21",
+                "seatSection": "1"
+            }
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Jaroměř"
+            },
+            "arrivalTime": "2019-08-06T19:54:00",
+            "departureDay": "2019-08-06",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Hradec Králové hl.n."
+            },
+            "departureTime": "2019-08-06T19:33:00",
+            "trainNumber": "Bus 501262"
+        }
+    }
+]
