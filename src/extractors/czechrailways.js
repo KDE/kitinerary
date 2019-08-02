@@ -38,10 +38,13 @@ function parseSeat(res, text) {
         res.reservedTicket.ticketedSeat.seatSection = coach[2];
         idx = coach.index + coach[1].length + coach[2].length;
     }
-    var seat = text.substr(idx).match(/\s+(\d+)/);
-    if (seat) {
-        createSeat(res);
-        res.reservedTicket.ticketedSeat.seatNumber = seat[1];
+    var seat = text.substr(idx).match(/\s+([\d,\- ]+)/)
+    if (seat && seat[1].trim()) {
+        seatNumber = seat[1].trim();
+        if (seatNumber) {
+            createSeat(res);
+            res.reservedTicket.ticketedSeat.seatNumber = seatNumber;
+        }
     }
 }
 
