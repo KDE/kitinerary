@@ -190,26 +190,34 @@ static void applyStationData(const KnowledgeDb::TrainStation &record, TrainStati
     }
 }
 
+static void applyStationCountry(const QString &isoCode, TrainStation &station)
+{
+    auto addr = station.address();
+    if (addr.addressCountry().isEmpty()) {
+        addr.setAddressCountry(isoCode.toUpper());
+        station.setAddress(addr);
+    }
+}
+
 TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation station) const
 {
     const auto id = station.identifier();
     if (id.isEmpty()) { // empty -> null cleanup, to have more compact json-ld output
         station.setIdentifier(QString());
     } else if (id.startsWith(QLatin1String("sncf:")) && id.size() == 10) {
-        // Gare & Connexion ids start with a country code, propagate that to the station address field
-        auto addr = station.address();
-        if (addr.addressCountry().isEmpty()) {
-            addr.setAddressCountry(id.mid(5, 2).toUpper());
-            station.setAddress(addr);
-        }
         const auto record = KnowledgeDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{id.mid(5)});
         applyStationData(record, station);
+        applyStationCountry(id.mid(5, 2).toUpper(), station);
     } else if (id.startsWith(QLatin1String("ibnr:")) && id.size() == 12) {
         const auto record = KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{id.mid(5).toUInt()});
         applyStationData(record, station);
+        const auto country = KnowledgeDb::countryIdForUicCode(id.midRef(5, 2).toUShort()).toString();
+        applyStationCountry(country, station);
     } else if (id.startsWith(QLatin1String("uic:")) && id.size() == 11) {
         const auto record = KnowledgeDb::stationForUic(KnowledgeDb::UICStation{id.mid(4).toUInt()});
         applyStationData(record, station);
+        const auto country = KnowledgeDb::countryIdForUicCode(id.midRef(4, 2).toUShort()).toString();
+        applyStationCountry(country, station);
     }
 
     return processPlace(station);
