@@ -3,7 +3,7 @@
  */
 
 #include "knowledgedb.h"
-#include "countrydb.h"
+#include "countrydb_p.h"
 
 namespace KItinerary {
 namespace KnowledgeDb {
@@ -52,7 +52,7 @@ static const Country country_table[] = {
     {CountryId{"CU"}, DrivingSide::Right, {TypeA|TypeB}}, // Cuba
     {CountryId{"CV"}, DrivingSide::Right, {TypeC|TypeF}}, // Cape Verde
     {CountryId{"CW"}, DrivingSide::Right, {TypeA|TypeB}}, // Curaçao
-    {CountryId{"CY"}, DrivingSide::Left, {TypeG}}, // Cyprus
+    {CountryId{"CY"}, DrivingSide::Left, {TypeG}}, // Republic of Cyprus
     {CountryId{"CZ"}, DrivingSide::Right, {TypeC|TypeE}}, // Czech Republic
     {CountryId{"DE"}, DrivingSide::Right, {TypeC|TypeF}}, // Germany
     {CountryId{"DJ"}, DrivingSide::Right, {TypeC|TypeE}}, // Djibouti
@@ -214,6 +214,75 @@ static const Country country_table[] = {
     {CountryId{"ZA"}, DrivingSide::Left, {TypeC|TypeD|TypeM|TypeN}}, // South Africa
     {CountryId{"ZM"}, DrivingSide::Left, {TypeC|TypeD|TypeG}}, // Zambia
     {CountryId{"ZW"}, DrivingSide::Left, {TypeD|TypeG}}, // Zimbabwe
+};
+
+static const UicCountryCodeMapping uic_country_code_table[] = {
+    {10, CountryId{"FI"}},
+    {20, CountryId{"RU"}},
+    {21, CountryId{"BY"}},
+    {22, CountryId{"UA"}},
+    {23, CountryId{"MD"}},
+    {24, CountryId{"LT"}},
+    {25, CountryId{"LV"}},
+    {26, CountryId{"EE"}},
+    {27, CountryId{"KZ"}},
+    {28, CountryId{"GE"}},
+    {29, CountryId{"UZ"}},
+    {30, CountryId{"KP"}},
+    {31, CountryId{"MN"}},
+    {32, CountryId{"VN"}},
+    {33, CountryId{"CN"}},
+    {40, CountryId{"CU"}},
+    {41, CountryId{"AL"}},
+    {42, CountryId{"JP"}},
+    {44, CountryId{"BA"}},
+    {49, CountryId{"BA"}},
+    {50, CountryId{"BA"}},
+    {51, CountryId{"PL"}},
+    {52, CountryId{"BG"}},
+    {53, CountryId{"RO"}},
+    {54, CountryId{"CZ"}},
+    {55, CountryId{"HU"}},
+    {56, CountryId{"SK"}},
+    {57, CountryId{"AZ"}},
+    {58, CountryId{"AM"}},
+    {59, CountryId{"KG"}},
+    {60, CountryId{"IE"}},
+    {61, CountryId{"KR"}},
+    {62, CountryId{"ME"}},
+    {64, CountryId{"NZ"}},
+    {65, CountryId{"MK"}},
+    {66, CountryId{"TJ"}},
+    {67, CountryId{"TM"}},
+    {68, CountryId{"AF"}},
+    {70, CountryId{"GB"}},
+    {71, CountryId{"ES"}},
+    {72, CountryId{"RS"}},
+    {73, CountryId{"GR"}},
+    {74, CountryId{"SE"}},
+    {75, CountryId{"TR"}},
+    {76, CountryId{"NO"}},
+    {78, CountryId{"HR"}},
+    {79, CountryId{"SI"}},
+    {80, CountryId{"DE"}},
+    {81, CountryId{"AT"}},
+    {82, CountryId{"LU"}},
+    {83, CountryId{"IT"}},
+    {84, CountryId{"NL"}},
+    {85, CountryId{"CH"}},
+    {86, CountryId{"DK"}},
+    {87, CountryId{"FR"}},
+    {88, CountryId{"BE"}},
+    {90, CountryId{"EG"}},
+    {91, CountryId{"TN"}},
+    {92, CountryId{"DZ"}},
+    {93, CountryId{"MA"}},
+    {94, CountryId{"PT"}},
+    {95, CountryId{"IL"}},
+    {96, CountryId{"IR"}},
+    {97, CountryId{"SY"}},
+    {98, CountryId{"LB"}},
+    {99, CountryId{"IQ"}},
 };
 
 

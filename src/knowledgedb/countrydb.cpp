@@ -123,4 +123,16 @@ PowerPlugTypes KnowledgeDb::incompatiblePowerSockets(PowerPlugTypes plugs, Power
     return failSockets & ~plugs;
 }
 
+KnowledgeDb::CountryId KnowledgeDb::countryIdForUicCode(uint16_t uicCountryCode)
+{
+    const auto it = std::lower_bound(std::begin(uic_country_code_table), std::end(uic_country_code_table), uicCountryCode, [](const auto &lhs, uint16_t rhs) {
+        return lhs.uicCode < rhs;
+    });
+    if (it == std::end(uic_country_code_table) || (*it).uicCode != uicCountryCode) {
+        return {};
+    }
+
+    return (*it).isoCode;
+}
+
 #include "moc_countrydb.cpp"

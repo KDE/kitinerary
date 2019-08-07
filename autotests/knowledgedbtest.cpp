@@ -197,6 +197,14 @@ private Q_SLOTS:
         QCOMPARE(KnowledgeDb::timezoneForCountry(CountryId{"FR"}).toQTimeZone(), QTimeZone("Europe/Paris"));
         QCOMPARE(KnowledgeDb::timezoneForCountry(CountryId{"BR"}).toQTimeZone(), QTimeZone());
     }
+
+    void testUICCountryCodeLookup()
+    {
+        using namespace KnowledgeDb;
+
+        QCOMPARE(KnowledgeDb::countryIdForUicCode(80), CountryId{"DE"});
+        QCOMPARE(KnowledgeDb::countryIdForUicCode(0), CountryId{});
+    }
 };
 
 QTEST_APPLESS_MAIN(KnowledgeDbTest)

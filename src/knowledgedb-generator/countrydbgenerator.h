@@ -40,6 +40,7 @@ public:
     {
         QUrl uri;
         QString name;
+        QString isoCode;
         QString drivingSide;
         QSet<QString> powerPlugTypes;
     };
@@ -48,12 +49,15 @@ private:
     bool fetchCountryList();
     bool fetchDrivingDirections();
     bool fetchPowerPlugTypes();
+    bool fetchUicCountryCodes();
     QUrl insertOrMerge(const QJsonObject &obj);
     void writeCountryTable(QIODevice *out);
+    void writeUicCodeTable(QIODevice *out);
     void printSummary();
 
     std::vector<Country> m_countries;
     std::map<QString, QUrl> m_isoCodeMap;
+    std::map<uint16_t, QString> m_uicCodeMap;
 
     int m_isoCodeConflicts = 0;
 };

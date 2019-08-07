@@ -45,19 +45,20 @@ static bool operator<(const CountryDbGenerator::Country &lhs, const QUrl &rhs)
 
 bool CountryDbGenerator::generate(QIODevice* out)
 {
-    if (!fetchCountryList() || !fetchDrivingDirections() || !fetchPowerPlugTypes()) {
+    if (!fetchCountryList() || !fetchDrivingDirections() || !fetchPowerPlugTypes() || !fetchUicCountryCodes()) {
         return false;
     }
 
     CodeGen::writeLicenseHeader(out);
     out->write(R"(
 #include "knowledgedb.h"
-#include "countrydb.h"
+#include "countrydb_p.h"
 
 namespace KItinerary {
 namespace KnowledgeDb {
 )");
     writeCountryTable(out);
+    writeUicCodeTable(out);
     out->write(R"(
 }
 }
@@ -150,6 +151,34 @@ bool CountryDbGenerator::fetchPowerPlugTypes()
     return true;
 }
 
+bool Generator::CountryDbGenerator::fetchUicCountryCodes()
+{
+    const auto uicArray = WikiData::query(R"(
+        SELECT DISTINCT ?country ?uicCode WHERE {
+            ?country (wdt:P31/wdt:P279*) wd:Q6256.
+            ?country wdt:P2982 ?uicCode.
+    } ORDER BY (?country))", "wikidata_country_uic_code.json");
+    if (uicArray.isEmpty()) {
+        qWarning() << "Empty UIC code query result!";
+        return false;
+    }
+
+    for (const auto &uicCodeData : uicArray) {
+        const auto uicObj = uicCodeData.toObject();
+        const auto uicCode = uicObj.value(QLatin1String("uicCode")).toObject().value(QLatin1String("value")).toString().toUShort();
+        const auto uri = QUrl(uicObj.value(QLatin1String("country")).toObject().value(QLatin1String("value")).toString());
+        const auto it = std::find_if(m_countries.begin(), m_countries.end(), [uri](const auto &country) { return country.uri == uri; });
+        if (it == m_countries.end()) {
+            qWarning() << "UIC code" << uicCode << "refers to unknown country" << uri;
+            continue;
+        }
+        m_uicCodeMap[uicCode] = (*it).isoCode;
+
+    }
+    return true;
+}
+
+
 QUrl CountryDbGenerator::insertOrMerge(const QJsonObject& obj)
 {
     if (obj.isEmpty()) {
@@ -165,6 +194,7 @@ QUrl CountryDbGenerator::insertOrMerge(const QJsonObject& obj)
     if (!obj.contains(QLatin1String("plugTypeEndTime")) && obj.contains(QLatin1String("plugType"))) {
         c.powerPlugTypes.insert(QUrl(obj.value(QLatin1String("plugType")).toObject().value(QLatin1String("value")).toString()).fileName());
     }
+    c.isoCode = obj.value(QLatin1String("isoCode")).toObject().value(QLatin1String("value")).toString();
 
     const auto it = std::lower_bound(m_countries.begin(), m_countries.end(), c);
     if (it != m_countries.end() && (*it).uri == c.uri) {
@@ -247,8 +277,22 @@ void CountryDbGenerator::writeCountryTable(QIODevice *out)
     out->write("};\n\n");
 }
 
+void Generator::CountryDbGenerator::writeUicCodeTable(QIODevice* out)
+{
+    out->write("static const UicCountryCodeMapping uic_country_code_table[] = {\n");
+    for (const auto &kv : m_uicCodeMap) {
+        out->write("    {");
+        out->write(QByteArray::number(kv.first));
+        out->write(", CountryId{\"");
+        out->write(kv.second.toUtf8());
+        out->write("\"}},\n");
+    }
+    out->write("};\n\n");
+}
+
 void CountryDbGenerator::printSummary()
 {
     qDebug() << "Generated database containing" << m_isoCodeMap.size() << "countries.";
+    qDebug() << "Generated UIC code lookup table for" << m_uicCodeMap.size() << "countries.";
     qDebug() << "ISO 3166-1 alpha 2 code collisions:" << m_isoCodeConflicts;
 }
