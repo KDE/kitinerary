@@ -45,6 +45,7 @@ set(kitinerary_lib_srcs
     extractor.cpp
     extractorengine.cpp
     extractorfilter.cpp
+    extractorinput.cpp
     extractorpostprocessor.cpp
     extractorrepository.cpp
     extractorutil.cpp
@@ -119,6 +120,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         DocumentUtil
         Extractor
         ExtractorEngine
+        ExtractorInput
         ExtractorPostprocessor
         File
         HtmlDocument
