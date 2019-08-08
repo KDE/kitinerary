@@ -21,6 +21,7 @@
 #include "barcodedecoder.h"
 #include "extractorengine.h"
 #include "extractor.h"
+#include "extractorinput.h"
 #include "extractorrepository.h"
 #include "genericpdfextractor_p.h"
 #include "genericpkpassextractor_p.h"
@@ -231,42 +232,6 @@ void ExtractorEnginePrivate::setContent(KMime::Content *content)
     m_mimeContent = (ct && ct->isMultipart()) ? content : nullptr;
 }
 
-static bool contentStartsWith(const QByteArray &data, char s)
-{
-    for (const auto c : data) {
-        if (std::isspace(c)) {
-            continue;
-        }
-        return c == s;
-    }
-    return false;
-}
-
-static bool contentStartsWith(const QByteArray &data, const char *str)
-{
-    auto it = data.begin();
-    while (it != data.end() && std::isspace(*it)) {
-        ++it;
-    }
-
-    const auto len = std::strlen(str);
-    if ((int)len >= std::distance(it, data.end())) {
-        return false;
-    }
-    return std::strncmp(it, str, len) == 0;
-}
-
-static bool contentMightBeEmail(const QByteArray &data)
-{
-    for (const auto c : data) {
-        if (std::isalpha(c) || c == '-') {
-            continue;
-        }
-        return c == ':';
-    }
-    return false;
-}
-
 void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
 {
     // let's not even try to parse anything with implausible size
@@ -274,28 +239,24 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
         return;
     }
 
-    if (fileName.endsWith(QLatin1String(".pkpass"), Qt::CaseInsensitive) || strncmp(data.constData(), "PK\x03\x04", 4) == 0) {
+    const auto nameType = ExtractorInput::typeFromFileName(fileName);
+    const auto contentType = ExtractorInput::typeFromContent(data);
+    if (nameType == ExtractorInput::PkPass || contentType == ExtractorInput::PkPass) {
         d->m_pass = make_owning_ptr(KPkPass::Pass::fromData(data));
         return;
     }
 
-    if (fileName.endsWith(QLatin1String(".pdf"), Qt::CaseInsensitive) ||  strncmp(data.constData(), "%PDF", 4) == 0) {
+    if (nameType == ExtractorInput::Pdf || contentType == ExtractorInput::Pdf) {
         d->m_pdfDoc = make_owning_ptr(PdfDocument::fromData(data));
         return;
     }
 
-    if (fileName.endsWith(QLatin1String(".html"), Qt::CaseInsensitive)
-        || fileName.endsWith(QLatin1String(".htm"), Qt::CaseInsensitive)
-        || contentStartsWith(data, '<'))
-    {
+    if (nameType == ExtractorInput::Html || contentType == ExtractorInput::Html) {
         d->m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(data));
         return;
     }
 
-    if (fileName.endsWith(QLatin1String(".ics"), Qt::CaseInsensitive)
-        || fileName.endsWith(QLatin1String(".ical"), Qt::CaseInsensitive)
-        || contentStartsWith(data, "BEGIN:VCALENDAR"))
-    {
+    if (nameType == ExtractorInput::ICal || contentType == ExtractorInput::ICal) {
 #ifdef HAVE_KCAL
         d->m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone()));
         KCalendarCore::ICalFormat format;
@@ -310,15 +271,12 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
 #endif
     }
 
-    if (fileName.endsWith(QLatin1String(".txt"), Qt::CaseInsensitive)) {
+    if (nameType == ExtractorInput::Text || contentType == ExtractorInput::Text) {
         d->m_text = QString::fromUtf8(data);
         return;
     }
 
-    if (fileName.endsWith(QLatin1String(".eml"), Qt::CaseInsensitive)
-        || fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive)
-        || contentMightBeEmail(data))
-    {
+    if (nameType == ExtractorInput::Email || contentType == ExtractorInput::Email) {
         d->m_ownedMimeContent.reset(new KMime::Message);
         d->m_ownedMimeContent->setContent(KMime::CRLFtoLF(data));
         d->m_ownedMimeContent->parse();
@@ -326,10 +284,7 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
         return;
     }
 
-    if (fileName.endsWith(QLatin1String(".json"), Qt::CaseInsensitive)
-        || fileName.endsWith(QLatin1String(".jsonld"), Qt::CaseInsensitive)
-        || contentStartsWith(data, '{') || contentStartsWith(data, '['))
-    {
+    if (nameType == ExtractorInput::JsonLd || contentType == ExtractorInput::JsonLd ) {
         // pass through JSON data, so the using code can apply post-processing to that
         const auto doc = QJsonDocument::fromJson(data);
         if (doc.isObject()) {
