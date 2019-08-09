@@ -192,26 +192,25 @@ void ExtractorEngine::setCalendar(const QSharedPointer<KCalendarCore::Calendar> 
 #endif
 }
 
-static bool isContentType(KMime::Content *content, KMime::Headers::ContentType *ct, const char *mimeType, const char *ext)
-{
-    if (ct && ct->mimeType() == mimeType) {
-        return true;
-    }
-    if (ct && ct->name().endsWith(QLatin1String(ext))) {
-        return true;
-    }
-    const auto cd = content->contentDisposition(false);
-    return cd && cd->filename().endsWith(QLatin1String(ext));
-}
-
 void ExtractorEnginePrivate::setContent(KMime::Content *content)
 {
     setContext(content);
 
+    auto mtType = ExtractorInput::Unknown;
+    auto fnType = ExtractorInput::Unknown;
     const auto ct = content->contentType(false);
-    if (isContentType(content, ct, "application/vnd.apple.pkpass", ".pkpass")) {
+    if (ct) {
+        mtType = ExtractorInput::typeFromMimeType(QString::fromLatin1(ct->mimeType()));
+        fnType = ExtractorInput::typeFromFileName(ct->name());
+    }
+    const auto cd = content->contentDisposition(false);
+    if (fnType == ExtractorInput::Unknown && cd) {
+        fnType = ExtractorInput::typeFromFileName(cd->filename());
+    }
+
+    if (mtType == ExtractorInput::PkPass || fnType == ExtractorInput::PkPass) {
         m_pass = make_owning_ptr(KPkPass::Pass::fromData(content->decodedContent()));
-    } else if (isContentType(content, ct, "text/calendar", ".ics")) {
+    } else if (mtType == ExtractorInput::ICal || fnType == ExtractorInput::ICal) {
 #ifdef HAVE_KCAL
         m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone()));
         KCalendarCore::ICalFormat format;
@@ -221,11 +220,11 @@ void ExtractorEnginePrivate::setContent(KMime::Content *content)
             m_calendar.reset();
         }
 #endif
-    } else if (isContentType(content, ct, "application/pdf", ".pdf")) {
+    } else if (mtType == ExtractorInput::Pdf || fnType == ExtractorInput::Pdf) {
         m_pdfDoc = make_owning_ptr(PdfDocument::fromData(content->decodedContent()));
-    } else if (ct && ct->isHTMLText()) {
+    } else if (mtType == ExtractorInput::Html) {
         m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(content->decodedContent()));
-    } else if ( (ct && ct->isPlainText()) || (!ct && content->isTopLevel())) {
+    } else if ( (mtType == ExtractorInput::Text) || (!ct && content->isTopLevel())) {
         m_text = content->decodedText();
     }
 
