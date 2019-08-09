@@ -240,62 +240,67 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
 
     const auto nameType = ExtractorInput::typeFromFileName(fileName);
     const auto contentType = ExtractorInput::typeFromContent(data);
-    if (nameType == ExtractorInput::PkPass || contentType == ExtractorInput::PkPass) {
-        d->m_pass = make_owning_ptr(KPkPass::Pass::fromData(data));
+    qWarning() << nameType << contentType << fileName;
+    setData(data, nameType == ExtractorInput::Unknown ? contentType : nameType);
+}
+
+void ExtractorEngine::setData(const QByteArray &data, ExtractorInput::Type type)
+{
+    // let's not even try to parse anything with implausible size
+    if (data.size() <= 4 || data.size() > 4000000) {
         return;
     }
 
-    if (nameType == ExtractorInput::Pdf || contentType == ExtractorInput::Pdf) {
-        d->m_pdfDoc = make_owning_ptr(PdfDocument::fromData(data));
-        return;
-    }
-
-    if (nameType == ExtractorInput::Html || contentType == ExtractorInput::Html) {
-        d->m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(data));
-        return;
-    }
-
-    if (nameType == ExtractorInput::ICal || contentType == ExtractorInput::ICal) {
+    switch (type) {
+        case ExtractorInput::PkPass:
+            d->m_pass = make_owning_ptr(KPkPass::Pass::fromData(data));
+            break;
+        case ExtractorInput::Pdf:
+            d->m_pdfDoc = make_owning_ptr(PdfDocument::fromData(data));
+            break;
+        case ExtractorInput::Html:
+            d->m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(data));
+            break;
+        case ExtractorInput::ICal:
+        {
 #ifdef HAVE_KCAL
-        d->m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone()));
-        KCalendarCore::ICalFormat format;
-        if (format.fromRawString(d->m_calendar, data)) {
-            d->m_calendar->setProductId(format.loadedProductId());
-            return;
-        }
-        qCDebug(Log) << "Failed to parse iCal content.";
-        d->m_calendar.reset();
+            d->m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone()));
+            KCalendarCore::ICalFormat format;
+            if (format.fromRawString(d->m_calendar, data)) {
+                d->m_calendar->setProductId(format.loadedProductId());
+                break;
+            }
+            qCDebug(Log) << "Failed to parse iCal content.";
+            d->m_calendar.reset();
 #else
-        qCDebug(Log) << "Trying to exctract ical file, but ical support is not enabled.";
+            qCDebug(Log) << "Trying to exctract ical file, but ical support is not enabled.";
 #endif
-    }
-
-    if (nameType == ExtractorInput::Text || contentType == ExtractorInput::Text) {
-        d->m_text = QString::fromUtf8(data);
-        return;
-    }
-
-    if (nameType == ExtractorInput::Email || contentType == ExtractorInput::Email) {
-        d->m_ownedMimeContent.reset(new KMime::Message);
-        d->m_ownedMimeContent->setContent(KMime::CRLFtoLF(data));
-        d->m_ownedMimeContent->parse();
-        setContent(d->m_ownedMimeContent.get());
-        return;
-    }
-
-    if (nameType == ExtractorInput::JsonLd || contentType == ExtractorInput::JsonLd ) {
-        // pass through JSON data, so the using code can apply post-processing to that
-        const auto doc = QJsonDocument::fromJson(data);
-        if (doc.isObject()) {
-            d->m_result.push_back(doc.object());
-            return;
-        } else if (doc.isArray()) {
-            d->m_result = doc.array();
-            return;
+            break;
         }
+        case ExtractorInput::Text:
+            d->m_text = QString::fromUtf8(data);
+            break;
+        case ExtractorInput::Email:
+            d->m_ownedMimeContent.reset(new KMime::Message);
+            d->m_ownedMimeContent->setContent(KMime::CRLFtoLF(data));
+            d->m_ownedMimeContent->parse();
+            setContent(d->m_ownedMimeContent.get());
+            break;
+        case ExtractorInput::JsonLd:
+        {
+            // pass through JSON data, so the using code can apply post-processing to that
+            const auto doc = QJsonDocument::fromJson(data);
+            if (doc.isObject()) {
+                d->m_result.push_back(doc.object());
+            } else if (doc.isArray()) {
+                d->m_result = doc.array();
+            }
+            break;
+        }
+        default:
+            d->m_data = data;
+            break;
     }
-
-    d->m_data = data;
 }
 
 void ExtractorEnginePrivate::setContext(KMime::Content *context)

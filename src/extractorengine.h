@@ -21,6 +21,7 @@
 #define EXTRACTORENGINE_H
 
 #include "kitinerary_export.h"
+#include "extractorinput.h"
 
 #include <QString>
 
@@ -156,6 +157,7 @@ public:
      *  Only considered for ical extractors.
      */
     void setCalendar(const QSharedPointer<KCalendarCore::Calendar> &calendar);
+
     /** A MIME part to extract from.
      *  This is assumed to contain one of the supported mime types.
      *  @p content is also set as extraction context (see setContext).
@@ -168,6 +170,11 @@ public:
      *  @param fileName Used as a hint to determine the type, optional.
      */
     void setData(const QByteArray &data, const QString &fileName = {});
+
+    /** Raw data to extract, but with a known type.
+     *  No content type detection is performed here, you should be sure about @p type.
+     */
+    void setData(const QByteArray &data, ExtractorInput::Type type);
 
     /** Sets the MIME part the document we try to extract comes from.
      *  Use this for documents received by email, to provide additional

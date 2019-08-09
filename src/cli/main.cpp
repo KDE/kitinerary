@@ -95,7 +95,7 @@ int main(int argc, char** argv)
     parser.addOption(capOpt);
     QCommandLineOption ctxOpt({QStringLiteral("c"), QStringLiteral("context-date")}, QStringLiteral("ISO date/time for when this data has been received."), QStringLiteral("date"));
     parser.addOption(ctxOpt);
-    QCommandLineOption typeOpt({QStringLiteral("t"), QStringLiteral("type")}, QStringLiteral("Type of the input data [mime, pdf, pkpass, ical, html]."), QStringLiteral("type"));
+    QCommandLineOption typeOpt({QStringLiteral("t"), QStringLiteral("type")}, QStringLiteral("Type of the input data [Email, Pdf, PkPass, ICal, Html]."), QStringLiteral("type"));
     parser.addOption(typeOpt);
 
     parser.addPositionalArgument(QStringLiteral("input"), QStringLiteral("File to extract data from, omit for using stdin."));
@@ -129,18 +129,15 @@ int main(int argc, char** argv)
         }
 
         auto fileName = f.fileName();
-        const auto typeArg = parser.value(typeOpt);
-        if (!typeArg.isEmpty()) {
-            if (typeArg == QLatin1String("mime")) {
-                fileName = QStringLiteral("dummy.eml");
-            } else {
-                fileName = QLatin1String("dummy.") + typeArg;
-            }
-        }
+        const auto typeArg = ExtractorInput::typeFromName(parser.value(typeOpt));
 
         engine.clear();
         engine.setContextDate(contextDt);
-        engine.setData(f.readAll(), fileName);
+        if (typeArg == ExtractorInput::Unknown) {
+            engine.setData(f.readAll(), fileName);
+        } else {
+            engine.setData(f.readAll(), typeArg);
+        }
 
         const auto result = JsonLdDocument::fromJson(engine.extract());
         postproc.process(result);
