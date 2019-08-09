@@ -110,7 +110,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::P
     }
 
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
-        if ((*it).type() != Extractor::PkPass) {
+        if ((*it).type() != ExtractorInput::PkPass) {
             continue;
         }
         for (const auto &filter : (*it).filters()) {

@@ -410,7 +410,7 @@ void ExtractorEnginePrivate::extractCustom()
 {
     for (const auto extractor : m_extractors) {
         switch (extractor->type()) {
-            case Extractor::Text:
+            case ExtractorInput::Text:
                 // running text extractors on PDF or HTML docs is possible,
                 // but only extract the text when really needed
                 if (m_text.isEmpty() && m_pdfDoc) {
@@ -427,27 +427,30 @@ void ExtractorEnginePrivate::extractCustom()
                     executeScript(extractor);
                 }
                 break;
-            case Extractor::Html:
+            case ExtractorInput::Html:
                 if (m_htmlDoc) {
                     executeScript(extractor);
                 }
                 break;
-            case Extractor::Pdf:
+            case ExtractorInput::Pdf:
                 if (m_pdfDoc) {
                     executeScript(extractor);
                 }
                 break;
-            case Extractor::PkPass:
+            case ExtractorInput::PkPass:
                 if (m_pass) {
                     executeScript(extractor);
                 }
                 break;
-            case Extractor::ICal:
+            case ExtractorInput::ICal:
 #ifdef HAVE_KCAL
                 if (m_calendar) {
                     executeScript(extractor);
                 }
 #endif
+                break;
+            default:
+                qCWarning(Log) << "Unexpected extractor type:" << extractor->type();
                 break;
         }
 
@@ -534,25 +537,30 @@ void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
     qCDebug(Log) << "Running custom extractor" << extractor->scriptFileName() << extractor->scriptFunction();
     QJSValueList args;
     switch (extractor->type()) {
-        case Extractor::Text:
+        case ExtractorInput::Text:
             args = {m_text};
             break;
-        case Extractor::Html:
+        case ExtractorInput::Html:
             args = {m_engine.toScriptValue<QObject*>(m_htmlDoc.get())};
             break;
-        case Extractor::Pdf:
+        case ExtractorInput::Pdf:
             args = {m_engine.toScriptValue<QObject*>(m_pdfDoc.get())};
             break;
-        case Extractor::PkPass:
+        case ExtractorInput::PkPass:
             args = {m_engine.toScriptValue<QObject*>(m_pass.get())};
             break;
-        case Extractor::ICal:
+        case ExtractorInput::ICal:
+        {
 #ifdef HAVE_KCAL
             const auto events = m_calendar->events();
             for (const auto &event : events) {
                 processScriptResult(mainFunc.call({m_engine.toScriptValue(*event.data())}));
             }
 #endif
+            break;
+        }
+        default:
+            qCWarning(Log) << "Unexpected extractor input type:" << extractor->type();
             break;
     }
 

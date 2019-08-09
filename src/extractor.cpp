@@ -36,7 +36,7 @@ public:
     QString m_scriptName;
     QString m_scriptFunction;
     std::vector<ExtractorFilter> m_filters;
-    Extractor::Type m_type = Extractor::Text;
+    ExtractorInput::Type m_type = ExtractorInput::Text;
 };
 }
 
@@ -49,15 +49,9 @@ Extractor::~Extractor() = default;
 
 bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
 {
-    const auto type = obj.value(QLatin1String("type")).toString();
-    if (type == QLatin1String("pkpass")) {
-        d->m_type = PkPass;
-    } else if (type == QLatin1String("pdf")) {
-        d->m_type = Pdf;
-    } else if (type == QLatin1String("html")) {
-        d->m_type = Html;
-    } else if (type == QLatin1String("ical")) {
-        d->m_type = ICal;
+    d->m_type = ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString());
+    if (d->m_type == ExtractorInput::Unknown) {
+        d->m_type = ExtractorInput::Text;
     }
 
     const auto filterArray = obj.value(QLatin1String("filter")).toArray();
@@ -83,7 +77,7 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
     return !d->m_filters.empty();
 }
 
-Extractor::Type Extractor::type() const
+ExtractorInput::Type Extractor::type() const
 {
     return d->m_type;
 }

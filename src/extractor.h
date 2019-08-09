@@ -21,6 +21,7 @@
 #define EXTRACTOR_H
 
 #include "kitinerary_export.h"
+#include "extractorinput.h"
 
 #include <memory>
 #include <vector>
@@ -47,12 +48,12 @@ class ExtractorPrivate;
  * - \c script: A JavaScript file to execute.
  * - \c function: The entry point in the above mentioned script, @c main if not specified.
  *
- * The following extractor types are supported:
- * - \c text: plain text, the argument to the script function is a single string.
- * - \c html: HTML documents, the argument to the script function is a HtmlDocument instance.
- * - \c pdf: PDF documents, the argument to the script function is a PdfDocument instance.
- * - \c pkpass: Apple Wallet passes, the argument to the script function is a KPkPass::BoardingPass instance.
- * - \c ical: iCalendar events, the argument to the script function is a KCalendarCore::Event instance.
+ * The following extractor types are supported (see also ExtractorInput::Type):
+ * - \c Text: plain text, the argument to the script function is a single string.
+ * - \c Html: HTML documents, the argument to the script function is a HtmlDocument instance.
+ * - \c Pdf: PDF documents, the argument to the script function is a PdfDocument instance.
+ * - \c PkPass: Apple Wallet passes, the argument to the script function is a KPkPass::BoardingPass instance.
+ * - \c ICal: iCalendar events, the argument to the script function is a KCalendarCore::Event instance.
  *
  * Filter definitions have the following field:
  * - \c type: The type of data this filter applies to, one of: @c Mime, @c PkPass, @c JsonLd, @c Barcode, @c ICal.
@@ -66,13 +67,13 @@ class ExtractorPrivate;
  * @code
  * [
  *   {
- *     "type": "pdf",
+ *     "type": "Pdf",
  *     "filter": [ { "header": "From", "match": "@swiss.com" } ],
  *     "script": "swiss.js",
  *     "function": "parsePdf"
  *   },
  *   {
- *     "type": "pkpass",
+ *     "type": "PkPass",
  *     "filter": [ { "field": "passTypeIdentifier", "match": "pass.booking.swiss.com" } ],
  *     "script": "swiss.js",
  *     "function": "parsePkPass"
@@ -100,16 +101,7 @@ public:
     /** Load meta data from the given JSON object. */
     bool load(const QJsonObject &obj, const QString &baseDir);
 
-    /** Type of data this extractor can process. */
-    enum Type {
-        Text, ///< A plain-text extractor.
-        Html, ///< A HTML document extractor.
-        Pdf, ///< A PDF document extractor.
-        PkPass, ///< A Apple Wallet pass extractor.
-        ICal ///< iCalendar events extractor.
-    };
-    /** Returns the type of this extractor. */
-    Type type() const;
+    ExtractorInput::Type type() const;
 
     /** The JS script containing the code of the extractor. */
     QString scriptFileName() const;
