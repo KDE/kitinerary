@@ -33,14 +33,15 @@ namespace ExtractorInput
     KITINERARY_EXPORT Q_NAMESPACE
     /** Type of extractor input data. */
     enum Type {
-        Unknown = 0,
-        Text,
-        Email,
-        Html,
-        JsonLd,
-        ICal,
-        Pdf,
-        PkPass
+        Unknown = 0, ///< Unknown or not yet detected input type.
+        Text, ///< Plain text document.
+        Barcode, ///< Content of a barcode.
+        Email, ///< An email message.
+        Html, ///< A HTML document.
+        JsonLd, ///< JSON-LD encoded schema.org structured data.
+        ICal, ///< An iCalendar event.
+        Pdf, ///< A PDF file.
+        PkPass ///< An Apple Wallet pass file.
     };
     Q_ENUM_NS(Type)
 

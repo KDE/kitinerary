@@ -20,6 +20,8 @@
 #ifndef EXTRACTORFILTER_H
 #define EXTRACTORFILTER_H
 
+#include "extractorinput.h"
+
 #include <QRegularExpression>
 #include <QByteArray>
 
@@ -34,18 +36,8 @@ public:
     ExtractorFilter();
     ~ExtractorFilter();
 
-    /** Filter type. */
-    enum Type {
-        Undefined,
-        Mime,
-        PkPass,
-        JsonLd,
-        Barcode,
-        ICal
-    };
-
     /** The filter type. */
-    Type type() const;
+    ExtractorInput::Type type() const;
     /** The field to filter on. */
     const char *fieldName() const;
     /** Check if @p data matches this filter. */
@@ -56,7 +48,7 @@ public:
 private:
     QByteArray m_fieldName;
     QRegularExpression m_exp;
-    Type m_type = Undefined;
+    ExtractorInput::Type m_type = ExtractorInput::Unknown;
 };
 
 }

@@ -79,7 +79,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
 
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
         for (const auto &filter : (*it).filters()) {
-            if (filter.type() != ExtractorFilter::Mime) {
+            if (filter.type() != ExtractorInput::Email) {
                 continue;
             }
             auto header = part->headerByType(filter.fieldName());
@@ -114,7 +114,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::P
             continue;
         }
         for (const auto &filter : (*it).filters()) {
-            if (filter.type() != ExtractorFilter::PkPass) {
+            if (filter.type() != ExtractorInput::PkPass) {
                 continue;
             }
 
@@ -154,7 +154,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForJsonLd(const QJ
         const auto id = providerId(val.toObject());
         for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
             for (const auto &filter : (*it).filters()) {
-                if (filter.type() != ExtractorFilter::JsonLd) {
+                if (filter.type() != ExtractorInput::JsonLd) {
                     continue;
                 }
                 if (strcmp(filter.fieldName(), "provider") != 0) {
@@ -177,7 +177,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForBarcode(const Q
 
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
         for (const auto &filter : (*it).filters()) {
-            if (filter.type() == ExtractorFilter::Barcode && filter.matches(code)) {
+            if (filter.type() == ExtractorInput::Barcode && filter.matches(code)) {
                 v.push_back(&(*it));
                 break;
             }
@@ -193,7 +193,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForCalendar(const 
     std::vector<const Extractor *> v;
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
         for (const auto &filter : (*it).filters()) {
-            if (filter.type() != ExtractorFilter::ICal) {
+            if (filter.type() != ExtractorInput::ICal) {
                 continue;
             }
 
