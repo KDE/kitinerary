@@ -43,6 +43,7 @@ private Q_SLOTS:
         QTest::newRow("text") << QByteArray("abc def") << ExtractorInput::Unknown;
         QTest::newRow("ical") << QByteArray("BEGIN:VCALENDAR\nEND:VCALENDAR") << ExtractorInput::ICal;
         QTest::newRow("email") << QByteArray("From: null@kde.org\nTo: foo@localhost\n\n") << ExtractorInput::Email;
+        QTest::newRow("mbox") << QByteArray("From null@kde.org Mon Jan 01 12:34:56 1970\n") << ExtractorInput::Email;
     }
 
     void testTypeFromContent()

@@ -51,13 +51,20 @@ static bool contentStartsWith(const QByteArray &data, const char *str)
 
 static bool contentMightBeEmail(const QByteArray &data)
 {
+    // raw email
     for (const auto c : data) {
         if (std::isalpha(c) || c == '-') {
             continue;
         }
-        return c == ':';
+        if (c == ':') {
+            return true;
+        } else {
+            break;
+        }
     }
-    return false;
+
+    // mbox format
+    return data.startsWith("From ");
 }
 
 
