@@ -86,6 +86,7 @@ public:
 
     ExtractorEngine *q = nullptr;
     std::vector<const Extractor*> m_extractors;
+    std::vector<const Extractor*> m_additionalExtractors;
     JsApi::Barcode *m_barcodeApi = nullptr;
     JsApi::Context *m_context = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
@@ -436,8 +437,12 @@ void ExtractorEnginePrivate::extractDocument()
         m_extractors = m_repo.extractorsForCalendar(m_calendar);
 #endif
     }
-    if (m_extractors.empty() && m_mimeContext) {
-        m_extractors = m_repo.extractorsForMessage(m_mimeContext);
+    if (m_extractors.empty()) {
+        if (m_mimeContext) {
+            m_extractors = m_repo.extractorsForMessage(m_mimeContext);
+        } else {
+            m_extractors = std::move(m_additionalExtractors);
+        }
     }
     extractCustom();
 
@@ -654,4 +659,9 @@ void ExtractorEngine::setUseSeparateProcess(bool separateProcess)
         return;
     }
     d->m_externalExtractor = fi.canonicalFilePath();
+}
+
+void ExtractorEngine::setAdditionalExtractors(std::vector<const Extractor*> &&extractors)
+{
+    d->m_additionalExtractors = std::move(extractors);
 }

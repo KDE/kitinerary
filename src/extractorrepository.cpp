@@ -214,6 +214,17 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForCalendar(const 
 }
 #endif
 
+const Extractor* ExtractorRepository::extractor(const QString &name) const
+{
+    auto it = std::lower_bound(d->m_extractors.begin(), d->m_extractors.end(), name, [](const auto &lhs, const auto &rhs) {
+        return lhs.name() < rhs;
+    });
+    if (it != d->m_extractors.end() && (*it).name() == name) {
+        return &(*it);
+    }
+    return nullptr;
+}
+
 void ExtractorRepositoryPrivate::loadExtractors()
 {
     auto searchDirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
