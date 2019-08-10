@@ -51,6 +51,7 @@
 
 #include <QDateTime>
 #include <QFile>
+#include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -68,7 +69,9 @@ class ExtractorEnginePrivate {
 public:
     void setupEngine();
     void resetContent();
+
     void openDocument();
+    bool shouldExtractExternally() const;
 
     void extractRecursive(KMime::Content *content);
     void extractDocument();
@@ -101,6 +104,7 @@ public:
     QJSEngine m_engine;
     ExtractorRepository m_repo;
     BarcodeDecoder m_barcodeDecoder;
+    QString m_externalExtractor;
 };
 
 template <typename T>
@@ -128,6 +132,12 @@ void ExtractorEnginePrivate::setupEngine()
     m_engine.globalObject().setProperty(QStringLiteral("Barcode"), m_engine.newQObject(m_barcodeApi));
     m_engine.globalObject().setProperty(QStringLiteral("Context"), m_engine.newQObject(m_context));
 }
+
+bool ExtractorEnginePrivate::shouldExtractExternally() const
+{
+    return !m_externalExtractor.isEmpty() && !m_data.isEmpty() && m_inputType == ExtractorInput::Pdf;
+}
+
 
 ExtractorEngine::ExtractorEngine()
     : d(new ExtractorEnginePrivate)
@@ -592,4 +602,20 @@ void ExtractorEnginePrivate::processScriptResult(const QJSValue &result)
     } else {
         qCWarning(Log) << "Invalid result type from script";
     }
+}
+
+void ExtractorEngine::setUseSeparateProcess(bool separateProcess)
+{
+    if (!separateProcess) {
+        d->m_externalExtractor.clear();
+        return;
+    }
+
+    // find external extractor
+    QFileInfo fi(QLatin1String(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5) + QLatin1String("/kitinerary-extractor"));
+    if (!fi.exists() && !fi.isFile() && !fi.isExecutable()) {
+        qCCritical(Log) << "Cannot find external extractor:" << fi.fileName();
+        return;
+    }
+    d->m_externalExtractor = fi.canonicalFilePath();
 }

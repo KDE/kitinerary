@@ -107,6 +107,7 @@ int main(int argc, char** argv)
     }
 
     ExtractorEngine engine;
+    engine.setUseSeparateProcess(false); // we are the external extractor
     ExtractorPostprocessor postproc;
 
     auto contextDt = QDateTime::fromString(parser.value(ctxOpt), Qt::ISODate);

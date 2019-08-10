@@ -192,6 +192,13 @@ public:
      */
     void setContextDate(const QDateTime &dt);
 
+    /** Perform extraction of "risky" content such as PDF files in a separate process.
+     *  This is safer as it isolates the using application from crashes/hangs due to corrupt files.
+     *  It is however slower, and not available on all platforms.
+     *  This is off by default.
+     */
+    void setUseSeparateProcess(bool separateProcess);
+
     /** Perform the actual extraction, and return the JSON-LD data
      *  that has been found.
      */
