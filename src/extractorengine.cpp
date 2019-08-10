@@ -69,7 +69,6 @@ public:
     void setupEngine();
     void resetContent();
 
-    void setContent(KMime::Content *content);
     void setContext(KMime::Content *context);
     void setContextDate(const QDateTime &dt);
 
@@ -82,6 +81,7 @@ public:
     void executeScript(const Extractor *extractor);
     void processScriptResult(const QJSValue &result);
 
+    ExtractorEngine *q = nullptr;
     std::vector<const Extractor*> m_extractors;
     JsApi::Barcode *m_barcodeApi = nullptr;
     JsApi::Context *m_context = nullptr;
@@ -133,6 +133,7 @@ void ExtractorEnginePrivate::setupEngine()
 ExtractorEngine::ExtractorEngine()
     : d(new ExtractorEnginePrivate)
 {
+    d->q = this;
     d->m_genericPdfExtractor.setBarcodeDecoder(&d->m_barcodeDecoder);
     d->setupEngine();
 }
@@ -190,45 +191,6 @@ void ExtractorEngine::setCalendar(const QSharedPointer<KCalendarCore::Calendar> 
 #else
     Q_UNUSED(calendar);
 #endif
-}
-
-void ExtractorEnginePrivate::setContent(KMime::Content *content)
-{
-    setContext(content);
-
-    auto mtType = ExtractorInput::Unknown;
-    auto fnType = ExtractorInput::Unknown;
-    const auto ct = content->contentType(false);
-    if (ct) {
-        mtType = ExtractorInput::typeFromMimeType(QString::fromLatin1(ct->mimeType()));
-        fnType = ExtractorInput::typeFromFileName(ct->name());
-    }
-    const auto cd = content->contentDisposition(false);
-    if (fnType == ExtractorInput::Unknown && cd) {
-        fnType = ExtractorInput::typeFromFileName(cd->filename());
-    }
-
-    if (mtType == ExtractorInput::PkPass || fnType == ExtractorInput::PkPass) {
-        m_pass = make_owning_ptr(KPkPass::Pass::fromData(content->decodedContent()));
-    } else if (mtType == ExtractorInput::ICal || fnType == ExtractorInput::ICal) {
-#ifdef HAVE_KCAL
-        m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone()));
-        KCalendarCore::ICalFormat format;
-        if (format.fromRawString(m_calendar, content->decodedContent())) {
-            m_calendar->setProductId(format.loadedProductId());
-        } else {
-            m_calendar.reset();
-        }
-#endif
-    } else if (mtType == ExtractorInput::Pdf || fnType == ExtractorInput::Pdf) {
-        m_pdfDoc = make_owning_ptr(PdfDocument::fromData(content->decodedContent()));
-    } else if (mtType == ExtractorInput::Html) {
-        m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(content->decodedContent()));
-    } else if ( (mtType == ExtractorInput::Text) || (!ct && content->isTopLevel())) {
-        m_text = content->decodedText();
-    }
-
-    m_mimeContent = (ct && ct->isMultipart()) ? content : nullptr;
 }
 
 void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
@@ -331,7 +293,33 @@ void ExtractorEnginePrivate::setContextDate(const QDateTime &dt)
 
 void ExtractorEngine::setContent(KMime::Content *content)
 {
-    d->setContent(content);
+    setContext(content);
+
+    auto mtType = ExtractorInput::Unknown;
+    auto fnType = ExtractorInput::Unknown;
+    const auto ct = content->contentType(false);
+    if (ct) {
+        mtType = ExtractorInput::typeFromMimeType(QString::fromLatin1(ct->mimeType()));
+        fnType = ExtractorInput::typeFromFileName(ct->name());
+    }
+    const auto cd = content->contentDisposition(false);
+    if (fnType == ExtractorInput::Unknown && cd) {
+        fnType = ExtractorInput::typeFromFileName(cd->filename());
+    }
+
+    if (mtType == ExtractorInput::PkPass || fnType == ExtractorInput::PkPass) {
+        setData(content->decodedContent(), ExtractorInput::PkPass);
+    } else if (mtType == ExtractorInput::ICal || fnType == ExtractorInput::ICal) {
+        setData(content->decodedContent(), ExtractorInput::ICal);
+    } else if (mtType == ExtractorInput::Pdf || fnType == ExtractorInput::Pdf) {
+        setData(content->decodedContent(), ExtractorInput::Pdf);
+    } else if (mtType == ExtractorInput::Html) {
+        setData(content->decodedContent(), ExtractorInput::Html);
+    } else if ( (mtType == ExtractorInput::Text) || (!ct && content->isTopLevel())) {
+        d->m_text = content->decodedText();
+    }
+
+    d->m_mimeContent = (ct && ct->isMultipart()) ? content : nullptr;
 }
 
 void ExtractorEngine::setContext(KMime::Content *context)
@@ -361,7 +349,7 @@ void ExtractorEnginePrivate::extractRecursive(KMime::Content *content)
     const auto children = content->contents();
     for (const auto child : children) {
         resetContent();
-        setContent(child);
+        q->setContent(child);
         if (m_mimeContent) {
             extractRecursive(m_mimeContent);
         } else {
