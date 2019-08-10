@@ -70,6 +70,11 @@ ExtractorRepository::ExtractorRepository()
 ExtractorRepository::~ExtractorRepository() = default;
 ExtractorRepository::ExtractorRepository(KItinerary::ExtractorRepository &&) noexcept = default;
 
+const std::vector<Extractor>& ExtractorRepository::allExtractors() const
+{
+    return d->m_extractors;
+}
+
 std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::Content *part) const
 {
     std::vector<const Extractor *> v;

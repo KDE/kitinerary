@@ -122,6 +122,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         ExtractorEngine
         ExtractorInput
         ExtractorPostprocessor
+        ExtractorRepository
         File
         HtmlDocument
         IataBcbpParser

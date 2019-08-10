@@ -18,8 +18,11 @@
 #include <config-kitinerary.h>
 #include <kitinerary_version.h>
 
+#include <KItinerary/Extractor>
 #include <KItinerary/ExtractorEngine>
+#include <KItinerary/ExtractorInput>
 #include <KItinerary/ExtractorPostprocessor>
+#include <KItinerary/ExtractorRepository>
 #include <KItinerary/JsonLdDocument>
 
 #include <QCommandLineParser>
@@ -77,6 +80,17 @@ static void printCapabilities()
               << "not available"
 #endif
               << std::endl;
+
+    ExtractorRepository repo;
+    std::cout << "Extractor scripts   : " << repo.allExtractors().size() << std::endl;
+}
+
+static void printExtractors()
+{
+    ExtractorRepository repo;
+    for (const auto &ext : repo.allExtractors()) {
+        std::cout << qPrintable(ext.name()) << " (" << qPrintable(ExtractorInput::typeToString(ext.type()))  << ")" << std::endl;
+    }
 }
 
 int main(int argc, char** argv)
@@ -93,6 +107,9 @@ int main(int argc, char** argv)
     parser.addVersionOption();
     QCommandLineOption capOpt({QStringLiteral("capabilities")}, QStringLiteral("Show available extraction capabilities."));
     parser.addOption(capOpt);
+    QCommandLineOption listExtOpt({QStringLiteral("list-extractors")}, QStringLiteral("List all available extractors."));
+    parser.addOption(listExtOpt);
+
     QCommandLineOption ctxOpt({QStringLiteral("c"), QStringLiteral("context-date")}, QStringLiteral("ISO date/time for when this data has been received."), QStringLiteral("date"));
     parser.addOption(ctxOpt);
     QCommandLineOption typeOpt({QStringLiteral("t"), QStringLiteral("type")}, QStringLiteral("Type of the input data [Email, Pdf, PkPass, ICal, Html]."), QStringLiteral("type"));
@@ -103,6 +120,10 @@ int main(int argc, char** argv)
 
     if (parser.isSet(capOpt)) {
         printCapabilities();
+        return 0;
+    }
+    if (parser.isSet(listExtOpt)) {
+        printExtractors();
         return 0;
     }
 

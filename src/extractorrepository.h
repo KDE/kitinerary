@@ -51,13 +51,16 @@ class ExtractorRepositoryPrivate;
  *
  *  See KItinerary::Extractor on where this loads its content from.
  */
-class ExtractorRepository
+class KITINERARY_EXPORT ExtractorRepository
 {
 public:
     ExtractorRepository();
     ~ExtractorRepository();
     ExtractorRepository(ExtractorRepository &&) noexcept;
     ExtractorRepository(const ExtractorRepository &) = delete;
+
+    /** All known extractors. */
+    const std::vector<Extractor>& allExtractors() const;
 
     /** Finds matching extractors for the given message part. */
     std::vector<const Extractor *> extractorsForMessage(KMime::Content *part) const;
