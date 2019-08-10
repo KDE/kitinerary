@@ -101,6 +101,13 @@ public:
     /** Load meta data from the given JSON object. */
     bool load(const QJsonObject &obj, const QString &baseDir);
 
+    /** Identifier for this extractor. */
+    QString name() const;
+    ///@cond internal
+    void setName(const QString &name);
+    ///@endcond
+
+    /** Data type this extractor can process. */
     ExtractorInput::Type type() const;
 
     /** The JS script containing the code of the extractor. */

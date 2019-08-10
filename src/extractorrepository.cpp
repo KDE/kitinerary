@@ -230,20 +230,25 @@ void ExtractorRepositoryPrivate::loadExtractors()
             }
 
             QFileInfo fi(fileName);
+            const auto name = fi.fileName().left(fi.fileName().size() - 5);
 
             if (doc.isObject()) {
                 const auto obj = doc.object();
                 Extractor e;
                 if (e.load(obj, fi.absolutePath())) {
+                    e.setName(name);
                     m_extractors.push_back(std::move(e));
                 }
             } else if (doc.isArray()) {
                 const auto extractorArray = doc.array();
+                int i = 0;
                 for (const auto &v : extractorArray) {
                     Extractor e;
                     if (e.load(v.toObject(), fi.absolutePath())) {
+                        e.setName(name + QLatin1Char(':') + QString::number(i));
                         m_extractors.push_back(std::move(e));
                     }
+                    ++i;
                 }
             } else {
                 qCWarning(Log) << "Invalid extractor meta-data:" << fileName;

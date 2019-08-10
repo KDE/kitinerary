@@ -33,6 +33,7 @@ namespace KItinerary {
 class ExtractorPrivate
 {
 public:
+    QString m_name;
     QString m_scriptName;
     QString m_scriptFunction;
     std::vector<ExtractorFilter> m_filters;
@@ -75,6 +76,16 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
     d->m_scriptFunction = obj.value(QLatin1String("function")).toString(QStringLiteral("main"));
 
     return !d->m_filters.empty();
+}
+
+QString Extractor::name() const
+{
+    return d->m_name;
+}
+
+void Extractor::setName(const QString &name)
+{
+    d->m_name = name;
 }
 
 ExtractorInput::Type Extractor::type() const
