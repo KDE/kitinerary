@@ -250,7 +250,11 @@ void ExtractorRepositoryPrivate::loadExtractors()
                 for (const auto &v : extractorArray) {
                     Extractor e;
                     if (e.load(v.toObject(), fi.absolutePath())) {
-                        e.setName(name + QLatin1Char(':') + QString::number(i));
+                        if (extractorArray.size() > 1) {
+                            e.setName(name + QLatin1Char(':') + QString::number(i));
+                        } else {
+                            e.setName(name);
+                        }
                         m_extractors.push_back(std::move(e));
                     }
                     ++i;
