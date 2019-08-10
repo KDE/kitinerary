@@ -58,6 +58,7 @@
 #include <QLocale>
 #include <QJSEngine>
 #include <QJSValueIterator>
+#include <QProcess>
 
 #include <cstring>
 
@@ -72,6 +73,7 @@ public:
 
     void openDocument();
     bool shouldExtractExternally() const;
+    void extractExternal();
 
     void extractRecursive(KMime::Content *content);
     void extractDocument();
@@ -136,6 +138,29 @@ void ExtractorEnginePrivate::setupEngine()
 bool ExtractorEnginePrivate::shouldExtractExternally() const
 {
     return !m_externalExtractor.isEmpty() && !m_data.isEmpty() && m_inputType == ExtractorInput::Pdf;
+}
+
+void ExtractorEnginePrivate::extractExternal()
+{
+    QProcess proc;
+    proc.setProgram(m_externalExtractor);
+    proc.setArguments({QLatin1String("--type"), ExtractorInput::typeToString(m_inputType),
+                       QLatin1String("--context-date"), m_context->m_senderDate.toString(Qt::ISODate)});
+    proc.start(QProcess::ReadWrite);
+    proc.setProcessChannelMode(QProcess::ForwardedErrorChannel);
+    if (!proc.waitForStarted(1000)) {
+        qCWarning(Log) << "could not start external extractor" << m_externalExtractor << proc.errorString();
+        return;
+    }
+    proc.write(m_data);
+    proc.closeWriteChannel();
+    if (!proc.waitForFinished(15000)) {
+        qCWarning(Log) << "external extractor did not exit cleanly" << m_externalExtractor << proc.errorString();
+        return;
+    }
+
+    const auto res = QJsonDocument::fromJson(proc.readAllStandardOutput()).array();
+    std::copy(res.begin(), res.end(), std::back_inserter(m_result));
 }
 
 
@@ -382,8 +407,8 @@ void ExtractorEnginePrivate::extractDocument()
     }
 
     if (shouldExtractExternally()) {
-        // TODO
-        // return;
+        extractExternal();
+        return;
     }
     openDocument();
 
