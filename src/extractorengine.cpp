@@ -68,6 +68,7 @@ class ExtractorEnginePrivate {
 public:
     void setupEngine();
     void resetContent();
+    void openDocument();
 
     void extractRecursive(KMime::Content *content);
     void extractDocument();
@@ -85,6 +86,7 @@ public:
     JsApi::JsonLd *m_jsonLdApi = nullptr;
     QString m_text;
     QByteArray m_data;
+    ExtractorInput::Type m_inputType = ExtractorInput::Unknown;
     std::unique_ptr<HtmlDocument, std::function<void(HtmlDocument*)>> m_htmlDoc;
     std::unique_ptr<PdfDocument, std::function<void(PdfDocument*)>> m_pdfDoc;
     std::unique_ptr<KPkPass::Pass, std::function<void(KPkPass::Pass*)>> m_pass;
@@ -152,6 +154,7 @@ void ExtractorEnginePrivate::resetContent()
 {
     m_text.clear();
     m_data.clear();
+    m_inputType = ExtractorInput::Unknown;
     m_pdfDoc.reset();
     m_htmlDoc.reset();
     m_pass.reset();
@@ -199,7 +202,6 @@ void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
 
     const auto nameType = ExtractorInput::typeFromFileName(fileName);
     const auto contentType = ExtractorInput::typeFromContent(data);
-    qWarning() << nameType << contentType << fileName;
     setData(data, nameType == ExtractorInput::Unknown ? contentType : nameType);
 }
 
@@ -210,54 +212,70 @@ void ExtractorEngine::setData(const QByteArray &data, ExtractorInput::Type type)
         return;
     }
 
-    switch (type) {
+    d->m_data = data;
+    d->m_inputType = type;
+}
+
+void ExtractorEnginePrivate::openDocument()
+{
+    if (m_data.isEmpty())  {
+        return;
+    }
+
+    switch (m_inputType) {
         case ExtractorInput::PkPass:
-            d->m_pass = make_owning_ptr(KPkPass::Pass::fromData(data));
+            m_pass = make_owning_ptr(KPkPass::Pass::fromData(m_data));
+            m_data.clear();
             break;
         case ExtractorInput::Pdf:
-            d->m_pdfDoc = make_owning_ptr(PdfDocument::fromData(data));
+            m_pdfDoc = make_owning_ptr(PdfDocument::fromData(m_data));
+            m_data.clear();
             break;
         case ExtractorInput::Html:
-            d->m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(data));
+            m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(m_data));
+            m_data.clear();
             break;
         case ExtractorInput::ICal:
         {
 #ifdef HAVE_KCAL
-            d->m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone()));
+            m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone()));
             KCalendarCore::ICalFormat format;
-            if (format.fromRawString(d->m_calendar, data)) {
-                d->m_calendar->setProductId(format.loadedProductId());
+            if (format.fromRawString(m_calendar, m_data)) {
+                m_calendar->setProductId(format.loadedProductId());
                 break;
             }
             qCDebug(Log) << "Failed to parse iCal content.";
-            d->m_calendar.reset();
+            m_calendar.reset();
 #else
             qCDebug(Log) << "Trying to exctract ical file, but ical support is not enabled.";
 #endif
+            m_data.clear();
             break;
         }
         case ExtractorInput::Text:
-            d->m_text = QString::fromUtf8(data);
+            m_text = QString::fromUtf8(m_data);
+            m_data.clear();
             break;
         case ExtractorInput::Email:
-            d->m_ownedMimeContent.reset(new KMime::Message);
-            d->m_ownedMimeContent->setContent(KMime::CRLFtoLF(data));
-            d->m_ownedMimeContent->parse();
-            setContent(d->m_ownedMimeContent.get());
+            m_ownedMimeContent.reset(new KMime::Message);
+            m_ownedMimeContent->setContent(KMime::CRLFtoLF(m_data));
+            m_ownedMimeContent->parse();
+            m_data.clear();
+            q->setContent(m_ownedMimeContent.get());
             break;
         case ExtractorInput::JsonLd:
         {
             // pass through JSON data, so the using code can apply post-processing to that
-            const auto doc = QJsonDocument::fromJson(data);
+            const auto doc = QJsonDocument::fromJson(m_data);
             if (doc.isObject()) {
-                d->m_result.push_back(doc.object());
+                m_result.push_back(doc.object());
             } else if (doc.isArray()) {
-                d->m_result = doc.array();
+                m_result = doc.array();
             }
+            m_data.clear();
             break;
         }
         default:
-            d->m_data = data;
             break;
     }
 }
@@ -321,6 +339,7 @@ void ExtractorEngine::setContextDate(const QDateTime &dt)
 
 QJsonArray ExtractorEngine::extract()
 {
+    d->openDocument();
     if (d->m_mimeContent) {
         d->extractRecursive(d->m_mimeContent);
     } else {
@@ -337,6 +356,7 @@ void ExtractorEnginePrivate::extractRecursive(KMime::Content *content)
     for (const auto child : children) {
         resetContent();
         q->setContent(child);
+        openDocument();
         if (m_mimeContent) {
             extractRecursive(m_mimeContent);
         } else {
@@ -353,6 +373,8 @@ void ExtractorEnginePrivate::extractRecursive(KMime::Content *content)
 
 void ExtractorEnginePrivate::extractDocument()
 {
+    openDocument();
+
     // structured content
     extractStructured();
     if (!m_result.isEmpty()) {
