@@ -118,6 +118,8 @@ int main(int argc, char** argv)
     parser.addOption(ctxOpt);
     QCommandLineOption typeOpt({QStringLiteral("t"), QStringLiteral("type")}, QStringLiteral("Type of the input data [Email, Pdf, PkPass, ICal, Html]."), QStringLiteral("type"));
     parser.addOption(typeOpt);
+    QCommandLineOption extOpt({QStringLiteral("e"), QStringLiteral("extractors")}, QStringLiteral("Additional extractors to apply."), QStringLiteral("extractors"));
+    parser.addOption(extOpt);
 
     parser.addPositionalArgument(QStringLiteral("input"), QStringLiteral("File to extract data from, omit for using stdin."));
     parser.process(app);

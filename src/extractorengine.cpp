@@ -142,10 +142,19 @@ bool ExtractorEnginePrivate::shouldExtractExternally() const
 
 void ExtractorEnginePrivate::extractExternal()
 {
+    m_extractors.clear();
+    if (m_mimeContext) {
+        m_extractors = m_repo.extractorsForMessage(m_mimeContext);
+    }
+    QStringList extNames;
+    extNames.reserve(m_extractors.size());
+    std::transform(m_extractors.begin(), m_extractors.end(), std::back_inserter(extNames), [](const auto ext) { return ext->name(); });
+
     QProcess proc;
     proc.setProgram(m_externalExtractor);
     proc.setArguments({QLatin1String("--type"), ExtractorInput::typeToString(m_inputType),
-                       QLatin1String("--context-date"), m_context->m_senderDate.toString(Qt::ISODate)});
+                       QLatin1String("--context-date"), m_context->m_senderDate.toString(Qt::ISODate),
+                       QLatin1String("--extractors"), extNames.join(QLatin1Char(';'))});
     proc.start(QProcess::ReadWrite);
     proc.setProcessChannelMode(QProcess::ForwardedErrorChannel);
     if (!proc.waitForStarted(1000)) {
