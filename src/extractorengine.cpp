@@ -69,9 +69,6 @@ public:
     void setupEngine();
     void resetContent();
 
-    void setContext(KMime::Content *context);
-    void setContextDate(const QDateTime &dt);
-
     void extractRecursive(KMime::Content *content);
     void extractDocument();
     void extractStructured();
@@ -265,32 +262,6 @@ void ExtractorEngine::setData(const QByteArray &data, ExtractorInput::Type type)
     }
 }
 
-void ExtractorEnginePrivate::setContext(KMime::Content *context)
-{
-    m_mimeContext = context;
-    if (context) {
-        auto dateHdr = context->header<KMime::Headers::Date>();
-        while (!dateHdr && context->parent()) {
-            context = context->parent();
-            dateHdr = context->header<KMime::Headers::Date>();
-        }
-        if (dateHdr) {
-            setContextDate(dateHdr->dateTime());
-            return;
-        }
-    }
-
-    setContextDate({});
-}
-
-void ExtractorEnginePrivate::setContextDate(const QDateTime &dt)
-{
-    m_context->m_senderDate = dt;
-    m_jsonLdApi->setContextDate(dt);
-    m_barcodeApi->setContextDate(dt);
-    m_genericPdfExtractor.setContextDate(dt);
-}
-
 void ExtractorEngine::setContent(KMime::Content *content)
 {
     setContext(content);
@@ -324,12 +295,28 @@ void ExtractorEngine::setContent(KMime::Content *content)
 
 void ExtractorEngine::setContext(KMime::Content *context)
 {
-    d->setContext(context);
+    d->m_mimeContext = context;
+    if (context) {
+        auto dateHdr = context->header<KMime::Headers::Date>();
+        while (!dateHdr && context->parent()) {
+            context = context->parent();
+            dateHdr = context->header<KMime::Headers::Date>();
+        }
+        if (dateHdr) {
+            setContextDate(dateHdr->dateTime());
+            return;
+        }
+    }
+
+    setContextDate({});
 }
 
 void ExtractorEngine::setContextDate(const QDateTime &dt)
 {
-    d->setContextDate(dt);
+    d->m_context->m_senderDate = dt;
+    d->m_jsonLdApi->setContextDate(dt);
+    d->m_barcodeApi->setContextDate(dt);
+    d->m_genericPdfExtractor.setContextDate(dt);
 }
 
 QJsonArray ExtractorEngine::extract()
