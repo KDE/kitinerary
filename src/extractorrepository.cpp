@@ -231,9 +231,13 @@ void ExtractorRepositoryPrivate::loadExtractors()
     searchDirs += QStringLiteral(":/org.kde.pim");
 
     for (const auto &dir : qAsConst(searchDirs)) {
-        QDirIterator it(dir + QStringLiteral("/kitinerary/extractors"), {QStringLiteral("*.json")}, QDir::Files);
+        QDirIterator it(dir + QStringLiteral("/kitinerary/extractors"), QDir::Files);
         while (it.hasNext()) {
             const auto fileName = it.next();
+            if (!fileName.endsWith(QLatin1String(".json"))) {
+                continue;
+            }
+
             QFile file(fileName);
             if (!file.open(QFile::ReadOnly)) {
                 continue;
