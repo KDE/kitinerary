@@ -31,7 +31,6 @@ function parseHtml(doc)
     res.reservationFor.geo.latitude = text.match(/Latitude:\s(-?\d+.\d+)/)[1] * 1.0;
     res.reservationFor.geo.longitude = text.match(/Longitude:\s(-?\d+.\d+)/)[1] * 1.0;
 
-    console.log(text);
     var addr = text.match(/Lodging information[\n\s]+(.*?)\n[\n\s]+(.*?)\n[\n\s]+(.*?)\n[\n\s]+Telephone: (.*?)\n.*\n*\s+Email:\s+(.*?)\n\s+Internet:\s+(.*?)\n/);
     res.reservationFor.address.streetAddress = addr[2];
     res.reservationFor.address.addressLocality = addr[3];
