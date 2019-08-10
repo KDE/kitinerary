@@ -96,6 +96,8 @@ public:
     Extractor(const Extractor &) = delete;
     Extractor(Extractor &&) noexcept;
     ~Extractor();
+    Extractor& operator=(const Extractor&) = delete;
+    Extractor& operator=(Extractor&&);
     ///@endcond
 
     /** Load meta data from the given JSON object. */

@@ -47,6 +47,7 @@ Extractor::Extractor()
 }
 Extractor::Extractor(Extractor &&) noexcept = default;
 Extractor::~Extractor() = default;
+Extractor& Extractor::operator=(Extractor &&) = default;
 
 bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
 {

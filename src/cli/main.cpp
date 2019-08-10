@@ -89,7 +89,11 @@ static void printExtractors()
 {
     ExtractorRepository repo;
     for (const auto &ext : repo.allExtractors()) {
-        std::cout << qPrintable(ext.name()) << " (" << qPrintable(ExtractorInput::typeToString(ext.type()))  << ")" << std::endl;
+        std::cout << qPrintable(ext.name()) << " (" << qPrintable(ExtractorInput::typeToString(ext.type()));
+        if (!ext.scriptFileName().isEmpty()) {
+            std::cout << ", " << qPrintable(ext.scriptFileName()) << ":" << qPrintable(ext.scriptFunction());
+        }
+        std::cout << ")" << std::endl;
     }
 }
 

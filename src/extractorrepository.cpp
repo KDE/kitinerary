@@ -49,6 +49,7 @@ class ExtractorRepositoryPrivate {
 public:
     ExtractorRepositoryPrivate();
     void loadExtractors();
+    void addExtractor(Extractor &&e);
 
     std::vector<Extractor> m_extractors;
 };
@@ -242,7 +243,7 @@ void ExtractorRepositoryPrivate::loadExtractors()
                 Extractor e;
                 if (e.load(obj, fi.absolutePath())) {
                     e.setName(name);
-                    m_extractors.push_back(std::move(e));
+                    addExtractor(std::move(e));
                 }
             } else if (doc.isArray()) {
                 const auto extractorArray = doc.array();
@@ -255,7 +256,7 @@ void ExtractorRepositoryPrivate::loadExtractors()
                         } else {
                             e.setName(name);
                         }
-                        m_extractors.push_back(std::move(e));
+                        addExtractor(std::move(e));
                     }
                     ++i;
                 }
@@ -264,5 +265,15 @@ void ExtractorRepositoryPrivate::loadExtractors()
                 continue;
             }
         }
+    }
+}
+
+void ExtractorRepositoryPrivate::addExtractor(Extractor &&e)
+{
+    auto it = std::lower_bound(m_extractors.begin(), m_extractors.end(), e, [](const auto &lhs, const auto &rhs) {
+        return lhs.name() < rhs.name();
+    });
+    if (it == m_extractors.end() || (*it).name() != e.name()) {
+        m_extractors.insert(it, std::move(e));
     }
 }
