@@ -349,13 +349,7 @@ void ExtractorEngine::setContextDate(const QDateTime &dt)
 
 QJsonArray ExtractorEngine::extract()
 {
-    d->openDocument();
-    if (d->m_mimeContent) {
-        d->extractRecursive(d->m_mimeContent);
-    } else {
-        d->extractDocument();
-    }
-
+    d->extractDocument();
     return d->m_result;
 }
 
@@ -366,12 +360,7 @@ void ExtractorEnginePrivate::extractRecursive(KMime::Content *content)
     for (const auto child : children) {
         resetContent();
         q->setContent(child);
-        openDocument();
-        if (m_mimeContent) {
-            extractRecursive(m_mimeContent);
-        } else {
-            extractDocument();
-        }
+        extractDocument();
 
         // the extractor takes early exits if data has been found, so make it look like that isn't the case
         std::copy(m_result.begin(), m_result.end(), std::back_inserter(aggregatedResult));
@@ -383,6 +372,19 @@ void ExtractorEnginePrivate::extractRecursive(KMime::Content *content)
 
 void ExtractorEnginePrivate::extractDocument()
 {
+    // recurse into email MIME nodes if needed
+    if (m_inputType == ExtractorInput::Email) {
+        openDocument();
+    }
+    if (m_mimeContent) {
+        extractRecursive(m_mimeContent);
+        return;
+    }
+
+    if (shouldExtractExternally()) {
+        // TODO
+        // return;
+    }
     openDocument();
 
     // structured content
