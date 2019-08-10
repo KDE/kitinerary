@@ -77,12 +77,24 @@ std::shared_ptr<const ZXing::BitMatrix> QImagePureBinarizer::getBlackMatrix() co
     if (!m_bitmap) {
         const auto w = width();
         const auto h = height();
+        const auto bpp = m_img.bytesPerLine() / (w - 2);
 
         auto bitmap = std::make_shared<BitMatrix>(w, h);
-        for (int x = 1; x < w - 1; ++x) {
+        // fast path for grayscale, avoids the conversion to qRGB inside pixel() and uses the faster scanline access
+        if (bpp == 1) {
             for (int y = 1; y < h - 1; ++y) {
-                if (qGray(m_img.pixel(x - 1, y - 1)) < 127)
-                    bitmap->set(x, y);
+                const auto scanline = m_img.scanLine(y - 1);
+                for (int x = 1; x < w - 1; ++x) {
+                    if (scanline[(x - 1)] < 127)
+                        bitmap->set(x, y);
+                }
+            }
+        } else {
+            for (int x = 1; x < w - 1; ++x) {
+                for (int y = 1; y < h - 1; ++y) {
+                    if (qGray(m_img.pixel(x - 1, y - 1)) < 127)
+                        bitmap->set(x, y);
+                }
             }
         }
 
