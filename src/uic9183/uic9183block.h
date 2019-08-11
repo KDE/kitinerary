@@ -29,6 +29,7 @@ class KITINERARY_EXPORT Uic9183Block
 {
 public:
     Uic9183Block();
+    explicit Uic9183Block(const QByteArray &data, int offset);
     Uic9183Block(const Uic9183Block&);
     Uic9183Block(Uic9183Block&&);
     Uic9183Block& operator=(const Uic9183Block&);
@@ -58,9 +59,6 @@ public:
     Uic9183Block nextBlock() const;
 
 private:
-    friend class Uic9183Parser;
-    Uic9183Block(const QByteArray &data, int offset);
-
     QByteArray m_data;
     int m_offset = 0;
 };

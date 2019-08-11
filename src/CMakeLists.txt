@@ -176,6 +176,7 @@ ecm_generate_headers(KItinerary_Pdf_FORWARDING_HEADERS
 ecm_generate_headers(KItinerary_Uic9183_FORWARDING_HEADERS
     HEADER_NAMES
         Rct2Ticket
+        Uic9183Block
         Uic9183Parser
         Uic9183TicketLayout
     PREFIX KItinerary

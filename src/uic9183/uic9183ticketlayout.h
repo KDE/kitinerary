@@ -27,6 +27,7 @@ class QSize;
 
 namespace KItinerary {
 
+class Uic9183Block;
 class Uic9183TicketLayoutPrivate;
 
 /** Parser for a U_TLAY block in a UIC 918-3 ticket. */
@@ -41,10 +42,9 @@ public:
     /** Parse U_TLAY ticket layout block in @p data.
      *  It's the callers responsibility to ensure @p data outlives this instance, the data
      *  is not copied.
-     *  @param data UIC 918.3 U_TLAY data block
-     *  @param size The length of the U_TLAY data block
+     *  @param block A UIC 918.3 U_TLAY data block
      */
-    Uic9183TicketLayout(const char *data, int size);
+    Uic9183TicketLayout(const Uic9183Block &block);
     Uic9183TicketLayout(const Uic9183TicketLayout&);
     ~Uic9183TicketLayout();
     Uic9183TicketLayout& operator=(const Uic9183TicketLayout&);

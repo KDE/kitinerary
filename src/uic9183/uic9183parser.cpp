@@ -348,7 +348,7 @@ QString Uic9183Parser::seatingType() const
 Uic9183TicketLayout Uic9183Parser::ticketLayout() const
 {
     const auto block = findBlock("U_TLAY");
-    Uic9183TicketLayout layout(block.data(), block.size());
+    Uic9183TicketLayout layout(block);
     return layout;
 }
 

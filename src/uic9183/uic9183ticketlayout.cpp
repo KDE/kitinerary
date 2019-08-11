@@ -16,6 +16,7 @@
 */
 
 #include "uic9183ticketlayout.h"
+#include "uic9183block.h"
 #include "logging.h"
 
 #include <QDateTime>
@@ -176,9 +177,7 @@ Uic9183TicketLayoutField Uic9183TicketLayoutPrivate::firstField() const
 }
 
 
-// 6x "U_TLAY"
-// 2x version (always "01")
-// 4x record length, numbers as ASCII text
+// "U_TLAY" Block
 // 4x ticket layout type (e.g. "RCT2")
 // 4x field count
 // Nx fields (see Uic9183TicketLayoutField)
@@ -187,11 +186,11 @@ Uic9183TicketLayout::Uic9183TicketLayout()
 {
 }
 
-Uic9183TicketLayout::Uic9183TicketLayout(const char *data, int size)
+Uic9183TicketLayout::Uic9183TicketLayout(const Uic9183Block &block)
     : d(new Uic9183TicketLayoutPrivate)
 {
-    d->data = data;
-    d->size = size;
+    d->data = block.data();
+    d->size = block.size();
 
 #if 0
     std::vector<QString> out;
