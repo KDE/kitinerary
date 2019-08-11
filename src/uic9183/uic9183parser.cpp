@@ -135,7 +135,7 @@ Vendor0080BLSubBlock Vendor0080BLBlock::findSubBlock(const char id[3]) const
 
 int Vendor0080BLBlock::subblockOffset(const Uic9183Block& block)
 {
-    const auto certCount = *(block.data() + 14) - '0';
+    const auto certCount = *(block.content() + 2) - '0';
     const auto certSize = block.version() == 2 ? 46 : 26;
     return 15 + certSize * certCount + 2;
 }
@@ -143,18 +143,15 @@ int Vendor0080BLBlock::subblockOffset(const Uic9183Block& block)
 
 Uic9183Block Uic9183ParserPrivate::findBlock(const char name[6]) const
 {
-    // 6x header name
-    // 2x block version
-    // 4x block size as string, including the header
-
     for (int i = 0; i < m_payload.size() - 12;) {
-        const int blockSize = m_payload.mid(i + 8, 4).toInt();
-        if (blockSize + i > m_payload.size()) {
+        Uic9183Block block(m_payload, i);
+        const int blockSize = block.size();
+        if (blockSize + i > m_payload.size() || !blockSize) {
             qCWarning(Log) << "UIC 918-3 block size exceeds payload size.";
             return {};
         }
-        if (strncmp(name, m_payload.data() + i, 6) == 0) {
-            return {m_payload.data() + i, blockSize};
+        if (strncmp(name, block.name(), 6) == 0) {
+            return block;
         }
         i += blockSize;
     }
@@ -234,7 +231,7 @@ bool Uic9183Parser::isValid() const
     return !d->m_payload.isEmpty();
 }
 
-// U_HEAD (version 1, size 53)
+// U_HEAD Block (version 1, size 53)
 // 4x issuing carrier id
 // 6x PNR
 // 20x unique ticket key
@@ -249,7 +246,7 @@ QString Uic9183Parser::pnr() const
     if (b.isNull() || b.version() != 1 || b.size() != 53) {
         return {};
     }
-    return QString::fromUtf8(b.data() + 16, 6);
+    return QString::fromUtf8(b.content() + 4, 6);
 }
 
 QString Uic9183Parser::carrierId() const
@@ -258,7 +255,7 @@ QString Uic9183Parser::carrierId() const
     if (b.isNull() || b.version() != 1 || b.size() != 53) {
         return {};
     }
-    return QString::fromUtf8(b.data() + 12, 4);
+    return QString::fromUtf8(b.content(), 4);
 }
 
 Person Uic9183Parser::person() const

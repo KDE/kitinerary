@@ -17,8 +17,6 @@
 
 #include "uic9183block.h"
 
-#include <QByteArray>
-
 using namespace KItinerary;
 
 Uic9183Block::Uic9183Block() = default;
@@ -27,28 +25,59 @@ Uic9183Block::Uic9183Block(Uic9183Block&&) = default;
 Uic9183Block& Uic9183Block::operator=(const Uic9183Block&) = default;
 Uic9183Block& Uic9183Block::operator=(Uic9183Block&&) = default;
 
-Uic9183Block::Uic9183Block(const char* data, int size)
+
+Uic9183Block::Uic9183Block(const QByteArray &data, int offset)
     : m_data(data)
-    , m_size(size)
+    , m_offset(offset)
 {
+}
+
+// 6x header name
+// 2x block version
+// 4x block size as string, including the header
+// followed by block payload (as 12 byte offset from header start)
+
+const char* Uic9183Block::name() const
+{
+    if (isNull()) {
+        return nullptr;
+    }
+    return m_data.constData() + m_offset;
+}
+
+const char* Uic9183Block::content() const
+{
+    if (isNull()) {
+        return nullptr;
+    }
+    return m_data.constData() + m_offset + 12;
 }
 
 const char* Uic9183Block::data() const
 {
-    return m_data;
+    if (isNull()) {
+        return nullptr;
+    }
+    return m_data.constData() + m_offset;
 }
 
 int Uic9183Block::size() const
 {
-    return m_size;
+    if (m_data.size() < m_offset + 12) {
+        return 0;
+    }
+    return m_data.mid(m_offset + 8, 4).toInt();
 }
 
 int Uic9183Block::version() const
 {
-    return QByteArray(m_data + 6, 2).toInt();
+    if (isNull()) {
+        return 0;
+    }
+    return m_data.mid(m_offset + 6, 2).toInt();
 }
 
 bool Uic9183Block::isNull() const
 {
-    return !m_data || m_size <= 12;
+    return m_data.size() < m_offset + 12;
 }

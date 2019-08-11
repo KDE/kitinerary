@@ -20,6 +20,8 @@
 
 #include "kitinerary_export.h"
 
+#include <QByteArray>
+
 namespace KItinerary {
 
 /** A data block from a UIC 918.3 ticket. */
@@ -27,14 +29,17 @@ class KITINERARY_EXPORT Uic9183Block
 {
 public:
     Uic9183Block();
-    Uic9183Block(const char *data, int size);
     Uic9183Block(const Uic9183Block&);
     Uic9183Block(Uic9183Block&&);
     Uic9183Block& operator=(const Uic9183Block&);
     Uic9183Block& operator=(Uic9183Block&&);
 
+    /** Returns the block name (6 characters). */
+    const char *name() const;
+    /** Returns the payload data (not including the block header). */
+    const char *content() const;
     /** Returns the raw payload data. */
-    const char *data() const;
+    KITINERARY_DEPRECATED const char *data() const;
     /** Returns the size of the raw payload data. */
     int size() const;
     /** Returns the version number of this block. */
@@ -44,8 +49,11 @@ public:
     bool isNull() const;
 
 private:
-    const char *m_data = nullptr;
-    int m_size = 0;
+    friend class Uic9183ParserPrivate;
+    Uic9183Block(const QByteArray &data, int offset);
+
+    QByteArray m_data;
+    int m_offset = 0;
 };
 
 }
