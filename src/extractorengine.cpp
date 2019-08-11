@@ -32,7 +32,7 @@
 #include "logging.h"
 #include "pdf/pdfdocument.h"
 #include "structureddataextractor_p.h"
-#include "uic9183parser.h"
+#include "uic9183/uic9183parser.h"
 
 #include "jsapi/barcode.h"
 #include "jsapi/context.h"

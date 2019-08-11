@@ -16,8 +16,9 @@
 */
 
 #include "genericuic918extractor_p.h"
-#include "uic9183parser.h"
-#include "rct2ticket.h"
+
+#include <KItinerary/Uic9183Parser>
+#include <KItinerary/Rct2Ticket>
 
 #include <QDateTime>
 #include <QJsonArray>

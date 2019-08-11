@@ -39,6 +39,10 @@ set(kitinerary_lib_srcs
     pdf/pdfvectorpicture.cpp
     pdf/popplerutils.cpp
 
+    uic9183/rct2ticket.cpp
+    uic9183/uic9183parser.cpp
+    uic9183/uic9183ticketlayout.cpp
+
     barcodedecoder.cpp
     calendarhandler.cpp
     documentutil.cpp
@@ -61,12 +65,9 @@ set(kitinerary_lib_srcs
     locationutil.cpp
     mergeutil.cpp
     qimagepurebinarizer.cpp
-    rct2ticket.cpp
     sortutil.cpp
     stringutil.cpp
     structureddataextractor.cpp
-    uic9183parser.cpp
-    uic9183ticketlayout.cpp
 )
 qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
@@ -129,10 +130,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         JsonLdDocument
         LocationUtil
         MergeUtil
-        Rct2Ticket
         SortUtil
-        Uic9183Parser
-        Uic9183TicketLayout
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS
 )
@@ -174,6 +172,15 @@ ecm_generate_headers(KItinerary_Pdf_FORWARDING_HEADERS
     REQUIRED_HEADERS KItinerary_Pdf_HEADERS
     RELATIVE pdf
 )
+ecm_generate_headers(KItinerary_Uic9183_FORWARDING_HEADERS
+    HEADER_NAMES
+        Rct2Ticket
+        Uic9183Parser
+        Uic9183TicketLayout
+    PREFIX KItinerary
+    REQUIRED_HEADERS KItinerary_Uic9183_HEADERS
+    RELATIVE uic9183
+)
 
 install(TARGETS KPimItinerary EXPORT KPimItineraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
@@ -181,6 +188,7 @@ install(FILES
     ${KItinerary_KnowledgeDb_FORWARDING_HEADERS}
     ${KItinerary_Datatypes_FORWARDING_HEADERS}
     ${KItinerary_Pdf_FORWARDING_HEADERS}
+    ${KItinerary_Uic9183_FORWARDING_HEADERS}
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/KItinerary
 )
 install(FILES
@@ -189,6 +197,7 @@ install(FILES
     ${KItinerary_Datatypes_HEADERS}
     ${KItinerary_KnowledgeDb_HEADERS}
     ${KItinerary_Pdf_HEADERS}
+    ${KItinerary_Uic9183_HEADERS}
     ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/kitinerary
 )
