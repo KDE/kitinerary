@@ -112,16 +112,16 @@ bool Vendor0080BLBlock::isValid() const
 Vendor0080BLSubBlock Vendor0080BLBlock::findSubBlock(const char id[3]) const
 {
     for (int i = subblockOffset(m_block); i < m_block.size();) {
-        if (*(m_block.data() + i) != 'S') {
+        if (*(m_block.content() + i) != 'S') {
             qCWarning(Log) << "0080BL invalid S-block format.";
             return {};
         }
-        const int subblockSize = QByteArray(m_block.data() + i + 4, 4).toInt();
+        const int subblockSize = QByteArray(m_block.content() + i + 4, 4).toInt();
         if (subblockSize + i > m_block.size()) {
             qCWarning(Log) << "0080BL S-block size exceeds block size.";
             return {};
         }
-        Vendor0080BLSubBlock sb(m_block.data() + i, subblockSize);
+        Vendor0080BLSubBlock sb(m_block.content() + i, subblockSize);
         if (!sb.isNull() && strncmp(sb.id(), id, 3) == 0) {
             return sb;
         }
@@ -134,7 +134,7 @@ int Vendor0080BLBlock::subblockOffset(const Uic9183Block& block)
 {
     const auto certCount = *(block.content() + 2) - '0';
     const auto certSize = block.version() == 2 ? 46 : 26;
-    return 15 + certSize * certCount + 2;
+    return 3 + certSize * certCount + 2;
 }
 
 
