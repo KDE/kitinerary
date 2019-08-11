@@ -42,8 +42,10 @@ public:
     const char *content() const;
     /** Returns the raw payload data. */
     KITINERARY_DEPRECATED const char *data() const;
-    /** Returns the size of the raw payload data. */
+    /** Returns the size of the entire block data. */
     int size() const;
+    /** Returns the size of the content data. */
+    int contentSize() const;
     /** Returns the version number of this block. */
     int version() const;
 

@@ -98,7 +98,7 @@ Vendor0080BLBlock::Vendor0080BLBlock(const Uic9183Block &block)
         qCWarning(Log) << "Unsupported version of 0080BL vendor block." << block.version();
         return;
     }
-    if (block.isNull() || block.size() < 15 || subblockOffset(block) > block.size()) {
+    if (block.isNull() || block.contentSize() < 3 || subblockOffset(block) > block.size()) {
         return;
     }
     m_block = block;

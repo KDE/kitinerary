@@ -19,6 +19,14 @@
 
 using namespace KItinerary;
 
+enum {
+    BlockHeaderSize = 12,
+    BlockVersionOffset = 6,
+    BlockVersionSize = 2,
+    BlockSizeOffset = 8,
+    BlockSizeSize = 4,
+};
+
 Uic9183Block::Uic9183Block() = default;
 Uic9183Block::Uic9183Block(const Uic9183Block&) = default;
 Uic9183Block::Uic9183Block(Uic9183Block&&) = default;
@@ -50,7 +58,7 @@ const char* Uic9183Block::content() const
     if (isNull()) {
         return nullptr;
     }
-    return m_data.constData() + m_offset + 12;
+    return m_data.constData() + m_offset + BlockHeaderSize;
 }
 
 const char* Uic9183Block::data() const
@@ -63,10 +71,15 @@ const char* Uic9183Block::data() const
 
 int Uic9183Block::size() const
 {
-    if (m_data.size() < m_offset + 12) {
+    if (m_data.size() < m_offset + BlockHeaderSize) {
         return 0;
     }
-    return m_data.mid(m_offset + 8, 4).toInt();
+    return m_data.mid(m_offset + BlockSizeOffset, BlockSizeSize).toInt();
+}
+
+int Uic9183Block::contentSize() const
+{
+    return std::max(0, size() - BlockHeaderSize);
 }
 
 int Uic9183Block::version() const
@@ -74,12 +87,12 @@ int Uic9183Block::version() const
     if (isNull()) {
         return 0;
     }
-    return m_data.mid(m_offset + 6, 2).toInt();
+    return m_data.mid(m_offset + BlockVersionOffset, BlockVersionSize).toInt();
 }
 
 bool Uic9183Block::isNull() const
 {
-    return (m_data.size() < m_offset + 12) || (size() > m_data.size() + m_offset);
+    return (m_data.size() < m_offset + BlockHeaderSize) || (size() > m_data.size() + m_offset);
 }
 
 Uic9183Block Uic9183Block::nextBlock() const
