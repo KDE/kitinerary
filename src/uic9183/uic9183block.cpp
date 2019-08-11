@@ -79,5 +79,10 @@ int Uic9183Block::version() const
 
 bool Uic9183Block::isNull() const
 {
-    return m_data.size() < m_offset + 12;
+    return (m_data.size() < m_offset + 12) || (size() > m_data.size() + m_offset);
+}
+
+Uic9183Block Uic9183Block::nextBlock() const
+{
+    return Uic9183Block(m_data, m_offset + size());
 }

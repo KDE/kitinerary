@@ -30,6 +30,7 @@ class QDateTime;
 namespace KItinerary {
 
 class Rct2Ticket;
+class Uic9183Block;
 class Uic9183ParserPrivate;
 class Uic9183TicketLayout;
 
@@ -90,6 +91,15 @@ public:
 
     /** RCT2 ticket layout, if present. */
     Rct2Ticket rct2Ticket() const;
+
+    /** First data block in this ticket.
+     *  Useful for iterating over all blocks.
+     */
+    Uic9183Block firstBlock() const;
+    /** Returns the first block with the given name.
+     *  A null block is returned if no such block exists.
+     */
+    Uic9183Block findBlock(const char name[6]) const;
 
     /** Quickly checks if @p might be UIC 918.3 content.
      *  This prioritizes speed over correctness and is used in barcode content auto-detection.

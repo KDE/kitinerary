@@ -34,7 +34,9 @@ public:
     Uic9183Block& operator=(const Uic9183Block&);
     Uic9183Block& operator=(Uic9183Block&&);
 
-    /** Returns the block name (6 characters). */
+    /** Returns the block name (6 characters).
+     *  The name is either "U_" + 4 letter standard type or a 4 digit vendor id + 2 char vendor type
+     */
     const char *name() const;
     /** Returns the payload data (not including the block header). */
     const char *content() const;
@@ -48,8 +50,13 @@ public:
     /** Checks if the block is valid or empty/default constructed. */
     bool isNull() const;
 
+    /** Returns the next block in the ticket.
+     *  If there is no more block, a null block is returned.
+     */
+    Uic9183Block nextBlock() const;
+
 private:
-    friend class Uic9183ParserPrivate;
+    friend class Uic9183Parser;
     Uic9183Block(const QByteArray &data, int offset);
 
     QByteArray m_data;
