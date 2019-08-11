@@ -18,6 +18,7 @@
 #include "uic9183parser.h"
 #include "logging.h"
 #include "rct2ticket.h"
+#include "uic9183block.h"
 #include "uic9183ticketlayout.h"
 
 #include <QDateTime>
@@ -31,22 +32,6 @@
 using namespace KItinerary;
 
 namespace KItinerary {
-
-class Uic9183Block
-{
-public:
-    Uic9183Block() = default;
-    Uic9183Block(const char *data, int size);
-
-    const char *data() const { return m_data; }
-    int version() const;
-    int size() const { return m_size; }
-    bool isNull() const { return m_size <= 12; }
-
-private:
-    const char *m_data = nullptr;
-    int m_size = 0;
-};
 
 // 0080BL vendor block sub-block ("S block")
 // 1x 'S'
@@ -99,17 +84,6 @@ public:
     QByteArray m_payload;
     QDateTime m_contextDt;
 };
-}
-
-Uic9183Block::Uic9183Block(const char* data, int size)
-    : m_data(data)
-    , m_size(size)
-{
-}
-
-int Uic9183Block::version() const
-{
-    return QByteArray(m_data + 6, 2).toInt();
 }
 
 Vendor0080BLSubBlock::Vendor0080BLSubBlock(const char *data, int size)

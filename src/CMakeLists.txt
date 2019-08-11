@@ -40,6 +40,7 @@ set(kitinerary_lib_srcs
     pdf/popplerutils.cpp
 
     uic9183/rct2ticket.cpp
+    uic9183/uic9183block.cpp
     uic9183/uic9183parser.cpp
     uic9183/uic9183ticketlayout.cpp
 
