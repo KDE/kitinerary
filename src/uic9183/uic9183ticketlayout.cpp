@@ -80,8 +80,7 @@ class Uic9183TicketLayoutPrivate : public QSharedData
 public:
     Uic9183TicketLayoutField firstField() const;
 
-    int size = 0;
-    const char *data = nullptr;
+    Uic9183Block block;
 };
 
 }
@@ -170,8 +169,9 @@ Uic9183TicketLayoutField Uic9183TicketLayoutField::next() const
 
 Uic9183TicketLayoutField Uic9183TicketLayoutPrivate::firstField() const
 {
-    if (size > 20) {
-        return Uic9183TicketLayoutField(data + 20, size - 20);
+    const auto contentSize = block.contentSize();
+    if (contentSize > 8) {
+        return Uic9183TicketLayoutField(block.content() + 8, contentSize - 8);
     }
     return {};
 }
@@ -189,8 +189,7 @@ Uic9183TicketLayout::Uic9183TicketLayout()
 Uic9183TicketLayout::Uic9183TicketLayout(const Uic9183Block &block)
     : d(new Uic9183TicketLayoutPrivate)
 {
-    d->data = block.data();
-    d->size = block.size();
+    d->block = block;
 
 #if 0
     std::vector<QString> out;
@@ -212,12 +211,12 @@ Uic9183TicketLayout& Uic9183TicketLayout::operator=(const Uic9183TicketLayout&) 
 
 QString Uic9183TicketLayout::type() const
 {
-    return QString::fromUtf8(d->data + 12, 4);
+    return QString::fromUtf8(d->block.content(), 4);
 }
 
 bool Uic9183TicketLayout::isValid() const
 {
-    return d->data && d->size > 34 && std::strncmp(d->data + 6, "01", 2) == 0;
+    return !d->block.isNull() && d->block.contentSize() > 8 && d->block.version() == 1;
 }
 
 QString Uic9183TicketLayout::text(int row, int column, int width, int height) const
