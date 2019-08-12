@@ -41,8 +41,6 @@ public:
     const char *name() const;
     /** Returns the payload data (not including the block header). */
     const char *content() const;
-    /** Returns the raw payload data. */
-    KITINERARY_DEPRECATED const char *data() const;
     /** Returns the size of the entire block data. */
     int size() const;
     /** Returns the size of the content data. */

@@ -61,14 +61,6 @@ const char* Uic9183Block::content() const
     return m_data.constData() + m_offset + BlockHeaderSize;
 }
 
-const char* Uic9183Block::data() const
-{
-    if (isNull()) {
-        return nullptr;
-    }
-    return m_data.constData() + m_offset;
-}
-
 int Uic9183Block::size() const
 {
     if (m_data.size() < m_offset + BlockHeaderSize) {
