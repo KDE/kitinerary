@@ -111,7 +111,7 @@ bool Vendor0080BLBlock::isValid() const
 
 Vendor0080BLSubBlock Vendor0080BLBlock::findSubBlock(const char id[3]) const
 {
-    for (int i = subblockOffset(m_block); i < m_block.size();) {
+    for (int i = subblockOffset(m_block); i < m_block.contentSize();) {
         if (*(m_block.content() + i) != 'S') {
             qCWarning(Log) << "0080BL invalid S-block format.";
             return {};
