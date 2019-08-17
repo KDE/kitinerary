@@ -76,9 +76,9 @@ const std::vector<Extractor>& ExtractorRepository::allExtractors() const
     return d->m_extractors;
 }
 
-std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::Content *part) const
+std::vector<Extractor> ExtractorRepository::extractorsForMessage(KMime::Content *part) const
 {
-    std::vector<const Extractor *> v;
+    std::vector<Extractor> v;
     if (!part) {
         return v;
     }
@@ -99,7 +99,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
             }
             const auto headerData = header->asUnicodeString();
             if (filter.matches(headerData)) {
-                v.push_back(&(*it));
+                v.push_back(*it);
                 break;
             }
         }
@@ -108,9 +108,9 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForMessage(KMime::
     return v;
 }
 
-std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::Pass *pass) const
+std::vector<Extractor> ExtractorRepository::extractorsForPass(KPkPass::Pass *pass) const
 {
-    std::vector<const Extractor *> v;
+    std::vector<Extractor> v;
     if (pass->type() != KPkPass::Pass::BoardingPass && pass->type() != KPkPass::Pass::EventTicket) {
         return v;
     }
@@ -131,7 +131,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForPass(KPkPass::P
                 continue;
             }
             if (filter.matches(value)) {
-                v.push_back(&(*it));
+                v.push_back(*it);
                 break;
             }
         }
@@ -152,9 +152,9 @@ static QString providerId(const QJsonObject &res)
     return {};
 }
 
-std::vector<const Extractor *> ExtractorRepository::extractorsForJsonLd(const QJsonArray &data) const
+std::vector<Extractor> ExtractorRepository::extractorsForJsonLd(const QJsonArray &data) const
 {
-    std::vector<const Extractor *> v;
+    std::vector<Extractor> v;
 
     for (const auto &val : data) {
         const auto id = providerId(val.toObject());
@@ -167,7 +167,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForJsonLd(const QJ
                     continue;
                 }
                 if (filter.matches(id)) {
-                    v.push_back(&(*it));
+                    v.push_back(*it);
                     break;
                 }
             }
@@ -177,14 +177,14 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForJsonLd(const QJ
     return v;
 }
 
-std::vector<const Extractor *> ExtractorRepository::extractorsForBarcode(const QString &code) const
+std::vector<Extractor> ExtractorRepository::extractorsForBarcode(const QString &code) const
 {
-    std::vector<const Extractor *> v;
+    std::vector<Extractor> v;
 
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
         for (const auto &filter : (*it).filters()) {
             if (filter.type() == ExtractorInput::Barcode && filter.matches(code)) {
-                v.push_back(&(*it));
+                v.push_back(*it);
                 break;
             }
         }
@@ -194,9 +194,9 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForBarcode(const Q
 }
 
 #ifdef HAVE_KCAL
-std::vector<const Extractor *> ExtractorRepository::extractorsForCalendar(const QSharedPointer<KCalendarCore::Calendar> &cal) const
+std::vector<Extractor> ExtractorRepository::extractorsForCalendar(const QSharedPointer<KCalendarCore::Calendar> &cal) const
 {
-    std::vector<const Extractor *> v;
+    std::vector<Extractor> v;
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
         for (const auto &filter : (*it).filters()) {
             if (filter.type() != ExtractorInput::ICal) {
@@ -205,7 +205,7 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForCalendar(const 
 
             const auto value = cal->property(filter.fieldName());
             if (filter.matches(value.toString())) {
-                v.push_back(&(*it));
+                v.push_back(*it);
                 break;
             }
         }
@@ -214,15 +214,15 @@ std::vector<const Extractor *> ExtractorRepository::extractorsForCalendar(const 
 }
 #endif
 
-const Extractor* ExtractorRepository::extractor(const QString &name) const
+Extractor ExtractorRepository::extractor(const QString &name) const
 {
     auto it = std::lower_bound(d->m_extractors.begin(), d->m_extractors.end(), name, [](const auto &lhs, const auto &rhs) {
         return lhs.name() < rhs;
     });
     if (it != d->m_extractors.end() && (*it).name() == name) {
-        return &(*it);
+        return *it;
     }
-    return nullptr;
+    return {};
 }
 
 void ExtractorRepositoryPrivate::loadExtractors()

@@ -30,14 +30,14 @@
 using namespace KItinerary;
 
 namespace KItinerary {
-class ExtractorPrivate
+class ExtractorPrivate : public QSharedData
 {
 public:
+    ExtractorInput::Type m_type = ExtractorInput::Text;
     QString m_name;
     QString m_scriptName;
     QString m_scriptFunction;
     std::vector<ExtractorFilter> m_filters;
-    ExtractorInput::Type m_type = ExtractorInput::Text;
 };
 }
 
@@ -45,9 +45,11 @@ Extractor::Extractor()
     : d(new ExtractorPrivate)
 {
 }
-Extractor::Extractor(Extractor &&) noexcept = default;
+Extractor& Extractor::operator=(const Extractor&) = default;
+Extractor::Extractor(Extractor&&) noexcept = default;
 Extractor::~Extractor() = default;
-Extractor& Extractor::operator=(Extractor &&) = default;
+Extractor::Extractor(const Extractor&) = default;
+Extractor& Extractor::operator=(Extractor&&) = default;
 
 bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
 {

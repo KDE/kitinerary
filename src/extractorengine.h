@@ -203,7 +203,7 @@ public:
      *  Extractors are usually automatically selected, this is therefore most likely not needed to
      *  be called manually. This mainly exists for the external extractor process.
      */
-    void setAdditionalExtractors(std::vector<const Extractor*> &&extractors);
+    void setAdditionalExtractors(std::vector<Extractor> &&extractors);
 
     /** Perform the actual extraction, and return the JSON-LD data
      *  that has been found.

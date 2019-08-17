@@ -164,14 +164,12 @@ int main(int argc, char** argv)
 
         if (!parser.value(extOpt).isEmpty()) {
             const auto extNames = parser.value(extOpt).split(QLatin1Char(';'), QString::SkipEmptyParts);
-            std::vector<const Extractor*> exts;
+            std::vector<Extractor> exts;
             exts.reserve(extNames.size());
             ExtractorRepository repo;
             for (const auto &name : extNames) {
                 const auto ext = repo.extractor(name);
-                if (ext) {
-                    exts.push_back(ext);
-                }
+                exts.push_back(ext);
             }
             engine.setAdditionalExtractors(std::move(exts));
         }

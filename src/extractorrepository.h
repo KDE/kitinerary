@@ -63,17 +63,17 @@ public:
     const std::vector<Extractor>& allExtractors() const;
 
     /** Finds matching extractors for the given message part. */
-    std::vector<const Extractor *> extractorsForMessage(KMime::Content *part) const;
+    std::vector<Extractor> extractorsForMessage(KMime::Content *part) const;
     /** Finds matching extractors for the given pkpass boarding pass. */
-    std::vector<const Extractor *> extractorsForPass(KPkPass::Pass *pass) const;
+    std::vector<Extractor> extractorsForPass(KPkPass::Pass *pass) const;
     /** Finds matching extractors for the given JSON-LD data provided by generic extractors. */
-    std::vector<const Extractor *> extractorsForJsonLd(const QJsonArray &data) const;
+    std::vector<Extractor> extractorsForJsonLd(const QJsonArray &data) const;
     /** Finds matching extractors for the given barcode string. */
-    std::vector<const Extractor *> extractorsForBarcode(const QString &code) const;
+    std::vector<Extractor> extractorsForBarcode(const QString &code) const;
     /** Find matching extractors for the given iCal calendar. */
-    std::vector<const Extractor *> extractorsForCalendar(const QSharedPointer<KCalendarCore::Calendar> &cal) const;
+    std::vector<Extractor> extractorsForCalendar(const QSharedPointer<KCalendarCore::Calendar> &cal) const;
     /** Returns the extractor with the given identifier. */
-    const Extractor* extractor(const QString &name) const;
+    Extractor extractor(const QString &name) const;
 
 private:
     ExtractorRepositoryPrivate* d;

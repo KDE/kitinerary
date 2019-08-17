@@ -23,7 +23,8 @@
 #include "kitinerary_export.h"
 #include "extractorinput.h"
 
-#include <memory>
+#include <QExplicitlySharedDataPointer>
+
 #include <vector>
 
 class QJsonObject;
@@ -91,14 +92,12 @@ class ExtractorPrivate;
 class KITINERARY_EXPORT Extractor
 {
 public:
-    ///@cond internal
     Extractor();
-    Extractor(const Extractor &) = delete;
-    Extractor(Extractor &&) noexcept;
+    Extractor(const Extractor&);
+    Extractor(Extractor&&) noexcept;
     ~Extractor();
-    Extractor& operator=(const Extractor&) = delete;
+    Extractor& operator=(const Extractor&);
     Extractor& operator=(Extractor&&);
-    ///@endcond
 
     /** Load meta data from the given JSON object. */
     bool load(const QJsonObject &obj, const QString &baseDir);
@@ -120,7 +119,7 @@ public:
     const std::vector<ExtractorFilter> &filters() const;
 
 private:
-    std::unique_ptr<ExtractorPrivate> d;
+    QExplicitlySharedDataPointer<ExtractorPrivate> d;
 };
 
 }

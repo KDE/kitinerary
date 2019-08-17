@@ -81,12 +81,12 @@ public:
     void extractCustom();
     void extractGeneric();
 
-    void executeScript(const Extractor *extractor);
+    void executeScript(const Extractor &extractor);
     void processScriptResult(const QJSValue &result);
 
     ExtractorEngine *q = nullptr;
-    std::vector<const Extractor*> m_extractors;
-    std::vector<const Extractor*> m_additionalExtractors;
+    std::vector<Extractor> m_extractors;
+    std::vector<Extractor> m_additionalExtractors;
     JsApi::Barcode *m_barcodeApi = nullptr;
     JsApi::Context *m_context = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
@@ -149,7 +149,7 @@ void ExtractorEnginePrivate::extractExternal()
     }
     QStringList extNames;
     extNames.reserve(m_extractors.size());
-    std::transform(m_extractors.begin(), m_extractors.end(), std::back_inserter(extNames), [](const auto ext) { return ext->name(); });
+    std::transform(m_extractors.begin(), m_extractors.end(), std::back_inserter(extNames), [](const auto &ext) { return ext.name(); });
 
     QProcess proc;
     proc.setProgram(m_externalExtractor);
@@ -461,8 +461,8 @@ void ExtractorEnginePrivate::extractStructured()
 
 void ExtractorEnginePrivate::extractCustom()
 {
-    for (const auto extractor : m_extractors) {
-        switch (extractor->type()) {
+    for (const auto &extractor : m_extractors) {
+        switch (extractor.type()) {
             case ExtractorInput::Text:
                 // running text extractors on PDF or HTML docs is possible,
                 // but only extract the text when really needed
@@ -503,7 +503,7 @@ void ExtractorEnginePrivate::extractCustom()
 #endif
                 break;
             default:
-                qCWarning(Log) << "Unexpected extractor type:" << extractor->type();
+                qCWarning(Log) << "Unexpected extractor type:" << extractor.type();
                 break;
         }
 
@@ -561,14 +561,13 @@ void ExtractorEnginePrivate::extractGeneric()
     }
 }
 
-void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
+void ExtractorEnginePrivate::executeScript(const Extractor &extractor)
 {
-    Q_ASSERT(extractor);
-    if (extractor->scriptFileName().isEmpty()) {
+    if (extractor.scriptFileName().isEmpty()) {
         return;
     }
 
-    QFile f(extractor->scriptFileName());
+    QFile f(extractor.scriptFileName());
     if (!f.open(QFile::ReadOnly)) {
         qCWarning(Log) << "Failed to open extractor script" << f.fileName() << f.errorString();
         return;
@@ -581,15 +580,15 @@ void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
         return;
     }
 
-    auto mainFunc = m_engine.globalObject().property(extractor->scriptFunction());
+    auto mainFunc = m_engine.globalObject().property(extractor.scriptFunction());
     if (!mainFunc.isCallable()) {
-        qCWarning(Log) << "Script entry point not found!" << extractor->scriptFunction();
+        qCWarning(Log) << "Script entry point not found!" << extractor.scriptFunction();
         return;
     }
 
-    qCDebug(Log) << "Running custom extractor" << extractor->scriptFileName() << extractor->scriptFunction();
+    qCDebug(Log) << "Running custom extractor" << extractor.scriptFileName() << extractor.scriptFunction();
     QJSValueList args;
-    switch (extractor->type()) {
+    switch (extractor.type()) {
         case ExtractorInput::Text:
             args = {m_text};
             break;
@@ -613,7 +612,7 @@ void ExtractorEnginePrivate::executeScript(const Extractor *extractor)
             break;
         }
         default:
-            qCWarning(Log) << "Unexpected extractor input type:" << extractor->type();
+            qCWarning(Log) << "Unexpected extractor input type:" << extractor.type();
             break;
     }
 
@@ -661,7 +660,7 @@ void ExtractorEngine::setUseSeparateProcess(bool separateProcess)
     d->m_externalExtractor = fi.canonicalFilePath();
 }
 
-void ExtractorEngine::setAdditionalExtractors(std::vector<const Extractor*> &&extractors)
+void ExtractorEngine::setAdditionalExtractors(std::vector<Extractor> &&extractors)
 {
     d->m_additionalExtractors = std::move(extractors);
 }
