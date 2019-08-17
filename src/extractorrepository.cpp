@@ -71,6 +71,12 @@ ExtractorRepository::ExtractorRepository()
 ExtractorRepository::~ExtractorRepository() = default;
 ExtractorRepository::ExtractorRepository(KItinerary::ExtractorRepository &&) noexcept = default;
 
+void ExtractorRepository::reload()
+{
+    d->m_extractors.clear();
+    d->loadExtractors();
+}
+
 const std::vector<Extractor>& ExtractorRepository::allExtractors() const
 {
     return d->m_extractors;

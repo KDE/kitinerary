@@ -59,6 +59,11 @@ public:
     ExtractorRepository(ExtractorRepository &&) noexcept;
     ExtractorRepository(const ExtractorRepository &) = delete;
 
+    /** Reload the extractor repository.
+     *  Not needed during normal operations, this is mainly for tooling.
+     */
+    void reload();
+
     /** All known extractors. */
     const std::vector<Extractor>& allExtractors() const;
 
