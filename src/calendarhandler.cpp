@@ -83,7 +83,7 @@ static void fillTaxiReservation(const TaxiReservation &reservation, const KCalen
 QSharedPointer<KCalendarCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation)
 {
 #ifdef HAVE_KCAL
-    if (!JsonLd::canConvert<Reservation>(reservation)) {
+    if (!JsonLd::canConvert<Reservation>(reservation) || !calendar) {
         return {};
     }
 
