@@ -108,6 +108,7 @@ public:
     ExtractorRepository m_repo;
     BarcodeDecoder m_barcodeDecoder;
     QString m_externalExtractor;
+    QString m_usedExtractor;
 };
 
 template <typename T>
@@ -193,6 +194,7 @@ void ExtractorEngine::clear()
     d->m_context->m_senderDate = {};
     d->m_ownedMimeContent.reset();
     d->m_barcodeDecoder.clearCache();
+    d->m_usedExtractor.clear();
 }
 
 void ExtractorEnginePrivate::resetContent()
@@ -508,6 +510,7 @@ void ExtractorEnginePrivate::extractCustom()
         }
 
         if (!m_result.isEmpty()) {
+            m_usedExtractor = extractor.name();
             break;
         }
     }
@@ -663,4 +666,9 @@ void ExtractorEngine::setUseSeparateProcess(bool separateProcess)
 void ExtractorEngine::setAdditionalExtractors(std::vector<Extractor> &&extractors)
 {
     d->m_additionalExtractors = std::move(extractors);
+}
+
+QString ExtractorEngine::usedCustomExtractor() const
+{
+    return d->m_usedExtractor;
 }

@@ -210,6 +210,12 @@ public:
      */
     QJsonArray extract();
 
+    /** Returns the extractor id used to obtain the result.
+     *  Can be empty if generic extractors have been used.
+     *  Not supposed to be used for normal operations, this is only needed for tooling.
+     */
+    QString usedCustomExtractor() const;
+
 private:
     std::unique_ptr<ExtractorEnginePrivate> d;
 };
