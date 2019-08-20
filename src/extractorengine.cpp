@@ -564,6 +564,13 @@ void ExtractorEnginePrivate::extractGeneric()
     }
 }
 
+static void printScriptError(const QJSValue &result)
+{
+    // don't change the formatting without adjusting KItinerary Workbench too!
+    qCWarning(Log).noquote().nospace() << "JS ERROR: [" << result.property(QStringLiteral("fileName")).toString()
+        << "]:" << result.property(QStringLiteral("lineNumber")).toInt() << ": " << result.toString();
+}
+
 void ExtractorEnginePrivate::executeScript(const Extractor &extractor)
 {
     if (extractor.scriptFileName().isEmpty()) {
@@ -578,8 +585,7 @@ void ExtractorEnginePrivate::executeScript(const Extractor &extractor)
 
     auto result = m_engine.evaluate(QString::fromUtf8(f.readAll()), f.fileName());
     if (result.isError()) {
-        qCWarning(Log) << "Script parsing error in" << result.property(QStringLiteral("fileName")).toString()
-                                << ':' << result.property(QStringLiteral("lineNumber")).toInt() << result.toString();
+        printScriptError(result);
         return;
     }
 
@@ -627,8 +633,7 @@ void ExtractorEnginePrivate::executeScript(const Extractor &extractor)
 void ExtractorEnginePrivate::processScriptResult(const QJSValue &result)
 {
     if (result.isError()) {
-        qCWarning(Log) << "Script execution error in" << result.property(QStringLiteral("fileName")).toString()
-                                << ':' << result.property(QStringLiteral("lineNumber")).toInt() << result.toString();
+        printScriptError(result);
         return;
     }
 
