@@ -125,7 +125,8 @@ static const struct {
     { "billet", Rct2Ticket::Transport },
     { "fahrkarte", Rct2Ticket::Transport },
     { "fahrschein", Rct2Ticket::Transport },
-    { "reservation", Rct2Ticket::Reservation }
+    { "reservation", Rct2Ticket::Reservation },
+    { "reservierung", Rct2Ticket::Reservation },
 };
 
 Rct2Ticket::Type Rct2Ticket::type() const
