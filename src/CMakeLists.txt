@@ -122,6 +122,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         DocumentUtil
         Extractor
         ExtractorEngine
+        ExtractorFilter
         ExtractorInput
         ExtractorPostprocessor
         ExtractorRepository

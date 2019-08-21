@@ -20,6 +20,8 @@
 #ifndef EXTRACTORFILTER_H
 #define EXTRACTORFILTER_H
 
+#include "kitinerary_export.h"
+
 #include "extractorinput.h"
 
 #include <QRegularExpression>
@@ -29,12 +31,18 @@ class QJsonObject;
 
 namespace KItinerary {
 
+class ExtractorFilterPrivate;
+
 /** Determines whether an extractor is applicable to a given email. */
-class ExtractorFilter
+class KITINERARY_EXPORT ExtractorFilter
 {
 public:
     ExtractorFilter();
     ~ExtractorFilter();
+    ExtractorFilter(const ExtractorFilter&);
+    ExtractorFilter(ExtractorFilter&&) noexcept;
+    ExtractorFilter& operator=(const ExtractorFilter&);
+    ExtractorFilter& operator=(ExtractorFilter&&);
 
     /** The filter type. */
     ExtractorInput::Type type() const;
@@ -44,11 +52,11 @@ public:
     bool matches(const QString &data) const;
     /** Load filter from @p obj. */
     bool load(const QJsonObject &obj);
+    /** Pattern to match field value against. */
+    QString pattern() const;
 
 private:
-    QByteArray m_fieldName;
-    QRegularExpression m_exp;
-    ExtractorInput::Type m_type = ExtractorInput::Unknown;
+    QExplicitlySharedDataPointer<ExtractorFilterPrivate> d;
 };
 
 }

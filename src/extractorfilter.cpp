@@ -24,51 +24,74 @@
 
 using namespace KItinerary;
 
-ExtractorFilter::ExtractorFilter() = default;
+namespace KItinerary {
+class ExtractorFilterPrivate : public QSharedData
+{
+public:
+    ExtractorInput::Type m_type = ExtractorInput::Unknown;
+    QByteArray m_fieldName;
+    QRegularExpression m_exp;
+};
+}
+
+ExtractorFilter::ExtractorFilter()
+    : d(new ExtractorFilterPrivate)
+{
+}
+
+ExtractorFilter::ExtractorFilter(const ExtractorFilter&) = default;
+ExtractorFilter::ExtractorFilter(ExtractorFilter&&) noexcept = default;
 ExtractorFilter::~ExtractorFilter() = default;
+ExtractorFilter& ExtractorFilter::operator=(const ExtractorFilter&) = default;
+ExtractorFilter& ExtractorFilter::operator=(ExtractorFilter&&) = default;
 
 ExtractorInput::Type ExtractorFilter::type() const
 {
-    return m_type;
+    return d->m_type;
 }
 
 const char *ExtractorFilter::fieldName() const
 {
-    return m_fieldName.constData();
+    return d->m_fieldName.constData();
 }
 
 bool ExtractorFilter::matches(const QString &data) const
 {
-    if (!m_exp.isValid()) {
-        qCDebug(Log) << m_exp.errorString() << m_exp.pattern();
+    if (!d->m_exp.isValid()) {
+        qCDebug(Log) << d->m_exp.errorString() << d->m_exp.pattern();
     }
-    return m_exp.match(data).hasMatch();
+    return d->m_exp.match(data).hasMatch();
 }
 
 bool ExtractorFilter::load(const QJsonObject &obj)
 {
-    m_type = ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString());
+    d->m_type = ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString());
 
     auto it = obj.find(QLatin1String("header"));
     if (it != obj.end()) {
-        m_fieldName = it.value().toString().toUtf8();
-        m_type = ExtractorInput::Email;
+        d->m_fieldName = it.value().toString().toUtf8();
+        d->m_type = ExtractorInput::Email;
     }
 
     it = obj.find(QLatin1String("field"));
     if (it != obj.end()) {
-        m_fieldName = it.value().toString().toUtf8();
-        m_type = ExtractorInput::PkPass;
+        d->m_fieldName = it.value().toString().toUtf8();
+        d->m_type = ExtractorInput::PkPass;
     }
 
     it = obj.find(QLatin1String("property"));
     if (it != obj.end()) {
-        m_fieldName = it.value().toString().toUtf8();
-        if (m_type == ExtractorInput::Unknown) { // backward compat, can be removed once all extractors are adjusted
-            m_type = ExtractorInput::JsonLd;
+        d->m_fieldName = it.value().toString().toUtf8();
+        if (d->m_type == ExtractorInput::Unknown) { // backward compat, can be removed once all extractors are adjusted
+            d->m_type = ExtractorInput::JsonLd;
         }
     }
 
-    m_exp.setPattern(obj.value(QLatin1String("match")).toString());
-    return m_type != ExtractorInput::Unknown && (!m_fieldName.isEmpty() || m_type == ExtractorInput::Barcode) && m_exp.isValid();
+    d->m_exp.setPattern(obj.value(QLatin1String("match")).toString());
+    return d->m_type != ExtractorInput::Unknown && (!d->m_fieldName.isEmpty() || d->m_type == ExtractorInput::Barcode) && d->m_exp.isValid();
+}
+
+QString ExtractorFilter::pattern() const
+{
+    return d->m_exp.pattern();
 }
