@@ -195,10 +195,10 @@ QString Rct2Ticket::trainNumber() const
     const auto t = type();
     if (t == Reservation || t == TransportReservation) {
         const auto cat = d->layout.text(8, 13, 3, 1).trimmed();
-        auto num = d->layout.text(8, 7, 5, 1);
+        auto num = d->layout.text(8, 7, 5, 1).trimmed();
 
-        // check for train number bleeding into our left neighbour field (happens e.g. on ÖBB IRT tickets)
-        if (!num.isEmpty() && num.at(0).isDigit()) {
+        // check for train number bleeding into our left neighbour field (happens e.g. on ÖBB IRT/RES tickets)
+        if (num.isEmpty() || num.at(0).isDigit()) {
             const auto numPrefix = d->layout.text(8, 1, 6, 1);
             for (int i = numPrefix.size() - 1; i >= 0; --i) {
                 if (numPrefix.at(i).isDigit()) {
