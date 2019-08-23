@@ -154,9 +154,17 @@ void ExtractorEnginePrivate::extractExternal()
 
     QProcess proc;
     proc.setProgram(m_externalExtractor);
-    proc.setArguments({QLatin1String("--type"), ExtractorInput::typeToString(m_inputType),
-                       QLatin1String("--context-date"), m_context->m_senderDate.toString(Qt::ISODate),
-                       QLatin1String("--extractors"), extNames.join(QLatin1Char(';'))});
+
+    QStringList args({QLatin1String("--type"), ExtractorInput::typeToString(m_inputType),
+                      QLatin1String("--context-date"), m_context->m_senderDate.toString(Qt::ISODate),
+                      QLatin1String("--extractors"), extNames.join(QLatin1Char(';'))});
+    const auto extraPaths = m_repo.additionalSearchPaths();
+    for (const auto &p : extraPaths) {
+        args.push_back(QStringLiteral("--additional-search-path"));
+        args.push_back(p);
+    }
+
+    proc.setArguments(args);
     proc.start(QProcess::ReadWrite);
     proc.setProcessChannelMode(QProcess::ForwardedErrorChannel);
     if (!proc.waitForStarted(1000)) {

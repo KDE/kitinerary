@@ -80,6 +80,11 @@ public:
     /** Returns the extractor with the given identifier. */
     Extractor extractor(const QString &name) const;
 
+    /** Returns the list of additional search paths for extractor scripts. */
+    QStringList additionalSearchPaths() const;
+    /** Sets additional search paths to look for extractors. */
+    void setAdditionalSearchPaths(const QStringList &searchPaths);
+
 private:
     ExtractorRepositoryPrivate* d;
 };

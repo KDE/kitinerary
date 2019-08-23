@@ -52,6 +52,7 @@ public:
     void addExtractor(Extractor &&e);
 
     std::vector<Extractor> m_extractors;
+    QStringList m_extraSearchPaths;
 };
 }
 
@@ -233,11 +234,15 @@ Extractor ExtractorRepository::extractor(const QString &name) const
 
 void ExtractorRepositoryPrivate::loadExtractors()
 {
-    auto searchDirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
-    searchDirs += QStringLiteral(":/org.kde.pim");
+    auto searchDirs = m_extraSearchPaths;
+    const auto qsp = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+    for (const auto &p : qsp) {
+        searchDirs.push_back(p + QLatin1String("/kitinerary/extractors"));
+    }
+    searchDirs += QStringLiteral(":/org.kde.pim/kitinerary/extractors");
 
     for (const auto &dir : qAsConst(searchDirs)) {
-        QDirIterator it(dir + QStringLiteral("/kitinerary/extractors"), QDir::Files);
+        QDirIterator it(dir, QDir::Files);
         while (it.hasNext()) {
             const auto fileName = it.next();
             if (!fileName.endsWith(QLatin1String(".json"))) {
@@ -297,4 +302,14 @@ void ExtractorRepositoryPrivate::addExtractor(Extractor &&e)
     if (it == m_extractors.end() || (*it).name() != e.name()) {
         m_extractors.insert(it, std::move(e));
     }
+}
+
+QStringList ExtractorRepository::additionalSearchPaths() const
+{
+    return d->m_extraSearchPaths;
+}
+
+void ExtractorRepository::setAdditionalSearchPaths(const QStringList& searchPaths)
+{
+    d->m_extraSearchPaths = searchPaths;
 }

@@ -120,9 +120,17 @@ int main(int argc, char** argv)
     parser.addOption(typeOpt);
     QCommandLineOption extOpt({QStringLiteral("e"), QStringLiteral("extractors")}, QStringLiteral("Additional extractors to apply."), QStringLiteral("extractors"));
     parser.addOption(extOpt);
+    QCommandLineOption pathsOpt({QStringLiteral("additional-search-path")}, QStringLiteral("Additional search path for extractors."), QStringLiteral("search-path"));
+    parser.addOption(pathsOpt);
 
     parser.addPositionalArgument(QStringLiteral("input"), QStringLiteral("File to extract data from, omit for using stdin."));
     parser.process(app);
+
+    ExtractorRepository repo;
+    if (parser.isSet(pathsOpt)) {
+        repo.setAdditionalSearchPaths(parser.values(pathsOpt));
+        repo.reload();
+    }
 
     if (parser.isSet(capOpt)) {
         printCapabilities();
@@ -166,7 +174,6 @@ int main(int argc, char** argv)
             const auto extNames = parser.value(extOpt).split(QLatin1Char(';'), QString::SkipEmptyParts);
             std::vector<Extractor> exts;
             exts.reserve(extNames.size());
-            ExtractorRepository repo;
             for (const auto &name : extNames) {
                 const auto ext = repo.extractor(name);
                 exts.push_back(ext);
