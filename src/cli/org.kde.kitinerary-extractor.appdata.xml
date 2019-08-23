@@ -22,6 +22,7 @@
   <name xml:lang="x-test">xxKItinerary Command Line Extractorxx</name>
   <summary>Command line reservation data extractor.</summary>
   <summary xml:lang="ca">Extractor de dades de reserves de la línia d'ordres.</summary>
+  <summary xml:lang="cs">Extraktor dat rezervací v příkazové řádce.</summary>
   <summary xml:lang="en-GB">Command line reservation data extractor.</summary>
   <summary xml:lang="es">Extractor de línea de órdenes de reserva de datos.</summary>
   <summary xml:lang="fi">Komentorivin varaustietojäsennin.</summary>
