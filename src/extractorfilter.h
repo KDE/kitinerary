@@ -55,6 +55,12 @@ public:
     /** Pattern to match field value against. */
     QString pattern() const;
 
+    ///@cond internal
+    void setType(ExtractorInput::Type type);
+    void setFieldName(const QString &fieldName);
+    void setPattern(const QString &pattern);
+    ///@endcond
+
 private:
     QExplicitlySharedDataPointer<ExtractorFilterPrivate> d;
 };

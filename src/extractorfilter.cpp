@@ -50,9 +50,21 @@ ExtractorInput::Type ExtractorFilter::type() const
     return d->m_type;
 }
 
+void ExtractorFilter::setType(ExtractorInput::Type type)
+{
+    d.detach();
+    d->m_type = type;
+}
+
 const char *ExtractorFilter::fieldName() const
 {
     return d->m_fieldName.constData();
+}
+
+void ExtractorFilter::setFieldName(const QString &fieldName)
+{
+    d.detach();
+    d->m_fieldName = fieldName.toUtf8();
 }
 
 bool ExtractorFilter::matches(const QString &data) const
@@ -94,4 +106,10 @@ bool ExtractorFilter::load(const QJsonObject &obj)
 QString ExtractorFilter::pattern() const
 {
     return d->m_exp.pattern();
+}
+
+void ExtractorFilter::setPattern(const QString &pattern)
+{
+    d.detach();
+    d->m_exp.setPattern(pattern);
 }
