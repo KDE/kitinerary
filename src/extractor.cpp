@@ -22,6 +22,7 @@
 #include "logging.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonObject>
 
@@ -34,10 +35,11 @@ class ExtractorPrivate : public QSharedData
 {
 public:
     ExtractorInput::Type m_type = ExtractorInput::Text;
-    QString m_name;
+    QString m_fileName;
     QString m_scriptName;
     QString m_scriptFunction;
     std::vector<ExtractorFilter> m_filters;
+    int m_index = -1;
 };
 }
 
@@ -51,8 +53,11 @@ Extractor::~Extractor() = default;
 Extractor::Extractor(const Extractor&) = default;
 Extractor& Extractor::operator=(Extractor&&) = default;
 
-bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
+bool Extractor::load(const QJsonObject &obj, const QString &fileName, int index)
 {
+    d->m_fileName = fileName;
+    d->m_index = index;
+
     d->m_type = ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString());
     if (d->m_type == ExtractorInput::Unknown) {
         d->m_type = ExtractorInput::Text;
@@ -69,7 +74,8 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
 
     const auto scriptName = obj.value(QLatin1String("script")).toString();
     if (!scriptName.isEmpty()) {
-        d->m_scriptName = baseDir + QLatin1Char('/') + scriptName;
+        QFileInfo fi(fileName);
+        d->m_scriptName = fi.path() + QLatin1Char('/') + scriptName;
     }
 
     if (!d->m_scriptName.isEmpty() && !QFile::exists(d->m_scriptName)) {
@@ -83,12 +89,11 @@ bool Extractor::load(const QJsonObject &obj, const QString &baseDir)
 
 QString Extractor::name() const
 {
-    return d->m_name;
-}
-
-void Extractor::setName(const QString &name)
-{
-    d->m_name = name;
+    QFileInfo fi(d->m_fileName);
+    if (d->m_index < 0) {
+        return fi.baseName();
+    }
+    return fi.baseName() + QLatin1Char(':') + QString::number(d->m_index);
 }
 
 ExtractorInput::Type Extractor::type() const
@@ -109,4 +114,9 @@ QString Extractor::scriptFunction() const
 const std::vector<ExtractorFilter> &Extractor::filters() const
 {
     return d->m_filters;
+}
+
+QString Extractor::fileName() const
+{
+    return d->m_fileName;
 }

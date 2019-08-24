@@ -267,8 +267,7 @@ void ExtractorRepositoryPrivate::loadExtractors()
             if (doc.isObject()) {
                 const auto obj = doc.object();
                 Extractor e;
-                if (e.load(obj, fi.canonicalPath())) {
-                    e.setName(name);
+                if (e.load(obj, fi.canonicalFilePath())) {
                     addExtractor(std::move(e));
                 }
             } else if (doc.isArray()) {
@@ -276,12 +275,7 @@ void ExtractorRepositoryPrivate::loadExtractors()
                 int i = 0;
                 for (const auto &v : extractorArray) {
                     Extractor e;
-                    if (e.load(v.toObject(), fi.canonicalPath())) {
-                        if (extractorArray.size() > 1) {
-                            e.setName(name + QLatin1Char(':') + QString::number(i));
-                        } else {
-                            e.setName(name);
-                        }
+                    if (e.load(v.toObject(), fi.canonicalFilePath(), extractorArray.size() == 1 ? -1 : i)) {
                         addExtractor(std::move(e));
                     }
                     ++i;

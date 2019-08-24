@@ -99,14 +99,8 @@ public:
     Extractor& operator=(const Extractor&);
     Extractor& operator=(Extractor&&);
 
-    /** Load meta data from the given JSON object. */
-    bool load(const QJsonObject &obj, const QString &baseDir);
-
     /** Identifier for this extractor. */
     QString name() const;
-    ///@cond internal
-    void setName(const QString &name);
-    ///@endcond
 
     /** Data type this extractor can process. */
     ExtractorInput::Type type() const;
@@ -117,6 +111,13 @@ public:
     QString scriptFunction() const;
     /** Returns the filters deciding whether this extractor should be applied. */
     const std::vector<ExtractorFilter> &filters() const;
+
+    ///@cond internal
+    /** Load meta data from the given JSON object. */
+    bool load(const QJsonObject &obj, const QString &fileName, int index = -1);
+
+    QString fileName() const;
+    ///@endcond
 
 private:
     QExplicitlySharedDataPointer<ExtractorPrivate> d;
