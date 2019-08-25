@@ -50,12 +50,15 @@ public:
     const char *fieldName() const;
     /** Check if @p data matches this filter. */
     bool matches(const QString &data) const;
-    /** Load filter from @p obj. */
-    bool load(const QJsonObject &obj);
     /** Pattern to match field value against. */
     QString pattern() const;
 
     ///@cond internal
+    /** Load filter from @p obj. */
+    bool load(const QJsonObject &obj);
+    /** Serialize filter to a JSON object. */
+    QJsonObject toJson() const;
+
     void setType(ExtractorInput::Type type);
     void setFieldName(const QString &fieldName);
     void setPattern(const QString &pattern);
