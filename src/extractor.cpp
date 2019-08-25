@@ -122,9 +122,21 @@ ExtractorInput::Type Extractor::type() const
     return d->m_type;
 }
 
+void Extractor::setType(ExtractorInput::Type type)
+{
+    d.detach();
+    d->m_type = type;
+}
+
 QString Extractor::scriptFileName() const
 {
     return d->m_scriptName;
+}
+
+void Extractor::setScriptFileName(const QString &script)
+{
+    d.detach();
+    d->m_scriptName = script;
 }
 
 QString Extractor::scriptFunction() const
@@ -132,9 +144,21 @@ QString Extractor::scriptFunction() const
     return d->m_scriptFunction;
 }
 
+void Extractor::setScriptFunction(const QString &func)
+{
+    d.detach();
+    d->m_scriptFunction = func;
+}
+
 const std::vector<ExtractorFilter> &Extractor::filters() const
 {
     return d->m_filters;
+}
+
+void Extractor::setFilters(std::vector<ExtractorFilter> filters)
+{
+    d.detach();
+    d->m_filters = std::move(filters);
 }
 
 QString Extractor::fileName() const

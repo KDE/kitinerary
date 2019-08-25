@@ -118,7 +118,13 @@ public:
     /** Save extractor meta data to a JSON object. */
     QJsonObject toJson() const;
 
+    /** Source file name. */
     QString fileName() const;
+
+    void setType(ExtractorInput::Type type);
+    void setScriptFileName(const QString &script);
+    void setScriptFunction(const QString &func);
+    void setFilters(std::vector<ExtractorFilter> filters);
     ///@endcond
 
 private:
