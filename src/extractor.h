@@ -115,6 +115,8 @@ public:
     ///@cond internal
     /** Load meta data from the given JSON object. */
     bool load(const QJsonObject &obj, const QString &fileName, int index = -1);
+    /** Save extractor meta data to a JSON object. */
+    QJsonObject toJson() const;
 
     QString fileName() const;
     ///@endcond

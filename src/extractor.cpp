@@ -87,6 +87,27 @@ bool Extractor::load(const QJsonObject &obj, const QString &fileName, int index)
     return !d->m_filters.empty();
 }
 
+QJsonObject Extractor::toJson() const
+{
+    QJsonObject obj;
+    obj.insert(QStringLiteral("type"), ExtractorInput::typeToString(d->m_type));
+
+    QFileInfo metaFi(d->m_fileName);
+    QFileInfo scriptFi(d->m_scriptName);
+    if (metaFi.canonicalPath() == scriptFi.canonicalPath()) {
+        obj.insert(QStringLiteral("script"), scriptFi.fileName());
+    } else {
+        obj.insert(QStringLiteral("script"), d->m_scriptName);
+    }
+    obj.insert(QStringLiteral("function"), d->m_scriptFunction);
+
+    QJsonArray filters;
+    std::transform(d->m_filters.begin(), d->m_filters.end(), std::back_inserter(filters), std::mem_fn(&ExtractorFilter::toJson));
+    obj.insert(QStringLiteral("filter"), filters);
+
+    return obj;
+}
+
 QString Extractor::name() const
 {
     QFileInfo fi(d->m_fileName);
