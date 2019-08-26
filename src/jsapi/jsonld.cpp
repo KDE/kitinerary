@@ -119,7 +119,7 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
         auto dtStrFixed = dtStr;
         for (int i = 1; i <= 12; ++i) {
             const auto monthName = locale.monthName(i, QLocale::ShortFormat);
-            dtStrFixed = dtStrFixed.replace(monthName.left(3), monthName, Qt::CaseInsensitive);
+            dtStrFixed.replace(monthName.left(3), monthName, Qt::CaseInsensitive);
         }
         dt = locale.toDateTime(dtStrFixed, format);
     }
@@ -143,7 +143,7 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
                 }
             }
             if (endIdx - beginIdx >= 3) {
-                dtStrFixed = dtStrFixed.replace(beginIdx, endIdx - beginIdx, locale.monthName(i, QLocale::ShortFormat));
+                dtStrFixed.replace(beginIdx, endIdx - beginIdx, locale.monthName(i, QLocale::ShortFormat));
                 break;
             }
         }
