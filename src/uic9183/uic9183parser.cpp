@@ -20,6 +20,7 @@
 #include "rct2ticket.h"
 #include "uic9183block.h"
 #include "uic9183ticketlayout.h"
+#include "vendor0080block.h"
 
 #include <QDateTime>
 #include <QDebug>
@@ -33,108 +34,12 @@ using namespace KItinerary;
 
 namespace KItinerary {
 
-// 0080BL vendor block sub-block ("S block")
-// 1x 'S'
-// 3x field type
-// 4x field value length
-// nx field value
-class Vendor0080BLSubBlock
-{
-public:
-    Vendor0080BLSubBlock() = default;
-    Vendor0080BLSubBlock(const char *data, int size);
-
-    bool isNull() const { return m_size <= 0 || !m_data; }
-    int size() const { return m_size; }
-    const char *id() const { return m_data + 1; }
-    const char *data() const { return m_data + 8; }
-
-    QString toString() const { return QString::fromUtf8(data(), size()); }
-
-private:
-    const char *m_data = nullptr;
-    int m_size = 0;
-};
-
-// 0080BL vendor block (DB) (version 2/3, dynamic size)
-// 2x stuff
-// 1x number of certificate blocks
-// 22+8+8+8x (v2) or 8+8+10x (v3) certificate block
-// 2x number of sub blocks
-class Vendor0080BLBlock
-{
-public:
-    Vendor0080BLBlock(const Uic9183Block &block);
-
-    bool isValid() const;
-    Vendor0080BLSubBlock findSubBlock(const char id[3]) const;
-
-private:
-    static int subblockOffset(const Uic9183Block &block);
-
-    Uic9183Block m_block;
-};
-
 class Uic9183ParserPrivate : public QSharedData
 {
 public:
     QByteArray m_payload;
     QDateTime m_contextDt;
 };
-}
-
-Vendor0080BLSubBlock::Vendor0080BLSubBlock(const char *data, int size)
-    : m_data(data)
-    , m_size(size)
-{
-}
-
-Vendor0080BLBlock::Vendor0080BLBlock(const Uic9183Block &block)
-{
-    if (block.isNull()) {
-        return;
-    }
-    if (block.version() != 2 && block.version() != 3) {
-        qCWarning(Log) << "Unsupported version of 0080BL vendor block." << block.version();
-        return;
-    }
-    if (block.isNull() || block.contentSize() < 3 || subblockOffset(block) > block.size()) {
-        return;
-    }
-    m_block = block;
-}
-
-bool Vendor0080BLBlock::isValid() const
-{
-    return !m_block.isNull();
-}
-
-Vendor0080BLSubBlock Vendor0080BLBlock::findSubBlock(const char id[3]) const
-{
-    for (int i = subblockOffset(m_block); i < m_block.contentSize();) {
-        if (*(m_block.content() + i) != 'S') {
-            qCWarning(Log) << "0080BL invalid S-block format.";
-            return {};
-        }
-        const int subblockSize = QByteArray(m_block.content() + i + 4, 4).toInt();
-        if (subblockSize + i > m_block.size()) {
-            qCWarning(Log) << "0080BL S-block size exceeds block size.";
-            return {};
-        }
-        Vendor0080BLSubBlock sb(m_block.content() + i, subblockSize);
-        if (!sb.isNull() && strncmp(sb.id(), id, 3) == 0) {
-            return sb;
-        }
-        i += subblockSize + 8;
-    }
-    return {};
-}
-
-int Vendor0080BLBlock::subblockOffset(const Uic9183Block& block)
-{
-    const auto certCount = *(block.content() + 2) - '0';
-    const auto certSize = block.version() == 2 ? 46 : 26;
-    return 3 + certSize * certCount + 2;
 }
 
 
