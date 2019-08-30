@@ -22,6 +22,14 @@
 
 using namespace KItinerary;
 
+enum {
+    SBlockFirstByte = 'S',
+    SBlockTypeOffset = 1,
+    SBlockLengthOffset = 4,
+    SBlockLengthSize = 4,
+    SBlockHeaderSize = 8
+};
+
 // 0080BL vendor block sub-block ("S block")
 // 1x 'S'
 // 3x field type
@@ -30,35 +38,74 @@ using namespace KItinerary;
 
 Vendor0080BLSubBlock::Vendor0080BLSubBlock() = default;
 
-Vendor0080BLSubBlock::Vendor0080BLSubBlock(const char *data, int size)
-    : m_data(data)
-    , m_size(size)
+Vendor0080BLSubBlock::Vendor0080BLSubBlock(const Uic9183Block &block, int offset)
+    : m_offset(offset)
 {
+    if (block.isNull()) {
+        return;
+    }
+
+    if (block.size() < offset + SBlockHeaderSize) {
+        qCWarning(Log) << "0080BL S-block too small";
+        return;
+    }
+    if (*(block.content() + offset) != SBlockFirstByte) {
+        qCWarning(Log) << "0080BL invalid S-block header";
+        return;
+    }
+
+    m_block = block;
+    if (block.size() < offset + size()) {
+        qCWarning(Log) << "0080BL S-block size exceeds 0080BL block size";
+        m_block = {};
+    }
 }
 
 bool Vendor0080BLSubBlock::isNull() const
 {
-    return m_size <= 0 || !m_data;
+    return m_block.isNull();
 }
 
 int Vendor0080BLSubBlock::size() const
 {
-    return m_size;
+    return contentSize() + SBlockHeaderSize;
+}
+
+Vendor0080BLSubBlock Vendor0080BLSubBlock::next() const
+{
+    return Vendor0080BLSubBlock(m_block, m_offset + size());
+}
+
+int Vendor0080BLSubBlock::contentSize() const
+{
+    if (isNull()) {
+        return 0;
+    }
+    return QByteArray(m_block.content() + m_offset + SBlockLengthOffset, SBlockLengthSize).toInt();
 }
 
 const char* Vendor0080BLSubBlock::id() const
 {
-    return m_data + 1;
+    if (isNull()) {
+        return nullptr;
+    }
+    return m_block.content() + m_offset + SBlockTypeOffset;
 }
 
-const char* Vendor0080BLSubBlock::data() const
+const char* Vendor0080BLSubBlock::content() const
 {
-    return m_data + 8;
+    if (isNull()) {
+        return nullptr;
+    }
+    return m_block.content() + m_offset + SBlockHeaderSize;
 }
 
 QString Vendor0080BLSubBlock::toString() const
 {
-    return QString::fromUtf8(data(), size());
+    if (isNull()) {
+        return {};
+    }
+    return QString::fromUtf8(content(), contentSize());
 }
 
 
@@ -88,23 +135,19 @@ bool Vendor0080BLBlock::isValid() const
     return !m_block.isNull();
 }
 
+Vendor0080BLSubBlock Vendor0080BLBlock::firstBlock() const
+{
+    return Vendor0080BLSubBlock(m_block, subblockOffset(m_block));
+}
+
 Vendor0080BLSubBlock Vendor0080BLBlock::findSubBlock(const char id[3]) const
 {
-    for (int i = subblockOffset(m_block); i < m_block.contentSize();) {
-        if (*(m_block.content() + i) != 'S') {
-            qCWarning(Log) << "0080BL invalid S-block format.";
-            return {};
+    auto sblock = firstBlock();
+    while (!sblock.isNull()) {
+        if (strncmp(sblock.id(), id, 3) == 0) {
+            return sblock;
         }
-        const int subblockSize = QByteArray(m_block.content() + i + 4, 4).toInt();
-        if (subblockSize + i > m_block.size()) {
-            qCWarning(Log) << "0080BL S-block size exceeds block size.";
-            return {};
-        }
-        Vendor0080BLSubBlock sb(m_block.content() + i, subblockSize);
-        if (!sb.isNull() && strncmp(sb.id(), id, 3) == 0) {
-            return sb;
-        }
-        i += subblockSize + 8;
+        sblock = sblock.next();
     }
     return {};
 }

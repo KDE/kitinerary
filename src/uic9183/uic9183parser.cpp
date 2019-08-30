@@ -168,11 +168,11 @@ Person Uic9183Parser::person() const
         // S028 contains family and given name separated by a '#', UTF-8 encoded
         auto sblock = b.findSubBlock("028");
         if (!sblock.isNull()) {
-            const auto endIt = sblock.data() + sblock.size();
-            auto it = std::find(sblock.data(), endIt, '#');
+            const auto endIt = sblock.content() + sblock.contentSize();
+            auto it = std::find(sblock.content(), endIt, '#');
             if (it != endIt) {
                 Person p;
-                p.setGivenName(QString::fromUtf8(sblock.data(), std::distance(sblock.data(), it)));
+                p.setGivenName(QString::fromUtf8(sblock.content(), std::distance(sblock.content(), it)));
                 ++it;
                 p.setFamilyName(QString::fromUtf8(it, std::distance(it, endIt)));
                 return p;
@@ -207,7 +207,7 @@ QString Uic9183Parser::outboundDepartureStationId() const
     if (b.isValid()) {
         // S035 contains the IBNR, possible with leading '80' country code and leading 0 stripped
         const auto sblock = b.findSubBlock("035");
-        if (!sblock.isNull() && sblock.size() <= 7) {
+        if (!sblock.isNull() && sblock.contentSize() <= 7) {
             QString ibnr = QStringLiteral("ibnr:8000000");
             const auto s = sblock.toString();
             return ibnr.replace(ibnr.size() - s.size(), s.size(), s);
@@ -222,7 +222,7 @@ QString Uic9183Parser::outboundArrivalStationId() const
     if (b.isValid()) {
         // S036 contains the IBNR, possible with leading '80' country code and leading 0 stripped
         const auto sblock = b.findSubBlock("036");
-        if (!sblock.isNull() && sblock.size() <= 7) {
+        if (!sblock.isNull() && sblock.contentSize() <= 7) {
             QString ibnr = QStringLiteral("ibnr:8000000");
             const auto s = sblock.toString();
             return ibnr.replace(ibnr.size() - s.size(), s.size(), s);

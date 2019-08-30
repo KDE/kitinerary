@@ -29,18 +29,28 @@ class Vendor0080BLSubBlock
 {
 public:
     Vendor0080BLSubBlock();
-    Vendor0080BLSubBlock(const char *data, int size);
+    Vendor0080BLSubBlock(const Uic9183Block &block, int offset);
 
     bool isNull() const;
-    int size() const;
-    const char *id() const;
-    const char *data() const;
 
+    /** Type of the S-block. */
+    const char *id() const;
+    /** Size of the entire S-block. */
+    int size() const;
+    /** Next S-block in the 0080BL block. */
+    Vendor0080BLSubBlock next() const;
+
+    /** Size of the content of the S-block. */
+    int contentSize() const;
+    /** Content data of the S-block. */
+    const char *content() const;
+
+    /** Content as Unicode string. */
     QString toString() const;
 
 private:
-    const char *m_data = nullptr;
-    int m_size = 0;
+    Uic9183Block m_block;
+    int m_offset = 0;
 };
 
 
@@ -51,6 +61,9 @@ public:
     Vendor0080BLBlock(const Uic9183Block &block);
 
     bool isValid() const;
+    /** First S-block, for iterating. */
+    Vendor0080BLSubBlock firstBlock() const;
+    /** Finds a S-block by type. */
     Vendor0080BLSubBlock findSubBlock(const char id[3]) const;
 
 private:
