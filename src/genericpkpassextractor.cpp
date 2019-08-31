@@ -107,7 +107,9 @@ static Event extractEventTicketPass(KPkPass::Pass *pass, Event event)
         geo.setLatitude(loc.latitude());
         geo.setLongitude(loc.longitude());
         venue.setGeo(geo);
-        venue.setName(loc.relevantText());
+        if (venue.name().isEmpty()) {
+            venue.setName(loc.relevantText());
+        }
         event.setLocation(venue);
     }
     return event;
