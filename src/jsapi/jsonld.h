@@ -56,6 +56,8 @@ public:
      *  This can be used by extractor scripts to fill in the extracted information.
      */
     Q_INVOKABLE QJSValue newLodgingReservation() const;
+
+    Q_INVOKABLE QJSValue newEventReservation() const;
     // TODO add the same for other reservation types
 
     /** Convert a date/time string to a date/time value.
