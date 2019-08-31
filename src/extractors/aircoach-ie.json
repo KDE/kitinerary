@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "header": "From",
+            "match": "@aircoach.ie",
+            "type": "Email"
+        }
+    ],
+    "function": "main",
+    "script": "aircoach-ie.js",
+    "type": "Text"
+}
