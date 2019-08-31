@@ -45,6 +45,18 @@ QJSValue JsApi::JsonLd::newObject(const QString &typeName) const
     return v;
 }
 
+QJSValue JsApi::JsonLd::newPlace(const QString &type) const
+{
+    const auto addr = newObject(QStringLiteral("PostalAddress"));
+    const auto geo = newObject(QStringLiteral("GeoCoordinates"));
+
+    auto p = newObject(type);
+    p.setProperty(QStringLiteral("address"), addr);
+    p.setProperty(QStringLiteral("geo"), geo);
+
+    return p;
+}
+
 QJSValue JsApi::JsonLd::newFlightReservation() const
 {
     const auto dep = newObject(QStringLiteral("Airport"));
@@ -89,15 +101,29 @@ QJSValue JsApi::JsonLd::newTrainReservation() const
     return res;
 }
 
+QJSValue JsApi::JsonLd::newBusReservation() const
+{
+    const auto dep = newPlace(QStringLiteral("BusStation"));
+    const auto arr = newPlace(QStringLiteral("BusStation"));
+    const auto person = newObject(QStringLiteral("Person"));
+    const auto ticket = newObject(QStringLiteral("Ticket"));
+
+    auto resFor = newObject(QStringLiteral("BusTrip"));
+    resFor.setProperty(QStringLiteral("departureBusStop"), dep);
+    resFor.setProperty(QStringLiteral("arrivalBusStop"), arr);
+
+    auto res = newObject(QStringLiteral("BusReservation"));
+    res.setProperty(QStringLiteral("reservationFor"), resFor);
+    res.setProperty(QStringLiteral("underName"), person);
+    res.setProperty(QStringLiteral("reservedTicket"), ticket);
+
+    return res;
+}
+
 QJSValue JsApi::JsonLd::newLodgingReservation() const
 {
-    const auto addr = newObject(QStringLiteral("PostalAddress"));
-    const auto geo = newObject(QStringLiteral("GeoCoordinates"));
     const auto person = newObject(QStringLiteral("Person"));
-
-    auto resFor = newObject(QStringLiteral("LodgingBusiness"));
-    resFor.setProperty(QStringLiteral("address"), addr);
-    resFor.setProperty(QStringLiteral("geo"), geo);
+    const auto resFor = newPlace(QStringLiteral("LodgingBusiness"));
 
     auto res = newObject(QStringLiteral("LodgingReservation"));
     res.setProperty(QStringLiteral("reservationFor"), resFor);

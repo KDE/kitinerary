@@ -48,6 +48,10 @@ public:
      *  This can be used by extractor scripts to fill in the extracted information.
      */
     Q_INVOKABLE QJSValue newTrainReservation() const;
+    /** Convenience method that generates a full BusReservation JS object.
+     *  This can be used by extractor scripts to fill in the extracted information.
+     */
+    Q_INVOKABLE QJSValue newBusReservation() const;
     /** Convenience method that generates a full LodgingReservation JS object.
      *  This can be used by extractor scripts to fill in the extracted information.
      */
@@ -85,6 +89,7 @@ public:
     void setContextDate(const QDateTime &dt);
     ///@endcond
 private:
+    QJSValue newPlace(const QString &type) const;
     QJSEngine *m_engine;
     QDateTime m_contextDate;
 };
