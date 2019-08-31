@@ -135,6 +135,7 @@ QJSValue JsApi::JsonLd::newLodgingReservation() const
 QJSValue KItinerary::JsApi::JsonLd::newEventReservation() const
 {
     auto resFor = newObject(QStringLiteral("Event"));
+    resFor.setProperty(QStringLiteral("location"), newPlace(QStringLiteral("Place")));
 
     auto res = newObject(QStringLiteral("EventReservation"));
     res.setProperty(QStringLiteral("reservationFor"), resFor);
@@ -144,7 +145,6 @@ QJSValue KItinerary::JsApi::JsonLd::newEventReservation() const
 
     return res;
 }
-
 
 QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const
 {
