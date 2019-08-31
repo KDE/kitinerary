@@ -4,5 +4,15 @@
         "filter": [ { "header": "From", "match": "@easyjet.com" } ],
         "script": "easyjet.js",
         "function": "parseHtmlBooking"
+    },
+    {
+        "type": "pdf",
+        "filter": [
+            { "property": "provider", "match": "EJU" },
+            { "property": "provider", "match": "EZS" },
+            { "property": "provider", "match": "EZY" }
+        ],
+        "script": "easyjet.js",
+        "function": "parsePdfBoardingPass"
     }
 ]
