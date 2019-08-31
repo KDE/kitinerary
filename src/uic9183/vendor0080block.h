@@ -18,6 +18,7 @@
 #ifndef KITINERARY_VENDOR0080BLOCK_H
 #define KITINERARY_VENDOR0080BLOCK_H
 
+#include "kitinerary_export.h"
 #include "uic9183block.h"
 
 class QString;
@@ -25,7 +26,7 @@ class QString;
 namespace KItinerary {
 
 /** UIC 918.3 0080BL vendor data block sub-block. */
-class Vendor0080BLSubBlock
+class KITINERARY_EXPORT Vendor0080BLSubBlock
 {
 public:
     Vendor0080BLSubBlock();
@@ -38,7 +39,7 @@ public:
     /** Size of the entire S-block. */
     int size() const;
     /** Next S-block in the 0080BL block. */
-    Vendor0080BLSubBlock next() const;
+    Vendor0080BLSubBlock nextBlock() const;
 
     /** Size of the content of the S-block. */
     int contentSize() const;
@@ -55,7 +56,7 @@ private:
 
 
 /** UIC 918.3 0080BL vendor data block. */
-class Vendor0080BLBlock
+class KITINERARY_EXPORT Vendor0080BLBlock
 {
 public:
     Vendor0080BLBlock(const Uic9183Block &block);

@@ -181,6 +181,7 @@ ecm_generate_headers(KItinerary_Uic9183_FORWARDING_HEADERS
         Uic9183Block
         Uic9183Parser
         Uic9183TicketLayout
+        Vendor0080Block
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_Uic9183_HEADERS
     RELATIVE uic9183

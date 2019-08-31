@@ -71,7 +71,7 @@ int Vendor0080BLSubBlock::size() const
     return contentSize() + SBlockHeaderSize;
 }
 
-Vendor0080BLSubBlock Vendor0080BLSubBlock::next() const
+Vendor0080BLSubBlock Vendor0080BLSubBlock::nextBlock() const
 {
     return Vendor0080BLSubBlock(m_block, m_offset + size());
 }
@@ -147,7 +147,7 @@ Vendor0080BLSubBlock Vendor0080BLBlock::findSubBlock(const char id[3]) const
         if (strncmp(sblock.id(), id, 3) == 0) {
             return sblock;
         }
-        sblock = sblock.next();
+        sblock = sblock.nextBlock();
     }
     return {};
 }
