@@ -28,9 +28,5 @@ function main(text) {
     res.reservationFor.arrivalBusStop.name = arr[2];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(date + arr[1], "dd/MM/yyyyhh:mm", "en");
 
-    // operator only serves locations in IE
-    res.reservationFor.departureBusStop.address.addressCountry = "IE";
-    res.reservationFor.arrivalBusStop.address.addressCountry = "IE";
-
     return res;
 }
