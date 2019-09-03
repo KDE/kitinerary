@@ -71,7 +71,7 @@ static QString valueForItemProperty(const HtmlElement &elem)
         v = elem.attribute(QStringLiteral("content"));
     } else if (elemName == QLatin1String("time")) {
         v = elem.attribute(QStringLiteral("datetime"));
-    } else if (elemName == QLatin1String("link") || elemName == QLatin1String("a")) {
+    } else if (elemName == QLatin1String("link") || elemName == QLatin1Char('a')) {
         if (elem.hasAttribute(QStringLiteral("href"))) {
             v = elem.attribute(QStringLiteral("href"));
         } else if (elem.hasAttribute(QStringLiteral("content"))) {

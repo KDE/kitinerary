@@ -196,8 +196,8 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
 
     const bool hasFullYear = format.contains(QLatin1String("yyyy"));
     const bool hasYear = hasFullYear || format.contains(QLatin1String("yy"));
-    const bool hasMonth = format.contains(QLatin1String("M"));
-    const bool hasDay = format.contains(QLatin1String("d"));
+    const bool hasMonth = format.contains(QLatin1Char('M'));
+    const bool hasDay = format.contains(QLatin1Char('d'));
 
     // time only, set a default date
     if (!hasDay && !hasMonth && !hasYear) {
