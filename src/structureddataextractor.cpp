@@ -36,6 +36,12 @@ static QByteArray fixupJson(const QByteArray &data)
     // Eurowings doesn't put a comma between objects in top-level arrays...
     output.replace("}{", "},{");
 
+    // Volotea doesn't put square brackets in top level arrays...
+    if (output.front() != '[' && output.back() != ']') {
+        output.prepend("[");
+        output.append("]");
+    }
+
     return output;
 }
 
