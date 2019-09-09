@@ -54,7 +54,7 @@ KITINERARY_MAKE_OPERATOR(Ticket)
 
 Ticket::TicketTokenType Ticket::ticketTokenType() const
 {
-    if (d->ticketToken.startsWith(QLatin1Literal("qrcode:"), Qt::CaseInsensitive)) {
+    if (d->ticketToken.startsWith(QLatin1String("qrcode:"), Qt::CaseInsensitive)) {
         return QRCode;
     } else if (d->ticketToken.startsWith(QLatin1String("aztec"), Qt::CaseInsensitive)) {
         return AztecCode;
@@ -68,7 +68,7 @@ Ticket::TicketTokenType Ticket::ticketTokenType() const
 
 QString Ticket::ticketTokenData() const
 {
-    if (d->ticketToken.startsWith(QLatin1Literal("qrcode:"), Qt::CaseInsensitive)) {
+    if (d->ticketToken.startsWith(QLatin1String("qrcode:"), Qt::CaseInsensitive)) {
         return ticketToken().mid(7);
     } else if (d->ticketToken.startsWith(QLatin1String("azteccode:"), Qt::CaseInsensitive)) {
         return ticketToken().mid(10);
