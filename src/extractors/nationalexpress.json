@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "header": "From",
+            "match": "nationalexpress.com",
+            "type": "Email"
+        }
+    ],
+    "function": "parseHtmlBooking",
+    "script": "nationalexpress.js",
+    "type": "Html"
+}
