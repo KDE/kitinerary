@@ -273,6 +273,8 @@ BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
     trip.setArrivalBusStop(processPlace(trip.arrivalBusStop()));
     trip.setDepartureTime(processTimeForLocation(trip.departureTime(), trip.departureBusStop()));
     trip.setArrivalTime(processTimeForLocation(trip.arrivalTime(), trip.arrivalBusStop()));
+    trip.setBusNumber(trip.busNumber().simplified());
+    trip.setBusName(trip.busName().simplified());
     return trip;
 }
 
