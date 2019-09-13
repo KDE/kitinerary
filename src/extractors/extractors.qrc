@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/org.kde.pim/kitinerary/extractors">
+        <file>acprail.json</file>
+        <file>acprail.js</file>
         <file>aerlingus.json</file>
         <file>aerlingus.js</file>
         <file>airbaltic.json</file>

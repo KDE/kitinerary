@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "header": "From",
+            "match": "@acprail.com",
+            "type": "Email"
+        }
+    ],
+    "function": "main",
+    "script": "acprail.js",
+    "type": "Html"
+}
