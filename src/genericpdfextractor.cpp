@@ -37,7 +37,7 @@ enum {
     MaxFileSize = 4000000, // maximum in the current test set is 980kB
     // unit is 1/72 inch, assuming landscape orientation
     MinTargetImageHeight = 28,
-    MinTargetImageWidth = 72,
+    MinTargetImageWidth = 36,
     MaxTargetImageHeight = 252,
     MaxTargetImageWidth = 252,
 };
