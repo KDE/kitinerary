@@ -64,7 +64,11 @@ QVariant JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
         if (!GenericPdfExtractor::maybeBarcode(pdfImg, BarcodeDecoder::Aztec)) {
             return {};
         }
-        return m_decoder->decodeBinary(pdfImg.image(), BarcodeDecoder::Aztec);
+        const auto content = m_decoder->decodeBinary(pdfImg.image(), BarcodeDecoder::Aztec);
+        if (content.isEmpty()) {
+            return {};
+        }
+        return content;
     }
     return {};
 }

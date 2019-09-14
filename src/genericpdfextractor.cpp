@@ -109,6 +109,10 @@ void GenericPdfExtractor::extractImage(const PdfImage &img, QJsonArray &result)
 
 void GenericPdfExtractor::extractBarcode(const QString &code, QJsonArray &result)
 {
+    if (code.isEmpty()) {
+        return;
+    }
+
     if (IataBcbpParser::maybeIataBcbp(code)) {
         const auto res = IataBcbpParser::parse(code, m_contextDate.date());
         const auto jsonLd = JsonLdDocument::toJson(res);
