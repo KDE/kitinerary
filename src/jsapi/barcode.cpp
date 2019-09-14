@@ -85,6 +85,18 @@ QString JsApi::Barcode::decodeQR(const QVariant &img) const
     return {};
 }
 
+QString JsApi::Barcode::decodeDataMatrix(const QVariant &img) const
+{
+    if (img.userType() == qMetaTypeId<PdfImage>()) {
+        const auto pdfImg = img.value<PdfImage>();
+        if (!GenericPdfExtractor::maybeBarcode(pdfImg, BarcodeDecoder::DataMatrix)) {
+            return {};
+        }
+        return m_decoder->decodeString(pdfImg.image(), BarcodeDecoder::DataMatrix);
+    }
+    return {};
+}
+
 QVariant JsApi::Barcode::decodeUic9183(const QVariant &s) const
 {
     Uic9183Parser p;

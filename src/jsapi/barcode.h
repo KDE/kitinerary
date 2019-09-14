@@ -49,6 +49,11 @@ public:
      *  @param img An image containing the barcode, e.g. a PdfImage instance.
      */
     Q_INVOKABLE QString decodeQR(const QVariant &img) const;
+    /** Decode a DataMatrix barcode image.
+     *  @param img An image containing the barcode, e.g. a PdfImage instance.
+     */
+    Q_INVOKABLE QString decodeDataMatrix(const QVariant &img) const;
+
     /** Decode an UIC 918.3 message from a train ticket Aztec code.
      *  @param s A QByteArray containing the raw data from the barcode.
      *  @returns An instance of Uic9183Parser.
@@ -58,6 +63,7 @@ public:
      *  @returns A JSON-LD structure representing the boarding pass.
      */
     Q_INVOKABLE QVariant decodeIataBcbp(const QString &s) const;
+
     /** Converts the given QByteArray into an base64 encoded string. */
     Q_INVOKABLE QString toBase64(const QVariant &b) const;
     /** Converts the given QByteArray into a BitArray. */
