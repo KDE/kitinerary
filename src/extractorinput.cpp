@@ -154,14 +154,14 @@ QString ExtractorInput::typeToString(ExtractorInput::Type type)
         return {};
     }
 
-    const auto me = ExtractorInput::staticMetaObject.enumerator(0);
+    const auto me = QMetaEnum::fromType<ExtractorInput::Type>();
     Q_ASSERT(me.isValid());
     return QString::fromUtf8(me.valueToKey(type));
 }
 
 ExtractorInput::Type ExtractorInput::typeFromName(const QString &name)
 {
-    const auto me = ExtractorInput::staticMetaObject.enumerator(0);
+    const auto me = QMetaEnum::fromType<ExtractorInput::Type>();
     Q_ASSERT(me.isValid());
 
     bool ok = false;
