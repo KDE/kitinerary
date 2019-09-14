@@ -56,6 +56,8 @@
         <file>np4.js</file>
         <file>regiojet.json</file>
         <file>regiojet.js</file>
+        <file>renfe.json</file>
+        <file>renfe.js</file>
         <file>sas.json</file>
         <file>sas-boardingpass.js</file>
         <file>sas-receipt.js</file>
