@@ -49,8 +49,9 @@ public:
         Aztec = 1,
         QRCode = 2,
         PDF417 = 4,
-        Any = 7,
-        AnySquare = 3,
+        DataMatrix = 8,
+        Any = 15,
+        AnySquare = 11,
         None = 0
     };
     Q_DECLARE_FLAGS(BarcodeTypes, BarcodeType)

@@ -137,6 +137,9 @@ static std::vector<ZXing::BarcodeFormat> typeToFormats(BarcodeDecoder::BarcodeTy
     if (types & BarcodeDecoder::PDF417) {
         formats.push_back(ZXing::BarcodeFormat::PDF_417);
     }
+    if (types & BarcodeDecoder::DataMatrix) {
+        formats.push_back(ZXing::BarcodeFormat::DATA_MATRIX);
+    }
     return formats;
 }
 
@@ -149,6 +152,8 @@ BarcodeDecoder::BarcodeType formatToType(ZXing::BarcodeFormat format)
             return BarcodeDecoder::QRCode;
         case ZXing::BarcodeFormat::PDF_417:
             return BarcodeDecoder::PDF417;
+        case ZXing::BarcodeFormat::DATA_MATRIX:
+            return BarcodeDecoder::DataMatrix;
         default:
             break;
     }
