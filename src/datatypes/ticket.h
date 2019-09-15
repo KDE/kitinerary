@@ -61,11 +61,12 @@ class KITINERARY_EXPORT Ticket
 public:
     /** The type of content in the ticketToken property. */
     enum TicketTokenType {
+        Unknown, ///< Unknown or empty ticket token
+        Url, ///< A download URL
         QRCode, ///< QR code
         AztecCode, ///< Aztec code
         Code128, ///< Code 128 barcode
-        Url, ///< A download URL
-        Unknown ///< Unknown or empty ticket token
+        DataMatrix ///< A DataMatrix barcode
     };
     Q_ENUM(TicketTokenType)
 
