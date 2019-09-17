@@ -26,6 +26,7 @@ set(kitinerary_lib_srcs
     jsapi/context.cpp
     jsapi/jsonld.cpp
 
+    knowledgedb/alphaid.cpp
     knowledgedb/airportdb.cpp
     knowledgedb/countrydb.cpp
     knowledgedb/iatacode.cpp

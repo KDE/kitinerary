@@ -19,6 +19,7 @@
 
 #include <KItinerary/CountryDb>
 
+#include <knowledgedb/alphaid.h>
 #include <knowledgedb/trainstationdb.h>
 
 #include <QDebug>
@@ -58,6 +59,31 @@ private Q_SLOTS:
         QVERIFY(uic[0] < uic[1]);
         QVERIFY(uic[0] == uic[0]);
         QVERIFY(uic[0] != uic[1]);
+    }
+
+   void testAlphaId()
+   {
+       using ID3 = AlphaId<uint16_t, 3>;
+       constexpr ID3 id1{"ABC"};
+       const ID3 id2(QStringLiteral("CBA"));
+       static_assert(sizeof(id1) == 2, "");
+       QVERIFY(id1.isValid());
+       QVERIFY(id2.isValid());
+       QVERIFY(id1 < id2);
+       QVERIFY(!(id2 < id1));
+       QVERIFY(id1 == id1);
+       QVERIFY(id1 != id2);
+       QVERIFY(!(id1 == id2));
+       QVERIFY(!(id1 != id1));
+
+       QCOMPARE(id1.toString(), QLatin1String("ABC"));
+       QCOMPARE(id2.toString(), QLatin1String("CBA"));
+
+       constexpr ID3 id3;
+       QVERIFY(!id3.isValid());
+       QVERIFY(id3.toString().isEmpty());
+
+       qDebug() << id1;
     }
 
     void testIBNRLookup()
