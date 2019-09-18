@@ -388,6 +388,13 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
         const auto isoCode = KContacts::Address::countryToISO(addr.addressCountry()).toUpper();
         if (!isoCode.isEmpty()) {
             addr.setAddressCountry(isoCode);
+
+        // try ISO 3166-1 alpha-3, we get that e.g. from Flixbus
+        } else if (addr.addressCountry().size() == 3) {
+            const auto c = KnowledgeDb::countryIdFromIso3166_1alpha3(KnowledgeDb::CountryId3(addr.addressCountry()));
+            if (c.isValid()) {
+                addr.setAddressCountry(c.toString());
+            }
         }
     }
 
