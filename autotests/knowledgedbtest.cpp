@@ -171,7 +171,7 @@ private Q_SLOTS:
         QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Left);
         QCOMPARE(country.powerPlugTypes, {TypeG});
         country = KnowledgeDb::countryForId(CountryId{"GL"});
-        QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Unknown);
+        QCOMPARE(country.drivingSide, KnowledgeDb::DrivingSide::Right);
     }
 
     void testPowerPlugCompat_data()
@@ -230,6 +230,14 @@ private Q_SLOTS:
 
         QCOMPARE(KnowledgeDb::countryIdForUicCode(80), CountryId{"DE"});
         QCOMPARE(KnowledgeDb::countryIdForUicCode(0), CountryId{});
+    }
+
+    void testIso3Lookup()
+    {
+        using namespace KnowledgeDb;
+
+        QCOMPARE(KnowledgeDb::countryIdFromIso3166_1alpha3(CountryId3{"ITA"}), CountryId{"IT"});
+        QCOMPARE(KnowledgeDb::countryIdFromIso3166_1alpha3(CountryId3{"FOO"}), CountryId{});
     }
 };
 

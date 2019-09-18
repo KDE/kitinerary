@@ -52,12 +52,14 @@ private:
     bool fetchUicCountryCodes();
     QUrl insertOrMerge(const QJsonObject &obj);
     void writeCountryTable(QIODevice *out);
+    void writeIso3CodeTable(QIODevice *out);
     void writeUicCodeTable(QIODevice *out);
     void printSummary();
 
     std::vector<Country> m_countries;
     std::map<QString, QUrl> m_isoCodeMap;
     std::map<uint16_t, QString> m_uicCodeMap;
+    std::map<QString, QString> m_iso3CodeMap;
 
     int m_isoCodeConflicts = 0;
 };
