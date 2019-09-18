@@ -52,7 +52,7 @@ using namespace KItinerary;
 static QVariant createInstance(const QJsonObject &obj);
 
 // Eurowings workarounds...
-static const char *fallbackDateTimePattern[] = {
+static const char* const fallbackDateTimePattern[] = {
     "yyyy-MM-dd HH:mm:ss",
     "yyyy-MM-dd HH:mm",
     "MM-dd-yyyy HH:mm" // yes, seriously ;(

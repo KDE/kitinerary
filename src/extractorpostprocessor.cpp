@@ -370,7 +370,7 @@ Person ExtractorPostprocessorPrivate::processPerson(Person person) const
     }
 
     // strip prefixes, they break comparisons
-    static const char* honorificPrefixes[] = { "MR ", "MS ", "MRS " };
+    static const char* const honorificPrefixes[] = { "MR ", "MS ", "MRS " };
     for (auto prefix : honorificPrefixes) {
         if (person.name().startsWith(QLatin1String(prefix), Qt::CaseInsensitive)) {
             person.setName(person.name().mid(strlen(prefix)));
