@@ -19,6 +19,7 @@
 #define KITINERARY_TIMEZONEDB_H
 
 #include <kitinerary_export.h>
+#include "countrydb.h"
 
 #include <cstdint>
 #include <limits>
@@ -27,7 +28,6 @@ class QTimeZone;
 
 namespace KItinerary {
 namespace KnowledgeDb {
-    class CountryId;
     enum class Tz : uint16_t;
 
     /** Timezone type as used in the database.

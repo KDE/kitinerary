@@ -28,21 +28,6 @@ using namespace KItinerary::KnowledgeDb;
 
 static_assert(sizeof(CountryId) <= 2, "CountryId too large");
 
-CountryId::CountryId(const QString& id)
-{
-    m_id1 = m_id2 = 0;
-    m_unused = 0;
-
-    if (id.size() != 2) {
-        return;
-    }
-    if (!id.at(0).isUpper() || !id.at(1).isUpper()) {
-        return;
-    }
-    m_id1 = id.at(0).toLatin1() - '@';
-    m_id2 = id.at(1).toLatin1() - '@';
-}
-
 Country KnowledgeDb::countryForId(CountryId id)
 {
     const auto it = std::lower_bound(std::begin(country_table), std::end(country_table), id, [](const Country &lhs, CountryId rhs) {
@@ -62,15 +47,6 @@ const Country* KnowledgeDb::countriesBegin()
 const Country* KnowledgeDb::countriesEnd()
 {
     return std::end(country_table);
-}
-
-QString KnowledgeDb::CountryId::toString() const
-{
-    QString s;
-    s.resize(2);
-    s[0] = QLatin1Char('@' + m_id1);
-    s[1] = QLatin1Char('@' + m_id2);
-    return s;
 }
 
 struct PowerPlugCompatMap {

@@ -19,6 +19,7 @@
 #define KITINERARY_COUNTRYDB_H
 
 #include "kitinerary_export.h"
+#include "alphaid.h"
 
 #include <QMetaType>
 
@@ -31,50 +32,9 @@ namespace KnowledgeDb {
     KITINERARY_EXPORT Q_NAMESPACE
 
 /** ISO 3166-1 alpha 2 country identifier. */
-class CountryId
-{
-public:
-    inline constexpr CountryId()
-        : m_id1(0)
-        , m_id2(0)
-        , m_unused(0)
-    {}
-
-    inline constexpr CountryId(const char id[2])
-        : m_id1(id[0] - '@')
-        , m_id2(id[1] - '@')
-        , m_unused(0)
-    {}
-
-    KITINERARY_EXPORT explicit CountryId(const QString &id);
-
-    inline constexpr bool operator<(CountryId other) const
-    {
-        return (m_id1 << 5 | m_id2) < (other.m_id1 << 5 | other.m_id2);
-    }
-
-    inline constexpr bool operator==(CountryId other) const
-    {
-        return m_id1 == other.m_id1 && m_id2 == other.m_id2;
-    }
-
-    inline constexpr bool operator!=(CountryId other) const
-    {
-        return m_id1 != other.m_id1 || m_id2 != other.m_id2;
-    }
-
-    inline constexpr bool isValid() const
-    {
-        return m_id1 != 0 || m_id2 != 0;
-    }
-
-    KITINERARY_EXPORT QString toString() const;
-
-private:
-    uint16_t m_id1 : 5;
-    uint16_t m_id2 : 5;
-    uint16_t m_unused : 6;
-};
+using CountryId = AlphaId<uint16_t, 2>;
+/** ISO 3166-1 alpha 3 country identifier. */
+using CountryId3 = AlphaId<uint16_t, 3>;
 
 /** Driving side. */
 enum class DrivingSide : uint8_t {

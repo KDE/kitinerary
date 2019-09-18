@@ -20,53 +20,16 @@
 #ifndef KITINERARY_KNOWLEDGEDB_IATACODE_H
 #define KITINERARY_KNOWLEDGEDB_IATACODE_H
 
-#include "kitinerary_export.h"
+#include "alphaid.h"
 
 #include <cstdint>
-
-class QDebug;
-class QString;
 
 namespace KItinerary {
 namespace KnowledgeDb {
 
 /** IATA airport code. */
-class KITINERARY_EXPORT IataCode
-{
-public:
-    inline constexpr IataCode()
-        : m_letter0(0)
-        , m_letter1(0)
-        , m_letter2(0)
-        , m_valid(0)
-    {
-    }
-
-    inline explicit constexpr IataCode(const char iataStr[4])
-        : m_letter0(iataStr[0] - 'A')
-        , m_letter1(iataStr[1] - 'A')
-        , m_letter2(iataStr[2] - 'A')
-        , m_valid(1)
-    {
-    }
-
-    explicit IataCode(const QString &iataStr);
-    bool isValid() const;
-    bool operator<(IataCode rhs) const;
-    bool operator==(IataCode other) const;
-    bool operator!=(IataCode other) const;
-
-    QString toString() const;
-private:
-    uint16_t toUInt16() const;
-    uint16_t m_letter0 : 5;
-    uint16_t m_letter1 : 5;
-    uint16_t m_letter2 : 5;
-    uint16_t m_valid : 1;
-};
+using IataCode = AlphaId<uint16_t, 3>;
 
 }}
-
-KITINERARY_EXPORT QDebug operator<<(QDebug dbg, KItinerary::KnowledgeDb::IataCode code);
 
 #endif // KITINERARY_KNOWLEDGEDB_IATACODE_H

@@ -140,6 +140,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
 )
 ecm_generate_headers(KItinerary_KnowledgeDb_FORWARDING_HEADERS
     HEADER_NAMES
+        AlphaId
         CountryDb
         KnowledgeDb
     PREFIX KItinerary
