@@ -43,11 +43,14 @@ class KITINERARY_EXPORT Organization
 {
     KITINERARY_BASE_GADGET(Organization)
     KITINERARY_PROPERTY(QString, name, setName)
+    KITINERARY_PROPERTY(QString, description, setDescription)
+    KITINERARY_PROPERTY(QUrl, image, setImage)
     KITINERARY_PROPERTY(QString, email, setEmail)
     KITINERARY_PROPERTY(QString, telephone, setTelephone)
     KITINERARY_PROPERTY(QUrl, url, setUrl)
     KITINERARY_PROPERTY(KItinerary::PostalAddress, address, setAddress)
     KITINERARY_PROPERTY(KItinerary::GeoCoordinates, geo, setGeo)
+    KITINERARY_PROPERTY(QVariantList, potentialAction, setPotentialAction)
 protected:
     ///@cond internal
     QExplicitlySharedDataPointer<OrganizationPrivate> d;
