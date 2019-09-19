@@ -20,6 +20,7 @@
 #include "config-kitinerary.h"
 #include "extractorpostprocessor.h"
 #include "extractorpostprocessor_p.h"
+#include "extractorvalidator_p.h"
 #include "flightpostprocessor_p.h"
 
 #include "extractorutil.h"
@@ -101,7 +102,7 @@ QVector<QVariant> ExtractorPostprocessor::result() const
 {
     if (!d->m_resultFinalized) {
         for (auto it = d->m_data.begin(); it != d->m_data.end();) {
-            if (d->filterReservation(*it)) {
+            if (ExtractorValidator::isValidElement(*it)) {
                 ++it;
             } else {
                 //qCDebug(Log).noquote() << "Discarding element:" << QJsonDocument(JsonLdDocument::toJson({*it})).toJson();
@@ -523,87 +524,4 @@ QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, co
         dt = dt.toTimeZone(tz);
     }
     return dt;
-}
-
-
-bool ExtractorPostprocessorPrivate::filterReservation(const QVariant &res) const
-{
-    if (JsonLd::isA<FlightReservation>(res)) {
-        return filterFlight(res.value<FlightReservation>().reservationFor().value<Flight>());
-    }
-    if (JsonLd::isA<TrainReservation>(res)) {
-        return filterTrainTrip(res.value<TrainReservation>().reservationFor().value<TrainTrip>());
-    }
-    if (JsonLd::isA<BusReservation>(res)) {
-        return filterBusTrip(res.value<BusReservation>().reservationFor().value<BusTrip>());
-    }
-    if (JsonLd::isA<LodgingReservation>(res)) {
-        return filterLodgingReservation(res.value<LodgingReservation>());
-    }
-    if (JsonLd::isA<EventReservation>(res)) {
-        return filterEventReservation(res.value<EventReservation>());
-    }
-    if (JsonLd::isA<FoodEstablishmentReservation>(res)) {
-        return filterFoodReservation(res.value<FoodEstablishmentReservation>());
-    }
-
-    // types without specific filters yet
-    if (JsonLd::isA<TouristAttractionVisit>(res) ||
-            JsonLd::isA<RentalCarReservation>(res) ||
-            JsonLd::isA<TaxiReservation>(res)) {
-        return true;
-    }
-
-    // unknown top-level type
-    return false;
-}
-
-bool ExtractorPostprocessorPrivate::filterLodgingReservation(const LodgingReservation &res) const
-{
-    return res.checkinTime().isValid() && res.checkoutTime().isValid();
-}
-
-bool ExtractorPostprocessorPrivate::filterFlight(const Flight &flight) const
-{
-    // this will be valid if either boarding time, departure time or departure day is set
-    const auto validDate = flight.departureDay().isValid();
-    return filterAirport(flight.departureAirport())
-           && filterAirport(flight.arrivalAirport())
-           && validDate;
-}
-
-bool ExtractorPostprocessorPrivate::filterAirport(const Airport &airport) const
-{
-    return !airport.iataCode().isEmpty() || !airport.name().isEmpty();
-}
-
-bool ExtractorPostprocessorPrivate::filterTrainTrip(const TrainTrip &trip) const
-{
-    return filterTrainOrBusStation(trip.departureStation())
-           && filterTrainOrBusStation(trip.arrivalStation())
-           && trip.departureDay().isValid();
-}
-
-bool ExtractorPostprocessorPrivate::filterBusTrip(const BusTrip &trip) const
-{
-    return filterTrainOrBusStation(trip.departureBusStop())
-           && filterTrainOrBusStation(trip.arrivalBusStop())
-           && trip.departureTime().isValid() && trip.arrivalTime().isValid();
-}
-
-template <typename T>
-bool ExtractorPostprocessorPrivate::filterTrainOrBusStation(const T &station) const
-{
-    return !station.name().isEmpty();
-}
-
-bool ExtractorPostprocessorPrivate::filterEventReservation(const EventReservation &res) const
-{
-    const auto event = res.reservationFor().value<Event>();
-    return !event.name().isEmpty() && event.startDate().isValid();
-}
-
-bool ExtractorPostprocessorPrivate::filterFoodReservation(const FoodEstablishmentReservation &res) const
-{
-    return res.startTime().isValid();
 }

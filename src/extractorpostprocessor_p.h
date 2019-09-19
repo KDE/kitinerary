@@ -77,16 +77,6 @@ public:
     QVariantList processActions(QVariantList actions) const;
     template <typename T> QDateTime processTimeForLocation(QDateTime dt, const T &place) const;
 
-    bool filterReservation(const QVariant &res) const;
-    bool filterLodgingReservation(const LodgingReservation &res) const;
-    bool filterFlight(const Flight &flight) const;
-    bool filterAirport(const Airport &airport) const;
-    bool filterTrainTrip(const TrainTrip &trip) const;
-    bool filterBusTrip(const BusTrip &trip) const;
-    template <typename T> bool filterTrainOrBusStation(const T &station) const;
-    bool filterEventReservation(const EventReservation &res) const;
-    bool filterFoodReservation(const FoodEstablishmentReservation &res) const;
-
     QVector<QVariant> m_data;
     QDateTime m_contextDate;
     bool m_resultFinalized = false;
