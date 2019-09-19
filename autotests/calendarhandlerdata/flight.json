@@ -15,7 +15,6 @@
             "airline": {
                 "@type": "Airline",
                 "iataCode": "AB",
-                "image": "https://www.airberlin.com/site/affiliate/bannerintegration/boardingpass/ab_ow_pos_RGB.png",
                 "name": "airberlin"
             },
             "arrivalAirport": {
