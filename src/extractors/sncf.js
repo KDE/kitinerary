@@ -151,12 +151,12 @@ function parseHtmlConfirmation(html)
                     res.reservationNumber = pnr[0].content;
                 }
 
-                res.reservationFor.departureTime = JsonLd.toDateTime(dt + segmentDetail.content, "dd MMMMhh'h'mm", "fr");
+                res.reservationFor.departureTime = JsonLd.toDateTime(dt + segmentDetail.content, "d MMMMhh'h'mm", "fr");
                 segmentDetail = segmentDetail.nextSibling;
                 res.reservationFor.departureStation.name = segmentDetail.content;
             }
             else if (cls.includes("segment-arrival")) {
-                res.reservationFor.arrivalTime = JsonLd.toDateTime(dt + segmentDetail.content, "dd MMMMhh'h'mm", "fr");
+                res.reservationFor.arrivalTime = JsonLd.toDateTime(dt + segmentDetail.content, "d MMMMhh'h'mm", "fr");
                 segmentDetail = segmentDetail.nextSibling;
                 res.reservationFor.arrivalStation.name = segmentDetail.content;
                 reservations.push(res);
