@@ -34,6 +34,7 @@ class KITINERARY_EXPORT Action
 {
     KITINERARY_BASE_GADGET(Action)
     KITINERARY_PROPERTY(QUrl, target, setTarget)
+    KITINERARY_PROPERTY(QVariant, result, setResult)
 protected:
     ///@cond internal
     QExplicitlySharedDataPointer<ActionPrivate> d;

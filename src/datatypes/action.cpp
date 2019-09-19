@@ -29,10 +29,12 @@ class ActionPrivate : public QSharedData
     KITINERARY_PRIVATE_BASE_GADGET(Action)
 public:
     QUrl target;
+    QVariant result;
 };
 
 KITINERARY_MAKE_BASE_CLASS(Action)
 KITINERARY_MAKE_PROPERTY(Action, QUrl, target, setTarget)
+KITINERARY_MAKE_PROPERTY(Action, QVariant, result, setResult)
 KITINERARY_MAKE_OPERATOR(Action)
 
 class CancelActionPrivate : public ActionPrivate
