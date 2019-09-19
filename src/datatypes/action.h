@@ -64,6 +64,14 @@ class KITINERARY_EXPORT DownloadAction : public Action
     KITINERARY_GADGET(DownloadAction)
 };
 
+/** Reserve action.
+ *  @see https://schema.org/ReserveAction
+ */
+class KITINERARY_EXPORT ReserveAction : public Action
+{
+    KITINERARY_GADGET(ReserveAction)
+};
+
 /** Edit/update action.
  *  @see https://schema.org/UpdateAction
  */
