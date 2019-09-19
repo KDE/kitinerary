@@ -33,6 +33,8 @@ class KITINERARY_EXPORT Event
 {
     KITINERARY_GADGET(Event)
     KITINERARY_PROPERTY(QString, name, setName)
+    KITINERARY_PROPERTY(QString, description, setDescription)
+    KITINERARY_PROPERTY(QUrl, image, setImage)
     KITINERARY_PROPERTY(QUrl, url, setUrl)
     KITINERARY_PROPERTY(QDateTime, startDate, setStartDate)
     KITINERARY_PROPERTY(QDateTime, endDate, setEndDate)
