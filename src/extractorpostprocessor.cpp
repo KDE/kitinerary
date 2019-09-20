@@ -74,6 +74,7 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
     d->m_resultFinalized = false;
     d->m_data.reserve(d->m_data.size() + data.size());
     for (auto elem : data) {
+        // reservation types
         if (JsonLd::isA<FlightReservation>(elem)) {
             elem = d->processFlightReservation(elem.value<FlightReservation>());
         } else if (JsonLd::isA<TrainReservation>(elem)) {
@@ -92,6 +93,15 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
             elem = d->processRentalCarReservation(elem.value<RentalCarReservation>());
         } else if (JsonLd::isA<TaxiReservation>(elem)) {
             elem = d->processTaxiReservation(elem.value<TaxiReservation>());
+        }
+
+        // "reservationFor" types
+        else if (JsonLd::isA<LodgingBusiness>(elem)) {
+            elem = d->processPlace(elem.value<LodgingBusiness>());
+        } else if (JsonLd::isA<FoodEstablishment>(elem)) {
+            elem = d->processPlace(elem.value<FoodEstablishment>());
+        } else if (JsonLd::isA<Event>(elem)) {
+            elem = d->processEvent(elem.value<Event>());
         }
 
         d->mergeOrAppend(elem);
