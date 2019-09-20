@@ -28,10 +28,16 @@ namespace KItinerary {
 /** Utility function for sorting reservations/visits/events. */
 namespace SortUtil
 {
-    /** Returns the (start) time associated with the given reservation. */
-    KITINERARY_EXPORT QDateTime startDateTime(const QVariant &res);
+    /** Returns the (start) time associated with the given element.
+     *  This can be either a Reservation object, or a reservable object
+     *  if that has a time associated (such as an Event).
+     */
+    KITINERARY_EXPORT QDateTime startDateTime(const QVariant &elem);
 
-    /** Returns the (end) time associated with the given reservation. */
+    /** Returns the (end) time associated with the given element.
+     *  This can be either a Reservation object, or a reservable object
+     *  if that has a time associated (such as an Event).
+     */
     KITINERARY_EXPORT QDateTime endDateTime(const QVariant &res);
 
     /** Sorting function for top-level reservation/visit/event elements. */
