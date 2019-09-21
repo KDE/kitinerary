@@ -101,10 +101,6 @@ static void migrateToAction(QJsonObject &obj, const char *propName, const char *
 
 static void filterTrainTrip(QJsonObject &trip)
 {
-    if (trip.value(QLatin1String("@type")).toString() != QLatin1String("TrainTrip")) {
-        return;
-    }
-
     // move TrainTrip::trainCompany to TrainTrip::provider (as defined by schema.org)
     renameProperty(trip, "trainCompany", "provider");
 }
@@ -114,11 +110,6 @@ static void filterLodgingReservation(QJsonObject &res)
     // check[in|out]Date -> check[in|out]Time (legacy Google format)
     renameProperty(res, "checkinDate", "checkinTime");
     renameProperty(res, "checkoutDate", "checkoutTime");
-}
-
-static void filterTaxiReservation(QJsonObject &res)
-{
-    renameProperty(res, "reservationId", "reservationNumber");
 }
 
 static void filterFlight(QJsonObject &res)
@@ -155,6 +146,9 @@ static void filterReservation(QJsonObject &res)
     migrateToAction(res, "ticketDownloadUrl", "DownloadAction", true);
     migrateToAction(res, "url", "ViewAction", false);
 
+    // technically the wrong way (reservationId is the current schema.org standard), but hardly used anywhere (yet)
+    renameProperty(res, "reservationId", "reservationNumber");
+
     // "typos"
     renameProperty(res, "Url", "url");
 }
@@ -164,13 +158,6 @@ static void filterBusTrip(QJsonObject &trip)
     renameProperty(trip, "arrivalStation", "arrivalBusStop");
     renameProperty(trip, "departureStation", "departureBusStop");
     renameProperty(trip, "busCompany", "provider");
-}
-
-static void filterBusReservation(QJsonObject &res)
-{
-    QJsonObject trip = res.value(QLatin1String("reservationFor")).toObject();
-    filterBusTrip(trip);
-    res.insert(QStringLiteral("reservationFor"), trip);
 }
 
 static QJsonArray filterActions(const QJsonValue &v)
@@ -190,6 +177,19 @@ static QJsonArray filterActions(const QJsonValue &v)
 
     return actions;
 }
+
+
+// filter functions applied to objects of the corresponding (already normalized) type
+// IMPORTANT: keep alphabetically sorted by type!
+static const struct {
+    const char* type;
+    void(*filterFunc)(QJsonObject&);
+} type_filters[] = {
+    { "BusTrip", filterBusTrip },
+    { "Flight", filterFlight },
+    { "LodgingReservation", filterLodgingReservation },
+    { "TrainTrip", filterTrainTrip },
+};
 
 static void filterRecursive(QJsonObject &obj);
 
@@ -211,6 +211,8 @@ static void filterRecursive(QJsonArray &array)
 static void filterRecursive(QJsonObject &obj)
 {
     const auto type = obj.value(QLatin1String("@type")).toString().toUtf8();
+
+    // normalize type
     const auto it = std::lower_bound(std::begin(type_mapping), std::end(type_mapping), type, [](const auto &lhs, const auto &rhs) {
         return std::strcmp(lhs.fromType, rhs.constData()) < 0;
     });
@@ -229,6 +231,14 @@ static void filterRecursive(QJsonObject &obj)
             *it = array;
         }
     }
+
+    // apply filter functions
+    const auto filterIt = std::lower_bound(std::begin(type_filters), std::end(type_filters), type, [](const auto &lhs, const auto &rhs) {
+        return std::strcmp(lhs.type, rhs.constData()) < 0;
+    });
+    if (filterIt != std::end(type_filters) && std::strcmp((*filterIt).type, type.constData()) == 0) {
+        (*filterIt).filterFunc(obj);
+    }
 }
 
 QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
@@ -239,26 +249,6 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
     const auto type = obj.value(QLatin1String("@type")).toString();
     if (type.endsWith(QLatin1String("Reservation"))) {
         filterReservation(res);
-    }
-
-    if (type == QLatin1String("TrainReservation")) {
-        auto train = obj.value(QLatin1String("reservationFor")).toObject();
-        filterTrainTrip(train);
-        if (!train.isEmpty()) {
-            res.insert(QStringLiteral("reservationFor"), train);
-        }
-    } else if (type == QLatin1String("LodgingReservation")) {
-        filterLodgingReservation(res);
-    } else if (type == QLatin1String("FlightReservation")) {
-        auto flight = obj.value(QLatin1String("reservationFor")).toObject();
-        filterFlight(flight);
-        if (!flight.isEmpty()) {
-            res.insert(QStringLiteral("reservationFor"), flight);
-        }
-    } else if (type == QLatin1String("TaxiReservation")) {
-        filterTaxiReservation(res);
-    } else if (type == QLatin1String("BusReservation")) {
-        filterBusReservation(res);
     }
 
     auto actions = res.value(QLatin1String("potentialAction"));
