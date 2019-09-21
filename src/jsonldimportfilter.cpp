@@ -22,7 +22,48 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include <cstring>
+
 using namespace KItinerary;
+
+// type normalization from full schema.org type hierarchy to our simplified subset
+// IMPORTANT: keep alphabetically sorted by fromType!
+static const struct {
+    const char* fromType;
+    const char* toType;
+} type_mapping[] = {
+    { "Bakery", "FoodEstablishment" },
+    { "BarOrPub", "FoodEstablishment" },
+    { "BedAndBreakfast", "LodgingBusiness" },
+    { "Brewery", "FoodEstablishment" },
+    { "BusStop", "BusStation" },
+    { "CafeOrCoffeeShop", "FoodEstablishment" },
+    { "Campground", "LodgingBusiness" },
+    { "ChildrensEvent", "Event" },
+    { "ComedyEvent", "Event" },
+    { "DanceEvent", "Event" },
+    { "Distillery", "FoodEstablishment" },
+    { "EditAction", "UpdateAction" },
+    { "EducationEvent", "Event" },
+    { "ExhibitionEvent", "Event" },
+    { "FastFoodRestaurant", "FoodEstablishment" },
+    { "Festival", "Event" },
+    { "Hostel", "LodgingBusiness" },
+    { "Hotel", "LodgingBusiness" },
+    { "IceCreamShop", "FoodEstablishment" },
+    { "LiteraryEvent", "Event" },
+    { "Motel", "LodgingBusiness" },
+    { "MusicEvent", "Event" },
+    { "Resort", "LodgingBusiness" },
+    { "Restaurant", "FoodEstablishment" },
+    { "SaleEvent", "Event" },
+    { "ScreeningEvent", "Event" },
+    { "SocialEvent", "Event" },
+    { "SportsEvent", "Event" },
+    { "TheaterEvent", "Event" },
+    { "VisualArtsEvent", "Event" },
+    { "Winery", "FoodEstablishment" },
+};
 
 static void renameProperty(QJsonObject &obj, const char *oldName, const char *newName)
 {
@@ -30,13 +71,6 @@ static void renameProperty(QJsonObject &obj, const char *oldName, const char *ne
     if (!value.isNull() && !obj.contains(QLatin1String(newName))) {
         obj.insert(QLatin1String(newName), value);
         obj.remove(QLatin1String(oldName));
-    }
-}
-
-static void renameType(QJsonObject &obj, const char *oldType, const char *newType)
-{
-    if (obj.value(QLatin1String("@type")) == QLatin1String(oldType)) {
-        obj.insert(QStringLiteral("@type"), QLatin1String(newType));
     }
 }
 
@@ -75,21 +109,11 @@ static void filterTrainTrip(QJsonObject &trip)
     renameProperty(trip, "trainCompany", "provider");
 }
 
-static void filterLodgingBusiness(QJsonObject &hotel)
-{
-    // convert LodgingBusiness sub-types we don't handle
-    renameType(hotel, "Hotel", "LodgingBusiness");
-}
-
 static void filterLodgingReservation(QJsonObject &res)
 {
     // check[in|out]Date -> check[in|out]Time (legacy Google format)
     renameProperty(res, "checkinDate", "checkinTime");
     renameProperty(res, "checkoutDate", "checkoutTime");
-
-    QJsonObject hotel = res.value(QLatin1String("reservationFor")).toObject();
-    filterLodgingBusiness(hotel);
-    res.insert(QStringLiteral("reservationFor"), hotel);
 }
 
 static void filterTaxiReservation(QJsonObject &res)
@@ -135,37 +159,11 @@ static void filterReservation(QJsonObject &res)
     renameProperty(res, "Url", "url");
 }
 
-static void filterEvent(QJsonObject &hotel)
-{
-    // convert Event sub-types we don't handle
-    renameType(hotel, "MusicEvent", "Event");
-}
-
-static void filterEventReservation(QJsonObject &res)
-{
-    QJsonObject event = res.value(QLatin1String("reservationFor")).toObject();
-    filterEvent(event);
-    res.insert(QStringLiteral("reservationFor"), event);
-}
-
-static void filterBusStop(QJsonObject &station)
-{
-    renameType(station, "BusStop", "BusStation");
-}
-
 static void filterBusTrip(QJsonObject &trip)
 {
     renameProperty(trip, "arrivalStation", "arrivalBusStop");
     renameProperty(trip, "departureStation", "departureBusStop");
     renameProperty(trip, "busCompany", "provider");
-
-    auto station = trip.value(QLatin1String("arrivalBusStop")).toObject();
-    filterBusStop(station);
-    trip.insert(QStringLiteral("arrivalBusStop"), station);
-
-    station = trip.value(QLatin1String("departureBusStop")).toObject();
-    filterBusStop(station);
-    trip.insert(QStringLiteral("departureBusStop"), station);
 }
 
 static void filterBusReservation(QJsonObject &res)
@@ -186,7 +184,6 @@ static QJsonArray filterActions(const QJsonValue &v)
 
     for (auto it = actions.begin(); it != actions.end(); ++it) {
         auto action = (*it).toObject();
-        renameType(action, "EditAction", "UpdateAction");
         renameProperty(action, "url", "target");
         *it = action;
     }
@@ -194,9 +191,51 @@ static QJsonArray filterActions(const QJsonValue &v)
     return actions;
 }
 
+static void filterRecursive(QJsonObject &obj);
+
+static void filterRecursive(QJsonArray &array)
+{
+    for (auto it = array.begin(); it != array.end(); ++it) {
+        if ((*it).type() == QJsonValue::Object) {
+            QJsonObject subObj = (*it).toObject();
+            filterRecursive(subObj);
+            *it = subObj;
+        } else if ((*it).type() == QJsonValue::Array) {
+            QJsonArray array = (*it).toArray();
+            filterRecursive(array);
+            *it = array;
+        }
+    }
+}
+
+static void filterRecursive(QJsonObject &obj)
+{
+    const auto type = obj.value(QLatin1String("@type")).toString().toUtf8();
+    const auto it = std::lower_bound(std::begin(type_mapping), std::end(type_mapping), type, [](const auto &lhs, const auto &rhs) {
+        return std::strcmp(lhs.fromType, rhs.constData()) < 0;
+    });
+    if (it != std::end(type_mapping) && std::strcmp((*it).fromType, type.constData()) == 0) {
+        obj.insert(QStringLiteral("@type"), QLatin1String((*it).toType));
+    }
+
+    for (auto it = obj.begin(); it != obj.end(); ++it) {
+        if ((*it).type() == QJsonValue::Object) {
+            QJsonObject subObj = (*it).toObject();
+            filterRecursive(subObj);
+            *it = subObj;
+        } else if ((*it).type() == QJsonValue::Array) {
+            QJsonArray array = (*it).toArray();
+            filterRecursive(array);
+            *it = array;
+        }
+    }
+}
+
 QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
 {
     QJsonObject res(obj);
+    filterRecursive(res);
+
     const auto type = obj.value(QLatin1String("@type")).toString();
     if (type.endsWith(QLatin1String("Reservation"))) {
         filterReservation(res);
@@ -218,8 +257,6 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         }
     } else if (type == QLatin1String("TaxiReservation")) {
         filterTaxiReservation(res);
-    } else if (type == QLatin1String("EventReservation")) {
-        filterEventReservation(res);
     } else if (type == QLatin1String("BusReservation")) {
         filterBusReservation(res);
     }
