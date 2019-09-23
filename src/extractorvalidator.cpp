@@ -16,6 +16,7 @@
 */
 
 #include "extractorvalidator_p.h"
+#include "validator-logging.h"
 
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
@@ -96,6 +97,7 @@ bool ExtractorValidator::isValidElement(const QVariant &elem)
     if (JsonLd::canConvert<Reservation>(elem)) {
         const auto res = JsonLd::convert<Reservation>(elem);
         if (!isValidElement(res.reservationFor())) {
+            qCDebug(ValidatorLog) << "Reservation element discarded due to rejected reservationFor property:" << elem.typeName();
             return false;
         }
 
@@ -138,5 +140,6 @@ bool ExtractorValidator::isValidElement(const QVariant &elem)
     }
 
     // unknown top-level type
+    qCDebug(ValidatorLog) << "Element discarded due to unsupported top-level type:" << elem.typeName();
     return false;
 }

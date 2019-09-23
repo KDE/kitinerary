@@ -1,1 +1,2 @@
 org.kde.kitinerary KItinerary IDENTIFIER [KItinerary::Log]
+org.kde.kitinerary.extractorValidator KItinerary Extractor Validator Logging IDENTIFIER [KItinerary::ValidatorLog]
