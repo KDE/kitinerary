@@ -80,18 +80,33 @@ static bool filterFoodReservation(const FoodEstablishmentReservation &res)
     return res.startTime().isValid();
 }
 
+static bool filterFoodEstablishment(const FoodEstablishment &res)
+{
+    return !res.name().isEmpty();
+}
+
+static bool filterLodgingBusiness(const LodgingBusiness &hotel)
+{
+    return !hotel.name().isEmpty();
+}
+
 bool ExtractorValidator::isValidElement(const QVariant &elem)
 {
     // reservation types
-    if (JsonLd::isA<LodgingReservation>(elem)) {
-        return filterLodgingReservation(elem.value<LodgingReservation>());
-    }
-    if (JsonLd::isA<FoodEstablishmentReservation>(elem)) {
-        return filterFoodReservation(elem.value<FoodEstablishmentReservation>());
-    }
     if (JsonLd::canConvert<Reservation>(elem)) {
         const auto res = JsonLd::convert<Reservation>(elem);
-        return isValidElement(res.reservationFor());
+        if (!isValidElement(res.reservationFor())) {
+            return false;
+        }
+
+        if (JsonLd::isA<LodgingReservation>(elem)) {
+            return filterLodgingReservation(elem.value<LodgingReservation>());
+        }
+        if (JsonLd::isA<FoodEstablishmentReservation>(elem)) {
+            return filterFoodReservation(elem.value<FoodEstablishmentReservation>());
+        }
+
+        return true;
     }
 
     // reservationFor types
@@ -106,6 +121,12 @@ bool ExtractorValidator::isValidElement(const QVariant &elem)
     }
     if (JsonLd::isA<Event>(elem)) {
         return filterEvent(elem.value<Event>());
+    }
+    if (JsonLd::isA<FoodEstablishment>(elem)) {
+        return filterFoodEstablishment(elem.value<FoodEstablishment>());
+    }
+    if (JsonLd::isA<LodgingBusiness>(elem)) {
+        return filterLodgingBusiness(elem.value<LodgingBusiness>());
     }
 
     // types without specific filters yet
