@@ -21,6 +21,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QUrl>
 
 #include <cstring>
 
@@ -160,6 +161,59 @@ static void filterBusTrip(QJsonObject &trip)
     renameProperty(trip, "busCompany", "provider");
 }
 
+static void filterActionTarget(QJsonObject &action)
+{
+    QJsonArray targets;
+    QString filteredTargetUrlString;
+
+    const QJsonValue oldTarget = action.value(QLatin1String("target"));
+    if (oldTarget.isArray()) {
+        targets = oldTarget.toArray();
+    } else if (oldTarget.isObject()) {
+        targets.push_back(oldTarget);
+    }
+
+    for (auto it = targets.begin(); it != targets.end(); ++it) {
+        auto target = (*it).toObject();
+
+        QJsonArray platforms;
+
+        const QJsonValue actionPlatform = target.value(QLatin1String("actionPlatform"));
+        if (actionPlatform.isArray()) {
+            platforms = actionPlatform.toArray();
+        } else {
+            platforms.push_back(actionPlatform);
+        }
+
+        // Always return at least one URL but prefer the current platform if possible
+        if (!filteredTargetUrlString.isEmpty()) {
+            const bool hasPreferredPlatform = std::any_of(platforms.begin(), platforms.end(), [](const QJsonValue &platformValue) {
+                const QString platform = platformValue.toString();
+                // FIXME android
+                return platform == QLatin1String("http://schema.org/DesktopWebPlatform");
+            });
+
+            if (!hasPreferredPlatform) {
+                continue;
+            }
+        }
+
+        const QUrl url(target.value(QLatin1String("urlTemplate")).toString());
+        // It could also be a "URL template"
+        if (!url.isValid()) {
+            continue;
+        }
+
+        filteredTargetUrlString = url.toString();
+    }
+
+    if (filteredTargetUrlString.isEmpty()) {
+        renameProperty(action, "url", "target");
+    } else {
+        action.insert(QStringLiteral("target"), filteredTargetUrlString);
+    }
+}
+
 static QJsonArray filterActions(const QJsonValue &v)
 {
     QJsonArray actions;
@@ -171,7 +225,7 @@ static QJsonArray filterActions(const QJsonValue &v)
 
     for (auto it = actions.begin(); it != actions.end(); ++it) {
         auto action = (*it).toObject();
-        renameProperty(action, "url", "target");
+        filterActionTarget(action);
         *it = action;
     }
 
