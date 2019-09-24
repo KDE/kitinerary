@@ -1,0 +1,32 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "description": "For most of the year, KDE—one of the largest free and open software communities in the world — works on-line by email, IRC, forums and mailing lists. Akademy provides all KDE contributors the opportunity to meet in person to foster social bonds, work on concrete technology issues, consider new ideas, and reinforce the innovative, dynamic culture of KDE. Akademy brings together artists, designers, developers, translators, users, writers, sponsors and many other types of KDE contributors to celebrate the achievements of the past year and help determine the direction for the next year. Hands-on sessions offer the opportunity for intense work bringing those plans to reality. The KDE community welcomes companies building on KDE technology, and those that are looking for opportunities. For more information, please contact the Akademy Team.",
+        "endDate": {
+            "@type": "QDateTime",
+            "@value": "2019-07-13T16:30:00+02:00",
+            "timezone": "Europe/Rome"
+        },
+        "image": "https://akademy.kde.org/sites/akademy.kde.org/files/2019/milanpanoramic.jpg",
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "IT",
+                "addressLocality": "Milan",
+                "addressRegion": "Lombardy",
+                "postalCode": "20126",
+                "streetAddress": "Piazza dell'Ateneo Nuovo, 1"
+            },
+            "name": "University of Milano-Bicocca"
+        },
+        "name": "Akademy 2019",
+        "startDate": {
+            "@type": "QDateTime",
+            "@value": "2019-09-07T09:30:00+02:00",
+            "timezone": "Europe/Rome"
+        },
+        "url": "https://akademy.kde.org/2019"
+    }
+]

@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>Hotel example from schemap.org - https://schema.org/docs/hotels.html</title>
+</head>
+<body>
+<div itemscope itemtype="http://schema.org/Hotel">
+    <h1><span itemprop="name">ACME Hotel Innsbruck</span></h1>
+    <span itemprop="description">A beautifully located business hotel right in the
+heart of the alps. Watch the sun rise over the scenic Inn valley while
+enjoying your morning coffee.</span>
+    <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+    <span itemprop="streetAddress">Technikerstrasse 21</span>
+    <span itemprop="postalCode">6020</span>
+    <span itemprop="addressLocality">Innsbruck</span>
+    <span itemprop="addressRegion">Tyrol</span>,
+    <span itemprop="addressCountry">Austria</span>
+    </div>
+    <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+     <meta itemprop="latitude" content="47.2649990" />
+     <meta itemprop="longitude" content="11.3428720" />
+    </div>
+    Phone: <span itemprop="telephone">+43 512 8000-0</span>
+    Fax: <span itemprop="faxNumber">+43 512 8000-99</span>
+    <img itemprop="photo" src="../media/hotel_front.png" alt="Front view of the hotel" />
+    Star rating: <span itemprop="starRating" itemscope itemtype="http://schema.org/Rating">
+    <meta itemprop="ratingValue" content="4">****
+    </span>
+    Room rates: <span itemprop="priceRange">$100 - $240</span>
+    Reception opening hours:
+    <meta itemprop="openingHours" content="Mo-Fr 07:00-23:00">Mon-Fri 07.00-23.00
+    <meta itemprop="openingHours" content="Sa 08:00-23:00">Saturdays 08.00-23.00
+    <meta itemprop="openingHours" content="Sun 08:00-12:00">Sundays 08.00-12.00
+    Check-in: <meta itemprop="checkinTime" content="14:00:00">2:00 PM
+    Check-out: <meta itemprop="checkoutTime" content="11:00:00">11:00 AM
+</div>
+</body>
+</html>
