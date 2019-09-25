@@ -1,0 +1,13 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FoodEstablishment",
+        "name": "Tartine Bakery",
+        "potentialAction": [
+            {
+                "@type": "ViewAction",
+                "target": "http://api.urbanspoon.com/r/6/92204"
+            }
+        ]
+    }
+]
