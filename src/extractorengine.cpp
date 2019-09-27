@@ -538,23 +538,30 @@ void ExtractorEnginePrivate::extractGeneric()
         res = GenericPkPassExtractor::extract(m_pass.get(), res, m_context->m_senderDate);
         m_result[0] = res;
     } else if (m_pdfDoc && m_result.isEmpty()) {
-        QJsonArray genericResult;
-        m_genericPdfExtractor.extract(m_pdfDoc.get(), genericResult);
+        const auto genericResults = m_genericPdfExtractor.extract(m_pdfDoc.get());
 
-        // check if generic extractors identified documents we have custom extractors for
-        m_extractors = m_repo.extractorsForJsonLd(genericResult);
-        extractCustom();
+        for (const auto &genericResult : genericResults) {
+            // expose genericResult content to custom extractors via Context object
+            m_context->m_barcode = genericResult.barcode;
+            m_context->m_data = m_engine.toScriptValue(genericResult.result);
+            m_context->m_pdfPageNum = genericResult.pageNum;
 
-        // check the unrecognized (vendor-specific) barcodes, if any
-        const auto unrecognizedCodes = m_genericPdfExtractor.unrecognizedBarcodes();
-        for (const auto &code : unrecognizedCodes) {
-            m_extractors = m_repo.extractorsForBarcode(code);
+            // check if generic extractors identified documents we have custom extractors for
+            m_extractors = m_repo.extractorsForJsonLd(genericResult.result);
             extractCustom();
+
+            // check the unrecognized (vendor-specific) barcodes, if any
+            m_extractors = m_repo.extractorsForBarcode(genericResult.barcode.toString());
+            extractCustom();
+
+            m_context->reset();
         }
 
         // if none of that found something, take the generic extractor result as-is
         if (m_result.isEmpty()) {
-            m_result = genericResult;
+            for (const auto &genericResult : genericResults) {
+                std::copy(genericResult.result.begin(), genericResult.result.end(), std::back_inserter(m_result));
+            }
         }
     } else if (!m_text.isEmpty() && m_result.isEmpty()) {
         if (IataBcbpParser::maybeIataBcbp(m_text)) {

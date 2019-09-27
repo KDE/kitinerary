@@ -55,14 +55,14 @@ void GenericPdfExtractor::setContextDate(const QDateTime &dt)
     m_contextDate = dt;
 }
 
-void GenericPdfExtractor::extract(PdfDocument *doc, QJsonArray &result)
+std::vector<GenericPdfExtractor::Result> GenericPdfExtractor::extract(PdfDocument *doc)
 {
-    m_unrecognizedBarcodes.clear();
+    std::vector<Result> result;
 
     // stay away from documents that are atypically large for what we are looking for
     // that's just unnecessarily eating up resources
     if (doc->pageCount() > MaxPageCount || doc->fileSize() > MaxFileSize) {
-        return;
+        return result;
     }
 
     m_imageIds.clear();
@@ -79,47 +79,52 @@ void GenericPdfExtractor::extract(PdfDocument *doc, QJsonArray &result)
                 continue;
             }
 
-            extractImage(img, result);
+            auto r = extractImage(img);
+            if (!r.barcode.isNull() || !r.result.isEmpty()) {
+                r.pageNum = i;
+                result.push_back(r);
+            }
             if (img.hasObjectId()) {
                 m_imageIds.insert(img.objectId());
             }
         }
     }
+
+    return result;
 }
 
-QStringList GenericPdfExtractor::unrecognizedBarcodes() const
-{
-    return m_unrecognizedBarcodes;
-}
-
-void GenericPdfExtractor::extractImage(const PdfImage &img, QJsonArray &result)
+GenericPdfExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img)
 {
     const auto b = m_barcodeDecoder->decodeBinary(img.image());
     if (Uic9183Parser::maybeUic9183(b)) {
+        QJsonArray result;
         GenericUic918Extractor::extract(b, result, m_contextDate);
-        return;
+        if (!result.isEmpty()) {
+            return Result {-1, result, b};
+        }
+        return {};
     }
 
     if (b.isEmpty()) {
-        extractBarcode(m_barcodeDecoder->decodeString(img.image()), result);
+        return extractBarcode(m_barcodeDecoder->decodeString(img.image()));
     } else {
-        extractBarcode(QString::fromUtf8(b), result);
+        return extractBarcode(QString::fromUtf8(b));
     }
 }
 
-void GenericPdfExtractor::extractBarcode(const QString &code, QJsonArray &result)
+GenericPdfExtractor::Result GenericPdfExtractor::extractBarcode(const QString &code)
 {
     if (code.isEmpty()) {
-        return;
+        return {};
     }
 
     if (IataBcbpParser::maybeIataBcbp(code)) {
         const auto res = IataBcbpParser::parse(code, m_contextDate.date());
         const auto jsonLd = JsonLdDocument::toJson(res);
-        std::copy(jsonLd.begin(), jsonLd.end(), std::back_inserter(result));
+        return {-1, jsonLd, code};
     }
 
-    m_unrecognizedBarcodes.push_back(code);
+    return {-1, {}, code};
 }
 
 bool GenericPdfExtractor::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint)
