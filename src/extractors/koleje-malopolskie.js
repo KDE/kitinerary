@@ -17,34 +17,22 @@
    02110-1301, USA.
 */
 
-function parsePdf(pdf) {
-    var reservations = new Array();
+function parsePdf(pdf)
+{
+    var obj = JSON.parse(Context.barcode);
+    if (!obj)
+        return null;
 
-    for (var i = 0; i < pdf.pageCount; ++i) {
-        var page = pdf.pages[i];
-        var images = page.images;
-        for (var j = 0; j < images.length; ++j) {
-            var barcode = Barcode.decodeQR(images[j]);
-            if (!barcode)
-                continue;
-            var obj = JSON.parse(barcode);
-            if (!obj)
-                continue;
+    var res = JsonLd.newTrainReservation();
+    res.underName.givenName = obj.name;
+    res.underName.familyName = obj.surname
+    res.reservationNumber = obj.idDocValue;
+    res.reservationFor.trainNumber = obj.nrKursu;
+    res.reservationFor.departureStation.name = obj.fromStop;
+    res.reservationFor.arrivalStation.name = obj.toStop;
+    var depDate = new Date();
+    depDate.setTime(obj.goDate);
+    res.reservationFor.departureTime = depDate;
 
-            var res = JsonLd.newTrainReservation();
-            res.underName.givenName = obj.name;
-            res.underName.familyName = obj.surname
-            res.reservationNumber = obj.idDocValue;
-            res.reservationFor.trainNumber = obj.nrKursu;
-            res.reservationFor.departureStation.name = obj.fromStop;
-            res.reservationFor.arrivalStation.name = obj.toStop;
-            var depDate = new Date();
-            depDate.setTime(obj.goDate);
-            res.reservationFor.departureTime = depDate;
-
-            reservations.push(res);
-        }
-    }
-
-    return reservations;
+    return res;
 }

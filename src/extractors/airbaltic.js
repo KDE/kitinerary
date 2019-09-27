@@ -17,33 +17,19 @@
    02110-1301, USA.
 */
 
-function main(pdf) {
-    var result = new Array();
-
-    for (var i = 0; i < pdf.pageCount; ++i) {
-        var page = pdf.pages[i];
-        var images = page.imagesInRect(0, 0, 0.3, 0.2);
-        for (var j = 0; j < images.length; ++j) {
-            var bcbp = Barcode.decodePdf417(images[j]);
-            if (!bcbp)
-                continue;
-
-            var res = JsonLd.newFlightReservation();
-            res.reservedTicket.ticketToken = "aztecCode:" + bcbp;
-
-            var time = page.text.match(/Boarding\s+(\d{1,2}.\d{1,2}.\d{4})[\s.]+?(\d{2}:\d{2})/);
-            if (time)
-                res.reservationFor.boardingTime = JsonLd.toDateTime(time[1] + time[2], "dd.MM.yyyyhh:mm", "en")
-            time = page.text.match(/Arr. terminal\s+(\d{2}:\d{2})\s+(\d{2}:\d{2})/);
-            if (time) {
-                res.reservationFor.departureTime = JsonLd.toDateTime(time[1], "hh:mm", "en")
-                res.reservationFor.arrivalTime = JsonLd.toDateTime(time[2], "hh:mm", "en")
-            }
-
-            result.push(res);
-            break;
-        }
+function main(pdf)
+{
+    var res = Context.data[0];
+    var page = pdf.pages[Context.pdfPageNumber];
+    var time = page.text.match(/Boarding\s+(\d{1,2}.\d{1,2}.\d{4})[\s.]+?(\d{2}:\d{2})/);
+    if (time) {
+        res.reservationFor.boardingTime = JsonLd.toDateTime(time[1] + time[2], "dd.MM.yyyyhh:mm", "en")
+        res.reservationFor.departureDay = ""; // reset departure day from IATA BCBP, we know better now
     }
-
-    return result;
+    time = page.text.match(/Arr. terminal\s+(\d{2}:\d{2})\s+(\d{2}:\d{2})/);
+    if (time) {
+        res.reservationFor.departureTime = JsonLd.toDateTime(time[1], "hh:mm", "en")
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(time[2], "hh:mm", "en")
+    }
+    return res;
 }

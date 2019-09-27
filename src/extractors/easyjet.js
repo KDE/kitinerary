@@ -81,36 +81,24 @@ function parseHtmlBooking(doc) {
 
 function parsePdfBoardingPass(pdf)
 {
-    var result = new Array();
-    for (var i = 0; i < pdf.pageCount; ++i) {
-        var page = pdf.pages[i];
-        var images = page.images;
-        for (var j = 0; j < images.length; ++j) {
-            var bcbp = Barcode.decodePdf417(images[j]);
-            if (!bcbp)
-                continue;
-            var res = JsonLd.newFlightReservation();
-            res.reservedTicket.ticketToken = "aztecCode:" + bcbp;
+    var res = Context.data[0];
 
-            var rightCol = page.textInRect(0.65, 0, 1, 0.25);
-            var depName = rightCol.match(/(?:from|Flying)\n\([A-Z]{3}\) ([^]*?)\n(?:to|Going)/);
-            if (depName)
-                res.reservationFor.departureAirport.name = depName[1];
-            var arrName = rightCol.match(/(?:to|Going)\n\([A-Z]{3}\) ([^]*?)\ndeparts/);
-            if (arrName)
-                res.reservationFor.arrivalAirport.name = arrName[1];
-            var depTime = rightCol.match(/(?:departs|Flight)\n(\d\d:\d\d)/);
-            if (depTime)
-                res.reservationFor.departureTime = JsonLd.toDateTime(depTime[1], "hh:mm", "en");
+    var page = pdf.pages[Context.pdfPageNumber];
+    var rightCol = page.textInRect(0.65, 0, 1, 0.25);
+    var depName = rightCol.match(/(?:from|Flying)\n\([A-Z]{3}\) ([^]*?)\n(?:to|Going)/);
+    if (depName)
+        res.reservationFor.departureAirport.name = depName[1];
+    var arrName = rightCol.match(/(?:to|Going)\n\([A-Z]{3}\) ([^]*?)\ndeparts/);
+    if (arrName)
+        res.reservationFor.arrivalAirport.name = arrName[1];
+    var depTime = rightCol.match(/(?:departs|Flight)\n(\d\d:\d\d)/);
+    if (depTime)
+        res.reservationFor.departureTime = JsonLd.toDateTime(depTime[1], "hh:mm", "en");
 
-            var leftCol = page.textInRect(0, 0, 0.3, 0.25);
-            var boarding = leftCol.match(/(?:closes|Gate)\n(\d\d:\d\d)/);
-            if (boarding)
-                res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[1], "hh:mm", "en");
-            result.push(res);
-            break;
-        }
-    }
+    var leftCol = page.textInRect(0, 0, 0.3, 0.25);
+    var boarding = leftCol.match(/(?:closes|Gate)\n(\d\d:\d\d)/);
+    if (boarding)
+        res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[1], "hh:mm", "en");
 
-    return result;
+    return res;
 }
