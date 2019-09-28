@@ -406,7 +406,6 @@ private Q_SLOTS:
         const auto data = JsonLdDocument::fromJson(array);
         QCOMPARE(data.size(), 1);
         const auto flight = data[0].value<Flight>();
-        QEXPECT_FAIL("weird LH format", "not supported yet", Abort);
         QCOMPARE(flight.departureTime(), result);
         QCOMPARE(flight.departureTime().timeSpec(), result.timeSpec());
     }
