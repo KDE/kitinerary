@@ -50,6 +50,7 @@ public:
     ExtractorRepositoryPrivate();
     void loadExtractors();
     void addExtractor(Extractor &&e);
+    std::vector<Extractor> extractorForTypeAndContent(ExtractorInput::Type type, const QString &content) const;
 
     std::vector<Extractor> m_extractors;
     QStringList m_extraSearchPaths;
@@ -60,6 +61,22 @@ ExtractorRepositoryPrivate::ExtractorRepositoryPrivate()
 {
     initResources();
     loadExtractors();
+}
+
+std::vector<Extractor> ExtractorRepositoryPrivate::extractorForTypeAndContent(ExtractorInput::Type type, const QString &content) const
+{
+    std::vector<Extractor> v;
+
+    for (auto it = m_extractors.begin(), end = m_extractors.end(); it != end; ++it) {
+        for (const auto &filter : (*it).filters()) {
+            if (filter.type() == type && filter.matches(content)) {
+                v.push_back(*it);
+                break;
+            }
+        }
+    }
+
+    return v;
 }
 
 
@@ -186,18 +203,7 @@ std::vector<Extractor> ExtractorRepository::extractorsForJsonLd(const QJsonArray
 
 std::vector<Extractor> ExtractorRepository::extractorsForBarcode(const QString &code) const
 {
-    std::vector<Extractor> v;
-
-    for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
-        for (const auto &filter : (*it).filters()) {
-            if (filter.type() == ExtractorInput::Barcode && filter.matches(code)) {
-                v.push_back(*it);
-                break;
-            }
-        }
-    }
-
-    return v;
+    return d->extractorForTypeAndContent(ExtractorInput::Barcode, code);
 }
 
 #ifdef HAVE_KCAL
@@ -220,6 +226,11 @@ std::vector<Extractor> ExtractorRepository::extractorsForCalendar(const QSharedP
     return v;
 }
 #endif
+
+std::vector<Extractor> ExtractorRepository::extractorsForContent(const QString &content) const
+{
+    return d->extractorForTypeAndContent(ExtractorInput::Text, content);
+}
 
 Extractor ExtractorRepository::extractor(const QString &name) const
 {

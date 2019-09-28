@@ -75,6 +75,17 @@ bool ExtractorFilter::matches(const QString &data) const
     return d->m_exp.match(data).hasMatch();
 }
 
+static bool needsFieldName(ExtractorInput::Type type)
+{
+    switch (type) {
+        case ExtractorInput::Barcode:
+        case ExtractorInput::Text:
+            return false;
+        default:
+            return true;
+    }
+}
+
 bool ExtractorFilter::load(const QJsonObject &obj)
 {
     d->m_type = ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString());
@@ -100,23 +111,25 @@ bool ExtractorFilter::load(const QJsonObject &obj)
     }
 
     d->m_exp.setPattern(obj.value(QLatin1String("match")).toString());
-    return d->m_type != ExtractorInput::Unknown && (!d->m_fieldName.isEmpty() || d->m_type == ExtractorInput::Barcode) && d->m_exp.isValid();
+    return d->m_type != ExtractorInput::Unknown && (!d->m_fieldName.isEmpty() || !needsFieldName(d->m_type)) && d->m_exp.isValid();
 }
 
 QJsonObject ExtractorFilter::toJson() const
 {
     QJsonObject obj;
     obj.insert(QStringLiteral("type"), ExtractorInput::typeToString(d->m_type));
-    switch (d->m_type) {
-        case ExtractorInput::Email:
-            obj.insert(QStringLiteral("header"), QString::fromUtf8(d->m_fieldName));
-            break;
-        case ExtractorInput::PkPass:
-            obj.insert(QStringLiteral("field"), QString::fromUtf8(d->m_fieldName));
-            break;
-        default:
-            obj.insert(QStringLiteral("property"), QString::fromUtf8(d->m_fieldName));
-            break;
+    if (needsFieldName(d->m_type)) {
+        switch (d->m_type) {
+            case ExtractorInput::Email:
+                obj.insert(QStringLiteral("header"), QString::fromUtf8(d->m_fieldName));
+                break;
+            case ExtractorInput::PkPass:
+                obj.insert(QStringLiteral("field"), QString::fromUtf8(d->m_fieldName));
+                break;
+            default:
+                obj.insert(QStringLiteral("property"), QString::fromUtf8(d->m_fieldName));
+                break;
+        }
     }
     obj.insert(QStringLiteral("match"), pattern());
     return obj;

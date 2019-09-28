@@ -1,0 +1,11 @@
+{
+    "filter": [
+        {
+            "match": "^PNR:\\d{10},TRAIN:",
+            "type": "Text"
+        }
+    ],
+    "function": "main",
+    "script": "irctc.js",
+    "type": "Text"
+}

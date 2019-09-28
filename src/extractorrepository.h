@@ -77,6 +77,8 @@ public:
     std::vector<Extractor> extractorsForBarcode(const QString &code) const;
     /** Find matching extractors for the given iCal calendar. */
     std::vector<Extractor> extractorsForCalendar(const QSharedPointer<KCalendarCore::Calendar> &cal) const;
+    /** Find matching extractors for the given content. */
+    std::vector<Extractor> extractorsForContent(const QString &content) const;
     /** Returns the extractor with the given identifier. */
     Extractor extractor(const QString &name) const;
 
