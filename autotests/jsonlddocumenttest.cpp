@@ -382,6 +382,34 @@ private Q_SLOTS:
         QCOMPARE(f1.airline().iataCode(), QLatin1String("AB"));
         QCOMPARE(f1.airline().name(), QLatin1String("Air Berlin"));
     }
+
+    void testDateTimeParsing_data()
+    {
+        QTest::addColumn<QByteArray>("dtStr");
+        QTest::addColumn<QDateTime>("result");
+
+        QTest::newRow("iso") << QByteArray("2018-08-15T22:00:00+02:00") << QDateTime({2018, 8, 15}, {22 ,00}, Qt::OffsetFromUTC, 7200);
+        QTest::newRow("weird LH format") << QByteArray("20200826T200000Z") << QDateTime({2020, 8, 26}, {20 ,00}, Qt::UTC);
+    }
+
+    void testDateTimeParsing()
+    {
+        QFETCH(QByteArray, dtStr);
+        QFETCH(QDateTime, result);
+
+        const auto b = QByteArray("[{"
+            "\"@context\": \"http://schema.org\","
+            "\"@type\": \"Flight\","
+            "\"departureTime\": \"" + dtStr + "\""
+        "}]");
+        const auto array = QJsonDocument::fromJson(b).array();
+        const auto data = JsonLdDocument::fromJson(array);
+        QCOMPARE(data.size(), 1);
+        const auto flight = data[0].value<Flight>();
+        QEXPECT_FAIL("weird LH format", "not supported yet", Abort);
+        QCOMPARE(flight.departureTime(), result);
+        QCOMPARE(flight.departureTime().timeSpec(), result.timeSpec());
+    }
 };
 
 QTEST_APPLESS_MAIN(JsonLdDocumentTest)
