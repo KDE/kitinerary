@@ -55,7 +55,8 @@ static QVariant createInstance(const QJsonObject &obj);
 static const char* const fallbackDateTimePattern[] = {
     "yyyy-MM-dd HH:mm:ss",
     "yyyy-MM-dd HH:mm",
-    "MM-dd-yyyy HH:mm" // yes, seriously ;(
+    "MM-dd-yyyy HH:mm", // yes, seriously ;(
+    "yyyyMMddTHHmmsst"
 };
 static const auto fallbackDateTimePatternCount = sizeof(fallbackDateTimePattern) / sizeof(const char *);
 
@@ -88,6 +89,10 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
             dt = QDateTime::fromString(str, Qt::ISODate);
             for (unsigned int i = 0; i < fallbackDateTimePatternCount && dt.isNull(); ++i) {
                 dt = QDateTime::fromString(str, QString::fromLatin1(fallbackDateTimePattern[i]));
+            }
+            // HACK QDateTimeParser handles 't' in the format but then forces it back to LocalTime in the end...
+            if (dt.isValid() && dt.timeSpec() == Qt::LocalTime && str.endsWith(QLatin1Char('Z'))) {
+                dt.setTimeSpec(Qt::UTC);
             }
             if (dt.isNull()) {
                 qCDebug(Log) << "Datetime parsing failed for" << str;
