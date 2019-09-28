@@ -92,7 +92,7 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
             }
             // HACK QDateTimeParser handles 't' in the format but then forces it back to LocalTime in the end...
             if (dt.isValid() && dt.timeSpec() == Qt::LocalTime && str.endsWith(QLatin1Char('Z'))) {
-                dt.setTimeSpec(Qt::UTC);
+                dt = dt.toTimeSpec(Qt::UTC);
             }
             if (dt.isNull()) {
                 qCDebug(Log) << "Datetime parsing failed for" << str;

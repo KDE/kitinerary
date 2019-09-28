@@ -43,7 +43,7 @@ class JsonLdDocumentTest : public QObject
 private Q_SLOTS:
     void initTestCase()
     {
-        qputenv("TZ", "GMT");
+        qputenv("TZ", "America/Chicago");
     }
 
     void testSerialization()
