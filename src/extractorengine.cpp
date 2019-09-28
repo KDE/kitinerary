@@ -450,8 +450,13 @@ void ExtractorEnginePrivate::extractDocument()
     if (m_extractors.empty()) {
         if (m_mimeContext) {
             m_extractors = m_repo.extractorsForMessage(m_mimeContext);
-        } else {
+        } else if (!m_additionalExtractors.empty()) {
             m_extractors = std::move(m_additionalExtractors);
+        } else if (!m_text.isEmpty()) {
+            m_extractors = m_repo.extractorsForContent(m_text);
+        } else if (m_inputType == ExtractorInput::Text && !m_data.isEmpty()) {
+            m_text = QString::fromUtf8(m_data);
+            m_extractors = m_repo.extractorsForContent(m_text);
         }
     }
     extractCustom();
