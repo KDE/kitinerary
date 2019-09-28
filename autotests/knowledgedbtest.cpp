@@ -239,6 +239,22 @@ private Q_SLOTS:
         QCOMPARE(KnowledgeDb::countryIdFromIso3166_1alpha3(CountryId3{"ITA"}), CountryId{"IT"});
         QCOMPARE(KnowledgeDb::countryIdFromIso3166_1alpha3(CountryId3{"FOO"}), CountryId{});
     }
+
+    void testIndianRailwaysStationCodeLookup()
+    {
+        auto station = KnowledgeDb::stationForIndianRailwaysStationCode(QString());
+        QVERIFY(!station.coordinate.isValid());
+        QCOMPARE(station.timezone.toQTimeZone(), QTimeZone());
+
+        station = KnowledgeDb::stationForIndianRailwaysStationCode(QStringLiteral("NDLS"));
+        QVERIFY(station.coordinate.isValid());
+        QCOMPARE(station.timezone.toQTimeZone(), QTimeZone("Asia/Kolkata"));
+        QCOMPARE(station.country, CountryId{"IN"});
+
+        station = KnowledgeDb::stationForIndianRailwaysStationCode(QStringLiteral("ndls"));
+        QVERIFY(!station.coordinate.isValid());
+        QCOMPARE(station.timezone.toQTimeZone(), QTimeZone());
+    }
 };
 
 QTEST_APPLESS_MAIN(KnowledgeDbTest)

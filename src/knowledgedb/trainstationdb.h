@@ -107,6 +107,9 @@ KITINERARY_EXPORT TrainStation stationForUic(UICStation uic);
 /** Lookup train station data by Gares & Connexions ID. */
 KITINERARY_EXPORT TrainStation stationForGaresConnexionsId(GaresConnexionsId garesConnexionsId);
 
+/** Lookup train station data by Indian Railways station code. */
+KITINERARY_EXPORT TrainStation stationForIndianRailwaysStationCode(const QString &code);
+
 }
 }
 

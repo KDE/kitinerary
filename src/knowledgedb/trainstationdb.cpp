@@ -21,6 +21,7 @@
 #include <QString>
 
 #include <algorithm>
+#include <cstring>
 
 using namespace KItinerary;
 using namespace KItinerary::KnowledgeDb;
@@ -69,4 +70,17 @@ TrainStation KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId garesCon
     }
 
     return trainstation_table[(*gcIt).stationIndex.value()];
+}
+
+TrainStation KnowledgeDb::stationForIndianRailwaysStationCode(const QString &code)
+{
+    const auto codeStr = code.toUtf8();
+    const auto it = std::lower_bound(std::begin(indianRailwaysSationCode_index), std::end(indianRailwaysSationCode_index), codeStr, [](auto lhs, const QByteArray &rhs) {
+        return strcmp(indianRailwaysSationCode_stringtable + lhs.offset, rhs.constData()) < 0;
+    });
+    if (it == std::end(indianRailwaysSationCode_index) || strcmp(indianRailwaysSationCode_stringtable + (*it).offset, codeStr.constData()) != 0) {
+        return {Coordinate{}, Timezone{}, CountryId{}};
+    }
+
+    return trainstation_table[(*it).stationIndex.value()];
 }
