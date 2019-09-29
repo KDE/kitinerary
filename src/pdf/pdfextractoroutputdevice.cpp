@@ -30,7 +30,7 @@ PdfExtractorOutputDevice::PdfExtractorOutputDevice()
 {
 }
 
-void PdfExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str, int width, int height, GfxImageColorMap* colorMap, bool interpolate, int* maskColors, bool inlineImg)
+void PdfExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str, int width, int height, GfxImageColorMap* colorMap, bool interpolate, PopplerMaskColors* maskColors, bool inlineImg)
 {
     Q_UNUSED(str);
     Q_UNUSED(interpolate);

@@ -24,6 +24,7 @@
 #cmakedefine HAVE_POPPLER_0_58
 #cmakedefine HAVE_POPPLER_0_69
 #cmakedefine HAVE_POPPLER_0_72
+#cmakedefine HAVE_POPPLER_0_82
 
 #cmakedefine HAVE_ZXING
 
