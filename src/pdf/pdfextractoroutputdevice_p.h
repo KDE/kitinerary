@@ -21,6 +21,7 @@
 #include <config-kitinerary.h>
 
 #include "pdfvectorpicture_p.h"
+#include "popplertypes_p.h"
 
 #ifdef HAVE_POPPLER
 #include <TextOutputDev.h>
@@ -43,7 +44,7 @@ public:
     void finalize();
 
     bool needNonText() override { return true; }
-    void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, int *maskColors, bool inlineImg) override;
+    void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, PopplerMaskColors *maskColors, bool inlineImg) override;
 
     // operations used to detect vector barcodes
     void saveState(GfxState *state) override;

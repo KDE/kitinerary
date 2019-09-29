@@ -65,17 +65,12 @@ if(TARGET Poppler::Core)
     if (${Poppler_VERSION} VERSION_GREATER 0.68)
         set(HAVE_POPPLER_0_69 ON)
     endif()
-    set(CMAKE_REQUIRED_LIBRARIES Poppler::Core Qt5::Core)
-    check_cxx_source_compiles("
-    #include <goo/GooString.h>
-    #include <QString>
-    int main()
-    {
-        GooString s;
-        QString val = QString::fromUtf8(s.c_str());
-        return 0;
-    }
-    " HAVE_POPPLER_0_72)
+    if (${Poppler_VERSION} VERSION_GREATER 0.71)
+        set(HAVE_POPPLER_0_72 ON)
+    endif()
+    if (${Poppler_VERSION} VERSION_GREATER 0.81)
+        set(HAVE_POPPLER_0_82 ON)
+    endif()
 endif()
 
 if (TARGET ZXing::Core)
