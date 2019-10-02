@@ -92,7 +92,7 @@ static QString valueForItemProperty(const HtmlElement &elem)
     return v;
 }
 
-static void parseMicroData(const HtmlElement &elem, QJsonObject &obj)
+static void parseMicroData(const HtmlElement &elem, QJsonObject &obj, QJsonArray &result)
 {
     auto child = elem.firstChild();
     while (!child.isNull()) {
@@ -100,15 +100,19 @@ static void parseMicroData(const HtmlElement &elem, QJsonObject &obj)
         const auto type = child.attribute(QStringLiteral("itemtype"));
         if (type.startsWith(QLatin1String("http://schema.org/"))) {
             QJsonObject subObj;
-            parseMicroData(child, subObj);
+            parseMicroData(child, subObj, result);
             const QUrl typeUrl(type);
             subObj.insert(QStringLiteral("@type"), typeUrl.fileName());
-            obj.insert(prop, subObj);
+            if (prop.isEmpty()) {
+                result.push_back(subObj); // stand-alone object that just happens to be nested
+            } else {
+                obj.insert(prop, subObj);
+            }
         } else if (!prop.isEmpty()) {
             obj.insert(prop, valueForItemProperty(child));
         } else  {
             // skip intermediate nodes without Microdata annotations
-            parseMicroData(child, obj);
+            parseMicroData(child, obj, result);
         }
         child = child.nextSibling();
     }
@@ -126,7 +130,7 @@ static void extractRecursive(const HtmlElement &elem, QJsonArray &result)
     const auto itemType = elem.attribute(QStringLiteral("itemtype"));
     if (itemType.startsWith(QLatin1String("http://schema.org/"))) {
         QJsonObject obj;
-        parseMicroData(elem, obj);
+        parseMicroData(elem, obj, result);
         if (obj.isEmpty()) {
             return;
         }

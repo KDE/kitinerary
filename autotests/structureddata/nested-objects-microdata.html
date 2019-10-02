@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html itemscope="itemscope" itemtype="http://schema.org/WebPage" lang="de" xml:lang="de" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+<p>Products:</p>
+<ul>
+    <li itemscope itemtype="http://schema.org/Product">
+        <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            <span class="price" itemprop="price">8,50 €</span>
+        </span>
+        <b itemprop="name">Pizza Margherita</b>
+        <span itemprop="description">mit Tomatensauce und Käse</span>
+    </li>
+    <li itemscope itemtype="http://schema.org/Product">
+        <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            <span class="price" itemprop="price">8,50 €</span>
+        </span>
+        <b itemprop="name">Pizza Salami</b>
+    </li>
+</ul>
+<div itemscope itemtype="http://schema.org/Restaurant">
+    <h2 itemprop="name" content="Pizza Test Sometown">Pizza Test</h2>
+    <p itemprop="branchOf" content="Pizza Test">Sometown</p>
+    <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+        <span itemprop="streetAddress">Randomstraße&nbsp;1</span>
+        <span itemprop="postalCode">12345</span>
+        <span itemprop="addressLocality">Sometown</span>
+    </div>
+    <div>
+        <span itemprop="telephone">0123456789</span>
+    </div>
+    <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+        <meta itemprop="latitude" content="48.0"/>
+        <meta itemprop="longitude" content="9.0"/>
+    </div>
+</div>
+</body>
+</html>

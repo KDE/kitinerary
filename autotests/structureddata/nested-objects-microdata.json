@@ -1,0 +1,36 @@
+[
+    {
+        "@type": "Product",
+        "description": "mit Tomatensauce und Käse",
+        "name": "Pizza Margherita",
+        "offers": {
+            "@type": "Offer",
+            "price": "8,50 €"
+        }
+    },
+    {
+        "@type": "Product",
+        "name": "Pizza Salami",
+        "offers": {
+            "@type": "Offer",
+            "price": "8,50 €"
+        }
+    },
+    {
+        "@type": "Restaurant",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Sometown",
+            "postalCode": "12345",
+            "streetAddress": "Randomstraße 1"
+        },
+        "branchOf": "Sometown",
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "48.0",
+            "longitude": "9.0"
+        },
+        "name": "Pizza Test",
+        "telephone": "0123456789"
+    }
+]
