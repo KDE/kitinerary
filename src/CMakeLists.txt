@@ -21,6 +21,11 @@ set(kitinerary_lib_srcs
     datatypes/rentalcar.cpp
     datatypes/visit.cpp
 
+    generic/genericpdfextractor.cpp
+    generic/genericpkpassextractor.cpp
+    generic/genericuic918extractor.cpp
+    generic/structureddataextractor.cpp
+
     jsapi/barcode.cpp
     jsapi/bitarray.cpp
     jsapi/context.cpp
@@ -59,9 +64,6 @@ set(kitinerary_lib_srcs
     extractorvalidator.cpp
     file.cpp
     flightpostprocessor.cpp
-    genericpdfextractor.cpp
-    genericpkpassextractor.cpp
-    genericuic918extractor.cpp
     htmldocument.cpp
     iatabcbpparser.cpp
     jsonlddocument.cpp
@@ -71,7 +73,6 @@ set(kitinerary_lib_srcs
     qimagepurebinarizer.cpp
     sortutil.cpp
     stringutil.cpp
-    structureddataextractor.cpp
 )
 qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)

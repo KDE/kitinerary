@@ -17,7 +17,7 @@
    02110-1301, USA.
 */
 
-#include "structureddataextractor_p.h"
+#include "generic/structureddataextractor_p.h"
 #include <KItinerary/HtmlDocument>
 
 #include <QDebug>
