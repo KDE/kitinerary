@@ -55,9 +55,9 @@ void GenericPdfExtractor::setContextDate(const QDateTime &dt)
     m_contextDate = dt;
 }
 
-std::vector<GenericPdfExtractor::Result> GenericPdfExtractor::extract(PdfDocument *doc)
+std::vector<GenericExtractor::Result> GenericPdfExtractor::extract(PdfDocument *doc)
 {
-    std::vector<Result> result;
+    std::vector<GenericExtractor::Result> result;
 
     // stay away from documents that are atypically large for what we are looking for
     // that's just unnecessarily eating up resources
@@ -93,14 +93,14 @@ std::vector<GenericPdfExtractor::Result> GenericPdfExtractor::extract(PdfDocumen
     return result;
 }
 
-GenericPdfExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img)
+GenericExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img)
 {
     const auto b = m_barcodeDecoder->decodeBinary(img.image());
     if (Uic9183Parser::maybeUic9183(b)) {
         QJsonArray result;
         GenericUic918Extractor::extract(b, result, m_contextDate);
         if (!result.isEmpty()) {
-            return Result {-1, result, b};
+            return GenericExtractor::Result{result, b, -1};
         }
         return {};
     }
@@ -112,7 +112,7 @@ GenericPdfExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &im
     }
 }
 
-GenericPdfExtractor::Result GenericPdfExtractor::extractBarcode(const QString &code)
+GenericExtractor::Result GenericPdfExtractor::extractBarcode(const QString &code)
 {
     if (code.isEmpty()) {
         return {};
@@ -121,10 +121,10 @@ GenericPdfExtractor::Result GenericPdfExtractor::extractBarcode(const QString &c
     if (IataBcbpParser::maybeIataBcbp(code)) {
         const auto res = IataBcbpParser::parse(code, m_contextDate.date());
         const auto jsonLd = JsonLdDocument::toJson(res);
-        return {-1, jsonLd, code};
+        return {jsonLd, code, -1};
     }
 
-    return {-1, {}, code};
+    return {{}, code, -1};
 }
 
 bool GenericPdfExtractor::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint)
