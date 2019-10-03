@@ -22,7 +22,8 @@
                     "latitude": 48.35390090942383,
                     "longitude": 11.786100387573242
                 },
-                "iataCode": "MUC"
+                "iataCode": "MUC",
+                "name": "Munich"
             },
             "boardingTime": {
                 "@type": "QDateTime",
@@ -40,9 +41,11 @@
                     "latitude": 52.559688568115234,
                     "longitude": 13.287711143493652
                 },
-                "iataCode": "TXL"
+                "iataCode": "TXL",
+                "name": "Berlin - Tegel"
             },
             "departureDay": "2017-10-24",
+            "departureGate": "C62",
             "flightNumber": "6203"
         },
         "reservationNumber": "XXX007",

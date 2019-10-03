@@ -40,6 +40,36 @@
 
 using namespace KItinerary;
 
+static QVector<KPkPass::Field> frontFieldsForPass(KPkPass::Pass *pass)
+{
+    QVector<KPkPass::Field> fields;
+    fields += pass->headerFields();
+    fields += pass->primaryFields();
+    fields += pass->secondaryFields();
+    fields += pass->auxiliaryFields();
+    return fields;
+}
+
+static bool isAirportName(const QString &name, KnowledgeDb::IataCode iataCode)
+{
+    if (name.size() <= 3) {
+        return false;
+    }
+
+    const auto codes = KnowledgeDb::iataCodesFromName(name);
+    return std::find(codes.begin(), codes.end(), iataCode) != codes.end();
+}
+
+static bool isPlausibeGate(const QString &s)
+{
+    for (const auto &c : s) {
+        if (c.isLetter() || c.isDigit()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
 {
     // "relevantDate" is the best guess for the boarding time
@@ -51,18 +81,55 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
             flight.setBoardingTime(pass->relevantDate());
         }
     }
-    // look for common field names containing the boarding time, if we still have no idea
-    if (!flight.boardingTime().isValid()) {
-        const auto fields = pass->fields();
-        for (const auto &field : fields) {
-            if (!field.key().contains(QLatin1String("boarding"), Qt::CaseInsensitive)) {
-                continue;
-            }
+
+    // search for missing information by field key
+    const auto fields = pass->fields();
+    for (const auto &field : fields) {
+        // boarding time
+        if (!flight.boardingTime().isValid() && field.key().contains(QLatin1String("boarding"), Qt::CaseInsensitive)) {
             const auto time = QTime::fromString(field.value().toString());
             if (time.isValid()) {
                 // this misses date, but the postprocessor will fill that in
                 flight.setBoardingTime(QDateTime(QDate(1, 1, 1), time));
-                break;
+                continue;
+            }
+        }
+        // departure gate
+        if (flight.departureGate().isEmpty() && field.key().contains(QLatin1String("gate"), Qt::CaseInsensitive)) {
+            const auto gateStr = field.value().toString();
+            if (isPlausibeGate(gateStr)) {
+                flight.setDepartureGate(gateStr);
+                continue;
+            }
+        }
+    }
+
+    // search for missing information in field content
+    const auto depIata = KnowledgeDb::IataCode(flight.departureAirport().iataCode());
+    const auto arrIata = KnowledgeDb::IataCode(flight.arrivalAirport().iataCode());
+    const auto frontFields = frontFieldsForPass(pass);
+    for (const auto &field : frontFields) {
+        // full airport names
+        if (flight.departureAirport().name().isEmpty()) {
+            if (isAirportName(field.value().toString(), depIata)) {
+                auto airport = flight.departureAirport();
+                airport.setName(field.value().toString());
+                flight.setDepartureAirport(airport);
+            } else if (isAirportName(field.label(), depIata)) {
+                auto airport = flight.departureAirport();
+                airport.setName(field.label());
+                flight.setDepartureAirport(airport);
+            }
+        }
+        if (flight.arrivalAirport().name().isEmpty()) {
+            if (isAirportName(field.value().toString(), arrIata)) {
+                auto airport = flight.arrivalAirport();
+                airport.setName(field.value().toString());
+                flight.setArrivalAirport(airport);
+            } else if (isAirportName(field.label(), arrIata)) {
+                auto airport = flight.arrivalAirport();
+                airport.setName(field.label());
+                flight.setArrivalAirport(airport);
             }
         }
     }

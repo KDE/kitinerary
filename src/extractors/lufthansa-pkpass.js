@@ -24,7 +24,6 @@ function main(pass)
 //     }
 
     var res = JsonLd.newFlightReservation();
-    res.reservationFor.departureGate = pass.field["gate"].value;
     res.reservationFor.departureAirport.name = pass.field["origin"].label;
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
 

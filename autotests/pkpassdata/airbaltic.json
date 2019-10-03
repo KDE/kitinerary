@@ -22,7 +22,8 @@
                     "latitude": 56.920799255371094,
                     "longitude": 23.970800399780273
                 },
-                "iataCode": "RIX"
+                "iataCode": "RIX",
+                "name": "Riga"
             },
             "boardingTime": {
                 "@type": "QDateTime",
@@ -40,7 +41,8 @@
                     "latitude": 52.55970001220703,
                     "longitude": 13.287799835205078
                 },
-                "iataCode": "TXL"
+                "iataCode": "TXL",
+                "name": "Berlin"
             },
             "departureDay": "2017-11-05",
             "flightNumber": "212"
