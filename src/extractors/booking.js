@@ -49,6 +49,8 @@ regExMap['de_DE']['person'] = /Name des Gastes +(.*) Name des Gastes bearbeiten/
 regExMap['de_DE']['dateFormat'] = "dddd, d. MMMM yyyy hh:mm";
 
 function main(text) {
+    if (Context.data)
+        return null; // this is just backup if we have no structured data
     var res = JsonLd.newLodgingReservation();
 
     for (var locale in regExMap) {
@@ -100,6 +102,8 @@ function main(text) {
 
 function parseHtml(doc)
 {
+    if (Context.data)
+        return null; // this is just backup if we have no structured data
     var res = JsonLd.newLodgingReservation();
     var elem = doc.eval("//table[@class=\"mg_conf_hotel_preview\"]")[0];
     res.reservationFor.name = elem.eval("(.//b|.//strong)")[0].content;

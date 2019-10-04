@@ -77,9 +77,12 @@ public:
 
     void extractRecursive(KMime::Content *content);
     void extractDocument();
-    void extractStructured();
-    void extractCustom();
     void extractGeneric();
+    void extractCustom();
+    void extractCustomForGenericResults();
+    void extractGenericPkPass();
+
+    void determineExtractors();
 
     void executeScript(const Extractor &extractor);
     void processScriptResult(const QJSValue &result);
@@ -103,6 +106,7 @@ public:
     KMime::Content *m_mimeContext = nullptr;
     std::unique_ptr<KMime::Content> m_ownedMimeContent;
     GenericPdfExtractor m_genericPdfExtractor;
+    std::vector<GenericExtractor::Result> m_genericResults;
     QJsonArray m_result;
     QJSEngine m_engine;
     ExtractorRepository m_repo;
@@ -432,45 +436,96 @@ void ExtractorEnginePrivate::extractDocument()
     }
     openDocument();
 
-    // structured content
-    extractStructured();
-    if (!m_result.isEmpty()) {
-        return;
+    // generic extraction
+    m_genericResults.clear();
+    extractGeneric();
+
+    // determine which custom extractos apply, and run them
+    m_extractors.clear();
+    determineExtractors();
+    if (!m_genericResults.empty()) {
+        // run the custom extractors for each generic extractor find and use that as its context
+        extractCustomForGenericResults();
+    } else {
+        // run custom extractors without context
+        extractCustom();
+        // if we didn't find anything, let's use whatever the generic extractors found
+        if (m_result.empty()) {
+            for (const auto &gr : m_genericResults) {
+                std::copy(gr.result.begin(), gr.result.end(), std::back_inserter(m_result));
+            }
+        }
     }
 
-    // custom extractors
+    // ### legacy pkpass handling, to be ported to new extraction order
+    if (!m_result.isEmpty() || !m_pass) {
+        return;
+    }
     m_extractors.clear();
     if (m_pass) {
         m_repo.extractorsForPass(m_pass.get(), m_extractors);
+    }
+    extractCustom();
+
+    // generic extractors
+    extractGenericPkPass();
+}
+
+void ExtractorEnginePrivate::extractGeneric()
+{
+    if (m_htmlDoc) {
+        const auto res = StructuredDataExtractor::extract(m_htmlDoc.get());
+        m_genericResults.emplace_back(GenericExtractor::Result{res, {}, -1});
+    }
+    else if (m_pdfDoc) {
+        m_genericResults = m_genericPdfExtractor.extract(m_pdfDoc.get());
+    }
+    else  if (!m_text.isEmpty()) {
+        if (IataBcbpParser::maybeIataBcbp(m_text)) {
+            const auto res = IataBcbpParser::parse(m_text, m_context->m_senderDate.date());
+            m_genericResults.emplace_back(GenericExtractor::Result{JsonLdDocument::toJson(res), m_text, -1});
+        }
+    }
+    else if (!m_data.isEmpty()) {
+        if (Uic9183Parser::maybeUic9183(m_data)) {
+            QJsonArray res;
+            GenericUic918Extractor::extract(m_data, res, m_context->m_senderDate);
+            m_genericResults.emplace_back(GenericExtractor::Result{res, m_data, -1});
+            return;
+        }
+        // try again as text
+        m_text = QString::fromUtf8(m_data);
+        extractGeneric();
+    }
+}
+
+void ExtractorEnginePrivate::determineExtractors()
+{
+    m_extractors = m_additionalExtractors;
+
+    if (m_pass) {
+        // TODO this needs the order for pkpass extraction swapped first
+//         m_repo.extractorsForPass(m_pass.get(), m_extractors);
 #ifdef HAVE_KCAL
     } else if (m_calendar) {
         m_repo.extractorsForCalendar(m_calendar, m_extractors);
 #endif
     }
-    if (m_extractors.empty()) {
-        if (m_mimeContext) {
-            m_repo.extractorsForMessage(m_mimeContext, m_extractors);
-        } else if (!m_additionalExtractors.empty()) {
-            m_extractors = std::move(m_additionalExtractors);
-        } else if (!m_text.isEmpty()) {
-            m_repo.extractorsForContent(m_text, m_extractors);
-        } else if (m_inputType == ExtractorInput::Text && !m_data.isEmpty()) {
-            m_text = QString::fromUtf8(m_data);
-            m_repo.extractorsForContent(m_text, m_extractors);
-        }
+    if (m_mimeContext) {
+        m_repo.extractorsForMessage(m_mimeContext, m_extractors);
     }
-    extractCustom();
+    if (!m_text.isEmpty()) {
+        m_repo.extractorsForContent(m_text, m_extractors);
+    } else if (m_inputType == ExtractorInput::Text && !m_data.isEmpty()) {
+        m_text = QString::fromUtf8(m_data);
+        m_repo.extractorsForContent(m_text, m_extractors);
+    }
 
-    // generic extractors
-    extractGeneric();
-}
-
-void ExtractorEnginePrivate::extractStructured()
-{
-    if (m_htmlDoc) {
-        qCDebug(Log) << "Looking for structured annotations...";
-        const auto res = StructuredDataExtractor::extract(m_htmlDoc.get());
-        std::copy(res.begin(), res.end(), std::back_inserter(m_result));
+    for (const auto &genericResult : m_genericResults) {
+        // check if generic extractors identified documents we have custom extractors for
+        m_repo.extractorsForJsonLd(genericResult.result, m_extractors);
+        // check the unrecognized (vendor-specific) barcodes, if any
+        m_repo.extractorsForBarcode(genericResult.barcode.toString(), m_extractors);
     }
 }
 
@@ -524,12 +579,33 @@ void ExtractorEnginePrivate::extractCustom()
 
         if (!m_result.isEmpty()) {
             m_usedExtractor = extractor.name();
-            break;
         }
     }
 }
 
-void ExtractorEnginePrivate::extractGeneric()
+void ExtractorEnginePrivate::extractCustomForGenericResults()
+{
+    for (const auto &genericResult : m_genericResults) {
+        // expose genericResult content to custom extractors via Context object
+        m_context->m_barcode = genericResult.barcode;
+        if (!genericResult.result.empty()) {
+            m_context->m_data = m_engine.toScriptValue(genericResult.result);
+        }
+        m_context->m_pdfPageNum = genericResult.pageNum;
+
+        // check if generic extractors identified documents we have custom extractors for
+        const auto prevResults = m_result.size();
+        extractCustom();
+        m_context->reset();
+
+        // if this didn't find something, take the generic extractor result as-is
+        if (prevResults == m_result.size()) {
+            std::copy(genericResult.result.begin(), genericResult.result.end(), std::back_inserter(m_result));
+        }
+    }
+}
+
+void ExtractorEnginePrivate::extractGenericPkPass()
 {
     if (m_pass) {
         if (m_result.size() > 1) { // a pkpass file contains exactly one boarding pass
@@ -542,47 +618,6 @@ void ExtractorEnginePrivate::extractGeneric()
         auto res = m_result.at(0).toObject();
         res = GenericPkPassExtractor::extract(m_pass.get(), res, m_context->m_senderDate);
         m_result[0] = res;
-    } else if (m_pdfDoc && m_result.isEmpty()) {
-        const auto genericResults = m_genericPdfExtractor.extract(m_pdfDoc.get());
-
-        for (const auto &genericResult : genericResults) {
-            // expose genericResult content to custom extractors via Context object
-            m_context->m_barcode = genericResult.barcode;
-            m_context->m_data = m_engine.toScriptValue(genericResult.result);
-            m_context->m_pdfPageNum = genericResult.pageNum;
-
-            // check if generic extractors identified documents we have custom extractors for
-            m_extractors.clear();
-            m_repo.extractorsForJsonLd(genericResult.result, m_extractors);
-            extractCustom();
-
-            // check the unrecognized (vendor-specific) barcodes, if any
-            m_extractors.clear();
-            m_repo.extractorsForBarcode(genericResult.barcode.toString(), m_extractors);
-            extractCustom();
-
-            m_context->reset();
-        }
-
-        // if none of that found something, take the generic extractor result as-is
-        if (m_result.isEmpty()) {
-            for (const auto &genericResult : genericResults) {
-                std::copy(genericResult.result.begin(), genericResult.result.end(), std::back_inserter(m_result));
-            }
-        }
-    } else if (!m_text.isEmpty() && m_result.isEmpty()) {
-        if (IataBcbpParser::maybeIataBcbp(m_text)) {
-            const auto res = IataBcbpParser::parse(m_text, m_context->m_senderDate.date());
-            m_result = JsonLdDocument::toJson(res);
-        }
-    } else if (!m_data.isEmpty() && m_result.isEmpty()) {
-        if (Uic9183Parser::maybeUic9183(m_data)) {
-            GenericUic918Extractor::extract(m_data, m_result, m_context->m_senderDate);
-            return;
-        }
-        // try again as text
-        m_text = QString::fromUtf8(m_data);
-        extractGeneric();
     }
 }
 
