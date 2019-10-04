@@ -23,7 +23,7 @@ function main(pass)
 //         return null;
 //     }
 
-    var res = JsonLd.newFlightReservation();
+    var res = Context.data[0];
     res.reservationFor.departureAirport.name = pass.field["origin"].label;
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
 

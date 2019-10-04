@@ -32,7 +32,7 @@ namespace KItinerary {
 /** Generic extractor for PkPass files. */
 namespace GenericPkPassExtractor
 {
-    QJsonObject extract(KPkPass::Pass *pass, const QJsonObject &extracted, const QDateTime &contextDate);
+    QJsonObject extract(KPkPass::Pass *pass, const QDateTime &contextDate);
 }
 
 }

@@ -30,7 +30,7 @@ function expandStationName(name)
 
 function parsePkPass(pass)
 {
-    var res = JsonLd.newObject("TrainReservation");
+    var res = Context.data[0];
     res.reservationFor = JsonLd.newObject("TrainTrip");
     res.reservationFor.departureDay = JsonLd.toDateTime(pass.field["travelDate"].value, "dd/MM/yyyy", "en");
     res.reservationFor.departureStation = JsonLd.newObject("TrainStation");

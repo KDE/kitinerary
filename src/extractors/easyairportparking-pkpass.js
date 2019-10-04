@@ -19,15 +19,15 @@
 
 function main(pass)
 {
-    var res = JsonLd.newEventReservation();
+    var res = Context.data[0];
     res.reservationFor.startDate = JsonLd.toDateTime(pass.field["reservation_time_from"].value, "dd.MM.yyyy", "de");
     res.reservationFor.endDate = JsonLd.toDateTime(pass.field["reservation_time_till"].value, "dd.MM.yyyy", "de");
 
     res.reservationFor.location.name = pass.field["logo_text"].value;
     var addr = pass.field["adsress"].value.split("\n"); // sic!
+    res.reservationFor.location.address = JsonLd.newObject("PostalAddress");
     res.reservationFor.location.address.streetAddress = addr[0];
     res.reservationFor.location.address.addressLocality = addr[1];
     res.reservationFor.location.address.addressCountry = addr[2];
     return res;
 }
-

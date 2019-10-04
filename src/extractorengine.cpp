@@ -80,7 +80,6 @@ public:
     void extractGeneric();
     void extractCustom();
     void extractCustomForGenericResults();
-    void extractGenericPkPass();
 
     void determineExtractors();
 
@@ -456,19 +455,6 @@ void ExtractorEnginePrivate::extractDocument()
             }
         }
     }
-
-    // ### legacy pkpass handling, to be ported to new extraction order
-    if (!m_result.isEmpty() || !m_pass) {
-        return;
-    }
-    m_extractors.clear();
-    if (m_pass) {
-        m_repo.extractorsForPass(m_pass.get(), m_extractors);
-    }
-    extractCustom();
-
-    // generic extractors
-    extractGenericPkPass();
 }
 
 void ExtractorEnginePrivate::extractGeneric()
@@ -479,6 +465,9 @@ void ExtractorEnginePrivate::extractGeneric()
     }
     else if (m_pdfDoc) {
         m_genericResults = m_genericPdfExtractor.extract(m_pdfDoc.get());
+    }
+    else if (m_pass) {
+        m_genericResults.emplace_back(GenericExtractor::Result{{GenericPkPassExtractor::extract(m_pass.get(), m_context->m_senderDate)}, {}, -1});
     }
     else  if (!m_text.isEmpty()) {
         if (IataBcbpParser::maybeIataBcbp(m_text)) {
@@ -497,6 +486,7 @@ void ExtractorEnginePrivate::extractGeneric()
         m_text = QString::fromUtf8(m_data);
         extractGeneric();
     }
+
 }
 
 void ExtractorEnginePrivate::determineExtractors()
@@ -504,8 +494,7 @@ void ExtractorEnginePrivate::determineExtractors()
     m_extractors = m_additionalExtractors;
 
     if (m_pass) {
-        // TODO this needs the order for pkpass extraction swapped first
-//         m_repo.extractorsForPass(m_pass.get(), m_extractors);
+        m_repo.extractorsForPass(m_pass.get(), m_extractors);
 #ifdef HAVE_KCAL
     } else if (m_calendar) {
         m_repo.extractorsForCalendar(m_calendar, m_extractors);
@@ -602,22 +591,6 @@ void ExtractorEnginePrivate::extractCustomForGenericResults()
         if (prevResults == m_result.size()) {
             std::copy(genericResult.result.begin(), genericResult.result.end(), std::back_inserter(m_result));
         }
-    }
-}
-
-void ExtractorEnginePrivate::extractGenericPkPass()
-{
-    if (m_pass) {
-        if (m_result.size() > 1) { // a pkpass file contains exactly one boarding pass
-            return;
-        }
-        if (m_result.isEmpty()) {
-            m_result.push_back(QJsonObject());
-        }
-
-        auto res = m_result.at(0).toObject();
-        res = GenericPkPassExtractor::extract(m_pass.get(), res, m_context->m_senderDate);
-        m_result[0] = res;
     }
 }
 

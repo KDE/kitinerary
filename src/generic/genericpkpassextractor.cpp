@@ -190,27 +190,28 @@ static QDateTime iataContextDate(KPkPass::Pass *pass, const QDateTime &context)
     return pass->relevantDate().addDays(-1); // go a bit back, to compensate for unknown departure timezone at this point
 }
 
-QJsonObject GenericPkPassExtractor::extract(KPkPass::Pass *pass, const QJsonObject &extracted, const QDateTime &contextDate)
+QJsonObject GenericPkPassExtractor::extract(KPkPass::Pass *pass, const QDateTime &contextDate)
 {
-    auto result = extracted;
-    if (result.isEmpty()) { // no previous extractor ran, so we need to create the top-level element ourselves
-        if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass)) {
-            switch (boardingPass->transitType()) {
-                case KPkPass::BoardingPass::Air:
-                    result.insert(QStringLiteral("@type"), QLatin1String("FlightReservation"));
-                    break;
-                // TODO expand once we have test files for train tickets
-                default:
-                    break;
-            }
-        } else {
-            switch (pass->type()) {
-                case KPkPass::Pass::EventTicket:
-                    result.insert(QStringLiteral("@type"), QLatin1String("EventReservation"));
-                    break;
-                default:
-                    return result;
-            }
+    QJsonObject result;
+    if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass)) {
+        switch (boardingPass->transitType()) {
+            case KPkPass::BoardingPass::Air:
+                result.insert(QStringLiteral("@type"), QLatin1String("FlightReservation"));
+                break;
+            case KPkPass::BoardingPass::Train:
+                result.insert(QStringLiteral("@type"), QLatin1String("TrainReservation"));
+                break;
+            // TODO expand once we have test files for other types
+            default:
+                break;
+        }
+    } else {
+        switch (pass->type()) {
+            case KPkPass::Pass::EventTicket:
+                result.insert(QStringLiteral("@type"), QLatin1String("EventReservation"));
+                break;
+            default:
+                return result;
         }
     }
 
@@ -231,9 +232,7 @@ QJsonObject GenericPkPassExtractor::extract(KPkPass::Pass *pass, const QJsonObje
         token += barcode.message();
         QJsonObject ticket = result.value(QLatin1String("reservedTicket")).toObject();
         ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
-        if (!ticket.contains(QLatin1String("ticketToken"))) {
-            ticket.insert(QStringLiteral("ticketToken"), token);
-        }
+        ticket.insert(QStringLiteral("ticketToken"), token);
         result.insert(QStringLiteral("reservedTicket"), ticket);
     }
 

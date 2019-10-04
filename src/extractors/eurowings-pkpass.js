@@ -19,7 +19,7 @@
 
 function main(pass)
 {
-    var res = JsonLd.newFlightReservation();
+    var res = Context.data[0];
     res.reservationFor.departureAirport.name = pass.field["origin"].label;
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
     if (pass.field["operatingcarrier"])
