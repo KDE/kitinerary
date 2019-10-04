@@ -34,6 +34,7 @@ namespace KItinerary {
 
 class ExtractorFilter;
 class ExtractorPrivate;
+class ExtractorRepositoryPrivate;
 
 /** A single unstructured data extraction rule set.
  *
@@ -129,6 +130,7 @@ public:
 
 private:
     QExplicitlySharedDataPointer<ExtractorPrivate> d;
+    friend class ExtractorRepositoryPrivate;
 };
 
 }

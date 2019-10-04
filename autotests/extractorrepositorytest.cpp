@@ -42,11 +42,13 @@ private Q_SLOTS:
     {
         ExtractorRepository repo;
 
-        auto extractors = repo.extractorsForBarcode(QStringLiteral("i0CVxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxX"));
+        std::vector<Extractor> extractors;
+        repo.extractorsForBarcode(QStringLiteral("i0CVxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxX"), extractors);
         QCOMPARE(extractors.size(), 1);
         QVERIFY(extractors[0].name().startsWith(QLatin1String("sncf")));
 
-        extractors = repo.extractorsForContent(QStringLiteral("PNR:1234567890,TRAIN:12345,DOJ:dd-mm-yyyy,TIME:hh:mm,SL,A TO B,John Doe+2,S7 49 S7 52 S7 55,FARE:140,SC:10+PG CHGS."));
+        extractors.clear();
+        repo.extractorsForContent(QStringLiteral("PNR:1234567890,TRAIN:12345,DOJ:dd-mm-yyyy,TIME:hh:mm,SL,A TO B,John Doe+2,S7 49 S7 52 S7 55,FARE:140,SC:10+PG CHGS."), extractors);
         QCOMPARE(extractors.size(), 1);
         QVERIFY(extractors[0].name().startsWith(QLatin1String("irctc")));
     }

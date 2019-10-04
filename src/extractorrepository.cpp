@@ -50,7 +50,8 @@ public:
     ExtractorRepositoryPrivate();
     void loadExtractors();
     void addExtractor(Extractor &&e);
-    std::vector<Extractor> extractorForTypeAndContent(ExtractorInput::Type type, const QString &content) const;
+    void extractorForTypeAndContent(ExtractorInput::Type type, const QString &content, std::vector<Extractor> &extractors) const;
+    static void insertExtractor(const Extractor &ext, std::vector<Extractor> &extractors);
 
     std::vector<Extractor> m_extractors;
     QStringList m_extraSearchPaths;
@@ -63,20 +64,28 @@ ExtractorRepositoryPrivate::ExtractorRepositoryPrivate()
     loadExtractors();
 }
 
-std::vector<Extractor> ExtractorRepositoryPrivate::extractorForTypeAndContent(ExtractorInput::Type type, const QString &content) const
+void ExtractorRepositoryPrivate::extractorForTypeAndContent(ExtractorInput::Type type, const QString &content, std::vector<Extractor> &extractors) const
 {
-    std::vector<Extractor> v;
-
     for (auto it = m_extractors.begin(), end = m_extractors.end(); it != end; ++it) {
         for (const auto &filter : (*it).filters()) {
             if (filter.type() == type && filter.matches(content)) {
-                v.push_back(*it);
+                insertExtractor(*it, extractors);
                 break;
             }
         }
     }
+}
 
-    return v;
+// approximate set behavior on extractors, using the d pointers as a quick way to ensure uniqueness
+void ExtractorRepositoryPrivate::insertExtractor(const Extractor &ext, std::vector<Extractor> &extractors)
+{
+    const auto it = std::lower_bound(extractors.begin(), extractors.end(), ext, [](const auto &lhs, const auto &rhs) {
+        return lhs.d < rhs.d;
+    });
+    if (it != extractors.end() && (*it).d == ext.d) {
+        return;
+    }
+    extractors.insert(it, ext);
 }
 
 
@@ -100,11 +109,10 @@ const std::vector<Extractor>& ExtractorRepository::allExtractors() const
     return d->m_extractors;
 }
 
-std::vector<Extractor> ExtractorRepository::extractorsForMessage(KMime::Content *part) const
+void ExtractorRepository::extractorsForMessage(KMime::Content *part, std::vector<Extractor> &extractors) const
 {
-    std::vector<Extractor> v;
     if (!part) {
-        return v;
+        return;
     }
 
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
@@ -123,20 +131,17 @@ std::vector<Extractor> ExtractorRepository::extractorsForMessage(KMime::Content 
             }
             const auto headerData = header->asUnicodeString();
             if (filter.matches(headerData)) {
-                v.push_back(*it);
+                ExtractorRepositoryPrivate::insertExtractor(*it, extractors);
                 break;
             }
         }
     }
-
-    return v;
 }
 
-std::vector<Extractor> ExtractorRepository::extractorsForPass(KPkPass::Pass *pass) const
+void ExtractorRepository::extractorsForPass(KPkPass::Pass *pass, std::vector<Extractor> &extractors) const
 {
-    std::vector<Extractor> v;
     if (pass->type() != KPkPass::Pass::BoardingPass && pass->type() != KPkPass::Pass::EventTicket) {
-        return v;
+        return;
     }
 
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
@@ -155,13 +160,11 @@ std::vector<Extractor> ExtractorRepository::extractorsForPass(KPkPass::Pass *pas
                 continue;
             }
             if (filter.matches(value)) {
-                v.push_back(*it);
+                ExtractorRepositoryPrivate::insertExtractor(*it, extractors);
                 break;
             }
         }
     }
-
-    return v;
 }
 
 static QString providerId(const QJsonObject &res)
@@ -176,10 +179,8 @@ static QString providerId(const QJsonObject &res)
     return {};
 }
 
-std::vector<Extractor> ExtractorRepository::extractorsForJsonLd(const QJsonArray &data) const
+void ExtractorRepository::extractorsForJsonLd(const QJsonArray &data, std::vector<Extractor> &extractors) const
 {
-    std::vector<Extractor> v;
-
     for (const auto &val : data) {
         const auto id = providerId(val.toObject());
         for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
@@ -191,23 +192,21 @@ std::vector<Extractor> ExtractorRepository::extractorsForJsonLd(const QJsonArray
                     continue;
                 }
                 if (filter.matches(id)) {
-                    v.push_back(*it);
+                    ExtractorRepositoryPrivate::insertExtractor(*it, extractors);
                     break;
                 }
             }
         }
     }
-
-    return v;
 }
 
-std::vector<Extractor> ExtractorRepository::extractorsForBarcode(const QString &code) const
+void ExtractorRepository::extractorsForBarcode(const QString &code, std::vector<Extractor> &extractors) const
 {
-    return d->extractorForTypeAndContent(ExtractorInput::Barcode, code);
+    d->extractorForTypeAndContent(ExtractorInput::Barcode, code, extractors);
 }
 
 #ifdef HAVE_KCAL
-std::vector<Extractor> ExtractorRepository::extractorsForCalendar(const QSharedPointer<KCalendarCore::Calendar> &cal) const
+void ExtractorRepository::extractorsForCalendar(const QSharedPointer<KCalendarCore::Calendar> &cal, std::vector<Extractor> &extractors) const
 {
     std::vector<Extractor> v;
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
@@ -218,18 +217,17 @@ std::vector<Extractor> ExtractorRepository::extractorsForCalendar(const QSharedP
 
             const auto value = cal->property(filter.fieldName());
             if (filter.matches(value.toString())) {
-                v.push_back(*it);
+                ExtractorRepositoryPrivate::insertExtractor(*it, extractors);
                 break;
             }
         }
     }
-    return v;
 }
 #endif
 
-std::vector<Extractor> ExtractorRepository::extractorsForContent(const QString &content) const
+void ExtractorRepository::extractorsForContent(const QString &content, std::vector<Extractor> &extractors) const
 {
-    return d->extractorForTypeAndContent(ExtractorInput::Text, content);
+    d->extractorForTypeAndContent(ExtractorInput::Text, content, extractors);
 }
 
 Extractor ExtractorRepository::extractor(const QString &name) const

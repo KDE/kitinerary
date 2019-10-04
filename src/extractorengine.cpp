@@ -146,7 +146,7 @@ void ExtractorEnginePrivate::extractExternal()
 {
     m_extractors.clear();
     if (m_mimeContext) {
-        m_extractors = m_repo.extractorsForMessage(m_mimeContext);
+        m_repo.extractorsForMessage(m_mimeContext, m_extractors);
     }
     QStringList extNames;
     extNames.reserve(m_extractors.size());
@@ -441,22 +441,22 @@ void ExtractorEnginePrivate::extractDocument()
     // custom extractors
     m_extractors.clear();
     if (m_pass) {
-        m_extractors = m_repo.extractorsForPass(m_pass.get());
+        m_repo.extractorsForPass(m_pass.get(), m_extractors);
 #ifdef HAVE_KCAL
     } else if (m_calendar) {
-        m_extractors = m_repo.extractorsForCalendar(m_calendar);
+        m_repo.extractorsForCalendar(m_calendar, m_extractors);
 #endif
     }
     if (m_extractors.empty()) {
         if (m_mimeContext) {
-            m_extractors = m_repo.extractorsForMessage(m_mimeContext);
+            m_repo.extractorsForMessage(m_mimeContext, m_extractors);
         } else if (!m_additionalExtractors.empty()) {
             m_extractors = std::move(m_additionalExtractors);
         } else if (!m_text.isEmpty()) {
-            m_extractors = m_repo.extractorsForContent(m_text);
+            m_repo.extractorsForContent(m_text, m_extractors);
         } else if (m_inputType == ExtractorInput::Text && !m_data.isEmpty()) {
             m_text = QString::fromUtf8(m_data);
-            m_extractors = m_repo.extractorsForContent(m_text);
+            m_repo.extractorsForContent(m_text, m_extractors);
         }
     }
     extractCustom();
@@ -552,11 +552,13 @@ void ExtractorEnginePrivate::extractGeneric()
             m_context->m_pdfPageNum = genericResult.pageNum;
 
             // check if generic extractors identified documents we have custom extractors for
-            m_extractors = m_repo.extractorsForJsonLd(genericResult.result);
+            m_extractors.clear();
+            m_repo.extractorsForJsonLd(genericResult.result, m_extractors);
             extractCustom();
 
             // check the unrecognized (vendor-specific) barcodes, if any
-            m_extractors = m_repo.extractorsForBarcode(genericResult.barcode.toString());
+            m_extractors.clear();
+            m_repo.extractorsForBarcode(genericResult.barcode.toString(), m_extractors);
             extractCustom();
 
             m_context->reset();
