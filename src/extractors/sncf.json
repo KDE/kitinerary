@@ -10,7 +10,7 @@
     },
     {
         "type": "text",
-        "filter": [ { "header": "From", "match": "e-billet@sncf.fr" } ],
+        "filter": [ { "header": "From", "match": "UNITTEST-e-billet@sncf.fr" } ],
         "script": "sncf.js",
         "function": "parseText"
     },

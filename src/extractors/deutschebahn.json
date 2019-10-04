@@ -10,7 +10,7 @@
     },
     {
         "type": "text",
-        "filter": [ { "header": "From", "match": "buchungsbestaetigung@bahn.de" } ],
+        "filter": [ { "header": "From", "match": "UNITTEST-buchungsbestaetigung@bahn.de" } ],
         "script": "deutschebahn.js",
         "function": "parseText"
     }
