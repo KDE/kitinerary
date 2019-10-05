@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "FlixMobility",
+            "property": "reservationFor.busCompany.name",
+            "type": "JsonLd"
+        }
+    ],
+    "function": "main",
+    "script": "flixbus.js",
+    "type": "Html"
+}
