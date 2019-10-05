@@ -120,11 +120,11 @@ void ExtractorRepository::extractorsForMessage(KMime::Content *part, std::vector
             if (filter.type() != ExtractorInput::Email) {
                 continue;
             }
-            auto header = part->headerByType(filter.fieldName());
+            auto header = part->headerByType(filter.fieldName().toUtf8().constData());
             auto ancestor = part;
             while (!header && ancestor->parent()) {
                 ancestor = ancestor->parent();
-                header = ancestor->headerByType(filter.fieldName());
+                header = ancestor->headerByType(filter.fieldName().toUtf8().constData());
             }
             if (!header) {
                 continue;
@@ -154,7 +154,7 @@ void ExtractorRepository::extractorsForPass(KPkPass::Pass *pass, std::vector<Ext
             }
 
             QString value;
-            if (strcmp(filter.fieldName(), "passTypeIdentifier") == 0) {
+            if (filter.fieldName() == QLatin1String("passTypeIdentifier")) {
                 value = pass->passTypeIdentifier();
             } else {
                 continue;
@@ -167,31 +167,32 @@ void ExtractorRepository::extractorsForPass(KPkPass::Pass *pass, std::vector<Ext
     }
 }
 
-static QString providerId(const QJsonObject &res)
+static QString valueForJsonPath(const QJsonObject &obj, const QString &path)
 {
-    if (res.value(QLatin1String("@type")).toString() == QLatin1String("FlightReservation")) {
-        return res.value(QLatin1String("reservationFor")).toObject().value(QLatin1String("airline")).toObject().value(QLatin1String("iataCode")).toString();
+    const auto pathSections = path.splitRef(QLatin1Char('.'));
+    QJsonValue v(obj);
+    for (const auto &pathSection : pathSections) {
+        if (!v.isObject()) {
+            return {};
+        }
+        v = v.toObject().value(pathSection.toString());
     }
-    if (res.value(QLatin1String("@type")).toString() == QLatin1String("TrainReservation")) {
-        return res.value(QLatin1String("reservationFor")).toObject().value(QLatin1String("provider")).toObject().value(QLatin1String("identifier")).toString();
-    }
-
-    return {};
+    return v.toString();
 }
 
 void ExtractorRepository::extractorsForJsonLd(const QJsonArray &data, std::vector<Extractor> &extractors) const
 {
     for (const auto &val : data) {
-        const auto id = providerId(val.toObject());
         for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
             for (const auto &filter : (*it).filters()) {
                 if (filter.type() != ExtractorInput::JsonLd) {
                     continue;
                 }
-                if (strcmp(filter.fieldName(), "provider") != 0) {
+                const auto value = valueForJsonPath(val.toObject(), filter.fieldName());
+                if (value.isEmpty()) {
                     continue;
                 }
-                if (filter.matches(id)) {
+                if (filter.matches(value)) {
                     ExtractorRepositoryPrivate::insertExtractor(*it, extractors);
                     break;
                 }
@@ -215,7 +216,7 @@ void ExtractorRepository::extractorsForCalendar(const QSharedPointer<KCalendarCo
                 continue;
             }
 
-            const auto value = cal->property(filter.fieldName());
+            const auto value = cal->property(filter.fieldName().toUtf8().constData());
             if (filter.matches(value.toString())) {
                 ExtractorRepositoryPrivate::insertExtractor(*it, extractors);
                 break;

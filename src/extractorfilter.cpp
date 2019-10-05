@@ -29,7 +29,7 @@ class ExtractorFilterPrivate : public QSharedData
 {
 public:
     ExtractorInput::Type m_type = ExtractorInput::Unknown;
-    QByteArray m_fieldName;
+    QString m_fieldName;
     QRegularExpression m_exp;
 };
 }
@@ -56,15 +56,15 @@ void ExtractorFilter::setType(ExtractorInput::Type type)
     d->m_type = type;
 }
 
-const char *ExtractorFilter::fieldName() const
+QString ExtractorFilter::fieldName() const
 {
-    return d->m_fieldName.constData();
+    return d->m_fieldName;
 }
 
 void ExtractorFilter::setFieldName(const QString &fieldName)
 {
     d.detach();
-    d->m_fieldName = fieldName.toUtf8();
+    d->m_fieldName = fieldName;
 }
 
 bool ExtractorFilter::matches(const QString &data) const
@@ -92,19 +92,19 @@ bool ExtractorFilter::load(const QJsonObject &obj)
 
     auto it = obj.find(QLatin1String("header"));
     if (it != obj.end()) {
-        d->m_fieldName = it.value().toString().toUtf8();
+        d->m_fieldName = it.value().toString();
         d->m_type = ExtractorInput::Email;
     }
 
     it = obj.find(QLatin1String("field"));
     if (it != obj.end()) {
-        d->m_fieldName = it.value().toString().toUtf8();
+        d->m_fieldName = it.value().toString();
         d->m_type = ExtractorInput::PkPass;
     }
 
     it = obj.find(QLatin1String("property"));
     if (it != obj.end()) {
-        d->m_fieldName = it.value().toString().toUtf8();
+        d->m_fieldName = it.value().toString();
         if (d->m_type == ExtractorInput::Unknown) { // backward compat, can be removed once all extractors are adjusted
             d->m_type = ExtractorInput::JsonLd;
         }
@@ -121,13 +121,13 @@ QJsonObject ExtractorFilter::toJson() const
     if (needsFieldName(d->m_type)) {
         switch (d->m_type) {
             case ExtractorInput::Email:
-                obj.insert(QStringLiteral("header"), QString::fromUtf8(d->m_fieldName));
+                obj.insert(QStringLiteral("header"), d->m_fieldName);
                 break;
             case ExtractorInput::PkPass:
-                obj.insert(QStringLiteral("field"), QString::fromUtf8(d->m_fieldName));
+                obj.insert(QStringLiteral("field"), d->m_fieldName);
                 break;
             default:
-                obj.insert(QStringLiteral("property"), QString::fromUtf8(d->m_fieldName));
+                obj.insert(QStringLiteral("property"), d->m_fieldName);
                 break;
         }
     }

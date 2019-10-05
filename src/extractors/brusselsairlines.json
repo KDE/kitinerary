@@ -10,7 +10,7 @@
         "type": "pdf",
         "filter": [
             { "header": "From", "match": "brusselsairlines.com" },
-            { "property": "provider", "match": "SN" }
+            { "property": "reservationFor.airline.iataCode", "match": "SN" }
         ],
         "script": "brusselsairlines-receipt.js"
     }

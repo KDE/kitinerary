@@ -47,7 +47,7 @@ public:
     /** The filter type. */
     ExtractorInput::Type type() const;
     /** The field to filter on. */
-    const char *fieldName() const;
+    QString fieldName() const;
     /** Check if @p data matches this filter. */
     bool matches(const QString &data) const;
     /** Pattern to match field value against. */

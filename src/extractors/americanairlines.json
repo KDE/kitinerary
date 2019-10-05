@@ -2,7 +2,7 @@
     "type": "pdf",
     "filter": [
         { "header": "From", "match": "americanairlines@aa.com" },
-        { "property": "provider", "match": "AA" }
+        { "property": "reservationFor.airline.iataCode", "match": "AA" }
     ],
     "script": "americanairlines.js"
 }

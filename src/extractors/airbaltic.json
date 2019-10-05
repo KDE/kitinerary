@@ -2,7 +2,7 @@
     "type": "pdf",
     "filter": [
         { "header": "From", "match": "@airbaltic.com" },
-        { "property": "provider", "match": "BT" }
+        { "property": "reservationFor.airline.iataCode", "match": "BT" }
     ],
     "script": "airbaltic.js"
 }

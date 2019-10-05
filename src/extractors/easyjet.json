@@ -8,9 +8,9 @@
     {
         "type": "pdf",
         "filter": [
-            { "property": "provider", "match": "EJU" },
-            { "property": "provider", "match": "EZS" },
-            { "property": "provider", "match": "EZY" }
+            { "property": "reservationFor.airline.iataCode", "match": "EJU" },
+            { "property": "reservationFor.airline.iataCode", "match": "EZS" },
+            { "property": "reservationFor.airline.iataCode", "match": "EZY" }
         ],
         "script": "easyjet.js",
         "function": "parsePdfBoardingPass"

@@ -3,7 +3,7 @@
         "type": "pdf",
         "filter": [
             { "header": "From", "match": "no-reply@flysas.com" },
-            { "property": "provider", "match": "SK" }
+            { "property": "reservationFor.airline.iataCode", "match": "SK" }
         ],
         "script": "sas-boardingpass.js"
     },
