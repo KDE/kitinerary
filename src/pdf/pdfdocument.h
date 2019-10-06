@@ -22,13 +22,13 @@
 
 #include <KItinerary/PdfImage>
 
+#include <QDateTime>
 #include <QExplicitlySharedDataPointer>
 #include <QObject>
 #include <QVariant>
 
 #include <memory>
 
-class QDateTime;
 class QImage;
 class QTransform;
 

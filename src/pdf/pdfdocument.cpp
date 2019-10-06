@@ -23,7 +23,6 @@
 #include "popplerutils_p.h"
 #include "logging.h"
 
-#include <QDateTime>
 #include <QDebug>
 #include <QImage>
 #include <QScopedValueRollback>
