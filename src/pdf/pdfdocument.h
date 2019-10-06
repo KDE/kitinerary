@@ -28,6 +28,7 @@
 
 #include <memory>
 
+class QDateTime;
 class QImage;
 class QTransform;
 
@@ -88,6 +89,9 @@ class KITINERARY_EXPORT PdfDocument : public QObject
     Q_PROPERTY(QString text READ text CONSTANT)
     Q_PROPERTY(int pageCount READ pageCount CONSTANT)
     Q_PROPERTY(QVariantList pages READ pagesVariant CONSTANT)
+    Q_PROPERTY(QDateTime creationTime READ creationTime CONSTANT)
+    Q_PROPERTY(QDateTime modificationTime READ modificationTime CONSTANT)
+
 public:
     explicit PdfDocument(QObject *parent = nullptr);
     ~PdfDocument();
@@ -103,6 +107,11 @@ public:
 
     /** File size of the entire document in bytes. */
     int fileSize() const;
+
+    /** Creation time as specified in the PDF file. */
+    QDateTime creationTime() const;
+    /** Modification time as specified in the PDF file. */
+    QDateTime modificationTime() const;
 
     /** Creates a PdfDocument from the given raw data.
      *  @returns @c nullptr if loading fails or Poppler was not found.

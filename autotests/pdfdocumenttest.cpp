@@ -30,6 +30,11 @@ class PdfDocumentTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase()
+    {
+        qputenv("TZ", "GMT");
+    }
+
     void testPdfDocument()
     {
         QFile f(QStringLiteral(SOURCE_DIR "/misc/test.pdf"));
@@ -70,6 +75,9 @@ private Q_SLOTS:
 
         QVERIFY(page.imagesInRect(0, 0, 0.5, 1).isEmpty());
         QCOMPARE(page.imagesInRect(0, 0.5, 1, 1).size(), 1);
+
+        QCOMPARE(doc->creationTime(), QDateTime({2018, 4, 29}, {11, 41, 28}, Qt::OffsetFromUTC, 7200));
+        QCOMPARE(doc->modificationTime(), QDateTime());
 #endif
     }
 

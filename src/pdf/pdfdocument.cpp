@@ -23,12 +23,14 @@
 #include "popplerutils_p.h"
 #include "logging.h"
 
+#include <QDateTime>
 #include <QDebug>
 #include <QImage>
 #include <QScopedValueRollback>
 
 #ifdef HAVE_POPPLER
 #include <GlobalParams.h>
+#include <DateInfo.h>
 #include <PDFDoc.h>
 #include <Stream.h>
 #endif
@@ -188,6 +190,48 @@ PdfPage PdfDocument::page(int index) const
 int PdfDocument::fileSize() const
 {
     return d->m_pdfData.size();
+}
+
+static QDateTime parsePdfDateTime(const char *str)
+{
+    int year, month, day, hour, min, sec, tzHours, tzMins;
+    char tz;
+
+    if (!parseDateString(str, &year, &month, &day, &hour, &min, &sec, &tz, &tzHours, &tzMins)) {
+        return {};
+    }
+
+    QDate date(year, month, day);
+    QTime time(hour, min, sec);
+    if (!date.isValid() || !time.isValid()) {
+        return {};
+    }
+
+    int offset = tzHours * 3600 + tzMins * 60;
+    if (tz == '+') {
+        return QDateTime(date, time, Qt::OffsetFromUTC, offset);
+    } else if (tz == '-') {
+        return QDateTime(date, time, Qt::OffsetFromUTC, -offset);
+    }
+    return QDateTime(date, time, Qt::UTC);
+}
+
+QDateTime PdfDocument::creationTime() const
+{
+    std::unique_ptr<GooString> dt(d->m_popplerDoc->getDocInfoCreatDate());
+    if (!dt) {
+        return {};
+    }
+    return parsePdfDateTime(dt->c_str());
+}
+
+QDateTime PdfDocument::modificationTime() const
+{
+    std::unique_ptr<GooString> dt(d->m_popplerDoc->getDocInfoModDate());
+    if (!dt) {
+        return {};
+    }
+    return parsePdfDateTime(dt->c_str());
 }
 
 QVariantList PdfDocument::pagesVariant() const
