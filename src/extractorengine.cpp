@@ -86,6 +86,8 @@ public:
     void executeScript(const Extractor &extractor);
     void processScriptResult(const QJSValue &result);
 
+    void setContext(PdfDocument *pdf);
+
     ExtractorEngine *q = nullptr;
     std::vector<Extractor> m_extractors;
     std::vector<Extractor> m_additionalExtractors;
@@ -235,6 +237,7 @@ void ExtractorEngine::setHtmlDocument(HtmlDocument *htmlDoc)
 void ExtractorEngine::setPdfDocument(PdfDocument *pdfDoc)
 {
     d->m_pdfDoc = make_nonowning_ptr(pdfDoc);
+    d->setContext(d->m_pdfDoc.get());
 }
 
 void ExtractorEngine::setPass(KPkPass::Pass *pass)
@@ -288,6 +291,7 @@ void ExtractorEnginePrivate::openDocument()
         case ExtractorInput::Pdf:
             m_pdfDoc = make_owning_ptr(PdfDocument::fromData(m_data));
             m_data.clear();
+            setContext(m_pdfDoc.get());
             break;
         case ExtractorInput::Html:
             m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(m_data));
@@ -385,6 +389,17 @@ void ExtractorEngine::setContext(KMime::Content *context)
     }
 
     setContextDate({});
+}
+
+void ExtractorEnginePrivate::setContext(PdfDocument *pdf)
+{
+    auto dt = pdf->modificationTime();
+    if (!dt.isValid()) {
+        dt = pdf->creationTime();
+    }
+    if (dt.isValid() && dt.date().year() > 2000 && dt < QDateTime::currentDateTime()) {
+        q->setContextDate(dt);
+    }
 }
 
 void ExtractorEngine::setContextDate(const QDateTime &dt)
