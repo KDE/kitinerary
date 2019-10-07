@@ -30,7 +30,7 @@ namespace KItinerary {
 
 class PdfVectorPicturePrivate;
 
-/** Similar to QPicture, for defered-rendered path-based vector graphics extracted from PDF documents. */
+/** Similar to QPicture, for deferred-rendered path-based vector graphics extracted from PDF documents. */
 class PdfVectorPicture
 {
 public:

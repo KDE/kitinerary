@@ -173,7 +173,7 @@ private Q_SLOTS:
         // multiple unique hits / unique hit on valid (but wrong) IATA code
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("GIMPO INTERNATIONAL TERMINAL I - SKY CITY INTERNATIONAL TERMINAL")), KnowledgeDb::IataCode{"GMP"});
 
-        // Amadeus/BCD airport names containing city/country data too, and using "INTL" abbrevation
+        // Amadeus/BCD airport names containing city/country data too, and using "INTL" abbreviation
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SAN FRANCISCO CA SAN FRANCISCO INTL")), KnowledgeDb::IataCode{"SFO"});
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("BEIJING CN CAPITAL INTL")), KnowledgeDb::IataCode{"PEK"});
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("FRANKFURT DE - FRANKFURT INTL")), KnowledgeDb::IataCode{}); // ambigious with Frankfurt Hahn

@@ -15,8 +15,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef KITINERARY_GENERICEXTRACTOR_H
-#define KITINERARY_GENERICEXTRACTOR_H
+#ifndef KITINERARY_GENERICEXTRACTOR_P_H
+#define KITINERARY_GENERICEXTRACTOR_P_H
 
 #include <QJsonArray>
 #include <QVariant>
@@ -36,4 +36,4 @@ namespace GenericExtractor
 
 }
 
-#endif // KITINERARY_GENERICEXTRACTOR_H
+#endif // KITINERARY_GENERICEXTRACTOR_P_H

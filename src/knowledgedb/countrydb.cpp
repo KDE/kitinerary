@@ -59,7 +59,7 @@ static const PowerPlugCompatMap power_plug_compat_map[] = {
     { TypeB, TypeB },
     { TypeC, TypeC | TypeE | TypeF | TypeH | TypeJ | TypeK | TypeL | TypeN },
     { TypeD, TypeD },
-    { TypeE, TypeE | TypeF | TypeK }, // TypeE <-> TypeF not strictly correct, but in practise almost always compatible
+    { TypeE, TypeE | TypeF | TypeK }, // TypeE <-> TypeF not strictly correct, but in practice almost always compatible
     { TypeF, TypeE | TypeF | TypeK },
     { TypeG, TypeG },
     { TypeH, TypeH },

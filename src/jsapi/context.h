@@ -53,7 +53,7 @@ class Context : public QObject
      */
     Q_PROPERTY(QVariant barcode MEMBER m_barcode)
 
-    /** If the extractor was triggered by results from a preceeding generic
+    /** If the extractor was triggered by results from a preceding generic
      *  extractor run, this property contains the generic extraction results.
      *  A typical example are e.g. information retrieved from an IATA barcode.
      *  This can be used by the extractor script to augment generic extraction results.
