@@ -58,6 +58,16 @@ public:
      */
     QTransform transform() const;
 
+    /** Hints for loading image data. */
+    enum LoadingHint {
+        NoHint = 0, ///< Load image data as-is. The default.
+        AbortOnColorHint = 1, ///< Abort loading when encountering a non black/white pixel, as a shortcut for barcode detection.
+    };
+    Q_DECLARE_FLAGS(LoadingHints, LoadingHint)
+
+    /** Sets image loading hints. */
+    void setLoadingHints(LoadingHints hints);
+
     /** The source image with display transformations applied. */
     QImage image() const;
 
@@ -82,5 +92,6 @@ private:
 }
 
 Q_DECLARE_METATYPE(KItinerary::PdfImage)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KItinerary::PdfImage::LoadingHints)
 
 #endif // KITINERARY_PDFIMAGE_H

@@ -20,6 +20,7 @@
 #include "pdfdocument_p.h"
 #include "popplerutils_p.h"
 
+#include <QDebug>
 #include <QScopedValueRollback>
 
 #ifdef HAVE_POPPLER
@@ -81,6 +82,15 @@ void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *st
 }
 #endif
 
+static inline bool isColor(GfxRGB rgb)
+{
+    enum { Threshold = 72 * 256 }; // GfxComp is stored as color value * 255
+
+    // barcode images for SNCF and Renfe for example are anti-aliased, so we cannot simply filter for black or white
+    // KLM/AF use tinted barcodes, so checking for R = G = B doesn't help either
+    return std::abs(rgb.r - rgb.g) > Threshold || std::abs(rgb.r - rgb.b) > Threshold || std::abs(rgb.g - rgb.b) > Threshold;
+}
+
 QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
 {
     auto img = QImage(m_sourceWidth, m_sourceHeight, m_format);
@@ -96,6 +106,9 @@ QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
                 GfxRGB rgb;
                 for (int j = 0; j < m_sourceWidth; ++j) {
                     colorMap->getRGB(row + (j * bytesPerPixel), &rgb);
+                    if ((m_loadingHints & PdfImage::AbortOnColorHint) && isColor(rgb)) {
+                        return {};
+                    }
                     *imgData++ = colToByte(rgb.r);
                     *imgData++ = colToByte(rgb.g);
                     *imgData++ = colToByte(rgb.b);
@@ -187,6 +200,11 @@ int PdfImage::sourceWidth() const
 QTransform PdfImage::transform() const
 {
     return d->m_transform;
+}
+
+void PdfImage::setLoadingHints(LoadingHints hints)
+{
+    d->m_loadingHints = hints;
 }
 
 QImage PdfImage::image() const

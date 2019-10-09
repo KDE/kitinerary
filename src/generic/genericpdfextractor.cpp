@@ -70,7 +70,8 @@ std::vector<GenericExtractor::Result> GenericPdfExtractor::extract(PdfDocument *
         const auto page = doc->page(i);
 
         for (int j = 0; j < page.imageCount(); ++j) {
-            const auto img = page.image(j);
+            auto img = page.image(j);
+            img.setLoadingHints(PdfImage::AbortOnColorHint); // we only care about b/w-ish images for barcode detection
             if (img.hasObjectId() &&  m_imageIds.find(img.objectId()) != m_imageIds.end()) {
                 continue;
             }
@@ -95,7 +96,12 @@ std::vector<GenericExtractor::Result> GenericPdfExtractor::extract(PdfDocument *
 
 GenericExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img)
 {
-    const auto b = m_barcodeDecoder->decodeBinary(img.image());
+    const auto imgData = img.image();
+    if (imgData.isNull()) { // can happen due to AbortOnColorHint
+        return {};
+    }
+
+    const auto b = m_barcodeDecoder->decodeBinary(imgData);
     if (Uic9183Parser::maybeUic9183(b)) {
         QJsonArray result;
         GenericUic918Extractor::extract(b, result, m_contextDate);
@@ -106,7 +112,7 @@ GenericExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img)
     }
 
     if (b.isEmpty()) {
-        return extractBarcode(m_barcodeDecoder->decodeString(img.image()));
+        return extractBarcode(m_barcodeDecoder->decodeString(imgData));
     } else {
         return extractBarcode(QString::fromUtf8(b));
     }

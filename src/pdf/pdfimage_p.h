@@ -20,6 +20,7 @@
 
 #include <config-kitinerary.h>
 
+#include "pdfimage.h"
 #include "pdfvectorpicture_p.h"
 
 #include <QImage>
@@ -60,6 +61,7 @@ public:
     int m_height = 0;
     int m_sourceWidth = 0;
     int m_sourceHeight = 0;
+    PdfImage::LoadingHints m_loadingHints = PdfImage::NoHint;
 };
 
 }
