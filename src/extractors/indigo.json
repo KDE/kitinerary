@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "6E",
+            "property": "reservationFor.airline.iataCode",
+            "type": "JsonLd"
+        }
+    ],
+    "function": "main",
+    "script": "indigo.js",
+    "type": "Pdf"
+}

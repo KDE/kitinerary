@@ -42,6 +42,8 @@
         <file>hertz.json</file>
         <file>iberia.json</file>
         <file>iberia.js</file>
+        <file>indigo.json</file>
+        <file>indigo.js</file>
         <file>irctc.json</file>
         <file>irctc.js</file>
         <file>klm.json</file>
