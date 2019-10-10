@@ -71,7 +71,7 @@ std::vector<GenericExtractor::Result> GenericPdfExtractor::extract(PdfDocument *
 
         for (int j = 0; j < page.imageCount(); ++j) {
             auto img = page.image(j);
-            img.setLoadingHints(PdfImage::AbortOnColorHint); // we only care about b/w-ish images for barcode detection
+            img.setLoadingHints(PdfImage::AbortOnColorHint | PdfImage::ConvertToGrayscaleHint); // we only care about b/w-ish images for barcode detection
             if (img.hasObjectId() &&  m_imageIds.find(img.objectId()) != m_imageIds.end()) {
                 continue;
             }

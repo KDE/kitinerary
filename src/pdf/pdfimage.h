@@ -62,6 +62,7 @@ public:
     enum LoadingHint {
         NoHint = 0, ///< Load image data as-is. The default.
         AbortOnColorHint = 1, ///< Abort loading when encountering a non black/white pixel, as a shortcut for barcode detection.
+        ConvertToGrayscaleHint = 2, ///< Convert to QImage::Format_Grayscale8 during loading. More efficient than converting later if all you need is grayscale.
     };
     Q_DECLARE_FLAGS(LoadingHints, LoadingHint)
 

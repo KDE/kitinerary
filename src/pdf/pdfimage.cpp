@@ -93,7 +93,7 @@ static inline bool isColor(GfxRGB rgb)
 
 QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
 {
-    auto img = QImage(m_sourceWidth, m_sourceHeight, m_format);
+    auto img = QImage(m_sourceWidth, m_sourceHeight, (m_loadingHints & PdfImage::ConvertToGrayscaleHint) ? QImage::Format_Grayscale8 : m_format);
     const auto bytesPerPixel = colorMap->getNumPixelComps();
     std::unique_ptr<ImageStream> imgStream(new ImageStream(str, m_sourceWidth, bytesPerPixel, colorMap->getBits()));
     imgStream->reset();
@@ -109,9 +109,13 @@ QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
                     if ((m_loadingHints & PdfImage::AbortOnColorHint) && isColor(rgb)) {
                         return {};
                     }
-                    *imgData++ = colToByte(rgb.r);
-                    *imgData++ = colToByte(rgb.g);
-                    *imgData++ = colToByte(rgb.b);
+                    if ((m_loadingHints & PdfImage::ConvertToGrayscaleHint)) {
+                        *imgData++ = colToByte(rgb.g); // technically not correct but good enough
+                    } else {
+                        *imgData++ = colToByte(rgb.r);
+                        *imgData++ = colToByte(rgb.g);
+                        *imgData++ = colToByte(rgb.b);
+                    }
                 }
             }
             break;
