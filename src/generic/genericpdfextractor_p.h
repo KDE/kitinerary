@@ -59,8 +59,7 @@ public:
     static bool maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint = BarcodeDecoder::Any);
 
 private:
-    GenericExtractor::Result extractImage(const PdfImage &img);
-    GenericExtractor::Result extractBarcode(const QString &code);
+    GenericExtractor::Result extractImage(const PdfImage &img, const std::vector<GenericExtractor::Result> &existingResults);
 
     QDateTime m_contextDate;
     std::unordered_set<int> m_imageIds;
