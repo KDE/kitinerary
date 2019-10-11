@@ -221,7 +221,11 @@ QDateTime PdfDocument::creationTime() const
     if (!dt) {
         return {};
     }
+#ifdef HAVE_POPPLER_0_72
     return parsePdfDateTime(dt->c_str());
+#else
+    return parsePdfDateTime(dt->getCString());
+#endif
 }
 
 QDateTime PdfDocument::modificationTime() const
@@ -230,7 +234,11 @@ QDateTime PdfDocument::modificationTime() const
     if (!dt) {
         return {};
     }
+#ifdef HAVE_POPPLER_0_72
     return parsePdfDateTime(dt->c_str());
+#else
+    return parsePdfDateTime(dt->getCString());
+#endif
 }
 
 QVariantList PdfDocument::pagesVariant() const
