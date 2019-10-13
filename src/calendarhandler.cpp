@@ -379,7 +379,7 @@ static void fillFoodReservation(const FoodEstablishmentReservation &reservation,
     event->setDtStart(reservation.startTime());
     auto endTime = reservation.endTime();
     if (!endTime.isValid()) {
-        endTime = QDateTime(reservation.startTime().date(), QTime(23, 59, 59));
+        endTime = reservation.startTime().addSecs(7200); // if we have no end time, let's assume 2h
     }
     event->setDtEnd(endTime);
     event->setAllDay(false);
