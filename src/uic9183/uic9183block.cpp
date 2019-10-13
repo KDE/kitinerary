@@ -33,7 +33,6 @@ Uic9183Block::Uic9183Block(Uic9183Block&&) = default;
 Uic9183Block& Uic9183Block::operator=(const Uic9183Block&) = default;
 Uic9183Block& Uic9183Block::operator=(Uic9183Block&&) = default;
 
-
 Uic9183Block::Uic9183Block(const QByteArray &data, int offset)
     : m_data(data)
     , m_offset(offset)
@@ -90,4 +89,9 @@ bool Uic9183Block::isNull() const
 Uic9183Block Uic9183Block::nextBlock() const
 {
     return Uic9183Block(m_data, m_offset + size());
+}
+
+QString Uic9183Block::contentText() const
+{
+    return QString::fromUtf8(content(), contentSize());
 }

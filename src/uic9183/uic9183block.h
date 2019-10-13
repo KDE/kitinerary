@@ -21,12 +21,17 @@
 #include "kitinerary_export.h"
 
 #include <QByteArray>
+#include <QMetaType>
+#include <QString>
 
 namespace KItinerary {
 
 /** A data block from a UIC 918.3 ticket. */
 class KITINERARY_EXPORT Uic9183Block
 {
+    Q_GADGET
+    /** Content as string, for use in JS. */
+    Q_PROPERTY(QString contentText READ contentText)
 public:
     Uic9183Block();
     explicit Uic9183Block(const QByteArray &data, int offset);
@@ -57,10 +62,14 @@ public:
     Uic9183Block nextBlock() const;
 
 private:
+    QString contentText() const;
+
     QByteArray m_data;
     int m_offset = 0;
 };
 
 }
+
+Q_DECLARE_METATYPE(KItinerary::Uic9183Block)
 
 #endif // KITINERARY_UIC9183BLOCK_H

@@ -42,6 +42,14 @@ public:
 };
 }
 
+Uic9183Parser::Uic9183Parser()
+    : d(new Uic9183ParserPrivate)
+{
+}
+
+Uic9183Parser::Uic9183Parser(const Uic9183Parser&) = default;
+Uic9183Parser::~Uic9183Parser() = default;
+Uic9183Parser& Uic9183Parser::operator=(const Uic9183Parser&) = default;
 
 Uic9183Block Uic9183Parser::firstBlock() const
 {
@@ -60,15 +68,14 @@ Uic9183Block Uic9183Parser::findBlock(const char name[6]) const
     return {};
 }
 
-
-Uic9183Parser::Uic9183Parser()
-    : d(new Uic9183ParserPrivate)
+QVariant Uic9183Parser::block(const QString &name) const
 {
-}
+    if (name.size() != 6 || d->m_payload.isEmpty()) {
+        return {};
+    }
 
-Uic9183Parser::Uic9183Parser(const Uic9183Parser&) = default;
-Uic9183Parser::~Uic9183Parser() = default;
-Uic9183Parser& Uic9183Parser::operator=(const Uic9183Parser&) = default;
+    return QVariant::fromValue(findBlock(name.toUtf8().constData()));
+}
 
 void Uic9183Parser::setContextDate(const QDateTime &contextDt)
 {

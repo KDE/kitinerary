@@ -101,6 +101,9 @@ public:
      */
     Uic9183Block findBlock(const char name[6]) const;
 
+    /** Same as the above, but for JS usage. */
+    Q_INVOKABLE QVariant block(const QString &name) const;
+
     /** Quickly checks if @p might be UIC 918.3 content.
      *  This prioritizes speed over correctness and is used in barcode content auto-detection.
      */
