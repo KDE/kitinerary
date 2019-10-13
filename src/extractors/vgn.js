@@ -17,30 +17,17 @@
    02110-1301, USA.
 */
 
-function parseBarcode(barcode)
-{
-    var ticket = Barcode.decodeUic9183(barcode);
+function parsePdf(pdf) {
+    var ticket = Barcode.decodeUic9183(Context.barcode);
     if (!ticket)
         return null;
 
     var res = JsonLd.newTrainReservation();
     res.reservationNumber = ticket.pnr;
-    res.reservedTicket.ticketToken = "aztectBin:" + Barcode.toBase64(barcode);
+    res.reservedTicket.ticketToken = "aztectBin:" + Barcode.toBase64(Context.barcode);
     res.underName.name = ticket.ticketLayout.text(0, 0, 72, 1);
     res.reservationFor.departureTime = JsonLd.toDateTime(ticket.ticketLayout.text(3, 0, 72, 1).match(/([\d\.: ]+)/)[1], "dd.MM.yyyy hh:mm", "de");
     res.reservationFor.departureStation.name = ticket.ticketLayout.text(7, 0, 72, 1);
     res.reservationFor.arrivalStation.name = ticket.ticketLayout.text(8, 0, 72, 1);
     return res;
-}
-
-function parsePdf(pdf) {
-    // try to find the UIC918.3 barcode
-    var images = pdf.pages[0].images;
-    for (var i = 0; i < images.length; ++i) {
-        var barcode = Barcode.decodeAztecBinary(images[i]);
-        if (barcode)
-            return parseBarcode(barcode);
-    }
-
-    return null;
 }
