@@ -3,7 +3,7 @@ set(PIM_VERSION "5.12.42")
 project(KItinerary VERSION ${PIM_VERSION})
 
 set(CMAKE_CXX_STANDARD 14)
-set(KF5_MIN_VERSION "5.62.0")
+set(KF5_MIN_VERSION "5.63.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
@@ -33,13 +33,11 @@ if (NOT ANDROID)
 endif()
 
 set(KMIME_VERSION "5.12.40")
-set(KCALENDARCORE_LIB_VERSION "5.12.40")
-set(KCONTACTS_LIB_VERSION "5.12.40")
 
 
 find_package(KF5Mime ${KMIME_VERSION} CONFIG REQUIRED)
-find_package(KF5CalendarCore ${KCALENDARCORE_LIB_VERSION} CONFIG)
-find_package(KF5Contacts ${KCONTACTS_LIB_VERSION} CONFIG REQUIRED)
+find_package(KF5CalendarCore ${KF5_MIN_VERSION} CONFIG)
+find_package(KF5Contacts ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KPimPkPass CONFIG REQUIRED)
 find_package(Poppler COMPONENTS Core)
 set_package_properties("Poppler" PROPERTIES TYPE OPTIONAL PURPOSE "Support for extraction from PDF booking confirmations.")
