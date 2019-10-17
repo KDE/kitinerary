@@ -2,12 +2,12 @@
 
 include(CMakeFindDependencyMacro)
 find_dependency(Qt5Gui)
-find_dependency(KF5Mime)
+find_dependency(KF5Mime "@KMIME_VERSION@")
 if (@HAVE_KCAL@)
-    find_dependency(KF5CalendarCore)
+    find_dependency(KF5CalendarCore "@KF5_MIN_VERSION@")
 endif()
-find_dependency(KF5Contacts)
-find_dependency(KPimPkPass)
+find_dependency(KF5Contacts "@KF5_MIN_VERSION@")
+find_dependency(KPimPkPass "@PIM_PKPASS@")
 
 if (NOT @BUILD_SHARED_LIBS@)
     find_dependency(ZLIB)

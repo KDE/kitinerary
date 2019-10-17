@@ -33,12 +33,12 @@ if (NOT ANDROID)
 endif()
 
 set(KMIME_VERSION "5.12.40")
-
+set(PIM_PKPASS "5.12.40")
 
 find_package(KF5Mime ${KMIME_VERSION} CONFIG REQUIRED)
 find_package(KF5CalendarCore ${KF5_MIN_VERSION} CONFIG)
 find_package(KF5Contacts ${KF5_MIN_VERSION} CONFIG REQUIRED)
-find_package(KPimPkPass CONFIG REQUIRED)
+find_package(KPimPkPass ${PIM_PKPASS} CONFIG REQUIRED)
 find_package(Poppler COMPONENTS Core)
 set_package_properties("Poppler" PROPERTIES TYPE OPTIONAL PURPOSE "Support for extraction from PDF booking confirmations.")
 find_package(ZXing CONFIG)
