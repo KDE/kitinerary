@@ -1,7 +1,7 @@
 @PACKAGE_INIT@
 
 include(CMakeFindDependencyMacro)
-find_dependency(Qt5Gui)
+find_dependency(Qt5Gui "@QT_REQUIRED_VERSION@")
 find_dependency(KF5Mime "@KMIME_VERSION@")
 if (@HAVE_KCAL@)
     find_dependency(KF5CalendarCore "@KF5_MIN_VERSION@")
