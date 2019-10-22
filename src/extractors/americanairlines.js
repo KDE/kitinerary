@@ -18,30 +18,13 @@
 */
 
 function main(pdf) {
-    var result = new Array();
-
-    for (var i = 0; i < pdf.pageCount; ++i) {
-        var page = pdf.pages[i];
-        var images = page.imagesInRect(0.7, 0, 1, 0.3);
-        for (var j = 0; j < images.length; ++j) {
-            var bcbp = Barcode.decodePdf417(images[j]);
-            if (!bcbp)
-                continue;
-
-            var res = JsonLd.newFlightReservation();
-            res.reservedTicket.ticketToken = "aztecCode:" + bcbp;
-
-            var time = page.text.match(/Departing at\s+(\d{1,2}:\d{2}[AP]M)/);
-            if (time)
-                res.reservationFor.departureTime = JsonLd.toDateTime(time[1], "h:mmA", "en")
-            time = page.text.match(/Arriving at:\s+(\d{1,2}:\d{2}[AP]M)/);
-            if (time)
-                res.reservationFor.arrivalTime = JsonLd.toDateTime(time[1], "h:mmA", "en")
-
-            result.push(res);
-            break;
-        }
-    }
-
-    return result;
+    var res = Context.data[0];
+    var page = pdf.pages[Context.pdfPageNumber];
+    var time = page.text.match(/Departing at\s+(\d{1,2}:\d{2}[AP]M)/);
+    if (time)
+        res.reservationFor.departureTime = JsonLd.toDateTime(time[1], "h:mmA", "en")
+    time = page.text.match(/Arriving at:\s+(\d{1,2}:\d{2}[AP]M)/);
+    if (time)
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(time[1], "h:mmA", "en")
+    return res;
 }
