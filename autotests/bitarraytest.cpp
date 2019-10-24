@@ -52,6 +52,13 @@ private Q_SLOTS:
         QCOMPARE(b.readNumberMSB(58*8, 36), 1059177703);
 
         QCOMPARE(b.readNumberMSB(32*8 + 7, 49), 1592464900416);
+
+        // exactly containing the last bit
+        QCOMPARE(b.readNumberMSB(66*8, 8), 0x2F);
+
+        // out of bounds reads
+        QCOMPARE(b.readNumberMSB(66*8, 9), 0);
+        QCOMPARE(b.readNumberMSB(67*8, 1), 0);
     }
 };
 

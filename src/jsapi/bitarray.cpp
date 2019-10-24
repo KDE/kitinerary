@@ -34,14 +34,14 @@ BitArray::~BitArray() = default;
 
 quint64 BitArray::readNumberMSB(int startBit, int size) const
 {
-    if (m_data.size() <= ((startBit + size) / 8) || size < 0 || size > 64 || startBit < 0) {
+    const auto byteStart = startBit / 8;
+    const auto byteCount = ((size + (startBit % 8)) / 8) + (((startBit + size) % 8) ? 1 : 0);
+
+    if (m_data.size() < byteStart + byteCount || size < 0 || size > 64 || startBit < 0) {
         return 0;
     }
 
     quint64 result = 0;
-
-    const auto byteStart = startBit / 8;
-    const auto byteCount = ((size + (startBit % 8)) / 8) + (((startBit + size) % 8) ? 1 : 0);
     auto bitIdx = startBit % 8;
     auto outIdx = size - 1;
 
