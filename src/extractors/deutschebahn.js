@@ -183,32 +183,18 @@ function parseTicket(text, uic918ticket) {
 }
 
 function parsePdf(pdf) {
-    var result = new Array();
-    var pages = pdf.pages;
-    for (var pageNum = 0; pageNum < pages.length; ++pageNum) {
-        var page = pages[pageNum];
+    var page = pdf.pages[Context.pdfPageNumber];
+    var uic918ticket = Barcode.decodeUic9183(Context.barcode);
 
-        // try to find the UIC918.3 barcode
-        var images = page.imagesInRect(0.6, 0, 1, 1);
-        var barcode = null;
-        var uic918ticket = null;
-        for (var i = 0; i < images.length && !barcode; ++i) {
-            if (images[i].width === images[i].height) {
-                barcode = Barcode.decodeAztecBinary(images[i]);
-                uic918ticket = Barcode.decodeUic9183(barcode);
-                break;
-            }
+    var reservations = parseTicket(page.text, uic918ticket);
+    for (var i = 0; i < reservations.length; ++i) {
+        reservations[i].reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(Context.barcode);
+        reservations[i].reservedTicket.ticketedSeat.seatingType = uic918ticket.seatingType;
+        if (Context.data.length > 0) {
+            reservations[i].reservedTicket.name = Context.data[0].reservedTicket.name;
         }
-
-        var reservations = parseTicket(page.text, uic918ticket);
-        for (var i = 0; i < reservations.length && barcode; ++i) {
-            reservations[i].reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(barcode);
-            reservations[i].reservedTicket.ticketedSeat.seatingType = uic918ticket.seatingType;
-            reservations[i].underName = JsonLd.toJson(uic918ticket.person);
-        }
-
-        result = result.concat(reservations);
+        reservations[i].underName = JsonLd.toJson(uic918ticket.person);
     }
 
-    return result;
+    return reservations;
 }
