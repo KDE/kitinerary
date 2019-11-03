@@ -121,6 +121,8 @@ static const struct {
 } rct2_ticket_type_map[] = {
     { "ticket + reservation", Rct2Ticket::TransportReservation },
     { "fahrschein + reservierung", Rct2Ticket::TransportReservation },
+    { "upgrade", Rct2Ticket::Upgrade },
+    { "aufpreis", Rct2Ticket::Upgrade },
     { "ticket", Rct2Ticket::Transport },
     { "billet", Rct2Ticket::Transport },
     { "fahrkarte", Rct2Ticket::Transport },
@@ -193,7 +195,7 @@ QString Rct2Ticket::outboundClass() const
 QString Rct2Ticket::trainNumber() const
 {
     const auto t = type();
-    if (t == Reservation || t == TransportReservation) {
+    if (t == Reservation || t == TransportReservation || t == Upgrade) {
         const auto cat = d->layout.text(8, 13, 3, 1).trimmed();
         auto num = d->layout.text(8, 7, 5, 1).trimmed();
 

@@ -56,6 +56,7 @@ void GenericUic918Extractor::extract(const QByteArray &data, QJsonArray &result,
                 Q_FALLTHROUGH();
             }
             case Rct2Ticket::Transport:
+            case Rct2Ticket::Upgrade:
             {
                 QJsonObject dep;
                 dep.insert(QStringLiteral("@type"), QLatin1String("TrainStation"));

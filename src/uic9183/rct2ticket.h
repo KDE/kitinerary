@@ -70,6 +70,7 @@ public:
         Transport, ///< Non-integrated Reservation Ticket (NRT)
         TransportReservation, ///< Integration Reservation Ticket (IRT)
         Reservation, ///< Reservation Only Document (RES)
+        Upgrade, ///< Update Document (UPG)
         Unknown ///< ticket type could not be detected, or ticket type not supported yet
     };
     Q_ENUM(Type);
