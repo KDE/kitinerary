@@ -43,11 +43,13 @@ KITINERARY_MAKE_OPERATOR(Seat)
 class TicketPrivate : public QSharedData
 {
 public:
+    QString name;
     Seat ticketedSeat;
     QString ticketToken;
 };
 
 KITINERARY_MAKE_SIMPLE_CLASS(Ticket)
+KITINERARY_MAKE_PROPERTY(Ticket, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Ticket, Seat, ticketedSeat, setTicketedSeat)
 KITINERARY_MAKE_PROPERTY(Ticket, QString, ticketToken, setTicketToken)
 KITINERARY_MAKE_OPERATOR(Ticket)

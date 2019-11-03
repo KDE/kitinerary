@@ -20,6 +20,8 @@
 #include <KItinerary/Uic9183Parser>
 #include <KItinerary/Rct2Ticket>
 
+#include <KLocalizedString>
+
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -91,6 +93,16 @@ void GenericUic918Extractor::extract(const QByteArray &data, QJsonArray &result,
     ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
     ticket.insert(QStringLiteral("ticketToken"), QString(QLatin1String("aztecbin:") + QString::fromLatin1(data.toBase64())));
     ticket.insert(QStringLiteral("ticketedSeat"), seat);
+    switch (rct2.type()) { // provide names for typically "addon" tickets, so we can distinguish them in the UI
+        case Rct2Ticket::Reservation:
+            ticket.insert(QStringLiteral("name"), i18n("Reservation"));
+            break;
+        case Rct2Ticket::Upgrade:
+            ticket.insert(QStringLiteral("name"), i18n("Upgrade"));
+            break;
+        default:
+            break;
+    }
 
     QJsonObject person;
     person.insert(QStringLiteral("@type"), QLatin1String("Person"));

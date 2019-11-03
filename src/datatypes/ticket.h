@@ -47,6 +47,7 @@ class TicketPrivate;
 class KITINERARY_EXPORT Ticket
 {
     KITINERARY_GADGET(Ticket)
+    KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(KItinerary::Seat, ticketedSeat, setTicketedSeat)
     /** The raw ticket token string.
      *  @see ticketTokenType, ticketTokenData
