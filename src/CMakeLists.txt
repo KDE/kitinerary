@@ -76,6 +76,7 @@ set(kitinerary_lib_srcs
 )
 qt5_add_resources(kitinerary_lib_srcs extractors/extractors.qrc)
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
+ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER compare-logging.h IDENTIFIER KItinerary::CompareLog CATEGORY_NAME org.kde.kitinerary.comparator)
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER validator-logging.h IDENTIFIER KItinerary::ValidatorLog CATEGORY_NAME org.kde.kitinerary.extractorValidator)
 
 add_library(KPimItinerary ${kitinerary_lib_srcs})

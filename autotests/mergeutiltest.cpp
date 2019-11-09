@@ -21,7 +21,9 @@
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
 #include <KItinerary/Reservation>
+#include <KItinerary/TrainTrip>
 
+#include <QDateTime>
 #include <QDebug>
 #include <QFile>
 #include <QJsonArray>
@@ -218,6 +220,47 @@ private Q_SLOTS:
                 QVERIFY(!MergeUtil::isSamePerson(lhs, rhs));
             }
         }
+    }
+
+    void testIsSameTrain_data()
+    {
+        QTest::addColumn<QString>("lhsName");
+        QTest::addColumn<QString>("lhsNumber");
+        QTest::addColumn<QString>("rhsName");
+        QTest::addColumn<QString>("rhsNumber");
+        QTest::addColumn<bool>("shouldBeSame");
+
+        QTest::newRow("empty") << QString() << QString() << QString() << QString() << false;
+        QTest::newRow("equal number") << QString() << _("123") << QString() << _("123") << true;
+        QTest::newRow("optional name") << QString() << _("123") << _("EC") << _("123") << true;
+        QTest::newRow("optional name2") << QString() << _("123") << QString() << _("EC 123") << true;
+        QTest::newRow("name mismatch") << _("IC") << _("123") << _("EC") << _("123") << false;
+        QTest::newRow("name mismatch2") << QString() << _("IC 123") << QString() << _("EC 123") << false;
+        QTest::newRow("number mismatch") << QString() << _("123") << QString() << _("234") << false;
+        QTest::newRow("number prefix") << QString() << _("123") << QString() << _("12") << false;
+        QTest::newRow("number prefix2") << QString() << _("123") << QString() << _("23") << false;
+    }
+
+    void testIsSameTrain()
+    {
+        QFETCH(QString, lhsName);
+        QFETCH(QString, lhsNumber);
+        QFETCH(QString, rhsName);
+        QFETCH(QString, rhsNumber);
+        QFETCH(bool, shouldBeSame);
+
+        TrainTrip lhs;
+        lhs.setDepartureTime(QDateTime({2019, 11, 9}, {12, 00}));
+        lhs.setTrainName(lhsName);
+        lhs.setTrainNumber(lhsNumber);
+
+        TrainTrip rhs;
+        rhs.setDepartureTime(QDateTime({2019, 11, 9}, {12, 00}));
+        rhs.setTrainName(rhsName);
+        rhs.setTrainNumber(rhsNumber);
+
+        QCOMPARE(MergeUtil::isSame(lhs, rhs), shouldBeSame);
+        QCOMPARE(MergeUtil::isSame(rhs, lhs), shouldBeSame);
     }
 
     void testIsSameLodingReservation()

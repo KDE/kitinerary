@@ -17,6 +17,7 @@
 
 #include "mergeutil.h"
 #include "logging.h"
+#include "compare-logging.h"
 #include "stringutil.h"
 
 #include <KItinerary/BusTrip>
@@ -268,13 +269,57 @@ static bool isSameFlight(const Flight& lhs, const Flight& rhs)
     return true;
 }
 
+// see kpublictrainport, line.cpp
+template <typename Iter>
+static bool isSameLineName(const Iter &lBegin, const Iter &lEnd, const Iter &rBegin, const Iter &rEnd)
+{
+    auto lIt = lBegin;
+    auto rIt = rBegin;
+    while (lIt != lEnd && rIt != rEnd) {
+        // ignore spaces etc.
+        if (!(*lIt).isLetter() && !(*lIt).isDigit()) {
+            ++lIt;
+            continue;
+        }
+        if (!(*rIt).isLetter() && !(*rIt).isDigit()) {
+            ++rIt;
+            continue;
+        }
+
+        if ((*lIt).toCaseFolded() != (*rIt).toCaseFolded()) {
+            return false;
+        }
+
+        ++lIt;
+        ++rIt;
+    }
+
+    if (lIt == lEnd && rIt == rEnd) { // both inputs fully consumed, and no mismatch found
+        return true;
+    }
+
+    // one input is prefix of the other, that is ok if there's a separator
+    return (lIt != lEnd && (*lIt).isSpace()) || (rIt != rEnd && (*rIt).isSpace());
+}
+
+static bool isSameLineName(const QString &lhs, const QString &rhs)
+{
+    return isSameLineName(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())
+        || isSameLineName(lhs.rbegin(), lhs.rend(), rhs.rbegin(), rhs.rend());
+}
+
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
 {
     if (lhs.trainNumber().isEmpty() || rhs.trainNumber().isEmpty()) {
+        qCDebug(CompareLog) << "missing train number" << lhs.trainNumber() << rhs.trainNumber();
         return false;
     }
 
-    return lhs.trainName() == rhs.trainName() && lhs.trainNumber() == rhs.trainNumber() && lhs.departureTime().date() == rhs.departureTime().date();
+    const auto isSameLine = isSameLineName(lhs.trainNumber(), rhs.trainNumber());
+    qCDebug(CompareLog) << "left:" << lhs.trainName() << lhs.trainNumber() << lhs.departureTime();
+    qCDebug(CompareLog) << "right:" << rhs.trainName() << rhs.trainNumber() << rhs.departureTime();
+    qCDebug(CompareLog) << "same line:" << isSameLine;
+    return !conflictIfPresent(lhs.trainName(),rhs.trainName()) && isSameLine && lhs.departureTime().date() == rhs.departureTime().date();
 }
 
 static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs)
