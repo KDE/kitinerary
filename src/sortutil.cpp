@@ -25,6 +25,7 @@
 #include <KItinerary/Place>
 #include <KItinerary/RentalCar>
 #include <KItinerary/Reservation>
+#include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
 
@@ -154,6 +155,13 @@ bool SortUtil::isBefore(const QVariant &lhs, const QVariant &rhs)
         if (!lhsRes.underName().isNull() && !rhsRes.underName().isNull() && MergeUtil::isSame(lhsRes.reservationFor(), rhsRes.reservationFor())) {
             const auto lhsUN = lhsRes.underName().value<Person>();
             const auto rhsUN = rhsRes.underName().value<Person>();
+
+            // for multi-ticket reservations for the same person, sort by ticket name
+            if (lhsUN.name() == rhsUN.name()) {
+                const auto lhsTicket = lhsRes.reservedTicket().value<Ticket>();
+                const auto rhsTicket = rhsRes.reservedTicket().value<Ticket>();
+                return lhsTicket.name() < rhsTicket.name();
+            }
             return lhsUN.name() < rhsUN.name();
         }
     }

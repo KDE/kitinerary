@@ -1,0 +1,65 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "MUENCHEN HBF"
+            },
+            "arrivalTime": "2019-11-09T16:25:00",
+            "departureDay": "2019-11-09",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "VERONA PN"
+            },
+            "departureTime": "2019-11-09T11:02:00",
+            "trainNumber": "EC 119"
+        },
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Reservation",
+            "ticketToken": "aztec:XXX007",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "42",
+                "seatSection": "23",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Dr Konqui"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "MUENCHEN"
+            },
+            "arrivalTime": "2019-11-09T16:25:00",
+            "departureDay": "2019-11-09",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "VERONA P. N."
+            },
+            "departureTime": "2019-11-09T11:02:00",
+            "trainNumber": "119"
+        },
+        "reservationNumber": "YYY008",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztec:YYY008"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Dr Konqui"
+        }
+    }
+]
