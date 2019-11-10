@@ -59,7 +59,7 @@
     <p xml:lang="uk">Програма, керування якою відбувається з командного рядка, для видобування даних бронювання. Призначено для інтеграції зі сторонніми програмами.</p>
     <p xml:lang="x-test">xxCommand line extractor for itinerary data, for integrating into 3rd party applications.xx</p>
   </description>
-  <url type="homepage">https://pim.kde.org/</url>
+  <url type="homepage">https://community.kde.org/KDE_PIM/KItinerary</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=KDE+Itinerary</url>
   <project_group>KDE</project_group>
   <provides>
