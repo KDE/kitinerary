@@ -376,7 +376,10 @@ Person ExtractorPostprocessorPrivate::processPerson(Person person) const
 {
     person.setName(person.name().simplified());
 
-    if (person.name().isEmpty() && !person.familyName().isEmpty() && !person.givenName().isEmpty()) {
+    // fill name with name parts, if it's empty
+    if ((person.name().isEmpty() || person.name() == person.familyName() || person.name() == person.givenName())
+        && !person.familyName().isEmpty() && !person.givenName().isEmpty())
+    {
         person.setName(person.givenName() + QLatin1Char(' ') + person.familyName());
     }
 
