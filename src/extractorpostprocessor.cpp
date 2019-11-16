@@ -152,6 +152,8 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
         const auto bcbpData = IataBcbpParser::parse(bcbp, m_contextDate.date());
         if (bcbpData.size() == 1) {
             res = JsonLdDocument::apply(bcbpData.at(0), res).value<FlightReservation>();
+            // standardize on the BCBP booking reference, not some secondary one we might have in structured data for example
+            res.setReservationNumber(bcbpData.at(0).value<FlightReservation>().reservationNumber());
         } else {
             for (const auto &data : bcbpData) {
                 if (MergeUtil::isSame(res, data)) {
@@ -376,7 +378,10 @@ Person ExtractorPostprocessorPrivate::processPerson(Person person) const
 {
     person.setName(person.name().simplified());
 
-    if (person.name().isEmpty() && !person.familyName().isEmpty() && !person.givenName().isEmpty()) {
+    // fill name with name parts, if it's empty
+    if ((person.name().isEmpty() || person.name() == person.familyName() || person.name() == person.givenName())
+        && !person.familyName().isEmpty() && !person.givenName().isEmpty())
+    {
         person.setName(person.givenName() + QLatin1Char(' ') + person.familyName());
     }
 
