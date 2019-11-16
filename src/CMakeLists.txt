@@ -1,7 +1,9 @@
 set(KDE_INSTALL_INCLUDEDIR_PIM ${KDE_INSTALL_INCLUDEDIR}/KPim)
 
 add_subdirectory(cli)
-add_subdirectory(knowledgedb-generator)
+if (TARGET Qt5::Network)
+    add_subdirectory(knowledgedb-generator)
+endif()
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 set(kitinerary_lib_srcs
