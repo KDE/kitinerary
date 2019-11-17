@@ -35,7 +35,7 @@ using namespace KItinerary;
 
 #ifdef HAVE_POPPLER
 // legacy image loading
-#ifndef HAVE_POPPLER_0_69
+#if KPOPPLER_VERSION < QT_VERSION_CHECK(0, 69, 0)
 namespace KItinerary {
 class ImageLoaderOutputDevice : public OutputDev
 {
@@ -150,7 +150,7 @@ QImage PdfImagePrivate::load()
 #ifdef HAVE_POPPLER
     QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
 
-#ifdef HAVE_POPPLER_0_69
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 69, 0)
     const auto xref = m_page->m_doc->m_popplerDoc->getXRef();
     const auto obj = xref->fetch(m_refNum, m_refGen);
     return load(obj.getStream(), m_colorMap.get());

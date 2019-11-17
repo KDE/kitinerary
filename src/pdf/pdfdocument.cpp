@@ -52,7 +52,7 @@ void PdfPagePrivate::load()
     const auto pageRect = m_doc->m_popplerDoc->getPage(m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
 
-#ifdef HAVE_POPPLER_0_72
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     m_text = QString::fromUtf8(s->c_str());
 #else
     m_text = QString::fromUtf8(s->getCString());
@@ -97,7 +97,7 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
     const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(ratio(pageRect->x1, pageRect->x2, left), ratio(pageRect->y1, pageRect->y2, top),
                                                 ratio(pageRect->x1, pageRect->x2, right), ratio(pageRect->y1, pageRect->y2, bottom)));
-#ifdef HAVE_POPPLER_0_72
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     return QString::fromUtf8(s->c_str());
 #else
     return QString::fromUtf8(s->getCString());
@@ -221,7 +221,7 @@ QDateTime PdfDocument::creationTime() const
     if (!dt) {
         return {};
     }
-#ifdef HAVE_POPPLER_0_72
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     return parsePdfDateTime(dt->c_str());
 #else
     return parsePdfDateTime(dt->getCString());
@@ -234,7 +234,7 @@ QDateTime PdfDocument::modificationTime() const
     if (!dt) {
         return {};
     }
-#ifdef HAVE_POPPLER_0_72
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     return parsePdfDateTime(dt->c_str());
 #else
     return parsePdfDateTime(dt->getCString());
@@ -257,7 +257,7 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
     std::unique_ptr<PdfDocument> doc(new PdfDocument(parent));
     doc->d->m_pdfData = data;
     // PDFDoc takes ownership of stream
-#ifdef HAVE_POPPLER_0_58
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 58, 0)
     auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), Object());
 #else
     Object obj;
