@@ -7,6 +7,7 @@
   <name xml:lang="ca">Extractor de la línia d'ordres del KItinerary</name>
   <name xml:lang="en-GB">KItinerary Command Line Extractor</name>
   <name xml:lang="es">Extractor de línea de órdenes de KItinerary</name>
+  <name xml:lang="et">KItinerary käsurea hankija</name>
   <name xml:lang="fi">KItineraryn komentorivijäsennin</name>
   <name xml:lang="fr">Extracteur KItinerary en ligne de commande</name>
   <name xml:lang="gl">Extractor de liña de ordes de KItinerary</name>
@@ -25,6 +26,7 @@
   <summary xml:lang="cs">Extraktor dat rezervací v příkazové řádce.</summary>
   <summary xml:lang="en-GB">Command line reservation data extractor.</summary>
   <summary xml:lang="es">Extractor de línea de órdenes de reserva de datos.</summary>
+  <summary xml:lang="et">Käsurea reserveerimisandmete hankija.</summary>
   <summary xml:lang="fi">Komentorivin varaustietojäsennin.</summary>
   <summary xml:lang="fr">Extracteur de données de réservation en ligne de commande.</summary>
   <summary xml:lang="gl">Extractor de datos de reservas de liña de ordes.</summary>
@@ -45,6 +47,7 @@
     <p xml:lang="ca">Extractor de dades d'itineraris de la línia d'ordres, per a la integració en aplicacions de tercers.</p>
     <p xml:lang="en-GB">Command line extractor for itinerary data, for integrating into 3rd party applications.</p>
     <p xml:lang="es">Extractor de línea de órdenes para datos de itinerario. para integración en aplicaciones de terceros.</p>
+    <p xml:lang="et">Käsurea reisiandmete hankija, mida lõimida kolmanda poole rakendustega.</p>
     <p xml:lang="fi">Komentorivijäsennin varaustiedoille kolmannen osapuolen sovelluksia varten.</p>
     <p xml:lang="fr">Extracteur en ligne de commande pour les données d'itinéraires, afin de les intégrer à des applications tierces.</p>
     <p xml:lang="gl">Extractor de liña de ordes de datos de itinerarios, para integrar con aplicacións de terceiros.</p>
