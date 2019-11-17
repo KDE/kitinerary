@@ -18,6 +18,7 @@
 #include "pdfimage.h"
 #include "pdfimage_p.h"
 #include "pdfdocument_p.h"
+#include "popplerglobalparams_p.h"
 #include "popplerutils_p.h"
 
 #include <QDebug>
@@ -148,7 +149,7 @@ QImage PdfImagePrivate::load()
     }
 
 #ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
+    PopplerGlobalParams gp;
 
 #if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 69, 0)
     const auto xref = m_page->m_doc->m_popplerDoc->getXRef();

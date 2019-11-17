@@ -43,6 +43,7 @@ set(kitinerary_lib_srcs
     pdf/pdfextractoroutputdevice.cpp
     pdf/pdfimage.cpp
     pdf/pdfvectorpicture.cpp
+    pdf/popplerglobalparams.cpp
     pdf/popplerutils.cpp
 
     uic9183/rct2ticket.cpp
