@@ -79,7 +79,7 @@ private Q_SLOTS:
         postproc.process(preData);
         QCOMPARE(inArray.size(), postproc.result().size());
 
-        MemoryCalendar::Ptr refCal(new MemoryCalendar(QTimeZone{}));
+        MemoryCalendar::Ptr refCal(new MemoryCalendar(QTimeZone::systemTimeZone()));
         ICalFormat format;
         format.load(refCal, icalFile);
 
@@ -139,7 +139,7 @@ private Q_SLOTS:
         postproc.process(preData);
         QCOMPARE(inArray.size(), postproc.result().size());
 
-        MemoryCalendar::Ptr refCal(new MemoryCalendar(QTimeZone{}));
+        MemoryCalendar::Ptr refCal(new MemoryCalendar(QTimeZone::systemTimeZone()));
         ICalFormat format;
         format.load(refCal, icalFile);
 
