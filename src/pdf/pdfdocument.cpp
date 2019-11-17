@@ -20,6 +20,7 @@
 #include "pdfdocument_p.h"
 #include "pdfextractoroutputdevice_p.h"
 #include "pdfimage_p.h"
+#include "popplerglobalparams_p.h"
 #include "popplerutils_p.h"
 #include "logging.h"
 
@@ -28,7 +29,6 @@
 #include <QScopedValueRollback>
 
 #ifdef HAVE_POPPLER
-#include <GlobalParams.h>
 #include <DateInfo.h>
 #include <PDFDoc.h>
 #include <Stream.h>
@@ -45,14 +45,14 @@ void PdfPagePrivate::load()
     }
 
 #ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
+    PopplerGlobalParams gp;
     PdfExtractorOutputDevice device;
     m_doc->m_popplerDoc->displayPageSlice(&device, m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
     device.finalize();
     const auto pageRect = m_doc->m_popplerDoc->getPage(m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
 
-#ifdef HAVE_POPPLER_0_72
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     m_text = QString::fromUtf8(s->c_str());
 #else
     m_text = QString::fromUtf8(s->getCString());
@@ -90,14 +90,14 @@ static double ratio(double begin, double end, double ratio)
 QString PdfPage::textInRect(double left, double top, double right, double bottom) const
 {
 #ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
+    PopplerGlobalParams gp;
 
     TextOutputDev device(nullptr, false, 0, false, false);
     d->m_doc->m_popplerDoc->displayPageSlice(&device, d->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
     const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(ratio(pageRect->x1, pageRect->x2, left), ratio(pageRect->y1, pageRect->y2, top),
                                                 ratio(pageRect->x1, pageRect->x2, right), ratio(pageRect->y1, pageRect->y2, bottom)));
-#ifdef HAVE_POPPLER_0_72
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     return QString::fromUtf8(s->c_str());
 #else
     return QString::fromUtf8(s->getCString());
@@ -137,7 +137,7 @@ QVariantList PdfPage::imagesInRect(double left, double top, double right, double
     d->load();
     QVariantList l;
 #ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
+    PopplerGlobalParams gp;
     const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
 
     for (const auto &img : d->m_images) {
@@ -221,7 +221,7 @@ QDateTime PdfDocument::creationTime() const
     if (!dt) {
         return {};
     }
-#ifdef HAVE_POPPLER_0_72
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     return parsePdfDateTime(dt->c_str());
 #else
     return parsePdfDateTime(dt->getCString());
@@ -234,7 +234,7 @@ QDateTime PdfDocument::modificationTime() const
     if (!dt) {
         return {};
     }
-#ifdef HAVE_POPPLER_0_72
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     return parsePdfDateTime(dt->c_str());
 #else
     return parsePdfDateTime(dt->getCString());
@@ -252,12 +252,12 @@ QVariantList PdfDocument::pagesVariant() const
 PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
 {
 #ifdef HAVE_POPPLER
-    QScopedValueRollback<GlobalParams*> globalParamResetter(globalParams, PopplerUtils::globalParams());
+    PopplerGlobalParams gp;
 
     std::unique_ptr<PdfDocument> doc(new PdfDocument(parent));
     doc->d->m_pdfData = data;
     // PDFDoc takes ownership of stream
-#ifdef HAVE_POPPLER_0_58
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 58, 0)
     auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), Object());
 #else
     Object obj;

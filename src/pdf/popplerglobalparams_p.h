@@ -15,35 +15,26 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef KITINERARY_POPPLERUTILS_P_H
-#define KITINERARY_POPPLERUTILS_P_H
+#ifndef KITINERARY_POPPLERGLOBALPARAMS_H
+#define KITINERARY_POPPLERGLOBALPARAMS_H
 
-#include <qnamespace.h>
+#include <memory>
 
-class GfxPath;
-class GfxState;
-
-class QBrush;
-class QPainterPath;
-class QPen;
-class QTransform;
+class GlobalParams;
 
 namespace KItinerary {
 
-/** Utilities for interacting with Poppler. */
-namespace PopplerUtils
+/** RAII wrapper of the globalParams object. */
+class PopplerGlobalParams
 {
-    /** Returns the current pen. */
-    QPen currentPen(GfxState *state);
-    /** Retruns the current brush. */
-    QBrush currentBrush(GfxState *state);
-    /** Returns the current transformation matrix. */
-    QTransform currentTransform(GfxState *state);
+public:
+    PopplerGlobalParams();
+    ~PopplerGlobalParams();
 
-    /** Convets a Poppler path into a Qt path. */
-    QPainterPath convertPath(GfxPath *path, Qt::FillRule fillRule);
-}
+private:
+    std::unique_ptr<GlobalParams> m_prev;
+};
 
 }
 
-#endif // KITINERARY_POPPLERUTILS_P_H
+#endif // KITINERARY_POPPLERGLOBALPARAMS_H

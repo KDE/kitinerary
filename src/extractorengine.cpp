@@ -300,7 +300,7 @@ void ExtractorEnginePrivate::openDocument()
         case ExtractorInput::ICal:
         {
 #ifdef HAVE_KCAL
-            m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone()));
+            m_calendar.reset(new KCalendarCore::MemoryCalendar(QTimeZone::systemTimeZone()));
             KCalendarCore::ICalFormat format;
             if (format.fromRawString(m_calendar, m_data)) {
                 m_calendar->setProductId(format.loadedProductId());
