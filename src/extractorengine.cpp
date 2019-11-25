@@ -291,7 +291,9 @@ void ExtractorEnginePrivate::openDocument()
         case ExtractorInput::Pdf:
             m_pdfDoc = make_owning_ptr(PdfDocument::fromData(m_data));
             m_data.clear();
-            setContext(m_pdfDoc.get());
+            if (m_pdfDoc) {
+                setContext(m_pdfDoc.get());
+            }
             break;
         case ExtractorInput::Html:
             m_htmlDoc = make_owning_ptr(HtmlDocument::fromData(m_data));
