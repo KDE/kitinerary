@@ -164,6 +164,13 @@ private Q_SLOTS:
 
         QCOMPARE(refDoc.array(), postProcResult);
     }
+
+    void testNegative()
+    {
+        m_engine.clear();
+        m_engine.setData("%PDF-1.4\nINVALID!!!!");
+        QCOMPARE(m_engine.extract(), QJsonArray());
+    }
 };
 
 QTEST_MAIN(ExtractorTest)
