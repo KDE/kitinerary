@@ -168,7 +168,7 @@ void PdfExtractorOutputDevice::finalize()
             mergedOps.push_back(*it);
         }
     }
-    qDebug() << m_vectorOps.size() << mergedOps.size();
+    //qDebug() << m_vectorOps.size() << mergedOps.size();
 
     std::vector<PdfVectorPicture::PathStroke> strokes;
     QTransform t;
@@ -178,7 +178,7 @@ void PdfExtractorOutputDevice::finalize()
                 t = op.transform;
             }
             if (t != op.transform) {
-                qDebug() << "diffent transforms for strokes, not supported yet";
+                //qDebug() << "diffent transforms for strokes, not supported yet";
                 continue;
             }
             strokes.push_back(op.stroke);

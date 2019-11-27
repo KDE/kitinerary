@@ -25,14 +25,14 @@ regExMap["cs_CZ"]["singleTripHeader"] = /Cesta/;
 regExMap["cs_CZ"]["thereTripHeader"] = /Cesta tam/;
 regExMap["cs_CZ"]["returnTripHeader"] = /Cesta zpět/;
 regExMap["cs_CZ"]["columns"] = [ /Datum/, /Zastávka\/Přestup/, /Příjezd/, /Odjezd/, /Nást\./, /Spoj/, /Vůz\/sedadla/ ];
-regExMap["cs_CZ"]["date"] = /([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{2})/;
+regExMap["cs_CZ"]["date"] = /([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{2,4}$)/;
 regExMap["en_US"] = new Array();
 regExMap["en_US"]["ticketId"] = /Electronic ticket\s+([0-9]+)/;
 regExMap["en_US"]["singleTripHeader"] = /Route/;
 regExMap["en_US"]["thereTripHeader"] = /Route there/;
 regExMap["en_US"]["returnTripHeader"] = /Route back/;
 regExMap["en_US"]["columns"] = [ /Date/, /Station\/Transfer/, /Arrival/, /Departure/, /Platf\./, /Connection/, /Coach\/Seats/ ];
-regExMap["en_US"]["date"] = /([0-9]{2})\/([0-9]{2})\/([0-9]{2})/;
+regExMap["en_US"]["date"] = /([0-9]{2})\/([0-9]{2})\/([0-9]{2,4}$)/;
 
 function padDigit(s) {
     while (s.length < 2) {

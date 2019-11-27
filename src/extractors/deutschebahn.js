@@ -190,7 +190,7 @@ function parsePdf(pdf) {
     for (var i = 0; i < reservations.length; ++i) {
         reservations[i].reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(Context.barcode);
         reservations[i].reservedTicket.ticketedSeat.seatingType = uic918ticket.seatingType;
-        if (Context.data.length > 0) {
+        if (Context.data && Context.data.length > 0) {
             reservations[i].reservedTicket.name = Context.data[0].reservedTicket.name;
         }
         reservations[i].underName = JsonLd.toJson(uic918ticket.person);
