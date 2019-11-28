@@ -18,7 +18,7 @@ static const Country country_table[] = {
     {CountryId{"AR"}, DrivingSide::Right, {TypeC|TypeI}}, // Argentina
     {CountryId{"AT"}, DrivingSide::Right, {TypeC|TypeF}}, // Austria
     {CountryId{"AU"}, DrivingSide::Left, {TypeI}}, // Australia
-    {CountryId{"AW"}, DrivingSide::Unknown, {TypeA|TypeB|TypeF}}, // Aruba
+    {CountryId{"AW"}, DrivingSide::Right, {TypeA|TypeB|TypeF}}, // Aruba
     {CountryId{"AZ"}, DrivingSide::Right, {TypeC|TypeF}}, // Azerbaijan
     {CountryId{"BA"}, DrivingSide::Right, {TypeC|TypeF}}, // Bosnia and Herzegovina
     {CountryId{"BB"}, DrivingSide::Left, {TypeA|TypeB}}, // Barbados
