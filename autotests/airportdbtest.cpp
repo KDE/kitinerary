@@ -175,7 +175,7 @@ private Q_SLOTS:
 
         // Amadeus/BCD airport names containing city/country data too, and using "INTL" abbreviation
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SAN FRANCISCO CA SAN FRANCISCO INTL")), KnowledgeDb::IataCode{"SFO"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("BEIJING CN CAPITAL INTL")), KnowledgeDb::IataCode{"PEK"});
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("BEIJING CN CAPITAL INTL")), (std::vector<IataCode>{IataCode{"PEK"}, IataCode{"PKX"}}));
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("FRANKFURT DE - FRANKFURT INTL")), KnowledgeDb::IataCode{}); // ambigious with Frankfurt Hahn
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SEATTLE US - SEATTLE TACOMA INTL")), KnowledgeDb::IataCode{"SEA"});
     }
