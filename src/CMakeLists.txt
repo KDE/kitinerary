@@ -54,6 +54,8 @@ set(kitinerary_lib_srcs
     uic9183/uic9183ticketlayout.cpp
     uic9183/vendor0080block.cpp
 
+    vdv/vdvticketparser.cpp
+
     barcodedecoder.cpp
     calendarhandler.cpp
     documentutil.cpp
@@ -196,6 +198,14 @@ ecm_generate_headers(KItinerary_Uic9183_FORWARDING_HEADERS
     RELATIVE uic9183
 )
 
+ecm_generate_headers(KItinerary_Vdv_FORWARDING_HEADERS
+    HEADER_NAMES
+        VdvTicketParser
+    PREFIX KItinerary
+    REQUIRED_HEADERS KItinerary_Vdv_HEADERS
+    RELATIVE vdv
+)
+
 install(TARGETS KPimItinerary EXPORT KPimItineraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
     ${KItinerary_FORWARDING_HEADERS}
@@ -203,6 +213,7 @@ install(FILES
     ${KItinerary_Datatypes_FORWARDING_HEADERS}
     ${KItinerary_Pdf_FORWARDING_HEADERS}
     ${KItinerary_Uic9183_FORWARDING_HEADERS}
+    ${KItinerary_Vdv_FORWARDING_HEADERS}
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/KItinerary
 )
 install(FILES
@@ -212,6 +223,7 @@ install(FILES
     ${KItinerary_KnowledgeDb_HEADERS}
     ${KItinerary_Pdf_HEADERS}
     ${KItinerary_Uic9183_HEADERS}
+    ${KItinerary_Vdv_HEADERS}
     ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/kitinerary
 )
