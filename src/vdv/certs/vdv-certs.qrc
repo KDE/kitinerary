@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/org.kde.pim/kitinerary/vdv/certs">
+        <file>2.vdv-cert</file>
+        <file>8.vdv-cert</file>
+    </qresource>
+</RCC>

@@ -17,6 +17,7 @@
 
 #include "vdvticketparser.h"
 #include "vdvdata_p.h"
+#include "vdvcertificate_p.h"
 
 #include <QByteArray>
 #include <QDebug>
@@ -36,27 +37,33 @@ void VdvTicketParser::parse(const QByteArray &data)
 
     // (1) find the certificate authority reference (CAR) to identify the key to decode the CV certificate
     const auto sigRemainder = reinterpret_cast<const VdvSignatureRemainder*>(data.constData() + VdvSignatureRemainder::Offset);
-    if (!sigRemainder->isValid() || VdvSignatureRemainder::Offset + sigRemainder->size() + sizeof(VdvCvCertificate) > (unsigned)data.size()) {
+    if (!sigRemainder->isValid() || VdvSignatureRemainder::Offset + sigRemainder->size() + sizeof(VdvCertificateHeader) > (unsigned)data.size()) {
         qWarning() << "Invalid VDV signature remainder.";
         return;
     }
     qDebug() << sigRemainder->contentSize;
 
     const auto cvCertOffset = VdvSignatureRemainder::Offset + sigRemainder->size();
-    const auto cvCert = reinterpret_cast<const VdvCvCertificate*>(data.constData() + cvCertOffset);
-    if (!cvCert->isValid() || cvCertOffset + cvCert->size() + sizeof(VdvCAReference) > (unsigned)data.size()) {
-        qWarning() << "Invalid CV signature.";
+    const auto cvCert = reinterpret_cast<const VdvCertificateHeader*>(data.constData() + cvCertOffset);
+    if (!cvCert->isValid() || cvCertOffset + cvCert->size() + sizeof(VdvCaReference) > (unsigned)data.size()) {
+        qWarning() << "Invalid CV signature:" << cvCert->isValid() << cvCertOffset << cvCert->size();
         return;
     }
     qDebug() << cvCert->contentSize();
 
     const auto carOffset = cvCertOffset + cvCert->size();
-    const auto car = reinterpret_cast<const VdvCAReference*>(data.constData() + carOffset);
+    const auto car = reinterpret_cast<const VdvCaReference*>(data.constData() + carOffset);
     if (!car->isValid()) {
         qWarning() << "Invalid CA Reference.";
         return;
     }
-    qDebug() << QByteArray(car->name, 3) << car->serviceIndicator << car->discretionaryData << car->algorithmReference << car->year;
+    qDebug() << QByteArray(car->car.name, 3) << car->car.serviceIndicator << car->car.discretionaryData << car->car.algorithmReference << car->car.year;
+
+    const auto caCert = VdvPkiRepository::caCertificate(car->car.algorithmReference);
+    if (!caCert.isValid()) {
+        qWarning() << "Could not find CA certificate" << car->car.algorithmReference;
+        return;
+    }
 
     // (2) decode the CV certificate
     // TODO

@@ -54,7 +54,9 @@ set(kitinerary_lib_srcs
     uic9183/uic9183ticketlayout.cpp
     uic9183/vendor0080block.cpp
 
+    vdv/vdvcertificate.cpp
     vdv/vdvticketparser.cpp
+    vdv/certs/vdv-certs.qrc
 
     barcodedecoder.cpp
     calendarhandler.cpp

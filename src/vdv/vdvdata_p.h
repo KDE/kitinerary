@@ -27,12 +27,14 @@ enum : uint8_t {
     TagSignature = 0x9E,
     TagSignatureRemainder = 0x9A,
     TagCaReference = 0x42,
+    TagOneByteSize = 0x81,
+    TagTwoByteSize = 0x82,
 };
 
 enum : uint16_t {
-    TagCvCertificate = 0x7F21,
-    TagCvCertificateSignature = 0x5F37,
-    TagCvCertificateContent = 0x5F4E,
+    TagCertificate = 0x7F21,
+    TagCertificateSignature = 0x5F37,
+    TagCertificateContent = 0x5F4E,
 };
 
 #pragma pack(push)
@@ -66,37 +68,48 @@ struct VdvSignatureRemainder {
 };
 
 /** CV certificate. */
-struct VdvCvCertificate {
+struct VdvCertificateHeader {
     uint16_t tag;
+    uint8_t sizeTag;
     uint8_t size0;
     uint8_t size1;
 
     inline bool isValid() const
     {
-        return  qFromBigEndian(tag) == TagCvCertificate;
+        return  qFromBigEndian(tag) == TagCertificate && (sizeTag == TagOneByteSize || sizeTag == TagTwoByteSize);
     }
 
     inline uint16_t contentSize() const
     {
-        return ((size0 << 8) | size1) - 0x8100;
+        return sizeTag == TagOneByteSize ? size0 : ((size0 << 8) + size1);
+    }
+
+    inline uint16_t contentOffset() const
+    {
+        return sizeof(VdvCertificateHeader) - ((sizeTag == TagOneByteSize) ? 1 : 0);
     }
 
     inline uint16_t size() const
     {
-        return contentSize() + sizeof(tag) + sizeof(size0) + sizeof(size1);
+        return contentSize() + contentOffset();
     }
 };
 
-/** Certificate Authority Reference (CAR) */
-struct VdvCAReference {
-    uint8_t tag;
-    uint8_t contentSize;
+/** Certificate Authority Reference (CAR) content. */
+struct VdvCaReferenceContent
+{
     char region[2];
     char name[3];
     uint8_t serviceIndicator: 4;
     uint8_t discretionaryData: 4;
     uint8_t algorithmReference;
     uint8_t year;
+};
+
+struct VdvCaReference {
+    uint8_t tag;
+    uint8_t contentSize;
+    VdvCaReferenceContent car;
 
     inline bool isValid() const
     {
@@ -120,18 +133,19 @@ struct VdvCertificateHolderAuthorization {
 /** Certificate key, contained in a certificate object. */
 struct VdvCertificateKey {
     uint16_t tag;
-    uint16_t taggedSize;
-    uint8_t cpi;
-    VdvCAReference car;
+    uint8_t sizeTag;
+    uint8_t size0;
+    uint8_t certificateProfileIdentifier;
+    VdvCaReferenceContent car;
     VdvCertificateHolderReference chr;
     VdvCertificateHolderAuthorization cha;
-    uint8_t date[3];
+    uint8_t date[4];
     uint8_t oid[9];
     uint8_t modulusBegin;
 
     inline bool isValid() const
     {
-        return qFromBigEndian(tag) == TagCvCertificateContent;
+        return qFromBigEndian(tag) == TagCertificateContent && sizeTag == TagOneByteSize;
     }
 };
 
@@ -142,7 +156,7 @@ struct VdvCertificateSignature {
 
     inline bool isValid() const
     {
-        return qFromBigEndian(tag) == TagCvCertificateSignature;
+        return qFromBigEndian(tag) == TagCertificateSignature;
     }
 };
 
