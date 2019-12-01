@@ -80,7 +80,7 @@ QTransform KItinerary::PopplerUtils::currentTransform(GfxState *state)
     return QTransform(ctm[0], ctm[1], ctm[2], ctm[3], ctm[4], ctm[5]);
 }
 
-QPainterPath PopplerUtils::convertPath(GfxPath *path, Qt::FillRule fillRule)
+QPainterPath PopplerUtils::convertPath(GFXPATH_CONST GfxPath *path, Qt::FillRule fillRule)
 {
     QPainterPath qpp;
     qpp.setFillRule(fillRule);

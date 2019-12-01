@@ -28,6 +28,10 @@ class QPainterPath;
 class QPen;
 class QTransform;
 
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 83, 0)
+#define GFXPATH_CONST const
+#endif
+
 namespace KItinerary {
 
 /** Utilities for interacting with Poppler. */
@@ -41,7 +45,7 @@ namespace PopplerUtils
     QTransform currentTransform(GfxState *state);
 
     /** Convets a Poppler path into a Qt path. */
-    QPainterPath convertPath(GfxPath *path, Qt::FillRule fillRule);
+    QPainterPath convertPath(GFXPATH_CONST GfxPath *path, Qt::FillRule fillRule);
 }
 
 }
