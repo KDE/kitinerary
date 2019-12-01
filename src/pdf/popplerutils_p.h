@@ -30,6 +30,8 @@ class QTransform;
 
 #if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 83, 0)
 #define GFXPATH_CONST const
+#else
+#define GFXPATH_CONST
 #endif
 
 namespace KItinerary {
