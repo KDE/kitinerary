@@ -48,7 +48,7 @@ VdvCertificate::VdvCertificate(const QByteArray &data, int offset)
     }
 
     qDebug() << "car:" << QByteArray(certKey()->car.region, 2) << QByteArray(certKey()->car.name, 3);
-    qDebug() << "chr:" << QByteArray(certKey()->chr.name, 5);
+    qDebug() << "chr:" << QByteArray(certKey()->chr.name, 5) << certKey()->chr.algorithmReference << certKey()->chr.year;
     qDebug() << "cha:" << QByteArray(certKey()->cha.name, 6);
     qDebug() << "modulus:" << modulusSize() << *modulus() << *(modulus() + modulusSize() - 1);
     qDebug() << "exponent:" << exponentSize() << *exponent() << *(exponent() + exponentSize() - 1);

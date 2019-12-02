@@ -159,7 +159,10 @@ struct VdvCaReferenceBlock : public VdvSimpleDataBlock<uint8_t, TagCaReference> 
 struct VdvCertificateHolderReference {
     uint8_t filler[4]; // always null
     char name[5];
-    uint8_t extension[3];
+    uint8_t serviceIndicator: 4;
+    uint8_t discretionaryData: 4;
+    uint8_t algorithmReference;
+    uint8_t year;
 };
 
 /** Certificate Holder Authorization (CHA) */
