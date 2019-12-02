@@ -34,49 +34,73 @@ enum : uint8_t {
 enum : uint16_t {
     TagCertificate = 0x7F21,
     TagCertificateSignature = 0x5F37,
+    TagCertificateSignatureRemainder = 0x5F38,
     TagCertificateContent = 0x5F4E,
 };
 
 #pragma pack(push)
 #pragma pack(1)
 
-/** Signature container for the signed part of the payload data. */
-struct VdvSignature {
-    uint8_t tag;
-    uint8_t stuff; // always 0x81
-    uint8_t size;  // always 0x80
-    uint8_t data[128];
-};
-
-/** Signature Remainder header. */
-struct VdvSignatureRemainder {
-    enum { Offset = 131 };
-
-    uint8_t tag;
-    uint8_t contentSize; // >= 5
-    // followed by size bytes with the remainder of the signed payload data. */
+/** Generic structure for the header of data blocks in VDV binary data.
+ *  This consits of:
+ *  - a one or two byte tag (@tparam TagType) with a fixed value (@tparam TagValue)
+ *  - a one byte field indicating the size of the size field (optional)
+ *  - one or two bytes for the size
+ *  - followed by size bytes of content
+ */
+template <typename TagType, TagType TagValue>
+struct VdvAbstractDataBlock
+{
+    TagType tag;
 
     inline bool isValid() const
     {
-        return tag == TagSignatureRemainder && contentSize >= 5;
-    }
-
-    inline uint8_t size() const
-    {
-        return contentSize + sizeof(tag) + sizeof(contentSize);
+        return qFromBigEndian(tag) == TagValue;
     }
 };
 
-/** CV certificate. */
-struct VdvCertificateHeader {
-    uint16_t tag;
+template <typename TagType, TagType TagValue>
+struct VdvSimpleDataBlock : public VdvAbstractDataBlock<TagType, TagValue>
+{
+    uint8_t size0;
+
+    inline uint16_t contentSize() const
+    {
+        return size0;
+    }
+
+    inline uint16_t contentOffset() const
+    {
+        return sizeof(VdvSimpleDataBlock);
+    }
+
+    inline const uint8_t* contentData() const
+    {
+        return reinterpret_cast<const uint8_t*>(this) + contentOffset();
+    }
+
+    inline uint16_t size() const
+    {
+        return contentSize() + contentOffset();
+    }
+
+    template <typename T>
+    inline const T* contentAt(int offset) const
+    {
+        return reinterpret_cast<const T*>(contentData() + offset);
+    }
+};
+
+template <typename TagType, TagType TagValue>
+struct VdvTaggedSizeDataBlock : public VdvAbstractDataBlock<TagType, TagValue>
+{
     uint8_t sizeTag;
     uint8_t size0;
     uint8_t size1;
 
     inline bool isValid() const
     {
-        return  qFromBigEndian(tag) == TagCertificate && (sizeTag == TagOneByteSize || sizeTag == TagTwoByteSize);
+        return VdvAbstractDataBlock<TagType, TagValue>::isValid() && (sizeTag == TagOneByteSize || sizeTag == TagTwoByteSize);
     }
 
     inline uint16_t contentSize() const
@@ -86,17 +110,41 @@ struct VdvCertificateHeader {
 
     inline uint16_t contentOffset() const
     {
-        return sizeof(VdvCertificateHeader) - ((sizeTag == TagOneByteSize) ? 1 : 0);
+        return sizeof(VdvTaggedSizeDataBlock) - ((sizeTag == TagOneByteSize) ? 1 : 0);
+    }
+
+    inline const uint8_t* contentData() const
+    {
+        return reinterpret_cast<const uint8_t*>(this) + contentOffset();
     }
 
     inline uint16_t size() const
     {
         return contentSize() + contentOffset();
     }
+
+    template <typename T>
+    inline const T* contentAt(int offset) const
+    {
+        return reinterpret_cast<const T*>(contentData() + offset);
+    }
+};
+
+
+/** Signature container for the signed part of the payload data. */
+struct VdvSignature : public VdvTaggedSizeDataBlock<uint8_t, TagSignature> {};
+
+/** Signature Remainder header. */
+struct VdvSignatureRemainder : public VdvSimpleDataBlock<uint8_t, TagSignatureRemainder> {
+    enum { Offset = 131 };
+};
+
+/** CV certificate. */
+struct VdvCertificateHeader : public VdvTaggedSizeDataBlock<uint16_t, TagCertificate> {
 };
 
 /** Certificate Authority Reference (CAR) content. */
-struct VdvCaReferenceContent
+struct VdvCaReference
 {
     char region[2];
     char name[3];
@@ -105,17 +153,7 @@ struct VdvCaReferenceContent
     uint8_t algorithmReference;
     uint8_t year;
 };
-
-struct VdvCaReference {
-    uint8_t tag;
-    uint8_t contentSize;
-    VdvCaReferenceContent car;
-
-    inline bool isValid() const
-    {
-        return tag == TagCaReference && contentSize == 8;
-    }
-};
+struct VdvCaReferenceBlock : public VdvSimpleDataBlock<uint8_t, TagCaReference> {};
 
 /** Certificate Holder Reference (CHR) */
 struct VdvCertificateHolderReference {
@@ -132,33 +170,20 @@ struct VdvCertificateHolderAuthorization {
 
 /** Certificate key, contained in a certificate object. */
 struct VdvCertificateKey {
-    uint16_t tag;
-    uint8_t sizeTag;
-    uint8_t size0;
     uint8_t certificateProfileIdentifier;
-    VdvCaReferenceContent car;
+    VdvCaReference car;
     VdvCertificateHolderReference chr;
     VdvCertificateHolderAuthorization cha;
     uint8_t date[4];
     uint8_t oid[9];
     uint8_t modulusBegin;
-
-    inline bool isValid() const
-    {
-        return qFromBigEndian(tag) == TagCertificateContent && sizeTag == TagOneByteSize;
-    }
 };
+struct VdvCertificateKeyBlock : public VdvTaggedSizeDataBlock<uint16_t, TagCertificateContent> {};
 
 /** Certificate signature. */
-struct VdvCertificateSignature {
-    uint16_t tag;
-    uint16_t taggedSize;
-
-    inline bool isValid() const
-    {
-        return qFromBigEndian(tag) == TagCertificateSignature;
-    }
-};
+struct VdvCertificateSignature : public VdvTaggedSizeDataBlock<uint16_t, TagCertificateSignature> {};
+/** Certificate signature remainder. */
+struct VdvCertificateSignatureRemainder : public VdvSimpleDataBlock<uint16_t, TagCertificateSignatureRemainder> {};
 
 #pragma pack(pop)
 

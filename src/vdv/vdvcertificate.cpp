@@ -40,8 +40,13 @@ VdvCertificate::VdvCertificate(const QByteArray &data, int offset)
         m_data.clear();
         return;
     }
+    const auto certKeyBlock = hdr->contentAt<VdvCertificateKeyBlock>(0);
+    if (!certKeyBlock->isValid()) {
+        qWarning() << "Invalid certificate key block.";
+        m_data.clear();
+        return;
+    }
 
-    qDebug() << "key:" << certKey()->isValid();
     qDebug() << "car:" << QByteArray(certKey()->car.region, 2) << QByteArray(certKey()->car.name, 3);
     qDebug() << "chr:" << QByteArray(certKey()->chr.name, 5);
     qDebug() << "cha:" << QByteArray(certKey()->cha.name, 6);
@@ -91,7 +96,7 @@ const VdvCertificateHeader* VdvCertificate::header() const
 const VdvCertificateKey* VdvCertificate::certKey() const
 {
     // TODO check if m_data is large enough
-    return reinterpret_cast<const VdvCertificateKey*>(m_data.constData() + m_offset + header()->contentOffset());
+    return header()->contentAt<VdvCertificateKeyBlock>(0)->contentAt<VdvCertificateKey>(0);
 }
 
 
