@@ -88,7 +88,8 @@ if (TARGET PhoneNumber::PhoneNumber)
     set(HAVE_PHONENUMBER ON)
 endif()
 if (TARGET OpenSSL::Crypto)
-    set(HAVE_OPENSSL_RSA ON)
+    # TODO breaks FreeBSD build due to not finding the ssl/rsa.h include
+    #set(HAVE_OPENSSL_RSA ON)
 endif()
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kitinerary\")
