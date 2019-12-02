@@ -128,6 +128,9 @@ endif()
 if (HAVE_PHONENUMBER)
     target_link_libraries(KPimItinerary PRIVATE PhoneNumber::PhoneNumber)
 endif()
+if (HAVE_OPENSSL_RSA)
+    target_link_libraries(KPimItinerary PRIVATE OpenSSL::Crypto)
+endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS
     HEADER_NAMES

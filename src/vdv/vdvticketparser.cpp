@@ -85,6 +85,11 @@ void VdvTicketParser::parse(const QByteArray &data)
     cvDecoder.setRsaParameters(caCert.modulus(), caCert.modulusSize(), caCert.exponent(), caCert.exponentSize());
     cvDecoder.addWithRecoveredMessage(cvSig->contentData(), cvSig->contentSize());
     cvDecoder.add(cvRem->contentData(), cvRem->contentSize());
+    const auto cvDecoded = cvDecoder.recoveredMessage();
+    if (cvDecoded.isEmpty()) {
+        qDebug() << "Failed to decode CV certificate.";
+        return;
+    }
 
     // (3) decode the ticket data using the decoded CV certificate
     // TODO

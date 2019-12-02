@@ -18,9 +18,16 @@
 #ifndef KITINERARY_ISO9796_2DECODER_P_H
 #define KITINERARY_ISO9796_2DECODER_P_H
 
+#include "config-kitinerary.h"
+
 #include <QByteArray>
 
+#ifdef HAVE_OPENSSL_RSA
+#include <ssl/rsa.h>
+#endif
+
 #include <cstdint>
+#include <memory>
 
 namespace KItinerary {
 
@@ -43,6 +50,9 @@ public:
     QByteArray recoveredMessage() const;
 
 private:
+#ifdef HAVE_OPENSSL_RSA
+    std::unique_ptr<RSA, void(*)(RSA*)> m_rsa;
+#endif
 };
 
 }
