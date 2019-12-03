@@ -1,5 +1,4 @@
-The two CA certs in here are manually retrieved from:
-ldap://ldap-vdv-ion.telesec.de:389/cn=4445564456110506,ou=VDV%20KA,o=VDV%20Kernapplikations%20GmbH,c=de
-ldap://ldap-vdv-ion.telesec.de:389/cn=4445564456110706,ou=VDV%20KA,o=VDV%20Kernapplikations%20GmbH,c=de
+The CA certs in here are manually retrieved from:
+ldap://ldap-vdv-ion.telesec.de:389/cn=<CAR>,ou=VDV%20KA,o=VDV%20Kernapplikations%20GmbH,c=de
 
 TODO: do this automatically for all relevant certs

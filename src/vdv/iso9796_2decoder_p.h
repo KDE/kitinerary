@@ -23,7 +23,7 @@
 #include <QByteArray>
 
 #ifdef HAVE_OPENSSL_RSA
-#include <ssl/rsa.h>
+#include <openssl/rsa.h>
 #endif
 
 #include <cstdint>
@@ -53,6 +53,7 @@ private:
 #ifdef HAVE_OPENSSL_RSA
     std::unique_ptr<RSA, void(*)(RSA*)> m_rsa;
 #endif
+    QByteArray m_recoveredMsg;
 };
 
 }

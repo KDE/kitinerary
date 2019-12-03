@@ -20,7 +20,8 @@
 #include <QDebug>
 
 #ifdef HAVE_OPENSSL_RSA
-#include <ssl/bn.h>
+#include <openssl/bn.h>
+#include <openssl/err.h>
 #endif
 
 using namespace KItinerary;
@@ -54,8 +55,18 @@ void Iso9796_2Decoder::addWithRecoveredMessage(const uint8_t *data, int size)
     QByteArray out;
     out.resize(RSA_size(m_rsa.get()));
     const auto outSize = RSA_public_decrypt(size, data, (uint8_t*)out.data(), m_rsa.get(), RSA_NO_PADDING);
+    if (outSize < 0) {
+        qWarning() << "RSA error:" << ERR_error_string(ERR_get_error(), nullptr);
+        return;
+    }
+
     out.resize(outSize);
-    qDebug() << outSize << out.toHex();
+    if ((uint8_t)out[0] != 0x6a || (uint8_t)out[out.size() - 1] != 0xbc || out.size() < 22) { // 20 byte SHA-1 + padding/trailer
+        qWarning() << "RSA message recovery failed:" << out.toHex() << outSize;
+        return;
+    }
+
+    m_recoveredMsg.append(out.constData() + 1, out.size() - 22);
 #else
     Q_UNUSED(data);
     Q_UNUSED(size);
@@ -64,15 +75,13 @@ void Iso9796_2Decoder::addWithRecoveredMessage(const uint8_t *data, int size)
 
 void Iso9796_2Decoder::add(const uint8_t *data, int size)
 {
-#ifdef HAVE_OPENSSL_RSA
-    // TODO
-#else
-    Q_UNUSED(data);
-    Q_UNUSED(size);
-#endif
+    if (m_recoveredMsg.isEmpty()) { // previous failure
+        return;
+    }
+    m_recoveredMsg.append((const char*)data, size);
 }
 
 QByteArray Iso9796_2Decoder::recoveredMessage() const
 {
-    return {}; // TODO
+    return m_recoveredMsg;
 }

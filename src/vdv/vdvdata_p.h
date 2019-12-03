@@ -178,8 +178,17 @@ struct VdvCertificateKey {
     VdvCertificateHolderReference chr;
     VdvCertificateHolderAuthorization cha;
     uint8_t date[4];
-    uint8_t oid[9];
-    uint8_t modulusBegin;
+    uint8_t oidBegin;
+
+    inline uint8_t oidSize() const
+    {
+        return oidBegin == 0x2a ? 9 : 7; // ugly, but works for now
+    }
+
+    inline uint8_t headerSize() const
+    {
+        return sizeof(VdvCertificateKey) + oidSize() - 1;
+    }
 };
 struct VdvCertificateKeyBlock : public VdvTaggedSizeDataBlock<uint16_t, TagCertificateContent> {};
 

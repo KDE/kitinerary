@@ -22,10 +22,16 @@
 
 namespace KItinerary {
 
+struct VdvCaReference;
 struct VdvCertificateHeader;
 struct VdvCertificateKey;
 
-/** Certificate object, to obtain the RSA parameters. */
+/** Certificate object, to obtain the RSA parameters.
+ *  This can be both a raw certificate which can be directly consumed,
+ *  or one with an ISO 9796-2 signature with message recovery. In the latter
+ *  case you need to provide the key of the corresponding CA certificate
+ *  for decoding too.
+*/
 class VdvCertificate
 {
 public:
@@ -34,6 +40,10 @@ public:
     ~VdvCertificate();
 
     bool isValid() const;
+    bool needsCaKey() const;
+
+    /** Size of the entire encoded certificate data. */
+    int size() const;
 
     /** Amount of bytes in the RSA modulus. */
     uint16_t modulusSize() const;
@@ -45,19 +55,28 @@ public:
     /** RSA exponent. */
     const uint8_t* exponent() const;
 
+    /** Sets the CA certificate for decoding ISO 9796-2 signed certificates. */
+    void setCaCertificate(const VdvCertificate &caCert);
+
 private:
     const VdvCertificateHeader *header() const;
     const VdvCertificateKey *certKey() const;
 
     QByteArray m_data;
+    QByteArray m_recoveredData;
     int m_offset = 0;
+    enum CertificateType {
+        Invalid,
+        Raw,
+        Signed
+    } m_type = Invalid;
 };
 
 /** VDV (sub)CA certificate access. */
 namespace VdvPkiRepository
 {
-    /** Returns the (sub)CA certificate for the given serial number. */
-    VdvCertificate caCertificate(uint8_t serNum);
+    /** Returns the (sub)CA certificate for the given CA Reference (CAR). */
+    VdvCertificate caCertificate(const VdvCaReference *car);
 }
 
 }
