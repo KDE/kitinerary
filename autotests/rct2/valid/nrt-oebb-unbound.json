@@ -7,6 +7,6 @@
         "outboundClass": "1",
         "outboundDepartureStation": "GRAZ",
         "passengerName": "Lastname Name",
-        "type": 0
+        "type": "Transport"
     }
 ]
