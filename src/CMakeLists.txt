@@ -4,6 +4,7 @@ add_subdirectory(cli)
 if (TARGET Qt5::Network)
     add_subdirectory(knowledgedb-generator)
 endif()
+add_subdirectory(vdv/certs)
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 set(kitinerary_lib_srcs
