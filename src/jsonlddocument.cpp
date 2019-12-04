@@ -319,6 +319,17 @@ static QJsonValue toJsonValue(const QVariant &v)
         if (!prop.isStored()) {
             continue;
         }
+
+        if (prop.isEnumType()) { // enums defined in this QMO
+            const auto key = prop.readOnGadget(v.constData()).toInt();
+            const auto value = prop.enumerator().valueToKey(key);
+            obj.insert(QString::fromUtf8(prop.name()), QString::fromUtf8(value));
+            continue;
+        } else if (QMetaType::typeFlags(prop.userType()) & QMetaType::IsEnumeration) { // external enums
+            obj.insert(QString::fromUtf8(prop.name()), prop.readOnGadget(v.constData()).toString());
+            continue;
+        }
+
         const auto value = prop.readOnGadget(v.constData());
         if (!valueIsNull(value)) {
             const auto jsVal = toJsonValue(value);
@@ -422,6 +433,38 @@ QVariant JsonLdDocument::apply(const QVariant& lhs, const QVariant& rhs)
         if (!prop.isStored()) {
             continue;
         }
+
+        if (prop.isEnumType() && rhs.type() == QVariant::String) { // internal enums in this QMO
+            const auto key = prop.enumerator().keyToValue(rhs.toString().toUtf8().constData());
+            prop.writeOnGadget(res.data(), key);
+            continue;
+        }
+        if ((QMetaType::typeFlags(prop.userType()) & QMetaType::IsEnumeration) && rhs.type() == QVariant::String) { // external enums
+            const QMetaType mt(prop.userType());
+            const auto mo = mt.metaObject();
+            if (!mo) {
+                qCWarning(Log) << "No meta object found for enum type:" << prop.type();
+                continue;
+            }
+            const auto enumIdx = mo->indexOfEnumerator(prop.typeName() + strlen(mo->className()) + 2);
+            if (enumIdx < 0) {
+                qCWarning(Log) << "Could not find QMetaEnum for" << prop.type();
+                continue;
+            }
+            const auto me = mo->enumerator(enumIdx);
+            bool success = false;
+            const auto numValue = me.keyToValue(rhs.toString().toUtf8().constData(), &success);
+            if (!success) {
+                qCWarning(Log) << "Unknown enum value" << rhs.toString() << "for" << prop.type();
+                continue;
+            }
+            auto valueData = mt.create();
+            *reinterpret_cast<int*>(valueData) = numValue;
+            QVariant value(prop.userType(), valueData);
+            prop.writeOnGadget(res.data(), value);
+            continue;
+        }
+
         auto pv = prop.readOnGadget(rhs.constData());
         if (QMetaType(pv.userType()).metaObject()) {
             pv = apply(prop.readOnGadget(lhs.constData()), pv);
