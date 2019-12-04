@@ -30,14 +30,14 @@ VdvCertificate::VdvCertificate(const QByteArray &data, int offset)
     : m_offset(offset)
 {
     if ((unsigned)data.size() <= m_offset + sizeof(VdvCertificateHeader)) {
-        qWarning() << "Certificate data too small:" << data.size() << offset;
+        qDebug() << "Certificate data too small:" << data.size() << offset;
         return;
     }
 
     m_data = data;
     const auto hdr = header();
     if (!hdr->isValid() || data.size() < hdr->size() + offset) {
-        qWarning() << "Invalid certificate header:" << hdr->isValid() << hdr->size() << data.size() << offset;
+        qDebug() << "Invalid certificate header:" << hdr->isValid() << hdr->size() << data.size() << offset;
         m_data.clear();
         return;
     }
@@ -45,11 +45,8 @@ VdvCertificate::VdvCertificate(const QByteArray &data, int offset)
     if (certKeyBlock->isValid()) {
         m_type = Raw;
         qDebug() << "found decrypted key";
-        qDebug() << "car:" << QByteArray(certKey()->car.region, 2) << QByteArray(certKey()->car.name, 3);
-        qDebug() << "chr:" << QByteArray(certKey()->chr.name, 5) << certKey()->chr.algorithmReference << certKey()->chr.year;
-        qDebug() << "cha:" << QByteArray(certKey()->cha.name, 6);
-        qDebug() << "modulus:" << modulusSize() << *modulus() << *(modulus() + modulusSize() - 1) << (modulus() - (const uint8_t*)certKey());
-        qDebug() << "exponent:" << exponentSize() << *exponent() << *(exponent() + exponentSize() - 1) << (exponent() - (const uint8_t*)certKey());
+        qDebug() << "CHR:" << QByteArray(certKey()->chr.name, 5) << certKey()->chr.algorithmReference << certKey()->chr.year;
+        qDebug() << "CAR:" << QByteArray(certKey()->car.region, 2) << QByteArray(certKey()->car.name, 3);
         return;
     }
 
@@ -134,23 +131,16 @@ void VdvCertificate::setCaCertificate(const VdvCertificate &caCert)
         } else {
             qWarning() << "Invalid signature remainder!" << rem->isValid() << rem->size() << sig->size() << header()->contentSize();
         }
-        qDebug() << rem->isValid() << rem->contentOffset() << rem->contentSize();
     }
 
     m_recoveredData = decoder.recoveredMessage();
-    qDebug() << m_recoveredData.toHex() << m_recoveredData.size();
     if (!m_recoveredData.isEmpty() && m_recoveredData.size() >= (certKey()->headerSize() + modulusSize() + exponentSize())) {
         qDebug() << "successfully decrypted key";
-        qDebug() << "car:" << QByteArray(certKey()->car.region, 2) << QByteArray(certKey()->car.name, 3);
-        qDebug() << "chr:" << QByteArray(certKey()->chr.name, 5) << certKey()->chr.algorithmReference << certKey()->chr.year;
-        qDebug() << "cha:" << QByteArray(certKey()->cha.name, 6);
-        qDebug() << "modulus:" << modulusSize() << *modulus() << *(modulus() + modulusSize() - 1) << (modulus() - (const uint8_t*)certKey());
-        qDebug() << "exponent:" << exponentSize() << *exponent() << *(exponent() + exponentSize() - 1) << (exponent() - (const uint8_t*)certKey());
+        qDebug() << "CAR:" << QByteArray(certKey()->car.region, 2) << QByteArray(certKey()->car.name, 3);
+        qDebug() << "CHR:" << QByteArray(certKey()->chr.name, 5) << certKey()->chr.algorithmReference << certKey()->chr.year;
     } else {
         qWarning() << "decrypting certificate key failed!";
         qDebug() << "size is:" << m_recoveredData.size() << "expected:" << (certKey()->headerSize() + modulusSize() + exponentSize());
-        qDebug() << QByteArray((const char*)caCert.modulus(), caCert.modulusSize()).toHex();
-        qDebug() << QByteArray((const char*)caCert.exponent(), caCert.exponentSize()).toHex();
         qDebug() << QByteArray((const char*)sig->contentData(), sig->contentSize()).toHex();;
         m_type = Invalid;
         m_recoveredData.clear();

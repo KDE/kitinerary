@@ -43,7 +43,8 @@ public:
     VdvTicketParser();
     ~VdvTicketParser();
 
-    void parse(const QByteArray &data);
+    /** Tries to parse the ticket in @p data. */
+    bool parse(const QByteArray &data);
 
     /** Fast check if @p data might contain a VDV ticket.
      *  Does not perform full decoding, mainly useful for content auto-detection.

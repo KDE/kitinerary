@@ -19,6 +19,7 @@
 #include "vdvdata_p.h"
 #include "vdvcertificate_p.h"
 #include "iso9796_2decoder_p.h"
+#include "logging.h"
 
 #include <QByteArray>
 #include <QDebug>
@@ -28,54 +29,50 @@ using namespace KItinerary;
 VdvTicketParser::VdvTicketParser() = default;
 VdvTicketParser::~VdvTicketParser() = default;
 
-void VdvTicketParser::parse(const QByteArray &data)
+bool VdvTicketParser::parse(const QByteArray &data)
 {
-    qDebug() << data.size();
-    if (!maybeVdvTicket(data)) {
-        qWarning() << "Input data is not a VDV ticket!";
-        return;
-    }
-
     // (1) find the certificate authority reference (CAR) to identify the key to decode the CV certificate
-    const auto sigRemainder = reinterpret_cast<const VdvSignatureRemainder*>(data.constData() + VdvSignatureRemainder::Offset);
-    if (!sigRemainder->isValid() || VdvSignatureRemainder::Offset + sigRemainder->size() + sizeof(VdvCertificateHeader) > (unsigned)data.size()) {
-        qWarning() << "Invalid VDV signature remainder.";
-        return;
+    const auto sig = reinterpret_cast<const VdvSignature*>(data.constData());
+    if (!sig->isValid()) {
+        qCDebug(Log) << "Invalid VDV ticket signature.";
+        return false;
     }
-    qDebug() << sigRemainder->contentSize();
+    const auto sigRemainder = reinterpret_cast<const VdvSignatureRemainder*>(data.constData() + sig->size());
+    if (!sigRemainder->isValid() || sig->size() + sigRemainder->size() + sizeof(VdvCertificateHeader) > (unsigned)data.size()) {
+        qCDebug(Log) << "Invalid VDV signature remainder.";
+        return false;
+    }
 
-    const auto cvCertOffset = VdvSignatureRemainder::Offset + sigRemainder->size();
-    auto cvCert = VdvCertificate(data ,cvCertOffset);
+    const auto cvCertOffset = sig->size() + sigRemainder->size();
+    auto cvCert = VdvCertificate(data, cvCertOffset);
     if ((!cvCert.isValid() && !cvCert.needsCaKey()) || cvCertOffset + cvCert.size() + sizeof(VdvCaReferenceBlock) > (unsigned)data.size()) {
-        qWarning() << "Invalid CV signature:" << cvCert.isValid() << cvCertOffset << cvCert.size();
-        return;
+        qCDebug(Log) << "Invalid CV signature:" << cvCert.isValid() << cvCertOffset << cvCert.size();
+        return false;
     }
 
     const auto carOffset = cvCertOffset + cvCert.size();
     const auto carBlock = reinterpret_cast<const VdvCaReferenceBlock*>(data.constData() + carOffset);
     if (!carBlock->isValid() || carBlock->contentSize() < sizeof(VdvCaReference)) {
-        qWarning() << "Invalid CA Reference.";
-        return;
+        qCDebug(Log) << "Invalid CA Reference.";
+        return false;
     }
     const auto car = carBlock->contentAt<VdvCaReference>(0);
-    qDebug() << QByteArray(car->name, 3) << car->serviceIndicator << car->discretionaryData << car->algorithmReference << car->year;
+    qCDebug(Log) << "CV CAR:" << QByteArray(car->region, 5) << car->serviceIndicator << car->discretionaryData << car->algorithmReference << car->year;
 
     const auto caCert = VdvPkiRepository::caCertificate(car);
     if (!caCert.isValid()) {
-        qWarning() << "Could not find CA certificate" << QByteArray(reinterpret_cast<const char*>(car), sizeof(VdvCaReference)).toHex();
-        return;
+        qCWarning(Log) << "Could not find CA certificate" << QByteArray(reinterpret_cast<const char*>(car), sizeof(VdvCaReference)).toHex();
+        return false;
     }
 
     // (2) decode the CV certificate
     cvCert.setCaCertificate(caCert);
     if (!cvCert.isValid()) {
-        qDebug() << "Failed to decode CV certificate.";
-        return;
+        qCWarning(Log) << "Failed to decode CV certificate.";
+        return false;
     }
 
     // (3) decode the ticket data using the decoded CV certificate
-    const auto sig = reinterpret_cast<const VdvSignature*>(data.constData());
-    qDebug() << sig->isValid() << sig->contentSize();
 
     Iso9796_2Decoder decoder;
     decoder.setRsaParameters(cvCert.modulus(), cvCert.modulusSize(), cvCert.exponent(), cvCert.exponentSize());
@@ -86,6 +83,7 @@ void VdvTicketParser::parse(const QByteArray &data)
     qDebug() << decoder.recoveredMessage();
     qDebug() << decoder.recoveredMessage().toHex();
     // TODO
+    return true;
 }
 
 bool VdvTicketParser::maybeVdvTicket(const QByteArray& data)
@@ -95,15 +93,15 @@ bool VdvTicketParser::maybeVdvTicket(const QByteArray& data)
     }
 
     // signature header
-    if ((uint8_t)data[0] != TagSignature || (uint8_t)data[1] != 0x81 || (uint8_t)data[2] != 0x80 || (uint8_t)data[VdvSignatureRemainder::Offset] != TagSignatureRemainder) {
+    const auto sig = reinterpret_cast<const VdvSignature*>(data.constData());
+    if (!sig->isValid()) {
         return false;
     }
-
-    const uint8_t len = data[132]; // length of the 0x9A unsigned data block
-    if (len + 133 > data.size()) {
+    const auto rem = reinterpret_cast<const VdvSignatureRemainder*>(data.constData() + sig->size());
+    if (!rem->isValid() || sig->size() + rem->size() + sizeof(VdvCertificateHeader) > (unsigned)data.size()) {
         return false;
     }
 
     // verify the "VDV" marker is there
-    return strncmp(data.constData() + 133 + len - 5, "VDV", 3) == 0;
+    return strncmp((const char*)(rem->contentData() + rem->contentSize() - 5), "VDV", 3) == 0;
 }

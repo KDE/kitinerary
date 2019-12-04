@@ -42,11 +42,17 @@ public:
     Iso9796_2Decoder();
     ~Iso9796_2Decoder();
 
+    /** Set RSA modulus and exponents (@see VdvCertificate). */
     void setRsaParameters(const uint8_t *modulus, uint16_t modulusSize, const uint8_t *exponent, uint16_t exponentSize);
 
+    /** Process the first block of data, containing the recoverable message and the SHA-1 hash. */
     void addWithRecoveredMessage(const uint8_t *data, int size);
+    /** Process any further data. */
     void add(const uint8_t *data, int size);
 
+    /** Returns the recovered message.
+     *  This should either be modulusSize - 22 bytes, or empty in case of an error.
+     */
     QByteArray recoveredMessage() const;
 
 private:

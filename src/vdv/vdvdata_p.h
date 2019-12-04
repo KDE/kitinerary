@@ -133,15 +133,10 @@ struct VdvTaggedSizeDataBlock : public VdvAbstractDataBlock<TagType, TagValue>
 
 /** Signature container for the signed part of the payload data. */
 struct VdvSignature : public VdvTaggedSizeDataBlock<uint8_t, TagSignature> {};
-
 /** Signature Remainder header. */
-struct VdvSignatureRemainder : public VdvSimpleDataBlock<uint8_t, TagSignatureRemainder> {
-    enum { Offset = 131 };
-};
-
+struct VdvSignatureRemainder : public VdvSimpleDataBlock<uint8_t, TagSignatureRemainder> {};
 /** CV certificate. */
-struct VdvCertificateHeader : public VdvTaggedSizeDataBlock<uint16_t, TagCertificate> {
-};
+struct VdvCertificateHeader : public VdvTaggedSizeDataBlock<uint16_t, TagCertificate> {};
 
 /** Certificate Authority Reference (CAR) content. */
 struct VdvCaReference
