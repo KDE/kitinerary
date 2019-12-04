@@ -19,6 +19,7 @@
 #define KITINERARY_VDVTICKETPARSER_H
 
 #include "kitinerary_export.h"
+#include "vdvticket.h"
 
 class QByteArray;
 
@@ -46,10 +47,16 @@ public:
     /** Tries to parse the ticket in @p data. */
     bool parse(const QByteArray &data);
 
+    /** Returns the parsed ticket data. */
+    VdvTicket ticket() const;
+
     /** Fast check if @p data might contain a VDV ticket.
      *  Does not perform full decoding, mainly useful for content auto-detection.
      */
     static bool maybeVdvTicket(const QByteArray &data);
+
+private:
+    VdvTicket m_ticket;
 };
 
 }

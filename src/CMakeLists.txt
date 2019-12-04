@@ -56,6 +56,7 @@ set(kitinerary_lib_srcs
 
     vdv/iso9796_2decoder.cpp
     vdv/vdvcertificate.cpp
+    vdv/vdvticket.cpp
     vdv/vdvticketparser.cpp
     vdv/certs/vdv-certs.qrc
 
@@ -206,6 +207,7 @@ ecm_generate_headers(KItinerary_Uic9183_FORWARDING_HEADERS
 
 ecm_generate_headers(KItinerary_Vdv_FORWARDING_HEADERS
     HEADER_NAMES
+        VdvTicket
         VdvTicketParser
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_Vdv_HEADERS

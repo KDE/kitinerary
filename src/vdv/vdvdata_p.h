@@ -192,6 +192,48 @@ struct VdvCertificateSignature : public VdvTaggedSizeDataBlock<uint16_t, TagCert
 /** Certificate signature remainder. */
 struct VdvCertificateSignatureRemainder : public VdvSimpleDataBlock<uint16_t, TagCertificateSignatureRemainder> {};
 
+/** Date/time representation encoded in 4 byte. */
+struct VdvDateTimeCompact
+{
+    uint32_t data;
+
+    inline int year() const
+    {
+        return ((qFromBigEndian(data) & 0b1111'1110'0000'0000'0000'0000'0000'0000) >> 25) + 1990;
+    }
+    inline int month() const
+    {
+        return (qFromBigEndian(data) & 0b0000'0001'1110'0000'0000'0000'0000'0000) >> 21;
+    }
+    inline int day() const
+    {
+        return (qFromBigEndian(data) & 0b0000'0000'0001'1111'0000'0000'0000'0000) >> 16;
+    }
+    inline int hour() const
+    {
+        return (qFromBigEndian(data) & 0b0000'0000'0000'0000'1111'1000'0000'0000) >> 11;
+    }
+    inline int minute() const
+    {
+        return (qFromBigEndian(data) & 0b0000'0000'0000'0000'0000'0111'1110'0000) >> 5;
+    }
+    inline int second() const
+    {
+        return (qFromBigEndian(data) & 0b0000'0000'0000'0000'0000'0000'0001'1111) * 2;
+    }
+};
+
+/** Ticket data header. */
+struct VdvTicketHeader
+{
+    uint32_t ticketId;
+    uint16_t kvpOrgId;
+    uint16_t productId;
+    uint16_t pvOrgId;
+    VdvDateTimeCompact beginDt;
+    VdvDateTimeCompact endDt;
+};
+
 #pragma pack(pop)
 
 }

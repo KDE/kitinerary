@@ -73,16 +73,13 @@ bool VdvTicketParser::parse(const QByteArray &data)
     }
 
     // (3) decode the ticket data using the decoded CV certificate
-
     Iso9796_2Decoder decoder;
     decoder.setRsaParameters(cvCert.modulus(), cvCert.modulusSize(), cvCert.exponent(), cvCert.exponentSize());
     decoder.addWithRecoveredMessage(sig->contentData(), sig->contentSize());
     decoder.add(sigRemainder->contentData(), sigRemainder->contentSize());
 
     // (4) profit!
-    qDebug() << decoder.recoveredMessage();
-    qDebug() << decoder.recoveredMessage().toHex();
-    // TODO
+    m_ticket = VdvTicket(decoder.recoveredMessage());
     return true;
 }
 
@@ -104,4 +101,9 @@ bool VdvTicketParser::maybeVdvTicket(const QByteArray& data)
 
     // verify the "VDV" marker is there
     return strncmp((const char*)(rem->contentData() + rem->contentSize() - 5), "VDV", 3) == 0;
+}
+
+VdvTicket VdvTicketParser::ticket() const
+{
+    return m_ticket;
 }
