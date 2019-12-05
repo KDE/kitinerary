@@ -87,11 +87,18 @@ VdvTicket::VdvTicket(const QByteArray &data)
     qDebug() << "begin:" << beginDateTime();
     qDebug() << "end:" << endDateTime();
     // iterate over TLV content
-     int tlvOff = 0;
-    while (tlvOff < productBlock->contentSize()) {
-        const auto tlv = productBlock->contentAt<VdvTlvBlock<uint8_t>>(tlvOff);
+    auto tlv = productBlock->first();
+    while (tlv) {
         qDebug() << "tag:" << tlv->tag << "size:" << tlv->contentSize() << "content:" << QByteArray((const char*)tlv->contentData(), tlv->contentSize()).toHex();
-        tlvOff += tlv->size();
+        tlv = productBlock->next(tlv);
+    }
+    const auto basicData = productBlock->contentByTag<VdvTicketBasicData>();
+    if (basicData) {
+        qDebug() << "traveler type:" << basicData->travelerType << "class:" << basicData->serviceClass;
+    }
+    const auto travelerData = productBlock->contentByTag<VdvTicketTravelerData>();
+    if (travelerData) {
+        qDebug() << "traveler:" << travelerData->gender << QDate(travelerData->birthDate.year(), travelerData->birthDate.month(), travelerData->birthDate.day()) << QByteArray(travelerData->name(), travelerData->nameSize());
     }
 }
 

@@ -31,6 +31,8 @@ enum : uint8_t {
     TagTwoByteSize = 0x82,
     TagTicketProductData = 0x85,
     TagTicketProductTransactionData = 0x8A,
+    TagTicketBasicData = 0xDA,
+    TagTicketTravelerData = 0xDB,
 };
 
 enum : uint16_t {
@@ -90,6 +92,7 @@ struct VdvTlvBlock
 template <typename TagType, TagType TagValue>
 struct VdvTlvTypedBlock : public VdvTlvBlock<TagType>
 {
+    enum : TagType { Tag = TagValue };
     inline bool isValid() const
     {
         return qFromBigEndian(VdvTlvBlock<TagType>::tag) == TagValue;
@@ -274,7 +277,74 @@ struct VdvTicketHeader
 /** Product-specific ticket data block.
  *  Contains a set of TLV elements.
  */
-struct VdvTicketProductData : public VdvTlvTypedBlock<uint8_t, TagTicketProductData> {};
+struct VdvTicketProductData : public VdvTlvTypedBlock<uint8_t, TagTicketProductData>
+{
+    /** First TLV element inside this block. */
+    const VdvTlvBlock* first() const
+    {
+        if (contentSize() < 2) {
+            return nullptr;
+        }
+        const auto tlv = contentAt<VdvTlvBlock>(0);
+        return tlv->size() > contentSize() ? nullptr : tlv;
+    }
+    /** Next TLV element, for iteration. */
+    const VdvTlvBlock* next(const VdvTlvBlock *prev) const
+    {
+        const auto off = (const uint8_t*)prev - contentData() + prev->size();
+        if (off + 2 > contentSize()) {
+            return nullptr;
+        }
+        const auto tlv = contentAt<VdvTlvBlock>(off);
+        return tlv->size() > contentSize() ? nullptr : tlv;
+    }
+
+    /** Find TLV element with type @tparam T. */
+    template <typename T>
+    inline const T* contentByTag() const
+    {
+        for (auto tlv = first(); tlv; tlv = next(tlv)) {
+            if (qFromBigEndian(tlv->tag) == T::Tag && tlv->size() >= sizeof(T)) {
+                return reinterpret_cast<const T*>(tlv);
+            }
+        }
+        return nullptr;
+    }
+};
+
+/** Product specific data - basic information. */
+struct VdvTicketBasicData : public VdvTlvTypedBlock<uint8_t, TagTicketBasicData>
+{
+    uint8_t paymentType;
+    uint8_t travelerType; // 1 adult, 2 child, 65 bike
+    uint8_t includedTravelerType1; // 0 none, 1 adult, 2 child, 251 family child
+    uint8_t includedTravelerCount1;
+    uint8_t includedTravelerType2;
+    uint8_t includedTravelerCount2;
+    uint8_t categroy;
+    uint8_t serviceClass; // 1 first class, 2 second class, 3 first class upgrade
+    uint8_t price[3]; // 24 bit big endian, price in Euro cent
+    uint16_t vat; // VAT rate in 0,01% steps
+    uint8_t priceCategory;
+    uint8_t productNumber[3];
+};
+
+/** Product specific data - traveler information. */
+struct VdvTicketTravelerData : public VdvTlvTypedBlock<uint8_t, TagTicketTravelerData>
+{
+    uint8_t gender;
+    VdvBcdDate birthDate;
+    char nameBegin;
+
+    inline const char* name() const
+    {
+        return &nameBegin;
+    }
+    inline int nameSize() const
+    {
+        return size() - sizeof(VdvTicketTravelerData) + 1;
+    }
+};
 
 /** Ticket transaction data block. */
 struct VdvTicketTransactionData
