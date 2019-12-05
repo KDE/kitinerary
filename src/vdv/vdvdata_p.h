@@ -47,27 +47,17 @@ enum {
 #pragma pack(push)
 #pragma pack(1)
 
-/** Generic structure for the header of data blocks in VDV binary data.
+/** Generic structure for the TLV (tag-length-value) data blocks in VDV binary data.
  *  This consits of:
  *  - a one or two byte tag (@tparam TagType) with a fixed value (@tparam TagValue)
  *  - a one byte field indicating the size of the size field (optional)
  *  - one or two bytes for the size
  *  - followed by size bytes of content
  */
-template <typename TagType, TagType TagValue>
-struct VdvAbstractDataBlock
+template <typename TagType>
+struct VdvTlvBlock
 {
     TagType tag;
-
-    inline bool isValid() const
-    {
-        return qFromBigEndian(tag) == TagValue;
-    }
-};
-
-template <typename TagType, TagType TagValue>
-struct VdvSimpleDataBlock : public VdvAbstractDataBlock<TagType, TagValue>
-{
     uint8_t size0;
 
     inline uint16_t contentSize() const
@@ -77,7 +67,7 @@ struct VdvSimpleDataBlock : public VdvAbstractDataBlock<TagType, TagValue>
 
     inline uint16_t contentOffset() const
     {
-        return sizeof(VdvSimpleDataBlock);
+        return sizeof(VdvTlvBlock);
     }
 
     inline const uint8_t* contentData() const
@@ -98,15 +88,25 @@ struct VdvSimpleDataBlock : public VdvAbstractDataBlock<TagType, TagValue>
 };
 
 template <typename TagType, TagType TagValue>
-struct VdvTaggedSizeDataBlock : public VdvAbstractDataBlock<TagType, TagValue>
+struct VdvTlvTypedBlock : public VdvTlvBlock<TagType>
 {
+    inline bool isValid() const
+    {
+        return qFromBigEndian(VdvTlvBlock<TagType>::tag) == TagValue;
+    }
+};
+
+template <typename TagType, TagType TagValue>
+struct VdvTaggedSizeDataBlock
+{
+    TagType tag;
     uint8_t sizeTag;
     uint8_t size0;
     uint8_t size1;
 
     inline bool isValid() const
     {
-        return VdvAbstractDataBlock<TagType, TagValue>::isValid() && (sizeTag == TagOneByteSize || sizeTag == TagTwoByteSize);
+        return qFromBigEndian(tag) == TagValue && (sizeTag == TagOneByteSize || sizeTag == TagTwoByteSize);
     }
 
     inline uint16_t contentSize() const
@@ -171,7 +171,7 @@ struct VdvBcdDate
 /** Signature container for the signed part of the payload data. */
 struct VdvSignature : public VdvTaggedSizeDataBlock<uint8_t, TagSignature> {};
 /** Signature Remainder header. */
-struct VdvSignatureRemainder : public VdvSimpleDataBlock<uint8_t, TagSignatureRemainder> {};
+struct VdvSignatureRemainder : public VdvTlvTypedBlock<uint8_t, TagSignatureRemainder> {};
 /** CV certificate. */
 struct VdvCertificateHeader : public VdvTaggedSizeDataBlock<uint16_t, TagCertificate> {};
 
@@ -185,7 +185,7 @@ struct VdvCaReference
     uint8_t algorithmReference;
     uint8_t year;
 };
-struct VdvCaReferenceBlock : public VdvSimpleDataBlock<uint8_t, TagCaReference> {};
+struct VdvCaReferenceBlock : public VdvTlvTypedBlock<uint8_t, TagCaReference> {};
 
 /** Certificate Holder Reference (CHR) */
 struct VdvCertificateHolderReference {
@@ -227,7 +227,7 @@ struct VdvCertificateKeyBlock : public VdvTaggedSizeDataBlock<uint16_t, TagCerti
 /** Certificate signature. */
 struct VdvCertificateSignature : public VdvTaggedSizeDataBlock<uint16_t, TagCertificateSignature> {};
 /** Certificate signature remainder. */
-struct VdvCertificateSignatureRemainder : public VdvSimpleDataBlock<uint16_t, TagCertificateSignatureRemainder> {};
+struct VdvCertificateSignatureRemainder : public VdvTlvTypedBlock<uint16_t, TagCertificateSignatureRemainder> {};
 
 /** Date/time representation encoded in 4 byte. */
 struct VdvDateTimeCompact
@@ -274,7 +274,7 @@ struct VdvTicketHeader
 /** Product-specific ticket data block.
  *  Contains a set of TLV elements.
  */
-struct VdvTicketProductData : public VdvSimpleDataBlock<uint8_t, TagTicketProductData> {};
+struct VdvTicketProductData : public VdvTlvTypedBlock<uint8_t, TagTicketProductData> {};
 
 /** Ticket transaction data block. */
 struct VdvTicketTransactionData
@@ -284,8 +284,9 @@ struct VdvTicketTransactionData
     VdvDateTimeCompact dt;
     uint8_t locationId[6];
 };
+
 /** Product-specific transaction data block (variable length). */
-struct VdvTicketProductTransactionData : public VdvSimpleDataBlock<uint8_t, TagTicketProductTransactionData> {};
+struct VdvTicketProductTransactionData : public VdvTlvTypedBlock<uint8_t, TagTicketProductTransactionData> {};
 
 /** Ticket issuer data block. */
 struct VdvTicketIssueData

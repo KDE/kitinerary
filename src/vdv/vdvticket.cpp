@@ -89,9 +89,9 @@ VdvTicket::VdvTicket(const QByteArray &data)
     // iterate over TLV content
      int tlvOff = 0;
     while (tlvOff < productBlock->contentSize()) {
-        const auto tlvSize = (uint8_t)productBlock->contentData()[tlvOff + 1];
-        qDebug() << "tag:" << (uint8_t)productBlock->contentData()[tlvOff] << "size:" << tlvSize << "content:" << QByteArray((const char*)productBlock->contentData() + tlvOff + 2, tlvSize).toHex();
-        tlvOff += tlvSize + 2;
+        const auto tlv = productBlock->contentAt<VdvTlvBlock<uint8_t>>(tlvOff);
+        qDebug() << "tag:" << tlv->tag << "size:" << tlv->contentSize() << "content:" << QByteArray((const char*)tlv->contentData(), tlv->contentSize()).toHex();
+        tlvOff += tlv->size();
     }
 }
 
