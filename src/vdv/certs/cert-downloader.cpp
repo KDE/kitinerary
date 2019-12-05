@@ -85,16 +85,40 @@ static void writeQrc(const std::vector<QString> &certNames)
     qrc.write("    </qresource>\n</RCC>\n");
 }
 
-static void decodeCert(const QString &certName)
+static VdvCertificate loadCert(const QString &certName)
 {
     QFile f(certName + QLatin1String(".vdv-cert"));
-    f.open(QFile::ReadOnly);
-    VdvCertificate cert(f.readAll());
+    if (!f.open(QFile::ReadOnly)) {
+        qFatal("Failed to open file %s: %s", qPrintable(f.fileName()), qPrintable(f.errorString()));
+    }
+    return VdvCertificate(f.readAll());
+}
+
+static void decodeCert(const QString &certName)
+{
+    auto cert = loadCert(certName);
     if (cert.needsCaKey()) {
         qDebug() << certName << "needs decoding";
-        // TODO
+        const auto rootCa = loadCert(QStringLiteral("4555564456100106"));
+        cert.setCaCertificate(rootCa);
+        if (cert.isValid()) {
+            QFile f(certName + QLatin1String(".vdv-cert"));
+            if (!f.open(QFile::WriteOnly)) {
+                qFatal("Failed to open file %s: %s", qPrintable(f.fileName()), qPrintable(f.errorString()));
+            }
+            cert.writeKey(&f);
+        } else {
+            qFatal("Decoding failed for %s", qPrintable(certName));;
+        }
+    } else if (cert.isValid()) {
+        // this removes the signature and other unknown elements, leaving just the key
+        QFile f(certName + QLatin1String(".vdv-cert"));
+        if (!f.open(QFile::WriteOnly)) {
+            qFatal("Failed to open file %s: %s", qPrintable(f.fileName()), qPrintable(f.errorString()));
+        }
+        cert.writeKey(&f);
     } else {
-        qDebug() << certName << "is already decoded";
+        qFatal("%s is invalid", qPrintable(certName));
     }
 }
 
