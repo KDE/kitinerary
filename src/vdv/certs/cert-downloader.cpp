@@ -18,6 +18,7 @@
 #include <vdvcertificate_p.h>
 
 #include <QCoreApplication>
+#include <QDate>
 #include <QDebug>
 #include <QFile>
 #include <QProcess>
@@ -130,12 +131,17 @@ int main(int argc, char **argv)
     auto certNames = listCerts();
 
     // (2) load all certificates we don't have yet
-    for (const auto &certName : certNames) {
-        qDebug() << "checking certificate" << certName;
-        if (QFile::exists(certName + QLatin1String(".vdv-cert"))) {
+    for (auto it = certNames.begin(); it != certNames.end();) {
+        if (QFile::exists(QLatin1Char('.') + (*it) + QLatin1String(".vdv-cert"))) {
+            // expired certificate, but cached from previous run
+            it = certNames.erase(it);
             continue;
         }
-        downloadCert(certName);
+        qDebug() << "checking certificate" << (*it);
+        if (!QFile::exists((*it) + QLatin1String(".vdv-cert"))) {
+            downloadCert(*it);
+        }
+        ++it;
     }
 
     // (3) decode certificates (avoids runtime cost and shrinks the file size)
@@ -144,7 +150,19 @@ int main(int argc, char **argv)
     }
 
     // (4) discard old sub-CA certificates we don't need
-    // TODO
+    for (auto it = certNames.begin(); it != certNames.end();) {
+        const auto cert = loadCert(*it);
+        if (!cert.isValid()) {
+            qFatal("Invalid certificate: %s", qPrintable(*it));
+        }
+        if (!cert.isSelfSigned() && cert.endOfValidity().year() < 2019) {
+            qDebug() << "discarding" << (*it) << "due to being expired" << cert.endOfValidity();
+            QFile::rename((*it) + QLatin1String(".vdv-cert"), QLatin1Char('.') + (*it) + QLatin1String(".vdv-cert"));
+            it = certNames.erase(it);
+        } else {
+            ++it;
+        }
+    }
 
     // (5) write qrc file
     std::sort(certNames.begin(), certNames.end());
