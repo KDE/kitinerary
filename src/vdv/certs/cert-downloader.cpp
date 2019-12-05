@@ -32,8 +32,11 @@ static std::vector<QString> listCerts()
     QProcess proc;
     proc.setProgram(QStringLiteral("kioclient5"));
     proc.setArguments({QStringLiteral("ls"), QStringLiteral("ldap://ldap-vdv-ion.telesec.de:389/ou=VDV%20KA,o=VDV%20Kernapplikations%20GmbH,c=de")});
+    proc.setProcessChannelMode(QProcess::ForwardedErrorChannel);
     proc.start();
-    proc.waitForFinished();
+    if (!proc.waitForFinished() || proc.exitStatus() != QProcess::NormalExit) {
+        qFatal("Failed to list certificates from LDAP server.");
+    }
 
     std::vector<QString> certs;
     for (const auto &line : proc.readAllStandardOutput().split('\n')) {
@@ -50,8 +53,11 @@ static void downloadCert(const QString &certName)
     QProcess proc;
     proc.setProgram(QStringLiteral("kioclient5"));
     proc.setArguments({QStringLiteral("cat"), QStringLiteral("ldap://ldap-vdv-ion.telesec.de:389/cn=") + certName + QStringLiteral(",ou=VDV%20KA,o=VDV%20Kernapplikations%20GmbH,c=de")});
+    proc.setProcessChannelMode(QProcess::ForwardedErrorChannel);
     proc.start();
-    proc.waitForFinished();
+    if (!proc.waitForFinished() || proc.exitStatus() != QProcess::NormalExit) {
+        qFatal("Failed to download certificate %s from LDAP server.", qPrintable(certName));
+    }
 
     // primitive LDIF parser, would be nicer with something like KLDAP
     const auto certLdif = QString::fromUtf8(proc.readAllStandardOutput());
@@ -67,7 +73,9 @@ static void downloadCert(const QString &certName)
 static void writeQrc(const std::vector<QString> &certNames)
 {
     QFile qrc(QStringLiteral("vdv-certs.qrc"));
-    qrc.open(QFile::WriteOnly);
+    if (!qrc.open(QFile::WriteOnly)) {
+        qFatal("Failed to open file %s: %s", qPrintable(qrc.fileName()), qPrintable(qrc.errorString()));
+    }
     qrc.write("<RCC>\n    <qresource prefix=\"/org.kde.pim/kitinerary/vdv/certs\">\n");
     for (const auto &certName : certNames) {
         qrc.write("        <file>");
