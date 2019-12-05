@@ -130,6 +130,37 @@ struct VdvTaggedSizeDataBlock : public VdvAbstractDataBlock<TagType, TagValue>
     }
 };
 
+/** Two-digit BCD encoded number. */
+struct VdvBcdNumber
+{
+    uint8_t data;
+
+    uint8_t value() const
+    {
+        return ((data & 0xF0) >> 4) * 10 + (data & 0x0F);
+    }
+};
+
+/** Date encoded as 8 BCD digits. */
+struct VdvBcdDate
+{
+    VdvBcdNumber bcdYear[2];
+    VdvBcdNumber bcdMonth;
+    VdvBcdNumber bcdDay;
+
+    inline uint16_t year() const
+    {
+        return bcdYear[0].value() * 100 + bcdYear[1].value();
+    }
+    inline uint8_t month() const
+    {
+        return bcdMonth.value();
+    }
+    inline uint8_t day() const
+    {
+        return bcdDay.value();
+    }
+};
 
 /** Signature container for the signed part of the payload data. */
 struct VdvSignature : public VdvTaggedSizeDataBlock<uint8_t, TagSignature> {};
@@ -172,7 +203,7 @@ struct VdvCertificateKey {
     VdvCaReference car;
     VdvCertificateHolderReference chr;
     VdvCertificateHolderAuthorization cha;
-    uint8_t date[4];
+    VdvBcdDate date;
     uint8_t oidBegin;
 
     inline uint8_t oidSize() const

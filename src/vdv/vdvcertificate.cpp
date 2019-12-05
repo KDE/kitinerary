@@ -19,6 +19,7 @@
 #include "vdvdata_p.h"
 #include "iso9796_2decoder_p.h"
 
+#include <QDate>
 #include <QDebug>
 #include <QFile>
 
@@ -145,6 +146,17 @@ void VdvCertificate::setCaCertificate(const VdvCertificate &caCert)
         m_type = Invalid;
         m_recoveredData.clear();
     }
+}
+
+bool VdvCertificate::isSelfSigned() const
+{
+    return memcmp(&certKey()->car, certKey()->chr.name, sizeof(VdvCaReference)) == 0;
+}
+
+QDate KItinerary::VdvCertificate::endOfValidity() const
+{
+    const auto key = certKey();
+    return QDate(key->date.year(), key->date.month(), key->date.day());
 }
 
 const VdvCertificateHeader* VdvCertificate::header() const

@@ -20,6 +20,8 @@
 
 #include <QByteArray>
 
+class QDate;
+
 namespace KItinerary {
 
 struct VdvCaReference;
@@ -57,6 +59,11 @@ public:
 
     /** Sets the CA certificate for decoding ISO 9796-2 signed certificates. */
     void setCaCertificate(const VdvCertificate &caCert);
+
+    /** Returns whether this is a self-signed (== root) certificate. */
+    bool isSelfSigned() const;
+    /** Returns the date this certificate expires. */
+    QDate endOfValidity() const;
 
 private:
     const VdvCertificateHeader *header() const;
