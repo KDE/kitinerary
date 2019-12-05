@@ -27,6 +27,7 @@ set(kitinerary_lib_srcs
     generic/genericpdfextractor.cpp
     generic/genericpkpassextractor.cpp
     generic/genericuic918extractor.cpp
+    generic/genericvdvextractor.cpp
     generic/structureddataextractor.cpp
 
     jsapi/barcode.cpp

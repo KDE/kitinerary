@@ -17,12 +17,14 @@
 
 #include "genericpdfextractor_p.h"
 #include "genericuic918extractor_p.h"
+#include "genericvdvextractor_p.h"
 
 #include <KItinerary/BarcodeDecoder>
 #include <KItinerary/IataBcbpParser>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/PdfDocument>
 #include <KItinerary/Uic9183Parser>
+#include <KItinerary/VdvTicketParser>
 
 #include <QDebug>
 #include <QImage>
@@ -123,6 +125,13 @@ GenericExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img, 
                 return GenericExtractor::Result{result, b, -1};
             }
             return {};
+        }
+
+        if (VdvTicketParser::maybeVdvTicket(b)) {
+            const auto result = GenericVdvExtractor::extract(b);
+            if (!result.isEmpty()) {
+                return GenericExtractor::Result{result, b, -1};
+            }
         }
     }
 
