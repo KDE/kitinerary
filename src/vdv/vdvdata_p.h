@@ -29,6 +29,8 @@ enum : uint8_t {
     TagCaReference = 0x42,
     TagOneByteSize = 0x81,
     TagTwoByteSize = 0x82,
+    TagTicketProductData = 0x85,
+    TagTicketProductTransactionData = 0x8A,
 };
 
 enum : uint16_t {
@@ -36,6 +38,10 @@ enum : uint16_t {
     TagCertificateSignature = 0x5F37,
     TagCertificateSignatureRemainder = 0x5F38,
     TagCertificateContent = 0x5F4E,
+};
+
+enum {
+    MinimumTicketDataSize = 111,
 };
 
 #pragma pack(push)
@@ -263,6 +269,38 @@ struct VdvTicketHeader
     uint16_t pvOrgId;
     VdvDateTimeCompact beginDt;
     VdvDateTimeCompact endDt;
+};
+
+/** Product-specific ticket data block.
+ *  Contains a set of TLV elements.
+ */
+struct VdvTicketProductData : public VdvSimpleDataBlock<uint8_t, TagTicketProductData> {};
+
+/** Ticket transaction data block. */
+struct VdvTicketTransactionData
+{
+    uint16_t kvpOrgId;
+    uint8_t terminalId[5];
+    VdvDateTimeCompact dt;
+    uint8_t locationId[6];
+};
+/** Product-specific transaction data block (variable length). */
+struct VdvTicketProductTransactionData : public VdvSimpleDataBlock<uint8_t, TagTicketProductTransactionData> {};
+
+/** Ticket issuer data block. */
+struct VdvTicketIssueData
+{
+    uint32_t samSeq1;
+    uint8_t version;
+    uint32_t samSeq2;
+    uint8_t samId[3];
+};
+
+/** Ticket trailer, after padding. */
+struct VdvTicketTrailer
+{
+    const char identifier[3];
+    uint16_t version;
 };
 
 #pragma pack(pop)

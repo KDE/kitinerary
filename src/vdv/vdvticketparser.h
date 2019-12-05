@@ -37,6 +37,8 @@ namespace KItinerary {
  *  which isn't entirely surprising given this also exists in a NFC card variant.
  *
  *  Do not use directly, only installed for use in tooling.
+ *
+ *  @see https://de.wikipedia.org/wiki/VDV-Kernapplikation
  */
 class KITINERARY_EXPORT VdvTicketParser
 {

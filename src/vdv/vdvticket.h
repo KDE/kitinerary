@@ -39,6 +39,9 @@ class KITINERARY_EXPORT VdvTicket
     /** End of the validity of this ticket. */
     Q_PROPERTY(QDateTime endDateTime READ endDateTime)
 
+    /** VDV organization identifier of the ticket issuer. */
+    Q_PROPERTY(int issuerId READ issuerId)
+
 public:
     VdvTicket();
     VdvTicket(const QByteArray &data);
@@ -48,6 +51,7 @@ public:
 
     QDateTime beginDateTime() const;
     QDateTime endDateTime() const;
+    int issuerId() const;
 
 private:
     QExplicitlySharedDataPointer<VdvTicketPrivate> d;

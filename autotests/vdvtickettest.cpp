@@ -53,6 +53,16 @@ private Q_SLOTS:
         QFETCH(bool, isVdv);
         QCOMPARE(VdvTicketParser::maybeVdvTicket(input), isVdv);
     }
+
+    void testTicket()
+    {
+        const auto data = QByteArray::fromHex("00f569d018f111d017d43b7d68003b8268008532da110000030000000000000992000000000000db0c000000000000000000000000dc0f1117d40000000004b000000000000018f110007a18f13b7974cfd400000017d48a00000105d601000105d602474200000000005644561400");
+
+        VdvTicket ticket(data);
+        QCOMPARE(ticket.issuerId(), 6385);
+        QCOMPARE(ticket.beginDateTime(), QDateTime({2019, 11, 29}, {13, 0}));
+        QCOMPARE(ticket.endDateTime(), QDateTime({2019, 12, 2}, {13, 0}));
+    }
 };
 
 QTEST_APPLESS_MAIN(VdvTicketTest)
