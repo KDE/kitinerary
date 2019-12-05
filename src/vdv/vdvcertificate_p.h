@@ -21,6 +21,7 @@
 #include <QByteArray>
 
 class QDate;
+class QIODevice;
 
 namespace KItinerary {
 
@@ -59,6 +60,9 @@ public:
 
     /** Sets the CA certificate for decoding ISO 9796-2 signed certificates. */
     void setCaCertificate(const VdvCertificate &caCert);
+
+    /** Write the key to @p out, in ISO 9796-2 format, without signatures. */
+    void writeKey(QIODevice *out) const;
 
     /** Returns whether this is a self-signed (== root) certificate. */
     bool isSelfSigned() const;

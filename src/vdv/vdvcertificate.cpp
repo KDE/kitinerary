@@ -148,6 +148,34 @@ void VdvCertificate::setCaCertificate(const VdvCertificate &caCert)
     }
 }
 
+static void writeTaggedSize(QIODevice *out, int size)
+{
+    if (size <= 255) {
+        out->write("\x81");
+        char size1 = (uint8_t)(size);
+        out->write(&size1, 1);
+    } else {
+        out->write("\x82");
+        uint16_t size2 = qToBigEndian((uint16_t)(size));
+        out->write((const char*)&size2, 2);
+    }
+}
+
+void VdvCertificate::writeKey(QIODevice *out) const
+{
+    out->write("\x7F\x21");
+    if (m_type == Signed) {
+        writeTaggedSize(out, m_recoveredData.size() + 3);
+        out->write("\x5F\x4E");
+        writeTaggedSize(out, m_recoveredData.size());
+        out->write(m_recoveredData);
+    } else if (m_type == Raw) {
+        const auto keyBlock = header()->contentAt<VdvCertificateKeyBlock>(0);
+        writeTaggedSize(out, keyBlock->size());
+        out->write((const char*)keyBlock, keyBlock->size());
+    }
+}
+
 bool VdvCertificate::isSelfSigned() const
 {
     return memcmp(&certKey()->car, certKey()->chr.name, sizeof(VdvCaReference)) == 0;
