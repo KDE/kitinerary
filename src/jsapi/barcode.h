@@ -63,6 +63,11 @@ public:
      *  @returns A JSON-LD structure representing the boarding pass.
      */
     Q_INVOKABLE QVariant decodeIataBcbp(const QString &s) const;
+    /** Decode an VDV ticket barcode.
+     *  @param s A QByteArray containing the raw VDV barcode data.
+     *  @returns An instance of VdvTicket.
+     */
+    Q_INVOKABLE QVariant decodeVdvTicket(const QVariant &s) const;
 
     /** Converts the given QByteArray into an base64 encoded string. */
     Q_INVOKABLE QString toBase64(const QVariant &b) const;

@@ -23,6 +23,8 @@
 #include <KItinerary/IataBcbpParser>
 #include <KItinerary/PdfDocument>
 #include <KItinerary/Uic9183Parser>
+#include <KItinerary/VdvTicket>
+#include <KItinerary/VdvTicketParser>
 
 #include <QImage>
 
@@ -108,6 +110,15 @@ QVariant JsApi::Barcode::decodeUic9183(const QVariant &s) const
 QVariant JsApi::Barcode::decodeIataBcbp(const QString &s) const
 {
     return QVariant::fromValue(IataBcbpParser::parse(s, m_contextDate.date()));
+}
+
+QVariant JsApi::Barcode::decodeVdvTicket(const QVariant &s) const
+{
+    VdvTicketParser p;
+    if (!p.parse(s.toByteArray())) {
+        return {};
+    }
+    return QVariant::fromValue(p.ticket());
 }
 
 QString JsApi::Barcode::toBase64(const QVariant &b) const
