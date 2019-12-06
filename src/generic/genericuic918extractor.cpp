@@ -17,6 +17,7 @@
 
 #include "genericuic918extractor_p.h"
 
+#include <KItinerary/JsonLdDocument>
 #include <KItinerary/Uic9183Parser>
 #include <KItinerary/Rct2Ticket>
 
@@ -45,6 +46,7 @@ void GenericUic918Extractor::extract(const QByteArray &data, QJsonArray &result,
     trip.insert(QStringLiteral("provider"), org);
     QJsonObject seat;
     seat.insert(QStringLiteral("@type"), QLatin1String("Seat"));
+    seat.insert(QStringLiteral("seatingType"), p.seatingType());
 
     const auto rct2 = p.rct2Ticket();
     if (rct2.isValid()) {
@@ -81,7 +83,6 @@ void GenericUic918Extractor::extract(const QByteArray &data, QJsonArray &result,
                     trip.insert(QStringLiteral("arrivalTime"), rct2.outboundArrivalTime().toString(Qt::ISODate));
                 }
 
-                seat.insert(QStringLiteral("seatingType"), rct2.outboundClass());
                 break;
             }
             default:
@@ -104,18 +105,12 @@ void GenericUic918Extractor::extract(const QByteArray &data, QJsonArray &result,
             break;
     }
 
-    QJsonObject person;
-    person.insert(QStringLiteral("@type"), QLatin1String("Person"));
-    if (!rct2.passengerName().isEmpty()) {
-        person.insert(QStringLiteral("name"), rct2.passengerName());
-    }
-
     QJsonObject res;
     res.insert(QStringLiteral("@type"), QLatin1String("TrainReservation"));
     res.insert(QStringLiteral("reservationFor"), trip);
     res.insert(QStringLiteral("reservationNumber"), p.pnr());
     res.insert(QStringLiteral("reservedTicket"), ticket);
-    res.insert(QStringLiteral("underName"), person);
+    res.insert(QStringLiteral("underName"), JsonLdDocument::toJson(p.person()));
 
     result.push_back(res);
 }
