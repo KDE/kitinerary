@@ -17,8 +17,11 @@
 
 #include "genericvdvextractor_p.h"
 
+#include <KItinerary/JsonLdDocument>
 #include <KItinerary/VdvTicket>
 #include <KItinerary/VdvTicketParser>
+
+#include <KLocalizedString>
 
 #include <QByteArray>
 #include <QJsonArray>
@@ -43,23 +46,32 @@ QJsonArray GenericVdvExtractor::extract(const QByteArray &data)
     trip.insert(QStringLiteral("provider"), org);
     QJsonObject seat;
     seat.insert(QStringLiteral("@type"), QLatin1String("Seat"));
-//     seat.insert(QStringLiteral("seatingType"), vdv.serviceClass());
+    switch (vdv.serviceClass()) {
+        case VdvTicket::FirstClass:
+        case VdvTicket::FirstClassUpgrade:
+            seat.insert(QStringLiteral("seatingType"), QStringLiteral("1"));
+            break;
+        case VdvTicket::SecondClass:
+            seat.insert(QStringLiteral("seatingType"), QStringLiteral("2"));
+            break;
+        default:
+            break;
+    }
 
     QJsonObject ticket;
     ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
     ticket.insert(QStringLiteral("ticketToken"), QString(QLatin1String("aztecbin:") + QString::fromLatin1(data.toBase64())));
     ticket.insert(QStringLiteral("ticketedSeat"), seat);
-
-    QJsonObject person;
-    person.insert(QStringLiteral("@type"), QLatin1String("Person"));
-//     person.insert(QStringLiteral("name"), vdv.passengerName());
+    if (vdv.serviceClass() == VdvTicket::FirstClassUpgrade) {
+        ticket.insert(QStringLiteral("name"), i18n("Upgrade"));
+    }
 
     QJsonObject res;
     res.insert(QStringLiteral("@type"), QLatin1String("TrainReservation"));
     res.insert(QStringLiteral("reservationFor"), trip);
-//     res.insert(QStringLiteral("reservationNumber"), vdv.ticketNumber());
+    res.insert(QStringLiteral("reservationNumber"), vdv.ticketNumber());
     res.insert(QStringLiteral("reservedTicket"), ticket);
-    res.insert(QStringLiteral("underName"), person);
+    res.insert(QStringLiteral("underName"), JsonLdDocument::toJson(vdv.person()));
 
     return {res};
 }

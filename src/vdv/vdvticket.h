@@ -20,6 +20,8 @@
 
 #include "kitinerary_export.h"
 
+#include <KItinerary/Person>
+
 #include <QDateTime>
 #include <QExplicitlySharedDataPointer>
 #include <QMetaType>
@@ -41,6 +43,12 @@ class KITINERARY_EXPORT VdvTicket
 
     /** VDV organization identifier of the ticket issuer. */
     Q_PROPERTY(int issuerId READ issuerId)
+    /** Service class for this ticket. */
+    Q_PROPERTY(ServiceClass serviceClass READ serviceClass)
+    /** The person this ticket is valid for. */
+    Q_PROPERTY(KItinerary::Person person READ person)
+    /** Ticket number. */
+    Q_PROPERTY(QString ticketNumber READ ticketNumber)
 
 public:
     VdvTicket();
@@ -52,6 +60,18 @@ public:
     QDateTime beginDateTime() const;
     QDateTime endDateTime() const;
     int issuerId() const;
+
+    enum ServiceClass {
+        UnknownClass = 0,
+        FirstClass = 1,
+        SecondClass = 2,
+        FirstClassUpgrade = 3
+    };
+    Q_ENUM(ServiceClass)
+    ServiceClass serviceClass() const;
+
+    Person person() const;
+    QString ticketNumber() const;
 
 private:
     QExplicitlySharedDataPointer<VdvTicketPrivate> d;
