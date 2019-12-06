@@ -63,7 +63,7 @@ function parseEvent(event)
         return null;
     }
 
-    var refNum = event.description.match(/(?:Reservation code|Buchungsnummer|Buchungscode):\s(\w+)\n/);
+    var refNum = event.description.match(/(?:Reservation code|Buchungsnummer|Buchungscode):\s(.+)\n/);
     res.reservationNumber = refNum[1];
 
     return res;
