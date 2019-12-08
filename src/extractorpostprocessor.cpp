@@ -231,6 +231,9 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
         applyStationData(record, station);
         const auto country = KnowledgeDb::countryIdForUicCode(id.midRef(4, 2).toUShort()).toString();
         applyStationCountry(country, station);
+    } else if (id.startsWith(QLatin1String("ir:")) && id.size() > 4) {
+        const auto record = KnowledgeDb::stationForIndianRailwaysStationCode(id.mid(3));
+        applyStationData(record, station);
     }
 
     return processPlace(station);

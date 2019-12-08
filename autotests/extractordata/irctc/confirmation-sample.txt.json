@@ -1,0 +1,57 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IN"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 28.411500930786133,
+                    "longitude": 77.30729675292969
+                },
+                "identifier": "ir:FDB",
+                "name": "FDB"
+            },
+            "departureDay": "2012-08-25",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IN"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 28.64229965209961,
+                    "longitude": 77.22000122070312
+                },
+                "identifier": "ir:NDLS",
+                "name": "NDLS"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2012-08-25T05:15:00+05:30",
+                "timezone": "Asia/Kolkata"
+            },
+            "trainNumber": "12138"
+        },
+        "reservationNumber": "2438941616",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "S7 49 S7 52 S7 55",
+                "seatingType": "SL"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "RAMESH KUMAR"
+        }
+    }
+]
