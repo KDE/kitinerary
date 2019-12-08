@@ -42,6 +42,7 @@ using namespace KItinerary;
 static void initResources() // must be outside of a namespace
 {
     Q_INIT_RESOURCE(extractors);
+    Q_INIT_RESOURCE(vdv_certs);
 }
 
 namespace KItinerary {
