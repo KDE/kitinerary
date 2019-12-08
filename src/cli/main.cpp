@@ -51,7 +51,7 @@ static void printCapabilities()
 
     std::cout << "PDF support         : "
 #ifdef HAVE_POPPLER
-              << "poppler"
+              << "poppler (" << KPOPPLER_VERSION_STRING << ")"
 #else
               << "not available"
 #endif
@@ -76,6 +76,14 @@ static void printCapabilities()
     std::cout << "Phone number decoder: "
 #ifdef HAVE_PHONENUMBER
               << "libphonenumber"
+#else
+              << "not available"
+#endif
+              << std::endl;
+
+    std::cout << "RSA support         : "
+#ifdef HAVE_OPENSSL_RSA
+              << "openssl"
 #else
               << "not available"
 #endif
