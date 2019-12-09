@@ -102,10 +102,8 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (conflictIfPresent(lhsTicket.ticketedSeat().seatNumber(), rhsTicket.ticketedSeat().seatNumber(), Qt::CaseInsensitive)) {
             return false;
         }
-        if (lhsTicket.ticketTokenType() == rhsTicket.ticketTokenType()) {
-            if (conflictIfPresent(lhsTicket.ticketToken(), rhsTicket.ticketToken())) {
-                return false;
-            }
+        if (conflictIfPresent(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())) {
+            return false;
         }
     }
 
