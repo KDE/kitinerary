@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "uic:9997",
+            "property": "reservationFor.provider.identifier",
+            "type": "JsonLd"
+        }
+    ],
+    "function": "parsePdf",
+    "script": "chaos-communication-congress.js",
+    "type": "Pdf"
+}
