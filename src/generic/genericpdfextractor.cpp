@@ -83,7 +83,7 @@ std::vector<GenericExtractor::Result> GenericPdfExtractor::extract(PdfDocument *
             }
 
             auto r = extractImage(img, result);
-            if (!r.barcode.isNull() || !r.result.isEmpty()) {
+            if (!r.isEmpty()) {
                 r.pageNum = i;
                 result.push_back(r);
             }
@@ -122,7 +122,7 @@ GenericExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img, 
             QJsonArray result;
             GenericUic918Extractor::extract(b, result, m_contextDate);
             if (!result.isEmpty()) {
-                return GenericExtractor::Result{result, b, -1};
+                return GenericExtractor::Result{result, b};
             }
             return {};
         }
@@ -130,7 +130,7 @@ GenericExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img, 
         if (VdvTicketParser::maybeVdvTicket(b)) {
             const auto result = GenericVdvExtractor::extract(b);
             if (!result.isEmpty()) {
-                return GenericExtractor::Result{result, b, -1};
+                return GenericExtractor::Result{result, b};
             }
         }
     }
@@ -145,11 +145,11 @@ GenericExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img, 
         if (IataBcbpParser::maybeIataBcbp(s)) {
             const auto res = IataBcbpParser::parse(s, m_contextDate.date());
             const auto jsonLd = JsonLdDocument::toJson(res);
-            return {jsonLd, s, -1};
+            return GenericExtractor::Result{jsonLd, s};
         }
     }
 
-    return {{}, s.isEmpty() ? b.isEmpty() ? QVariant() : QVariant(b) : QVariant(s), -1};
+    return GenericExtractor::Result{{}, s.isEmpty() ? b.isEmpty() ? QVariant() : QVariant(b) : QVariant(s)};
 }
 
 bool GenericPdfExtractor::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint)

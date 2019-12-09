@@ -18,3 +18,18 @@
 #include "genericextractor_p.h"
 
 using namespace KItinerary;
+
+GenericExtractor::Result::Result() = default;
+
+GenericExtractor::Result::Result(const QJsonArray &result, const QVariant &barcode)
+    : result(result)
+    , barcode(barcode)
+{
+}
+
+GenericExtractor::Result::~Result() = default;
+
+bool KItinerary::GenericExtractor::Result::isEmpty() const
+{
+    return result.isEmpty() && barcode.isNull();
+}

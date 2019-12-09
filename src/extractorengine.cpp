@@ -478,25 +478,25 @@ void ExtractorEnginePrivate::extractGeneric()
 {
     if (m_htmlDoc) {
         const auto res = StructuredDataExtractor::extract(m_htmlDoc.get());
-        m_genericResults.emplace_back(GenericExtractor::Result{res, {}, -1});
+        m_genericResults.emplace_back(GenericExtractor::Result{res});
     }
     else if (m_pdfDoc) {
         m_genericResults = m_genericPdfExtractor.extract(m_pdfDoc.get());
     }
     else if (m_pass) {
-        m_genericResults.emplace_back(GenericExtractor::Result{{GenericPkPassExtractor::extract(m_pass.get(), m_context->m_senderDate)}, {}, -1});
+        m_genericResults.emplace_back(GenericExtractor::Result{{GenericPkPassExtractor::extract(m_pass.get(), m_context->m_senderDate)}});
     }
     else  if (!m_text.isEmpty()) {
         if (IataBcbpParser::maybeIataBcbp(m_text)) {
             const auto res = IataBcbpParser::parse(m_text, m_context->m_senderDate.date());
-            m_genericResults.emplace_back(GenericExtractor::Result{JsonLdDocument::toJson(res), m_text, -1});
+            m_genericResults.emplace_back(GenericExtractor::Result{JsonLdDocument::toJson(res), m_text});
         }
     }
     else if (!m_data.isEmpty()) {
         if (Uic9183Parser::maybeUic9183(m_data)) {
             QJsonArray res;
             GenericUic918Extractor::extract(m_data, res, m_context->m_senderDate);
-            m_genericResults.emplace_back(GenericExtractor::Result{res, m_data, -1});
+            m_genericResults.emplace_back(GenericExtractor::Result{res, m_data});
             return;
         }
         // try again as text

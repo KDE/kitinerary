@@ -24,6 +24,7 @@ set(kitinerary_lib_srcs
     datatypes/rentalcar.cpp
     datatypes/visit.cpp
 
+    generic/genericextractor.cpp
     generic/genericpdfextractor.cpp
     generic/genericpkpassextractor.cpp
     generic/genericuic918extractor.cpp

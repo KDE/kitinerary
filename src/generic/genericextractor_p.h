@@ -26,12 +26,24 @@ namespace KItinerary {
 /** Shared bits between all generic extractors. */
 namespace GenericExtractor
 {
-    /** Generic extraction result. */
-    struct Result {
-        QJsonArray result; // JSON-LD data extracted from this document or page
-        QVariant barcode; // unrecognized barcode for further processing
-        int pageNum = -1; // page number, if result is from a single PDF page
-    };
+
+/** Generic extraction result. */
+class Result
+{
+public:
+    Result();
+    explicit Result(const QJsonArray &result, const QVariant &barcode = {});
+    ~Result();
+
+    /** Checks if there is any relevant result set in here. */
+    bool isEmpty() const;
+
+public: // TODO
+    QJsonArray result; // JSON-LD data extracted from this document or page
+    QVariant barcode; // unrecognized barcode for further processing
+    int pageNum = -1; // page number, if result is from a single PDF page
+};
+
 }
 
 }
