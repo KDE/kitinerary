@@ -26,6 +26,7 @@
 #include "generic/genericpdfextractor_p.h"
 #include "generic/genericpkpassextractor_p.h"
 #include "generic/genericuic918extractor_p.h"
+#include "generic/genericvdvextractor_p.h"
 #include "htmldocument.h"
 #include "iatabcbpparser.h"
 #include "jsonlddocument.h"
@@ -33,6 +34,7 @@
 #include "pdf/pdfdocument.h"
 #include "generic/structureddataextractor_p.h"
 #include "uic9183/uic9183parser.h"
+#include "vdv/vdvticketparser.h"
 
 #include "jsapi/barcode.h"
 #include "jsapi/context.h"
@@ -497,6 +499,12 @@ void ExtractorEnginePrivate::extractGeneric()
             QJsonArray res;
             GenericUic918Extractor::extract(m_data, res, m_context->m_senderDate);
             m_genericResults.emplace_back(GenericExtractor::Result{res, m_data});
+            return;
+        } else if (VdvTicketParser::maybeVdvTicket(m_data)) {
+            const auto res = GenericVdvExtractor::extract(m_data);
+            if (!res.isEmpty()) {
+                m_genericResults.emplace_back(GenericExtractor::Result(res, m_data));
+            }
             return;
         }
         // try again as text
