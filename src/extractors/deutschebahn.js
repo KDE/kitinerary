@@ -68,6 +68,18 @@ function parseArrival(res, line, year) {
     return true;
 }
 
+function convertToBus(res) {
+    res['@type'] = 'BusReservation';
+    res.reservationFor['@type'] = 'BusTrip';
+    res.reservationFor.departureBusStop = res.reservationFor.departureStation;
+    res.reservationFor.departureBusStop['@type'] = 'BusStop';
+    res.reservationFor.arrivalBusStop = res.reservationFor.arrivalStation;
+    res.reservationFor.arrivalBusStop['@type'] = 'BusStop';
+    res.reservationFor.busName = res.reservationFor.trainName;
+    res.reservationFor.busNumber = res.reservationFor.trainNumber;
+    res.reservedTicket.ticketedSeat = undefined;
+}
+
 function parseLegs(text, year, compact) {
     var reservations = new Array();
     var lines = text.split('\n');
@@ -177,8 +189,13 @@ function parseTicket(text, uic918ticket) {
     // international tickets have the booking reference somewhere on the side, so we don't really know
     // where it is relative to the itinerary
     var bookingRef = text.match(/(?:Auftragsnummer|Auftrag \(NVS\)):\s*([A-Z0-9]{6,9})\n/);
-    for (var i = 0; i < reservations.length; ++i)
+    for (var i = 0; i < reservations.length; ++i) {
         reservations[i].reservationNumber = bookingRef[1];
+
+        if (reservations[i].reservationFor.trainNumber && reservations[i].reservationFor.trainNumber.startsWith("Bus")) {
+            convertToBus(reservations[i]);
+        }
+    }
     return reservations;
 }
 
@@ -192,7 +209,9 @@ function parsePdf(pdf) {
         if (Context.data && Context.data.length > 0) {
             reservations[i].reservedTicket.name = Context.data[0].reservedTicket.name;
             reservations[i].underName = Context.data[0].underName;
-            reservations[i].reservedTicket.ticketedSeat.seatingType = Context.data[0].reservedTicket.ticketedSeat.seatingType;
+            if (reservations[i].reservedTicket.ticketedSeat) {
+                reservations[i].reservedTicket.ticketedSeat.seatingType = Context.data[0].reservedTicket.ticketedSeat.seatingType;
+            }
         }
     }
 
