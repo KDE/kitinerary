@@ -45,7 +45,7 @@ Vendor0080BLSubBlock::Vendor0080BLSubBlock(const Uic9183Block &block, int offset
         return;
     }
 
-    if (block.size() < offset + SBlockHeaderSize) {
+    if (block.contentSize() < offset + SBlockHeaderSize) {
         qCWarning(Log) << "0080BL S-block too small";
         return;
     }
@@ -55,7 +55,7 @@ Vendor0080BLSubBlock::Vendor0080BLSubBlock(const Uic9183Block &block, int offset
     }
 
     m_block = block;
-    if (block.size() < offset + size()) {
+    if (block.contentSize() < offset + size()) {
         qCWarning(Log) << "0080BL S-block size exceeds 0080BL block size";
         m_block = {};
     }
@@ -73,6 +73,9 @@ int Vendor0080BLSubBlock::size() const
 
 Vendor0080BLSubBlock Vendor0080BLSubBlock::nextBlock() const
 {
+    if (m_offset + size() >= m_block.contentSize()) { // we are the last block
+        return {};
+    }
     return Vendor0080BLSubBlock(m_block, m_offset + size());
 }
 
