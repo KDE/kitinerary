@@ -44,6 +44,7 @@ QJsonArray GenericVdvExtractor::extract(const QByteArray &data)
     QJsonObject trip;
     trip.insert(QStringLiteral("@type"), QLatin1String("TrainTrip"));
     trip.insert(QStringLiteral("provider"), org);
+    trip.insert(QStringLiteral("departureDay"), vdv.beginDateTime().date().toString(Qt::ISODate));
     QJsonObject seat;
     seat.insert(QStringLiteral("@type"), QLatin1String("Seat"));
     switch (vdv.serviceClass()) {
