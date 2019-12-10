@@ -38,10 +38,21 @@ public:
     /** Checks if there is any relevant result set in here. */
     bool isEmpty() const;
 
+    /** Unrecognized barcode for further processing.
+     *  Can be either a QByteArray or a QString.
+     */
+    QVariant barcode() const;
+
+    /** Page number, if result is from a single PDF page. */
+    int pageNumber() const;
+    void setPageNumber(int pageNum);
+
 public: // TODO
     QJsonArray result; // JSON-LD data extracted from this document or page
-    QVariant barcode; // unrecognized barcode for further processing
-    int pageNum = -1; // page number, if result is from a single PDF page
+
+private:
+    QVariant m_barcode;
+    int m_pageNum = -1;
 };
 
 }

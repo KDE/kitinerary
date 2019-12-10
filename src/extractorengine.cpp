@@ -539,7 +539,7 @@ void ExtractorEnginePrivate::determineExtractors()
         // check if generic extractors identified documents we have custom extractors for
         m_repo.extractorsForJsonLd(genericResult.result, m_extractors);
         // check the unrecognized (vendor-specific) barcodes, if any
-        m_repo.extractorsForBarcode(genericResult.barcode.toString(), m_extractors);
+        m_repo.extractorsForBarcode(genericResult.barcode().toString(), m_extractors);
     }
 }
 
@@ -601,11 +601,11 @@ void ExtractorEnginePrivate::extractCustomForGenericResults()
 {
     for (const auto &genericResult : m_genericResults) {
         // expose genericResult content to custom extractors via Context object
-        m_context->m_barcode = genericResult.barcode;
+        m_context->m_barcode = genericResult.barcode();
         if (!genericResult.result.empty()) {
             m_context->m_data = m_engine.toScriptValue(genericResult.result);
         }
-        m_context->m_pdfPageNum = genericResult.pageNum;
+        m_context->m_pdfPageNum = genericResult.pageNumber();
 
         // check if generic extractors identified documents we have custom extractors for
         const auto prevResults = m_result.size();

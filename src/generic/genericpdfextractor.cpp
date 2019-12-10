@@ -84,7 +84,7 @@ std::vector<GenericExtractor::Result> GenericPdfExtractor::extract(PdfDocument *
 
             auto r = extractImage(img, result);
             if (!r.isEmpty()) {
-                r.pageNum = i;
+                r.setPageNumber(i);
                 result.push_back(r);
             }
             if (img.hasObjectId()) {
@@ -99,7 +99,7 @@ std::vector<GenericExtractor::Result> GenericPdfExtractor::extract(PdfDocument *
 static bool containsBarcodeResult(const std::vector<GenericExtractor::Result> &results, const QVariant &barcode)
 {
     const auto it = std::find_if(results.begin(), results.end(), [barcode](const auto &result) {
-        return result.barcode == barcode;
+        return result.barcode() == barcode;
     });
     return it != results.end();
 }

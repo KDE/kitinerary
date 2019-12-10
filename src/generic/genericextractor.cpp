@@ -23,7 +23,7 @@ GenericExtractor::Result::Result() = default;
 
 GenericExtractor::Result::Result(const QJsonArray &result, const QVariant &barcode)
     : result(result)
-    , barcode(barcode)
+    , m_barcode(barcode)
 {
 }
 
@@ -31,5 +31,20 @@ GenericExtractor::Result::~Result() = default;
 
 bool KItinerary::GenericExtractor::Result::isEmpty() const
 {
-    return result.isEmpty() && barcode.isNull();
+    return result.isEmpty() && m_barcode.isNull();
+}
+
+QVariant GenericExtractor::Result::barcode() const
+{
+    return m_barcode;
+}
+
+int GenericExtractor::Result::pageNumber() const
+{
+    return m_pageNum;
+}
+
+void GenericExtractor::Result::setPageNumber(int pageNum)
+{
+    m_pageNum = pageNum;
 }
