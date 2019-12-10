@@ -522,7 +522,10 @@ void ExtractorEnginePrivate::determineExtractors()
         m_repo.extractorsForPass(m_pass.get(), m_extractors);
 #ifdef HAVE_KCAL
     } else if (m_calendar) {
-        m_repo.extractorsForCalendar(m_calendar, m_extractors);
+        m_repo.extractorsForCalendar(m_calendar.get(), m_extractors);
+        for (const auto &event : m_calendar->events()) {
+            m_repo.extractorsForEvent(event.get(), m_extractors);
+        }
 #endif
     }
     if (m_mimeContext) {

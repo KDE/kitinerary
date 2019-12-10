@@ -25,6 +25,7 @@
 
 #ifdef HAVE_KCAL
 #include <KCalendarCore/Calendar>
+#include <KCalendarCore/Event>
 #endif
 
 #include <KMime/Content>
@@ -35,6 +36,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMetaProperty>
 #include <QStandardPaths>
 
 using namespace KItinerary;
@@ -208,9 +210,8 @@ void ExtractorRepository::extractorsForBarcode(const QString &code, std::vector<
 }
 
 #ifdef HAVE_KCAL
-void ExtractorRepository::extractorsForCalendar(const QSharedPointer<KCalendarCore::Calendar> &cal, std::vector<Extractor> &extractors) const
+void ExtractorRepository::extractorsForCalendar(const KCalendarCore::Calendar *cal, std::vector<Extractor> &extractors) const
 {
-    std::vector<Extractor> v;
     for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
         for (const auto &filter : (*it).filters()) {
             if (filter.type() != ExtractorInput::ICal) {
@@ -218,6 +219,28 @@ void ExtractorRepository::extractorsForCalendar(const QSharedPointer<KCalendarCo
             }
 
             const auto value = cal->property(filter.fieldName().toUtf8().constData());
+            if (filter.matches(value.toString())) {
+                ExtractorRepositoryPrivate::insertExtractor(*it, extractors);
+                break;
+            }
+        }
+    }
+}
+
+void ExtractorRepository::extractorsForEvent(const KCalendarCore::Event *event, std::vector<Extractor> &extractors) const
+{
+    for (auto it = d->m_extractors.begin(), end = d->m_extractors.end(); it != end; ++it) {
+        for (const auto &filter : (*it).filters()) {
+            if (filter.type() != ExtractorInput::ICal) {
+                continue;
+            }
+
+            const auto propIdx = KCalendarCore::Event::staticMetaObject.indexOfProperty(filter.fieldName().toUtf8().constData());
+            if (propIdx < 0) {
+                continue;
+            }
+            const auto prop = KCalendarCore::Event::staticMetaObject.property(propIdx);
+            const auto value = prop.readOnGadget(event);
             if (filter.matches(value.toString())) {
                 ExtractorRepositoryPrivate::insertExtractor(*it, extractors);
                 break;
