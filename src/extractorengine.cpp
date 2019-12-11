@@ -470,7 +470,8 @@ void ExtractorEnginePrivate::extractDocument()
         // if we didn't find anything, let's use whatever the generic extractors found
         if (m_result.empty()) {
             for (const auto &gr : m_genericResults) {
-                std::copy(gr.result.begin(), gr.result.end(), std::back_inserter(m_result));
+                const auto r = gr.jsonLdResult();
+                std::copy(r.begin(), r.end(), std::back_inserter(m_result));
             }
         }
     }
@@ -486,12 +487,12 @@ void ExtractorEnginePrivate::extractGeneric()
         m_genericResults = m_genericPdfExtractor.extract(m_pdfDoc.get());
     }
     else if (m_pass) {
-        m_genericResults.emplace_back(GenericExtractor::Result{{GenericPkPassExtractor::extract(m_pass.get(), m_context->m_senderDate)}});
+        m_genericResults.emplace_back(GenericPkPassExtractor::extract(m_pass.get(), m_context->m_senderDate));
     }
     else  if (!m_text.isEmpty()) {
         if (IataBcbpParser::maybeIataBcbp(m_text)) {
             const auto res = IataBcbpParser::parse(m_text, m_context->m_senderDate.date());
-            m_genericResults.emplace_back(GenericExtractor::Result{JsonLdDocument::toJson(res), m_text});
+            m_genericResults.emplace_back(GenericExtractor::Result{res, m_text});
         }
     }
     else if (!m_data.isEmpty()) {
@@ -540,7 +541,7 @@ void ExtractorEnginePrivate::determineExtractors()
 
     for (const auto &genericResult : m_genericResults) {
         // check if generic extractors identified documents we have custom extractors for
-        m_repo.extractorsForJsonLd(genericResult.result, m_extractors);
+        m_repo.extractorsForJsonLd(genericResult.jsonLdResult(), m_extractors);
         // check the unrecognized (vendor-specific) barcodes, if any
         m_repo.extractorsForBarcode(genericResult.barcode().toString(), m_extractors);
     }
@@ -605,8 +606,8 @@ void ExtractorEnginePrivate::extractCustomForGenericResults()
     for (const auto &genericResult : m_genericResults) {
         // expose genericResult content to custom extractors via Context object
         m_context->m_barcode = genericResult.barcode();
-        if (!genericResult.result.empty()) {
-            m_context->m_data = m_engine.toScriptValue(genericResult.result);
+        if (!genericResult.jsonLdResult().isEmpty()) {
+            m_context->m_data = m_engine.toScriptValue(genericResult.jsonLdResult());
         }
         m_context->m_pdfPageNum = genericResult.pageNumber();
 
@@ -617,7 +618,8 @@ void ExtractorEnginePrivate::extractCustomForGenericResults()
 
         // if this didn't find something, take the generic extractor result as-is
         if (prevResults == m_result.size()) {
-            std::copy(genericResult.result.begin(), genericResult.result.end(), std::back_inserter(m_result));
+            const auto r = genericResult.jsonLdResult();
+            std::copy(r.begin(), r.end(), std::back_inserter(m_result));
         }
     }
 }

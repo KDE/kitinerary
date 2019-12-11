@@ -20,6 +20,8 @@
 #ifndef KITINERARY_GENERICPKPASSEXTRACTOR_P_H
 #define KITINERARY_GENERICPKPASSEXTRACTOR_P_H
 
+#include "genericextractor_p.h"
+
 namespace KPkPass {
 class Pass;
 }
@@ -32,7 +34,7 @@ namespace KItinerary {
 /** Generic extractor for PkPass files. */
 namespace GenericPkPassExtractor
 {
-    QJsonObject extract(KPkPass::Pass *pass, const QDateTime &contextDate);
+    GenericExtractor::Result extract(KPkPass::Pass *pass, const QDateTime &contextDate);
 }
 
 }

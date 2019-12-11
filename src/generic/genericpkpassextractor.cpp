@@ -190,7 +190,7 @@ static QDateTime iataContextDate(KPkPass::Pass *pass, const QDateTime &context)
     return pass->relevantDate().addDays(-1); // go a bit back, to compensate for unknown departure timezone at this point
 }
 
-QJsonObject GenericPkPassExtractor::extract(KPkPass::Pass *pass, const QDateTime &contextDate)
+GenericExtractor::Result GenericPkPassExtractor::extract(KPkPass::Pass *pass, const QDateTime &contextDate)
 {
     QJsonObject result;
     if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass)) {
@@ -211,7 +211,7 @@ QJsonObject GenericPkPassExtractor::extract(KPkPass::Pass *pass, const QDateTime
                 result.insert(QStringLiteral("@type"), QLatin1String("EventReservation"));
                 break;
             default:
-                return result;
+                return {};
         }
     }
 
@@ -284,5 +284,5 @@ QJsonObject GenericPkPassExtractor::extract(KPkPass::Pass *pass, const QDateTime
         result.insert(QStringLiteral("pkpassSerialNumber"), pass->serialNumber());
     }
 
-    return result;
+    return GenericExtractor::Result(QJsonArray({result}));
 }

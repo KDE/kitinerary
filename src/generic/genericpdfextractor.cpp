@@ -149,7 +149,7 @@ GenericExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img, 
         }
     }
 
-    return GenericExtractor::Result{{}, s.isEmpty() ? b.isEmpty() ? QVariant() : QVariant(b) : QVariant(s)};
+    return GenericExtractor::Result{QJsonArray(), s.isEmpty() ? b.isEmpty() ? QVariant() : QVariant(b) : QVariant(s)};
 }
 
 bool GenericPdfExtractor::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint)
