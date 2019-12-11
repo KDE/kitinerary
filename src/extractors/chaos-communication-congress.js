@@ -25,6 +25,8 @@ function parsePdf(pdf)
     var res = JsonLd.newEventReservation();
     res.reservationFor.name = ptTicket.person.name;
     res.reservationFor.location.name = "Congress Center Leipzig";
+    res.reservationFor.location.address.streetAddress = "Messeallee";
+    res.reservationFor.location.address.postalCode = "04356";
     res.reservationFor.location.address.addressLocality = "Leipzig";
     res.reservationFor.location.address.addressCountry = "DE";
     res.reservationFor.location.geo.latitude = 51.39737;
