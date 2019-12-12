@@ -36,9 +36,9 @@ class Uic9183TicketLayout;
 
 /** Parser for UIC 918.3 and 918.3* train tickets.
  *
- *  @see http://www.era.europa.eu/Document-Register/Documents/ERA_Technical_Document_TAP_B_7_v1.2.pdf
+ *  @see https://www.era.europa.eu/sites/default/files/filesystem/tap/baseline_1.2.0_archive/era_technical_document_tap_b_7_v1.2.pdf
  *    for information about the general UIC 918-3 structure
- *  @see http://www.era.europa.eu/Document-Register/Documents/ERA_Technical_Document_TAP_B_6_v1_2.pdf
+ *  @see https://www.era.europa.eu/sites/default/files/filesystem/tap/baseline_1.2.0_archive/era_technical_document_tap_b_6_v1.2.pdf
  *    for information about the U_TLAY block
  *  @see https://www.bahn.de/p/view/angebot/regio/barcode.shtml
  *    for information about the 0080VU vendor block

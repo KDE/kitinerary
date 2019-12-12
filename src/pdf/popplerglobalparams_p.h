@@ -15,8 +15,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef KITINERARY_POPPLERGLOBALPARAMS_H
-#define KITINERARY_POPPLERGLOBALPARAMS_H
+#ifndef KITINERARY_POPPLERGLOBALPARAMS_P_H
+#define KITINERARY_POPPLERGLOBALPARAMS_P_H
 
 #include <memory>
 
@@ -37,4 +37,4 @@ private:
 
 }
 
-#endif // KITINERARY_POPPLERGLOBALPARAMS_H
+#endif // KITINERARY_POPPLERGLOBALPARAMS_P_H

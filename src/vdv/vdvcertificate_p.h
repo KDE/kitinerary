@@ -15,8 +15,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef KITINERARY_VDVCERTIFICATE_H
-#define KITINERARY_VDVCERTIFICATE_H
+#ifndef KITINERARY_VDVCERTIFICATE_P_H
+#define KITINERARY_VDVCERTIFICATE_P_H
 
 #include <QByteArray>
 
@@ -92,4 +92,4 @@ namespace VdvPkiRepository
 
 }
 
-#endif // KITINERARY_VDVCERTIFICATE_H
+#endif // KITINERARY_VDVCERTIFICATE_P_H
