@@ -1,0 +1,46 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Brno, dolní nádraží"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2019-01-02T16:05:00+01:00",
+                "timezone": "Europe/Prague"
+            },
+            "departureDay": "2019-01-02",
+            "departureStation": {
+                "@type": "TrainStation",
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 48.18522644042969,
+                    "longitude": 16.376480102539062
+                },
+                "name": "Vienna, Hbf"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2019-01-02T14:39:00+01:00",
+                "timezone": "Europe/Vienna"
+            },
+            "trainNumber": "RJ, RJ 1234"
+        },
+        "reservationNumber": "9876543210",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "1/42"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Dr Konqui"
+        }
+    }
+]

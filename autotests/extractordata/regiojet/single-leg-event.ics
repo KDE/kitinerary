@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Michael Angstadt//biweekly 0.6.0//EN
+METHOD:REQUEST
+BEGIN:VEVENT
+DTSTAMP:20190101T123456Z
+DTSTART;TZID=Europe/Vienna:20190102T143900
+DTEND;TZID=Europe/Prague:20190102T160500
+CREATED:20190101T123456Z
+ATTENDEE;CN=Dr Konqui:mailto:null@kde.org
+SUMMARY:#9876543210: From Vienna\, Hbf\, to Brno\, dolní nádraží\, seat: 1/
+ 42
+DESCRIPTION:Arrival/Departure|Station/Transfer|Platf.|Connection|Coach/Seat
+ s\nDep:14:39|Vienna\, Hbf|Vienna → Prague (RJ\, RJ 1234)|1/42\nArr:16:05|B
+ rno\, dolní nádraží\n
+LOCATION:48.18522644042969\, 16.376480102539062
+UID:-1234567890@regiojet.cz
+SEQUENCE:1
+END:VEVENT
+END:VCALENDAR

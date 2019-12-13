@@ -1,7 +1,17 @@
-{
-    "filter": [
-        { "header": "From", "match": "express@studentagency.cz" },
-        { "header": "From", "match": "info@regiojet.cz" }
-    ],
-    "script": "regiojet.js"
-}
+[
+    {
+        "type": "text",
+        "filter": [
+            { "header": "From", "match": "express@studentagency.cz" },
+            { "header": "From", "match": "info@regiojet.cz" }
+        ],
+        "script": "regiojet.js",
+        "function": "main"
+    },
+    {
+        "type": "ical",
+        "filter": [ { "property": "uid", "match": "@regiojet.cz", "type": "ICal" } ],
+        "script": "regiojet.js",
+        "function": "parseEvent"
+    }
+]

@@ -215,3 +215,25 @@ function main(text) {
 
     return reservations;
 }
+
+function parseEvent(event)
+{
+    var res = JsonLd.newTrainReservation();
+    res.reservationFor.departureTime = JsonLd.readQDateTime(event, "dtStart");
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(event, "dtEnd");
+    res.underName.name = event.attendees[0].name;
+
+    var summary = event.summary.match(/#(.+?): From (.+?), to (.+?), seat: (.+)/);
+    res.reservationNumber = summary[1];
+    res.reservationFor.departureStation.name = summary[2];
+    res.reservationFor.arrivalStation.name = summary[3];
+    res.reservedTicket.ticketedSeat.seatNumber =summary[4];
+
+    var desc = event.description.match(/\((.+?)\)/);
+    res.reservationFor.trainNumber = desc[1];
+
+    var loc = event.location.match(/(.+?), (.+)/);
+    res.reservationFor.departureStation.geo.latitude = 1.0 * loc[1];
+    res.reservationFor.departureStation.geo.longitude = 1.0 * loc[2];
+    return res;
+}
