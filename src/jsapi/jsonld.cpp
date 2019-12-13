@@ -25,6 +25,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QLocale>
+#include <QMetaProperty>
 #include <QRegularExpression>
 #include <QUrl>
 
@@ -255,6 +256,22 @@ QJSValue JsApi::JsonLd::toGeoCoordinates(const QString &mapUrl)
     }
 
     return {};
+}
+
+QJSValue JsApi::JsonLd::readQDateTime(const QVariant &obj, const QString &propName) const
+{
+    const auto mo = QMetaType::metaObjectForType(obj.userType());
+    if (!mo) {
+        return {};
+    }
+    const auto propIdx = mo->indexOfProperty(propName.toUtf8().constData());
+    if (propIdx < 0) {
+        qWarning() << "Unknown property name:" << mo->className() << propName;
+        return {};
+    }
+    const auto prop = mo->property(propIdx);
+    const auto dt = prop.readOnGadget(obj.constData());
+    return toJson(dt);
 }
 
 void JsApi::JsonLd::setContextDate(const QDateTime& dt)

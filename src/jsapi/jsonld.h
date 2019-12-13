@@ -89,6 +89,15 @@ public:
      */
     Q_INVOKABLE QJSValue toGeoCoordinates(const QString &mapUrl);
 
+    /** Read a QDateTime property and return a JSON-LD serialization of it.
+     *  This is a workaround for JS destroying timezone information when getting in touch with a QDateTime
+     *  object. With this method it is safe to read a QDateTime property e.g. from a Qt gadget or QObject
+     *  without the risk of losing information.
+     *  @param obj The object to read from.
+     *  @param propName The name of the property to read.
+     */
+    Q_INVOKABLE QJSValue readQDateTime(const QVariant &obj, const QString &propName) const;
+
     ///@cond internal
     void setContextDate(const QDateTime &dt);
     ///@endcond
