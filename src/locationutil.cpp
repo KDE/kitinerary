@@ -41,7 +41,7 @@ bool LocationUtil::isLocationChange(const QVariant &res)
         }
         return !isSameLocation(pickup, dropoff);
     }
-    return JsonLd::isA<FlightReservation>(res) || JsonLd::isA<TrainReservation>(res) || JsonLd::isA<BusReservation>(res);
+    return JsonLd::isA<FlightReservation>(res) || JsonLd::isA<TrainReservation>(res) || JsonLd::isA<BusReservation>(res) || JsonLd::isA<TaxiReservation>(res);
 }
 
 QVariant LocationUtil::arrivalLocation(const QVariant &res)
@@ -74,6 +74,9 @@ QVariant LocationUtil::departureLocation(const QVariant &res)
     }
     if (JsonLd::isA<RentalCarReservation>(res)) {
         return res.value<RentalCarReservation>().pickupLocation();
+    }
+    if (JsonLd::isA<TaxiReservation>(res)) {
+        return res.value<TaxiReservation>().pickupLocation();
     }
     return {};
 }
