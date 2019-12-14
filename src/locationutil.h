@@ -68,7 +68,8 @@ int KITINERARY_EXPORT distance(const GeoCoordinates &coord1, const GeoCoordinate
 /** Location comparison accuracy. */
 enum Accuracy {
     Exact, ///< Locations match exactly
-    CityLevel ///< Locations are in the same city
+    CityLevel, ///< Locations are in the same city
+    WalkingDistance, ///< Locations are close enough together to not need transportation
 };
 
 /** Returns @c true if the given locations are the same.
