@@ -235,6 +235,12 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
         switch (accuracy) {
             case Exact:
                 return d < 100;
+            case WalkingDistance:
+            {
+                // airports are large but we have no local transport there, so the distance threshold needs to be higher there
+                const auto isAirport = JsonLd::isA<Airport>(lhs) || JsonLd::isA<Airport>(rhs);
+                return d < (isAirport ? 2000 : 1000);
+            }
             case CityLevel:
                 return d < 50000;
                 break;
@@ -246,6 +252,7 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
     const auto rhsAddr = address(rhs);
     switch (accuracy) {
         case Exact:
+        case WalkingDistance:
             if (!lhsAddr.streetAddress().isEmpty() && !lhsAddr.addressLocality().isEmpty()) {
                 return  lhsAddr.streetAddress() == rhsAddr.streetAddress() && lhsAddr.addressLocality() == rhsAddr.addressLocality();
             }
