@@ -19,6 +19,7 @@
 #include <kitinerary_version.h>
 
 #include <KItinerary/Extractor>
+#include <KItinerary/ExtractorCapabilities>
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorInput>
 #include <KItinerary/ExtractorPostprocessor>
@@ -41,56 +42,7 @@ using namespace KItinerary;
 
 static void printCapabilities()
 {
-    std::cout << "HTML support        : "
-#ifdef HAVE_LIBXML2
-              << "libxml2"
-#else
-              << "not available"
-#endif
-              << std::endl;
-
-    std::cout << "PDF support         : "
-#ifdef HAVE_POPPLER
-              << "poppler (" << KPOPPLER_VERSION_STRING << ")"
-#else
-              << "not available"
-#endif
-              << std::endl;
-
-    std::cout << "iCal support        : "
-#ifdef HAVE_KCAL
-              << "kcal"
-#else
-              << "not available"
-#endif
-              << std::endl;
-
-    std::cout << "Barcode decoder     : "
-#ifdef HAVE_ZXING
-              << "zxing"
-#else
-              << "not available"
-#endif
-              << std::endl;
-
-    std::cout << "Phone number decoder: "
-#ifdef HAVE_PHONENUMBER
-              << "libphonenumber"
-#else
-              << "not available"
-#endif
-              << std::endl;
-
-    std::cout << "RSA support         : "
-#ifdef HAVE_OPENSSL_RSA
-              << "openssl"
-#else
-              << "not available"
-#endif
-              << std::endl;
-
-    ExtractorRepository repo;
-    std::cout << "Extractor scripts   : " << repo.allExtractors().size() << std::endl;
+    std::cout << qPrintable(ExtractorCapabilities::capabilitiesString());
 }
 
 static void printExtractors()

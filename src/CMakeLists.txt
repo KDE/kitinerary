@@ -67,6 +67,7 @@ set(kitinerary_lib_srcs
     calendarhandler.cpp
     documentutil.cpp
     extractor.cpp
+    extractorcapabilities.cpp
     extractorengine.cpp
     extractorfilter.cpp
     extractorinput.cpp
@@ -101,6 +102,7 @@ set_target_properties(KPimItinerary PROPERTIES
 )
 target_include_directories(KPimItinerary INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_PIM}>")
 target_include_directories(KPimItinerary PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
+target_include_directories(KPimItinerary PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(KPimItinerary
     PUBLIC
         Qt5::Core
@@ -142,6 +144,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         CalendarHandler
         DocumentUtil
         Extractor
+        ExtractorCapabilities
         ExtractorEngine
         ExtractorFilter
         ExtractorInput
