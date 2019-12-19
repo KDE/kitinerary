@@ -1,0 +1,54 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "13C",
+        "passengerSequenceNumber": "42",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AK"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IT"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 45.630001068115234,
+                    "longitude": 8.72305965423584
+                },
+                "iataCode": "MXP"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "AT"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 48.11029815673828,
+                    "longitude": 16.569700241088867
+                },
+                "iataCode": "VIE"
+            },
+            "departureDay": "2019-09-06",
+            "flightNumber": "1996"
+        },
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1DRAGON/KONQUI       EXXX007 VIEMXPAK 1996 249J013C0042 167>5321WW8325BAK 0014123456002001414246700100141234789012A0141234567890 1AK AK 1234567890123    4PCYLX58Z^108ABCDEFGH"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DRAGON",
+            "givenName": "KONQUI",
+            "name": "KONQUI DRAGON"
+        }
+    }
+]
