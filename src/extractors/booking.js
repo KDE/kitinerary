@@ -109,11 +109,31 @@ function parseHtml(doc)
     res.reservationFor.name = elem.eval("(.//b|.//strong)")[0].content;
 
     var fullAddr = elem.eval(".//tr")[1].recursiveContent;
-    var addr = fullAddr.match(/^(.*), (.*?), (.*?), ([^,]*?)\s*-?\s*$/);
-    res.reservationFor.address.streetAddress = addr[1];
-    res.reservationFor.address.addressLocality = addr[2];
-    res.reservationFor.address.postalCode = addr[3];
-    res.reservationFor.address.addressCountry = addr[4];
+    var addrRegex = /^(.*), (.*?), (.*?), ([^,]*?)\s*-?\s*$/;
+
+    //HACK: Japanese addresses do not have the country set in Booking.com HTML
+    // and have a different HTML structure
+    if (!addrRegex.test(fullAddr)) {
+        // The first two elements are the hotel name and the hotel name in
+        // Japanese, skip to the third
+        var addressElement = elem.eval("string(.//tr[3]//td)");
+        // Booking.com addresses are always separated by "\n-\n"
+        // We split and get the first part, which is the romanized address
+        var fullAddr = addressElement.split("\n-\n")[0]
+        // Replace double spaces from the extraction
+        fullAddr = fullAddr.replace(/\s+/g, ' ');
+        var addr = fullAddr.match(addrRegex);
+        res.reservationFor.address.streetAddress = addr[4];
+        res.reservationFor.address.addressLocality = addr[2];
+        res.reservationFor.address.postalCode = addr[1];
+        res.reservationFor.addressCountry = "Japan";
+    } else {
+        var addr = fullAddr.match(addrRegex);
+        res.reservationFor.address.streetAddress = addr[1];
+        res.reservationFor.address.addressLocality = addr[2];
+        res.reservationFor.address.postalCode = addr[3];
+        res.reservationFor.address.addressCountry = addr[4];
+    }
 
     res.reservationFor.telephone = elem.eval(".//*[@class=\"u-phone\"]")[0].content;
 
