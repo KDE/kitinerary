@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "header": "From",
+            "match": "@rw.kintetsu.co.jp",
+            "type": "Email"
+        }
+    ],
+    "function": "main",
+    "script": "kintetsu.js",
+    "type": "text"
+}
+
