@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "header": "From",
+            "match": "noreply@norwegian",
+            "type": "Email"
+        }
+    ],
+    "function": "extractPdf",
+    "script": "norwegian.js",
+    "type": "Pdf"
+}
