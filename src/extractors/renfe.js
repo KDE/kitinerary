@@ -45,10 +45,12 @@ function parsePdf(pdf)
     var text = pdf.pages[Context.pdfPageNumber].text;
     var dep = text.match(/Salida +(.*?) {2,}([\d\/]+) +(\d\d:\d\d)/);
     res.reservationFor.departureStation.name = dep[1];
+    res.reservationFor.departureStation.identifier = "uic:71" + Context.barcode.substr(13, 5);
     res.reservationFor.departureTime = JsonLd.toDateTime(dep[2] + dep[3], "dd/MM/yyyyhh:mm", "es");
 
     var arr = text.match(/Llegada\s+(.*?) {2,}([\d\/]+) +(\d\d:\d\d)\n *(\S+) /);
     res.reservationFor.arrivalStation.name = arr[1];
+    res.reservationFor.arrivalStation.identifier = "uic:71" + Context.barcode.substr(18, 5);
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2] + arr[3], "dd/MM/yyyyhh:mm", "es");
     res.reservationFor.trainName = arr[4];
 
