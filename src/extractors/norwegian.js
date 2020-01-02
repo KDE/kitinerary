@@ -25,7 +25,7 @@ function extractPdf(pdf) {
         var pnr = page.text.match(/\nBooking reference.*(.{6})\n/);
         res.reservationNumber = pnr[1];
 
-        var name = page.text.match(/\nPassenger\s+\S+ (.*)\/(.*)\n/);
+        var name = page.text.match(/\nPassenger\s+(?:\S+)? ([A-Z ]+)\/(.+)\n/);
         res.underName.familyName = name[1];
         res.underName.givenName = name[2];
 
