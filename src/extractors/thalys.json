@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "header": "From",
+            "match": "thalysticket",
+            "type": "Email"
+        }
+    ],
+    "function": "parseReservation",
+    "script": "thalys.js",
+    "type": "Html"
+}
