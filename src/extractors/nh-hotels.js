@@ -50,7 +50,7 @@ function parseHtml(doc) {
             res.reservationFor.email = url.substr(7);
     }
 
-    var bookingRef = doc.eval("//table/tbody/tr/td/table/tbody/tr/td[2]")[0];
+    var bookingRef = doc.eval("//table//tr/td/table//tr/td[2]")[0];
     res.reservationNumber = bookingRef.content;
     var bookingRow = bookingRef.parent.nextSibling.nextSibling;
 
