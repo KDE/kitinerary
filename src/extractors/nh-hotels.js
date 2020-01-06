@@ -34,7 +34,7 @@ function parseHtml(doc) {
     res.reservationFor.name = nameElem.content;
 
     var addrElem = nameElem.parent.nextSibling.nextSibling.nextSibling.firstChild;
-    var addr = addrElem.content.match(/([^,]*), (.*)/);
+    var addr = addrElem.content.match(/(.*), ?([^,]*)/);
     res.reservationFor.address = JsonLd.newObject("PostalAddress");
     res.reservationFor.address.streetAddress = addr[1];
     res.reservationFor.address.addressLocality = addr[2];
