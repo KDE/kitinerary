@@ -1,0 +1,11 @@
+{
+    "filter": [
+        {
+            "match": "^\\x{10}",
+            "type": "Barcode"
+        }
+    ],
+    "function": "parseTicket",
+    "script": "vr.fi.js",
+    "type": "Pdf"
+}

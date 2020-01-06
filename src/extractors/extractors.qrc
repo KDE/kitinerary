@@ -91,6 +91,8 @@
         <file>trenitalia.js</file>
         <file>vgn.json</file>
         <file>vgn.js</file>
+        <file>vr.fi.json</file>
+        <file>vr.fi.js</file>
         <file>vueling.json</file>
         <file>vueling.js</file>
     </qresource>
