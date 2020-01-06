@@ -41,5 +41,10 @@ function parseReservation(html) {
     var tokenElem = html.eval('//table[@class="qrcode"]//img')[0];
     var token = tokenElem.attribute("src").match(/barcode\/tAZTEC\/.*\/nBinary\/v(.*)\/barcode.gif/);
     res.reservedTicket.ticketToken = "aztecbin:" + token[1];
+
+    var passengerElem = html.eval('//table[@class="passengername"]')[0];
+    var name = passengerElem.recursiveContent.match(/\n(.*)/);
+    res.underName.name = name[1];
+
     return res;
 }
