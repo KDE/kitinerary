@@ -126,3 +126,4 @@ install(EXPORT KPimItineraryTargets
         NAMESPACE KPim::
 )
 install(FILES org_kde_kitinerary.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+ki18n_install(po)
