@@ -21,10 +21,12 @@
 #include <config-kitinerary.h>
 #include <qglobal.h>
 
+#ifdef HAVE_POPPLER
 #if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 82, 0)
 using PopplerMaskColors = const int;
 #else
 using PopplerMaskColors = int;
+#endif
 #endif
 
 #endif // KITINERARY_POPPLERTYPES_P_H
