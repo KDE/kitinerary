@@ -18,6 +18,7 @@
 #include <config-kitinerary.h>
 #include <kitinerary_version.h>
 
+#include <KItinerary/CalendarHandler>
 #include <KItinerary/Extractor>
 #include <KItinerary/ExtractorCapabilities>
 #include <KItinerary/ExtractorEngine>
@@ -25,6 +26,12 @@
 #include <KItinerary/ExtractorPostprocessor>
 #include <KItinerary/ExtractorRepository>
 #include <KItinerary/JsonLdDocument>
+#include <KItinerary/MergeUtil>
+#include <KItinerary/Reservation>
+
+#include <KCalendarCore/Event>
+#include <KCalendarCore/ICalFormat>
+#include <KCalendarCore/MemoryCalendar>
 
 #include <QCommandLineParser>
 #include <QCoreApplication>
@@ -39,6 +46,39 @@
 #include <iostream>
 
 using namespace KItinerary;
+
+static QVector<QVector<QVariant>> batchReservations(const QVector<QVariant> &reservations)
+{
+    using namespace KItinerary;
+
+    QVector<QVector<QVariant>> batches;
+    QVector<QVariant> batch;
+
+    for (const auto &res : reservations) {
+        if (batch.isEmpty()) {
+            batch.push_back(res);
+            continue;
+        }
+
+        if (JsonLd::canConvert<Reservation>(res) && JsonLd::canConvert<Reservation>(batch.at(0))) {
+            const auto trip1 = JsonLd::convert<Reservation>(res).reservationFor();
+            const auto trip2 = JsonLd::convert<Reservation>(batch.at(0)).reservationFor();
+            if (KItinerary::MergeUtil::isSame(trip1, trip2)) {
+                batch.push_back(res);
+                continue;
+            }
+        }
+
+        batches.push_back(batch);
+        batch.clear();
+        batch.push_back(res);
+    }
+
+    if (!batch.isEmpty()) {
+        batches.push_back(batch);
+    }
+    return batches;
+}
 
 static void printCapabilities()
 {
@@ -82,6 +122,8 @@ int main(int argc, char** argv)
     parser.addOption(extOpt);
     QCommandLineOption pathsOpt({QStringLiteral("additional-search-path")}, QStringLiteral("Additional search path for extractors."), QStringLiteral("search-path"));
     parser.addOption(pathsOpt);
+    QCommandLineOption formatOpt({QStringLiteral("o"), QStringLiteral("output")}, QStringLiteral("Output format [JsonLd, iCal]. Default: JsonLd"), QStringLiteral("format"));
+    parser.addOption(formatOpt);
 
     parser.addPositionalArgument(QStringLiteral("input"), QStringLiteral("File to extract data from, omit for using stdin."));
     parser.process(app);
@@ -151,6 +193,19 @@ int main(int argc, char** argv)
         postproc.process(result);
     }
 
-    const auto postProcResult = JsonLdDocument::toJson(postproc.result());
-    std::cout << QJsonDocument(postProcResult).toJson().constData() << std::endl;
+
+    if (ExtractorInput::typeFromName(parser.value(formatOpt)) == ExtractorInput::ICal) {
+        const auto batches = batchReservations(postproc.result());
+        KCalendarCore::Calendar::Ptr cal(new KCalendarCore::MemoryCalendar(QTimeZone::systemTimeZone()));
+        for (const auto &batch : batches) {
+            KCalendarCore::Event::Ptr event(new KCalendarCore::Event);
+            CalendarHandler::fillEvent(batch, event);
+            cal->addEvent(event);
+        }
+        KCalendarCore::ICalFormat format;
+        std::cout << qPrintable(format.toString(cal));
+    } else {
+        const auto postProcResult = JsonLdDocument::toJson(postproc.result());
+        std::cout << QJsonDocument(postProcResult).toJson().constData() << std::endl;
+    }
 }
