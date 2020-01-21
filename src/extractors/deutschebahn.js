@@ -199,7 +199,48 @@ function parseTicket(text, uic918ticket) {
     return reservations;
 }
 
+function parseReservation(text) {
+    var reservations = Array();
+    var idx = 0;
+
+    while (true) {
+        var dep = text.substr(idx).match(/  (\S.*\S) +(\d\d.\d\d.\d\d) +ab (\d\d:\d\d)  +(.*?)  +([A-Z].*\S)  +(.*)\n/);
+        if (!dep)
+            return reservations;
+        idx += dep.index + dep[0].length;
+        var arr = text.substr(idx).match(/  (\S.*\S) +an (\d\d:\d\d)  +(.*?)  +(.*)\n/);
+        if (!arr)
+            return reservations;
+
+        var res = JsonLd.newTrainReservation();
+        res.reservationFor.departureStation.name = dep[1];
+        res.reservationFor.departureTime = JsonLd.toDateTime(dep[2] + dep[3], "dd.MM.yyhh:mm", "de");
+        res.reservationFor.trainNumber = dep[5];
+        res.reservationFor.departurePlatform = dep[4];
+        res.reservationFor.arrivalStation.name = arr[1];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(dep[2] + arr[2], "dd.MM.yyhh:mm", "de");
+        res.reservationFor.arrivalPlatform = arr[3];
+        reservations.push(res);
+
+        seatText = dep[6] + " " + arr[4];
+        var seat = seatText.match(/(\d)\. Klasse, Wg\. (\d+), Pl. (.*?),/);
+        if (seat) {
+            res.reservedTicket.ticketedSeat.seatingType = seat[1];
+            res.reservedTicket.ticketedSeat.seatSection = seat[2];
+            res.reservedTicket.ticketedSeat.seatNumber = seat[3];
+        }
+
+        idx += arr.index + arr[0].length;
+    }
+
+    return reservations;
+}
+
 function parsePdf(pdf) {
+    if (Context.pdfPageNumber < 0) { // no barcode
+        return parseReservation(pdf.pages[0].text);
+    }
+
     var page = pdf.pages[Context.pdfPageNumber];
     var uic918ticket = Barcode.decodeUic9183(Context.barcode);
 
