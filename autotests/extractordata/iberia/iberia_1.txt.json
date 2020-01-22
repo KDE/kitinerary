@@ -2,6 +2,7 @@
     {
         "@context": "http://schema.org",
         "@type": "FlightReservation",
+        "modifiedTime": "2017-12-29T18:46:02+01:00",
         "reservationFor": {
             "@type": "Flight",
             "airline": {
@@ -55,6 +56,7 @@
     {
         "@context": "http://schema.org",
         "@type": "FlightReservation",
+        "modifiedTime": "2017-12-29T18:46:02+01:00",
         "reservationFor": {
             "@type": "Flight",
             "airline": {
@@ -108,6 +110,7 @@
     {
         "@context": "http://schema.org",
         "@type": "FlightReservation",
+        "modifiedTime": "2017-12-29T18:46:02+01:00",
         "reservationFor": {
             "@type": "Flight",
             "airline": {
@@ -161,6 +164,7 @@
     {
         "@context": "http://schema.org",
         "@type": "FlightReservation",
+        "modifiedTime": "2017-12-29T18:46:02+01:00",
         "reservationFor": {
             "@type": "Flight",
             "airline": {

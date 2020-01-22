@@ -2,6 +2,7 @@
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "modifiedTime": "2017-12-29T18:46:02+01:00",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {

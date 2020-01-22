@@ -475,6 +475,15 @@ void ExtractorEnginePrivate::extractDocument()
             }
         }
     }
+
+    // set modification time for all results that don't have it yet
+    for (int i = 0; i < m_result.size(); ++i) {
+        auto res = m_result.at(i).toObject();
+        if (!res.contains(QLatin1String("modifiedTime"))) {
+            res.insert(QStringLiteral("modifiedTime"), m_context->m_senderDate.toString(Qt::ISODate));
+        }
+        m_result[i] = res;
+    }
 }
 
 void ExtractorEnginePrivate::extractGeneric()
