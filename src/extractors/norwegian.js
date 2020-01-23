@@ -55,7 +55,7 @@ function parsePage(page)
     }
 
     if (Context.barcode) {
-        res.reservedTicket.ticketToken = Context.barcode;
+        res.reservedTicket.ticketToken = "azteccode:" + Context.barcode;
     }
 
     return res;
