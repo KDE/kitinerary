@@ -1,0 +1,28 @@
+[
+    {
+        "@type": "FlightReservation",
+        "airplaneSeat": "06D",
+        "modifiedTime": "2019-12-19T00:00:00",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "XX"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "CPH",
+                "name": "Copenhagen"
+            },
+            "arrivalTime": "2020-01-05T12:15:00.000",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "PRG",
+                "name": "Prag"
+            },
+            "departureTime": "2020-01-05T10:55:00.000",
+            "flightNumber": "1234"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

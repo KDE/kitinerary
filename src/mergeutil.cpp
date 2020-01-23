@@ -534,6 +534,15 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
         return {};
     }
 
+    // prefer the element with the newer mtime, if we have that information
+    if (JsonLd::canConvert<Reservation>(lhs) && JsonLd::canConvert<Reservation>(rhs)) {
+        const auto lhsDt = JsonLd::convert<Reservation>(lhs).modifiedTime();
+        const auto rhsDt = JsonLd::convert<Reservation>(rhs).modifiedTime();
+        if (lhsDt.isValid() && rhsDt.isValid() && rhsDt < lhsDt) {
+            return MergeUtil::merge(rhs, lhs);
+        }
+    }
+
     auto res = lhs;
     const auto mo = QMetaType(res.userType()).metaObject();
     for (int i = 0; i < mo->propertyCount(); ++i) {

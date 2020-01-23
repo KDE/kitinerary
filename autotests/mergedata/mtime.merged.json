@@ -1,0 +1,32 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "airplaneSeat": "27E",
+    "modifiedTime": "2020-01-04T00:00:00",
+    "reservationFor": {
+        "@type": "Flight",
+        "airline": {
+            "@type": "Airline",
+            "iataCode": "DX"
+        },
+        "arrivalAirport": {
+            "@type": "Airport",
+            "iataCode": "CPH",
+            "name": "Copenhagen"
+        },
+        "arrivalTime": "2020-01-05T12:15:00",
+        "departureAirport": {
+            "@type": "Airport",
+            "iataCode": "PRG",
+            "name": "Prag"
+        },
+        "departureDay": "2021-01-05",
+        "departureTime": "2020-01-05T10:55:00",
+        "flightNumber": "1234"
+    },
+    "reservationNumber": "XXX007",
+    "reservedTicket": {
+        "@type": "Ticket",
+        "ticketToken": "aztecCode:M1..."
+    }
+}]

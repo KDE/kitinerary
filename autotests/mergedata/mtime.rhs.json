@@ -1,0 +1,31 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "27E",
+        "modifiedTime": "2020-01-04T00:00:00",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "DX"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "CPH"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "PRG"
+            },
+            "departureDay": "2021-01-05",
+            "flightNumber": "1234"
+        },
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1..."
+        }
+    }
+]
+
