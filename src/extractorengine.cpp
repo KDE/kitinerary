@@ -664,7 +664,7 @@ void ExtractorEnginePrivate::executeScript(const Extractor &extractor)
         return;
     }
 
-    qCDebug(Log) << "Running custom extractor" << extractor.scriptFileName() << extractor.scriptFunction();
+    //qCDebug(Log) << "Running custom extractor" << extractor.scriptFileName() << extractor.scriptFunction();
     QJSValueList args;
     switch (extractor.type()) {
         case ExtractorInput::Text:
