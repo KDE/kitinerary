@@ -1,0 +1,39 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2020-01-14T00:00:00Z",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "4 A-C",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Köln Hbf"
+            },
+            "arrivalTime": "2019-02-03T10:15:00",
+            "departureDay": "2019-02-03",
+            "departurePlatform": "3",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Bruxelles"
+            },
+            "departureTime": "2019-02-03T08:32:00",
+            "trainNumber": "ICE 13"
+        },
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecbin:foo",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Konqui",
+            "givenName": "Dragon",
+            "name": "Konqui Dragon"
+        }
+    }
+]

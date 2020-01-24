@@ -126,7 +126,7 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
     if (JsonLd::isA<TrainReservation>(lhs)) {
         const auto lhsRes = lhs.value<TrainReservation>();
         const auto rhsRes = rhs.value<TrainReservation>();
-        if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
+        if (conflictIfPresent(lhsRes.reservationNumber(), rhsRes.reservationNumber())) {
             return false;
         }
         return isSame(lhsRes.reservationFor(), rhsRes.reservationFor());
