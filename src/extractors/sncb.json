@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "header": "From",
+            "match": "ticketonline@b-rail.be",
+            "type": "Email"
+        }
+    ],
+    "function": "parsePdf",
+    "script": "sncb.js",
+    "type": "Pdf"
+}
