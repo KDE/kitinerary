@@ -102,7 +102,10 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (conflictIfPresent(lhsTicket.ticketedSeat().seatNumber(), rhsTicket.ticketedSeat().seatNumber(), Qt::CaseInsensitive)) {
             return false;
         }
-        if (conflictIfPresent(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())) {
+        // flight ticket tokens (IATA BCBP) can differ, so we need to compare the relevant bits in them manually
+        // this however happens automatically as they are unpacked to other fields by post-processing
+        // so we can simply skip this here for flights
+        if (!JsonLd::isA<FlightReservation>(lhs) && conflictIfPresent(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())) {
             return false;
         }
     }

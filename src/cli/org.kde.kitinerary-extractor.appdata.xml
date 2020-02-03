@@ -11,6 +11,7 @@
   <name xml:lang="fi">KItineraryn komentorivijäsennin</name>
   <name xml:lang="fr">Extracteur KItinerary en ligne de commande</name>
   <name xml:lang="gl">Extractor de liña de ordes de KItinerary</name>
+  <name xml:lang="ia">KItinerary extractor de commando in linea</name>
   <name xml:lang="id">KItinerary Command Line Extractor</name>
   <name xml:lang="it">Estrattore a riga di comando di KItinerary</name>
   <name xml:lang="nl">Extractor van opdrachtregel van KItinerary</name>
@@ -30,6 +31,7 @@
   <summary xml:lang="fi">Komentorivin varaustietojäsennin.</summary>
   <summary xml:lang="fr">Extracteur de données de réservation en ligne de commande.</summary>
   <summary xml:lang="gl">Extractor de datos de reservas de liña de ordes.</summary>
+  <summary xml:lang="ia">Extractor de datos de reservation como commando in linea</summary>
   <summary xml:lang="id">Pengekstrak data reservasi baris perintah.</summary>
   <summary xml:lang="it">Estrattore di dati di prenotazioni a riga di comando.</summary>
   <summary xml:lang="nl">Gegevensextractor van reservering op de opdrachtregel.</summary>
@@ -51,6 +53,7 @@
     <p xml:lang="fi">Komentorivijäsennin varaustiedoille kolmannen osapuolen sovelluksia varten.</p>
     <p xml:lang="fr">Extracteur en ligne de commande pour les données d'itinéraires, afin de les intégrer à des applications tierces.</p>
     <p xml:lang="gl">Extractor de liña de ordes de datos de itinerarios, para integrar con aplicacións de terceiros.</p>
+    <p xml:lang="ia">Commando de linea extractor  per datos de itinerario, de integrar in applications de tertie partes.</p>
     <p xml:lang="id">Pengekstrak baris data untuk data rencana perjalanan, untuk pengintegrasian ke dalam aplikasi pihak ketiga.</p>
     <p xml:lang="it">Estrattore a riga di comando per dati di itinerari, per l'integrazione con applicazioni di terze parti.</p>
     <p xml:lang="nl">Extractor van reisgegevens op de opdrachtregel, voor integratie in toepassingen van derden.</p>
