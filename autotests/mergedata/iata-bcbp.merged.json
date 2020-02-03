@@ -1,0 +1,45 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "airplaneSeat": "6D",
+    "modifiedTime": "2020-02-02T00:00:00Z",
+    "passengerSequenceNumber": "42",
+    "reservationFor": {
+        "@type": "Flight",
+        "airline": {
+            "@type": "Airline",
+            "iataCode": "SN"
+        },
+        "arrivalAirport": {
+            "@type": "Airport",
+            "iataCode": "TXL"
+        },
+        "arrivalTime": {
+            "@type": "QDateTime",
+            "@value": "2020-02-02T22:00:00+01:00",
+            "timezone": "Europe/Berlin"
+        },
+        "departureAirport": {
+            "@type": "Airport",
+            "iataCode": "BRU"
+        },
+        "departureDay": "2020-02-02",
+        "departureTime": {
+            "@type": "QDateTime",
+            "@value": "2020-02-02T20:40:00+01:00",
+            "timezone": "Europe/Brussels"
+        },
+        "flightNumber": "2591"
+    },
+    "reservationNumber": "XXX007",
+    "reservedTicket": {
+        "@type": "Ticket",
+        "ticketToken": "aztecCode:M1KRAUSE/VOLKERMR     EXXX007 BRUTXLSN 2591 033Y006D0042 35D>5181WW0033BSN              XXXXXXXXXXXXXXXX SN LH XXXXXXXXXXXXXXX     N*XXXXXXXXXXXXX       "
+    },
+    "underName": {
+        "@type": "Person",
+        "familyName": "KRAUSE",
+        "givenName": "VOLKERMR",
+        "name": "VOLKERMR KRAUSE"
+    }
+}]
