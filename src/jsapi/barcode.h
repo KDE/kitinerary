@@ -71,6 +71,8 @@ public:
 
     /** Converts the given QByteArray into an base64 encoded string. */
     Q_INVOKABLE QString toBase64(const QVariant &b) const;
+    /** Converts a given Base64 encoded string to a QByteArray. */
+    Q_INVOKABLE QVariant fromBase64(const QString &s) const;
     /** Converts the given QByteArray into a BitArray. */
     Q_INVOKABLE QVariant toBitArray(const QVariant &b) const;
 

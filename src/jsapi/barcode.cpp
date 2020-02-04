@@ -129,6 +129,11 @@ QString JsApi::Barcode::toBase64(const QVariant &b) const
     return QString::fromUtf8(b.toByteArray().toBase64());
 }
 
+QVariant JsApi::Barcode::fromBase64(const QString &s) const
+{
+    return QByteArray::fromBase64(s.toUtf8());
+}
+
 QVariant JsApi::Barcode::toBitArray(const QVariant &b) const
 {
     return QVariant::fromValue(JsApi::BitArray(b.toByteArray()));
