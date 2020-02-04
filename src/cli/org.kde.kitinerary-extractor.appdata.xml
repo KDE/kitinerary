@@ -5,6 +5,7 @@
   <project_license>LGPL-2.0+</project_license>
   <name>KItinerary Command Line Extractor</name>
   <name xml:lang="ca">Extractor de la línia d'ordres del KItinerary</name>
+  <name xml:lang="ca-valencia">Extractor de la línia d'ordres del KItinerary</name>
   <name xml:lang="en-GB">KItinerary Command Line Extractor</name>
   <name xml:lang="es">Extractor de línea de órdenes de KItinerary</name>
   <name xml:lang="fi">KItineraryn komentorivijäsennin</name>
@@ -23,6 +24,7 @@
   <name xml:lang="x-test">xxKItinerary Command Line Extractorxx</name>
   <summary>Command line reservation data extractor.</summary>
   <summary xml:lang="ca">Extractor de dades de reserves de la línia d'ordres.</summary>
+  <summary xml:lang="ca-valencia">Extractor de dades de reserves de la línia d'ordres.</summary>
   <summary xml:lang="cs">Extraktor dat rezervací v příkazové řádce.</summary>
   <summary xml:lang="en-GB">Command line reservation data extractor.</summary>
   <summary xml:lang="es">Extractor de línea de órdenes de reserva de datos.</summary>
@@ -45,6 +47,7 @@
     Command line extractor for itinerary data, for integrating into 3rd party applications.
     </p>
     <p xml:lang="ca">Extractor de dades d'itineraris de la línia d'ordres, per a la integració en aplicacions de tercers.</p>
+    <p xml:lang="ca-valencia">Extractor de dades d'itineraris de la línia d'ordres, per a la integració en aplicacions de tercers.</p>
     <p xml:lang="en-GB">Command line extractor for itinerary data, for integrating into 3rd party applications.</p>
     <p xml:lang="es">Extractor de línea de órdenes para datos de itinerario. para integración en aplicaciones de terceros.</p>
     <p xml:lang="fi">Komentorivijäsennin varaustiedoille kolmannen osapuolen sovelluksia varten.</p>
