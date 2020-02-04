@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KItinerary Extractor
 Name[ca]=KItinerary Extractor
+Name[ca@valencia]=KItinerary Extractor
 Name[cs]=Extraktor KItinerary
 Name[en_GB]=KItinerary Extractor
 Name[es]=Extractor de KItinerary
@@ -20,6 +21,7 @@ Name[uk]=Засіб видобування KItinerary
 Name[x-test]=xxKItinerary Extractorxx
 GenericName=KItinerary command line extractor
 GenericName[ca]=Extractor del KItinerary de la línia d'ordres
+GenericName[ca@valencia]=Extractor del KItinerary de la línia d'ordres
 GenericName[en_GB]=KItinerary command line extractor
 GenericName[es]=Extractor de línea de órdenes de KItinerary
 GenericName[fi]=KItineraryn komentorivijäsennin
@@ -41,6 +43,7 @@ Icon=map-globe
 Type=Application
 Comment=Command line reservation data extractor.
 Comment[ca]=Extractor de dades de reserves de la línia d'ordres.
+Comment[ca@valencia]=Extractor de dades de reserves de la línia d'ordres.
 Comment[en_GB]=Command line reservation data extractor.
 Comment[es]=Extractor de línea de órdenes de reserva de datos
 Comment[fi]=Komentorivin varaustietojäsennin.
