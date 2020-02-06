@@ -1,0 +1,32 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2020-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "ZONE BRUSSEL"
+            },
+            "departureDay": "2020-02-28",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "AMSTERDAM CENTRAAL"
+            }
+        },
+        "reservationNumber": "XXX007",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecbin:ABCDEFGH",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Dr Konqui"
+        }
+    }
+]

@@ -311,6 +311,16 @@ static bool isSameLineName(const QString &lhs, const QString &rhs)
 
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
 {
+    if (lhs.departureDay() != rhs.departureDay()) {
+        return false;
+    }
+
+    // for unbound tickets, comparing the line number below wont help
+    // so we have to use the slightly less robust location comparisson
+    if (!lhs.departureTime().isValid() && !rhs.departureTime().isValid()) {
+        return lhs.departureStation().name() == rhs.departureStation().name() && lhs.arrivalStation().name() == rhs.departureStation().name();
+    }
+
     if (lhs.trainNumber().isEmpty() || rhs.trainNumber().isEmpty()) {
         qCDebug(CompareLog) << "missing train number" << lhs.trainNumber() << rhs.trainNumber();
         return false;
