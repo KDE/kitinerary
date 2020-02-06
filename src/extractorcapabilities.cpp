@@ -30,6 +30,7 @@ QString ExtractorCapabilities::capabilitiesString()
 {
     const char s[] =
         "Engine version      : " KITINERARY_VERSION_STRING "\n"
+        "Qt version          : " QT_VERSION_STR "\n"
 
         "HTML support        : "
 #ifdef HAVE_LIBXML2
