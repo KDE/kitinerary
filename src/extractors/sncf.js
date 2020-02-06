@@ -151,7 +151,10 @@ function parseHtmlConfirmation(html)
                 res.reservationFor.arrivalTime = JsonLd.toDateTime(dt + segmentDetail.content, "d MMMMhh'h'mm", "fr");
                 segmentDetail = segmentDetail.nextSibling;
                 res.reservationFor.arrivalStation.name = segmentDetail.content;
-                reservations.push(res);
+                // HACK drop invalid elements so the structured fallback kicks in correctly
+                // this should be done automatically in the engine
+                if (res.reservationFor.departureTime > 0)
+                    reservations.push(res);
             }
             else if (cls === "segment") {
                 res.reservationFor.trainName = segmentDetail.content;
