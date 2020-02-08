@@ -34,3 +34,29 @@ function main(pdf) {
     res.reservationFor.arrivalAirport.name = to[1];
     return res;
 }
+
+function parseHtml(doc) {
+    var pnrElem = doc.eval('//td[@class="barcode1"]')[0];
+    var pnr = pnrElem.content.match(/: ([A-Z0-9]{6})/)[1];
+
+    var reservations = new Array();
+    var row = doc.eval('//table//table//tr/th/..')[2].nextSibling;
+    while (!row.isNull) {
+        var res = JsonLd.newFlightReservation();
+        res.reservationNumber = pnr;
+
+        var f = row.recursiveContent.match(/(.*)\n(.*)\n\s*(\d{2}:\d{2})\s*\n\s*([A-Z0-9]{2}) *(\d{1,4})\s*\n(?:.*\n)*\s*(\d{2}:\d{2})\s*\n(.*)\n\s*(\d{2}:\d{2})/);
+
+        res.reservationFor.departureAirport.name = f[2];
+        res.reservationFor.arrivalAirport.name = f[7];
+        res.reservationFor.airline.iataCode = f[4];
+        res.reservationFor.flightNumber = f[5];
+        res.reservationFor.departureTime = JsonLd.toDateTime(f[1]+f[3], "dd MMM yyhh:mm", "en");
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(f[1]+f[8], "dd MMM yyhh:mm", "en");
+
+        reservations.push(res);
+        row = row.nextSibling;
+    }
+
+    return reservations;
+}
