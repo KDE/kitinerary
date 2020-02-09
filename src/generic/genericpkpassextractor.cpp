@@ -244,6 +244,9 @@ GenericExtractor::Result GenericPkPassExtractor::extract(KPkPass::Pass *pass, co
         const auto bcbpData = IataBcbpParser::parse(bcbp, iataContextDate(pass, contextDate).date());
         if (bcbpData.size() == 1) {
             res = JsonLdDocument::apply(bcbpData.at(0), res).value<FlightReservation>();
+        } else {
+            // if this doesn't contain IATA BCBP data we wont be able to get sufficient information out of this
+            return {};
         }
     }
 
