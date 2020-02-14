@@ -234,6 +234,8 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
     } else if (id.startsWith(QLatin1String("ir:")) && id.size() > 4) {
         const auto record = KnowledgeDb::stationForIndianRailwaysStationCode(id.mid(3));
         applyStationData(record, station);
+    } else if (id.startsWith(QLatin1String("benerail:")) && id.size() == 14) {
+        applyStationCountry(id.mid(9, 2).toUpper(), station);
     }
 
     return processPlace(station);
