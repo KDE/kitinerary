@@ -14,6 +14,7 @@
   <name xml:lang="ia">KItinerary extractor de commando in linea</name>
   <name xml:lang="id">KItinerary Command Line Extractor</name>
   <name xml:lang="it">Estrattore a riga di comando di KItinerary</name>
+  <name xml:lang="ko">KItinerary 명령행 추출기</name>
   <name xml:lang="nl">Extractor van opdrachtregel van KItinerary</name>
   <name xml:lang="pl">Wydobywane danych z wiersza poleceń KItinerary</name>
   <name xml:lang="pt">Extracção da Linha de Comandos do KItinerary</name>
@@ -34,6 +35,7 @@
   <summary xml:lang="ia">Extractor de datos de reservation como commando in linea</summary>
   <summary xml:lang="id">Pengekstrak data reservasi baris perintah.</summary>
   <summary xml:lang="it">Estrattore di dati di prenotazioni a riga di comando.</summary>
+  <summary xml:lang="ko">명령행 예약 데이터 추출기입니다.</summary>
   <summary xml:lang="nl">Gegevensextractor van reservering op de opdrachtregel.</summary>
   <summary xml:lang="pl">Wydobywane danych o rezerwacji z wiersza poleceń.</summary>
   <summary xml:lang="pt">Extracção de dados de reservas na linha de comandos.</summary>
@@ -56,6 +58,7 @@
     <p xml:lang="ia">Commando de linea extractor  per datos de itinerario, de integrar in applications de tertie partes.</p>
     <p xml:lang="id">Pengekstrak baris data untuk data rencana perjalanan, untuk pengintegrasian ke dalam aplikasi pihak ketiga.</p>
     <p xml:lang="it">Estrattore a riga di comando per dati di itinerari, per l'integrazione con applicazioni di terze parti.</p>
+    <p xml:lang="ko">외부 프로그램에 통합할 수 있는 명령행 여행 정보 추출기입니다.</p>
     <p xml:lang="nl">Extractor van reisgegevens op de opdrachtregel, voor integratie in toepassingen van derden.</p>
     <p xml:lang="pl">Wydobywane danych z wiersza poleceń dla planu podróży, do zszywania z aplikacjami osób trzecich.</p>
     <p xml:lang="pt">Extracção pela linha de comandos de dados de itinerários, para se integrar com aplicações de terceiros.</p>
