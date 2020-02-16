@@ -72,7 +72,7 @@ using namespace KCalendarCore;
 static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
 static void fillTrainReservation(const TrainReservation &reservation, const KCalendarCore::Event::Ptr &event);
 static void fillBusReservation(const BusReservation &reservation, const KCalendarCore::Event::Ptr &event);
-static void fillLodgingReservation(const LodgingReservation &reservation, const KCalendarCore::Event::Ptr &event);
+static void fillLodgingReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
 static void fillEventReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
 static void fillGeoPosition(const QVariant &place, const KCalendarCore::Event::Ptr &event);
 static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalendarCore::Event::Ptr &event);
@@ -133,7 +133,7 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
     if (typeId == qMetaTypeId<FlightReservation>()) {
         fillFlightReservation(reservations, event);
     } else if (typeId == qMetaTypeId<LodgingReservation>()) {
-        fillLodgingReservation(reservation.value<LodgingReservation>(), event);
+        fillLodgingReservation(reservations, event);
     } else if (typeId == qMetaTypeId<TrainReservation>()) {
         fillTrainReservation(reservation.value<TrainReservation>(), event);
     } else if (typeId == qMetaTypeId<BusReservation>()) {
@@ -290,8 +290,9 @@ static void fillBusReservation(const BusReservation &reservation, const KCalenda
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillLodgingReservation(const LodgingReservation &reservation, const KCalendarCore::Event::Ptr &event)
+static void fillLodgingReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event)
 {
+    const auto reservation = reservations.at(0).value<LodgingReservation>();
     const auto lodgingBusiness = reservation.reservationFor().value<LodgingBusiness>();
 
     event->setSummary(i18n("Hotel reservation: %1", lodgingBusiness.name()));
@@ -301,11 +302,36 @@ static void fillLodgingReservation(const LodgingReservation &reservation, const 
     event->setDtStart(QDateTime(reservation.checkinTime().date(), QTime()));
     event->setDtEnd(QDateTime(reservation.checkoutTime().date(), QTime()));
     event->setAllDay(true);
-    event->setDescription(i18n("Check-in: %1\nCheck-out: %2\nBooking reference: %3",
-                               QLocale().toString(reservation.checkinTime().time(), QLocale::ShortFormat),
-                               QLocale().toString(reservation.checkoutTime().time(), QLocale::ShortFormat),
-                               reservation.reservationNumber()));
     event->setTransparency(KCalendarCore::Event::Transparent);
+
+    QStringList desc;
+    if (reservation.checkinTime().isValid()) {
+        desc.push_back(i18n("Check-in: %1", QLocale().toString(reservation.checkinTime().time(), QLocale::ShortFormat)));
+    }
+    if (reservation.checkoutTime().isValid()) {
+        desc.push_back(i18n("Check-out: %1", QLocale().toString(reservation.checkoutTime().time(), QLocale::ShortFormat)));
+    }
+    if (!lodgingBusiness.telephone().isEmpty()) {
+        desc.push_back(i18n("Phone: %1", lodgingBusiness.telephone()));
+    }
+    if (!lodgingBusiness.email().isEmpty()) {
+        desc.push_back(i18n("Email: %1", lodgingBusiness.email()));
+    }
+    if (!lodgingBusiness.url().isEmpty()) {
+        desc.push_back(i18n("Website: %1", lodgingBusiness.url().toString()));
+    }
+
+    for (const auto &r : reservations) {
+        const auto reservation = r.value<LodgingReservation>();
+        const auto person = reservation.underName().value<KItinerary::Person>();
+        if (!person.name().isEmpty()) {
+            desc.push_back(person.name());
+        }
+        if (!reservation.reservationNumber().isEmpty()) {
+            desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
+        }
+    }
+    event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
 static void fillEventReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event)
