@@ -39,6 +39,7 @@ class Pass;
 }
 
 class QJsonArray;
+class QJsonValue;
 class QString;
 class QStringList;
 
@@ -88,6 +89,13 @@ public:
     QStringList additionalSearchPaths() const;
     /** Sets additional search paths to look for extractors. */
     void setAdditionalSearchPaths(const QStringList &searchPaths);
+
+    ///@cond internal
+    /** JSON serialization of @p extractor, including all other Extractor definitions in the same file, if any.
+     *  Only for tooling, do not use otherwise.
+     */
+    QJsonValue extractorToJson(const Extractor &extractor) const;
+    ///@endcond
 
 private:
     ExtractorRepositoryPrivate* d;

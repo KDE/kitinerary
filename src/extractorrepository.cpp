@@ -341,3 +341,28 @@ void ExtractorRepository::setAdditionalSearchPaths(const QStringList& searchPath
 {
     d->m_extraSearchPaths = searchPaths;
 }
+
+QJsonValue ExtractorRepository::extractorToJson(const Extractor &extractor) const
+{
+    QJsonArray a;
+    bool added = false;
+    for (const auto &e : d->m_extractors) {
+        if (e.fileName() != extractor.fileName()) {
+            continue;
+        }
+        if (extractor.name() == e.name()) {
+            a.push_back(extractor.toJson());
+            added = true;
+        } else {
+            a.push_back(e.toJson());
+        }
+    }
+    if (!added) {
+        a.push_back(extractor.toJson());
+    }
+
+    if (a.size() == 1) {
+        return a.at(0);
+    }
+    return a;
+}
