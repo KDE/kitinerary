@@ -92,11 +92,31 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
 #ifdef HAVE_POPPLER
     PopplerGlobalParams gp;
 
+    const auto page = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1);
+    const auto pageRect = page->getCropBox();
+
+    double l, t, r, b;
+    switch (page->getRotate()) {
+        case 0:
+            l = ratio(pageRect->x1, pageRect->x2, left);
+            t = ratio(pageRect->y1, pageRect->y2, top);
+            r = ratio(pageRect->x1, pageRect->x2, right);
+            b = ratio(pageRect->y1, pageRect->y2, bottom);
+            break;
+        case 90:
+            l = ratio(pageRect->y1, pageRect->y2, left);
+            t = ratio(pageRect->x1, pageRect->x2, top);
+            r = ratio(pageRect->y1, pageRect->y2, right);
+            b = ratio(pageRect->x1, pageRect->x2, bottom);
+            break;
+        default:
+            qCWarning(Log) << "Unsupported page rotation!" << page->getRotate();
+            return {};
+    }
+
     TextOutputDev device(nullptr, false, 0, false, false);
     d->m_doc->m_popplerDoc->displayPageSlice(&device, d->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
-    const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
-    std::unique_ptr<GooString> s(device.getText(ratio(pageRect->x1, pageRect->x2, left), ratio(pageRect->y1, pageRect->y2, top),
-                                                ratio(pageRect->x1, pageRect->x2, right), ratio(pageRect->y1, pageRect->y2, bottom)));
+    std::unique_ptr<GooString> s(device.getText(l, t, r, b));
 #if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     return QString::fromUtf8(s->c_str());
 #else
