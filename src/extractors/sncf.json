@@ -1,23 +1,54 @@
 [
     {
-        "type": "pdf",
         "filter": [
-            { "header": "From", "match": "e-billet@sncf.fr" },
-            { "type": "Barcode", "match": "^i0CV" }
+            {
+                "header": "From",
+                "match": "e-billet@sncf.fr",
+                "type": "Email"
+            },
+            {
+                "match": "^i0CV",
+                "type": "Barcode"
+            }
         ],
+        "function": "parsePdf",
         "script": "sncf.js",
-        "function": "parsePdf"
+        "type": "Pdf"
     },
     {
-        "type": "text",
-        "filter": [ { "header": "From", "match": "UNITTEST-e-billet@sncf.fr" } ],
+        "filter": [
+            {
+                "header": "From",
+                "match": "UNITTEST-e-billet@sncf.fr",
+                "type": "Email"
+            }
+        ],
+        "function": "parseText",
         "script": "sncf.js",
-        "function": "parseText"
+        "type": "Text"
     },
     {
-        "type": "html",
-        "filter": [ { "header": "From", "match": "oui.sncf" } ],
+        "filter": [
+            {
+                "header": "From",
+                "match": "oui.sncf",
+                "type": "Email"
+            }
+        ],
+        "function": "parseOuigoConfirmation",
         "script": "sncf.js",
-        "function": "parseHtmlConfirmation"
+        "type": "Html"
+    },
+    {
+        "filter": [
+            {
+                "header": "From",
+                "match": "ne-pas-repondre@pasngr.ouigo.com",
+                "type": "Email"
+            }
+        ],
+        "function": "parseOuigoTicket",
+        "script": "sncf.js",
+        "type": "Pdf"
     }
 ]

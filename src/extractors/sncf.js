@@ -121,7 +121,7 @@ function parsePdf(pdf) {
     return reservations;
 }
 
-function parseHtmlConfirmation(html)
+function parseOuigoConfirmation(html)
 {
     var reservations = new Array();
 
@@ -168,4 +168,26 @@ function parseHtmlConfirmation(html)
     }
 
     return reservations;
+}
+
+function parseOuigoTicket(pdf) {
+    var text = pdf.pages[0].textInRect(0, 0, 0.5, 1);
+
+    var res = JsonLd.newTrainReservation();
+    res.reservationNumber = text.match(/numéro de réservation est\s*:\s*([\w]{6})\n/)[1];
+    var trip = text.match(/(\d{2} .+ \d{4})\n\s*(\d{2}h\d{2})\s*(.*?)\n\s*(\d{2}h\d{2})\s*(.*?)\n/);
+    res.reservationFor.departureStation.name = trip[3];
+    res.reservationFor.departureTime = JsonLd.toDateTime(trip[1] + trip[2], "dd MMMM yyyyhh'h'mm", "fr");
+    res.reservationFor.arrivalStation.name = trip[5];
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[1] + trip[4], "dd MMMM yyyyhh'h'mm", "fr");
+
+    res.reservationFor.trainNumber = text.match(/N°\s*(\S+)/)[1];
+
+    var seat = text.match(/Voiture\s*(\S+)\s*Place\s*(\S+)/);
+    res.reservedTicket.ticketedSeat.seatSection = seat[1];
+    res.reservedTicket.ticketedSeat.seatNumber = seat[2];
+    if (Context.barcode) {
+        res.reservedTicket.ticketToken = "acteccode:" + Context.barcode;
+    }
+    return res;
 }
