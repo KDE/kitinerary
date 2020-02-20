@@ -34,7 +34,7 @@ using namespace KItinerary;
 
 static bool filterLodgingReservation(const LodgingReservation &res)
 {
-    return res.checkinTime().isValid() && res.checkoutTime().isValid();
+    return res.checkinTime().isValid() && res.checkoutTime().isValid() && res.checkinTime() <= res.checkoutTime();
 }
 
 static bool filterAirport(const Airport &airport)
