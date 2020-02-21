@@ -15,6 +15,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <config-kitinerary.h>
+
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPostprocessor>
 #include <KItinerary/HtmlDocument>
@@ -123,6 +125,12 @@ private Q_SLOTS:
             QSKIP("nothing extracted");
             return;
         }
+#ifndef HAVE_ZXING
+        if (jsonResult.isEmpty()) {
+            QSKIP("nothing extracted, but ZXing is missing!");
+            return;
+        }
+#endif
         QVERIFY(!jsonResult.isEmpty());
         const auto result = JsonLdDocument::fromJson(jsonResult);
         ExtractorPostprocessor postproc;
