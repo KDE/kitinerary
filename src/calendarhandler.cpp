@@ -73,6 +73,7 @@ static void fillFlightReservation(const QVector<QVariant> &reservations, const K
 static void fillTrainReservation(const TrainReservation &reservation, const KCalendarCore::Event::Ptr &event);
 static void fillBusReservation(const BusReservation &reservation, const KCalendarCore::Event::Ptr &event);
 static void fillLodgingReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
+static void fillEvent(const KItinerary::Event &ev, const KCalCore::Event::Ptr &event);
 static void fillEventReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
 static void fillGeoPosition(const QVariant &place, const KCalendarCore::Event::Ptr &event);
 static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalendarCore::Event::Ptr &event);
@@ -83,7 +84,7 @@ static void fillTaxiReservation(const TaxiReservation &reservation, const KCalen
 QSharedPointer<KCalendarCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation)
 {
 #ifdef HAVE_KCAL
-    if (!JsonLd::canConvert<Reservation>(reservation) || !calendar) {
+    if (!(JsonLd::canConvert<Reservation>(reservation) || JsonLd::canConvert<KItinerary::Event>(reservation)) || !calendar) {
         return {};
     }
 
@@ -140,6 +141,8 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
         fillBusReservation(reservation.value<BusReservation>(), event);
     } else if (JsonLd::isA<EventReservation>(reservation)) {
         fillEventReservation(reservations, event);
+    } else if  (JsonLd::isA<Event>(reservation)) {
+        fillEvent(reservation.value<KItinerary::Event>(), event);
     } else if (JsonLd::isA<FoodEstablishmentReservation>(reservation)) {
         fillFoodReservation(reservation.value<FoodEstablishmentReservation>(), event);
     } else if (JsonLd::isA<RentalCarReservation>(reservation)) {
@@ -334,9 +337,8 @@ static void fillLodgingReservation(const QVector<QVariant> &reservations, const 
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillEventReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event)
+static void fillEvent(const KItinerary::Event &ev, const KCalCore::Event::Ptr &event)
 {
-    const auto ev = reservations.at(0).value<EventReservation>().reservationFor().value<KItinerary::Event>();
     Place location;
     if (JsonLd::canConvert<Place>(ev.location())) {
         location = JsonLd::convert<Place>(ev.location());
@@ -363,6 +365,12 @@ static void fillEventReservation(const QVector<QVariant> &reservations, const KC
             event->addAlarm(alarm);
         }
     }
+}
+
+static void fillEventReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event)
+{
+    const auto ev = reservations.at(0).value<EventReservation>().reservationFor().value<KItinerary::Event>();
+    fillEvent(ev, event);
 
     QStringList desc;
     for (const auto &r : reservations) {

@@ -84,26 +84,24 @@ private Q_SLOTS:
         format.load(refCal, icalFile);
 
         const auto refEvents = refCal->rawEvents(KCalendarCore::EventSortStartDate, KCalendarCore::SortDirectionAscending);
-        QCOMPARE(refEvents.size(), inArray.size());
-        for (int i = 0; i < inArray.size(); ++i) {
-            Event::Ptr newEvent(new Event);
-            CalendarHandler::fillEvent(postproc.result(), newEvent);
+        QCOMPARE(refEvents.size(), 1);
+        Event::Ptr newEvent(new Event);
+        CalendarHandler::fillEvent(postproc.result(), newEvent);
 
-            // sync volatile fields, we only care for differences elsewhere
-            const auto &refEvent = refEvents.at(i);
-            newEvent->setUid(refEvent->uid());
-            newEvent->setLastModified(refEvent->lastModified());
-            newEvent->setCreated(refEvent->created());
+        // sync volatile fields, we only care for differences elsewhere
+        const auto &refEvent = refEvents.at(0);
+        newEvent->setUid(refEvent->uid());
+        newEvent->setLastModified(refEvent->lastModified());
+        newEvent->setCreated(refEvent->created());
 
-            if (*newEvent != *refEvent) {
-                qDebug().noquote() << "Actual: " << format.toICalString(newEvent);
-                qDebug().noquote() << "Expected: " << format.toICalString(refEvent);
-            }
-
-            QCOMPARE(newEvent->dtStart(), refEvent->dtStart());
-            QCOMPARE(newEvent->dtEnd(), refEvent->dtEnd());
-            QVERIFY(*newEvent == *refEvent);
+        if (*newEvent != *refEvent) {
+            qDebug().noquote() << "Actual: " << format.toICalString(newEvent).remove(QLatin1Char('\r'));
+            qDebug().noquote() << "Expected: " << format.toICalString(refEvent).remove(QLatin1Char('\r'));
         }
+
+        QCOMPARE(newEvent->dtStart(), refEvent->dtStart());
+        QCOMPARE(newEvent->dtEnd(), refEvent->dtEnd());
+        QVERIFY(*newEvent == *refEvent);
     }
 
     void testFindEvent_data()
