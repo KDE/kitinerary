@@ -24,6 +24,7 @@
 #include "extractorinput.h"
 #include "extractorrepository.h"
 #include "generic/genericpdfextractor_p.h"
+#include "generic/genericicalextractor_p.h"
 #include "generic/genericpkpassextractor_p.h"
 #include "generic/genericuic918extractor_p.h"
 #include "generic/genericvdvextractor_p.h"
@@ -498,6 +499,11 @@ void ExtractorEnginePrivate::extractGeneric()
     else if (m_pass) {
         m_genericResults.emplace_back(GenericPkPassExtractor::extract(m_pass.get(), m_context->m_senderDate));
     }
+#ifdef HAVE_KCAL
+    else if (m_calendar) {
+        m_genericResults = GenericIcalExtractor::extract(m_calendar);
+    }
+#endif
     else  if (!m_text.isEmpty()) {
         if (IataBcbpParser::maybeIataBcbp(m_text)) {
             const auto res = IataBcbpParser::parse(m_text, m_context->m_senderDate.date());

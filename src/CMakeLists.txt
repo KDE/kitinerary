@@ -25,6 +25,7 @@ set(kitinerary_lib_srcs
     datatypes/visit.cpp
 
     generic/genericextractor.cpp
+    generic/genericicalextractor.cpp
     generic/genericpdfextractor.cpp
     generic/genericpkpassextractor.cpp
     generic/genericuic918extractor.cpp

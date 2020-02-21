@@ -18,3 +18,5 @@ Makefile
 .cmake/
 CMakeLists.txt.user*
 *.unc-backup*
+*.fail
+*.rej
