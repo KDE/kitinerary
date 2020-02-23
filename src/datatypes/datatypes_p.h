@@ -112,6 +112,11 @@ KITINERARY_MAKE_CLASS_IMPL(Class) \
 Class::Class() : d(*s_ ## Class ## _shared_null()) {} \
 Class::Class(Class ## Private *dd) : d(dd) {}
 
+#define KITINERARY_MAKE_INTERMEDIATE_CLASS(Class, Base) \
+KITINERARY_MAKE_CLASS_IMPL(Class) \
+Class::Class() : Base(s_ ## Class ## _shared_null()->data()) {} \
+Class::Class(Class ## Private *dd) : Base(dd) {}
+
 #define KITINERARY_MAKE_SUB_CLASS(Class, Base) \
 KITINERARY_MAKE_CLASS_IMPL(Class) \
 Class::Class() : Base(s_ ## Class ## _shared_null()->data()) {}

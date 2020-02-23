@@ -62,18 +62,25 @@ KITINERARY_MAKE_SUB_CLASS(Airline, Organization)
 KITINERARY_MAKE_PROPERTY(Airline, QString, iataCode, setIataCode)
 KITINERARY_MAKE_OPERATOR(Airline)
 
-class FoodEstablishmentPrivate: public OrganizationPrivate
+class LocalBusinessPrivate : public OrganizationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(LocalBusiness)
+};
+KITINERARY_MAKE_INTERMEDIATE_CLASS(LocalBusiness, Organization)
+KITINERARY_MAKE_OPERATOR(LocalBusiness)
+
+class FoodEstablishmentPrivate: public LocalBusinessPrivate
 {
     KITINERARY_PRIVATE_GADGET(FoodEstablishment)
 };
-KITINERARY_MAKE_SUB_CLASS(FoodEstablishment, Organization)
+KITINERARY_MAKE_SUB_CLASS(FoodEstablishment, LocalBusiness)
 KITINERARY_MAKE_OPERATOR(FoodEstablishment)
 
-class LodgingBusinessPrivate : public OrganizationPrivate
+class LodgingBusinessPrivate : public LocalBusinessPrivate
 {
     KITINERARY_PRIVATE_GADGET(LodgingBusiness)
 };
-KITINERARY_MAKE_SUB_CLASS(LodgingBusiness, Organization)
+KITINERARY_MAKE_SUB_CLASS(LodgingBusiness, LocalBusiness)
 KITINERARY_MAKE_OPERATOR(LodgingBusiness)
 
 }
