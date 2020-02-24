@@ -45,6 +45,7 @@ class KITINERARY_EXPORT Organization
     KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(QString, description, setDescription)
     KITINERARY_PROPERTY(QUrl, image, setImage)
+    KITINERARY_PROPERTY(QUrl, logo, setLogo)
     KITINERARY_PROPERTY(QString, email, setEmail)
     KITINERARY_PROPERTY(QString, telephone, setTelephone)
     KITINERARY_PROPERTY(QUrl, url, setUrl)

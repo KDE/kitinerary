@@ -31,6 +31,7 @@ public:
     QString name;
     QString description;
     QUrl image;
+    QUrl logo;
     QString email;
     QString telephone;
     QUrl url;
@@ -43,6 +44,7 @@ KITINERARY_MAKE_BASE_CLASS(Organization)
 KITINERARY_MAKE_PROPERTY(Organization, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Organization, QString, description, setDescription)
 KITINERARY_MAKE_PROPERTY(Organization, QUrl, image, setImage)
+KITINERARY_MAKE_PROPERTY(Organization, QUrl, logo, setLogo)
 KITINERARY_MAKE_PROPERTY(Organization, QString, email, setEmail)
 KITINERARY_MAKE_PROPERTY(Organization, QString, telephone, setTelephone)
 KITINERARY_MAKE_PROPERTY(Organization, QUrl, url, setUrl)
