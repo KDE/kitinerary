@@ -162,6 +162,22 @@ static void filterBusTrip(QJsonObject &trip)
     renameProperty(trip, "busCompany", "provider");
 }
 
+static void filterFoodEstablishment(QJsonObject &restaurant)
+{
+    // This can be a bool, "Yes"/"No", or a URL.
+    auto reservationsValue = restaurant.value(QLatin1String("acceptsReservations"));
+    if (reservationsValue.isString()) {
+        const QString reservations = reservationsValue.toString();
+        if (reservations == QLatin1String("Yes")) {
+            restaurant.insert(QLatin1String("acceptsReservations"), true);
+        } else if (reservations == QLatin1String("No")) {
+            restaurant.insert(QLatin1String("acceptsReservations"), false);
+        } else {
+            migrateToAction(restaurant, "acceptsReservations", "ReserveAction", true);
+        }
+    }
+}
+
 static void filterActionTarget(QJsonObject &action)
 {
     QJsonArray targets;
@@ -242,6 +258,7 @@ static const struct {
 } type_filters[] = {
     { "BusTrip", filterBusTrip },
     { "Flight", filterFlight },
+    { "FoodEstablishment", filterFoodEstablishment },
     { "LodgingReservation", filterLodgingReservation },
     { "TrainTrip", filterTrainTrip },
 };
