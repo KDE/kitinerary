@@ -10,6 +10,7 @@
             "postalCode": "10019",
             "streetAddress": "148 W 51st St"
         },
+        "image": "https://example.com/photos/1x1/photo.jpg",
         "name": "Trattoria Luigi"
     }
 ]
