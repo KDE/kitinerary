@@ -81,14 +81,9 @@ static bool filterFoodReservation(const FoodEstablishmentReservation &res)
     return res.startTime().isValid();
 }
 
-static bool filterFoodEstablishment(const FoodEstablishment &res)
+static bool filterLocalBusiness(const LocalBusiness &business)
 {
-    return !res.name().isEmpty();
-}
-
-static bool filterLodgingBusiness(const LodgingBusiness &hotel)
-{
-    return !hotel.name().isEmpty();
+    return !business.name().isEmpty();
 }
 
 bool ExtractorValidator::isValidElement(const QVariant &elem)
@@ -124,11 +119,8 @@ bool ExtractorValidator::isValidElement(const QVariant &elem)
     if (JsonLd::isA<Event>(elem)) {
         return filterEvent(elem.value<Event>());
     }
-    if (JsonLd::isA<FoodEstablishment>(elem)) {
-        return filterFoodEstablishment(elem.value<FoodEstablishment>());
-    }
-    if (JsonLd::isA<LodgingBusiness>(elem)) {
-        return filterLodgingBusiness(elem.value<LodgingBusiness>());
+    if (JsonLd::canConvert<LocalBusiness>(elem)) {
+        return filterLocalBusiness(JsonLd::convert<LocalBusiness>(elem));
     }
 
     // types without specific filters yet
