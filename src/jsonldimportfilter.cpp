@@ -311,5 +311,10 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         res.insert(QStringLiteral("potentialAction"), filterActions(actions));
     }
 
+    const auto image = res.value(QLatin1String("image"));
+    if (image.isArray()) {
+        res.insert(QStringLiteral("image"), image.toArray().first());
+    }
+
     return res;
 }
