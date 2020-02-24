@@ -329,9 +329,17 @@ QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
         res.insert(QStringLiteral("potentialAction"), filterActions(actions));
     }
 
-    const auto image = res.value(QLatin1String("image"));
+    auto image = res.value(QLatin1String("image"));
     if (image.isArray()) {
         res.insert(QStringLiteral("image"), image.toArray().first());
+    }
+
+    image = res.value(QLatin1String("image"));
+    if (image.isObject()) {
+        const auto imageObject = image.toObject();
+        if (imageObject.value(QLatin1String("@type")).toString() == QLatin1String("ImageObject")) {
+            res.insert(QStringLiteral("image"), imageObject.value(QLatin1String("url")));
+        }
     }
 
     return res;
