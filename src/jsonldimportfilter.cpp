@@ -264,14 +264,15 @@ static void filterRecursive(QJsonArray &array)
 
 static void filterRecursive(QJsonObject &obj)
 {
-    const auto type = obj.value(QLatin1String("@type")).toString().toUtf8();
+    auto type = obj.value(QLatin1String("@type")).toString().toUtf8();
 
     // normalize type
     const auto it = std::lower_bound(std::begin(type_mapping), std::end(type_mapping), type, [](const auto &lhs, const auto &rhs) {
         return std::strcmp(lhs.fromType, rhs.constData()) < 0;
     });
     if (it != std::end(type_mapping) && std::strcmp((*it).fromType, type.constData()) == 0) {
-        obj.insert(QStringLiteral("@type"), QLatin1String((*it).toType));
+        type = it->toType;
+        obj.insert(QStringLiteral("@type"), QLatin1String(type));
     }
 
     for (auto it = obj.begin(); it != obj.end(); ++it) {
