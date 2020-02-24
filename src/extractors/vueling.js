@@ -24,6 +24,8 @@ function parseHtmlBooking(doc) {
     if (!bookingRef)
         return null;
 
+    var lang = doc.eval('//a[@class="copyright-text"]')[0].attribute("href").match(/\/([a-z]{2})$/)[1];
+
     var elems = doc.eval("//td[@class=\"vuelo_confirmado_card__subheader\"]");
     for (var i = 0; i < elems.length; ++i) {
         var elem = elems[i];
@@ -40,12 +42,12 @@ function parseHtmlBooking(doc) {
         res.reservationFor.arrivalAirport.name = airportName.nextSibling.content;
 
         var time = detailsRoot.eval(".//td[@class=\"vuelo_confirmado_card_details--time\"]")[0];
-        res.reservationFor.departureTime = JsonLd.toDateTime(elem.content + ' ' + time.content.replace('h', ''), "dddd, dd MMMM yyyy HH:mm", "es");
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(elem.content + ' ' + time.nextSibling.content.replace('h', ''), "dddd, dd MMMM yyyy HH:mm", "es");
+        res.reservationFor.departureTime = JsonLd.toDateTime(elem.content + ' ' + time.content.replace('h', ''), "dddd, dd MMMM yyyy HH:mm", lang);
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(elem.content + ' ' + time.nextSibling.content.replace('h', ''), "dddd, dd MMMM yyyy HH:mm", lang);
 
-        var flightNum = detailsRoot.eval(".//td[@class=\"v-middle vuelo_confirmado_card_details--numVuelo\"]")[0].content;
-        res.reservationFor.flightNumber = flightNum.substr(2);
-        res.reservationFor.airline.iataCode = flightNum.substr(0, 2);
+        var flightNum = detailsRoot.recursiveContent.match(/\s([A-Z0-9]{2})(\d{1,4})\b/);
+        res.reservationFor.flightNumber = flightNum[2];
+        res.reservationFor.airline.iataCode = flightNum[1];
 
         reservations.push(res);
     }
