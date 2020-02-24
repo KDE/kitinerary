@@ -16,6 +16,7 @@
 */
 
 #include "jsonldimportfilter.h"
+#include "logging.h"
 
 #include <QDebug>
 #include <QJsonArray>
@@ -135,6 +136,18 @@ static void filterReservation(QJsonObject &res)
             ticket.insert(QStringLiteral("ticketToken"), token);
             res.insert(QStringLiteral("reservedTicket"), ticket);
             res.remove(QStringLiteral("ticketToken"));
+        }
+    }
+
+    // unpack reservationFor array - if we ever encounter more than one element in here we'd need to multiply the result
+    const auto resFor = res.value(QLatin1String("reservationFor"));
+    if (resFor.isArray()) {
+        const auto a = resFor.toArray();
+        if (a.size() > 1) {
+            qCWarning(Log) << "Found reservationFor array with" << a.size() << "elements!";
+        }
+        if (!a.isEmpty()) {
+            res.insert(QStringLiteral("reservationFor"), a.at(0));
         }
     }
 

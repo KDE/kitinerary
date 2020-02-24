@@ -32,6 +32,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QObject>
+#include <QProcess>
 #include <QTest>
 #include <QTimeZone>
 
@@ -40,6 +41,14 @@ using namespace KItinerary;
 class JsonLdDocumentTest : public QObject
 {
     Q_OBJECT
+private:
+    QByteArray readFile(const QString &fn)
+    {
+        QFile f(fn);
+        f.open(QFile::ReadOnly);
+        return f.readAll();
+    }
+
 private Q_SLOTS:
     void initTestCase()
     {
@@ -408,6 +417,50 @@ private Q_SLOTS:
         const auto flight = data[0].value<Flight>();
         QCOMPARE(flight.departureTime(), result);
         QCOMPARE(flight.departureTime().timeSpec(), result.timeSpec());
+    }
+
+    void testNormalize_data()
+    {
+        QTest::addColumn<QString>("inFile");
+        QTest::addColumn<QString>("refFile");
+
+        QDir dir(QStringLiteral(SOURCE_DIR "/jsonlddata"));
+        const auto lst = dir.entryList(QStringList(QStringLiteral("*.in.json")), QDir::Files | QDir::Readable | QDir::NoSymLinks);
+        for (const auto &file : lst) {
+            const QString refFile = dir.path() + QLatin1Char('/') + file.left(file.size() - 7) + QStringLiteral("out.json");
+            if (!QFile::exists(refFile)) {
+                qDebug() << "reference file" << refFile << "does not exist, skipping test file" << file;
+                continue;
+            }
+            QTest::newRow(file.toLatin1().constData()) << QString(dir.path() + QLatin1Char('/') +  file) << refFile;
+        }
+    }
+
+    void testNormalize()
+    {
+        QFETCH(QString, inFile);
+        QFETCH(QString, refFile);
+
+        const auto inJson = QJsonDocument::fromJson(readFile(inFile)).array();
+        QVERIFY(!inJson.isEmpty());
+        const auto normalizedJson = JsonLdDocument::toJson(JsonLdDocument::fromJson(inJson));
+        QVERIFY(!normalizedJson.isEmpty());
+        const auto refJson = QJsonDocument::fromJson(readFile(refFile)).array();
+        QVERIFY(!refJson.isEmpty());
+
+        qDebug() << normalizedJson;
+        if (normalizedJson != refJson) {
+            QFile f(refFile + QLatin1String(".fail"));
+            QVERIFY(f.open(QFile::WriteOnly));
+            f.write(QJsonDocument(normalizedJson).toJson());
+            f.close();
+
+            QProcess proc;
+            proc.setProcessChannelMode(QProcess::ForwardedChannels);
+            proc.start(QStringLiteral("diff"), {QStringLiteral("-u"), refFile, f.fileName()});
+            QVERIFY(proc.waitForFinished());
+        }
+        QCOMPARE(normalizedJson, refJson);
     }
 };
 
