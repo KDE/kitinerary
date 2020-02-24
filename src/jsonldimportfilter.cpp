@@ -38,6 +38,7 @@ static const struct {
     { "BedAndBreakfast", "LodgingBusiness" },
     { "Brewery", "FoodEstablishment" },
     { "BusStop", "BusStation" },
+    { "BusinessEvent", "Event" },
     { "CafeOrCoffeeShop", "FoodEstablishment" },
     { "Campground", "LodgingBusiness" },
     { "ChildrensEvent", "Event" },
