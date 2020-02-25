@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "header": "From",
+            "match": "@reservation.accor-mail.com",
+            "type": "Email"
+        }
+    ],
+    "function": "parseConfirmation",
+    "script": "accor.js",
+    "type": "Html"
+}
