@@ -327,33 +327,53 @@ static void filterRecursive(QJsonObject &obj)
     }
 }
 
-QJsonObject JsonLdImportFilter::filterObject(const QJsonObject& obj)
+QJsonArray JsonLdImportFilter::filterObject(const QJsonObject& obj)
 {
-    QJsonObject res(obj);
-    filterRecursive(res);
-
-    const auto type = obj.value(QLatin1String("@type")).toString();
-    if (type.endsWith(QLatin1String("Reservation"))) {
-        filterReservation(res);
-    }
-
-    auto actions = res.value(QLatin1String("potentialAction"));
-    if (!actions.isUndefined()) {
-        res.insert(QStringLiteral("potentialAction"), filterActions(actions));
-    }
-
-    auto image = res.value(QLatin1String("image"));
-    if (image.isArray()) {
-        res.insert(QStringLiteral("image"), image.toArray().first());
-    }
-
-    image = res.value(QLatin1String("image"));
-    if (image.isObject()) {
-        const auto imageObject = image.toObject();
-        if (imageObject.value(QLatin1String("@type")).toString() == QLatin1String("ImageObject")) {
-            res.insert(QStringLiteral("image"), imageObject.value(QLatin1String("url")));
+    QStringList types;
+    const auto typeVal = obj.value(QLatin1String("@type"));
+    if (typeVal.isString()) {
+        types.push_back(typeVal.toString());
+    } else if (typeVal.isArray()) {
+        const auto typeNames = typeVal.toArray();
+        for (const auto &t : typeNames) {
+            if (t.isString()) {
+                types.push_back(t.toString());
+            }
         }
     }
+    // TODO consider additionalTypes property
 
-    return res;
+    QJsonArray results;
+
+    for (const auto &type : types) {
+        QJsonObject res(obj);
+        res.insert(QStringLiteral("@type"), type);
+        filterRecursive(res);
+
+        if (type.endsWith(QLatin1String("Reservation"))) {
+            filterReservation(res);
+        }
+
+        auto actions = res.value(QLatin1String("potentialAction"));
+        if (!actions.isUndefined()) {
+            res.insert(QStringLiteral("potentialAction"), filterActions(actions));
+        }
+
+        auto image = res.value(QLatin1String("image"));
+        if (image.isArray()) {
+            res.insert(QStringLiteral("image"), image.toArray().first());
+        }
+
+        image = res.value(QLatin1String("image"));
+        if (image.isObject()) {
+            const auto imageObject = image.toObject();
+            if (imageObject.value(QLatin1String("@type")).toString() == QLatin1String("ImageObject")) {
+                res.insert(QStringLiteral("image"), imageObject.value(QLatin1String("url")));
+            }
+        }
+
+        results.push_back(res);
+    }
+
+    return results;
 }

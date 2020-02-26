@@ -151,7 +151,7 @@ QVariant File::reservation(const QString &resId) const
         }
         return array.at(0);
     } else if (doc.isObject()) {
-        return JsonLdDocument::fromJson(doc.object());
+        return JsonLdDocument::fromJsonSingular(doc.object());
     }
     return {};
 }
@@ -278,7 +278,7 @@ QVariant File::documentInfo(const QString &id) const
         }
         return array.at(0);
     } else if (doc.isObject()) {
-        return JsonLdDocument::fromJson(doc.object());
+        return JsonLdDocument::fromJsonSingular(doc.object());
     }
     return {};
 }

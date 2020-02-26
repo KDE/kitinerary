@@ -238,7 +238,7 @@ GenericExtractor::Result GenericPkPassExtractor::extract(KPkPass::Pass *pass, co
 
     // decode the barcode here already, so we have more information available for the following steps
     // also, we have additional context time information here
-    auto res = JsonLdDocument::fromJson(result);
+    auto res = JsonLdDocument::fromJsonSingular(result);
     if (JsonLd::isA<FlightReservation>(res)) {
         const auto bcbp = res.value<FlightReservation>().reservedTicket().value<Ticket>().ticketTokenData();
         const auto bcbpData = IataBcbpParser::parse(bcbp, iataContextDate(pass, contextDate).date());

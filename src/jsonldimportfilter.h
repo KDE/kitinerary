@@ -18,6 +18,7 @@
 #ifndef KITINERARY_JSONLDIMPORTFILTER_H
 #define KITINERARY_JSONLDIMPORTFILTER_H
 
+class QJsonArray;
 class QJsonObject;
 
 namespace KItinerary {
@@ -27,8 +28,10 @@ namespace KItinerary {
  */
 namespace JsonLdImportFilter
 {
-    /** Filter the top-level object @p obj for loading with JsonLdDocument. */
-    QJsonObject filterObject(const QJsonObject &obj);
+    /** Filter the top-level object @p obj for loading with JsonLdDocument.
+     *  Due to type and graph expansion, the result can actually contain multiple object.
+     */
+    QJsonArray filterObject(const QJsonObject &obj);
 }
 
 }

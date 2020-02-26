@@ -1,0 +1,8 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": [ "Hotel", "Hostel" ],
+        "name": "A place to stay",
+        "description": "Test multi-type expansion in import filtering"
+    }
+]

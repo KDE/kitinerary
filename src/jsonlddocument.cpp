@@ -223,7 +223,6 @@ static QVariant createInstance(const QJsonObject &obj)
 }
 
 #undef MAKE_FACTORY
-
 QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
 {
     QVector<QVariant> l;
@@ -239,7 +238,21 @@ QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
 
 QVariant JsonLdDocument::fromJson(const QJsonObject& obj)
 {
-    return createInstance(JsonLdImportFilter::filterObject(obj));
+    const auto normalized = JsonLdImportFilter::filterObject(obj);
+    // TODO actually return a vector here
+    if (normalized.isEmpty()) {
+        return {};
+    }
+    return createInstance(normalized.at(0).toObject());
+}
+
+QVariant JsonLdDocument::fromJsonSingular(const QJsonObject &obj)
+{
+    const auto normalized = JsonLdImportFilter::filterObject(obj);
+    if (normalized.isEmpty()) {
+        return {};
+    }
+    return createInstance(normalized.at(0).toObject());
 }
 
 static bool valueIsNull(const QVariant &v)

@@ -40,7 +40,16 @@ public:
     /** Convert JSON-LD array into instantiated data types. */
     static KITINERARY_EXPORT QVector<QVariant> fromJson(const QJsonArray &array);
     /** Convert JSON-LD object into an instantiated data type. */
-    static KITINERARY_EXPORT QVariant fromJson(const QJsonObject &obj);
+    static KITINERARY_EXPORT QVariant fromJson(const QJsonObject &obj); // TODO return QVector<QVariant> here
+
+    /** Convert a single JSON-LD object into an instantiated data type.
+     *  @note Use this only if you are sure the JSON-LD object does not expand to multiple objects!
+     *  That is usually only the case for objects you have written yourself and that semantically
+     *  are guaranteed to be a single object. Anything received from external sources can expand
+     *  and should not use this method.
+     *  @since 20.04
+     */
+    static KITINERARY_EXPORT QVariant fromJsonSingular(const QJsonObject &obj);
 
     /** Serialize instantiated data types to JSON-LD. */
     static KITINERARY_EXPORT QJsonArray toJson(const QVector<QVariant> &data);
