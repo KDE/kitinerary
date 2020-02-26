@@ -1,5 +1,3 @@
-set(KDE_INSTALL_INCLUDEDIR_PIM ${KDE_INSTALL_INCLUDEDIR}/KPim)
-
 add_subdirectory(cli)
 if (TARGET Qt5::Network)
     add_subdirectory(knowledgedb-generator)

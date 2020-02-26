@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(PIM_VERSION "5.13.40")
+set(PIM_VERSION "5.13.41")
 project(KItinerary VERSION ${PIM_VERSION})
 
 set(CMAKE_CXX_STANDARD 14)
@@ -100,13 +100,14 @@ endif()
 
 add_definitions(-DQT_NO_FOREACH)
 
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KPimItinerary")
+set(KDE_INSTALL_INCLUDEDIR_PIM ${KDE_INSTALL_INCLUDEDIR}/KPim)
+
 add_subdirectory(src)
 if(BUILD_TESTING)
    add_subdirectory(autotests)
 endif()
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KPimItinerary")
 
 configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KPimItineraryConfig.cmake.in"
@@ -126,4 +127,6 @@ install(EXPORT KPimItineraryTargets
         NAMESPACE KPim::
 )
 install(FILES org_kde_kitinerary.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_version.h
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM} COMPONENT Devel)
 ki18n_install(po)
