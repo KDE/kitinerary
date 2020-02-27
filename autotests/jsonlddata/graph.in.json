@@ -1,0 +1,56 @@
+[{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "/#organization",
+      "name": "A car company",
+      "url": "/",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "/#logo",
+        "url": "/favicon.png",
+        "caption": "Creating cars"
+      },
+      "image": {
+        "@id": "/#logo"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "/#website",
+      "url": "/",
+      "name": "Car Company",
+      "publisher": {
+        "@id": "/#organization"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "ImageObject",
+      "@id": "/#primaryimage",
+      "url": "/logo@2x.png"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "/#webpage",
+      "url": "/",
+      "name": "Some car company",
+      "isPartOf": {
+        "@id": "/#website"
+      },
+      "about": {
+        "@id": "/#organization"
+      },
+      "primaryImageOfPage": {
+        "@id": "/#primaryimage"
+      },
+      "datePublished": "2019-12-20T12:18:20+00:00",
+      "dateModified": "2020-02-06T08:33:55+00:00"
+    }
+  ]
+}]

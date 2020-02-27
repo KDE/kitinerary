@@ -1,0 +1,8 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "A car company",
+        "url": "/"
+    }
+]

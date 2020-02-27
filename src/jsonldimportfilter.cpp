@@ -327,7 +327,20 @@ static void filterRecursive(QJsonObject &obj)
     }
 }
 
-QJsonArray JsonLdImportFilter::filterObject(const QJsonObject& obj)
+static QJsonArray graphExpand(const QJsonObject &obj)
+{
+    QJsonArray result;
+
+    const auto graph = obj.value(QLatin1String("@graph")).toArray();
+    for (const auto &o : graph) {
+        const auto a = JsonLdImportFilter::filterObject(o.toObject());
+        std::copy(a.begin(), a.end(), std::back_inserter(result));
+    }
+
+    return result;
+}
+
+QJsonArray JsonLdImportFilter::filterObject(const QJsonObject &obj)
 {
     QStringList types;
     const auto typeVal = obj.value(QLatin1String("@type"));
@@ -342,6 +355,10 @@ QJsonArray JsonLdImportFilter::filterObject(const QJsonObject& obj)
         }
     }
     // TODO consider additionalTypes property
+
+    if (types.isEmpty()) {
+        return graphExpand(obj);
+    }
 
     QJsonArray results;
 
