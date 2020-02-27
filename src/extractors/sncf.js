@@ -125,10 +125,12 @@ function parseOuigoConfirmation(html)
 {
     var reservations = new Array();
 
-    var pnr = html.eval("//*[@class=\"pnr-ref\"]/*[@class=\"pnr-info\"]");
+    var pnr = html.eval('//*[@class="pnr-ref"]/*[@class="pnr-info"]');
+    var pnrOuigo = html.eval('//*[@class="pnr-info-digital pnr-info-digital-ouigo"]');
+    var passengerName = html.eval('//*[@class="passenger"]/*[@class="name"]');
 
-    var productDts = html.eval("//*[@class=\"product-travel-date\"]");
-    var productDetails = html.eval("//table[@class=\"product-details\"]");
+    var productDts = html.eval('//*[@class="product-travel-date"]');
+    var productDetails = html.eval('//table[@class="product-details"]');
     for (productDetailIdx in productDetails) {
         // date is in the table before us
         var dt = productDts[productDetailIdx].content.replace(/\S+ (.*)/, "$1");
@@ -139,10 +141,6 @@ function parseOuigoConfirmation(html)
             var cls = segmentDetail.attribute("class");
             if (cls.includes("segment-departure")) {
                 res = JsonLd.newTrainReservation();
-                if (pnr.length > 0) {
-                    res.reservationNumber = pnr[0].content;
-                }
-
                 res.reservationFor.departureTime = JsonLd.toDateTime(dt + segmentDetail.content, "d MMMMhh'h'mm", "fr");
                 segmentDetail = segmentDetail.nextSibling;
                 res.reservationFor.departureStation.name = segmentDetail.content;
@@ -151,6 +149,16 @@ function parseOuigoConfirmation(html)
                 res.reservationFor.arrivalTime = JsonLd.toDateTime(dt + segmentDetail.content, "d MMMMhh'h'mm", "fr");
                 segmentDetail = segmentDetail.nextSibling;
                 res.reservationFor.arrivalStation.name = segmentDetail.content;
+
+                if (res.reservationFor.trainName == "OUIGO" && pnrOuigo.length) {
+                    res.reservationNumber = pnrOuigo[0].content;
+                } else if (pnr.length) {
+                    res.reservationNumber = pnr[0].content;
+                }
+                if (passengerName.length) {
+                    res.underName.name = passengerName[0].content;
+                }
+
                 // HACK drop invalid elements so the structured fallback kicks in correctly
                 // this should be done automatically in the engine
                 if (res.reservationFor.departureTime > 0)
