@@ -348,7 +348,11 @@ static void fillEvent(const KItinerary::Event &ev, const KCalCore::Event::Ptr &e
     event->setLocation(location.name());
     fillGeoPosition(location, event);
     event->setDtStart(ev.startDate());
-    event->setDtEnd(ev.endDate());
+    if (ev.endDate().isValid()) {
+        event->setDtEnd(ev.endDate());
+    } else {
+        event->setDtEnd(ev.startDate().addSecs(3600));
+    }
     event->setAllDay(false);
 
     if (ev.doorTime().isValid()) {
