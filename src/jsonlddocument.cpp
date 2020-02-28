@@ -108,6 +108,8 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
             return v.toDouble();
         }
         return v.toString().toInt();
+    case QVariant::Time:
+        return QTime::fromString(v.toString(), Qt::ISODate);
     case QVariant::Url:
         return QUrl(v.toString());
     default:
@@ -305,6 +307,8 @@ static QJsonValue toJsonValue(const QVariant &v)
             }
             return v.toDateTime().toString(Qt::ISODate);
         }
+        case QVariant::Time:
+            return v.toTime().toString(Qt::ISODate);
         case QVariant::Url:
             return v.toUrl().toString();
         case QVariant::Bool:
