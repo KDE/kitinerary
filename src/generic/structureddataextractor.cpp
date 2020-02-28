@@ -77,11 +77,13 @@ static QString valueForItemProperty(const HtmlElement &elem)
         v = elem.attribute(QStringLiteral("content"));
     } else if (elemName == QLatin1String("time")) {
         v = elem.attribute(QStringLiteral("datetime"));
-    } else if (elemName == QLatin1String("link") || elemName == QLatin1Char('a')) {
+    } else if (elemName == QLatin1String("link") || elemName == QLatin1Char('a') || elemName == QLatin1String("img")) {
         if (elem.hasAttribute(QStringLiteral("href"))) {
             v = elem.attribute(QStringLiteral("href"));
         } else if (elem.hasAttribute(QStringLiteral("content"))) {
             v = elem.attribute(QStringLiteral("content"));
+        } else if (elem.hasAttribute(QStringLiteral("src"))) {
+            v = elem.attribute(QStringLiteral("src"));
         } else {
             v = elem.recursiveContent();
         }

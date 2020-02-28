@@ -1,0 +1,13 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Hotel",
+        "description": "Discover a 4 star hotel in the heart of Paris.",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://community.kde.org/images.community/thumb/4/40/Mascot_konqi.png/144px-Mascot_konqi.png"
+        },
+        "name": "Konqi Resort and Spa",
+        "url": "https://www.kde.org"
+    }
+]
