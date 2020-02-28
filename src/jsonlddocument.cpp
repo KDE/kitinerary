@@ -223,29 +223,35 @@ static QVariant createInstance(const QJsonObject &obj)
 
     return {};
 }
-
 #undef MAKE_FACTORY
+
+static QVector<QVariant> fromJson(const QJsonObject &obj) // TODO this should replace JsonLdDocument::fromJson once we can change the API
+{
+    const auto normalized = JsonLdImportFilter::filterObject(obj);
+    QVector<QVariant> result;
+    result.reserve(normalized.size());
+    for (const auto &n : normalized) {
+        const auto v = createInstance(n.toObject());
+        if (!v.isNull()) {
+            result.push_back(v);
+        }
+    }
+    return result;
+}
+
 QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
 {
     QVector<QVariant> l;
     l.reserve(array.size());
     for (const auto &obj : array) {
-        const auto v = fromJson(obj.toObject());
-        if (!v.isNull()) {
-            l.push_back(v);
-        }
+        l.append(::fromJson(obj.toObject()));
     }
     return l;
 }
 
 QVariant JsonLdDocument::fromJson(const QJsonObject& obj)
 {
-    const auto normalized = JsonLdImportFilter::filterObject(obj);
-    // TODO actually return a vector here
-    if (normalized.isEmpty()) {
-        return {};
-    }
-    return createInstance(normalized.at(0).toObject());
+    return fromJsonSingular(obj); // ### temporary, see above
 }
 
 QVariant JsonLdDocument::fromJsonSingular(const QJsonObject &obj)

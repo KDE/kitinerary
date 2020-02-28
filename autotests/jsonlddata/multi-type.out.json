@@ -4,5 +4,11 @@
         "@type": "LodgingBusiness",
         "description": "Test multi-type expansion in import filtering",
         "name": "A place to stay"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "LodgingBusiness",
+        "description": "Test multi-type expansion in import filtering",
+        "name": "A place to stay"
     }
 ]
