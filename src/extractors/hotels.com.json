@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "http[s]://[a-z]{2,3}.hotels.com/",
+            "property": "url",
+            "type": "JsonLd"
+        }
+    ],
+    "function": "parseBookingConfirmation",
+    "script": "hotels.com.js",
+    "type": "Html"
+}

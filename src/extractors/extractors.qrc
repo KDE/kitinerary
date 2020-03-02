@@ -44,6 +44,8 @@
         <file>flixbus.js</file>
         <file>hertz.js</file>
         <file>hertz.json</file>
+        <file>hotels.com.json</file>
+        <file>hotels.com.js</file>
         <file>iberia.json</file>
         <file>iberia.js</file>
         <file>indigo.json</file>
