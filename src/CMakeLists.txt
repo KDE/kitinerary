@@ -50,6 +50,8 @@ set(kitinerary_lib_srcs
     pdf/popplerglobalparams.cpp
     pdf/popplerutils.cpp
 
+    tlv/berelement.cpp
+
     uic9183/rct2ticket.cpp
     uic9183/uic9183block.cpp
     uic9183/uic9183parser.cpp
