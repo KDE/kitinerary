@@ -46,11 +46,14 @@ namespace CalendarHandler
      */
     KITINERARY_EXPORT QVector<QVariant> reservationsForEvent(const QSharedPointer<KCalendarCore::Event> &event);
 
+    /** Checks if the given @p reservation contains enough information to create an iCal event from it. */
+    KITINERARY_EXPORT bool canCreateEvent(const QVariant &reservation);
+
     /** Fills @p event with details of @p reservations.
      *  Can be used on new events or to update existing ones.
-     *  @param reservations When passing more than one reservation here, those most be for the same multi-traveler trip.
-     *  @param event The event.
+     *  @param reservations When passing more than one reservation here, those must be for the same multi-traveler trip.
      *  That is, MergeUtil::isSame() returns true for Reservation::reservationFor for each pair of values.
+     *  @param event The event.
      */
     KITINERARY_EXPORT void fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalendarCore::Event> &event);
 }

@@ -77,7 +77,9 @@ private Q_SLOTS:
 
         ExtractorPostprocessor postproc;
         postproc.process(preData);
-        QCOMPARE(inArray.size(), postproc.result().size());
+        const auto postData = postproc.result();
+        QVERIFY(std::all_of(postData.begin(), postData.end(), CalendarHandler::canCreateEvent));
+        QCOMPARE(inArray.size(), postData.size());
 
         MemoryCalendar::Ptr refCal(new MemoryCalendar(QTimeZone::systemTimeZone()));
         ICalFormat format;
@@ -86,7 +88,7 @@ private Q_SLOTS:
         const auto refEvents = refCal->rawEvents(KCalendarCore::EventSortStartDate, KCalendarCore::SortDirectionAscending);
         QCOMPARE(refEvents.size(), 1);
         Event::Ptr newEvent(new Event);
-        CalendarHandler::fillEvent(postproc.result(), newEvent);
+        CalendarHandler::fillEvent(postData, newEvent);
 
         // sync volatile fields, we only care for differences elsewhere
         const auto &refEvent = refEvents.at(0);

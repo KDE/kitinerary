@@ -121,6 +121,22 @@ QVector<QVariant> CalendarHandler::reservationsForEvent(const QSharedPointer<KCa
 #endif
 }
 
+bool CalendarHandler::canCreateEvent(const QVariant &reservation)
+{
+#ifdef HAVE_KCAL
+    if (JsonLd::isA<FlightReservation>(reservation)) {
+        const auto f = reservation.value<FlightReservation>().reservationFor().value<Flight>();
+        if (f.departureTime().isValid() && f.arrivalTime().isValid()) {
+            return true;
+        }
+    }
+    return SortUtil::startDateTime(reservation).isValid();
+#else
+    Q_UNUSED(reservation);
+    return false;
+#endif
+}
+
 void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalendarCore::Event> &event)
 {
     if (reservations.isEmpty()) {
