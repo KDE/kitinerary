@@ -28,13 +28,18 @@ enum {
     BerVariableLengthMarker = 0x80,
 };
 
-BER::Element::Element(const QByteArray &data, int offset)
+BER::Element::Element() = default;
+
+BER::Element::Element(const QByteArray &data, int offset, int size)
     : m_data(data)
     , m_offset(offset)
+    , m_dataSize(size < 0 ? data.size() : std::min(offset + size, data.size()))
 {
+    assert(m_dataSize <= m_data.size());
     if (!isValid()) {
         m_data.clear();
         m_offset = -1;
+        m_dataSize = -1;
     }
 }
 
@@ -42,37 +47,37 @@ BER::Element::~Element() = default;
 
 bool BER::Element::isValid() const
 {
-    if (m_offset < 0 || m_offset + 2 >= m_data.size()) {
+    if (m_offset < 0 || m_dataSize <= 0 || m_offset + 2 >= m_dataSize) {
         return false;
     }
 
     // check type size
     const auto ts = typeSize();
-    if (ts < 0 || ts >= 4 || m_offset + ts + 1 >= m_data.size()) {
+    if (ts < 0 || ts >= 4 || m_offset + ts + 1 >= m_dataSize) {
         return false;
     }
 
     // check size of length field
     const auto ls = lengthSize();
-    if (ls <= 0 || ls >= 4 || m_offset + ts + ls >= m_data.size()) {
+    if (ls <= 0 || ls >= 4 || m_offset + ts + ls >= m_dataSize) {
         return false;
     }
 
     // check size of the content
     const auto cs = contentSize();
-    return cs > 0 && m_offset + ts + ls + cs <= m_data.size();
+    return cs > 0 && m_offset + ts + ls + cs <= m_dataSize;
 }
 
 int BER::Element::typeSize() const
 {
     assert(m_offset >= 0);
-    assert(m_offset + 1 < m_data.size());
+    assert(m_offset + 1 < m_dataSize);
     auto it = m_data.begin() + m_offset;
     if (((*it) & BerLongTypeMask) != BerLongTypeMask) {
         return 1;
     }
 
-    while (it != m_data.end()) {
+    while (it != m_data.end() && std::distance(m_data.begin(), it) < m_dataSize) {
         ++it;
         if (((*it) & BerExtendedTypeMask) == 0) {
             return std::distance(m_data.begin(), it) - m_offset + 1;
@@ -126,7 +131,11 @@ int BER::Element::contentSize() const
     const auto ts = typeSize();
     const uint8_t firstLengthByte = *(m_data.constData() + m_offset + ts);
     if (firstLengthByte == BerVariableLengthMarker) {
-        return m_data.indexOf(QByteArray("\0\0", 2), m_offset + ts + 1) - m_offset - ts - 1;
+        const auto idx = m_data.indexOf(QByteArray("\0\0", 2), m_offset + ts + 1);
+        if (idx + 1 > m_dataSize) {
+            return - 1;
+        }
+        return idx - m_offset - ts - 1;
     }
     if (firstLengthByte & BerExtendedLenghtMask) {
         const auto ls = firstLengthByte & ~BerExtendedLenghtMask;
@@ -140,7 +149,23 @@ int BER::Element::contentSize() const
     return firstLengthByte;
 }
 
+int BER::Element::contentOffset() const
+{
+    return m_offset + typeSize() + lengthSize();
+}
+
 const uint8_t* BER::Element::contentData() const
 {
-    return reinterpret_cast<const uint8_t*>(m_data.constData() + typeSize() + lengthSize());
+    return reinterpret_cast<const uint8_t*>(m_data.constData() + contentOffset());
+}
+
+BER::Element BER::Element::first() const
+{
+    return BER::Element(m_data, contentOffset(), contentSize());
+}
+
+BER::Element BER::Element::next(const Element &prev) const
+{
+    const auto off = prev.m_offset + prev.size();
+    return BER::Element(m_data, off, contentSize() - (off - contentOffset()));
 }

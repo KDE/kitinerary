@@ -90,6 +90,50 @@ private Q_SLOTS:
         QCOMPARE(e.size(), input.size());
         QVERIFY(e.contentData());
     }
+
+    void testBerRecursionInvalid_data()
+    {
+        QTest::addColumn<QByteArray>("input");
+        QTest::newRow("incomplete content") << QByteArray::fromHex("1E020201");
+        QTest::newRow("wrong child size") << QByteArray::fromHex("1E03020242");
+        QTest::newRow("wrong child size with trailing data") << QByteArray::fromHex("1E03020242020142");
+        QTest::newRow("variable length child") << QByteArray::fromHex("1E0402804242420000");
+    }
+
+    void testBerRecursionInvalid()
+    {
+        QFETCH(QByteArray, input);
+        BER::Element e(input);
+        QVERIFY(e.isValid());
+        QVERIFY(!e.first().isValid());
+    }
+
+    void testBerChildCount_data()
+    {
+        QTest::addColumn<QByteArray>("input");
+        QTest::addColumn<int>("childCount");
+        QTest::newRow("one child") << QByteArray::fromHex("1E03020142") << 1;
+        QTest::newRow("two children") << QByteArray::fromHex("1E06020142020123") << 2;
+        QTest::newRow("one child, trailing element") << QByteArray::fromHex("1E03020142020123") << 1;
+    }
+
+    void testBerChildCount()
+    {
+        QFETCH(QByteArray, input);
+        QFETCH(int, childCount);
+
+        BER::Element e(input);
+        QVERIFY(e.isValid());
+
+        BER::Element c = e.first();
+        QVERIFY(c.isValid());
+        int i = 0;
+        while (c.isValid()) {
+            c = e.next(c);
+            ++i;
+        }
+        QCOMPARE(i, childCount);
+    }
 };
 
 QTEST_APPLESS_MAIN(BerDecoderTest)

@@ -29,11 +29,14 @@ namespace BER {
 
 /**
  * An element in BER/DER/X.690 encoding.
+ * Implicitly this is also kinda implementing a QByteArrayRef, as this works without copying
+ * the underlying data.
  */
 class Element
 {
 public:
-    explicit Element(const QByteArray &data, int offset = 0);
+    Element();
+    explicit Element(const QByteArray &data, int offset = 0, int size = -1);
     ~Element();
 
     /** Returns @c true if this element has a valid structure and can be read from. */
@@ -52,12 +55,35 @@ public:
     /** Raw content data. */
     const uint8_t* contentData() const;
 
+    /** Convenience method to access typed content. */
+    template <typename T>
+    inline const T* contentAt(int offset) const
+    {
+        return reinterpret_cast<const T*>(contentData() + offset);
+    }
+
+    /** First child element, for nested types. */
+    Element first() const;
+    /** Next child element, for nested types. */
+    Element next(const Element &prev) const;
+
 private:
     int typeSize() const;
     int lengthSize() const;
+    int contentOffset() const;
 
     QByteArray m_data;
     int m_offset = -1;
+    int m_dataSize = -1;
+};
+
+template <uint32_t TagValue>
+struct TypedElement : public Element
+{
+    inline bool isValid() const
+    {
+        return Element::isValid() && type() == TagValue;
+    }
 };
 
 }
