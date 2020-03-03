@@ -129,7 +129,7 @@ private Q_SLOTS:
         QVERIFY(c.isValid());
         int i = 0;
         while (c.isValid()) {
-            c = e.next(c);
+            c = c.next();
             ++i;
         }
         QCOMPARE(i, childCount);

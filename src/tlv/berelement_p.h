@@ -65,7 +65,7 @@ public:
     /** First child element, for nested types. */
     Element first() const;
     /** Next child element, for nested types. */
-    Element next(const Element &prev) const;
+    Element next() const;
 
 private:
     int typeSize() const;

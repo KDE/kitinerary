@@ -164,8 +164,11 @@ BER::Element BER::Element::first() const
     return BER::Element(m_data, contentOffset(), contentSize());
 }
 
-BER::Element BER::Element::next(const Element &prev) const
+BER::Element BER::Element::next() const
 {
-    const auto off = prev.m_offset + prev.size();
-    return BER::Element(m_data, off, contentSize() - (off - contentOffset()));
+    const auto s = size();
+    if (m_dataSize <= m_offset + s) {
+        return {};
+    }
+    return BER::Element(m_data, m_offset + s, m_dataSize - m_offset - s);
 }
