@@ -57,8 +57,11 @@ public:
 
     /** Convenience method to access typed content. */
     template <typename T>
-    inline const T* contentAt(int offset) const
+    inline const T* contentAt(int offset = 0) const
     {
+        if (offset < 0 || (int)sizeof(T) > contentSize() - offset) {
+            return nullptr;
+        }
         return reinterpret_cast<const T*>(contentData() + offset);
     }
 
