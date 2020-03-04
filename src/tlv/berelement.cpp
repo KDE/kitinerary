@@ -172,3 +172,15 @@ BER::Element BER::Element::next() const
     }
     return BER::Element(m_data, m_offset + s, m_dataSize - m_offset - s);
 }
+
+BER::Element BER::Element::find(uint32_t type) const
+{
+    auto e = first();
+    while (e.isValid()) {
+        if (e.type() == type) {
+            return e;
+        }
+        e = e.next();
+    }
+    return {};
+}

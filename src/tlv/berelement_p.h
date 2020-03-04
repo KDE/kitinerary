@@ -69,6 +69,8 @@ public:
     Element first() const;
     /** Next child element, for nested types. */
     Element next() const;
+    /** Returns the first child element of the given @p type. */
+    Element find(uint32_t type) const;
 
 private:
     int typeSize() const;

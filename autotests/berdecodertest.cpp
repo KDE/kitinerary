@@ -134,6 +134,29 @@ private Q_SLOTS:
         }
         QCOMPARE(i, childCount);
     }
+
+    void testBerFindChild_data()
+    {
+        QTest::addColumn<QByteArray>("input");
+        QTest::addColumn<uint32_t>("type");
+        QTest::addColumn<bool>("found");
+        QTest::newRow("no children") << QByteArray::fromHex("020142") << 0x02u << false;
+        QTest::newRow("children, not found") << QByteArray::fromHex("1E06020142020123") << 0x04u << false;
+        QTest::newRow("children, first hit") << QByteArray::fromHex("1E06040142020123") << 0x04u << true;
+        QTest::newRow("children, second hit") << QByteArray::fromHex("1E06020142040123") << 0x04u << true;
+    }
+
+    void testBerFindChild()
+    {
+        QFETCH(QByteArray, input);
+        QFETCH(uint32_t, type);
+        QFETCH(bool, found);
+
+        BER::Element e(input);
+        QVERIFY(e.isValid());
+        auto c = e.find(type);
+        QCOMPARE(c.isValid(), found);
+    }
 };
 
 QTEST_APPLESS_MAIN(BerDecoderTest)
