@@ -47,25 +47,25 @@ BER::Element::~Element() = default;
 
 bool BER::Element::isValid() const
 {
-    if (m_offset < 0 || m_dataSize <= 0 || m_offset + 2 >= m_dataSize) {
+    if (m_offset < 0 || m_dataSize <= 0 || m_offset + 2 > m_dataSize) {
         return false;
     }
 
     // check type size
     const auto ts = typeSize();
-    if (ts < 0 || ts >= 4 || m_offset + ts + 1 >= m_dataSize) {
+    if (ts < 0 || ts >= 4 || m_offset + ts + 1 > m_dataSize) {
         return false;
     }
 
     // check size of length field
     const auto ls = lengthSize();
-    if (ls <= 0 || ls >= 4 || m_offset + ts + ls >= m_dataSize) {
+    if (ls <= 0 || ls >= 4 || m_offset + ts + ls > m_dataSize) {
         return false;
     }
 
     // check size of the content
     const auto cs = contentSize();
-    return cs > 0 && m_offset + ts + ls + cs <= m_dataSize;
+    return cs >= 0 && m_offset + ts + ls + cs <= m_dataSize;
 }
 
 int BER::Element::typeSize() const

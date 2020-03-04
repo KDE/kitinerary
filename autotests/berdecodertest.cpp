@@ -52,6 +52,7 @@ private Q_SLOTS:
 
         QTest::newRow("primitive type") << QByteArray::fromHex("020142") << 0x02u;
         QTest::newRow("extended type") << QByteArray::fromHex("1F420142") << 0x1F42u;
+        QTest::newRow("zero size") << QByteArray::fromHex("0200") << 0x02u;
     }
 
     void testBerElementType()
@@ -78,6 +79,8 @@ private Q_SLOTS:
         QTest::newRow("2 byte extended size") << b << 256;
 
         QTest::newRow("variable length") << QByteArray::fromHex("0280420000") << 1;
+
+        QTest::newRow("zero size") << QByteArray::fromHex("0200") << 0;
     }
 
     void testBerElementContentSize()
