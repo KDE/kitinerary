@@ -47,6 +47,10 @@ public:
 
     /** Size of the entire element (type, size and content). */
     int size() const;
+    /** Raw data of this element.
+     *  Typically only needed when copying/writing this element somewhere.
+     */
+    const char* rawData() const;
 
     /** Size of the value part of this element.
      *  This is excluding a possible variable length end marker.
@@ -83,8 +87,10 @@ private:
 };
 
 template <uint32_t TagValue>
-struct TypedElement : public Element
+class TypedElement : public Element
 {
+public:
+    using Element::Element;
     inline bool isValid() const
     {
         return Element::isValid() && type() == TagValue;

@@ -18,24 +18,21 @@
 #ifndef KITINERARY_VDVDATA_P_H
 #define KITINERARY_VDVDATA_P_H
 
+#include "../tlv/berelement_p.h"
+
 #include <QtEndian>
 #include <cstdint>
 
 namespace KItinerary {
 
-enum : uint8_t {
+enum {
     TagSignature = 0x9E,
     TagSignatureRemainder = 0x9A,
     TagCaReference = 0x42,
-    TagOneByteSize = 0x81,
-    TagTwoByteSize = 0x82,
     TagTicketProductData = 0x85,
     TagTicketProductTransactionData = 0x8A,
     TagTicketBasicData = 0xDA,
     TagTicketTravelerData = 0xDB,
-};
-
-enum : uint16_t {
     TagCertificate = 0x7F21,
     TagCertificateSignature = 0x5F37,
     TagCertificateSignatureRemainder = 0x5F38,
@@ -48,96 +45,6 @@ enum {
 
 #pragma pack(push)
 #pragma pack(1)
-
-/** Generic structure for the TLV (tag-length-value) data blocks in VDV binary data.
- *  This consits of:
- *  - a one or two byte tag (@tparam TagType) with a fixed value (@tparam TagValue)
- *  - a one byte field indicating the size of the size field (optional)
- *  - one or two bytes for the size
- *  - followed by size bytes of content
- */
-template <typename TagType>
-struct VdvTlvBlock
-{
-    TagType tag;
-    uint8_t size0;
-
-    inline uint16_t contentSize() const
-    {
-        return size0;
-    }
-
-    inline uint16_t contentOffset() const
-    {
-        return sizeof(VdvTlvBlock);
-    }
-
-    inline const uint8_t* contentData() const
-    {
-        return reinterpret_cast<const uint8_t*>(this) + contentOffset();
-    }
-
-    inline uint16_t size() const
-    {
-        return contentSize() + contentOffset();
-    }
-
-    template <typename T>
-    inline const T* contentAt(int offset) const
-    {
-        return reinterpret_cast<const T*>(contentData() + offset);
-    }
-};
-
-template <typename TagType, TagType TagValue>
-struct VdvTlvTypedBlock : public VdvTlvBlock<TagType>
-{
-    enum : TagType { Tag = TagValue };
-    inline bool isValid() const
-    {
-        return qFromBigEndian(VdvTlvBlock<TagType>::tag) == TagValue;
-    }
-};
-
-template <typename TagType, TagType TagValue>
-struct VdvTaggedSizeDataBlock
-{
-    TagType tag;
-    uint8_t sizeTag;
-    uint8_t size0;
-    uint8_t size1;
-
-    inline bool isValid() const
-    {
-        return qFromBigEndian(tag) == TagValue && (sizeTag == TagOneByteSize || sizeTag == TagTwoByteSize);
-    }
-
-    inline uint16_t contentSize() const
-    {
-        return sizeTag == TagOneByteSize ? size0 : ((size0 << 8) + size1);
-    }
-
-    inline uint16_t contentOffset() const
-    {
-        return sizeof(VdvTaggedSizeDataBlock) - ((sizeTag == TagOneByteSize) ? 1 : 0);
-    }
-
-    inline const uint8_t* contentData() const
-    {
-        return reinterpret_cast<const uint8_t*>(this) + contentOffset();
-    }
-
-    inline uint16_t size() const
-    {
-        return contentSize() + contentOffset();
-    }
-
-    template <typename T>
-    inline const T* contentAt(int offset) const
-    {
-        return reinterpret_cast<const T*>(contentData() + offset);
-    }
-};
 
 /** Two-digit BCD encoded number. */
 struct VdvBcdNumber
@@ -171,13 +78,6 @@ struct VdvBcdDate
     }
 };
 
-/** Signature container for the signed part of the payload data. */
-struct VdvSignature : public VdvTaggedSizeDataBlock<uint8_t, TagSignature> {};
-/** Signature Remainder header. */
-struct VdvSignatureRemainder : public VdvTlvTypedBlock<uint8_t, TagSignatureRemainder> {};
-/** CV certificate. */
-struct VdvCertificateHeader : public VdvTaggedSizeDataBlock<uint16_t, TagCertificate> {};
-
 /** Certificate Authority Reference (CAR) content. */
 struct VdvCaReference
 {
@@ -188,7 +88,6 @@ struct VdvCaReference
     uint8_t algorithmReference;
     uint8_t year;
 };
-struct VdvCaReferenceBlock : public VdvTlvTypedBlock<uint8_t, TagCaReference> {};
 
 /** Certificate Holder Reference (CHR) */
 struct VdvCertificateHolderReference {
@@ -225,12 +124,6 @@ struct VdvCertificateKey {
         return sizeof(VdvCertificateKey) + oidSize() - 1;
     }
 };
-struct VdvCertificateKeyBlock : public VdvTaggedSizeDataBlock<uint16_t, TagCertificateContent> {};
-
-/** Certificate signature. */
-struct VdvCertificateSignature : public VdvTaggedSizeDataBlock<uint16_t, TagCertificateSignature> {};
-/** Certificate signature remainder. */
-struct VdvCertificateSignatureRemainder : public VdvTlvTypedBlock<uint16_t, TagCertificateSignatureRemainder> {};
 
 /** Date/time representation encoded in 4 byte. */
 struct VdvDateTimeCompact
@@ -274,46 +167,8 @@ struct VdvTicketHeader
     VdvDateTimeCompact endDt;
 };
 
-/** Product-specific ticket data block.
- *  Contains a set of TLV elements.
- */
-struct VdvTicketProductData : public VdvTlvTypedBlock<uint8_t, TagTicketProductData>
-{
-    /** First TLV element inside this block. */
-    const VdvTlvBlock* first() const
-    {
-        if (contentSize() < 2) {
-            return nullptr;
-        }
-        const auto tlv = contentAt<VdvTlvBlock>(0);
-        return tlv->size() > contentSize() ? nullptr : tlv;
-    }
-    /** Next TLV element, for iteration. */
-    const VdvTlvBlock* next(const VdvTlvBlock *prev) const
-    {
-        const auto off = (const uint8_t*)prev - contentData() + prev->size();
-        if (off + 2 > contentSize()) {
-            return nullptr;
-        }
-        const auto tlv = contentAt<VdvTlvBlock>(off);
-        return tlv->size() > contentSize() ? nullptr : tlv;
-    }
-
-    /** Find TLV element with type @tparam T. */
-    template <typename T>
-    inline const T* contentByTag() const
-    {
-        for (auto tlv = first(); tlv; tlv = next(tlv)) {
-            if (qFromBigEndian(tlv->tag) == T::Tag && tlv->size() >= sizeof(T)) {
-                return reinterpret_cast<const T*>(tlv);
-            }
-        }
-        return nullptr;
-    }
-};
-
 /** Product specific data - basic information. */
-struct VdvTicketBasicData : public VdvTlvTypedBlock<uint8_t, TagTicketBasicData>
+struct VdvTicketBasicData
 {
     uint8_t paymentType;
     uint8_t travelerType; // 1 adult, 2 child, 65 bike
@@ -330,7 +185,7 @@ struct VdvTicketBasicData : public VdvTlvTypedBlock<uint8_t, TagTicketBasicData>
 };
 
 /** Product specific data - traveler information. */
-struct VdvTicketTravelerData : public VdvTlvTypedBlock<uint8_t, TagTicketTravelerData>
+struct VdvTicketTravelerData
 {
     uint8_t gender;
     VdvBcdDate birthDate;
@@ -340,9 +195,9 @@ struct VdvTicketTravelerData : public VdvTlvTypedBlock<uint8_t, TagTicketTravele
     {
         return &nameBegin;
     }
-    inline int nameSize() const
+    inline int nameSize(int elementSize) const
     {
-        return size() - sizeof(VdvTicketTravelerData) + 1;
+        return elementSize - sizeof(VdvTicketTravelerData) + 1;
     }
 };
 
@@ -354,9 +209,6 @@ struct VdvTicketTransactionData
     VdvDateTimeCompact dt;
     uint8_t locationId[6];
 };
-
-/** Product-specific transaction data block (variable length). */
-struct VdvTicketProductTransactionData : public VdvTlvTypedBlock<uint8_t, TagTicketProductTransactionData> {};
 
 /** Ticket issuer data block. */
 struct VdvTicketIssueData

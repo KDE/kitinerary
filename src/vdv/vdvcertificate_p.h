@@ -25,8 +25,8 @@ class QIODevice;
 
 namespace KItinerary {
 
+namespace BER { class Element; }
 struct VdvCaReference;
-struct VdvCertificateHeader;
 struct VdvCertificateKey;
 
 /** Certificate object, to obtain the RSA parameters.
@@ -70,7 +70,7 @@ public:
     QDate endOfValidity() const;
 
 private:
-    const VdvCertificateHeader *header() const;
+    BER::Element header() const;
     const VdvCertificateKey *certKey() const;
 
     QByteArray m_data;

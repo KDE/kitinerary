@@ -6,6 +6,7 @@ add_executable(vdv-cert-downloader
     cert-downloader.cpp
     ../vdvcertificate.cpp
     ../iso9796_2decoder.cpp
+    ../../tlv/berelement.cpp
 )
 
 target_include_directories(vdv-cert-downloader PRIVATE ${CMAKE_BINARY_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/..)

@@ -126,6 +126,11 @@ int BER::Element::size() const
     return s;
 }
 
+const char *BER::Element::rawData() const
+{
+    return m_data.constData() + m_offset;
+}
+
 int BER::Element::contentSize() const
 {
     const auto ts = typeSize();

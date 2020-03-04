@@ -30,20 +30,15 @@ VdvCertificate::VdvCertificate() = default;
 VdvCertificate::VdvCertificate(const QByteArray &data, int offset)
     : m_offset(offset)
 {
-    if ((unsigned)data.size() <= m_offset + sizeof(VdvCertificateHeader)) {
-        qDebug() << "Certificate data too small:" << data.size() << offset;
+    const auto hdr = BER::TypedElement<TagCertificate>(data, offset);
+    if (!hdr.isValid()) {
+        qDebug() << "Invalid certificate header:" << hdr.isValid() << data.size() << offset;
         return;
     }
 
     m_data = data;
-    const auto hdr = header();
-    if (!hdr->isValid() || data.size() < hdr->size() + offset) {
-        qDebug() << "Invalid certificate header:" << hdr->isValid() << hdr->size() << data.size() << offset;
-        m_data.clear();
-        return;
-    }
-    const auto certKeyBlock = hdr->contentAt<VdvCertificateKeyBlock>(0);
-    if (certKeyBlock->isValid()) {
+    const auto certKeyBlock = hdr.find(TagCertificateContent);
+    if (certKeyBlock.isValid()) {
         m_type = Raw;
         qDebug() << "found decrypted key";
         qDebug() << "CHR:" << QByteArray(certKey()->chr.name, 5) << certKey()->chr.algorithmReference << certKey()->chr.year;
@@ -51,8 +46,8 @@ VdvCertificate::VdvCertificate(const QByteArray &data, int offset)
         return;
     }
 
-    const auto sig = hdr->contentAt<VdvCertificateSignature>(0);
-    if (!sig->isValid()) {
+    const auto sig = hdr.find(TagCertificateSignature);
+    if (!sig.isValid()) {
         qWarning() << "Invalid certificate content: neither a key nor a signature!";
         m_data.clear();
         return;
@@ -79,7 +74,7 @@ bool VdvCertificate::needsCaKey() const
 
 int VdvCertificate::size() const
 {
-    return m_type == Invalid ? 0 : header()->size();
+    return m_type == Invalid ? 0 : header().size();
 }
 
 uint16_t VdvCertificate::modulusSize() const
@@ -122,15 +117,15 @@ void VdvCertificate::setCaCertificate(const VdvCertificate &caCert)
     Iso9796_2Decoder decoder;
     decoder.setRsaParameters(caCert.modulus(), caCert.modulusSize(), caCert.exponent(), caCert.exponentSize());
 
-    const auto sig = header()->contentAt<VdvCertificateSignature>(0);
-    decoder.addWithRecoveredMessage(sig->contentData(), sig->contentSize());
+    const auto sig = header().find(TagCertificateSignature);
+    decoder.addWithRecoveredMessage(sig.contentData(), sig.contentSize());
 
-    if (header()->contentSize() > sig->size()) {
-        const auto rem = header()->contentAt<VdvCertificateSignatureRemainder>(sig->size());
-        if (rem->isValid() && rem->size() + sig->size() >= header()->contentSize()) {
-            decoder.add(rem->contentData(), rem->contentSize());
+    if (header().contentSize() > sig.size()) {
+        const auto rem = header().find(TagCertificateSignatureRemainder);
+        if (rem.isValid()) {
+            decoder.add(rem.contentData(), rem.contentSize());
         } else {
-            qWarning() << "Invalid signature remainder!" << rem->isValid() << rem->size() << sig->size() << header()->contentSize();
+            qWarning() << "Invalid signature remainder!" << rem.isValid() << rem.size() << sig.size() << header().contentSize();
         }
     }
 
@@ -142,7 +137,7 @@ void VdvCertificate::setCaCertificate(const VdvCertificate &caCert)
     } else {
         qWarning() << "decrypting certificate key failed!";
         qDebug() << "size is:" << m_recoveredData.size() << "expected:" << (certKey()->headerSize() + modulusSize() + exponentSize());
-        qDebug() << QByteArray((const char*)sig->contentData(), sig->contentSize()).toHex();;
+        qDebug() << QByteArray((const char*)sig.contentData(), sig.contentSize()).toHex();
         m_type = Invalid;
         m_recoveredData.clear();
     }
@@ -170,9 +165,9 @@ void VdvCertificate::writeKey(QIODevice *out) const
         writeTaggedSize(out, m_recoveredData.size());
         out->write(m_recoveredData);
     } else if (m_type == Raw) {
-        const auto keyBlock = header()->contentAt<VdvCertificateKeyBlock>(0);
-        writeTaggedSize(out, keyBlock->size());
-        out->write((const char*)keyBlock, keyBlock->size());
+        const auto keyBlock = header().find(TagCertificateContent);
+        writeTaggedSize(out, keyBlock.size());
+        out->write(keyBlock.rawData(), keyBlock.size());
     }
 }
 
@@ -187,9 +182,9 @@ QDate KItinerary::VdvCertificate::endOfValidity() const
     return QDate(key->date.year(), key->date.month(), key->date.day());
 }
 
-const VdvCertificateHeader* VdvCertificate::header() const
+BER::Element VdvCertificate::header() const
 {
-    return reinterpret_cast<const VdvCertificateHeader*>(m_data.constData() + m_offset);
+    return BER::Element(m_data, m_offset);
 }
 
 const VdvCertificateKey* VdvCertificate::certKey() const
@@ -197,7 +192,7 @@ const VdvCertificateKey* VdvCertificate::certKey() const
     if (m_type == Signed) {
         return reinterpret_cast<const VdvCertificateKey*>(m_recoveredData.constData());
     } else if (m_type == Raw) {
-        return header()->contentAt<VdvCertificateKeyBlock>(0)->contentAt<VdvCertificateKey>(0);
+        return header().find(TagCertificateContent).contentAt<VdvCertificateKey>();
     }
     return nullptr;
 }

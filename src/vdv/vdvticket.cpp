@@ -29,19 +29,28 @@ class VdvTicketPrivate : public QSharedData
 public:
     QByteArray m_data;
 
-    template <typename T> const T* productData() const;
+    BER::Element productElement(uint32_t type) const;
+    template <typename T> const T* productData(uint32_t type) const;
 };
 }
 
-template <typename T>
-const T* VdvTicketPrivate::productData() const
+BER::Element VdvTicketPrivate::productElement(uint32_t type) const
 {
-    if (m_data.isEmpty()) {
-        return nullptr;
+    const auto productElement = BER::TypedElement<TagTicketProductData>(m_data, sizeof(VdvTicketHeader));
+    if (!productElement.isValid()) {
+        return {};
     }
+    return productElement.find(type);
+}
 
-    const auto productBlock = reinterpret_cast<const VdvTicketProductData*>(m_data.constData() + sizeof(VdvTicketHeader));
-    return productBlock->contentByTag<T>();
+template <typename T>
+const T* VdvTicketPrivate::productData(uint32_t type) const
+{
+    const auto elem = productElement(type);
+    if (elem.isValid()) {
+        return elem.template contentAt<T>();
+    }
+    return nullptr;
 }
 
 VdvTicket::VdvTicket()
@@ -60,23 +69,23 @@ VdvTicket::VdvTicket(const QByteArray &data)
     static_assert(sizeof(VdvTicketHeader) < MinimumTicketDataSize, "");
     int offset = sizeof(VdvTicketHeader);
 
-    const auto productBlock = reinterpret_cast<const VdvTicketProductData*>(data.constData() + offset);
-    if (!productBlock->isValid() || productBlock->size() + offset > data.size()) {
-        qCWarning(Log) << "Invalid product block" << productBlock->isValid() << productBlock->size() << offset << data.size();
+    const auto productBlock = BER::TypedElement<TagTicketProductData>(data, offset);
+    if (!productBlock.isValid() || productBlock.size() + offset > data.size()) {
+        qCWarning(Log) << "Invalid product block" << productBlock.isValid() << productBlock.size() << offset << data.size();
         return;
     }
-    offset += productBlock->size();
+    offset += productBlock.size();
 
     const auto transactionBlock = reinterpret_cast<const VdvTicketTransactionData*>(data.constData() + offset);
     qDebug() << "transaction block:" << qFromBigEndian(transactionBlock->kvpOrgId);
     offset += sizeof(VdvTicketTransactionData);
 
-    const auto prodTransactionBlock = reinterpret_cast<const VdvTicketProductTransactionData*>(data.constData() + offset);
-    if (!prodTransactionBlock->isValid() || prodTransactionBlock->size() + offset > data.size()) {
-        qCWarning(Log) << "Invalid product transaction block" << prodTransactionBlock->isValid() << prodTransactionBlock->size() << offset << data.size();
+    const auto prodTransactionBlock = BER::TypedElement<TagTicketProductTransactionData>(data, offset);
+    if (!prodTransactionBlock.isValid()) {
+        qCWarning(Log) << "Invalid product transaction block" << prodTransactionBlock.isValid() << offset << data.size();
         return;
     }
-    offset += prodTransactionBlock->size();
+    offset += prodTransactionBlock.size();
 
     const auto issueData = reinterpret_cast<const VdvTicketIssueData*>(data.constData() + offset);
     qDebug() << issueData->version << QByteArray((const char*)&issueData->samId, 3).toHex();
@@ -92,16 +101,16 @@ VdvTicket::VdvTicket(const QByteArray &data)
     }
     d->m_data = data;
 
-#if 0
+#if 1
     const auto hdr = reinterpret_cast<const VdvTicketHeader*>(data.constData());
     qDebug() << qFromBigEndian(hdr->productId) << qFromBigEndian(hdr->pvOrgId);
     // iterate over TLV content
-    auto tlv = productBlock->first();
-    while (tlv) {
-        qDebug() << "tag:" << tlv->tag << "size:" << tlv->contentSize() << "content:" << QByteArray((const char*)tlv->contentData(), tlv->contentSize()).toHex();
-        tlv = productBlock->next(tlv);
+    auto tlv = productBlock.first();
+    while (tlv.isValid()) {
+        qDebug() << "tag:" << tlv.type() << "size:" << tlv.contentSize() << "content:" << QByteArray((const char*)tlv.contentData(), tlv.contentSize()).toHex();
+        tlv = tlv.next();
     }
-    const auto basicData = productBlock->contentByTag<VdvTicketBasicData>();
+    const auto basicData = d->productData<VdvTicketBasicData>(TagTicketBasicData);
     if (basicData) {
         qDebug() << "traveler type:" << basicData->travelerType;
     }
@@ -149,7 +158,7 @@ int VdvTicket::issuerId() const
 
 VdvTicket::ServiceClass VdvTicket::serviceClass() const
 {
-    const auto tlv = d->productData<VdvTicketBasicData>();
+    const auto tlv = d->productData<VdvTicketBasicData>(TagTicketBasicData);
     if (!tlv) {
         return UnknownClass;
     }
@@ -169,13 +178,14 @@ VdvTicket::ServiceClass VdvTicket::serviceClass() const
 
 Person VdvTicket::person() const
 {
-    const auto tlv = d->productData<VdvTicketTravelerData>();
+    const auto elem = d->productElement(TagTicketTravelerData);
+    const auto tlv = elem.isValid() ? elem.contentAt<VdvTicketTravelerData>() : nullptr;
     if (!tlv) {
         return {};
     }
-    qDebug() << "traveler:" << tlv->gender << QDate(tlv->birthDate.year(), tlv->birthDate.month(), tlv->birthDate.day()) << QByteArray(tlv->name(), tlv->nameSize());
+    qDebug() << "traveler:" << tlv->gender << QDate(tlv->birthDate.year(), tlv->birthDate.month(), tlv->birthDate.day()) << QByteArray(tlv->name(), tlv->nameSize(elem.contentSize()));
 
-    const auto len = strnlen(tlv->name(), tlv->nameSize()); // name field can contain null bytes
+    const auto len = strnlen(tlv->name(), tlv->nameSize(elem.contentSize())); // name field can contain null bytes
     if (len == 0) {
         return {};
     }
