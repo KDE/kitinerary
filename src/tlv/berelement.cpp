@@ -18,6 +18,8 @@
 #include "berelement_p.h"
 
 #include <QDebug>
+#include <QIODevice>
+#include <QtEndian>
 
 using namespace KItinerary;
 
@@ -188,4 +190,28 @@ BER::Element BER::Element::find(uint32_t type) const
         e = e.next();
     }
     return {};
+}
+
+void BER::Element::writeSize(QIODevice *out, int size)
+{
+    const uint32_t beSize = qToBigEndian((uint32_t)(size));
+    constexpr auto maxBytes = sizeof(size);
+    static_assert(maxBytes == sizeof(beSize), "wrong size datatypes");
+
+    if (size <= 127) {
+        out->write(((const char*)&beSize) + maxBytes - 1, 1);
+        return;
+    }
+
+    uint32_t mask = 0xff000000;
+    static_assert(maxBytes == sizeof(mask), "wrong size datatypes");
+    for (int i = maxBytes; i > 0; --i) {
+        if (size & mask) {
+            uint8_t sizeTag = BerExtendedLenghtMask | i;
+            out->write((const char*)&sizeTag, 1);
+            out->write(((const char*)&beSize) + maxBytes - i, i);
+            return;
+        }
+        mask >>= 8;
+    }
 }

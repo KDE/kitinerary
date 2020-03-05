@@ -22,6 +22,8 @@
 
 #include <cstdint>
 
+class QIODevice;
+
 namespace KItinerary {
 
 /** BER/DER/X.690 encoding classes and functions. */
@@ -75,6 +77,9 @@ public:
     Element next() const;
     /** Returns the first child element of the given @p type. */
     Element find(uint32_t type) const;
+
+    /** Writes the given size in BER encoding to @p out. */
+    static void writeSize(QIODevice *out, int size);
 
 private:
     int typeSize() const;
