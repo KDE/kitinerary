@@ -32,8 +32,8 @@ if (NOT ANDROID)
     find_package(SharedMimeInfo 1.3 REQUIRED)
 endif()
 
-set(KMIME_VERSION "5.13.40")
-set(PIM_PKPASS "5.13.40")
+set(KMIME_VERSION "5.13.80")
+set(PIM_PKPASS "5.13.80")
 
 find_package(KF5Mime ${KMIME_VERSION} CONFIG REQUIRED)
 find_package(KF5CalendarCore ${KF5_MIN_VERSION} CONFIG)
@@ -95,7 +95,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kitinerary\")
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
-   add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x058000)
+   add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x054400)
 endif()
 
 add_definitions(-DQT_NO_FOREACH)
