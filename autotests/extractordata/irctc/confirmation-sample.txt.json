@@ -14,7 +14,7 @@
                 "geo": {
                     "@type": "GeoCoordinates",
                     "latitude": 28.411500930786133,
-                    "longitude": 77.30729675292969
+                    "longitude": 77.30740356445312
                 },
                 "identifier": "ir:FDB",
                 "name": "FDB"

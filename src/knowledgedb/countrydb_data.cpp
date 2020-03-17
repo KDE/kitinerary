@@ -16,6 +16,7 @@ static const Country country_table[] = {
     {CountryId{"AM"}, DrivingSide::Right, {TypeC|TypeF}}, // Armenia
     {CountryId{"AO"}, DrivingSide::Right, {TypeC}}, // Angola
     {CountryId{"AR"}, DrivingSide::Right, {TypeC|TypeI}}, // Argentina
+    {CountryId{"AS"}, DrivingSide::Right, {TypeA|TypeB|TypeF|TypeI}}, // American Samoa
     {CountryId{"AT"}, DrivingSide::Right, {TypeC|TypeF}}, // Austria
     {CountryId{"AU"}, DrivingSide::Left, {TypeI}}, // Australia
     {CountryId{"AW"}, DrivingSide::Right, {TypeA|TypeB|TypeF}}, // Aruba
@@ -225,6 +226,7 @@ static const IsoCountryCodeMapping iso_country_code_table[] = {
     { CountryId3{"ARE"}, CountryId{"AE"}},
     { CountryId3{"ARG"}, CountryId{"AR"}},
     { CountryId3{"ARM"}, CountryId{"AM"}},
+    { CountryId3{"ASM"}, CountryId{"AS"}},
     { CountryId3{"ATG"}, CountryId{"AG"}},
     { CountryId3{"AUS"}, CountryId{"AU"}},
     { CountryId3{"AUT"}, CountryId{"AT"}},
