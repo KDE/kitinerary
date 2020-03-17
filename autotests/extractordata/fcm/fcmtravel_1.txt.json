@@ -51,6 +51,7 @@
             "flightNumber": "212"
         },
         "reservationNumber": "ABCDEF",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "John Doe"
@@ -108,6 +109,7 @@
             "flightNumber": "211"
         },
         "reservationNumber": "ABCDEF",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "John Doe"

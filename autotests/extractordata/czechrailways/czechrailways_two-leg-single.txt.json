@@ -18,6 +18,7 @@
             "trainNumber": "R 945"
         },
         "reservationNumber": "Z39230",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {
@@ -45,6 +46,7 @@
             "departureTime": "2017-08-09T11:02:00",
             "trainNumber": "Sp 1786"
         },
-        "reservationNumber": "Z39230"
+        "reservationNumber": "Z39230",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
 ]

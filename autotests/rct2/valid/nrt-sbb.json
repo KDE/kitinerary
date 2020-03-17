@@ -9,6 +9,6 @@
         "outboundDepartureStation": "VISP",
         "outboundDepartureTime": "2012-09-21T00:00:00",
         "passengerName": "Last Name First Nam",
-        "type": "Transport"
+        "type": "http://schema.org/Transport"
     }
 ]

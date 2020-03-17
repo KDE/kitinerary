@@ -21,6 +21,7 @@
             "trainNumber": "ICE 13"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketToken": "aztecbin:foo",

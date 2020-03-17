@@ -31,6 +31,7 @@
             "trainNumber": "RJ, RJ 1234"
         },
         "reservationNumber": "9876543210",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {

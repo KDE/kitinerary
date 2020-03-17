@@ -41,6 +41,7 @@
             "flightNumber": "1996"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketToken": "aztecCode:M1DRAGON/KONQUI       EXXX007 VIEMXPAK 1996 249J013C0042 167>5321WW8325BAK 0014123456002001414246700100141234789012A0141234567890 1AK AK 1234567890123    4PCYLX58Z^108ABCDEFGH"

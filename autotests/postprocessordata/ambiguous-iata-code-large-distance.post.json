@@ -49,6 +49,7 @@
             },
             "flightNumber": "123"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
 ]

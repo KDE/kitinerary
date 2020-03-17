@@ -20,7 +20,7 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "PostalAddress"\,"addressCountry":"FI"\,"addressLocality":
  "Espoo"\,"addressRegion":""\,"postalCode":"02600"\,"streetAddress":
  "Leppävaarankatu 1"}\,"name":"Glo Hotel Sello"\,"telephone":
- "+358101234567"\,"url":"https://www.booking.com/hotel/fi/palace-sello.html?aid=123456&label=postbooking_confemail"}\,"reservationNumber":"1234567890"\,"underName":{"@type":
+ "+358101234567"\,"url":"https://www.booking.com/hotel/fi/palace-sello.html?aid=123456&label=postbooking_confemail"}\,"reservationNumber":"1234567890"\,"reservationStatus":"http://schema.org/ReservationConfirmed","underName":{"@type":
  "Person"\,"email":"john.doe@email.com"\,"name":"John Doe"}\,"url":"https://secure.booking.com/mybooking.en-gb.html?aid=123456\;auth_key=magic&&source=conf_metadata&pbsource=conf_email_modify"}]
 END:VEVENT
 END:VCALENDAR

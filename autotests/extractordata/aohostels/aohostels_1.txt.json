@@ -31,6 +31,7 @@
             "telephone": "+43 1 602 1234 5678"
         },
         "reservationNumber": "AOI-XX-1234567",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "John Doe"

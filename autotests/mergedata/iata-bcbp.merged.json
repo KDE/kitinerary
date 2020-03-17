@@ -32,6 +32,7 @@
         "flightNumber": "2591"
     },
     "reservationNumber": "XXX007",
+    "reservationStatus": "http://schema.org/ReservationConfirmed",
     "reservedTicket": {
         "@type": "Ticket",
         "ticketToken": "aztecCode:M1KRAUSE/VOLKERMR     EXXX007 BRUTXLSN 2591 033Y006D0042 35D>5181WW0033BSN              XXXXXXXXXXXXXXXX SN LH XXXXXXXXXXXXXXX     N*XXXXXXXXXXXXX       "

@@ -7,6 +7,6 @@
         "outboundClass": "1",
         "outboundDepartureStation": "GRAZ",
         "passengerName": "Lastname Name",
-        "type": "Transport"
+        "type": "http://schema.org/Transport"
     }
 ]

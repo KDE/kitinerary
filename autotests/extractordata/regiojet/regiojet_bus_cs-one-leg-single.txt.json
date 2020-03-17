@@ -24,6 +24,7 @@
             "departureTime": "2012-06-29T03:20:00"
         },
         "reservationNumber": "0123456789",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {

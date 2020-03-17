@@ -11,6 +11,6 @@
         "outboundDepartureTime": "2010-05-16T11:02:00",
         "seatNumber": "FENSTER 023",
         "trainNumber": "EC 42",
-        "type": "Reservation"
+        "type": "http://schema.org/Reservation"
     }
 ]

@@ -51,6 +51,7 @@
             "flightNumber": "6439"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "Jane Doe"
@@ -108,6 +109,7 @@
             "flightNumber": "6439"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "John Doe"
@@ -165,6 +167,7 @@
             "flightNumber": "7392"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "Jane Doe"
@@ -222,6 +225,7 @@
             "flightNumber": "7392"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "John Doe"
@@ -279,6 +283,7 @@
             "flightNumber": "086"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "Jane Doe"
@@ -336,6 +341,7 @@
             "flightNumber": "086"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "John Doe"
@@ -393,6 +399,7 @@
             "flightNumber": "7421"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "Jane Doe"
@@ -450,6 +457,7 @@
             "flightNumber": "7421"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "John Doe"

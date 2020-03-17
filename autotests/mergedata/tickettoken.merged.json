@@ -1,6 +1,7 @@
 [{
     "@context": "http://schema.org",
     "@type": "FlightReservation",
+    "reservationStatus": "http://schema.org/ReservationConfirmed",
     "reservedTicket": {
         "@type": "Ticket",
         "ticketToken": "aztecCode:M1DOE/JOHN            EXXX007 TXLBRUSN 2592 110"

@@ -30,6 +30,7 @@
             }
         },
         "reservationNumber": "42",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "Dr Konqui"
@@ -66,6 +67,7 @@
             }
         },
         "reservationNumber": "42",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "name": "Katie Dragon"

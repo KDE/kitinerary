@@ -24,6 +24,7 @@
             "departureTime": "2012-08-11T09:30:00"
         },
         "reservationNumber": "0123456789",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {
@@ -57,6 +58,7 @@
             "departureTime": "2012-08-11T22:40:00"
         },
         "reservationNumber": "0123456789",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {

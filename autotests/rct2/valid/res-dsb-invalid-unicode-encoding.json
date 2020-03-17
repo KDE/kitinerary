@@ -10,6 +10,6 @@
         "outboundDepartureTime": "2018-12-08T17:22:00",
         "seatNumber": "103",
         "trainNumber": "267",
-        "type": "Reservation"
+        "type": "http://schema.org/Reservation"
     }
 ]

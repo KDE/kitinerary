@@ -25,6 +25,7 @@
         "flightNumber": "1234"
     },
     "reservationNumber": "XXX007",
+    "reservationStatus": "http://schema.org/ReservationConfirmed",
     "reservedTicket": {
         "@type": "Ticket",
         "ticketToken": "aztecCode:M1..."

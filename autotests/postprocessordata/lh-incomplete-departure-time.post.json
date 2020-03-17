@@ -47,6 +47,7 @@
             "departureDay": "2018-03-06",
             "flightNumber": "2724"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
 ]

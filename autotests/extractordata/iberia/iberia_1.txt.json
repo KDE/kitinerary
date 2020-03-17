@@ -51,7 +51,8 @@
             },
             "flightNumber": "3677"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
     {
         "@context": "http://schema.org",
@@ -105,7 +106,8 @@
             },
             "flightNumber": "8588"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
     {
         "@context": "http://schema.org",
@@ -159,7 +161,8 @@
             },
             "flightNumber": "8603"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
     {
         "@context": "http://schema.org",
@@ -212,6 +215,7 @@
             },
             "flightNumber": "3186"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
 ]

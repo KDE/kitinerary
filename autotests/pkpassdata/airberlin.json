@@ -50,6 +50,7 @@
             "flightNumber": "6203"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 TXLMUCAB 6203 297Y019F0060 33C>5080      B2A                                         N00  "

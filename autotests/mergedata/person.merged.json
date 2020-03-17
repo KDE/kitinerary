@@ -1,6 +1,7 @@
 [{
     "@context": "http://schema.org",
     "@type": "FlightReservation",
+    "reservationStatus": "http://schema.org/ReservationConfirmed",
     "underName": {
         "@type": "Person",
         "familyName": "Ottens",

@@ -45,6 +45,7 @@
             "flightNumber": "834"
         },
         "reservationNumber": "ABC123",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketToken": "aztecCode:M1DESMARAIS/LUC       EABC123 YULFRAAC 0834 326J001A0025 100"

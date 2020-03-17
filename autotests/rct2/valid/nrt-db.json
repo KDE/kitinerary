@@ -7,6 +7,6 @@
         "outboundClass": "2",
         "outboundDepartureStation": "Duisburg",
         "passengerName": "Last Name Firstn",
-        "type": "Transport"
+        "type": "http://schema.org/Transport"
     }
 ]

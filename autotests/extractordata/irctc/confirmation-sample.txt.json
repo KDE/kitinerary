@@ -42,6 +42,7 @@
             "trainNumber": "12138"
         },
         "reservationNumber": "2438941616",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {

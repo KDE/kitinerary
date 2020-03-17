@@ -20,7 +20,7 @@
             "departureTime": "1970-01-01T00:45:00",
             "flightNumber": "1234"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
 ]
-

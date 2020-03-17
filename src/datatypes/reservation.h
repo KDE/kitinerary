@@ -34,6 +34,18 @@ class ReservationPrivate;
  */
 class KITINERARY_EXPORT Reservation
 {
+public:
+    /** Reservation status enum.
+     *  @see https://schema.org/ReservationStatusType
+     */
+    enum ReservationStatus {
+        ReservationConfirmed,
+        ReservationCancelled,
+        ReservationHold,
+        ReservationPending,
+    };
+    Q_ENUM(ReservationStatus)
+
     KITINERARY_BASE_GADGET(Reservation)
     KITINERARY_PROPERTY(QString, reservationNumber, setReservationNumber)
     KITINERARY_PROPERTY(QVariant, reservationFor, setReservationFor)
@@ -44,6 +56,7 @@ class KITINERARY_EXPORT Reservation
     KITINERARY_PROPERTY(QVariantList, potentialAction, setPotentialAction)
     KITINERARY_PROPERTY(QDateTime, modifiedTime, setModifiedTime)
     KITINERARY_PROPERTY(QVariantList, subjectOf, setSubjectOf)
+    KITINERARY_PROPERTY(ReservationStatus, reservationStatus, setReservationStatus)
 
     // KDE extensions
     /** Pass type identifier of an associated Apple Wallet boarding pass.
@@ -152,6 +165,7 @@ class KITINERARY_EXPORT TaxiReservation : public Reservation
 
 }
 
+Q_DECLARE_METATYPE(KItinerary::Reservation::ReservationStatus)
 Q_DECLARE_METATYPE(KItinerary::FlightReservation)
 Q_DECLARE_METATYPE(KItinerary::LodgingReservation)
 Q_DECLARE_METATYPE(KItinerary::TrainReservation)

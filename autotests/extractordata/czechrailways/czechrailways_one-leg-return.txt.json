@@ -17,6 +17,7 @@
             "departureTime": "2017-12-31T13:51:00",
             "trainNumber": "EC 173"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {
@@ -44,6 +45,7 @@
             "departureTime": "2018-01-01T10:38:00",
             "trainNumber": "rj 72"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {

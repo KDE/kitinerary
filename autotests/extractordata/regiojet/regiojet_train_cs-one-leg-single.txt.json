@@ -25,6 +25,7 @@
             "trainNumber": "RJ, RJ 1010"
         },
         "reservationNumber": "0123456789",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {

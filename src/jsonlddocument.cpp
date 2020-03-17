@@ -70,6 +70,16 @@ static double doubleValue(const QJsonValue &v)
 
 static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
 {
+    // enum handling must be done first, as prop.type() == Int
+    if (prop.isEnumType() && v.isString()) {
+        auto value = v.toString();
+        if (value.startsWith(QLatin1String("http://schema.org/"))) {
+            value = value.mid(18);
+        }
+        const auto key = prop.enumerator().keyToValue(value.toUtf8().constData());
+        return key;
+    }
+
     switch (prop.type()) {
     case QVariant::String:
         return v.toString();
@@ -353,8 +363,12 @@ static QJsonValue toJsonValue(const QVariant &v)
 
         if (prop.isEnumType()) { // enums defined in this QMO
             const auto key = prop.readOnGadget(v.constData()).toInt();
-            const auto value = prop.enumerator().valueToKey(key);
-            obj.insert(QString::fromUtf8(prop.name()), QString::fromUtf8(value));
+            auto value = QString::fromUtf8(prop.enumerator().valueToKey(key));
+            // this is (ab)used elsewhere, so let's not interfere with enum serialization there for now
+            if (strncmp(mo->className(), "KItinerary::", 12) == 0) {
+                value = QLatin1String("http://schema.org/") + value;
+            }
+            obj.insert(QString::fromUtf8(prop.name()), value);
             continue;
         } else if (QMetaType::typeFlags(prop.userType()) & QMetaType::IsEnumeration) { // external enums
             obj.insert(QString::fromUtf8(prop.name()), prop.readOnGadget(v.constData()).toString());

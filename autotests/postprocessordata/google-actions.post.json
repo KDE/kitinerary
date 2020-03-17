@@ -84,6 +84,7 @@
             "flightNumber": "110"
         },
         "reservationNumber": "RXJ34P",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketToken": "qrCode:123456789"

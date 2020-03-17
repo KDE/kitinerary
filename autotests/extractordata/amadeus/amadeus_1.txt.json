@@ -50,7 +50,8 @@
             },
             "flightNumber": "9520"
         },
-        "reservationNumber": "123456"
+        "reservationNumber": "123456",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
     {
         "@context": "http://schema.org",
@@ -104,7 +105,8 @@
             },
             "flightNumber": "139"
         },
-        "reservationNumber": "123456"
+        "reservationNumber": "123456",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
     {
         "@context": "http://schema.org",
@@ -159,7 +161,8 @@
             },
             "flightNumber": "8573"
         },
-        "reservationNumber": "123456"
+        "reservationNumber": "123456",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
     {
         "@context": "http://schema.org",
@@ -213,6 +216,7 @@
             },
             "flightNumber": "8680"
         },
-        "reservationNumber": "123456"
+        "reservationNumber": "123456",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
 ]

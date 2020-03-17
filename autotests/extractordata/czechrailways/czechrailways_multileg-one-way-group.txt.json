@@ -17,6 +17,7 @@
             "departureTime": "2019-08-06T17:50:00",
             "trainNumber": "EC 283"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {
@@ -44,6 +45,7 @@
             "departureTime": "2019-08-06T19:03:00",
             "trainNumber": "R 1262"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {
@@ -70,6 +72,7 @@
             },
             "departureTime": "2019-08-06T19:33:00",
             "trainNumber": "Bus 501262"
-        }
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
 ]

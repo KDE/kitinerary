@@ -48,6 +48,7 @@
             },
             "flightNumber": "38"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "familyName": "KONQUI",
@@ -104,6 +105,7 @@
             },
             "flightNumber": "38"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "familyName": "KONQUI",
@@ -160,6 +162,7 @@
             },
             "flightNumber": "38"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "familyName": "KONQUI",

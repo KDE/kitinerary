@@ -48,6 +48,7 @@
             },
             "flightNumber": "289"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "familyName": "DOE",
@@ -104,6 +105,7 @@
             },
             "flightNumber": "83"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "familyName": "DOE",
@@ -161,6 +163,7 @@
             },
             "flightNumber": "3000"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "familyName": "DOE",
@@ -218,6 +221,7 @@
             },
             "flightNumber": "3001"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "familyName": "DOE",
@@ -274,6 +278,7 @@
             },
             "flightNumber": "84"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "familyName": "DOE",
@@ -330,6 +335,7 @@
             },
             "flightNumber": "226"
         },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "underName": {
             "@type": "Person",
             "familyName": "DOE",

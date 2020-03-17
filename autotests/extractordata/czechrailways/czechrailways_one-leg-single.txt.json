@@ -18,6 +18,7 @@
             "trainNumber": "RJ 76"
         },
         "reservationNumber": "FXI305",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {

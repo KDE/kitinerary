@@ -19,7 +19,8 @@
             "departureTime": "2027-02-10T08:37:00",
             "trainNumber": "IC 148"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
     {
         "@context": "http://schema.org",
@@ -41,6 +42,7 @@
             "departureTime": "2027-02-12T16:08:00",
             "trainNumber": "IC 147"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
 ]

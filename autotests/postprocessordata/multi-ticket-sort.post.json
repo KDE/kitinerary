@@ -18,6 +18,7 @@
             "trainNumber": "119"
         },
         "reservationNumber": "YYY008",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketToken": "aztec:YYY008"
@@ -46,6 +47,7 @@
             "trainNumber": "EC 119"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "name": "Reservation",

@@ -17,6 +17,7 @@
             "departureTime": "2017-01-01T16:55:00",
             "trainNumber": "Os 9424"
         },
-        "reservationNumber": "VM5MZ3"
+        "reservationNumber": "VM5MZ3",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
 ]

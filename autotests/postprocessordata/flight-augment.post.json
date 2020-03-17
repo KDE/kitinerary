@@ -49,5 +49,6 @@
         },
         "flightNumber": "110"
     },
-    "reservationNumber": "RXJ34P"
+    "reservationNumber": "RXJ34P",
+    "reservationStatus": "http://schema.org/ReservationConfirmed"
 }]

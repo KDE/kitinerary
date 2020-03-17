@@ -49,6 +49,7 @@
             "flightNumber": "212"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 TXLRIXBT 0212 309Y014E0063 100"

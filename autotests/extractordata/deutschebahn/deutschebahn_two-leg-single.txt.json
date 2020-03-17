@@ -19,7 +19,8 @@
             "departureTime": "2026-12-28T15:06:00",
             "trainNumber": "S0"
         },
-        "reservationNumber": "XXX007"
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
     {
         "@context": "http://schema.org",
@@ -42,6 +43,7 @@
             "trainNumber": "ICE 943"
         },
         "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
             "ticketedSeat": {

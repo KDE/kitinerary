@@ -12,6 +12,6 @@
        "passengerName": "Lastname Firs",
        "seatNumber": "FENSTER 046",
        "trainNumber": "NJ 421",
-       "type": "TransportReservation"
+       "type": "http://schema.org/TransportReservation"
    }
 ]
