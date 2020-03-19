@@ -69,11 +69,7 @@ QJsonArray WikiData::query(const char *sparqlQuery, const char *cacheFileName)
         auto reply = nam.get(QNetworkRequest(url));
         QObject::connect(reply, &QNetworkReply::finished, QCoreApplication::instance(), &QCoreApplication::quit);
         QCoreApplication::exec();
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
     if (reply->error() != QNetworkReply::NoError) {
-#else
-    if (reply->networkError() != QNetworkReply::NoError) {
-#endif
             qWarning() << reply->errorString();
             return {};
         }
