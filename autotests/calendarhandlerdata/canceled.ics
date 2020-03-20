@@ -1,0 +1,35 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+CALSCALE:GREGORIAN
+
+BEGIN:VEVENT
+DTSTAMP:20171227T111649Z
+X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
+ "FlightReservation"\,"modifiedTime":"2027-05-01T08:30:00-08:
+ 00"\,"reservationFor":{"@type":"Flight"\,"airline":{"@type":
+ "Airline"\,"iataCode":"UA"}\,"arrivalAirport":{"@type":
+ "Airport"\,"address":{"@type":"PostalAddress"\,"addressCountry":
+ "US"}\,"geo":{"@type":"GeoCoordinates"\,"latitude":
+ 40.63970184326172\,"longitude":-73.77890014648438}\,"iataCode":
+ "JFK"}\,"arrivalTime":{"@type":"QDateTime"\,"@value":"2027-03-05T06:30:
+ 00-05:00"\,"timezone":"America/New_York"}\,"boardingTime":"2027-03-05T05:
+ 30:00-05:00"\,"departureAirport":{"@type":"Airport"\,"address":{"@type":
+ "PostalAddress"\,"addressCountry":"US"}\,"geo":{"@type":
+ "GeoCoordinates"\,"latitude":37.618900299072266\,"longitude":
+ -122.375}\,"iataCode":"SFO"}\,"departureDay":
+ "2027-03-04"\,"departureTime":{"@type":"QDateTime"\,"@value":
+ "2027-03-04T20:15:00-08:00"\,"timezone":
+ "America/Los_Angeles"}\,"flightNumber":"110"}\,"reservationNumber":
+ "RXJ34P"\,"reservationStatus":"http://schema.org/ReservationCancelled"}]
+CREATED:20171227T111649Z
+UID:KIT-XXX007-1b22236a-21ff-4885-8c99-b3b2bbca062c
+LAST-MODIFIED:20171227T111649Z
+DESCRIPTION:Boarding time: 5:30 AM\nBooking reference: RXJ34P
+SUMMARY:Canceled: Flight UA 110 from SFO to JFK
+GEO:37.618900;-122.375000
+DTSTART;TZID=America/Los_Angeles:20270304T201500
+DTEND;TZID=America/New_York:20270305T063000
+TRANSP:TRANSPARENT
+END:VEVENT
+
+END:VCALENDAR

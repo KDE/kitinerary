@@ -169,6 +169,12 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
         return;
     }
 
+    if (JsonLd::canConvert<Reservation>(reservation) && JsonLd::convert<Reservation>(reservation).reservationStatus() == Reservation::ReservationCancelled) {
+        event->setTransparency(KCalendarCore::Event::Transparent);
+        event->setSummary(i18nc("canceled train/flight/loding reservation", "Canceled: %1", event->summary()));
+        event->clearAlarms();
+    }
+
     if (!event->uid().startsWith(QLatin1String("KIT-"))) {
         event->setUid(QLatin1String("KIT-") + event->uid());
     }
