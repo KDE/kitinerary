@@ -88,7 +88,7 @@ QSharedPointer<KCalendarCore::Event> CalendarHandler::findEvent(const QSharedPoi
         return {};
     }
 
-    const auto dt = SortUtil::startDateTime(reservation).date();
+    const auto dt = SortUtil::startDateTime(reservation).toTimeZone(calendar->timeZone()).date();
     const auto events = calendar->events(dt);
     for (const auto &event : events) {
         if (!event->uid().startsWith(QLatin1String("KIT-"))) {
