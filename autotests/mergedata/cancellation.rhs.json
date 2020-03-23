@@ -1,0 +1,8 @@
+[{
+  "@context": "http://schema.org",
+  "@type": "FlightReservation",
+  "reservationNumber": "RXJ34P",
+  "reservationStatus": "http://schema.org/Cancelled",
+  "modifiedTime": "2027-02-01T08:30:00-08:00"
+}]
+

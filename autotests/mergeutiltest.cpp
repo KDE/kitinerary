@@ -305,12 +305,18 @@ private Q_SLOTS:
         const auto expected = QJsonDocument::fromJson(readFile(baseName + QLatin1String(".merged.json")));
 
         const auto mergedL2R = MergeUtil::merge(lhs, rhs);
-        //qDebug().noquote() << QJsonDocument(JsonLdDocument::toJson({mergedL2R})).toJson();
-        QCOMPARE(QJsonDocument(JsonLdDocument::toJson(QVector<QVariant>({mergedL2R}))), expected);
+        auto mergedJson = QJsonDocument(JsonLdDocument::toJson(QVector<QVariant>({mergedL2R})));
+        if (mergedJson != expected) {
+            qDebug().noquote() << mergedJson.toJson();
+        }
+        QCOMPARE(mergedJson, expected);
 
         const auto mergedR2L = MergeUtil::merge(rhs, lhs);
-        //qDebug().noquote() << QJsonDocument(JsonLdDocument::toJson({m5ergedR2L})).toJson();
-        QCOMPARE(QJsonDocument(JsonLdDocument::toJson(QVector<QVariant>({mergedR2L}))), expected);
+        mergedJson = QJsonDocument(JsonLdDocument::toJson(QVector<QVariant>({mergedR2L})));
+        if (mergedJson != expected) {
+            qDebug().noquote() << mergedJson.toJson();
+        }
+        QCOMPARE(mergedJson, expected);
     }
 };
 
