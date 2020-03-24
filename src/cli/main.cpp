@@ -124,6 +124,8 @@ int main(int argc, char** argv)
     parser.addOption(pathsOpt);
     QCommandLineOption formatOpt({QStringLiteral("o"), QStringLiteral("output")}, QStringLiteral("Output format [JsonLd, iCal]. Default: JsonLd"), QStringLiteral("format"));
     parser.addOption(formatOpt);
+    QCommandLineOption noValidationOpt({QStringLiteral("no-validation")}, QStringLiteral("Disable result validation."));
+    parser.addOption(noValidationOpt);
 
     parser.addPositionalArgument(QStringLiteral("input"), QStringLiteral("File to extract data from, omit for using stdin."));
     parser.process(app);
@@ -152,6 +154,7 @@ int main(int argc, char** argv)
         contextDt = QDateTime::currentDateTime();
     }
     postproc.setContextDate(contextDt);
+    postproc.setValidationEnabled(!parser.isSet(noValidationOpt));
 
     const auto files = parser.positionalArguments().isEmpty() ? QStringList(QString()) : parser.positionalArguments();
     for (const auto arg : files) {

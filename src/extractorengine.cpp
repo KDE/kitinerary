@@ -165,7 +165,8 @@ void ExtractorEnginePrivate::extractExternal()
 
     QStringList args({QLatin1String("--type"), ExtractorInput::typeToString(m_inputType),
                       QLatin1String("--context-date"), m_context->m_senderDate.toString(Qt::ISODate),
-                      QLatin1String("--extractors"), extNames.join(QLatin1Char(';'))});
+                      QLatin1String("--extractors"), extNames.join(QLatin1Char(';')),
+                      QLatin1String("--no-validation")});
     const auto extraPaths = m_repo.additionalSearchPaths();
     for (const auto &p : extraPaths) {
         args.push_back(QStringLiteral("--additional-search-path"));
