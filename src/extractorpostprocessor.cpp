@@ -110,15 +110,10 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
 
 QVector<QVariant> ExtractorPostprocessor::result() const
 {
-    if (!d->m_resultFinalized) {
-        for (auto it = d->m_data.begin(); it != d->m_data.end();) {
-            if (d->m_validator.isValidElement(*it)) {
-                ++it;
-            } else {
-                //qCDebug(Log).noquote() << "Discarding element:" << QJsonDocument(JsonLdDocument::toJson({*it})).toJson();
-                it = d->m_data.erase(it);
-            }
-        }
+    if (!d->m_resultFinalized && d->m_validationEnabled) {
+        d->m_data.erase(std::remove_if(d->m_data.begin(), d->m_data.end(), [this](const auto &elem) {
+            return !d->m_validator.isValidElement(elem);
+        }), d->m_data.end());
         d->m_resultFinalized = true;
     }
 
@@ -129,6 +124,11 @@ QVector<QVariant> ExtractorPostprocessor::result() const
 void ExtractorPostprocessor::setContextDate(const QDateTime& dt)
 {
     d->m_contextDate = dt;
+}
+
+void ExtractorPostprocessor::setValidationEnabled(bool validate)
+{
+    d->m_validationEnabled = validate;
 }
 
 void ExtractorPostprocessorPrivate::mergeOrAppend(const QVariant &elem)

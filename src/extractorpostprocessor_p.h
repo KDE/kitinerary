@@ -83,6 +83,7 @@ public:
     QDateTime m_contextDate;
     ExtractorValidator m_validator;
     bool m_resultFinalized = false;
+    bool m_validationEnabled = true;
 };
 
 template<typename T> inline T ExtractorPostprocessorPrivate::processPlace(T place)

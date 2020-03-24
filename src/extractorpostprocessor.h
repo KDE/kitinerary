@@ -94,6 +94,15 @@ public:
      */
     void setContextDate(const QDateTime &dt);
 
+    /** Enable or disable validation.
+     *  By default this is enabled, and will discard all unknown types
+     *  and incomplete items. If you need more control over this, disable
+     *  this here and pass the items through ExtractorValidator yourself
+     *  (or even use an entirely different validation mechanism entirely).
+     *  @see ExtractorValidator.
+     */
+    void setValidationEnabled(bool validate);
+
 private:
     std::unique_ptr<ExtractorPostprocessorPrivate> d;
 };
