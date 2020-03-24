@@ -32,6 +32,8 @@
 
 using namespace KItinerary;
 
+static bool filterElement(const QVariant &elem);
+
 static bool filterLodgingReservation(const LodgingReservation &res)
 {
     return res.checkinTime().isValid() && res.checkoutTime().isValid() && res.checkinTime() <= res.checkoutTime();
@@ -86,52 +88,113 @@ static bool filterLocalBusiness(const LocalBusiness &business)
     return !business.name().isEmpty();
 }
 
-bool ExtractorValidator::isValidElement(const QVariant &elem)
+static bool filterReservation(const Reservation &res)
 {
-    // reservation types
-    if (JsonLd::canConvert<Reservation>(elem)) {
-        const auto res = JsonLd::convert<Reservation>(elem);
-        if (!isValidElement(res.reservationFor())) {
-            qCDebug(ValidatorLog) << "Reservation element discarded due to rejected reservationFor property:" << elem.typeName();
-            return false;
-        }
-
-        if (JsonLd::isA<LodgingReservation>(elem)) {
-            return filterLodgingReservation(elem.value<LodgingReservation>());
-        }
-        if (JsonLd::isA<FoodEstablishmentReservation>(elem)) {
-            return filterFoodReservation(elem.value<FoodEstablishmentReservation>());
-        }
-
-        return true;
+    if (!filterElement(res.reservationFor())) {
+        qCDebug(ValidatorLog) << "Reservation element discarded due to rejected reservationFor property:" << res.reservationFor().typeName();
+        return false;
     }
+    return true;
+}
+
+template <typename T, bool (*F)(const T&)>
+static inline bool callFilterWithType(const QVariant &v)
+{
+    // JsonLd::canConvert<T>(v) is guaranteed by walking up the meta object tree here
+    return F(JsonLd::convert<T>(v));
+}
+
+#define FILTER(Type, Func) { &Type::staticMetaObject, callFilterWithType<Type, Func> }
+struct {
+    const QMetaObject *metaObject;
+    bool (*filter)(const QVariant &v);
+} static const filter_func_map[] {
+    FILTER(Flight, filterFlight),
+    FILTER(TrainTrip, filterTrainTrip),
+    FILTER(BusTrip, filterBusTrip),
+    FILTER(Event, filterEvent),
+    FILTER(LocalBusiness, filterLocalBusiness),
+    FILTER(FoodEstablishmentReservation, filterFoodReservation),
+    FILTER(LodgingReservation, filterLodgingReservation),
+    FILTER(Reservation, filterReservation),
+};
+#undef FILTER
+
+static bool filterElement(const QVariant &elem)
+{
+    auto mo = QMetaType::metaObjectForType(elem.userType());
+    if (!mo) {
+        qCDebug(ValidatorLog) << "Element discared due to non-gadget type:" << elem.typeName();
+        return false;
+    }
+    while (mo) {
+        for (const auto &f : filter_func_map) {
+            if (f.metaObject != mo) {
+                continue;
+            }
+            if (!f.filter(elem)) {
+                return false;
+            }
+            break;
+        }
+        mo = mo->superClass();
+    }
+    return true;
+}
+
+// TODO this default is merely to retain behavior compat for now
+// eventually this should be configured by the user to  the subset they need
+static const QMetaObject* supported_type_table[] = {
+    // reservation types
+    &FlightReservation::staticMetaObject,
+    &TrainReservation::staticMetaObject,
+    &BusReservation::staticMetaObject,
+    &RentalCarReservation::staticMetaObject,
+    &TaxiReservation::staticMetaObject,
+    &EventReservation::staticMetaObject,
+    &FoodEstablishmentReservation::staticMetaObject,
+    &LodgingReservation::staticMetaObject,
 
     // reservationFor types
-    if (JsonLd::isA<Flight>(elem)) {
-        return filterFlight(elem.value<Flight>());
-    }
-    if (JsonLd::isA<TrainTrip>(elem)) {
-        return filterTrainTrip(elem.value<TrainTrip>());
-    }
-    if (JsonLd::isA<BusTrip>(elem)) {
-        return filterBusTrip(elem.value<BusTrip>());
-    }
-    if (JsonLd::isA<Event>(elem)) {
-        return filterEvent(elem.value<Event>());
-    }
-    if (JsonLd::canConvert<LocalBusiness>(elem)) {
-        return filterLocalBusiness(JsonLd::convert<LocalBusiness>(elem));
-    }
+    &Flight::staticMetaObject,
+    &TrainTrip::staticMetaObject,
+    &BusTrip::staticMetaObject,
+    &RentalCar::staticMetaObject,
+    &Taxi::staticMetaObject,
+    &Event::staticMetaObject,
+    &TouristAttractionVisit::staticMetaObject,
+    &FoodEstablishment::staticMetaObject,
 
-    // types without specific filters yet
-    if (JsonLd::isA<TouristAttractionVisit>(elem) ||
-        JsonLd::isA<RentalCar>(elem) ||
-        JsonLd::isA<Taxi>(elem)
-    ) {
-        return true;
-    }
+    // PBI types
+    &LocalBusiness::staticMetaObject,
+};
 
-    // unknown top-level type
-    qCDebug(ValidatorLog) << "Element discarded due to unsupported top-level type:" << elem.typeName();
+static bool isSupportedTopLevelType(const QVariant &elem)
+{
+    auto mo = QMetaType::metaObjectForType(elem.userType());
+    if (!mo) {
+        qCDebug(ValidatorLog) << "Element discared due to non-gadget top-level type:" << elem.typeName();
+        return false;
+    }
+    while (mo) {
+        for (const auto &t : supported_type_table) {
+            if (t == mo) {
+                return true;
+            }
+        }
+        mo = mo->superClass();
+    }
     return false;
+}
+
+bool ExtractorValidator::isValidElement(const QVariant &elem)
+{
+    // check this is an allowed top-level type
+    if (!isSupportedTopLevelType(elem)) {
+        qCDebug(ValidatorLog) << "Element discarded due to unsupported top-level type:" << elem.typeName();
+        return false;
+    }
+
+    // apply type-specific filter functions
+    return filterElement(elem);
 }
