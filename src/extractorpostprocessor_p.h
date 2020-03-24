@@ -17,6 +17,8 @@
    02110-1301, USA.
 */
 
+#include "extractorvalidator.h"
+
 #include <QDateTime>
 #include <QVariant>
 #include <QVector>
@@ -79,6 +81,7 @@ public:
 
     QVector<QVariant> m_data;
     QDateTime m_contextDate;
+    ExtractorValidator m_validator;
     bool m_resultFinalized = false;
 };
 

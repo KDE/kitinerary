@@ -32,6 +32,15 @@
 
 using namespace KItinerary;
 
+namespace KItinerary {
+class ExtractorValidatorPrivate {
+public:
+};
+}
+
+ExtractorValidator::ExtractorValidator() = default;
+ExtractorValidator::~ExtractorValidator() = default;
+
 static bool filterElement(const QVariant &elem);
 
 static bool filterLodgingReservation(const LodgingReservation &res)

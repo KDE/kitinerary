@@ -15,22 +15,40 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef EXTRACTORVALIDATOR_H
-#define EXTRACTORVALIDATOR_H
+#ifndef KITINERARY_EXTRACTORVALIDATOR_H
+#define KITINERARY_EXTRACTORVALIDATOR_H
+
+#include "kitinerary_export.h"
+
+#include <memory>
 
 class QVariant;
+
+namespace KItinerary {
+class ExtractorValidatorPrivate;
 
 /**
  * Validates extractor results.
  * Used to discard incomplete or otherwise invalid data.
  */
-namespace ExtractorValidator
+class KITINERARY_EXPORT ExtractorValidator
 {
+public:
+    ExtractorValidator();
+    ~ExtractorValidator();
+    ExtractorValidator(const ExtractorValidator&) = delete;
+    ExtractorValidator& operator=(const ExtractorValidator&) = delete;
+
     /** Checks if the given element is valid.
      *  This will accept both Reservation object and things
      *  that can be reserved as top-level objects.
      */
     bool isValidElement(const QVariant &elem);
+
+private:
+    std::unique_ptr<ExtractorValidatorPrivate> d;
+};
+
 }
 
 #endif // EXTRACTORVALIDATOR_H

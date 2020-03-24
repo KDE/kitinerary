@@ -112,7 +112,7 @@ QVector<QVariant> ExtractorPostprocessor::result() const
 {
     if (!d->m_resultFinalized) {
         for (auto it = d->m_data.begin(); it != d->m_data.end();) {
-            if (ExtractorValidator::isValidElement(*it)) {
+            if (d->m_validator.isValidElement(*it)) {
                 ++it;
             } else {
                 //qCDebug(Log).noquote() << "Discarding element:" << QJsonDocument(JsonLdDocument::toJson({*it})).toJson();
