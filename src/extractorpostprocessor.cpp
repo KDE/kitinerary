@@ -20,7 +20,7 @@
 #include "config-kitinerary.h"
 #include "extractorpostprocessor.h"
 #include "extractorpostprocessor_p.h"
-#include "extractorvalidator_p.h"
+#include "extractorvalidator.h"
 #include "flightpostprocessor_p.h"
 
 #include "extractorutil.h"
