@@ -63,6 +63,9 @@ class ExtractorPostprocessorPrivate;
  *  - A LodigingReservation without an attached LodgingBusiness.
  *  - etc.
  *
+ *  Validation can be disabled and done separately using KItinerary::ExtractorValidator, in case you
+ *  want more control over which elements are considered valid. See setValidationEnabled().
+ *
  *  @section postproc_sort Sorting
  *
  *  Finally the remaining elements are sorted based on their relevant date (see SortUtil). This
