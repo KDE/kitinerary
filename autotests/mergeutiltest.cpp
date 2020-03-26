@@ -284,6 +284,15 @@ private Q_SLOTS:
         QVERIFY(MergeUtil::isSame(res1, res2));
     }
 
+    void testIsSameCancellation()
+    {
+        const auto lhs = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(_(SOURCE_DIR "/mergedata/cancellation.lhs.json"))).array());
+        const auto rhs = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(_(SOURCE_DIR "/mergedata/cancellation.rhs.json"))).array());
+        QCOMPARE(lhs.size(), 1);
+        QCOMPARE(rhs.size(), 1);
+        QVERIFY(MergeUtil::isSame(lhs[0], rhs[0]));
+    }
+
     void testMerge_data()
     {
         QTest::addColumn<QString>("baseName");

@@ -19,6 +19,7 @@
 #include "logging.h"
 #include "compare-logging.h"
 #include "stringutil.h"
+#include "sortutil.h"
 
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
@@ -78,6 +79,7 @@ static bool isSameTouristAttraction(const TouristAttraction &lhs, const TouristA
 static bool isSameEvent(const Event &lhs, const Event &rhs);
 static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs);
 static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs);
+static bool isMinimalCancelationFor(const QVariant &r, const Reservation &cancel);
 
 bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 {
@@ -90,15 +92,18 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 
     // for all reservations check underName and ticket
     if (JsonLd::canConvert<Reservation>(lhs)) {
+        const auto lhsRes = JsonLd::convert<Reservation>(lhs);
+        const auto rhsRes = JsonLd::convert<Reservation>(rhs);
+
         // for all: underName either matches or is not set
-        const auto lhsUN = JsonLd::convert<Reservation>(lhs).underName().value<Person>();
-        const auto rhsUN = JsonLd::convert<Reservation>(rhs).underName().value<Person>();
+        const auto lhsUN = lhsRes.underName().value<Person>();
+        const auto rhsUN = rhsRes.underName().value<Person>();
         if (!lhsUN.name().isEmpty() && !rhsUN.name().isEmpty() &&  !isSamePerson(lhsUN, rhsUN)) {
             return false;
         }
 
-        const auto lhsTicket = JsonLd::convert<Reservation>(lhs).reservedTicket().value<Ticket>();
-        const auto rhsTicket = JsonLd::convert<Reservation>(rhs).reservedTicket().value<Ticket>();
+        const auto lhsTicket = lhsRes.reservedTicket().value<Ticket>();
+        const auto rhsTicket = rhsRes.reservedTicket().value<Ticket>();
         if (conflictIfPresent(lhsTicket.ticketedSeat().seatNumber(), rhsTicket.ticketedSeat().seatNumber(), Qt::CaseInsensitive)) {
             return false;
         }
@@ -107,6 +112,12 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         // so we can simply skip this here for flights
         if (!JsonLd::isA<FlightReservation>(lhs) && conflictIfPresent(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())) {
             return false;
+        }
+
+        // one side is a minimal cancelation, matches the reservation number and has a plausible modification time
+        // in this case don't bother comparing content (which will fail), we accept this directly
+        if (isMinimalCancelationFor(lhs, rhsRes) || isMinimalCancelationFor(rhs, lhsRes)) {
+            return true;
         }
     }
 
@@ -586,4 +597,19 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
     }
 
     return res;
+}
+
+bool isMinimalCancelationFor(const QVariant &r, const Reservation &cancel)
+{
+    const auto res = JsonLd::convert<Reservation>(r);
+    if (res.reservationStatus() == Reservation::ReservationCancelled || cancel.reservationStatus() != Reservation::ReservationCancelled) {
+        return false;
+    }
+    if (!equalAndPresent(res.reservationNumber(), cancel.reservationNumber())) {
+        return false;
+    }
+    if (!cancel.modifiedTime().isValid() || !cancel.reservationFor().isNull()) {
+        return false;
+    }
+    return SortUtil::startDateTime(r) > cancel.modifiedTime();
 }
