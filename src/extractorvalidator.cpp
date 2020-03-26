@@ -36,6 +36,17 @@ namespace KItinerary {
 class ExtractorValidatorPrivate {
 public:
     bool isSupportedTopLevelType(const QVariant &elem) const;
+    bool filterElement(const QVariant &elem) const;
+
+    bool filterLodgingReservation(const LodgingReservation &res) const;
+    bool filterAirport(const Airport &airport) const;
+    bool filterFlight(const Flight &flight) const;
+    bool filterTrainTrip(const TrainTrip &trip) const;
+    bool filterBusTrip(const BusTrip &trip) const;
+    bool filterEvent(const Event &event) const;
+    bool filterFoodReservation(const FoodEstablishmentReservation &res) const;
+    bool filterLocalBusiness(const LocalBusiness &business) const;
+    bool filterReservation(const Reservation &res) const;
 
     std::vector<const QMetaObject*> m_acceptedTypes;
 };
@@ -52,19 +63,17 @@ void ExtractorValidator::setAcceptedTypes(std::vector<const QMetaObject*> &&accp
     d->m_acceptedTypes = std::move(accptedTypes);
 }
 
-static bool filterElement(const QVariant &elem);
-
-static bool filterLodgingReservation(const LodgingReservation &res)
+bool ExtractorValidatorPrivate::filterLodgingReservation(const LodgingReservation &res) const
 {
     return res.checkinTime().isValid() && res.checkoutTime().isValid() && res.checkinTime() <= res.checkoutTime();
 }
 
-static bool filterAirport(const Airport &airport)
+bool ExtractorValidatorPrivate::filterAirport(const Airport &airport) const
 {
     return !airport.iataCode().isEmpty() || !airport.name().isEmpty();
 }
 
-static bool filterFlight(const Flight &flight)
+bool ExtractorValidatorPrivate::filterFlight(const Flight &flight) const
 {
     // this will be valid if either boarding time, departure time or departure day is set
     const auto validDate = flight.departureDay().isValid();
@@ -79,36 +88,36 @@ static bool filterTrainOrBusStation(const T &station)
     return !station.name().isEmpty();
 }
 
-static bool filterTrainTrip(const TrainTrip &trip)
+bool ExtractorValidatorPrivate::filterTrainTrip(const TrainTrip &trip) const
 {
     return filterTrainOrBusStation(trip.departureStation())
            && filterTrainOrBusStation(trip.arrivalStation())
            && trip.departureDay().isValid();
 }
 
-static bool filterBusTrip(const BusTrip &trip)
+bool ExtractorValidatorPrivate::filterBusTrip(const BusTrip &trip) const
 {
     return filterTrainOrBusStation(trip.departureBusStop())
            && filterTrainOrBusStation(trip.arrivalBusStop())
            && trip.departureTime().isValid() && trip.arrivalTime().isValid();
 }
 
-static bool filterEvent(const Event &event)
+bool ExtractorValidatorPrivate::filterEvent(const Event &event) const
 {
     return !event.name().isEmpty() && event.startDate().isValid();
 }
 
-static bool filterFoodReservation(const FoodEstablishmentReservation &res)
+bool ExtractorValidatorPrivate::filterFoodReservation(const FoodEstablishmentReservation &res) const
 {
     return res.startTime().isValid();
 }
 
-static bool filterLocalBusiness(const LocalBusiness &business)
+bool ExtractorValidatorPrivate::filterLocalBusiness(const LocalBusiness &business) const
 {
     return !business.name().isEmpty();
 }
 
-static bool filterReservation(const Reservation &res)
+bool ExtractorValidatorPrivate::filterReservation(const Reservation &res) const
 {
     if (!filterElement(res.reservationFor())) {
         qCDebug(ValidatorLog) << "Reservation element discarded due to rejected reservationFor property:" << res.reservationFor().typeName();
@@ -117,17 +126,17 @@ static bool filterReservation(const Reservation &res)
     return true;
 }
 
-template <typename T, bool (*F)(const T&)>
-static inline bool callFilterWithType(const QVariant &v)
+template <typename T, bool (ExtractorValidatorPrivate::*F)(const T&) const>
+static inline bool callFilterWithType(const ExtractorValidatorPrivate *d, const QVariant &v)
 {
     // JsonLd::canConvert<T>(v) is guaranteed by walking up the meta object tree here
-    return F(JsonLd::convert<T>(v));
+    return (d->*F)(JsonLd::convert<T>(v));
 }
 
-#define FILTER(Type, Func) { &Type::staticMetaObject, callFilterWithType<Type, Func> }
+#define FILTER(Type, Func) { &Type::staticMetaObject, callFilterWithType<Type, &ExtractorValidatorPrivate::Func> }
 struct {
     const QMetaObject *metaObject;
-    bool (*filter)(const QVariant &v);
+    bool (*filter)(const ExtractorValidatorPrivate *d, const QVariant &v);
 } static const filter_func_map[] {
     FILTER(Flight, filterFlight),
     FILTER(TrainTrip, filterTrainTrip),
@@ -140,7 +149,7 @@ struct {
 };
 #undef FILTER
 
-static bool filterElement(const QVariant &elem)
+bool ExtractorValidatorPrivate::filterElement(const QVariant &elem) const
 {
     auto mo = QMetaType::metaObjectForType(elem.userType());
     if (!mo) {
@@ -152,7 +161,7 @@ static bool filterElement(const QVariant &elem)
             if (f.metaObject != mo) {
                 continue;
             }
-            if (!f.filter(elem)) {
+            if (!f.filter(this, elem)) {
                 return false;
             }
             break;
@@ -192,5 +201,5 @@ bool ExtractorValidator::isValidElement(const QVariant &elem)
     }
 
     // apply type-specific filter functions
-    return filterElement(elem);
+    return d->filterElement(elem);
 }
