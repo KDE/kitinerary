@@ -35,11 +35,22 @@ using namespace KItinerary;
 namespace KItinerary {
 class ExtractorValidatorPrivate {
 public:
+    bool isSupportedTopLevelType(const QVariant &elem) const;
+
+    std::vector<const QMetaObject*> m_acceptedTypes;
 };
 }
 
-ExtractorValidator::ExtractorValidator() = default;
+ExtractorValidator::ExtractorValidator() :
+    d(new ExtractorValidatorPrivate)
+{}
+
 ExtractorValidator::~ExtractorValidator() = default;
+
+void ExtractorValidator::setAcceptedTypes(std::vector<const QMetaObject*> &&accptedTypes)
+{
+    d->m_acceptedTypes = std::move(accptedTypes);
+}
 
 static bool filterElement(const QVariant &elem);
 
@@ -151,45 +162,21 @@ static bool filterElement(const QVariant &elem)
     return true;
 }
 
-// TODO this default is merely to retain behavior compat for now
-// eventually this should be configured by the user to  the subset they need
-static const QMetaObject* supported_type_table[] = {
-    // reservation types
-    &FlightReservation::staticMetaObject,
-    &TrainReservation::staticMetaObject,
-    &BusReservation::staticMetaObject,
-    &RentalCarReservation::staticMetaObject,
-    &TaxiReservation::staticMetaObject,
-    &EventReservation::staticMetaObject,
-    &FoodEstablishmentReservation::staticMetaObject,
-    &LodgingReservation::staticMetaObject,
-
-    // reservationFor types
-    &Flight::staticMetaObject,
-    &TrainTrip::staticMetaObject,
-    &BusTrip::staticMetaObject,
-    &RentalCar::staticMetaObject,
-    &Taxi::staticMetaObject,
-    &Event::staticMetaObject,
-    &TouristAttractionVisit::staticMetaObject,
-    &FoodEstablishment::staticMetaObject,
-
-    // PBI types
-    &LocalBusiness::staticMetaObject,
-};
-
-static bool isSupportedTopLevelType(const QVariant &elem)
+bool ExtractorValidatorPrivate::isSupportedTopLevelType(const QVariant &elem) const
 {
+    if (m_acceptedTypes.empty()) { // nothing configured, we accept everything
+        return true;
+    }
+
     auto mo = QMetaType::metaObjectForType(elem.userType());
     if (!mo) {
         qCDebug(ValidatorLog) << "Element discared due to non-gadget top-level type:" << elem.typeName();
         return false;
     }
     while (mo) {
-        for (const auto &t : supported_type_table) {
-            if (t == mo) {
-                return true;
-            }
+        const auto it = std::find(m_acceptedTypes.begin(), m_acceptedTypes.end(), mo);
+        if (it != m_acceptedTypes.end()) {
+            return true;
         }
         mo = mo->superClass();
     }
@@ -199,7 +186,7 @@ static bool isSupportedTopLevelType(const QVariant &elem)
 bool ExtractorValidator::isValidElement(const QVariant &elem)
 {
     // check this is an allowed top-level type
-    if (!isSupportedTopLevelType(elem)) {
+    if (!d->isSupportedTopLevelType(elem)) {
         qCDebug(ValidatorLog) << "Element discarded due to unsupported top-level type:" << elem.typeName();
         return false;
     }

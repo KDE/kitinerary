@@ -18,6 +18,7 @@
 #include <extractorvalidator.h>
 
 #include <KItinerary/JsonLdDocument>
+#include <KItinerary/Reservation>
 
 #include <QDebug>
 #include <QFile>
@@ -51,7 +52,14 @@ private Q_SLOTS:
         QEXPECT_FAIL("", "not implemented yet", Continue);
         QVERIFY(v.isValidElement(input.at(0)));
 
-        // TODO test type filtering
+        v.setAcceptedTypes<FlightReservation, TrainReservation>();
+        input = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(SOURCE_DIR "/mergedata/cancellation.lhs.json")).array());
+        QCOMPARE(input.size(), 1);
+        QVERIFY(v.isValidElement(input.at(0)));
+        v.setAcceptedTypes<LodgingReservation, TrainReservation>();
+        QVERIFY(!v.isValidElement(input.at(0)));
+        v.setAcceptedTypes();
+        QVERIFY(v.isValidElement(input.at(0)));
     }
 };
 

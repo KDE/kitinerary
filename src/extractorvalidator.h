@@ -21,7 +21,9 @@
 #include "kitinerary_export.h"
 
 #include <memory>
+#include <vector>
 
+class QMetaObject;
 class QVariant;
 
 namespace KItinerary {
@@ -30,6 +32,7 @@ class ExtractorValidatorPrivate;
 /**
  * Validates extractor results.
  * Used to discard incomplete or otherwise invalid data.
+ * @since 20.08
  */
 class KITINERARY_EXPORT ExtractorValidator
 {
@@ -44,6 +47,18 @@ public:
      *  that can be reserved as top-level objects.
      */
     bool isValidElement(const QVariant &elem);
+
+    /** Sets the list of supported top-level types that should be accepted.
+     *  Providing an empty set of types will accept all top-level types.
+     *  Instances of types inheriting from accepted types are also accepted.
+     *  Default is to accept all types.
+     */
+    void setAcceptedTypes(std::vector<const QMetaObject*> &&accptedTypes);
+    /** Convenience overload of setAcceptedTypes(). */
+    template <typename ...Args> inline void setAcceptedTypes()
+    {
+        setAcceptedTypes({&Args::staticMetaObject...});
+    }
 
 private:
     std::unique_ptr<ExtractorValidatorPrivate> d;

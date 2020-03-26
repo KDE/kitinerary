@@ -41,6 +41,7 @@
 #include <KItinerary/Place>
 #include <KItinerary/RentalCar>
 #include <KItinerary/Reservation>
+#include <KItinerary/Taxi>
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
@@ -64,6 +65,28 @@ using namespace KItinerary;
 ExtractorPostprocessor::ExtractorPostprocessor()
     : d(new ExtractorPostprocessorPrivate)
 {
+    // configure the default set of accepted types, for backward compatibility
+    d->m_validator.setAcceptedTypes<
+        FlightReservation,
+        TrainReservation,
+        BusReservation,
+        RentalCarReservation,
+        TaxiReservation,
+        EventReservation,
+        FoodEstablishmentReservation,
+        LodgingReservation,
+        // reservationFor types
+        Flight,
+        TrainTrip,
+        BusTrip,
+        RentalCar,
+        Taxi,
+        Event,
+        TouristAttractionVisit,
+        FoodEstablishment,
+        // PBI types
+        LocalBusiness
+    >();
 }
 
 ExtractorPostprocessor::ExtractorPostprocessor(ExtractorPostprocessor &&) noexcept = default;
