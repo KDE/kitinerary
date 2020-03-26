@@ -246,6 +246,7 @@ bool TrainStationDbGenerator::fetchCountryInformation()
 
     for (const auto &stationData : stationArray) {
         const auto uri = insertOrMerge(stationData.toObject(), true);
+        Q_UNUSED(uri)
     }
 
     return true;
