@@ -49,9 +49,11 @@ private Q_SLOTS:
 
         input = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(SOURCE_DIR "/mergedata/cancellation.rhs.json")).array());
         QCOMPARE(input.size(), 1);
-        QEXPECT_FAIL("", "not implemented yet", Continue);
+        QVERIFY(!v.isValidElement(input.at(0)));
+        v.setAcceptOnlyCompleteElements(false);
         QVERIFY(v.isValidElement(input.at(0)));
 
+        v.setAcceptOnlyCompleteElements(true);
         v.setAcceptedTypes<FlightReservation, TrainReservation>();
         input = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(SOURCE_DIR "/mergedata/cancellation.lhs.json")).array());
         QCOMPARE(input.size(), 1);

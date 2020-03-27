@@ -49,6 +49,7 @@ public:
     bool filterReservation(const Reservation &res) const;
 
     std::vector<const QMetaObject*> m_acceptedTypes;
+    bool m_onlyComplete = true;
 };
 }
 
@@ -62,6 +63,12 @@ void ExtractorValidator::setAcceptedTypes(std::vector<const QMetaObject*> &&accp
 {
     d->m_acceptedTypes = std::move(accptedTypes);
 }
+
+void ExtractorValidator::setAcceptOnlyCompleteElements(bool completeOnly)
+{
+    d->m_onlyComplete = completeOnly;
+}
+
 
 bool ExtractorValidatorPrivate::filterLodgingReservation(const LodgingReservation &res) const
 {
@@ -119,6 +126,16 @@ bool ExtractorValidatorPrivate::filterLocalBusiness(const LocalBusiness &busines
 
 bool ExtractorValidatorPrivate::filterReservation(const Reservation &res) const
 {
+    if (!m_onlyComplete) { // accept minimal cancellation elements
+        if (res.reservationFor().isNull()
+            && res.modifiedTime().isValid()
+            && !res.reservationNumber().isEmpty()
+            && res.reservationStatus() == Reservation::ReservationCancelled)
+        {
+            return true;
+        }
+    }
+
     if (!filterElement(res.reservationFor())) {
         qCDebug(ValidatorLog) << "Reservation element discarded due to rejected reservationFor property:" << res.reservationFor().typeName();
         return false;

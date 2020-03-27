@@ -60,6 +60,15 @@ public:
         setAcceptedTypes({&Args::staticMetaObject...});
     }
 
+    /** Configure whether or not to accept also incomplete elements.
+     *  The default is @c true.
+     *  Accepting incomplete elements is useful if the output is
+     *  further processed, for example to merge minimal cancellation
+     *  elements with already existing data. If the output is displayed
+     *  directly, set this to @c true.
+     */
+    void setAcceptOnlyCompleteElements(bool completeOnly);
+
 private:
     std::unique_ptr<ExtractorValidatorPrivate> d;
 };
