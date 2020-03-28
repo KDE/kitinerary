@@ -73,7 +73,7 @@ static void fillFlightReservation(const QVector<QVariant> &reservations, const K
 static void fillTrainReservation(const TrainReservation &reservation, const KCalendarCore::Event::Ptr &event);
 static void fillBusReservation(const BusReservation &reservation, const KCalendarCore::Event::Ptr &event);
 static void fillLodgingReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
-static void fillEvent(const KItinerary::Event &ev, const KCalCore::Event::Ptr &event);
+static void fillEvent(const KItinerary::Event &ev, const KCalendarCore::Event::Ptr &event);
 static void fillEventReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
 static void fillGeoPosition(const QVariant &place, const KCalendarCore::Event::Ptr &event);
 static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalendarCore::Event::Ptr &event);
@@ -88,8 +88,21 @@ QSharedPointer<KCalendarCore::Event> CalendarHandler::findEvent(const QSharedPoi
         return {};
     }
 
+    QVector<KCalendarCore::Event::Ptr> events;
     const auto dt = SortUtil::startDateTime(reservation).toTimeZone(calendar->timeZone()).date();
-    const auto events = calendar->events(dt);
+    if (dt.isValid()) {
+        // we know the exact day to search at
+        events = calendar->events(dt);
+    } else if (JsonLd::canConvert<Reservation>(reservation)) {
+        // for minimal cancellations, we need to search in a larger range
+        const auto res = JsonLd::convert<Reservation>(reservation);
+        if (!res.modifiedTime().isValid() || res.reservationStatus() != Reservation::ReservationCancelled) {
+            return {};
+        }
+        const auto date = res.modifiedTime().toTimeZone(calendar->timeZone()).date();
+        events = calendar->events(date, date.addDays(180));
+    }
+
     for (const auto &event : events) {
         if (!event->uid().startsWith(QLatin1String("KIT-"))) {
             continue;
@@ -359,7 +372,7 @@ static void fillLodgingReservation(const QVector<QVariant> &reservations, const 
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
-static void fillEvent(const KItinerary::Event &ev, const KCalCore::Event::Ptr &event)
+static void fillEvent(const KItinerary::Event &ev, const KCalendarCore::Event::Ptr &event)
 {
     Place location;
     if (JsonLd::canConvert<Place>(ev.location())) {

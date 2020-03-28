@@ -146,6 +146,22 @@ private Q_SLOTS:
         const auto event = CalendarHandler::findEvent(refCal, postproc.result().at(0));
         QVERIFY(event);
     }
+
+    void testFindEventForCancellation()
+    {
+        QFile f(QStringLiteral(SOURCE_DIR "/mergedata/cancellation.rhs.json"));
+        QVERIFY(f.open(QFile::ReadOnly));
+        const auto in = JsonLdDocument::fromJson(QJsonDocument::fromJson(f.readAll()).array());
+        QCOMPARE(in.size(), 1);
+        const auto cancel = in[0];
+
+        MemoryCalendar::Ptr refCal(new MemoryCalendar(QTimeZone::systemTimeZone()));
+        ICalFormat format;
+        format.load(refCal, QStringLiteral(SOURCE_DIR "/calendarhandlerdata/to-be-cancelled.ics"));
+
+        const auto event = CalendarHandler::findEvent(refCal, cancel);
+        QVERIFY(event);
+    }
 };
 
 QTEST_APPLESS_MAIN(CalendarHandlerTest)
