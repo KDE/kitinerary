@@ -68,6 +68,22 @@ static double doubleValue(const QJsonValue &v)
     return v.toString().toDouble();
 }
 
+static bool isEmptyJsonLdObject(const QJsonObject &obj)
+{
+    for (auto it = obj.begin(); it != obj.end(); ++it) {
+        if (it.key() == QLatin1String("@type")) {
+            continue;
+        }
+        if (it.value().type() != QJsonValue::Object) {
+            return false;
+        }
+        if (!isEmptyJsonLdObject(it.value().toObject())) {
+            return false;
+        }
+    }
+    return true;
+}
+
 static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
 {
     // enum handling must be done first, as prop.type() == Int
@@ -148,7 +164,11 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         return QVariant::fromValue(l);
     }
 
-    return createInstance(v.toObject());
+    const auto obj = v.toObject();
+    if (prop.userType() == qMetaTypeId<QVariant>() && isEmptyJsonLdObject(obj)) {
+        return {};
+    }
+    return createInstance(obj);
 }
 
 static void createInstance(const QMetaObject *mo, void *v, const QJsonObject &obj)
