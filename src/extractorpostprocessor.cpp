@@ -187,14 +187,18 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
         }
     }
 
-    FlightPostProcessor p;
-    res.setReservationFor(p.processFlight(res.reservationFor().value<Flight>()));
+    if (res.reservationFor().isValid()) {
+        FlightPostProcessor p;
+        res.setReservationFor(p.processFlight(res.reservationFor().value<Flight>()));
+    }
     return processReservation(res);
 }
 
 TrainReservation ExtractorPostprocessorPrivate::processTrainReservation(TrainReservation res) const
 {
-    res.setReservationFor(processTrainTrip(res.reservationFor().value<TrainTrip>()));
+    if (res.reservationFor().isValid()) {
+        res.setReservationFor(processTrainTrip(res.reservationFor().value<TrainTrip>()));
+    }
     return processReservation(res);
 }
 
@@ -304,7 +308,9 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, cons
 
 BusReservation ExtractorPostprocessorPrivate::processBusReservation(BusReservation res) const
 {
-    res.setReservationFor(processBusTrip(res.reservationFor().value<BusTrip>()));
+    if (res.reservationFor().isValid()) {
+        res.setReservationFor(processBusTrip(res.reservationFor().value<BusTrip>()));
+    }
     return processReservation(res);
 }
 
@@ -321,9 +327,11 @@ BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
 
 LodgingReservation ExtractorPostprocessorPrivate::processLodgingReservation(LodgingReservation res) const
 {
-    res.setReservationFor(processPlace(res.reservationFor().value<LodgingBusiness>()));
-    res.setCheckinTime(processTimeForLocation(res.checkinTime(), res.reservationFor().value<LodgingBusiness>()));
-    res.setCheckoutTime(processTimeForLocation(res.checkoutTime(), res.reservationFor().value<LodgingBusiness>()));
+    if (res.reservationFor().isValid()) {
+        res.setReservationFor(processPlace(res.reservationFor().value<LodgingBusiness>()));
+        res.setCheckinTime(processTimeForLocation(res.checkinTime(), res.reservationFor().value<LodgingBusiness>()));
+        res.setCheckoutTime(processTimeForLocation(res.checkoutTime(), res.reservationFor().value<LodgingBusiness>()));
+    }
     return processReservation(res);
 }
 
@@ -336,7 +344,9 @@ TaxiReservation ExtractorPostprocessorPrivate::processTaxiReservation(TaxiReserv
 
 RentalCarReservation ExtractorPostprocessorPrivate::processRentalCarReservation(RentalCarReservation res) const
 {
-    res.setReservationFor(processRentalCar(res.reservationFor().value<RentalCar>()));
+    if (res.reservationFor().isValid()) {
+        res.setReservationFor(processRentalCar(res.reservationFor().value<RentalCar>()));
+    }
     res.setPickupLocation(processPlace(res.pickupLocation()));
     res.setDropoffLocation(processPlace(res.dropoffLocation()));
     res.setPickupTime(processTimeForLocation(res.pickupTime(), res.pickupLocation()));
@@ -352,9 +362,11 @@ RentalCar ExtractorPostprocessorPrivate::processRentalCar(RentalCar car) const
 
 FoodEstablishmentReservation ExtractorPostprocessorPrivate::processFoodEstablishmentReservation(FoodEstablishmentReservation res) const
 {
-    res.setReservationFor(processPlace(res.reservationFor().value<FoodEstablishment>()));
-    res.setStartTime(processTimeForLocation(res.startTime(), res.reservationFor().value<FoodEstablishment>()));
-    res.setEndTime(processTimeForLocation(res.endTime(), res.reservationFor().value<FoodEstablishment>()));
+    if (res.reservationFor().isValid()) {
+        res.setReservationFor(processPlace(res.reservationFor().value<FoodEstablishment>()));
+        res.setStartTime(processTimeForLocation(res.startTime(), res.reservationFor().value<FoodEstablishment>()));
+        res.setEndTime(processTimeForLocation(res.endTime(), res.reservationFor().value<FoodEstablishment>()));
+    }
     return processReservation(res);
 }
 
@@ -368,7 +380,9 @@ TouristAttractionVisit ExtractorPostprocessorPrivate::processTouristAttractionVi
 
 EventReservation ExtractorPostprocessorPrivate::processEventReservation(EventReservation res) const
 {
-    res.setReservationFor(processEvent(res.reservationFor().value<Event>()));
+    if (res.reservationFor().isValid()) {
+        res.setReservationFor(processEvent(res.reservationFor().value<Event>()));
+    }
     return processReservation(res);
 }
 
