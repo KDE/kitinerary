@@ -83,9 +83,9 @@ void ExtractorRepositoryPrivate::extractorForTypeAndContent(ExtractorInput::Type
 void ExtractorRepositoryPrivate::insertExtractor(const Extractor &ext, std::vector<Extractor> &extractors)
 {
     const auto it = std::lower_bound(extractors.begin(), extractors.end(), ext, [](const auto &lhs, const auto &rhs) {
-        return lhs.d < rhs.d;
+        return lhs.d.constData() < rhs.d.constData();
     });
-    if (it != extractors.end() && (*it).d == ext.d) {
+    if (it != extractors.end() && (*it).d.constData() == ext.d.constData()) {
         return;
     }
     extractors.insert(it, ext);
