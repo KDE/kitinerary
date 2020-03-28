@@ -258,3 +258,15 @@ function parsePdf(pdf) {
 
     return reservations;
 }
+
+function parseCancellation(html) {
+    var title = html.eval('//title')[0];
+    var pnr = title.content.match(/Stornierungsbestätigung \(Auftrag (.*)\)/);
+    if (!pnr)
+        return null;
+    var res = JsonLd.newTrainReservation();
+    res.reservationNumber = pnr[1];
+    res.reservationStatus = "ReservationCancelled";
+    res.reservationFor = 1;
+    return res;
+}

@@ -1,18 +1,48 @@
 [
     {
-        "type": "pdf",
         "filter": [
-            { "header": "From", "match": "buchungsbestaetigung@bahn.de" },
-            { "property": "reservationFor.provider.identifier", "match": "uic:0080" },
-            { "property": "reservationFor.provider.identifier", "match": "vdv:6260" }
+            {
+                "header": "From",
+                "match": "buchungsbestaetigung@bahn.de",
+                "type": "Email"
+            },
+            {
+                "match": "uic:0080",
+                "property": "reservationFor.provider.identifier",
+                "type": "JsonLd"
+            },
+            {
+                "match": "vdv:6260",
+                "property": "reservationFor.provider.identifier",
+                "type": "JsonLd"
+            }
         ],
+        "function": "parsePdf",
         "script": "deutschebahn.js",
-        "function": "parsePdf"
+        "type": "Pdf"
     },
     {
-        "type": "text",
-        "filter": [ { "header": "From", "match": "UNITTEST-buchungsbestaetigung@bahn.de" } ],
+        "filter": [
+            {
+                "header": "From",
+                "match": "UNITTEST-buchungsbestaetigung@bahn.de",
+                "type": "Email"
+            }
+        ],
+        "function": "parseText",
         "script": "deutschebahn.js",
-        "function": "parseText"
+        "type": "Text"
+    },
+    {
+        "filter": [
+            {
+                "header": "From",
+                "match": "buchungsbestaetigung@bahn.de",
+                "type": "Email"
+            }
+        ],
+        "function": "parseCancellation",
+        "script": "deutschebahn.js",
+        "type": "Html"
     }
 ]
