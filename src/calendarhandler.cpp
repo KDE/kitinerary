@@ -81,14 +81,14 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
 static void fillTaxiReservation(const TaxiReservation &reservation, const KCalendarCore::Event::Ptr &event);
 #endif
 
-QSharedPointer<KCalendarCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation)
+QVector<QSharedPointer<KCalendarCore::Event> > CalendarHandler::findEvents(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation)
 {
 #ifdef HAVE_KCAL
     if (!(JsonLd::canConvert<Reservation>(reservation) || JsonLd::canConvert<KItinerary::Event>(reservation)) || !calendar) {
         return {};
     }
 
-    QVector<KCalendarCore::Event::Ptr> events;
+    QVector<KCalendarCore::Event::Ptr> events, results;
     const auto dt = SortUtil::startDateTime(reservation).toTimeZone(calendar->timeZone()).date();
     if (dt.isValid()) {
         // we know the exact day to search at
@@ -110,16 +110,29 @@ QSharedPointer<KCalendarCore::Event> CalendarHandler::findEvent(const QSharedPoi
         const auto otherRes = CalendarHandler::reservationsForEvent(event);
         for (const auto &other : otherRes) {
             if (MergeUtil::isSame(other, reservation)) {
-                return event;
+                results.push_back(event);
             }
         }
     }
+
+    return results;
 #else
     Q_UNUSED(calendar);
     Q_UNUSED(reservation);
-#endif
-
     return {};
+#endif
+}
+
+QSharedPointer<KCalendarCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation)
+{
+#ifdef HAVE_KCAL
+    const auto evs = findEvents(calendar, reservation);
+    return evs.empty() ? KCalendarCore::Event::Ptr() : evs.at(0);
+#else
+    Q_UNUSED(calendar);
+    Q_UNUSED(reservation);
+    return {};
+#endif
 }
 
 QVector<QVariant> CalendarHandler::reservationsForEvent(const QSharedPointer<KCalendarCore::Event> &event)

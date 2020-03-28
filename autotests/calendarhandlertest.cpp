@@ -143,8 +143,9 @@ private Q_SLOTS:
         ICalFormat format;
         format.load(refCal, icalFile);
 
-        const auto event = CalendarHandler::findEvent(refCal, postproc.result().at(0));
-        QVERIFY(event);
+        const auto events = CalendarHandler::findEvents(refCal, postproc.result().at(0));
+        QCOMPARE(events.size(), 1);
+        QVERIFY(events[0]);
     }
 
     void testFindEventForCancellation()
@@ -159,8 +160,10 @@ private Q_SLOTS:
         ICalFormat format;
         format.load(refCal, QStringLiteral(SOURCE_DIR "/calendarhandlerdata/to-be-cancelled.ics"));
 
-        const auto event = CalendarHandler::findEvent(refCal, cancel);
-        QVERIFY(event);
+        const auto events = CalendarHandler::findEvents(refCal, cancel);
+        QCOMPARE(events.size(), 2);
+        QVERIFY(events[0]);
+        QVERIFY(events[1]);
     }
 };
 

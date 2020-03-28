@@ -33,4 +33,36 @@ DTSTART;TZID=America/Los_Angeles:20270304T201500
 DTEND;TZID=America/New_York:20270305T063000
 TRANSP:OPAQUE
 END:VEVENT
+
+BEGIN:VEVENT
+DTSTAMP:20200328T095155Z
+X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
+ "FlightReservation"\,"modifiedTime":"2027-01-01T08:30:00-08:
+ 00"\,"reservationFor":{"@type":"Flight"\,"airline":{"@type":
+ "Airline"\,"iataCode":"UA"\,"name":"United"}\,"departureAirport":{"@type":
+ "Airport"\,"address":{"@type":"PostalAddress"\,"addressCountry":
+ "US"}\,"geo":{"@type":"GeoCoordinates"\,"latitude":
+ 40.63970184326172\,"longitude":-73.77890014648438}\,"iataCode":
+ "JFK"\,"name":"John F. Kennedy International Airport"}\,"departureTime":
+ {"@type":"QDateTime"\,"@value":"2027-03-05T06:30:00-05:00"\,"timezone":
+ "America/New_York"}\,"arrivalAirport":{"@type":"Airport"\,"address":
+ {"@type":"PostalAddress"\,"addressCountry":"US"}\,"geo":{"@type":
+ "GeoCoordinates"\,"latitude":37.618900299072266\,"longitude":
+ -122.375}\,"iataCode":"SFO"\,"name":"San Francisco
+ Airport"}\,"departureDay":"2027-03-04"\,"arrivalTime":{"@type":
+ "QDateTime"\,"@value":"2027-03-04T20:15:00-08:00"\,"timezone":
+ "America/Los_Angeles"}\,"flightNumber":"110"}\,"reservationNumber":
+ "RXJ34P"\,"reservationStatus":"http:
+ //schema.org/ReservationConfirmed"\,"underName":{"@type":"Person"\,"name":
+ "Eva Green"}}]
+CREATED:20200328T095155Z
+UID:KIT-74e55159-9032-4e97-a947-59a92a5af9cd
+LAST-MODIFIED:20200328T095155Z
+DESCRIPTION:Eva Green\nBooking reference: RXJ34P
+SUMMARY:Flight UA 110 from JFK to SFO
+LOCATION:JFK
+DTSTART;TZID=America/Los_Angeles:20270305T201500
+DTEND;TZID=America/New_York:20270306T063000
+TRANSP:OPAQUE
+END:VEVENT
 END:VCALENDAR

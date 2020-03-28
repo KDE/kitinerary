@@ -38,8 +38,18 @@ namespace KItinerary {
 /** Methods for converting between ical events and JSON-LD booking data. */
 namespace CalendarHandler
 {
-    /** Attempts to find an event in @p calendar for @p reservation. */
-    KITINERARY_EXPORT QSharedPointer<KCalendarCore::Event> findEvent(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation);
+    /** Attempts to find calendar events in @p calendar for @p reservation.
+     *  For a complete reservation this should not return more than one element,
+     *  for a minimal cancellation element however this can return multiple events
+     *  (e.g. all trip segments covered by the same reservation number).
+     *  @since 20.08
+     */
+    KITINERARY_EXPORT QVector<QSharedPointer<KCalendarCore::Event>> findEvents(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation);
+
+    /** Attempts to find an event in @p calendar for @p reservation.
+     *  @deprecated since 20.08 use findEvents instead.
+     */
+    KITINERARY_DEPRECATED_EXPORT QSharedPointer<KCalendarCore::Event> findEvent(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation);
 
     /** Returns the reservations for this event.
      *  In case of a mult-travler trip, the result contains more than one reservation.
