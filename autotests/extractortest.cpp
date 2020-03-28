@@ -19,6 +19,7 @@
 
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPostprocessor>
+#include <KItinerary/ExtractorValidator>
 #include <KItinerary/HtmlDocument>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/PdfDocument>
@@ -135,8 +136,16 @@ private Q_SLOTS:
         const auto result = JsonLdDocument::fromJson(jsonResult);
         ExtractorPostprocessor postproc;
         postproc.setContextDate(contextMsg.date()->dateTime());
+        postproc.setValidationEnabled(false);
         postproc.process(result);
-        const auto postProcResult = JsonLdDocument::toJson(postproc.result());
+        auto postProcResult = postproc.result();
+
+        ExtractorValidator validator;
+        validator.setAcceptOnlyCompleteElements(false);
+        postProcResult.erase(std::remove_if(postProcResult.begin(), postProcResult.end(), [&validator](const auto &elem) {
+            return !validator.isValidElement(elem);
+        }), postProcResult.end());
+
         if (postProcResult.isEmpty() && expectedSkip) {
             QSKIP("result filtered");
             return;
@@ -147,21 +156,24 @@ private Q_SLOTS:
         }
         QVERIFY(!postProcResult.isEmpty());
 
+        const auto encodedResult = JsonLdDocument::toJson(postProcResult);
+        QCOMPARE(encodedResult.size(), postProcResult.size());
+
         const QString refFile = inputFile + QLatin1String(".json");
         if (!QFile::exists(refFile) && !expectedSkip) {
             QFile f(refFile);
             QVERIFY(f.open(QFile::WriteOnly));
-            f.write(QJsonDocument(postProcResult).toJson());
+            f.write(QJsonDocument(encodedResult).toJson());
             return;
         }
 
         QFile f(refFile);
         QVERIFY(f.open(QFile::ReadOnly));
         const auto refDoc = QJsonDocument::fromJson(f.readAll());
-        if (refDoc.array() != postProcResult) {
+        if (refDoc.array() != encodedResult) {
             QFile failFile(refFile + QLatin1String(".fail"));
             QVERIFY(failFile.open(QFile::WriteOnly));
-            failFile.write(QJsonDocument(postProcResult).toJson());
+            failFile.write(QJsonDocument(encodedResult).toJson());
             failFile.close();
 
             QProcess proc;
@@ -170,7 +182,7 @@ private Q_SLOTS:
             QVERIFY(proc.waitForFinished());
         }
 
-        QCOMPARE(refDoc.array(), postProcResult);
+        QCOMPARE(refDoc.array(), encodedResult);
     }
 
     void testNegative()
