@@ -16,6 +16,17 @@
 */
 
 // see https://community.kde.org/KDE_PIM/KItinerary/vr.fi_Barcode
+function readStationCode(bitarray, offset)
+{
+    var s = "";
+    for (var i = 0; i < 3; ++i) {
+        var n = bitarray.readNumberMSB(offset + i * 6, 6);
+        if (n != 36)
+            s += String.fromCharCode(n + 55);
+    }
+    return s;
+}
+
 function parseTicket(pdf) {
     var res = JsonLd.newTrainReservation();
     var bitarray = Barcode.toBitArray(Context.barcode);
@@ -41,8 +52,11 @@ function parseTicket(pdf) {
         res.reservedTicket.ticketedSeat.seatNumber = bitarray.readNumberMSB(30 * 8 + 6, 7) + "";
     }
 
+    // for station codes see: https://rata.digitraffic.fi/api/v1/metadata/stations
     res.reservationFor.departureStation.name = trip[1];
+    res.reservationFor.departureStation.identifier = "vrfi:" + readStationCode(bitarray, 13*8 + 2);
     res.reservationFor.arrivalStation.name = trip[2];
+    res.reservationFor.arrivalStation.identifier = "vrfi:" + readStationCode(bitarray, 17*8 + 1);
 
     res.reservedTicket.ticketToken = "aztectbin:" + Barcode.toBase64(Context.barcode);
     return res;
