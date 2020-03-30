@@ -46,7 +46,7 @@ public:
      *  This will accept both Reservation object and things
      *  that can be reserved as top-level objects.
      */
-    bool isValidElement(const QVariant &elem);
+    bool isValidElement(const QVariant &elem) const;
 
     /** Sets the list of supported top-level types that should be accepted.
      *  Providing an empty set of types will accept all top-level types.

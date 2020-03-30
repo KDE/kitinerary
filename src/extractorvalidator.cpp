@@ -209,7 +209,7 @@ bool ExtractorValidatorPrivate::isSupportedTopLevelType(const QVariant &elem) co
     return false;
 }
 
-bool ExtractorValidator::isValidElement(const QVariant &elem)
+bool ExtractorValidator::isValidElement(const QVariant &elem) const
 {
     // check this is an allowed top-level type
     if (!d->isSupportedTopLevelType(elem)) {
