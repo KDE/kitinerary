@@ -255,6 +255,17 @@ private Q_SLOTS:
         QVERIFY(!station.coordinate.isValid());
         QCOMPARE(station.timezone.toQTimeZone(), QTimeZone());
     }
+
+    void testFinishStationCodeLookup()
+    {
+        auto station = KnowledgeDb::stationForVRStationCode(VRStationCode(QStringLiteral("HKI")));
+        QVERIFY(station.coordinate.isValid());
+        QCOMPARE(station.timezone.toQTimeZone(), QTimeZone("Europe/Helsinki"));
+
+        station = KnowledgeDb::stationForVRStationCode(VRStationCode(QStringLiteral("BLÄ")));
+        QVERIFY(!station.coordinate.isValid());
+        QCOMPARE(station.timezone.toQTimeZone(), QTimeZone());
+    }
 };
 
 QTEST_APPLESS_MAIN(KnowledgeDbTest)

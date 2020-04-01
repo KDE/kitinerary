@@ -19,7 +19,7 @@
 function readStationCode(bitarray, offset)
 {
     var s = "";
-    for (var i = 0; i < 3; ++i) {
+    for (var i = 0; i < 5; ++i) {
         var n = bitarray.readNumberMSB(offset + i * 6, 6);
         if (n != 36)
             s += String.fromCharCode(n + 55);

@@ -98,6 +98,30 @@ private:
     }
 };
 
+/** VR (Finland) station codes.
+ *  2 to 4 letter uppercase alphabetic code.
+ */
+class VRStationCode : public UnalignedNumber<3>
+{
+public:
+    inline constexpr VRStationCode() = default;
+    inline explicit constexpr VRStationCode(const char s[4])
+        : UnalignedNumber<3>(fromChars(s))
+    {}
+    KITINERARY_EXPORT explicit VRStationCode(const QString &id);
+
+private:
+    static inline constexpr uint32_t charVal(const char c)
+    {
+        // TODO in theory there's apparently also 'Ä' amd 'Ö'?
+        return c == '\0' ? 0 : c - '@';
+    }
+    static inline constexpr uint32_t fromChars(const char s[4])
+    {
+        return (charVal(s[0]) << 18) + (charVal(s[1]) << 12) + (charVal(s[2]) << 6) + charVal(s[3]);
+    }
+};
+
 /** Lookup train station data by IBNR. */
 KITINERARY_EXPORT TrainStation stationForIbnr(IBNR ibnr);
 
@@ -109,6 +133,9 @@ KITINERARY_EXPORT TrainStation stationForGaresConnexionsId(GaresConnexionsId gar
 
 /** Lookup train station data by Indian Railways station code. */
 KITINERARY_EXPORT TrainStation stationForIndianRailwaysStationCode(const QString &code);
+
+/** Lookup train station data by VR (Finland) station code. */
+KITINERARY_EXPORT TrainStation stationForVRStationCode(VRStationCode vrStation);
 
 }
 }

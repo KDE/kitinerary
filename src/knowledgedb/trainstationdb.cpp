@@ -43,6 +43,17 @@ GaresConnexionsId::GaresConnexionsId(const QString& id)
     setValue(fromChars(id.toUpper().toLatin1().constData()));
 }
 
+VRStationCode::VRStationCode(const QString &id)
+{
+    if (id.size() < 2 || id.size() > 4) {
+        return;
+    }
+    char buffer[4];
+    memset(buffer, 0, 4);
+    memcpy(buffer, id.toUpper().toUtf8().constData(), id.size());
+    setValue(fromChars(buffer));
+}
+
 TrainStation KnowledgeDb::stationForIbnr(IBNR ibnr)
 {
     const auto ibnrIt = std::lower_bound(std::begin(ibnr_table), std::end(ibnr_table), ibnr);
@@ -79,6 +90,16 @@ TrainStation KnowledgeDb::stationForIndianRailwaysStationCode(const QString &cod
         return strcmp(indianRailwaysSationCode_stringtable + lhs.offset, rhs.constData()) < 0;
     });
     if (it == std::end(indianRailwaysSationCode_index) || strcmp(indianRailwaysSationCode_stringtable + (*it).offset, codeStr.constData()) != 0) {
+        return {Coordinate{}, Timezone{}, CountryId{}};
+    }
+
+    return trainstation_table[(*it).stationIndex.value()];
+}
+
+TrainStation KnowledgeDb::stationForVRStationCode(VRStationCode vrStation)
+{
+    const auto it = std::lower_bound(std::begin(vrfiConnexionsId_table), std::end(vrfiConnexionsId_table), vrStation);
+    if (it == std::end(vrfiConnexionsId_table) || (*it).stationId != vrStation) {
         return {Coordinate{}, Timezone{}, CountryId{}};
     }
 

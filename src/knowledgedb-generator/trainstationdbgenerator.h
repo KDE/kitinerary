@@ -54,6 +54,7 @@ private:
     bool fetchUIC();
     bool fetchGaresConnexions();
     bool fetchIndianRailwaysStationCode();
+    bool fetchFinishStationCodes();
     bool fetchCountryInformation();
     QUrl insertOrMerge(const QJsonObject &obj, bool mergeOnly = false);
     void processStations();
@@ -62,6 +63,7 @@ private:
     void writeUICMap(QIODevice *out);
     void writeGareConnexionMap(QIODevice *out);
     void writeIndianRailwaysMap(QIODevice *out);
+    void writeVRMap(QIODevice *out);
     void printSummary();
 
     std::vector<Station> m_stations;
@@ -69,6 +71,7 @@ private:
     std::map<uint32_t, QUrl> m_uicMap;
     std::map<QString, QUrl> m_garesConnexionsIdMap;
     std::map<QString, QUrl> m_indianRailwaysMap;
+    std::map<QString, QUrl> m_vrfiMap;
     Timezones m_tzDb;
 
     int m_idConflicts = 0;

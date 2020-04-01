@@ -46,7 +46,7 @@ static bool operator<(const TrainStationDbGenerator::Station &lhs, const QUrl &r
 bool TrainStationDbGenerator::generate(QIODevice *out)
 {
     // retrieve content from Wikidata
-    if (!fetchIBNR() || !fetchUIC() || !fetchGaresConnexions() || !fetchIndianRailwaysStationCode()) {
+    if (!fetchIBNR() || !fetchUIC() || !fetchGaresConnexions() || !fetchIndianRailwaysStationCode() || !fetchFinishStationCodes()) {
         return false;
     }
     if (!fetchCountryInformation()) {
@@ -72,6 +72,7 @@ namespace KnowledgeDb {
     writeUICMap(out);
     writeGareConnexionMap(out);
     writeIndianRailwaysMap(out);
+    writeVRMap(out);
     out->write(R"(
 }
 }
@@ -225,6 +226,51 @@ bool TrainStationDbGenerator::fetchIndianRailwaysStationCode()
             qWarning() << "Conflict on Indian Railwaiys station code" << id << uri << m_indianRailwaysMap[id];
         } else {
             m_indianRailwaysMap[id] = uri;
+        }
+    }
+
+    return true;
+}
+
+bool TrainStationDbGenerator::fetchFinishStationCodes()
+{
+    const auto stationArray = WikiData::query(R"(
+        SELECT DISTINCT ?station ?stationLabel ?code ?coord ?ref WHERE {
+            ?station (wdt:P31/wdt:P279*) wd:Q55488.
+            ?station p:P296 ?codeStmt.
+            ?codeStmt ps:P296 ?code.
+            ?codeStmt prov:wasDerivedFrom ?refnode.
+            ?refnode pr:P854 ?ref.
+            OPTIONAL { ?station wdt:P625 ?coord. }
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        } ORDER BY (?station))", "wikidata_trainstation_vrfi.json");
+    if (stationArray.isEmpty()) {
+        qWarning() << "Empty query result!";
+        return false;
+    }
+
+    for (const auto &stationData : stationArray) {
+        const auto stationObj = stationData.toObject();
+        const auto ref = stationObj.value(QLatin1String("ref")).toObject().value(QLatin1String("value")).toString();
+        if (!ref.contains(QLatin1String("rata.digitraffic.fi"), Qt::CaseInsensitive)) {
+            continue;
+        }
+        const auto uri = insertOrMerge(stationObj);
+
+        // TODO this filters 'Ä' and 'Ö' too, which seem to occur in a few cases?
+        const auto id = stationObj.value(QLatin1String("code")).toObject().value(QLatin1String("value")).toString().toUpper();
+        if (id.size() < 2 || id.size() > 4 || !Util::containsOnlyLetters(id)) {
+            ++m_idFormatViolations;
+            qWarning() << "VR (Finland) station id format violation" << id << uri;
+            continue;
+        }
+
+        const auto it = m_vrfiMap.find(id);
+        if (it != m_vrfiMap.end() && (*it).second != uri) {
+            ++m_idConflicts;
+            qWarning() << "Conflict on VR (Finland) station code" << id << uri << m_vrfiMap[id];
+        } else {
+            m_vrfiMap[id] = uri;
         }
     }
 
@@ -441,6 +487,28 @@ R"(static constexpr const struct {
     out->write("};\n\n");
 }
 
+void TrainStationDbGenerator::writeVRMap(QIODevice *out)
+{
+    out->write("static constexpr const TrainStationIdIndex<VRStationCode> vrfiConnexionsId_table[] = {\n");
+    for (const auto &it : m_vrfiMap) {
+        const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it.second);
+        if (station == m_stations.end() || (*station).uri != it.second) {
+            continue;
+        }
+        out->write("    { VRStationCode{\"");
+        out->write(it.first.toUtf8());
+        for (int i = 0; i < 4 - it.first.size(); ++i) {
+            out->write("\\0");
+        }
+        out->write("\"}, TrainStationIndex{");
+        out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
+        out->write("} }, // ");
+        out->write((*station).name.toUtf8());
+        out->write("\n");
+    }
+    out->write("};\n\n");
+}
+
 void TrainStationDbGenerator::printSummary()
 {
     qDebug() << "Generated database containing" << m_stations.size() << "train stations";
@@ -448,6 +516,7 @@ void TrainStationDbGenerator::printSummary()
     qDebug() << "UIC index:" << m_uicMap.size() << "elements";
     qDebug() << "Gares & Connexions ID index:" << m_garesConnexionsIdMap.size() << "elements";
     qDebug() << "Indian Railwaiys station code index:" << m_indianRailwaysMap.size() << "elements";
+    qDebug() << "VR (Finland) station code index:" << m_vrfiMap.size() << "elements";
     qDebug() << "Identifier collisions:" << m_idConflicts;
     qDebug() << "Identifier format violations:" << m_idFormatViolations;
     qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;
