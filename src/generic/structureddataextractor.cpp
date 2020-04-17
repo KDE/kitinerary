@@ -29,6 +29,11 @@
 
 using namespace KItinerary;
 
+static bool isJsonLdTag(const HtmlElement &elem)
+{
+    return elem.name() == QLatin1String("script") && elem.attribute(QStringLiteral("type")) == QLatin1String("application/ld+json");
+}
+
 static QByteArray fixupJson(const QByteArray &data)
 {
     auto output(data);
@@ -112,7 +117,10 @@ static void parseMicroData(const HtmlElement &elem, QJsonObject &obj, QJsonArray
             }
         } else if (!prop.isEmpty()) {
             obj.insert(prop, valueForItemProperty(child));
-        } else  {
+        // Maybe there is more JSON-LD inside this microdata tree
+        } else if (isJsonLdTag(child)) {
+            parseJson(child.content().toUtf8(), result);
+        } else {
             // skip intermediate nodes without Microdata annotations
             parseMicroData(child, obj, result);
         }
@@ -123,7 +131,7 @@ static void parseMicroData(const HtmlElement &elem, QJsonObject &obj, QJsonArray
 static void extractRecursive(const HtmlElement &elem, QJsonArray &result)
 {
     // JSON-LD
-    if (elem.name() == QLatin1String("script") && elem.attribute(QStringLiteral("type")) == QLatin1String("application/ld+json")) {
+    if (isJsonLdTag(elem)) {
         parseJson(elem.content().toUtf8(), result);
         return;
     }
