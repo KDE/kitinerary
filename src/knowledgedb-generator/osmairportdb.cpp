@@ -294,7 +294,11 @@ void OSMAirportDb::loadStation(const OSM::Node &elem)
             return OSM::contains(terminal, elem.coordinate);
         });
 
-        if (onPremise || inTerminal) {
+        const auto isCloseToTerminal = std::any_of(airport.terminalBboxes.begin(), airport.terminalBboxes.end(), [&elem](const auto &terminal) {
+            return OSM::distance(terminal.center(), elem.coordinate) < 100;
+        });
+
+        if (onPremise || inTerminal || isCloseToTerminal) {
             //qDebug() << "found station for airport:" << elem.url() << (*it).first << (*it).second.source;
             (*it).second.stations.push_back(elem.coordinate);
         }

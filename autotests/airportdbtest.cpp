@@ -241,7 +241,7 @@ private Q_SLOTS:
         QTest::newRow("GRU") << s("GRU") << -23.42560f << -46.48165f << 100;
         QTest::newRow("GVA") << s("GVA") << 46.23020f << 6.10828f << 250;
         QTest::newRow("HAJ") << s("HAJ") << 52.45849f << 9.69898f << 50;
-        QTest::newRow("HAM") << s("HAM") << 53.63214f << 10.00648f << 50;
+        QTest::newRow("HAM") << s("HAM") << 53.63214f << 10.00648f << 100;
         QTest::newRow("HEL") << s("HEL") << 60.31619f << 24.96914f << 50;
         QTest::newRow("HKG") << s("HKG") << 22.31569f << 113.93605f << 100;
         QTest::newRow("KEF") << s("KEF") << 63.99663f << -22.62355f << 200;
@@ -295,13 +295,12 @@ private Q_SLOTS:
         QEXPECT_FAIL("BUD", "not optimized yet", Continue);
         QEXPECT_FAIL("DEN", "not optimized yet", Continue);
         QEXPECT_FAIL("DUS", "not optimized yet", Continue);
-        QEXPECT_FAIL("FRA", "terminal proximity station finding not implemented yet", Continue);
-        QEXPECT_FAIL("GDN", "terminal proximity station finding not implemented yet", Continue);
+        QEXPECT_FAIL("FRA", "spurious entrance node in OSM data", Continue);
+        QEXPECT_FAIL("GDN", "railway=halt stations not handled yet", Continue);
         QEXPECT_FAIL("GLA", "airport is not a polygon in OSM", Continue);
         QEXPECT_FAIL("GRU", "not optimized yet", Continue);
-        QEXPECT_FAIL("HAM", "terminal proximity station finding not implemented yet", Continue);
         QEXPECT_FAIL("HKG", "not optimized yet", Continue);
-        QEXPECT_FAIL("LIS", "terminal proximity station finding not implemented yet", Continue);
+        QEXPECT_FAIL("LIS", "station/terminal proximity metric is too simple", Continue);
         QEXPECT_FAIL("PDX", "stop_position::railway::tram_stop not handled yet", Continue);
         QEXPECT_FAIL("PRG", "not optimized yet", Continue);
         QEXPECT_FAIL("PVG", "not optimized yet", Continue);
