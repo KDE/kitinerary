@@ -219,7 +219,7 @@ private Q_SLOTS:
 
         QTest::newRow("AGP") << s("AGP") << 36.67608f << -4.49095f << 100;
         QTest::newRow("AMS") << s("AMS") << 52.3095230f << 4.7621813f << 50;
-        QTest::newRow("ARN") << s("ARN") << 59.64927f << 17.92956f << 100;
+        QTest::newRow("ARN") << s("ARN") << 59.64927f << 17.92956f << 50;
         QTest::newRow("BLR") << s("BLR") << 13.20023f << 77.70972f << 150;
         QTest::newRow("BRE") << s("BRE") << 53.05266f << 8.78692f << 150;
         QTest::newRow("BRU") << s("BRU") << 50.8985255f << 4.4830282f << 50;
@@ -227,9 +227,9 @@ private Q_SLOTS:
         QTest::newRow("CGN") << s("CGN") << 50.87856f << 7.12107f << 150;
         QTest::newRow("CPH") << s("CPH") << 55.6295693f << 12.6492994f << 50;
         QTest::newRow("DEL") << s("DEL") << 28.55681f << 77.08718f << 100;
-        QTest::newRow("DEN") << s("DEN") << 39.84790f << -104.67340f << 200;
-        QTest::newRow("DUB") << s("DUB") << 53.4273328f << -6.2437352f << 200;
-        QTest::newRow("DUS") << s("DUS") << 51.27889f << 6.76566f << 100;
+        QTest::newRow("DEN") << s("DEN") << 39.84790f << -104.67340f << 150;
+        QTest::newRow("DUB") << s("DUB") << 53.4273328f << -6.2437352f << 150;
+        QTest::newRow("DUS") << s("DUS") << 51.27889f << 6.76566f << 150;
         QTest::newRow("EAP") << s("EAP") << 47.59960f << 7.53144f << 150;
         QTest::newRow("EDI") << s("EDI") << 55.9483110f << -3.36353370f << 100;
         QTest::newRow("EWR") << s("EWR") << 40.69049f << -74.17765f << 250;
@@ -251,7 +251,7 @@ private Q_SLOTS:
         QTest::newRow("LIS") << s("LIS") << 38.76876f << -9.12844f << 100;
         QTest::newRow("LUX") << s("LUX") << 49.63506f << 6.21650f << 200;
         QTest::newRow("LYS") << s("LYS") << 45.72065f << 5.07807f << 150;
-        QTest::newRow("MUC") << s("MUC") << 48.35378f << 11.78633f << 100;
+        QTest::newRow("MUC") << s("MUC") << 48.35378f << 11.78633f << 50;
         QTest::newRow("NRT") << s("NRT") << 35.77059f << 140.38679f << 300;
         QTest::newRow("NUE") << s("NUE") << 49.49411f << 11.07867f << 100;
         QTest::newRow("ORD") << s("ORD") << 41.97779f << -87.90269f << 300;
@@ -265,15 +265,15 @@ private Q_SLOTS:
         QTest::newRow("SFO") << s("SFO") << 37.6162238f << -122.3915235f << 50;
         QTest::newRow("SHA") << s("SHA") << 31.19624f << 121.32377f << 100;
         QTest::newRow("STR") << s("STR") << 48.69052f << 9.19302f << 50;
-        QTest::newRow("SXB") << s("SXB") << 48.54444f << 7.62783f << 100;
+        QTest::newRow("SXB") << s("SXB") << 48.54444f << 7.62783f << 50;
         QTest::newRow("SXF") << s("SXF") << 52.38856f << 13.51809f << 100;
         QTest::newRow("TLL") << s("TLL") << 59.41685f << 24.79899f << 150;
         QTest::newRow("TLS") << s("TLS") << 43.63146f << 1.37364f << 100;
         QTest::newRow("TPE") << s("TPE") << 25.07719f <<  121.23250f << 350; // still ok-ish
         QTest::newRow("TXL") << s("TXL") << 52.55392f << 13.29208f << 100;
-        QTest::newRow("VIE") << s("VIE") << 48.12024f << 16.56431f << 100;
+        QTest::newRow("VIE") << s("VIE") << 48.12024f << 16.56431f << 50;
         QTest::newRow("YOW") << s("YOW") << 45.32277f << -75.66726f << 100;
-        QTest::newRow("ZRH") << s("ZRH") << 47.45024f << 8.56207f << 100;
+        QTest::newRow("ZRH") << s("ZRH") << 47.45024f << 8.56207f << 50;
 
         // too complex to work with this approach: LHR, CDG, MAD, MXP, ICN, BCN, PEK
     }
@@ -289,24 +289,22 @@ private Q_SLOTS:
         QVERIFY(coord.isValid());
 
         const auto d = LocationUtil::distance(coord.latitude, coord.longitude, lat, lon);
-        qDebug() << coord.latitude << coord.longitude << d;
+        qDebug() << coord.latitude << coord.longitude << d << (dist - d);
 
 #if 0
-        QEXPECT_FAIL("BUD", "not optimized yet", Continue);
-        QEXPECT_FAIL("DEN", "not optimized yet", Continue);
-        QEXPECT_FAIL("DUS", "not optimized yet", Continue);
+        QEXPECT_FAIL("BUD", "closed terminal 1 (w8557242) interfering", Continue);
         QEXPECT_FAIL("FRA", "spurious entrance node in OSM data", Continue);
-        QEXPECT_FAIL("GDN", "railway=halt stations not handled yet", Continue);
+        QEXPECT_FAIL("GDN", "station/terminal proximity metric is too simple", Continue);
         QEXPECT_FAIL("GLA", "airport is not a polygon in OSM", Continue);
-        QEXPECT_FAIL("GRU", "not optimized yet", Continue);
-        QEXPECT_FAIL("HKG", "not optimized yet", Continue);
+        QEXPECT_FAIL("GRU", "w777206182 interfering", Continue);
+        QEXPECT_FAIL("HKG", "way-type station elements not handled yet", Continue);
         QEXPECT_FAIL("LIS", "station/terminal proximity metric is too simple", Continue);
-        QEXPECT_FAIL("PDX", "stop_position::railway::tram_stop not handled yet", Continue);
-        QEXPECT_FAIL("PRG", "not optimized yet", Continue);
-        QEXPECT_FAIL("PVG", "not optimized yet", Continue);
+        QEXPECT_FAIL("PDX", "stop clustering missing", Continue);
+        QEXPECT_FAIL("PRG", "private/military terminals 3 and 4 interfering", Continue);
+        QEXPECT_FAIL("PVG", "needs way-type station element support, and subway vs generic type filter", Continue);
         QEXPECT_FAIL("RIG", "open polygon in OSM", Continue);
         QEXPECT_FAIL("SHA", "not optimized yet", Continue);
-        QEXPECT_FAIL("SXF", "not optimized yet", Continue);
+        QEXPECT_FAIL("SXF", "w630509626 (government terminal) interfering", Continue);
         QVERIFY(d <= dist);
 #endif
     }

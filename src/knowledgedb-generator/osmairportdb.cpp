@@ -90,6 +90,9 @@ void OSMAirportDb::load(const QString &path)
     for (const auto &node : m_dataset.nodes) {
         loadStation(node);
     }
+    for (auto &a : m_iataMap) {
+        filterStations(a.second);
+    }
 
     qDebug() << "airports:" << m_iataMap.size();
     qDebug() << "  with a single terminal:" << std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) { return a.second.terminalBboxes.size() == 1; } );
@@ -268,7 +271,7 @@ void OSMAirportDb::loadTerminal(const OSM::Way &elem)
 void OSMAirportDb::loadStation(const OSM::Node &elem)
 {
     const auto railway = OSM::tagValue(elem, QLatin1String("railway"));
-    if (railway != QLatin1String("station")) {
+    if (railway != QLatin1String("station") && railway != QLatin1String("halt") && railway != QLatin1String("tram_stop")) {
         return;
     }
 
@@ -287,7 +290,7 @@ void OSMAirportDb::loadStation(const OSM::Node &elem)
             continue;
         }
 
-        const auto onPremise = airport.airportPolygon.containsPoint(QPointF(elem.coordinate.latF(), elem.coordinate.lonF()), Qt::WindingFill);
+        const auto onPremises = airport.airportPolygon.containsPoint(QPointF(elem.coordinate.latF(), elem.coordinate.lonF()), Qt::WindingFill);
         // one would assume that terminals are always within the airport bounds, but that's not the case
         // they sometimes expand beyond them. A station inside a terminal is however most likely something relevant for us
         const auto inTerminal = std::any_of(airport.terminalBboxes.begin(), airport.terminalBboxes.end(), [&elem](const auto &terminal) {
@@ -298,10 +301,30 @@ void OSMAirportDb::loadStation(const OSM::Node &elem)
             return OSM::distance(terminal.center(), elem.coordinate) < 100;
         });
 
-        if (onPremise || inTerminal || isCloseToTerminal) {
-            //qDebug() << "found station for airport:" << elem.url() << (*it).first << (*it).second.source;
-            (*it).second.stations.push_back(elem.coordinate);
+        if (onPremises || inTerminal || isCloseToTerminal) {
+            //qDebug() << "found station for airport:" << elem.url() << (*it).first << (*it).second.source << onPremises << inTerminal << isCloseToTerminal;
+            (*it).second.stations.push_back(&elem);
         }
+    }
+}
+
+void OSMAirportDb::filterStations(OSMAirportData &airport)
+{
+    // if we have a full station, drop halts
+    // TODO similar filters are probably needed for various tram/subway variants for on-premises transport lines
+    auto it = std::partition(airport.stations.begin(), airport.stations.end(), [](auto station) {
+        return OSM::tagValue(*station, QLatin1String("railway")) == QLatin1String("station");
+    });
+    if (it != airport.stations.begin() && it != airport.stations.end()) {
+        airport.stations.erase(it, airport.stations.end());
+    }
+
+    // "creative" way of separating "real" and on-premises stations: only real ones tend to have Wikidata tags
+    it = std::partition(airport.stations.begin(), airport.stations.end(), [](auto station) {
+        return !OSM::tagValue(*station, QLatin1String("wikidata")).isEmpty();
+    });
+    if (it != airport.stations.begin() && it != airport.stations.end()) {
+        airport.stations.erase(it, airport.stations.end());
     }
 }
 
@@ -334,10 +357,10 @@ OSM::Coordinate OSMAirportDb::lookup(const QString &iata, float lat, float lon)
         return airport.terminalBboxes[0].center();
     }
 
-    // single on-premise station
+    // single station
     if (airport.stations.size() == 1) {
-        qDebug() << "  by station:" << airport.stations[0];
-        return airport.stations[0];
+        qDebug() << "  by station:" << airport.stations[0]->url();
+        return airport.stations[0]->coordinate;
     }
 
     // multiple terminals: take the center of the sum of all bounding boxes, and TODO check the result isn't ridiculously large
@@ -345,6 +368,7 @@ OSM::Coordinate OSMAirportDb::lookup(const QString &iata, float lat, float lon)
         const auto terminalBbox = std::accumulate(airport.terminalBboxes.begin(), airport.terminalBboxes.end(), OSM::BoundingBox(), OSM::unite);
         // if the original coordinate is outside the terminal bounding box, this is highly likely an improvement,
         // otherwise we cannot be sure (see MUC, where the Wikidata coordinate is ideal).
+        //qDebug() << "    considering terminal bbox:" << terminalBbox;
         if (!OSM::contains(terminalBbox, wdCoord)) {
             qDebug() << "  by terminal bbox center:" << terminalBbox.center();
             return terminalBbox.center();

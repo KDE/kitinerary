@@ -35,7 +35,7 @@ struct OSMAirportData
 
     std::vector<OSM::BoundingBox> terminalBboxes;
     std::vector<OSM::Coordinate> terminalEntrances;
-    std::vector<OSM::Coordinate> stations;
+    std::vector<const OSM::Node*> stations;
 };
 
 /** OSM airport database for optimizing geo coordinates. */
@@ -52,6 +52,7 @@ private:
     void loadTerminal(const OSM::Relation &elem);
     void loadTerminal(const OSM::Way &elem);
     void loadStation(const OSM::Node &elem);
+    void filterStations(OSMAirportData &airport);
 
     template <typename Iter>
     void appendPointsFromWay(QVector<QPointF> &points, const Iter &nodeEegin, const Iter &nodeEnd) const;

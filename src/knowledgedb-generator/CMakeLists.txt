@@ -32,7 +32,7 @@ add_custom_command(
 )
 
 # extract all elements we are interested in (airports, terminals, stations at airports)
-osm_filter(OUTPUT airports.o5m FILTER --keep=\"iata=* or aeroway=terminal or public_transport=station or railway=station\")
+osm_filter(OUTPUT airports.o5m FILTER --keep=\"iata=* or aeroway=terminal or public_transport=station or railway=station or railway=halt or railway=tram_stop\")
 
 # augment bounding box information
 osm_convert(INPUT airports.o5m OUTPUT airports-bbox.o5m ADD_BBOX ON)
