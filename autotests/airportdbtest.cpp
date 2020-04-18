@@ -309,8 +309,6 @@ private Q_SLOTS:
         QEXPECT_FAIL("PVG", "not optimized yet", Continue);
         QEXPECT_FAIL("RIG", "open polygon in OSM", Continue);
         QEXPECT_FAIL("SHA", "not optimized yet", Continue);
-        QEXPECT_FAIL("TLS", "out of bounds Airbus buildings interfering", Continue);
-        QEXPECT_FAIL("TXL", "not optimized yet", Continue);
         QEXPECT_FAIL("SXF", "not optimized yet", Continue);
         QVERIFY(d <= dist);
 #endif

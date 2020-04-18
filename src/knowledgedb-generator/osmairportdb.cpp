@@ -233,6 +233,12 @@ void OSMAirportDb::loadTerminal(const OSM::Way &elem)
         if (!OSM::intersects((*it).second.bbox, elem.bbox)) {
             continue;
         }
+        // check against the exact airport boundary, not just the bounding box,
+        // this excludes terminal buildings from adjacent sites we don't care about
+        // example: the Airbus delivery buildings next to TLS
+        if (!(*it).second.airportPolygon.intersects(QRectF(QPointF(elem.bbox.min.latF(), elem.bbox.min.lonF()), QPointF(elem.bbox.max.latF(), elem.bbox.max.lonF())))) {
+            continue;
+        }
         //qDebug() << "found terminal for airport:" << elem.url() << (*it).first << (*it).second.source;
         (*it).second.terminalBboxes.push_back(elem.bbox);
 
