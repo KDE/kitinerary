@@ -31,6 +31,15 @@ add_custom_command(
         ${CMAKE_CURRENT_SOURCE_DIR}/timezones.qgs
 )
 
+# extract all elements we are interested in (airports, terminals, stations at airports)
+osm_filter(OUTPUT airports.o5m FILTER --keep=\"iata=* or aeroway=terminal or public_transport=station or railway=station\")
+
+# augment bounding box information
+osm_convert(INPUT airports.o5m OUTPUT airports-bbox.o5m ADD_BBOX ON)
+
+# convert the output to OSM XML format, so the code generator can consume it
+osm_convert(INPUT airports-bbox.o5m OUTPUT airports-bbox.osm)
+
 set(outfiles "")
 macro(generate_db dbtype outfile)
     add_custom_command(
