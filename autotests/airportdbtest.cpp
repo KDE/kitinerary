@@ -19,6 +19,8 @@
 
 #include <knowledgedb/airportdb.h>
 
+#include <KItinerary/LocationUtil>
+
 #include <QDebug>
 #include <QObject>
 #include <QTest>
@@ -28,6 +30,8 @@
 
 using namespace KItinerary;
 using namespace KItinerary::KnowledgeDb;
+
+#define s(x) QStringLiteral(x)
 
 namespace KItinerary { namespace KnowledgeDb {
 char *toString(const IataCode &code)
@@ -204,6 +208,112 @@ private Q_SLOTS:
 
         iso = KnowledgeDb::countryForAirport(KnowledgeDb::IataCode{"TXL"});
         QCOMPARE(iso, KnowledgeDb::CountryId{"DE"});
+    }
+
+    void airportLocationTest_data()
+    {
+        QTest::addColumn<QString>("iata");
+        QTest::addColumn<float>("lat");
+        QTest::addColumn<float>("lon");
+        QTest::addColumn<int>("dist");
+
+        QTest::newRow("AGP") << s("AGP") << 36.67764f << -4.49017f << 50;
+        QTest::newRow("AMS") << s("AMS") << 52.3095230f << 4.7621813f << 50;
+        QTest::newRow("ARN") << s("ARN") << 59.64927f << 17.92956f << 100;
+        QTest::newRow("BLR") << s("BLR") << 13.20023f << 77.70972f << 150;
+        QTest::newRow("BRE") << s("BRE") << 53.05266f << 8.78692f << 150;
+        QTest::newRow("BRU") << s("BRU") << 50.8985255f << 4.4830282f << 50;
+        QTest::newRow("BUD") << s("BUD") << 47.43279f << 19.26115f << 100;
+        QTest::newRow("CGN") << s("CGN") << 50.87856f << 7.12107f << 150;
+        QTest::newRow("CPH") << s("CPH") << 55.6295693f << 12.6492994f << 50;
+        QTest::newRow("DEL") << s("DEL") << 28.55681f << 77.08718f << 100;
+        QTest::newRow("DEN") << s("DEN") << 39.84790f << -104.67340f << 200;
+        QTest::newRow("DUB") << s("DUB") << 53.4273328f << -6.2437352f << 200;
+        QTest::newRow("DUS") << s("DUS") << 51.27889f << 6.76566f << 100;
+        QTest::newRow("EAP") << s("EAP") << 47.59960f << 7.53144f << 150;
+        QTest::newRow("EDI") << s("EDI") << 55.9483110f << -3.36353370f << 100;
+        QTest::newRow("EWR") << s("EWR") << 40.69049f << -74.17765f << 250;
+        QTest::newRow("FCO") << s("FCO") << 41.79348f << 12.25208f << 100;
+        QTest::newRow("FRA") << s("FRA") << 50.05100f << 8.571590f << 50;
+        QTest::newRow("GDN") << s("GDN") << 54.38234f << 18.46640f << 50;
+        QTest::newRow("GLA") << s("GLA") << 55.86405f << -4.43181f << 50;
+        QTest::newRow("GOT") << s("GOT") << 57.66771f << 12.29549f << 150;
+        QTest::newRow("GRU") << s("GRU") << -23.42560f << -46.48165f << 100;
+        QTest::newRow("GVA") << s("GVA") << 46.23020f << 6.10828f << 250;
+        QTest::newRow("HAJ") << s("HAJ") << 52.45849f << 9.69898f << 50;
+        QTest::newRow("HAM") << s("HAM") << 53.63214f << 10.00648f << 50;
+        QTest::newRow("HEL") << s("HEL") << 60.31619f << 24.96914f << 50;
+        QTest::newRow("HKG") << s("HKG") << 22.31569f << 113.93605f << 100;
+        QTest::newRow("KEF") << s("KEF") << 63.99663f << -22.62355f << 200;
+        QTest::newRow("LAX") << s("LAX") << 33.94356f << -118.40786f << 150;
+        QTest::newRow("LEI") << s("LEI") << 36.84775f << -2.37242f << 50;
+        QTest::newRow("LEJ") << s("LEJ") << 51.42020f << 12.22122f << 400; // we get the station here, which is fine
+        QTest::newRow("LIS") << s("LIS") << 38.76876f << -9.12844f << 100;
+        QTest::newRow("LUX") << s("LUX") << 49.63506f << 6.21650f << 200;
+        QTest::newRow("LYS") << s("LYS") << 45.72065f << 5.07807f << 150;
+        QTest::newRow("MUC") << s("MUC") << 48.35378f << 11.78633f << 100;
+        QTest::newRow("NRT") << s("NRT") << 35.77059f << 140.38679f << 300;
+        QTest::newRow("NUE") << s("NUE") << 49.49411f << 11.07867f << 100;
+        QTest::newRow("ORD") << s("ORD") << 41.97779f << -87.90269f << 300;
+        QTest::newRow("OSL") << s("OSL") << 60.19361f << 11.09758f << 100;
+        QTest::newRow("OTP") << s("OTP") << 44.57040f << 26.07763f << 150;
+        QTest::newRow("PDX") << s("PDX") << 45.58833f << -122.59240f << 100;
+        QTest::newRow("PRG") << s("PRG") << 50.10640f << 14.26784f << 100;
+        QTest::newRow("PVG") << s("PVG") << 31.15240f << 121.80214f << 100;
+        QTest::newRow("REC") << s("REC") << -8.1314735f << -34.9177565f << 150;
+        QTest::newRow("RIG") << s("RIX") << 56.92188f << 23.97976f << 50;
+        QTest::newRow("SFO") << s("SFO") << 37.6162238f << -122.3915235f << 50;
+        QTest::newRow("SHA") << s("SHA") << 31.19624f << 121.32377f << 100;
+        QTest::newRow("STR") << s("STR") << 48.69052f << 9.19302f << 50;
+        QTest::newRow("SXB") << s("SXB") << 48.54444f << 7.62783f << 100;
+        QTest::newRow("SXF") << s("SXF") << 52.38856f << 13.51809f << 100;
+        QTest::newRow("TLL") << s("TLL") << 59.41685f << 24.79899f << 150;
+        QTest::newRow("TLS") << s("TLS") << 43.63146f << 1.37364f << 100;
+        QTest::newRow("TPE") << s("TPE") << 25.07719f <<  121.23250f << 350; // still ok-ish
+        QTest::newRow("TXL") << s("TXL") << 52.55392f << 13.29208f << 100;
+        QTest::newRow("VIE") << s("VIE") << 48.12024f << 16.56431f << 100;
+        QTest::newRow("YOW") << s("YOW") << 45.32277f << -75.66726f << 100;
+        QTest::newRow("ZRH") << s("ZRH") << 47.45024f << 8.56207f << 100;
+
+        // too complex to work with this approach: LHR, CDG, MAD, MXP, ICN, BCN, PEK
+    }
+
+    void airportLocationTest()
+    {
+        QFETCH(QString, iata);
+        QFETCH(float, lat);
+        QFETCH(float, lon);
+        QFETCH(int, dist);
+
+        const auto coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{iata});
+        QVERIFY(coord.isValid());
+
+        const auto d = LocationUtil::distance(coord.latitude, coord.longitude, lat, lon);
+        qDebug() << coord.latitude << coord.longitude << d;
+
+#if 0
+        QEXPECT_FAIL("AGP", "terminal proximity station finding not implemented yet", Continue);
+        QEXPECT_FAIL("BUD", "not optimized yet", Continue);
+        QEXPECT_FAIL("CPH", "terminal proximity station finding not implemented yet", Continue);
+        QEXPECT_FAIL("DEN", "not optimized yet", Continue);
+        QEXPECT_FAIL("DUS", "not optimized yet", Continue);
+        QEXPECT_FAIL("FRA", "terminal proximity station finding not implemented yet", Continue);
+        QEXPECT_FAIL("GDN", "terminal proximity station finding not implemented yet", Continue);
+        QEXPECT_FAIL("GLA", "airport is not a polygon in OSM", Continue);
+        QEXPECT_FAIL("GRU", "not optimized yet", Continue);
+        QEXPECT_FAIL("HAM", "terminal proximity station finding not implemented yet", Continue);
+        QEXPECT_FAIL("HKG", "not optimized yet", Continue);
+        QEXPECT_FAIL("LIS", "terminal proximity station finding not implemented yet", Continue);
+        QEXPECT_FAIL("PDX", "stop_position::railway::tram_stop not handled yet", Continue);
+        QEXPECT_FAIL("PRG", "not optimized yet", Continue);
+        QEXPECT_FAIL("PVG", "not optimized yet", Continue);
+        QEXPECT_FAIL("RIG", "open polygon in OSM", Continue);
+        QEXPECT_FAIL("SHA", "not optimized yet", Continue);
+        QEXPECT_FAIL("TLS", "out of bounds Airbus buildings interfering", Continue);
+        QEXPECT_FAIL("TXL", "not optimized yet", Continue);
+        QEXPECT_FAIL("SXF", "not optimized yet", Continue);
+        QVERIFY(d <= dist);
+#endif
     }
 };
 
