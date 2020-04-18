@@ -279,15 +279,25 @@ void OSMAirportDb::loadStation(const OSM::Node &elem)
     }
 
     for (auto it = m_iataMap.begin(); it != m_iataMap.end(); ++it) {
+        const auto &airport = (*it).second;
+
         // we need the exact path here, the bounding box can contain a lot more stuff
         // the bounding box check is just for speed
-        if (!OSM::contains((*it).second.bbox, elem.coordinate)
-         || !(*it).second.airportPolygon.containsPoint(QPointF(elem.coordinate.latF(), elem.coordinate.lonF()), Qt::WindingFill))
-        {
+        if (!OSM::contains(airport.bbox, elem.coordinate)) {
             continue;
         }
-        //qDebug() << "found station for airport:" << elem.url() << (*it).first << (*it).second.source;
-        (*it).second.stations.push_back(elem.coordinate);
+
+        const auto onPremise = airport.airportPolygon.containsPoint(QPointF(elem.coordinate.latF(), elem.coordinate.lonF()), Qt::WindingFill);
+        // one would assume that terminals are always within the airport bounds, but that's not the case
+        // they sometimes expand beyond them. A station inside a terminal is however most likely something relevant for us
+        const auto inTerminal = std::any_of(airport.terminalBboxes.begin(), airport.terminalBboxes.end(), [&elem](const auto &terminal) {
+            return OSM::contains(terminal, elem.coordinate);
+        });
+
+        if (onPremise || inTerminal) {
+            //qDebug() << "found station for airport:" << elem.url() << (*it).first << (*it).second.source;
+            (*it).second.stations.push_back(elem.coordinate);
+        }
     }
 }
 

@@ -217,7 +217,7 @@ private Q_SLOTS:
         QTest::addColumn<float>("lon");
         QTest::addColumn<int>("dist");
 
-        QTest::newRow("AGP") << s("AGP") << 36.67764f << -4.49017f << 50;
+        QTest::newRow("AGP") << s("AGP") << 36.67608f << -4.49095f << 100;
         QTest::newRow("AMS") << s("AMS") << 52.3095230f << 4.7621813f << 50;
         QTest::newRow("ARN") << s("ARN") << 59.64927f << 17.92956f << 100;
         QTest::newRow("BLR") << s("BLR") << 13.20023f << 77.70972f << 150;
@@ -292,9 +292,7 @@ private Q_SLOTS:
         qDebug() << coord.latitude << coord.longitude << d;
 
 #if 0
-        QEXPECT_FAIL("AGP", "terminal proximity station finding not implemented yet", Continue);
         QEXPECT_FAIL("BUD", "not optimized yet", Continue);
-        QEXPECT_FAIL("CPH", "terminal proximity station finding not implemented yet", Continue);
         QEXPECT_FAIL("DEN", "not optimized yet", Continue);
         QEXPECT_FAIL("DUS", "not optimized yet", Continue);
         QEXPECT_FAIL("FRA", "terminal proximity station finding not implemented yet", Continue);
