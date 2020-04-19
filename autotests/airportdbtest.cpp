@@ -231,7 +231,7 @@ private Q_SLOTS:
         QTest::newRow("DUB") << s("DUB") << 53.4273328f << -6.2437352f << 150;
         QTest::newRow("DUS") << s("DUS") << 51.27889f << 6.76566f << 150;
         QTest::newRow("EAP") << s("EAP") << 47.59960f << 7.53144f << 150;
-        QTest::newRow("EDI") << s("EDI") << 55.9483110f << -3.36353370f << 100;
+        QTest::newRow("EDI") << s("EDI") << 55.9483110f << -3.36353370f << 250;
         QTest::newRow("EWR") << s("EWR") << 40.69049f << -74.17765f << 250;
         QTest::newRow("FCO") << s("FCO") << 41.79348f << 12.25208f << 50;
         QTest::newRow("FRA") << s("FRA") << 50.05100f << 8.571590f << 50;
@@ -254,7 +254,7 @@ private Q_SLOTS:
         QTest::newRow("MUC") << s("MUC") << 48.35378f << 11.78633f << 50;
         QTest::newRow("NRT") << s("NRT") << 35.77059f << 140.38679f << 300;
         QTest::newRow("NUE") << s("NUE") << 49.49411f << 11.07867f << 100;
-        QTest::newRow("ORD") << s("ORD") << 41.97779f << -87.90269f << 300;
+        QTest::newRow("ORD") << s("ORD") << 41.97779f << -87.90269f << 50;
         QTest::newRow("OSL") << s("OSL") << 60.19361f << 11.09758f << 100;
         QTest::newRow("OTP") << s("OTP") << 44.57040f << 26.07763f << 150;
         QTest::newRow("PDX") << s("PDX") << 45.58833f << -122.59240f << 150;

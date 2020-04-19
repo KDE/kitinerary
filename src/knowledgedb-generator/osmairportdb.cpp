@@ -357,19 +357,8 @@ OSM::Coordinate OSMAirportDb::lookup(const QString &iata, float lat, float lon)
         return {};
     }
 
-    // single entrance
     qDebug() << "Optimizing" << iata << airport.source << lat << lon << airport.bbox;
     qDebug() << "  entrances:" << airport.terminalEntrances.size() << "terminals:" << airport.terminalBboxes.size() << "stations:" << airport.stations.size();
-    if (airport.terminalEntrances.size() == 1) { // ### this works for small airports, but for larger ones this is often due to missing data
-        qDebug() << "  by entrance:" << airport.terminalEntrances[0];
-        return airport.terminalEntrances[0];
-    }
-
-    // single terminal
-    if (airport.terminalBboxes.size() == 1) {
-        qDebug() << "  by terminal:" << airport.terminalBboxes[0].center();
-        return airport.terminalBboxes[0].center();
-    }
 
     // single station
     if (airport.stations.size() == 1) {
@@ -386,6 +375,18 @@ OSM::Coordinate OSMAirportDb::lookup(const QString &iata, float lat, float lon)
             qDebug() << "  by clustered station:" << stationBbox;
             return stationBbox.center();
         }
+    }
+
+    // single entrance
+    if (airport.terminalEntrances.size() == 1) { // ### this works for small airports, but for larger ones this is often due to missing data
+        qDebug() << "  by entrance:" << airport.terminalEntrances[0];
+        return airport.terminalEntrances[0];
+    }
+
+    // single terminal
+    if (airport.terminalBboxes.size() == 1) {
+        qDebug() << "  by terminal:" << airport.terminalBboxes[0].center();
+        return airport.terminalBboxes[0].center();
     }
 
     // multiple terminals: take the center of the sum of all bounding boxes, and TODO check the result isn't ridiculously large
