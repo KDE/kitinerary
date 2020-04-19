@@ -19,6 +19,7 @@
 #define OSMAIRPORTDB_H
 
 #include <osm/datatypes.h>
+#include <osm/element.h>
 
 #include <QPolygonF>
 
@@ -35,7 +36,7 @@ struct OSMAirportData
 
     std::vector<OSM::BoundingBox> terminalBboxes;
     std::vector<OSM::Coordinate> terminalEntrances;
-    std::vector<const OSM::Node*> stations;
+    std::vector<OSM::Element> stations;
 };
 
 /** OSM airport database for optimizing geo coordinates. */
@@ -51,7 +52,7 @@ private:
     void loadAirport(const OSM::Way &elem, const QString &iataCode);
     void loadTerminal(const OSM::Relation &elem);
     void loadTerminal(const OSM::Way &elem);
-    void loadStation(const OSM::Node &elem);
+    void loadStation(OSM::Element elem);
     void filterStations(OSMAirportData &airport);
 
     template <typename Iter>

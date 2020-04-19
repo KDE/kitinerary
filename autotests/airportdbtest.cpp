@@ -221,7 +221,7 @@ private Q_SLOTS:
         QTest::newRow("AMS") << s("AMS") << 52.3095230f << 4.7621813f << 50;
         QTest::newRow("ARN") << s("ARN") << 59.64927f << 17.92956f << 50;
         QTest::newRow("BLR") << s("BLR") << 13.20023f << 77.70972f << 150;
-        QTest::newRow("BRE") << s("BRE") << 53.05266f << 8.78692f << 150;
+        QTest::newRow("BRE") << s("BRE") << 53.05266f << 8.78692f << 50;
         QTest::newRow("BRU") << s("BRU") << 50.8985255f << 4.4830282f << 50;
         QTest::newRow("BUD") << s("BUD") << 47.43279f << 19.26115f << 100;
         QTest::newRow("CGN") << s("CGN") << 50.87856f << 7.12107f << 150;
@@ -233,7 +233,7 @@ private Q_SLOTS:
         QTest::newRow("EAP") << s("EAP") << 47.59960f << 7.53144f << 150;
         QTest::newRow("EDI") << s("EDI") << 55.9483110f << -3.36353370f << 100;
         QTest::newRow("EWR") << s("EWR") << 40.69049f << -74.17765f << 250;
-        QTest::newRow("FCO") << s("FCO") << 41.79348f << 12.25208f << 100;
+        QTest::newRow("FCO") << s("FCO") << 41.79348f << 12.25208f << 50;
         QTest::newRow("FRA") << s("FRA") << 50.05100f << 8.571590f << 50;
         QTest::newRow("GDN") << s("GDN") << 54.38234f << 18.46640f << 50;
         QTest::newRow("GLA") << s("GLA") << 55.86405f << -4.43181f << 50;
@@ -257,7 +257,7 @@ private Q_SLOTS:
         QTest::newRow("ORD") << s("ORD") << 41.97779f << -87.90269f << 300;
         QTest::newRow("OSL") << s("OSL") << 60.19361f << 11.09758f << 100;
         QTest::newRow("OTP") << s("OTP") << 44.57040f << 26.07763f << 150;
-        QTest::newRow("PDX") << s("PDX") << 45.58833f << -122.59240f << 100;
+        QTest::newRow("PDX") << s("PDX") << 45.58833f << -122.59240f << 150;
         QTest::newRow("PRG") << s("PRG") << 50.10640f << 14.26784f << 100;
         QTest::newRow("PVG") << s("PVG") << 31.15240f << 121.80214f << 100;
         QTest::newRow("REC") << s("REC") << -8.1314735f << -34.9177565f << 150;
@@ -297,13 +297,12 @@ private Q_SLOTS:
         QEXPECT_FAIL("GDN", "station/terminal proximity metric is too simple", Continue);
         QEXPECT_FAIL("GLA", "airport is not a polygon in OSM", Continue);
         QEXPECT_FAIL("GRU", "w777206182 interfering", Continue);
-        QEXPECT_FAIL("HKG", "way-type station elements not handled yet", Continue);
+        QEXPECT_FAIL("HKG", "freight terminals interfering, better station selection", Continue);
         QEXPECT_FAIL("LIS", "station/terminal proximity metric is too simple", Continue);
-        QEXPECT_FAIL("PDX", "stop clustering missing", Continue);
         QEXPECT_FAIL("PRG", "private/military terminals 3 and 4 interfering", Continue);
-        QEXPECT_FAIL("PVG", "needs way-type station element support, and subway vs generic type filter", Continue);
+        QEXPECT_FAIL("PVG", "complicated", Continue);
         QEXPECT_FAIL("RIG", "open polygon in OSM", Continue);
-        QEXPECT_FAIL("SHA", "not optimized yet", Continue);
+        QEXPECT_FAIL("SHA", "station not detected?", Continue);
         QEXPECT_FAIL("SXF", "w630509626 (government terminal) interfering", Continue);
         QVERIFY(d <= dist);
 #endif

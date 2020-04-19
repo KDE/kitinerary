@@ -22,6 +22,10 @@
 #include <QDebug>
 #include <QFile>
 
+enum {
+    StationClusterDistance = 100, // in meter
+};
+
 template <typename T>
 static bool isActiveAirport(const T &elem)
 {
@@ -87,9 +91,7 @@ void OSMAirportDb::load(const QString &path)
     }
 
     // load railway stations
-    for (const auto &node : m_dataset.nodes) {
-        loadStation(node);
-    }
+    OSM::for_each(m_dataset, [this](const auto &elem) { loadStation(elem); });
     for (auto &a : m_iataMap) {
         filterStations(a.second);
     }
@@ -268,15 +270,15 @@ void OSMAirportDb::loadTerminal(const OSM::Way &elem)
     }
 }
 
-void OSMAirportDb::loadStation(const OSM::Node &elem)
+void OSMAirportDb::loadStation(OSM::Element elem)
 {
-    const auto railway = OSM::tagValue(elem, QLatin1String("railway"));
+    const auto railway = elem.tagValue(QLatin1String("railway"));
     if (railway != QLatin1String("station") && railway != QLatin1String("halt") && railway != QLatin1String("tram_stop")) {
         return;
     }
 
     // try to filter out airport-interal transport systems, those are typically airside and thus not what we want
-    const auto station = OSM::tagValue(elem, QLatin1String("station"));
+    const auto station = elem.tagValue(QLatin1String("station"));
     if (station == QLatin1String("monorail")) {
         return;
     }
@@ -286,24 +288,24 @@ void OSMAirportDb::loadStation(const OSM::Node &elem)
 
         // we need the exact path here, the bounding box can contain a lot more stuff
         // the bounding box check is just for speed
-        if (!OSM::contains(airport.bbox, elem.coordinate)) {
+        if (!OSM::contains(airport.bbox, elem.center())) {
             continue;
         }
 
-        const auto onPremises = airport.airportPolygon.containsPoint(QPointF(elem.coordinate.latF(), elem.coordinate.lonF()), Qt::WindingFill);
+        const auto onPremises = airport.airportPolygon.containsPoint(QPointF(elem.center().latF(), elem.center().lonF()), Qt::WindingFill);
         // one would assume that terminals are always within the airport bounds, but that's not the case
         // they sometimes expand beyond them. A station inside a terminal is however most likely something relevant for us
         const auto inTerminal = std::any_of(airport.terminalBboxes.begin(), airport.terminalBboxes.end(), [&elem](const auto &terminal) {
-            return OSM::contains(terminal, elem.coordinate);
+            return OSM::contains(terminal, elem.center());
         });
 
         const auto isCloseToTerminal = std::any_of(airport.terminalBboxes.begin(), airport.terminalBboxes.end(), [&elem](const auto &terminal) {
-            return OSM::distance(terminal.center(), elem.coordinate) < 100;
+            return OSM::distance(terminal.center(), elem.center()) < 100;
         });
 
         if (onPremises || inTerminal || isCloseToTerminal) {
             //qDebug() << "found station for airport:" << elem.url() << (*it).first << (*it).second.source << onPremises << inTerminal << isCloseToTerminal;
-            (*it).second.stations.push_back(&elem);
+            (*it).second.stations.push_back(elem);
         }
     }
 }
@@ -313,7 +315,7 @@ void OSMAirportDb::filterStations(OSMAirportData &airport)
     // if we have a full station, drop halts
     // TODO similar filters are probably needed for various tram/subway variants for on-premises transport lines
     auto it = std::partition(airport.stations.begin(), airport.stations.end(), [](auto station) {
-        return OSM::tagValue(*station, QLatin1String("railway")) == QLatin1String("station");
+        return station.tagValue(QLatin1String("railway")) == QLatin1String("station");
     });
     if (it != airport.stations.begin() && it != airport.stations.end()) {
         airport.stations.erase(it, airport.stations.end());
@@ -321,7 +323,7 @@ void OSMAirportDb::filterStations(OSMAirportData &airport)
 
     // "creative" way of separating "real" and on-premises stations: only real ones tend to have Wikidata tags
     it = std::partition(airport.stations.begin(), airport.stations.end(), [](auto station) {
-        return !OSM::tagValue(*station, QLatin1String("wikidata")).isEmpty();
+        return !station.tagValue(QLatin1String("wikidata")).isEmpty();
     });
     if (it != airport.stations.begin() && it != airport.stations.end()) {
         airport.stations.erase(it, airport.stations.end());
@@ -359,8 +361,19 @@ OSM::Coordinate OSMAirportDb::lookup(const QString &iata, float lat, float lon)
 
     // single station
     if (airport.stations.size() == 1) {
-        qDebug() << "  by station:" << airport.stations[0]->url();
-        return airport.stations[0]->coordinate;
+        qDebug() << "  by station:" << airport.stations[0].url();
+        return airport.stations[0].center();
+    }
+
+    // multiple stations, but close together
+    if (airport.stations.size() > 1) {
+        auto stationBbox = std::accumulate(airport.stations.begin(), airport.stations.end(), OSM::BoundingBox(), [](OSM::BoundingBox lhs, OSM::Element rhs) {
+            return OSM::unite(lhs, OSM::BoundingBox(rhs.boundingBox().center(), rhs.boundingBox().center()));
+        });
+        if (OSM::distance(stationBbox.min, stationBbox.max) < StationClusterDistance) {
+            qDebug() << "  by clustered station:" << stationBbox;
+            return stationBbox.center();
+        }
     }
 
     // multiple terminals: take the center of the sum of all bounding boxes, and TODO check the result isn't ridiculously large
