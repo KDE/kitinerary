@@ -297,7 +297,7 @@ private Q_SLOTS:
         QEXPECT_FAIL("GDN", "station/terminal proximity metric is too simple", Continue);
         QEXPECT_FAIL("GLA", "airport is not a polygon in OSM", Continue);
         QEXPECT_FAIL("GRU", "w777206182 interfering", Continue);
-        QEXPECT_FAIL("HKG", "freight terminals interfering, better station selection", Continue);
+        QEXPECT_FAIL("HKG", "better station selection", Continue);
         QEXPECT_FAIL("LIS", "station/terminal proximity metric is too simple", Continue);
         QEXPECT_FAIL("PRG", "private/military terminals 3 and 4 interfering", Continue);
         QEXPECT_FAIL("PVG", "complicated", Continue);

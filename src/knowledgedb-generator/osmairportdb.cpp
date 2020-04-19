@@ -45,7 +45,19 @@ template <typename T>
 static bool isTerminal(const T &elem)
 {
     const auto aeroway = OSM::tagValue(elem, QLatin1String("aeroway"));
-    return aeroway == QLatin1String("terminal");
+    if (aeroway != QLatin1String("terminal")) {
+        return false;
+    }
+
+    // filter out freight terminals
+    const auto usage = OSM::tagValue(elem, QLatin1String("usage"));
+    const auto traffic_mode = OSM::tagValue(elem, QLatin1String("traffic_mode"));
+    const auto building = OSM::tagValue(elem, QLatin1String("building"));
+    const auto industrial = OSM::tagValue(elem, QLatin1String("industrial"));
+    return usage != QLatin1String("freight")
+        && traffic_mode != QLatin1String("freigt")
+        && building != QLatin1String("industrial")
+        && industrial.isEmpty();
 }
 
 void OSMAirportDb::load(const QString &path)
