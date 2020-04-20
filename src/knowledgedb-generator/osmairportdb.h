@@ -34,7 +34,7 @@ struct OSMAirportData
     std::vector<const OSM::Way*> airportPaths;
     QPolygonF airportPolygon;
 
-    std::vector<OSM::BoundingBox> terminalBboxes;
+    std::vector<OSM::Element> terminals;
     std::vector<OSM::Coordinate> terminalEntrances;
     std::vector<OSM::Element> stations;
 };
@@ -50,8 +50,7 @@ private:
     template <typename T> void loadAirport(const T &elem);
     void loadAirport(const OSM::Relation &elem, const QString &iataCode);
     void loadAirport(const OSM::Way &elem, const QString &iataCode);
-    void loadTerminal(const OSM::Relation &elem);
-    void loadTerminal(const OSM::Way &elem);
+    void loadTerminal(OSM::Element elem);
     void loadStation(OSM::Element elem);
     void filterStations(OSMAirportData &airport);
 

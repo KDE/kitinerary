@@ -226,7 +226,7 @@ private Q_SLOTS:
         QTest::newRow("BUD") << s("BUD") << 47.43279f << 19.26115f << 100;
         QTest::newRow("CGN") << s("CGN") << 50.87856f << 7.12107f << 150;
         QTest::newRow("CPH") << s("CPH") << 55.6295693f << 12.6492994f << 50;
-        QTest::newRow("DEL") << s("DEL") << 28.55681f << 77.08718f << 100;
+        QTest::newRow("DEL") << s("DEL") << 28.55681f << 77.08718f << 50;
         QTest::newRow("DEN") << s("DEN") << 39.84790f << -104.67340f << 150;
         QTest::newRow("DUB") << s("DUB") << 53.4273328f << -6.2437352f << 150;
         QTest::newRow("DUS") << s("DUS") << 51.27889f << 6.76566f << 150;
@@ -235,11 +235,11 @@ private Q_SLOTS:
         QTest::newRow("EWR") << s("EWR") << 40.69049f << -74.17765f << 250;
         QTest::newRow("FCO") << s("FCO") << 41.79348f << 12.25208f << 50;
         QTest::newRow("FRA") << s("FRA") << 50.05100f << 8.571590f << 50;
-        QTest::newRow("GDN") << s("GDN") << 54.38234f << 18.46640f << 50;
+        QTest::newRow("GDN") << s("GDN") << 54.38234f << 18.46640f << 150;
         QTest::newRow("GLA") << s("GLA") << 55.86405f << -4.43181f << 50;
         QTest::newRow("GOT") << s("GOT") << 57.66771f << 12.29549f << 150;
         QTest::newRow("GRU") << s("GRU") << -23.42560f << -46.48165f << 100;
-        QTest::newRow("GVA") << s("GVA") << 46.23020f << 6.10828f << 250;
+        QTest::newRow("GVA") << s("GVA") << 46.23020f << 6.10828f << 200;
         QTest::newRow("HAJ") << s("HAJ") << 52.45849f << 9.69898f << 50;
         QTest::newRow("HAM") << s("HAM") << 53.63214f << 10.00648f << 100;
         QTest::newRow("HEL") << s("HEL") << 60.31619f << 24.96914f << 50;
@@ -248,15 +248,15 @@ private Q_SLOTS:
         QTest::newRow("LAX") << s("LAX") << 33.94356f << -118.40786f << 150;
         QTest::newRow("LEI") << s("LEI") << 36.84775f << -2.37242f << 50;
         QTest::newRow("LEJ") << s("LEJ") << 51.42020f << 12.22122f << 400; // we get the station here, which is fine
-        QTest::newRow("LIS") << s("LIS") << 38.76876f << -9.12844f << 100;
+        QTest::newRow("LIS") << s("LIS") << 38.76876f << -9.12844f << 50;
         QTest::newRow("LUX") << s("LUX") << 49.63506f << 6.21650f << 200;
         QTest::newRow("LYS") << s("LYS") << 45.72065f << 5.07807f << 150;
         QTest::newRow("MUC") << s("MUC") << 48.35378f << 11.78633f << 50;
         QTest::newRow("NRT") << s("NRT") << 35.77059f << 140.38679f << 300;
-        QTest::newRow("NUE") << s("NUE") << 49.49411f << 11.07867f << 100;
+        QTest::newRow("NUE") << s("NUE") << 49.49411f << 11.07867f << 50;
         QTest::newRow("ORD") << s("ORD") << 41.97779f << -87.90269f << 50;
         QTest::newRow("OSL") << s("OSL") << 60.19361f << 11.09758f << 100;
-        QTest::newRow("OTP") << s("OTP") << 44.57040f << 26.07763f << 150;
+        QTest::newRow("OTP") << s("OTP") << 44.57040f << 26.07763f << 200;
         QTest::newRow("PDX") << s("PDX") << 45.58833f << -122.59240f << 150;
         QTest::newRow("PRG") << s("PRG") << 50.10640f << 14.26784f << 100;
         QTest::newRow("PVG") << s("PVG") << 31.15240f << 121.80214f << 100;
@@ -293,12 +293,9 @@ private Q_SLOTS:
 
 #if 0
         QEXPECT_FAIL("BUD", "closed terminal 1 (w8557242) interfering", Continue);
-        QEXPECT_FAIL("FRA", "spurious entrance node in OSM data", Continue);
-        QEXPECT_FAIL("GDN", "station/terminal proximity metric is too simple", Continue);
         QEXPECT_FAIL("GLA", "airport is not a polygon in OSM", Continue);
         QEXPECT_FAIL("GRU", "w777206182 interfering", Continue);
         QEXPECT_FAIL("HKG", "better station selection", Continue);
-        QEXPECT_FAIL("LIS", "station/terminal proximity metric is too simple", Continue);
         QEXPECT_FAIL("PRG", "private/military terminals 3 and 4 interfering", Continue);
         QEXPECT_FAIL("PVG", "complicated", Continue);
         QEXPECT_FAIL("RIG", "open polygon in OSM", Continue);

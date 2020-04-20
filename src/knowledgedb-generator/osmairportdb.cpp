@@ -17,6 +17,7 @@
 
 #include "osmairportdb.h"
 
+#include <osm/math.h>
 #include <osm/xmlparser.h>
 
 #include <QDebug>
@@ -24,6 +25,7 @@
 
 enum {
     StationClusterDistance = 100, // in meter
+    StationToTerminalDistance = 75, // in meter
 };
 
 template <typename T>
@@ -39,25 +41,6 @@ static bool isActiveAirport(const T &elem)
 
     const auto aeroway = OSM::tagValue(elem, QLatin1String("aeroway"));
     return aeroway == QLatin1String("aerodrome");
-}
-
-template <typename T>
-static bool isTerminal(const T &elem)
-{
-    const auto aeroway = OSM::tagValue(elem, QLatin1String("aeroway"));
-    if (aeroway != QLatin1String("terminal")) {
-        return false;
-    }
-
-    // filter out freight terminals
-    const auto usage = OSM::tagValue(elem, QLatin1String("usage"));
-    const auto traffic_mode = OSM::tagValue(elem, QLatin1String("traffic_mode"));
-    const auto building = OSM::tagValue(elem, QLatin1String("building"));
-    const auto industrial = OSM::tagValue(elem, QLatin1String("industrial"));
-    return usage != QLatin1String("freight")
-        && traffic_mode != QLatin1String("freigt")
-        && building != QLatin1String("industrial")
-        && industrial.isEmpty();
 }
 
 void OSMAirportDb::load(const QString &path)
@@ -93,14 +76,7 @@ void OSMAirportDb::load(const QString &path)
     }
 
     // find all terminal buildings, and add them to their airports
-    for (const auto &rel : m_dataset.relations) {
-        loadTerminal(rel);
-    }
-    for (const auto &way : m_dataset.ways) {
-        if (isTerminal(way)) {
-            loadTerminal(way);
-        }
-    }
+    OSM::for_each(m_dataset, [this](const auto &elem) { loadTerminal(elem); });
 
     // load railway stations
     OSM::for_each(m_dataset, [this](const auto &elem) { loadStation(elem); });
@@ -109,18 +85,18 @@ void OSMAirportDb::load(const QString &path)
     }
 
     qDebug() << "airports:" << m_iataMap.size();
-    qDebug() << "  with a single terminal:" << std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) { return a.second.terminalBboxes.size() == 1; } );
-    qDebug() << "  with multiple terminals:" << std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) { return a.second.terminalBboxes.size() > 1; } );
+    qDebug() << "  with a single terminal:" << std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) { return a.second.terminals.size() == 1; } );
+    qDebug() << "  with multiple terminals:" << std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) { return a.second.terminals.size() > 1; } );
     qDebug() << "  with a single entrance:" << std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) { return a.second.terminalEntrances.size() == 1; } );
     qDebug() << "  with multiple entrances:" << std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) { return a.second.terminalEntrances.size() > 1; } );
     qDebug() << "  with a single station:" <<  std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) { return a.second.stations.size() == 1; } );
     qDebug() << "  with multiple stations:" <<  std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) { return a.second.stations.size() > 1; } );
     qDebug() << "  with at least one singular feature:" <<  std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) {
-        return a.second.stations.size() == 1 || a.second.terminalBboxes.size() == 1 || a.second.terminalEntrances.size() == 1;
+        return a.second.stations.size() == 1 || a.second.terminals.size() == 1 || a.second.terminalEntrances.size() == 1;
     });
     qDebug() << "  with conflicting features:" <<  std::count_if(m_iataMap.begin(), m_iataMap.end(), [](const auto &a) {
-        return a.second.stations.size() != 1 && a.second.terminalBboxes.size() != 1 && a.second.terminalEntrances.size() != 1 &&
-            !(a.second.stations.empty() && a.second.terminalBboxes.empty() && a.second.terminalEntrances.empty());
+        return a.second.stations.size() != 1 && a.second.terminals.size() != 1 && a.second.terminalEntrances.size() != 1 &&
+            !(a.second.stations.empty() && a.second.terminals.empty() && a.second.terminalEntrances.empty());
     });
 }
 
@@ -224,59 +200,53 @@ void OSMAirportDb::loadAirport(const OSM::Way &elem, const QString &iataCode)
     m_iataMap[iataCode] = std::move(airport);
 }
 
-void OSMAirportDb::loadTerminal(const OSM::Relation& elem)
+void OSMAirportDb::loadTerminal(OSM::Element elem)
 {
-    if (!isTerminal(elem)) {
+    const auto aeroway = elem.tagValue(QLatin1String("aeroway"));
+    if (aeroway != QLatin1String("terminal")) {
         return;
     }
 
-    // we assume type == multipolygon here
-    for (const auto &member : elem.members) {
-        if (member.role != QLatin1String("outer")) {
-            continue;
-        }
-        const auto it = std::lower_bound(m_dataset.ways.begin(), m_dataset.ways.end(), member.id);
-        if (it != m_dataset.ways.end() && (*it).id == member.id) {
-           loadTerminal(*it);
-        }
+    // filter out freight terminals
+    const auto usage = elem.tagValue(QLatin1String("usage"));
+    const auto traffic_mode = elem.tagValue(QLatin1String("traffic_mode"));
+    const auto building = elem.tagValue(QLatin1String("building"));
+    const auto industrial = elem.tagValue(QLatin1String("industrial"));
+    if (usage == QLatin1String("freight")
+        || traffic_mode == QLatin1String("freigt")
+        || building == QLatin1String("industrial")
+        || !industrial.isEmpty()) {
+        return;
     }
-}
 
-
-void OSMAirportDb::loadTerminal(const OSM::Way &elem)
-{
     // find matching airport
     for (auto it = m_iataMap.begin(); it != m_iataMap.end(); ++it) {
-        if (!OSM::intersects((*it).second.bbox, elem.bbox)) {
+        if (!OSM::intersects((*it).second.bbox, elem.boundingBox())) {
             continue;
         }
         // check against the exact airport boundary, not just the bounding box,
         // this excludes terminal buildings from adjacent sites we don't care about
         // example: the Airbus delivery buildings next to TLS
-        if (!(*it).second.airportPolygon.intersects(QRectF(QPointF(elem.bbox.min.latF(), elem.bbox.min.lonF()), QPointF(elem.bbox.max.latF(), elem.bbox.max.lonF())))) {
+        if (!(*it).second.airportPolygon.intersects(QRectF(QPointF(elem.boundingBox().min.latF(), elem.boundingBox().min.lonF()), QPointF(elem.boundingBox().max.latF(), elem.boundingBox().max.lonF())))) {
             continue;
         }
         //qDebug() << "found terminal for airport:" << elem.url() << (*it).first << (*it).second.source;
-        (*it).second.terminalBboxes.push_back(elem.bbox);
+        (*it).second.terminals.push_back(elem);
 
         // look for entrances to terminals
-        for (const auto &nodeId : elem.nodes) {
-            const auto nodeIt = std::lower_bound(m_dataset.nodes.begin(), m_dataset.nodes.end(), nodeId);
-            if (nodeIt == m_dataset.nodes.end() || (*nodeIt).id != nodeId) {
-                continue;
-            }
+        for (auto node : elem.outerPath(m_dataset)) {
 
             // filter out inaccessible entrances, or gates
-            const auto access = OSM::tagValue(*nodeIt, QLatin1String("access"));
-            const auto aeroway = OSM::tagValue(*nodeIt, QLatin1String("gate"));
+            const auto access = OSM::tagValue(*node, QLatin1String("access"));
+            const auto aeroway = OSM::tagValue(*node, QLatin1String("gate"));
             if (access == QLatin1String("private") || access == QLatin1String("no") || aeroway == QLatin1String("gate")) {
                 continue;
             }
 
-            const auto entrance = OSM::tagValue(*nodeIt, QLatin1String("entrance"));
+            const auto entrance = OSM::tagValue(*node, QLatin1String("entrance"));
             if (entrance == QLatin1String("yes") || entrance == QLatin1String("main")) {
                 //qDebug() << "  found entrance for terminal:" << (*nodeIt).url() << entrance << access;
-                (*it).second.terminalEntrances.push_back((*nodeIt).coordinate);
+                (*it).second.terminalEntrances.push_back(node->coordinate);
             }
         }
     }
@@ -307,16 +277,19 @@ void OSMAirportDb::loadStation(OSM::Element elem)
         const auto onPremises = airport.airportPolygon.containsPoint(QPointF(elem.center().latF(), elem.center().lonF()), Qt::WindingFill);
         // one would assume that terminals are always within the airport bounds, but that's not the case
         // they sometimes expand beyond them. A station inside a terminal is however most likely something relevant for us
-        const auto inTerminal = std::any_of(airport.terminalBboxes.begin(), airport.terminalBboxes.end(), [&elem](const auto &terminal) {
-            return OSM::contains(terminal, elem.center());
+        const auto inTerminal = std::any_of(airport.terminals.begin(), airport.terminals.end(), [&elem](const auto &terminal) {
+            return OSM::contains(terminal.boundingBox(), elem.center());
         });
 
-        const auto isCloseToTerminal = std::any_of(airport.terminalBboxes.begin(), airport.terminalBboxes.end(), [&elem](const auto &terminal) {
-            return OSM::distance(terminal.center(), elem.center()) < 100;
-        });
+        // distance of the station to the terminal outer polygon
+        uint32_t distanceToTerminal = std::numeric_limits<uint32_t>::max();
+        for (auto terminal : airport.terminals) {
+            const auto outerPath = terminal.outerPath(m_dataset);
+            distanceToTerminal = std::min(distanceToTerminal, OSM::distance(outerPath, elem.center()));
+        }
 
-        if (onPremises || inTerminal || isCloseToTerminal) {
-            //qDebug() << "found station for airport:" << elem.url() << (*it).first << (*it).second.source << onPremises << inTerminal << isCloseToTerminal;
+        if (onPremises || inTerminal || distanceToTerminal < StationToTerminalDistance) {
+            qDebug() << "found station for airport:" << elem.url() << (*it).first << (*it).second.source << onPremises << inTerminal << distanceToTerminal;
             (*it).second.stations.push_back(elem);
         }
     }
@@ -356,9 +329,13 @@ OSM::Coordinate OSMAirportDb::lookup(const QString &iata, float lat, float lon)
         qDebug() << "Airport" << iata << "is not where we expect it to be!?" << airport.source << airport.bbox << lat << lon;
         return {};
     }
+    if (airport.terminals.empty() && airport.terminalEntrances.empty() && airport.stations.empty()) {
+        // no details available for this airport
+        return {};
+    }
 
     qDebug() << "Optimizing" << iata << airport.source << lat << lon << airport.bbox;
-    qDebug() << "  entrances:" << airport.terminalEntrances.size() << "terminals:" << airport.terminalBboxes.size() << "stations:" << airport.stations.size();
+    qDebug() << "  entrances:" << airport.terminalEntrances.size() << "terminals:" << airport.terminals.size() << "stations:" << airport.stations.size();
 
     // single station
     if (airport.stations.size() == 1) {
@@ -384,14 +361,16 @@ OSM::Coordinate OSMAirportDb::lookup(const QString &iata, float lat, float lon)
     }
 
     // single terminal
-    if (airport.terminalBboxes.size() == 1) {
-        qDebug() << "  by terminal:" << airport.terminalBboxes[0].center();
-        return airport.terminalBboxes[0].center();
+    if (airport.terminals.size() == 1) {
+        qDebug() << "  by terminal:" << airport.terminals[0].url() << airport.terminals[0].center();
+        return airport.terminals[0].center();
     }
 
     // multiple terminals: take the center of the sum of all bounding boxes, and TODO check the result isn't ridiculously large
-    if (airport.terminalBboxes.size() > 1) {
-        const auto terminalBbox = std::accumulate(airport.terminalBboxes.begin(), airport.terminalBboxes.end(), OSM::BoundingBox(), OSM::unite);
+    if (airport.terminals.size() > 1) {
+        const auto terminalBbox = std::accumulate(airport.terminals.begin(), airport.terminals.end(), OSM::BoundingBox(), [](const auto &bbox, auto terminal) {
+            return OSM::unite(bbox, terminal.boundingBox());
+        });
         // if the original coordinate is outside the terminal bounding box, this is highly likely an improvement,
         // otherwise we cannot be sure (see MUC, where the Wikidata coordinate is ideal).
         //qDebug() << "    considering terminal bbox:" << terminalBbox;
