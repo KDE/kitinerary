@@ -94,6 +94,9 @@ void OSMAirportDb::loadAirport(OSM::Element elem)
         return;
     }
 
+    // osmconvert gives us wrong values e.g. for FRA, so we need to do this ourselves...
+    elem.recomputeBoundingBox(m_dataset);
+
     // semicolon list split
     if (iata.contains(QLatin1Char(';'))) {
         const auto iatas = iata.split(QLatin1Char(';'), Qt::SkipEmptyParts);
