@@ -275,6 +275,16 @@ void OSMAirportDb::filterStations(OSMAirportData &airport)
     if (it != airport.stations.begin() && it != airport.stations.end()) {
         airport.stations.erase(it, airport.stations.end());
     }
+
+    // prioritize by number of platforms, if we have that information for all stations
+    if (airport.stations.size() > 1 && std::all_of(airport.stations.begin(), airport.stations.end(), [](auto s) { return !s.tagValue(QLatin1String("platforms")).isEmpty(); })) {
+        std::sort(airport.stations.begin(), airport.stations.end(), [](auto lhs, auto rhs) {
+            return lhs.tagValue(QLatin1String("platforms")).toInt() > rhs.tagValue(QLatin1String("platforms")).toInt();
+        });
+        if (airport.stations[0].tagValue(QLatin1String("platforms")) != airport.stations[1].tagValue(QLatin1String("platforms"))) {
+            airport.stations.erase(std::next(airport.stations.begin()), airport.stations.end());
+        }
+    }
 }
 
 OSM::Coordinate OSMAirportDb::lookup(const QString &iata, float lat, float lon)

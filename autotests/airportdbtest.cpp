@@ -228,6 +228,7 @@ private Q_SLOTS:
         QTest::newRow("CPH") << s("CPH") << 55.6295693f << 12.6492994f << 50;
         QTest::newRow("DEL") << s("DEL") << 28.55681f << 77.08718f << 50;
         QTest::newRow("DEN") << s("DEN") << 39.84790f << -104.67340f << 150;
+        QTest::newRow("DOH") << s("DOH") << 25.25854f << 51.61507f << 400; // ok-ish, w212459176 interfering, n7052290435 out of range
         QTest::newRow("DUB") << s("DUB") << 53.4273328f << -6.2437352f << 150;
         QTest::newRow("DUS") << s("DUS") << 51.27889f << 6.76566f << 150;
         QTest::newRow("EAP") << s("EAP") << 47.59960f << 7.53144f << 150;
@@ -243,6 +244,7 @@ private Q_SLOTS:
         QTest::newRow("HAJ") << s("HAJ") << 52.45849f << 9.69898f << 50;
         QTest::newRow("HAM") << s("HAM") << 53.63214f << 10.00648f << 100;
         QTest::newRow("HEL") << s("HEL") << 60.31619f << 24.96914f << 50;
+        QTest::newRow("HFS") << s("HFS") << 60.02591f << 13.58202f << 50;
         QTest::newRow("HKG") << s("HKG") << 22.31569f << 113.93605f << 100;
         QTest::newRow("KEF") << s("KEF") << 63.99663f << -22.62355f << 200;
         QTest::newRow("LAX") << s("LAX") << 33.94356f << -118.40786f << 150;
@@ -252,11 +254,12 @@ private Q_SLOTS:
         QTest::newRow("LUX") << s("LUX") << 49.63506f << 6.21650f << 200;
         QTest::newRow("LYS") << s("LYS") << 45.72065f << 5.07807f << 150;
         QTest::newRow("MUC") << s("MUC") << 48.35378f << 11.78633f << 50;
-        QTest::newRow("NRT") << s("NRT") << 35.77059f << 140.38679f << 300;
+        QTest::newRow("NRT") << s("NRT") << 35.76462f << 140.38615f << 100; // technically a multi-terminal airport, but T1 is reasonable as all ways there pass T2
         QTest::newRow("NUE") << s("NUE") << 49.49411f << 11.07867f << 50;
         QTest::newRow("ORD") << s("ORD") << 41.97779f << -87.90269f << 50;
         QTest::newRow("OSL") << s("OSL") << 60.19361f << 11.09758f << 100;
         QTest::newRow("OTP") << s("OTP") << 44.57040f << 26.07763f << 200;
+        QTest::newRow("OUL") << s("OUL") << 64.92865f << 25.37406f << 50;
         QTest::newRow("PDX") << s("PDX") << 45.58833f << -122.59240f << 150;
         QTest::newRow("PRG") << s("PRG") << 50.10640f << 14.26784f << 100;
         QTest::newRow("PVG") << s("PVG") << 31.15240f << 121.80214f << 100;
@@ -275,7 +278,7 @@ private Q_SLOTS:
         QTest::newRow("YOW") << s("YOW") << 45.32277f << -75.66726f << 100;
         QTest::newRow("ZRH") << s("ZRH") << 47.45024f << 8.56207f << 50;
 
-        // too complex to work with this approach: LHR, CDG, MAD, MXP, ICN, BCN, PEK
+        // too complex to work with this approach: LHR, CDG, MAD, MXP, ICN, BCN, PEK, BOM
     }
 
     void airportLocationTest()
@@ -295,7 +298,6 @@ private Q_SLOTS:
         QEXPECT_FAIL("BUD", "closed terminal 1 (w8557242) interfering", Continue);
         QEXPECT_FAIL("GLA", "airport is not a polygon in OSM", Continue);
         QEXPECT_FAIL("GRU", "w777206182 interfering", Continue);
-        QEXPECT_FAIL("HKG", "better station selection", Continue);
         QEXPECT_FAIL("PRG", "private/military terminals 3 and 4 interfering", Continue);
         QEXPECT_FAIL("PVG", "complicated", Continue);
         QEXPECT_FAIL("RIG", "open polygon in OSM", Continue);
