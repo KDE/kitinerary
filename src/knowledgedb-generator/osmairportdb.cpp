@@ -28,21 +28,6 @@ enum {
     StationToTerminalDistance = 75, // in meter
 };
 
-template <typename T>
-static bool isActiveAirport(const T &elem)
-{
-    // filter out airports we aren't interested in
-    // not strictly needed here, but it reduces the diagnostic noise
-    const auto disused = OSM::tagValue(elem, QLatin1String("disused"));
-    const auto militayLanduse = OSM::tagValue(elem, QLatin1String("landuse")) == QLatin1String("military");
-    if (!disused.isEmpty() || militayLanduse) {
-        return false;
-    }
-
-    const auto aeroway = OSM::tagValue(elem, QLatin1String("aeroway"));
-    return aeroway == QLatin1String("aerodrome");
-}
-
 void OSMAirportDb::load(const QString &path)
 {
     QFile f(path);
@@ -62,24 +47,13 @@ void OSMAirportDb::load(const QString &path)
     // as a single node: we don't care, this doesn't improve coordinate information for our use-case
     // as a single way for the outer shape
     // as a relation representing a multi-polygon outer shape
-    for (const auto &rel : m_dataset.relations) {
-        loadAirport(rel);
-    }
-    for (const auto &way : m_dataset.ways) {
-        if (isActiveAirport(way)) {
-            loadAirport(way);
-        }
-    }
-    // resolve multi-path polygons
-    for (auto &it : m_iataMap) {
-        resolveAirportPaths(it.second);
-    }
+    OSM::for_each(m_dataset, [this](auto elem) { loadAirport(elem); }, OSM::IncludeRelations | OSM::IncludeWays);
 
     // find all terminal buildings, and add them to their airports
-    OSM::for_each(m_dataset, [this](const auto &elem) { loadTerminal(elem); });
+    OSM::for_each(m_dataset, [this](auto elem) { loadTerminal(elem); });
 
     // load railway stations
-    OSM::for_each(m_dataset, [this](const auto &elem) { loadStation(elem); });
+    OSM::for_each(m_dataset, [this](auto elem) { loadStation(elem); });
     for (auto &a : m_iataMap) {
         filterStations(a.second);
     }
@@ -100,9 +74,22 @@ void OSMAirportDb::load(const QString &path)
     });
 }
 
-template<typename T> void OSMAirportDb::loadAirport(const T &elem)
+void OSMAirportDb::loadAirport(OSM::Element elem)
 {
-    const auto iata = OSM::tagValue(elem, QLatin1String("iata"));
+    const auto aeroway = elem.tagValue(QLatin1String("aeroway"));
+    if (aeroway != QLatin1String("aerodrome")) {
+        return;
+    }
+
+    // filter out airports we aren't interested in
+    // not strictly needed here, but it reduces the diagnostic noise
+    const auto disused = elem.tagValue(QLatin1String("disused"));
+    const auto militayLanduse = elem.tagValue(QLatin1String("landuse")) == QLatin1String("military");
+    if (!disused.isEmpty() || militayLanduse) {
+        return;
+    }
+
+    const auto iata = elem.tagValue(QLatin1String("iata"));
     if (iata.isEmpty()) {
         return;
     }
@@ -111,93 +98,65 @@ template<typename T> void OSMAirportDb::loadAirport(const T &elem)
     if (iata.contains(QLatin1Char(';'))) {
         const auto iatas = iata.split(QLatin1Char(';'), Qt::SkipEmptyParts);
         for (const auto &iata : iatas) {
-            auto e = elem;
-            OSM::setTagValue(e, QStringLiteral("iata"), iata);
-            loadAirport(e);
+            loadAirport(elem, iata);
         }
-        return;
-    }
-
-    if (iata.size() != 3 || !std::all_of(iata.begin(), iata.end(), [](const auto c) { return c.isUpper(); })) {
-        qWarning() << "IATA code format violation:" << iata << elem.url();
-        return;
-    }
-
-    loadAirport(elem, iata);
-}
-
-void OSMAirportDb::loadAirport(const OSM::Relation &elem, const QString &iataCode)
-{
-    if (!isActiveAirport(elem)) {
-        return;
-    }
-
-    const auto it = m_iataMap.find(iataCode);
-    if (it != m_iataMap.end()) {
-        qWarning() << "Duplicate relation for IATA code:" << iataCode << (*it).second.source << elem.url();
-        return;
-    }
-
-    OSMAirportData airport;
-    airport.source = elem.url();
-    airport.bbox = elem.bbox;
-    m_iataMap[iataCode] = std::move(airport);
-
-    // we assume type == multipolygon here
-    for (const auto &member : elem.members) {
-        if (member.role != QLatin1String("outer")) {
-            continue;
-        }
-        const auto it = std::lower_bound(m_dataset.ways.begin(), m_dataset.ways.end(), member.id);
-        if (it != m_dataset.ways.end() && (*it).id == member.id) {
-           loadAirport(*it, iataCode);
-        }
-    }
-}
-
-void OSMAirportDb::loadAirport(const OSM::Way &elem, const QString &iataCode)
-{
-    if (elem.nodes.empty()) {
-        qWarning() << "Empty way element!" << elem.url();
-        return;
-    }
-
-    const auto it = m_iataMap.find(iataCode);
-    if (it != m_iataMap.end()) {
-        // check if this overlaps, then it's just multiple parts of the same airport, otherwise this is a suspected IATA code duplication
-        if ((*it).second.bbox.isValid() && !OSM::intersects((*it).second.bbox, elem.bbox)) {
-            // TODO we probably want to exclude the entire code as invalid then
-            qWarning() << "duplicate IATA code?" << (*it).first << elem.url() << (*it).second.source;
-        } else {
-            //qDebug() << "merging airport parts:" << iataCode << (*it).second.source << elem.url();
-            (*it).second.bbox = OSM::unite((*it).second.bbox, elem.bbox);
-
-            if (elem.isClosed()) {
-                QVector<QPointF> points;
-                points.reserve(elem.nodes.size());
-                appendPointsFromWay(points, elem.nodes.begin(), elem.nodes.end());
-                (*it).second.airportPolygon = (*it).second.airportPolygon.united(QPolygonF(points));
-            } else {
-                (*it).second.airportPaths.push_back(&elem);
-            }
-        }
-        return;
-    }
-
-    //qDebug() << iata << elem.bbox << elem.id;
-
-    OSMAirportData airport;
-    airport.source = elem.url();
-    airport.bbox = elem.bbox;
-    if (elem.isClosed()) {
-        QVector<QPointF> points;
-        points.reserve(elem.nodes.size());
-        appendPointsFromWay(points, elem.nodes.begin(), elem.nodes.end());
-        airport.airportPolygon = QPolygonF(points);
     } else {
-        airport.airportPaths.push_back(&elem);
+        loadAirport(elem, iata);
     }
-    m_iataMap[iataCode] = std::move(airport);
+}
+
+static QPolygonF polygonFromOuterPath(const std::vector<const OSM::Node*> &path)
+{
+    if (path.empty()) {
+        return {};
+    }
+
+    QPolygonF subPoly, result;
+    subPoly.push_back(QPointF(path[0]->coordinate.latF(), path[0]->coordinate.lonF()));
+    OSM::Id firstNode = path[0]->id;
+    for (auto it = std::next(path.begin()); it != path.end(); ++it) {
+        if (firstNode == 0) { // starting a new loop
+            firstNode = (*it)->id;
+            subPoly.push_back(QPointF((*it)->coordinate.latF(), (*it)->coordinate.lonF()));
+        } else if ((*it)->id == firstNode) { // just closed a loop, so this is not a line on the path
+            subPoly.push_back(QPointF((*it)->coordinate.latF(), (*it)->coordinate.lonF()));
+            firstNode = 0;
+            result = result.united(subPoly);
+            subPoly.clear();
+        } else {
+            subPoly.push_back(QPointF((*it)->coordinate.latF(), (*it)->coordinate.lonF()));
+        }
+    }
+    if (!subPoly.empty()) {
+        result = result.united(subPoly);
+    }
+    return result;
+}
+
+void OSMAirportDb::loadAirport(OSM::Element elem, const QString &iataCode)
+{
+    if (iataCode.size() != 3 || !std::all_of(iataCode.begin(), iataCode.end(), [](const auto c) { return c.isUpper(); })) {
+        qWarning() << "IATA code format violation:" << iataCode << elem.url();
+        return;
+    }
+
+    const auto it = m_iataMap.find(iataCode);
+    if (it != m_iataMap.end() && !OSM::intersects((*it).second.bbox, elem.boundingBox())) {
+        qWarning() << "Duplicate IATA code:" << iataCode << (*it).second.source << elem.url();
+        return;
+    }
+
+    const auto poly = polygonFromOuterPath(elem.outerPath(m_dataset));
+    if (it != m_iataMap.end()) {
+        (*it).second.bbox = OSM::unite(elem.boundingBox(), (*it).second.bbox);
+        (*it).second.airportPolygon = (*it).second.airportPolygon.united(poly);
+    } else {
+        OSMAirportData airport;
+        airport.source = elem.url();
+        airport.bbox = elem.boundingBox();
+        airport.airportPolygon = poly;
+        m_iataMap[iataCode] = std::move(airport);
+    }
 }
 
 void OSMAirportDb::loadTerminal(OSM::Element elem)
@@ -381,76 +340,4 @@ OSM::Coordinate OSMAirportDb::lookup(const QString &iata, float lat, float lon)
     }
 
     return {};
-}
-
-template <typename Iter>
-void OSMAirportDb::appendPointsFromWay(QVector<QPointF>& points, const Iter& nodeBegin, const Iter &nodeEnd) const
-{
-    points.reserve(points.size() + std::distance(nodeBegin, nodeEnd));
-    for (auto it = nodeBegin; it != nodeEnd; ++it) {
-        const auto nodeIt = std::lower_bound(m_dataset.nodes.begin(), m_dataset.nodes.end(), (*it));
-        if (nodeIt == m_dataset.nodes.end() || (*nodeIt).id != (*it)) {
-            continue;
-        }
-        points.push_back(QPointF((*nodeIt).coordinate.latF(), (*nodeIt).coordinate.lonF()));
-    }
-}
-
-OSM::Id OSMAirportDb::appendNextPath(QVector<QPointF> &points, OSM::Id startNode, OSMAirportData &airport) const
-{
-    if (airport.airportPaths.empty()) {
-        return {};
-    }
-
-    for (auto it = airport.airportPaths.begin() + 1; it != airport.airportPaths.end(); ++it) {
-        assert(!(*it)->nodes.empty()); // ensured above
-        //qDebug() << "    looking at:" << (*it)->nodes.front() << (*it)->url();
-        if ((*it)->nodes.front() == startNode) {
-            appendPointsFromWay(points, (*it)->nodes.begin(), (*it)->nodes.end());
-            const auto lastNodeId = (*it)->nodes.back();
-            airport.airportPaths.erase(it);
-            return lastNodeId;
-        }
-        // path segments can also be backwards
-        if ((*it)->nodes.back() == startNode) {
-            appendPointsFromWay(points, (*it)->nodes.rbegin(), (*it)->nodes.rend());
-            const auto lastNodeId = (*it)->nodes.front();
-            airport.airportPaths.erase(it);
-            return lastNodeId;
-        }
-    }
-
-    return {};
-}
-
-void OSMAirportDb::resolveAirportPaths(OSMAirportData &airport) const
-{
-    //qDebug() << "resolving polygon for" << airport.source << airport.bbox << airport.airportPaths.size();
-    for (auto it = airport.airportPaths.begin(); it != airport.airportPaths.end();) {
-        assert(!(*it)->nodes.empty()); // ensured above
-        if (airport.airportPaths.size() == 1) {
-            qWarning() << "  open airport polgyon:" << airport.source << (*it)->url();
-            return;
-        }
-
-        QVector<QPointF> points;
-        appendPointsFromWay(points, (*it)->nodes.begin(), (*it)->nodes.end());
-        const auto startNode = (*it)->nodes.front();
-        auto lastNode = (*it)->nodes.back();
-        //qDebug() << "  starting:" << startNode << lastNode << (*it)->url();
-
-        do {
-            lastNode = appendNextPath(points, lastNode, airport);
-            //qDebug() << "  next:" << lastNode;
-        } while (lastNode && lastNode != startNode);
-
-        if (lastNode != startNode) {
-            qWarning() << "  open airport polygon:" << airport.source << (*it)->url();
-        } else {
-            airport.airportPolygon = airport.airportPolygon.united(QPolygonF(points));
-        }
-
-        it = airport.airportPaths.erase(it);
-    }
-    //qDebug() << "  polygon:" << airport.airportPolygon.size() << airport.airportPolygon.boundingRect();
 }

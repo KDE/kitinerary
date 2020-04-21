@@ -31,7 +31,6 @@ struct OSMAirportData
     QString source; // OSM URL, for diagnostics only
     OSM::BoundingBox bbox;
 
-    std::vector<const OSM::Way*> airportPaths;
     QPolygonF airportPolygon;
 
     std::vector<OSM::Element> terminals;
@@ -47,17 +46,11 @@ public:
     OSM::Coordinate lookup(const QString &iata, float lat, float lon);
 
 private:
-    template <typename T> void loadAirport(const T &elem);
-    void loadAirport(const OSM::Relation &elem, const QString &iataCode);
-    void loadAirport(const OSM::Way &elem, const QString &iataCode);
+    void loadAirport(OSM::Element elem);
+    void loadAirport(OSM::Element elem, const QString &iataCode);
     void loadTerminal(OSM::Element elem);
     void loadStation(OSM::Element elem);
     void filterStations(OSMAirportData &airport);
-
-    template <typename Iter>
-    void appendPointsFromWay(QVector<QPointF> &points, const Iter &nodeEegin, const Iter &nodeEnd) const;
-    OSM::Id appendNextPath(QVector<QPointF> &points, OSM::Id startNode, OSMAirportData &airport) const;
-    void resolveAirportPaths(OSMAirportData &airport) const;
 
     OSM::DataSet m_dataset;
     std::map<QString, OSMAirportData> m_iataMap;
