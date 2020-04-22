@@ -76,20 +76,20 @@ void OSMAirportDb::load(const QString &path)
 
 void OSMAirportDb::loadAirport(OSM::Element elem)
 {
-    const auto aeroway = elem.tagValue(QLatin1String("aeroway"));
+    const auto aeroway = elem.tagValue("aeroway");
     if (aeroway != QLatin1String("aerodrome")) {
         return;
     }
 
     // filter out airports we aren't interested in
     // not strictly needed here, but it reduces the diagnostic noise
-    const auto disused = elem.tagValue(QLatin1String("disused"));
-    const auto militayLanduse = elem.tagValue(QLatin1String("landuse")) == QLatin1String("military");
+    const auto disused = elem.tagValue("disused");
+    const auto militayLanduse = elem.tagValue("landuse") == QLatin1String("military");
     if (!disused.isEmpty() || militayLanduse) {
         return;
     }
 
-    const auto iata = elem.tagValue(QLatin1String("iata"));
+    const auto iata = elem.tagValue("iata");
     if (iata.isEmpty()) {
         return;
     }
@@ -164,16 +164,16 @@ void OSMAirportDb::loadAirport(OSM::Element elem, const QString &iataCode)
 
 void OSMAirportDb::loadTerminal(OSM::Element elem)
 {
-    const auto aeroway = elem.tagValue(QLatin1String("aeroway"));
+    const auto aeroway = elem.tagValue("aeroway");
     if (aeroway != QLatin1String("terminal")) {
         return;
     }
 
     // filter out freight terminals
-    const auto usage = elem.tagValue(QLatin1String("usage"));
-    const auto traffic_mode = elem.tagValue(QLatin1String("traffic_mode"));
-    const auto building = elem.tagValue(QLatin1String("building"));
-    const auto industrial = elem.tagValue(QLatin1String("industrial"));
+    const auto usage = elem.tagValue("usage");
+    const auto traffic_mode = elem.tagValue("traffic_mode");
+    const auto building = elem.tagValue("building");
+    const auto industrial = elem.tagValue("industrial");
     if (usage == QLatin1String("freight")
         || traffic_mode == QLatin1String("freigt")
         || building == QLatin1String("industrial")
@@ -216,13 +216,13 @@ void OSMAirportDb::loadTerminal(OSM::Element elem)
 
 void OSMAirportDb::loadStation(OSM::Element elem)
 {
-    const auto railway = elem.tagValue(QLatin1String("railway"));
+    const auto railway = elem.tagValue("railway");
     if (railway != QLatin1String("station") && railway != QLatin1String("halt") && railway != QLatin1String("tram_stop")) {
         return;
     }
 
     // try to filter out airport-interal transport systems, those are typically airside and thus not what we want
-    const auto station = elem.tagValue(QLatin1String("station"));
+    const auto station = elem.tagValue("station");
     if (station == QLatin1String("monorail")) {
         return;
     }
@@ -262,7 +262,7 @@ void OSMAirportDb::filterStations(OSMAirportData &airport)
     // if we have a full station, drop halts
     // TODO similar filters are probably needed for various tram/subway variants for on-premises transport lines
     auto it = std::partition(airport.stations.begin(), airport.stations.end(), [](auto station) {
-        return station.tagValue(QLatin1String("railway")) == QLatin1String("station");
+        return station.tagValue("railway") == QLatin1String("station");
     });
     if (it != airport.stations.begin() && it != airport.stations.end()) {
         airport.stations.erase(it, airport.stations.end());
@@ -270,18 +270,18 @@ void OSMAirportDb::filterStations(OSMAirportData &airport)
 
     // "creative" way of separating "real" and on-premises stations: only real ones tend to have Wikidata tags
     it = std::partition(airport.stations.begin(), airport.stations.end(), [](auto station) {
-        return !station.tagValue(QLatin1String("wikidata")).isEmpty();
+        return !station.tagValue("wikidata").isEmpty();
     });
     if (it != airport.stations.begin() && it != airport.stations.end()) {
         airport.stations.erase(it, airport.stations.end());
     }
 
     // prioritize by number of platforms, if we have that information for all stations
-    if (airport.stations.size() > 1 && std::all_of(airport.stations.begin(), airport.stations.end(), [](auto s) { return !s.tagValue(QLatin1String("platforms")).isEmpty(); })) {
+    if (airport.stations.size() > 1 && std::all_of(airport.stations.begin(), airport.stations.end(), [](auto s) { return !s.tagValue("platforms").isEmpty(); })) {
         std::sort(airport.stations.begin(), airport.stations.end(), [](auto lhs, auto rhs) {
-            return lhs.tagValue(QLatin1String("platforms")).toInt() > rhs.tagValue(QLatin1String("platforms")).toInt();
+            return lhs.tagValue("platforms").toInt() > rhs.tagValue("platforms").toInt();
         });
-        if (airport.stations[0].tagValue(QLatin1String("platforms")) != airport.stations[1].tagValue(QLatin1String("platforms"))) {
+        if (airport.stations[0].tagValue("platforms") != airport.stations[1].tagValue("platforms")) {
             airport.stations.erase(std::next(airport.stations.begin()), airport.stations.end());
         }
     }
