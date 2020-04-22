@@ -49,6 +49,7 @@ private:
     void loadAirport(OSM::Element elem);
     void loadAirport(OSM::Element elem, const QString &iataCode);
     void loadTerminal(OSM::Element elem);
+    void filterTerminals(OSMAirportData &airport);
     void loadStation(OSM::Element elem);
     void filterStations(OSMAirportData &airport);
 

@@ -28,6 +28,8 @@ enum {
     StationToTerminalDistance = 75, // in meter
 };
 
+constexpr float TerminalSizeThreshold = 0.1; // percent of largest terminal size
+
 void OSMAirportDb::load(const QString &path)
 {
     QFile f(path);
@@ -54,7 +56,10 @@ void OSMAirportDb::load(const QString &path)
 
     // load railway stations
     OSM::for_each(m_dataset, [this](auto elem) { loadStation(elem); });
+
+    // once we have all elements grouped by airport, filter out elements we don't want to consider
     for (auto &a : m_iataMap) {
+        filterTerminals(a.second);
         filterStations(a.second);
     }
 
@@ -212,6 +217,22 @@ void OSMAirportDb::loadTerminal(OSM::Element elem)
             }
         }
     }
+}
+
+void OSMAirportDb::filterTerminals(OSMAirportData &airport)
+{
+    if (airport.terminals.empty()) {
+        return;
+    }
+
+    // sort by size, and drop micro terminals (which are usually data artifacts)
+    std::sort(airport.terminals.begin(), airport.terminals.end(), [](auto lhs, auto rhs) {
+        return OSM::distance(lhs.boundingBox().min, lhs.boundingBox().max) > OSM::distance(rhs.boundingBox().min, rhs.boundingBox().max);
+    });
+    const auto sizeThreshold = OSM::distance(airport.terminals[0].boundingBox().min, airport.terminals[0].boundingBox().max) * TerminalSizeThreshold;
+    airport.terminals.erase(std::partition(airport.terminals.begin(), airport.terminals.end(), [sizeThreshold](auto t) {
+        return OSM::distance(t.boundingBox().min, t.boundingBox().max) > sizeThreshold;
+    }), airport.terminals.end());
 }
 
 void OSMAirportDb::loadStation(OSM::Element elem)

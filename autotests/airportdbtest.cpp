@@ -239,7 +239,7 @@ private Q_SLOTS:
         QTest::newRow("GDN") << s("GDN") << 54.38234f << 18.46640f << 150;
         QTest::newRow("GLA") << s("GLA") << 55.86405f << -4.43181f << 50;
         QTest::newRow("GOT") << s("GOT") << 57.66771f << 12.29549f << 150;
-        QTest::newRow("GRU") << s("GRU") << -23.42560f << -46.48165f << 100;
+        QTest::newRow("GRU") << s("GRU") << -23.42560f << -46.48165f << 200;
         QTest::newRow("GVA") << s("GVA") << 46.23020f << 6.10828f << 200;
         QTest::newRow("HAJ") << s("HAJ") << 52.45849f << 9.69898f << 50;
         QTest::newRow("HAM") << s("HAM") << 53.63214f << 10.00648f << 100;
@@ -297,7 +297,6 @@ private Q_SLOTS:
 #if 0
         QEXPECT_FAIL("BUD", "closed terminal 1 (w8557242) interfering", Continue);
         QEXPECT_FAIL("GLA", "airport is not a polygon in OSM", Continue);
-        QEXPECT_FAIL("GRU", "w777206182 interfering", Continue);
         QEXPECT_FAIL("PRG", "private/military terminals 3 and 4 interfering", Continue);
         QEXPECT_FAIL("PVG", "complicated", Continue);
         QEXPECT_FAIL("RIG", "open polygon in OSM", Continue);
