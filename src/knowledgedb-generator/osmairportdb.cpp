@@ -253,7 +253,11 @@ void OSMAirportDb::loadStation(OSM::Element elem)
 
         // we need the exact path here, the bounding box can contain a lot more stuff
         // the bounding box check is just for speed
-        if (!OSM::contains(airport.bbox, elem.center())) {
+        // as we also look for stations in close proximity to terminals, we technically need a slightly larger bounding box though
+        // in most cases this just works, SHA being one of the counter examples due to perfect alignment with its bounding box
+        const auto adjustedBbox = OSM::BoundingBox(OSM::Coordinate(airport.bbox.min.latitude - 100'000, airport.bbox.min.longitude - 100'000),
+                                                   OSM::Coordinate(airport.bbox.max.latitude + 100'000, airport.bbox.max.longitude + 100'000));
+        if (!OSM::contains(adjustedBbox, elem.center())) {
             continue;
         }
 

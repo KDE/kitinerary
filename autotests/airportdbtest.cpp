@@ -266,7 +266,7 @@ private Q_SLOTS:
         QTest::newRow("REC") << s("REC") << -8.1314735f << -34.9177565f << 150;
         QTest::newRow("RIG") << s("RIX") << 56.92188f << 23.97976f << 50;
         QTest::newRow("SFO") << s("SFO") << 37.6162238f << -122.3915235f << 50;
-        QTest::newRow("SHA") << s("SHA") << 31.19624f << 121.32377f << 100;
+        QTest::newRow("SHA") << s("SHA") << 31.19624f << 121.32377f << 200;
         QTest::newRow("STR") << s("STR") << 48.69052f << 9.19302f << 50;
         QTest::newRow("SXB") << s("SXB") << 48.54444f << 7.62783f << 50;
         QTest::newRow("SXF") << s("SXF") << 52.38856f << 13.51809f << 100;
@@ -300,7 +300,6 @@ private Q_SLOTS:
         QEXPECT_FAIL("PRG", "private/military terminals 3 and 4 interfering", Continue);
         QEXPECT_FAIL("PVG", "complicated", Continue);
         QEXPECT_FAIL("RIG", "open polygon in OSM", Continue);
-        QEXPECT_FAIL("SHA", "station not detected?", Continue);
         QEXPECT_FAIL("SXF", "w630509626 (government terminal) interfering", Continue);
         QVERIFY(d <= dist);
 #endif
