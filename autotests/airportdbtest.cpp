@@ -217,6 +217,7 @@ private Q_SLOTS:
         QTest::addColumn<float>("lon");
         QTest::addColumn<int>("dist");
 
+        // "single" entry airports
         QTest::newRow("AGP") << s("AGP") << 36.67608f << -4.49095f << 100;
         QTest::newRow("AMS") << s("AMS") << 52.3095230f << 4.7621813f << 50;
         QTest::newRow("ARN") << s("ARN") << 59.64927f << 17.92956f << 50;
@@ -278,7 +279,18 @@ private Q_SLOTS:
         QTest::newRow("YOW") << s("YOW") << 45.32277f << -75.66726f << 100;
         QTest::newRow("ZRH") << s("ZRH") << 47.45024f << 8.56207f << 50;
 
-        // too complex to work with this approach: LHR, CDG, MAD, MXP, ICN, BCN, PEK, BOM
+        // "multi" (entry) airports, ie. those basically consisting of multiple separate airports in close proximity
+        // for those all we can do here is verifyingh we get a stable result for *any* of its terminals,
+        // for actually selecting the right terminal we'd need more detailed API
+        QTest::newRow("BCN") << s("BCN") << 41.28891f << 2.07385f << 100; // T1
+        QTest::newRow("BOM") << s("BOM") << 19.09929f << 72.87440f << 100; // T2
+        QTest::newRow("CDG") << s("CDG") << 49.00397f << 2.57107f << 100; // T2
+        QTest::newRow("ICN") << s("ICN") << 37.44750f << 126.45243f << 100; // T1
+        QTest::newRow("LHR") << s("LHR") << 51.47207f << -0.48812f << 100; // T5
+        QTest::newRow("MAD") << s("MAD") << 40.46791f << -3.57119f << 50; // T1-3
+        //QTest::newRow("MAD") << s("MAD") << 40.49127f << -3.59243f << 100; // T4
+        QTest::newRow("MXP") << s("MXP") << 45.64825f << 8.72300f << 100; // T2
+        QTest::newRow("PEK") << s("PEK") << 40.05252f << 116.60973f << 100; // T3
     }
 
     void airportLocationTest()
@@ -301,6 +313,15 @@ private Q_SLOTS:
         QEXPECT_FAIL("PVG", "complicated", Continue);
         QEXPECT_FAIL("RIG", "open polygon in OSM", Continue);
         QEXPECT_FAIL("SXF", "w630509626 (government terminal) interfering", Continue);
+
+        QEXPECT_FAIL("BCN", "complicated", Continue);
+        QEXPECT_FAIL("BOM", "complicated", Continue);
+        QEXPECT_FAIL("CDG", "complicated", Continue);
+        QEXPECT_FAIL("ICN", "complicated", Continue);
+        QEXPECT_FAIL("LHR", "complicated", Continue);
+        QEXPECT_FAIL("MXP", "complicated", Continue);
+        QEXPECT_FAIL("PEK", "complicated", Continue);
+
         QVERIFY(d <= dist);
 #endif
     }
