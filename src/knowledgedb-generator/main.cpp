@@ -35,6 +35,8 @@ int main(int argc, char **argv)
     parser.addOption(dbOpt);
     QCommandLineOption outputOpt({QStringLiteral("o"), QStringLiteral("output")}, QStringLiteral("Output file."), QStringLiteral("output file"));
     parser.addOption(outputOpt);
+    QCommandLineOption osmOpt({QStringLiteral("m"), QStringLiteral("osm-data")}, QStringLiteral("OSM data file."), QStringLiteral("osm file"));
+    parser.addOption(osmOpt);
     parser.addHelpOption();
     parser.process(app);
 
@@ -46,6 +48,7 @@ int main(int argc, char **argv)
 
     if (parser.value(dbOpt) == QLatin1String("airport")) {
         AirportDbGenerator gen;
+        gen.osmDb.load(parser.value(osmOpt));
         return gen.generate(&out) ? 0 : 1;
     } else if (parser.value(dbOpt) == QLatin1String("country")) {
         CountryDbGenerator gen;

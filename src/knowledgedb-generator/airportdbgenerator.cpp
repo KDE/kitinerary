@@ -234,6 +234,20 @@ void AirportDbGenerator::lookupTimezones()
     }
 }
 
+void AirportDbGenerator::improveCoordinates()
+{
+    for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
+        if (!(*it).coord.isValid()) {
+            continue;
+        }
+        const auto coord = osmDb.lookup((*it).iataCode, (*it).coord.latitude, (*it).coord.longitude);
+        if (coord.isValid()) {
+            (*it).coord.latitude = coord.latF();
+            (*it).coord.longitude = coord.lonF();
+        }
+    }
+}
+
 void KItinerary::Generator::AirportDbGenerator::indexNames()
 {
     for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
@@ -296,8 +310,9 @@ bool AirportDbGenerator::generate(QIODevice* out)
         return false;
     }
 
-    // step 2 augment the data with timezones
+    // step 2 augment the data with timezones and optimized OSM airport positions
     lookupTimezones();
+    improveCoordinates();
 
     // step 3 index the names for reverse lookup
     indexNames();

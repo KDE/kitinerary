@@ -5,6 +5,7 @@ add_executable(generate-knowledgedb
     wikidata.cpp
     airportdbgenerator.cpp
     countrydbgenerator.cpp
+    osmairportdb.cpp
     timezonedbgenerator.cpp
     trainstationdbgenerator.cpp
     util.cpp
@@ -15,7 +16,7 @@ target_include_directories(generate-knowledgedb PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../knowledgedb
     ${CMAKE_CURRENT_BINARY_DIR}/..
 )
-target_link_libraries(generate-knowledgedb PRIVATE Qt5::Network Qt5::Gui)
+target_link_libraries(generate-knowledgedb PRIVATE Qt5::Network Qt5::Gui KOSM)
 
 find_program(XSLTPROC_EXECUTABLE xsltproc)
 
@@ -41,21 +42,28 @@ osm_convert(INPUT airports.o5m OUTPUT airports-bbox.o5m ADD_BBOX ON)
 osm_convert(INPUT airports-bbox.o5m OUTPUT airports-bbox.osm)
 
 set(outfiles "")
-macro(generate_db dbtype outfile)
+function(generate_db dbtype outfile)
+    set(extra_args "")
+    if (ARGN)
+        set(extra_args "--osm-data=${ARGN}")
+    endif()
     add_custom_command(
         OUTPUT ${outfile}
-        COMMAND generate-knowledgedb -o ${CMAKE_CURRENT_SOURCE_DIR}/../knowledgedb/${outfile} -d ${dbtype}
+        COMMAND generate-knowledgedb -o ${CMAKE_CURRENT_SOURCE_DIR}/../knowledgedb/${outfile} -d ${dbtype} ${extra_args}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/timezones.colormap
         ${CMAKE_CURRENT_SOURCE_DIR}/timezones.png
+        ${ARGN}
+        generate-knowledgedb
     )
     list(APPEND outfiles ${outfile})
-endmacro()
+    set(outfiles ${outfiles} PARENT_SCOPE)
+endfunction()
 generate_db(country countrydb_data.cpp)
 generate_db(timezone timezonedb_data.cpp)
 generate_db(timezoneheader timezonedb_data_p.h)
-generate_db(airport airportdb_data.cpp)
+generate_db(airport airportdb_data.cpp ${OSM_PLANET_DIR}/airports-bbox.osm)
 generate_db(trainstation trainstationdb_data.cpp)
 
 add_custom_target(rebuild-knowledgedb DEPENDS ${outfiles} ${CMAKE_CURRENT_SOURCE_DIR}/timezones.png)

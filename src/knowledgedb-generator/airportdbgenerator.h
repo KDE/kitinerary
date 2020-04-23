@@ -19,6 +19,7 @@
 #define KITINERARY_AIRPORTDBGENERATOR_H
 
 #include <knowledgedb.h>
+#include "osmairportdb.h"
 #include "timezones.h"
 
 #include <QHash>
@@ -49,11 +50,15 @@ public:
         int tzOffset;
         KnowledgeDb::Coordinate coord;
     };
+
+    OSMAirportDb osmDb;
+
 private:
     bool fetchAirports();
     bool fetchCountries();
     void merge(Airport &lhs, const Airport &rhs);
     void lookupTimezones();
+    void improveCoordinates();
     void indexNames();
 
     QHash<QUrl, Airport> m_airportMap;
