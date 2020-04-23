@@ -285,9 +285,16 @@ void OSMAirportDb::loadStation(OSM::Element elem)
 void OSMAirportDb::filterStations(OSMAirportData &airport)
 {
     // if we have a full station, drop halts
-    // TODO similar filters are probably needed for various tram/subway variants for on-premises transport lines
     auto it = std::partition(airport.stations.begin(), airport.stations.end(), [](auto station) {
         return station.tagValue("railway") == QLatin1String("station");
+    });
+    if (it != airport.stations.begin() && it != airport.stations.end()) {
+        airport.stations.erase(it, airport.stations.end());
+    }
+
+    // drop light_rail in favor of "real" rail, as that's often used for on-premises transport lines
+    it = std::partition(airport.stations.begin(), airport.stations.end(), [](auto station) {
+        return station.tagValue("station") != QLatin1String("light_rail");
     });
     if (it != airport.stations.begin() && it != airport.stations.end()) {
         airport.stations.erase(it, airport.stations.end());
