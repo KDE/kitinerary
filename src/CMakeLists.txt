@@ -1,5 +1,6 @@
 add_subdirectory(cli)
 if (TARGET Qt5::Network AND NOT CMAKE_CROSSCOMPILING AND OSM_PLANET_DIR AND OsmTools_FOUND)
+    add_subdirectory(osm)
     add_subdirectory(knowledgedb-generator)
 endif()
 add_subdirectory(vdv/certs)
