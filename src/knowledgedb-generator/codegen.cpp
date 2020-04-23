@@ -25,7 +25,9 @@ using namespace KItinerary::Generator;
 void CodeGen::writeLicenseHeader(QIODevice *out)
 {
     out->write(R"(/*
- * This code is auto-generated from Wikidata data. Licensed under CC0.
+ * SPDX-License-Identifier: ODbL-1.0
+ *
+ * This code is auto-generated from OpenStreetMap (licensed under ODbL) and Wikidata (licensed under CC0), do not edit!
  */
 )");
 }
