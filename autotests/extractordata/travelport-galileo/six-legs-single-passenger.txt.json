@@ -35,8 +35,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 23.077199935913086,
-                    "longitude": 72.63469696044922
+                    "latitude": 23.073400497436523,
+                    "longitude": 72.62210083007812
                 },
                 "iataCode": "AMD"
             },
@@ -74,8 +74,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.80030059814453,
-                    "longitude": 12.238900184631348
+                    "latitude": 41.793399810791016,
+                    "longitude": 12.251899719238281
                 },
                 "iataCode": "FCO"
             },
@@ -132,8 +132,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 39.48939895629883,
-                    "longitude": -0.48166701197624207
+                    "latitude": 39.4921989440918,
+                    "longitude": -0.474373996257782
                 },
                 "iataCode": "VLC"
             },
@@ -150,8 +150,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.80030059814453,
-                    "longitude": 12.238900184631348
+                    "latitude": 41.793399810791016,
+                    "longitude": 12.251899719238281
                 },
                 "iataCode": "FCO"
             },
@@ -190,8 +190,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.80030059814453,
-                    "longitude": 12.238900184631348
+                    "latitude": 41.793399810791016,
+                    "longitude": 12.251899719238281
                 },
                 "iataCode": "FCO"
             },
@@ -208,8 +208,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 39.48939895629883,
-                    "longitude": -0.48166701197624207
+                    "latitude": 39.4921989440918,
+                    "longitude": -0.474373996257782
                 },
                 "iataCode": "VLC"
             },
@@ -265,8 +265,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.80030059814453,
-                    "longitude": 12.238900184631348
+                    "latitude": 41.793399810791016,
+                    "longitude": 12.251899719238281
                 },
                 "iataCode": "FCO"
             },
@@ -304,8 +304,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 23.077199935913086,
-                    "longitude": 72.63469696044922
+                    "latitude": 23.073400497436523,
+                    "longitude": 72.62210083007812
                 },
                 "iataCode": "AMD"
             },

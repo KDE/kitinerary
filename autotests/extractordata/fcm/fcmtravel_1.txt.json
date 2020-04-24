@@ -17,8 +17,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 56.920799255371094,
-                    "longitude": 23.970800399780273
+                    "latitude": 56.92319869995117,
+                    "longitude": 23.97800064086914
                 },
                 "iataCode": "RIX",
                 "name": "Riga"
@@ -36,8 +36,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Tegel"
@@ -75,8 +75,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Tegel"
@@ -94,8 +94,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 56.920799255371094,
-                    "longitude": 23.970800399780273
+                    "latitude": 56.92319869995117,
+                    "longitude": 23.97800064086914
                 },
                 "iataCode": "RIX",
                 "name": "Riga"

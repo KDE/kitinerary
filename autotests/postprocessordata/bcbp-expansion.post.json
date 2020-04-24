@@ -18,8 +18,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 50.03329849243164,
-                    "longitude": 8.570560455322266
+                    "latitude": 50.051300048828125,
+                    "longitude": 8.571749687194824
                 },
                 "iataCode": "FRA"
             },
@@ -36,8 +36,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 45.47060012817383,
-                    "longitude": -73.74079895019531
+                    "latitude": 45.457401275634766,
+                    "longitude": -73.74949645996094
                 },
                 "iataCode": "YUL"
             },

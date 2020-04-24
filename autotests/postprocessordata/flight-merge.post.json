@@ -21,8 +21,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 43.6349983215332,
-                    "longitude": 1.3677799701690674
+                    "latitude": 43.63130187988281,
+                    "longitude": 1.3743799924850464
                 },
                 "iataCode": "TLS",
                 "name": "Toulouse, Blagnac Airport, FR"

@@ -306,7 +306,6 @@ private Q_SLOTS:
         const auto d = LocationUtil::distance(coord.latitude, coord.longitude, lat, lon);
         qDebug() << coord.latitude << coord.longitude << d << (dist - d);
 
-#if 0
         QEXPECT_FAIL("BUD", "closed terminal 1 (w8557242) interfering", Continue);
         QEXPECT_FAIL("GLA", "airport is not a polygon in OSM", Continue);
         QEXPECT_FAIL("PRG", "private/military terminals 3 and 4 interfering", Continue);
@@ -323,7 +322,6 @@ private Q_SLOTS:
         QEXPECT_FAIL("PEK", "complicated", Continue);
 
         QVERIFY(d <= dist);
-#endif
     }
 };
 

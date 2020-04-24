@@ -17,8 +17,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.308101654052734,
-                    "longitude": 4.764170169830322
+                    "latitude": 52.30950164794922,
+                    "longitude": 4.762179851531982
                 },
                 "iataCode": "AMS",
                 "name": "AMSTERDAM, NL (SCHIPHOL AIRPORT)"
@@ -36,8 +36,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "BERLIN, DE (TEGEL)"
@@ -71,8 +71,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 42.212501525878906,
-                    "longitude": -83.35330200195312
+                    "latitude": 42.207801818847656,
+                    "longitude": -83.3561019897461
                 },
                 "iataCode": "DTW",
                 "name": "DETROIT, MI (METROPOLITAN WAYNE CO)"
@@ -91,8 +91,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.308101654052734,
-                    "longitude": 4.764170169830322
+                    "latitude": 52.30950164794922,
+                    "longitude": 4.762179851531982
                 },
                 "iataCode": "AMS",
                 "name": "AMSTERDAM, NL (SCHIPHOL AIRPORT)"
@@ -146,8 +146,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 42.212501525878906,
-                    "longitude": -83.35330200195312
+                    "latitude": 42.207801818847656,
+                    "longitude": -83.3561019897461
                 },
                 "iataCode": "DTW",
                 "name": "DETROIT, MI (METROPOLITAN WAYNE CO)"
@@ -182,8 +182,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "BERLIN, DE (TEGEL)"

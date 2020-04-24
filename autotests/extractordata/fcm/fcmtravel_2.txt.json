@@ -17,8 +17,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 51.289398193359375,
-                    "longitude": 6.766670227050781
+                    "latitude": 51.2781982421875,
+                    "longitude": 6.766839981079102
                 },
                 "iataCode": "DUS",
                 "name": "International Airport"
@@ -36,8 +36,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Tegel"
@@ -75,8 +75,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 51.289398193359375,
-                    "longitude": 6.766670227050781
+                    "latitude": 51.2781982421875,
+                    "longitude": 6.766839981079102
                 },
                 "iataCode": "DUS",
                 "name": "International Airport"
@@ -94,8 +94,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Tegel"
@@ -133,8 +133,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 37.618900299072266,
-                    "longitude": -122.375
+                    "latitude": 37.6161994934082,
+                    "longitude": -122.39199829101562
                 },
                 "iataCode": "SFO",
                 "name": "San Francisco International"
@@ -152,8 +152,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 51.289398193359375,
-                    "longitude": 6.766670227050781
+                    "latitude": 51.2781982421875,
+                    "longitude": 6.766839981079102
                 },
                 "iataCode": "DUS",
                 "name": "International Airport"
@@ -191,8 +191,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 37.618900299072266,
-                    "longitude": -122.375
+                    "latitude": 37.6161994934082,
+                    "longitude": -122.39199829101562
                 },
                 "iataCode": "SFO",
                 "name": "San Francisco International"
@@ -210,8 +210,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 51.289398193359375,
-                    "longitude": 6.766670227050781
+                    "latitude": 51.2781982421875,
+                    "longitude": 6.766839981079102
                 },
                 "iataCode": "DUS",
                 "name": "International Airport"
@@ -249,8 +249,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.978599548339844,
-                    "longitude": -87.90470123291016
+                    "latitude": 41.977901458740234,
+                    "longitude": -87.9030990600586
                 },
                 "iataCode": "ORD",
                 "name": "O Hare International"
@@ -268,8 +268,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 45.588600158691406,
-                    "longitude": -122.5979995727539
+                    "latitude": 45.587398529052734,
+                    "longitude": -122.59300231933594
                 },
                 "iataCode": "PDX",
                 "name": "Portland International"
@@ -307,8 +307,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.978599548339844,
-                    "longitude": -87.90470123291016
+                    "latitude": 41.977901458740234,
+                    "longitude": -87.9030990600586
                 },
                 "iataCode": "ORD",
                 "name": "O Hare International"
@@ -326,8 +326,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 45.588600158691406,
-                    "longitude": -122.5979995727539
+                    "latitude": 45.587398529052734,
+                    "longitude": -122.59300231933594
                 },
                 "iataCode": "PDX",
                 "name": "Portland International"
@@ -365,8 +365,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Tegel"
@@ -384,8 +384,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.978599548339844,
-                    "longitude": -87.90470123291016
+                    "latitude": 41.977901458740234,
+                    "longitude": -87.9030990600586
                 },
                 "iataCode": "ORD",
                 "name": "O Hare International"
@@ -423,8 +423,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Tegel"
@@ -442,8 +442,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.978599548339844,
-                    "longitude": -87.90470123291016
+                    "latitude": 41.977901458740234,
+                    "longitude": -87.9030990600586
                 },
                 "iataCode": "ORD",
                 "name": "O Hare International"

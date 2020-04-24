@@ -17,8 +17,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 47.44889831542969,
-                    "longitude": -122.30899810791016
+                    "latitude": 47.4452018737793,
+                    "longitude": -122.2969970703125
                 },
                 "iataCode": "SEA"
             },
@@ -35,8 +35,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 22.308900833129883,
-                    "longitude": 113.91400146484375
+                    "latitude": 22.315900802612305,
+                    "longitude": 113.93699645996094
                 },
                 "iataCode": "HKG"
             },
@@ -74,8 +74,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 47.44889831542969,
-                    "longitude": -122.30899810791016
+                    "latitude": 47.4452018737793,
+                    "longitude": -122.2969970703125
                 },
                 "iataCode": "SEA"
             },
@@ -92,8 +92,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 22.308900833129883,
-                    "longitude": 113.91400146484375
+                    "latitude": 22.315900802612305,
+                    "longitude": 113.93699645996094
                 },
                 "iataCode": "HKG"
             },
@@ -131,8 +131,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 47.44889831542969,
-                    "longitude": -122.30899810791016
+                    "latitude": 47.4452018737793,
+                    "longitude": -122.2969970703125
                 },
                 "iataCode": "SEA"
             },
@@ -149,8 +149,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 22.308900833129883,
-                    "longitude": 113.91400146484375
+                    "latitude": 22.315900802612305,
+                    "longitude": 113.93699645996094
                 },
                 "iataCode": "HKG"
             },

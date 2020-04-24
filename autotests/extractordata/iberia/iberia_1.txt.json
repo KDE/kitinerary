@@ -18,8 +18,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 40.472198486328125,
-                    "longitude": -3.5608301162719727
+                    "latitude": 40.467899322509766,
+                    "longitude": -3.5717599391937256
                 },
                 "iataCode": "MAD",
                 "name": "Madrid"
@@ -37,8 +37,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Berlin"
@@ -73,8 +73,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 36.84389877319336,
-                    "longitude": -2.369999885559082
+                    "latitude": 36.8474006652832,
+                    "longitude": -2.372109889984131
                 },
                 "iataCode": "LEI",
                 "name": "Almeria"
@@ -92,8 +92,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 40.472198486328125,
-                    "longitude": -3.5608301162719727
+                    "latitude": 40.467899322509766,
+                    "longitude": -3.5717599391937256
                 },
                 "iataCode": "MAD",
                 "name": "Madrid"
@@ -128,8 +128,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 40.472198486328125,
-                    "longitude": -3.5608301162719727
+                    "latitude": 40.467899322509766,
+                    "longitude": -3.5717599391937256
                 },
                 "iataCode": "MAD",
                 "name": "Madrid"
@@ -147,8 +147,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 36.84389877319336,
-                    "longitude": -2.369999885559082
+                    "latitude": 36.8474006652832,
+                    "longitude": -2.372109889984131
                 },
                 "iataCode": "LEI",
                 "name": "Almeria"
@@ -182,8 +182,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Berlin"
@@ -201,8 +201,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 40.472198486328125,
-                    "longitude": -3.5608301162719727
+                    "latitude": 40.467899322509766,
+                    "longitude": -3.5717599391937256
                 },
                 "iataCode": "MAD",
                 "name": "Madrid"

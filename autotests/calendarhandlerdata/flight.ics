@@ -10,7 +10,7 @@ LAST-MODIFIED:20171227T111649Z
 DESCRIPTION:Boarding time: 2:25 PM\nDeparture gate: 16\nJOHN DOE\nBoarding group: C\nSeat: 16E\nBooking reference: XXX007
 SUMMARY:Flight AB 8075 from HEL to TXL
 LOCATION:Helsinki
-GEO:60.317200;24.963301
+GEO:60.316399;24.969101
 DTSTART;TZID=Europe/Helsinki:20170920T150500
 DTEND;TZID=Europe/Berlin:20170920T160000
 TRANSP:OPAQUE
@@ -21,15 +21,15 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "Airline"\,"iataCode":"AB"\,"name":"airberlin"}\,"arrivalAirport":
  {"@type":"Airport"\,"address":{"@type":"PostalAddress"\,"addressCountry":
  "DE"}\,"geo":{"@type":"GeoCoordinates"\,"latitude":
- 52.55970001220703\,"longitude":13.287799835205078}\,"iataCode":
+ 52.55390167236328\,"longitude":13.29319953918457}\,"iataCode":
  "TXL"\,"name":"Berlin (Tegel)"}\,"arrivalTime":{"@type":
  "QDateTime"\,"@value":"2017-09-20T16:00:00+02:00"\,"timezone":
  "Europe/Berlin"}\,"boardingTime":{"@type":"QDateTime"\,"@value":
  "2017-09-20T14:25:00+03:00"\,"timezone":
  "Europe/Helsinki"}\,"departureAirport":{"@type":"Airport"\,"address":
  {"@type":"PostalAddress"\,"addressCountry":"FI"}\,"geo":{"@type":
- "GeoCoordinates"\,"latitude":60.31719970703125\,"longitude":
- 24.963300704956055}\,"iataCode":"HEL"\,"name":"Helsinki"}\,"departureDay":
+ "GeoCoordinates"\,"latitude":60.31639862060547\,"longitude":
+ 24.969100952148438}\,"iataCode":"HEL"\,"name":"Helsinki"}\,"departureDay":
  "2017-09-20"\,"departureGate":"16"\,"departureTime":{"@type":
  "QDateTime"\,"@value":"2017-09-20T15:05:00+03:00"\,"timezone":
  "Europe/Helsinki"}\,"flightNumber":"8075"}\,"reservationNumber":

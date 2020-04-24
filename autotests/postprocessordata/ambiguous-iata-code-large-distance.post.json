@@ -16,8 +16,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 55.618099212646484,
-                    "longitude": 12.656100273132324
+                    "latitude": 55.629600524902344,
+                    "longitude": 12.649299621582031
                 },
                 "iataCode": "CPH",
                 "name": "COPENHAGEN DK KASTRUP"
@@ -35,8 +35,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 48.689998626708984,
-                    "longitude": 9.221940040588379
+                    "latitude": 48.69070053100586,
+                    "longitude": 9.193140029907227
                 },
                 "iataCode": "STR",
                 "name": "STUTTGART AIRPORT"

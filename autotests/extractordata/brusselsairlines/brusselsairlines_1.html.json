@@ -17,8 +17,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 50.90140151977539,
-                    "longitude": 4.484439849853516
+                    "latitude": 50.89849853515625,
+                    "longitude": 4.483029842376709
                 },
                 "iataCode": "BRU",
                 "name": "Brussels Airport, BE"
@@ -36,8 +36,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Berlin, Tegel Airport, DE"
@@ -71,8 +71,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Berlin, Tegel Airport, DE"
@@ -90,8 +90,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 50.90140151977539,
-                    "longitude": 4.484439849853516
+                    "latitude": 50.89849853515625,
+                    "longitude": 4.483029842376709
                 },
                 "iataCode": "BRU",
                 "name": "Brussels Airport, BE"

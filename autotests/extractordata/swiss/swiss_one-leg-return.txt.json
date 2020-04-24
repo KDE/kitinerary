@@ -16,8 +16,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 47.464698791503906,
-                    "longitude": 8.549169540405273
+                    "latitude": 47.45029830932617,
+                    "longitude": 8.562230110168457
                 },
                 "iataCode": "ZRH",
                 "name": "Zürich"
@@ -35,8 +35,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Berlin"
@@ -69,8 +69,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55970001220703,
-                    "longitude": 13.287799835205078
+                    "latitude": 52.55390167236328,
+                    "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
                 "name": "Berlin"
@@ -88,8 +88,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 47.464698791503906,
-                    "longitude": 8.549169540405273
+                    "latitude": 47.45029830932617,
+                    "longitude": 8.562230110168457
                 },
                 "iataCode": "ZRH",
                 "name": "Zürich"
