@@ -20,6 +20,7 @@
   <name xml:lang="pl">Wydobywane danych z wiersza poleceń KItinerary</name>
   <name xml:lang="pt">Extracção da Linha de Comandos do KItinerary</name>
   <name xml:lang="pt-BR">Extrator em linha de comando do KItinerary</name>
+  <name xml:lang="ru">Инструмент командной строки для извлечения данных маршрутов</name>
   <name xml:lang="sk">Extraktor cez príkazový riadok pre KItinerary</name>
   <name xml:lang="sv">Kitinerary extrahering på kommandoraden</name>
   <name xml:lang="uk">Командний засіб видобування KItinerary</name>
@@ -42,6 +43,7 @@
   <summary xml:lang="pl">Wydobywane danych o rezerwacji z wiersza poleceń.</summary>
   <summary xml:lang="pt">Extracção de dados de reservas na linha de comandos.</summary>
   <summary xml:lang="pt-BR">Extrator em linha de comando de dados de reservas.</summary>
+  <summary xml:lang="ru">Инструмент командной строки для извлечения данных маршрутов.</summary>
   <summary xml:lang="sk">Extraktor dát pre rezerváciu cez príkazový riadok.</summary>
   <summary xml:lang="sv">Extrahering av reservationsdata på kommandoraden</summary>
   <summary xml:lang="uk">Програма для видобування даних бронювання, керування якою відбувається з командного рядка.</summary>
