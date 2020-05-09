@@ -18,6 +18,7 @@
 #include "timezonedb.h"
 #include "timezonedb_p.h"
 #include "timezonedb_data.cpp"
+// #include "timezone_zindex.cpp"
 
 #include <QTimeZone>
 
@@ -45,3 +46,24 @@ KnowledgeDb::Tz KnowledgeDb::timezoneForCountry(CountryId country)
 
     return Tz::Undefined;
 }
+
+#if 0
+KnowledgeDb::Tz KnowledgeDb::timezoneForCoordinate(float lat, float lon)
+{
+    const uint32_t x = ((lon + 180.0) / 360.0) * (1 << timezone_index_zDepth);
+    const uint32_t y = ((lat + 90.0) / 180.0) * (1 << timezone_index_zDepth);
+    uint32_t z = 0;
+    for (int i = timezone_index_zDepth - 1; i >= 0; --i) {
+        z <<= 1;
+        z += (y & (1 << i)) ? 1 : 0;
+        z <<= 1;
+        z += (x & (1 << i)) ? 1 : 0;
+    }
+
+    const auto it = std::upper_bound(std::begin(timezone_index), std::end(timezone_index), z);
+    if (it == std::begin(timezone_index)) {
+        return Tz::Undefined;
+    }
+    return (*std::prev(it)).tz;
+}
+#endif

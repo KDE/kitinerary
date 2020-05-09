@@ -39,6 +39,13 @@ namespace KnowledgeDb {
      *  one timezone used in that country.
      */
     KITINERARY_EXPORT Tz timezoneForCountry(CountryId country);
+
+#if 0
+    /** Returns the timezone for the given coordinate.
+     *  The result can be @c Tz::Undefined if this cannot be clearly determined.
+     */
+    KITINERARY_EXPORT Tz timezoneForCoordinate(float lat, float lon);
+#endif
 }
 }
 

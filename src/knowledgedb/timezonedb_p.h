@@ -37,6 +37,17 @@ inline constexpr bool operator<(const CountryTimezoneMap lhs, const CountryId rh
     return lhs.country < rhs;
 }
 
+// geo coordinate to timezone index entry
+struct TimezoneZIndexEntry {
+    uint32_t z: 22;
+    Tz tz: 9;
+};
+
+inline constexpr bool operator<(uint32_t lhs, TimezoneZIndexEntry rhs)
+{
+    return lhs < rhs.z;
+}
+
 }
 }
 
