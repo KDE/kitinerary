@@ -21,22 +21,27 @@
 
 #include <QTimeZone>
 
-using namespace KItinerary::KnowledgeDb;
+using namespace KItinerary;
 
-QTimeZone Timezone::toQTimeZone() const
+const char* KnowledgeDb::tzId(KnowledgeDb::Tz tz)
 {
-    if (offset > sizeof(timezone_names)) {
-        return {};
-    }
-    return QTimeZone(timezone_names + offset);
+    return timezone_names + timezone_names_offsets[static_cast<std::underlying_type<KnowledgeDb::Tz>::type>(tz)];
 }
 
-Timezone KItinerary::KnowledgeDb::timezoneForCountry(CountryId country)
+QTimeZone KnowledgeDb::toQTimeZone(Tz tz)
+{
+    if (tz == Tz::Undefined) {
+        return {};
+    }
+    return QTimeZone(tzId(tz));
+}
+
+KnowledgeDb::Tz KnowledgeDb::timezoneForCountry(CountryId country)
 {
     const auto it = std::lower_bound(std::begin(country_timezone_map), std::end(country_timezone_map), country);
     if (it != std::end(country_timezone_map) && (*it).country == country) {
         return (*it).timezone;
     }
 
-    return {};
+    return Tz::Undefined;
 }

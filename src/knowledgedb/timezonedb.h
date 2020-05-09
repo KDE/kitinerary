@@ -20,6 +20,7 @@
 
 #include <kitinerary_export.h>
 #include "countrydb.h"
+#include "timezonedb_data.h"
 
 #include <cstdint>
 #include <limits>
@@ -28,28 +29,16 @@ class QTimeZone;
 
 namespace KItinerary {
 namespace KnowledgeDb {
-    enum class Tz : uint16_t;
+    /** Returns the IANA timezone id for @p tz. */
+    const char* tzId(Tz tz);
 
-    /** Timezone type as used in the database.
-     *  @note Do not use in API/ABI.
-     */
-    struct Timezone {
-        inline constexpr Timezone() = default;
-        inline constexpr Timezone(Tz tz)
-            : offset(static_cast<uint16_t>(tz))
-        {}
-
-        /** Returns the corresponding QTimeZone. */
-        KITINERARY_EXPORT QTimeZone toQTimeZone() const;
-
-        // offset into timezone name string table
-        uint16_t offset = std::numeric_limits<uint16_t>::max();
-    };
+    /** Returns the corresponding QTimeZone. */
+    KITINERARY_EXPORT QTimeZone toQTimeZone(Tz tz);
 
     /** Returns the timezone for the given country, as long as there is exactly
      *  one timezone used in that country.
      */
-    KITINERARY_EXPORT Timezone timezoneForCountry(CountryId country);
+    KITINERARY_EXPORT Tz timezoneForCountry(CountryId country);
 }
 }
 

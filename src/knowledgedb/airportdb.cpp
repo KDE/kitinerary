@@ -60,7 +60,7 @@ QTimeZone timezoneForAirport(IataCode iataCode)
         return {};
     }
 
-    return (*it).timezone.toQTimeZone();
+    return KnowledgeDb::toQTimeZone((*it).timezone);
 }
 
 KnowledgeDb::CountryId countryForAirport(IataCode iataCode)

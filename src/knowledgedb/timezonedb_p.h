@@ -29,7 +29,7 @@ namespace KnowledgeDb  {
 // country to timezone mapping (for countries where this is unique)
 struct CountryTimezoneMap {
     CountryId country;
-    Timezone timezone;
+    Tz timezone;
 };
 
 inline constexpr bool operator<(const CountryTimezoneMap lhs, const CountryId rhs)

@@ -57,7 +57,7 @@ void CodeGen::writeCountryIsoCode(QIODevice *out, const QString &isoCode)
 void CodeGen::writeTimezone(QIODevice *out, const QByteArray &tzName)
 {
     if (tzName.isEmpty()) {
-        out->write("Timezone{}");
+        out->write("Tz::Undefined");
     } else {
         out->write("Tz::");
         writeTimezoneEnum(out, tzName);

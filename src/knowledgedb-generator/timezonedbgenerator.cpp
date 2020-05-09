@@ -32,7 +32,7 @@ void TimezoneDbGenerator::generate(QIODevice *out)
 
     out->write(R"(
 #include "timezonedb_p.h"
-#include "timezonedb_data_p.h"
+#include "timezonedb_data.h"
 
 namespace KItinerary {
 namespace KnowledgeDb {
@@ -40,7 +40,7 @@ namespace KnowledgeDb {
 // timezone name strings
 static const char timezone_names[] =
 )");
-    // timezone string tables
+    // timezone string table
     for (const auto &tz : tzDb.m_zones) {
         out->write("    ");
         out->write("\"");
@@ -48,6 +48,22 @@ static const char timezone_names[] =
         out->write("\\0\"\n");
     }
     out->write(R"(;
+
+static constexpr const uint16_t timezone_names_offsets[] = {
+    )");
+    out->write(QByteArray::number(tzDb.m_zones.front().size()));
+    out->write(", // Undefined\n");
+
+    // offsets into timezone string table
+    for (const auto &tz : tzDb.m_zones) {
+        out->write("    ");
+        out->write(QByteArray::number(tzDb.offset(tz)));
+        out->write(", // ");
+        out->write(tz);
+        out->write("\n");
+    }
+
+    out->write(R"(};
 
 static constexpr const CountryTimezoneMap country_timezone_map[] = {
 )");
@@ -76,23 +92,22 @@ void TimezoneDbGenerator::generateHeader(QIODevice *out)
 
     Timezones tzDb;
     out->write(R"(
-#ifndef KITINERARY_KNOWLEDGEDB_TIMEZONEDB_DATA_P_H
-#define KITINERARY_KNOWLEDGEDB_TIMEZONEDB_DATA_P_H
+#ifndef KITINERARY_KNOWLEDGEDB_TIMEZONEDB_DATA_H
+#define KITINERARY_KNOWLEDGEDB_TIMEZONEDB_DATA_H
 
 #include <cstdint>
 
 namespace KItinerary {
 namespace KnowledgeDb {
 
-/** Enum representing all timezones, values match the offsets into the timezone name string table. */
+/** Enum representing all timezones. */
 enum class Tz : uint16_t {
+    Undefined,
 )");
 
     for (const auto &tz : tzDb.m_zones) {
         out->write("    ");
         CodeGen::writeTimezoneEnum(out, tz);
-        out->write(" = ");
-        out->write(QByteArray::number(tzDb.offset(tz)));
         out->write(",\n");
     }
     out->write(R"(};

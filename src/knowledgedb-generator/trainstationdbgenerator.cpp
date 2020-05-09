@@ -62,7 +62,7 @@ bool TrainStationDbGenerator::generate(QIODevice *out)
 #include "knowledgedb.h"
 #include "timezonedb.h"
 #include "trainstationdb.h"
-#include "timezonedb_data_p.h"
+#include "timezonedb_data.h"
 
 namespace KItinerary {
 namespace KnowledgeDb {

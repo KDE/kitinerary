@@ -58,7 +58,7 @@ TrainStation KnowledgeDb::stationForIbnr(IBNR ibnr)
 {
     const auto ibnrIt = std::lower_bound(std::begin(ibnr_table), std::end(ibnr_table), ibnr);
     if (ibnrIt == std::end(ibnr_table) || (*ibnrIt).stationId != ibnr) {
-        return {Coordinate{}, Timezone{}, CountryId{}};
+        return {Coordinate{}, Tz::Undefined, CountryId{}};
     }
 
     return trainstation_table[(*ibnrIt).stationIndex.value()];
@@ -68,7 +68,7 @@ TrainStation KnowledgeDb::stationForUic(UICStation uic)
 {
     const auto it = std::lower_bound(std::begin(uic_table), std::end(uic_table), uic);
     if (it == std::end(uic_table) || (*it).stationId != uic) {
-        return {Coordinate{}, Timezone{}, CountryId{}};
+        return {Coordinate{}, Tz::Undefined, CountryId{}};
     }
     return trainstation_table[(*it).stationIndex.value()];
 }
@@ -77,7 +77,7 @@ TrainStation KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId garesCon
 {
     const auto gcIt = std::lower_bound(std::begin(garesConnexionsId_table), std::end(garesConnexionsId_table), garesConnexionsId);
     if (gcIt == std::end(garesConnexionsId_table) || (*gcIt).stationId != garesConnexionsId) {
-        return {Coordinate{}, Timezone{}, CountryId{}};
+        return {Coordinate{}, Tz::Undefined, CountryId{}};
     }
 
     return trainstation_table[(*gcIt).stationIndex.value()];
@@ -90,7 +90,7 @@ TrainStation KnowledgeDb::stationForIndianRailwaysStationCode(const QString &cod
         return strcmp(indianRailwaysSationCode_stringtable + lhs.offset, rhs.constData()) < 0;
     });
     if (it == std::end(indianRailwaysSationCode_index) || strcmp(indianRailwaysSationCode_stringtable + (*it).offset, codeStr.constData()) != 0) {
-        return {Coordinate{}, Timezone{}, CountryId{}};
+        return {Coordinate{}, Tz::Undefined, CountryId{}};
     }
 
     return trainstation_table[(*it).stationIndex.value()];
@@ -100,7 +100,7 @@ TrainStation KnowledgeDb::stationForVRStationCode(VRStationCode vrStation)
 {
     const auto it = std::lower_bound(std::begin(vrfiConnexionsId_table), std::end(vrfiConnexionsId_table), vrStation);
     if (it == std::end(vrfiConnexionsId_table) || (*it).stationId != vrStation) {
-        return {Coordinate{}, Timezone{}, CountryId{}};
+        return {Coordinate{}, Tz::Undefined, CountryId{}};
     }
 
     return trainstation_table[(*it).stationIndex.value()];

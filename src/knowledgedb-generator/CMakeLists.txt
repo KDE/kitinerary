@@ -62,7 +62,7 @@ function(generate_db dbtype outfile)
 endfunction()
 generate_db(country countrydb_data.cpp)
 generate_db(timezone timezonedb_data.cpp)
-generate_db(timezoneheader timezonedb_data_p.h)
+generate_db(timezoneheader timezonedb_data.h)
 generate_db(airport airportdb_data.cpp ${OSM_PLANET_DIR}/airports-bbox.osm)
 generate_db(trainstation trainstationdb_data.cpp)
 

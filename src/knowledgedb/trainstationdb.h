@@ -57,7 +57,7 @@ struct TrainStationIdIndex {
  */
 struct TrainStation {
     Coordinate coordinate;
-    Timezone timezone;
+    Tz timezone;
     CountryId country;
 };
 

@@ -284,12 +284,12 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, cons
     QTimeZone tz;
     if (station.identifier().startsWith(QLatin1String("sncf:"))) {
         const auto record = KnowledgeDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{station.identifier().mid(5)});
-        tz = record.timezone.toQTimeZone();
+        tz = KnowledgeDb::toQTimeZone(record.timezone);
     } else if (station.identifier().startsWith(QLatin1String("ibnr:"))) {
         const auto record = KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{station.identifier().mid(5).toUInt()});
-        tz = record.timezone.toQTimeZone();
+        tz = KnowledgeDb::toQTimeZone(record.timezone);
     } else if (!station.address().addressCountry().isEmpty()) {
-        tz = KnowledgeDb::timezoneForCountry(KnowledgeDb::CountryId{station.address().addressCountry()}).toQTimeZone();
+        tz = KnowledgeDb::toQTimeZone(KnowledgeDb::timezoneForCountry(KnowledgeDb::CountryId{station.address().addressCountry()}));
     }
     if (!tz.isValid()) {
         return dt;
@@ -565,7 +565,7 @@ QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, co
 
     QTimeZone tz;
     if (!place.address().addressCountry().isEmpty()) {
-        tz = KnowledgeDb::timezoneForCountry(KnowledgeDb::CountryId{place.address().addressCountry()}).toQTimeZone();
+        tz = KnowledgeDb::toQTimeZone(KnowledgeDb::timezoneForCountry(KnowledgeDb::CountryId{place.address().addressCountry()}));
     }
     if (!tz.isValid()) {
         return dt;
