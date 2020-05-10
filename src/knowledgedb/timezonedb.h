@@ -45,6 +45,12 @@ namespace KnowledgeDb {
      *  The result can be @c Tz::Undefined if this cannot be clearly determined.
      */
     KITINERARY_EXPORT Tz timezoneForCoordinate(float lat, float lon);
+
+    /** Returns the timezone for the given location consisting of coordinates and country.
+     *  This combines the results of the two above individual queries
+     *  to obtain better results close to borders.
+     */
+    KITINERARY_EXPORT Tz timezoneForLocation(float lat, float lon, CountryId country);
 #endif
 }
 }

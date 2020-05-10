@@ -66,4 +66,47 @@ KnowledgeDb::Tz KnowledgeDb::timezoneForCoordinate(float lat, float lon)
     }
     return (*std::prev(it)).tz;
 }
+
+static bool compareOffsetData(const QTimeZone::OffsetData &lhs, const QTimeZone::OffsetData &rhs)
+{
+    return lhs.offsetFromUtc == rhs.offsetFromUtc
+        && lhs.standardTimeOffset == rhs.standardTimeOffset
+        && lhs.daylightTimeOffset == rhs.daylightTimeOffset
+        && lhs.atUtc == rhs.atUtc
+        && lhs.abbreviation == rhs.abbreviation;
+}
+
+static bool isEquivalentTimezone(const QTimeZone &lhs, const QTimeZone &rhs)
+{
+    auto dt = QDateTime::currentDateTimeUtc();
+    if (lhs.offsetFromUtc(dt) != rhs.offsetFromUtc(dt) || lhs.hasTransitions() != rhs.hasTransitions()) {
+        return false;
+    }
+
+    for (int i = 0; i < 2 && dt.isValid(); ++i) {
+        const auto lhsOff = lhs.nextTransition(dt);
+        const auto rhsOff = rhs.nextTransition(dt);
+        if (!compareOffsetData(lhsOff, rhsOff)) {
+            return false;
+        }
+        dt = lhsOff.atUtc;
+    }
+
+    return true;
+}
+
+KnowledgeDb::Tz KnowledgeDb::timezoneForLocation(float lat, float lon, CountryId country)
+{
+    const auto coordTz = timezoneForCoordinate(lat, lon);
+    const auto countryTz = timezoneForCountry(country);
+    if (coordTz == Tz::Undefined || coordTz == countryTz) {
+        return countryTz;
+    }
+    if (countryTz == Tz::Undefined) {
+        return coordTz;
+    }
+
+    // if both timezones are equivalent, the country-based one wins, otherwise we use the coordinate one
+    return isEquivalentTimezone(toQTimeZone(coordTz), toQTimeZone(countryTz)) ? countryTz : coordTz;
+}
 #endif
