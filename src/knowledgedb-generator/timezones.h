@@ -24,8 +24,8 @@
 
 #include <QImage>
 #include <QHash>
+#include <QByteArray>
 
-class QByteArray;
 class QColor;
 
 namespace KItinerary {
