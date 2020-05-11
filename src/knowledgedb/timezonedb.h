@@ -40,6 +40,12 @@ namespace KnowledgeDb {
      */
     KITINERARY_EXPORT Tz timezoneForCountry(CountryId country);
 
+    /** Returns the country for a given timezone.
+     *  This is unique for most IANA timezones, but not guaranteed to be so,
+     *  in which case an invalid country is returned.
+     */
+    KITINERARY_EXPORT CountryId countryForTimezone(Tz tz);
+
 #if 0
     /** Returns the timezone for the given coordinate.
      *  The result can be @c Tz::Undefined if this cannot be clearly determined.

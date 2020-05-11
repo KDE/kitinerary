@@ -58,6 +58,7 @@ private:
     std::vector<uint16_t> m_zoneOffsets;
 
     std::map<QString, std::vector<QByteArray>> m_countryZones;
+    std::map<QByteArray, QString> m_countryForZone;
 };
 
 }

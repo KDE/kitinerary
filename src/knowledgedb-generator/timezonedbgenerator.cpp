@@ -81,6 +81,20 @@ static constexpr const CountryTimezoneMap country_timezone_map[] = {
 
     out->write(R"(};
 
+static constexpr const CountryId timezone_country_map[] = {
+    CountryId{}, // Undefined
+)");
+
+    for (const auto &tz : tzDb.m_zones) {
+        out->write("    ");
+        CodeGen::writeCountryIsoCode(out, tzDb.m_countryForZone[tz]);
+        out->write(", // ");
+        out->write(tz);
+        out->write("\n");
+    }
+
+    out->write(R"(};
+
 }
 }
 )");

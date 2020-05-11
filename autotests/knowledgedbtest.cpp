@@ -224,6 +224,16 @@ private Q_SLOTS:
         QCOMPARE(toQTimeZone(timezoneForCountry(CountryId{"BR"})), QTimeZone());
     }
 
+    void testCountryForTimezone()
+    {
+        using namespace KnowledgeDb;
+
+        qDebug() << countryForTimezone(Tz::Europe_Busingen).toString();
+        QCOMPARE(countryForTimezone(Tz::Europe_Busingen), CountryId{"DE"});
+        QCOMPARE(countryForTimezone(Tz::America_Los_Angeles), CountryId{"US"});
+        QCOMPARE(countryForTimezone(Tz::Asia_Kuching), CountryId{"MY"});
+    }
+
     void testUICCountryCodeLookup()
     {
         using namespace KnowledgeDb;

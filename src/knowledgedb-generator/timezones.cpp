@@ -107,8 +107,16 @@ Timezones::Timezones()
         }
 
         const auto countries = cols.at(0).split(QLatin1Char(','));
+        const auto tzName = cols.at(2).toUtf8();
         for (const auto &country : countries) {
-            m_countryZones[country].push_back(cols.at(2).toUtf8());
+            m_countryZones[country].push_back(tzName);
+        }
+        if (countries.size() == 1) {
+            if (m_countryForZone.find(tzName) != m_countryForZone.end()) {
+                m_countryForZone[tzName] = QString();
+            } else {
+                m_countryForZone[tzName] = countries[0];
+            }
         }
     }
 
