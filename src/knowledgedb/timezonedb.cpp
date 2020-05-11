@@ -106,6 +106,36 @@ KnowledgeDb::Tz KnowledgeDb::timezoneForLocation(float lat, float lon, CountryId
     const auto countryTz = timezoneForCountry(country);
     const auto countryFromCoord = countryForTimezone(coordTz);
 
+    // if we determine a different country than was provided, search for an equivalent timezone
+    // in the requested country
+    // example: Tijuana airport ending up in America/Los Angeles, and America/Tijuna being the only MX timezone equivalent to that
+    if (coordTz != Tz::Undefined && countryFromCoord.isValid() && countryFromCoord != country) {
+        bool nonUnique = false;
+        Tz foundTz = Tz::Undefined;
+        const auto coordZone = toQTimeZone(coordTz);
+
+        constexpr const int timezone_count = sizeof(timezone_country_map) / sizeof(timezone_country_map[0]);
+        for (int i = 1; i < timezone_count; ++i) {
+            if (timezone_country_map[i] != country) {
+                continue;
+            }
+            const auto t = static_cast<Tz>(i);
+            if (!isEquivalentTimezone(toQTimeZone(t), coordZone)) {
+                continue;
+            }
+            if (foundTz != Tz::Undefined) {
+                nonUnique = true;
+                break;
+            }
+            foundTz = t;
+        }
+
+        if (!nonUnique && foundTz != Tz::Undefined) {
+            return foundTz;
+        }
+    }
+
+    // only one method found a result, let's use that one
     if (coordTz == Tz::Undefined || coordTz == countryTz) {
         return countryTz;
     }
