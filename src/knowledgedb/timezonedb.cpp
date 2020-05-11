@@ -104,10 +104,18 @@ KnowledgeDb::Tz KnowledgeDb::timezoneForLocation(float lat, float lon, CountryId
 {
     const auto coordTz = timezoneForCoordinate(lat, lon);
     const auto countryTz = timezoneForCountry(country);
+    const auto countryFromCoord = countryForTimezone(coordTz);
+
     if (coordTz == Tz::Undefined || coordTz == countryTz) {
         return countryTz;
     }
     if (countryTz == Tz::Undefined) {
+        return coordTz;
+    }
+
+    // if the coordinate-based timezone is also in @p country, that takes precedence
+    // example: the various AR sub-zones, or the MY sub-zone
+    if (country == countryFromCoord) {
         return coordTz;
     }
 
