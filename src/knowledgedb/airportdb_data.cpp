@@ -2224,7 +2224,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"GOB"}, CountryId{"ET"}, Tz::Africa_Addis_Ababa}, // Robe Airport
     Airport{IataCode{"GOC"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Gora
     Airport{IataCode{"GOG"}, CountryId{"NA"}, Tz::Africa_Windhoek}, // Gobabis Airport
-    Airport{IataCode{"GOH"}, CountryId{"GL"}, Tz::America_Godthab}, // Nuuk Airport
+    Airport{IataCode{"GOH"}, CountryId{"GL"}, Tz::America_Nuuk}, // Nuuk Airport
     Airport{IataCode{"GOI"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Dabolim Airport
     Airport{IataCode{"GOJ"}, CountryId{"RU"}, Tz::Europe_Moscow}, // Nizhny Novgorod International Airport
     Airport{IataCode{"GOK"}, CountryId{"US"}, Tz::America_Chicago}, // Guthrie–Edmond Regional Airport
@@ -2822,7 +2822,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JAR"}, CountryId{"IR"}, Tz::Asia_Tehran}, // Jahrom Airport
     Airport{IataCode{"JAT"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Jabot Airport
     Airport{IataCode{"JAU"}, CountryId{"PE"}, Tz::America_Lima}, // Francisco Carle Airport
-    Airport{IataCode{"JAV"}, CountryId{"GL"}, Tz::America_Godthab}, // Ilulissat Airport
+    Airport{IataCode{"JAV"}, CountryId{"GL"}, Tz::America_Nuuk}, // Ilulissat Airport
     Airport{IataCode{"JAX"}, CountryId{"US"}, Tz::America_New_York}, // Jacksonville International Airport
     Airport{IataCode{"JBB"}, CountryId{"ID"}, Tz::Asia_Jakarta}, // Notohadinegoro Airport
     Airport{IataCode{"JBQ"}, CountryId{"DO"}, Tz::America_Santo_Domingo}, // La Isabela International Airport
@@ -2842,13 +2842,13 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JED"}, CountryId{"SA"}, Tz::Asia_Riyadh}, // King Abdulaziz International Airport
     Airport{IataCode{"JEE"}, CountryId{"HT"}, Tz::America_Port_au_Prince}, // Jérémie Airport
     Airport{IataCode{"JEF"}, CountryId{"US"}, Tz::America_Chicago}, // Jefferson City Memorial Airport
-    Airport{IataCode{"JEG"}, CountryId{"GL"}, Tz::America_Godthab}, // Aasiaat Airport
+    Airport{IataCode{"JEG"}, CountryId{"GL"}, Tz::America_Nuuk}, // Aasiaat Airport
     Airport{IataCode{"JEJ"}, CountryId{"MH"}, Tz::Pacific_Majuro}, // Jeh Airport
     Airport{IataCode{"JEQ"}, CountryId{"BR"}, Tz::America_Bahia}, // Jequié Airport
     Airport{IataCode{"JER"}, CountryId{"JE"}, Tz::Europe_Jersey}, // Jersey Airport
     Airport{IataCode{"JFK"}, CountryId{"US"}, Tz::America_New_York}, // John F. Kennedy International Airport
     Airport{IataCode{"JFN"}, CountryId{"US"}, Tz::America_New_York}, // Northeast Ohio Regional Airport
-    Airport{IataCode{"JFR"}, CountryId{"GL"}, Tz::America_Godthab}, // Paamiut Airport
+    Airport{IataCode{"JFR"}, CountryId{"GL"}, Tz::America_Nuuk}, // Paamiut Airport
     Airport{IataCode{"JGA"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Jamnagar Airport
     Airport{IataCode{"JGB"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Jagdalpur Airport
     Airport{IataCode{"JGD"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Jiagedaqi Airport
@@ -2859,7 +2859,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JHL"}, CountryId{"CA"}, Tz::America_Edmonton}, // Fort MacKay/Albian Aerodrome
     Airport{IataCode{"JHM"}, CountryId{"US"}, Tz::Pacific_Honolulu}, // Kapalua Airport
     Airport{IataCode{"JHQ"}, CountryId{"AU"}, Tz::Australia_Brisbane}, // Whitsunday Airport
-    Airport{IataCode{"JHS"}, CountryId{"GL"}, Tz::America_Godthab}, // Sisimiut Airport
+    Airport{IataCode{"JHS"}, CountryId{"GL"}, Tz::America_Nuuk}, // Sisimiut Airport
     Airport{IataCode{"JHW"}, CountryId{"US"}, Tz::America_New_York}, // Chautauqua County-Jamestown Airport
     Airport{IataCode{"JIA"}, CountryId{"BR"}, Tz::America_Cuiaba}, // Juína Airport
     Airport{IataCode{"JIB"}, CountryId{"DJ"}, Tz::Africa_Djibouti}, // Djibouti-Ambouli International Airport
@@ -2907,7 +2907,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JOT"}, CountryId{"US"}, Tz::America_Chicago}, // Joliet Regional Airport
     Airport{IataCode{"JPA"}, CountryId{"BR"}, Tz::America_Fortaleza}, // Presidente Castro Pinto International Airport
     Airport{IataCode{"JPR"}, CountryId{"BR"}, Tz::America_Porto_Velho}, // Ji-Paraná Airport
-    Airport{IataCode{"JQA"}, CountryId{"GL"}, Tz::America_Godthab}, // Qaarsut Airport
+    Airport{IataCode{"JQA"}, CountryId{"GL"}, Tz::America_Nuuk}, // Qaarsut Airport
     Airport{IataCode{"JQE"}, CountryId{"PA"}, Tz::America_Panama}, // Jaqué Airport
     Airport{IataCode{"JRF"}, CountryId{"US"}, Tz::Pacific_Honolulu}, // Kalaeloa Airport
     Airport{IataCode{"JRG"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Jharsuguda Airport
@@ -2921,7 +2921,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JSM"}, CountryId{"AR"}, Tz::America_Argentina_Catamarca}, // José de San Martín Airport
     Airport{IataCode{"JSR"}, CountryId{"BD"}, Tz::Asia_Dhaka}, // Jessore Airport
     Airport{IataCode{"JST"}, CountryId{"US"}, Tz::America_New_York}, // Johnstown–Cambria County Airport
-    Airport{IataCode{"JSU"}, CountryId{"GL"}, Tz::America_Godthab}, // Maniitsoq Airport
+    Airport{IataCode{"JSU"}, CountryId{"GL"}, Tz::America_Nuuk}, // Maniitsoq Airport
     Airport{IataCode{"JSY"}, CountryId{"GR"}, Tz::Europe_Athens}, // Syros Island National Airport
     Airport{IataCode{"JTC"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Bauru-Arealva Airport
     Airport{IataCode{"JTI"}, CountryId{"BR"}, Tz::America_Sao_Paulo}, // Jataí Airport
@@ -2935,7 +2935,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"JUM"}, CountryId{"NP"}, Tz::Asia_Kathmandu}, // Jumla Airport
     Airport{IataCode{"JUR"}, CountryId{"AU"}, Tz::Australia_Perth}, // Jurien Bay Airport
     Airport{IataCode{"JUT"}, CountryId{"HN"}, Tz::America_Tegucigalpa}, // Jutigalpa airport
-    Airport{IataCode{"JUV"}, CountryId{"GL"}, Tz::America_Godthab}, // Upernavik Airport
+    Airport{IataCode{"JUV"}, CountryId{"GL"}, Tz::America_Nuuk}, // Upernavik Airport
     Airport{IataCode{"JUZ"}, CountryId{"CN"}, Tz::Asia_Shanghai}, // Quzhou Airport
     Airport{IataCode{"JVA"}, CountryId{"MG"}, Tz::Indian_Antananarivo}, // Ankavandra Airport
     Airport{IataCode{"JVI"}, CountryId{"US"}, Tz::America_New_York}, // Central Jersey Regional Airport
@@ -3286,7 +3286,7 @@ static constexpr Airport airport_table[] = {
     Airport{IataCode{"KUO"}, CountryId{"FI"}, Tz::Europe_Helsinki}, // Kuopio Airport
     Airport{IataCode{"KUP"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kupiano Airport
     Airport{IataCode{"KUQ"}, CountryId{"PG"}, Tz::Pacific_Port_Moresby}, // Kuri Airport
-    Airport{IataCode{"KUS"}, CountryId{"GL"}, Tz::America_Godthab}, // Kulusuk Airport
+    Airport{IataCode{"KUS"}, CountryId{"GL"}, Tz::America_Nuuk}, // Kulusuk Airport
     Airport{IataCode{"KUT"}, CountryId{"GE"}, Tz::Asia_Tbilisi}, // Kutaisi International Airport
     Airport{IataCode{"KUU"}, CountryId{"IN"}, Tz::Asia_Kolkata}, // Bhuntar Airport
     Airport{IataCode{"KUV"}, CountryId{"KR"}, Tz::Asia_Seoul}, // Gunsan Airport

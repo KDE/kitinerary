@@ -117,7 +117,6 @@ static const char timezone_names[] =
     "America/Fort_Nelson\0"
     "America/Fortaleza\0"
     "America/Glace_Bay\0"
-    "America/Godthab\0"
     "America/Goose_Bay\0"
     "America/Grand_Turk\0"
     "America/Grenada\0"
@@ -171,6 +170,7 @@ static const char timezone_names[] =
     "America/North_Dakota/Beulah\0"
     "America/North_Dakota/Center\0"
     "America/North_Dakota/New_Salem\0"
+    "America/Nuuk\0"
     "America/Ojinaga\0"
     "America/Panama\0"
     "America/Pangnirtung\0"
@@ -211,7 +211,17 @@ static const char timezone_names[] =
     "America/Winnipeg\0"
     "America/Yakutat\0"
     "America/Yellowknife\0"
+    "Antarctica/Casey\0"
+    "Antarctica/Davis\0"
+    "Antarctica/DumontDUrville\0"
     "Antarctica/Macquarie\0"
+    "Antarctica/Mawson\0"
+    "Antarctica/McMurdo\0"
+    "Antarctica/Palmer\0"
+    "Antarctica/Rothera\0"
+    "Antarctica/Syowa\0"
+    "Antarctica/Troll\0"
+    "Antarctica/Vostok\0"
     "Arctic/Longyearbyen\0"
     "Asia/Aden\0"
     "Asia/Almaty\0"
@@ -226,6 +236,7 @@ static const char timezone_names[] =
     "Asia/Baku\0"
     "Asia/Bangkok\0"
     "Asia/Barnaul\0"
+    "Asia/Beijing\0"
     "Asia/Beirut\0"
     "Asia/Bishkek\0"
     "Asia/Brunei\0"
@@ -271,6 +282,7 @@ static const char timezone_names[] =
     "Asia/Pontianak\0"
     "Asia/Pyongyang\0"
     "Asia/Qatar\0"
+    "Asia/Qostanay\0"
     "Asia/Qyzylorda\0"
     "Asia/Riyadh\0"
     "Asia/Sakhalin\0"
@@ -535,315 +547,327 @@ static constexpr const uint16_t timezone_names_offsets[] = {
     1769, // America/Fort_Nelson
     1789, // America/Fortaleza
     1807, // America/Glace_Bay
-    1825, // America/Godthab
-    1841, // America/Goose_Bay
-    1859, // America/Grand_Turk
-    1878, // America/Grenada
-    1894, // America/Guadeloupe
-    1913, // America/Guatemala
-    1931, // America/Guayaquil
-    1949, // America/Guyana
-    1964, // America/Halifax
-    1980, // America/Havana
-    1995, // America/Hermosillo
-    2014, // America/Indiana/Indianapolis
-    2043, // America/Indiana/Knox
-    2064, // America/Indiana/Marengo
-    2088, // America/Indiana/Petersburg
-    2115, // America/Indiana/Tell_City
-    2141, // America/Indiana/Vevay
-    2163, // America/Indiana/Vincennes
-    2189, // America/Indiana/Winamac
-    2213, // America/Inuvik
-    2228, // America/Iqaluit
-    2244, // America/Jamaica
-    2260, // America/Juneau
-    2275, // America/Kentucky/Louisville
-    2303, // America/Kentucky/Monticello
-    2331, // America/Kralendijk
-    2350, // America/La_Paz
-    2365, // America/Lima
-    2378, // America/Los_Angeles
-    2398, // America/Lower_Princes
-    2420, // America/Maceio
-    2435, // America/Managua
-    2451, // America/Manaus
-    2466, // America/Marigot
-    2482, // America/Martinique
-    2501, // America/Matamoros
-    2519, // America/Mazatlan
-    2536, // America/Menominee
-    2554, // America/Merida
-    2569, // America/Metlakatla
-    2588, // America/Mexico_City
-    2608, // America/Miquelon
-    2625, // America/Moncton
-    2641, // America/Monterrey
-    2659, // America/Montevideo
-    2678, // America/Montserrat
-    2697, // America/Nassau
-    2712, // America/New_York
-    2729, // America/Nipigon
-    2745, // America/Nome
-    2758, // America/Noronha
-    2774, // America/North_Dakota/Beulah
-    2802, // America/North_Dakota/Center
-    2830, // America/North_Dakota/New_Salem
-    2861, // America/Ojinaga
-    2877, // America/Panama
-    2892, // America/Pangnirtung
-    2912, // America/Paramaribo
-    2931, // America/Phoenix
-    2947, // America/Port-au-Prince
-    2970, // America/Port_of_Spain
-    2992, // America/Porto_Velho
-    3012, // America/Puerto_Rico
-    3032, // America/Punta_Arenas
-    3053, // America/Rainy_River
-    3073, // America/Rankin_Inlet
-    3094, // America/Recife
-    3109, // America/Regina
-    3124, // America/Resolute
-    3141, // America/Rio_Branco
-    3160, // America/Santarem
-    3177, // America/Santiago
-    3194, // America/Santo_Domingo
-    3216, // America/Sao_Paulo
-    3234, // America/Scoresbysund
-    3255, // America/Sitka
-    3269, // America/St_Barthelemy
-    3291, // America/St_Johns
-    3308, // America/St_Kitts
-    3325, // America/St_Lucia
-    3342, // America/St_Thomas
-    3360, // America/St_Vincent
-    3379, // America/Swift_Current
-    3401, // America/Tegucigalpa
-    3421, // America/Thule
-    3435, // America/Thunder_Bay
-    3455, // America/Tijuana
-    3471, // America/Toronto
-    3487, // America/Tortola
-    3503, // America/Vancouver
-    3521, // America/Whitehorse
-    3540, // America/Winnipeg
-    3557, // America/Yakutat
-    3573, // America/Yellowknife
-    3593, // Antarctica/Macquarie
-    3614, // Arctic/Longyearbyen
-    3634, // Asia/Aden
-    3644, // Asia/Almaty
-    3656, // Asia/Amman
-    3667, // Asia/Anadyr
-    3679, // Asia/Aqtau
-    3690, // Asia/Aqtobe
-    3702, // Asia/Ashgabat
-    3716, // Asia/Atyrau
-    3728, // Asia/Baghdad
-    3741, // Asia/Bahrain
-    3754, // Asia/Baku
-    3764, // Asia/Bangkok
-    3777, // Asia/Barnaul
-    3790, // Asia/Beirut
-    3802, // Asia/Bishkek
-    3815, // Asia/Brunei
-    3827, // Asia/Chita
-    3838, // Asia/Choibalsan
-    3854, // Asia/Colombo
-    3867, // Asia/Damascus
-    3881, // Asia/Dhaka
-    3892, // Asia/Dili
-    3902, // Asia/Dubai
-    3913, // Asia/Dushanbe
-    3927, // Asia/Famagusta
-    3942, // Asia/Gaza
-    3952, // Asia/Hebron
-    3964, // Asia/Ho_Chi_Minh
-    3981, // Asia/Hong_Kong
-    3996, // Asia/Hovd
-    4006, // Asia/Irkutsk
-    4019, // Asia/Jakarta
-    4032, // Asia/Jayapura
-    4046, // Asia/Jerusalem
-    4061, // Asia/Kabul
-    4072, // Asia/Kamchatka
-    4087, // Asia/Karachi
-    4100, // Asia/Kathmandu
-    4115, // Asia/Khandyga
-    4129, // Asia/Kolkata
-    4142, // Asia/Krasnoyarsk
-    4159, // Asia/Kuala_Lumpur
-    4177, // Asia/Kuching
-    4190, // Asia/Kuwait
-    4202, // Asia/Macau
-    4213, // Asia/Magadan
-    4226, // Asia/Makassar
-    4240, // Asia/Manila
-    4252, // Asia/Muscat
-    4264, // Asia/Nicosia
-    4277, // Asia/Novokuznetsk
-    4295, // Asia/Novosibirsk
-    4312, // Asia/Omsk
-    4322, // Asia/Oral
-    4332, // Asia/Phnom_Penh
-    4348, // Asia/Pontianak
-    4363, // Asia/Pyongyang
-    4378, // Asia/Qatar
-    4389, // Asia/Qyzylorda
-    4404, // Asia/Riyadh
-    4416, // Asia/Sakhalin
-    4430, // Asia/Samarkand
-    4445, // Asia/Seoul
-    4456, // Asia/Shanghai
-    4470, // Asia/Singapore
-    4485, // Asia/Srednekolymsk
-    4504, // Asia/Taipei
-    4516, // Asia/Tashkent
-    4530, // Asia/Tbilisi
-    4543, // Asia/Tehran
-    4555, // Asia/Thimphu
-    4568, // Asia/Tokyo
-    4579, // Asia/Tomsk
-    4590, // Asia/Ulaanbaatar
-    4607, // Asia/Urumqi
-    4619, // Asia/Ust-Nera
-    4633, // Asia/Vientiane
-    4648, // Asia/Vladivostok
-    4665, // Asia/Yakutsk
-    4678, // Asia/Yangon
-    4690, // Asia/Yekaterinburg
-    4709, // Asia/Yerevan
-    4722, // Atlantic/Azores
-    4738, // Atlantic/Bermuda
-    4755, // Atlantic/Canary
-    4771, // Atlantic/Cape_Verde
-    4791, // Atlantic/Faroe
-    4806, // Atlantic/Madeira
-    4823, // Atlantic/Reykjavik
-    4842, // Atlantic/South_Georgia
-    4865, // Atlantic/St_Helena
-    4884, // Atlantic/Stanley
-    4901, // Australia/Adelaide
-    4920, // Australia/Brisbane
-    4939, // Australia/Broken_Hill
-    4961, // Australia/Currie
-    4978, // Australia/Darwin
-    4995, // Australia/Eucla
-    5011, // Australia/Hobart
-    5028, // Australia/Lindeman
-    5047, // Australia/Lord_Howe
-    5067, // Australia/Melbourne
-    5087, // Australia/Perth
-    5103, // Australia/Sydney
-    5120, // Europe/Amsterdam
-    5137, // Europe/Andorra
-    5152, // Europe/Astrakhan
-    5169, // Europe/Athens
-    5183, // Europe/Belgrade
-    5199, // Europe/Berlin
-    5213, // Europe/Bratislava
-    5231, // Europe/Brussels
-    5247, // Europe/Bucharest
-    5264, // Europe/Budapest
-    5280, // Europe/Busingen
-    5296, // Europe/Chisinau
-    5312, // Europe/Copenhagen
-    5330, // Europe/Dublin
-    5344, // Europe/Gibraltar
-    5361, // Europe/Guernsey
-    5377, // Europe/Helsinki
-    5393, // Europe/Isle_of_Man
-    5412, // Europe/Istanbul
-    5428, // Europe/Jersey
-    5442, // Europe/Kaliningrad
-    5461, // Europe/Kiev
-    5473, // Europe/Kirov
-    5486, // Europe/Lisbon
-    5500, // Europe/Ljubljana
-    5517, // Europe/London
-    5531, // Europe/Luxembourg
-    5549, // Europe/Madrid
-    5563, // Europe/Malta
-    5576, // Europe/Mariehamn
-    5593, // Europe/Minsk
-    5606, // Europe/Monaco
-    5620, // Europe/Moscow
-    5634, // Europe/Oslo
-    5646, // Europe/Paris
-    5659, // Europe/Podgorica
-    5676, // Europe/Prague
-    5690, // Europe/Riga
-    5702, // Europe/Rome
-    5714, // Europe/Samara
-    5728, // Europe/San_Marino
-    5746, // Europe/Sarajevo
-    5762, // Europe/Saratov
-    5777, // Europe/Simferopol
-    5795, // Europe/Skopje
-    5809, // Europe/Sofia
-    5822, // Europe/Stockholm
-    5839, // Europe/Tallinn
-    5854, // Europe/Tirane
-    5868, // Europe/Ulyanovsk
-    5885, // Europe/Uzhgorod
-    5901, // Europe/Vaduz
-    5914, // Europe/Vatican
-    5929, // Europe/Vienna
-    5943, // Europe/Vilnius
-    5958, // Europe/Volgograd
-    5975, // Europe/Warsaw
-    5989, // Europe/Zagreb
-    6003, // Europe/Zaporozhye
-    6021, // Europe/Zurich
-    6035, // Indian/Antananarivo
-    6055, // Indian/Chagos
-    6069, // Indian/Christmas
-    6086, // Indian/Cocos
-    6099, // Indian/Comoro
-    6113, // Indian/Kerguelen
-    6130, // Indian/Mahe
-    6142, // Indian/Maldives
-    6158, // Indian/Mauritius
-    6175, // Indian/Mayotte
-    6190, // Indian/Reunion
-    6205, // Pacific/Apia
-    6218, // Pacific/Auckland
-    6235, // Pacific/Bougainville
-    6256, // Pacific/Chatham
-    6272, // Pacific/Chuuk
-    6286, // Pacific/Easter
-    6301, // Pacific/Efate
-    6315, // Pacific/Enderbury
-    6333, // Pacific/Fakaofo
-    6349, // Pacific/Fiji
-    6362, // Pacific/Funafuti
-    6379, // Pacific/Galapagos
-    6397, // Pacific/Gambier
-    6413, // Pacific/Guadalcanal
-    6433, // Pacific/Guam
-    6446, // Pacific/Honolulu
-    6463, // Pacific/Kiritimati
-    6482, // Pacific/Kosrae
-    6497, // Pacific/Kwajalein
-    6515, // Pacific/Majuro
-    6530, // Pacific/Marquesas
-    6548, // Pacific/Midway
-    6563, // Pacific/Nauru
-    6577, // Pacific/Niue
-    6590, // Pacific/Norfolk
-    6606, // Pacific/Noumea
-    6621, // Pacific/Pago_Pago
-    6639, // Pacific/Palau
-    6653, // Pacific/Pitcairn
-    6670, // Pacific/Pohnpei
-    6686, // Pacific/Port_Moresby
-    6707, // Pacific/Rarotonga
-    6725, // Pacific/Saipan
-    6740, // Pacific/Tahiti
-    6755, // Pacific/Tarawa
-    6770, // Pacific/Tongatapu
-    6788, // Pacific/Wake
-    6801, // Pacific/Wallis
+    1825, // America/Goose_Bay
+    1843, // America/Grand_Turk
+    1862, // America/Grenada
+    1878, // America/Guadeloupe
+    1897, // America/Guatemala
+    1915, // America/Guayaquil
+    1933, // America/Guyana
+    1948, // America/Halifax
+    1964, // America/Havana
+    1979, // America/Hermosillo
+    1998, // America/Indiana/Indianapolis
+    2027, // America/Indiana/Knox
+    2048, // America/Indiana/Marengo
+    2072, // America/Indiana/Petersburg
+    2099, // America/Indiana/Tell_City
+    2125, // America/Indiana/Vevay
+    2147, // America/Indiana/Vincennes
+    2173, // America/Indiana/Winamac
+    2197, // America/Inuvik
+    2212, // America/Iqaluit
+    2228, // America/Jamaica
+    2244, // America/Juneau
+    2259, // America/Kentucky/Louisville
+    2287, // America/Kentucky/Monticello
+    2315, // America/Kralendijk
+    2334, // America/La_Paz
+    2349, // America/Lima
+    2362, // America/Los_Angeles
+    2382, // America/Lower_Princes
+    2404, // America/Maceio
+    2419, // America/Managua
+    2435, // America/Manaus
+    2450, // America/Marigot
+    2466, // America/Martinique
+    2485, // America/Matamoros
+    2503, // America/Mazatlan
+    2520, // America/Menominee
+    2538, // America/Merida
+    2553, // America/Metlakatla
+    2572, // America/Mexico_City
+    2592, // America/Miquelon
+    2609, // America/Moncton
+    2625, // America/Monterrey
+    2643, // America/Montevideo
+    2662, // America/Montserrat
+    2681, // America/Nassau
+    2696, // America/New_York
+    2713, // America/Nipigon
+    2729, // America/Nome
+    2742, // America/Noronha
+    2758, // America/North_Dakota/Beulah
+    2786, // America/North_Dakota/Center
+    2814, // America/North_Dakota/New_Salem
+    2845, // America/Nuuk
+    2858, // America/Ojinaga
+    2874, // America/Panama
+    2889, // America/Pangnirtung
+    2909, // America/Paramaribo
+    2928, // America/Phoenix
+    2944, // America/Port-au-Prince
+    2967, // America/Port_of_Spain
+    2989, // America/Porto_Velho
+    3009, // America/Puerto_Rico
+    3029, // America/Punta_Arenas
+    3050, // America/Rainy_River
+    3070, // America/Rankin_Inlet
+    3091, // America/Recife
+    3106, // America/Regina
+    3121, // America/Resolute
+    3138, // America/Rio_Branco
+    3157, // America/Santarem
+    3174, // America/Santiago
+    3191, // America/Santo_Domingo
+    3213, // America/Sao_Paulo
+    3231, // America/Scoresbysund
+    3252, // America/Sitka
+    3266, // America/St_Barthelemy
+    3288, // America/St_Johns
+    3305, // America/St_Kitts
+    3322, // America/St_Lucia
+    3339, // America/St_Thomas
+    3357, // America/St_Vincent
+    3376, // America/Swift_Current
+    3398, // America/Tegucigalpa
+    3418, // America/Thule
+    3432, // America/Thunder_Bay
+    3452, // America/Tijuana
+    3468, // America/Toronto
+    3484, // America/Tortola
+    3500, // America/Vancouver
+    3518, // America/Whitehorse
+    3537, // America/Winnipeg
+    3554, // America/Yakutat
+    3570, // America/Yellowknife
+    3590, // Antarctica/Casey
+    3607, // Antarctica/Davis
+    3624, // Antarctica/DumontDUrville
+    3650, // Antarctica/Macquarie
+    3671, // Antarctica/Mawson
+    3689, // Antarctica/McMurdo
+    3708, // Antarctica/Palmer
+    3726, // Antarctica/Rothera
+    3745, // Antarctica/Syowa
+    3762, // Antarctica/Troll
+    3779, // Antarctica/Vostok
+    3797, // Arctic/Longyearbyen
+    3817, // Asia/Aden
+    3827, // Asia/Almaty
+    3839, // Asia/Amman
+    3850, // Asia/Anadyr
+    3862, // Asia/Aqtau
+    3873, // Asia/Aqtobe
+    3885, // Asia/Ashgabat
+    3899, // Asia/Atyrau
+    3911, // Asia/Baghdad
+    3924, // Asia/Bahrain
+    3937, // Asia/Baku
+    3947, // Asia/Bangkok
+    3960, // Asia/Barnaul
+    3973, // Asia/Beijing
+    3986, // Asia/Beirut
+    3998, // Asia/Bishkek
+    4011, // Asia/Brunei
+    4023, // Asia/Chita
+    4034, // Asia/Choibalsan
+    4050, // Asia/Colombo
+    4063, // Asia/Damascus
+    4077, // Asia/Dhaka
+    4088, // Asia/Dili
+    4098, // Asia/Dubai
+    4109, // Asia/Dushanbe
+    4123, // Asia/Famagusta
+    4138, // Asia/Gaza
+    4148, // Asia/Hebron
+    4160, // Asia/Ho_Chi_Minh
+    4177, // Asia/Hong_Kong
+    4192, // Asia/Hovd
+    4202, // Asia/Irkutsk
+    4215, // Asia/Jakarta
+    4228, // Asia/Jayapura
+    4242, // Asia/Jerusalem
+    4257, // Asia/Kabul
+    4268, // Asia/Kamchatka
+    4283, // Asia/Karachi
+    4296, // Asia/Kathmandu
+    4311, // Asia/Khandyga
+    4325, // Asia/Kolkata
+    4338, // Asia/Krasnoyarsk
+    4355, // Asia/Kuala_Lumpur
+    4373, // Asia/Kuching
+    4386, // Asia/Kuwait
+    4398, // Asia/Macau
+    4409, // Asia/Magadan
+    4422, // Asia/Makassar
+    4436, // Asia/Manila
+    4448, // Asia/Muscat
+    4460, // Asia/Nicosia
+    4473, // Asia/Novokuznetsk
+    4491, // Asia/Novosibirsk
+    4508, // Asia/Omsk
+    4518, // Asia/Oral
+    4528, // Asia/Phnom_Penh
+    4544, // Asia/Pontianak
+    4559, // Asia/Pyongyang
+    4574, // Asia/Qatar
+    4585, // Asia/Qostanay
+    4599, // Asia/Qyzylorda
+    4614, // Asia/Riyadh
+    4626, // Asia/Sakhalin
+    4640, // Asia/Samarkand
+    4655, // Asia/Seoul
+    4666, // Asia/Shanghai
+    4680, // Asia/Singapore
+    4695, // Asia/Srednekolymsk
+    4714, // Asia/Taipei
+    4726, // Asia/Tashkent
+    4740, // Asia/Tbilisi
+    4753, // Asia/Tehran
+    4765, // Asia/Thimphu
+    4778, // Asia/Tokyo
+    4789, // Asia/Tomsk
+    4800, // Asia/Ulaanbaatar
+    4817, // Asia/Urumqi
+    4829, // Asia/Ust-Nera
+    4843, // Asia/Vientiane
+    4858, // Asia/Vladivostok
+    4875, // Asia/Yakutsk
+    4888, // Asia/Yangon
+    4900, // Asia/Yekaterinburg
+    4919, // Asia/Yerevan
+    4932, // Atlantic/Azores
+    4948, // Atlantic/Bermuda
+    4965, // Atlantic/Canary
+    4981, // Atlantic/Cape_Verde
+    5001, // Atlantic/Faroe
+    5016, // Atlantic/Madeira
+    5033, // Atlantic/Reykjavik
+    5052, // Atlantic/South_Georgia
+    5075, // Atlantic/St_Helena
+    5094, // Atlantic/Stanley
+    5111, // Australia/Adelaide
+    5130, // Australia/Brisbane
+    5149, // Australia/Broken_Hill
+    5171, // Australia/Currie
+    5188, // Australia/Darwin
+    5205, // Australia/Eucla
+    5221, // Australia/Hobart
+    5238, // Australia/Lindeman
+    5257, // Australia/Lord_Howe
+    5277, // Australia/Melbourne
+    5297, // Australia/Perth
+    5313, // Australia/Sydney
+    5330, // Europe/Amsterdam
+    5347, // Europe/Andorra
+    5362, // Europe/Astrakhan
+    5379, // Europe/Athens
+    5393, // Europe/Belgrade
+    5409, // Europe/Berlin
+    5423, // Europe/Bratislava
+    5441, // Europe/Brussels
+    5457, // Europe/Bucharest
+    5474, // Europe/Budapest
+    5490, // Europe/Busingen
+    5506, // Europe/Chisinau
+    5522, // Europe/Copenhagen
+    5540, // Europe/Dublin
+    5554, // Europe/Gibraltar
+    5571, // Europe/Guernsey
+    5587, // Europe/Helsinki
+    5603, // Europe/Isle_of_Man
+    5622, // Europe/Istanbul
+    5638, // Europe/Jersey
+    5652, // Europe/Kaliningrad
+    5671, // Europe/Kiev
+    5683, // Europe/Kirov
+    5696, // Europe/Lisbon
+    5710, // Europe/Ljubljana
+    5727, // Europe/London
+    5741, // Europe/Luxembourg
+    5759, // Europe/Madrid
+    5773, // Europe/Malta
+    5786, // Europe/Mariehamn
+    5803, // Europe/Minsk
+    5816, // Europe/Monaco
+    5830, // Europe/Moscow
+    5844, // Europe/Oslo
+    5856, // Europe/Paris
+    5869, // Europe/Podgorica
+    5886, // Europe/Prague
+    5900, // Europe/Riga
+    5912, // Europe/Rome
+    5924, // Europe/Samara
+    5938, // Europe/San_Marino
+    5956, // Europe/Sarajevo
+    5972, // Europe/Saratov
+    5987, // Europe/Simferopol
+    6005, // Europe/Skopje
+    6019, // Europe/Sofia
+    6032, // Europe/Stockholm
+    6049, // Europe/Tallinn
+    6064, // Europe/Tirane
+    6078, // Europe/Ulyanovsk
+    6095, // Europe/Uzhgorod
+    6111, // Europe/Vaduz
+    6124, // Europe/Vatican
+    6139, // Europe/Vienna
+    6153, // Europe/Vilnius
+    6168, // Europe/Volgograd
+    6185, // Europe/Warsaw
+    6199, // Europe/Zagreb
+    6213, // Europe/Zaporozhye
+    6231, // Europe/Zurich
+    6245, // Indian/Antananarivo
+    6265, // Indian/Chagos
+    6279, // Indian/Christmas
+    6296, // Indian/Cocos
+    6309, // Indian/Comoro
+    6323, // Indian/Kerguelen
+    6340, // Indian/Mahe
+    6352, // Indian/Maldives
+    6368, // Indian/Mauritius
+    6385, // Indian/Mayotte
+    6400, // Indian/Reunion
+    6415, // Pacific/Apia
+    6428, // Pacific/Auckland
+    6445, // Pacific/Bougainville
+    6466, // Pacific/Chatham
+    6482, // Pacific/Chuuk
+    6496, // Pacific/Easter
+    6511, // Pacific/Efate
+    6525, // Pacific/Enderbury
+    6543, // Pacific/Fakaofo
+    6559, // Pacific/Fiji
+    6572, // Pacific/Funafuti
+    6589, // Pacific/Galapagos
+    6607, // Pacific/Gambier
+    6623, // Pacific/Guadalcanal
+    6643, // Pacific/Guam
+    6656, // Pacific/Honolulu
+    6673, // Pacific/Kiritimati
+    6692, // Pacific/Kosrae
+    6707, // Pacific/Kwajalein
+    6725, // Pacific/Majuro
+    6740, // Pacific/Marquesas
+    6758, // Pacific/Midway
+    6773, // Pacific/Nauru
+    6787, // Pacific/Niue
+    6800, // Pacific/Norfolk
+    6816, // Pacific/Noumea
+    6831, // Pacific/Pago_Pago
+    6849, // Pacific/Palau
+    6863, // Pacific/Pitcairn
+    6880, // Pacific/Pohnpei
+    6896, // Pacific/Port_Moresby
+    6917, // Pacific/Rarotonga
+    6935, // Pacific/Saipan
+    6950, // Pacific/Tahiti
+    6965, // Pacific/Tarawa
+    6980, // Pacific/Tongatapu
+    6998, // Pacific/Wake
+    7011, // Pacific/Wallis
 };
 
 static constexpr const CountryTimezoneMap country_timezone_map[] = {
@@ -855,6 +879,7 @@ static constexpr const CountryTimezoneMap country_timezone_map[] = {
     { CountryId{"AL"}, Tz::Europe_Tirane },
     { CountryId{"AM"}, Tz::Asia_Yerevan },
     { CountryId{"AO"}, Tz::Africa_Luanda },
+    { CountryId{"AR"}, Tz::America_Argentina_Buenos_Aires },
     { CountryId{"AS"}, Tz::Pacific_Pago_Pago },
     { CountryId{"AT"}, Tz::Europe_Vienna },
     { CountryId{"AW"}, Tz::America_Aruba },
@@ -1176,7 +1201,6 @@ static constexpr const CountryId timezone_country_map[] = {
     CountryId{"CA"}, // America/Fort_Nelson
     CountryId{"BR"}, // America/Fortaleza
     CountryId{"CA"}, // America/Glace_Bay
-    CountryId{}, // America/Godthab
     CountryId{"CA"}, // America/Goose_Bay
     CountryId{"TC"}, // America/Grand_Turk
     CountryId{"GD"}, // America/Grenada
@@ -1230,6 +1254,7 @@ static constexpr const CountryId timezone_country_map[] = {
     CountryId{"US"}, // America/North_Dakota/Beulah
     CountryId{"US"}, // America/North_Dakota/Center
     CountryId{"US"}, // America/North_Dakota/New_Salem
+    CountryId{"GL"}, // America/Nuuk
     CountryId{"MX"}, // America/Ojinaga
     CountryId{"PA"}, // America/Panama
     CountryId{"CA"}, // America/Pangnirtung
@@ -1270,7 +1295,17 @@ static constexpr const CountryId timezone_country_map[] = {
     CountryId{"CA"}, // America/Winnipeg
     CountryId{"US"}, // America/Yakutat
     CountryId{"CA"}, // America/Yellowknife
+    CountryId{"AQ"}, // Antarctica/Casey
+    CountryId{"AQ"}, // Antarctica/Davis
+    CountryId{"AQ"}, // Antarctica/DumontDUrville
     CountryId{"AU"}, // Antarctica/Macquarie
+    CountryId{"AQ"}, // Antarctica/Mawson
+    CountryId{"AQ"}, // Antarctica/McMurdo
+    CountryId{"AQ"}, // Antarctica/Palmer
+    CountryId{"AQ"}, // Antarctica/Rothera
+    CountryId{"AQ"}, // Antarctica/Syowa
+    CountryId{"AQ"}, // Antarctica/Troll
+    CountryId{"AQ"}, // Antarctica/Vostok
     CountryId{"SJ"}, // Arctic/Longyearbyen
     CountryId{"YE"}, // Asia/Aden
     CountryId{"KZ"}, // Asia/Almaty
@@ -1285,6 +1320,7 @@ static constexpr const CountryId timezone_country_map[] = {
     CountryId{"AZ"}, // Asia/Baku
     CountryId{"TH"}, // Asia/Bangkok
     CountryId{"RU"}, // Asia/Barnaul
+    CountryId{"CN"}, // Asia/Beijing
     CountryId{"LB"}, // Asia/Beirut
     CountryId{"KG"}, // Asia/Bishkek
     CountryId{"BN"}, // Asia/Brunei
@@ -1330,6 +1366,7 @@ static constexpr const CountryId timezone_country_map[] = {
     CountryId{"ID"}, // Asia/Pontianak
     CountryId{"KP"}, // Asia/Pyongyang
     CountryId{"QA"}, // Asia/Qatar
+    CountryId{"KZ"}, // Asia/Qostanay
     CountryId{"KZ"}, // Asia/Qyzylorda
     CountryId{"SA"}, // Asia/Riyadh
     CountryId{"RU"}, // Asia/Sakhalin

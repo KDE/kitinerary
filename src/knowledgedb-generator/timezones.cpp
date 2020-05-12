@@ -47,7 +47,6 @@ Timezones::Timezones()
         if (tzName.isEmpty()) {
             continue;
         }
-        m_zones.push_back(tzName);
 
         QColor c;
         c.setRed(split.at(0).toInt());
@@ -57,14 +56,6 @@ Timezones::Timezones()
             qWarning() << "Color collision on timezones:" << m_colorMap.value(c.rgb()) << split.at(4).trimmed();
         }
         m_colorMap.insert(c.rgb(), split.at(4).trimmed());
-    }
-
-    std::sort(m_zones.begin(), m_zones.end());
-    m_zoneOffsets.reserve(m_zones.size());
-    uint16_t offset = 0;
-    for (const auto &tz : m_zones) {
-        m_zoneOffsets.push_back(offset);
-        offset += tz.size() + 1; // +1 of the trailing null byte
     }
 
     // load the wold file for correcting the pixel to coordinate mapping in the timezone image
@@ -108,6 +99,8 @@ Timezones::Timezones()
 
         const auto countries = cols.at(0).split(QLatin1Char(','));
         const auto tzName = cols.at(2).toUtf8();
+
+        m_zones.push_back(tzName);
         for (const auto &country : countries) {
             m_countryZones[country].push_back(tzName);
         }
@@ -118,6 +111,14 @@ Timezones::Timezones()
                 m_countryForZone[tzName] = countries[0];
             }
         }
+    }
+
+    std::sort(m_zones.begin(), m_zones.end());
+    m_zoneOffsets.reserve(m_zones.size());
+    uint16_t offset = 0;
+    for (const auto &tz : m_zones) {
+        m_zoneOffsets.push_back(offset);
+        offset += tz.size() + 1; // +1 of the trailing null byte
     }
 
     /* Manual overrides for countries that de-facto only have a single timezone,
