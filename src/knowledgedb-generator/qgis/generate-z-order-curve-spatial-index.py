@@ -23,8 +23,10 @@ zDepth = 11 # minimum tile size is 1/(2^zdepth), amount of bits needed to store 
 #
 xStart = -180
 xRange = 360
-yStart = -90
-yRange = 180
+# cut out artic regions (starting at 65°S and 80°N), that saves about 20% z-order curve coverage which we
+# can better use to increase precision in more relevant areas
+yStart = -65
+yRange = 145
 
 xStep = xRange / (1 << zDepth)
 yStep = yRange / (1 << zDepth)
