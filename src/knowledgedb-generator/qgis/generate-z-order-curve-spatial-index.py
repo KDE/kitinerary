@@ -103,7 +103,7 @@ class SpatialIndexerSubTask(QgsTask):
                     for f in layerFeatures:
                         featureArea = f.geometry().intersection(rectGeo).area()
                         feature.append((f['tzid'], featureArea / rectGeo.area()))
-                    feature = self.normalizeAndFilter(feature)
+                feature = self.normalizeAndFilter(feature)
 
                 # if there's a change to the previous value, propagate to the result output
                 if self.lastFeature != feature and feature != []:
@@ -112,10 +112,17 @@ class SpatialIndexerSubTask(QgsTask):
 
             z += zIncrement
 
+    def isValidFeature(self, f):
+        return not f.startswith("Etc/")
+
     def normalizeAndFilter(self, r):
         if len(r) == 0:
             return r
         r = list(filter(lambda x: x[1] > featureAreaRatioThreshold, r))
+        r = list(filter(lambda x: self.isValidFeature(x[0]), r))
+
+        if len(r) < 1:
+            return r
         n = functools.reduce(lambda n, f: n + f[1], r, 0)
         r = [(k, v/n) for (k, v) in r]
         r.sort(key = lambda x: x[1], reverse = True)
