@@ -50,13 +50,20 @@ namespace KnowledgeDb {
     /** Returns the timezone for the given coordinate.
      *  The result can be @c Tz::Undefined if this cannot be clearly determined.
      */
-    KITINERARY_EXPORT Tz timezoneForCoordinate(float lat, float lon);
+    KITINERARY_EXPORT Tz timezoneForCoordinate(float lat, float lon, bool *ambiguous = nullptr);
 
     /** Returns the timezone for the given location consisting of coordinates and country.
      *  This combines the results of the two above individual queries
      *  to obtain better results close to borders.
      */
     KITINERARY_EXPORT Tz timezoneForLocation(float lat, float lon, CountryId country);
+
+    /** Returns the country for the given coordinate.
+     *  The result will be the country identifier only if the underlying
+     *  spatial index has no ambiguity at the requested locations, ie. this
+     *  will return less results than timezoneForCoordinate() for example.
+     */
+    KITINERARY_EXPORT CountryId countryForCoordinate(float lat, float lon);
 #endif
 }
 }

@@ -53,7 +53,7 @@ KnowledgeDb::CountryId KnowledgeDb::countryForTimezone(KnowledgeDb::Tz tz)
 }
 
 #if 0
-KnowledgeDb::Tz KnowledgeDb::timezoneForCoordinate(float lat, float lon)
+KnowledgeDb::Tz KnowledgeDb::timezoneForCoordinate(float lat, float lon, bool *ambiguous)
 {
     // see arctic latitude filter in the generator script, we only cover 65°S to 80°N
     if (lat < -65.0f || lat > 80.0f) {
@@ -73,6 +73,9 @@ KnowledgeDb::Tz KnowledgeDb::timezoneForCoordinate(float lat, float lon)
     const auto it = std::upper_bound(std::begin(timezone_index), std::end(timezone_index), z);
     if (it == std::begin(timezone_index)) {
         return Tz::Undefined;
+    }
+    if (ambiguous) {
+        *ambiguous = (*std::prev(it)).isAmbiguous;
     }
     return (*std::prev(it)).tz;
 }
@@ -107,7 +110,8 @@ static bool isEquivalentTimezone(const QTimeZone &lhs, const QTimeZone &rhs)
 
 KnowledgeDb::Tz KnowledgeDb::timezoneForLocation(float lat, float lon, CountryId country)
 {
-    const auto coordTz = timezoneForCoordinate(lat, lon);
+    bool ambiguous = false;
+    const auto coordTz = timezoneForCoordinate(lat, lon, &ambiguous);
     const auto countryTz = timezoneForCountry(country);
     const auto countryFromCoord = countryForTimezone(coordTz);
 
@@ -150,11 +154,21 @@ KnowledgeDb::Tz KnowledgeDb::timezoneForLocation(float lat, float lon, CountryId
 
     // if the coordinate-based timezone is also in @p country, that takes precedence
     // example: the various AR sub-zones, or the MY sub-zone
-    if (country == countryFromCoord) {
+    if (country == countryFromCoord || !ambiguous) {
         return coordTz;
     }
 
     // if both timezones are equivalent, the country-based one wins, otherwise we use the coordinate one
     return isEquivalentTimezone(toQTimeZone(coordTz), toQTimeZone(countryTz)) ? countryTz : coordTz;
+}
+
+KnowledgeDb::CountryId KnowledgeDb::countryForCoordinate(float lat, float lon)
+{
+    bool ambiguous = false;
+    const auto tz = timezoneForCoordinate(lat, lon, &ambiguous);
+    if (!ambiguous) {
+        return countryForTimezone(tz);
+    }
+    return {};
 }
 #endif

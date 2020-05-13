@@ -41,7 +41,10 @@ inline constexpr bool operator<(const CountryTimezoneMap lhs, const CountryId rh
 struct TimezoneZIndexEntry {
     uint32_t z: 22;
     Tz tz: 9;
+    bool isAmbiguous: 1;
 };
+
+static_assert(sizeof(TimezoneZIndexEntry) == 4, "structure is size-sensitive");
 
 inline constexpr bool operator<(uint32_t lhs, TimezoneZIndexEntry rhs)
 {

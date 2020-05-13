@@ -176,12 +176,15 @@ namespace KnowledgeDb {
             out.write('static constexpr TimezoneZIndexEntry timezone_index[] = {\n')
 
             prevFeature = ""
+            prevAmbiguous = False
             for task in self.tasks:
                 for (z,res) in task.result:
                     feature = ""
 
+                    isAmbiguous = False
                     if len(res) > 1:
                         self.conflictTiles += 1
+                        isAmbiguous = True
                     if len(res) > 1 and self.isConflict(res):
                         feature = "Undefined"
                         self.hardConflictTiles += 1
@@ -189,10 +192,14 @@ namespace KnowledgeDb {
                         feature = res[0][0].replace('/', '_').replace('-', '_')
                     coverage = res[0][1]
 
-                    if prevFeature == feature:
+                    if prevFeature == feature and prevAmbiguous == isAmbiguous:
                         continue
                     prevFeature = feature
-                    out.write("    { " + str(z) + ", Tz::" + feature + " }, // " + str(coverage) + "\n")
+                    prevAmbiguous = isAmbiguous
+                    if isAmbiguous:
+                        out.write("    { " + str(z) + ", Tz::" + feature + ", true }, // " + str(coverage) + "\n")
+                    else:
+                        out.write("    { " + str(z) + ", Tz::" + feature + ", false },\n")
 
             out.write("};\n}\n}\n")
             out.close()
