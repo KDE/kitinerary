@@ -219,7 +219,8 @@ namespace KnowledgeDb {
         try:
             # hacky tz comparison, lacking access to the rules for comparing actual DST transition times
             dt = datetime.datetime.today().toordinal()
-            return all(lhs.utcoffset(datetime.datetime.fromordinal(dt + 30*x)) == rhs.utcoffset(datetime.datetime.fromordinal(dt + 30*x)) for x in range(0, 11))
+            return all(lhs.utcoffset(datetime.datetime.fromordinal(dt + 30*x)) == rhs.utcoffset(datetime.datetime.fromordinal(dt + 30*x))
+                   and lhs.tzname(datetime.datetime.fromordinal(dt + 30*x)) == rhs.tzname(datetime.datetime.fromordinal(dt + 30*x)) for x in range(0, 11))
         except:
             return False
 
