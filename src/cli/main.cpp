@@ -176,7 +176,12 @@ int main(int argc, char** argv)
         engine.setContextDate(contextDt);
 
         if (!parser.value(extOpt).isEmpty()) {
-            const auto extNames = parser.value(extOpt).split(QLatin1Char(';'), QString::SkipEmptyParts);
+            const auto extNames = parser.value(extOpt).split(QLatin1Char(';'),
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+                                                             QString::SkipEmptyParts);
+#else
+                                                             Qt::SkipEmptyParts);
+#endif
             std::vector<Extractor> exts;
             exts.reserve(extNames.size());
             for (const auto &name : extNames) {
