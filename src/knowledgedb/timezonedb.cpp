@@ -56,14 +56,14 @@ KnowledgeDb::CountryId KnowledgeDb::countryForTimezone(KnowledgeDb::Tz tz)
 KnowledgeDb::Tz KnowledgeDb::timezoneForCoordinate(float lat, float lon, bool *ambiguous)
 {
     // see arctic latitude filter in the generator script, we only cover 65°S to 80°N
-    if (lat < -65.0f || lat > 80.0f) {
+    if (lat < timezone_index_params.yStart || lat > timezone_index_params.yEnd()) {
         return Tz::Undefined;
     }
 
-    const uint32_t x = ((lon + 180.0) / 360.0) * (1 << timezone_index_zDepth);
-    const uint32_t y = ((lat + 65.0) / 145.0) * (1 << timezone_index_zDepth);
+    const uint32_t x = ((lon - timezone_index_params.xStart) / timezone_index_params.xRange) * (1 << timezone_index_params.zDepth);
+    const uint32_t y = ((lat - timezone_index_params.yStart) / timezone_index_params.yRange) * (1 << timezone_index_params.zDepth);
     uint32_t z = 0;
-    for (int i = timezone_index_zDepth - 1; i >= 0; --i) {
+    for (int i = timezone_index_params.zDepth - 1; i >= 0; --i) {
         z <<= 1;
         z += (y & (1 << i)) ? 1 : 0;
         z <<= 1;

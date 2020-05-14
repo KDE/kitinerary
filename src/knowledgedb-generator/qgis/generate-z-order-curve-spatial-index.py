@@ -172,7 +172,8 @@ namespace KItinerary {
 namespace KnowledgeDb {
 
 """)
-            out.write('static constexpr uint8_t timezone_index_zDepth = ' + str(zDepth) + ';\n\n')
+            out.write('static constexpr const TimezoneZIndexParams timezone_index_params = {{ {xStart}, {xRange}, {yStart}, {yRange}, {zDepth} }};\n\n'
+               .format(xStart = xStart, xRange = xRange, yStart = yStart, yRange = yRange, zDepth = zDepth));
             out.write('static constexpr TimezoneZIndexEntry timezone_index[] = {\n')
 
             prevFeature = ""
