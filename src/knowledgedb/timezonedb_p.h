@@ -45,7 +45,7 @@ struct TimezoneZIndexParams {
     float   yRange;
     uint8_t zDepth;
 
-    constexpr inline float yEnd() const { return xStart + xRange; }
+    constexpr inline float yEnd() const { return yStart + yRange; }
 };
 
 // geo coordinate to timezone index entry
