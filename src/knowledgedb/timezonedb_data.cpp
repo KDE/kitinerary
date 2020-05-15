@@ -1318,7 +1318,7 @@ static constexpr const CountryId timezone_country_map[] = {
     CountryId{"IQ"}, // Asia/Baghdad
     CountryId{"BH"}, // Asia/Bahrain
     CountryId{"AZ"}, // Asia/Baku
-    CountryId{"TH"}, // Asia/Bangkok
+    CountryId{}, // Asia/Bangkok
     CountryId{"RU"}, // Asia/Barnaul
     CountryId{"CN"}, // Asia/Beijing
     CountryId{"LB"}, // Asia/Beirut
@@ -1456,7 +1456,7 @@ static constexpr const CountryId timezone_country_map[] = {
     CountryId{"SM"}, // Europe/San_Marino
     CountryId{"BA"}, // Europe/Sarajevo
     CountryId{"RU"}, // Europe/Saratov
-    CountryId{"UA"}, // Europe/Simferopol
+    CountryId{}, // Europe/Simferopol
     CountryId{"MK"}, // Europe/Skopje
     CountryId{"BG"}, // Europe/Sofia
     CountryId{"SE"}, // Europe/Stockholm

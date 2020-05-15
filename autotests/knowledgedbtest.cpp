@@ -228,10 +228,11 @@ private Q_SLOTS:
     {
         using namespace KnowledgeDb;
 
-        qDebug() << countryForTimezone(Tz::Europe_Busingen).toString();
         QCOMPARE(countryForTimezone(Tz::Europe_Busingen), CountryId{"DE"});
         QCOMPARE(countryForTimezone(Tz::America_Los_Angeles), CountryId{"US"});
         QCOMPARE(countryForTimezone(Tz::Asia_Kuching), CountryId{"MY"});
+        QCOMPARE(countryForTimezone(Tz::Asia_Bangkok), CountryId{});
+        QCOMPARE(countryForTimezone(Tz::Asia_Ho_Chi_Minh), CountryId{"VN"});
     }
 
     void testUICCountryCodeLookup()

@@ -124,10 +124,15 @@ Timezones::Timezones()
     /* Manual overrides for countries that de-facto only have a single timezone,
      * even if the IANA database doesn't reflect that.
     */
+    m_countryZones[QStringLiteral("AR")] = { "America/Argentina/Buenos_Aires" };
     m_countryZones[QStringLiteral("CN")] = { "Asia/Shanghai" };
     m_countryZones[QStringLiteral("CY")] = { "Asia/Nicosia" };
     m_countryZones[QStringLiteral("DE")] = { "Europe/Berlin" };
     m_countryZones[QStringLiteral("MY")] = { "Asia/Kuala_Lumpur" };
+
+    /* Manual overrides for timezones that do not belong to a unique country, contrary what zonetab claims. */
+    setCountryForZone("Asia/Bangkok", {}); // also used in northern Vietnam
+    setCountryForZone("Europe/Simferopol", {}); // disputed area
 }
 
 Timezones::~Timezones() = default;
@@ -209,4 +214,13 @@ QPoint Timezones::coordinateToPixel(KnowledgeDb::Coordinate coord) const
     p.setX(qRound((coord.longitude - m_topLeftMapUnitX) / m_xMapUnitsPerPixel));
     p.setY(qRound((coord.latitude - m_topLeftMapUnitY) / m_yMapUnitsPerPixel));
     return p;
+}
+
+void Timezones::setCountryForZone(const QByteArray &tz, const QString &country)
+{
+    auto it = m_countryForZone.find(tz);
+    if (it == m_countryForZone.end()) {
+        return;
+    }
+    (*it).second = country;
 }

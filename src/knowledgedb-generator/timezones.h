@@ -47,6 +47,8 @@ private:
     QPoint coordinateToPixel(KnowledgeDb::Coordinate coord) const;
     QByteArray timezoneForPixel(int x, int y) const;
 
+    void setCountryForZone(const QByteArray &tz, const QString &country);
+
     mutable QImage m_map;
     QHash<QRgb, QByteArray> m_colorMap;
     double m_xMapUnitsPerPixel;
