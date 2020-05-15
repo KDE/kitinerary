@@ -18,7 +18,7 @@
 #include "timezonedb.h"
 #include "timezonedb_p.h"
 #include "timezonedb_data.cpp"
-// #include "timezone_zindex.cpp"
+#include "timezone_zindex.cpp"
 
 #include <QTimeZone>
 
@@ -52,7 +52,6 @@ KnowledgeDb::CountryId KnowledgeDb::countryForTimezone(KnowledgeDb::Tz tz)
     return timezone_country_map[static_cast<std::underlying_type<KnowledgeDb::Tz>::type>(tz)];
 }
 
-#if 0
 KnowledgeDb::Tz KnowledgeDb::timezoneForCoordinate(float lat, float lon, bool *ambiguous)
 {
     // see arctic latitude filter in the generator script, we only cover 65°S to 80°N
@@ -171,4 +170,3 @@ KnowledgeDb::CountryId KnowledgeDb::countryForCoordinate(float lat, float lon)
     }
     return {};
 }
-#endif

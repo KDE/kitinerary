@@ -46,7 +46,6 @@ namespace KnowledgeDb {
      */
     KITINERARY_EXPORT CountryId countryForTimezone(Tz tz);
 
-#if 0
     /** Returns the timezone for the given coordinate.
      *  The result can be @c Tz::Undefined if this cannot be clearly determined.
      */
@@ -64,7 +63,6 @@ namespace KnowledgeDb {
      *  will return less results than timezoneForCoordinate() for example.
      */
     KITINERARY_EXPORT CountryId countryForCoordinate(float lat, float lon);
-#endif
 }
 }
 
