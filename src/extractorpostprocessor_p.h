@@ -36,6 +36,7 @@ class EventReservation;
 class Flight;
 class FlightReservation;
 class FoodEstablishmentReservation;
+class GeoCoordinates;
 class LodgingReservation;
 class Person;
 class PostalAddress;
@@ -74,7 +75,7 @@ public:
     template <typename T> T processReservation(T res) const;
     Person processPerson(Person person) const;
     template <typename T> static T processPlace(T place);
-    static PostalAddress processAddress(PostalAddress addr, const QString &phoneNumber);
+    static PostalAddress processAddress(PostalAddress addr, const QString &phoneNumber, const GeoCoordinates &geo);
     static QString processPhoneNumber(const QString &phoneNumber, const PostalAddress &addr);
     QVariantList processActions(QVariantList actions) const;
     template <typename T> QDateTime processTimeForLocation(QDateTime dt, const T &place) const;
@@ -89,7 +90,7 @@ public:
 template<typename T> inline T ExtractorPostprocessorPrivate::processPlace(T place)
 {
     place.setName(place.name().simplified());
-    auto addr = processAddress(place.address(), place.telephone());
+    auto addr = processAddress(place.address(), place.telephone(), place.geo());
     place.setAddress(addr);
     place.setTelephone(processPhoneNumber(place.telephone(), place.address()));
     return place;

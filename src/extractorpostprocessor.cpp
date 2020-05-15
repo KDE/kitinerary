@@ -442,7 +442,7 @@ Person ExtractorPostprocessorPrivate::processPerson(Person person) const
     return person;
 }
 
-PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, const QString &phoneNumber)
+PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, const QString &phoneNumber, const GeoCoordinates &geo)
 {
     // convert to ISO 3166-1 alpha-2 country codes
     if (addr.addressCountry().size() > 2) {
@@ -484,6 +484,13 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
         }
     }
 #endif
+
+    if (geo.isValid() && addr.addressCountry().isEmpty()) {
+        const auto isoCode = KnowledgeDb::countryForCoordinate(geo.latitude(), geo.longitude());
+        if (isoCode.isValid()) {
+            addr.setAddressCountry(isoCode.toString());
+        }
+    }
 
     addr = ExtractorUtil::extractPostalCode(addr);
     return addr;
@@ -565,7 +572,8 @@ QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, co
 
     QTimeZone tz;
     if (!place.address().addressCountry().isEmpty()) {
-        tz = KnowledgeDb::toQTimeZone(KnowledgeDb::timezoneForCountry(KnowledgeDb::CountryId{place.address().addressCountry()}));
+        tz = KnowledgeDb::toQTimeZone(KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(),
+                                                                       KnowledgeDb::CountryId{place.address().addressCountry()}));
     }
     if (!tz.isValid()) {
         return dt;

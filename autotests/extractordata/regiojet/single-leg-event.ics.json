@@ -16,6 +16,10 @@
             "departureDay": "2019-01-02",
             "departureStation": {
                 "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "AT"
+                },
                 "geo": {
                     "@type": "GeoCoordinates",
                     "latitude": 48.18522644042969,
