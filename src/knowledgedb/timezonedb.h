@@ -30,7 +30,7 @@ class QTimeZone;
 namespace KItinerary {
 namespace KnowledgeDb {
     /** Returns the IANA timezone id for @p tz. */
-    const char* tzId(Tz tz);
+    KITINERARY_EXPORT const char* tzId(Tz tz);
 
     /** Returns the corresponding QTimeZone. */
     KITINERARY_EXPORT QTimeZone toQTimeZone(Tz tz);
