@@ -57,7 +57,6 @@ private:
     bool fetchAirports();
     bool fetchCountries();
     void merge(Airport &lhs, const Airport &rhs);
-    void lookupTimezones();
     void improveCoordinates();
     void indexNames();
 
@@ -65,8 +64,6 @@ private:
     QMap<QString, QUrl> m_iataMap;
     // mapping IATA codes to indexed string fragments
     QMap<QString, QVector<QString>> m_labelMap;
-
-    Timezones m_tzDb;
 
     int m_iataCollisions = 0;
     int m_coordinateConflicts = 0;

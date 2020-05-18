@@ -38,7 +38,7 @@ namespace KnowledgeDb {
 struct Airport {
     IataCode iataCode;
     CountryId country;
-    Tz timezone;
+    Coordinate coordinate;
 };
 
 /** Returns the geographical coordinates the airport with IATA code @p iataCode is in. */

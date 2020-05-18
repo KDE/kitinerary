@@ -219,21 +219,6 @@ bool AirportDbGenerator::fetchCountries()
     return true;
 }
 
-void AirportDbGenerator::lookupTimezones()
-{
-    for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
-        if (!(*it).coord.isValid()) {
-            qDebug() << "Airport has no geo coordinate:" << (*it).label << (*it).iataCode << (*it).uri;
-        }
-        (*it).tz = m_tzDb.timezoneForLocation((*it).country, (*it).coord);
-        if ((*it).tz.isEmpty()) {
-            qDebug() << "Failed to find timezone for" << (*it).iataCode << (*it).label << (*it).country << (*it).coord.latitude << (*it).coord.longitude << (*it).uri;
-            ++m_timezoneLoopupFails;
-            continue;
-        }
-    }
-}
-
 void AirportDbGenerator::improveCoordinates()
 {
     for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
@@ -310,8 +295,7 @@ bool AirportDbGenerator::generate(QIODevice* out)
         return false;
     }
 
-    // step 2 augment the data with timezones and optimized OSM airport positions
-    lookupTimezones();
+    // step 2 augment the data with optimized OSM airport positions
     improveCoordinates();
 
     // step 3 index the names for reverse lookup
@@ -346,25 +330,9 @@ static constexpr Airport airport_table[] = {
         out->write("\"}, ");
         CodeGen::writeCountryIsoCode(out, m_airportMap.value(it.value()).country);
         out->write(", ");
-        CodeGen::writeTimezone(out, m_airportMap.value(it.value()).tz);
+        CodeGen::writeCoordinate(out, m_airportMap.value(it.value()).coord);
         out->write("}, // ");
         out->write(m_airportMap.value(it.value()).label.toUtf8());
-        out->write("\n");
-    }
-    out->write(R"(};
-
-// airport coordinates in latitude/longitude pairs
-// stored out of line of the airport_table to avoid alignment padding
-static constexpr Coordinate coordinate_table[] = {
-)");
-    // airport data tables - coordinates
-    // TODO: should be possible to squeeze into 48 bit per coordinate, as 10m resolution is good enough for us
-    for (auto it = m_iataMap.constBegin(); it != m_iataMap.constEnd(); ++it) {
-        const auto &airport = m_airportMap.value(it.value());
-        out->write("    ");
-        CodeGen::writeCoordinate(out, airport.coord);
-        out->write(", // ");
-        out->write(airport.iataCode.toUtf8());
         out->write("\n");
     }
     out->write(R"(};
@@ -372,7 +340,7 @@ static constexpr Coordinate coordinate_table[] = {
 // reverse name lookup string table for unique strings
 static const char name1_string_table[] =
 )");
-    // TODO prefix compression
+    // TODO suffix compression -> see KPublicTransport, that has generic code for this
     std::vector<Name1Index> string_offsets;
     string_offsets.reserve(m_labelMap.size());
     uint32_t label_offset = 0;

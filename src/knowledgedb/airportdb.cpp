@@ -35,9 +35,6 @@ namespace KnowledgeDb {
 
 static_assert(alignof(Airport) <= sizeof(Airport), "Airport struct alignment too big!");
 
-static constexpr auto airport_table_size = sizeof(airport_table) / sizeof(Airport);
-static_assert(airport_table_size == sizeof(coordinate_table) / sizeof(KnowledgeDb::Coordinate), "Airport coordinate table size mismatch!");
-
 static bool operator<(const Airport &lhs, IataCode rhs)
 {
     return lhs.iataCode < rhs;
@@ -50,7 +47,7 @@ Coordinate coordinateForAirport(IataCode iataCode)
         return {};
     }
 
-    return coordinate_table[std::distance(std::begin(airport_table), it)];
+    return (*it).coordinate;
 }
 
 QTimeZone timezoneForAirport(IataCode iataCode)
@@ -60,7 +57,7 @@ QTimeZone timezoneForAirport(IataCode iataCode)
         return {};
     }
 
-    return KnowledgeDb::toQTimeZone((*it).timezone);
+    return KnowledgeDb::toQTimeZone(KnowledgeDb::timezoneForLocation((*it).coordinate.latitude, (*it).coordinate.longitude, (*it).country));
 }
 
 KnowledgeDb::CountryId countryForAirport(IataCode iataCode)
