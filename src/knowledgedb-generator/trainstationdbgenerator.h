@@ -52,7 +52,7 @@ public:
 private:
     bool fetchIBNR();
     bool fetchUIC();
-    bool fetchGaresConnexions();
+    bool fetchSncf();
     bool fetchIndianRailwaysStationCode();
     bool fetchFinishStationCodes();
     bool fetchCountryInformation();
@@ -61,7 +61,7 @@ private:
     void writeStationData(QIODevice *out);
     void writeIBNRMap(QIODevice *out);
     void writeUICMap(QIODevice *out);
-    void writeGareConnexionMap(QIODevice *out);
+    void writeSncfMap(QIODevice *out);
     void writeIndianRailwaysMap(QIODevice *out);
     void writeVRMap(QIODevice *out);
     void printSummary();
@@ -69,7 +69,7 @@ private:
     std::vector<Station> m_stations;
     std::map<uint32_t, QUrl> m_ibnrMap;
     std::map<uint32_t, QUrl> m_uicMap;
-    std::map<QString, QUrl> m_garesConnexionsIdMap;
+    std::map<QString, QUrl> m_sncfIdMap;
     std::map<QString, QUrl> m_indianRailwaysMap;
     std::map<QString, QUrl> m_vrfiMap;
     Timezones m_tzDb;

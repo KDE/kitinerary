@@ -35,7 +35,7 @@ static_assert(trainstation_table_size < (1 << (sizeof(TrainStationIndex) * 8)), 
 }
 }
 
-GaresConnexionsId::GaresConnexionsId(const QString& id)
+SncfStationId::SncfStationId(const QString& id)
 {
     if (id.size() != 5) {
         return;
@@ -73,14 +73,14 @@ TrainStation KnowledgeDb::stationForUic(UICStation uic)
     return trainstation_table[(*it).stationIndex.value()];
 }
 
-TrainStation KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId garesConnexionsId)
+TrainStation KnowledgeDb::stationForSncfStationId(SncfStationId sncfId)
 {
-    const auto gcIt = std::lower_bound(std::begin(garesConnexionsId_table), std::end(garesConnexionsId_table), garesConnexionsId);
-    if (gcIt == std::end(garesConnexionsId_table) || (*gcIt).stationId != garesConnexionsId) {
+    const auto it = std::lower_bound(std::begin(sncfStationId_table), std::end(sncfStationId_table), sncfId);
+    if (it == std::end(sncfStationId_table) || (*it).stationId != sncfId) {
         return {Coordinate{}, Tz::Undefined, CountryId{}};
     }
 
-    return trainstation_table[(*gcIt).stationIndex.value()];
+    return trainstation_table[(*it).stationIndex.value()];
 }
 
 TrainStation KnowledgeDb::stationForIndianRailwaysStationCode(const QString &code)

@@ -245,7 +245,7 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
     if (id.isEmpty()) { // empty -> null cleanup, to have more compact json-ld output
         station.setIdentifier(QString());
     } else if (id.startsWith(QLatin1String("sncf:")) && id.size() == 10) {
-        const auto record = KnowledgeDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{id.mid(5)});
+        const auto record = KnowledgeDb::stationForSncfStationId(KnowledgeDb::SncfStationId{id.mid(5)});
         applyStationData(record, station);
         applyStationCountry(id.mid(5, 2).toUpper(), station);
     } else if (id.startsWith(QLatin1String("ibnr:")) && id.size() == 12) {
@@ -283,7 +283,7 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, cons
 
     QTimeZone tz;
     if (station.identifier().startsWith(QLatin1String("sncf:"))) {
-        const auto record = KnowledgeDb::stationForGaresConnexionsId(KnowledgeDb::GaresConnexionsId{station.identifier().mid(5)});
+        const auto record = KnowledgeDb::stationForSncfStationId(KnowledgeDb::SncfStationId{station.identifier().mid(5)});
         tz = KnowledgeDb::toQTimeZone(record.timezone);
     } else if (station.identifier().startsWith(QLatin1String("ibnr:"))) {
         const auto record = KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{station.identifier().mid(5).toUInt()});

@@ -77,19 +77,19 @@ class UICStation : public UnalignedNumber<3> {
     using UnalignedNumber<3>::UnalignedNumber;
 };
 
-/** Gares & Connexion ID.
- *  2 letters ISO country code, 5 letters station id, expected to be in upper case.
+/** SNCF station id.
+ *  2 letters ISO country code, 3 letters station id, expected to be in upper case.
  */
-class GaresConnexionsId : public UnalignedNumber<3>
+class SncfStationId : public UnalignedNumber<3>
 {
 public:
-    inline constexpr GaresConnexionsId() = default;
-    inline explicit constexpr GaresConnexionsId(const char s[5])
+    inline constexpr SncfStationId() = default;
+    inline explicit constexpr SncfStationId(const char s[5])
         : UnalignedNumber<3>(fromChars(s))
     {
     }
 
-    KITINERARY_EXPORT explicit GaresConnexionsId(const QString &id);
+    KITINERARY_EXPORT explicit SncfStationId(const QString &id);
 
 private:
     static inline constexpr uint32_t fromChars(const char s[5])
@@ -128,8 +128,8 @@ KITINERARY_EXPORT TrainStation stationForIbnr(IBNR ibnr);
 /** Lookup train station data by UIC station id. */
 KITINERARY_EXPORT TrainStation stationForUic(UICStation uic);
 
-/** Lookup train station data by Gares & Connexions ID. */
-KITINERARY_EXPORT TrainStation stationForGaresConnexionsId(GaresConnexionsId garesConnexionsId);
+/** Lookup train station data by SNCF station id. */
+KITINERARY_EXPORT TrainStation stationForSncfStationId(SncfStationId sncfId);
 
 /** Lookup train station data by Indian Railways station code. */
 KITINERARY_EXPORT TrainStation stationForIndianRailwaysStationCode(const QString &code);

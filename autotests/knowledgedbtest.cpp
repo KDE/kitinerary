@@ -142,27 +142,27 @@ private Q_SLOTS:
         QCOMPARE(station.country, CountryId{"FI"});
     }
 
-    void testGaresConnexionsIdLookup()
+    void testSncfStationIdLookup()
     {
-        auto station = KnowledgeDb::stationForGaresConnexionsId({});
+        auto station = KnowledgeDb::stationForSncfStationId({});
         QVERIFY(!station.coordinate.isValid());
         QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
 
-        station = KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId{"XXXXX"});
+        station = KnowledgeDb::stationForSncfStationId(SncfStationId{"XXXXX"});
         QVERIFY(!station.coordinate.isValid());
         QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
 
-        station = KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId{"FRAES"});
+        station = KnowledgeDb::stationForSncfStationId(SncfStationId{"FRAES"});
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Europe/Paris"));
         QCOMPARE(station.country, CountryId{"FR"});
 
-        station = KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId{QStringLiteral("FRXYT")});
+        station = KnowledgeDb::stationForSncfStationId(SncfStationId{QStringLiteral("FRXYT")});
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Europe/Paris"));
         QCOMPARE(station.country, CountryId{"FR"});
 
-        station = KnowledgeDb::stationForGaresConnexionsId(GaresConnexionsId{"CHGVA"});
+        station = KnowledgeDb::stationForSncfStationId(SncfStationId{"CHGVA"});
         QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);
         QVERIFY(station.coordinate.isValid());
         QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);

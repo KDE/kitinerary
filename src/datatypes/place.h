@@ -87,8 +87,11 @@ class KITINERARY_EXPORT Place
     /** Identifier.
      *  We use the following schemas currently:
      *  - 'uic:', UIC station code (see https://www.wikidata.org/wiki/Property:P722)
-     *  - 'sncf:', Gares & Connexions ID, (see https://www.wikidata.org/wiki/Property:P3104), French train station identifier.
-     *  - 'ibnr:', Internationale Bahnhofsnummer, (see https://www.wikidata.org/wiki/Property:P954), German train station identifier.
+     *  - 'sncf:', SNCF station id (see https://www.wikidata.org/wiki/Property:P8181), French train station identifier.
+     *  - 'ibnr:', Internationale Bahnhofsnummer (see https://www.wikidata.org/wiki/Property:P954), German train station identifier.
+     *  - 'ir:', Indian Railways station code (see https://www.wikidata.org/wiki/Property:P5696).
+     *  - 'vrfi:', Finish railway station codes.
+     *  - 'benerail:', Belgian railway station codes.
      *  @see http://schema.org/docs/datamodel.html#identifierBg
      */
     KITINERARY_PROPERTY(QString, identifier, setIdentifier)

@@ -33,5 +33,6 @@ Extracted data can be augmented by static knowledge obtained from Wikidata:
 Via KItinerary::KnowledgeDb:
 * Airport IATA codes, countries, timezones and geo coordinates.
 * Train station countries, timezones and geo coordinates.
-* Train station lookup by IBNR or Gares & Connexion IDs.
+* Train station lookup by UIC, IBNR, SNCF, VR or Indian Railway station identifiers.
 * Country ISO codes, driving side and used power plugs.
+* Timezone and country lookup from a geo coordinate.
