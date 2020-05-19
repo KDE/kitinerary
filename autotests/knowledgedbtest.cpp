@@ -248,12 +248,6 @@ private Q_SLOTS:
         QCOMPARE(countryForTimezone(Tz::Asia_Ho_Chi_Minh), CountryId{"VN"});
     }
 
-    void testTimezoneForCoordinate()
-    {
-        using namespace KnowledgeDb;
-        KnowledgeDb::compareTrainTimezones();
-    }
-
     void testTimezoneForLocation()
     {
         using namespace KnowledgeDb;
