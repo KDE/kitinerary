@@ -284,10 +284,10 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, cons
     QTimeZone tz;
     if (station.identifier().startsWith(QLatin1String("sncf:"))) {
         const auto record = KnowledgeDb::stationForSncfStationId(KnowledgeDb::SncfStationId{station.identifier().mid(5)});
-        tz = KnowledgeDb::toQTimeZone(record.timezone);
+        tz = KnowledgeDb::toQTimeZone(record.timezone());
     } else if (station.identifier().startsWith(QLatin1String("ibnr:"))) {
         const auto record = KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{station.identifier().mid(5).toUInt()});
-        tz = KnowledgeDb::toQTimeZone(record.timezone);
+        tz = KnowledgeDb::toQTimeZone(record.timezone());
     } else if (!station.address().addressCountry().isEmpty()) {
         tz = KnowledgeDb::toQTimeZone(KnowledgeDb::timezoneForCountry(KnowledgeDb::CountryId{station.address().addressCountry()}));
     }

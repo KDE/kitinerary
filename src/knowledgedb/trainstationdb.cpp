@@ -35,6 +35,11 @@ static_assert(trainstation_table_size < (1 << (sizeof(TrainStationIndex) * 8)), 
 }
 }
 
+Tz TrainStation::timezone() const
+{
+    return m_timezone;
+}
+
 SncfStationId::SncfStationId(const QString& id)
 {
     if (id.size() != 5) {

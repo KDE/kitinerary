@@ -103,26 +103,26 @@ private Q_SLOTS:
     {
         auto station = KnowledgeDb::stationForIbnr(IBNR{1234567});
         QVERIFY(!station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
 
         station = KnowledgeDb::stationForIbnr({});
         QVERIFY(!station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
 
         station = KnowledgeDb::stationForIbnr(IBNR{8011160});
         QVERIFY(station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Europe/Berlin"));
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Berlin"));
         QCOMPARE(station.country, CountryId{"DE"});
 
         station = KnowledgeDb::stationForIbnr(IBNR{8501687});
         QVERIFY(station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Europe/Zurich"));
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Zurich"));
         QCOMPARE(station.country, CountryId{"CH"});
 
         // Aachen West, very close to the NL border, should be in DE timezone
         station = KnowledgeDb::stationForIbnr(IBNR{8000404});
         QVERIFY(station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Europe/Berlin"));
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Berlin"));
         QCOMPARE(station.country, CountryId{"DE"});
     }
 
@@ -130,15 +130,15 @@ private Q_SLOTS:
     {
         auto station = KnowledgeDb::stationForUic(UICStation{1234567});
         QVERIFY(!station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
 
         station = KnowledgeDb::stationForUic({});
         QVERIFY(!station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
 
         station = KnowledgeDb::stationForUic(UICStation{1001332});
         QVERIFY(station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Europe/Helsinki"));
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Helsinki"));
         QCOMPARE(station.country, CountryId{"FI"});
     }
 
@@ -146,27 +146,27 @@ private Q_SLOTS:
     {
         auto station = KnowledgeDb::stationForSncfStationId({});
         QVERIFY(!station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
 
         station = KnowledgeDb::stationForSncfStationId(SncfStationId{"XXXXX"});
         QVERIFY(!station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
 
         station = KnowledgeDb::stationForSncfStationId(SncfStationId{"FRAES"});
         QVERIFY(station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Europe/Paris"));
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Paris"));
         QCOMPARE(station.country, CountryId{"FR"});
 
         station = KnowledgeDb::stationForSncfStationId(SncfStationId{QStringLiteral("FRXYT")});
         QVERIFY(station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Europe/Paris"));
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Paris"));
         QCOMPARE(station.country, CountryId{"FR"});
 
         station = KnowledgeDb::stationForSncfStationId(SncfStationId{"CHGVA"});
         QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);
         QVERIFY(station.coordinate.isValid());
         QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Europe/Zurich"));
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Zurich"));
         QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);
         QCOMPARE(station.country, CountryId{"CH"});
     }
@@ -246,6 +246,12 @@ private Q_SLOTS:
         QCOMPARE(countryForTimezone(Tz::Asia_Kuching), CountryId{"MY"});
         QCOMPARE(countryForTimezone(Tz::Asia_Bangkok), CountryId{});
         QCOMPARE(countryForTimezone(Tz::Asia_Ho_Chi_Minh), CountryId{"VN"});
+    }
+
+    void testTimezoneForCoordinate()
+    {
+        using namespace KnowledgeDb;
+        KnowledgeDb::compareTrainTimezones();
     }
 
     void testTimezoneForLocation()
@@ -347,27 +353,27 @@ private Q_SLOTS:
     {
         auto station = KnowledgeDb::stationForIndianRailwaysStationCode(QString());
         QVERIFY(!station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
 
         station = KnowledgeDb::stationForIndianRailwaysStationCode(QStringLiteral("NDLS"));
         QVERIFY(station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Asia/Kolkata"));
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Asia/Kolkata"));
         QCOMPARE(station.country, CountryId{"IN"});
 
         station = KnowledgeDb::stationForIndianRailwaysStationCode(QStringLiteral("ndls"));
         QVERIFY(!station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
     }
 
     void testFinishStationCodeLookup()
     {
         auto station = KnowledgeDb::stationForVRStationCode(VRStationCode(QStringLiteral("HKI")));
         QVERIFY(station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone("Europe/Helsinki"));
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Helsinki"));
 
         station = KnowledgeDb::stationForVRStationCode(VRStationCode(QStringLiteral("BLÄ")));
         QVERIFY(!station.coordinate.isValid());
-        QCOMPARE(toQTimeZone(station.timezone), QTimeZone());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
     }
 };
 
