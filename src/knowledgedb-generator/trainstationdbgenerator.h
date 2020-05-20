@@ -19,7 +19,6 @@
 #define KITINERARY_GENERATOR_TRAINSTATIONDBGENERATOR_H
 
 #include <knowledgedb.h>
-#include <timezones.h>
 
 #include <QByteArray>
 #include <QString>
@@ -45,7 +44,6 @@ public:
         QUrl uri;
         QString name;
         KnowledgeDb::Coordinate coord;
-        QByteArray tz;
         QString isoCode;
     };
 
@@ -72,7 +70,6 @@ private:
     std::map<QString, QUrl> m_sncfIdMap;
     std::map<QString, QUrl> m_indianRailwaysMap;
     std::map<QString, QUrl> m_vrfiMap;
-    Timezones m_tzDb;
 
     int m_idConflicts = 0;
     int m_idFormatViolations = 0;

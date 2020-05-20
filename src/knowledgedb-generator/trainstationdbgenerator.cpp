@@ -53,16 +53,14 @@ bool TrainStationDbGenerator::generate(QIODevice *out)
          return false;
      }
 
-    // timezone lookup and filtering
+    // filtering out stations without useful information
     processStations();
 
     // code generation
     CodeGen::writeLicenseHeader(out);
     out->write(R"(
 #include "knowledgedb.h"
-#include "timezonedb.h"
 #include "trainstationdb.h"
-#include "timezonedb_data.h"
 
 namespace KItinerary {
 namespace KnowledgeDb {
@@ -182,7 +180,7 @@ bool TrainStationDbGenerator::fetchSncf()
         const auto stationObj = stationData.toObject();
         const auto uri = insertOrMerge(stationObj);
 
-        const auto id = stationObj.value(QLatin1String("gareConnexionId")).toObject().value(QLatin1String("value")).toString().toUpper();
+        const auto id = stationObj.value(QLatin1String("sncfId")).toObject().value(QLatin1String("value")).toString().toUpper();
         if (id.size() != 5 || !Util::containsOnlyLetters(id)) {
             ++m_idFormatViolations;
             qWarning() << "SNCF ID format violation" << id << uri;
@@ -350,13 +348,7 @@ void TrainStationDbGenerator::processStations()
             qDebug() << "Station has no geo coordinates:" << (*it).name << (*it).uri;
         }
 
-        (*it).tz = m_tzDb.timezoneForLocation((*it).isoCode, (*it).coord);
-        if ((*it).tz.isEmpty() && ((*it).coord.isValid() || !(*it).isoCode.isEmpty())) {
-            ++m_timezoneLookupFailure;
-            qWarning() << "Timezone lookup failure:" << (*it).name << (*it).uri;
-        }
-
-        if (!(*it).coord.isValid() && (*it).tz.isEmpty() && (*it).isoCode.isEmpty()) { // no useful information
+        if (!(*it).coord.isValid() && (*it).isoCode.isEmpty()) { // no useful information
             it = m_stations.erase(it);
         } else {
             ++it;
@@ -370,8 +362,6 @@ void TrainStationDbGenerator::writeStationData(QIODevice *out)
     for (const auto &station : m_stations) {
         out->write("    {");
         CodeGen::writeCoordinate(out, station.coord);
-        out->write(", ");
-        CodeGen::writeTimezone(out, station.tz);
         out->write(", ");
         CodeGen::writeCountryIsoCode(out, station.isoCode);
         out->write("}, // ");
@@ -521,5 +511,4 @@ void TrainStationDbGenerator::printSummary()
     qDebug() << "Identifier format violations:" << m_idFormatViolations;
     qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;
     qDebug() << "Country ISO code conflicts: " << m_countryConflicts;
-    qDebug() << "Failed timezone lookups:" << m_timezoneLookupFailure;
 }

@@ -163,12 +163,14 @@ private Q_SLOTS:
         QCOMPARE(station.country, CountryId{"FR"});
 
         station = KnowledgeDb::stationForSncfStationId(SncfStationId{"CHGVA"});
-        QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);
         QVERIFY(station.coordinate.isValid());
-        QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);
         QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Zurich"));
-        QEXPECT_FAIL("", "Wikidata does not supply ids for non-French stations yet", Continue);
         QCOMPARE(station.country, CountryId{"CH"});
+
+        station = KnowledgeDb::stationForSncfStationId(SncfStationId{"NLAMA"}); // vs. SNCB ID of NLASC
+        QVERIFY(station.coordinate.isValid());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Amsterdam"));
+        QCOMPARE(station.country, CountryId{"NL"});
     }
 
     void testCountryDb()
