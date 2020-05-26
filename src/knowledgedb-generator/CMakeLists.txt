@@ -18,20 +18,6 @@ target_include_directories(generate-knowledgedb PRIVATE
 )
 target_link_libraries(generate-knowledgedb PRIVATE Qt5::Network Qt5::Gui KOSM)
 
-find_program(XSLTPROC_EXECUTABLE xsltproc)
-
-add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/timezones.colormap
-    COMMAND
-        ${XSLTPROC_EXECUTABLE} --novalid
-            ${CMAKE_CURRENT_SOURCE_DIR}/timezones.xsl
-            ${CMAKE_CURRENT_SOURCE_DIR}/timezones.qgs
-            > ${CMAKE_CURRENT_SOURCE_DIR}/timezones.colormap
-    DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/timezones.xsl
-        ${CMAKE_CURRENT_SOURCE_DIR}/timezones.qgs
-)
-
 # extract all elements we are interested in (airports, terminals, stations at airports)
 osm_filter(OUTPUT airports.o5m FILTER --keep=\"iata=* or aeroway=terminal or public_transport=station or railway=station or railway=halt or railway=tram_stop\")
 
@@ -52,8 +38,6 @@ function(generate_db dbtype outfile)
         COMMAND generate-knowledgedb -o ${CMAKE_CURRENT_SOURCE_DIR}/../knowledgedb/${outfile} -d ${dbtype} ${extra_args}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/timezones.colormap
-        ${CMAKE_CURRENT_SOURCE_DIR}/timezones.png
         ${ARGN}
         generate-knowledgedb
     )
@@ -66,4 +50,4 @@ generate_db(timezoneheader timezonedb_data.h)
 generate_db(airport airportdb_data.cpp ${OSM_PLANET_DIR}/airports-bbox.osm)
 generate_db(trainstation trainstationdb_data.cpp)
 
-add_custom_target(rebuild-knowledgedb DEPENDS ${outfiles} ${CMAKE_CURRENT_SOURCE_DIR}/timezones.png)
+add_custom_target(rebuild-knowledgedb DEPENDS ${outfiles})
