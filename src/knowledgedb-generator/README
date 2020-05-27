@@ -8,11 +8,16 @@ https://github.com/evansiroky/timezone-boundary-builder/releases
 
 Extract the zip file into this folder.
 
-(2) Generate timezone lookup map
+(2) Generate the timezone index
 
-Open timezones.qgs in QGIS. Select "Project" > "Layouts" > "timezone_lookup_map" and then
-"Layout" > "Export as Image". Choose "timezones.png" in this folder, 2400dpi, enable
-"Generate world file" and *disable* anti-aliasing.
+- If necessary, adjust the output path at the end of qgis/generate-z-order-curve-spatial-index.py.
+- Open timezones.qgs in QGIS.
+- Select "Plugins" > "Python Console".
+- In the Python Console, click on the "Show Editor" toolbar icon.
+- In the Python script editor, select "Open Script..." in the toolbar, and open qgis/generate-z-order-curve-spatial-index.py.
+- In the Python script editor, select "Run Script".
+- Wait.
+- Once the script has finished, an updated timezone index can be found in the output file set in the first step.
 
 (3) Run the code generator
 
