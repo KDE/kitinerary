@@ -120,7 +120,9 @@ if (HAVE_POPPLER)
     target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
 endif()
 
-if (HAVE_ZXING)
+if (TARGET ZXing::ZXing)
+    target_link_libraries(KPimItinerary PRIVATE ZXing::ZXing)
+elseif (TARGET ZXing::Core)
     target_link_libraries(KPimItinerary PRIVATE ZXing::Core)
 endif()
 

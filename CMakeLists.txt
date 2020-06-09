@@ -74,7 +74,7 @@ if (HAVE_POPPLER)
     list(GET _poppler_version_components 2 POPPLER_VERSION_PATCH)
 endif()
 
-if (TARGET ZXing::Core)
+if (TARGET ZXing::ZXing OR TARGET ZXing::Core)
     set(HAVE_ZXING ON)
 endif()
 
