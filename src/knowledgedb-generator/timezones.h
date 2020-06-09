@@ -22,12 +22,11 @@
 
 #include <knowledgedb.h>
 
+#include <QByteArray>
 #include <QString>
 
 #include <map>
 #include <vector>
-
-class QByteArray;
 
 namespace KItinerary {
 namespace Generator {
