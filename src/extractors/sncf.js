@@ -131,11 +131,14 @@ function parseOuigoConfirmation(html)
 
     var productDts = html.eval('//*[@class="product-travel-date"]');
     var productDetails = html.eval('//table[@class="product-details"]');
+    var passengerDetails = html.eval('//table[@class="passengers"]');
     for (productDetailIdx in productDetails) {
         // date is in the table before us
         var dt = productDts[productDetailIdx].content.replace(/\S+ (.*)/, "$1");
 
         var segmentDetail = productDetails[productDetailIdx].eval(".//td")[0];
+        var placement = passengerDetails[productDetailIdx].eval('.//td[@class="placement "]'); // yes, there is a space behind placement there...
+        var seat = placement[0].content.match(/Voiture (.*?) - Place (.*?) /);
         var res = null;
         while (segmentDetail && !segmentDetail.isNull) {
             var cls = segmentDetail.attribute("class");
@@ -144,6 +147,10 @@ function parseOuigoConfirmation(html)
                 res.reservationFor.departureTime = JsonLd.toDateTime(dt + segmentDetail.content, "d MMMMhh'h'mm", "fr");
                 segmentDetail = segmentDetail.nextSibling;
                 res.reservationFor.departureStation.name = segmentDetail.content;
+                if (seat) {
+                    res.reservedTicket.ticketedSeat.seatSection = seat[1];
+                    res.reservedTicket.ticketedSeat.seatNumber = seat[2];
+                }
             }
             else if (cls.includes("segment-arrival")) {
                 res.reservationFor.arrivalTime = JsonLd.toDateTime(dt + segmentDetail.content, "d MMMMhh'h'mm", "fr");
