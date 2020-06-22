@@ -29,8 +29,6 @@
 
 #include <memory>
 
-class QImage;
-class QTransform;
 
 namespace KItinerary {
 

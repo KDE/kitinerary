@@ -25,7 +25,6 @@
 #include <QSharedPointer>
 template <typename T> class QVector;
 
-class QDateTime;
 class QVariant;
 
 namespace KCalendarCore {

@@ -28,7 +28,6 @@
 
 namespace KItinerary {
 
-class Airport;
 class BusReservation;
 class BusTrip;
 class Event;

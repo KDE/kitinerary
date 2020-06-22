@@ -22,7 +22,6 @@
 
 #include "datatypes.h"
 
-class QVariant;
 
 namespace KItinerary {
 

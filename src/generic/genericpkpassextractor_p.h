@@ -27,7 +27,6 @@ class Pass;
 }
 
 class QDateTime;
-class QJsonObject;
 
 namespace KItinerary {
 

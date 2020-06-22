@@ -27,7 +27,6 @@ class QString;
 namespace KItinerary {
 namespace Generator {
 
-class Timezones;
 
 /** Code generation utilities. */
 namespace CodeGen

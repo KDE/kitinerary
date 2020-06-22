@@ -25,7 +25,6 @@
 
 #include <cstdint>
 
-class QString;
 
 namespace KItinerary {
 namespace KnowledgeDb {

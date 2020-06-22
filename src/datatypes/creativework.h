@@ -21,7 +21,6 @@
 #include "kitinerary_export.h"
 #include "datatypes.h"
 
-class QUrl;
 
 namespace KItinerary {
 

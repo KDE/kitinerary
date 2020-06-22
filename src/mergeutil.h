@@ -25,7 +25,6 @@ class QVariant;
 namespace KItinerary {
 class Flight;
 class Person;
-class TrainTrip;
 
 /** Utilities for merging reservations or elements of them. */
 namespace MergeUtil
