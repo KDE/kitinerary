@@ -26,7 +26,7 @@ private Q_SLOTS:
     {
         // use some exotic locale and timezone to ensure the date/time parsing doesn't just work by luck
         QLocale::setDefault(QLocale(QStringLiteral("fr_FR")));
-        qputenv("TZ", "GMT");
+        qputenv("TZ", "UTC");
     }
 
     void testToDateTime_data()
