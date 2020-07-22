@@ -4,8 +4,8 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.0+</project_license>
   <name>KItinerary Command Line Extractor</name>
-  <name xml:lang="ca">Extractor de la línia d'ordres del KItinerary</name>
-  <name xml:lang="ca-valencia">Extractor de la línia d'ordres del KItinerary</name>
+  <name xml:lang="ca">Extractor del KItinerary per a la línia d'ordres</name>
+  <name xml:lang="ca-valencia">Extractor del KItinerary per a la línia d'ordres</name>
   <name xml:lang="en-GB">KItinerary Command Line Extractor</name>
   <name xml:lang="es">Extractor de línea de órdenes de KItinerary</name>
   <name xml:lang="et">KItinerary käsurea hankija</name>
@@ -27,8 +27,8 @@
   <name xml:lang="uk">Командний засіб видобування KItinerary</name>
   <name xml:lang="x-test">xxKItinerary Command Line Extractorxx</name>
   <summary>Command line reservation data extractor.</summary>
-  <summary xml:lang="ca">Extractor de dades de reserves de la línia d'ordres.</summary>
-  <summary xml:lang="ca-valencia">Extractor de dades de reserves de la línia d'ordres.</summary>
+  <summary xml:lang="ca">Extractor de les dades de reserves mitjançant la línia d'ordres.</summary>
+  <summary xml:lang="ca-valencia">Extractor de les dades de reserves mitjançant la línia d'ordres.</summary>
   <summary xml:lang="cs">Extraktor dat rezervací v příkazové řádce.</summary>
   <summary xml:lang="en-GB">Command line reservation data extractor.</summary>
   <summary xml:lang="es">Extractor de línea de órdenes de reserva de datos.</summary>
@@ -54,8 +54,8 @@
     <p>
     Command line extractor for itinerary data, for integrating into 3rd party applications.
     </p>
-    <p xml:lang="ca">Extractor de dades d'itineraris de la línia d'ordres, per a la integració en aplicacions de tercers.</p>
-    <p xml:lang="ca-valencia">Extractor de dades d'itineraris de la línia d'ordres, per a la integració en aplicacions de tercers.</p>
+    <p xml:lang="ca">Extractor de les dades d'itineraris mitjançant la línia d'ordres, per a la integració en aplicacions de tercers.</p>
+    <p xml:lang="ca-valencia">Extractor de les dades d'itineraris mitjançant la línia d'ordres, per a la integració en aplicacions de tercers.</p>
     <p xml:lang="en-GB">Command line extractor for itinerary data, for integrating into 3rd party applications.</p>
     <p xml:lang="es">Extractor de línea de órdenes para datos de itinerario. para integración en aplicaciones de terceros.</p>
     <p xml:lang="et">Käsurea reisiandmete hankija, mida lõimida kolmanda poole rakendustega.</p>
