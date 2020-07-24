@@ -41,6 +41,7 @@ set(kitinerary_lib_srcs
     knowledgedb/countrydb.cpp
     knowledgedb/iatacode.cpp
     knowledgedb/knowledgedb.cpp
+    knowledgedb/stationidentifier.cpp
     knowledgedb/timezonedb.cpp
     knowledgedb/trainstationdb.cpp
 

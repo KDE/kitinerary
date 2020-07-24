@@ -8,6 +8,7 @@
 #define KITINERARY_GENERATOR_TRAINSTATIONDBGENERATOR_H
 
 #include <knowledgedb.h>
+#include <stationidentifier.h>
 
 #include <QByteArray>
 #include <QString>
@@ -37,28 +38,32 @@ public:
     };
 
 private:
-    bool fetchIBNR();
-    bool fetchUIC();
-    bool fetchSncf();
+    template <typename Id>
+    bool fetch(const char *prop, const char *name, std::map<Id, QUrl> &idMap);
     bool fetchIndianRailwaysStationCode();
     bool fetchFinishStationCodes();
     bool fetchCountryInformation();
     QUrl insertOrMerge(const QJsonObject &obj, bool mergeOnly = false);
     void processStations();
     void writeStationData(QIODevice *out);
-    void writeIBNRMap(QIODevice *out);
-    void writeUICMap(QIODevice *out);
-    void writeSncfMap(QIODevice *out);
+    template <typename Id>
+    void writeIdMap(QIODevice *out, const std::map<Id, QUrl> &idMap, const char *tabName, const char *typeName) const;
     void writeIndianRailwaysMap(QIODevice *out);
     void writeVRMap(QIODevice *out);
     void printSummary();
 
+    template <typename Id>
+    QByteArray encodeId(Id id) const { return '"' + id.toString().toUtf8() + '"'; }
+    QByteArray encodeId(KnowledgeDb::IBNR id) const { return QByteArray::number(id.value()); }
+    QByteArray encodeId(KnowledgeDb::UICStation id) const { return QByteArray::number(id.value()); }
+
     std::vector<Station> m_stations;
-    std::map<uint32_t, QUrl> m_ibnrMap;
-    std::map<uint32_t, QUrl> m_uicMap;
-    std::map<QString, QUrl> m_sncfIdMap;
+    std::map<KnowledgeDb::IBNR, QUrl> m_ibnrMap;
+    std::map<KnowledgeDb::UICStation, QUrl> m_uicMap;
+    std::map<KnowledgeDb::SncfStationId, QUrl> m_sncfIdMap;
+    std::map<KnowledgeDb::BenerailStationId, QUrl> m_benerailIdMap;
     std::map<QString, QUrl> m_indianRailwaysMap;
-    std::map<QString, QUrl> m_vrfiMap;
+    std::map<KnowledgeDb::VRStationCode, QUrl> m_vrfiMap;
 
     int m_idConflicts = 0;
     int m_idFormatViolations = 0;

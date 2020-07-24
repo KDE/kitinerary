@@ -38,8 +38,13 @@ KnowledgeDb::Coordinate WikiData::parseCoordinate(const QString& value)
 
 QJsonArray WikiData::query(const char *sparqlQuery, const char *cacheFileName)
 {
+    return query(QString::fromUtf8(sparqlQuery), QString::fromUtf8(cacheFileName));
+}
+
+QJsonArray WikiData::query(const QString &sparqlQuery, const QString &cacheFileName)
+{
     QDir().mkdir(QStringLiteral("data"));
-    QFile cacheFile(QLatin1String("data/") + QString::fromUtf8(cacheFileName));
+    QFile cacheFile(QLatin1String("data/") + cacheFileName);
     QByteArray data;
     if (cacheFile.exists() && qEnvironmentVariableIsSet("KITINERARY_USE_WIKIDATA_CACHE")) {
         cacheFile.open(QFile::ReadOnly);
@@ -50,7 +55,7 @@ QJsonArray WikiData::query(const char *sparqlQuery, const char *cacheFileName)
     if (data.isEmpty()) {
         QUrl url(QStringLiteral("https://query.wikidata.org/sparql"));
         QUrlQuery query;
-        query.addQueryItem(QStringLiteral("query"), QString::fromUtf8(sparqlQuery).trimmed().simplified());
+        query.addQueryItem(QStringLiteral("query"), sparqlQuery.trimmed().simplified());
         query.addQueryItem(QStringLiteral("format"), QStringLiteral("json"));
         url.setQuery(query);
 

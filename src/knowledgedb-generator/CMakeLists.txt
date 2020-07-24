@@ -10,6 +10,7 @@ add_executable(generate-knowledgedb
     trainstationdbgenerator.cpp
     util.cpp
     ../stringutil.cpp
+    ../knowledgedb/stationidentifier.cpp
 )
 target_compile_definitions(generate-knowledgedb PRIVATE "KITINERARY_STATIC_DEFINE")
 target_include_directories(generate-knowledgedb PRIVATE

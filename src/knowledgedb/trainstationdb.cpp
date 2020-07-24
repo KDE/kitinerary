@@ -29,52 +29,30 @@ Tz TrainStation::timezone() const
     return timezoneForLocation(coordinate.latitude, coordinate.longitude, country);
 }
 
-SncfStationId::SncfStationId(const QString& id)
+template <typename Id, std::size_t Size>
+static TrainStation lookupStation(Id id, const TrainStationIdIndex<Id>(&tab)[Size])
 {
-    if (id.size() != 5) {
-        return;
+    const auto it = std::lower_bound(std::begin(tab), std::end(tab), id);
+    if (it == std::end(tab) || (*it).stationId != id) {
+        return {};
     }
-    setValue(fromChars(id.toUpper().toLatin1().constData()));
-}
 
-VRStationCode::VRStationCode(const QString &id)
-{
-    if (id.size() < 2 || id.size() > 4) {
-        return;
-    }
-    char buffer[4];
-    memset(buffer, 0, 4);
-    memcpy(buffer, id.toUpper().toUtf8().constData(), id.size());
-    setValue(fromChars(buffer));
+    return trainstation_table[(*it).stationIndex.value()];
 }
 
 TrainStation KnowledgeDb::stationForIbnr(IBNR ibnr)
 {
-    const auto ibnrIt = std::lower_bound(std::begin(ibnr_table), std::end(ibnr_table), ibnr);
-    if (ibnrIt == std::end(ibnr_table) || (*ibnrIt).stationId != ibnr) {
-        return {};
-    }
-
-    return trainstation_table[(*ibnrIt).stationIndex.value()];
+    return lookupStation(ibnr, ibnr_table);
 }
 
 TrainStation KnowledgeDb::stationForUic(UICStation uic)
 {
-    const auto it = std::lower_bound(std::begin(uic_table), std::end(uic_table), uic);
-    if (it == std::end(uic_table) || (*it).stationId != uic) {
-        return {};
-    }
-    return trainstation_table[(*it).stationIndex.value()];
+    return lookupStation(uic, uic_table);
 }
 
 TrainStation KnowledgeDb::stationForSncfStationId(SncfStationId sncfId)
 {
-    const auto it = std::lower_bound(std::begin(sncfStationId_table), std::end(sncfStationId_table), sncfId);
-    if (it == std::end(sncfStationId_table) || (*it).stationId != sncfId) {
-        return {};
-    }
-
-    return trainstation_table[(*it).stationIndex.value()];
+    return lookupStation(sncfId, sncfStationId_table);
 }
 
 TrainStation KnowledgeDb::stationForIndianRailwaysStationCode(const QString &code)
@@ -92,10 +70,10 @@ TrainStation KnowledgeDb::stationForIndianRailwaysStationCode(const QString &cod
 
 TrainStation KnowledgeDb::stationForVRStationCode(VRStationCode vrStation)
 {
-    const auto it = std::lower_bound(std::begin(vrfiConnexionsId_table), std::end(vrfiConnexionsId_table), vrStation);
-    if (it == std::end(vrfiConnexionsId_table) || (*it).stationId != vrStation) {
-        return {};
-    }
+    return lookupStation(vrStation, vrfiConnexionsId_table);
+}
 
-    return trainstation_table[(*it).stationIndex.value()];
+TrainStation KnowledgeDb::stationForBenerailId(BenerailStationId id)
+{
+    return lookupStation(id, benerail_table);
 }

@@ -249,6 +249,8 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
         const auto record = KnowledgeDb::stationForIndianRailwaysStationCode(id.mid(3));
         applyStationData(record, station);
     } else if (id.startsWith(QLatin1String("benerail:")) && id.size() == 14) {
+        const auto record = KnowledgeDb::stationForBenerailId(KnowledgeDb::BenerailStationId(id.mid(9)));
+        applyStationData(record, station);
         applyStationCountry(id.mid(9, 2).toUpper(), station);
     } else if (id.startsWith(QLatin1String("vrfi:")) && id.size() >= 7 && id.size() <= 9) {
         const auto record = KnowledgeDb::stationForVRStationCode(KnowledgeDb::VRStationCode(id.mid(5)));

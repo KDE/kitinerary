@@ -30,6 +30,7 @@ namespace WikiData
      *  CLI tool!
      */
     QJsonArray query(const char *sparqlQuery, const char *cacheFileName);
+    QJsonArray query(const QString &sparqlQuery, const QString &cacheFileName);
 }
 
 }

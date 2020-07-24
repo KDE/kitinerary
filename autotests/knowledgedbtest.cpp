@@ -86,6 +86,22 @@ private Q_SLOTS:
        qDebug() << id1;
     }
 
+    void testStationIdentifiers()
+    {
+        auto sncf = KnowledgeDb::SncfStationId(QStringLiteral("FRPNO"));
+        QVERIFY(sncf.isValid());
+        QCOMPARE(sncf.toString(), QLatin1String("FRPNO"));
+        sncf = KnowledgeDb::SncfStationId(QStringLiteral("Abc"));
+        QVERIFY(!sncf.isValid());
+        sncf =  KnowledgeDb::SncfStationId(QStringLiteral("CHZID"));
+        QVERIFY(sncf.isValid());
+        QCOMPARE(sncf.toString(), QLatin1String("CHZID"));
+
+        auto vrCode = KnowledgeDb::VRStationCode(QStringLiteral("HSL"));
+        QVERIFY(vrCode.isValid());
+        QCOMPARE(vrCode.toString(), QLatin1String("HSL"));
+    }
+
     void testIBNRLookup()
     {
         auto station = KnowledgeDb::stationForIbnr(IBNR{1234567});
@@ -155,6 +171,22 @@ private Q_SLOTS:
         QCOMPARE(station.country, CountryId{"CH"});
 
         station = KnowledgeDb::stationForSncfStationId(SncfStationId{"NLAMA"}); // vs. SNCB ID of NLASC
+        QVERIFY(station.coordinate.isValid());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Amsterdam"));
+        QCOMPARE(station.country, CountryId{"NL"});
+    }
+
+    void testBenerailStationIdLookup()
+    {
+        auto station = KnowledgeDb::stationForBenerailId({});
+        QVERIFY(!station.coordinate.isValid());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
+
+        station = KnowledgeDb::stationForBenerailId(BenerailStationId{"XXXXX"});
+        QVERIFY(!station.coordinate.isValid());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone());
+
+        station = KnowledgeDb::stationForBenerailId(BenerailStationId{"NLASC"});
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Amsterdam"));
         QCOMPARE(station.country, CountryId{"NL"});

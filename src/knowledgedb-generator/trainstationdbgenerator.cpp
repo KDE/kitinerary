@@ -35,7 +35,13 @@ static bool operator<(const TrainStationDbGenerator::Station &lhs, const QUrl &r
 bool TrainStationDbGenerator::generate(QIODevice *out)
 {
     // retrieve content from Wikidata
-    if (!fetchIBNR() || !fetchUIC() || !fetchSncf() || !fetchIndianRailwaysStationCode() || !fetchFinishStationCodes()) {
+    if (!fetch("P954", "ibnr", m_ibnrMap)
+     || !fetch("P722", "uic", m_uicMap)
+     || !fetch("P8181", "sncf", m_sncfIdMap)
+     || !fetch("P8448", "benerail", m_benerailIdMap)
+     || !fetchIndianRailwaysStationCode()
+     || !fetchFinishStationCodes()
+    ) {
         return false;
     }
     if (!fetchCountryInformation()) {
@@ -55,9 +61,10 @@ namespace KItinerary {
 namespace KnowledgeDb {
 )");
     writeStationData(out);
-    writeIBNRMap(out);
-    writeUICMap(out);
-    writeSncfMap(out);
+    writeIdMap(out, m_ibnrMap, "ibnr", "IBNR");
+    writeIdMap(out, m_uicMap, "uic", "UICStation");
+    writeIdMap(out, m_sncfIdMap, "sncfStationId", "SncfStationId");
+    writeIdMap(out, m_benerailIdMap, "benerail", "BenerailStationId");
     writeIndianRailwaysMap(out);
     writeVRMap(out);
     out->write(R"(
@@ -69,16 +76,17 @@ namespace KnowledgeDb {
     return true;
 }
 
-bool TrainStationDbGenerator::fetchIBNR()
+template<typename Id>
+bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map<Id, QUrl> &idMap)
 {
-    const auto stationArray = WikiData::query(R"(
-        SELECT DISTINCT ?station ?stationLabel ?ibnr ?coord ?replacedBy WHERE {
+    const auto stationArray = WikiData::query(QLatin1String(R"(
+        SELECT DISTINCT ?station ?stationLabel ?id ?coord ?replacedBy WHERE {
             ?station (wdt:P31/wdt:P279*) wd:Q55488.
-            ?station wdt:P954 ?ibnr.
+            ?station wdt:)") + QString::fromUtf8(prop) + QLatin1String(R"( ?id.
             OPTIONAL { ?station wdt:P625 ?coord. }
             OPTIONAL { ?station wdt:P1366 ?replacedBy. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-        } ORDER BY (?station))", "wikidata_trainstation_ibnr.json");
+        } ORDER BY (?station))"), QLatin1String("wikidata_trainstation_") + QString::fromUtf8(name) + QLatin1String(".json"));
     if (stationArray.isEmpty()) {
         qWarning() << "Empty query result!";
         return false;
@@ -91,97 +99,20 @@ bool TrainStationDbGenerator::fetchIBNR()
         }
 
         const auto uri = insertOrMerge(stationObj);
-
-        const auto id = stationObj.value(QLatin1String("ibnr")).toObject().value(QLatin1String("value")).toString().toUInt();
-        if (id < 1000000 || id > 9999999) {
+        const auto idStr = stationObj.value(QLatin1String("id")).toObject().value(QLatin1String("value")).toString();
+        const auto id = Id(idStr);
+        if (!id.isValid()) {
             ++m_idFormatViolations;
-            qWarning() << "IBNR format violation" << id << uri;
+            qWarning() << name << "format violation" << idStr << uri;
             continue;
         }
 
-        const auto it = m_ibnrMap.find(id);
-        if (it != m_ibnrMap.end() && (*it).second != uri) {
+        const auto it = idMap.find(id);
+        if (it != idMap.end() && (*it).second != uri) {
             ++m_idConflicts;
-            qWarning() << "Conflict on IBNR" << id << uri << m_ibnrMap[id];
+            qWarning() << "Conflict on" << name << idStr << uri << idMap[id];
         } else {
-            m_ibnrMap[id] = uri;
-        }
-    }
-
-    return true;
-}
-
-bool TrainStationDbGenerator::fetchUIC()
-{
-    const auto stationArray = WikiData::query(R"(
-        SELECT DISTINCT ?station ?stationLabel ?uic ?coord WHERE {
-            ?station (wdt:P31/wdt:P279*) wd:Q55488.
-            ?station wdt:P722 ?uic.
-            OPTIONAL { ?station wdt:P625 ?coord. }
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-        } ORDER BY (?station))", "wikidata_trainstation_ibnr.json");
-    if (stationArray.isEmpty()) {
-        qWarning() << "Empty query result!";
-        return false;
-    }
-
-    for (const auto &stationData : stationArray) {
-        const auto stationObj = stationData.toObject();
-        const auto uri = insertOrMerge(stationObj);
-
-        auto id = stationObj.value(QLatin1String("uic")).toObject().value(QLatin1String("value")).toString().toUInt();
-        if (id > 9999999) {
-            id /= 10; // strip off check digit if present
-        }
-        if (id < 1000000 || id > 9999999) {
-            ++m_idFormatViolations;
-            qWarning() << "UIC format violation" << id << uri;
-            continue;
-        }
-
-        const auto it = m_uicMap.find(id);
-        if (it != m_uicMap.end() && (*it).second != uri) {
-            ++m_idConflicts;
-            qWarning() << "Conflict on UIC" << id << uri << m_uicMap[id];
-        } else {
-            m_uicMap[id] = uri;
-        }
-    }
-
-    return true;
-}
-
-bool TrainStationDbGenerator::fetchSncf()
-{
-    const auto stationArray = WikiData::query(R"(
-        SELECT DISTINCT ?station ?stationLabel ?sncfId ?coord WHERE {
-            ?station (wdt:P31/wdt:P279*) wd:Q55488.
-            ?station wdt:P8181 ?sncfId.
-            OPTIONAL { ?station wdt:P625 ?coord. }
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-        } ORDER BY (?station))", "wikidata_trainstation_gare_connexion.json");
-    if (stationArray.isEmpty()) {
-        qWarning() << "Empty query result!";
-        return false;
-    }
-
-    for (const auto &stationData : stationArray) {
-        const auto stationObj = stationData.toObject();
-        const auto uri = insertOrMerge(stationObj);
-
-        const auto id = stationObj.value(QLatin1String("sncfId")).toObject().value(QLatin1String("value")).toString().toUpper();
-        if (id.size() != 5 || !Util::containsOnlyLetters(id)) {
-            ++m_idFormatViolations;
-            qWarning() << "SNCF ID format violation" << id << uri;
-            continue;
-        }
-
-        const auto it = m_sncfIdMap.find(id);
-        if (it != m_sncfIdMap.end() && (*it).second != uri) {
-            ++m_idConflicts;
-            qWarning() << "Conflict on SNCF ID" << id << uri << m_sncfIdMap[id];
-        } else {
-            m_sncfIdMap[id] = uri;
+            idMap[id] = uri;
         }
     }
 
@@ -245,17 +176,18 @@ bool TrainStationDbGenerator::fetchFinishStationCodes()
         const auto uri = insertOrMerge(stationObj);
 
         // TODO this filters 'Ä' and 'Ö' too, which seem to occur in a few cases?
-        const auto id = stationObj.value(QLatin1String("code")).toObject().value(QLatin1String("value")).toString().toUpper();
-        if (id.size() < 2 || id.size() > 4 || !Util::containsOnlyLetters(id)) {
+        const auto idStr = stationObj.value(QLatin1String("code")).toObject().value(QLatin1String("value")).toString().toUpper();
+        const auto id = KnowledgeDb::VRStationCode(idStr);
+        if (!id.isValid()) {
             ++m_idFormatViolations;
-            qWarning() << "VR (Finland) station id format violation" << id << uri;
+            qWarning() << "VR (Finland) station id format violation" << idStr << uri;
             continue;
         }
 
         const auto it = m_vrfiMap.find(id);
         if (it != m_vrfiMap.end() && (*it).second != uri) {
             ++m_idConflicts;
-            qWarning() << "Conflict on VR (Finland) station code" << id << uri << m_vrfiMap[id];
+            qWarning() << "Conflict on VR (Finland) station code" << idStr << uri << m_vrfiMap[id];
         } else {
             m_vrfiMap[id] = uri;
         }
@@ -360,55 +292,24 @@ void TrainStationDbGenerator::writeStationData(QIODevice *out)
     out->write("};\n\n");
 }
 
-void TrainStationDbGenerator::writeIBNRMap(QIODevice *out)
+template<typename Id>
+void TrainStationDbGenerator::writeIdMap(QIODevice *out, const std::map<Id, QUrl> &idMap, const char *tabName, const char *typeName) const
 {
-    out->write("static constexpr const TrainStationIdIndex<IBNR> ibnr_table[] = {\n");
-    for (const auto &it : m_ibnrMap) {
+    out->write("static constexpr const TrainStationIdIndex<");
+    out->write(typeName);
+    out->write("> ");
+    out->write(tabName);
+    out->write("_table[] = {\n");
+    for (const auto &it : idMap) {
         const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it.second);
         if (station == m_stations.end() || (*station).uri != it.second) {
             continue;
         }
-        out->write("    { IBNR{");
-        out->write(QByteArray::number(it.first));
+        out->write("    { ");
+        out->write(typeName);
+        out->write("{");
+        out->write(encodeId(it.first));
         out->write("}, TrainStationIndex{");
-        out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
-        out->write("} }, // ");
-        out->write((*station).name.toUtf8());
-        out->write("\n");
-    }
-    out->write("};\n\n");
-}
-
-void TrainStationDbGenerator::writeUICMap(QIODevice* out)
-{
-    out->write("static constexpr const TrainStationIdIndex<UICStation> uic_table[] = {\n");
-    for (const auto &it : m_uicMap) {
-        const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it.second);
-        if (station == m_stations.end() || (*station).uri != it.second) {
-            continue;
-        }
-        out->write("    { UICStation{");
-        out->write(QByteArray::number(it.first));
-        out->write("}, TrainStationIndex{");
-        out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
-        out->write("} }, // ");
-        out->write((*station).name.toUtf8());
-        out->write("\n");
-    }
-    out->write("};\n\n");
-}
-
-void TrainStationDbGenerator::writeSncfMap(QIODevice *out)
-{
-    out->write("static constexpr const TrainStationIdIndex<SncfStationId> sncfStationId_table[] = {\n");
-    for (const auto &it : m_sncfIdMap) {
-        const auto station = std::lower_bound(m_stations.begin(), m_stations.end(), it.second);
-        if (station == m_stations.end() || (*station).uri != it.second) {
-            continue;
-        }
-        out->write("    { SncfStationId{\"");
-        out->write(it.first.toUtf8());
-        out->write("\"}, TrainStationIndex{");
         out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
         out->write("} }, // ");
         out->write((*station).name.toUtf8());
@@ -421,7 +322,7 @@ void TrainStationDbGenerator::writeIndianRailwaysMap(QIODevice *out)
 {
     // variable length identifiers, so we need a string table
     std::vector<uint16_t> offsets;
-    offsets.reserve(m_sncfIdMap.size());
+    offsets.reserve(m_indianRailwaysMap.size());
     uint16_t offset = 0;
 
     out->write("static constexpr const char indianRailwaysSationCode_stringtable[] =\n");
@@ -475,8 +376,8 @@ void TrainStationDbGenerator::writeVRMap(QIODevice *out)
             continue;
         }
         out->write("    { VRStationCode{\"");
-        out->write(it.first.toUtf8());
-        for (int i = 0; i < 4 - it.first.size(); ++i) {
+        out->write(it.first.toString().toUtf8());
+        for (int i = 0; i < 4 - it.first.toString().toUtf8().size(); ++i) {
             out->write("\\0");
         }
         out->write("\"}, TrainStationIndex{");
@@ -494,6 +395,7 @@ void TrainStationDbGenerator::printSummary()
     qDebug() << "IBNR index:" << m_ibnrMap.size() << "elements";
     qDebug() << "UIC index:" << m_uicMap.size() << "elements";
     qDebug() << "SNCF station code index:" << m_sncfIdMap.size() << "elements";
+    qDebug() << "Benerail station code index:" << m_benerailIdMap.size() << "elements";
     qDebug() << "Indian Railwaiys station code index:" << m_indianRailwaysMap.size() << "elements";
     qDebug() << "VR (Finland) station code index:" << m_vrfiMap.size() << "elements";
     qDebug() << "Identifier collisions:" << m_idConflicts;
