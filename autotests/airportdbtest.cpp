@@ -26,6 +26,11 @@ char *toString(const IataCode &code)
     using QTest::toString;
     return toString(code.toString());
 }
+char *toString(const CountryId &code)
+{
+    using QTest::toString;
+    return toString(code.toString());
+}
 }}
 
 class AirportDbTest : public QObject
@@ -119,6 +124,14 @@ private Q_SLOTS:
         QCOMPARE(tz.id(), QByteArray("Europe/Luxembourg"));
 
         // HKG seems to cause trouble on FreeBSD
+        const auto coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"HKG"});
+        QVERIFY(coord.isValid());
+        QVERIFY(LocationUtil::distance(coord.latitude, coord.longitude, 22.31600, 113.93688) < 500);
+        QCOMPARE(KnowledgeDb::timezoneForCoordinate(coord.latitude, coord.longitude), KnowledgeDb::Tz::Asia_Hong_Kong);
+        const auto country = KnowledgeDb::countryForAirport(KnowledgeDb::IataCode{"HKG"});
+        QCOMPARE(country, KnowledgeDb::CountryId{"CN"});
+        QCOMPARE(KnowledgeDb::timezoneForLocation(coord.latitude, coord.longitude, country), KnowledgeDb::Tz::Asia_Hong_Kong);
+        QCOMPARE(KnowledgeDb::tzId(KnowledgeDb::Tz::Asia_Hong_Kong), "Asia/Hong_Kong");
         tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{"HKG"});
         QCOMPARE(tz, QTimeZone("Asia/Hong_Kong"));
         QCOMPARE(tz.id(), QByteArray("Asia/Hong_Kong"));
