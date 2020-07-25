@@ -50,13 +50,8 @@ Timezones::Timezones()
         }
     }
 
-    std::sort(m_zones.begin(), m_zones.end());
-    m_zoneOffsets.reserve(m_zones.size());
-    uint16_t offset = 0;
-    for (const auto &tz : m_zones) {
-        m_zoneOffsets.push_back(offset);
-        offset += tz.size() + 1; // +1 of the trailing null byte
-    }
+    /* Remove non-official zones that openSUSE patches into their zonetab. */
+    removeZone("Asia/Beijing");
 
     /* Manual overrides for countries that de-facto only have a single timezone,
      * even if the IANA database doesn't reflect that.
@@ -70,6 +65,16 @@ Timezones::Timezones()
     /* Manual overrides for timezones that do not belong to a unique country, contrary what zonetab claims. */
     setCountryForZone("Asia/Bangkok", {}); // also used in northern Vietnam
     setCountryForZone("Europe/Simferopol", {}); // disputed area
+
+    // create offset index
+    std::sort(m_zones.begin(), m_zones.end());
+    m_zoneOffsets.reserve(m_zones.size());
+    uint16_t offset = 0;
+    for (const auto &tz : m_zones) {
+        m_zoneOffsets.push_back(offset);
+        offset += tz.size() + 1; // +1 of the trailing null byte
+    }
+
 }
 
 Timezones::~Timezones() = default;
@@ -90,4 +95,13 @@ void Timezones::setCountryForZone(const QByteArray &tz, const QString &country)
         return;
     }
     (*it).second = country;
+}
+
+void Timezones::removeZone(const QByteArray &tz)
+{
+    m_zones.erase(std::remove(m_zones.begin(), m_zones.end(), tz), m_zones.end());
+    m_countryForZone.erase(tz);
+    for (auto &it : m_countryZones) {
+        it.second.erase(std::remove(it.second.begin(), it.second.end(), tz), it.second.end());
+    }
 }

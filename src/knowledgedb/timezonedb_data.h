@@ -239,7 +239,6 @@ enum class Tz : uint16_t {
     Asia_Baku,
     Asia_Bangkok,
     Asia_Barnaul,
-    Asia_Beijing,
     Asia_Beirut,
     Asia_Bishkek,
     Asia_Brunei,

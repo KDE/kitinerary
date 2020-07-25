@@ -44,7 +44,7 @@
             "departureTime": {
                 "@type": "QDateTime",
                 "@value": "2017-01-20T11:45:00+08:00",
-                "timezone": "Asia/Hong_Kong"
+                "timezone": "Asia/Shanghai"
             },
             "flightNumber": "38"
         },
@@ -101,7 +101,7 @@
             "departureTime": {
                 "@type": "QDateTime",
                 "@value": "2017-01-20T11:45:00+08:00",
-                "timezone": "Asia/Hong_Kong"
+                "timezone": "Asia/Shanghai"
             },
             "flightNumber": "38"
         },
@@ -158,7 +158,7 @@
             "departureTime": {
                 "@type": "QDateTime",
                 "@value": "2017-01-20T11:45:00+08:00",
-                "timezone": "Asia/Hong_Kong"
+                "timezone": "Asia/Shanghai"
             },
             "flightNumber": "38"
         },
