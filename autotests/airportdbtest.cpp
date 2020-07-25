@@ -130,11 +130,9 @@ private Q_SLOTS:
         QCOMPARE(KnowledgeDb::timezoneForCoordinate(coord.latitude, coord.longitude), KnowledgeDb::Tz::Asia_Hong_Kong);
         const auto country = KnowledgeDb::countryForAirport(KnowledgeDb::IataCode{"HKG"});
         QCOMPARE(country, KnowledgeDb::CountryId{"CN"});
-        QCOMPARE(KnowledgeDb::timezoneForLocation(coord.latitude, coord.longitude, country), KnowledgeDb::Tz::Asia_Hong_Kong);
-        QCOMPARE(KnowledgeDb::tzId(KnowledgeDb::Tz::Asia_Hong_Kong), "Asia/Hong_Kong");
+        QCOMPARE(KnowledgeDb::timezoneForLocation(coord.latitude, coord.longitude, country), KnowledgeDb::Tz::Asia_Shanghai);
         tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{"HKG"});
-        QCOMPARE(tz, QTimeZone("Asia/Hong_Kong"));
-        QCOMPARE(tz.id(), QByteArray("Asia/Hong_Kong"));
+        QCOMPARE(tz.id(), QByteArray("Asia/Shanghai"));
     }
 
     void iataLookupTest()

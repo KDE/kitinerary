@@ -24,8 +24,6 @@ public:
     Timezones();
     ~Timezones();
 
-    QByteArray timezoneForLocation(const QString &isoCode, KnowledgeDb::Coordinate coord) const;
-
     // the offset into the timezone string table
     uint16_t offset(const QByteArray &tz) const;
 
@@ -33,6 +31,7 @@ private:
     friend class TimezoneDbGenerator;
 
     void setCountryForZone(const QByteArray &tz, const QString &country);
+    void removeZone(const QByteArray &tz);
 
     std::vector<QByteArray> m_zones;
     std::vector<uint16_t> m_zoneOffsets;
