@@ -117,6 +117,11 @@ private Q_SLOTS:
         // tiny, make sure our lookup resolution is big enough for that
         tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{"LUX"});
         QCOMPARE(tz.id(), QByteArray("Europe/Luxembourg"));
+
+        // HKG seems to cause trouble on FreeBSD
+        tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{"HKG"});
+        QCOMPARE(tz, QTimeZone("Asia/Hong_Kong"));
+        QCOMPARE(tz.id(), QByteArray("Asia/Hong_Kong"));
     }
 
     void iataLookupTest()

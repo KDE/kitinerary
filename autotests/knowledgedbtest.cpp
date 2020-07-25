@@ -321,6 +321,9 @@ private Q_SLOTS:
         // polar regions
         QCOMPARE(timezoneForCoordinate(-90.0, 0.0), Tz::Undefined);
         QCOMPARE(timezoneForCoordinate(90.0, 0.0), Tz::Undefined);
+
+        // Hong Kong seems problematic on FreeBSD
+        QCOMPARE(timezoneForCoordinate(22.31600, 113.93688), Tz::Asia_Hong_Kong);
     }
 
     void testCountryFromCoordinate()
