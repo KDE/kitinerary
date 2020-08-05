@@ -12,7 +12,7 @@
 #include <memory>
 #include <vector>
 
-class QMetaObject;
+struct QMetaObject;
 class QVariant;
 
 namespace KItinerary {
