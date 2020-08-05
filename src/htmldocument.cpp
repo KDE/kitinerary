@@ -110,6 +110,7 @@ HtmlElement HtmlElement::nextSibling() const
     return {};
 }
 
+#ifdef HAVE_LIBXML2
 static QString normalizeSpaces(const QString &in)
 {
     QString out;
@@ -145,6 +146,7 @@ static QString normalizeSpaces(const QString &in)
 
     return out.trimmed(); // trailing trim can be done without copying
 }
+#endif
 
 QString HtmlElement::content() const
 {
