@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "header": "From",
+            "match": "@tierpark-berlin.de",
+            "type": "Email"
+        }
+    ],
+    "function": "main",
+    "script": "tierparkberlin.js",
+    "type": "Pdf"
+}
