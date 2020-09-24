@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "header": "Subject",
+            "match": "^\\[Indico\\] ",
+            "type": "Email"
+        }
+    ],
+    "function": "parseRegistration",
+    "script": "indico.js",
+    "type": "Html"
+}
