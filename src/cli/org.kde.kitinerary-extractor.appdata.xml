@@ -21,6 +21,7 @@
   <name xml:lang="pl">Wydobywane danych z wiersza poleceń KItinerary</name>
   <name xml:lang="pt">Extracção da Linha de Comandos do KItinerary</name>
   <name xml:lang="pt-BR">Extrator em linha de comando do KItinerary</name>
+  <name xml:lang="ro">Extractor KItinerary în linie de comandă</name>
   <name xml:lang="ru">Инструмент командной строки для извлечения данных маршрутов</name>
   <name xml:lang="sk">Extraktor cez príkazový riadok pre KItinerary</name>
   <name xml:lang="sl">KItinerary ekstraktor ukazne vrstice</name>
@@ -46,6 +47,7 @@
   <summary xml:lang="pl">Wydobywane danych o rezerwacji z wiersza poleceń.</summary>
   <summary xml:lang="pt">Extracção de dados de reservas na linha de comandos.</summary>
   <summary xml:lang="pt-BR">Extrator em linha de comando de dados de reservas.</summary>
+  <summary xml:lang="ro">Extractor în linie de comandă pentru date despre rezervări.</summary>
   <summary xml:lang="ru">Инструмент командной строки для извлечения данных маршрутов.</summary>
   <summary xml:lang="sk">Extraktor dát pre rezerváciu cez príkazový riadok.</summary>
   <summary xml:lang="sl">Ekstraktor podatkov o rezervaciji v ukazni vrstici.</summary>
@@ -73,6 +75,7 @@
     <p xml:lang="pl">Wydobywane danych z wiersza poleceń dla planu podróży, do zszywania z aplikacjami osób trzecich.</p>
     <p xml:lang="pt">Extracção pela linha de comandos de dados de itinerários, para se integrar com aplicações de terceiros.</p>
     <p xml:lang="pt-BR">Extrator em linha de comando para dados de itinerários, para integração em aplicativos de terceiros.</p>
+    <p xml:lang="ro">Extractor în linie de comandă pentru date despre itinerare, pentru integrare în aplicații de la terți.</p>
     <p xml:lang="sk">Extraktor cez príkazový riadok pre dáta itinerára na integráciu do aplikácií tretích strán.</p>
     <p xml:lang="sl">Ekstraktor ukazne vrstice za potovalne podatke za integracijo aplikacije tretje osebe.</p>
     <p xml:lang="sv">Extrahering av reseinformation på kommandoraden, för att integrera med tredjepartsprogram.</p>
