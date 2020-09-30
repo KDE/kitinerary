@@ -23,6 +23,9 @@ static bool isJsonLdTag(const HtmlElement &elem)
 
 static QByteArray fixupJson(const QByteArray &data)
 {
+    if (data.isEmpty()) {
+        return {};
+    }
     auto output(data);
 
     // Eurowings doesn't put a comma between objects in top-level arrays...
