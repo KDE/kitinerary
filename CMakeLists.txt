@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(PIM_VERSION "5.15.2")
+set(PIM_VERSION "5.15.3")
 project(KItinerary VERSION ${PIM_VERSION})
 
 set(CMAKE_CXX_STANDARD 14)
