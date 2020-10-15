@@ -58,6 +58,10 @@ set_package_properties(OsmTools PROPERTIES TYPE OPTIONAL PURPOSE "Needed only fo
 if (NOT ANDROID)
     set_package_properties(KF5CalendarCore PROPERTIES TYPE REQUIRED)
     set_package_properties(LibXml2 PROPERTIES TYPE REQUIRED)
+else()
+    # force Poppler on Android, to avoid silent failures on binary factory when its
+    # Poppler build broke, which then results in feature regressions in KDE Itinerary
+    set_package_properties(Poppler PROPERTIES TYPE REQUIRED)
 endif()
 
 if(TARGET Poppler::Core)
