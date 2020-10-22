@@ -9,7 +9,6 @@
 #include "util.h"
 #include "wikidata.h"
 
-#include <QByteArray>
 #include <QDebug>
 #include <QIODevice>
 #include <QJsonArray>

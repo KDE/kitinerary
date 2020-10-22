@@ -8,7 +8,6 @@
 
 #include <KItinerary/JsonLdDocument>
 
-#include <QDateTime>
 #include <QDebug>
 #include <QJSEngine>
 #include <QJsonArray>

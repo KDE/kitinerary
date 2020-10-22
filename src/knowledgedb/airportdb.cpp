@@ -8,7 +8,6 @@
 #include "airportdb_p.h"
 #include "airportdb_data.cpp"
 #include "stringutil.h"
-#include "timezonedb.h"
 
 #include <QDebug>
 #include <QRegularExpression>

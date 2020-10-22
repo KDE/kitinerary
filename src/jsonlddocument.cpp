@@ -30,7 +30,6 @@
 #include <QMetaProperty>
 #include <QUrl>
 #include <QTimeZone>
-#include <QVector>
 
 #include <cmath>
 

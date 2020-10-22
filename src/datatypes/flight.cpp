@@ -5,8 +5,6 @@
 */
 
 #include "flight.h"
-#include "place.h"
-#include "organization.h"
 #include "datatypes_p.h"
 
 #include <QDateTime>

@@ -5,8 +5,6 @@
 */
 
 #include "traintrip.h"
-#include "organization.h"
-#include "place.h"
 #include "datatypes_p.h"
 
 #include <QDateTime>

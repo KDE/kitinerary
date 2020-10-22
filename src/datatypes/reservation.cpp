@@ -5,7 +5,6 @@
 */
 
 #include "reservation.h"
-#include "organization.h"
 #include "datatypes_p.h"
 
 #include <QDateTime>

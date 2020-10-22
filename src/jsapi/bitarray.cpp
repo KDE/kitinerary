@@ -6,7 +6,6 @@
 
 #include "bitarray.h"
 
-#include <QByteArray>
 #include <QDebug>
 
 #include <cstdint>

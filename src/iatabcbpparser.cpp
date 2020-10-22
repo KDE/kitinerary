@@ -14,7 +14,6 @@
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
 
-#include <QDate>
 #include <QVariant>
 
 using namespace KItinerary;

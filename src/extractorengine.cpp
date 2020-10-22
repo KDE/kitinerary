@@ -8,7 +8,6 @@
 #include "barcodedecoder.h"
 #include "extractorengine.h"
 #include "extractor.h"
-#include "extractorinput.h"
 #include "extractorrepository.h"
 #include "generic/genericpdfextractor_p.h"
 #include "generic/genericicalextractor_p.h"
