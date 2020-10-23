@@ -11,6 +11,8 @@
 
 #include <QTimeZone>
 
+#include <cmath>
+
 using namespace KItinerary;
 
 const char* KnowledgeDb::tzId(KnowledgeDb::Tz tz)
@@ -43,6 +45,10 @@ KnowledgeDb::CountryId KnowledgeDb::countryForTimezone(KnowledgeDb::Tz tz)
 
 KnowledgeDb::Tz KnowledgeDb::timezoneForCoordinate(float lat, float lon, bool *ambiguous)
 {
+    if (std::isnan(lat) || std::isnan(lon)) {
+        return Tz::Undefined;
+    }
+
     // see arctic latitude filter in the generator script, we only cover 65°S to 80°N
     if (lat < timezone_index_params.yStart || lat > timezone_index_params.yEnd()) {
         return Tz::Undefined;
