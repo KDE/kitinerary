@@ -73,22 +73,22 @@ function parsePdf(pdf) {
     for (var i = 0; i < pdf.pageCount; ++i) {
         var page = pdf.pages[i];
 
-        // barcode format:
+        // barcode format: (see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes)
         // 'i0CV'
         // 6x PNR
-        // 9x document id
+        // 9x document id / e-ticket number
         // '1211'
         // dd/MM/yyyy birthdate
-        // 2x 5x gare & connextion ids of the first leg
+        // 2x 5x SNCF station code of the first leg
         // 5x train number first leg
         // dd/MM travel date
         // 18x client id
         // 19x family name
         // 19x given name
-        // 1x class
-        // 4x stuff
-        // '1' to indicate a second leg, '0' otherwise
-        // 2x 5x gare & connexion ids for the second leg
+        // 1x class first leg ('1' or '2')
+        // 4x tariff/price code
+        // 1x class second leg ('1' or '2'; '0' if there is no second leg)
+        // 2x 5x SNCF station code for the second leg
         // 5x train number second leg
         var barcode = null;
         var images = page.imagesInRect(0.75, 0, 1, 0.75);
@@ -101,8 +101,8 @@ function parsePdf(pdf) {
         var underName = null;
         if (barcode) {
             var underName = JsonLd.newObject("Person");
-            underName.familyName = barcode.substring(73, 91).trim();
-            underName.givenName = barcode.substring(92, 110).trim();
+            underName.familyName = barcode.substr(72, 19).trim();
+            underName.givenName = barcode.substr(91, 19).trim();
         }
 
         var legs = parseText(page.text);
@@ -112,7 +112,7 @@ function parsePdf(pdf) {
                 legs[j].reservedTicket.ticketToken = "aztecCode:" + barcode;
                 legs[j].reservationFor.departureStation.identifier = "sncf:" + barcode.substr(j == 0 ? 33 : 116, 5);
                 legs[j].reservationFor.arrivalStation.identifier = "sncf:" + barcode.substr(j == 0 ? 38 : 121, 5);
-                legs[j].reservedTicket.ticketedSeat.seatingType = barcode.substring(110, 111);
+                legs[j].reservedTicket.ticketedSeat.seatingType = barcode.substr(j == 0 ? 110 : 115, 1);
             }
             reservations.push(legs[j]);
         }
