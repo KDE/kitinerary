@@ -70,6 +70,7 @@ function parseText(text) {
 function parsePdf(pdf) {
     var reservations = new Array();
 
+    var barcode = null;
     for (var i = 0; i < pdf.pageCount; ++i) {
         var page = pdf.pages[i];
 
@@ -90,13 +91,17 @@ function parsePdf(pdf) {
         // 1x class second leg ('1' or '2'; '0' if there is no second leg)
         // 2x 5x SNCF station code for the second leg
         // 5x train number second leg
-        var barcode = null;
+        var nextBarcode = null;
         var images = page.imagesInRect(0.75, 0, 1, 0.75);
-        for (var j = 0; j < images.length && !barcode; ++j) {
-            barcode = Barcode.decodeAztec(images[j]);
-            if (barcode.substr(0, 4).toUpperCase() !== "I0CV")
-                barcode = null;
+        for (var j = 0; j < images.length && !nextBarcode; ++j) {
+            nextBarcode = Barcode.decodeAztec(images[j]);
+            if (nextBarcode.substr(0, 4).toUpperCase() !== "I0CV")
+                nextBarcode = null;
         }
+        // Guard against tickets with 3 or more legs, with the second page for the 3rd and subsequent
+        // leg repeating the barcode of the first two legs. One would expect the barcode for the following
+        // legs there, but that doesn't even seem to exists in the sample documents I have for this...
+        barcode = (nextBarcode && nextBarcode != barcode) ? nextBarcode : null;
 
         var underName = null;
         if (barcode) {
