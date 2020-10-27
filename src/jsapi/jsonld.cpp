@@ -196,7 +196,9 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
     // if the date does not contain a year number, determine that based on the context date, if set
     else if (!hasYear && m_contextDate.isValid()) {
         dt.setDate({m_contextDate.date().year(), dt.date().month(), dt.date().day()});
-        if (dt < m_contextDate) {
+        // go one day back to leave a bit of room for documents produced very close to
+        // or even during the trip
+        if (dt < m_contextDate.addDays(-1)) {
             dt = dt.addYears(1);
         }
     }
