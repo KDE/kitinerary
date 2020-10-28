@@ -54,30 +54,45 @@ function parseText(text) {
     return reservations;
 }
 
+// see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes
+function parseSncfBarcode(barcode)
+{
+    var reservations = new Array();
+
+    var res1 = JsonLd.newTrainReservation();
+    res1.reservationNumber = barcode.substr(4, 6);
+    res1.underName.familyName = barcode.substr(72, 19);
+    res1.underName.givenName = barcode.substr(91, 19);
+    res1.reservationFor.departureStation.name = barcode.substr(33, 5);
+    res1.reservationFor.departureStation.identifier = "sncf:" + barcode.substr(33, 5);
+    res1.reservationFor.arrivalStation.name = barcode.substr(38, 5);
+    res1.reservationFor.arrivalStation.identifier = "sncf:" + barcode.substr(38, 5);
+    res1.reservationFor.departureDay = JsonLd.toDateTime(barcode.substr(48, 5), "dd/MM", "fr");
+    res1.reservationFor.trainNumber = barcode.substr(43, 5);
+    res1.reservedTicket.ticketToken = "aztecCode:" + barcode;
+    res1.reservedTicket.ticketedSeat.seatingType = barcode.substr(110, 1);
+    reservations.push(res1);
+
+    if (barcode.substr(115, 1) != '0') {
+        var res2 = JsonLd.clone(res1);
+        res2.reservationFor.departureStation.name = barcode.substr(116, 5);
+        res2.reservationFor.departureStation.identifier = "sncf:" + barcode.substr(116, 5);
+        res2.reservationFor.arrivalStation.name = barcode.substr(121, 5);
+        res2.reservationFor.arrivalStation.identifier = "sncf:" + barcode.substr(121, 5);
+        res2.reservationFor.trainNumber = barcode.substr(126, 5);
+        res2.reservedTicket.ticketedSeat.seatingType = barcode.substr(115, 1);
+        reservations.push(res2);
+    }
+
+    return reservations;
+}
+
 function parsePdf(pdf) {
     var reservations = new Array();
 
     var barcode = null;
     for (var i = 0; i < pdf.pageCount; ++i) {
         var page = pdf.pages[i];
-
-        // barcode format: (see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes)
-        // 'i0CV'
-        // 6x PNR
-        // 9x document id / e-ticket number
-        // '1211'
-        // dd/MM/yyyy birthdate
-        // 2x 5x SNCF station code of the first leg
-        // 5x train number first leg
-        // dd/MM travel date
-        // 18x client id
-        // 19x family name
-        // 19x given name
-        // 1x class first leg ('1' or '2')
-        // 4x tariff/price code
-        // 1x class second leg ('1' or '2'; '0' if there is no second leg)
-        // 2x 5x SNCF station code for the second leg
-        // 5x train number second leg
         var nextBarcode = null;
         var images = page.imagesInRect(0.75, 0, 1, 0.75);
         for (var j = 0; j < images.length && !nextBarcode; ++j) {
@@ -89,22 +104,18 @@ function parsePdf(pdf) {
         // leg repeating the barcode of the first two legs. One would expect the barcode for the following
         // legs there, but that doesn't even seem to exists in the sample documents I have for this...
         barcode = (nextBarcode && nextBarcode != barcode) ? nextBarcode : null;
-
-        var underName = null;
         if (barcode) {
-            var underName = JsonLd.newObject("Person");
-            underName.familyName = barcode.substr(72, 19).trim();
-            underName.givenName = barcode.substr(91, 19).trim();
+            var barcodeRes = barcode ? parseSncfBarcode(barcode) : null;
         }
 
         var legs = parseText(page.text);
         for (var j = 0; j < legs.length; ++j) {
             if (barcode) {
-                legs[j].underName = underName;
+                legs[j].underName = barcodeRes[j].underName;
                 legs[j].reservedTicket.ticketToken = "aztecCode:" + barcode;
-                legs[j].reservationFor.departureStation.identifier = "sncf:" + barcode.substr(j == 0 ? 33 : 116, 5);
-                legs[j].reservationFor.arrivalStation.identifier = "sncf:" + barcode.substr(j == 0 ? 38 : 121, 5);
-                legs[j].reservedTicket.ticketedSeat.seatingType = barcode.substr(j == 0 ? 110 : 115, 1);
+                legs[j].reservationFor.departureStation.identifier = barcodeRes[j].reservationFor.departureStation.identifier;
+                legs[j].reservationFor.arrivalStation.identifier = barcodeRes[j].reservationFor.arrivalStation.identifier;
+                legs[j].reservedTicket.ticketedSeat.seatingType = barcodeRes[j].reservedTicket.ticketedSeat.seatingType;
             }
             reservations.push(legs[j]);
         }

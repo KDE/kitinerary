@@ -18,6 +18,17 @@
     {
         "filter": [
             {
+                "match": "^i[01]CV",
+                "type": "Text"
+            }
+        ],
+        "function": "parseSncfBarcode",
+        "script": "sncf.js",
+        "type": "Text"
+    },
+    {
+        "filter": [
+            {
                 "header": "From",
                 "match": "UNITTEST-e-billet@sncf.fr",
                 "type": "Email"
