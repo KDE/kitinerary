@@ -46,7 +46,7 @@
                 "type": "Email"
             }
         ],
-        "function": "parseOuigoConfirmation",
+        "function": "parseOuigoEmail",
         "script": "sncf.js",
         "type": "Html"
     },

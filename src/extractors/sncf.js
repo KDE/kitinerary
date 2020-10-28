@@ -141,6 +141,37 @@ function parseSecutixPdf(pdf)
     return res;
 }
 
+function parseOuigoEmail(html)
+{
+    if (html.eval('//*[@data-select="travel-summary-reference"]').length > 0) {
+        return parseOuigoSummary(html);
+    } else {
+        return parseOuigoConfirmation(html);
+    }
+}
+
+function parseOuigoSummary(html)
+{
+    // TODO extract passenger names
+    var res = JsonLd.newTrainReservation();
+    res.reservationFor.departureStation.name = html.eval('//*[@data-select="travel-summary-origin"]')[0].content;
+    res.reservationFor.arrivalStation.name = html.eval('//*[@data-select="travel-summary-destination"]')[0].content;
+    res.reservationNumber = html.eval('//*[@data-select="travel-summary-reference"]')[0].content;
+
+    var depTimeStr = html.eval('//*[@data-select="travel-departureDate"]')[0].recursiveContent;
+    var depTime = depTimeStr.match(/(\d+ [^ ]+ \d+) +[^ ]+ (\d+:\d+)/);
+    if (depTime) {
+        res.reservationFor.departureTime = JsonLd.toDateTime(depTime[1] + depTime[2], "dd MMMM yyyyhh:mm", "fr");
+    } else {
+        depTime = depTimeStr.match(/(\d+ [^ ]+) +[^ ]+ +(\d+[:h]\d+)/);
+        res.reservationFor.departureTime = JsonLd.toDateTime(depTime[1] + depTime[2].replace('h', ':'), "dd MMMMhh:mm", "fr");
+    }
+
+    var trainNum = html.eval('//*[@class="passenger-detail__equipment"]');
+    res.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
+    return res;
+}
+
 function parseOuigoConfirmation(html)
 {
     var reservations = new Array();
