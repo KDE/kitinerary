@@ -30,6 +30,17 @@
     {
         "filter": [
             {
+                "match": "^2200",
+                "type": "Barcode"
+            }
+        ],
+        "function": "parseSecutixPdf",
+        "script": "sncf.js",
+        "type": "Pdf"
+    },
+    {
+        "filter": [
+            {
                 "header": "From",
                 "match": "oui.sncf",
                 "type": "Email"

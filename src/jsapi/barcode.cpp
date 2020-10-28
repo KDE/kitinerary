@@ -133,4 +133,10 @@ void JsApi::Barcode::setContextDate(const QDateTime &dt)
     m_contextDate = dt;
 }
 
+QString JsApi::Barcode::byteArrayToString(const QVariant &b) const
+{
+    const auto ba = b.toByteArray();
+    return QString::fromLatin1(ba.constData(), ba.size());
+}
+
 #include "moc_barcode.cpp"

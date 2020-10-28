@@ -113,6 +113,34 @@ function parsePdf(pdf) {
     return reservations;
 }
 
+function parseSecutixPdf(pdf)
+{
+    // see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes#SNCF_Secutix_Tickets
+    var res = JsonLd.newTrainReservation();
+    var code = Barcode.byteArrayToString(Context.barcode);
+    res.reservationNumber = code.substr(268, 9);
+    res.reservationFor.departureStation.name = code.substr(277, 5);
+    res.reservationFor.departureStation.identifier = "sncf:" + code.substr(277, 5);
+    res.reservationFor.arrivalStation.name = code.substr(282, 5);
+    res.reservationFor.arrivalStation.identifier = "sncf:" + code.substr(282, 5);
+    res.reservationFor.departureDay = JsonLd.toDateTime(code.substr(343, 8), "ddMMyyyy", "fr");
+    res.reservedTicket.ticketedSeat.seatingType = code.substr(351, 1);
+    res.reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(Context.barcode);
+    res.underName.familyName = code.substr(376, 19);
+    res.underName.givenName = code.substr(395, 19);
+
+    var text = pdf.pages[Context.pdfPageNumber].text;
+    var dep = text.match(/Départ [^ ]+ (\d+\.\d+\.\d+) à (\d+:\d+) [^ ]+ (.*)\n/);
+    var arr = text.match(/Arrivée [^ ]+ (\d+\.\d+\.\d+) à (\d+:\d+) [^ ]+ (.*)\n\s+(.*)\n/);
+    res.reservationFor.departureStation.name = dep[3];
+    res.reservationFor.departureTime = JsonLd.toDateTime(dep[1] + dep[2], "dd.MM.yyyyhh:mm", "fr");
+    res.reservationFor.arrivalStation.name = arr[3];
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[1] + arr[2], "dd.MM.yyyyhh:mm", "fr");
+    res.reservationFor.trainNumber = arr[4];
+
+    return res;
+}
+
 function parseOuigoConfirmation(html)
 {
     var reservations = new Array();
