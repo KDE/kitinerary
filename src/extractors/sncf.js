@@ -253,7 +253,7 @@ function parseOuigoTicket(pdf) {
     res.reservedTicket.ticketedSeat.seatSection = seat[1];
     res.reservedTicket.ticketedSeat.seatNumber = seat[2];
     if (Context.barcode) {
-        res.reservedTicket.ticketToken = "acteccode:" + Context.barcode;
+        res.reservedTicket.ticketToken = "azteccode:" + Context.barcode;
     }
     return res;
 }
