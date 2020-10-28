@@ -409,6 +409,8 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
 Person ExtractorPostprocessorPrivate::processPerson(Person person) const
 {
     person.setName(person.name().simplified());
+    person.setFamilyName(person.familyName().simplified());
+    person.setGivenName(person.givenName().simplified());
 
     // fill name with name parts, if it's empty
     if ((person.name().isEmpty() || person.name() == person.familyName() || person.name() == person.givenName())
