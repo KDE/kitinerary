@@ -4,7 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parseText(text) {
+function parseSncfPdfText(text) {
     var reservations = new Array();
     var bookingRef = text.match(/(?:DOSSIER VOYAGE|BOOKING FILE REFERENCE) : +([A-Z0-9]{6})/);
 
@@ -54,6 +54,50 @@ function parseText(text) {
     return reservations;
 }
 
+function parseInouiPdfText(page)
+{
+    var reservations = new Array();
+    var text = page.textInRect(0.0, 0.0, 0.5, 1.0);
+
+    var date = text.match(/(\d+ [^ ]+ \d{4})\n/)
+    if (!date)
+        return reservations;
+    var pos = date.index + date[0].length;
+    while (true) {
+        var dep = text.substr(pos).match(/(\d+h\d+) +(.*)\n/);
+        if (!dep)
+            break;
+        pos += dep.index + dep[0].length;
+
+        var res = JsonLd.newTrainReservation();
+        res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + dep[1], "d MMMM yyyyhh'h'mm", "fr");
+        res.reservationFor.departureStation.name = dep[2];
+
+        var arr = text.substr(pos).match(/(\d+h\d+) +(.*)\n/);
+        if (!arr)
+            break;
+        var endPos = arr.index + arr[0].length;
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + arr[1], "d MMMM yyyyhh'h'mm", "fr");
+        res.reservationFor.arrivalStation.name = arr[2];
+
+        var detailsText = text.substr(pos, endPos - arr[0].length);
+        var train = detailsText.match(/^ *(.*?) *-/);
+        res.reservationFor.trainNumber = train[1];
+        var seat = detailsText.match(/Voiture *(\d+) *Place *(\d+)/);
+        if (seat) {
+            res.reservedTicket.ticketedSeat.seatSection = seat[1];
+            res.reservedTicket.ticketedSeat.seatNumber = seat[2];
+        }
+
+        reservations.push(res);
+        if (endPos == 0)
+            break;
+        pos += endPos;
+    }
+
+    return reservations;
+}
+
 // see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes
 function parseSncfBarcode(barcode)
 {
@@ -94,10 +138,10 @@ function parsePdf(pdf) {
     for (var i = 0; i < pdf.pageCount; ++i) {
         var page = pdf.pages[i];
         var nextBarcode = null;
-        var images = page.imagesInRect(0.75, 0, 1, 0.75);
+        var images = page.images;
         for (var j = 0; j < images.length && !nextBarcode; ++j) {
             nextBarcode = Barcode.decodeAztec(images[j]);
-            if (nextBarcode.substr(0, 4).toUpperCase() !== "I0CV")
+            if (nextBarcode.substr(0, 4) !== "i0CV")
                 nextBarcode = null;
         }
         // Guard against tickets with 3 or more legs, with the second page for the 3rd and subsequent
@@ -108,16 +152,23 @@ function parsePdf(pdf) {
             var barcodeRes = barcode ? parseSncfBarcode(barcode) : null;
         }
 
-        var legs = parseText(page.text);
-        for (var j = 0; j < legs.length; ++j) {
-            if (barcode) {
-                legs[j].underName = barcodeRes[j].underName;
-                legs[j].reservedTicket.ticketToken = "aztecCode:" + barcode;
-                legs[j].reservationFor.departureStation.identifier = barcodeRes[j].reservationFor.departureStation.identifier;
-                legs[j].reservationFor.arrivalStation.identifier = barcodeRes[j].reservationFor.arrivalStation.identifier;
-                legs[j].reservedTicket.ticketedSeat.seatingType = barcodeRes[j].reservedTicket.ticketedSeat.seatingType;
+        var legs = parseSncfPdfText(page.text);
+        if (legs.length == 0) {
+            legs = parseInouiPdfText(page);
+        }
+        if (legs.length > 0) {
+            for (var j = 0; j < legs.length; ++j) {
+                if (barcode) {
+                    legs[j].underName = barcodeRes[j].underName;
+                    legs[j].reservedTicket.ticketToken = "aztecCode:" + barcode;
+                    legs[j].reservationFor.departureStation.identifier = barcodeRes[j].reservationFor.departureStation.identifier;
+                    legs[j].reservationFor.arrivalStation.identifier = barcodeRes[j].reservationFor.arrivalStation.identifier;
+                    legs[j].reservedTicket.ticketedSeat.seatingType = barcodeRes[j].reservedTicket.ticketedSeat.seatingType;
+                }
+                reservations.push(legs[j]);
             }
-            reservations.push(legs[j]);
+        } else {
+            reservations = reservations.concat(barcodeRes);
         }
     }
 

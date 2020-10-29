@@ -34,7 +34,7 @@
                 "type": "Email"
             }
         ],
-        "function": "parseText",
+        "function": "parseSncfPdfText",
         "script": "sncf.js",
         "type": "Text"
     },
