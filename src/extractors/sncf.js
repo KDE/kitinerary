@@ -192,6 +192,8 @@ function parseSecutixPdf(pdf)
     res.underName.givenName = code.substr(395, 19);
 
     var text = pdf.pages[Context.pdfPageNumber].text;
+    var pnr = text.match(res.reservationNumber + '[^\n]* ([A-Z0-9]{6})\n');
+    res.reservationNumber = pnr[1];
     var dep = text.match(/Départ [^ ]+ (\d+\.\d+\.\d+) à (\d+:\d+) [^ ]+ (.*)\n/);
     var arr = text.match(/Arrivée [^ ]+ (\d+\.\d+\.\d+) à (\d+:\d+) [^ ]+ (.*)\n\s+(.*)\n/);
     res.reservationFor.departureStation.name = dep[3];
