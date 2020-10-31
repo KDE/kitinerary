@@ -194,15 +194,39 @@ function parseSecutixPdf(pdf)
     var text = pdf.pages[Context.pdfPageNumber].text;
     var pnr = text.match(res.reservationNumber + '[^\n]* ([A-Z0-9]{6})\n');
     res.reservationNumber = pnr[1];
-    var dep = text.match(/Départ [^ ]+ (\d+\.\d+\.\d+) à (\d+:\d+) [^ ]+ (.*)\n/);
-    var arr = text.match(/Arrivée [^ ]+ (\d+\.\d+\.\d+) à (\d+:\d+) [^ ]+ (.*)\n\s+(.*)\n/);
-    res.reservationFor.departureStation.name = dep[3];
-    res.reservationFor.departureTime = JsonLd.toDateTime(dep[1] + dep[2], "dd.MM.yyyyhh:mm", "fr");
-    res.reservationFor.arrivalStation.name = arr[3];
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[1] + arr[2], "dd.MM.yyyyhh:mm", "fr");
-    res.reservationFor.trainNumber = arr[4];
 
-    return res;
+    var reservations = new Array();
+    var pos = 0;
+    while (true) {
+        var dep = text.substr(pos).match(/Départ [^ ]+ (\d+\.\d+\.\d+) à (\d+:\d+) [^ ]+ (.*)\n/);
+        if (!dep)
+            break;
+        pos += dep.index + dep[0].length;
+        var arr = text.substr(pos).match(/Arrivée [^ ]+ (\d+\.\d+\.\d+) à (\d+:\d+) [^ ]+ (.*)\n\s+(.*)\n/);
+        if (!arr)
+            break;
+        pos += arr.index + arr[0].length;
+
+        var leg = JsonLd.newTrainReservation();
+        leg.reservationFor.departureStation.name = dep[3];
+        leg.reservationFor.departureTime = JsonLd.toDateTime(dep[1] + dep[2], "dd.MM.yyyyhh:mm", "fr");
+        leg.reservationFor.arrivalStation.name = arr[3];
+        leg.reservationFor.arrivalTime = JsonLd.toDateTime(arr[1] + arr[2], "dd.MM.yyyyhh:mm", "fr");
+        leg.reservationFor.trainNumber = arr[4];
+        leg.underName = res.underName;
+        leg.reservationNumber = res.reservationNumber;
+        leg.reservedTicket = res.reservedTicket;
+
+        reservations.push(leg);
+    }
+
+    if (reservations.length == 0)
+        return res;
+
+    reservations[0].reservationFor.departureStation.identifier = res.reservationFor.departureStation.identifier;
+    reservations[reservations.length - 1].reservationFor.arrivalStation.identifier = res.reservationFor.arrivalStation.identifier;
+
+    return reservations;
 }
 
 function parseOuigoEmail(html)
