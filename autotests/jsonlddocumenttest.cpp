@@ -178,7 +178,7 @@ private Q_SLOTS:
 
         auto data = datas.at(0);
         QVERIFY(data.canConvert<Flight>());
-        Flight flight = data.value<Flight>();
+        auto flight = data.value<Flight>();
         QCOMPARE(flight.flightNumber(), QLatin1String("1234"));
         QCOMPARE(flight.departureAirport().iataCode(), QLatin1String("TXL"));
         QCOMPARE(flight.departureAirport().name(), QLatin1String("Berlin Tegel"));

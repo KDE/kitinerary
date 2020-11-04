@@ -16,7 +16,7 @@
 namespace OSM {
 
 /** OSM element identifier. */
-typedef int64_t Id;
+using Id = int64_t;
 
 /** Coordinate, stored as 1e7 * degree to avoid floating point precision issues,
  *  and offset to unsigned values to make the z-order curve work.

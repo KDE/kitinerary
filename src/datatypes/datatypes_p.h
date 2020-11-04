@@ -31,7 +31,7 @@ template <typename T>
 struct base_type {
     template <typename U> static typename U::super_type test(typename U::super_type*);
     template <typename U> static T test(...);
-    typedef decltype(test<T>(nullptr)) type;
+    using type = decltype(test<T>(nullptr));
     static constexpr const bool is_valid = !std::is_same<type, T>::value;
 };
 

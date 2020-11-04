@@ -25,7 +25,7 @@ private Q_SLOTS:
         QTest::newRow("empty") << QByteArray() << ExtractorInput::Unknown;
         QTest::newRow("html") << QByteArray("<html>") << ExtractorInput::Html;
         QTest::newRow("html padded") << QByteArray("      <!DOCTYPE html>") << ExtractorInput::Html;
-        QTest::newRow("json") << QByteArray("{\"@type\": \"Foo\"}") << ExtractorInput::JsonLd;
+        QTest::newRow("json") << QByteArray(R"({"@type": "Foo"})") << ExtractorInput::JsonLd;
         QTest::newRow("json padded") << QByteArray("          []") << ExtractorInput::JsonLd;
         QTest::newRow("pkpass") << QByteArray("PK\x03\x04") << ExtractorInput::PkPass;
         QTest::newRow("pdf") << QByteArray("%PDF") << ExtractorInput::Pdf;

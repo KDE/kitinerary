@@ -343,7 +343,7 @@ static QJsonValue toJsonValue(const QVariant &v)
         }
 
         if (v.canConvert<QVariantList>()) {
-            QSequentialIterable iterable = v.value<QSequentialIterable>();
+            auto iterable = v.value<QSequentialIterable>();
             if (iterable.size() == 0) {
                 return {};
             }

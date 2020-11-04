@@ -12,6 +12,8 @@
 #ifdef HAVE_POPPLER
 #include <GlobalParams.h>
 
+#include <memory>
+
 using namespace KItinerary;
 
 static std::unique_ptr<GlobalParams> s_globalParams;
@@ -19,7 +21,7 @@ static std::unique_ptr<GlobalParams> s_globalParams;
 PopplerGlobalParams::PopplerGlobalParams()
 {
     if (!s_globalParams) {
-        s_globalParams.reset(new GlobalParams);
+        s_globalParams = std::make_unique<GlobalParams>();
     }
 
 #if KPOPPLER_VERSION <= QT_VERSION_CHECK(0, 82, 0)

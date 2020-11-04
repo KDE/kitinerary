@@ -50,6 +50,7 @@
 #include <QProcess>
 
 #include <cstring>
+#include <memory>
 
 using namespace KItinerary;
 
@@ -311,7 +312,7 @@ void ExtractorEnginePrivate::openDocument()
             m_data.clear();
             break;
         case ExtractorInput::Email:
-            m_ownedMimeContent.reset(new KMime::Message);
+            m_ownedMimeContent = std::make_unique<KMime::Message>();
             m_ownedMimeContent->setContent(KMime::CRLFtoLF(m_data));
             m_ownedMimeContent->parse();
             m_data.clear();

@@ -20,6 +20,7 @@
 #include <QJsonObject>
 #include <QString>
 #include <QUuid>
+#include <memory>
 
 using namespace KItinerary;
 
@@ -67,9 +68,9 @@ void File::setFileName(const QString &fileName)
 bool File::open(File::OpenMode mode) const
 {
     if (d->device) {
-        d->zipFile.reset(new KZip(d->device));
+        d->zipFile = std::make_unique<KZip>(d->device);
     } else {
-        d->zipFile.reset(new KZip(d->fileName));
+        d->zipFile = std::make_unique<KZip>(d->fileName);
     }
 
     if (!d->zipFile->open(mode == File::Write ? QIODevice::WriteOnly : QIODevice::ReadOnly)) {
