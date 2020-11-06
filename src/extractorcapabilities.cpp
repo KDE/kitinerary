@@ -47,7 +47,7 @@ QString ExtractorCapabilities::capabilitiesString()
 
         "Barcode decoder     : "
 #ifdef HAVE_ZXING
-            "zxing"
+            "zxing (" ZXING_VERSION_STRING ")"
 #else
             "not available"
 #endif
