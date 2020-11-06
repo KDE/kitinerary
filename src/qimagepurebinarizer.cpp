@@ -59,6 +59,28 @@ bool QImagePureBinarizer::getBlackRow(int y, ZXing::BitArray &row) const
     return true;
 }
 
+#if ZXING_VERSION >= QT_VERSION_CHECK(1, 1, 1)
+bool QImagePureBinarizer::getPatternRow(int y, ZXing::PatternRow& res) const
+{
+    res.clear();
+    // TODO we can probably skip this indirection eventually and directly access image data here?
+    ZXing::BitArray row;
+    getBlackRow(y, row);
+
+    auto li = row.begin();
+    auto i = li;
+    if (*i) {
+        res.push_back(0);
+    }
+    while ((i = row.getNextSetTo(i, !*i)) != row.end()) {
+        res.push_back(static_cast<ZXing::PatternRow::value_type>(i - li));
+        li = i;
+    }
+    res.push_back(static_cast<ZXing::PatternRow::value_type>(i - li));
+    return true;
+}
+#endif
+
 std::shared_ptr<const ZXing::BitMatrix> QImagePureBinarizer::getBlackMatrix() const
 {
     using namespace ZXing;

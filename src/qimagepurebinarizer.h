@@ -31,7 +31,15 @@ public:
     int width() const override;
     bool isPureBarcode() const override;
 
-    bool getBlackRow(int y, ZXing::BitArray &row) const override;
+    bool getBlackRow(int y, ZXing::BitArray &row) const
+#if ZXING_VERSION < QT_VERSION_CHECK(1, 1, 1)
+    // no longer present in later versions of 1.1.1...
+    override
+#endif
+    ;
+#if ZXING_VERSION >= QT_VERSION_CHECK(1, 1, 1)
+    bool getPatternRow(int y, ZXing::PatternRow& res) const override;
+#endif
     std::shared_ptr<const ZXing::BitMatrix> getBlackMatrix() const override;
 
     bool canCrop() const override;
