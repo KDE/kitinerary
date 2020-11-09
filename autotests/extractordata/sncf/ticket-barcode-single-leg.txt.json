@@ -1,0 +1,56 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2017-12-29T18:46:02+01:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 43.60459899902344,
+                    "longitude": 3.881040096282959
+                },
+                "identifier": "sncf:FRMPL",
+                "name": "FRMPL"
+            },
+            "departureDay": "2018-07-31",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 43.61109924316406,
+                    "longitude": 1.4536099433898926
+                },
+                "identifier": "sncf:FRXYT",
+                "name": "FRXYT"
+            },
+            "trainNumber": "04321"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:i0CVXXX007123456789121101/01/1970FRXYTFRMPL0432131/070123456789012345678                DOE               JOHN2CF000          00000\n",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHN",
+            "name": "JOHN DOE"
+        }
+    }
+]

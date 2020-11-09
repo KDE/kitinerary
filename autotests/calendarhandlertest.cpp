@@ -15,6 +15,7 @@
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QProcess>
 #include <QObject>
 #include <QTest>
 
@@ -86,6 +87,16 @@ private Q_SLOTS:
         if (*newEvent != *refEvent) {
             qDebug().noquote() << "Actual: " << format.toICalString(newEvent).remove(QLatin1Char('\r'));
             qDebug().noquote() << "Expected: " << format.toICalString(refEvent).remove(QLatin1Char('\r'));
+
+            QFile failFile(icalFile + QLatin1String(".fail"));
+            QVERIFY(failFile.open(QFile::WriteOnly));
+            failFile.write(format.toICalString(newEvent).remove(QLatin1Char('\r')).toUtf8());
+            failFile.close();
+
+            QProcess proc;
+            proc.setProcessChannelMode(QProcess::ForwardedChannels);
+            proc.start(QStringLiteral("diff"), {QStringLiteral("-u"), icalFile, failFile.fileName()});
+            QVERIFY(proc.waitForFinished());
         }
 
         QCOMPARE(newEvent->dtStart(), refEvent->dtStart());

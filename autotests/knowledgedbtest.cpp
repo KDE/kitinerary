@@ -169,6 +169,10 @@ private Q_SLOTS:
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Zurich"));
         QCOMPARE(station.country, CountryId{"CH"});
+        station = KnowledgeDb::stationForSncfStationId(SncfStationId{"FRHWO"}); // alias for CHGVA...
+        QVERIFY(station.coordinate.isValid());
+        QCOMPARE(toQTimeZone(station.timezone()), QTimeZone("Europe/Zurich"));
+        QCOMPARE(station.country, CountryId{"CH"});
 
         station = KnowledgeDb::stationForSncfStationId(SncfStationId{"NLAMA"}); // vs. SNCB ID of NLASC
         QVERIFY(station.coordinate.isValid());

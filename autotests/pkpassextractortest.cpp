@@ -18,6 +18,7 @@
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QProcess>
 #include <QObject>
 #include <QTest>
 
@@ -78,8 +79,17 @@ private Q_SLOTS:
         QCOMPARE(doc.array().size(), result.size());
 
         if (resJson != doc.array()) {
-            qDebug().noquote() << QJsonDocument(resJson).toJson();
+            QFile failFile(refFile + QLatin1String(".fail"));
+            QVERIFY(failFile.open(QFile::WriteOnly));
+            failFile.write(QJsonDocument(resJson).toJson());
+            failFile.close();
+
+            QProcess proc;
+            proc.setProcessChannelMode(QProcess::ForwardedChannels);
+            proc.start(QStringLiteral("diff"), {QStringLiteral("-u"), refFile, failFile.fileName()});
+            QVERIFY(proc.waitForFinished());
         }
+
         QCOMPARE(resJson, doc.array());
     }
 };

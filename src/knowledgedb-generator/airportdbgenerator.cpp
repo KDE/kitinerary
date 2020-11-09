@@ -333,23 +333,34 @@ static constexpr Airport airport_table[] = {
     out->write(R"(};
 
 // reverse name lookup string table for unique strings
-static const char name1_string_table[] =
+static const char name1_string_table_0[] =
 )");
     // TODO suffix compression -> see KPublicTransport, that has generic code for this
     std::vector<Name1Index> string_offsets;
     string_offsets.reserve(m_labelMap.size());
     uint32_t label_offset = 0;
+    uint32_t batch_size = 0;
     for (auto it = m_labelMap.constBegin(); it != m_labelMap.constEnd(); ++it) {
         if (it.value().size() > 1) {
             continue;
         }
+
+        const auto keySize = it.key().toUtf8().size();
+        if (batch_size + keySize > (1 << 16)) { // max string size on MSVC...
+            out->write(R"(;
+static const char name1_string_table_1[] =
+)");
+            batch_size = 0;
+        }
+
         out->write("    \"");
         out->write(it.key().toUtf8());
         out->write("\" // ");
         out->write(it.value().at(0).toUtf8());
         out->write("\n");
-        string_offsets.emplace_back(Name1Index{label_offset, (uint8_t)it.key().toUtf8().size(), (uint16_t)std::distance(m_iataMap.begin(), m_iataMap.find(it.value().at(0)))});
-        label_offset += it.key().toUtf8().size();
+        string_offsets.emplace_back(Name1Index{label_offset, (uint8_t)keySize, (uint16_t)std::distance(m_iataMap.begin(), m_iataMap.find(it.value().at(0)))});
+        label_offset += keySize;
+        batch_size += keySize;
     }
     out->write(R"(;
 
