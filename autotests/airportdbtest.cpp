@@ -170,7 +170,6 @@ private Q_SLOTS:
 
         // alternative transliterations
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Duesseldorf International")), KnowledgeDb::IataCode{"DUS"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Berlin Schoenefeld")), KnowledgeDb::IataCode{"SXF"});
         QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Zuerich")), KnowledgeDb::IataCode{"ZRH"});
 
         // IATA code contained in name
@@ -224,6 +223,7 @@ private Q_SLOTS:
         QTest::newRow("AGP") << s("AGP") << 36.67608f << -4.49095f << 100;
         QTest::newRow("AMS") << s("AMS") << 52.3095230f << 4.7621813f << 50;
         QTest::newRow("ARN") << s("ARN") << 59.64927f << 17.92956f << 50;
+        QTest::newRow("BER") << s("BER") << 52.36444f << 13.50964f << 150;
         QTest::newRow("BLR") << s("BLR") << 13.20023f << 77.70972f << 150;
         QTest::newRow("BRE") << s("BRE") << 53.05266f << 8.78692f << 50;
         QTest::newRow("BRU") << s("BRU") << 50.8985255f << 4.4830282f << 50;
@@ -247,7 +247,7 @@ private Q_SLOTS:
         QTest::newRow("GVA") << s("GVA") << 46.23020f << 6.10828f << 200;
         QTest::newRow("HAJ") << s("HAJ") << 52.45849f << 9.69898f << 50;
         QTest::newRow("HAM") << s("HAM") << 53.63214f << 10.00648f << 100;
-        QTest::newRow("HEL") << s("HEL") << 60.31619f << 24.96914f << 50;
+        QTest::newRow("HEL") << s("HEL") << 60.31619f << 24.96914f << 100;
         QTest::newRow("HFS") << s("HFS") << 60.02591f << 13.58202f << 50;
         QTest::newRow("HKG") << s("HKG") << 22.31569f << 113.93605f << 100;
         QTest::newRow("KEF") << s("KEF") << 63.99663f << -22.62355f << 200;
@@ -273,7 +273,6 @@ private Q_SLOTS:
         QTest::newRow("SHA") << s("SHA") << 31.19624f << 121.32377f << 200;
         QTest::newRow("STR") << s("STR") << 48.69052f << 9.19302f << 50;
         QTest::newRow("SXB") << s("SXB") << 48.54444f << 7.62783f << 50;
-        QTest::newRow("SXF") << s("SXF") << 52.38856f << 13.51809f << 100;
         QTest::newRow("TLL") << s("TLL") << 59.41685f << 24.79899f << 150;
         QTest::newRow("TLS") << s("TLS") << 43.63146f << 1.37364f << 100;
         QTest::newRow("TPE") << s("TPE") << 25.07719f <<  121.23250f << 350; // still ok-ish

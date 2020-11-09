@@ -36,7 +36,7 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55390167236328,
+                    "latitude": 52.55379867553711,
                     "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
@@ -75,7 +75,7 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.55390167236328,
+                    "latitude": 52.55379867553711,
                     "longitude": 13.29319953918457
                 },
                 "iataCode": "TXL",
