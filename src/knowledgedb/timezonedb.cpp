@@ -71,7 +71,7 @@ KnowledgeDb::Tz KnowledgeDb::timezoneForCoordinate(float lat, float lon, bool *a
     if (ambiguous) {
         *ambiguous = (*std::prev(it)).isAmbiguous;
     }
-    return (*std::prev(it)).tz;
+    return static_cast<Tz>((*std::prev(it)).tz);
 }
 
 static bool compareOffsetData(const QTimeZone::OffsetData &lhs, const QTimeZone::OffsetData &rhs)

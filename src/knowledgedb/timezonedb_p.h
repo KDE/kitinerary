@@ -36,10 +36,18 @@ struct TimezoneZIndexParams {
 };
 
 // geo coordinate to timezone index entry
+// Note: MSVC cannot create bitfields across unsigned integer types and enums/bools (as those are signed there)
+// so we need to use a single type for the bitfield and do the conversion manually (and very forcefully)
 struct TimezoneZIndexEntry {
+    inline constexpr TimezoneZIndexEntry(uint32_t _z, Tz _tz, bool _isAmbiguous)
+        : z(_z)
+        , tz(uint32_t(_tz))
+        , isAmbiguous(_isAmbiguous)
+    {}
+
     uint32_t z: 22;
-    Tz tz: 9;
-    bool isAmbiguous: 1;
+    uint32_t tz: 9;
+    uint32_t isAmbiguous: 1;
 };
 
 static_assert(sizeof(TimezoneZIndexEntry) == 4, "structure is size-sensitive");
