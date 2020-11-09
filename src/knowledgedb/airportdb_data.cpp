@@ -7449,7 +7449,7 @@ static constexpr Airport airport_table[] = {
 };
 
 // reverse name lookup string table for unique strings
-static const char name1_string_table[] =
+static const char name1_string_table_0[] =
     "aachen" // MST
     "aalborg" // AAL
     "aarhus" // AAR
@@ -16589,6 +16589,8 @@ static const char name1_string_table[] =
     "安康五里铺机场" // AKA
     "安顺黄果树机场" // AVA
     "宜宾五粮液机场" // YBP
+;
+static const char name1_string_table_1[] =
     "宜昌三峡机场" // YIH
     "宜春明月山机场" // YIC
     "富蕴可可托海机场" // FYN

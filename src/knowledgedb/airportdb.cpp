@@ -77,16 +77,25 @@ static void applyTransliterations(QStringList &fragments)
     }
 }
 
+// HACK to work around MSVC string length limit
+static const char* name1_string_table(uint32_t offset)
+{
+    if (offset < sizeof(name1_string_table_0)) {
+        return name1_string_table_0 + offset;
+    }
+    return name1_string_table_1 + (offset - sizeof(name1_string_table_0));
+}
+
 static IataCode iataCodeForUniqueFragment(const QString &s)
 {
     const auto it = std::lower_bound(std::begin(name1_string_index), std::end(name1_string_index), s.toUtf8(), [](const Name1Index &lhs, const QByteArray &rhs) {
-        const auto cmp = strncmp(name1_string_table + lhs.offset(), rhs.constData(), std::min<int>(lhs.length, rhs.size()));
+        const auto cmp = strncmp(name1_string_table(lhs.offset()), rhs.constData(), std::min<int>(lhs.length, rhs.size()));
         if (cmp == 0) {
             return lhs.length < rhs.size();
         }
         return cmp < 0;
     });
-    if (it == std::end(name1_string_index) || it->length != s.toUtf8().size() || strncmp(name1_string_table + it->offset(), s.toUtf8().constData(), it->length) != 0) {
+    if (it == std::end(name1_string_index) || it->length != s.toUtf8().size() || strncmp(name1_string_table(it->offset()), s.toUtf8().constData(), it->length) != 0) {
         return {};
     }
     return airport_table[it->iataIndex].iataCode;
