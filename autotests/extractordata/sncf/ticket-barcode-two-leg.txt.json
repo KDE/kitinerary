@@ -1,0 +1,110 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2017-12-29T18:46:02+01:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 43.92169952392578,
+                    "longitude": 4.785830020904541
+                },
+                "identifier": "sncf:FRAVG",
+                "name": "FRAVG"
+            },
+            "departureDay": "2018-11-01",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "CH"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 46.210201263427734,
+                    "longitude": 6.142449855804443
+                },
+                "identifier": "sncf:CHGVA",
+                "name": "CHGVA"
+            },
+            "trainNumber": "54321"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:i0CVXXX007123456789121101/01/1970CHGVAFRAVG5432101/110123456789012345678                DOE               JOHN2    1FRAVGFRXYT04321\n",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHN",
+            "name": "JOHN DOE"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2017-12-29T18:46:02+01:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 43.61109924316406,
+                    "longitude": 1.4536099433898926
+                },
+                "identifier": "sncf:FRXYT",
+                "name": "FRXYT"
+            },
+            "departureDay": "2018-11-01",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 43.92169952392578,
+                    "longitude": 4.785830020904541
+                },
+                "identifier": "sncf:FRAVG",
+                "name": "FRAVG"
+            },
+            "trainNumber": "04321"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:i0CVXXX007123456789121101/01/1970CHGVAFRAVG5432101/110123456789012345678                DOE               JOHN2    1FRAVGFRXYT04321\n",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "1"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHN",
+            "name": "JOHN DOE"
+        }
+    }
+]
