@@ -182,6 +182,6 @@ private Q_SLOTS:
     }
 };
 
-QTEST_MAIN(ExtractorTest)
+QTEST_GUILESS_MAIN(ExtractorTest)
 
 #include "extractortest.moc"
