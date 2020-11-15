@@ -184,7 +184,6 @@ private Q_SLOTS:
     }
 };
 
-QTEST_MAIN(DatatypesTest)
+QTEST_GUILESS_MAIN(DatatypesTest)
 
 #include "datatypestest.moc"
-
