@@ -76,6 +76,8 @@ private Q_SLOTS:
 
             QTest::newRow("1") << QStringLiteral("qrcode1.png") << QStringLiteral("M$K0YGV0G");
             QTest::newRow("2") << QStringLiteral("qrcode2.png") << QStringLiteral("KZEXO4HRE");
+            // individual lines have non-square features (found e.g. in Renfe tickets)
+            QTest::newRow("3") << QStringLiteral("qrcode-scale-artifacts.png") << QStringLiteral("M$K0YGV0G");
     }
 
     void testQRCode()
