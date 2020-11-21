@@ -1,0 +1,14 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "EventReservation",
+        "reservationFor": {
+            "@type": "Event",
+            "endDate": "2020-12-12T17:00:00+01:00",
+            "name": "XMAS Open Mobility Data Community Remote Meetup 2020 #xomdcrm20",
+            "startDate": "2020-12-11T17:00:00+01:00"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/Confirmed"
+    }
+]

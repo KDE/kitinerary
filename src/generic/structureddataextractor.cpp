@@ -37,6 +37,18 @@ static QByteArray fixupJson(const QByteArray &data)
         output.append("]");
     }
 
+    // Eventbrite adds commas where there shouldn't be one...
+    for (int idx = output.indexOf("\",\n"); idx > 0 && idx + 3 < output.size(); idx = output.indexOf("\",\n", idx)) {
+        const auto comma = idx + 1;
+        idx += 3;
+        while (idx < output.size() && std::isspace(output[idx])) {
+            ++idx;
+        }
+        if (idx < output.size() && output[idx] == '}') {
+            output[comma] = ' ';
+        }
+    }
+
     return output;
 }
 
