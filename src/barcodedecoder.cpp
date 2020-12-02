@@ -114,37 +114,49 @@ bool BarcodeDecoder::maybeBarcode(int width, int height, BarcodeDecoder::Barcode
 }
 
 #ifdef HAVE_ZXING
-static std::vector<ZXing::BarcodeFormat> typeToFormats(BarcodeDecoder::BarcodeTypes types)
+struct {
+    BarcodeDecoder::BarcodeType type;
+    ZXing::BarcodeFormat zxingType;
+} static constexpr const zxing_format_map[] = {
+#if ZXING_VERSION >= QT_VERSION_CHECK(1, 1, 0)
+    { BarcodeDecoder::Aztec, ZXing::BarcodeFormat::Aztec },
+    { BarcodeDecoder::QRCode, ZXing::BarcodeFormat::QRCode },
+    { BarcodeDecoder::PDF417, ZXing::BarcodeFormat::PDF417 },
+    { BarcodeDecoder::DataMatrix, ZXing::BarcodeFormat::DataMatrix },
+#else
+    { BarcodeDecoder::Aztec, ZXing::BarcodeFormat::AZTEC },
+    { BarcodeDecoder::QRCode, ZXing::BarcodeFormat::QR_CODE },
+    { BarcodeDecoder::PDF417, ZXing::BarcodeFormat::PDF_417 },
+    { BarcodeDecoder::DataMatrix, ZXing::BarcodeFormat::DATA_MATRIX },
+#endif
+};
+
+static auto typeToFormats(BarcodeDecoder::BarcodeTypes types)
 {
+#if ZXING_VERSION >= QT_VERSION_CHECK(1, 1, 0)
+    ZXing::BarcodeFormats formats;
+#else
     std::vector<ZXing::BarcodeFormat> formats;
-    if (types & BarcodeDecoder::Aztec) {
-        formats.push_back(ZXing::BarcodeFormat::AZTEC);
-    }
-    if (types & BarcodeDecoder::QRCode) {
-        formats.push_back(ZXing::BarcodeFormat::QR_CODE);
-    }
-    if (types & BarcodeDecoder::PDF417) {
-        formats.push_back(ZXing::BarcodeFormat::PDF_417);
-    }
-    if (types & BarcodeDecoder::DataMatrix) {
-        formats.push_back(ZXing::BarcodeFormat::DATA_MATRIX);
+#endif
+
+    for (auto i : zxing_format_map) {
+        if (types & i.type) {
+#if ZXING_VERSION >= QT_VERSION_CHECK(1, 1, 0)
+            formats |= i.zxingType;
+#else
+            formats.push_back(i.zxingType);
+#endif
+        }
     }
     return formats;
 }
 
 BarcodeDecoder::BarcodeType formatToType(ZXing::BarcodeFormat format)
 {
-    switch (format) {
-        case ZXing::BarcodeFormat::AZTEC:
-            return BarcodeDecoder::Aztec;
-        case ZXing::BarcodeFormat::QR_CODE:
-            return BarcodeDecoder::QRCode;
-        case ZXing::BarcodeFormat::PDF_417:
-            return BarcodeDecoder::PDF417;
-        case ZXing::BarcodeFormat::DATA_MATRIX:
-            return BarcodeDecoder::DataMatrix;
-        default:
-            break;
+    for (auto i : zxing_format_map) {
+        if (format == i.zxingType) {
+            return i.type;
+        }
     }
     return BarcodeDecoder::None;
 }
@@ -153,7 +165,11 @@ void BarcodeDecoder::decodeZxing(const QImage &img, BarcodeDecoder::BarcodeTypes
 {
     QImagePureBinarizer binarizer(img);
     ZXing::DecodeHints hints;
+#if ZXING_VERSION >= QT_VERSION_CHECK(1, 1, 0)
+    hints.setFormats(typeToFormats(format));
+#else
     hints.setPossibleFormats(typeToFormats(format));
+#endif
     ZXing::MultiFormatReader reader(hints);
     const auto res = reader.read(binarizer);
     if (res.isValid()) {
