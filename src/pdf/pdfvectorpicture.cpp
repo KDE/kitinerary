@@ -77,7 +77,7 @@ int PdfVectorPicture::pathElementsCount() const
     return c;
 }
 
-static double scaleFromTransform(QTransform t)
+static double scaleFromTransform(QTransform t, bool *shouldFlip = nullptr)
 {
     if (t.isRotating()) {
         t.rotate(90);
@@ -88,6 +88,9 @@ static double scaleFromTransform(QTransform t)
     }
 
     if (std::abs(std::abs(t.m11()) - std::abs(t.m22())) < 0.1) {
+        if (shouldFlip && t.m22() < 0) {
+            *shouldFlip = true;
+        }
         return std::max(std::abs(t.m11()), std::abs(t.m22()));
     }
     qDebug() << "asymetric scale not supported yet" << t;
@@ -97,13 +100,19 @@ static double scaleFromTransform(QTransform t)
 QImage PdfVectorPicture::renderToImage() const
 {
     if (d->image.isNull()) {
-        const double scale = (RenderDPI / 72.0) * scaleFromTransform(d->transform); // 1/72 dpi is the unit for the vector coordinates
+        bool shouldFlip = false;
+        const double scale = (RenderDPI / 72.0) * scaleFromTransform(d->transform, &shouldFlip); // 1/72 dpi is the unit for the vector coordinates
         const int width = boundingRect().width() * scale;
         const int height = boundingRect().height() * scale;
         d->image = QImage(width, height, QImage::Format_Grayscale8);
         d->image.fill(Qt::white);
         QPainter p(&d->image);
-        p.scale(scale, scale);
+        if (shouldFlip) {
+            p.translate(0.0, height);
+            p.scale(scale, -scale);
+        } else {
+            p.scale(scale, scale);
+        }
         for (const auto &stroke : d->strokes) {
             if (stroke.brush.style() == Qt::NoBrush) {
                 p.strokePath(stroke.path.translated(-boundingRect().x(), -boundingRect().y()), stroke.pen);
