@@ -26,8 +26,10 @@
 #define K_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 // this might compile with older versions too, but it only actually works post 1.1.1
+#ifdef HAVE_ZXING
 #if ZXING_VERSION > K_VERSION_CHECK(1, 1, 1)
 #define ZXING_USE_READBARCODE
+#endif
 #endif
 
 #cmakedefine HAVE_KCAL
