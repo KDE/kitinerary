@@ -22,6 +22,14 @@
 #define ZXING_VERSION_PATCH @ZXing_VERSION_PATCH@
 #define ZXING_VERSION ((@ZXing_VERSION_MAJOR@<<16)|(@ZXing_VERSION_MINOR@<<8)|(@ZXing_VERSION_PATCH@))
 
+// QT_VERSION_CHECK isn't available in here for the below check
+#define K_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
+
+// this might compile with older versions too, but it only actually works post 1.1.1
+#if ZXING_VERSION > K_VERSION_CHECK(1, 1, 1)
+#define ZXING_USE_READBARCODE
+#endif
+
 #cmakedefine HAVE_KCAL
 #cmakedefine HAVE_LIBXML2
 #cmakedefine HAVE_PHONENUMBER
