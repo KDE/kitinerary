@@ -121,7 +121,7 @@ struct {
     BarcodeDecoder::BarcodeType type;
     ZXing::BarcodeFormat zxingType;
 } static constexpr const zxing_format_map[] = {
-#if ZXING_VERSION >= QT_VERSION_CHECK(1, 1, 0)
+#if ZXING_VERSION > QT_VERSION_CHECK(1, 1, 1)
     { BarcodeDecoder::Aztec, ZXing::BarcodeFormat::Aztec },
     { BarcodeDecoder::QRCode, ZXing::BarcodeFormat::QRCode },
     { BarcodeDecoder::PDF417, ZXing::BarcodeFormat::PDF417 },
