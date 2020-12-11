@@ -9,6 +9,7 @@
 
 #include "kitinerary_export.h"
 
+#include <QStringList>
 #include <memory>
 #include <vector>
 
@@ -28,7 +29,6 @@ class Pass;
 class QJsonArray;
 class QJsonValue;
 class QString;
-class QStringList;
 
 namespace KItinerary {
 
