@@ -15,11 +15,12 @@
 #include <QString>
 
 #ifdef HAVE_ZXING
+#ifdef ZXING_USE_READBARCODE
+#include <ZXing/ReadBarcode.h>
+#else
 #include <ZXing/DecodeHints.h>
 #include <ZXing/MultiFormatReader.h>
 #include <ZXing/Result.h>
-#ifdef ZXING_USE_READBARCODE
-#include <ZXing/ReadBarcode.h>
 #endif
 #endif
 
