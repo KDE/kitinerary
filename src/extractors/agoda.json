@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "header": "From",
+            "match": "@agoda.com",
+            "type": "Email"
+        }
+    ],
+    "function": "main",
+    "script": "agoda.js",
+    "type": "Html"
+}
