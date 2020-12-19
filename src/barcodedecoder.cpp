@@ -261,18 +261,23 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
 
     if (aspectRatio > 1.5 && aspectRatio < 6 && (hint  & PDF417) && (result.negative & hint & PDF417) != (hint & PDF417)) {
         auto normalizedImg = img;
+        // newer ZXing versions handle rotated/flipped codes themselves correctly
+#ifndef ZXING_USE_READBARCODE
         if (normalizedImg.width() < normalizedImg.height()) {
             QTransform tf;
             tf.rotate(-90);
             normalizedImg = normalizedImg.transformed(tf);
         }
+#endif
 
         decodeZxing(normalizedImg, PDF417, result);
+#ifndef ZXING_USE_READBARCODE
         if (result.positive & PDF417) {
             return;
         }
         // try flipped around the x axis, zxing doesn't detect that, but it's e.g. encountered in SAS passes
         result.negative &= ~PDF417;
         decodeZxing(normalizedImg.transformed(QTransform{1, 0, 0, -1, 0, 0}), PDF417, result);
+#endif
     }
 }
