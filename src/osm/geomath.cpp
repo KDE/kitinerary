@@ -57,11 +57,7 @@ uint32_t OSM::distance(const std::vector<const OSM::Node*> &path, OSM::Coordinat
         QLineF n = lineSegment.normalVector();
         n.translate(coord.latF() - n.p1().x(), coord.lonF() - n.p1().y());
         QPointF p;
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-        const auto intersect = lineSegment.intersect(n, &p);
-#else
         const auto intersect = lineSegment.intersects(n, &p);
-#endif
         if (intersect == QLineF::BoundedIntersection) {
             dist = std::min(dist, distance(p.x(), p.y(), coord.latF(), coord.lonF()));
         } else {
