@@ -31,6 +31,7 @@ private Q_SLOTS:
         QTest::newRow("rot180") << QStringLiteral("pdf417_rot180.png");
         QTest::newRow("rot270") << QStringLiteral("pdf417_rot270.png");
         QTest::newRow("flipped") << QStringLiteral("pdf417_flipped.png");
+        QTest::newRow("partial cropped") << QStringLiteral("pdf417_partial_cropped.png");
     }
 
     void testPDF417()
