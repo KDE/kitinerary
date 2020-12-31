@@ -526,7 +526,7 @@ static Ticket mergeValue(const Ticket &lhs, const Ticket &rhs)
     return t;
 }
 
-static bool valueIsNull(const QVariant &v)
+static bool checkValueIsNull(const QVariant &v)
 {
     if (v.type() == qMetaTypeId<float>()) {
         return std::isnan(v.toFloat());
@@ -580,7 +580,7 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
             rv = merge(prop.readOnGadget(lhs.constData()), rv);
         }
 
-        if (!valueIsNull(rv)) {
+        if (!checkValueIsNull(rv)) {
             prop.writeOnGadget(res.data(), rv);
         }
     }
