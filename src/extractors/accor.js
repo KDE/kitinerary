@@ -30,9 +30,15 @@ function parseConfirmation(html) {
     hotelContent = hotelContent.replace(/\s+\n/, "\n");
 
     var hotel = hotelContent.match(/^(.*)\n+(.*\n.*)\n(?:.|\n)*Tel\s*:\s*([\d \/\+\(\)]+)\n(.+@.+?)[\s\n]/);
+    if (hotel) {
+        res.reservationFor.telephone = hotel[3];
+        res.reservationFor.email = hotel[4];
+    } else {
+        // no contact information present
+        hotel = hotelContent.match(/^(.*)\n+(.*\n.*)\n(?:.|\n)*/);
+    }
     res.reservationFor.name = hotel[1];
-    res.reservationFor.telephone = hotel[3];
-    res.reservationFor.email = hotel[4];
+
 
     var addr = hotel[2].match(/(.*)(?: - |\n)(.*) - (.*)/);
     res.reservationFor.address.streetAddress = addr[1];
