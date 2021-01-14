@@ -52,12 +52,12 @@ ImageLoaderOutputDevice::ImageLoaderOutputDevice(PdfImagePrivate* dd)
 
 void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, int *maskColors, bool inlineImg)
 {
-    Q_UNUSED(state);
-    Q_UNUSED(height);
-    Q_UNUSED(width);
-    Q_UNUSED(interpolate);
-    Q_UNUSED(maskColors);
-    Q_UNUSED(inlineImg);
+    Q_UNUSED(state)
+    Q_UNUSED(height)
+    Q_UNUSED(width)
+    Q_UNUSED(interpolate)
+    Q_UNUSED(maskColors)
+    Q_UNUSED(inlineImg)
 
     if (!colorMap || !colorMap->isOk() || !ref) {
         return;

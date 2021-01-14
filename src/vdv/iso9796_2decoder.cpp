@@ -31,10 +31,10 @@ void Iso9796_2Decoder::setRsaParameters(const uint8_t *modulus, uint16_t modulus
     const auto e = BN_bin2bn(exponent, exponentSize, nullptr);
     RSA_set0_key(m_rsa.get(), n, e, nullptr); // takes ownership of n and e
 #else
-    Q_UNUSED(modulus);
-    Q_UNUSED(modulusSize);
-    Q_UNUSED(exponent);
-    Q_UNUSED(exponentSize);
+    Q_UNUSED(modulus)
+    Q_UNUSED(modulusSize)
+    Q_UNUSED(exponent)
+    Q_UNUSED(exponentSize)
 #endif
 }
 
@@ -57,8 +57,8 @@ void Iso9796_2Decoder::addWithRecoveredMessage(const uint8_t *data, int size)
 
     m_recoveredMsg.append(out.constData() + 1, out.size() - 22);
 #else
-    Q_UNUSED(data);
-    Q_UNUSED(size);
+    Q_UNUSED(data)
+    Q_UNUSED(size)
 #endif
 }
 

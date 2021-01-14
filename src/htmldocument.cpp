@@ -75,7 +75,7 @@ QString HtmlElement::attribute(const QString &attr) const
         return QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
     }
 #else
-    Q_UNUSED(attr);
+    Q_UNUSED(attr)
 #endif
     return {};
 }
@@ -281,7 +281,7 @@ QVariant HtmlElement::eval(const QString &xpath) const
             return {};
     }
 #else
-    Q_UNUSED(xpath);
+    Q_UNUSED(xpath)
 #endif
     return {};
 }
@@ -302,7 +302,7 @@ bool HtmlElement::hasAttribute(const QString& attr) const
         attribute = attribute->next;
     }
 #else
-    Q_UNUSED(attr);
+    Q_UNUSED(attr)
 #endif
     return false;
 }
@@ -360,8 +360,8 @@ HtmlDocument* HtmlDocument::fromData(const QByteArray &data, QObject *parent)
     doc->d->m_doc = tree;
     return doc;
 #else
-    Q_UNUSED(data);
-    Q_UNUSED(parent);
+    Q_UNUSED(data)
+    Q_UNUSED(parent)
     return nullptr;
 #endif
 }

@@ -241,7 +241,7 @@ void ExtractorEngine::setCalendar(const QSharedPointer<KCalendarCore::Calendar> 
 #ifdef HAVE_KCAL
     d->m_calendar = calendar;
 #else
-    Q_UNUSED(calendar);
+    Q_UNUSED(calendar)
 #endif
 }
 

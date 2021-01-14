@@ -21,10 +21,10 @@ PdfExtractorOutputDevice::PdfExtractorOutputDevice()
 
 void PdfExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str, int width, int height, GfxImageColorMap* colorMap, bool interpolate, PopplerMaskColors* maskColors, bool inlineImg)
 {
-    Q_UNUSED(str);
-    Q_UNUSED(interpolate);
-    Q_UNUSED(maskColors);
-    Q_UNUSED(inlineImg);
+    Q_UNUSED(str)
+    Q_UNUSED(interpolate)
+    Q_UNUSED(maskColors)
+    Q_UNUSED(inlineImg)
 
     if (!colorMap || !colorMap->isOk() || !ref || !ref->isRef()) {
         return;
@@ -69,13 +69,13 @@ void PdfExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* s
 
 void PdfExtractorOutputDevice::saveState(GfxState *state)
 {
-    Q_UNUSED(state);
+    Q_UNUSED(state)
     m_vectorOps.push_back(VectorOp{VectorOp::PushState, {}, {}});
 }
 
 void PdfExtractorOutputDevice::restoreState(GfxState *state)
 {
-    Q_UNUSED(state);
+    Q_UNUSED(state)
     if (m_vectorOps.empty()) {
         return;
     }

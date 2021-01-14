@@ -122,10 +122,10 @@ bool QImagePureBinarizer::canCrop() const
 
 std::shared_ptr<ZXing::BinaryBitmap> QImagePureBinarizer::cropped(int left, int top, int width, int height) const
 {
-    Q_UNUSED(left);
-    Q_UNUSED(top);
-    Q_UNUSED(width);
-    Q_UNUSED(height);
+    Q_UNUSED(left)
+    Q_UNUSED(top)
+    Q_UNUSED(width)
+    Q_UNUSED(height)
     return {};
 }
 
@@ -136,7 +136,7 @@ bool QImagePureBinarizer::canRotate() const
 
 std::shared_ptr<ZXing::BinaryBitmap> QImagePureBinarizer::rotated(int degreeCW) const
 {
-    Q_UNUSED(degreeCW);
+    Q_UNUSED(degreeCW)
     return {};
 }
 

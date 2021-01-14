@@ -112,10 +112,10 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
     return QString::fromUtf8(s->getCString());
 #endif
 #else
-    Q_UNUSED(left);
-    Q_UNUSED(top);
-    Q_UNUSED(right);
-    Q_UNUSED(bottom);
+    Q_UNUSED(left)
+    Q_UNUSED(top)
+    Q_UNUSED(right)
+    Q_UNUSED(bottom)
     return {};
 #endif
 }
@@ -157,10 +157,10 @@ QVariantList PdfPage::imagesInRect(double left, double top, double right, double
         }
     }
 #else
-    Q_UNUSED(left);
-    Q_UNUSED(top);
-    Q_UNUSED(right);
-    Q_UNUSED(bottom);
+    Q_UNUSED(left)
+    Q_UNUSED(top)
+    Q_UNUSED(right)
+    Q_UNUSED(bottom)
 #endif
     return l;
 }
@@ -300,8 +300,8 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
     doc->d->m_popplerDoc = std::move(popplerDoc);
     return doc.release();
 #else
-    Q_UNUSED(data);
-    Q_UNUSED(parent);
+    Q_UNUSED(data)
+    Q_UNUSED(parent)
     return nullptr;
 #endif
 }

@@ -104,8 +104,8 @@ QVector<QSharedPointer<KCalendarCore::Event> > CalendarHandler::findEvents(const
 
     return results;
 #else
-    Q_UNUSED(calendar);
-    Q_UNUSED(reservation);
+    Q_UNUSED(calendar)
+    Q_UNUSED(reservation)
     return {};
 #endif
 }
@@ -116,8 +116,8 @@ QSharedPointer<KCalendarCore::Event> CalendarHandler::findEvent(const QSharedPoi
     const auto evs = findEvents(calendar, reservation);
     return evs.empty() ? KCalendarCore::Event::Ptr() : evs.at(0);
 #else
-    Q_UNUSED(calendar);
-    Q_UNUSED(reservation);
+    Q_UNUSED(calendar)
+    Q_UNUSED(reservation)
     return {};
 #endif
 }
@@ -129,7 +129,7 @@ QVector<QVariant> CalendarHandler::reservationsForEvent(const QSharedPointer<KCa
     const auto json = QJsonDocument::fromJson(payload).array();
     return JsonLdDocument::fromJson(json);
 #else
-    Q_UNUSED(event);
+    Q_UNUSED(event)
     return {};
 #endif
 }
@@ -145,7 +145,7 @@ bool CalendarHandler::canCreateEvent(const QVariant &reservation)
     }
     return SortUtil::startDateTime(reservation).isValid();
 #else
-    Q_UNUSED(reservation);
+    Q_UNUSED(reservation)
     return false;
 #endif
 }
@@ -195,7 +195,7 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
     const auto payload = QJsonDocument(JsonLdDocument::toJson(reservations)).toJson(QJsonDocument::Compact);
     event->setCustomProperty("KITINERARY", "RESERVATION", QString::fromUtf8(payload));
 #else
-    Q_UNUSED(event);
+    Q_UNUSED(event)
 #endif
 }
 

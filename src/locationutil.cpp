@@ -203,7 +203,7 @@ static QString applyTransliterations(const QString &s)
 
 static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationUtil::Accuracy accuracy)
 {
-    Q_UNUSED(accuracy); // TODO for city level we can strip station or airport suffixes for example
+    Q_UNUSED(accuracy) // TODO for city level we can strip station or airport suffixes for example
 
     if (lhs.isEmpty() || rhs.isEmpty()) {
         return false;

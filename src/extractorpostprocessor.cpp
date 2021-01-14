@@ -502,7 +502,7 @@ QString ExtractorPostprocessorPrivate::processPhoneNumber(const QString &phoneNu
         }
     }
 #else
-    Q_UNUSED(addr);
+    Q_UNUSED(addr)
 #endif
     return phoneNumber;
 }
