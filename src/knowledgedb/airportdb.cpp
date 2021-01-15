@@ -197,11 +197,7 @@ static void iataCodeForNameFragments(const QStringList &fragments, std::vector<I
 static QStringList splitToFragments(const QString &name)
 {
     return name.split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")),
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-                      QString::SkipEmptyParts);
-#else
                       Qt::SkipEmptyParts);
-#endif
 }
 
 }
