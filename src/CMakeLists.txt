@@ -252,6 +252,6 @@ install(FILES
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/kitinerary
 )
 if (NOT ANDROID)
-    install(FILES application-vnd-kde-itinerary.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
-    update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
+    install(FILES application-vnd-kde-itinerary.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
+    update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR})
 endif()
