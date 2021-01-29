@@ -12,7 +12,7 @@ target_link_libraries(kitinerary-extractor
 option(KITINERARY_STANDALONE_CLI_EXTRACTOR "Build stand-alone command line extractor (this should be off, unless you are building the dedicated Flatpak for this" OFF)
 
 if (KITINERARY_STANDALONE_CLI_EXTRACTOR)
-    install(TARGETS kitinerary-extractor DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
+    install(TARGETS kitinerary-extractor DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
     install(PROGRAMS org.kde.kitinerary-extractor.desktop DESTINATION ${KDE_INSTALL_APPDIR})
     install(FILES org.kde.kitinerary-extractor.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 else()

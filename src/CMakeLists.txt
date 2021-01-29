@@ -230,7 +230,7 @@ ecm_generate_headers(KItinerary_Vdv_FORWARDING_HEADERS
     RELATIVE vdv
 )
 
-install(TARGETS KPimItinerary EXPORT KPimItineraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KPimItinerary EXPORT KPimItineraryTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
     ${KItinerary_FORWARDING_HEADERS}
     ${KItinerary_KnowledgeDb_FORWARDING_HEADERS}
