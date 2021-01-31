@@ -1,6 +1,6 @@
 add_subdirectory(cli)
 add_subdirectory(osm)
-if (TARGET Qt5::Network AND NOT CMAKE_CROSSCOMPILING AND OSM_PLANET_DIR AND OsmTools_FOUND)
+if (TARGET Qt::Network AND NOT CMAKE_CROSSCOMPILING AND OSM_PLANET_DIR AND OsmTools_FOUND)
     add_subdirectory(knowledgedb-generator)
 endif()
 add_subdirectory(vdv/certs)
@@ -112,10 +112,10 @@ target_include_directories(KPimItinerary PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRE
 target_include_directories(KPimItinerary PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(KPimItinerary
     PUBLIC
-        Qt5::Core
+        Qt::Core
         KF5::Mime
     PRIVATE
-        Qt5::Qml
+        Qt::Qml
         KF5::Archive
         KF5::I18n
         KF5::Contacts
