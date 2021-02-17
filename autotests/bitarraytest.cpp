@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <../src/jsapi/bitarray.h>
+#include <../src/lib/jsapi/bitarray.h>
 
 #include <QByteArray>
 #include <QDebug>
