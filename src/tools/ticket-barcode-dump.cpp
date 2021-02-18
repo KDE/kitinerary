@@ -9,7 +9,10 @@
 #include <kitinerary_version.h>
 
 #include <KItinerary/IataBcbpParser>
+#include <KItinerary/Uic9183Block>
 #include <KItinerary/Uic9183Parser>
+#include <KItinerary/Uic9183TicketLayout>
+#include <KItinerary/Vendor0080Block>
 #include <KItinerary/VdvTicket>
 #include <KItinerary/VdvTicketParser>
 
@@ -54,6 +57,55 @@ void dumpSsbTicket(const QByteArray &data)
     }
 }
 
+void dumpRawData(const char *data, std::size_t size)
+{
+    bool isText = true;
+    for (std::size_t i = 0; i < size && isText; ++i) {
+        isText = (uint8_t)*(data + i) >= 20;
+    }
+
+    if (isText) {
+        std::cout.write(data, size);
+    } else {
+        std::cout << "(hex) " << QByteArray(data, size).toHex().constData();
+    }
+}
+
+void dumpUic9183(const QByteArray &data)
+{
+    Uic9183Parser parser;
+    parser.parse(data);
+    // TODO dump header
+
+    auto block = parser.firstBlock();
+    while (!block.isNull()) {
+        std::cout << "Block: ";
+        std::cout.write(block.name(), 6);
+        std::cout << ", size: " << block.size()  << ", version: " << block.version() << std::endl;
+
+        if (std::strncmp(block.name(), "U_TLAY", 6) == 0) {
+            Uic9183TicketLayout tlay(block);
+            // TODO
+        } else if (std::strncmp(block.name(), "0080BL", 6) == 0) {
+            Vendor0080BLBlock vendor(block);
+            auto sub = vendor.firstBlock();
+            while (!sub.isNull()) {
+                std::cout << " ";
+                std::cout.write(sub.id(), 3);
+                std::cout << " (size: " << sub.size() << "): ";
+                dumpRawData(sub.content(), sub.contentSize());
+                std::cout << std::endl;
+                sub = sub.nextBlock();
+            }
+        } else {
+            std::cout << " Content: ";
+            dumpRawData(block.content(), block.contentSize());
+            std::cout << std::endl;
+        }
+        block = block.nextBlock();
+    }
+}
+
 int main(int argc, char **argv)
 {
     QCoreApplication::setApplicationName(QStringLiteral("ticket-barcode-dump"));
@@ -90,7 +142,7 @@ int main(int argc, char **argv)
         dumpSsbTicket(data);
     } else if (Uic9183Parser::maybeUic9183(data)) {
         std::cout << "UIC 918.3 Container" << std::endl;
-        // TODO
+        dumpUic9183(data);
     } else if (VdvTicketParser::maybeVdvTicket(data)) {
         std::cout << "VDV Ticket" << std::endl;
         // TODO
