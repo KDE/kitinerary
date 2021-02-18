@@ -18,6 +18,8 @@ set(kitinerary_lib_srcs
     datatypes/rentalcar.cpp
     datatypes/visit.cpp
 
+    era/ssbticket.cpp
+
     generic/genericextractor.cpp
     generic/genericicalextractor.cpp
     generic/genericpdfextractor.cpp

@@ -7,3 +7,4 @@ if (TARGET Qt5::Network AND NOT CMAKE_CROSSCOMPILING AND OSM_PLANET_DIR AND OsmT
 endif()
 add_subdirectory(lib)
 add_subdirectory(cli)
+add_subdirectory(tools)
