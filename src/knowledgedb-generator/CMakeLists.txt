@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2018-2020 Volker Krause <vkrause@kde.org>
+# SPDX-License-Identifier: BSD-3-Clause
+
 add_executable(generate-knowledgedb
     main.cpp
     codegen.cpp

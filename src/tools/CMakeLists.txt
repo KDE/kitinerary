@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 Volker Krause <vkrause@kde.org>
+# SPDX-License-Identifier: BSD-3-Clause
+
 add_executable(ticket-barcode-dump ticket-barcode-dump.cpp)
 target_include_directories(ticket-barcode-dump PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(ticket-barcode-dump KPimItinerary)

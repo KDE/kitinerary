@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2018-2021 Laurent Montel <montel@kde.org>
+# SPDX-FileCopyrightText: 2018-2020 Volker Krause <vkrause@kde.org>
+# SPDX-License-Identifier: BSD-3-Clause
+
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 set(PIM_VERSION "5.16.40")
 project(KItinerary VERSION ${PIM_VERSION})
