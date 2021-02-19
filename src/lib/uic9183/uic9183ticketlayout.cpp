@@ -179,7 +179,7 @@ Uic9183TicketLayout& Uic9183TicketLayout::operator=(const Uic9183TicketLayout&) 
 
 QString Uic9183TicketLayout::type() const
 {
-    return QString::fromUtf8(d->block.content(), 4);
+    return d->block.readUtf8String(0, 4);
 }
 
 bool Uic9183TicketLayout::isValid() const
