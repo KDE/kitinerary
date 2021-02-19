@@ -66,7 +66,7 @@ VdvTicket::VdvTicket(const QByteArray &data)
     offset += productBlock.size();
 
     const auto transactionBlock = reinterpret_cast<const VdvTicketTransactionData*>(data.constData() + offset);
-    qDebug() << "transaction block:" << qFromBigEndian(transactionBlock->kvpOrgId);
+    qDebug() << "transaction block:" << transactionBlock->kvpOrgId;
     offset += sizeof(VdvTicketTransactionData);
 
     const auto prodTransactionBlock = BER::TypedElement<TagTicketProductTransactionData>(data, offset);
@@ -77,7 +77,7 @@ VdvTicket::VdvTicket(const QByteArray &data)
     offset += prodTransactionBlock.size();
 
     const auto issueData = reinterpret_cast<const VdvTicketIssueData*>(data.constData() + offset);
-    qDebug() << issueData->version << QByteArray((const char*)&issueData->samId, 3).toHex();
+    qDebug() << issueData->version << issueData->samId;
     offset += sizeof(VdvTicketIssueData);
 
     // 0 padding to reach at least 111 bytes
@@ -85,14 +85,14 @@ VdvTicket::VdvTicket(const QByteArray &data)
 
     const auto trailer = reinterpret_cast<const VdvTicketTrailer*>(data.constData() + offset);
     if (memcmp(trailer->identifier, "VDV", 3) != 0) {
-        qCWarning(Log) << "Invalid ticket trailer identifier:" << QByteArray(trailer->identifier, 3) << qFromBigEndian(trailer->version);
+        qCWarning(Log) << "Invalid ticket trailer identifier:" << QByteArray(trailer->identifier, 3) << trailer->version;
         return;
     }
     d->m_data = data;
 
 #if 1
     const auto hdr = reinterpret_cast<const VdvTicketHeader*>(data.constData());
-    qDebug() << qFromBigEndian(hdr->productId) << qFromBigEndian(hdr->pvOrgId);
+    qDebug() << hdr->productId << hdr->pvOrgId;
     // iterate over TLV content
     auto tlv = productBlock.first();
     while (tlv.isValid()) {
@@ -110,11 +110,6 @@ VdvTicket::VdvTicket(const VdvTicket&) = default;
 VdvTicket::~VdvTicket() = default;
 VdvTicket& VdvTicket::operator=(const VdvTicket&) = default;
 
-static QDateTime dtCompactToQdt(const VdvDateTimeCompact &dtc)
-{
-    return QDateTime({dtc.year(), dtc.month(), dtc.day()}, {dtc.hour(), dtc.minute(), dtc.second()});
-}
-
 QDateTime VdvTicket::beginDateTime() const
 {
     if (d->m_data.isEmpty()) {
@@ -122,7 +117,7 @@ QDateTime VdvTicket::beginDateTime() const
     }
 
     const auto hdr = reinterpret_cast<const VdvTicketHeader*>(d->m_data.constData());
-    return dtCompactToQdt(hdr->beginDt);
+    return hdr->beginDt;
 }
 
 QDateTime KItinerary::VdvTicket::endDateTime() const
@@ -132,7 +127,7 @@ QDateTime KItinerary::VdvTicket::endDateTime() const
     }
 
     const auto hdr = reinterpret_cast<const VdvTicketHeader*>(d->m_data.constData());
-    return dtCompactToQdt(hdr->endDt);
+    return hdr->endDt;
 }
 
 int VdvTicket::issuerId() const
@@ -142,7 +137,7 @@ int VdvTicket::issuerId() const
     }
 
     const auto hdr = reinterpret_cast<const VdvTicketHeader*>(d->m_data.constData());
-    return qFromBigEndian(hdr->kvpOrgId);
+    return hdr->kvpOrgId;
 }
 
 VdvTicket::ServiceClass VdvTicket::serviceClass() const
@@ -172,7 +167,7 @@ Person VdvTicket::person() const
     if (!tlv) {
         return {};
     }
-    qDebug() << "traveler:" << tlv->gender << QDate(tlv->birthDate.year(), tlv->birthDate.month(), tlv->birthDate.day()) << QByteArray(tlv->name(), tlv->nameSize(elem.contentSize()));
+    qDebug() << "traveler:" << tlv->gender << tlv->birthDate << QByteArray(tlv->name(), tlv->nameSize(elem.contentSize()));
 
     const auto len = strnlen(tlv->name(), tlv->nameSize(elem.contentSize())); // name field can contain null bytes
     if (len == 0) {
@@ -212,5 +207,5 @@ QString VdvTicket::ticketNumber() const
     }
 
     const auto hdr = reinterpret_cast<const VdvTicketHeader*>(d->m_data.constData());
-    return QString::number(qFromBigEndian(hdr->ticketId));
+    return QString::number(hdr->ticketId);
 }

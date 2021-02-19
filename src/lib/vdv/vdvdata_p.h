@@ -8,8 +8,8 @@
 #define KITINERARY_VDVDATA_P_H
 
 #include "../tlv/berelement_p.h"
+#include "vdvbasictypes.h"
 
-#include <QtEndian>
 #include <cstdint>
 
 namespace KItinerary {
@@ -34,38 +34,6 @@ enum {
 
 #pragma pack(push)
 #pragma pack(1)
-
-/** Two-digit BCD encoded number. */
-struct VdvBcdNumber
-{
-    uint8_t data;
-
-    uint8_t value() const
-    {
-        return ((data & 0xF0) >> 4) * 10 + (data & 0x0F);
-    }
-};
-
-/** Date encoded as 8 BCD digits. */
-struct VdvBcdDate
-{
-    VdvBcdNumber bcdYear[2];
-    VdvBcdNumber bcdMonth;
-    VdvBcdNumber bcdDay;
-
-    inline uint16_t year() const
-    {
-        return bcdYear[0].value() * 100 + bcdYear[1].value();
-    }
-    inline uint8_t month() const
-    {
-        return bcdMonth.value();
-    }
-    inline uint8_t day() const
-    {
-        return bcdDay.value();
-    }
-};
 
 /** Certificate Authority Reference (CAR) content. */
 struct VdvCaReference
@@ -114,44 +82,13 @@ struct VdvCertificateKey {
     }
 };
 
-/** Date/time representation encoded in 4 byte. */
-struct VdvDateTimeCompact
-{
-    uint32_t data;
-
-    inline int year() const
-    {
-        return ((qFromBigEndian(data) & 0b1111'1110'0000'0000'0000'0000'0000'0000) >> 25) + 1990;
-    }
-    inline int month() const
-    {
-        return (qFromBigEndian(data) & 0b0000'0001'1110'0000'0000'0000'0000'0000) >> 21;
-    }
-    inline int day() const
-    {
-        return (qFromBigEndian(data) & 0b0000'0000'0001'1111'0000'0000'0000'0000) >> 16;
-    }
-    inline int hour() const
-    {
-        return (qFromBigEndian(data) & 0b0000'0000'0000'0000'1111'1000'0000'0000) >> 11;
-    }
-    inline int minute() const
-    {
-        return (qFromBigEndian(data) & 0b0000'0000'0000'0000'0000'0111'1110'0000) >> 5;
-    }
-    inline int second() const
-    {
-        return (qFromBigEndian(data) & 0b0000'0000'0000'0000'0000'0000'0001'1111) * 2;
-    }
-};
-
 /** Ticket data header. */
 struct VdvTicketHeader
 {
-    uint32_t ticketId;
-    uint16_t kvpOrgId;
-    uint16_t productId;
-    uint16_t pvOrgId;
+    VdvNumber<4> ticketId;
+    VdvNumber<2> kvpOrgId;
+    VdvNumber<2> productId;
+    VdvNumber<2> pvOrgId;
     VdvDateTimeCompact beginDt;
     VdvDateTimeCompact endDt;
 };
@@ -159,24 +96,24 @@ struct VdvTicketHeader
 /** Product specific data - basic information. */
 struct VdvTicketBasicData
 {
-    uint8_t paymentType;
-    uint8_t travelerType; // 1 adult, 2 child, 65 bike
-    uint8_t includedTravelerType1; // 0 none, 1 adult, 2 child, 251 family child
-    uint8_t includedTravelerCount1;
-    uint8_t includedTravelerType2;
-    uint8_t includedTravelerCount2;
-    uint8_t categroy;
-    uint8_t serviceClass; // 1 first class, 2 second class, 3 first class upgrade
-    uint8_t price[3]; // 24 bit big endian, price in Euro cent
-    uint16_t vat; // VAT rate in 0,01% steps
-    uint8_t priceCategory;
-    uint8_t productNumber[3];
+    VdvNumber<1> paymentType;
+    VdvNumber<1> travelerType; // 1 adult, 2 child, 65 bike
+    VdvNumber<1> includedTravelerType1; // 0 none, 1 adult, 2 child, 251 family child
+    VdvNumber<1> includedTravelerCount1;
+    VdvNumber<1> includedTravelerType2;
+    VdvNumber<1> includedTravelerCount2;
+    VdvNumber<1> categroy;
+    VdvNumber<1> serviceClass; // 1 first class, 2 second class, 3 first class upgrade
+    VdvNumber<3> price; // 24 bit big endian, price in Euro cent
+    VdvNumber<2> vat; // VAT rate in 0,01% steps
+    VdvNumber<1> priceCategory;
+    VdvNumber<3> productNumber;
 };
 
 /** Product specific data - traveler information. */
 struct VdvTicketTravelerData
 {
-    uint8_t gender;
+    VdvNumber<1> gender;
     VdvBcdDate birthDate;
     char nameBegin;
 
@@ -193,26 +130,30 @@ struct VdvTicketTravelerData
 /** Ticket transaction data block. */
 struct VdvTicketTransactionData
 {
-    uint16_t kvpOrgId;
-    uint8_t terminalId[5];
+    VdvNumber<2> kvpOrgId;
+    VdvNumber<1> terminalTypeCode;
+    VdvNumber<2> terminalNumber;
+    VdvNumber<2> terminalOrganizationNumber;
     VdvDateTimeCompact dt;
-    uint8_t locationId[6];
+    VdvNumber<1> locationTypeCode;
+    VdvNumber<3> locationNumber;
+    VdvNumber<2> locationOrganizationNumber;
 };
 
 /** Ticket issuer data block. */
 struct VdvTicketIssueData
 {
-    uint32_t samSeq1;
-    uint8_t version;
-    uint32_t samSeq2;
-    uint8_t samId[3];
+    VdvNumber<4> samSeq1;
+    VdvNumber<1> version;
+    VdvNumber<4> samSeq2;
+    VdvNumber<3> samId;
 };
 
 /** Ticket trailer, after padding. */
 struct VdvTicketTrailer
 {
     const char identifier[3];
-    uint16_t version;
+    VdvNumber<2> version;
 };
 
 #pragma pack(pop)

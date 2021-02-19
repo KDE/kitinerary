@@ -152,10 +152,10 @@ bool VdvCertificate::isSelfSigned() const
     return memcmp(&certKey()->car, certKey()->chr.name, sizeof(VdvCaReference)) == 0;
 }
 
-QDate KItinerary::VdvCertificate::endOfValidity() const
+QDate VdvCertificate::endOfValidity() const
 {
     const auto key = certKey();
-    return QDate(key->date.year(), key->date.month(), key->date.day());
+    return key->date;
 }
 
 BER::Element VdvCertificate::header() const
