@@ -32,6 +32,16 @@ using namespace KItinerary;
 
 namespace KItinerary {
 
+class Uic9183TicketLayoutPrivate : public QSharedData
+{
+public:
+    Uic9183Block block;
+};
+
+}
+
+Uic9183TicketLayoutField::Uic9183TicketLayoutField() = default;
+
 // 2x field line, number as ascii text
 // 2x field column
 // 2x field height
@@ -39,42 +49,6 @@ namespace KItinerary {
 // 1x field format
 // 4x text length
 // Nx text content
-class Uic9183TicketLayoutField
-{
-public:
-    Uic9183TicketLayoutField() = default;
-    /** Create a new U_TLAY field starting at @p data.
-     *  @param size The size of the remaining U_TLAY field array (not just this field!).
-     */
-    Uic9183TicketLayoutField(const char *data, int size);
-    bool isNull() const;
-    // size of the field data, not size of the text content
-    int size() const;
-
-    int row() const;
-    int column() const;
-    int height() const;
-    int width() const;
-    QString text() const;
-
-    Uic9183TicketLayoutField next() const;
-
-private:
-    const char *m_data = nullptr;
-    int m_size = 0;
-};
-
-class Uic9183TicketLayoutPrivate : public QSharedData
-{
-public:
-    Uic9183TicketLayoutField firstField() const;
-
-    Uic9183Block block;
-};
-
-}
-
-
 Uic9183TicketLayoutField::Uic9183TicketLayoutField(const char *data, int size)
     : m_data(data)
     , m_size(size)
@@ -130,6 +104,11 @@ int Uic9183TicketLayoutField::width() const
     return asciiToInt(m_data + 6, 2);
 }
 
+int Uic9183TicketLayoutField::format() const
+{
+    return asciiToInt(m_data + 12, 1);
+}
+
 QString Uic9183TicketLayoutField::text() const
 {
     return QString::fromUtf8(m_data + 13, asciiToInt(m_data + 9, 4));
@@ -156,11 +135,11 @@ Uic9183TicketLayoutField Uic9183TicketLayoutField::next() const
     return {};
 }
 
-Uic9183TicketLayoutField Uic9183TicketLayoutPrivate::firstField() const
+Uic9183TicketLayoutField Uic9183TicketLayout::firstField() const
 {
-    const auto contentSize = block.contentSize();
+    const auto contentSize = d->block.contentSize();
     if (contentSize > 8) {
-        return Uic9183TicketLayoutField(block.content() + 8, contentSize - 8);
+        return Uic9183TicketLayoutField(d->block.content() + 8, contentSize - 8);
     }
     return {};
 }
@@ -216,7 +195,7 @@ QString Uic9183TicketLayout::text(int row, int column, int width, int height) co
         s.push_back({});
     }
 
-    for (auto f = d->firstField(); !f.isNull(); f = f.next()) {
+    for (auto f = firstField(); !f.isNull(); f = f.next()) {
         if (f.row() + f.height() - 1 < row || f.row() > row + height - 1) {
             continue;
         }
@@ -255,7 +234,7 @@ QString Uic9183TicketLayout::text(int row, int column, int width, int height) co
 QSize Uic9183TicketLayout::size() const
 {
     int width = 0, height = 0;
-    for (auto f = d->firstField(); !f.isNull(); f  = f.next()) {
+    for (auto f = firstField(); !f.isNull(); f  = f.next()) {
         width = std::max(width, f.column() + f.width());
         height = std::max(height, f.row() + f.height());
     }

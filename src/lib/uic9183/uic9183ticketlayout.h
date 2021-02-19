@@ -19,7 +19,43 @@ namespace KItinerary {
 class Uic9183Block;
 class Uic9183TicketLayoutPrivate;
 
-/** Parser for a U_TLAY block in a UIC 918-3 ticket. */
+/** Low-level field entries in a U_TLAY block.
+ *  For most uses, the high-level API to retrieve assembled text (Uic9183TicketLayout::text())
+ *  is probably preferable to this.
+ */
+class KITINERARY_EXPORT Uic9183TicketLayoutField
+{
+public:
+    Uic9183TicketLayoutField();
+    /** Create a new U_TLAY field starting at @p data.
+     *  @param size The size of the remaining U_TLAY field array (not just this field!).
+     */
+    Uic9183TicketLayoutField(const char *data, int size);
+
+    /** Returns @true if this is an empty field, e.g. when iterating beyond the last one. */
+    bool isNull() const;
+    /** Size of the entire field data (not the size of the text content!). */
+    int size() const;
+
+    int row() const;
+    int column() const;
+    int height() const;
+    int width() const;
+    int format() const;
+    QString text() const;
+
+    /** Returns the next field object, or a null one if there isn't one. */
+    Uic9183TicketLayoutField next() const;
+
+private:
+    const char *m_data = nullptr;
+    int m_size = 0;
+};
+
+
+/** Parser for a U_TLAY block in a UIC 918-3 ticket container, such as a ERA TLB ticket.
+ *  @see ERA TAP TSI TD B.12 Digital Security Elements For Rail Passenger Ticketing - §10 TLB - Ticket Layout Barcode
+ */
 class KITINERARY_EXPORT Uic9183TicketLayout
 {
     Q_GADGET
@@ -52,6 +88,10 @@ public:
     /** The size of the layout, as width and height in layout coordinates. */
     QSize size() const;
 
+    /** Low-level field iteration access.
+     *  Prefer text() over this to avoid doing your own text layout assembly.
+     */
+    Uic9183TicketLayoutField firstField() const;
 private:
     QExplicitlySharedDataPointer<Uic9183TicketLayoutPrivate> d;
 };
