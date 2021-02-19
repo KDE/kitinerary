@@ -7,6 +7,8 @@
 #include "uic9183block.h"
 #include "logging.h"
 
+#include <cstring>
+
 using namespace KItinerary;
 
 enum {
@@ -40,6 +42,11 @@ const char* Uic9183Block::name() const
         return nullptr;
     }
     return m_data.constData() + m_offset;
+}
+
+bool Uic9183Block::isA(const char recordId[6]) const
+{
+    return std::strncmp(name(), recordId, 6) == 0;
 }
 
 const char* Uic9183Block::content() const

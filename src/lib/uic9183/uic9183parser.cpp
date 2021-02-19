@@ -8,6 +8,7 @@
 #include "logging.h"
 #include "rct2ticket.h"
 #include "uic9183block.h"
+#include "uic9183head.h"
 #include "uic9183ticketlayout.h"
 #include "vendor0080block.h"
 
@@ -47,12 +48,10 @@ Uic9183Block Uic9183Parser::firstBlock() const
 
 Uic9183Block Uic9183Parser::findBlock(const char name[6]) const
 {
-    auto block = firstBlock();
-    while (!block.isNull()) {
-        if (strncmp(name, block.name(), 6) == 0) {
+    for (auto block = firstBlock(); !block.isNull(); block = block.nextBlock()) {
+        if (block.isA(name)) {
             return block;
         }
-        block = block.nextBlock();
     }
     return {};
 }
@@ -129,37 +128,20 @@ bool Uic9183Parser::isValid() const
     return !d->m_payload.isEmpty();
 }
 
-// U_HEAD Block (version 1, size 53)
-// 4x issuing carrier id
-// 6x PNR
-// 20x unique ticket key
-// 12x issuing date/time as ddMMyyyyHHMM, as UTC
-// 1x flags
-// 2x ticket language
-// 2x secondary ticket language
-
 QString Uic9183Parser::pnr() const
 {
-    const auto b = findBlock("U_HEAD");
-    if (b.isNull() || b.version() != 1 || b.size() != 53) {
-        return {};
-    }
-    return QString::fromUtf8(b.content() + 4, 6);
+    return findBlock<Uic9183Head>().ticketKey().left(6);
 }
 
 QString Uic9183Parser::carrierId() const
 {
-    const auto b = findBlock("U_HEAD");
-    if (b.isNull() || b.version() != 1 || b.size() != 53) {
-        return {};
-    }
-    return QString::fromUtf8(b.content(), 4);
+    return findBlock<Uic9183Head>().issuerCompanyCodeString();
 }
 
 Person Uic9183Parser::person() const
 {
     // Deutsche Bahn vendor block
-    const auto b = Vendor0080BLBlock(findBlock("0080BL"));
+    const auto b = findBlock<Vendor0080BLBlock>();
     if (b.isValid()) {
         // S028 contains family and given name separated by a '#', UTF-8 encoded
         auto sblock = b.findSubBlock("028");
@@ -199,7 +181,7 @@ Person Uic9183Parser::person() const
 
 QString Uic9183Parser::outboundDepartureStationId() const
 {
-    const auto b = Vendor0080BLBlock(findBlock("0080BL"));
+    const auto b = findBlock<Vendor0080BLBlock>();
     if (b.isValid()) {
         // S035 contains the IBNR, possible with leading '80' country code and leading 0 stripped
         const auto sblock = b.findSubBlock("035");
@@ -214,7 +196,7 @@ QString Uic9183Parser::outboundDepartureStationId() const
 
 QString Uic9183Parser::outboundArrivalStationId() const
 {
-    const auto b = Vendor0080BLBlock(findBlock("0080BL"));
+    const auto b = findBlock<Vendor0080BLBlock>();
     if (b.isValid()) {
         // S036 contains the IBNR, possible with leading '80' country code and leading 0 stripped
         const auto sblock = b.findSubBlock("036");
@@ -229,7 +211,7 @@ QString Uic9183Parser::outboundArrivalStationId() const
 
 QString Uic9183Parser::seatingType() const
 {
-    const auto b = Vendor0080BLBlock(findBlock("0080BL"));
+    const auto b = findBlock<Vendor0080BLBlock>();;
     if (b.isValid()) {
         // S014 contains the class, possibly with a leading 'S' for some reason
         const auto sblock = b.findSubBlock("014");
@@ -248,9 +230,7 @@ QString Uic9183Parser::seatingType() const
 
 Uic9183TicketLayout Uic9183Parser::ticketLayout() const
 {
-    const auto block = findBlock("U_TLAY");
-    Uic9183TicketLayout layout(block);
-    return layout;
+    return findBlock<Uic9183TicketLayout>();
 }
 
 QVariant Uic9183Parser::ticketLayoutVariant() const

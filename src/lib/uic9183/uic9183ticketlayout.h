@@ -92,6 +92,8 @@ public:
      *  Prefer text() over this to avoid doing your own text layout assembly.
      */
     Uic9183TicketLayoutField firstField() const;
+
+    static constexpr const char RecordId[] = "U_TLAY";
 private:
     QExplicitlySharedDataPointer<Uic9183TicketLayoutPrivate> d;
 };

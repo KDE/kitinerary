@@ -56,6 +56,7 @@ public:
     /** Finds a S-block by type. */
     Vendor0080BLSubBlock findSubBlock(const char id[3]) const;
 
+    static constexpr const char RecordId[] = "0080BL";
 private:
     static int subblockOffset(const Uic9183Block &block);
 

@@ -5,6 +5,7 @@
 */
 
 #include "../lib/era/ssbticket.h"
+#include "../lib/uic9183/uic9183head.h"
 
 #include <kitinerary_version.h>
 
@@ -77,32 +78,51 @@ void dumpUic9183(const QByteArray &data)
     parser.parse(data);
     // TODO dump header
 
-    auto block = parser.firstBlock();
-    while (!block.isNull()) {
+
+    for (auto block = parser.firstBlock(); !block.isNull(); block = block.nextBlock()) {
         std::cout << "Block: ";
         std::cout.write(block.name(), 6);
         std::cout << ", size: " << block.size()  << ", version: " << block.version() << std::endl;
 
-        if (std::strncmp(block.name(), "U_TLAY", 6) == 0) {
+        if (block.isA<Uic9183Head>()) {
+            Uic9183Head head(block);
+            for (auto i = 0; i < Uic9183Head::staticMetaObject.propertyCount(); ++i) {
+                const auto prop = Uic9183Head::staticMetaObject.property(i);
+                const auto value = prop.readOnGadget(&head);
+                std::cout << " " << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
+            }
+        } else if (block.isA<Uic9183TicketLayout>()) {
             Uic9183TicketLayout tlay(block);
-            // TODO
-        } else if (std::strncmp(block.name(), "0080BL", 6) == 0) {
+            std::cout << " Layout standard: " << qPrintable(tlay.type()) << std::endl;
+            for (auto field = tlay.firstField(); !field.isNull(); field = field.next()) {
+                std::cout << "  [row: " << field.row() << " column: " << field.column()
+                          << " height: " << field.height() << " width: " << field.width()
+                          << " format: " << field.format() << "]: " << qPrintable(field.text())
+                          << std::endl;
+            }
+        } else if (block.isA<Vendor0080BLBlock>()) {
             Vendor0080BLBlock vendor(block);
-            auto sub = vendor.firstBlock();
-            while (!sub.isNull()) {
+            for (auto sub = vendor.firstBlock(); !sub.isNull(); sub = sub.nextBlock()) {
                 std::cout << " ";
                 std::cout.write(sub.id(), 3);
                 std::cout << " (size: " << sub.size() << "): ";
                 dumpRawData(sub.content(), sub.contentSize());
                 std::cout << std::endl;
-                sub = sub.nextBlock();
             }
         } else {
             std::cout << " Content: ";
             dumpRawData(block.content(), block.contentSize());
             std::cout << std::endl;
         }
-        block = block.nextBlock();
+    }
+}
+
+void dumpVdv(const QByteArray &data)
+{
+    VdvTicketParser parser;
+    if (!parser.parse(data)) {
+        std::cerr << "failed to parse VDV ticket" << std::endl;
+        return;
     }
 }
 
@@ -145,7 +165,7 @@ int main(int argc, char **argv)
         dumpUic9183(data);
     } else if (VdvTicketParser::maybeVdvTicket(data)) {
         std::cout << "VDV Ticket" << std::endl;
-        // TODO
+        dumpVdv(data);
     } else {
         std::cout << "Unknown content" << std::endl;
         return 1;

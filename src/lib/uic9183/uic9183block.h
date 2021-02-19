@@ -33,6 +33,15 @@ public:
      *  The name is either "U_" + 4 letter standard type or a 4 digit vendor id + 2 char vendor type
      */
     const char *name() const;
+
+    /** Checks if this block has the given record id. */
+    bool isA(const char recordId[6]) const;
+    /** Checks if a block is of type @tparam T. */
+    template <typename T> inline bool isA() const
+    {
+        return isA(T::RecordId);
+    }
+
     /** Returns the payload data (not including the block header). */
     const char *content() const;
     /** Returns the size of the entire block data. */

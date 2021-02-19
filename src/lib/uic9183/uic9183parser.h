@@ -89,6 +89,14 @@ public:
      *  A null block is returned if no such block exists.
      */
     Uic9183Block findBlock(const char name[6]) const;
+    /** Returns the first block of type @tparam T.
+     *  A null block is returned if no such block exists.
+     */
+    template <typename T>
+    inline T findBlock() const
+    {
+        return T(findBlock(T::RecordId));
+    }
 
     /** Same as the above, but for JS usage. */
     Q_INVOKABLE QVariant block(const QString &name) const;
