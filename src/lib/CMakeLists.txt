@@ -64,6 +64,7 @@ set(kitinerary_lib_srcs
     vdv/iso9796_2decoder.cpp
     vdv/vdvcertificate.cpp
     vdv/vdvticket.cpp
+    vdv/vdvticketcontent.cpp
     vdv/vdvticketparser.cpp
     vdv/certs/vdv-certs.qrc
 

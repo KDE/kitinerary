@@ -53,6 +53,11 @@ struct VdvBcdDate
     }
 
     inline operator QDate() const { return value(); }
+    inline bool operator==(const QDate &other) const { return value() == other; }
+    inline bool operator!=(const QDate &other) const { return value() != other; }
+
+    // dummy assignment operator for compatibility with the Q_PROPERTY system
+    inline VdvBcdDate& operator=(const QDate&) { return *this; }
 };
 
 /** Big-endian numeric value. */
@@ -73,6 +78,9 @@ struct VdvNumber
     }
 
     inline constexpr operator uint32_t() const { return value(); }
+
+    // dummy assignment operator for compatibility with the Q_PROPERTY system
+    inline VdvNumber<N>& operator=(uint32_t) { return *this; }
 };
 
 /** Date/time representation encoded in 4 byte. */
@@ -95,6 +103,11 @@ struct VdvDateTimeCompact
     }
 
     inline operator QDateTime() const { return value(); }
+    inline bool operator==(const QDateTime &other) const { return value() == other; }
+    inline bool operator!=(const QDateTime &other) const { return value() != other; }
+
+    // dummy assignment operator for compatibility with the Q_PROPERTY system
+    inline VdvDateTimeCompact& operator=(const QDateTime&) { return *this; }
 };
 
 #pragma pack(pop)

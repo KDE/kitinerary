@@ -7,6 +7,8 @@
 #ifndef KITINERARY_BER_ELEMENT_P_H
 #define KITINERARY_BER_ELEMENT_P_H
 
+#include "kitinerary_export.h"
+
 #include <QByteArray>
 
 #include <cstdint>
@@ -23,7 +25,7 @@ namespace BER {
  * Implicitly this is also kinda implementing a QByteArrayRef, as this works without copying
  * the underlying data.
  */
-class Element
+class KITINERARY_EXPORT Element
 {
 public:
     Element();

@@ -17,7 +17,12 @@
 
 namespace KItinerary {
 
+class VdvTicketHeader;
 class VdvTicketPrivate;
+class VdvTicketCommonTransactionData;
+class VdvTicketIssueData;
+struct VdvTicketTrailer;
+namespace BER { class Element; }
 
 /** Ticket information from a VDV barcode.
  *  For use by tooling or custom extractor scripts.
@@ -61,6 +66,14 @@ public:
 
     Person person() const;
     QString ticketNumber() const;
+
+    // low-level content access
+    const VdvTicketHeader* header() const;
+    BER::Element productData() const;
+    const VdvTicketCommonTransactionData* commonTransactionData() const;
+    BER::Element productSpecificTransactionData() const;
+    const VdvTicketIssueData* issueData() const;
+    const VdvTicketTrailer* trailer() const;
 
 private:
     QExplicitlySharedDataPointer<VdvTicketPrivate> d;

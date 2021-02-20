@@ -6,6 +6,8 @@
 
 #include "../lib/era/ssbticket.h"
 #include "../lib/uic9183/uic9183head.h"
+#include "../lib/vdv/vdvticketcontent.h"
+#include "../lib/tlv/berelement_p.h"
 
 #include <kitinerary_version.h>
 
@@ -29,7 +31,7 @@
 
 using namespace KItinerary;
 
-void dumpSsbTicket(const QByteArray &data)
+static void dumpSsbTicket(const QByteArray &data)
 {
     SSBTicket ticket(data);
 
@@ -58,7 +60,7 @@ void dumpSsbTicket(const QByteArray &data)
     }
 }
 
-void dumpRawData(const char *data, std::size_t size)
+static void dumpRawData(const char *data, std::size_t size)
 {
     bool isText = true;
     for (std::size_t i = 0; i < size && isText; ++i) {
@@ -72,7 +74,17 @@ void dumpRawData(const char *data, std::size_t size)
     }
 }
 
-void dumpUic9183(const QByteArray &data)
+template <typename T>
+static void dumpGadget(const T *gadget, const char* indent)
+{
+    for (auto i = 0; i < T::staticMetaObject.propertyCount(); ++i) {
+        const auto prop = T::staticMetaObject.property(i);
+        const auto value = prop.readOnGadget(gadget);
+        std::cout << indent << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
+    }
+}
+
+static void dumpUic9183(const QByteArray &data)
 {
     Uic9183Parser parser;
     parser.parse(data);
@@ -86,11 +98,7 @@ void dumpUic9183(const QByteArray &data)
 
         if (block.isA<Uic9183Head>()) {
             Uic9183Head head(block);
-            for (auto i = 0; i < Uic9183Head::staticMetaObject.propertyCount(); ++i) {
-                const auto prop = Uic9183Head::staticMetaObject.property(i);
-                const auto value = prop.readOnGadget(&head);
-                std::cout << " " << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
-            }
+            dumpGadget(&head, " ");
         } else if (block.isA<Uic9183TicketLayout>()) {
             Uic9183TicketLayout tlay(block);
             std::cout << " Layout standard: " << qPrintable(tlay.type()) << std::endl;
@@ -117,13 +125,73 @@ void dumpUic9183(const QByteArray &data)
     }
 }
 
-void dumpVdv(const QByteArray &data)
+static void dumpVdv(const QByteArray &data)
 {
     VdvTicketParser parser;
     if (!parser.parse(data)) {
         std::cerr << "failed to parse VDV ticket" << std::endl;
         return;
     }
+    const auto ticket = parser.ticket();
+    std::cout << " Header:" << std::endl;
+    dumpGadget(ticket.header(), "  ");
+
+    std::cout << " Product data:" << std::endl;
+    for (auto block = ticket.productData().first(); block.isValid(); block = block.next()) {
+        std::cout << "  Tag: 0x" << std::hex << block.type() << std::dec << " size: " << block.size() << std::endl;
+        switch (block.type()) {
+            case VdvTicketBasicData::Tag:
+                dumpGadget(block.contentAt<VdvTicketBasicData>(), "    ");
+                break;
+            case VdvTicketTravelerData::Tag:
+            {
+                const auto traveler = block.contentAt<VdvTicketTravelerData>();
+                dumpGadget(traveler, "    ");
+                std::cout << "    name: " << qPrintable(QString::fromUtf8(traveler->name(), traveler->nameSize(block.contentSize()))) << std::endl;
+                break;
+            }
+            case VdvTicketValidityAreaData::Tag:
+            {
+                const auto area = block.contentAt<VdvTicketValidityAreaData>();
+
+                switch (area->type) {
+                    case VdvTicketValidityAreaDataType31::Type:
+                    {
+                        const auto area31 = static_cast<const VdvTicketValidityAreaDataType31*>(area);
+                        dumpGadget(area31, "    ");
+                        std::cout << "    payload: (hex) " << QByteArray((const char*)block.contentData() + sizeof(VdvTicketValidityAreaDataType31), block.contentSize() - sizeof(VdvTicketValidityAreaDataType31)).toHex().constData() << std::endl;
+                        break;
+                    }
+                    default:
+                        dumpGadget(area, "    ");
+                        std::cout << "    payload: (hex) " << QByteArray((const char*)block.contentData() + sizeof(VdvTicketValidityAreaData), block.contentSize() - sizeof(VdvTicketValidityAreaData)).toHex().constData() << std::endl;
+                        break;
+                }
+                break;
+            }
+            default:
+                std::cout << "   (hex) " << QByteArray((const char*)block.contentData(), block.contentSize()).toHex().constData() << std::endl;
+        }
+    }
+
+    std::cout << " Transaction data:" << std::endl;
+    dumpGadget(ticket.commonTransactionData(), "  ");
+    std::cout << " Product-specific transaction data (" << ticket.productSpecificTransactionData().contentSize() << " bytes):" << std::endl;
+    for (auto block = ticket.productSpecificTransactionData().first(); block.isValid(); block = block.next()) {
+        std::cout << "  Tag: " << block.type() << " size: " << block.size() << std::endl;
+        switch (block.type()) {
+            default:
+                std::cout << "   (hex) " << QByteArray((const char*)block.contentData(), block.contentSize()).toHex().constData() << std::endl;
+        }
+    }
+
+    std::cout << " Issue data:" << std::endl;
+    dumpGadget(ticket.issueData(), "  ");
+    std::cout << " Trailer:" << std::endl;
+    std::cout << "  identifier: ";
+    std::cout.write(ticket.trailer()->identifier, 3);
+    std::cout << std::endl;
+    std::cout << "  version: " << ticket.trailer()->version << std::endl;
 }
 
 int main(int argc, char **argv)

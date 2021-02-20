@@ -5,8 +5,11 @@
 */
 
 #include "vdvticket.h"
+#include "vdvticketcontent.h"
 #include "vdvdata_p.h"
 #include "logging.h"
+
+#include "../tlv/berelement_p.h"
 
 #include <QDebug>
 
@@ -19,7 +22,7 @@ public:
     QByteArray m_data;
 
     BER::Element productElement(uint32_t type) const;
-    template <typename T> const T* productData(uint32_t type) const;
+    template <typename T> const T* productData(uint32_t type = T::Tag) const;
 };
 }
 
@@ -64,10 +67,7 @@ VdvTicket::VdvTicket(const QByteArray &data)
         return;
     }
     offset += productBlock.size();
-
-    const auto transactionBlock = reinterpret_cast<const VdvTicketTransactionData*>(data.constData() + offset);
-    qDebug() << "transaction block:" << transactionBlock->kvpOrgId;
-    offset += sizeof(VdvTicketTransactionData);
+    offset += sizeof(VdvTicketCommonTransactionData);
 
     const auto prodTransactionBlock = BER::TypedElement<TagTicketProductTransactionData>(data, offset);
     if (!prodTransactionBlock.isValid()) {
@@ -75,9 +75,6 @@ VdvTicket::VdvTicket(const QByteArray &data)
         return;
     }
     offset += prodTransactionBlock.size();
-
-    const auto issueData = reinterpret_cast<const VdvTicketIssueData*>(data.constData() + offset);
-    qDebug() << issueData->version << issueData->samId;
     offset += sizeof(VdvTicketIssueData);
 
     // 0 padding to reach at least 111 bytes
@@ -89,21 +86,6 @@ VdvTicket::VdvTicket(const QByteArray &data)
         return;
     }
     d->m_data = data;
-
-#if 1
-    const auto hdr = reinterpret_cast<const VdvTicketHeader*>(data.constData());
-    qDebug() << hdr->productId << hdr->pvOrgId;
-    // iterate over TLV content
-    auto tlv = productBlock.first();
-    while (tlv.isValid()) {
-        qDebug() << "tag:" << tlv.type() << "size:" << tlv.contentSize() << "content:" << QByteArray((const char*)tlv.contentData(), tlv.contentSize()).toHex();
-        tlv = tlv.next();
-    }
-    const auto basicData = d->productData<VdvTicketBasicData>(TagTicketBasicData);
-    if (basicData) {
-        qDebug() << "traveler type:" << basicData->travelerType;
-    }
-#endif
 }
 
 VdvTicket::VdvTicket(const VdvTicket&) = default;
@@ -112,37 +94,25 @@ VdvTicket& VdvTicket::operator=(const VdvTicket&) = default;
 
 QDateTime VdvTicket::beginDateTime() const
 {
-    if (d->m_data.isEmpty()) {
-        return {};
-    }
-
-    const auto hdr = reinterpret_cast<const VdvTicketHeader*>(d->m_data.constData());
-    return hdr->beginDt;
+    const auto hdr = header();
+    return hdr ? hdr->validityBegin : QDateTime();
 }
 
 QDateTime KItinerary::VdvTicket::endDateTime() const
 {
-    if (d->m_data.isEmpty()) {
-        return {};
-    }
-
-    const auto hdr = reinterpret_cast<const VdvTicketHeader*>(d->m_data.constData());
-    return hdr->endDt;
+    const auto hdr = header();
+    return hdr ? hdr->validityEnd : QDateTime();
 }
 
 int VdvTicket::issuerId() const
 {
-    if (d->m_data.isEmpty()) {
-        return 0;
-    }
-
-    const auto hdr = reinterpret_cast<const VdvTicketHeader*>(d->m_data.constData());
-    return hdr->kvpOrgId;
+    const auto hdr = header();
+    return hdr ? hdr->kvpOrgId : 0;
 }
 
 VdvTicket::ServiceClass VdvTicket::serviceClass() const
 {
-    const auto tlv = d->productData<VdvTicketBasicData>(TagTicketBasicData);
+    const auto tlv = d->productData<VdvTicketBasicData>();
     if (!tlv) {
         return UnknownClass;
     }
@@ -162,12 +132,11 @@ VdvTicket::ServiceClass VdvTicket::serviceClass() const
 
 Person VdvTicket::person() const
 {
-    const auto elem = d->productElement(TagTicketTravelerData);
+    const auto elem = d->productElement(VdvTicketTravelerData::Tag);
     const auto tlv = elem.isValid() ? elem.contentAt<VdvTicketTravelerData>() : nullptr;
     if (!tlv) {
         return {};
     }
-    qDebug() << "traveler:" << tlv->gender << tlv->birthDate << QByteArray(tlv->name(), tlv->nameSize(elem.contentSize()));
 
     const auto len = strnlen(tlv->name(), tlv->nameSize(elem.contentSize())); // name field can contain null bytes
     if (len == 0) {
@@ -202,10 +171,46 @@ Person VdvTicket::person() const
 
 QString VdvTicket::ticketNumber() const
 {
-    if (d->m_data.isEmpty()) {
-        return {};
-    }
+    const auto hdr = header();
+    return hdr ? QString::number(hdr->ticketId) : QString();
+}
 
-    const auto hdr = reinterpret_cast<const VdvTicketHeader*>(d->m_data.constData());
-    return QString::number(hdr->ticketId);
+const VdvTicketHeader* VdvTicket::header() const
+{
+    return d->m_data.isEmpty() ? nullptr : reinterpret_cast<const VdvTicketHeader*>(d->m_data.constData());
+}
+
+BER::Element VdvTicket::productData() const
+{
+    const auto productElement = BER::Element(d->m_data, sizeof(VdvTicketHeader));
+    return (productElement.isValid() && productElement.type() == TagTicketProductData) ? productElement : BER::Element();
+}
+
+const VdvTicketCommonTransactionData* VdvTicket::commonTransactionData() const
+{
+    return d->m_data.isEmpty() ? nullptr :
+        reinterpret_cast<const VdvTicketCommonTransactionData*>(d->m_data.constData() + sizeof(VdvTicketHeader) + productData().size());
+}
+
+BER::Element VdvTicket::productSpecificTransactionData() const
+{
+    const auto offset = sizeof(VdvTicketHeader) + productData().size() + sizeof(VdvTicketCommonTransactionData);
+    const auto elem = BER::Element(d->m_data, offset);
+    return (elem.isValid() && elem.type() == TagTicketProductTransactionData) ? elem : BER::Element();
+}
+
+const VdvTicketIssueData* VdvTicket::issueData() const
+{
+    const auto offset = sizeof(VdvTicketHeader) + productData().size()
+                      + sizeof(VdvTicketCommonTransactionData) + productSpecificTransactionData().size();
+    return d->m_data.isEmpty() ? nullptr : reinterpret_cast<const VdvTicketIssueData*>(d->m_data.constData() + offset);
+}
+
+const VdvTicketTrailer* VdvTicket::trailer() const
+{
+    auto offset = sizeof(VdvTicketHeader) + productData().size()
+                      + sizeof(VdvTicketCommonTransactionData) + productSpecificTransactionData().size()
+                      + sizeof(VdvTicketIssueData);
+    offset += std::max<int>(111 - offset - sizeof(VdvTicketTrailer), 0); // padding to 111 bytes
+    return d->m_data.isEmpty() ? nullptr : reinterpret_cast<const VdvTicketTrailer*>(d->m_data.constData() + offset);
 }

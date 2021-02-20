@@ -10,6 +10,8 @@
 #include "iso9796_2decoder_p.h"
 #include "logging.h"
 
+#include "../tlv/berelement_p.h"
+
 #include <QByteArray>
 #include <QDebug>
 
