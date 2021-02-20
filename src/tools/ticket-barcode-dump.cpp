@@ -6,6 +6,7 @@
 
 #include "../lib/era/ssbticket.h"
 #include "../lib/uic9183/uic9183head.h"
+#include "../lib/uic9183/vendor0080vublockdata.h"
 #include "../lib/vdv/vdvticketcontent.h"
 #include "../lib/tlv/berelement_p.h"
 
@@ -77,6 +78,9 @@ static void dumpRawData(const char *data, std::size_t size)
 template <typename T>
 static void dumpGadget(const T *gadget, const char* indent)
 {
+    if (!gadget) {
+        return;
+    }
     for (auto i = 0; i < T::staticMetaObject.propertyCount(); ++i) {
         const auto prop = T::staticMetaObject.property(i);
         const auto value = prop.readOnGadget(gadget);
@@ -89,7 +93,6 @@ static void dumpUic9183(const QByteArray &data)
     Uic9183Parser parser;
     parser.parse(data);
     // TODO dump header
-
 
     for (auto block = parser.firstBlock(); !block.isNull(); block = block.nextBlock()) {
         std::cout << "Block: ";
@@ -116,6 +119,16 @@ static void dumpUic9183(const QByteArray &data)
                 std::cout << " (size: " << sub.size() << "): ";
                 dumpRawData(sub.content(), sub.contentSize());
                 std::cout << std::endl;
+            }
+        } else if (block.isA<Vendor0080VUBlock>()) {
+            Vendor0080VUBlock vendor(block);
+            dumpGadget(vendor.commonData(), " ");
+            for (int i = 0; i < (int)vendor.commonData()->numberOfTickets; ++i) {
+                const auto ticket = vendor.ticketData(i);
+                std::cout << " Ticket " << (i + 1) << ":" << std::endl;
+                dumpGadget(ticket, "  ");
+                dumpGadget(&ticket->validityArea, "  ");
+                std::cout << "    payload: (hex) " << QByteArray((const char*)&ticket->validityArea + sizeof(VdvTicketValidityAreaData), ticket->validityAreaDataSize - sizeof(VdvTicketValidityAreaData)).toHex().constData() << std::endl;
             }
         } else {
             std::cout << " Content: ";

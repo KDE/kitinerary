@@ -60,6 +60,7 @@ set(kitinerary_lib_srcs
     uic9183/uic9183parser.cpp
     uic9183/uic9183ticketlayout.cpp
     uic9183/vendor0080block.cpp
+    uic9183/vendor0080vublockdata.cpp
 
     vdv/iso9796_2decoder.cpp
     vdv/vdvcertificate.cpp

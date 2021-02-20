@@ -5,6 +5,7 @@
 */
 
 #include "vendor0080block.h"
+#include "vendor0080vublockdata.h"
 #include "logging.h"
 
 #include <QString>
@@ -149,4 +150,35 @@ int Vendor0080BLBlock::subblockOffset(const Uic9183Block& block)
     const auto certCount = *(block.content() + 2) - '0';
     const auto certSize = block.version() == 2 ? 46 : 26;
     return 3 + certSize * certCount + 2;
+}
+
+
+Vendor0080VUBlock::Vendor0080VUBlock(const Uic9183Block &block)
+{
+    if (block.isNull() || block.contentSize() < (int)sizeof(Vendor0080VUCommonData)) {
+        return;
+    }
+
+    m_block = block;
+}
+
+bool Vendor0080VUBlock::isValid() const
+{
+    return !m_block.isNull();
+}
+
+const Vendor0080VUCommonData* Vendor0080VUBlock::commonData() const
+{
+    return m_block.isNull() ? nullptr : reinterpret_cast<const Vendor0080VUCommonData*>(m_block.content());
+}
+
+const Vendor0080VUTicketData* Vendor0080VUBlock::ticketData(int index) const
+{
+    auto offset = sizeof(Vendor0080VUCommonData);
+    auto ticket = reinterpret_cast<const Vendor0080VUTicketData*>(m_block.content() + offset);
+    while (index-- > 0) {
+        offset += sizeof(Vendor0080VUTicketData) + ticket->validityAreaDataSize - sizeof(VdvTicketValidityAreaData);
+        ticket = reinterpret_cast<const Vendor0080VUTicketData*>(m_block.content() + offset);
+    }
+    return ticket;
 }

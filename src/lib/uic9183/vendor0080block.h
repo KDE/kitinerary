@@ -63,6 +63,26 @@ private:
     Uic9183Block m_block;
 };
 
+class Vendor0080VUCommonData;
+class Vendor0080VUTicketData;
+
+/** UIC 918.3 0080VU vendor data block (DB local public transport extensions).
+ *  @see UIC918.3* Interoperabilität Barcode DB Online-Ticker VDV-KA
+ */
+class KITINERARY_EXPORT Vendor0080VUBlock
+{
+public:
+    Vendor0080VUBlock(const Uic9183Block &block);
+    bool isValid() const;
+
+    const Vendor0080VUCommonData* commonData() const;
+    const Vendor0080VUTicketData* ticketData(int index) const;
+
+    static constexpr const char RecordId[] = "0080VU";
+private:
+    Uic9183Block m_block;
+};
+
 }
 
 #endif // KITINERARY_VENDOR0080BLOCK_H
