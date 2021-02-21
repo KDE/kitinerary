@@ -54,7 +54,7 @@ QString SSBTicket::readString(int start, int length) const
     QString res;
     res.resize(length);
     for (int i = 0; i < length; ++i) {
-        res[i] = (char)(readNumber(start + SSB_CHAR_WIDTH * i, SSB_CHAR_WIDTH) + 32);
+        res[i] = QChar(readNumber(start + SSB_CHAR_WIDTH * i, SSB_CHAR_WIDTH) + 32);
     }
     return res;
 }
