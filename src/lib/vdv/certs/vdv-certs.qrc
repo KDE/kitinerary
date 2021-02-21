@@ -1,3 +1,7 @@
+<!--
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: CC0-1.0
+-->
 <RCC>
     <qresource prefix="/org.kde.pim/kitinerary/vdv/certs">
         <file>4445564456110111.vdv-cert</file>
