@@ -102,6 +102,51 @@ QString Vendor0080BLSubBlock::toString() const
 }
 
 
+Vendor0080BLOrderBlock::Vendor0080BLOrderBlock() = default;
+Vendor0080BLOrderBlock::Vendor0080BLOrderBlock(const Uic9183Block &block, int offset)
+    : m_block(block)
+    , m_offset(offset)
+{
+}
+
+bool Vendor0080BLOrderBlock::isNull() const
+{
+    return m_block.isNull();
+}
+
+QDate Vendor0080BLOrderBlock::validFrom() const
+{
+    switch (m_block.version()) {
+        case 2:
+            return QDate::fromString(m_block.readUtf8String(m_offset + 22, 8), QStringLiteral("ddMMyyyy"));
+        case 3:
+            return QDate::fromString(m_block.readUtf8String(m_offset, 8), QStringLiteral("ddMMyyyy"));
+    }
+    return {};
+}
+
+QDate Vendor0080BLOrderBlock::validTo() const
+{
+    switch (m_block.version()) {
+        case 2:
+            return QDate::fromString(m_block.readUtf8String(m_offset + 22 + 8, 8), QStringLiteral("ddMMyyyy"));
+        case 3:
+            return QDate::fromString(m_block.readUtf8String(m_offset + 8, 8), QStringLiteral("ddMMyyyy"));
+    }
+    return {};
+}
+
+QString Vendor0080BLOrderBlock::serialNumber() const
+{
+    switch (m_block.version()) {
+        case 2:
+            return m_block.readUtf8String(m_offset + 22 + 8 + 8, 8);
+        case 3:
+            return m_block.readUtf8String(m_offset + 8 + 8, 10);
+    }
+    return {};
+}
+
 // 0080BL vendor block (DB) (version 2/3, dynamic size)
 // 2x stuff
 // 1x number of certificate blocks
@@ -126,6 +171,22 @@ Vendor0080BLBlock::Vendor0080BLBlock(const Uic9183Block &block)
 bool Vendor0080BLBlock::isValid() const
 {
     return !m_block.isNull();
+}
+
+int Vendor0080BLBlock::orderBlockCount() const
+{
+    return m_block.readAsciiEncodedNumber(2, 1);
+}
+
+Vendor0080BLOrderBlock Vendor0080BLBlock::orderBlock(int i) const
+{
+    if (i >= 0 && i < orderBlockCount()) {
+        switch (m_block.version()) {
+            case 2: return Vendor0080BLOrderBlock(m_block, 3 + i * (22 + 8 + 8 + 8));
+            case 3: return Vendor0080BLOrderBlock(m_block, 3 + i * (8 + 8 + 10));
+        }
+    }
+    return {};
 }
 
 Vendor0080BLSubBlock Vendor0080BLBlock::firstBlock() const

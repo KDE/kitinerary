@@ -14,6 +14,28 @@ class QString;
 
 namespace KItinerary {
 
+/** UIC 918.3 0080BL vendor data block order block. */
+class KITINERARY_EXPORT Vendor0080BLOrderBlock
+{
+    Q_GADGET
+    Q_PROPERTY(QDate validFrom READ validFrom)
+    Q_PROPERTY(QDate validTo READ validTo)
+    Q_PROPERTY(QString serialNumber READ serialNumber)
+public:
+    Vendor0080BLOrderBlock();
+    Vendor0080BLOrderBlock(const Uic9183Block &block, int offset);
+
+    bool isNull() const;
+
+    QDate validFrom() const;
+    QDate validTo() const;
+    QString serialNumber() const;
+
+private:
+    Uic9183Block m_block;
+    int m_offset = 0;
+};
+
 /** UIC 918.3 0080BL vendor data block sub-block. */
 class KITINERARY_EXPORT Vendor0080BLSubBlock
 {
@@ -47,10 +69,18 @@ private:
 /** UIC 918.3 0080BL vendor data block. */
 class KITINERARY_EXPORT Vendor0080BLBlock
 {
+    Q_GADGET
+    Q_PROPERTY(int orderBlockCount READ orderBlockCount)
+
 public:
     Vendor0080BLBlock(const Uic9183Block &block);
 
     bool isValid() const;
+    int orderBlockCount() const;
+
+    /** Order block at index @p i. */
+    Vendor0080BLOrderBlock orderBlock(int i) const;
+
     /** First S-block, for iterating. */
     Vendor0080BLSubBlock firstBlock() const;
     /** Finds a S-block by type. */

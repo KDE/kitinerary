@@ -95,26 +95,33 @@ static void dumpUic9183(const QByteArray &data)
     // TODO dump header
 
     for (auto block = parser.firstBlock(); !block.isNull(); block = block.nextBlock()) {
-        std::cout << "Block: ";
+        std::cout << " Block: ";
         std::cout.write(block.name(), 6);
         std::cout << ", size: " << block.size()  << ", version: " << block.version() << std::endl;
 
         if (block.isA<Uic9183Head>()) {
             Uic9183Head head(block);
-            dumpGadget(&head, " ");
+            dumpGadget(&head, "  ");
         } else if (block.isA<Uic9183TicketLayout>()) {
             Uic9183TicketLayout tlay(block);
-            std::cout << " Layout standard: " << qPrintable(tlay.type()) << std::endl;
+            std::cout << "   Layout standard: " << qPrintable(tlay.type()) << std::endl;
             for (auto field = tlay.firstField(); !field.isNull(); field = field.next()) {
-                std::cout << "  [row: " << field.row() << " column: " << field.column()
+                std::cout << "    [row: " << field.row() << " column: " << field.column()
                           << " height: " << field.height() << " width: " << field.width()
                           << " format: " << field.format() << "]: " << qPrintable(field.text())
                           << std::endl;
             }
         } else if (block.isA<Vendor0080BLBlock>()) {
             Vendor0080BLBlock vendor(block);
+            dumpGadget(&vendor, "  ");
+            for (int i = 0; i < vendor.orderBlockCount(); ++i) {
+                const auto order = vendor.orderBlock(i);
+                std::cout << "  Order block " << (i + 1) << ":" << std::endl;
+                dumpGadget(&order, "   ");
+            }
+            std::cout << "  S-blocks:" << std::endl;
             for (auto sub = vendor.firstBlock(); !sub.isNull(); sub = sub.nextBlock()) {
-                std::cout << " ";
+                std::cout << "   ";
                 std::cout.write(sub.id(), 3);
                 std::cout << " (size: " << sub.size() << "): ";
                 dumpRawData(sub.content(), sub.contentSize());
@@ -122,16 +129,16 @@ static void dumpUic9183(const QByteArray &data)
             }
         } else if (block.isA<Vendor0080VUBlock>()) {
             Vendor0080VUBlock vendor(block);
-            dumpGadget(vendor.commonData(), " ");
+            dumpGadget(vendor.commonData(), "  ");
             for (int i = 0; i < (int)vendor.commonData()->numberOfTickets; ++i) {
                 const auto ticket = vendor.ticketData(i);
-                std::cout << " Ticket " << (i + 1) << ":" << std::endl;
-                dumpGadget(ticket, "  ");
-                dumpGadget(&ticket->validityArea, "  ");
+                std::cout << "  Ticket " << (i + 1) << ":" << std::endl;
+                dumpGadget(ticket, "   ");
+                dumpGadget(&ticket->validityArea, "   ");
                 std::cout << "    payload: (hex) " << QByteArray((const char*)&ticket->validityArea + sizeof(VdvTicketValidityAreaData), ticket->validityAreaDataSize - sizeof(VdvTicketValidityAreaData)).toHex().constData() << std::endl;
             }
         } else {
-            std::cout << " Content: ";
+            std::cout << "  Content: ";
             dumpRawData(block.content(), block.contentSize());
             std::cout << std::endl;
         }
