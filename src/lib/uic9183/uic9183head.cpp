@@ -20,16 +20,16 @@ using namespace KItinerary;
 Uic9183Head::Uic9183Head(const Uic9183Block &block)
 {
     if (block.version() == 1 && block.size() == 53) {
-        m_block = block;
+        m_data = block;
     }
 }
 
 bool Uic9183Head::isValid() const
 {
-    return !m_block.isNull();
+    return !m_data.isNull();
 }
 
 QDateTime Uic9183Head::issuingDateTime() const
 {
-    return QDateTime::fromString(m_block.readUtf8String(24, 12), QStringLiteral("ddMMyyyyhhmm"));
+    return QDateTime::fromString(Uic9183Utils::readUtf8String(m_data, 24, 12), QStringLiteral("ddMMyyyyhhmm"));
 }

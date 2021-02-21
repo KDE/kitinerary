@@ -59,11 +59,6 @@ public:
      */
     Uic9183Block nextBlock() const;
 
-    /** Reads a number from content at offset @p offset and @p length in ASCII encoding. */
-    int readAsciiEncodedNumber(int offset, int length) const;
-    /** Reads a string from the content starting at offset @p offset with @p length, assuming UTF-8 encoding. */
-    QString readUtf8String(int offset, int length) const;
-
 private:
     QString contentText() const;
 

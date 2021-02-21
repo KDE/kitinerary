@@ -9,6 +9,7 @@
 #include "rct2ticket.h"
 #include "uic9183block.h"
 #include "uic9183head.h"
+#include "uic9183header.h"
 #include "uic9183ticketlayout.h"
 #include "vendor0080block.h"
 
@@ -27,6 +28,7 @@ namespace KItinerary {
 class Uic9183ParserPrivate : public QSharedData
 {
 public:
+    QByteArray m_data;
     QByteArray m_payload;
     QDateTime m_contextDt;
 };
@@ -72,39 +74,23 @@ void Uic9183Parser::setContextDate(const QDateTime &contextDt)
 
 void Uic9183Parser::parse(const QByteArray &data)
 {
+    d->m_data.clear();
     d->m_payload.clear();
 
-    // header and signature block (64 byte total)
-    if (!Uic9183Parser::maybeUic9183(data)) {
-        qCWarning(Log) << "UIC 918-3 ticket too short or has wrong header/version.";
+    Uic9183Header header(data);
+    if (!header.isValid()) {
         return;
     }
 
-    // 3x header
-    // 2x version
-    // 4x UIC code of the signing carrier
-    // 5x signature key id
-    // 50x ASN.1 signature
-
-    // zlib compressed payload
-    if (data.size() < 64 + 8) {
-        qCWarning(Log) << "UIC 918-3 payload too short.";
-        return;
-    }
-    // 4x compressed payload size as string
-    // 2x zlib header 0x789C
-    if (data[68] != 0x78 || ((uchar)data[69] != 0x9C && (uchar)data[69] != 0xDA)) {
-        qCWarning(Log) << "UIC 918-3 payload has wrong zlib header.";
-        return;
-    }
     // nx zlib payload
+    d->m_data = data;
     d->m_payload.resize(4096);
     z_stream stream;
     stream.zalloc = nullptr;
     stream.zfree = nullptr;
     stream.opaque = nullptr;
-    stream.avail_in = data.size() - 68;
-    stream.next_in = reinterpret_cast<unsigned char*>(const_cast<char*>(data.data() + 68));
+    stream.avail_in = data.size() - header.compressedMessageOffset();
+    stream.next_in = reinterpret_cast<unsigned char*>(const_cast<char*>(data.data() + header.compressedMessageOffset()));
     stream.avail_out = d->m_payload.size();
     stream.next_out = reinterpret_cast<unsigned char*>(d->m_payload.data());
 
@@ -255,21 +241,15 @@ QVariant Uic9183Parser::rct2TicketVariant() const
     return {};
 }
 
+Uic9183Header Uic9183Parser::header() const
+{
+    return Uic9183Header(d->m_data);
+}
+
 bool Uic9183Parser::maybeUic9183(const QByteArray& data)
 {
-    if (data.size() < 64) {
-        return false;
-    }
-
-    if (!data.startsWith("#UT") && !data.startsWith("OTI")) {
-        return false;
-    }
-
-    if (data.at(3) != '0' || data.at(4) != '1') {
-        return false;
-    }
-
-    return true;
+    Uic9183Header h(data);
+    return h.isValid();
 }
 
 #include "moc_uic9183parser.cpp"

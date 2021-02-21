@@ -20,6 +20,7 @@ namespace KItinerary {
 
 class Rct2Ticket;
 class Uic9183Block;
+class Uic9183Header;
 class Uic9183ParserPrivate;
 class Uic9183TicketLayout;
 
@@ -100,6 +101,9 @@ public:
 
     /** Same as the above, but for JS usage. */
     Q_INVOKABLE QVariant block(const QString &name) const;
+
+    /** Header found before the compressed payload. */
+    Uic9183Header header() const;
 
     /** Quickly checks if @p might be UIC 918.3 content.
      *  This prioritizes speed over correctness and is used in barcode content auto-detection.

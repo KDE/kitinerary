@@ -57,8 +57,10 @@ set(kitinerary_lib_srcs
     uic9183/rct2ticket.cpp
     uic9183/uic9183block.cpp
     uic9183/uic9183head.cpp
+    uic9183/uic9183header.cpp
     uic9183/uic9183parser.cpp
     uic9183/uic9183ticketlayout.cpp
+    uic9183/uic9183utils.cpp
     uic9183/vendor0080block.cpp
     uic9183/vendor0080vublockdata.cpp
 

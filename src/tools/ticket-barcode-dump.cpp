@@ -6,6 +6,7 @@
 
 #include "../lib/era/ssbticket.h"
 #include "../lib/uic9183/uic9183head.h"
+#include "../lib/uic9183/uic9183header.h"
 #include "../lib/uic9183/vendor0080vublockdata.h"
 #include "../lib/vdv/vdvticketcontent.h"
 #include "../lib/tlv/berelement_p.h"
@@ -92,7 +93,9 @@ static void dumpUic9183(const QByteArray &data)
 {
     Uic9183Parser parser;
     parser.parse(data);
-    // TODO dump header
+    std::cout << " Header:" << std::endl;
+    const auto header = parser.header();
+    dumpGadget(&header, "  ");
 
     for (auto block = parser.firstBlock(); !block.isNull(); block = block.nextBlock()) {
         std::cout << " Block: ";

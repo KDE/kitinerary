@@ -6,6 +6,7 @@
 
 #include "vendor0080block.h"
 #include "vendor0080vublockdata.h"
+#include "uic9183utils.h"
 #include "logging.h"
 
 #include <QString>
@@ -118,9 +119,9 @@ QDate Vendor0080BLOrderBlock::validFrom() const
 {
     switch (m_block.version()) {
         case 2:
-            return QDate::fromString(m_block.readUtf8String(m_offset + 22, 8), QStringLiteral("ddMMyyyy"));
+            return QDate::fromString(Uic9183Utils::readUtf8String(m_block, m_offset + 22, 8), QStringLiteral("ddMMyyyy"));
         case 3:
-            return QDate::fromString(m_block.readUtf8String(m_offset, 8), QStringLiteral("ddMMyyyy"));
+            return QDate::fromString(Uic9183Utils::readUtf8String(m_block, m_offset, 8), QStringLiteral("ddMMyyyy"));
     }
     return {};
 }
@@ -129,9 +130,9 @@ QDate Vendor0080BLOrderBlock::validTo() const
 {
     switch (m_block.version()) {
         case 2:
-            return QDate::fromString(m_block.readUtf8String(m_offset + 22 + 8, 8), QStringLiteral("ddMMyyyy"));
+            return QDate::fromString(Uic9183Utils::readUtf8String(m_block, m_offset + 22 + 8, 8), QStringLiteral("ddMMyyyy"));
         case 3:
-            return QDate::fromString(m_block.readUtf8String(m_offset + 8, 8), QStringLiteral("ddMMyyyy"));
+            return QDate::fromString(Uic9183Utils::readUtf8String(m_block, m_offset + 8, 8), QStringLiteral("ddMMyyyy"));
     }
     return {};
 }
@@ -140,9 +141,9 @@ QString Vendor0080BLOrderBlock::serialNumber() const
 {
     switch (m_block.version()) {
         case 2:
-            return m_block.readUtf8String(m_offset + 22 + 8 + 8, 8);
+            return Uic9183Utils::readUtf8String(m_block, m_offset + 22 + 8 + 8, 8);
         case 3:
-            return m_block.readUtf8String(m_offset + 8 + 8, 10);
+            return Uic9183Utils::readUtf8String(m_block, m_offset + 8 + 8, 10);
     }
     return {};
 }
@@ -175,7 +176,7 @@ bool Vendor0080BLBlock::isValid() const
 
 int Vendor0080BLBlock::orderBlockCount() const
 {
-    return m_block.readAsciiEncodedNumber(2, 1);
+    return Uic9183Utils::readAsciiEncodedNumber(m_block, 2, 1);
 }
 
 Vendor0080BLOrderBlock Vendor0080BLBlock::orderBlock(int i) const

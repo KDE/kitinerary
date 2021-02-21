@@ -9,18 +9,11 @@
 
 #include "kitinerary_export.h"
 #include "uic9183block.h"
+#include "uic9183utils.h"
 
 #include <QDateTime>
 
 namespace KItinerary {
-
-#define HEAD_NUM_PROPERTY(Name, Offset, Length) \
-public: \
-    inline int Name() const { return m_block.readAsciiEncodedNumber(Offset, Length); } \
-    Q_PROPERTY(int Name READ Name)
-#define HEAD_STR_PROPERTY(Name, Offset, Length) \
-    inline QString Name() const { return m_block.readUtf8String(Offset, Length); } \
-    Q_PROPERTY(QString Name READ Name)
 
 /** U_HEAD block of a UIC 918.3 ticket container.
  *  @see ERA TAP TSI TD B.12 Digital Security Elements For Rail Passenger Ticketing - §10.3.1 Main record (U_HEAD)
@@ -28,13 +21,13 @@ public: \
 class KITINERARY_EXPORT Uic9183Head
 {
     Q_GADGET
-    HEAD_NUM_PROPERTY(issuerCompanyCodeNumeric, 0, 4)
-    HEAD_STR_PROPERTY(issuerCompanyCodeString, 0, 4)
-    HEAD_STR_PROPERTY(ticketKey, 4, 20)
+    UIC_NUM_PROPERTY(issuerCompanyCodeNumeric, 0, 4)
+    UIC_STR_PROPERTY(issuerCompanyCodeString, 0, 4)
+    UIC_STR_PROPERTY(ticketKey, 4, 20)
     Q_PROPERTY(QDateTime issuingDateTime READ issuingDateTime)
-    HEAD_NUM_PROPERTY(flags, 36, 1)
-    HEAD_STR_PROPERTY(primaryLanguage, 37, 2);
-    HEAD_STR_PROPERTY(secondaryLanguage, 39, 2);
+    UIC_NUM_PROPERTY(flags, 36, 1)
+    UIC_STR_PROPERTY(primaryLanguage, 37, 2);
+    UIC_STR_PROPERTY(secondaryLanguage, 39, 2);
 
 public:
     Uic9183Head(const Uic9183Block &block);
@@ -46,10 +39,8 @@ public:
 
     static constexpr const char RecordId[] = "U_HEAD";
 private:
-    Uic9183Block m_block;
+    Uic9183Block m_data;
 };
-
-#undef HEAD_NUM_PROPERTY
 
 }
 
