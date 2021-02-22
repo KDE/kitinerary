@@ -2,6 +2,7 @@
 # SPDX-FileCopyrightText: none
 
 data/*
+dist/*
 timezones.png
 timezones.pgw
 timezones.colormap

@@ -11,10 +11,22 @@
 
 using namespace KItinerary::Generator;
 
-void CodeGen::writeLicenseHeader(QIODevice *out)
+void CodeGen::writeLicenseHeaderWikidata(QIODevice *out)
+{
+    out->write(R"(/*
+ * SPDX-License-Identifier: CC0-1.0
+ * SPDX-FileCopyrightText: Wikidata contributors
+ *
+ * This code is auto-generated from Wikidata, do not edit!
+ */
+)");
+}
+
+void CodeGen::writeLicenseHeaderOSM(QIODevice *out)
 {
     out->write(R"(/*
  * SPDX-License-Identifier: ODbL-1.0
+ * SPDX-FileCopyrightText: OpenStreetMap contributors
  *
  * This code is auto-generated from OpenStreetMap (licensed under ODbL) and Wikidata (licensed under CC0), do not edit!
  */

@@ -51,7 +51,7 @@ bool TrainStationDbGenerator::generate(QIODevice *out)
     processStations();
 
     // code generation
-    CodeGen::writeLicenseHeader(out);
+    CodeGen::writeLicenseHeaderWikidata(out);
     out->write(R"(
 #include "knowledgedb.h"
 #include "trainstationdb.h"

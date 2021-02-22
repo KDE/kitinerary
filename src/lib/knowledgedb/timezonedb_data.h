@@ -1,5 +1,6 @@
 /*
  * SPDX-License-Identifier: ODbL-1.0
+ * SPDX-FileCopyrightText: OpenStreetMap contributors
  *
  * This code is auto-generated from OpenStreetMap (licensed under ODbL) and Wikidata (licensed under CC0), do not edit!
  */

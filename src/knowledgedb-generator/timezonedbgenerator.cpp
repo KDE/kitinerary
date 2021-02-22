@@ -15,7 +15,7 @@ using namespace KItinerary::Generator;
 
 void TimezoneDbGenerator::generate(QIODevice *out)
 {
-    CodeGen::writeLicenseHeader(out);
+    CodeGen::writeLicenseHeaderOSM(out);
 
     Timezones tzDb;
 
@@ -91,7 +91,7 @@ static constexpr const CountryId timezone_country_map[] = {
 
 void TimezoneDbGenerator::generateHeader(QIODevice *out)
 {
-    CodeGen::writeLicenseHeader(out);
+    CodeGen::writeLicenseHeaderOSM(out);
 
     Timezones tzDb;
     out->write(R"(

@@ -293,7 +293,7 @@ bool AirportDbGenerator::generate(QIODevice* out)
     indexNames();
 
     // step 4 generate code
-    CodeGen::writeLicenseHeader(out);
+    CodeGen::writeLicenseHeaderOSM(out);
     out->write(R"(
 
 #include "airportdb.h"

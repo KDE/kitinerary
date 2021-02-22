@@ -38,7 +38,7 @@ bool CountryDbGenerator::generate(QIODevice* out)
         return false;
     }
 
-    CodeGen::writeLicenseHeader(out);
+    CodeGen::writeLicenseHeaderWikidata(out);
     out->write(R"(
 #include "knowledgedb.h"
 #include "countrydb_p.h"

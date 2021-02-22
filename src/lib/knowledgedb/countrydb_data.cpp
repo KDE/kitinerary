@@ -1,5 +1,8 @@
 /*
- * This code is auto-generated from Wikidata data. Licensed under CC0.
+ * SPDX-License-Identifier: CC0-1.0
+ * SPDX-FileCopyrightText: Wikidata contributors
+ *
+ * This code is auto-generated from Wikidata, do not edit!
  */
 
 #include "knowledgedb.h"

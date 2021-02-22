@@ -20,7 +20,8 @@ namespace Generator {
 /** Code generation utilities. */
 namespace CodeGen
 {
-    void writeLicenseHeader(QIODevice *out);
+    void writeLicenseHeaderWikidata(QIODevice *out);
+    void writeLicenseHeaderOSM(QIODevice *out);
     void writeCoordinate(QIODevice *out, KnowledgeDb::Coordinate coord);
     void writeCountryIsoCode(QIODevice *out, const QString &isoCode);
     void writeTimezone(QIODevice *out, const QByteArray &tzName);
