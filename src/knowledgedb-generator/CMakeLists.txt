@@ -12,13 +12,13 @@ add_executable(generate-knowledgedb
     timezonedbgenerator.cpp
     trainstationdbgenerator.cpp
     util.cpp
-    ../stringutil.cpp
-    ../knowledgedb/stationidentifier.cpp
+    ../lib/stringutil.cpp
+    ../lib/knowledgedb/stationidentifier.cpp
 )
 target_compile_definitions(generate-knowledgedb PRIVATE "KITINERARY_STATIC_DEFINE")
 target_include_directories(generate-knowledgedb PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../knowledgedb
-    ${CMAKE_CURRENT_BINARY_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lib/knowledgedb
+    ${CMAKE_CURRENT_BINARY_DIR}/../lib
 )
 target_link_libraries(generate-knowledgedb PRIVATE Qt5::Network Qt5::Gui KOSM)
 # extract all elements we are interested in (airports, terminals, stations at airports)
@@ -38,7 +38,7 @@ function(generate_db dbtype outfile)
     endif()
     add_custom_command(
         OUTPUT ${outfile}
-        COMMAND generate-knowledgedb -o ${CMAKE_CURRENT_SOURCE_DIR}/../knowledgedb/${outfile} -d ${dbtype} ${extra_args}
+        COMMAND generate-knowledgedb -o ${CMAKE_CURRENT_SOURCE_DIR}/../lib/knowledgedb/${outfile} -d ${dbtype} ${extra_args}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS
         ${ARGN}
