@@ -8,6 +8,8 @@
 #define KITINERARY_UIC9183TICKETLAYOUT_H
 
 #include "kitinerary_export.h"
+#include "uic9183block.h"
+#include "uic9183utils.h"
 
 #include <QExplicitlySharedDataPointer>
 #include <QMetaType>
@@ -25,31 +27,32 @@ class Uic9183TicketLayoutPrivate;
  */
 class KITINERARY_EXPORT Uic9183TicketLayoutField
 {
+    Q_GADGET
+    UIC_NUM_PROPERTY(row, 0 + m_offset, 2)
+    UIC_NUM_PROPERTY(column, 2 + m_offset, 2)
+    UIC_NUM_PROPERTY(height, 4 + m_offset, 2)
+    UIC_NUM_PROPERTY(width, 6 + m_offset, 2)
+    UIC_NUM_PROPERTY(format, 8 + m_offset, 1)
+    /** Size of the text content. */
+    UIC_NUM_PROPERTY(size, 9 + m_offset, 4)
+    UIC_STR_PROPERTY(text, 13 + m_offset, size())
+
 public:
     Uic9183TicketLayoutField();
-    /** Create a new U_TLAY field starting at @p data.
+    /** Create a new U_TLAY field starting at @p offset in @p block.
      *  @param size The size of the remaining U_TLAY field array (not just this field!).
      */
-    Uic9183TicketLayoutField(const char *data, int size);
+    Uic9183TicketLayoutField(const Uic9183Block &block, int offset);
 
     /** Returns @true if this is an empty field, e.g. when iterating beyond the last one. */
     bool isNull() const;
-    /** Size of the entire field data (not the size of the text content!). */
-    int size() const;
-
-    int row() const;
-    int column() const;
-    int height() const;
-    int width() const;
-    int format() const;
-    QString text() const;
 
     /** Returns the next field object, or a null one if there isn't one. */
     Uic9183TicketLayoutField next() const;
 
 private:
-    const char *m_data = nullptr;
-    int m_size = 0;
+    Uic9183Block m_data;
+    int m_offset;
 };
 
 

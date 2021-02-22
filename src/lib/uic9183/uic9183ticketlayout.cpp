@@ -6,7 +6,6 @@
 
 #include "uic9183ticketlayout.h"
 #include "uic9183block.h"
-#include "uic9183utils.h"
 #include "logging.h"
 
 #include <QDateTime>
@@ -14,20 +13,6 @@
 #include <QSize>
 
 #include <cstring>
-
-static int asciiToInt(const char *s, int size)
-{
-    if (!s) {
-        return 0;
-    }
-
-    int v = 0;
-    for (int i = 0; i < size; ++i) {
-        v *= 10;
-        v += (*(s + i)) - '0';
-    }
-    return v;
-}
 
 using namespace KItinerary;
 
@@ -41,6 +26,10 @@ public:
 
 }
 
+enum {
+    FieldHeaderSize = 13,
+};
+
 Uic9183TicketLayoutField::Uic9183TicketLayoutField() = default;
 
 // 2x field line, number as ascii text
@@ -50,75 +39,41 @@ Uic9183TicketLayoutField::Uic9183TicketLayoutField() = default;
 // 1x field format
 // 4x text length
 // Nx text content
-Uic9183TicketLayoutField::Uic9183TicketLayoutField(const char *data, int size)
-    : m_data(data)
-    , m_size(size)
+Uic9183TicketLayoutField::Uic9183TicketLayoutField(const Uic9183Block &block, int offset)
+    : m_offset(offset)
 {
-    if (size <= 13) { // too small
-        qCWarning(Log) << "Found too small U_TLAY field:" << size;
-        m_data = nullptr;
+    const auto remainingSize = block.contentSize() - offset;
+    if (remainingSize <= FieldHeaderSize) { // too small
+        qCWarning(Log) << "Found too small U_TLAY field:" << remainingSize;
         return;
     }
 
-    // invalid format
-    if (!std::all_of(data, data + 8, isdigit) || !std::all_of(data + 9, data + 13, isdigit)) {
+    // invalid format - we need to be very specific here, due to the workaround in ::next() below
+    if (!std::all_of(block.content() + offset, block.content() + offset + 8, isdigit)
+     || !std::all_of(block.content() + offset + 9, block.content() + offset + FieldHeaderSize, isdigit)) {
         qCWarning(Log) << "Found U_TLAY field with invalid format";
-        m_data = nullptr;
         return;
     }
 
     // size is too large
-    if (this->size() > m_size) {
-        qCWarning(Log) << "Found U_TLAY field with invalid size" << this->size() << m_size;
-        m_data = nullptr;
+    const auto fieldSize = Uic9183Utils::readAsciiEncodedNumber(block, offset + 9, 4) + FieldHeaderSize;
+    if (fieldSize + offset > block.contentSize()) {
+        qCWarning(Log) << "Found U_TLAY field with invalid size" << fieldSize << block.size();
         return;
     }
+
+    m_data = block;
 }
 
 bool Uic9183TicketLayoutField::isNull() const
 {
-    return !m_data || m_size <= 13;
-}
-
-int Uic9183TicketLayoutField::size() const
-{
-    return asciiToInt(m_data + 9, 4) + 13;
-}
-
-int Uic9183TicketLayoutField::row() const
-{
-    return asciiToInt(m_data, 2);
-}
-
-int Uic9183TicketLayoutField::column() const
-{
-    return asciiToInt(m_data + 2, 2);
-}
-
-int Uic9183TicketLayoutField::height() const
-{
-    return asciiToInt(m_data + 4, 2);
-}
-
-int Uic9183TicketLayoutField::width() const
-{
-    return asciiToInt(m_data + 6, 2);
-}
-
-int Uic9183TicketLayoutField::format() const
-{
-    return asciiToInt(m_data + 12, 1);
-}
-
-QString Uic9183TicketLayoutField::text() const
-{
-    return QString::fromUtf8(m_data + 13, asciiToInt(m_data + 9, 4));
+    return m_data.isNull();
 }
 
 Uic9183TicketLayoutField Uic9183TicketLayoutField::next() const
 {
-    const auto thisSize = size();
-    const auto remaining = m_size - size();
+    const auto thisSize = size() + FieldHeaderSize;
+    const auto remaining = m_data.contentSize() - thisSize - m_offset;
     if (remaining < 0) {
         return {};
     }
@@ -126,8 +81,8 @@ Uic9183TicketLayoutField Uic9183TicketLayoutField::next() const
     // search for the next field
     // in theory this should always trigger at i == 0, unless
     // the size field is wrong, which happens unfortunately
-    for (int i = 0; i < remaining - 13; ++i) {
-        Uic9183TicketLayoutField f(m_data + thisSize + i, remaining - i);
+    for (int i = 0; i < remaining - FieldHeaderSize; ++i) {
+        Uic9183TicketLayoutField f(m_data, m_offset + thisSize + i);
         if (!f.isNull()) {
             return f;
         }
@@ -140,7 +95,7 @@ Uic9183TicketLayoutField Uic9183TicketLayout::firstField() const
 {
     const auto contentSize = d->block.contentSize();
     if (contentSize > 8) {
-        return Uic9183TicketLayoutField(d->block.content() + 8, contentSize - 8);
+        return Uic9183TicketLayoutField(d->block, 8);
     }
     return {};
 }

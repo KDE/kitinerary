@@ -8,6 +8,8 @@
 #ifndef KITINERARY_UIC9183UTILS_H
 #define KITINERARY_UIC9183UTILS_H
 
+#include "kitinerary_export.h"
+
 #include <QString>
 
 namespace KItinerary {
@@ -16,18 +18,19 @@ class Uic9183Block;
 
 /*
  * Low-level decoding utilities for UIC 918.3 ticket content.
+ * @internal
  */
 namespace Uic9183Utils
 {
     /** Reads an ASCII encoded numerical value. */
     int readAsciiEncodedNumber(const char *data, int size, int offset, int length);
     int readAsciiEncodedNumber(const QByteArray &data, int offset, int length);
-    int readAsciiEncodedNumber(const Uic9183Block &block, int offset, int length);
+    KITINERARY_EXPORT int readAsciiEncodedNumber(const Uic9183Block &block, int offset, int length);
 
     /** Reads a UTF8 encoded string. */
     QString readUtf8String(const char *data, int size, int offset, int length);
     QString readUtf8String(const QByteArray &data, int offset, int length);
-    QString readUtf8String(const Uic9183Block &block, int offset, int length);
+    KITINERARY_EXPORT QString readUtf8String(const Uic9183Block &block, int offset, int length);
 }
 
 #define UIC_NUM_PROPERTY(Name, Offset, Length) \
