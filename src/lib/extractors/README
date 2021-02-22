@@ -1,3 +1,6 @@
 Development tip: symlink this folder to $PREFIX/share/kitinerary/extractors
 It will then take priority over the compiled-in files allowing you to test
 script changes without recompilation.
+
+SPDX-FileCopyrightText: none
+SPDX-License-Identifier: CC0-1.0

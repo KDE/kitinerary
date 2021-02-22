@@ -22,3 +22,6 @@ Extract the zip file into this folder.
 (3) Run the code generator
 
 Run `make rebuild-knowledgedb` in the build dir of this folder.
+
+SPDX-FileCopyrightText: none
+SPDX-License-Identifier: CC0-1.0

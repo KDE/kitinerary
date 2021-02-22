@@ -1,3 +1,6 @@
 The CA certs in here are retrieved from ldap://ldap-vdv-ion.telesec.de:389/cn=<CAR>,ou=VDV%20KA,o=VDV%20Kernapplikations%20GmbH,c=de
 using the vdv-cert-downloader tool in this folder, with all their signatures or other for us irrelevant data stripped, leaving just the
 public keys.
+
+SPDX-FileCopyrightText: none
+SPDX-License-Identifier: CC0-1.0
