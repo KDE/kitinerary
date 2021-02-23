@@ -31,6 +31,11 @@ SSBTicket::SSBTicket(const QByteArray &data)
 
 SSBTicket::~SSBTicket() = default;
 
+bool SSBTicket::isValid() const
+{
+    return !m_data.isEmpty();
+}
+
 int SSBTicket::readNumber(int start, int length) const
 {
     if (start < 0 || length < 1 || start / 8 >= m_data.size() || (start + length) / 8 >= m_data.size() || length > 31) {

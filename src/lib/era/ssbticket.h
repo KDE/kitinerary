@@ -115,6 +115,9 @@ public:
     explicit SSBTicket(const QByteArray &data);
     ~SSBTicket();
 
+    /** Returns @c true if this is a valid SSB ticket. */
+    bool isValid() const;
+
     /** Date of issue. */
     Q_INVOKABLE QDate issueDate(const QDate &contextDate = QDate::currentDate());
     /** Departure day for type 1 (IRT/RES/BOA) tickets. */

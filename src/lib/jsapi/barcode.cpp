@@ -7,6 +7,7 @@
 #include "barcode.h"
 #include "bitarray.h"
 #include <generic/genericpdfextractor_p.h>
+#include <era/ssbticket.h>
 
 #include <KItinerary/BarcodeDecoder>
 #include <KItinerary/IataBcbpParser>
@@ -111,6 +112,12 @@ QVariant JsApi::Barcode::decodeVdvTicket(const QVariant &s) const
         return {};
     }
     return QVariant::fromValue(p.ticket());
+}
+
+QVariant JsApi::Barcode::decodeEraSsbTicket(const QVariant &s) const
+{
+    SSBTicket ticket(s.toByteArray());
+    return ticket.isValid() ? QVariant::fromValue(ticket) : QVariant();
 }
 
 QString JsApi::Barcode::toBase64(const QVariant &b) const

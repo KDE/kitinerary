@@ -4,16 +4,6 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-// see https://community.kde.org/KDE_PIM/KItinerary/Thalys_Barcode
-function readEncodedString(bitArray, startIdx, size)
-{
-    var id = "";
-    for (var i = 0; i < size; ++i) {
-        id += String.fromCharCode(bitArray.readNumberMSB(startIdx + i * 6, 6) + 32);
-    }
-    return id;
-}
-
 function parseReservation(html) {
     var res = JsonLd.newTrainReservation();
 
@@ -45,9 +35,9 @@ function parseReservation(html) {
     var name = passengerElem.recursiveContent.match(/\n(.*)/);
     res.underName.name = name[1];
 
-    var bitArray = Barcode.toBitArray(Barcode.fromBase64(token[1]));
-    res.reservationFor.departureStation.identifier = "benerail:" + readEncodedString(bitArray, 18 * 8 + 4, 5);
-    res.reservationFor.arrivalStation.identifier = "benerail:" + readEncodedString(bitArray, 22 * 8 + 2, 5);
+    var ssb = Barcode.decodeEraSsbTicket(Barcode.fromBase64(token[1]));
+    res.reservationFor.departureStation.identifier = "benerail:" + ssb.type1DepartureStationAlpha;
+    res.reservationFor.arrivalStation.identifier = "benerail:" + ssb.type1ArrivalStationAlpha;
 
     return res;
 }
