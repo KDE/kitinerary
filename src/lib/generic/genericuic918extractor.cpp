@@ -18,10 +18,9 @@
 
 using namespace KItinerary;
 
-void GenericUic918Extractor::extract(const QByteArray &data, QJsonArray &result, const QDateTime &contextDate)
+void GenericUic918Extractor::extract(const QByteArray &data, QJsonArray &result)
 {
     Uic9183Parser p;
-    p.setContextDate(contextDate);
     p.parse(data);
     if (!p.isValid()) {
         return;

@@ -56,7 +56,7 @@ public:
     /** Date/time this ticket was first encountered.
      *  This is used to recover a missing year in the ticket data.
      */
-    void setContextDate(const QDateTime &contextDt);
+    [[deprecated("calling this is longer needed")]] void setContextDate(const QDateTime&);
 
     void parse(const QByteArray &data);
     bool isValid() const;

@@ -8,7 +8,6 @@
 #define KITINERARY_GENERICUIC918EXTRACTOR_P_H
 
 class QByteArray;
-class QDateTime;
 class QJsonArray;
 
 namespace KItinerary {
@@ -16,7 +15,7 @@ namespace KItinerary {
 /** Generic UIC 918 ticket code extractor. */
 namespace GenericUic918Extractor
 {
-    void extract(const QByteArray &data, QJsonArray &result, const QDateTime &contextDate);
+    void extract(const QByteArray &data, QJsonArray &result);
 }
 
 }

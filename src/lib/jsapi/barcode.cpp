@@ -92,7 +92,6 @@ QString JsApi::Barcode::decodeDataMatrix(const QVariant &img) const
 QVariant JsApi::Barcode::decodeUic9183(const QVariant &s) const
 {
     Uic9183Parser p;
-    p.setContextDate(m_contextDate);
     p.parse(s.toByteArray());
     if (!p.isValid()) {
         return {};

@@ -109,7 +109,7 @@ GenericExtractor::Result GenericPdfExtractor::extractImage(const PdfImage &img, 
 
         if (Uic9183Parser::maybeUic9183(b)) {
             QJsonArray result;
-            GenericUic918Extractor::extract(b, result, m_contextDate);
+            GenericUic918Extractor::extract(b, result);
             if (!result.isEmpty()) {
                 return GenericExtractor::Result{result, b};
             }

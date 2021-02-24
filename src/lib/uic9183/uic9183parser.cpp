@@ -30,7 +30,6 @@ class Uic9183ParserPrivate : public QSharedData
 public:
     QByteArray m_data;
     QByteArray m_payload;
-    QDateTime m_contextDt;
 };
 }
 
@@ -67,9 +66,8 @@ QVariant Uic9183Parser::block(const QString &name) const
     return QVariant::fromValue(findBlock(name.toUtf8().constData()));
 }
 
-void Uic9183Parser::setContextDate(const QDateTime &contextDt)
+void Uic9183Parser::setContextDate(const QDateTime&)
 {
-    d->m_contextDt = contextDt;
 }
 
 void Uic9183Parser::parse(const QByteArray &data)
@@ -228,7 +226,8 @@ QVariant Uic9183Parser::ticketLayoutVariant() const
 Rct2Ticket Uic9183Parser::rct2Ticket() const
 {
     Rct2Ticket rct2(ticketLayout());
-    rct2.setContextDate(d->m_contextDt);
+    const auto u_head = findBlock<Uic9183Head>();
+    rct2.setContextDate(u_head.issuingDateTime());
     return rct2;
 }
 

@@ -501,7 +501,7 @@ void ExtractorEnginePrivate::extractGeneric()
     else if (!m_data.isEmpty()) {
         if (Uic9183Parser::maybeUic9183(m_data)) {
             QJsonArray res;
-            GenericUic918Extractor::extract(m_data, res, m_context->m_senderDate);
+            GenericUic918Extractor::extract(m_data, res);
             m_genericResults.emplace_back(GenericExtractor::Result{res, m_data});
             return;
         } else if (VdvTicketParser::maybeVdvTicket(m_data)) {
