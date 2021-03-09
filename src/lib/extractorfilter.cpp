@@ -76,6 +76,9 @@ static bool needsFieldName(ExtractorInput::Type type)
 bool ExtractorFilter::load(const QJsonObject &obj)
 {
     d->m_type = ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString());
+    if (d->m_type == ExtractorInput::Unknown) {
+        qCDebug(Log) << "unspecified filter type";
+    }
 
     auto it = obj.find(QLatin1String("header"));
     if (it != obj.end()) {

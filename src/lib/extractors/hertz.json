@@ -1,6 +1,6 @@
 {
     "filter": [
-        { "header": "From", "match": "@hertz.com" }
+        { "header": "From", "match": "@hertz.com", "type": "Email" }
     ],
     "script": "hertz.js"
 }

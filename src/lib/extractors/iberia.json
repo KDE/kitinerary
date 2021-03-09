@@ -1,6 +1,6 @@
 {
     "filter": [
-        { "header": "From", "match": "@iberia.com" }
+        { "header": "From", "match": "@iberia.com", "type": "Email" }
     ],
     "script": "iberia.js"
 }

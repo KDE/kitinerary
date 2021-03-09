@@ -2,15 +2,15 @@
     {
         "type": "text",
         "filter": [
-            { "header": "From", "match": "@amadeus.com" },
-            { "header": "Message-ID",  "match": "amadeus.com" }
+            { "header": "From", "match": "@amadeus.com", "type": "Email" },
+            { "header": "Message-ID",  "match": "amadeus.com", "type": "Email" }
         ],
         "script": "amadeus.js"
     },
     {
         "type": "ical",
         "filter": [
-            { "header": "From", "match": "@amadeus.com" },
+            { "header": "From", "match": "@amadeus.com", "type": "Email" },
             { "property": "productId", "match": "//AMADEUS//", "type": "ICal" }
         ],
         "script": "amadeus.js",

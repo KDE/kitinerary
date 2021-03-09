@@ -1,7 +1,7 @@
 {
     "type": "html",
     "filter": [
-        { "header": "From", "match": "@nh-hotels.com" }
+        { "header": "From", "match": "@nh-hotels.com", "type": "Email" }
     ],
     "script": "nh-hotels.js",
     "function": "parseHtml"

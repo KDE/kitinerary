@@ -1,16 +1,16 @@
 [
     {
         "type": "html",
-        "filter": [ { "header": "From", "match": "@easyjet.com" } ],
+        "filter": [ { "header": "From", "match": "@easyjet.com", "type": "Email" } ],
         "script": "easyjet.js",
         "function": "parseHtmlBooking"
     },
     {
         "type": "pdf",
         "filter": [
-            { "property": "reservationFor.airline.iataCode", "match": "EJU" },
-            { "property": "reservationFor.airline.iataCode", "match": "EZS" },
-            { "property": "reservationFor.airline.iataCode", "match": "EZY" }
+            { "property": "reservationFor.airline.iataCode", "match": "EJU", "type": "JsonLd" },
+            { "property": "reservationFor.airline.iataCode", "match": "EZS", "type": "JsonLd" },
+            { "property": "reservationFor.airline.iataCode", "match": "EZY", "type": "JsonLd" }
         ],
         "script": "easyjet.js",
         "function": "parsePdfBoardingPass"

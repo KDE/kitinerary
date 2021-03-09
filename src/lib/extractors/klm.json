@@ -1,7 +1,7 @@
 [{
     "type": "text",
     "filter": [
-        { "header": "From", "match": "noreply@klm.com" }
+        { "header": "From", "match": "noreply@klm.com", "type": "Email" }
     ],
     "script": "klm.js"
 }]

@@ -2,8 +2,8 @@
     {
         "type": "text",
         "filter": [
-            { "header": "From", "match": "express@studentagency.cz" },
-            { "header": "From", "match": "info@regiojet.cz" }
+            { "header": "From", "match": "express@studentagency.cz", "type": "Email" },
+            { "header": "From", "match": "info@regiojet.cz", "type": "Email" }
         ],
         "script": "regiojet.js",
         "function": "main"

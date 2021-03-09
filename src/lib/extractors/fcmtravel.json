@@ -1,7 +1,7 @@
 {
     "filter": [
-        { "header": "From", "match": "@fcmtravel\." },
-        { "header": "From", "match": "@travellink\." }
+        { "header": "From", "match": "@fcmtravel\.", "type": "Email" },
+        { "header": "From", "match": "@travellink\.", "type": "Email" }
     ],
     "script": "fcmtravel.js"
 }

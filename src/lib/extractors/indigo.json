@@ -14,7 +14,8 @@
         "filter": [
             {
                 "match": "reservations@customer.goindigo.in",
-                "header": "From"
+                "header": "From",
+                "type": "Email"
             }
         ],
         "function": "parseHtml",

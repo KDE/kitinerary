@@ -2,15 +2,15 @@
     {
         "type": "html",
         "filter": [
-            { "header": "From", "match": "@brusselsairlines.com" }
+            { "header": "From", "match": "@brusselsairlines.com", "type": "Email" }
         ],
         "script": "brusselsairlines.js"
     },
     {
         "type": "pdf",
         "filter": [
-            { "header": "From", "match": "brusselsairlines.com" },
-            { "property": "reservationFor.airline.iataCode", "match": "SN" }
+            { "header": "From", "match": "brusselsairlines.com", "type": "Email" },
+            { "property": "reservationFor.airline.iataCode", "match": "SN", "type": "JsonLd" }
         ],
         "script": "brusselsairlines-receipt.js"
     }

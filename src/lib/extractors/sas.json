@@ -2,14 +2,14 @@
     {
         "type": "pdf",
         "filter": [
-            { "header": "From", "match": "no-reply@flysas.com" },
-            { "property": "reservationFor.airline.iataCode", "match": "SK" }
+            { "header": "From", "match": "no-reply@flysas.com", "type": "Email" },
+            { "property": "reservationFor.airline.iataCode", "match": "SK", "type": "JsonLd" }
         ],
         "script": "sas-boardingpass.js"
     },
     {
         "type": "pdf",
-        "filter": [ { "header": "From", "match": "no-reply@flysas.com" } ],
+        "filter": [ { "header": "From", "match": "no-reply@flysas.com", "type": "Email" } ],
         "script": "sas-receipt.js"
     }
 ]
