@@ -3,5 +3,6 @@
         { "header": "From", "match": "info@cd.cz", "type": "Email" },
         { "header": "From", "match": "eshop@cd.cz", "type": "Email" }
     ],
-    "script": "czechrailways.js"
+    "script": "czechrailways.js",
+    "type": "Text"
 }

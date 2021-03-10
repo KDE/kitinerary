@@ -47,6 +47,7 @@ bool Extractor::load(const QJsonObject &obj, const QString &fileName, int index)
 
     d->m_type = ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString());
     if (d->m_type == ExtractorInput::Unknown) {
+        qCDebug(Log) << "extractor type not specified" << fileName;
         d->m_type = ExtractorInput::Text;
     }
 

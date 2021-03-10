@@ -3,5 +3,6 @@
         { "header": "From", "match": "@fcmtravel\.", "type": "Email" },
         { "header": "From", "match": "@travellink\.", "type": "Email" }
     ],
-    "script": "fcmtravel.js"
+    "script": "fcmtravel.js",
+    "type": "Text"
 }

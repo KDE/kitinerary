@@ -2,5 +2,6 @@
     "filter": [
         { "header": "From", "match": "@aohostels.com", "type": "Email" }
     ],
-    "script": "aohostels.js"
+    "script": "aohostels.js",
+    "type": "Text"
 }
