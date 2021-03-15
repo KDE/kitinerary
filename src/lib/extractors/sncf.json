@@ -2,7 +2,7 @@
     {
         "filter": [
             {
-                "header": "From",
+                "field": "From",
                 "match": "e-billet@sncf.fr",
                 "type": "Email"
             },
@@ -29,7 +29,7 @@
     {
         "filter": [
             {
-                "header": "From",
+                "field": "From",
                 "match": "UNITTEST-e-billet@sncf.fr",
                 "type": "Email"
             }
@@ -52,7 +52,7 @@
     {
         "filter": [
             {
-                "header": "From",
+                "field": "From",
                 "match": "oui.sncf",
                 "type": "Email"
             }
@@ -64,7 +64,7 @@
     {
         "filter": [
             {
-                "header": "From",
+                "field": "From",
                 "match": "ne-pas-repondre@pasngr.ouigo.com",
                 "type": "Email"
             }

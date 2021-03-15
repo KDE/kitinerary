@@ -1,8 +1,8 @@
 {
     "type": "pdf",
     "filter": [
-        { "header": "From", "match": "americanairlines@aa.com", "type": "Email" },
-        { "property": "reservationFor.airline.iataCode", "match": "AA", "type": "JsonLd" }
+        { "field": "From", "match": "americanairlines@aa.com", "type": "Email" },
+        { "field": "reservationFor.airline.iataCode", "match": "AA", "type": "JsonLd" }
     ],
     "script": "americanairlines.js"
 }

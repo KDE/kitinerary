@@ -1,6 +1,6 @@
 {
     "filter": [
-        { "header": "From", "match": "@aohostels.com", "type": "Email" }
+        { "field": "From", "match": "@aohostels.com", "type": "Email" }
     ],
     "script": "aohostels.js",
     "type": "Text"

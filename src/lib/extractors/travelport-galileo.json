@@ -2,7 +2,7 @@
     {
         "type": "text",
         "filter": [
-            { "header": "From", "match": "@via.com", "type": "Email" }
+            { "field": "From", "match": "@via.com", "type": "Email" }
         ],
         "script": "travelport-galileo.js",
         "function": "parsePNR"

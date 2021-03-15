@@ -46,10 +46,9 @@ class ExtractorRepositoryPrivate;
  *
  * Filter definitions have the following field:
  * - \c type: The type of data this filter applies to, one of: @c Mime, @c PkPass, @c JsonLd, @c Barcode, @c ICal, @c Text.
- *            Can often be omitted as it's auto-detected based on the following fields.
- * - \c header: A MIME message header name (valid and mandatory for type @c Mime).
- * - \c field: A field id in a Apple Wallet pass (valid and mandatory for type @c PkPass).
- * - \c property: A property on a Json-LD object (valid and mandatory for type @c JsonLd and @c ICal).
+ * - \c field: The name of the field to match against. This can be a field id in a Apple Wallet pass,
+ *      A MIME message header name, a property on a Json-LD object or an iCal calendar or event.
+ *      For @c Text or @c Barcode, this is ignored.
  * - \c match: A regular expression that is matched against the specified value (see QRegularExpression).
  *
  * Example:
@@ -57,13 +56,13 @@ class ExtractorRepositoryPrivate;
  * [
  *   {
  *     "type": "Pdf",
- *     "filter": [ { "header": "From", "match": "@swiss.com" } ],
+ *     "filter": [ { "field": "From", "match": "@swiss.com", "type": "Email" } ],
  *     "script": "swiss.js",
  *     "function": "parsePdf"
  *   },
  *   {
  *     "type": "PkPass",
- *     "filter": [ { "field": "passTypeIdentifier", "match": "pass.booking.swiss.com" } ],
+ *     "filter": [ { "field": "passTypeIdentifier", "match": "pass.booking.swiss.com", "type": "PkPass" } ],
  *     "script": "swiss.js",
  *     "function": "parsePkPass"
  *   }

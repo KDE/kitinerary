@@ -1,7 +1,7 @@
 {
     "filter": [
         {
-            "header": "Subject",
+            "field": "Subject",
             "match": "^\\[Indico\\] ",
             "type": "Email"
         }

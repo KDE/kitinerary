@@ -2,7 +2,7 @@
     {
         "type": "pdf",
         "filter": [
-            { "property": "reservationFor.provider.identifier", "match": "3415", "type": "JsonLd" }
+            { "field": "reservationFor.provider.identifier", "match": "3415", "type": "JsonLd" }
         ],
         "script": "vgn.js",
         "function": "parsePdf"

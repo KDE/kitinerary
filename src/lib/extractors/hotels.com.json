@@ -2,7 +2,7 @@
     "filter": [
         {
             "match": "http[s]://[a-z]{2,3}.hotels.com/",
-            "property": "url",
+            "field": "url",
             "type": "JsonLd"
         }
     ],

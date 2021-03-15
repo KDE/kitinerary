@@ -1,7 +1,7 @@
 [{
     "type": "text",
     "filter": [
-        { "header": "From", "match": "@booking.eurowings.com", "type": "Email" }
+        { "field": "From", "match": "@booking.eurowings.com", "type": "Email" }
     ],
     "script": "eurowings.js"
 }, {

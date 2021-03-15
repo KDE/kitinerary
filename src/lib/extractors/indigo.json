@@ -3,7 +3,7 @@
         "filter": [
             {
                 "match": "6E",
-                "property": "reservationFor.airline.iataCode",
+                "field": "reservationFor.airline.iataCode",
                 "type": "JsonLd"
             }
         ],
@@ -14,7 +14,7 @@
         "filter": [
             {
                 "match": "reservations@customer.goindigo.in",
-                "header": "From",
+                "field": "From",
                 "type": "Email"
             }
         ],

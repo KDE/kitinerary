@@ -1,7 +1,7 @@
 [
     {
         "type": "ical",
-        "filter": [ { "property": "productId", "match": "NP4GmbH//PCSOffice", "type": "ICal" } ],
+        "filter": [ { "field": "productId", "match": "NP4GmbH//PCSOffice", "type": "ICal" } ],
         "script": "np4.js",
         "function": "parseEvent"
     }

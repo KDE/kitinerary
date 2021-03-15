@@ -1,7 +1,7 @@
 {
     "filter": [
         {
-            "header": "From",
+            "field": "From",
             "match": "@reservation.accor-mail.com",
             "type": "Email"
         }

@@ -2,7 +2,6 @@
     "filter": [
         {
             "match": "^\\d{13}.*\\S{6}(\\.\\.\\S{5}| +)?$",
-            "property": "",
             "type": "Barcode"
         }
     ],

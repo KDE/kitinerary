@@ -2,7 +2,7 @@
     "filter": [
         {
             "match": "uic:9997",
-            "property": "reservationFor.provider.identifier",
+            "field": "reservationFor.provider.identifier",
             "type": "JsonLd"
         }
     ],

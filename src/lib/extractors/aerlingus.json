@@ -1,7 +1,7 @@
 [{
     "type": "html",
     "filter": [
-        { "header": "From", "match": "aerlingus.com", "type": "Email" }
+        { "field": "From", "match": "aerlingus.com", "type": "Email" }
     ],
     "script": "aerlingus.js"
 }]

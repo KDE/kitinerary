@@ -1,12 +1,12 @@
 [
     {
         "type": "text",
-        "filter": [ { "header": "From", "match": "@booking.com", "type": "Email" } ],
+        "filter": [ { "field": "From", "match": "@booking.com", "type": "Email" } ],
         "script": "booking.js"
     },
     {
         "type": "html",
-        "filter": [ { "header": "From", "match": "@booking.com", "type": "Email" } ],
+        "filter": [ { "field": "From", "match": "@booking.com", "type": "Email" } ],
         "script": "booking.js",
         "function": "parseHtml"
     }

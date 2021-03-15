@@ -2,18 +2,18 @@
     {
         "filter": [
             {
-                "header": "From",
+                "field": "From",
                 "match": "buchungsbestaetigung@bahn.de",
                 "type": "Email"
             },
             {
                 "match": "uic:0080",
-                "property": "reservationFor.provider.identifier",
+                "field": "reservationFor.provider.identifier",
                 "type": "JsonLd"
             },
             {
                 "match": "vdv:6260",
-                "property": "reservationFor.provider.identifier",
+                "field": "reservationFor.provider.identifier",
                 "type": "JsonLd"
             }
         ],
@@ -24,7 +24,7 @@
     {
         "filter": [
             {
-                "header": "From",
+                "field": "From",
                 "match": "UNITTEST-buchungsbestaetigung@bahn.de",
                 "type": "Email"
             }
@@ -36,7 +36,7 @@
     {
         "filter": [
             {
-                "header": "From",
+                "field": "From",
                 "match": "buchungsbestaetigung@bahn.de",
                 "type": "Email"
             }

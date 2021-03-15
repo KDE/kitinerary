@@ -1,7 +1,7 @@
 {
     "filter": [
         {
-            "header": "From",
+            "field": "From",
             "match": "noreply@norwegian",
             "type": "Email"
         }

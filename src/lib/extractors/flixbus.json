@@ -2,7 +2,7 @@
     "filter": [
         {
             "match": "FlixMobility",
-            "property": "reservationFor.busCompany.name",
+            "field": "reservationFor.busCompany.name",
             "type": "JsonLd"
         }
     ],
