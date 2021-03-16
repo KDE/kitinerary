@@ -1,7 +1,7 @@
 {
     "type": "pdf",
     "filter": [
-        { "field": "From", "match": "americanairlines@aa.com", "type": "Email" },
+        { "field": "From", "match": "americanairlines@aa.com", "type": "Email", "scope": "Ancestors" },
         { "field": "reservationFor.airline.iataCode", "match": "AA", "type": "JsonLd" }
     ],
     "script": "americanairlines.js"

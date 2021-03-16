@@ -3,7 +3,8 @@
         {
             "field": "From",
             "match": "@rw.kintetsu.co.jp",
-            "type": "Email"
+            "type": "Email",
+            "scope": "Ancestors"
         }
     ],
     "function": "main",

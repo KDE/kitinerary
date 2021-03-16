@@ -1,5 +1,5 @@
 /*
-   SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2017-2021 Volker Krause <vkrause@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -8,6 +8,8 @@
 #include "logging.h"
 
 #include <QJsonObject>
+#include <QMetaEnum>
+#include <QRegularExpression>
 
 using namespace KItinerary;
 
@@ -18,6 +20,7 @@ public:
     ExtractorInput::Type m_type = ExtractorInput::Unknown;
     QString m_fieldName;
     QRegularExpression m_exp;
+    ExtractorFilter::Scope m_scope = ExtractorFilter::Current;
 };
 }
 
@@ -73,6 +76,19 @@ static bool needsFieldName(ExtractorInput::Type type)
     }
 }
 
+template <typename T>
+static T readEnum(const QJsonValue &v, T defaultValue = {})
+{
+    if (!v.isString()) {
+        return defaultValue;
+    }
+
+    const auto me = QMetaEnum::fromType<T>();
+    bool success = false;
+    const auto result = static_cast<T>(me.keyToValue(v.toString().toUtf8().constData(), &success));
+    return success ? result : defaultValue;
+}
+
 bool ExtractorFilter::load(const QJsonObject &obj)
 {
     d->m_type = ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString());
@@ -81,17 +97,19 @@ bool ExtractorFilter::load(const QJsonObject &obj)
     }
     d->m_fieldName = obj.value(QLatin1String("field")).toString();
     d->m_exp.setPattern(obj.value(QLatin1String("match")).toString());
+    d->m_scope = readEnum<ExtractorFilter::Scope>(obj.value(QLatin1String("scope")), ExtractorFilter::Current);
     return d->m_type != ExtractorInput::Unknown && (!d->m_fieldName.isEmpty() || !needsFieldName(d->m_type)) && d->m_exp.isValid();
 }
 
 QJsonObject ExtractorFilter::toJson() const
 {
     QJsonObject obj;
-    obj.insert(QStringLiteral("type"), ExtractorInput::typeToString(d->m_type));
+    obj.insert(QLatin1String("type"), ExtractorInput::typeToString(d->m_type));
     if (needsFieldName(d->m_type)) {
-        obj.insert(QStringLiteral("field"), d->m_fieldName);
+        obj.insert(QLatin1String("field"), d->m_fieldName);
     }
-    obj.insert(QStringLiteral("match"), pattern());
+    obj.insert(QLatin1String("match"), pattern());
+    obj.insert(QLatin1String("scope"), QLatin1String(QMetaEnum::fromType<ExtractorFilter::Scope>().valueToKey(d->m_scope)));
     return obj;
 }
 
@@ -104,4 +122,15 @@ void ExtractorFilter::setPattern(const QString &pattern)
 {
     d.detach();
     d->m_exp.setPattern(pattern);
+}
+
+ExtractorFilter::Scope ExtractorFilter::scope() const
+{
+    return d->m_scope;
+}
+
+void ExtractorFilter::setScope(Scope scope)
+{
+    d.detach();
+    d->m_scope = scope;
 }

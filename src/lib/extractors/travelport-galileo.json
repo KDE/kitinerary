@@ -2,7 +2,7 @@
     {
         "type": "text",
         "filter": [
-            { "field": "From", "match": "@via.com", "type": "Email" }
+            { "field": "From", "match": "@via.com", "type": "Email", "scope": "Ancestors" }
         ],
         "script": "travelport-galileo.js",
         "function": "parsePNR"

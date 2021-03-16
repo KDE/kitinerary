@@ -50,19 +50,21 @@ class ExtractorRepositoryPrivate;
  *      A MIME message header name, a property on a Json-LD object or an iCal calendar or event.
  *      For @c Text or @c Barcode, this is ignored.
  * - \c match: A regular expression that is matched against the specified value (see QRegularExpression).
+ * - \c scope: Specifies how the filter should be applied relative to the document node that is being extracted.
+ *      One of @c Current, @c Parent, @c Children, @c Ancestors, @c Descendants (@c Current is the default).
  *
  * Example:
  * @code
  * [
  *   {
  *     "type": "Pdf",
- *     "filter": [ { "field": "From", "match": "@swiss.com", "type": "Email" } ],
+ *     "filter": [ { "field": "From", "match": "@swiss.com", "type": "Email", "scope": "Ancestors" } ],
  *     "script": "swiss.js",
  *     "function": "parsePdf"
  *   },
  *   {
  *     "type": "PkPass",
- *     "filter": [ { "field": "passTypeIdentifier", "match": "pass.booking.swiss.com", "type": "PkPass" } ],
+ *     "filter": [ { "field": "passTypeIdentifier", "match": "pass.booking.swiss.com", "type": "PkPass", "scope": "Current" } ],
  *     "script": "swiss.js",
  *     "function": "parsePkPass"
  *   }

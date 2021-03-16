@@ -3,7 +3,8 @@
         {
             "field": "From",
             "match": "@aircoach.ie",
-            "type": "Email"
+            "type": "Email",
+            "scope": "Ancestors"
         }
     ],
     "function": "main",

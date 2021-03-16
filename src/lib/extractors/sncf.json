@@ -4,11 +4,13 @@
             {
                 "field": "From",
                 "match": "e-billet@sncf.fr",
-                "type": "Email"
+                "type": "Email",
+                "scope": "Ancestors"
             },
             {
                 "match": "^i0CV",
-                "type": "Barcode"
+                "type": "Barcode",
+                "scope": "Descendants"
             }
         ],
         "function": "parsePdf",
@@ -31,7 +33,8 @@
             {
                 "field": "From",
                 "match": "UNITTEST-e-billet@sncf.fr",
-                "type": "Email"
+                "type": "Email",
+                "scope": "Ancestors"
             }
         ],
         "function": "parseSncfPdfText",
@@ -42,7 +45,8 @@
         "filter": [
             {
                 "match": "^2200",
-                "type": "Barcode"
+                "type": "Barcode",
+                "scope": "Descendants"
             }
         ],
         "function": "parseSecutixPdf",
@@ -54,7 +58,8 @@
             {
                 "field": "From",
                 "match": "oui.sncf",
-                "type": "Email"
+                "type": "Email",
+                "scope": "Ancestors"
             }
         ],
         "function": "parseOuigoEmail",
@@ -66,7 +71,8 @@
             {
                 "field": "From",
                 "match": "ne-pas-repondre@pasngr.ouigo.com",
-                "type": "Email"
+                "type": "Email",
+                "scope": "Ancestors"
             }
         ],
         "function": "parseOuigoTicket",

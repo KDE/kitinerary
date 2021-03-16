@@ -1,6 +1,6 @@
 {
     "filter": [
-        { "field": "From", "match": "@hertz.com", "type": "Email" }
+        { "field": "From", "match": "@hertz.com", "type": "Email", "scope": "Ancestors" }
     ],
     "script": "hertz.js",
     "type": "Text"

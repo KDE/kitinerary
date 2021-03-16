@@ -1,7 +1,7 @@
 {
     "filter": [
-        { "field": "From", "match": "@fcmtravel\.", "type": "Email" },
-        { "field": "From", "match": "@travellink\.", "type": "Email" }
+        { "field": "From", "match": "@fcmtravel\.", "type": "Email", "scope": "Ancestors" },
+        { "field": "From", "match": "@travellink\.", "type": "Email", "scope": "Ancestors" }
     ],
     "script": "fcmtravel.js",
     "type": "Text"

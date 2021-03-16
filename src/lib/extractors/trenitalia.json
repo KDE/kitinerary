@@ -2,7 +2,7 @@
     {
         "type": "pdf",
         "filter": [
-            { "type": "Barcode", "match": "^ \\x{14}" }
+            { "type": "Barcode", "match": "^ \\x{14}", "scope": "Descendants" }
         ],
         "script": "trenitalia.js",
         "function": "parsePdf"

@@ -1,11 +1,11 @@
 [{
     "type": "text",
     "filter": [
-        { "field": "From", "match": "@booking.eurowings.com", "type": "Email" }
+        { "field": "From", "match": "@booking.eurowings.com", "type": "Email", "scope": "Ancestors" }
     ],
     "script": "eurowings.js"
 }, {
     "type": "pkpass",
-    "filter": [ { "field": "passTypeIdentifier", "match": "pass.wings.boardingpass", "type": "PkPass" } ],
+    "filter": [ { "field": "passTypeIdentifier", "match": "pass.wings.boardingpass", "type": "PkPass", "scope": "Current" } ],
     "script": "eurowings-pkpass.js"
 }]

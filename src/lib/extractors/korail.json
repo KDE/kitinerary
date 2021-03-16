@@ -1,7 +1,7 @@
 [{
     "type": "html",
     "filter": [
-        { "field": "From", "match": "korail.com", "type": "Email" }
+        { "field": "From", "match": "korail.com", "type": "Email", "scope": "Ancestors" }
     ],
     "script": "korail.js"
 }]

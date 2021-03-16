@@ -2,7 +2,8 @@
     "filter": [
         {
             "match": "^\\d{13}.{37}[A-Z]{8}VIA",
-            "type": "Barcode"
+            "type": "Barcode",
+            "scope": "Descendants"
         }
     ],
     "function": "parseBoardingPass",

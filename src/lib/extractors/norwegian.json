@@ -3,7 +3,8 @@
         {
             "field": "From",
             "match": "noreply@norwegian",
-            "type": "Email"
+            "type": "Email",
+            "scope": "Ancestors"
         }
     ],
     "function": "extractPdf",

@@ -2,7 +2,8 @@
     "filter": [
         {
             "match": "^\\x{10}",
-            "type": "Barcode"
+            "type": "Barcode",
+            "scope": "Descendants"
         }
     ],
     "function": "parseTicket",

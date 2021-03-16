@@ -2,7 +2,8 @@
     "filter": [
         {
             "match": "^\\d{13}.*\\S{6}(\\.\\.\\S{5}| +)?$",
-            "type": "Barcode"
+            "type": "Barcode",
+            "scope": "Descendants"
         }
     ],
     "function": "parsePdf",

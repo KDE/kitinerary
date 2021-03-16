@@ -2,7 +2,7 @@
     {
         "type": "pdf",
         "filter": [
-            { "type": "Barcode", "match": "docType.:.INTERNATIONAL_ID" }
+            { "type": "Barcode", "match": "docType.:.INTERNATIONAL_ID", "scope": "Descendants" }
         ],
         "script": "koleje-malopolskie.js",
         "function": "parsePdf"

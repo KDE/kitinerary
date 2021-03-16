@@ -15,7 +15,8 @@
             {
                 "match": "reservations@customer.goindigo.in",
                 "field": "From",
-                "type": "Email"
+                "type": "Email",
+                "scope": "Ancestors"
             }
         ],
         "function": "parseHtml",

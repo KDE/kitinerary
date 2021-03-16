@@ -1,6 +1,6 @@
 [{
     "type": "pkpass",
-    "filter": [ { "field": "passTypeIdentifier", "match": "pass.com.blueend.customer.eap.ticket", "type": "PkPass" } ],
+    "filter": [ { "field": "passTypeIdentifier", "match": "pass.com.blueend.customer.eap.ticket", "type": "PkPass", "scope": "Current" } ],
     "script": "easyairportparking-pkpass.js"
 }]
 

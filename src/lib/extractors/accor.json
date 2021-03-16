@@ -3,7 +3,8 @@
         {
             "field": "From",
             "match": "@reservation.accor-mail.com",
-            "type": "Email"
+            "type": "Email",
+            "scope": "Ancestors"
         }
     ],
     "function": "parseConfirmation",

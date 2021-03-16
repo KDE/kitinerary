@@ -2,16 +2,16 @@
     {
         "type": "text",
         "filter": [
-            { "field": "From", "match": "@amadeus.com", "type": "Email" },
-            { "field": "Message-ID",  "match": "amadeus.com", "type": "Email" }
+            { "field": "From", "match": "@amadeus.com", "type": "Email", "scope": "Ancestors" },
+            { "field": "Message-ID",  "match": "amadeus.com", "type": "Email", "scope": "Ancestors" }
         ],
         "script": "amadeus.js"
     },
     {
         "type": "ical",
         "filter": [
-            { "field": "From", "match": "@amadeus.com", "type": "Email" },
-            { "field": "productId", "match": "//AMADEUS//", "type": "ICal" }
+            { "field": "From", "match": "@amadeus.com", "type": "Email", "scope": "Ancestors" },
+            { "field": "productId", "match": "//AMADEUS//", "type": "ICal", "scope": "Parent" }
         ],
         "script": "amadeus.js",
         "function": "parseEvent"

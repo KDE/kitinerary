@@ -2,7 +2,8 @@
     "filter": [
         {
             "match": "^PNR:\\d{10},TRAIN:",
-            "type": "Text"
+            "type": "Text",
+            "scope": "Current"
         }
     ],
     "function": "main",

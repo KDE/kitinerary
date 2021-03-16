@@ -1,18 +1,18 @@
 /*
-   SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2017-2021 Volker Krause <vkrause@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef EXTRACTORFILTER_H
-#define EXTRACTORFILTER_H
+#ifndef KITINERARY_EXTRACTORFILTER_H
+#define KITINERARY_EXTRACTORFILTER_H
 
 #include "kitinerary_export.h"
 
 #include "extractorinput.h"
 
-#include <QRegularExpression>
-#include <QByteArray>
+#include <QExplicitlySharedDataPointer>
+#include <qobjectdefs.h>
 
 class QJsonObject;
 
@@ -23,6 +23,7 @@ class ExtractorFilterPrivate;
 /** Determines whether an extractor is applicable to a given email. */
 class KITINERARY_EXPORT ExtractorFilter
 {
+    Q_GADGET
 public:
     ExtractorFilter();
     ~ExtractorFilter();
@@ -40,6 +41,18 @@ public:
     /** Pattern to match field value against. */
     QString pattern() const;
 
+    /** Specifies which document nodes should match this filter, relative to the one being extracted. */
+    enum Scope {
+        Current, ///< match the node being extracted
+        Parent, ///< match the direct parent node
+        Children, ///< match the direct child nodes
+        Ancestors, ///< match any direct or indirect parent nodes
+        Descendants, ///< match any direct or indirect child nodes
+    };
+    Q_ENUM(Scope)
+    /** Evaluation scope of this filter, in relation to the node being extracted. */
+    Scope scope() const;
+
     ///@cond internal
     /** Load filter from @p obj. */
     bool load(const QJsonObject &obj);
@@ -49,6 +62,7 @@ public:
     void setType(ExtractorInput::Type type);
     void setFieldName(const QString &fieldName);
     void setPattern(const QString &pattern);
+    void setScope(Scope scope);
     ///@endcond
 
 private:
@@ -57,4 +71,4 @@ private:
 
 }
 
-#endif // EXTRACTORFILTER_H
+#endif // KITINERARY_EXTRACTORFILTER_H

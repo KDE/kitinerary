@@ -1,6 +1,6 @@
 {
     "filter": [
-        { "field": "From", "match": "@iberia.com", "type": "Email" }
+        { "field": "From", "match": "@iberia.com", "type": "Email", "scope": "Ancestors" }
     ],
     "script": "iberia.js",
     "type": "Text"

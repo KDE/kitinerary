@@ -1,7 +1,7 @@
 {
     "type": "pdf",
     "filter": [
-        { "field": "From", "match": "@airbaltic.com", "type": "Email" },
+        { "field": "From", "match": "@airbaltic.com", "type": "Email", "scope": "Ancestors" },
         { "field": "reservationFor.airline.iataCode", "match": "BT", "type": "JsonLd" }
     ],
     "script": "airbaltic.js"

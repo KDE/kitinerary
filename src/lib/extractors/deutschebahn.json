@@ -4,7 +4,8 @@
             {
                 "field": "From",
                 "match": "buchungsbestaetigung@bahn.de",
-                "type": "Email"
+                "type": "Email",
+                "scope": "Ancestors"
             },
             {
                 "match": "uic:0080",
@@ -26,7 +27,8 @@
             {
                 "field": "From",
                 "match": "UNITTEST-buchungsbestaetigung@bahn.de",
-                "type": "Email"
+                "type": "Email",
+                "scope": "Ancestors"
             }
         ],
         "function": "parseText",
@@ -38,7 +40,8 @@
             {
                 "field": "From",
                 "match": "buchungsbestaetigung@bahn.de",
-                "type": "Email"
+                "type": "Email",
+                "scope": "Ancestors"
             }
         ],
         "function": "parseCancellation",

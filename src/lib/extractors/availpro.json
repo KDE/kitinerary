@@ -1,7 +1,7 @@
 [
     {
         "type": "html",
-        "filter": [ { "field": "From", "match": "@availpro.com", "type": "Email" } ],
+        "filter": [ { "field": "From", "match": "@availpro.com", "type": "Email", "scope": "Ancestors" } ],
         "script": "availpro.js",
         "function": "parseHtml"
     }

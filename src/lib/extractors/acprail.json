@@ -3,7 +3,8 @@
         {
             "field": "From",
             "match": "@acprail.com",
-            "type": "Email"
+            "type": "Email",
+            "scope": "Ancestors"
         }
     ],
     "function": "main",
