@@ -33,7 +33,9 @@ public:
     ExtractorFilter& operator=(ExtractorFilter&&);
 
     /** The filter type. */
-    ExtractorInput::Type type() const;
+    [[deprecated("use mimeType()")]] ExtractorInput::Type type() const;
+    /** MIME type of the document part this filter can match. */
+    QString mimeType() const;
     /** The field to filter on. */
     QString fieldName() const;
     /** Check if @p data matches this filter. */
@@ -59,7 +61,8 @@ public:
     /** Serialize filter to a JSON object. */
     QJsonObject toJson() const;
 
-    void setType(ExtractorInput::Type type);
+    [[deprecated("use setMimeType()")]]  void setType(ExtractorInput::Type type);
+    void setMimeType(const QString &mimeType);
     void setFieldName(const QString &fieldName);
     void setPattern(const QString &pattern);
     void setScope(Scope scope);

@@ -108,6 +108,9 @@ ExtractorInput::Type ExtractorInput::typeFromMimeType(const QString &mimeType)
     if (mimeType == QLatin1String("text/plain")) {
         return ExtractorInput::Text;
     }
+    if (mimeType == QLatin1String("application/octet-stream")) {
+        return ExtractorInput::Barcode;
+    }
     return {};
 }
 
@@ -163,6 +166,23 @@ ExtractorInput::Type ExtractorInput::typeFromName(const QString &name)
         if (qstricmp(name.toUtf8().constData(), me.key(i)) == 0) {
             return static_cast<ExtractorInput::Type>(me.value(i));
         }
+    }
+
+    return {};
+}
+
+QString ExtractorInput::typeToMimeType(ExtractorInput::Type type)
+{
+    switch (type) {
+        case Unknown: return {};
+        case Text: return QStringLiteral("text/plain");
+        case Barcode: return QStringLiteral("application/octet-stream");
+        case Email: return QStringLiteral("message/rfc822");
+        case Html: return QStringLiteral("text/html");
+        case JsonLd: return QStringLiteral("application/ld+json");
+        case ICal: return QStringLiteral("text/calendar");
+        case Pdf: return QStringLiteral("application/pdf");
+        case PkPass: return QStringLiteral("application/vnd.apple.pkpass");
     }
 
     return {};

@@ -45,10 +45,10 @@ class ExtractorRepositoryPrivate;
  * - \c ICal: iCalendar events, the argument to the script function is a KCalendarCore::Event instance.
  *
  * Filter definitions have the following field:
- * - \c type: The type of data this filter applies to, one of: @c Mime, @c PkPass, @c JsonLd, @c Barcode, @c ICal, @c Text.
+ * - \c mimeType: The MIME type of the document part this filter can match against.
  * - \c field: The name of the field to match against. This can be a field id in a Apple Wallet pass,
  *      A MIME message header name, a property on a Json-LD object or an iCal calendar or event.
- *      For @c Text or @c Barcode, this is ignored.
+ *      For plain text or binary content, this is ignored.
  * - \c match: A regular expression that is matched against the specified value (see QRegularExpression).
  * - \c scope: Specifies how the filter should be applied relative to the document node that is being extracted.
  *      One of @c Current, @c Parent, @c Children, @c Ancestors, @c Descendants (@c Current is the default).
@@ -58,13 +58,13 @@ class ExtractorRepositoryPrivate;
  * [
  *   {
  *     "type": "Pdf",
- *     "filter": [ { "field": "From", "match": "@swiss.com", "type": "Email", "scope": "Ancestors" } ],
+ *     "filter": [ { "field": "From", "match": "@swiss.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
  *     "script": "swiss.js",
  *     "function": "parsePdf"
  *   },
  *   {
  *     "type": "PkPass",
- *     "filter": [ { "field": "passTypeIdentifier", "match": "pass.booking.swiss.com", "type": "PkPass", "scope": "Current" } ],
+ *     "filter": [ { "field": "passTypeIdentifier", "match": "pass.booking.swiss.com", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
  *     "script": "swiss.js",
  *     "function": "parsePkPass"
  *   }

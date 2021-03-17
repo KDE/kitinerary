@@ -17,7 +17,7 @@ namespace KItinerary {
 class ExtractorFilterPrivate : public QSharedData
 {
 public:
-    ExtractorInput::Type m_type = ExtractorInput::Unknown;
+    QString m_mimeType;
     QString m_fieldName;
     QRegularExpression m_exp;
     ExtractorFilter::Scope m_scope = ExtractorFilter::Current;
@@ -37,13 +37,23 @@ ExtractorFilter& ExtractorFilter::operator=(ExtractorFilter&&) = default;
 
 ExtractorInput::Type ExtractorFilter::type() const
 {
-    return d->m_type;
+    return ExtractorInput::typeFromMimeType(d->m_mimeType);
 }
 
 void ExtractorFilter::setType(ExtractorInput::Type type)
 {
+    setMimeType(ExtractorInput::typeToMimeType(type));
+}
+
+QString ExtractorFilter::mimeType() const
+{
+    return d->m_mimeType;
+}
+
+void ExtractorFilter::setMimeType(const QString &mimeType)
+{
     d.detach();
-    d->m_type = type;
+    d->m_mimeType = mimeType;
 }
 
 QString ExtractorFilter::fieldName() const
@@ -65,15 +75,9 @@ bool ExtractorFilter::matches(const QString &data) const
     return d->m_exp.match(data).hasMatch();
 }
 
-static bool needsFieldName(ExtractorInput::Type type)
+static bool needsFieldName(const QString &mimeType)
 {
-    switch (type) {
-        case ExtractorInput::Barcode:
-        case ExtractorInput::Text:
-            return false;
-        default:
-            return true;
-    }
+    return mimeType != QLatin1String("text/plain") && mimeType != QLatin1String("application/octet-stream");
 }
 
 template <typename T>
@@ -91,21 +95,25 @@ static T readEnum(const QJsonValue &v, T defaultValue = {})
 
 bool ExtractorFilter::load(const QJsonObject &obj)
 {
-    d->m_type = ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString());
-    if (d->m_type == ExtractorInput::Unknown) {
+    d.detach();
+    d->m_mimeType = obj.value(QLatin1String("mimeType")).toString();
+    if (d->m_mimeType.isEmpty()) {
+        setType(ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString()));
+    }
+    if (d->m_mimeType.isEmpty()) {
         qCDebug(Log) << "unspecified filter type";
     }
     d->m_fieldName = obj.value(QLatin1String("field")).toString();
     d->m_exp.setPattern(obj.value(QLatin1String("match")).toString());
     d->m_scope = readEnum<ExtractorFilter::Scope>(obj.value(QLatin1String("scope")), ExtractorFilter::Current);
-    return d->m_type != ExtractorInput::Unknown && (!d->m_fieldName.isEmpty() || !needsFieldName(d->m_type)) && d->m_exp.isValid();
+    return !d->m_mimeType.isEmpty() && (!d->m_fieldName.isEmpty() || !needsFieldName(d->m_mimeType)) && d->m_exp.isValid();
 }
 
 QJsonObject ExtractorFilter::toJson() const
 {
     QJsonObject obj;
-    obj.insert(QLatin1String("type"), ExtractorInput::typeToString(d->m_type));
-    if (needsFieldName(d->m_type)) {
+    obj.insert(QLatin1String("mimeType"), d->m_mimeType);
+    if (needsFieldName(d->m_mimeType)) {
         obj.insert(QLatin1String("field"), d->m_fieldName);
     }
     obj.insert(QLatin1String("match"), pattern());

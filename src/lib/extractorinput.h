@@ -44,6 +44,9 @@ namespace ExtractorInput
     KITINERARY_EXPORT QString typeToString(Type type);
     /** Convert string representation of the type to an enum. */
     KITINERARY_EXPORT Type typeFromName(const QString &name);
+
+    /** Convert type to a MIME type. */
+    QString typeToMimeType(Type type);
 }
 
 }
