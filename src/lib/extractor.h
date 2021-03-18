@@ -1,11 +1,11 @@
 /*
-   SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2017-2021 Volker Krause <vkrause@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef EXTRACTOR_H
-#define EXTRACTOR_H
+#ifndef KITINERARY_EXTRACTOR_H
+#define KITINERARY_EXTRACTOR_H
 
 #include "kitinerary_export.h"
 #include "extractorinput.h"
@@ -92,7 +92,9 @@ public:
     QString name() const;
 
     /** Data type this extractor can process. */
-    ExtractorInput::Type type() const;
+    [[deprecated("use mimeType()")]] ExtractorInput::Type type() const;
+    /** The MIME type this script extractor supports. */
+    QString mimeType() const;
 
     /** The JS script containing the code of the extractor. */
     QString scriptFileName() const;
@@ -110,7 +112,8 @@ public:
     /** Source file name. */
     QString fileName() const;
 
-    void setType(ExtractorInput::Type type);
+    [[deprecated("use setMimeType()")]] void setType(ExtractorInput::Type type);
+    void setMimeType(const QString &mimeType);
     void setScriptFileName(const QString &script);
     void setScriptFunction(const QString &func);
     void setFilters(std::vector<ExtractorFilter> filters);
@@ -123,4 +126,4 @@ private:
 
 }
 
-#endif // EXTRACTOR_H
+#endif // KITINERARY_EXTRACTOR_H

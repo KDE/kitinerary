@@ -1,5 +1,5 @@
 /*
-   SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2017-2021 Volker Krause <vkrause@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -21,7 +21,7 @@ namespace KItinerary {
 class ExtractorPrivate : public QSharedData
 {
 public:
-    ExtractorInput::Type m_type = ExtractorInput::Text;
+    QString m_mimeType;
     QString m_fileName;
     QString m_scriptName;
     QString m_scriptFunction;
@@ -45,10 +45,12 @@ bool Extractor::load(const QJsonObject &obj, const QString &fileName, int index)
     d->m_fileName = fileName;
     d->m_index = index;
 
-    d->m_type = ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString());
-    if (d->m_type == ExtractorInput::Unknown) {
-        qCDebug(Log) << "extractor type not specified" << fileName;
-        d->m_type = ExtractorInput::Text;
+    d->m_mimeType = obj.value(QLatin1String("mimeType")).toString();
+    if (d->m_mimeType.isEmpty()) { // ### legacy support
+        setType(ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString()));
+    }
+    if (d->m_mimeType.isEmpty()) {
+        qCDebug(Log) << "extractor MIME type not specified" << fileName;;
     }
 
     const auto filterArray = obj.value(QLatin1String("filter")).toArray();
@@ -72,13 +74,13 @@ bool Extractor::load(const QJsonObject &obj, const QString &fileName, int index)
     }
     d->m_scriptFunction = obj.value(QLatin1String("function")).toString(QStringLiteral("main"));
 
-    return !d->m_filters.empty();
+    return !d->m_filters.empty() && !d->m_mimeType.isEmpty();
 }
 
 QJsonObject Extractor::toJson() const
 {
     QJsonObject obj;
-    obj.insert(QStringLiteral("type"), ExtractorInput::typeToString(d->m_type));
+    obj.insert(QLatin1String("mimeType"), d->m_mimeType);
 
     QFileInfo metaFi(d->m_fileName);
     QFileInfo scriptFi(d->m_scriptName);
@@ -107,13 +109,23 @@ QString Extractor::name() const
 
 ExtractorInput::Type Extractor::type() const
 {
-    return d->m_type;
+    return ExtractorInput::typeFromMimeType(d->m_mimeType);
 }
 
 void Extractor::setType(ExtractorInput::Type type)
 {
+    setMimeType(ExtractorInput::typeToMimeType(type));
+}
+
+QString Extractor::mimeType() const
+{
+    return d->m_mimeType;
+}
+
+void Extractor::setMimeType(const QString &mimeType)
+{
     d.detach();
-    d->m_type = type;
+    d->m_mimeType = mimeType;
 }
 
 QString Extractor::scriptFileName() const
