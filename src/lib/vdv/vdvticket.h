@@ -75,6 +75,11 @@ public:
     const VdvTicketIssueData* issueData() const;
     const VdvTicketTrailer* trailer() const;
 
+    /** Raw data of this ticket.
+     *  Useful for generating a barcode for it again.
+     */
+    QByteArray rawData() const;
+
 private:
     QExplicitlySharedDataPointer<VdvTicketPrivate> d;
 };

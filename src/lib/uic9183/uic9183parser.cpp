@@ -245,6 +245,11 @@ Uic9183Header Uic9183Parser::header() const
     return Uic9183Header(d->m_data);
 }
 
+QByteArray Uic9183Parser::rawData() const
+{
+    return d->m_data;
+}
+
 bool Uic9183Parser::maybeUic9183(const QByteArray& data)
 {
     Uic9183Header h(data);

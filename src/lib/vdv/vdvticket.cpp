@@ -214,3 +214,8 @@ const VdvTicketTrailer* VdvTicket::trailer() const
     offset += std::max<int>(111 - offset - sizeof(VdvTicketTrailer), 0); // padding to 111 bytes
     return d->m_data.isEmpty() ? nullptr : reinterpret_cast<const VdvTicketTrailer*>(d->m_data.constData() + offset);
 }
+
+QByteArray VdvTicket::rawData() const
+{
+    return d->m_data;
+}

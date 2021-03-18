@@ -105,6 +105,11 @@ public:
     /** Header found before the compressed payload. */
     Uic9183Header header() const;
 
+    /** Raw data of this ticket.
+     *  Useful for generating a barcode for it again.
+     */
+    QByteArray rawData() const;
+
     /** Quickly checks if @p might be UIC 918.3 content.
      *  This prioritizes speed over correctness and is used in barcode content auto-detection.
      */
