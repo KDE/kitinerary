@@ -3,11 +3,11 @@
         {
             "field": "From",
             "match": "@tierpark-berlin.de",
-            "type": "Email",
+            "mimeType": "message/rfc822",
             "scope": "Ancestors"
         }
     ],
     "function": "main",
     "script": "tierparkberlin.js",
-    "type": "Pdf"
+    "mimeType": "application/pdf"
 }

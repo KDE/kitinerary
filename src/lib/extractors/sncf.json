@@ -4,7 +4,7 @@
             {
                 "field": "From",
                 "match": "e-billet@sncf.fr",
-                "type": "Email",
+                "mimeType": "message/rfc822",
                 "scope": "Ancestors"
             },
             {
@@ -15,31 +15,31 @@
         ],
         "function": "parsePdf",
         "script": "sncf.js",
-        "type": "Pdf"
+        "mimeType": "application/pdf"
     },
     {
         "filter": [
             {
                 "match": "^i[01]CV",
-                "type": "Text"
+                "mimeType": "text/plain"
             }
         ],
         "function": "parseSncfBarcode",
         "script": "sncf.js",
-        "type": "Text"
+        "mimeType": "text/plain"
     },
     {
         "filter": [
             {
                 "field": "From",
                 "match": "UNITTEST-e-billet@sncf.fr",
-                "type": "Email",
+                "mimeType": "message/rfc822",
                 "scope": "Ancestors"
             }
         ],
         "function": "parseSncfPdfText",
         "script": "sncf.js",
-        "type": "Text"
+        "mimeType": "text/plain"
     },
     {
         "filter": [
@@ -51,32 +51,32 @@
         ],
         "function": "parseSecutixPdf",
         "script": "sncf.js",
-        "type": "Pdf"
+        "mimeType": "application/pdf"
     },
     {
         "filter": [
             {
                 "field": "From",
                 "match": "oui.sncf",
-                "type": "Email",
+                "mimeType": "message/rfc822",
                 "scope": "Ancestors"
             }
         ],
         "function": "parseOuigoEmail",
         "script": "sncf.js",
-        "type": "Html"
+        "mimeType": "text/html"
     },
     {
         "filter": [
             {
                 "field": "From",
                 "match": "ne-pas-repondre@pasngr.ouigo.com",
-                "type": "Email",
+                "mimeType": "message/rfc822",
                 "scope": "Ancestors"
             }
         ],
         "function": "parseOuigoTicket",
         "script": "sncf.js",
-        "type": "Pdf"
+        "mimeType": "application/pdf"
     }
 ]

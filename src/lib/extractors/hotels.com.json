@@ -3,10 +3,10 @@
         {
             "match": "http[s]://[a-z]{2,3}.hotels.com/",
             "field": "url",
-            "type": "JsonLd"
+            "mimeType": "application/ld+json"
         }
     ],
     "function": "parseBookingConfirmation",
     "script": "hotels.com.js",
-    "type": "Html"
+    "mimeType": "text/html"
 }

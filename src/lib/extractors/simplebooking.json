@@ -1,7 +1,7 @@
 [
     {
-        "type": "html",
-        "filter": [ { "field": "From", "match": "@simplebooking.it", "type": "Email", "scope": "Ancestors" } ],
+        "mimeType": "text/html",
+        "filter": [ { "field": "From", "match": "@simplebooking.it", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
         "script": "simplebooking.js",
         "function": "parseHtml"
     }

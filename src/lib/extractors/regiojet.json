@@ -1,15 +1,15 @@
 [
     {
-        "type": "text",
+        "mimeType": "text/plain",
         "filter": [
-            { "field": "From", "match": "express@studentagency.cz", "type": "Email", "scope": "Ancestors" },
-            { "field": "From", "match": "info@regiojet.cz", "type": "Email", "scope": "Ancestors" }
+            { "field": "From", "match": "express@studentagency.cz", "mimeType": "message/rfc822", "scope": "Ancestors" },
+            { "field": "From", "match": "info@regiojet.cz", "mimeType": "message/rfc822", "scope": "Ancestors" }
         ],
         "script": "regiojet.js",
         "function": "main"
     },
     {
-        "type": "ical",
+        "mimeType": "text/calendar",
         "filter": [ { "field": "uid", "match": "@regiojet.cz", "type": "ICal", "scope": "Current" } ],
         "script": "regiojet.js",
         "function": "parseEvent"

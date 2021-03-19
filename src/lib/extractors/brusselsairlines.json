@@ -1,16 +1,16 @@
 [
     {
-        "type": "html",
+        "mimeType": "text/html",
         "filter": [
-            { "field": "From", "match": "@brusselsairlines.com", "type": "Email", "scope": "Ancestors" }
+            { "field": "From", "match": "@brusselsairlines.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
         ],
         "script": "brusselsairlines.js"
     },
     {
-        "type": "pdf",
+        "mimeType": "application/pdf",
         "filter": [
-            { "field": "From", "match": "brusselsairlines.com", "type": "Email", "scope": "Ancestors" },
-            { "field": "reservationFor.airline.iataCode", "match": "SN", "type": "JsonLd" }
+            { "field": "From", "match": "brusselsairlines.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
+            { "field": "reservationFor.airline.iataCode", "match": "SN", "mimeType": "application/ld+json" }
         ],
         "script": "brusselsairlines-receipt.js"
     }

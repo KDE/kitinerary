@@ -1,7 +1,7 @@
 [{
-    "type": "text",
+    "mimeType": "text/plain",
     "filter": [
-        { "field": "From", "match": "noreply@klm.com", "type": "Email", "scope": "Ancestors" }
+        { "field": "From", "match": "noreply@klm.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
     ],
     "script": "klm.js"
 }]

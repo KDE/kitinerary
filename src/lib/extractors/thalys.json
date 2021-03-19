@@ -3,11 +3,11 @@
         {
             "field": "From",
             "match": "thalysticket",
-            "type": "Email",
+            "mimeType": "message/rfc822",
             "scope": "Ancestors"
         }
     ],
     "function": "parseReservation",
     "script": "thalys.js",
-    "type": "Html"
+    "mimeType": "text/html"
 }

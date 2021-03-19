@@ -1,5 +1,5 @@
 [{
-    "type": "pkpass",
-    "filter": [ { "field": "passTypeIdentifier", "match": "pass.com.lufthansa.mbp", "type": "PkPass", "scope": "Current" } ],
+    "mimeType": "application/vnd.apple.pkpass",
+    "filter": [ { "field": "passTypeIdentifier", "match": "pass.com.lufthansa.mbp", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
     "script": "lufthansa-pkpass.js"
 }]

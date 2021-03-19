@@ -1,12 +1,12 @@
 [
     {
-        "type": "text",
-        "filter": [ { "field": "From", "match": "@booking.com", "type": "Email", "scope": "Ancestors" } ],
+        "mimeType": "text/plain",
+        "filter": [ { "field": "From", "match": "@booking.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
         "script": "booking.js"
     },
     {
-        "type": "html",
-        "filter": [ { "field": "From", "match": "@booking.com", "type": "Email", "scope": "Ancestors" } ],
+        "mimeType": "text/html",
+        "filter": [ { "field": "From", "match": "@booking.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
         "script": "booking.js",
         "function": "parseHtml"
     }

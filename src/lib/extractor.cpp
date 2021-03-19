@@ -46,9 +46,6 @@ bool Extractor::load(const QJsonObject &obj, const QString &fileName, int index)
     d->m_index = index;
 
     d->m_mimeType = obj.value(QLatin1String("mimeType")).toString();
-    if (d->m_mimeType.isEmpty()) { // ### legacy support
-        setType(ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString()));
-    }
     if (d->m_mimeType.isEmpty()) {
         qCDebug(Log) << "extractor MIME type not specified" << fileName;;
     }

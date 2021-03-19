@@ -1,6 +1,6 @@
 [
     {
-        "type": "pdf",
+        "mimeType": "application/pdf",
         "filter": [
             { "type": "Barcode", "match": "docType.:.INTERNATIONAL_ID", "scope": "Descendants" }
         ],

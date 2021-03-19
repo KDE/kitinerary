@@ -3,10 +3,10 @@
         {
             "match": "FlixMobility",
             "field": "reservationFor.busCompany.name",
-            "type": "JsonLd"
+            "mimeType": "application/ld+json"
         }
     ],
     "function": "main",
     "script": "flixbus.js",
-    "type": "Html"
+    "mimeType": "text/html"
 }

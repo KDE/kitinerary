@@ -4,48 +4,48 @@
             {
                 "field": "From",
                 "match": "buchungsbestaetigung@bahn.de",
-                "type": "Email",
+                "mimeType": "message/rfc822",
                 "scope": "Ancestors"
             },
             {
                 "match": "uic:0080",
                 "field": "reservationFor.provider.identifier",
-                "type": "JsonLd"
+                "mimeType": "application/ld+json"
             },
             {
                 "match": "vdv:6260",
                 "field": "reservationFor.provider.identifier",
-                "type": "JsonLd"
+                "mimeType": "application/ld+json"
             }
         ],
         "function": "parsePdf",
         "script": "deutschebahn.js",
-        "type": "Pdf"
+        "mimeType": "application/pdf"
     },
     {
         "filter": [
             {
                 "field": "From",
                 "match": "UNITTEST-buchungsbestaetigung@bahn.de",
-                "type": "Email",
+                "mimeType": "message/rfc822",
                 "scope": "Ancestors"
             }
         ],
         "function": "parseText",
         "script": "deutschebahn.js",
-        "type": "Text"
+        "mimeType": "text/plain"
     },
     {
         "filter": [
             {
                 "field": "From",
                 "match": "buchungsbestaetigung@bahn.de",
-                "type": "Email",
+                "mimeType": "message/rfc822",
                 "scope": "Ancestors"
             }
         ],
         "function": "parseCancellation",
         "script": "deutschebahn.js",
-        "type": "Html"
+        "mimeType": "text/html"
     }
 ]

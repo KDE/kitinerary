@@ -1,7 +1,7 @@
 [
     {
-        "type": "ical",
-        "filter": [ { "field": "productId", "match": "//DinnerBooking//", "type": "ICal", "scope": "Parent" } ],
+        "mimeType": "text/calendar",
+        "filter": [ { "field": "productId", "match": "//DinnerBooking//", "mimeType": "text/calendar", "scope": "Parent" } ],
         "script": "dinnerbooking.js",
         "function": "parseEvent"
     }

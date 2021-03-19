@@ -3,10 +3,10 @@
         {
             "match": "uic:1181",
             "field": "reservationFor.provider.identifier",
-            "type": "JsonLd"
+            "mimeType": "application/ld+json"
         }
     ],
     "function": "parsePdf",
     "script": "oebb.js",
-    "type": "Pdf"
+    "mimeType": "application/pdf"
 }

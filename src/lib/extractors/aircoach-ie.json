@@ -3,11 +3,11 @@
         {
             "field": "From",
             "match": "@aircoach.ie",
-            "type": "Email",
+            "mimeType": "message/rfc822",
             "scope": "Ancestors"
         }
     ],
     "function": "main",
     "script": "aircoach-ie.js",
-    "type": "Text"
+    "mimeType": "text/plain"
 }

@@ -3,11 +3,11 @@
         {
             "field": "Subject",
             "match": "^\\[Indico\\] ",
-            "type": "Email",
+            "mimeType": "message/rfc822",
             "scope": "Ancestors"
         }
     ],
     "function": "parseRegistration",
     "script": "indico.js",
-    "type": "Html"
+    "mimeType": "text/html"
 }

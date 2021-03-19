@@ -4,23 +4,23 @@
             {
                 "match": "6E",
                 "field": "reservationFor.airline.iataCode",
-                "type": "JsonLd"
+                "mimeType": "application/ld+json"
             }
         ],
         "function": "main",
         "script": "indigo.js",
-        "type": "Pdf"
+        "mimeType": "application/pdf"
     }, {
         "filter": [
             {
                 "match": "reservations@customer.goindigo.in",
                 "field": "From",
-                "type": "Email",
+                "mimeType": "message/rfc822",
                 "scope": "Ancestors"
             }
         ],
         "function": "parseHtml",
         "script": "indigo.js",
-        "type": "Html"
+        "mimeType": "text/html"
     }
 ]

@@ -1,17 +1,17 @@
 [
     {
-        "type": "text",
+        "mimeType": "text/plain",
         "filter": [
-            { "field": "From", "match": "@amadeus.com", "type": "Email", "scope": "Ancestors" },
-            { "field": "Message-ID",  "match": "amadeus.com", "type": "Email", "scope": "Ancestors" }
+            { "field": "From", "match": "@amadeus.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
+            { "field": "Message-ID",  "match": "amadeus.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
         ],
         "script": "amadeus.js"
     },
     {
-        "type": "ical",
+        "mimeType": "text/calendar",
         "filter": [
-            { "field": "From", "match": "@amadeus.com", "type": "Email", "scope": "Ancestors" },
-            { "field": "productId", "match": "//AMADEUS//", "type": "ICal", "scope": "Parent" }
+            { "field": "From", "match": "@amadeus.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
+            { "field": "productId", "match": "//AMADEUS//", "mimeType": "text/calendar", "scope": "Parent" }
         ],
         "script": "amadeus.js",
         "function": "parseEvent"

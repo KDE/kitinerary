@@ -3,11 +3,11 @@
         {
             "field": "From",
             "match": "nationalexpress.com",
-            "type": "Email",
+            "mimeType": "message/rfc822",
             "scope": "Ancestors"
         }
     ],
     "function": "parseHtmlBooking",
     "script": "nationalexpress.js",
-    "type": "Html"
+    "mimeType": "text/html"
 }

@@ -1,8 +1,8 @@
 {
     "filter": [
-        { "field": "From", "match": "info@cd.cz", "type": "Email", "scope": "Ancestors" },
-        { "field": "From", "match": "eshop@cd.cz", "type": "Email", "scope": "Ancestors" }
+        { "field": "From", "match": "info@cd.cz", "mimeType": "message/rfc822", "scope": "Ancestors" },
+        { "field": "From", "match": "eshop@cd.cz", "mimeType": "message/rfc822", "scope": "Ancestors" }
     ],
     "script": "czechrailways.js",
-    "type": "Text"
+    "mimeType": "text/plain"
 }

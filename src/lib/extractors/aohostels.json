@@ -1,7 +1,7 @@
 {
     "filter": [
-        { "field": "From", "match": "@aohostels.com", "type": "Email", "scope": "Ancestors" }
+        { "field": "From", "match": "@aohostels.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
     ],
     "script": "aohostels.js",
-    "type": "Text"
+    "mimeType": "text/plain"
 }

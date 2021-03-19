@@ -1,7 +1,7 @@
 {
     "filter": [
-        { "field": "From", "match": "@hertz.com", "type": "Email", "scope": "Ancestors" }
+        { "field": "From", "match": "@hertz.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
     ],
     "script": "hertz.js",
-    "type": "Text"
+    "mimeType": "text/plain"
 }

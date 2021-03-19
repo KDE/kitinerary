@@ -1,6 +1,6 @@
 [
     {
-        "type": "pdf",
+        "mimeType": "application/pdf",
         "filter": [
             { "type": "Barcode", "match": "^ \\x{14}", "scope": "Descendants" }
         ],

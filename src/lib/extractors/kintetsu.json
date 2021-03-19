@@ -3,12 +3,12 @@
         {
             "field": "From",
             "match": "@rw.kintetsu.co.jp",
-            "type": "Email",
+            "mimeType": "message/rfc822",
             "scope": "Ancestors"
         }
     ],
     "function": "main",
     "script": "kintetsu.js",
-    "type": "text"
+    "mimeType": "text/plain"
 }
 

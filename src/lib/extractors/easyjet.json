@@ -1,16 +1,16 @@
 [
     {
-        "type": "html",
-        "filter": [ { "field": "From", "match": "@easyjet.com", "type": "Email", "scope": "Ancestors" } ],
+        "mimeType": "text/html",
+        "filter": [ { "field": "From", "match": "@easyjet.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
         "script": "easyjet.js",
         "function": "parseHtmlBooking"
     },
     {
-        "type": "pdf",
+        "mimeType": "application/pdf",
         "filter": [
-            { "field": "reservationFor.airline.iataCode", "match": "EJU", "type": "JsonLd" },
-            { "field": "reservationFor.airline.iataCode", "match": "EZS", "type": "JsonLd" },
-            { "field": "reservationFor.airline.iataCode", "match": "EZY", "type": "JsonLd" }
+            { "field": "reservationFor.airline.iataCode", "match": "EJU", "mimeType": "application/ld+json" },
+            { "field": "reservationFor.airline.iataCode", "match": "EZS", "mimeType": "application/ld+json" },
+            { "field": "reservationFor.airline.iataCode", "match": "EZY", "mimeType": "application/ld+json" }
         ],
         "script": "easyjet.js",
         "function": "parsePdfBoardingPass"

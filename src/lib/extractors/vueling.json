@@ -1,7 +1,7 @@
 [
     {
-        "type": "html",
-        "filter": [ { "field": "From", "match": "@vueling.com", "type": "Email", "scope": "Ancestors" } ],
+        "mimeType": "text/html",
+        "filter": [ { "field": "From", "match": "@vueling.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
         "script": "vueling.js",
         "function": "parseHtmlBooking"
     }

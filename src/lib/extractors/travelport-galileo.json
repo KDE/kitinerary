@@ -1,8 +1,8 @@
 [
     {
-        "type": "text",
+        "mimeType": "text/plain",
         "filter": [
-            { "field": "From", "match": "@via.com", "type": "Email", "scope": "Ancestors" }
+            { "field": "From", "match": "@via.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
         ],
         "script": "travelport-galileo.js",
         "function": "parsePNR"

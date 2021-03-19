@@ -3,11 +3,11 @@
         {
             "field": "From",
             "match": "@reservation.accor-mail.com",
-            "type": "Email",
+            "mimeType": "message/rfc822",
             "scope": "Ancestors"
         }
     ],
     "function": "parseConfirmation",
     "script": "accor.js",
-    "type": "Html"
+    "mimeType": "text/html"
 }

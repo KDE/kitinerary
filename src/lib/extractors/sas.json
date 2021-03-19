@@ -1,15 +1,15 @@
 [
     {
-        "type": "pdf",
+        "mimeType": "application/pdf",
         "filter": [
-            { "field": "From", "match": "no-reply@flysas.com", "type": "Email", "scope": "Ancestors" },
-            { "field": "reservationFor.airline.iataCode", "match": "SK", "type": "JsonLd" }
+            { "field": "From", "match": "no-reply@flysas.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
+            { "field": "reservationFor.airline.iataCode", "match": "SK", "mimeType": "application/ld+json" }
         ],
         "script": "sas-boardingpass.js"
     },
     {
-        "type": "pdf",
-        "filter": [ { "field": "From", "match": "no-reply@flysas.com", "type": "Email", "scope": "Ancestors" } ],
+        "mimeType": "application/pdf",
+        "filter": [ { "field": "From", "match": "no-reply@flysas.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
         "script": "sas-receipt.js"
     }
 ]

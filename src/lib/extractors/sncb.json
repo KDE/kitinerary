@@ -3,11 +3,11 @@
         {
             "field": "From",
             "match": "ticketonline@b-rail.be",
-            "type": "Email",
+            "mimeType": "message/rfc822",
             "scope": "Ancestors"
         }
     ],
     "function": "parsePdf",
     "script": "sncb.js",
-    "type": "Pdf"
+    "mimeType": "application/pdf"
 }
