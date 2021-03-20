@@ -27,6 +27,8 @@ set(kitinerary_lib_srcs
     engine/extractorresult.cpp
     era/ssbticket.cpp
 
+    extractors/iatabcbpextractor.cpp
+
     generic/genericextractor.cpp
     generic/genericicalextractor.cpp
     generic/genericpdfextractor.cpp
