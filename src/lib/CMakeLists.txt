@@ -56,6 +56,8 @@ set(kitinerary_lib_srcs
     pdf/popplerglobalparams.cpp
     pdf/popplerutils.cpp
 
+    scripts/extractors.qrc
+
     tlv/berelement.cpp
 
     uic9183/rct2ticket.cpp
@@ -98,7 +100,6 @@ set(kitinerary_lib_srcs
     qimagepurebinarizer.cpp
     sortutil.cpp
     stringutil.cpp
-    extractors/extractors.qrc
 )
 kde_source_files_enable_exceptions(barcodedecoder.cpp qimagepurebinarizer.cpp)
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)

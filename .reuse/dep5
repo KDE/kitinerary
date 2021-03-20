@@ -7,7 +7,7 @@ Files: autotests/barcodes/* autotests/bcbpdata/* autotests/calendarhandlerdata/*
 Copyright: none
 License: CC0-1.0
 
-Files: src/lib/extractors/*.json
+Files: src/lib/scripts/*.json
 Copyright: none
 License: CC0-1.0
 
