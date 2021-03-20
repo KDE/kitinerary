@@ -62,7 +62,7 @@ private Q_SLOTS:
 
         ExtractorEngine engine;
         engine.setContextDate(QDateTime(QDate(2017, 12, 29), QTime(18, 46, 2)));
-        engine.setPass(pass);
+        engine.setContent(QVariant::fromValue(pass), u"application/vnd.apple.pkpass");
         auto result = JsonLdDocument::fromJson(engine.extract());
 
         ExtractorPostprocessor postproc;

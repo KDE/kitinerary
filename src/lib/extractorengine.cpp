@@ -245,14 +245,19 @@ void ExtractorEngine::setCalendar(const QSharedPointer<KCalendarCore::Calendar> 
 #endif
 }
 
-void ExtractorEngine::setData(const QByteArray &data, const QString &fileName)
+void ExtractorEngine::setData(const QByteArray &data, QStringView fileName, QStringView mimeType)
 {
     // let's not even try to parse anything with implausible size
     if (data.size() <= 4 || data.size() > 4000000) {
         return;
     }
 
-    const auto nameType = ExtractorInput::typeFromFileName(fileName);
+    const auto mtType = ExtractorInput::typeFromMimeType(mimeType.toString());
+    if (mtType != ExtractorInput::Unknown) {
+        setData(data, mtType);
+        return;
+    }
+    const auto nameType = ExtractorInput::typeFromFileName(fileName.toString());
     const auto contentType = ExtractorInput::typeFromContent(data);
     setData(data, nameType == ExtractorInput::Unknown ? contentType : nameType);
 }
@@ -266,6 +271,35 @@ void ExtractorEngine::setData(const QByteArray &data, ExtractorInput::Type type)
 
     d->m_data = data;
     d->m_inputType = type;
+}
+
+void ExtractorEngine::setContent(const QVariant &data, QStringView mimeType)
+{
+    // ### temporary scaffolding until we have the new extractor engine
+    switch (ExtractorInput::typeFromMimeType(mimeType.toString())) {
+        case ExtractorInput::Text:
+            setText(data.toString());
+            break;
+        case ExtractorInput::Html:
+            setHtmlDocument(data.value<HtmlDocument*>());
+            break;
+        case ExtractorInput::Pdf:
+            setPdfDocument(data.value<PdfDocument*>());
+            break;
+        case ExtractorInput::PkPass:
+            setPass(data.value<KPkPass::Pass*>());
+            break;
+        case ExtractorInput::ICal:
+#ifdef HAVE_KCAL
+            setCalendar(data.value<KCalCore::Calendar::Ptr>());
+#endif
+            break;
+        case ExtractorInput::Email:
+            setContent(data.value<KMime::Content*>());
+            break;
+        default:
+            break;
+    }
 }
 
 void ExtractorEnginePrivate::openDocument()

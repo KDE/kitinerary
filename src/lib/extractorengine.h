@@ -1,11 +1,11 @@
 /*
-   SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2017-2021 Volker Krause <vkrause@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef EXTRACTORENGINE_H
-#define EXTRACTORENGINE_H
+#ifndef KITINERARY_EXTRACTORENGINE_H
+#define KITINERARY_EXTRACTORENGINE_H
 
 #include "kitinerary_export.h"
 #include "extractorinput.h"
@@ -32,6 +32,7 @@ class Content;
 class QByteArray;
 class QDateTime;
 class QJsonArray;
+class QVariant;
 
 namespace KItinerary {
 
@@ -41,9 +42,9 @@ class HtmlDocument;
 class PdfDocument;
 
 /**
- * Unstructured data extraction engine.
+ * Semantic data extraction engine.
  *
- * This will apply the given Extractor instance to the given input data
+ * This will attempt to find travel itinerary data in the given input data
  * (plain text, HTML text, PDF documents, etc), and return the extracted
  * JSON-LD data.
  *
@@ -117,9 +118,9 @@ class KITINERARY_EXPORT ExtractorEngine
 {
 public:
     ExtractorEngine();
-    ~ExtractorEngine();
     ExtractorEngine(ExtractorEngine &&) noexcept;
     ExtractorEngine(const ExtractorEngine &) = delete;
+    ~ExtractorEngine();
 
     /** Resets the internal state, call before processing new input data. */
     void clear();
@@ -127,41 +128,46 @@ public:
     /** The text to extract data from.
      *  Only considered for text extractors.
      */
-    void setText(const QString &text);
+    [[deprecated("use setContent")]] void setText(const QString &text);
     /** A HTML document to extract data from.
      *  Only considered for HTML and text extractors.
      */
-    void setHtmlDocument(HtmlDocument *htmlDoc);
+    [[deprecated("use setContent")]] void setHtmlDocument(HtmlDocument *htmlDoc);
     /** A PDF document to extract data from.
      *  Only considered for PDF or text extractors.
      */
-    void setPdfDocument(PdfDocument *pdfDoc);
+    [[deprecated("use setContent")]] void setPdfDocument(PdfDocument *pdfDoc);
     /** The pkpass boarding pass to extract data from.
      *  Only considered for pkpass extractors.
      */
-    void setPass(KPkPass::Pass *pass);
+    [[deprecated("use setContent")]] void setPass(KPkPass::Pass *pass);
     /** The iCalendar to extract data from.
      *  Only considered for ical extractors.
      */
-    void setCalendar(const QSharedPointer<KCalendarCore::Calendar> &calendar);
+    [[deprecated("use setContent")]] void setCalendar(const QSharedPointer<KCalendarCore::Calendar> &calendar);
 
     /** A MIME part to extract from.
      *  This is assumed to contain one of the supported mime types.
      *  @p content is also set as extraction context (see setContext).
      */
-    void setContent(KMime::Content *content);
-    /** Any kind of data to extract from.
-     *  ExtractorEngine tries to auto-detect what type of data this is
-     *  and pick one of the above methods accordingly.
-     *  Avoid using this if you know exactly what data you have.
-     *  @param fileName Used as a hint to determine the type, optional.
+    [[deprecated("use setContent")]] void setContent(KMime::Content *content);
+
+    /** Set raw data to extract from.
+     *  @param data Raw data to extract from.
+     *  @param fileName Used as a hint to determine the type, optional and used for MIME type auto-detection if needed.
+     *  @param mimeType MIME type of @p data, auto-detected if empty.
      */
-    void setData(const QByteArray &data, const QString &fileName = {});
+    void setData(const QByteArray &data, QStringView fileName = {}, QStringView mimeType = {});
 
     /** Raw data to extract, but with a known type.
      *  No content type detection is performed here, you should be sure about @p type.
      */
-    void setData(const QByteArray &data, ExtractorInput::Type type);
+    [[deprecated("use setData")]] void setData(const QByteArray &data, ExtractorInput::Type type);
+
+    /** Already decoded data to extract from.
+     *  @param data Has to contain a object of a supported data type matching @p mimeType.
+     */
+    void setContent(const QVariant &data, QStringView mimeType);
 
     /** Sets the MIME part the document we try to extract comes from.
      *  Use this for documents received by email, to provide additional
@@ -209,4 +215,4 @@ private:
 
 }
 
-#endif // EXTRACTORENGINE_H
+#endif // KITINERARY_EXTRACTORENGINE_H
