@@ -7,7 +7,7 @@
 #include "config-kitinerary.h"
 #include "extractorrepository.h"
 #include "extractor.h"
-#include "extractorfilter.h"
+#include <KItinerary/ExtractorFilter>
 #include "logging.h"
 
 #ifdef HAVE_KCAL

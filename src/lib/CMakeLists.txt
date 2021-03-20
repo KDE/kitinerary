@@ -24,6 +24,7 @@ set(kitinerary_lib_srcs
     engine/abstractextractor.cpp
     engine/extractordocumentnode.cpp
     engine/extractordocumentprocessor.cpp
+    engine/extractorfilter.cpp
     engine/extractorresult.cpp
     era/ssbticket.cpp
 
@@ -85,7 +86,6 @@ set(kitinerary_lib_srcs
     extractor.cpp
     extractorcapabilities.cpp
     extractorengine.cpp
-    extractorfilter.cpp
     extractorinput.cpp
     extractorpostprocessor.cpp
     extractorrepository.cpp
@@ -167,7 +167,6 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         Extractor
         ExtractorCapabilities
         ExtractorEngine
-        ExtractorFilter
         ExtractorInput
         ExtractorPostprocessor
         ExtractorRepository
@@ -217,6 +216,7 @@ ecm_generate_headers(KItinerary_Engine_FORWARDING_HEADERS
     HEADER_NAMES
         AbstractExtractor
         ExtractorDocumentNode
+        ExtractorFilter
         ExtractorResult
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_Engine_HEADERS
@@ -257,6 +257,7 @@ install(FILES
     ${KItinerary_FORWARDING_HEADERS}
     ${KItinerary_KnowledgeDb_FORWARDING_HEADERS}
     ${KItinerary_Datatypes_FORWARDING_HEADERS}
+    ${KItinerary_Engine_FORWARDING_HEADERS}
     ${KItinerary_Pdf_FORWARDING_HEADERS}
     ${KItinerary_Uic9183_FORWARDING_HEADERS}
     ${KItinerary_Vdv_FORWARDING_HEADERS}
@@ -267,6 +268,7 @@ install(FILES
     ${KItinerary_AirportDb_HEADERS}
     ${KItinerary_Datatypes_HEADERS}
     ${KItinerary_KnowledgeDb_HEADERS}
+    ${KItinerary_Engine_HEADERS}
     ${KItinerary_Pdf_HEADERS}
     ${KItinerary_Uic9183_HEADERS}
     ${KItinerary_Vdv_HEADERS}

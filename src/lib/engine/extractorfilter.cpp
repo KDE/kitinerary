@@ -5,6 +5,9 @@
 */
 
 #include "extractorfilter.h"
+#include "extractordocumentnode.h"
+#include "extractordocumentprocessor.h"
+#include "extractorresult.h"
 #include "logging.h"
 
 #include <QJsonObject>
@@ -141,4 +144,73 @@ void ExtractorFilter::setScope(Scope scope)
 {
     d.detach();
     d->m_scope = scope;
+}
+
+static QString valueForJsonPath(const QJsonObject &obj, const QString &path)
+{
+    const auto pathSections = path.splitRef(QLatin1Char('.'));
+    QJsonValue v(obj);
+    for (const auto &pathSection : pathSections) {
+        if (!v.isObject()) {
+            return {};
+        }
+        v = v.toObject().value(pathSection.toString());
+    }
+    return v.toString();
+}
+
+static ExtractorDocumentNode filterMachesNode(const ExtractorFilter &filter, ExtractorFilter::Scope scope, const ExtractorDocumentNode &node)
+{
+    if (node.isNull()) {
+        return {};
+    }
+
+    if (filter.mimeType() == node.mimeType() && node.processor()->matches(filter, node)) {
+        return node;
+    }
+
+    if (scope != ExtractorFilter::Ancestors && filter.mimeType() == QLatin1String("application/ld+json") && !node.result().isEmpty()) {
+        const auto res = node.result().jsonLdResult();
+        for (const auto &elem : res) {
+            const auto property = valueForJsonPath(elem.toObject(), filter.fieldName());
+            if (filter.matches(property)) {
+                return node;
+            }
+        }
+    }
+
+    if (scope == ExtractorFilter::Ancestors) {
+        return filterMachesNode(filter, scope, node.parent());
+    }
+    if (scope == ExtractorFilter::Descendants) {
+        for (const auto &child : node.childNodes()) {
+            const auto m = filterMachesNode(filter, ExtractorFilter::Descendants, child);
+            if (!m.isNull()) {
+                return m;
+            }
+        }
+    }
+
+    return {};
+}
+
+ExtractorDocumentNode ExtractorFilter::matches(const ExtractorDocumentNode &node) const
+{
+    switch (d->m_scope) {
+        case ExtractorFilter::Current:
+            return filterMachesNode(*this, ExtractorFilter::Current, node);
+        case ExtractorFilter::Parent:
+            return filterMachesNode(*this, ExtractorFilter::Current, node.parent());
+        case ExtractorFilter::Ancestors:
+            return filterMachesNode(*this, ExtractorFilter::Ancestors, node.parent());
+        case ExtractorFilter::Children:
+        case ExtractorFilter::Descendants:
+            for (const auto &child : node.childNodes()) {
+                const auto m = filterMachesNode(*this, d->m_scope == ExtractorFilter::Descendants ? d->m_scope : ExtractorFilter::Current, child);
+                if (!m.isNull()) {
+                    return m;
+                }
+            }
+    }
+    return {};
 }

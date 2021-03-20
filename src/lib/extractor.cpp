@@ -5,7 +5,7 @@
 */
 
 #include "extractor.h"
-#include "extractorfilter.h"
+#include <KItinerary/ExtractorFilter>
 #include "logging.h"
 
 #include <QFile>

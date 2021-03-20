@@ -18,6 +18,7 @@ class QJsonObject;
 
 namespace KItinerary {
 
+class ExtractorDocumentNode;
 class ExtractorFilterPrivate;
 
 /** Determines whether an extractor is applicable to a given email. */
@@ -54,6 +55,12 @@ public:
     Q_ENUM(Scope)
     /** Evaluation scope of this filter, in relation to the node being extracted. */
     Scope scope() const;
+
+    /** Checks whether this filter applies to @p node.
+     *  @returns An invalid node if the filter doesn't match, or the node that ended up matching the filter.
+     *  This can differ from @p node depending on scope().
+     */
+    ExtractorDocumentNode matches(const ExtractorDocumentNode &node) const;
 
     ///@cond internal
     /** Load filter from @p obj. */
