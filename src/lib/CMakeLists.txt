@@ -21,6 +21,9 @@ set(kitinerary_lib_srcs
     datatypes/rentalcar.cpp
     datatypes/visit.cpp
 
+    engine/extractordocumentnode.cpp
+    engine/extractordocumentprocessor.cpp
+    engine/extractorresult.cpp
     era/ssbticket.cpp
 
     generic/genericextractor.cpp
@@ -205,6 +208,14 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_Datatypes_HEADERS
     RELATIVE datatypes
+)
+ecm_generate_headers(KItinerary_Engine_FORWARDING_HEADERS
+    HEADER_NAMES
+        ExtractorDocumentNode
+        ExtractorResult
+    PREFIX KItinerary
+    REQUIRED_HEADERS KItinerary_Engine_HEADERS
+    RELATIVE engine
 )
 ecm_generate_headers(KItinerary_Pdf_FORWARDING_HEADERS
     HEADER_NAMES
