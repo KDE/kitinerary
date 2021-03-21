@@ -5,10 +5,17 @@
 */
 
 #include "config-kitinerary.h"
-#include "barcodedecoder.h"
 #include "extractorengine.h"
+
+#include "barcodedecoder.h"
 #include "extractor.h"
-#include "engine/extractorrepository.h"
+#include "abstractextractor.h"
+#include "extractordocumentnode.h"
+#include "extractordocumentnodefactory.h"
+#include "extractordocumentprocessor.h"
+#include "extractorresult.h"
+#include "extractorrepository.h"
+#include "extractorscriptengine_p.h"
 #include "generic/genericpdfextractor_p.h"
 #include "generic/genericicalextractor_p.h"
 #include "generic/genericpkpassextractor_p.h"
@@ -23,8 +30,6 @@
 #include "uic9183/uic9183parser.h"
 #include "vdv/vdvticketparser.h"
 
-#include "engine/extractordocumentnodefactory.h"
-#include "engine/extractorscriptengine_p.h"
 #include "jsapi/barcode.h"
 #include "jsapi/context.h"
 #include "jsapi/jsonld.h"
@@ -79,6 +84,8 @@ public:
     void processScriptResult(const QJSValue &result);
 
     void setContext(PdfDocument *pdf);
+
+    void processNode(ExtractorDocumentNode &node);
 
     ExtractorEngine *q = nullptr;
     std::vector<Extractor> m_extractors;
@@ -180,6 +187,44 @@ void ExtractorEnginePrivate::extractExternal()
 
     const auto res = QJsonDocument::fromJson(proc.readAllStandardOutput()).array();
     std::copy(res.begin(), res.end(), std::back_inserter(m_result));
+}
+
+void ExtractorEnginePrivate::processNode(ExtractorDocumentNode& node)
+{
+    if (node.isNull()) {
+        return;
+    }
+
+    node.processor()->expandNode(node, q);
+    for (auto c : node.childNodes()) {
+        processNode(c);
+    }
+    node.processor()->reduceNode(node);
+
+    node.processor()->preExtract(node, q);
+    std::vector<const AbstractExtractor*> extractors;
+    m_repo.extractorsForNode(node, extractors);
+
+    for (const auto &extractor : extractors) {
+        auto res = extractor->extract(node, q);
+        node.addResult(std::move(res));
+        // TODO store result sources
+    }
+
+    node.processor()->postExtract(node);
+
+    // set modification time for all results that don't have it yet
+    if (node.contextDateTime().isValid()) {
+        auto result = node.result().jsonLdResult();
+        for (int i = 0; i < result.size(); ++i) {
+            auto res = result.at(i).toObject();
+            if (!res.contains(QLatin1String("modifiedTime"))) {
+                res.insert(QStringLiteral("modifiedTime"), node.contextDateTime().toString(Qt::ISODate));
+            }
+            result[i] = res;
+        }
+        node.setResult(result);
+    }
 }
 
 

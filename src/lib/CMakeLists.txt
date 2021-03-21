@@ -25,6 +25,7 @@ set(kitinerary_lib_srcs
     engine/extractordocumentnode.cpp
     engine/extractordocumentnodefactory.cpp
     engine/extractordocumentprocessor.cpp
+    engine/extractorengine.cpp
     engine/extractorfilter.cpp
     engine/extractorrepository.cpp
     engine/extractorresult.cpp
@@ -103,7 +104,6 @@ set(kitinerary_lib_srcs
     documentutil.cpp
     extractor.cpp
     extractorcapabilities.cpp
-    extractorengine.cpp
     extractorinput.cpp
     extractorpostprocessor.cpp
     extractorutil.cpp
@@ -183,7 +183,6 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         DocumentUtil
         Extractor
         ExtractorCapabilities
-        ExtractorEngine
         ExtractorInput
         ExtractorPostprocessor
         ExtractorValidator
@@ -234,6 +233,7 @@ ecm_generate_headers(KItinerary_Engine_FORWARDING_HEADERS
         ExtractorDocumentNode
         ExtractorDocumentNodeFactory
         ExtractorDocumentProcessor
+        ExtractorEngine
         ExtractorFilter
         ExtractorRepository
         ExtractorResult
