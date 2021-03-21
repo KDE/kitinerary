@@ -10,7 +10,7 @@
 #include "logging.h"
 
 #include "processors/binarydocumentprocessor.h"
-// #include "processors/externalprocessor.h"
+#include "processors/externalprocessor.h"
 #include "processors/htmldocumentprocessor.h"
 #include "processors/icaldocumentprocessor.h"
 #include "processors/imagedocumentprocessor.h"
@@ -237,7 +237,7 @@ void ExtractorDocumentNodeFactory::registerProcessor(std::unique_ptr<ExtractorDo
 void ExtractorDocumentNodeFactory::setUseSeparateProcess(bool separateProcess)
 {
     if (separateProcess && !d->interceptProcessor) {
-//         d->interceptProcessor = std::make_unique<ExternalProcessor>();
+        d->interceptProcessor = std::make_unique<ExternalProcessor>();
     } else {
         d->interceptProcessor.reset();
     }

@@ -65,6 +65,7 @@ set(kitinerary_lib_srcs
     pdf/popplerutils.cpp
 
     processors/binarydocumentprocessor.cpp
+    processors/externalprocessor.cpp
     processors/htmldocumentprocessor.cpp
     processors/icaldocumentprocessor.cpp
     processors/imagedocumentprocessor.cpp
