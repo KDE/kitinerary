@@ -1,0 +1,75 @@
+⎄[
+    {
+        "content": {
+            "creationTime": "Mon Aug 19 20:23:28 2019 GMT+0200",
+            "modificationTime": "Invalid Date",
+            "objectName": "",
+            "pageCount": 1,
+            "pages": [
+                {
+                    "images": [
+                        {
+                            "height": 139,
+                            "width": 139
+                        },
+                        {
+                            "height": 79,
+                            "width": 79
+                        }
+                    ],
+                    "text": "              Akademy Airways\n              Boarding Pass\nFrom: Vienna International, Terminal 2\nTo: Milano Malpensa, Terminal 1\nFlight: AK 1996\nGate: A36\nBoarding Time: 15:20\nDeparture Time: 15:45\nArrival Time: 17:20\nPassenger: Dragon, Dr. Konqi\n"
+                }
+            ],
+            "text": "              Akademy Airways\n              Boarding Pass\nFrom: Vienna International, Terminal 2\nTo: Milano Malpensa, Terminal 1\nFlight: AK 1996\nGate: A36\nBoarding Time: 15:20\nDeparture Time: 15:45\nArrival Time: 17:20\nPassenger: Dragon, Dr. Konqi\n"
+        }
+    },
+    {
+        "childNodes": [
+            {
+                "childNodes": [
+                ],
+                "content": "QVariant(QImage, QImage(QSize(164, 164),format=QImage::Format_Grayscale8,depth=8,devicePixelRatio=1,bytesPerLine=164,sizeInBytes=26896))",
+                "contextDateTime": "Mon Aug 19 20:23:28 2019 GMT+0200",
+                "isNull": false,
+                "location": 0,
+                "mimeType": "internal/qimage",
+                "result": [
+                ]
+            }
+        ],
+        "content": {
+            "creationTime": "Mon Aug 19 20:23:28 2019 GMT+0200",
+            "modificationTime": "Invalid Date",
+            "objectName": "",
+            "pageCount": 1,
+            "pages": [
+                {
+                    "images": [
+                        {
+                            "height": 139,
+                            "width": 139
+                        },
+                        {
+                            "height": 79,
+                            "width": 79
+                        }
+                    ],
+                    "text": "              Akademy Airways\n              Boarding Pass\nFrom: Vienna International, Terminal 2\nTo: Milano Malpensa, Terminal 1\nFlight: AK 1996\nGate: A36\nBoarding Time: 15:20\nDeparture Time: 15:45\nArrival Time: 17:20\nPassenger: Dragon, Dr. Konqi\n"
+                }
+            ],
+            "text": "              Akademy Airways\n              Boarding Pass\nFrom: Vienna International, Terminal 2\nTo: Milano Malpensa, Terminal 1\nFlight: AK 1996\nGate: A36\nBoarding Time: 15:20\nDeparture Time: 15:45\nArrival Time: 17:20\nPassenger: Dragon, Dr. Konqi\n"
+        },
+        "contextDateTime": "Mon Aug 19 20:23:28 2019 GMT+0200",
+        "isNull": false,
+        "mimeType": "application/pdf",
+        "result": [
+        ]
+    },
+    {
+        "data": [
+        ],
+        "objectName": "",
+        "pdfPageNumber": 0,
+        "senderDate": "Mon Aug 19 20:23:28 2019 GMT+0200"
+    }
+]
