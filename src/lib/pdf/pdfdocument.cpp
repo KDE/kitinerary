@@ -305,3 +305,8 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
     return nullptr;
 #endif
 }
+
+bool PdfDocument::maybePdf(const QByteArray &data)
+{
+    return data.startsWith("%PDF");
+}

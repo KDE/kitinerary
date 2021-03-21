@@ -1,5 +1,5 @@
 /*
-   SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2017-2021 Volker Krause <vkrause@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -23,6 +23,7 @@
 #include "uic9183/uic9183parser.h"
 #include "vdv/vdvticketparser.h"
 
+#include "engine/extractordocumentnodefactory.h"
 #include "jsapi/barcode.h"
 #include "jsapi/context.h"
 #include "jsapi/jsonld.h"
@@ -100,6 +101,7 @@ public:
     std::vector<GenericExtractor::Result> m_genericResults;
     QJsonArray m_result;
     QJSEngine m_engine;
+    ExtractorDocumentNodeFactory m_nodeFactory;
     ExtractorRepository m_repo;
     BarcodeDecoder m_barcodeDecoder;
     QString m_externalExtractor;
@@ -774,3 +776,14 @@ QString ExtractorEngine::usedCustomExtractor() const
 {
     return d->m_usedExtractor;
 }
+
+const ExtractorDocumentNodeFactory* ExtractorEngine::documentNodeFactory() const
+{
+    return &d->m_nodeFactory;
+}
+
+const BarcodeDecoder* ExtractorEngine::barcodeDecoder() const
+{
+    return &d->m_barcodeDecoder;
+}
+

@@ -105,6 +105,9 @@ public:
      */
     static PdfDocument* fromData(const QByteArray &data, QObject *parent = nullptr);
 
+    /** Fast check whether @p data might be a PDF document. */
+    static bool maybePdf(const QByteArray &data);
+
 private:
     QVariantList pagesVariant() const;
 

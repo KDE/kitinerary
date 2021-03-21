@@ -36,7 +36,9 @@ class QVariant;
 
 namespace KItinerary {
 
+class BarcodeDecoder;
 class Extractor;
+class ExtractorDocumentNodeFactory;
 class ExtractorEnginePrivate;
 class HtmlDocument;
 class PdfDocument;
@@ -208,6 +210,16 @@ public:
      *  Not supposed to be used for normal operations, this is only needed for tooling.
      */
     QString usedCustomExtractor() const;
+
+    /** Factory for creating new document nodes.
+     *  This is only for use by KItinerary::ExtractorDocumentProcessor instances.
+     */
+    const ExtractorDocumentNodeFactory* documentNodeFactory() const;
+    /** Barcode decoder for use by KItinerary::ExtractorDocumentProcessor.
+     *  Use this rather than your own instance as it caches repeated attempts to
+     *  decode the same image.
+     */
+    const BarcodeDecoder* barcodeDecoder() const;
 
 private:
     std::unique_ptr<ExtractorEnginePrivate> d;

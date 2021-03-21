@@ -23,6 +23,7 @@ set(kitinerary_lib_srcs
 
     engine/abstractextractor.cpp
     engine/extractordocumentnode.cpp
+    engine/extractordocumentnodefactory.cpp
     engine/extractordocumentprocessor.cpp
     engine/extractorfilter.cpp
     engine/extractorresult.cpp
@@ -58,6 +59,18 @@ set(kitinerary_lib_srcs
     pdf/pdfvectorpicture.cpp
     pdf/popplerglobalparams.cpp
     pdf/popplerutils.cpp
+
+    processors/binarydocumentprocessor.cpp
+    processors/htmldocumentprocessor.cpp
+    processors/icaldocumentprocessor.cpp
+    processors/imagedocumentprocessor.cpp
+    processors/jsonlddocumentprocessor.cpp
+    processors/mimedocumentprocessor.cpp
+    processors/pdfdocumentprocessor.cpp
+    processors/pkpassdocumentprocessor.cpp
+    processors/textdocumentprocessor.cpp
+    processors/uic9183documentprocessor.cpp
+    processors/vdvdocumentprocessor.cpp
 
     scripts/extractors.qrc
 
@@ -216,6 +229,8 @@ ecm_generate_headers(KItinerary_Engine_FORWARDING_HEADERS
     HEADER_NAMES
         AbstractExtractor
         ExtractorDocumentNode
+        ExtractorDocumentNodeFactory
+        ExtractorDocumentProcessor
         ExtractorFilter
         ExtractorResult
     PREFIX KItinerary

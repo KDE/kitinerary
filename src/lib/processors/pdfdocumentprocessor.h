@@ -1,0 +1,36 @@
+/*
+    SPDX-FileCopyrightText: 2021 Volker Krause <vkrause@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.0-or-later
+*/
+
+#ifndef KITINERARY_PDFDOCUMENTPROCESSOR_H
+#define KITINERARY_PDFDOCUMENTPROCESSOR_H
+
+#include <KItinerary/ExtractorDocumentProcessor>
+
+#include <unordered_set>
+
+namespace KItinerary {
+
+/** PDF document processor. */
+class PdfDocumentProcessor : public ExtractorDocumentProcessor
+{
+public:
+    PdfDocumentProcessor();
+    ~PdfDocumentProcessor();
+
+    bool canHandleData(const QByteArray &encodedData, QStringView fileName) const override;
+    ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
+    ExtractorDocumentNode createNodeFromContent(const QVariant &decodedData) const override;
+    void expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const override;
+    QJSValue contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const override;
+    void destroyNode(ExtractorDocumentNode &node) const override;
+
+private:
+    mutable std::unordered_set<int> m_imageIds;
+};
+
+}
+
+#endif // KITINERARY_PDFDOCUMENTPROCESSOR_H
