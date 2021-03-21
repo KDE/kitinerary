@@ -27,6 +27,9 @@ set(kitinerary_lib_srcs
     engine/extractordocumentprocessor.cpp
     engine/extractorfilter.cpp
     engine/extractorresult.cpp
+    engine/extractorscriptengine.cpp
+    engine/scriptextractor.cpp
+
     era/ssbticket.cpp
 
     extractors/iatabcbpextractor.cpp
@@ -233,6 +236,7 @@ ecm_generate_headers(KItinerary_Engine_FORWARDING_HEADERS
         ExtractorDocumentProcessor
         ExtractorFilter
         ExtractorResult
+        ScriptExtractor
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_Engine_HEADERS
     RELATIVE engine

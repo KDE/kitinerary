@@ -24,6 +24,7 @@
 #include "vdv/vdvticketparser.h"
 
 #include "engine/extractordocumentnodefactory.h"
+#include "engine/extractorscriptengine_p.h"
 #include "jsapi/barcode.h"
 #include "jsapi/context.h"
 #include "jsapi/jsonld.h"
@@ -106,6 +107,7 @@ public:
     BarcodeDecoder m_barcodeDecoder;
     QString m_externalExtractor;
     QString m_usedExtractor;
+    ExtractorScriptEngine m_scriptEngine;
 };
 
 template <typename T>
@@ -787,3 +789,8 @@ const BarcodeDecoder* ExtractorEngine::barcodeDecoder() const
     return &d->m_barcodeDecoder;
 }
 
+const ExtractorScriptEngine* ExtractorEngine::scriptEngine() const
+{
+    d->m_scriptEngine.setBarcodeDecoder(&d->m_barcodeDecoder);
+    return &d->m_scriptEngine;
+}

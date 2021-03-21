@@ -40,6 +40,7 @@ class BarcodeDecoder;
 class Extractor;
 class ExtractorDocumentNodeFactory;
 class ExtractorEnginePrivate;
+class ExtractorScriptEngine;
 class HtmlDocument;
 class PdfDocument;
 
@@ -220,6 +221,11 @@ public:
      *  decode the same image.
      */
     const BarcodeDecoder* barcodeDecoder() const;
+
+    ///@cond internal
+    /** JavaScript execution engine for script extractors. */
+    const ExtractorScriptEngine* scriptEngine() const;
+    ///@endcond
 
 private:
     std::unique_ptr<ExtractorEnginePrivate> d;
