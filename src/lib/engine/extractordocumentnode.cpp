@@ -92,7 +92,7 @@ ExtractorDocumentNode ExtractorDocumentNode::parent() const
 
 void ExtractorDocumentNode::setParent(const ExtractorDocumentNode &parent)
 {
-    d->parent = std::weak_ptr(parent.d);
+    d->parent = parent.d;
 }
 
 QString ExtractorDocumentNode::mimeType() const
