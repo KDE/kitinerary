@@ -1,0 +1,472 @@
+[
+    {
+        "content": {
+            "auxiliaryFields": [
+                {
+                    "changeMessage": "flightchangeMessage",
+                    "key": "flightNumber",
+                    "label": "flightHeading",
+                    "textAlignment": 1,
+                    "value": "LX962",
+                    "valueDisplayString": "LX962"
+                },
+                {
+                    "changeMessage": "datechangeMessage",
+                    "key": "date",
+                    "label": "dateHeading",
+                    "textAlignment": 1,
+                    "value": "15September",
+                    "valueDisplayString": "15September"
+                },
+                {
+                    "changeMessage": "boardingchangeMessage",
+                    "key": "boarding",
+                    "label": "boardingHeading",
+                    "textAlignment": 1,
+                    "value": "20:25",
+                    "valueDisplayString": "20:25"
+                },
+                {
+                    "changeMessage": "classchangeMessage",
+                    "key": "bookingClass",
+                    "label": "classHeading",
+                    "textAlignment": 1,
+                    "value": "Y",
+                    "valueDisplayString": "Y"
+                }
+            ],
+            "backFields": [
+                {
+                    "changeMessage": "",
+                    "key": "SWISSwishes",
+                    "label": "corporatePad",
+                    "textAlignment": 1,
+                    "value": "corporatePadvalue",
+                    "valueDisplayString": "corporatePadvalue"
+                }
+            ],
+            "backgroundColor": "#000000",
+            "barcodes": [
+                {
+                    "alternativeText": "",
+                    "format": 3,
+                    "message": "M1KRAUSE/VOLKER       EXXX007 ZRHTXLLX 0962 258Y010E0143 15D>5180 M7258BLX              2A724xxxxxxxxxx0 LX LH 123456789012345     N*30600000K09         ",
+                    "messageEncoding": "iso-8859-1"
+                }
+            ],
+            "description": "description",
+            "expirationDate": "Mon Sep 18 02:00:36 2017 GMT+0200",
+            "field": {
+                "SWISSwishes": {
+                    "changeMessage": "",
+                    "key": "SWISSwishes",
+                    "label": "corporatePad",
+                    "textAlignment": 1,
+                    "value": "corporatePadvalue",
+                    "valueDisplayString": "corporatePadvalue"
+                },
+                "boarding": {
+                    "changeMessage": "boardingchangeMessage",
+                    "key": "boarding",
+                    "label": "boardingHeading",
+                    "textAlignment": 1,
+                    "value": "20:25",
+                    "valueDisplayString": "20:25"
+                },
+                "bookingClass": {
+                    "changeMessage": "classchangeMessage",
+                    "key": "bookingClass",
+                    "label": "classHeading",
+                    "textAlignment": 1,
+                    "value": "Y",
+                    "valueDisplayString": "Y"
+                },
+                "date": {
+                    "changeMessage": "datechangeMessage",
+                    "key": "date",
+                    "label": "dateHeading",
+                    "textAlignment": 1,
+                    "value": "15September",
+                    "valueDisplayString": "15September"
+                },
+                "depart": {
+                    "changeMessage": "departchangeMessage",
+                    "key": "depart",
+                    "label": "departsHeading",
+                    "textAlignment": 1,
+                    "value": "ZRH",
+                    "valueDisplayString": "ZRH"
+                },
+                "destination": {
+                    "changeMessage": "destinationchangeMessage",
+                    "key": "destination",
+                    "label": "destinationHeading",
+                    "textAlignment": 1,
+                    "value": "TXL",
+                    "valueDisplayString": "TXL"
+                },
+                "ff_status": {
+                    "changeMessage": "statechangeMessage",
+                    "key": "ff_status",
+                    "label": "stateHeading",
+                    "textAlignment": 1,
+                    "value": "",
+                    "valueDisplayString": ""
+                },
+                "flightNumber": {
+                    "changeMessage": "flightchangeMessage",
+                    "key": "flightNumber",
+                    "label": "flightHeading",
+                    "textAlignment": 1,
+                    "value": "LX962",
+                    "valueDisplayString": "LX962"
+                },
+                "gate": {
+                    "changeMessage": "gatechangeMessage",
+                    "key": "gate",
+                    "label": "gateHeading",
+                    "textAlignment": 1,
+                    "value": "AB",
+                    "valueDisplayString": "AB"
+                },
+                "passenger": {
+                    "changeMessage": "passengerchangeMessage",
+                    "key": "passenger",
+                    "label": "passengerHeading",
+                    "textAlignment": 1,
+                    "value": "KRAUSE/VOLKERMR",
+                    "valueDisplayString": "KRAUSE/VOLKERMR"
+                },
+                "seat": {
+                    "changeMessage": "seatchangeMessage",
+                    "key": "seat",
+                    "label": "seatHeading",
+                    "textAlignment": 1,
+                    "value": "10E",
+                    "valueDisplayString": "10E"
+                }
+            },
+            "foregroundColor": "#000000",
+            "groupingIdentifier": "",
+            "headerFields": [
+                {
+                    "changeMessage": "seatchangeMessage",
+                    "key": "seat",
+                    "label": "seatHeading",
+                    "textAlignment": 1,
+                    "value": "10E",
+                    "valueDisplayString": "10E"
+                },
+                {
+                    "changeMessage": "gatechangeMessage",
+                    "key": "gate",
+                    "label": "gateHeading",
+                    "textAlignment": 1,
+                    "value": "AB",
+                    "valueDisplayString": "AB"
+                }
+            ],
+            "isVoided": false,
+            "labelColor": "#000000",
+            "locations": [
+                {
+                    "altitude": null,
+                    "latitude": 47.4523,
+                    "longitude": 8.56083,
+                    "relevantText": "LX962 Boarding 20:25"
+                }
+            ],
+            "logoText": "",
+            "objectName": "",
+            "organizationName": "SWISS",
+            "passTypeIdentifier": "pass.booking.swiss.com",
+            "primaryFields": [
+                {
+                    "changeMessage": "departchangeMessage",
+                    "key": "depart",
+                    "label": "departsHeading",
+                    "textAlignment": 1,
+                    "value": "ZRH",
+                    "valueDisplayString": "ZRH"
+                },
+                {
+                    "changeMessage": "destinationchangeMessage",
+                    "key": "destination",
+                    "label": "destinationHeading",
+                    "textAlignment": 1,
+                    "value": "TXL",
+                    "valueDisplayString": "TXL"
+                }
+            ],
+            "relevantDate": "Invalid Date",
+            "secondaryFields": [
+                {
+                    "changeMessage": "passengerchangeMessage",
+                    "key": "passenger",
+                    "label": "passengerHeading",
+                    "textAlignment": 1,
+                    "value": "KRAUSE/VOLKERMR",
+                    "valueDisplayString": "KRAUSE/VOLKERMR"
+                },
+                {
+                    "changeMessage": "statechangeMessage",
+                    "key": "ff_status",
+                    "label": "stateHeading",
+                    "textAlignment": 1,
+                    "value": "",
+                    "valueDisplayString": ""
+                }
+            ],
+            "serialNumber": "123456789",
+            "transitType": 0,
+            "type": 0
+        }
+    },
+    {
+        "childNodes": [
+            {
+                "childNodes": [
+                ],
+                "content": "M1KRAUSE/VOLKER       EXXX007 ZRHTXLLX 0962 258Y010E0143 15D>5180 M7258BLX              2A724xxxxxxxxxx0 LX LH 123456789012345     N*30600000K09         ",
+                "contextDateTime": "Invalid Date",
+                "isNull": false,
+                "mimeType": "text/plain",
+                "result": [
+                ]
+            }
+        ],
+        "content": {
+            "auxiliaryFields": [
+                {
+                    "changeMessage": "flightchangeMessage",
+                    "key": "flightNumber",
+                    "label": "flightHeading",
+                    "textAlignment": 1,
+                    "value": "LX962",
+                    "valueDisplayString": "LX962"
+                },
+                {
+                    "changeMessage": "datechangeMessage",
+                    "key": "date",
+                    "label": "dateHeading",
+                    "textAlignment": 1,
+                    "value": "15September",
+                    "valueDisplayString": "15September"
+                },
+                {
+                    "changeMessage": "boardingchangeMessage",
+                    "key": "boarding",
+                    "label": "boardingHeading",
+                    "textAlignment": 1,
+                    "value": "20:25",
+                    "valueDisplayString": "20:25"
+                },
+                {
+                    "changeMessage": "classchangeMessage",
+                    "key": "bookingClass",
+                    "label": "classHeading",
+                    "textAlignment": 1,
+                    "value": "Y",
+                    "valueDisplayString": "Y"
+                }
+            ],
+            "backFields": [
+                {
+                    "changeMessage": "",
+                    "key": "SWISSwishes",
+                    "label": "corporatePad",
+                    "textAlignment": 1,
+                    "value": "corporatePadvalue",
+                    "valueDisplayString": "corporatePadvalue"
+                }
+            ],
+            "backgroundColor": "#000000",
+            "barcodes": [
+                {
+                    "alternativeText": "",
+                    "format": 3,
+                    "message": "M1KRAUSE/VOLKER       EXXX007 ZRHTXLLX 0962 258Y010E0143 15D>5180 M7258BLX              2A724xxxxxxxxxx0 LX LH 123456789012345     N*30600000K09         ",
+                    "messageEncoding": "iso-8859-1"
+                }
+            ],
+            "description": "description",
+            "expirationDate": "Mon Sep 18 02:00:36 2017 GMT+0200",
+            "field": {
+                "SWISSwishes": {
+                    "changeMessage": "",
+                    "key": "SWISSwishes",
+                    "label": "corporatePad",
+                    "textAlignment": 1,
+                    "value": "corporatePadvalue",
+                    "valueDisplayString": "corporatePadvalue"
+                },
+                "boarding": {
+                    "changeMessage": "boardingchangeMessage",
+                    "key": "boarding",
+                    "label": "boardingHeading",
+                    "textAlignment": 1,
+                    "value": "20:25",
+                    "valueDisplayString": "20:25"
+                },
+                "bookingClass": {
+                    "changeMessage": "classchangeMessage",
+                    "key": "bookingClass",
+                    "label": "classHeading",
+                    "textAlignment": 1,
+                    "value": "Y",
+                    "valueDisplayString": "Y"
+                },
+                "date": {
+                    "changeMessage": "datechangeMessage",
+                    "key": "date",
+                    "label": "dateHeading",
+                    "textAlignment": 1,
+                    "value": "15September",
+                    "valueDisplayString": "15September"
+                },
+                "depart": {
+                    "changeMessage": "departchangeMessage",
+                    "key": "depart",
+                    "label": "departsHeading",
+                    "textAlignment": 1,
+                    "value": "ZRH",
+                    "valueDisplayString": "ZRH"
+                },
+                "destination": {
+                    "changeMessage": "destinationchangeMessage",
+                    "key": "destination",
+                    "label": "destinationHeading",
+                    "textAlignment": 1,
+                    "value": "TXL",
+                    "valueDisplayString": "TXL"
+                },
+                "ff_status": {
+                    "changeMessage": "statechangeMessage",
+                    "key": "ff_status",
+                    "label": "stateHeading",
+                    "textAlignment": 1,
+                    "value": "",
+                    "valueDisplayString": ""
+                },
+                "flightNumber": {
+                    "changeMessage": "flightchangeMessage",
+                    "key": "flightNumber",
+                    "label": "flightHeading",
+                    "textAlignment": 1,
+                    "value": "LX962",
+                    "valueDisplayString": "LX962"
+                },
+                "gate": {
+                    "changeMessage": "gatechangeMessage",
+                    "key": "gate",
+                    "label": "gateHeading",
+                    "textAlignment": 1,
+                    "value": "AB",
+                    "valueDisplayString": "AB"
+                },
+                "passenger": {
+                    "changeMessage": "passengerchangeMessage",
+                    "key": "passenger",
+                    "label": "passengerHeading",
+                    "textAlignment": 1,
+                    "value": "KRAUSE/VOLKERMR",
+                    "valueDisplayString": "KRAUSE/VOLKERMR"
+                },
+                "seat": {
+                    "changeMessage": "seatchangeMessage",
+                    "key": "seat",
+                    "label": "seatHeading",
+                    "textAlignment": 1,
+                    "value": "10E",
+                    "valueDisplayString": "10E"
+                }
+            },
+            "foregroundColor": "#000000",
+            "groupingIdentifier": "",
+            "headerFields": [
+                {
+                    "changeMessage": "seatchangeMessage",
+                    "key": "seat",
+                    "label": "seatHeading",
+                    "textAlignment": 1,
+                    "value": "10E",
+                    "valueDisplayString": "10E"
+                },
+                {
+                    "changeMessage": "gatechangeMessage",
+                    "key": "gate",
+                    "label": "gateHeading",
+                    "textAlignment": 1,
+                    "value": "AB",
+                    "valueDisplayString": "AB"
+                }
+            ],
+            "isVoided": false,
+            "labelColor": "#000000",
+            "locations": [
+                {
+                    "altitude": null,
+                    "latitude": 47.4523,
+                    "longitude": 8.56083,
+                    "relevantText": "LX962 Boarding 20:25"
+                }
+            ],
+            "logoText": "",
+            "objectName": "",
+            "organizationName": "SWISS",
+            "passTypeIdentifier": "pass.booking.swiss.com",
+            "primaryFields": [
+                {
+                    "changeMessage": "departchangeMessage",
+                    "key": "depart",
+                    "label": "departsHeading",
+                    "textAlignment": 1,
+                    "value": "ZRH",
+                    "valueDisplayString": "ZRH"
+                },
+                {
+                    "changeMessage": "destinationchangeMessage",
+                    "key": "destination",
+                    "label": "destinationHeading",
+                    "textAlignment": 1,
+                    "value": "TXL",
+                    "valueDisplayString": "TXL"
+                }
+            ],
+            "relevantDate": "Invalid Date",
+            "secondaryFields": [
+                {
+                    "changeMessage": "passengerchangeMessage",
+                    "key": "passenger",
+                    "label": "passengerHeading",
+                    "textAlignment": 1,
+                    "value": "KRAUSE/VOLKERMR",
+                    "valueDisplayString": "KRAUSE/VOLKERMR"
+                },
+                {
+                    "changeMessage": "statechangeMessage",
+                    "key": "ff_status",
+                    "label": "stateHeading",
+                    "textAlignment": 1,
+                    "value": "",
+                    "valueDisplayString": ""
+                }
+            ],
+            "serialNumber": "123456789",
+            "transitType": 0,
+            "type": 0
+        },
+        "contextDateTime": "Invalid Date",
+        "isNull": false,
+        "mimeType": "application/vnd.apple.pkpass",
+        "result": [
+        ]
+    },
+    {
+        "data": [
+        ],
+        "objectName": "",
+        "pdfPageNumber": 0,
+        "senderDate": "Invalid Date"
+    }
+]

@@ -1,0 +1,9 @@
+<!--
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: CC0-1.0
+-->
+<RCC>
+    <qresource prefix="/">
+        <file>reflector.js</file>
+    </qresource>
+</RCC>

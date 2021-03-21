@@ -16,6 +16,7 @@ ecm_add_test(extractordocumentnodetest.cpp LINK_LIBRARIES Qt5::Test KPim::Itiner
 ecm_add_test(extractorfiltertest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 ecm_add_test(extractorinputtest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 ecm_add_test(extractorrepositorytest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
+ecm_add_test(extractorscriptenginetest.cpp extractorscriptenginetest.qrc TEST_NAME extractorscriptenginetest LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 ecm_add_test(berdecodertest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 ecm_add_test(berencodertest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)
 ecm_add_test(bcbpparsertest.cpp LINK_LIBRARIES Qt5::Test KPim::Itinerary)

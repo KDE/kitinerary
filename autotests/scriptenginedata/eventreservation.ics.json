@@ -1,0 +1,95 @@
+[
+    {
+        "content": "QVariant(KCalendarCore::Calendar::Ptr, )"
+    },
+    {
+        "childNodes": [
+            {
+                "childNodes": [
+                ],
+                "content": {
+                    "allDay": false,
+                    "attachments": [
+                    ],
+                    "attendees": [
+                    ],
+                    "categories": [
+                    ],
+                    "conferences": [
+                    ],
+                    "created": "Wed Dec 27 12:16:49 2017 GMT+0100",
+                    "description": "Dr Konqui\nBooking reference: 42\nKatie Dragon\nBooking reference: 42",
+                    "dtEnd": "Sat Jul 13 16:30:00 2019 GMT+0200",
+                    "dtStart": "Sat Sep 7 09:30:00 2019 GMT+0200",
+                    "geoLatitude": 255,
+                    "geoLongitude": 255,
+                    "hasGeo": false,
+                    "lastModified": "Wed Dec 27 12:16:49 2017 GMT+0100",
+                    "location": "University of Milano-Bicocca",
+                    "organizer": {
+                        "email": "",
+                        "fullName": "",
+                        "isEmpty": true,
+                        "name": ""
+                    },
+                    "priority": 0,
+                    "secrecy": 0,
+                    "status": 0,
+                    "summary": "Akademy 2019",
+                    "transparency": 0,
+                    "uid": "KIT-1234567890-1b22236a-21ff-4885-8c99-b3b2bbca062c"
+                },
+                "contextDateTime": "Invalid Date",
+                "isNull": false,
+                "mimeType": "internal/event",
+                "result": [
+                    {
+                        "@context": "http://schema.org",
+                        "@type": "EventReservation",
+                        "reservationFor": {
+                            "@type": "Event",
+                            "endDate": "[...]",
+                            "location": "[...]",
+                            "name": "Akademy 2019",
+                            "startDate": "[...]"
+                        },
+                        "reservationNumber": "42",
+                        "underName": {
+                            "@type": "Person",
+                            "name": "Dr Konqui"
+                        }
+                    },
+                    {
+                        "@context": "http://schema.org",
+                        "@type": "EventReservation",
+                        "reservationFor": {
+                            "@type": "Event",
+                            "endDate": "[...]",
+                            "location": "[...]",
+                            "name": "Akademy 2019",
+                            "startDate": "[...]"
+                        },
+                        "reservationNumber": "42",
+                        "underName": {
+                            "@type": "Person",
+                            "name": "Katie Dragon"
+                        }
+                    }
+                ]
+            }
+        ],
+        "content": "QVariant(KCalendarCore::Calendar::Ptr, )",
+        "contextDateTime": "Invalid Date",
+        "isNull": false,
+        "mimeType": "text/calendar",
+        "result": [
+        ]
+    },
+    {
+        "data": [
+        ],
+        "objectName": "",
+        "pdfPageNumber": 0,
+        "senderDate": "Invalid Date"
+    }
+]

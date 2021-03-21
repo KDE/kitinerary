@@ -1,0 +1,22 @@
+[
+    {
+        "content": "Hello World!\n"
+    },
+    {
+        "childNodes": [
+        ],
+        "content": "Hello World!\n",
+        "contextDateTime": "Invalid Date",
+        "isNull": false,
+        "mimeType": "text/plain",
+        "result": [
+        ]
+    },
+    {
+        "data": [
+        ],
+        "objectName": "",
+        "pdfPageNumber": 0,
+        "senderDate": "Invalid Date"
+    }
+]
