@@ -23,6 +23,14 @@ using namespace KItinerary;
 
 #define s(x) QStringLiteral(x)
 
+void initLocale()
+{
+    qputenv("LC_ALL", "en_US.utf-8");
+    qputenv("TZ", "Europe/Brussels");
+}
+
+Q_CONSTRUCTOR_FUNCTION(initLocale)
+
 static void expandRecursive(ExtractorDocumentNode &node, const ExtractorEngine *engine)
 {
     if (node.isNull()) {
