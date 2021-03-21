@@ -1,11 +1,11 @@
 /*
-   SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2017-2021 Volker Krause <vkrause@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef EXTRACTORREPOSITORY_H
-#define EXTRACTORREPOSITORY_H
+#ifndef KITINERARY_EXTRACTORREPOSITORY_H
+#define KITINERARY_EXTRACTORREPOSITORY_H
 
 #include "kitinerary_export.h"
 
@@ -32,12 +32,18 @@ class QString;
 
 namespace KItinerary {
 
+class AbstractExtractor;
 class Extractor;
+class ExtractorDocumentNode;
 class ExtractorRepositoryPrivate;
 
-/** Collection of all unstructured data extractor rule sets.
+/**
+ *  Collection of all known data extractors.
+ *  This class is usually not used directly, but as an implementation detail to KItinerary::ExtractorEngine.
  *
  *  See KItinerary::Extractor on where this loads its content from.
+ *  @internal This API is only exported for developer tooling.
+ *  @see KItinerary::ScriptExtractor.
  */
 class KITINERARY_EXPORT ExtractorRepository
 {
@@ -54,6 +60,9 @@ public:
 
     /** All known extractors. */
     const std::vector<Extractor>& allExtractors() const;
+
+    /** Finds matching extractors for the given document node. */
+    void extractorsForNode(const ExtractorDocumentNode &node, std::vector<const AbstractExtractor*> &extractors) const;
 
     /** Finds matching extractors for the given message part. */
     void extractorsForMessage(KMime::Content *part, std::vector<Extractor> &extractors) const;
@@ -90,4 +99,4 @@ private:
 
 }
 
-#endif // EXTRACTORREPOSITORY_H
+#endif // KITINERARY_EXTRACTORREPOSITORY_H

@@ -1,14 +1,20 @@
 /*
-   SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2017-2021 Volker Krause <vkrause@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "config-kitinerary.h"
 #include "extractorrepository.h"
+
 #include "extractor.h"
-#include <KItinerary/ExtractorFilter>
 #include "logging.h"
+#include "extractors/iatabcbpextractor.h"
+
+#include <KItinerary/ExtractorDocumentNode>
+#include <KItinerary/ExtractorDocumentProcessor>
+#include <KItinerary/ExtractorFilter>
+#include <KItinerary/ScriptExtractor>
 
 #ifdef HAVE_KCAL
 #include <KCalendarCore/Calendar>
@@ -38,12 +44,16 @@ namespace KItinerary {
 class ExtractorRepositoryPrivate {
 public:
     ExtractorRepositoryPrivate();
-    void loadExtractors();
+    void loadAll();
+    void initBuiltInExtractors();
+    void loadScriptExtractors();
     void addExtractor(Extractor &&e);
+    void addExtractor(std::unique_ptr<AbstractExtractor> &&e);
     void extractorForTypeAndContent(ExtractorInput::Type type, const QString &content, std::vector<Extractor> &extractors) const;
     static void insertExtractor(const Extractor &ext, std::vector<Extractor> &extractors);
 
     std::vector<Extractor> m_extractors;
+    std::vector<std::unique_ptr<AbstractExtractor>> m_extractorsNew;
     QStringList m_extraSearchPaths;
 };
 }
@@ -51,7 +61,18 @@ public:
 ExtractorRepositoryPrivate::ExtractorRepositoryPrivate()
 {
     initResources();
-    loadExtractors();
+    loadAll();
+}
+
+void ExtractorRepositoryPrivate::loadAll()
+{
+    initBuiltInExtractors();
+    loadScriptExtractors();
+}
+
+void ExtractorRepositoryPrivate::initBuiltInExtractors()
+{
+    addExtractor(std::make_unique<IataBcbpExtractor>());
 }
 
 void ExtractorRepositoryPrivate::extractorForTypeAndContent(ExtractorInput::Type type, const QString &content, std::vector<Extractor> &extractors) const
@@ -91,7 +112,7 @@ ExtractorRepository::ExtractorRepository(KItinerary::ExtractorRepository &&) noe
 void ExtractorRepository::reload()
 {
     d->m_extractors.clear();
-    d->loadExtractors();
+    d->loadAll();
 }
 
 const std::vector<Extractor>& ExtractorRepository::allExtractors() const
@@ -237,6 +258,25 @@ void ExtractorRepository::extractorsForEvent(const KCalendarCore::Event *event, 
 }
 #endif
 
+void ExtractorRepository::extractorsForNode(const ExtractorDocumentNode &node, std::vector<const AbstractExtractor*> &extractors) const
+{
+    if (node.isNull()) {
+        return;
+    }
+
+    for (const auto &extractor : d->m_extractorsNew) {
+        if (extractor->canHandle(node)) {
+            // while we only would add each extractor at most once, some of them might already be in the list, so de-duplicate
+            const auto it = std::lower_bound(extractors.begin(), extractors.end(), extractor.get(), [](auto lhs, auto rhs) {
+                return lhs < rhs;
+            });
+            if (it == extractors.end() || (*it) != extractor.get()) {
+                extractors.insert(it, extractor.get());
+            }
+        }
+    }
+}
+
 void ExtractorRepository::extractorsForContent(const QString &content, std::vector<Extractor> &extractors) const
 {
     d->extractorForTypeAndContent(ExtractorInput::Text, content, extractors);
@@ -253,7 +293,7 @@ Extractor ExtractorRepository::extractor(const QString &name) const
     return {};
 }
 
-void ExtractorRepositoryPrivate::loadExtractors()
+void ExtractorRepositoryPrivate::loadScriptExtractors()
 {
     auto searchDirs = m_extraSearchPaths;
     const auto qsp = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
@@ -291,6 +331,13 @@ void ExtractorRepositoryPrivate::loadExtractors()
                 if (e.load(obj, fi.canonicalFilePath())) {
                     addExtractor(std::move(e));
                 }
+
+                auto ext = std::make_unique<ScriptExtractor>();
+                if (ext->load(obj, fi.canonicalFilePath())) {
+                    addExtractor(std::move(ext));
+                } else {
+                    qCWarning(Log) << "failed to load extractor:" << fi.canonicalFilePath();
+                }
             } else if (doc.isArray()) {
                 const auto extractorArray = doc.array();
                 int i = 0;
@@ -298,6 +345,13 @@ void ExtractorRepositoryPrivate::loadExtractors()
                     Extractor e;
                     if (e.load(v.toObject(), fi.canonicalFilePath(), extractorArray.size() == 1 ? -1 : i)) {
                         addExtractor(std::move(e));
+                    }
+
+                    auto ext = std::make_unique<ScriptExtractor>();
+                    if (ext->load(v.toObject(), fi.canonicalFilePath(), extractorArray.size() == 1 ? -1 : i)) {
+                        addExtractor(std::move(ext));
+                    } else {
+                        qCWarning(Log) << "failed to load extractor:" << fi.canonicalFilePath();
                     }
                     ++i;
                 }
@@ -316,6 +370,16 @@ void ExtractorRepositoryPrivate::addExtractor(Extractor &&e)
     });
     if (it == m_extractors.end() || (*it).name() != e.name()) {
         m_extractors.insert(it, std::move(e));
+    }
+}
+
+void ExtractorRepositoryPrivate::addExtractor(std::unique_ptr<AbstractExtractor> &&e)
+{
+    auto it = std::lower_bound(m_extractorsNew.begin(), m_extractorsNew.end(), e, [](const auto &lhs, const auto &rhs) {
+        return lhs->name() < rhs->name();
+    });
+    if (it == m_extractorsNew.end() || (*it)->name() != e->name()) {
+        m_extractorsNew.insert(it, std::move(e));
     }
 }
 

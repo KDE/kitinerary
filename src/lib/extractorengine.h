@@ -40,6 +40,7 @@ class BarcodeDecoder;
 class Extractor;
 class ExtractorDocumentNodeFactory;
 class ExtractorEnginePrivate;
+class ExtractorRepository;
 class ExtractorScriptEngine;
 class HtmlDocument;
 class PdfDocument;
@@ -223,6 +224,8 @@ public:
     const BarcodeDecoder* barcodeDecoder() const;
 
     ///@cond internal
+    /** Extractor repository instance used by this engine. */
+    const ExtractorRepository* extractorRepository() const;
     /** JavaScript execution engine for script extractors. */
     const ExtractorScriptEngine* scriptEngine() const;
     ///@endcond

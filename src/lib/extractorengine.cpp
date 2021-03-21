@@ -8,7 +8,7 @@
 #include "barcodedecoder.h"
 #include "extractorengine.h"
 #include "extractor.h"
-#include "extractorrepository.h"
+#include "engine/extractorrepository.h"
 #include "generic/genericpdfextractor_p.h"
 #include "generic/genericicalextractor_p.h"
 #include "generic/genericpkpassextractor_p.h"
@@ -787,6 +787,11 @@ const ExtractorDocumentNodeFactory* ExtractorEngine::documentNodeFactory() const
 const BarcodeDecoder* ExtractorEngine::barcodeDecoder() const
 {
     return &d->m_barcodeDecoder;
+}
+
+const ExtractorRepository* ExtractorEngine::extractorRepository() const
+{
+    return &d->m_repo;
 }
 
 const ExtractorScriptEngine* ExtractorEngine::scriptEngine() const

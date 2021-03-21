@@ -9,7 +9,8 @@
 
 #include "extractorcapabilities.h"
 #include "extractor.h"
-#include "extractorrepository.h"
+
+#include <KItinerary/ExtractorRepository>
 
 #include <QString>
 
