@@ -179,7 +179,15 @@ public:
      *  Calling this method is not necessary when using setContent,
      *  only when using any of the other content setter methods directly.
      */
-    void setContext(KMime::Content *context);
+    [[deprecated("set setContext()")]] void setContext(KMime::Content *context);
+
+    /** Provide a document part that is only used to determine which extractor to use,
+     *  but not for extraction itself.
+     *  This can for example be the MIME message part wrapping a document to extract.
+     *  Using this is not necessary when this document part is already included in
+     *  what is passed to setContent() already anyway.
+     */
+    void setContext(const QVariant &data, QStringView mimeType);
 
     /** Set the date the extracted document has been issued at.
      *  This does not need to be perfectly accurate and is used to

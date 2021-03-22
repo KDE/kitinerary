@@ -58,7 +58,7 @@ private Q_SLOTS:
         QTest::addColumn<QString>("contextFile");
         QTest::addColumn<QString>("inputFile");
 
-        for (const QDir &baseDir :  {QStringLiteral(SOURCE_DIR "/extractordata"), QStringLiteral(SOURCE_DIR "/../../kitinerary-tests")}) {
+        for (const QDir baseDir :  {QStringLiteral(SOURCE_DIR "/extractordata"), QStringLiteral(SOURCE_DIR "/../../kitinerary-tests")}) {
             if (!baseDir.exists()) {
                 continue;
             }
@@ -96,14 +96,13 @@ private Q_SLOTS:
         if (cf.open(QFile::ReadOnly)) {
             contextMsg.setContent(cf.readAll());
             contextMsg.parse();
-            m_engine.setContext(&contextMsg);
+            m_engine.setContext(QVariant::fromValue(&contextMsg), u"message/rfc822");
         } else if (inputFile.endsWith(QLatin1String(".eml"))) {
             contextMsg.setContent(inFile.readAll());
             inFile.seek(0);
             contextMsg.parse();
-            m_engine.setContext(&contextMsg);
+            m_engine.setContext(QVariant::fromValue(&contextMsg), u"message/rfc822");
         } else {
-            m_engine.setContext(nullptr);
             m_engine.setContextDate(QDateTime({2018, 1, 1}, {0, 0}));
         }
 

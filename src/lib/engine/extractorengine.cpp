@@ -109,6 +109,8 @@ public:
     std::vector<GenericExtractor::Result> m_genericResults;
     QJsonArray m_result;
     QJSEngine m_engine;
+    ExtractorDocumentNode m_rootNode;
+    ExtractorDocumentNode m_contextNode;
     ExtractorDocumentNodeFactory m_nodeFactory;
     ExtractorRepository m_repo;
     BarcodeDecoder m_barcodeDecoder;
@@ -248,6 +250,9 @@ void ExtractorEngine::clear()
     d->m_ownedMimeContent.reset();
     d->m_barcodeDecoder.clearCache();
     d->m_usedExtractor.clear();
+
+    d->m_rootNode = {};
+    d->m_contextNode = {};
 }
 
 void ExtractorEnginePrivate::resetContent()
@@ -309,6 +314,8 @@ void ExtractorEngine::setData(const QByteArray &data, QStringView fileName, QStr
     const auto nameType = ExtractorInput::typeFromFileName(fileName.toString());
     const auto contentType = ExtractorInput::typeFromContent(data);
     setData(data, nameType == ExtractorInput::Unknown ? contentType : nameType);
+
+    d->m_rootNode = d->m_nodeFactory.createNode(data, fileName, mimeType);
 }
 
 void ExtractorEngine::setData(const QByteArray &data, ExtractorInput::Type type)
@@ -324,6 +331,7 @@ void ExtractorEngine::setData(const QByteArray &data, ExtractorInput::Type type)
 
 void ExtractorEngine::setContent(const QVariant &data, QStringView mimeType)
 {
+    d->m_rootNode = d->m_nodeFactory.createNode(data, mimeType);
     // ### temporary scaffolding until we have the new extractor engine
     switch (ExtractorInput::typeFromMimeType(mimeType.toString())) {
         case ExtractorInput::Text:
@@ -467,6 +475,20 @@ void ExtractorEngine::setContext(KMime::Content *context)
     setContextDate({});
 }
 
+void ExtractorEngine::setContext(const QVariant &data, QStringView mimeType)
+{
+    // ### temporary migration scaffolding
+    if (mimeType == QLatin1String("message/rfc822")) {
+        if (data.value<KMime::Content*>()) {
+            setContext(data.value<KMime::Content*>());
+        } else {
+            setContext(data.value<KMime::Message*>());
+        }
+    }
+
+    d->m_contextNode = d->m_nodeFactory.createNode(data, mimeType);
+}
+
 void ExtractorEnginePrivate::setContext(PdfDocument *pdf)
 {
     auto dt = pdf->modificationTime();
@@ -480,6 +502,8 @@ void ExtractorEnginePrivate::setContext(PdfDocument *pdf)
 
 void ExtractorEngine::setContextDate(const QDateTime &dt)
 {
+    d->m_contextNode.setContextDateTime(dt);
+
     d->m_context->m_senderDate = dt;
     d->m_jsonLdApi->setContextDate(dt);
     d->m_barcodeApi->setContextDate(dt);
