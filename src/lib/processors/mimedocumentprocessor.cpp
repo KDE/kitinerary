@@ -64,6 +64,27 @@ ExtractorDocumentNode MimeDocumentProcessor::createNodeFromData(const QByteArray
     return node;
 }
 
+ExtractorDocumentNode MimeDocumentProcessor::createNodeFromContent(const QVariant &decodedData) const
+{
+    KMime::Content *content = decodedData.value<KMime::Content*>();
+    if (!content) {
+        content = decodedData.value<KMime::Message*>();
+    }
+    if (!content) {
+        return {};
+    }
+
+    ExtractorDocumentNode node;
+    node.setContent(content);
+
+    auto dateHdr = content->header<KMime::Headers::Date>();
+    if (dateHdr) {
+        node.setContextDateTime(dateHdr->dateTime());
+    }
+
+    return node;
+}
+
 static void expandContentNode(ExtractorDocumentNode &node, KMime::Content *content, const ExtractorEngine *engine)
 {
     QString fileName;
