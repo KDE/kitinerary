@@ -64,33 +64,7 @@
         ]
     },
     {
-        "data": [
-            {
-                "@type": "TrainReservation",
-                "reservationFor": {
-                    "@type": "TrainTrip",
-                    "provider": {
-                        "@type": "Organization",
-                        "identifier": "uic:0080"
-                    }
-                },
-                "reservationNumber": "9E8DXL",
-                "reservedTicket": {
-                    "@type": "Ticket",
-                    "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDIwLAIUGue7pQWksx4NCGj9cJzioDvHG2ICFGnc04h8A1eHmpP6hrOkqvuyoaofAAAAADAzNzR4nH2Rv07CUBTGkUFdXHyCJi5QqZ57+p8NbCsNFJMWCMhAiGhsQDSlkuiTsLk4ysqig0lfwEE3H8Zz5Y+YGDvcfvc7v/vd09N6p2QXLGAAqgxggGkbVrMi6am1h+mACAyZygywbMvmoGsBApBhMpQV7hQr5CjMBIVoX3Fa1qnaWg/CRQ4a87eBqmpq5KNvOdis1sveX7QG8oqmOKYFwPtlrHodXXUHN9F5OCKLuiGKhMxFgYSyFCYJDSUmMTMghttAgtcxoCNMJaWWk9lgSBuNZzlRd9i/uI3ijNcNh9n9ozC+o5r+T81YC0HG+2i4hbxQ809cMXCPi6JXEyuemHFKh47jOVmiqFVUL5PHZJa8RIJP4kHoJ9Ozfkfq5A8I0HiL/Kvw+2bqG5mp82krNBONj55qdLOMP+dyozh5Fvy938H8UKPOJ2fMf0o6Tcv7JN56m4xz7dRGrv26GP3T9ufmzmR8vxvS5mNB9IjoLYnpivgC6qKSSw==",
-                    "ticketedSeat": {
-                        "@type": "Seat",
-                        "seatingType": "2"
-                    }
-                },
-                "underName": {
-                    "@context": "http://schema.org",
-                    "@type": "Person",
-                    "familyName": "häöür Räß",
-                    "givenName": "kíck_-_:.,stû R"
-                }
-            }
-        ],
+        "data": [],
         "objectName": "",
         "pdfPageNumber": 0,
         "senderDate": "Fri Feb 17 15:18:00 2012 GMT+0100"

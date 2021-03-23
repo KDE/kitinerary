@@ -60,39 +60,7 @@
         ]
     },
     {
-        "data": [
-            {
-                "@context": "http://schema.org",
-                "@type": "FlightReservation",
-                "reservationFor": {
-                    "@type": "Flight",
-                    "airline": {
-                        "@type": "Airline",
-                        "iataCode": "UA",
-                        "name": "United"
-                    },
-                    "arrivalAirport": {
-                        "@type": "Airport",
-                        "iataCode": "JFK",
-                        "name": "John F. Kennedy International Airport"
-                    },
-                    "arrivalTime": "2027-03-05T06:30:00-05:00",
-                    "departureAirport": {
-                        "@type": "Airport",
-                        "iataCode": "SFO",
-                        "name": "San Francisco Airport"
-                    },
-                    "departureTime": "2027-03-04T20:15:00-08:00",
-                    "flightNumber": "110"
-                },
-                "reservationNumber": "RXJ34P",
-                "reservationStatus": "http://schema.org/Confirmed",
-                "underName": {
-                    "@type": "Person",
-                    "name": "Eva Green"
-                }
-            }
-        ],
+        "data": [],
         "objectName": "",
         "pdfPageNumber": 0,
         "senderDate": "Invalid Date"

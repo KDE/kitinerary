@@ -107,7 +107,7 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
     node.setScriptEngine(&d->m_engine);
     const auto engineReset = qScopeGuard([&node]{ node.setScriptEngine(nullptr); });
 
-    d->m_context->m_data = d->m_engine.toScriptValue(node.result().jsonLdResult());
+    d->m_context->m_data = d->m_engine.toScriptValue(triggerNode.result().jsonLdResult());
     d->m_context->m_barcode = triggerNode.content();
     d->m_context->m_pdfPageNum = triggerNode.location().toInt();
     d->m_context->m_senderDate = node.contextDateTime();
