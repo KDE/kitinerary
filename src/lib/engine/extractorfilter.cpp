@@ -159,14 +159,20 @@ static QString valueForJsonPath(const QJsonObject &obj, const QString &path)
     return v.toString();
 }
 
-static ExtractorDocumentNode filterMachesNode(const ExtractorFilter &filter, ExtractorFilter::Scope scope, const ExtractorDocumentNode &node)
+enum MatchMode { Any, All };
+
+static bool filterMachesNode(const ExtractorFilter &filter, ExtractorFilter::Scope scope, const ExtractorDocumentNode &node,
+                             std::vector<ExtractorDocumentNode> &matches, MatchMode matchMode)
 {
     if (node.isNull()) {
-        return {};
+        return false;
     }
 
     if (filter.mimeType() == node.mimeType() && node.processor()->matches(filter, node)) {
-        return node;
+        if (matchMode == All) {
+            matches.push_back(node);
+        }
+        return true;
     }
 
     if (scope != ExtractorFilter::Ancestors && filter.mimeType() == QLatin1String("application/ld+json") && !node.result().isEmpty()) {
@@ -174,43 +180,68 @@ static ExtractorDocumentNode filterMachesNode(const ExtractorFilter &filter, Ext
         for (const auto &elem : res) {
             const auto property = valueForJsonPath(elem.toObject(), filter.fieldName());
             if (filter.matches(property)) {
-                return node;
+                if (matchMode == All) {
+                    matches.push_back(node);
+                } else {
+                    return true;
+                }
             }
         }
     }
 
     if (scope == ExtractorFilter::Ancestors) {
-        return filterMachesNode(filter, scope, node.parent());
+        return filterMachesNode(filter, scope, node.parent(), matches, matchMode);
     }
     if (scope == ExtractorFilter::Descendants) {
         for (const auto &child : node.childNodes()) {
-            const auto m = filterMachesNode(filter, ExtractorFilter::Descendants, child);
-            if (!m.isNull()) {
-                return m;
+            const auto m = filterMachesNode(filter, ExtractorFilter::Descendants, child, matches, matchMode);
+            if (m && matchMode == Any) {
+                return true;
             }
         }
     }
 
-    return {};
+    return !matches.empty();
 }
 
-ExtractorDocumentNode ExtractorFilter::matches(const ExtractorDocumentNode &node) const
+bool ExtractorFilter::matches(const ExtractorDocumentNode &node) const
 {
+    std::vector<ExtractorDocumentNode> matches;
     switch (d->m_scope) {
         case ExtractorFilter::Current:
-            return filterMachesNode(*this, ExtractorFilter::Current, node);
+            return filterMachesNode(*this, ExtractorFilter::Current, node, matches, Any);
         case ExtractorFilter::Parent:
-            return filterMachesNode(*this, ExtractorFilter::Current, node.parent());
+            return filterMachesNode(*this, ExtractorFilter::Current, node.parent(), matches, Any);
         case ExtractorFilter::Ancestors:
-            return filterMachesNode(*this, ExtractorFilter::Ancestors, node.parent());
+            return filterMachesNode(*this, ExtractorFilter::Ancestors, node.parent(), matches, Any);
         case ExtractorFilter::Children:
         case ExtractorFilter::Descendants:
             for (const auto &child : node.childNodes()) {
-                const auto m = filterMachesNode(*this, d->m_scope == ExtractorFilter::Descendants ? d->m_scope : ExtractorFilter::Current, child);
-                if (!m.isNull()) {
-                    return m;
+                if (filterMachesNode(*this, d->m_scope == ExtractorFilter::Descendants ? d->m_scope : ExtractorFilter::Current, child, matches, Any)) {
+                    return true;
                 }
             }
     }
-    return {};
+    return false;
+}
+
+void ExtractorFilter::allMatches(const ExtractorDocumentNode &node, std::vector<ExtractorDocumentNode>& matches) const
+{
+    switch (d->m_scope) {
+        case ExtractorFilter::Current:
+            filterMachesNode(*this, ExtractorFilter::Current, node, matches, All);
+            return;
+        case ExtractorFilter::Parent:
+            filterMachesNode(*this, ExtractorFilter::Current, node.parent(), matches, All);
+            return;
+        case ExtractorFilter::Ancestors:
+            filterMachesNode(*this, ExtractorFilter::Ancestors, node.parent(), matches, All);
+            return;
+        case ExtractorFilter::Children:
+        case ExtractorFilter::Descendants:
+            for (const auto &child : node.childNodes()) {
+                filterMachesNode(*this, d->m_scope == ExtractorFilter::Descendants ? d->m_scope : ExtractorFilter::Current, child, matches, All);
+            }
+            return;
+    }
 }

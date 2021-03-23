@@ -43,29 +43,33 @@ private Q_SLOTS:
         filter.setPattern(s("KDE"));
         filter.setScope(ExtractorFilter::Current);
 
-        auto triggerNode = filter.matches(root);
-        QVERIFY(triggerNode.isNull());
+        QVERIFY(!filter.matches(root));
 
         filter.setPattern(s("libkcal"));
-        triggerNode = filter.matches(root);
-        QVERIFY(!triggerNode.isNull());
-        QCOMPARE(triggerNode.mimeType(), root.mimeType());
+        QVERIFY(filter.matches(root));
+
+        std::vector<ExtractorDocumentNode> matches;
+        filter.allMatches(root, matches);
+        QCOMPARE(matches.size(), 1);
+        QCOMPARE(matches[0].mimeType(), root.mimeType());
 
         filter.setScope(ExtractorFilter::Children);
-        triggerNode = filter.matches(root);
-        QVERIFY(triggerNode.isNull());
+        QVERIFY(!filter.matches(root));
         filter.setMimeType(s("internal/event"));
         filter.setPattern(s("Akademy"));
-        triggerNode = filter.matches(root);
-        QVERIFY(triggerNode.isNull());
+        QVERIFY(!filter.matches(root));
         filter.setFieldName(s("summary"));
-        triggerNode = filter.matches(root);
-        QVERIFY(!triggerNode.isNull());
-        QCOMPARE(triggerNode.mimeType(), QLatin1String("internal/event"));
+        QVERIFY(filter.matches(root));
+        matches.clear();
+        filter.allMatches(root, matches);
+        QCOMPARE(matches.size(), 1);
+        QCOMPARE(matches[0].mimeType(), QLatin1String("internal/event"));
         filter.setScope(ExtractorFilter::Descendants);
-        triggerNode = filter.matches(root);
-        QVERIFY(!triggerNode.isNull());
-        QCOMPARE(triggerNode.mimeType(), QLatin1String("internal/event"));
+        QVERIFY(filter.matches(root));
+        matches.clear();
+        filter.allMatches(root, matches);
+        QCOMPARE(matches.size(), 1);
+        QCOMPARE(matches[0].mimeType(), QLatin1String("internal/event"));
     }
 
     void testPkPassFilter()
@@ -88,15 +92,15 @@ private Q_SLOTS:
         filter.setPattern(s("pass.booking.swiss.com"));
 
         filter.setScope(ExtractorFilter::Current);
-        QVERIFY(filter.matches(bcbp).isNull());
-        QVERIFY(!filter.matches(root).isNull());
+        QVERIFY(!filter.matches(bcbp));
+        QVERIFY(filter.matches(root));
 
         filter.setScope(ExtractorFilter::Parent);
-        QVERIFY(!filter.matches(bcbp).isNull());
-        QVERIFY(filter.matches(root).isNull());
+        QVERIFY(filter.matches(bcbp));
+        QVERIFY(!filter.matches(root));
         filter.setScope(ExtractorFilter::Ancestors);
-        QVERIFY(!filter.matches(bcbp).isNull());
-        QVERIFY(filter.matches(root).isNull());
+        QVERIFY(filter.matches(bcbp));
+        QVERIFY(!filter.matches(root));
     }
 
     void testResultFilter()
@@ -116,9 +120,9 @@ private Q_SLOTS:
         filter.setFieldName(s("location.address.addressLocality"));
         filter.setPattern(s("Berlin"));
         filter.setScope(ExtractorFilter::Current);
-        QVERIFY(filter.matches(root).isNull());
+        QVERIFY(!filter.matches(root));
         filter.setPattern(s("Milan"));
-        QVERIFY(!filter.matches(root).isNull());
+        QVERIFY(filter.matches(root));
     }
 };
 

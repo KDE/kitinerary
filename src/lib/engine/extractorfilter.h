@@ -56,11 +56,15 @@ public:
     /** Evaluation scope of this filter, in relation to the node being extracted. */
     Scope scope() const;
 
+    /** Checks whether this filter applies to @p node. */
+    bool matches(const ExtractorDocumentNode &node) const;
+
     /** Checks whether this filter applies to @p node.
-     *  @returns An invalid node if the filter doesn't match, or the node that ended up matching the filter.
-     *  This can differ from @p node depending on scope().
+     *  Unlike matches() this returns all nodes triggering this filter.
+     *  This matters in particular for matching child nodes, where multiple
+     *  ones can match the filter.
      */
-    ExtractorDocumentNode matches(const ExtractorDocumentNode &node) const;
+    void allMatches(const ExtractorDocumentNode &node, std::vector<ExtractorDocumentNode> &matches) const;
 
     ///@cond internal
     /** Load filter from @p obj. */

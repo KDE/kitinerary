@@ -159,18 +159,26 @@ bool ScriptExtractor::canHandle(const ExtractorDocumentNode &node) const
     }
 
     return std::any_of(d->m_filters.begin(), d->m_filters.end(), [&node](const auto &filter) {
-        return !filter.matches(node).isNull();
+        return filter.matches(node);
     });
 }
 
 ExtractorResult ScriptExtractor::extract(const ExtractorDocumentNode &node, const ExtractorEngine *engine) const
 {
-    ExtractorDocumentNode triggerNode;
+    std::vector<ExtractorDocumentNode> triggerNodes;
     for (const auto &filter : d->m_filters) {
-        triggerNode = filter.matches(node);
-        if (!triggerNode.isNull()) {
-            break;
+        if (filter.scope() == ExtractorFilter::Children || filter.scope() == ExtractorFilter::Descendants) {
+            filter.allMatches(node, triggerNodes);
         }
     }
-    return engine->scriptEngine()->execute(this, node, triggerNode);
+
+    if (triggerNodes.empty()) {
+        return engine->scriptEngine()->execute(this, node, {});
+    } else {
+        ExtractorResult result;
+        for (const auto &triggerNode : triggerNodes) {
+            result.append(engine->scriptEngine()->execute(this, node, triggerNode));
+        }
+        return result;
+    }
 }
