@@ -3,7 +3,7 @@
         "mimeType": "application/pdf",
         "filter": [
             { "field": "From", "match": "no-reply@flysas.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
-            { "field": "reservationFor.airline.iataCode", "match": "SK", "mimeType": "application/ld+json" }
+            { "field": "reservationFor.airline.iataCode", "match": "SK", "mimeType": "application/ld+json", "scope": "Descendants" }
         ],
         "script": "sas-boardingpass.js"
     },

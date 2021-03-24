@@ -2,7 +2,7 @@
     {
         "mimeType": "application/pdf",
         "filter": [
-            { "field": "reservationFor.provider.identifier", "match": "3415", "mimeType": "application/ld+json" }
+            { "field": "reservationFor.provider.identifier", "match": "3415", "mimeType": "application/ld+json", "scope": "Descendants" }
         ],
         "script": "vgn.js",
         "function": "parsePdf"

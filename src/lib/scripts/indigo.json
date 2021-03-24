@@ -4,7 +4,8 @@
             {
                 "match": "6E",
                 "field": "reservationFor.airline.iataCode",
-                "mimeType": "application/ld+json"
+                "mimeType": "application/ld+json",
+                "scope": "Descendants"
             }
         ],
         "function": "main",

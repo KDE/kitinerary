@@ -3,7 +3,8 @@
         {
             "match": "uic:9997",
             "field": "reservationFor.provider.identifier",
-            "mimeType": "application/ld+json"
+            "mimeType": "application/ld+json",
+            "scope": "Descendants"
         }
     ],
     "function": "parsePdf",
