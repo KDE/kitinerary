@@ -133,6 +133,9 @@ const std::vector<ExtractorDocumentNode>& ExtractorDocumentNode::childNodes() co
 
 void ExtractorDocumentNode::appendChild(ExtractorDocumentNode &child)
 {
+    if (child.isNull()) {
+        return;
+    }
     child.setParent(*this);
     d->childNodes.push_back(child);
 }

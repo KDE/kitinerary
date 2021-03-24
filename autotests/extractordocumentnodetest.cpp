@@ -26,6 +26,7 @@ class ExtractorDocumentNodeTest : public QObject
 private Q_SLOTS:
     void testBasics()
     {
+        ExtractorDocumentNodeFactory factory;
         ExtractorDocumentNode node;
         QVERIFY(node.isNull());
         node = {};
@@ -36,8 +37,10 @@ private Q_SLOTS:
         node.setContextDateTime(QDateTime::currentDateTime());
         QVERIFY(node.isNull()); // not properly constructed
 
-        ExtractorDocumentNode child;
+        auto child = factory.createNode(QVariant::fromValue(QByteArray("data")), u"application/octet-stream");
+        QVERIFY(!child.isNull());
         node.appendChild(child);
+        QCOMPARE(node.childNodes().size(), 1);
         QCOMPARE(child.parent().mimeType(), QLatin1String("text/plain"));
         QVERIFY(child.contextDateTime().isValid());
         QCOMPARE(child.contextDateTime(), node.contextDateTime());
