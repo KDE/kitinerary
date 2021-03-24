@@ -15,6 +15,9 @@
 #include "jsapi/context.h"
 #include "jsapi/jsonld.h"
 
+#include <KItinerary/Uic9183Parser>
+#include <KItinerary/VdvTicket>
+
 #include <QFile>
 #include <QJSEngine>
 #include <QJSValueIterator>
@@ -107,8 +110,19 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
     node.setScriptEngine(&d->m_engine);
     const auto engineReset = qScopeGuard([&node]{ node.setScriptEngine(nullptr); });
 
+    // ### legacy context API, replace that by passing trigger node as a third argument eventually
     d->m_context->m_data = d->m_engine.toScriptValue(triggerNode.result().jsonLdResult());
-    d->m_context->m_barcode = triggerNode.content();
+    if (triggerNode.isA<Uic9183Parser>()) {
+        d->m_context->m_barcode = triggerNode.content<Uic9183Parser>().rawData();
+    } else if (triggerNode.isA<VdvTicket>()) {
+        d->m_context->m_barcode = triggerNode.content<VdvTicket>().rawData();
+    } else if (triggerNode.isA<QByteArray>()) {
+        d->m_context->m_barcode = triggerNode.content<QByteArray>();
+    } else if (triggerNode.isA<QString>()) {
+        d->m_context->m_barcode = triggerNode.content().toString();
+    } else {
+        d->m_context->m_barcode.clear();
+    }
     d->m_context->m_pdfPageNum = triggerNode.location().toInt();
     d->m_context->m_senderDate = node.contextDateTime();
 
