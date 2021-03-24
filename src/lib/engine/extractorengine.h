@@ -38,6 +38,7 @@ namespace KItinerary {
 
 class BarcodeDecoder;
 class Extractor;
+class ExtractorDocumentNode;
 class ExtractorDocumentNodeFactory;
 class ExtractorEnginePrivate;
 class ExtractorRepository;
@@ -236,6 +237,11 @@ public:
     const ExtractorRepository* extractorRepository() const;
     /** JavaScript execution engine for script extractors. */
     const ExtractorScriptEngine* scriptEngine() const;
+    /** Document root node.
+     *  Only fully populated after extraction has been performed.
+     *  Only exposed for tooling.
+     */
+    ExtractorDocumentNode rootDocumentNode() const;
     ///@endcond
 
 private:

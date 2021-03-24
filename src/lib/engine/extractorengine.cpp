@@ -868,3 +868,8 @@ const ExtractorScriptEngine* ExtractorEngine::scriptEngine() const
     d->m_scriptEngine.setBarcodeDecoder(&d->m_barcodeDecoder);
     return &d->m_scriptEngine;
 }
+
+ExtractorDocumentNode ExtractorEngine::rootDocumentNode() const
+{
+    return d->m_rootNode;
+}
