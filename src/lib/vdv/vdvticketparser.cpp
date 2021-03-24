@@ -74,7 +74,7 @@ bool VdvTicketParser::parse(const QByteArray &data)
     decoder.add(sigRemainder.contentData(), sigRemainder.contentSize());
 
     // (4) profit!
-    m_ticket = VdvTicket(decoder.recoveredMessage());
+    m_ticket = VdvTicket(decoder.recoveredMessage(), data);
     return true;
 }
 

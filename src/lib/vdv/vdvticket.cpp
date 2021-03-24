@@ -20,6 +20,7 @@ class VdvTicketPrivate : public QSharedData
 {
 public:
     QByteArray m_data;
+    QByteArray m_rawData;
 
     BER::Element productElement(uint32_t type) const;
     template <typename T> const T* productData(uint32_t type = T::Tag) const;
@@ -50,7 +51,7 @@ VdvTicket::VdvTicket()
 {
 }
 
-VdvTicket::VdvTicket(const QByteArray &data)
+VdvTicket::VdvTicket(const QByteArray &data, const QByteArray &rawData)
     : d(new VdvTicketPrivate)
 {
     if (data.size() < MinimumTicketDataSize) {
@@ -86,6 +87,7 @@ VdvTicket::VdvTicket(const QByteArray &data)
         return;
     }
     d->m_data = data;
+    d->m_rawData = rawData;
 }
 
 VdvTicket::VdvTicket(const VdvTicket&) = default;
@@ -217,5 +219,5 @@ const VdvTicketTrailer* VdvTicket::trailer() const
 
 QByteArray VdvTicket::rawData() const
 {
-    return d->m_data;
+    return d->m_rawData;
 }

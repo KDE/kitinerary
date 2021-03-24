@@ -46,7 +46,7 @@ class KITINERARY_EXPORT VdvTicket
 
 public:
     VdvTicket();
-    VdvTicket(const QByteArray &data);
+    VdvTicket(const QByteArray &data, const QByteArray &rawData);
     VdvTicket(const VdvTicket&);
     ~VdvTicket();
     VdvTicket& operator=(const VdvTicket&);
