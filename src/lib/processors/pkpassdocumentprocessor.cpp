@@ -296,10 +296,10 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
     auto res = JsonLdDocument::fromJsonSingular(result);
     if (JsonLd::isA<FlightReservation>(res)) {
         // if this doesn't contain a single IATA BCBP we wont be able to get sufficient information out of this
-        if (node.result().size() != 1) {
+        if (node.childNodes().size() != 1 || node.childNodes()[0].result().size() != 1) {
             return;
         }
-        res = JsonLdDocument::apply(node.result().result().at(0), res).value<FlightReservation>();
+        res = JsonLdDocument::apply(node.childNodes()[0].result().result().at(0), res).value<FlightReservation>();
     }
 
     // extract structured data from a pkpass, if the extractor script hasn't done so already
