@@ -173,7 +173,7 @@ ExtractorResult ScriptExtractor::extract(const ExtractorDocumentNode &node, cons
     }
 
     if (triggerNodes.empty()) {
-        return engine->scriptEngine()->execute(this, node, {});
+        return engine->scriptEngine()->execute(this, node, node);
     } else {
         ExtractorResult result;
         for (const auto &triggerNode : triggerNodes) {

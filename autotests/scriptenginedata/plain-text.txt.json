@@ -13,6 +13,7 @@
         ]
     },
     {
+        "barcode": "Hello World!\n",
         "data": [
         ],
         "objectName": "",
