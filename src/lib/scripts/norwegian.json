@@ -5,6 +5,12 @@
             "match": "noreply@norwegian",
             "mimeType": "message/rfc822",
             "scope": "Ancestors"
+        },
+        {
+            "field": "reservationFor.airline.iataCode",
+            "match": "D[8Y]",
+            "mimeType": "application/ld+json",
+            "scope": "Descendants"
         }
     ],
     "function": "extractPdf",
