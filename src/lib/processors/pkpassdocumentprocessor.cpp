@@ -345,8 +345,13 @@ void PkPassDocumentProcessor::postExtract(ExtractorDocumentNode &node) const
     auto result = node.result().jsonLdResult();
     for (auto resV : result) {
         auto res = resV.toObject();
-        res.insert(QStringLiteral("pkpassPassTypeIdentifier"), pass->passTypeIdentifier());
-        res.insert(QStringLiteral("pkpassSerialNumber"), pass->serialNumber());
+        res.insert(QLatin1String("pkpassPassTypeIdentifier"), pass->passTypeIdentifier());
+        res.insert(QLatin1String("pkpassSerialNumber"), pass->serialNumber());
+        // pass->relevantDate() as modification time is inherently unreliable (it wont change most of the time)
+        // so if we have something from an enclosing document, that's probably better
+        if (node.parent().contextDateTime().isValid()) {
+            res.insert(QLatin1String("modifiedTime"),  node.parent().contextDateTime().toString(Qt::ISODate));
+        }
         resV = res;
     }
     node.setResult(result);
