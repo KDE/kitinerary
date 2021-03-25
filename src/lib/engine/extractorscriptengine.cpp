@@ -111,7 +111,12 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
     const auto engineReset = qScopeGuard([&node]{ node.setScriptEngine(nullptr); });
 
     // ### legacy context API, replace that by passing trigger node as a third argument eventually
-    d->m_context->m_data = d->m_engine.toScriptValue(triggerNode.result().jsonLdResult());
+    if (triggerNode.result().isEmpty()) {
+        d->m_context->m_data = {};
+    } else {
+        d->m_context->m_data = d->m_engine.toScriptValue(triggerNode.result().jsonLdResult());
+    }
+
     if (triggerNode.isA<Uic9183Parser>()) {
         d->m_context->m_barcode = triggerNode.content<Uic9183Parser>().rawData();
     } else if (triggerNode.isA<VdvTicket>()) {
@@ -123,7 +128,13 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
     } else {
         d->m_context->m_barcode.clear();
     }
-    d->m_context->m_pdfPageNum = triggerNode.location().toInt();
+
+    if (triggerNode.location().isNull()) {
+        d->m_context->m_pdfPageNum = -1;
+    } else {
+        d->m_context->m_pdfPageNum = triggerNode.location().toInt();
+    }
+
     d->m_context->m_senderDate = node.contextDateTime();
 
     d->m_jsonLdApi->setContextDate(node.contextDateTime());

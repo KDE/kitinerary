@@ -86,10 +86,8 @@
         ]
     },
     {
-        "data": [
-        ],
         "objectName": "",
-        "pdfPageNumber": 0,
+        "pdfPageNumber": -1,
         "senderDate": "Invalid Date"
     }
 ]
