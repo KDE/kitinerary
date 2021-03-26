@@ -98,7 +98,7 @@ static void expandContentNode(ExtractorDocumentNode &node, KMime::Content *conte
     }
 
     ExtractorDocumentNode child;
-    if ((ct && ct->isPlainText()) || (!ct && content->isTopLevel())) {
+    if ((ct && ct->isPlainText() && fileName.isEmpty()) || (!ct && content->isTopLevel())) {
         child = engine->documentNodeFactory()->createNode(content->decodedText(), u"text/plain");
     } else {
         child = engine->documentNodeFactory()->createNode(content->decodedContent(), fileName);
