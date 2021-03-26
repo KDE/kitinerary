@@ -112,6 +112,7 @@ ExtractorRepository::ExtractorRepository(KItinerary::ExtractorRepository &&) noe
 void ExtractorRepository::reload()
 {
     d->m_extractors.clear();
+    d->m_extractorsNew.clear();
     d->loadAll();
 }
 
