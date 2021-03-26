@@ -7,6 +7,8 @@
 #include "htmldocumentprocessor.h"
 #include "logging.h"
 
+#include <KItinerary/ExtractorDocumentNodeFactory>
+#include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorResult>
 #include <KItinerary/HtmlDocument>
 
@@ -50,6 +52,14 @@ ExtractorDocumentNode HtmlDocumentProcessor::createNodeFromData(const QByteArray
     ExtractorDocumentNode node;
     node.setContent<Internal::OwnedPtr<HtmlDocument>>(html);
     return node;
+}
+
+void HtmlDocumentProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
+{
+    // plain text fallback node
+    const auto html = node.content<HtmlDocument*>();
+    auto fallback = engine->documentNodeFactory()->createNode(html->root().recursiveContent(), u"text/plain");
+    node.appendChild(fallback);
 }
 
 static bool isJsonLdTag(const HtmlElement &elem)

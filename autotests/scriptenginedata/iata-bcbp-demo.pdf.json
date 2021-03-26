@@ -46,6 +46,16 @@
                 "mimeType": "internal/qimage",
                 "result": [
                 ]
+            },
+            {
+                "childNodes": [
+                ],
+                "content": "              Akademy Airways\n              Boarding Pass\nFrom: Vienna International, Terminal 2\nTo: Milano Malpensa, Terminal 1\nFlight: AK 1996\nGate: A36\nBoarding Time: 15:20\nDeparture Time: 15:45\nArrival Time: 17:20\nPassenger: Dragon, Dr. Konqi\n",
+                "contextDateTime": "Mon Aug 19 20:23:28 2019 GMT+0200",
+                "isNull": false,
+                "mimeType": "text/plain",
+                "result": [
+                ]
             }
         ],
         "content": {

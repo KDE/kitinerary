@@ -62,7 +62,13 @@ private Q_SLOTS:
         QVERIFY(root.location().isNull());
 
         root.processor()->expandNode(root, &engine);
-        QCOMPARE(root.childNodes().size(), 2);
+        QCOMPARE(root.childNodes().size(), 3);
+
+        auto c3 = root.childNodes()[2];
+        QVERIFY(!c3.isNull());
+        QCOMPARE(c3.mimeType(), QLatin1String("text/plain"));
+        QCOMPARE(c3.content<QString>(), QLatin1String("This is the first page.\nIt contains a PDF 417 barcode.\nThis is the second page.\nIt contains an Aztec code.\n"));
+
         auto c1 = root.childNodes()[0];
         QVERIFY(!c1.isNull());
         QCOMPARE(c1.mimeType(), QLatin1String("internal/qimage"));
@@ -95,7 +101,7 @@ private Q_SLOTS:
         QCOMPARE(root.mimeType(), QLatin1String("application/pdf"));
 
         root.processor()->expandNode(root, &engine);
-        QCOMPARE(root.childNodes().size(), 2);
+        QCOMPARE(root.childNodes().size(), 3);
         auto c2 = root.childNodes()[1];
         QVERIFY(!c2.isNull());
         QCOMPARE(c2.mimeType(), QLatin1String("internal/qimage"));

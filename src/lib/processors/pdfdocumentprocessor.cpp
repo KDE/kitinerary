@@ -129,6 +129,10 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
             }
         }
     }
+
+    // fallback node for implicit conversion to plain text
+    auto fallback = engine->documentNodeFactory()->createNode(doc->text(), u"text/plain");
+    node.appendChild(fallback);
 }
 
 QJSValue PdfDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const
