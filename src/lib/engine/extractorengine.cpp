@@ -209,8 +209,10 @@ void ExtractorEnginePrivate::processNode(ExtractorDocumentNode& node)
 
     for (const auto &extractor : extractors) {
         auto res = extractor->extract(node, q);
-        node.addResult(std::move(res));
-        // TODO store result sources
+        if (!res.isEmpty()) {
+            m_usedExtractor = extractor->name();
+            node.setResult(std::move(res));
+        }
     }
 
     node.processor()->postExtract(node);
