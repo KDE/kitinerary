@@ -78,7 +78,7 @@ class ExtractorRepositoryPrivate;
  * script without recompiling or restarting the application.
  *
  */
-class KITINERARY_EXPORT Extractor
+class KITINERARY_DEPRECATED_EXPORT Extractor
 {
 public:
     Extractor();
