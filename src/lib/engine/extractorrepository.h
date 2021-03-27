@@ -59,27 +59,29 @@ public:
     void reload();
 
     /** All known extractors. */
-    const std::vector<Extractor>& allExtractors() const;
+    const std::vector<std::unique_ptr<AbstractExtractor>>& extractors() const;
+    [[deprecated("use extractors()")]] const std::vector<Extractor>& allExtractors() const;
 
     /** Finds matching extractors for the given document node. */
     void extractorsForNode(const ExtractorDocumentNode &node, std::vector<const AbstractExtractor*> &extractors) const;
 
     /** Finds matching extractors for the given message part. */
-    void extractorsForMessage(KMime::Content *part, std::vector<Extractor> &extractors) const;
+    [[deprecated("use extractorsForNode")]] void extractorsForMessage(KMime::Content *part, std::vector<Extractor> &extractors) const;
     /** Finds matching extractors for the given pkpass boarding pass. */
-    void extractorsForPass(KPkPass::Pass *pass, std::vector<Extractor> &extractors) const;
+    [[deprecated("use extractorsForNode")]] void extractorsForPass(KPkPass::Pass *pass, std::vector<Extractor> &extractors) const;
     /** Finds matching extractors for the given JSON-LD data provided by generic extractors. */
-    void extractorsForJsonLd(const QJsonArray &data, std::vector<Extractor> &extractors) const;
+    [[deprecated("use extractorsForNode")]] void extractorsForJsonLd(const QJsonArray &data, std::vector<Extractor> &extractors) const;
     /** Finds matching extractors for the given barcode string. */
-    void extractorsForBarcode(const QString &code, std::vector<Extractor> &extractors) const;
+    [[deprecated("use extractorsForNode")]] void extractorsForBarcode(const QString &code, std::vector<Extractor> &extractors) const;
     /** Find matching extractors for the given iCal calendar. */
-    void extractorsForCalendar(const KCalendarCore::Calendar *cal, std::vector<Extractor> &extractors) const;
+    [[deprecated("use extractorsForNode")]] void extractorsForCalendar(const KCalendarCore::Calendar *cal, std::vector<Extractor> &extractors) const;
     /** Find matching extractors for the given iCal event. */
-    void extractorsForEvent(const KCalendarCore::Event *event, std::vector<Extractor> &extractors) const;
+    [[deprecated("use extractorsForNode")]] void extractorsForEvent(const KCalendarCore::Event *event, std::vector<Extractor> &extractors) const;
     /** Find matching extractors for the given content. */
-    void extractorsForContent(const QString &content, std::vector<Extractor> &extractors) const;
+    [[deprecated("use extractorsForNode")]] void extractorsForContent(const QString &content, std::vector<Extractor> &extractors) const;
     /** Returns the extractor with the given identifier. */
-    Extractor extractor(const QString &name) const;
+    const AbstractExtractor* extractorByName(QStringView name) const;
+    [[deprecated("use extractorByName")]] Extractor extractor(const QString &name) const;
 
     /** Returns the list of additional search paths for extractor scripts. */
     QStringList additionalSearchPaths() const;

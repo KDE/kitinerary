@@ -26,10 +26,17 @@ private Q_SLOTS:
     void testReload()
     {
         ExtractorRepository repo;
-        const auto count = repo.allExtractors().size();
+        const auto count = repo.extractors().size();
         QVERIFY(count > 0);
+        QVERIFY(repo.extractorByName(u"<IATA BCBP>"));
+        QVERIFY(repo.extractorByName(u"chaos-communication-congress"));
+        QVERIFY(!repo.extractorByName(u"I-DONT-EXIST"));
+
         repo.reload();
-        QCOMPARE(repo.allExtractors().size(), count);
+        QCOMPARE(repo.extractors().size(), count);
+        QVERIFY(repo.extractorByName(u"<IATA BCBP>"));
+        QVERIFY(repo.extractorByName(u"chaos-communication-congress"));
+        QVERIFY(!repo.extractorByName(u"I-DONT-EXIST"));
     }
 
     void testApplyFilter()

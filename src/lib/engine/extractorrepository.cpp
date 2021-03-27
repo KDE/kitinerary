@@ -116,6 +116,11 @@ void ExtractorRepository::reload()
     d->loadAll();
 }
 
+const std::vector<std::unique_ptr<AbstractExtractor>>& ExtractorRepository::extractors() const
+{
+    return d->m_extractorsNew;
+}
+
 const std::vector<Extractor>& ExtractorRepository::allExtractors() const
 {
     return d->m_extractors;
@@ -281,6 +286,17 @@ void ExtractorRepository::extractorsForNode(const ExtractorDocumentNode &node, s
 void ExtractorRepository::extractorsForContent(const QString &content, std::vector<Extractor> &extractors) const
 {
     d->extractorForTypeAndContent(ExtractorInput::Text, content, extractors);
+}
+
+const AbstractExtractor* ExtractorRepository::extractorByName(QStringView name) const
+{
+    auto it = std::lower_bound(d->m_extractorsNew.begin(), d->m_extractorsNew.end(), name, [](const auto &lhs, auto rhs) {
+        return lhs->name() < rhs;
+    });
+    if (it != d->m_extractorsNew.end() && (*it)->name() == name) {
+        return (*it).get();
+    }
+    return {};
 }
 
 Extractor ExtractorRepository::extractor(const QString &name) const

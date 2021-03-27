@@ -8,7 +8,6 @@
 #include <kitinerary_version.h>
 
 #include "extractorcapabilities.h"
-#include "extractor.h"
 
 #include <KItinerary/ExtractorRepository>
 
@@ -70,11 +69,11 @@ QString ExtractorCapabilities::capabilitiesString()
 #endif
         "\n"
 
-        "Extractor scripts   : ";
+        "Extractors          : ";
 
     auto caps = QString::fromLatin1(s);
     ExtractorRepository repo;
-    caps += QString::number(repo.allExtractors().size()) + QLatin1Char('\n');
+    caps += QString::number(repo.extractors().size()) + QLatin1Char('\n');
 
     return caps;
 }

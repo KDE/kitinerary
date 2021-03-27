@@ -17,6 +17,7 @@
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/MergeUtil>
 #include <KItinerary/Reservation>
+#include <KItinerary/ScriptExtractor>
 
 #include <KCalendarCore/Event>
 #include <KCalendarCore/ICalFormat>
@@ -77,12 +78,14 @@ static void printCapabilities()
 static void printExtractors()
 {
     ExtractorRepository repo;
-    for (const auto &ext : repo.allExtractors()) {
-        std::cout << qPrintable(ext.name()) << " (" << qPrintable(ext.mimeType());
-        if (!ext.scriptFileName().isEmpty()) {
-            std::cout << ", " << qPrintable(ext.scriptFileName()) << ":" << qPrintable(ext.scriptFunction());
+    for (const auto &ext : repo.extractors()) {
+        std::cout << qPrintable(ext->name());
+        if (auto scriptExt = dynamic_cast<const ScriptExtractor*>(ext.get())) {
+            std::cout << " (" << qPrintable(scriptExt->mimeType()) << ", "
+                      << qPrintable(scriptExt->scriptFileName()) << ":"
+                      << qPrintable(scriptExt->scriptFunction()) << ")";
         }
-        std::cout << ")" << std::endl;
+        std::cout << std::endl;
     }
 }
 
