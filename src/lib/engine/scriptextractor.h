@@ -106,6 +106,7 @@ public:
     void setScriptFileName(const QString &script);
     void setScriptFunction(const QString &func);
     void setFilters(std::vector<ExtractorFilter> &&filters);
+    void setFilters(const std::vector<ExtractorFilter> &filters);
     ///@endcond
 
 private:

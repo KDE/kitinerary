@@ -147,6 +147,11 @@ void ScriptExtractor::setFilters(std::vector<ExtractorFilter> &&filters)
     d->m_filters = std::move(filters);
 }
 
+void ScriptExtractor::setFilters(const std::vector<ExtractorFilter> &filters)
+{
+    d->m_filters = filters;
+}
+
 bool ScriptExtractor::canHandle(const ExtractorDocumentNode &node) const
 {
     if (node.mimeType() != d->m_mimeType) {
