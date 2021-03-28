@@ -16,7 +16,9 @@ class QString;
 
 namespace KItinerary {
 
-/** Extractor input data type methods. */
+/** Extractor input data type methods.
+ *  @deprecated Use the MIME type based API instead.
+ */
 namespace ExtractorInput
 {
     KITINERARY_EXPORT Q_NAMESPACE
@@ -35,18 +37,18 @@ namespace ExtractorInput
     Q_ENUM_NS(Type)
 
     /** Try to determine data type based on @p content. */
-    KITINERARY_EXPORT Type typeFromContent(const QByteArray &content);
+    KITINERARY_DEPRECATED_EXPORT Type typeFromContent(const QByteArray &content);
     /** Return the content type based on the given MIME type. */
-    KITINERARY_EXPORT Type typeFromMimeType(const QString &mimeType);
+    KITINERARY_DEPRECATED_EXPORT Type typeFromMimeType(const QString &mimeType);
     /** Try to determine data type based on the file name. */
-    KITINERARY_EXPORT Type typeFromFileName(const QString &fileName);
+    KITINERARY_DEPRECATED_EXPORT Type typeFromFileName(const QString &fileName);
     /** Convert type enum to a string. */
-    KITINERARY_EXPORT QString typeToString(Type type);
+    KITINERARY_DEPRECATED_EXPORT QString typeToString(Type type);
     /** Convert string representation of the type to an enum. */
-    KITINERARY_EXPORT Type typeFromName(const QString &name);
+    KITINERARY_DEPRECATED_EXPORT Type typeFromName(const QString &name);
 
     /** Convert type to a MIME type. */
-    QString typeToMimeType(Type type);
+    KITINERARY_DEPRECATED QString typeToMimeType(Type type);
 }
 
 }
