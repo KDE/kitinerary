@@ -36,6 +36,7 @@ class AbstractExtractor;
 class Extractor;
 class ExtractorDocumentNode;
 class ExtractorRepositoryPrivate;
+class ScriptExtractor;
 
 /**
  *  Collection of all known data extractors.
@@ -93,6 +94,7 @@ public:
      *  Only for tooling, do not use otherwise.
      */
     QJsonValue extractorToJson(const Extractor &extractor) const;
+    QJsonValue extractorToJson(const ScriptExtractor *extractor) const;
     ///@endcond
 
 private:

@@ -434,3 +434,29 @@ QJsonValue ExtractorRepository::extractorToJson(const Extractor &extractor) cons
     }
     return a;
 }
+
+QJsonValue ExtractorRepository::extractorToJson(const ScriptExtractor *extractor) const
+{
+    QJsonArray a;
+    bool added = false;
+    for (const auto &ext : d->m_extractorsNew) {
+        auto e = dynamic_cast<ScriptExtractor*>(ext.get());
+        if (!e || e->fileName() != extractor->fileName()) {
+            continue;
+        }
+        if (extractor->name() == e->name()) {
+            a.push_back(extractor->toJson());
+            added = true;
+        } else {
+            a.push_back(e->toJson());
+        }
+    }
+    if (!added) {
+        a.push_back(extractor->toJson());
+    }
+
+    if (a.size() == 1) {
+        return a.at(0);
+    }
+    return a;
+}
