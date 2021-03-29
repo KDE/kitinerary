@@ -11,6 +11,7 @@
 #include "logging.h"
 
 #include <QJsonObject>
+#include <QJSValue>
 #include <QMetaEnum>
 #include <QRegularExpression>
 
@@ -255,4 +256,14 @@ void ExtractorFilter::allMatches(const ExtractorDocumentNode &node, std::vector<
             }
             return;
     }
+}
+
+ExtractorFilter ExtractorFilter::fromJSValue(const QJSValue &js)
+{
+    ExtractorFilter f;
+    f.setMimeType(js.property(QLatin1String("mimeType")).toString());
+    f.setFieldName(js.property(QLatin1String("field")).toString());
+    f.setPattern(js.property(QLatin1String("match")).toString());
+    f.setScope(readEnum<ExtractorFilter::Scope>(js.property(QLatin1String("scope")).toString(), ExtractorFilter::Current));
+    return f;
 }

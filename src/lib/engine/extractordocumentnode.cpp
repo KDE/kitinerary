@@ -6,6 +6,7 @@
 
 #include "extractordocumentnode.h"
 #include "extractordocumentprocessor.h"
+#include "extractorfilter.h"
 #include "extractorresult.h"
 
 #include <QJSEngine>
@@ -212,6 +213,19 @@ void ExtractorDocumentNode::setScriptEngine(QJSEngine* jsEngine) const
     } else {
         d->m_jsEngine = jsEngine;
     }
+}
+
+QVariantList ExtractorDocumentNode::findChildNodes(const QJSValue &jsFilter) const
+{
+    const auto filter = ExtractorFilter::fromJSValue(jsFilter);
+    std::vector<ExtractorDocumentNode> matches;
+    filter.allMatches(*this, matches);
+    qDebug() << matches.size() << filter.fieldName() << filter.pattern() << filter.mimeType();
+
+    QVariantList l;
+    l.reserve(matches.size());
+    std::transform(matches.begin(), matches.end(), std::back_inserter(l), [](const auto &c) { return QVariant::fromValue(c); });
+    return l;
 }
 
 #include "moc_extractordocumentnode.cpp"

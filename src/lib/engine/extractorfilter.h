@@ -15,6 +15,7 @@
 #include <qobjectdefs.h>
 
 class QJsonObject;
+class QJSValue;
 
 namespace KItinerary {
 
@@ -71,6 +72,8 @@ public:
     bool load(const QJsonObject &obj);
     /** Serialize filter to a JSON object. */
     QJsonObject toJson() const;
+    /** Create a filter from a JS object value. */
+    static ExtractorFilter fromJSValue(const QJSValue &js);
 
     [[deprecated("use setMimeType()")]]  void setType(ExtractorInput::Type type);
     void setMimeType(const QString &mimeType);

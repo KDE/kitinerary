@@ -166,6 +166,9 @@ public:
      */
     void appendChild(ExtractorDocumentNode &child);
 
+    /** JS API for finding child nodes given an KItinerary::ExtractorFilter. */
+    Q_INVOKABLE QVariantList findChildNodes(const QJSValue &jsFilter) const;
+
     /** Returns the results that have accumulated so far from this node or its children. */
     ExtractorResult result() const;
     /** Add additional results from an extraction step. */
