@@ -37,7 +37,7 @@ ExternalProcessor::~ExternalProcessor() = default;
 
 bool ExternalProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return PdfDocument::maybePdf(encodedData) || fileName.endsWith(QLatin1String(".pdf", Qt::CaseInsensitive));
+    return PdfDocument::maybePdf(encodedData) || fileName.endsWith(QLatin1String(".pdf"), Qt::CaseInsensitive);
 }
 
 ExtractorDocumentNode ExternalProcessor::createNodeFromData(const QByteArray &encodedData) const
