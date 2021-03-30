@@ -832,6 +832,8 @@ void ExtractorEnginePrivate::processScriptResult(const QJSValue &result)
 
 void ExtractorEngine::setUseSeparateProcess(bool separateProcess)
 {
+    d->m_nodeFactory.setUseSeparateProcess(separateProcess);
+
     if (!separateProcess) {
         d->m_externalExtractor.clear();
         return;
