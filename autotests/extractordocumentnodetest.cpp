@@ -118,6 +118,20 @@ private Q_SLOTS:
         QCOMPARE(c21.content<QString>(), QLatin1String("This is an example Aztec symbol for Wikipedia."));
         QCOMPARE(c21.location().toInt(), 1);
     }
+
+    void testPdfExternal()
+    {
+        ExtractorEngine engine;
+        engine.setUseSeparateProcess(true);
+
+        QFile f(QStringLiteral(SOURCE_DIR "/misc/test.pdf"));
+        QVERIFY(f.open(QFile::ReadOnly));
+        auto root = engine.documentNodeFactory()->createNode(f.readAll());
+        QVERIFY(!root.isNull());
+        QCOMPARE(root.mimeType(), QLatin1String("application/pdf"));
+        root.processor()->expandNode(root, &engine);
+        QCOMPARE(root.childNodes().size(), 0);
+    }
 };
 
 QTEST_GUILESS_MAIN(ExtractorDocumentNodeTest)

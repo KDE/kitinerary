@@ -44,6 +44,7 @@ ExtractorDocumentNode ExternalProcessor::createNodeFromData(const QByteArray &en
 {
     ExtractorDocumentNode node;
     node.setContent(encodedData);
+    node.setMimeType(QStringLiteral("application/pdf"));
     return node;
 }
 

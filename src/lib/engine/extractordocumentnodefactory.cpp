@@ -152,7 +152,9 @@ ExtractorDocumentNode ExtractorDocumentNodeFactory::createNode(const QByteArray 
 
     if (d->interceptProcessor && d->interceptProcessor->canHandleData(data, fileName)) {
         auto node = d->interceptProcessor->createNodeFromData(data);
-        node.setMimeType(QStringLiteral("internal/external-process"));
+        if (node.mimeType().isEmpty()) {
+            node.setMimeType(QStringLiteral("internal/external-process"));
+        }
         node.setProcessor(d->interceptProcessor.get());
         return node;
     }
