@@ -17,6 +17,7 @@ class Uic9183DocumentProcessor : public ExtractorDocumentProcessor
 public:
     bool canHandleData(const QByteArray &encodedData, QStringView fileName) const override;
     ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
+    void expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const override;
     void preExtract(ExtractorDocumentNode &node, const ExtractorEngine *engine) const override;
 };
 

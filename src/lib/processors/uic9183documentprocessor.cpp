@@ -35,11 +35,18 @@ ExtractorDocumentNode Uic9183DocumentProcessor::createNodeFromData(const QByteAr
 
     ExtractorDocumentNode node;
     node.setContent(p);
-
-    const auto u_head = p.findBlock<Uic9183Head>();
-    node.setContextDateTime(u_head.issuingDateTime());
-
     return node;
+}
+
+void Uic9183DocumentProcessor::expandNode(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
+{
+    // only use the U_HEAD issuing time as context if we have nothing better
+    // while that is usually correct it cannot contain a time zone, unlike the (often) enclosing PDF document´
+    if (!node.contextDateTime().isValid()) {
+        const auto p = node.content<Uic9183Parser>();
+        const auto u_head = p.findBlock<Uic9183Head>();
+        node.setContextDateTime(u_head.issuingDateTime());
+    }
 }
 
 void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
