@@ -208,7 +208,7 @@ QImage PdfImage::image() const
     }
 
     const auto img = d->load();
-    if (d->m_width != d->m_sourceWidth || d->m_height != d->m_sourceHeight) {
+    if (!img.isNull() && (d->m_width != d->m_sourceWidth || d->m_height != d->m_sourceHeight)) {
         return img.scaled(d->m_width, d->m_height);
     }
     return img;
