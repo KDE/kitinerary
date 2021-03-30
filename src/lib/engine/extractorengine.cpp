@@ -242,7 +242,12 @@ ExtractorEngine::ExtractorEngine()
 }
 
 ExtractorEngine::ExtractorEngine(ExtractorEngine &&) noexcept = default;
-ExtractorEngine::~ExtractorEngine() = default;
+
+ExtractorEngine::~ExtractorEngine()
+{
+    // ensure we destroy nodes before we destroy the node factory
+    clear();
+}
 
 void ExtractorEngine::clear()
 {
