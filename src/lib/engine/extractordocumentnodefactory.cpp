@@ -238,7 +238,7 @@ void ExtractorDocumentNodeFactory::setUseSeparateProcess(bool separateProcess)
 {
     if (separateProcess && !d->interceptProcessor) {
         d->interceptProcessor = std::make_unique<ExternalProcessor>();
-    } else {
+    } else if (!separateProcess && d->interceptProcessor) {
         d->interceptProcessor.reset();
     }
 }
