@@ -36,6 +36,7 @@ class QVariant;
 
 namespace KItinerary {
 
+class AbstractExtractor;
 class BarcodeDecoder;
 class Extractor;
 class ExtractorDocumentNode;
@@ -209,7 +210,8 @@ public:
      *  Extractors are usually automatically selected, this is therefore most likely not needed to
      *  be called manually. This mainly exists for the external extractor process.
      */
-    void setAdditionalExtractors(std::vector<Extractor> &&extractors);
+    void setAdditionalExtractors(std::vector<const AbstractExtractor*> &&extractors);
+    [[deprecated("uset setAdditionalExtractors()")]] void setAdditionalExtractors(std::vector<Extractor> &&extractors);
 
     /** Perform the actual extraction, and return the JSON-LD data
      *  that has been found.

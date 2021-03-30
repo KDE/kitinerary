@@ -89,7 +89,7 @@ public:
 
     ExtractorEngine *q = nullptr;
     std::vector<Extractor> m_extractors;
-    std::vector<Extractor> m_additionalExtractors;
+    std::vector<Extractor> m_additionalExtractorsLegacy;
     JsApi::Barcode *m_barcodeApi = nullptr;
     JsApi::Context *m_context = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
@@ -109,6 +109,7 @@ public:
     std::vector<GenericExtractor::Result> m_genericResults;
     QJsonArray m_result;
     QJSEngine m_engine;
+    std::vector<const AbstractExtractor*> m_additionalExtractors;
     ExtractorDocumentNode m_rootNode;
     ExtractorDocumentNode m_contextNode;
     ExtractorDocumentNodeFactory m_nodeFactory;
@@ -204,7 +205,7 @@ void ExtractorEnginePrivate::processNode(ExtractorDocumentNode& node)
     node.processor()->reduceNode(node);
 
     node.processor()->preExtract(node, q);
-    std::vector<const AbstractExtractor*> extractors;
+    std::vector<const AbstractExtractor*> extractors = m_additionalExtractors;
     m_repo.extractorsForNode(node, extractors);
 
     for (const auto &extractor : extractors) {
@@ -629,7 +630,7 @@ void ExtractorEnginePrivate::extractGeneric()
 
 void ExtractorEnginePrivate::determineExtractors()
 {
-    m_extractors = m_additionalExtractors;
+    m_extractors = m_additionalExtractorsLegacy;
 
     if (m_pass) {
         m_repo.extractorsForPass(m_pass.get(), m_extractors);
@@ -840,9 +841,14 @@ void ExtractorEngine::setUseSeparateProcess(bool separateProcess)
     d->m_externalExtractor = fi.canonicalFilePath();
 }
 
-void ExtractorEngine::setAdditionalExtractors(std::vector<Extractor> &&extractors)
+void ExtractorEngine::setAdditionalExtractors(std::vector<const AbstractExtractor*> &&extractors)
 {
     d->m_additionalExtractors = std::move(extractors);
+}
+
+void ExtractorEngine::setAdditionalExtractors(std::vector<Extractor> &&extractors)
+{
+    d->m_additionalExtractorsLegacy = std::move(extractors);
 }
 
 QString ExtractorEngine::usedCustomExtractor() const
