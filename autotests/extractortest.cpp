@@ -9,16 +9,9 @@
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPostprocessor>
 #include <KItinerary/ExtractorValidator>
-#include <KItinerary/HtmlDocument>
 #include <KItinerary/JsonLdDocument>
-#include <KItinerary/PdfDocument>
-
-#include <KPkPass/Pass>
 
 #include <KMime/Message>
-
-#include <KCalendarCore/MemoryCalendar>
-#include <KCalendarCore/ICalFormat>
 
 #include <QDebug>
 #include <QDir>
