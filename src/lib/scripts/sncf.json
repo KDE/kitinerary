@@ -45,7 +45,7 @@
         "filter": [
             {
                 "match": "^2200",
-                "type": "Barcode",
+                "mimeType": "application/octet-stream",
                 "scope": "Descendants"
             }
         ],
