@@ -520,8 +520,14 @@ void ExtractorEngine::setContextDate(const QDateTime &dt)
 
 QJsonArray ExtractorEngine::extract()
 {
+    d->m_rootNode.setParent(d->m_contextNode);
+    d->processNode(d->m_rootNode);
+#if 0
+    return d->m_rootNode.result().jsonLdResult();
+#else
     d->extractDocument();
     return d->m_result;
+#endif
 }
 
 void ExtractorEnginePrivate::extractRecursive(KMime::Content *content)
