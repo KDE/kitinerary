@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_GENERICVDVEXTRACTOR_P_H
-#define KITINERARY_GENERICVDVEXTRACTOR_P_H
+#pragma once
 
 class QByteArray;
 class QJsonArray;
@@ -20,4 +19,3 @@ namespace GenericVdvExtractor
 
 }
 
-#endif // KITINERARY_GENERICVDVEXTRACTOR_P_H

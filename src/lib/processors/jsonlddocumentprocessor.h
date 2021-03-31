@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_JSONLDDOCUMENTPROCESSOR_H
-#define KITINERARY_JSONLDDOCUMENTPROCESSOR_H
+#pragma once
 
 #include <KItinerary/ExtractorDocumentProcessor>
 
@@ -24,4 +23,3 @@ public:
 
 }
 
-#endif // KITINERARY_JSONLDDOCUMENTPROCESSOR_H

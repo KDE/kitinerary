@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_BRAND_H
-#define KITINERARY_BRAND_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
@@ -30,4 +29,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::Brand)
 
-#endif // KITINERARY_BRAND_H

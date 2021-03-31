@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_FLIGHTPOSTPROCESSOR_P_H
-#define KITINERARY_FLIGHTPOSTPROCESSOR_P_H
+#pragma once
 
 #include "knowledgedb/iatacode.h"
 
@@ -39,4 +38,3 @@ private:
 
 }
 
-#endif // KITINERARY_FLIGHTPOSTPROCESSOR_P_H

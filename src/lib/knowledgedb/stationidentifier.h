@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_KNOWLEDGEDB_STATIONIDENTIFIER_H
-#define KITINERARY_KNOWLEDGEDB_STATIONIDENTIFIER_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "knowledgedb.h"
@@ -124,4 +123,3 @@ private:
 }
 }
 
-#endif // KITINERARY_KNOWLEDGEDB_STATIONIDENTIFIER_H

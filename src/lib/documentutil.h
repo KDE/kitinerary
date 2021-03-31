@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_DOCUMENTUTIL_H
-#define KITINERARY_DOCUMENTUTIL_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -38,4 +37,3 @@ namespace DocumentUtil
 
 }
 
-#endif // KITINERARY_DOCUMENTUTIL_H

@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_MIMEDOCUMENTPROCESSOR_H
-#define KITINERARY_MIMEDOCUMENTPROCESSOR_H
+#pragma once
 
 #include <KItinerary/ExtractorDocumentProcessor>
 
@@ -25,4 +24,3 @@ public:
 
 }
 
-#endif // KITINERARY_MIMEDOCUMENTPROCESSOR_H

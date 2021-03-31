@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef AIRPORTDB_H
-#define AIRPORTDB_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "countrydb.h"
@@ -45,4 +44,3 @@ KITINERARY_EXPORT std::vector<IataCode> iataCodesFromName(const QString &name);
 
 }
 
-#endif // AIRPORTDB_H

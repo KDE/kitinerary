@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_KNOWLEDGEDB_TIMEZONEDB_P_H
-#define KITINERARY_KNOWLEDGEDB_TIMEZONEDB_P_H
+#pragma once
 
 #include "countrydb.h"
 #include "timezonedb.h"
@@ -60,4 +59,3 @@ inline constexpr bool operator<(uint32_t lhs, TimezoneZIndexEntry rhs)
 }
 }
 
-#endif

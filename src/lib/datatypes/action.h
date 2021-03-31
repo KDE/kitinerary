@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_ACTION_H
-#define KITINERARY_ACTION_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
@@ -80,4 +79,3 @@ class KITINERARY_EXPORT ViewAction : public Action
 
 }
 
-#endif // KITINERARY_ACTION_H

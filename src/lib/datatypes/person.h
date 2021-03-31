@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_PERSON_H
-#define KITINERARY_PERSON_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
@@ -32,4 +31,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::Person)
 
-#endif // KITINERARY_PERSON_H

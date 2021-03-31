@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_IATABCBPPARSER_H
-#define KITINERARY_IATABCBPPARSER_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -42,4 +41,3 @@ KITINERARY_EXPORT bool maybeIataBcbp(const QString &message);
 
 }
 
-#endif // KITINERARY_IATABCBPPARSER_H

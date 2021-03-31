@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_WIKIDATA_H
-#define KITINERARY_WIKIDATA_H
+#pragma once
 
 #include "knowledgedb.h"
 
@@ -36,4 +35,3 @@ namespace WikiData
 }
 }
 
-#endif // KITINERARY_WIKIDATA_H

@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_COUNTRYDB_H
-#define KITINERARY_COUNTRYDB_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "alphaid.h"
@@ -94,4 +93,3 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KItinerary::KnowledgeDb::PowerPlugTypes)
 Q_DECLARE_METATYPE(KItinerary::KnowledgeDb::DrivingSide)
 Q_DECLARE_METATYPE(KItinerary::KnowledgeDb::PowerPlugTypes)
 
-#endif // KITINERARY_COUNTRYDB_H

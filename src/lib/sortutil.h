@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_SORTUTIL_H
-#define KITINERARY_SORTUTIL_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -35,4 +34,3 @@ namespace SortUtil
 
 }
 
-#endif // KITINERARY_SORTUTIL_H

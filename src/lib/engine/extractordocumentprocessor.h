@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_EXTRACTORDOCUMENTPROCESSOR_H
-#define KITINERARY_EXTRACTORDOCUMENTPROCESSOR_H
+#pragma once
 
 #include "extractordocumentnode.h"
 
@@ -86,4 +85,3 @@ protected:
 
 }
 
-#endif // KITINERARY_EXTRACTORDOCUMENTPROCESSOR_H

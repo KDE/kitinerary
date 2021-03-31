@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_UIC9183DOCUMENTPROCESSOR_H
-#define KITINERARY_UIC9183DOCUMENTPROCESSOR_H
+#pragma once
 
 #include <KItinerary/ExtractorDocumentProcessor>
 
@@ -23,4 +22,3 @@ public:
 
 }
 
-#endif // KITINERARY_UIC9183DOCUMENTPROCESSOR_H

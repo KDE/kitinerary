@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef AIRPORTDB_P_H
-#define AIRPORTDB_P_H
+#pragma once
 
 #include <cstdint>
 
@@ -52,4 +51,3 @@ static_assert(sizeof(NameNIndex) % alignof(NameNIndex) == 0, "NameNIndex is not 
 }
 }
 
-#endif

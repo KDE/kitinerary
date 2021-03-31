@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_UIC9183HEADER_H
-#define KITINERARY_UIC9183HEADER_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "uic9183utils.h"
@@ -40,4 +39,3 @@ private:
 
 }
 
-#endif // KITINERARY_UIC9183HEADER_H

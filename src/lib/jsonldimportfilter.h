@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_JSONLDIMPORTFILTER_H
-#define KITINERARY_JSONLDIMPORTFILTER_H
+#pragma once
 
 class QJsonArray;
 class QJsonObject;
@@ -25,4 +24,3 @@ namespace JsonLdImportFilter
 
 }
 
-#endif // KITINERARY_JSONLDIMPORTFILTER_H

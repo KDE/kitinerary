@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_FLIGHT_H
-#define KITINERARY_FLIGHT_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
@@ -55,4 +54,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::Flight)
 
-#endif // KITINERARY_FLIGHT_H

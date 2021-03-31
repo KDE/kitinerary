@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_STRINGUTIL_H
-#define KITINERARY_STRINGUTIL_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -28,4 +27,3 @@ namespace StringUtil
 
 }
 
-#endif // KITINERARY_STRINGUTIL_H

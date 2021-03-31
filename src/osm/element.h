@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef OSM_ELEMENT_H
-#define OSM_ELEMENT_H
+#pragma once
 
 #include "datatypes.h"
 
@@ -132,4 +131,3 @@ inline void for_each_member(const DataSet &dataSet, const Relation &rel, Func fu
 
 }
 
-#endif // OSM_ELEMENT_H

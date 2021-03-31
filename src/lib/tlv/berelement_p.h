@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_BER_ELEMENT_P_H
-#define KITINERARY_BER_ELEMENT_P_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -96,4 +95,3 @@ public:
 }
 }
 
-#endif // KITINERARY_BER_ELEMENT_P_H

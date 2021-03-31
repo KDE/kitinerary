@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_GENERICPKPASSEXTRACTOR_P_H
-#define KITINERARY_GENERICPKPASSEXTRACTOR_P_H
+#pragma once
 
 #include "genericextractor_p.h"
 
@@ -25,4 +24,3 @@ namespace GenericPkPassExtractor
 
 }
 
-#endif // KITINERARY_GENERICPKPASSEXTRACTOR_P_H

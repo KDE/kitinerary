@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_POPPLERUTILS_P_H
-#define KITINERARY_POPPLERUTILS_P_H
+#pragma once
 
 #include <qnamespace.h>
 
@@ -35,4 +34,3 @@ namespace PopplerUtils
 
 }
 
-#endif // KITINERARY_POPPLERUTILS_P_H

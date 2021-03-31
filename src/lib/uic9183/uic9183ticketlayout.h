@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_UIC9183TICKETLAYOUT_H
-#define KITINERARY_UIC9183TICKETLAYOUT_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "uic9183block.h"
@@ -105,4 +104,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::Uic9183TicketLayout)
 
-#endif // KITINERARY_UIC9183TICKETLAYOUT_H

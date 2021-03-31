@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_RESERVATION_H
-#define KITINERARY_RESERVATION_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
@@ -163,5 +162,4 @@ Q_DECLARE_METATYPE(KItinerary::FoodEstablishmentReservation)
 Q_DECLARE_METATYPE(KItinerary::EventReservation)
 Q_DECLARE_METATYPE(KItinerary::RentalCarReservation)
 
-#endif // KITINERARY_RESERVATION_H
 

@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_SSBTICKET_H
-#define KITINERARY_SSBTICKET_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -141,4 +140,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::SSBTicket)
 
-#endif // KITINERARY_SSBTICKET_H

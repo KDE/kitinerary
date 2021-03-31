@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_VDVDATA_P_H
-#define KITINERARY_VDVDATA_P_H
+#pragma once
 
 #include "vdvbasictypes.h"
 
@@ -81,4 +80,3 @@ struct VdvCertificateKey {
 
 }
 
-#endif // KITINERARY_VDVDATA_P_H

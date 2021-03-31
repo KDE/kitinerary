@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_KNOWLEDGEDB_IATACODE_H
-#define KITINERARY_KNOWLEDGEDB_IATACODE_H
+#pragma once
 
 #include "alphaid.h"
 
@@ -19,4 +18,3 @@ using IataCode = AlphaId<uint16_t, 3>;
 
 }}
 
-#endif // KITINERARY_KNOWLEDGEDB_IATACODE_H

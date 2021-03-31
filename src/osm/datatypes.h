@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef OSM_DATATYPES_H
-#define OSM_DATATYPES_H
+#pragma once
 
 #include <QDebug>
 #include <QString>
@@ -265,4 +264,3 @@ inline bool operator<(const Elem &elem, Id id)
 QDebug operator<<(QDebug debug, OSM::Coordinate coord);
 QDebug operator<<(QDebug debug, OSM::BoundingBox bbox);
 
-#endif // OSM_DATATYPES_H

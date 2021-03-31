@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_CREATIVEWORK_H
-#define KITINERARY_CREATIVEWORK_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
@@ -56,5 +55,4 @@ Q_DECLARE_METATYPE(KItinerary::CreativeWork)
 Q_DECLARE_METATYPE(KItinerary::DigitalDocument)
 Q_DECLARE_METATYPE(KItinerary::EmailMessage)
 
-#endif // KITINERARY_CREATIVEWORK_H
 

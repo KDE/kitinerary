@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_EXTRACTORUTIL_H
-#define KITINERARY_EXTRACTORUTIL_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -30,4 +29,3 @@ KITINERARY_EXPORT PostalAddress extractPostalCode(PostalAddress addr);
 
 }
 
-#endif // KITINERARY_EXTRACTORUTIL_H

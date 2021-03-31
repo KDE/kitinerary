@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_JSAPI_BITARRAY_H
-#define KITINERARY_JSAPI_BITARRAY_H
+#pragma once
 
 #include <QByteArray>
 #include <QMetaType>
@@ -33,4 +32,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::JsApi::BitArray)
 
-#endif // KITINERARY_JSAPI_BITARRAY_H

@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_TIMEZONEDBGENERATOR_H
-#define KITINERARY_TIMEZONEDBGENERATOR_H
+#pragma once
 
 class QIODevice;
 
@@ -23,4 +22,3 @@ public:
 }
 }
 
-#endif // KITINERARY_TIMEZONEDBGENERATOR_H

@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef OSM_XMLPARSER_H
-#define OSM_XMLPARSER_H
+#pragma once
 
 #include <QString>
 
@@ -41,4 +40,3 @@ private:
 
 }
 
-#endif // OSM_XMLPARSER_P_H

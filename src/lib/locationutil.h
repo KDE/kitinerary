@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_LOCATIONUTIL_H
-#define KITINERARY_LOCATIONUTIL_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -74,4 +73,3 @@ bool KITINERARY_EXPORT isSameLocation(const QVariant &lhs, const QVariant &rhs, 
 
 }
 
-#endif // KITINERARY_LOCATIONUTIL_H

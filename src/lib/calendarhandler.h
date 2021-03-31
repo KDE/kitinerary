@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef CALENDARHANDLER_H
-#define CALENDARHANDLER_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -56,4 +55,3 @@ namespace CalendarHandler
 
 }
 
-#endif // CALENDARHANDLER_H

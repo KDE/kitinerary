@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_JSAPI_BARCODE_H
-#define KITINERARY_JSAPI_BARCODE_H
+#pragma once
 
 #include <QDateTime>
 #include <QObject>
@@ -87,4 +86,3 @@ private:
 }
 }
 
-#endif // KITINERARY_JSAPI_BARCODE_H

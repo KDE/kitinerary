@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_PLACE_H
-#define KITINERARY_PLACE_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -133,4 +132,3 @@ Q_DECLARE_METATYPE(KItinerary::TrainStation)
 Q_DECLARE_METATYPE(KItinerary::BusStation)
 Q_DECLARE_METATYPE(KItinerary::TouristAttraction)
 
-#endif // KITINERARY_PLACE_H

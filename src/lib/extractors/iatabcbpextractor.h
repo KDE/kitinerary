@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_IATABCBPEXTRACTOR_H
-#define KITINERARY_IATABCBPEXTRACTOR_H
+#pragma once
 
 #include <KItinerary/AbstractExtractor>
 
@@ -22,4 +21,3 @@ public:
 
 }
 
-#endif // KITINERARY_IATABCBPEXTRACTOR_H

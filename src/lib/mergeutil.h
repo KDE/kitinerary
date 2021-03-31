@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_MERGEUTIL_H
-#define KITINERARY_MERGEUTIL_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -50,4 +49,3 @@ KITINERARY_EXPORT QVariant merge(const QVariant &lhs, const QVariant &rhs);
 
 }
 
-#endif // KITINERARY_MERGEUTIL_H

@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_UIC9183BLOCK_H
-#define KITINERARY_UIC9183BLOCK_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -70,4 +69,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::Uic9183Block)
 
-#endif // KITINERARY_UIC9183BLOCK_H

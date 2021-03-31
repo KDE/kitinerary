@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_JSONLDDOCUMENT_H
-#define KITINERARY_JSONLDDOCUMENT_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -72,4 +71,3 @@ inline void JsonLdDocument::writeProperty(T &obj, const char *name, const QVaria
 
 }
 
-#endif // KITINERARY_JSONLDDOCUMENT_H

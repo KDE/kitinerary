@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_TICKET_H
-#define KITINERARY_TICKET_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
@@ -71,4 +70,3 @@ private:
 Q_DECLARE_METATYPE(KItinerary::Seat)
 Q_DECLARE_METATYPE(KItinerary::Ticket)
 
-#endif // KITINERARY_TICKET_H

@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_PDFIMAGE_H
-#define KITINERARY_PDFIMAGE_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -84,4 +83,3 @@ private:
 Q_DECLARE_METATYPE(KItinerary::PdfImage)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KItinerary::PdfImage::LoadingHints)
 
-#endif // KITINERARY_PDFIMAGE_H

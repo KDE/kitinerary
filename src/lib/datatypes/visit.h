@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_VISIT_H
-#define KITINERARY_VISIT_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -31,4 +30,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::TouristAttractionVisit)
 
-#endif // KITINERARY_VISIT_H

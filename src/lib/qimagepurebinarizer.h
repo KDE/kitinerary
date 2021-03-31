@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_QIMAGEPUREBINARIZER_H
-#define KITINERARY_QIMAGEPUREBINARIZER_H
+#pragma once
 
 #include "config-kitinerary.h"
 #if defined(HAVE_ZXING) && !defined(ZXING_USE_READBARCODE)
@@ -56,4 +55,3 @@ private:
 
 #endif
 
-#endif // KITINERARY_QIMAGEPUREBINARIZER_H

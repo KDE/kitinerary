@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_GENERATOR_TIMEZONES
-#define KITINERARY_GENERATOR_TIMEZONES
+#pragma once
 
 #include <knowledgedb.h>
 
@@ -43,4 +42,3 @@ private:
 }
 }
 
-#endif

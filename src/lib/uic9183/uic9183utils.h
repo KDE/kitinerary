@@ -5,8 +5,7 @@
 */
 
 
-#ifndef KITINERARY_UIC9183UTILS_H
-#define KITINERARY_UIC9183UTILS_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -44,4 +43,3 @@ public: \
     Q_PROPERTY(QString Name READ Name)
 }
 
-#endif // KITINERARY_UIC9183UTILS_H

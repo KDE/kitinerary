@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_COUNTRYDB_P_H
-#define KITINERARY_COUNTRYDB_P_H
+#pragma once
 
 #include "countrydb.h"
 
@@ -26,5 +25,4 @@ struct IsoCountryCodeMapping {
 }
 }
 
-#endif // KITINERARY_COUNTRYDB_P_H
 

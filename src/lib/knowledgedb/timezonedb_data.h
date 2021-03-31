@@ -5,8 +5,7 @@
  * This code is auto-generated from OpenStreetMap (licensed under ODbL) and Wikidata (licensed under CC0), do not edit!
  */
 
-#ifndef KITINERARY_KNOWLEDGEDB_TIMEZONEDB_DATA_H
-#define KITINERARY_KNOWLEDGEDB_TIMEZONEDB_DATA_H
+#pragma once
 
 #include <cstdint>
 
@@ -446,4 +445,3 @@ enum class Tz : uint16_t {
 }
 }
 
-#endif

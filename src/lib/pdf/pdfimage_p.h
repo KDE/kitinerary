@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_PDFIMAGE_P_H
-#define KITINERARY_PDFIMAGE_P_H
+#pragma once
 
 #include <config-kitinerary.h>
 
@@ -55,4 +54,3 @@ public:
 
 }
 
-#endif

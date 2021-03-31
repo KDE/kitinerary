@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_EXTRACTORENGINE_H
-#define KITINERARY_EXTRACTORENGINE_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "extractorinput.h"
@@ -252,4 +251,3 @@ private:
 
 }
 
-#endif // KITINERARY_EXTRACTORENGINE_H

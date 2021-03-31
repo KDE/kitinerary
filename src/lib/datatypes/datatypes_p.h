@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_DATATYPES_P_H
-#define KITINERARY_DATATYPES_P_H
+#pragma once
 
 #include <QDateTime>
 
@@ -150,4 +149,3 @@ bool Class::operator==(const Class &other) const \
 
 }
 
-#endif

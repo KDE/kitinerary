@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_EXTRACTORDOCUMENTNODE_H
-#define KITINERARY_EXTRACTORDOCUMENTNODE_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -191,4 +190,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::ExtractorDocumentNode)
 
-#endif // KITINERARY_EXTRACTORDOCUMENTNODE_H

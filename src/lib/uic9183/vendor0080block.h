@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_VENDOR0080BLOCK_H
-#define KITINERARY_VENDOR0080BLOCK_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "uic9183block.h"
@@ -115,4 +114,3 @@ private:
 
 }
 
-#endif // KITINERARY_VENDOR0080BLOCK_H

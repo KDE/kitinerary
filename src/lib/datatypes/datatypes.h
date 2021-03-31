@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_DATATYPES_H
-#define KITINERARY_DATATYPES_H
+#pragma once
 
 #include <QMetaType>
 #include <QSharedDataPointer>
@@ -88,4 +87,3 @@ public: \
     void SetName(KItinerary::detail::parameter_type<Type>::type value); \
 private:
 
-#endif

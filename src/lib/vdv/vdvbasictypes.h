@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_VDVBASICTYPES_H
-#define KITINERARY_VDVBASICTYPES_H
+#pragma once
 
 #include <QDateTime>
 
@@ -114,4 +113,3 @@ struct VdvDateTimeCompact
 
 }
 
-#endif // KITINERARY_VDVBASICTYPES_H

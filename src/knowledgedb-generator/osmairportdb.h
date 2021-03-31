@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef OSMAIRPORTDB_H
-#define OSMAIRPORTDB_H
+#pragma once
 
 #include <osm/datatypes.h>
 #include <osm/element.h>
@@ -46,4 +45,3 @@ private:
     std::map<QString, OSMAirportData> m_iataMap;
 };
 
-#endif // OSMAIRPORTDB_H

@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_GENERATOR_UTIL_H
-#define KITINERARY_GENERATOR_UTIL_H
+#pragma once
 
 class QString;
 
@@ -21,4 +20,3 @@ namespace Util
 }
 }
 
-#endif // KITINERARY_GENERATOR_UTIL_H

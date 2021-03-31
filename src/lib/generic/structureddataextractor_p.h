@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_STRUCTUREDDATAEXTRACTOR_P_H
-#define KITINERARY_STRUCTUREDDATAEXTRACTOR_P_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -28,4 +27,3 @@ namespace StructuredDataExtractor
 
 }
 
-#endif // KITINERARY_STRUCTUREDDATAEXTRACTOR_P_H

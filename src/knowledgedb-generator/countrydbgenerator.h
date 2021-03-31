@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_GENERATOR_COUNTRYDBGENERATOR_H
-#define KITINERARY_GENERATOR_COUNTRYDBGENERATOR_H
+#pragma once
 
 #include <QSet>
 #include <QUrl>
@@ -55,4 +54,3 @@ private:
 
 }}
 
-#endif // KITINERARY_GENERATOR_COUNTRYDBGENERATOR_H

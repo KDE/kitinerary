@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_GENERATOR_CODEGEN_H
-#define KITINERARY_GENERATOR_CODEGEN_H
+#pragma once
 
 #include "knowledgedb.h"
 
@@ -31,4 +30,3 @@ namespace CodeGen
 }
 }
 
-#endif // KITINERARY_GENERATOR_CODEGEN_H

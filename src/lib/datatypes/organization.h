@@ -5,8 +5,7 @@
 */
 
 
-#ifndef KITINERARY_ORGANIZATION_H
-#define KITINERARY_ORGANIZATION_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -91,4 +90,3 @@ Q_DECLARE_METATYPE(KItinerary::Airline)
 Q_DECLARE_METATYPE(KItinerary::FoodEstablishment)
 Q_DECLARE_METATYPE(KItinerary::LodgingBusiness)
 
-#endif // KITINERARY_ORGANIZATION_H

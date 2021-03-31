@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_AIRPORTDBGENERATOR_H
-#define KITINERARY_AIRPORTDBGENERATOR_H
+#pragma once
 
 #include <knowledgedb.h>
 #include "osmairportdb.h"
@@ -63,4 +62,3 @@ private:
 }
 }
 
-#endif // KITINERARY_AIRPORTDBGENERATOR_H

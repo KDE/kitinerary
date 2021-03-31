@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef EXTRACTORPOSTPROCESSOR_H
-#define EXTRACTORPOSTPROCESSOR_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -99,4 +98,3 @@ private:
 
 }
 
-#endif // EXTRACTORPOSTPROCESSOR_H

@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_EXTRACTORINPUT_H
-#define KITINERARY_EXTRACTORINPUT_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -53,4 +52,3 @@ namespace ExtractorInput
 
 }
 
-#endif // KITINERARY_EXTRACTORINPUT_H

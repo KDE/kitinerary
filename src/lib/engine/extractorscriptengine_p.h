@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_EXTRACTORSCRIPTENGINE_P_H
-#define KITINERARY_EXTRACTORSCRIPTENGINE_P_H
+#pragma once
 
 #include <memory>
 
@@ -33,4 +32,3 @@ private:
 
 }
 
-#endif // KITINERARY_EXTRACTORSCRIPTENGINE_P_H

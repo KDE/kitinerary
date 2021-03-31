@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_TIMEZONEDB_H
-#define KITINERARY_TIMEZONEDB_H
+#pragma once
 
 #include <kitinerary_export.h>
 #include "countrydb.h"
@@ -55,4 +54,3 @@ namespace KnowledgeDb {
 }
 }
 
-#endif

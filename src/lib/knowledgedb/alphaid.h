@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_KNOWLEDGEDB_ALPHAID_H
-#define KITINERARY_KNOWLEDGEDB_ALPHAID_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -92,4 +91,3 @@ inline QDebug operator<<(QDebug dbg, KItinerary::KnowledgeDb::AlphaId<T, N> id)
     return dbg;
 }
 
-#endif // KITINERARY_KNOWLEDGEDB_ALPHAID_H

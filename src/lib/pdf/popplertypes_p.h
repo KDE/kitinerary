@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_POPPLERTYPES_P_H
-#define KITINERARY_POPPLERTYPES_P_H
+#pragma once
 
 #include <config-kitinerary.h>
 #include <qglobal.h>
@@ -18,4 +17,3 @@ using PopplerMaskColors = int;
 #endif
 #endif
 
-#endif // KITINERARY_POPPLERTYPES_P_H

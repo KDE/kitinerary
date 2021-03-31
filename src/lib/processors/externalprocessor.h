@@ -4,8 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_EXTERNALPROCESSOR_H
-#define KITINERARY_EXTERNALPROCESSOR_H
+#pragma once
 
 #include <KItinerary/ExtractorDocumentProcessor>
 
@@ -30,4 +29,3 @@ private:
 
 }
 
-#endif // KITINERARY_EXTERNALPROCESSOR_H

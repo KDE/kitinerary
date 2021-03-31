@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef OSM_GEOMATH_H
-#define OSM_GEOMATH_H
+#pragma once
 
 #include "datatypes.h"
 
@@ -22,4 +21,3 @@ uint32_t distance(const std::vector<const OSM::Node*> &path, Coordinate coord);
 
 }
 
-#endif // OSM_GEOMATH_H

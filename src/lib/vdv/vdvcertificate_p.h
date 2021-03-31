@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_VDVCERTIFICATE_P_H
-#define KITINERARY_VDVCERTIFICATE_P_H
+#pragma once
 
 #include <QByteArray>
 
@@ -81,4 +80,3 @@ namespace VdvPkiRepository
 
 }
 
-#endif // KITINERARY_VDVCERTIFICATE_P_H

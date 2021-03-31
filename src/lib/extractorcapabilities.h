@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_EXTRACTORCAPABILITIES_H
-#define KITINERARY_EXTRACTORCAPABILITIES_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -24,4 +23,3 @@ namespace ExtractorCapabilities
 
 }
 
-#endif // KITINERARY_EXTRACTORCAPABILITIES_H

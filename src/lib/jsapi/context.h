@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_JSAPI_CONTEXT_H
-#define KITINERARY_JSAPI_CONTEXT_H
+#pragma once
 
 #include <QDateTime>
 #include <QJSValue>
@@ -65,4 +64,3 @@ public:
 }
 }
 
-#endif // KITINERARY_JSAPI_CONTEXT_H

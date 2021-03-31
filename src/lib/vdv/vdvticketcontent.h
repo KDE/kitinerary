@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_VDVTICKETCONTENT_H
-#define KITINERARY_VDVTICKETCONTENT_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "vdvbasictypes.h"
@@ -146,4 +145,3 @@ struct VdvTicketTrailer
 
 }
 
-#endif // KITINERARY_VDVTICKETCONTENT_H

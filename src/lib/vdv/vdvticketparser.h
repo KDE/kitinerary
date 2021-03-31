@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_VDVTICKETPARSER_H
-#define KITINERARY_VDVTICKETPARSER_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "vdvticket.h"
@@ -52,4 +51,3 @@ private:
 
 }
 
-#endif // KITINERARY_VDVTICKETPARSER_H

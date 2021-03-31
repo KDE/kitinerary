@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_VENDOR0080VUBLOCKDATA_H
-#define KITINERARY_VENDOR0080VUBLOCKDATA_H
+#pragma once
 
 #include "../vdv/vdvticketcontent.h"
 
@@ -56,4 +55,3 @@ class KITINERARY_EXPORT Vendor0080VUTicketData
 
 }
 
-#endif // KITINERARY_VENDOR0080VUBLOCKDATA_H

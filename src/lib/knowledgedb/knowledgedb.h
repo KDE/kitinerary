@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_KNOWLEDGEDB_H
-#define KITINERARY_KNOWLEDGEDB_H
+#pragma once
 
 #include <cmath>
 #include <cstdint>
@@ -142,4 +141,3 @@ private:
 
 }
 
-#endif // KITINERARY_KNOWLEDGEDB_H

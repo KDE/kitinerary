@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_GENERICICALEXTRACTOR_P_H
-#define KITINERARY_GENERICICALEXTRACTOR_P_H
+#pragma once
 
 #include <QSharedPointer>
 
@@ -29,4 +28,3 @@ namespace GenericIcalExtractor
 
 }
 
-#endif // KITINERARY_GENERICICALEXTRACTOR_H

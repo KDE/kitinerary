@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_JSAPI_JSONLD_H
-#define KITINERARY_JSAPI_JSONLD_H
+#pragma once
 
 #include <QDateTime>
 #include <QObject>
@@ -99,4 +98,3 @@ private:
 }
 }
 
-#endif // KITINERARY_JSAPI_JSONLD_H
