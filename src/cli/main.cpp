@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 
     QCommandLineOption ctxOpt({QStringLiteral("c"), QStringLiteral("context-date")}, QStringLiteral("ISO date/time for when this data has been received."), QStringLiteral("date"));
     parser.addOption(ctxOpt);
-    QCommandLineOption typeOpt({QStringLiteral("t"), QStringLiteral("type")}, QStringLiteral("Type of the input data [Email, Pdf, PkPass, ICal, Html]."), QStringLiteral("type"));
+    QCommandLineOption typeOpt({QStringLiteral("t"), QStringLiteral("type")}, QStringLiteral("Deprecated, no longer needed and ignored."), QStringLiteral("type"));
     parser.addOption(typeOpt);
     QCommandLineOption extOpt({QStringLiteral("e"), QStringLiteral("extractors")}, QStringLiteral("Additional extractors to apply."), QStringLiteral("extractors"));
     parser.addOption(extOpt);
@@ -149,7 +149,7 @@ int main(int argc, char** argv)
     postproc.setValidationEnabled(!parser.isSet(noValidationOpt));
 
     const auto files = parser.positionalArguments().isEmpty() ? QStringList(QString()) : parser.positionalArguments();
-    for (const auto arg : files) {
+    for (const auto &arg : files) {
         QFile f;
         if (!arg.isEmpty()) {
             f.setFileName(arg);
@@ -162,7 +162,6 @@ int main(int argc, char** argv)
         }
 
         auto fileName = f.fileName();
-        const auto typeArg = ExtractorInput::typeFromName(parser.value(typeOpt));
 
         engine.clear();
         engine.setContextDate(contextDt);
@@ -179,12 +178,7 @@ int main(int argc, char** argv)
             engine.setAdditionalExtractors(std::move(exts));
         }
 
-        if (typeArg == ExtractorInput::Unknown) {
-            engine.setData(f.readAll(), fileName);
-        } else {
-            engine.setData(f.readAll(), typeArg);
-        }
-
+        engine.setData(f.readAll(), fileName);
         const auto result = JsonLdDocument::fromJson(engine.extract());
         postproc.process(result);
     }
