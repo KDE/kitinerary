@@ -52,6 +52,13 @@ void ExternalProcessor::preExtract(ExtractorDocumentNode &node, const ExtractorE
 {
     std::vector<const AbstractExtractor*> extractors;
     engine->extractorRepository()->extractorsForNode(node, extractors);
+    // consider the implicit conversion to text/plain the PDF processor can do
+    if (node.mimeType() == QLatin1String("application/pdf")) {
+        node.setMimeType(QStringLiteral("text/plain"));
+        engine->extractorRepository()->extractorsForNode(node, extractors);
+        node.setMimeType(QStringLiteral("application/pdf"));
+    }
+
     QStringList extNames;
     extNames.reserve(extractors.size());
     std::transform(extractors.begin(), extractors.end(), std::back_inserter(extNames), [](auto ext) { return ext->name(); });
