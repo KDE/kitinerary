@@ -112,7 +112,7 @@ void ExtractorDocumentNodeFactoryStatic::registerBuiltIn()
     registerProcessor<PdfDocumentProcessor>(u"application/pdf");
     registerProcessor<PkPassDocumentProcessor>(u"application/vnd.apple.pkpass");
     registerProcessor<IcalEventProcessor>(u"internal/event");
-    registerProcessor<ImageDocumentProcessor>(u"internal/qimage");
+    registerProcessor<ImageDocumentProcessor>(u"internal/qimage", {u"image/png"});
     registerProcessor<Uic9183DocumentProcessor>(u"internal/uic9183");
     registerProcessor<VdvDocumentProcessor>(u"internal/vdv");
     registerProcessor<IcalCalendarProcessor>(u"text/calendar");

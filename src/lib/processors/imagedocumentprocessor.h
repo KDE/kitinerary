@@ -14,6 +14,7 @@ namespace KItinerary {
 class ImageDocumentProcessor : public ExtractorDocumentProcessor
 {
 public:
+    ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
     void expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const override;
 };
 

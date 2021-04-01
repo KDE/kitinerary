@@ -14,6 +14,18 @@
 
 using namespace KItinerary;
 
+ExtractorDocumentNode ImageDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
+{
+    const auto img = QImage::fromData(encodedData);
+    if (img.isNull()) {
+        return {};
+    }
+
+    ExtractorDocumentNode node;
+    node.setContent(img);
+    return node;
+}
+
 void ImageDocumentProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
 {
     // in case the barcode raw data (string or bytearray) gets detected as a type we handle,
