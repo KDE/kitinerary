@@ -43,6 +43,25 @@ bool MimeDocumentProcessor::canHandleData(const QByteArray &encodedData, QString
         fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive);
 }
 
+template <typename T>
+static const T* findHeader(KMime::Content *content)
+{
+    auto h = content->header<T>();
+    if (h || !content->parent()) {
+        return h;
+    }
+    return findHeader<T>(content->parent());
+}
+
+static const KMime::Headers::Base* findHeader(KMime::Content *content, const char *headerType)
+{
+    auto h = content->headerByType(headerType);
+    if (h || !content->parent()) {
+        return h;
+    }
+    return findHeader(content->parent(), headerType);
+}
+
 ExtractorDocumentNode MimeDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
 {
     auto msg = new KMime::Message;
@@ -56,7 +75,7 @@ ExtractorDocumentNode MimeDocumentProcessor::createNodeFromData(const QByteArray
     ExtractorDocumentNode node;
     node.setContent<Internal::OwnedPtr<KMime::Content>>(msg);
 
-    auto dateHdr = msg->header<KMime::Headers::Date>();
+    auto dateHdr = findHeader<KMime::Headers::Date>(msg);
     if (dateHdr) {
         node.setContextDateTime(dateHdr->dateTime());
     }
@@ -130,7 +149,7 @@ void MimeDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extrac
 bool MimeDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
 {
     const auto content = node.content<KMime::Content*>();
-    const auto header = content->headerByType(filter.fieldName().toUtf8().constData());
+    const auto header = findHeader(content, filter.fieldName().toUtf8().constData());
     return header ? filter.matches(header->asUnicodeString()) : false;
 }
 
