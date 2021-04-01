@@ -32,7 +32,7 @@
 
 using namespace KItinerary;
 
-Q_DECLARE_METATYPE(Internal::OwnedPtr<KPkPass::Pass>)
+Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KPkPass::Pass>)
 
 bool PkPassDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {

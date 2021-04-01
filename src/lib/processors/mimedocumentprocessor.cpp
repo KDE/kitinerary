@@ -16,7 +16,7 @@
 
 using namespace KItinerary;
 
-Q_DECLARE_METATYPE(Internal::OwnedPtr<KMime::Content>)
+Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KMime::Content>)
 
 static bool contentMightBeEmail(const QByteArray &data)
 {

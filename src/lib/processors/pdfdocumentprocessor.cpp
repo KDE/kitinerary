@@ -18,7 +18,7 @@
 
 using namespace KItinerary;
 
-Q_DECLARE_METATYPE(Internal::OwnedPtr<PdfDocument>)
+Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KItinerary::PdfDocument>)
 
 enum {
     MaxPageCount = 10, // maximum in the current test set is 6

@@ -22,7 +22,7 @@
 
 using namespace KItinerary;
 
-Q_DECLARE_METATYPE(Internal::OwnedPtr<HtmlDocument>)
+Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KItinerary::HtmlDocument>)
 
 static bool contentStartsWith(const QByteArray &data, char s)
 {
