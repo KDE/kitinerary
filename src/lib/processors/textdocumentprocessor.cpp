@@ -12,12 +12,13 @@
 #include <QStringView>
 
 #include <algorithm>
+#include <cctype>
 
 using namespace KItinerary;
 
 bool TextDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return std::none_of(encodedData.begin(), encodedData.end(), [](const auto c) { return c < 20; })
+    return std::none_of(encodedData.begin(), encodedData.end(), [](auto c) { return std::iscntrl(c) && !std::isspace(c); })
         || fileName.endsWith(QLatin1String(".txt"), Qt::CaseInsensitive);
 }
 
