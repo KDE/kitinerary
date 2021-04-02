@@ -4,10 +4,17 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function main(input) {
-    
-    var page = input.pages[Context.pdfPageNumber];
-    
+function main(pdf, node) {
+    var barcodes = node.findChildNodes({ mimeType: "text/plain", match: ".*", scope: "Descendants" });
+    var results = new Array();
+    for (barcode of barcodes) {
+        if (barcode.location != undefined)
+            results.push(parsePage(pdf.pages[barcode.location], barcode.content));
+    }
+    return results;
+}
+
+function parsePage(page, barcode) {
     const lines = page.text.split("\n")
     
     const res = JsonLd.newEventReservation()
@@ -17,7 +24,7 @@ function main(input) {
     let startTime = ""
     let endTime = ""
     
-    res.reservedTicket.ticketToken = "qrCode:" + Context.barcode
+    res.reservedTicket.ticketToken = "qrCode:" + barcode
     
     const address = JsonLd.newObject("PostalAddress")
     address.addressCountry = "DE"
@@ -56,5 +63,5 @@ function main(input) {
     res.reservationFor.startDate = JsonLd.toDateTime(date + " " + startTime, "dd MMM yyyy h:mm ap", "en")
     res.reservationFor.endDate = JsonLd.toDateTime(date + " " + endTime, "dd MMM yyyy h:mm ap", "en")
 
-    return [res]
+    return res;
 }

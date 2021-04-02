@@ -8,7 +8,7 @@
         "script": "amadeus.js"
     },
     {
-        "mimeType": "text/calendar",
+        "mimeType": "internal/event",
         "filter": [
             { "field": "From", "match": "@amadeus.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
             { "field": "productId", "match": "//AMADEUS//", "mimeType": "text/calendar", "scope": "Parent" }

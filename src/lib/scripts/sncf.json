@@ -9,7 +9,7 @@
             },
             {
                 "match": "^i0CV",
-                "type": "Barcode",
+                "mimeType": "text/plain",
                 "scope": "Descendants"
             }
         ],

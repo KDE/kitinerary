@@ -8,10 +8,8 @@
 #include <kitinerary_version.h>
 
 #include <KItinerary/CalendarHandler>
-#include <KItinerary/Extractor>
 #include <KItinerary/ExtractorCapabilities>
 #include <KItinerary/ExtractorEngine>
-#include <KItinerary/ExtractorInput>
 #include <KItinerary/ExtractorPostprocessor>
 #include <KItinerary/ExtractorRepository>
 #include <KItinerary/JsonLdDocument>
@@ -169,10 +167,10 @@ int main(int argc, char** argv)
         if (!parser.value(extOpt).isEmpty()) {
             const auto extNames = parser.value(extOpt).split(QLatin1Char(';'),
                                                              Qt::SkipEmptyParts);
-            std::vector<Extractor> exts;
+            std::vector<const AbstractExtractor*> exts;
             exts.reserve(extNames.size());
             for (const auto &name : extNames) {
-                const auto ext = repo.extractor(name);
+                const auto ext = repo.extractorByName(name);
                 exts.push_back(ext);
             }
             engine.setAdditionalExtractors(std::move(exts));
@@ -184,7 +182,7 @@ int main(int argc, char** argv)
     }
 
 
-    if (ExtractorInput::typeFromName(parser.value(formatOpt)) == ExtractorInput::ICal) {
+    if (parser.value(formatOpt).compare(QLatin1String("ical"), Qt::CaseInsensitive) == 0) {
         const auto batches = batchReservations(postproc.result());
         KCalendarCore::Calendar::Ptr cal(new KCalendarCore::MemoryCalendar(QTimeZone::systemTimeZone()));
         for (const auto &batch : batches) {

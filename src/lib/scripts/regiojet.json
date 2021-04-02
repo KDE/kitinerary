@@ -9,8 +9,8 @@
         "function": "main"
     },
     {
-        "mimeType": "text/calendar",
-        "filter": [ { "field": "uid", "match": "@regiojet.cz", "type": "ICal", "scope": "Current" } ],
+        "mimeType": "internal/event",
+        "filter": [ { "field": "uid", "match": "@regiojet.cz", "mimeType": "internal/event", "scope": "Current" } ],
         "script": "regiojet.js",
         "function": "parseEvent"
     }

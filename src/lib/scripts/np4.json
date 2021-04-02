@@ -1,6 +1,6 @@
 [
     {
-        "mimeType": "text/calendar",
+        "mimeType": "internal/event",
         "filter": [ { "field": "productId", "match": "NP4GmbH//PCSOffice", "mimeType": "text/calendar", "scope": "Parent" } ],
         "script": "np4.js",
         "function": "parseEvent"

@@ -361,7 +361,7 @@ function parseOuigoConfirmation(html)
     return reservations;
 }
 
-function parseOuigoTicket(pdf) {
+function parseOuigoTicket(pdf, node) {
     var text = pdf.pages[0].textInRect(0, 0, 0.5, 1);
 
     var res = JsonLd.newTrainReservation();
@@ -377,8 +377,13 @@ function parseOuigoTicket(pdf) {
     var seat = text.match(/Voiture\s*(\S+)\s*Place\s*(\S+)/);
     res.reservedTicket.ticketedSeat.seatSection = seat[1];
     res.reservedTicket.ticketedSeat.seatNumber = seat[2];
-    if (Context.barcode) {
-        res.reservedTicket.ticketToken = "azteccode:" + Context.barcode;
+
+    var barcodes = node.findChildNodes({ scope: "Descendants", mimeType: "text/plain", match: ".*" });
+    for (barcode of barcodes) {
+        if (barcode.location != undefined) {
+            res.reservedTicket.ticketToken = "azteccode:" + barcodes[0].content;
+            break;
+        }
     }
     return res;
 }
