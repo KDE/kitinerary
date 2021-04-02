@@ -39,7 +39,7 @@ public:
     void loadScriptExtractors();
     void addExtractor(std::unique_ptr<AbstractExtractor> &&e);
 
-    std::vector<std::unique_ptr<AbstractExtractor>> m_extractorsNew;
+    std::vector<std::unique_ptr<AbstractExtractor>> m_extractors;
     QStringList m_extraSearchPaths;
 };
 }
@@ -72,13 +72,13 @@ ExtractorRepository::ExtractorRepository(KItinerary::ExtractorRepository &&) noe
 
 void ExtractorRepository::reload()
 {
-    d->m_extractorsNew.clear();
+    d->m_extractors.clear();
     d->loadAll();
 }
 
 const std::vector<std::unique_ptr<AbstractExtractor>>& ExtractorRepository::extractors() const
 {
-    return d->m_extractorsNew;
+    return d->m_extractors;
 }
 
 void ExtractorRepository::extractorsForNode(const ExtractorDocumentNode &node, std::vector<const AbstractExtractor*> &extractors) const
@@ -87,7 +87,7 @@ void ExtractorRepository::extractorsForNode(const ExtractorDocumentNode &node, s
         return;
     }
 
-    for (const auto &extractor : d->m_extractorsNew) {
+    for (const auto &extractor : d->m_extractors) {
         if (extractor->canHandle(node)) {
             // while we only would add each extractor at most once, some of them might already be in the list, so de-duplicate
             const auto it = std::lower_bound(extractors.begin(), extractors.end(), extractor.get(), [](auto lhs, auto rhs) {
@@ -102,10 +102,10 @@ void ExtractorRepository::extractorsForNode(const ExtractorDocumentNode &node, s
 
 const AbstractExtractor* ExtractorRepository::extractorByName(QStringView name) const
 {
-    auto it = std::lower_bound(d->m_extractorsNew.begin(), d->m_extractorsNew.end(), name, [](const auto &lhs, auto rhs) {
+    auto it = std::lower_bound(d->m_extractors.begin(), d->m_extractors.end(), name, [](const auto &lhs, auto rhs) {
         return lhs->name() < rhs;
     });
-    if (it != d->m_extractorsNew.end() && (*it)->name() == name) {
+    if (it != d->m_extractors.end() && (*it)->name() == name) {
         return (*it).get();
     }
     return {};
@@ -173,11 +173,11 @@ void ExtractorRepositoryPrivate::loadScriptExtractors()
 
 void ExtractorRepositoryPrivate::addExtractor(std::unique_ptr<AbstractExtractor> &&e)
 {
-    auto it = std::lower_bound(m_extractorsNew.begin(), m_extractorsNew.end(), e, [](const auto &lhs, const auto &rhs) {
+    auto it = std::lower_bound(m_extractors.begin(), m_extractors.end(), e, [](const auto &lhs, const auto &rhs) {
         return lhs->name() < rhs->name();
     });
-    if (it == m_extractorsNew.end() || (*it)->name() != e->name()) {
-        m_extractorsNew.insert(it, std::move(e));
+    if (it == m_extractors.end() || (*it)->name() != e->name()) {
+        m_extractors.insert(it, std::move(e));
     }
 }
 
@@ -195,7 +195,7 @@ QJsonValue ExtractorRepository::extractorToJson(const ScriptExtractor *extractor
 {
     QJsonArray a;
     bool added = false;
-    for (const auto &ext : d->m_extractorsNew) {
+    for (const auto &ext : d->m_extractors) {
         auto e = dynamic_cast<ScriptExtractor*>(ext.get());
         if (!e || e->fileName() != extractor->fileName()) {
             continue;
