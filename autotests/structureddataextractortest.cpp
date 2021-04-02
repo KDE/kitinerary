@@ -4,8 +4,10 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "generic/structureddataextractor_p.h"
-#include <KItinerary/HtmlDocument>
+#include <KItinerary/ExtractorDocumentNode>
+#include <KItinerary/ExtractorDocumentProcessor>
+#include <KItinerary/ExtractorEngine>
+#include <KItinerary/ExtractorResult>
 
 #include <QDebug>
 #include <QDir>
@@ -45,15 +47,18 @@ private Q_SLOTS:
 
         QFile f(inputFile);
         QVERIFY(f.open(QFile::ReadOnly));
-        std::unique_ptr<HtmlDocument> htmlDoc(HtmlDocument::fromData(f.readAll()));
-        QVERIFY(htmlDoc);
+
+        ExtractorEngine engine;
+        engine.setData(f.readAll());
+        auto node = engine.rootDocumentNode();
+        node.processor()->preExtract(node, &engine);
 
         QFile ref(jsonFile);
         QVERIFY(ref.open(QFile::ReadOnly));
         const auto doc = QJsonDocument::fromJson(ref.readAll());
         QVERIFY(doc.isArray());
 
-        auto data = StructuredDataExtractor::extract(htmlDoc.get());
+        auto data = node.result().jsonLdResult();
         if (data != doc.array()) {
             qDebug().noquote() << QJsonDocument(data).toJson();
         }
