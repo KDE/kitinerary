@@ -58,6 +58,7 @@ set(kitinerary_lib_srcs
     knowledgedb/timezonedb.cpp
     knowledgedb/trainstationdb.cpp
 
+    pdf/pdfbarcodeutil.cpp
     pdf/pdfdocument.cpp
     pdf/pdfextractoroutputdevice.cpp
     pdf/pdfimage.cpp

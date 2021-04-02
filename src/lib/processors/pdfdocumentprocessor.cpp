@@ -5,6 +5,7 @@
 */
 
 #include "pdfdocumentprocessor.h"
+#include "pdf/pdfbarcodeutil_p.h"
 
 #include <KItinerary/BarcodeDecoder>
 #include <KItinerary/ExtractorDocumentNodeFactory>
@@ -23,11 +24,6 @@ Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KItinerary::PdfDocument>)
 enum {
     MaxPageCount = 10, // maximum in the current test set is 6
     MaxFileSize = 4000000, // maximum in the current test set is 980kB
-    // unit is 1/72 inch, assuming landscape orientation
-    MinTargetImageHeight = 28,
-    MinTargetImageWidth = 36,
-    MaxTargetImageHeight = 252,
-    MaxTargetImageWidth = 252,
 };
 
 PdfDocumentProcessor::PdfDocumentProcessor() = default;
@@ -80,23 +76,6 @@ ExtractorDocumentNode PdfDocumentProcessor::createNodeFromContent(const QVariant
     return node;
 }
 
-static bool maybeBarcode(const PdfImage &img)
-{
-    const auto w = img.width();
-    const auto h = img.height();
-
-    if (!BarcodeDecoder::isPlausibleSize(img.sourceWidth(), img.sourceHeight()) || !BarcodeDecoder::isPlausibleAspectRatio(w, h)) {
-        return false;
-    }
-
-    // image target size checks
-    if (std::min(w, h) < MinTargetImageHeight || std::max(w, h) < MinTargetImageWidth || h > MaxTargetImageHeight || w > MaxTargetImageWidth) {
-        return false;
-    }
-
-    return true;
-}
-
 void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
 {
     const auto doc = node.content<PdfDocument*>();
@@ -112,7 +91,7 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
                 continue;
             }
 
-            if (!maybeBarcode(img)) {
+            if (!PdfBarcodeUtil::maybeBarcode(img)) {
                 continue;
             }
 
