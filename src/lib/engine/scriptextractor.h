@@ -27,17 +27,17 @@ class ScriptExtractorPrivate;
  *
  * The meta-data files either contain a single JSON object or an array of JSON objects
  * with the following content:
- * - \c type: The type of the extractor, \c text if not specified.
+ * - \c mimeType: The MIME type of the extractor, \c text if not specified.
  * - \c filter: An array of filters that are used to select this extractor for a given input file.
  * - \c script: A JavaScript file to execute.
  * - \c function: The entry point in the above mentioned script, @c main if not specified.
  *
- * The following extractor types are supported (see also ExtractorInput::Type):
- * - \c Text: plain text, the argument to the script function is a single string.
- * - \c Html: HTML documents, the argument to the script function is a HtmlDocument instance.
- * - \c Pdf: PDF documents, the argument to the script function is a PdfDocument instance.
- * - \c PkPass: Apple Wallet passes, the argument to the script function is a KPkPass::BoardingPass instance.
- * - \c ICal: iCalendar events, the argument to the script function is a KCalendarCore::Event instance.
+ * The following extractor types are supported:
+ * - \c text/plain: plain text, the argument to the script function is a single string.
+ * - \c text/html: HTML documents, the argument to the script function is a KItinerary::HtmlDocument instance.
+ * - \c application/pdf: PDF documents, the argument to the script function is a KItinerary::PdfDocument instance.
+ * - \c application/vnd.apple.pkpass: Apple Wallet passes, the argument to the script function is a KPkPass::Pass instance.
+ * - \c internal/event: iCalendar events, the argument to the script function is a KCalendarCore::Event instance.
  *
  * Filter definitions have the following field:
  * - \c mimeType: The MIME type of the document part this filter can match against.
@@ -52,13 +52,13 @@ class ScriptExtractorPrivate;
  * @code
  * [
  *   {
- *     "type": "Pdf",
+ *     "mimeType": "application/pdf",
  *     "filter": [ { "field": "From", "match": "@swiss.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
  *     "script": "swiss.js",
  *     "function": "parsePdf"
  *   },
  *   {
- *     "type": "PkPass",
+ *     "mimeType": "application/vnd.apple.pkpass",
  *     "filter": [ { "field": "passTypeIdentifier", "match": "pass.booking.swiss.com", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
  *     "script": "swiss.js",
  *     "function": "parsePkPass"
