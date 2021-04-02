@@ -36,14 +36,6 @@ set(kitinerary_lib_srcs
 
     extractors/iatabcbpextractor.cpp
 
-    generic/genericextractor.cpp
-    generic/genericicalextractor.cpp
-    generic/genericpdfextractor.cpp
-    generic/genericpkpassextractor.cpp
-    generic/genericuic918extractor.cpp
-    generic/genericvdvextractor.cpp
-    generic/structureddataextractor.cpp
-
     jsapi/barcode.cpp
     jsapi/bitarray.cpp
     jsapi/context.cpp
@@ -103,9 +95,7 @@ set(kitinerary_lib_srcs
     barcodedecoder.cpp
     calendarhandler.cpp
     documentutil.cpp
-    extractor.cpp
     extractorcapabilities.cpp
-    extractorinput.cpp
     extractorpostprocessor.cpp
     extractorutil.cpp
     extractorvalidator.cpp
@@ -182,9 +172,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         BarcodeDecoder
         CalendarHandler
         DocumentUtil
-        Extractor
         ExtractorCapabilities
-        ExtractorInput
         ExtractorPostprocessor
         ExtractorValidator
         File

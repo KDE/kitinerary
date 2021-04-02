@@ -8,8 +8,6 @@
 
 #include "kitinerary_export.h"
 
-#include "extractorinput.h"
-
 #include <QExplicitlySharedDataPointer>
 #include <qobjectdefs.h>
 
@@ -33,8 +31,6 @@ public:
     ExtractorFilter& operator=(const ExtractorFilter&);
     ExtractorFilter& operator=(ExtractorFilter&&);
 
-    /** The filter type. */
-    [[deprecated("use mimeType()")]] ExtractorInput::Type type() const;
     /** MIME type of the document part this filter can match. */
     QString mimeType() const;
     /** The field to filter on. */
@@ -74,7 +70,6 @@ public:
     /** Create a filter from a JS object value. */
     static ExtractorFilter fromJSValue(const QJSValue &js);
 
-    [[deprecated("use setMimeType()")]]  void setType(ExtractorInput::Type type);
     void setMimeType(const QString &mimeType);
     void setFieldName(const QString &fieldName);
     void setPattern(const QString &pattern);

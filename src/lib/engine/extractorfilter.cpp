@@ -39,16 +39,6 @@ ExtractorFilter::~ExtractorFilter() = default;
 ExtractorFilter& ExtractorFilter::operator=(const ExtractorFilter&) = default;
 ExtractorFilter& ExtractorFilter::operator=(ExtractorFilter&&) = default;
 
-ExtractorInput::Type ExtractorFilter::type() const
-{
-    return ExtractorInput::typeFromMimeType(d->m_mimeType);
-}
-
-void ExtractorFilter::setType(ExtractorInput::Type type)
-{
-    setMimeType(ExtractorInput::typeToMimeType(type));
-}
-
 QString ExtractorFilter::mimeType() const
 {
     return d->m_mimeType;
@@ -102,10 +92,7 @@ bool ExtractorFilter::load(const QJsonObject &obj)
     d.detach();
     d->m_mimeType = obj.value(QLatin1String("mimeType")).toString();
     if (d->m_mimeType.isEmpty()) {
-        setType(ExtractorInput::typeFromName(obj.value(QLatin1String("type")).toString()));
-    }
-    if (d->m_mimeType.isEmpty()) {
-        qCDebug(Log) << "unspecified filter type";
+        qCDebug(Log) << "unspecified filter MIME type";
     }
     d->m_fieldName = obj.value(QLatin1String("field")).toString();
     d->m_exp.setPattern(obj.value(QLatin1String("match")).toString());
