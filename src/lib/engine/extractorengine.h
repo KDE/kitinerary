@@ -7,26 +7,11 @@
 #pragma once
 
 #include "kitinerary_export.h"
-#include "extractorinput.h"
 
 #include <QString>
 
 #include <memory>
 #include <vector>
-
-template <typename T> class QSharedPointer;
-
-namespace KCalendarCore {
-class Calendar;
-}
-
-namespace KPkPass {
-class Pass;
-}
-
-namespace KMime {
-class Content;
-}
 
 class QByteArray;
 class QDateTime;
@@ -37,14 +22,11 @@ namespace KItinerary {
 
 class AbstractExtractor;
 class BarcodeDecoder;
-class Extractor;
 class ExtractorDocumentNode;
 class ExtractorDocumentNodeFactory;
 class ExtractorEnginePrivate;
 class ExtractorRepository;
 class ExtractorScriptEngine;
-class HtmlDocument;
-class PdfDocument;
 
 /**
  * Semantic data extraction engine.
@@ -130,33 +112,6 @@ public:
     /** Resets the internal state, call before processing new input data. */
     void clear();
 
-    /** The text to extract data from.
-     *  Only considered for text extractors.
-     */
-    [[deprecated("use setContent")]] void setText(const QString &text);
-    /** A HTML document to extract data from.
-     *  Only considered for HTML and text extractors.
-     */
-    [[deprecated("use setContent")]] void setHtmlDocument(HtmlDocument *htmlDoc);
-    /** A PDF document to extract data from.
-     *  Only considered for PDF or text extractors.
-     */
-    [[deprecated("use setContent")]] void setPdfDocument(PdfDocument *pdfDoc);
-    /** The pkpass boarding pass to extract data from.
-     *  Only considered for pkpass extractors.
-     */
-    [[deprecated("use setContent")]] void setPass(KPkPass::Pass *pass);
-    /** The iCalendar to extract data from.
-     *  Only considered for ical extractors.
-     */
-    [[deprecated("use setContent")]] void setCalendar(const QSharedPointer<KCalendarCore::Calendar> &calendar);
-
-    /** A MIME part to extract from.
-     *  This is assumed to contain one of the supported mime types.
-     *  @p content is also set as extraction context (see setContext).
-     */
-    [[deprecated("use setContent")]] void setContent(KMime::Content *content);
-
     /** Set raw data to extract from.
      *  @param data Raw data to extract from.
      *  @param fileName Used as a hint to determine the type, optional and used for MIME type auto-detection if needed.
@@ -164,23 +119,10 @@ public:
      */
     void setData(const QByteArray &data, QStringView fileName = {}, QStringView mimeType = {});
 
-    /** Raw data to extract, but with a known type.
-     *  No content type detection is performed here, you should be sure about @p type.
-     */
-    [[deprecated("use setData")]] void setData(const QByteArray &data, ExtractorInput::Type type);
-
     /** Already decoded data to extract from.
      *  @param data Has to contain a object of a supported data type matching @p mimeType.
      */
     void setContent(const QVariant &data, QStringView mimeType);
-
-    /** Sets the MIME part the document we try to extract comes from.
-     *  Use this for documents received by email, to provide additional
-     *  hints for the extraction.
-     *  Calling this method is not necessary when using setContent,
-     *  only when using any of the other content setter methods directly.
-     */
-    [[deprecated("set setContext()")]] void setContext(KMime::Content *context);
 
     /** Provide a document part that is only used to determine which extractor to use,
      *  but not for extraction itself.
@@ -210,7 +152,6 @@ public:
      *  be called manually. This mainly exists for the external extractor process.
      */
     void setAdditionalExtractors(std::vector<const AbstractExtractor*> &&extractors);
-    [[deprecated("uset setAdditionalExtractors()")]] void setAdditionalExtractors(std::vector<Extractor> &&extractors);
 
     /** Perform the actual extraction, and return the JSON-LD data
      *  that has been found.
