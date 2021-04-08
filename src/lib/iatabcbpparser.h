@@ -13,7 +13,6 @@
 
 #include <memory>
 
-class QDate;
 class QString;
 class QVariant;
 
