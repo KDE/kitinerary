@@ -25,3 +25,6 @@ CMakeLists.txt.user*
 *.rej
 compile_commands.json
 .clang-format
+.clangd
+.idea
+/cmake-build*
