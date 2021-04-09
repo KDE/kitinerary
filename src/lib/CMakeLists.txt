@@ -117,9 +117,6 @@ ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER compare-logging.h IDE
 ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER validator-logging.h IDENTIFIER KItinerary::ValidatorLog CATEGORY_NAME org.kde.kitinerary.extractorValidator)
 
 add_library(KPimItinerary ${kitinerary_lib_srcs})
-if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
-    set_target_properties(KPimItinerary PROPERTIES UNITY_BUILD ON)
-endif()
 add_library(KPim::Itinerary ALIAS KPimItinerary)
 generate_export_header(KPimItinerary BASE_NAME KItinerary)
 set_target_properties(KPimItinerary PROPERTIES
