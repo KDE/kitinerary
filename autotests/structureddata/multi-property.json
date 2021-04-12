@@ -1,0 +1,14 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleBody": "bla",
+        "author": {
+            "@type": "Person",
+            "name": "Volker Krause"
+        },
+        "datePublished": "2021-04-02T11:15:00+02:00",
+        "headline": "February/March in KDE Itinerary",
+        "name": "February/March in KDE Itinerary"
+    }
+]

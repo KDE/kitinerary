@@ -147,6 +147,15 @@ static QString valueForItemProperty(const HtmlElement &elem)
     return v;
 }
 
+static void insertProperties(QJsonObject &obj, const QString &prop, const QJsonValue &val)
+{
+    // multiple properties can be specified at once, as a space-separated list
+    const auto props = prop.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+    for (const auto &p : props) {
+        obj.insert(p, val);
+    }
+}
+
 static void parseMicroData(const HtmlElement &elem, QJsonObject &obj, QJsonArray &result)
 {
     auto child = elem.firstChild();
@@ -161,10 +170,10 @@ static void parseMicroData(const HtmlElement &elem, QJsonObject &obj, QJsonArray
             if (prop.isEmpty()) {
                 result.push_back(subObj); // stand-alone object that just happens to be nested
             } else {
-                obj.insert(prop, subObj);
+                insertProperties(obj, prop, subObj);
             }
         } else if (!prop.isEmpty()) {
-            obj.insert(prop, valueForItemProperty(child));
+            insertProperties(obj, prop, valueForItemProperty(child));
         // Maybe there is more JSON-LD inside this microdata tree
         } else if (isJsonLdTag(child)) {
             parseJson(child.content().toUtf8(), result);
