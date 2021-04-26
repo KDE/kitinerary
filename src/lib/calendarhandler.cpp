@@ -404,6 +404,8 @@ static void fillEvent(const KItinerary::Event &ev, const KCalendarCore::Event::P
             event->addAlarm(alarm);
         }
     }
+
+    event->setDescription(formatAddress(location.address()) + QLatin1Char('\n'));
 }
 
 static void fillEventReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event)
@@ -411,7 +413,7 @@ static void fillEventReservation(const QVector<QVariant> &reservations, const KC
     const auto ev = reservations.at(0).value<EventReservation>().reservationFor().value<KItinerary::Event>();
     fillEvent(ev, event);
 
-    QStringList desc;
+    QStringList desc = { event->description() };
     for (const auto &r : reservations) {
         const auto reservation = r.value<EventReservation>();
         const auto person = reservation.underName().value<KItinerary::Person>();
