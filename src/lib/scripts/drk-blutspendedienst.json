@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "noreply@spenderservice.net",
+            "mimeType": "message/rfc822",
+            "scope": "Parent"
+        }
+    ],
+    "function": "parseReservation",
+    "mimeType": "text/html",
+    "script": "drk-blutspendedienst.js"
+}
