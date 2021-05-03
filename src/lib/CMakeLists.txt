@@ -137,7 +137,7 @@ target_link_libraries(KPimItinerary
         KF5::I18n
         KF5::Contacts
         KPim::PkPass
-        ${ZLIB_LIBRARIES}
+        ZLIB::ZLIB
 )
 if (HAVE_POPPLER)
     target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
