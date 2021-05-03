@@ -120,7 +120,7 @@ add_library(KPimItinerary ${kitinerary_lib_srcs})
 add_library(KPim::Itinerary ALIAS KPimItinerary)
 generate_export_header(KPimItinerary BASE_NAME KItinerary)
 set_target_properties(KPimItinerary PROPERTIES
-    VERSION ${KITINERARY_VERSION_STRING}
+    VERSION ${KITINERARY_VERSION}
     SOVERSION ${KITINERARY_SOVERSION}
     EXPORT_NAME Itinerary
 )
