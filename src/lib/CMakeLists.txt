@@ -138,10 +138,8 @@ target_link_libraries(KPimItinerary
         KF5::Contacts
         KPim::PkPass
         ZLIB::ZLIB
+        Poppler::Core
 )
-if (HAVE_POPPLER)
-    target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
-endif()
 
 if (TARGET ZXing::ZXing)
     target_link_libraries(KPimItinerary PRIVATE ZXing::ZXing)
