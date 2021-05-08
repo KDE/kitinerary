@@ -96,3 +96,8 @@ QDate SSBTicket::type1DepartureDay(const QDate& contextDate)
     const auto d = issueDate(contextDate);
     return d.addDays(type1DepartureDate());
 }
+
+QByteArray SSBTicket::rawData() const
+{
+    return m_data;
+}

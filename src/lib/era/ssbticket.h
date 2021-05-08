@@ -109,6 +109,8 @@ class KITINERARY_EXPORT SSBTicket {
     };
     Q_ENUM(TicketType)
 
+    Q_PROPERTY(QByteArray rawData READ rawData)
+
 public:
     SSBTicket();
     explicit SSBTicket(const QByteArray &data);
@@ -121,6 +123,9 @@ public:
     Q_INVOKABLE QDate issueDate(const QDate &contextDate = QDate::currentDate());
     /** Departure day for type 1 (IRT/RES/BOA) tickets. */
     Q_INVOKABLE QDate type1DepartureDay(const QDate &contextDate = QDate::currentDate());
+
+    /** Raw barcode data. */
+    QByteArray rawData() const;
 
     /** Returns @c true if @p data might be an ERA SSB ticket. */
     static bool maybeSSB(const QByteArray &data);
