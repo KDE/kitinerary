@@ -55,7 +55,7 @@ class KITINERARY_EXPORT SSBTicket {
     SSB_NUM_PROPERTY(type1DepartureTime, 217, 11)
     SSB_STR_PROPERTY(type1TrainNumber, 228, 5)
     SSB_NUM_PROPERTY(type1CoachNumber, 258, 10)
-    SSB_STR_PROPERTY(type1SeatNumbe, 268, 3)
+    SSB_STR_PROPERTY(type1SeatNumber, 268, 3)
     SSB_NUM_PROPERTY(type1OverbookingIndicator, 286, 1)
     SSB_NUM_PROPERTY(type1InformationMessages, 287, 14)
     SSB_STR_PROPERTY(type1OpenText, 301, 27)
