@@ -67,6 +67,7 @@ set(kitinerary_lib_srcs
     processors/mimedocumentprocessor.cpp
     processors/pdfdocumentprocessor.cpp
     processors/pkpassdocumentprocessor.cpp
+    processors/ssbdocumentprocessor.cpp
     processors/textdocumentprocessor.cpp
     processors/uic9183documentprocessor.cpp
     processors/vdvdocumentprocessor.cpp

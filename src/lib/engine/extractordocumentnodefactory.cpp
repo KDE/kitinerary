@@ -18,6 +18,7 @@
 #include "processors/mimedocumentprocessor.h"
 #include "processors/pdfdocumentprocessor.h"
 #include "processors/pkpassdocumentprocessor.h"
+#include "processors/ssbdocumentprocessor.h"
 #include "processors/textdocumentprocessor.h"
 #include "processors/uic9183documentprocessor.h"
 #include "processors/vdvdocumentprocessor.h"
@@ -113,6 +114,7 @@ void ExtractorDocumentNodeFactoryStatic::registerBuiltIn()
     registerProcessor<PkPassDocumentProcessor>(u"application/vnd.apple.pkpass");
     registerProcessor<IcalEventProcessor>(u"internal/event");
     registerProcessor<ImageDocumentProcessor>(u"internal/qimage", {u"image/png"});
+    registerProcessor<SsbDocumentProcessor>(u"internal/era-ssb");
     registerProcessor<Uic9183DocumentProcessor>(u"internal/uic9183");
     registerProcessor<VdvDocumentProcessor>(u"internal/vdv");
     registerProcessor<IcalCalendarProcessor>(u"text/calendar");
