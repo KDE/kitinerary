@@ -4,8 +4,29 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parseReservation(html) {
+function parseSsbTicket(ssb, node) {
     var res = JsonLd.newTrainReservation();
+    if (ssb.version != 3 || ssb.ticketTypeCode != 1) {
+        return res;
+    }
+    res.reservationFor.departureStation.name = ssb.type1DepartureStationAlpha;
+    res.reservationFor.departureStation.identifier = "benerail:" + ssb.type1DepartureStationAlpha;
+    res.reservationFor.arrivalStation.name = ssb.type1ArrivalStationAlpha;
+    res.reservationFor.arrivalStation.identifier = "benerail:" + ssb.type1ArrivalStationAlpha;
+    res.reservationFor.departureDay = ssb.type1DepartureDay(node.contextDateTime)
+    res.reservationFor.trainNumber = "THA " + ssb.type1TrainNumber.trim();
+    res.reservedTicket.ticketedSeat.seatingType = ssb.classOfTravel;
+    res.reservedTicket.ticketedSeat.seatSection = ssb.type1CoachNumber;
+    res.reservedTicket.ticketedSeat.seatNumber = ssb.type1SeatNumber;
+    res.reservationNumber = ssb.tcn;
+    res.reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(ssb.rawData);
+    return res;
+}
+
+function parseReservation(html, node) {
+    var tokenElem = html.eval('//table[@class="qrcode"]//img')[0];
+    var token = tokenElem.attribute("src").match(/barcode\/tAZTEC\/.*\/nBinary\/v(.*)\/barcode.gif/);
+    var res = parseSsbTicket(Barcode.decodeEraSsbTicket(Barcode.fromBase64(token[1])), node);
 
     var subtitle = html.eval('//table[@class="subtitle"]');
     var ref = subtitle[0].recursiveContent.match(/(\d{2}.\d{2}.\d{4})[\s\S]*([A-Z0-9]{6})/);
@@ -27,17 +48,8 @@ function parseReservation(html) {
     res.reservedTicket.ticketedSeat.seatSection = details[3];
     res.reservedTicket.ticketedSeat.seatNumber = details[4];
 
-    var tokenElem = html.eval('//table[@class="qrcode"]//img')[0];
-    var token = tokenElem.attribute("src").match(/barcode\/tAZTEC\/.*\/nBinary\/v(.*)\/barcode.gif/);
-    res.reservedTicket.ticketToken = "aztecbin:" + token[1];
-
     var passengerElem = html.eval('//table[@class="passengername"]')[0];
     var name = passengerElem.recursiveContent.match(/\n(.*)/);
     res.underName.name = name[1];
-
-    var ssb = Barcode.decodeEraSsbTicket(Barcode.fromBase64(token[1]));
-    res.reservationFor.departureStation.identifier = "benerail:" + ssb.type1DepartureStationAlpha;
-    res.reservationFor.arrivalStation.identifier = "benerail:" + ssb.type1ArrivalStationAlpha;
-
     return res;
 }

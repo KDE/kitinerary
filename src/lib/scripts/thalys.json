@@ -1,13 +1,28 @@
-{
-    "filter": [
-        {
-            "field": "From",
-            "match": "thalysticket",
-            "mimeType": "message/rfc822",
-            "scope": "Ancestors"
-        }
-    ],
-    "function": "parseReservation",
-    "script": "thalys.js",
-    "mimeType": "text/html"
-}
+[
+    {
+        "filter": [
+            {
+                "field": "issuerCode",
+                "match": "3018",
+                "mimeType": "internal/era-ssb",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseSsbTicket",
+        "script": "thalys.js",
+        "mimeType": "internal/era-ssb"
+    },
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "thalysticket",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "parseReservation",
+        "script": "thalys.js",
+        "mimeType": "text/html"
+    }
+]
