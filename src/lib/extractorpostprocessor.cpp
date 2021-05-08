@@ -402,6 +402,7 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
 {
     res.setUnderName(processPerson(res.underName().template value<Person>()));
     res.setPotentialAction(processActions(res.potentialAction()));
+    res.setReservationNumber(res.reservationNumber().trimmed());
     return res;
 }
 
