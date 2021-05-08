@@ -84,6 +84,9 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
 
     switch (prop.type()) {
     case QVariant::String:
+        if (v.isDouble()) {
+            return QString::number(v.toDouble());
+        }
         return v.toString();
     case QVariant::Date:
         return QDate::fromString(v.toString(), Qt::ISODate);
