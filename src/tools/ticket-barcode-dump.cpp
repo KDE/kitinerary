@@ -50,6 +50,11 @@ static void dumpSsbv3Ticket(const QByteArray &data)
             case QVariant::Int:
                 std::cout << prop.name() << ": " << value.toInt() << std::endl;
                 break;
+            case QVariant::ByteArray:
+                if (std::strcmp(prop.name(), "rawData") == 0) {
+                    break;
+                }
+                [[fallthrough]];
             default:
                 std::cout << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
                 break;
