@@ -41,7 +41,7 @@ QString SSBv3Ticket::readString(int start, int length) const
     QString res;
     res.resize(length);
     for (int i = 0; i < length; ++i) {
-        res[i] = QChar(readNumber(start + SSB_CHAR_WIDTH * i, SSB_CHAR_WIDTH) + 32);
+        res[i] = QLatin1Char((uint8_t)readNumber(start + SSB_CHAR_WIDTH * i, SSB_CHAR_WIDTH) + 32);
     }
     return res;
 }

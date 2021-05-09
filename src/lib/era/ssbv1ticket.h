@@ -29,7 +29,7 @@ class KITINERARY_EXPORT SSBv1Ticket : protected SSBTicketBase
     SSB_NUM_PROPERTY(firstDayOfValidity, 39, 9)
     SSB_NUM_PROPERTY(lastDayOfValidity, 48, 9)
     SSB_NUM_PROPERTY(customerNumberType, 57, 1)
-    SSB_NUM_PROPERTY(customerNumber, 58, 47) // ???
+    SSB_LONG_PROPERTY(customerNumber, 58, 47)
     SSB_NUM_PROPERTY(departureStationType, 105, 1)
     SSB_NUM_PROPERTY(departureStationNum, 106, 30)
     SSB_STR_PROPERTY(departureStationAlpha, 106, 5)
@@ -38,7 +38,7 @@ class KITINERARY_EXPORT SSBv1Ticket : protected SSBTicketBase
     SSB_STR_PROPERTY(arrivalStationAlpha, 137, 5)
     SSB_NUM_PROPERTY(departureTime, 167, 6)
     SSB_NUM_PROPERTY(trainNumber, 173, 17)
-    SSB_NUM_PROPERTY(reservationReference, 190, 40)
+    SSB_LONG_PROPERTY(reservationReference, 190, 40)
     SSB_NUM_PROPERTY(classOfTransport, 230, 6)
     SSB_NUM_PROPERTY(coachNumber, 236, 10)
     SSB_NUM_PROPERTY(seatNumber, 246, 7)

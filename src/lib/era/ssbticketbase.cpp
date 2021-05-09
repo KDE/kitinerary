@@ -18,9 +18,9 @@ enum {
 SSBTicketBase::SSBTicketBase() = default;
 SSBTicketBase::~SSBTicketBase() = default;
 
-int SSBTicketBase::readNumber(int start, int length) const
+uint64_t SSBTicketBase::readNumber(int start, int length) const
 {
-    if (start < 0 || length < 1 || start / 8 >= m_data.size() || (start + length) / 8 >= m_data.size() || length > 31) {
+    if (start < 0 || length < 1 || start / 8 >= m_data.size() || (start + length) / 8 >= m_data.size() || length > 63) {
         qWarning() << "invalid SSB read:" << start << length;
         return {};
     }
