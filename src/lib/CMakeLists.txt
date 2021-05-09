@@ -34,6 +34,7 @@ set(kitinerary_lib_srcs
 
     era/ssbticketbase.cpp
     era/ssbv1ticket.cpp
+    era/ssbv2ticket.cpp
     era/ssbv3ticket.cpp
 
     extractors/iatabcbpextractor.cpp

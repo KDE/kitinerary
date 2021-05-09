@@ -5,6 +5,7 @@
 */
 
 #include "../lib/era/ssbv1ticket.h"
+#include "../lib/era/ssbv2ticket.h"
 #include "../lib/era/ssbv3ticket.h"
 #include "../lib/uic9183/uic9183head.h"
 #include "../lib/uic9183/uic9183header.h"
@@ -65,6 +66,29 @@ static void dumpSsbv3Ticket(const QByteArray &data)
         std::cout << std::endl;
         std::cout << "Issuing day: " << qPrintable(ticket.issueDate().toString(Qt::ISODate)) << std::endl;
         std::cout << "Departure day: " << qPrintable(ticket.type1DepartureDay().toString(Qt::ISODate)) << std::endl;
+    }
+}
+
+static void dumpSsbv2Ticket(const QByteArray &data)
+{
+    SSBv2Ticket ticket(data);
+
+    for (auto i = 0; i < SSBv2Ticket::staticMetaObject.propertyCount(); ++i) {
+        const auto prop = SSBv2Ticket::staticMetaObject.property(i);
+        const auto value = prop.readOnGadget(&ticket);
+        switch (value.type()) {
+            case QVariant::Int:
+                std::cout << prop.name() << ": " << value.toInt() << std::endl;
+                break;
+            case QVariant::ByteArray:
+                if (std::strcmp(prop.name(), "rawData") == 0) {
+                    break;
+                }
+                [[fallthrough]];
+            default:
+                std::cout << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
+                break;
+        }
     }
 }
 
@@ -280,6 +304,9 @@ int main(int argc, char **argv)
     } else if (SSBv3Ticket::maybeSSB(data)) {
         std::cout << "ERA SSB Ticket" << std::endl;
         dumpSsbv3Ticket(data);
+    } else if (SSBv2Ticket::maybeSSB(data)) {
+        std::cout << "ERA SSB Ticket" << std::endl;
+        dumpSsbv2Ticket(data);
     } else if (SSBv1Ticket::maybeSSB(data)) {
         std::cout << "ERA SSB Ticket" << std::endl;
         dumpSsbv1Ticket(data);
