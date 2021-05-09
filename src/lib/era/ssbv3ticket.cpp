@@ -36,24 +36,6 @@ bool SSBv3Ticket::isValid() const
     return !m_data.isEmpty();
 }
 
-int SSBv3Ticket::readNumber(int start, int length) const
-{
-    if (start < 0 || length < 1 || start / 8 >= m_data.size() || (start + length) / 8 >= m_data.size() || length > 31) {
-        qWarning() << "invalid SSB read:" << start << length;
-        return {};
-    }
-
-    uint64_t num = 0;
-    for (int i = 0; i < 8; ++i) {
-        num <<= 8;
-        num |= (uint8_t)*(m_data.constData() + (start / 8) + i);
-    }
-    num <<= start % 8;
-    num >>= 64 - length;
-
-    return num;
-}
-
 QString SSBv3Ticket::readString(int start, int length) const
 {
     QString res;

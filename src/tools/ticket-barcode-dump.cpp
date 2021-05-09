@@ -4,6 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "../lib/era/ssbv1ticket.h"
 #include "../lib/era/ssbv3ticket.h"
 #include "../lib/uic9183/uic9183head.h"
 #include "../lib/uic9183/uic9183header.h"
@@ -33,7 +34,7 @@
 
 using namespace KItinerary;
 
-static void dumpSsbTicket(const QByteArray &data)
+static void dumpSsbv3Ticket(const QByteArray &data)
 {
     SSBv3Ticket ticket(data);
 
@@ -59,6 +60,29 @@ static void dumpSsbTicket(const QByteArray &data)
         std::cout << std::endl;
         std::cout << "Issuing day: " << qPrintable(ticket.issueDate().toString(Qt::ISODate)) << std::endl;
         std::cout << "Departure day: " << qPrintable(ticket.type1DepartureDay().toString(Qt::ISODate)) << std::endl;
+    }
+}
+
+static void dumpSsbv1Ticket(const QByteArray &data)
+{
+    SSBv1Ticket ticket(data);
+
+    for (auto i = 0; i < SSBv1Ticket::staticMetaObject.propertyCount(); ++i) {
+        const auto prop = SSBv1Ticket::staticMetaObject.property(i);
+        const auto value = prop.readOnGadget(&ticket);
+        switch (value.type()) {
+            case QVariant::Int:
+                std::cout << prop.name() << ": " << value.toInt() << std::endl;
+                break;
+            case QVariant::ByteArray:
+                if (std::strcmp(prop.name(), "rawData") == 0) {
+                    break;
+                }
+                [[fallthrough]];
+            default:
+                std::cout << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
+                break;
+        }
     }
 }
 
@@ -250,7 +274,10 @@ int main(int argc, char **argv)
         // TODO
     } else if (SSBv3Ticket::maybeSSB(data)) {
         std::cout << "ERA SSB Ticket" << std::endl;
-        dumpSsbTicket(data);
+        dumpSsbv3Ticket(data);
+    } else if (SSBv1Ticket::maybeSSB(data)) {
+        std::cout << "ERA SSB Ticket" << std::endl;
+        dumpSsbv1Ticket(data);
     } else if (Uic9183Parser::maybeUic9183(data)) {
         std::cout << "UIC 918.3 Container" << std::endl;
         dumpUic9183(data);

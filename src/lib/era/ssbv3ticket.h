@@ -7,25 +7,17 @@
 #pragma once
 
 #include "kitinerary_export.h"
+#include "ssbticketbase.h"
 
 #include <QDateTime>
 #include <QMetaType>
 
 namespace KItinerary {
 
-#define SSB_NUM_PROPERTY(Name, Start, Len) \
-public: \
-    inline int Name() const { return readNumber(Start, Len); } \
-    Q_PROPERTY(int Name READ Name)
-#define SSB_STR_PROPERTY(Name, Start, Len) \
-public: \
-    inline QString Name() const { return readString(Start, Len); } \
-    Q_PROPERTY(QString Name READ Name)
-
 /** ERA SSB ticket barcode (version 3).
  *  @see ERA TAP TSI TD B.12 Digital Security Elements For Rail Passenger Ticketing - §7 SSB - Small Structured Barcode
  */
-class KITINERARY_EXPORT SSBv3Ticket {
+class KITINERARY_EXPORT SSBv3Ticket : protected SSBTicketBase {
     Q_GADGET
     // low-level raw value access
     // header
@@ -131,15 +123,8 @@ public:
     static bool maybeSSB(const QByteArray &data);
 
 private:
-    // start and length in bits
-    int readNumber(int start, int length) const;
     QString readString(int start, int length) const;
-
-    QByteArray m_data;
 };
-
-#undef SSB_NUM_PROPERTY
-#undef SSB_STR_PROPERTY
 
 }
 
