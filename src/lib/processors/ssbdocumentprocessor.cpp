@@ -6,7 +6,7 @@
 
 #include "ssbdocumentprocessor.h"
 
-#include "era/ssbticket.h"
+#include "era/ssbv3ticket.h"
 
 #include <KItinerary/ExtractorFilter>
 
@@ -16,13 +16,13 @@ using namespace KItinerary;
 
 bool SsbDocumentProcessor::canHandleData(const QByteArray &encodedData, [[maybe_unused]] QStringView fileName) const
 {
-    return SSBTicket::maybeSSB(encodedData);
+    return SSBv3Ticket::maybeSSB(encodedData);
 }
 
 ExtractorDocumentNode SsbDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
 {
     ExtractorDocumentNode node;
-    auto ticket = SSBTicket(encodedData);
+    auto ticket = SSBv3Ticket(encodedData);
     if (ticket.isValid()) {
         node.setContent(ticket);
     }
@@ -31,12 +31,12 @@ ExtractorDocumentNode SsbDocumentProcessor::createNodeFromData(const QByteArray 
 
 bool SsbDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
 {
-    const auto ticket = node.content<SSBTicket>();
-    const auto propIdx = SSBTicket::staticMetaObject.indexOfProperty(filter.fieldName().toUtf8().constData());
+    const auto ticket = node.content<SSBv3Ticket>();
+    const auto propIdx = SSBv3Ticket::staticMetaObject.indexOfProperty(filter.fieldName().toUtf8().constData());
     if (propIdx < 0) {
         return false;
     }
-    const auto prop = SSBTicket::staticMetaObject.property(propIdx);
+    const auto prop = SSBv3Ticket::staticMetaObject.property(propIdx);
     const auto value = prop.readOnGadget(&ticket);
     return filter.matches(value.toString());
 }

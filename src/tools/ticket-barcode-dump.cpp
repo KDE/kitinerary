@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "../lib/era/ssbticket.h"
+#include "../lib/era/ssbv3ticket.h"
 #include "../lib/uic9183/uic9183head.h"
 #include "../lib/uic9183/uic9183header.h"
 #include "../lib/uic9183/vendor0080vublockdata.h"
@@ -35,11 +35,11 @@ using namespace KItinerary;
 
 static void dumpSsbTicket(const QByteArray &data)
 {
-    SSBTicket ticket(data);
+    SSBv3Ticket ticket(data);
 
     const auto typePrefix = QByteArray("type" + QByteArray::number(ticket.ticketTypeCode()));
-    for (auto i = 0; i < SSBTicket::staticMetaObject.propertyCount(); ++i) {
-        const auto prop = SSBTicket::staticMetaObject.property(i);
+    for (auto i = 0; i < SSBv3Ticket::staticMetaObject.propertyCount(); ++i) {
+        const auto prop = SSBv3Ticket::staticMetaObject.property(i);
         if (std::strncmp(prop.name(), "type", 4) == 0 && std::strncmp(prop.name(), typePrefix.constData(), 5) != 0) {
             continue;
         }
@@ -55,7 +55,7 @@ static void dumpSsbTicket(const QByteArray &data)
         }
     }
 
-    if (ticket.ticketTypeCode() == SSBTicket::IRT_RES_BOA) {
+    if (ticket.ticketTypeCode() == SSBv3Ticket::IRT_RES_BOA) {
         std::cout << std::endl;
         std::cout << "Issuing day: " << qPrintable(ticket.issueDate().toString(Qt::ISODate)) << std::endl;
         std::cout << "Departure day: " << qPrintable(ticket.type1DepartureDay().toString(Qt::ISODate)) << std::endl;
@@ -248,7 +248,7 @@ int main(int argc, char **argv)
     if (IataBcbpParser::maybeIataBcbp(QString::fromLatin1(data))) {
         std::cout << "IATA Barcoded Boarding Pass" << std::endl;
         // TODO
-    } else if (SSBTicket::maybeSSB(data)) {
+    } else if (SSBv3Ticket::maybeSSB(data)) {
         std::cout << "ERA SSB Ticket" << std::endl;
         dumpSsbTicket(data);
     } else if (Uic9183Parser::maybeUic9183(data)) {

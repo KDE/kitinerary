@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "ssbticket.h"
+#include "ssbv3ticket.h"
 
 #include <QDebug>
 
@@ -18,9 +18,9 @@ enum {
     SSB_VERSION = 3,
 };
 
-SSBTicket::SSBTicket() = default;
+SSBv3Ticket::SSBv3Ticket() = default;
 
-SSBTicket::SSBTicket(const QByteArray &data)
+SSBv3Ticket::SSBv3Ticket(const QByteArray &data)
 {
     if (maybeSSB(data)) {
         m_data = data;
@@ -29,14 +29,14 @@ SSBTicket::SSBTicket(const QByteArray &data)
     }
 }
 
-SSBTicket::~SSBTicket() = default;
+SSBv3Ticket::~SSBv3Ticket() = default;
 
-bool SSBTicket::isValid() const
+bool SSBv3Ticket::isValid() const
 {
     return !m_data.isEmpty();
 }
 
-int SSBTicket::readNumber(int start, int length) const
+int SSBv3Ticket::readNumber(int start, int length) const
 {
     if (start < 0 || length < 1 || start / 8 >= m_data.size() || (start + length) / 8 >= m_data.size() || length > 31) {
         qWarning() << "invalid SSB read:" << start << length;
@@ -54,7 +54,7 @@ int SSBTicket::readNumber(int start, int length) const
     return num;
 }
 
-QString SSBTicket::readString(int start, int length) const
+QString SSBv3Ticket::readString(int start, int length) const
 {
     QString res;
     res.resize(length);
@@ -64,7 +64,7 @@ QString SSBTicket::readString(int start, int length) const
     return res;
 }
 
-bool SSBTicket::maybeSSB(const QByteArray& data)
+bool SSBv3Ticket::maybeSSB(const QByteArray& data)
 {
     if (data.size() != SSB_DATA_SIZE) {
         return false;
@@ -72,9 +72,9 @@ bool SSBTicket::maybeSSB(const QByteArray& data)
     return (data.at(0) >> 4) == SSB_VERSION;
 }
 
-QDate SSBTicket::issueDate(const QDate &contextDate)
+QDate SSBv3Ticket::issueDate(const QDate &contextDate)
 {
-    if (m_data.isEmpty() || ticketTypeCode() > SSBTicket::RPT) {
+    if (m_data.isEmpty() || ticketTypeCode() > SSBv3Ticket::RPT) {
         return {};
     }
 
@@ -87,9 +87,9 @@ QDate SSBTicket::issueDate(const QDate &contextDate)
     return d;
 }
 
-QDate SSBTicket::type1DepartureDay(const QDate& contextDate)
+QDate SSBv3Ticket::type1DepartureDay(const QDate& contextDate)
 {
-    if (ticketTypeCode() != SSBTicket::IRT_RES_BOA) {
+    if (ticketTypeCode() != SSBv3Ticket::IRT_RES_BOA) {
         return {};
     }
 
@@ -97,7 +97,7 @@ QDate SSBTicket::type1DepartureDay(const QDate& contextDate)
     return d.addDays(type1DepartureDate());
 }
 
-QByteArray SSBTicket::rawData() const
+QByteArray SSBv3Ticket::rawData() const
 {
     return m_data;
 }

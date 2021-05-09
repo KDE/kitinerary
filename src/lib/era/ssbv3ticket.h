@@ -22,10 +22,10 @@ public: \
     inline QString Name() const { return readString(Start, Len); } \
     Q_PROPERTY(QString Name READ Name)
 
-/** ERA SSB ticket barcode.
+/** ERA SSB ticket barcode (version 3).
  *  @see ERA TAP TSI TD B.12 Digital Security Elements For Rail Passenger Ticketing - §7 SSB - Small Structured Barcode
  */
-class KITINERARY_EXPORT SSBTicket {
+class KITINERARY_EXPORT SSBv3Ticket {
     Q_GADGET
     // low-level raw value access
     // header
@@ -112,9 +112,9 @@ class KITINERARY_EXPORT SSBTicket {
     Q_PROPERTY(QByteArray rawData READ rawData)
 
 public:
-    SSBTicket();
-    explicit SSBTicket(const QByteArray &data);
-    ~SSBTicket();
+    SSBv3Ticket();
+    explicit SSBv3Ticket(const QByteArray &data);
+    ~SSBv3Ticket();
 
     /** Returns @c true if this is a valid SSB ticket. */
     bool isValid() const;
@@ -143,5 +143,5 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::SSBTicket)
+Q_DECLARE_METATYPE(KItinerary::SSBv3Ticket)
 
