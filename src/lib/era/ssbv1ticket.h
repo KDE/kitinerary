@@ -10,6 +10,7 @@
 #include "kitinerary_export.h"
 #include "ssbticketbase.h"
 
+#include <QDate>
 #include <QMetaType>
 
 namespace KItinerary {
@@ -26,8 +27,9 @@ class KITINERARY_EXPORT SSBv1Ticket : protected SSBTicketBase
     SSB_NUM_PROPERTY(numberOfTickets, 19, 6)
     SSB_NUM_PROPERTY(numberOfAdultPassengers, 25, 7)
     SSB_NUM_PROPERTY(numberOfChildPassengers, 32, 7)
-    SSB_NUM_PROPERTY(firstDayOfValidity, 39, 9)
-    SSB_NUM_PROPERTY(lastDayOfValidity, 48, 9)
+    /** Days since Jan 01. */
+    SSB_NUM_PROPERTY(firstDayOfValidityDay, 39, 9)
+    SSB_NUM_PROPERTY(lastDayOfValidityDay, 48, 9)
     SSB_NUM_PROPERTY(customerNumberType, 57, 1)
     SSB_LONG_PROPERTY(customerNumber, 58, 47)
     SSB_NUM_PROPERTY(departureStationType, 105, 1)
@@ -36,9 +38,13 @@ class KITINERARY_EXPORT SSBv1Ticket : protected SSBTicketBase
     SSB_NUM_PROPERTY(arrivalStationType, 136, 1)
     SSB_NUM_PROPERTY(arrivalStationNum, 137, 30)
     SSB_STR_PROPERTY(arrivalStationAlpha, 137, 5)
-    SSB_NUM_PROPERTY(departureTime, 167, 6)
+    /** departure time encoded as 48 30min time slots */
+    SSB_NUM_PROPERTY(departureTimeSlot, 167, 6)
     SSB_NUM_PROPERTY(trainNumber, 173, 17)
     SSB_LONG_PROPERTY(reservationReference, 190, 40)
+    /** ERA/TD/2009-14/INT: PASSENGER CODE LIST TO TAP TSI - §B.5.24 - Class
+     *  Possible values are: 1 (1st), 2 (2nd), C (Club), P (Superior), T (Tourist)
+     */
     SSB_NUM_PROPERTY(classOfTransport, 230, 6)
     SSB_NUM_PROPERTY(coachNumber, 236, 10)
     SSB_NUM_PROPERTY(seatNumber, 246, 7)
@@ -58,6 +64,11 @@ public:
 
     /** Returns @c true if this is a valid SSB ticket. */
     bool isValid() const;
+
+    /** First day of validity. */
+    Q_INVOKABLE QDate firstDayOfValidity(const QDate &contextDate = QDate::currentDate()) const;
+    /** Decoded departure time slot. */
+    Q_INVOKABLE QDateTime departureTime(const QDate &contextDate = QDate::currentDate()) const;
 
     /** Raw barcode data. */
     QByteArray rawData() const;

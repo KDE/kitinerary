@@ -113,6 +113,10 @@ static void dumpSsbv1Ticket(const QByteArray &data)
                 break;
         }
     }
+
+    std::cout << std::endl;
+    std::cout << "First day of validitiy: " << qPrintable(ticket.firstDayOfValidity().toString(Qt::ISODate)) << std::endl;
+    std::cout << "Departure time: " << qPrintable(ticket.departureTime().toString(Qt::ISODate)) << std::endl;
 }
 
 static void dumpRawData(const char *data, std::size_t size)
