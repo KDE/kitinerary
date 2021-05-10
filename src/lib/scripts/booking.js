@@ -120,6 +120,10 @@ function parseHtml(doc)
         res.reservationFor.address.addressLocality = addr[2];
         res.reservationFor.address.postalCode = addr[3];
         res.reservationFor.address.addressCountry = addr[4];
+
+        if (fullAddr.match(/CANCELED$/)) {
+            res.reservationStatus = "ReservationCancelled"
+        }
     }
 
     res.reservationFor.telephone = elem.eval(".//*[@class=\"u-phone\"]")[0].content;
