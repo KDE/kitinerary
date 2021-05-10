@@ -1,12 +1,28 @@
-{
-    "filter": [
-        {
-            "match": "^\\x{10}",
-            "mimeType": "application/octet-stream",
-            "scope": "Descendants"
-        }
-    ],
-    "function": "parseTicket",
-    "script": "vr.fi.js",
-    "mimeType": "application/pdf"
-}
+[
+    {
+        "filter": [
+            {
+                "field": "issuerCode",
+                "match": "10",
+                "mimeType": "internal/era-ssb",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parseTicket",
+        "script": "vr.fi.js",
+        "mimeType": "application/pdf"
+    },
+    {
+        "filter": [
+            {
+                "field": "issuerCode",
+                "match": "10",
+                "mimeType": "internal/era-ssb",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseSsbBarcode",
+        "script": "vr.fi.js",
+        "mimeType": "internal/era-ssb"
+    }
+]

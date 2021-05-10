@@ -4,49 +4,47 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-// see https://community.kde.org/KDE_PIM/KItinerary/vr.fi_Barcode
-function readStationCode(bitarray, offset)
+function parseSsbBarcode(ssb, node)
 {
-    var s = "";
-    for (var i = 0; i < 5; ++i) {
-        var n = bitarray.readNumberMSB(offset + i * 6, 6);
-        if (n != 36)
-            s += String.fromCharCode(n + 55);
+    if (ssb.version != 1) {
+        return;
     }
-    return s;
+    var res = JsonLd.newTrainReservation();
+    if (ssb.trainNumber > 0) {
+        res.reservationFor.trainNumber = ssb.trainNumber;
+    }
+    res.reservationFor.departureTime = ssb.departureTime(node.contextDateTime);
+    res.reservationFor.departureStation.name = ssb.departureStationAlpha;
+    res.reservationFor.arrivalStation.name = ssb.arrivalStationAlpha;
+    // for station codes see: https://rata.digitraffic.fi/api/v1/metadata/stations
+    res.reservationFor.departureStation.identifier = "vrfi:" + ssb.departureStationAlpha;
+    res.reservationFor.arrivalStation.identifier = "vrfi:" + ssb.arrivalStationAlpha;
+
+    res.reservedTicket.ticketToken = "aztectbin:" + Barcode.toBase64(ssb.rawData);
+    res.reservedTicket.ticketedSeat.seatingType = ssb.classOfTransport;
+
+    if (ssb.coachNumber > 0) {
+        res.reservedTicket.ticketedSeat.seatSection = ssb.coachNumber;
+        res.reservedTicket.ticketedSeat.seatNumber = ssb.seatNumber;
+    }
+
+    res.reservationNumber = ssb.reservationReference + "";
+    return res;
 }
 
-function parseTicket(pdf) {
-    var res = JsonLd.newTrainReservation();
-    var bitarray = Barcode.toBitArray(Context.barcode);
+function parseTicket(pdf, node, trigger) {
+    var res = trigger.result[0];
+    if (trigger.content.trainNumber == 0)
+        return; // TODO this misses bus legs!
 
-    var trainNum = bitarray.readNumberMSB(22 * 8, 14) + "";
-    if (trainNum == 0)
-        return null; // TODO this misses bus legs!
-
-    var text = pdf.pages[Context.pdfPageNumber].text;
-    var trip = text.match("(.*) - (.*)\n.*(\\d{4}).*?(\\d{2}:\\d{2}).*?(\\d{2}:\\d{2})\n(.*?" + trainNum + ")");
+    var text = pdf.pages[trigger.location].text;
+    var trip = text.match("(.*) - (.*)\n.*(\\d{4}).*?(\\d{2}:\\d{2}).*?(\\d{2}:\\d{2})\n(.*?" + trigger.content.trainNumber + ")");
     res.reservationFor.trainNumber = trip[6];
 
-    var departureDay = bitarray.readNumberMSB(4 * 8 + 7, 9) - 1;
-    var day = new Date(0);
-    day.setYear(trip[3]);
-    day.setTime(day.getTime() + departureDay * 24 * 60 * 60 * 1000);
-    res.reservationFor.departureTime = JsonLd.toDateTime(day.getFullYear() + '-' + (day.getMonth() + 1) + '-' + day.getDate() + '-' + trip[4], "yyyy-M-d-hh:mm", "en");
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(day.getFullYear() + '-' + (day.getMonth() + 1) + '-' + day.getDate() + '-' + trip[5], "yyyy-M-d-hh:mm", "en");
-
-    var coachNumber = bitarray.readNumberMSB(30 * 8, 6);
-    if (coachNumber > 0) {
-        res.reservedTicket.ticketedSeat.seatSection = coachNumber + "";
-        res.reservedTicket.ticketedSeat.seatNumber = bitarray.readNumberMSB(30 * 8 + 6, 7) + "";
-    }
-
-    // for station codes see: https://rata.digitraffic.fi/api/v1/metadata/stations
+    var date = trigger.content.firstDayOfValidity(node.contextDateTime).toISOString().substr(0, 10);
+    res.reservationFor.departureTime = JsonLd.toDateTime(date + trip[4], "yyyy-MM-ddhh:mm", "en");
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(date + trip[5], "yyyy-MM-ddhh:mm", "en");
     res.reservationFor.departureStation.name = trip[1];
-    res.reservationFor.departureStation.identifier = "vrfi:" + readStationCode(bitarray, 13*8 + 2);
     res.reservationFor.arrivalStation.name = trip[2];
-    res.reservationFor.arrivalStation.identifier = "vrfi:" + readStationCode(bitarray, 17*8 + 1);
-
-    res.reservedTicket.ticketToken = "aztectbin:" + Barcode.toBase64(Context.barcode);
     return res;
 }
