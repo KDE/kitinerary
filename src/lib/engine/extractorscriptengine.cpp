@@ -108,7 +108,11 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
 
     qCDebug(Log) << "Running script extractor" << extractor->scriptFileName() << extractor->scriptFunction();
     node.setScriptEngine(&d->m_engine);
-    const auto engineReset = qScopeGuard([&node]{ node.setScriptEngine(nullptr); });
+    triggerNode.setScriptEngine(&d->m_engine);
+    const auto engineReset = qScopeGuard([&node, &triggerNode]{
+        node.setScriptEngine(nullptr);
+        triggerNode.setScriptEngine(nullptr);
+    });
 
     // ### legacy context API, replace that by passing trigger node as a third argument eventually
     if (triggerNode.result().isEmpty()) {
@@ -142,7 +146,8 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
 
     const auto nodeArg = d->m_engine.toScriptValue(node);
     const auto dataArg = nodeArg.property(QLatin1String("content"));
-    QJSValueList args{ dataArg, nodeArg };
+    const auto triggerArg = d->m_engine.toScriptValue(triggerNode);
+    QJSValueList args{ dataArg, nodeArg, triggerArg };
 
     const auto result = mainFunc.call(args);
     if (result.isError()) {
