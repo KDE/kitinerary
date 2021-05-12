@@ -42,10 +42,14 @@ KITINERARY_MAKE_OPERATOR(TrainTrip)
 
 QDate TrainTrip::departureDay() const
 {
-    if (d->departureTime.isValid()) {
+    if (d->departureDay.isValid()) {
+        return d->departureDay;
+    }
+    // pre-1970 dates are used as transient state when we only know the time
+    if (d->departureTime.isValid() && d->departureTime.date().year() > 1970) {
         return d->departureTime.date();
     }
-    return d->departureDay;
+    return {};
 }
 
 void TrainTrip::setDepartureDay(const QDate &value)
