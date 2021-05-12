@@ -139,8 +139,6 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
         d->m_context->m_pdfPageNum = triggerNode.location().toInt();
     }
 
-    d->m_context->m_senderDate = node.contextDateTime();
-
     d->m_jsonLdApi->setContextDate(node.contextDateTime());
     d->m_barcodeApi->setContextDate(node.contextDateTime());
 
