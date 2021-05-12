@@ -64,6 +64,9 @@
         ]
     },
     {
+        "triggerNodeEqualsNode": true
+    },
+    {
         "barcode": "#UT010080000020,\u0002\u0014\u001a绥\u0005��\u001e\r\bh�p���;�\u001bb\u0002\u0014i�ӈ|\u0003W������������\u001f",
         "data": [
             {

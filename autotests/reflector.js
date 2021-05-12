@@ -45,13 +45,14 @@ function dumpValue(value, depth)
     return value;
 }
 
-function dumpArgs(content, node)
+function dumpArgs(content, node, triggerNode)
 {
     var res = new Array();
     var wrapper = new Object();
     wrapper.content = dumpValue(content, 6);
     res.push(wrapper);
     res.push(dumpValue(node, 6));
+    res.push({ triggerNodeEqualsNode: triggerNode == node });
     res.push(dumpValue(Context, 6));
     return res;
 }

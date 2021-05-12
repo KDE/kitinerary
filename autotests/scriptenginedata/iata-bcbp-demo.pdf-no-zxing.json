@@ -76,6 +76,9 @@
         ]
     },
     {
+        "triggerNodeEqualsNode": true
+    },
+    {
         "objectName": "",
         "pdfPageNumber": -1
     }

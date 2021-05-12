@@ -13,6 +13,9 @@
         ]
     },
     {
+        "triggerNodeEqualsNode": true
+    },
+    {
         "barcode": "Hello World!\n",
         "objectName": "",
         "pdfPageNumber": -1
