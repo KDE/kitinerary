@@ -195,8 +195,8 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
     trip.setDeparturePlatform(trip.departurePlatform().trimmed());
     trip.setDepartureStation(processTrainStation(trip.departureStation()));
     trip.setArrivalStation(processTrainStation(trip.arrivalStation()));
-    trip.setDepartureTime(processTrainTripTime(trip.departureTime(), trip.departureStation()));
-    trip.setArrivalTime(processTrainTripTime(trip.arrivalTime(), trip.arrivalStation()));
+    trip.setDepartureTime(processTrainTripTime(trip.departureTime(), trip.departureDay(), trip.departureStation()));
+    trip.setArrivalTime(processTrainTripTime(trip.arrivalTime(), trip.departureDay(), trip.arrivalStation()));
     trip.setTrainNumber(trip.trainNumber().simplified());
     trip.setTrainName(trip.trainName().simplified());
     return trip;
@@ -260,10 +260,14 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
     return processPlace(station);
 }
 
-QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, const TrainStation& station) const
+QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, QDate departureDay, const TrainStation& station) const
 {
     if (!dt.isValid()) {
         return dt;
+    }
+
+    if (dt.date().year() <= 1970 && departureDay.isValid()) { // we just have the time, but not the day
+        dt.setDate(departureDay);
     }
 
     if (dt.timeSpec() == Qt::TimeZone) {

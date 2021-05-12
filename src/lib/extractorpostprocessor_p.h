@@ -44,7 +44,7 @@ public:
     TrainReservation processTrainReservation(TrainReservation res) const;
     TrainTrip processTrainTrip(TrainTrip trip) const;
     TrainStation processTrainStation(TrainStation station) const;
-    QDateTime processTrainTripTime(QDateTime dt, const TrainStation &station) const;
+    QDateTime processTrainTripTime(QDateTime dt, QDate departureDay, const TrainStation &station) const;
 
     BusReservation processBusReservation(BusReservation res) const;
     BusTrip processBusTrip(BusTrip trip) const;
