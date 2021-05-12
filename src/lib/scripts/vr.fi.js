@@ -13,6 +13,7 @@ function parseSsbBarcode(ssb, node)
     if (ssb.trainNumber > 0) {
         res.reservationFor.trainNumber = ssb.trainNumber;
     }
+    res.reservationFor.departureDay = ssb.firstDayOfValidity(node.contextDateTime);
     res.reservationFor.departureTime = ssb.departureTime(node.contextDateTime);
     res.reservationFor.departureStation.name = ssb.departureStationAlpha;
     res.reservationFor.arrivalStation.name = ssb.arrivalStationAlpha;
@@ -41,9 +42,8 @@ function parseTicket(pdf, node, trigger) {
     var trip = text.match("(.*) - (.*)\n.*(\\d{4}).*?(\\d{2}:\\d{2}).*?(\\d{2}:\\d{2})\n(.*?" + trigger.content.trainNumber + ")");
     res.reservationFor.trainNumber = trip[6];
 
-    var date = trigger.content.firstDayOfValidity(node.contextDateTime).toISOString().substr(0, 10);
-    res.reservationFor.departureTime = JsonLd.toDateTime(date + trip[4], "yyyy-MM-ddhh:mm", "en");
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(date + trip[5], "yyyy-MM-ddhh:mm", "en");
+    res.reservationFor.departureTime = JsonLd.toDateTime(trip[4], "hh:mm", "en");
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[5], "hh:mm", "en");
     res.reservationFor.departureStation.name = trip[1];
     res.reservationFor.arrivalStation.name = trip[2];
     return res;
