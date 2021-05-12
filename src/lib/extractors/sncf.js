@@ -216,10 +216,10 @@ function parseSecutixPdfItineraryV2(text, res)
 
         var leg = JsonLd.newTrainReservation();
         leg.reservationFor.departureStation.name = data[2];
-        var date = res.reservationFor.departureDay.toISOString().substr(0, 10);
-        leg.reservationFor.departureTime = JsonLd.toDateTime(date + data[1], "yyyy-MM-ddhh'h'mm", "fr");
+        leg.reservationFor.departureDay = res.reservationFor.departureDay;
+        leg.reservationFor.departureTime = JsonLd.toDateTime(data[1], "hh'h'mm", "fr");
         leg.reservationFor.arrivalStation.name = data[5];
-        leg.reservationFor.arrivalTime = JsonLd.toDateTime(date + data[4], "yyyy-MM-ddhh'h'mm", "fr");
+        leg.reservationFor.arrivalTime = JsonLd.toDateTime(data[4], "hh'h'mm", "fr");
         leg.reservationFor.trainNumber = data[3];
         leg.underName = res.underName;
         leg.reservationNumber = res.reservationNumber;
