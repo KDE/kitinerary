@@ -78,17 +78,6 @@ void IcalCalendarProcessor::expandNode(ExtractorDocumentNode &node, const Extrac
 #endif
 }
 
-bool IcalCalendarProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
-{
-#ifdef HAVE_KCAL
-    const auto cal = node.content<KCalendarCore::Calendar::Ptr>();
-    const auto value = cal->property(filter.fieldName().toUtf8().constData());
-    return filter.matches(value.toString());
-#else
-    return false;
-#endif
-}
-
 
 bool IcalEventProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
 {

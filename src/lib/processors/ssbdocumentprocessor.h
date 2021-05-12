@@ -17,7 +17,6 @@ class SsbDocumentProcessor : public ExtractorDocumentProcessor
 public:
     bool canHandleData(const QByteArray &encodedData, QStringView fileName) const override;
     ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
-    bool matches(const KItinerary::ExtractorFilter &filter, const ExtractorDocumentNode &node) const override;
 };
 
 }

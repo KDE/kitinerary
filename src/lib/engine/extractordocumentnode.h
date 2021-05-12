@@ -28,6 +28,7 @@ struct OwnedPtr {
     inline OwnedPtr() = default;
     inline OwnedPtr(T* _ptr) : ptr(_ptr) {}
     inline operator T*() const { return ptr; }
+    inline T* operator->() const { return ptr; }
     T *ptr = nullptr;
 };
 }
@@ -189,4 +190,4 @@ private:
 }
 
 Q_DECLARE_METATYPE(KItinerary::ExtractorDocumentNode)
-
+Q_DECLARE_SMART_POINTER_METATYPE(KItinerary::Internal::OwnedPtr)

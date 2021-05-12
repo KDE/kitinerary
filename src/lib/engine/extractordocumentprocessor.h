@@ -54,7 +54,7 @@ public:
     virtual void preExtract(ExtractorDocumentNode &node, const ExtractorEngine *engine) const;
 
     /** Checks whether the given @p filter matches @p node.
-     *  The default implementation returns @c false unconditionally.
+     *  The default implementation can handle QObject and Q_GADGET types via Qt's property system.
      */
     virtual bool matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const;
 

@@ -86,18 +86,6 @@ void PkPassDocumentProcessor::destroyNode(ExtractorDocumentNode &node) const
     destroyIfOwned<KPkPass::Pass>(node);
 }
 
-bool PkPassDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
-{
-    const auto pass = node.content<KPkPass::Pass*>();
-    QString value;
-    if (filter.fieldName() == QLatin1String("passTypeIdentifier")) {
-        value = pass->passTypeIdentifier();
-    } else {
-        return false;
-    }
-    return filter.matches(value);
-}
-
 QJSValue PkPassDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const
 {
     return engine->toScriptValue(node.content<KPkPass::Pass*>());

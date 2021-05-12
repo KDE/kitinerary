@@ -9,10 +9,6 @@
 #include "era/ssbv1ticket.h"
 #include "era/ssbv3ticket.h"
 
-#include <KItinerary/ExtractorFilter>
-
-#include <QMetaProperty>
-
 using namespace KItinerary;
 
 bool SsbDocumentProcessor::canHandleData(const QByteArray &encodedData, [[maybe_unused]] QStringView fileName) const
@@ -35,20 +31,4 @@ ExtractorDocumentNode SsbDocumentProcessor::createNodeFromData(const QByteArray 
         }
     }
     return node;
-}
-
-bool SsbDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
-{
-    const auto ticket = node.content();
-    const auto mo = QMetaType(ticket.userType()).metaObject();
-    if (!mo) {
-        return false;
-    }
-    const auto propIdx = mo->indexOfProperty(filter.fieldName().toUtf8().constData());
-    if (propIdx < 0) {
-        return false;
-    }
-    const auto prop = mo->property(propIdx);
-    const auto value = prop.readOnGadget(ticket.constData());
-    return filter.matches(value.toString());
 }

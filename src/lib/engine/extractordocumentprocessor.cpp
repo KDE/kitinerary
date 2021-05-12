@@ -5,10 +5,12 @@
 */
 
 #include "extractordocumentprocessor.h"
+#include "extractorfilter.h"
 #include "extractorresult.h"
 
 #include <QJSEngine>
 #include <QJSValue>
+#include <QMetaProperty>
 
 using namespace KItinerary;
 
@@ -46,9 +48,30 @@ void ExtractorDocumentProcessor::preExtract([[maybe_unused]] ExtractorDocumentNo
 {
 }
 
-bool ExtractorDocumentProcessor::matches([[maybe_unused]] const ExtractorFilter &filter, [[maybe_unused]] const ExtractorDocumentNode &node) const
+bool ExtractorDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
 {
-    return false;
+    // QObject content
+    if (node.content().canConvert<QObject*>()) {
+        const auto obj = node.content().value<QObject*>();
+        if (!obj) {
+            return false;
+        }
+        const auto value = obj->property(filter.fieldName().toUtf8().constData());
+        return filter.matches(value.toString());
+    }
+
+    // Q_GADGET content
+    const auto mo = QMetaType(node.content().userType()).metaObject();
+    if (!mo) {
+        return false;
+    }
+    const auto propIdx = mo->indexOfProperty(filter.fieldName().toUtf8().constData());
+    if (propIdx < 0) {
+        return false;
+    }
+    const auto prop = mo->property(propIdx);
+    const auto value = prop.readOnGadget(node.content().constData());
+    return filter.matches(value.toString());
 }
 
 void ExtractorDocumentProcessor::postExtract([[maybe_unused]] ExtractorDocumentNode &node) const
