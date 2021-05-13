@@ -46,6 +46,8 @@ class KITINERARY_EXPORT Uic9183Parser
     /** RCT2 ticket layout block, if present, @c null otherwise. */
     Q_PROPERTY(QVariant rct2Ticket READ rct2TicketVariant)
 
+    Q_PROPERTY(QByteArray rawData READ rawData STORED false)
+
 public:
     Uic9183Parser();
     Uic9183Parser(const Uic9183Parser&);

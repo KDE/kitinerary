@@ -12,6 +12,7 @@
                 "name": ""
             },
             "pnr": "9E8DXL",
+            "rawData": "#UT010080000020,\u0002\u0014\u001a绥\u0005��\u001e\r\bh�p���;�\u001bb\u0002\u0014i�ӈ|\u0003W������������\u001f",
             "seatingType": "2"
         }
     },
@@ -30,6 +31,7 @@
                 "name": ""
             },
             "pnr": "9E8DXL",
+            "rawData": "#UT010080000020,\u0002\u0014\u001a绥\u0005��\u001e\r\bh�p���;�\u001bb\u0002\u0014i�ӈ|\u0003W������������\u001f",
             "seatingType": "2"
         },
         "contextDateTime": "Fri Feb 17 15:18:00 2012 GMT+0100",
