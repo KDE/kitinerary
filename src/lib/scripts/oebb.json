@@ -1,13 +1,13 @@
 {
     "filter": [
         {
-            "match": "uic:1181",
-            "field": "reservationFor.provider.identifier",
-            "mimeType": "application/ld+json",
-            "scope": "Descendants"
+            "match": "1181",
+            "field": "carrierId",
+            "mimeType": "internal/uic9183",
+            "scope": "Current"
         }
     ],
-    "function": "parsePdf",
+    "function": "parseTicket",
     "script": "oebb.js",
-    "mimeType": "application/pdf"
+    "mimeType": "internal/uic9183"
 }

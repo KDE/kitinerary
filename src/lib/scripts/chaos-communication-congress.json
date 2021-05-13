@@ -1,9 +1,9 @@
 {
     "filter": [
         {
-            "match": "uic:9997",
-            "field": "reservationFor.provider.identifier",
-            "mimeType": "application/ld+json",
+            "match": "9997",
+            "field": "carrierId",
+            "mimeType": "internal/uic9183",
             "scope": "Descendants"
         }
     ],

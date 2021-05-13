@@ -4,11 +4,11 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parseBookingConfirmation(html) {
-    if (Context.data.length != 1) {
+function parseBookingConfirmation(html, node) {
+    if (node.result.length != 1) {
         return;
     }
-    var res = Context.data[0];
+    var res = node.result[0];
 
     // augment checking times missing from schema.org annotations
     var checkinTimeElems = html.eval('//*[@id="booking-summary-check-in-time"]');

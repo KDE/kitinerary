@@ -4,12 +4,11 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parsePdf(pdf) {
-    if (Context.data.length > 1) // not sure this can happen
+function parseTicket(ticket, node) {
+    if (node.result.length > 1) // not sure this can happen
         return;
 
-    var res = Context.data[0];
-    var ticket = Barcode.decodeUic9183(Context.barcode);
+    var res = node.result[0];
 
     // decode 118199 vendor block
     var block = ticket.block("118199");

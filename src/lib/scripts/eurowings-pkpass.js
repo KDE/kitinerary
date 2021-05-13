@@ -4,9 +4,9 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function main(pass)
+function main(pass, node)
 {
-    var res = Context.data[0];
+    var res = node.result[0];
     res.reservationFor.departureAirport.name = pass.field["origin"].label;
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
     if (pass.field["operatingcarrier"])

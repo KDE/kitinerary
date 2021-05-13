@@ -1,10 +1,10 @@
 [
     {
-        "mimeType": "application/pdf",
+        "mimeType": "internal/uic9183",
         "filter": [
-            { "field": "reservationFor.provider.identifier", "match": "3415", "mimeType": "application/ld+json", "scope": "Descendants" }
+            { "field": "carrierId", "match": "3415", "mimeType": "internal/uic9183", "scope": "Current" }
         ],
         "script": "vgn.js",
-        "function": "parsePdf"
+        "function": "parseTicket"
     }
 ]

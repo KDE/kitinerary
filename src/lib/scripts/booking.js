@@ -35,8 +35,8 @@ regExMap['de_DE']['departureDate'] = /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-
 regExMap['de_DE']['person'] = /Name des Gastes +(.*) Name des Gastes bearbeiten/;
 regExMap['de_DE']['dateFormat'] = "dddd, d. MMMM yyyy hh:mm";
 
-function main(text) {
-    if (Context.data)
+function main(text, node) {
+    if (node.result.length > 0)
         return null; // this is just backup if we have no structured data
     var res = JsonLd.newLodgingReservation();
 
@@ -87,9 +87,9 @@ function main(text) {
     }
 }
 
-function parseHtml(doc)
+function parseHtml(doc, node)
 {
-    if (Context.data)
+    if (node.result.length > 0)
         return null; // this is just backup if we have no structured data
     var res = JsonLd.newLodgingReservation();
     var elem = doc.eval("//table[@class=\"mg_conf_hotel_preview\"]")[0];

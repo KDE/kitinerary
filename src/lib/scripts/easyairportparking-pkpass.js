@@ -4,9 +4,9 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function main(pass)
+function main(pass, node)
 {
-    var res = Context.data[0];
+    var res = node.result[0];
     res.reservationFor.startDate = JsonLd.toDateTime(pass.field["reservation_time_from"].value, "dd.MM.yyyy", "de");
     res.reservationFor.endDate = JsonLd.toDateTime(pass.field["reservation_time_till"].value, "dd.MM.yyyy", "de");
 

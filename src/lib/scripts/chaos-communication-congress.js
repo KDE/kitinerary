@@ -4,13 +4,13 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parsePdf(pdf)
+function parsePdf(pdf, node, triggerNode)
 {
-    if (!Context.data) {
+    if (!triggerNode.result) {
         return null;
     }
 
-    var ptTicket = Barcode.decodeUic9183(Context.barcode);
+    var ptTicket = triggerNode.content
     var res = JsonLd.newEventReservation();
     res.reservationFor.name = ptTicket.person.name;
     res.reservationFor.location.name = "Congress Center Leipzig";
@@ -29,7 +29,7 @@ function parsePdf(pdf)
     res.reservationFor.endDate = end;
 
     // search for the QR code with the actual event code
-    var images = pdf.pages[Context.pdfPageNumber].images;
+    var images = pdf.pages[triggerNode.location].images;
     for (var i = 0; i < images.length; ++i) {
         var code = Barcode.decodeQR(images[i]);
         if (code) {
@@ -40,7 +40,7 @@ function parsePdf(pdf)
 
     // generate the second ticket for public transport
     var pt = JsonLd.clone(res);
-    pt.reservedTicket.ticketToken = Context.data[0].reservedTicket.ticketToken;
+    pt.reservedTicket.ticketToken = triggerNode.result[0].reservedTicket.ticketToken;
     pt.reservedTicket.name = "Public Transport";
 
     var reservations = new Array();
