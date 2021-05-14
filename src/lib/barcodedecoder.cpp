@@ -35,6 +35,12 @@ enum {
     MaxSourceImageWidth = 2000
 };
 
+
+static constexpr const auto SQUARE_MAX_ASPECT = 1.2f;
+static constexpr const auto PDF417_MIN_ASPECT = 1.5f;
+static constexpr const auto PDF417_MAX_ASPECT = 6.0f;
+static constexpr const auto ANY1D_MIN_ASPECT = 6.0f;
+
 BarcodeDecoder::BarcodeDecoder() = default;
 BarcodeDecoder::~BarcodeDecoder() = default;
 
@@ -104,12 +110,21 @@ bool BarcodeDecoder::isPlausibleAspectRatio(int width, int height, BarcodeDecode
     const auto aspectRatio = (float)width / (float)height;
 
     // almost square, assume Aztec or QR
-    if (aspectRatio < 1.2f && (hint & AnySquare)) {
+    if (aspectRatio < SQUARE_MAX_ASPECT && (hint & AnySquare)) {
         return true;
     }
 
-    // rectangular with medium aspect ratio, assume PDF 417
-    return aspectRatio > 1.5 && aspectRatio < 6 && (hint  & PDF417);
+    // rectangular with medium aspect ratio, such as PDF 417
+    if (aspectRatio > PDF417_MIN_ASPECT && aspectRatio < PDF417_MAX_ASPECT && (hint & PDF417)) {
+        return true;
+    }
+
+    // 1D
+    if (aspectRatio > ANY1D_MIN_ASPECT && (hint & Any1D)) {
+        return true;
+    }
+
+    return false;
 }
 
 bool BarcodeDecoder::maybeBarcode(int width, int height, BarcodeDecoder::BarcodeTypes hint)
@@ -127,11 +142,17 @@ struct {
     { BarcodeDecoder::QRCode, ZXing::BarcodeFormat::QRCode },
     { BarcodeDecoder::PDF417, ZXing::BarcodeFormat::PDF417 },
     { BarcodeDecoder::DataMatrix, ZXing::BarcodeFormat::DataMatrix },
+    { BarcodeDecoder::Code39, ZXing::BarcodeFormat::Code39 },
+    { BarcodeDecoder::Code93, ZXing::BarcodeFormat::Code93 },
+    { BarcodeDecoder::Code128, ZXing::BarcodeFormat::Code128 },
 #else
     { BarcodeDecoder::Aztec, ZXing::BarcodeFormat::AZTEC },
     { BarcodeDecoder::QRCode, ZXing::BarcodeFormat::QR_CODE },
     { BarcodeDecoder::PDF417, ZXing::BarcodeFormat::PDF_417 },
     { BarcodeDecoder::DataMatrix, ZXing::BarcodeFormat::DATA_MATRIX },
+    { BarcodeDecoder::Code39, ZXing::BarcodeFormat::CODE_39 },
+    { BarcodeDecoder::Code93, ZXing::BarcodeFormat::CODE_93 },
+    { BarcodeDecoder::Code128, ZXing::BarcodeFormat::CODE_128 },
 #endif
 };
 
@@ -255,11 +276,11 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
         (float)img.height() / (float)img.width() :
         (float)img.width() / (float)img.height();
 
-    if (aspectRatio < 1.2f && (hint & AnySquare) && (result.negative & hint & AnySquare) != (hint & AnySquare)) {
+    if (aspectRatio < SQUARE_MAX_ASPECT && (hint & AnySquare) && (result.negative & hint & AnySquare) != (hint & AnySquare)) {
         decodeZxing(img, hint & AnySquare, result);
     }
 
-    if (aspectRatio > 1.5 && aspectRatio < 6 && (hint  & PDF417) && (result.negative & hint & PDF417) != (hint & PDF417)) {
+    if (aspectRatio > PDF417_MIN_ASPECT && aspectRatio < PDF417_MAX_ASPECT && (hint  & PDF417) && (result.negative & hint & PDF417) != (hint & PDF417)) {
         auto normalizedImg = img;
         // newer ZXing versions handle rotated/flipped codes themselves correctly
 #ifndef ZXING_USE_READBARCODE
@@ -279,5 +300,9 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
         result.negative &= ~PDF417;
         decodeZxing(normalizedImg.transformed(QTransform{1, 0, 0, -1, 0, 0}), PDF417, result);
 #endif
+    }
+
+    if (aspectRatio > ANY1D_MIN_ASPECT && (hint & Any1D) && (result.negative & hint & Any1D) != (hint & Any1D)) {
+        decodeZxing(img, hint & Any1D, result);
     }
 }

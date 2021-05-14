@@ -38,20 +38,25 @@ public:
         QRCode = 2,
         PDF417 = 4,
         DataMatrix = 8,
-        Any = 15,
-        AnySquare = 11,
+        Code39 = 16,
+        Code93 = 32,
+        Code128 = 64,
+        AnySquare = Aztec | QRCode | DataMatrix,
+        Any2D = AnySquare | PDF417,
+        Any1D = Code39 | Code93 | Code128,
+        Any = Any1D | Any2D,
         None = 0
     };
     Q_DECLARE_FLAGS(BarcodeTypes, BarcodeType)
 
     /** Checks if @p img contains a barcode of type @p hint. */
-    bool isBarcode(const QImage &img, BarcodeTypes hint = Any) const;
+    bool isBarcode(const QImage &img, BarcodeTypes hint = Any2D) const;
 
     /** Decodes a binary payload barcode in @p img of type @p hint. */
-    QByteArray decodeBinary(const QImage &img, BarcodeTypes hint = Any) const;
+    QByteArray decodeBinary(const QImage &img, BarcodeTypes hint = Any2D) const;
 
     /** Decodes a textual payload barcode in @p img of type @p hint. */
-    QString decodeString(const QImage &img, BarcodeTypes hint = Any) const;
+    QString decodeString(const QImage &img, BarcodeTypes hint = Any2D) const;
 
     /** Clears the internal cache. */
     void clearCache();
@@ -66,10 +71,10 @@ public:
     /** Checks if the given image dimensions are a barcode of type @p hint.
      *  See above.
      */
-    static bool isPlausibleAspectRatio(int width, int height, BarcodeTypes hint = Any);
+    static bool isPlausibleAspectRatio(int width, int height, BarcodeTypes hint);
 
     /** The combination of the above. */
-    static bool maybeBarcode(int width, int height, BarcodeTypes hint = Any);
+    static bool maybeBarcode(int width, int height, BarcodeTypes hint);
 
 private:
     struct Result {

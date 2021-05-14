@@ -12,6 +12,8 @@
 #include <QObject>
 #include <QTest>
 
+Q_DECLARE_METATYPE(KItinerary::BarcodeDecoder::BarcodeType)
+
 using namespace KItinerary;
 
 class BarcodeDecoderTest : public QObject
@@ -98,8 +100,8 @@ private Q_SLOTS:
 
     void testPlausibilityCheck()
     {
-        QVERIFY(!BarcodeDecoder::maybeBarcode(10, 10));
-        QVERIFY(BarcodeDecoder::maybeBarcode(100, 100));
+        QVERIFY(!BarcodeDecoder::maybeBarcode(10, 10, BarcodeDecoder::Any));
+        QVERIFY(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::Any));
         QVERIFY(!BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::PDF417));
         QVERIFY(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::Aztec));
         QVERIFY(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::AnySquare));
@@ -162,6 +164,33 @@ private Q_SLOTS:
         const auto ba = decoder.decodeBinary(img, BarcodeDecoder::Any);
         QCOMPARE(ba.size(), 351);
         QVERIFY(ba.startsWith("OTI010080000020"));
+#endif
+    }
+
+    void test1D_data()
+    {
+        QTest::addColumn<QString>("filename");
+        QTest::addColumn<BarcodeDecoder::BarcodeType>("type");
+
+        QTest::newRow("code39") << QStringLiteral("code39.png") << BarcodeDecoder::Code39;
+        QTest::newRow("code93") << QStringLiteral("code93.png") << BarcodeDecoder::Code93;
+        QTest::newRow("code128") << QStringLiteral("code128.png") << BarcodeDecoder::Code128;
+    }
+
+    void test1D()
+    {
+        QFETCH(QString, filename);
+        QFETCH(BarcodeDecoder::BarcodeType, type);
+
+        QImage img(QLatin1String(SOURCE_DIR "/barcodes/") + filename);
+        QVERIFY(!img.isNull());
+
+        BarcodeDecoder decoder;
+#ifdef HAVE_ZXING
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any2D), QString());
+        QCOMPARE(decoder.decodeString(img, type), QLatin1String("123456789"));
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any1D), QLatin1String("123456789"));
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QLatin1String("123456789"));
 #endif
     }
 };
