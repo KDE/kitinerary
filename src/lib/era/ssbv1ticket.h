@@ -55,7 +55,7 @@ class KITINERARY_EXPORT SSBv1Ticket : protected SSBTicketBase
     SSB_NUM_PROPERTY(specimen, 306, 1)
     SSB_STR_PROPERTY(viaStations, 307, 5) // is that the correct encoding? page 131 of TAP TSI Annex B.6 could also be read as 6 times 5 bit content
 
-    Q_PROPERTY(QByteArray rawData READ rawData)
+    Q_PROPERTY(QByteArray rawData READ rawData STORED false)
 
 public:
     SSBv1Ticket();

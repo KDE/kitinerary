@@ -43,6 +43,8 @@ class KITINERARY_EXPORT VdvTicket
     /** Ticket number. */
     Q_PROPERTY(QString ticketNumber READ ticketNumber)
 
+    Q_PROPERTY(QByteArray rawData READ rawData STORED false)
+
 public:
     VdvTicket();
     VdvTicket(const QByteArray &data, const QByteArray &rawData);

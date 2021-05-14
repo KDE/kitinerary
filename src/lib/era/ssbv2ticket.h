@@ -52,7 +52,7 @@ class KITINERARY_EXPORT SSBv2Ticket : protected SSBTicketBase
     SSB_NUM_PROPERTY(railwayCarrierCode, 349, 14)
     SSB_STR_PROPERTY(reference, 363, 8)
 
-    Q_PROPERTY(QByteArray rawData READ rawData)
+    Q_PROPERTY(QByteArray rawData READ rawData STORED false)
 
 public:
     SSBv2Ticket();

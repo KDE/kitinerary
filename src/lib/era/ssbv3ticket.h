@@ -101,7 +101,7 @@ class KITINERARY_EXPORT SSBv3Ticket : protected SSBTicketBase {
     };
     Q_ENUM(TicketType)
 
-    Q_PROPERTY(QByteArray rawData READ rawData)
+    Q_PROPERTY(QByteArray rawData READ rawData STORED false)
 
 public:
     SSBv3Ticket();
