@@ -109,15 +109,17 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
     ticket.insert(QStringLiteral("ticketToken"), QString(QLatin1String("aztecbin:") + QString::fromLatin1(p.rawData().toBase64())));
     ticket.insert(QStringLiteral("ticketedSeat"), seat);
-    switch (rct2.type()) { // provide names for typically "addon" tickets, so we can distinguish them in the UI
-        case Rct2Ticket::Reservation:
-            ticket.insert(QStringLiteral("name"), i18n("Reservation"));
-            break;
-        case Rct2Ticket::Upgrade:
-            ticket.insert(QStringLiteral("name"), i18n("Upgrade"));
-            break;
-        default:
-            break;
+    if (rct2.isValid()) {
+        switch (rct2.type()) { // provide names for typically "addon" tickets, so we can distinguish them in the UI
+            case Rct2Ticket::Reservation:
+                ticket.insert(QStringLiteral("name"), i18n("Reservation"));
+                break;
+            case Rct2Ticket::Upgrade:
+                ticket.insert(QStringLiteral("name"), i18n("Upgrade"));
+                break;
+            default:
+                break;
+        }
     }
 
     QJsonObject res;
