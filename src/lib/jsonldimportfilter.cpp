@@ -97,7 +97,7 @@ static void migrateToAction(QJsonObject &obj, const char *propName, const char *
     obj.insert(QStringLiteral("potentialAction"), actions);
 
     if (remove) {
-        obj.remove(QStringLiteral("propName"));
+        obj.remove(QLatin1String(propName));
     }
 }
 
