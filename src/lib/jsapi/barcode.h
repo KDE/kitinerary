@@ -41,6 +41,12 @@ public:
      *  @param img An image containing the barcode, e.g. a PdfImage instance.
      */
     Q_INVOKABLE QString decodeDataMatrix(const QVariant &img) const;
+    /** Attempts to decode any barcode found in the given image.
+     *  This is the most expensive of the above option, and should only be
+     *  used if no other alternative is available.
+     *  @param img An image containing the barcode, e.g. a PdfImage instance.
+     */
+    Q_INVOKABLE QString decodeAnyBarcode(const QVariant &img) const;
 
     /** Decode an UIC 918.3 message from a train ticket Aztec code.
      *  @param s A QByteArray containing the raw data from the barcode.
