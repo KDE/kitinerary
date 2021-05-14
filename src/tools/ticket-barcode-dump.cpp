@@ -35,6 +35,22 @@
 
 using namespace KItinerary;
 
+template <typename T>
+static void dumpGadget(const T *gadget, const char* indent = "")
+{
+    if (!gadget) {
+        return;
+    }
+    for (auto i = 0; i < T::staticMetaObject.propertyCount(); ++i) {
+        const auto prop = T::staticMetaObject.property(i);
+        if (!prop.isStored()) {
+            continue;
+        }
+        const auto value = prop.readOnGadget(gadget);
+        std::cout << indent << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
+    }
+}
+
 static void dumpSsbv3Ticket(const QByteArray &data)
 {
     SSBv3Ticket ticket(data);
@@ -42,24 +58,15 @@ static void dumpSsbv3Ticket(const QByteArray &data)
     const auto typePrefix = QByteArray("type" + QByteArray::number(ticket.ticketTypeCode()));
     for (auto i = 0; i < SSBv3Ticket::staticMetaObject.propertyCount(); ++i) {
         const auto prop = SSBv3Ticket::staticMetaObject.property(i);
+        if (!prop.isStored()) {
+            continue;
+        }
         if (std::strncmp(prop.name(), "type", 4) == 0 && std::strncmp(prop.name(), typePrefix.constData(), 5) != 0) {
             continue;
         }
 
         const auto value = prop.readOnGadget(&ticket);
-        switch (value.type()) {
-            case QVariant::Int:
-                std::cout << prop.name() << ": " << value.toInt() << std::endl;
-                break;
-            case QVariant::ByteArray:
-                if (std::strcmp(prop.name(), "rawData") == 0) {
-                    break;
-                }
-                [[fallthrough]];
-            default:
-                std::cout << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
-                break;
-        }
+        std::cout << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
     }
 
     if (ticket.ticketTypeCode() == SSBv3Ticket::IRT_RES_BOA) {
@@ -72,48 +79,13 @@ static void dumpSsbv3Ticket(const QByteArray &data)
 static void dumpSsbv2Ticket(const QByteArray &data)
 {
     SSBv2Ticket ticket(data);
-
-    for (auto i = 0; i < SSBv2Ticket::staticMetaObject.propertyCount(); ++i) {
-        const auto prop = SSBv2Ticket::staticMetaObject.property(i);
-        const auto value = prop.readOnGadget(&ticket);
-        switch (value.type()) {
-            case QVariant::Int:
-                std::cout << prop.name() << ": " << value.toInt() << std::endl;
-                break;
-            case QVariant::ByteArray:
-                if (std::strcmp(prop.name(), "rawData") == 0) {
-                    break;
-                }
-                [[fallthrough]];
-            default:
-                std::cout << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
-                break;
-        }
-    }
+    dumpGadget(&ticket);
 }
 
 static void dumpSsbv1Ticket(const QByteArray &data)
 {
     SSBv1Ticket ticket(data);
-
-    for (auto i = 0; i < SSBv1Ticket::staticMetaObject.propertyCount(); ++i) {
-        const auto prop = SSBv1Ticket::staticMetaObject.property(i);
-        const auto value = prop.readOnGadget(&ticket);
-        switch (value.type()) {
-            case QVariant::Int:
-                std::cout << prop.name() << ": " << value.toInt() << std::endl;
-                break;
-            case QVariant::ByteArray:
-                if (std::strcmp(prop.name(), "rawData") == 0) {
-                    break;
-                }
-                [[fallthrough]];
-            default:
-                std::cout << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
-                break;
-        }
-    }
-
+    dumpGadget(&ticket);
     std::cout << std::endl;
     std::cout << "First day of validitiy: " << qPrintable(ticket.firstDayOfValidity().toString(Qt::ISODate)) << std::endl;
     std::cout << "Departure time: " << qPrintable(ticket.departureTime().toString(Qt::ISODate)) << std::endl;
@@ -130,19 +102,6 @@ static void dumpRawData(const char *data, std::size_t size)
         std::cout.write(data, size);
     } else {
         std::cout << "(hex) " << QByteArray(data, size).toHex().constData();
-    }
-}
-
-template <typename T>
-static void dumpGadget(const T *gadget, const char* indent)
-{
-    if (!gadget) {
-        return;
-    }
-    for (auto i = 0; i < T::staticMetaObject.propertyCount(); ++i) {
-        const auto prop = T::staticMetaObject.property(i);
-        const auto value = prop.readOnGadget(gadget);
-        std::cout << indent << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
     }
 }
 
