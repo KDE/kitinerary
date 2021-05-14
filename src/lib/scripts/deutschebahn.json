@@ -2,27 +2,34 @@
     {
         "filter": [
             {
-                "field": "From",
-                "match": "buchungsbestaetigung@bahn.de",
-                "mimeType": "message/rfc822",
-                "scope": "Ancestors"
-            },
-            {
-                "match": "uic:0080",
-                "field": "reservationFor.provider.identifier",
-                "mimeType": "application/ld+json",
+                "field": "carrierId",
+                "match": "80",
+                "mimeType": "internal/uic9183",
                 "scope": "Descendants"
             },
             {
-                "match": "vdv:6260",
-                "field": "reservationFor.provider.identifier",
-                "mimeType": "application/ld+json",
+                "field": "issuerId",
+                "match": "6260",
+                "mimeType": "internal/vdv",
                 "scope": "Descendants"
             }
         ],
         "function": "parsePdf",
-        "script": "deutschebahn.js",
-        "mimeType": "application/pdf"
+        "mimeType": "application/pdf",
+        "script": "deutschebahn.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "buchungsbestaetigung@bahn.de",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "parseReservation",
+        "mimeType": "application/pdf",
+        "script": "deutschebahn.js"
     },
     {
         "filter": [
@@ -34,8 +41,8 @@
             }
         ],
         "function": "parseText",
-        "script": "deutschebahn.js",
-        "mimeType": "text/plain"
+        "mimeType": "text/plain",
+        "script": "deutschebahn.js"
     },
     {
         "filter": [
@@ -47,7 +54,7 @@
             }
         ],
         "function": "parseCancellation",
-        "script": "deutschebahn.js",
-        "mimeType": "text/html"
+        "mimeType": "text/html",
+        "script": "deutschebahn.js"
     }
 ]
