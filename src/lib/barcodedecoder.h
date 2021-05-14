@@ -41,6 +41,7 @@ public:
         Code39 = 16,
         Code93 = 32,
         Code128 = 64,
+        IgnoreAspectRatio = 128, /// search for barcodes anywhere in the image, rather than assuming the image is primarily containing the barcode
         AnySquare = Aztec | QRCode | DataMatrix,
         Any2D = AnySquare | PDF417,
         Any1D = Code39 | Code93 | Code128,
@@ -66,7 +67,7 @@ public:
      *  to perform them manually if a cheaper way to obtain the image dimension exists
      *  that does not require a full QImage creation.
      */
-    static bool isPlausibleSize(int width, int height);
+    static bool isPlausibleSize(int width, int height, BarcodeTypes hint);
 
     /** Checks if the given image dimensions are a barcode of type @p hint.
      *  See above.

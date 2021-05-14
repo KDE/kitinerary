@@ -90,18 +90,23 @@ void BarcodeDecoder::clearCache()
     m_cache.clear();
 }
 
-bool BarcodeDecoder::isPlausibleSize(int width, int height)
+bool BarcodeDecoder::isPlausibleSize(int width, int height, BarcodeDecoder::BarcodeTypes hint)
 {
     // normalize to landscape
     if (height > width) {
         std::swap(width, height);
     }
 
-    return width > MinSourceImageWidth && height > MinSourceImageHeight && width < MaxSourceImageWidth && height < MaxSourceImageHeight;
+    return width > MinSourceImageWidth && height > MinSourceImageHeight
+        && ((width < MaxSourceImageWidth && height < MaxSourceImageHeight) || (hint & IgnoreAspectRatio));
 }
 
 bool BarcodeDecoder::isPlausibleAspectRatio(int width, int height, BarcodeDecoder::BarcodeTypes hint)
 {
+    if (hint & IgnoreAspectRatio) {
+        return true;
+    }
+
     // normalize to landscape
     if (height > width) {
         std::swap(width, height);
@@ -129,7 +134,7 @@ bool BarcodeDecoder::isPlausibleAspectRatio(int width, int height, BarcodeDecode
 
 bool BarcodeDecoder::maybeBarcode(int width, int height, BarcodeDecoder::BarcodeTypes hint)
 {
-    return isPlausibleSize(width, height) && isPlausibleAspectRatio(width, height, hint);
+    return isPlausibleSize(width, height, hint) && isPlausibleAspectRatio(width, height, hint);
 }
 
 #ifdef HAVE_ZXING
@@ -269,6 +274,11 @@ void BarcodeDecoder::decodeZxing(const QImage&, BarcodeDecoder::BarcodeTypes, Ba
 void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTypes hint, BarcodeDecoder::Result &result) const
 {
     if ((result.positive & hint) || (result.negative & hint) == hint) {
+        return;
+    }
+
+    if (hint & IgnoreAspectRatio) {
+        decodeZxing(img, hint, result);
         return;
     }
 

@@ -22,7 +22,7 @@ bool PdfBarcodeUtil::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTy
     const auto w = img.width();
     const auto h = img.height();
 
-    if (!BarcodeDecoder::isPlausibleSize(img.sourceWidth(), img.sourceHeight()) || !BarcodeDecoder::isPlausibleAspectRatio(w, h, hint)) {
+    if (!BarcodeDecoder::isPlausibleSize(img.sourceWidth(), img.sourceHeight(), hint) || !BarcodeDecoder::isPlausibleAspectRatio(w, h, hint)) {
         return false;
     }
 
