@@ -220,7 +220,6 @@ QVariantList ExtractorDocumentNode::findChildNodes(const QJSValue &jsFilter) con
     const auto filter = ExtractorFilter::fromJSValue(jsFilter);
     std::vector<ExtractorDocumentNode> matches;
     filter.allMatches(*this, matches);
-    qDebug() << matches.size() << filter.fieldName() << filter.pattern() << filter.mimeType();
 
     QVariantList l;
     l.reserve(matches.size());

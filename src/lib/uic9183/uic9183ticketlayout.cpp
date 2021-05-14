@@ -158,7 +158,6 @@ QString Uic9183TicketLayout::text(int row, int column, int width, int height) co
         if (f.column() + f.width() - 1 < column || f.column() > column + width - 1) {
             continue;
         }
-        //qDebug() << "Field:" << f.row() << f.column() << f.height() << f.width() << f.size() << f.text();
 
         // split field into lines
         // TODO this needs to follow the U_TLAY word-wrapping algorithm?
