@@ -37,6 +37,10 @@ int Uic9183Utils::readAsciiEncodedNumber(const Uic9183Block &block, int offset, 
 
 QString Uic9183Utils::readUtf8String(const char* data, int size, int offset, int length)
 {
+    if (length == 0) { // common in ÖBB RCT2 blocks...
+        return {};
+    }
+
     if (!data || offset < 0 || length < 1 || size < 1 || offset + length > size) {
         qCWarning(Log) << "Invalid UIC 918.3 read" << offset << length << size;
         return {};
