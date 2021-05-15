@@ -275,6 +275,17 @@ function parseOuigoEmail(html)
     }
 }
 
+function parseOuigoSummaryTime(htmlElem)
+{
+    var timeStr = htmlElem[0].recursiveContent;
+    var time = timeStr.match(/(\d+ [^ ]+ \d+) +[^ ]+ (\d+:\d+)/);
+    if (time) {
+        return JsonLd.toDateTime(time[1] + time[2], "dd MMMM yyyyhh:mm", "fr");
+    }
+    time = timeStr.match(/(\d+ [^ ]+) +[^ ]+ +(\d+[:h]\d+)/);
+    return JsonLd.toDateTime(time[1] + time[2].replace('h', ':'), "dd MMMMhh:mm", "fr");
+}
+
 function parseOuigoSummary(html)
 {
     // TODO extract passenger names
@@ -283,18 +294,30 @@ function parseOuigoSummary(html)
     res.reservationFor.arrivalStation.name = html.eval('//*[@data-select="travel-summary-destination"]')[0].content;
     res.reservationNumber = html.eval('//*[@data-select="travel-summary-reference"]')[0].content;
 
-    var depTimeStr = html.eval('//*[@data-select="travel-departureDate"]')[0].recursiveContent;
-    var depTime = depTimeStr.match(/(\d+ [^ ]+ \d+) +[^ ]+ (\d+:\d+)/);
-    if (depTime) {
-        res.reservationFor.departureTime = JsonLd.toDateTime(depTime[1] + depTime[2], "dd MMMM yyyyhh:mm", "fr");
-    } else {
-        depTime = depTimeStr.match(/(\d+ [^ ]+) +[^ ]+ +(\d+[:h]\d+)/);
-        res.reservationFor.departureTime = JsonLd.toDateTime(depTime[1] + depTime[2].replace('h', ':'), "dd MMMMhh:mm", "fr");
+    res.reservationFor.departureTime = parseOuigoSummaryTime(html.eval('//*[@data-select="travel-departureDate"]'));
+
+    var trainNum = html.eval('//*[@data-select="passenger-detail-outwardFares"]//*[@class="passenger-detail__equipment"]');
+    if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
+        // can occur multiple times for multi-leg journeys or multiple passengers
+        // we don't have information about connections on multi-leg journeys, so omit the train number in that case
+        res.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
     }
 
-    var trainNum = html.eval('//*[@class="passenger-detail__equipment"]');
-    res.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
-    return res;
+    // check if this is a return ticket
+    var retourTime = html.eval('//*[@data-select="travel-returnDate"]');
+    if (retourTime.length == 0) {
+        return res;
+    }
+    var retour = JsonLd.newTrainReservation();
+    retour.reservationFor.departureStation.name = res.reservationFor.arrivalStation.name;
+    retour.reservationFor.arrivalStation.name = res.reservationFor.departureStation.name;
+    retour.reservationFor.departureTime = parseOuigoSummaryTime(retourTime);
+    trainNum = html.eval('//*[@data-select="passenger-detail-inwardFares"]//*[@class="passenger-detail__equipment"]');
+    if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
+        retour.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
+    }
+
+    return [res, retour];
 }
 
 function parseOuigoConfirmation(html)
