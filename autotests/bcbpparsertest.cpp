@@ -5,6 +5,9 @@
 */
 
 #include "iatabcbpparser.h"
+
+#include "../lib/iata/iatabcbp.h"
+
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Organization>
 #include <KItinerary/Place>
@@ -69,6 +72,9 @@ private Q_SLOTS:
             qWarning().noquote() << QJsonDocument(resJson).toJson();
         }
         QCOMPARE(resJson, refArray);
+
+        IataBcbp bcbp(message);
+        QVERIFY(bcbp.isValid());
     }
 
     void testParserInvalid_data()
@@ -90,6 +96,9 @@ private Q_SLOTS:
             qDebug().noquote() << QJsonDocument(JsonLdDocument::toJson(res)).toJson();
         }
         QVERIFY(res.isEmpty());
+
+        IataBcbp bcbp(message);
+        QVERIFY(!bcbp.isValid());
     }
 };
 

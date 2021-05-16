@@ -40,6 +40,9 @@ set(kitinerary_lib_srcs
 
     extractors/iatabcbpextractor.cpp
 
+    iata/iatabcbp.cpp
+    iata/iatabcbpsections.cpp
+
     jsapi/barcode.cpp
     jsapi/bitarray.cpp
     jsapi/context.cpp

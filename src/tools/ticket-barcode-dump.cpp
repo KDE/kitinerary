@@ -7,6 +7,7 @@
 #include "../lib/era/ssbv1ticket.h"
 #include "../lib/era/ssbv2ticket.h"
 #include "../lib/era/ssbv3ticket.h"
+#include "../lib/iata/iatabcbp.h"
 #include "../lib/uic9183/uic9183head.h"
 #include "../lib/uic9183/uic9183header.h"
 #include "../lib/uic9183/vendor0080vublockdata.h"
@@ -15,7 +16,6 @@
 
 #include <kitinerary_version.h>
 
-#include <KItinerary/IataBcbpParser>
 #include <KItinerary/Uic9183Block>
 #include <KItinerary/Uic9183Parser>
 #include <KItinerary/Uic9183TicketLayout>
@@ -233,6 +233,38 @@ static void dumpVdv(const QByteArray &data)
     std::cout << "  version: " << ticket.trailer()->version << std::endl;
 }
 
+void dumpIataBcbp(const QString &data, const QDate &contextDate)
+{
+    IataBcbp ticket(data);
+    if (!ticket.isValid()) {
+        std::cout << "invalid format" << std::endl;
+        return;
+    }
+
+    const auto ums = ticket.uniqueMandatorySection();
+    dumpGadget(&ums);
+    const auto ucs = ticket.uniqueConditionalSection();
+    dumpGadget(&ucs);
+    const auto issueDate = ucs.dateOfIssue(contextDate);
+    std::cout << "Date of issue: " << qPrintable(issueDate.toString(Qt::ISODate)) << std::endl;
+
+    for (auto i = 0; i < ums.numberOfLegs(); ++i) {
+        std::cout << "Leg " << (i + 1) << std::endl;
+        const auto rms = ticket.repeatedMandatorySection(i);
+        dumpGadget(&rms, "  ");
+        const auto rcs = ticket.repeatedConditionalSection(i);
+        dumpGadget(&rcs, "  ");
+        std::cout << "  Airline use section: " << qPrintable(ticket.airlineUseSection(i)) << std::endl;
+        std::cout << "  Date of flight: " << qPrintable(rms.dateOfFlight(issueDate.isValid() ? issueDate : contextDate).toString(Qt::ISODate)) << std::endl;
+    }
+
+    if (ticket.hasSecuritySection()) {
+        std::cout << "Security:" << std::endl;
+        const auto sec = ticket.securitySection();
+        dumpGadget(&sec, "  ");
+    }
+}
+
 int main(int argc, char **argv)
 {
     QCoreApplication::setApplicationName(QStringLiteral("ticket-barcode-dump"));
@@ -245,25 +277,32 @@ int main(int argc, char **argv)
     parser.setApplicationDescription(QStringLiteral("Decode ticket barcode content."));
     parser.addHelpOption();
     parser.addVersionOption();
+    QCommandLineOption contextDateOpt(QStringLiteral("context-date"), QStringLiteral("Context to resolve incomplete dates."), QStringLiteral("yyyy-MM-dd"));
+    parser.addOption(contextDateOpt);
     parser.addPositionalArgument(QStringLiteral("input"), QStringLiteral("File to read data from, omit for using stdin."));
     parser.process(app);
 
-    // TODO stdin support
-    if (parser.positionalArguments().isEmpty()) {
-        parser.showHelp(1);
+    auto contextDate = QDate::currentDate();
+    if (parser.isSet(contextDateOpt)) {
+        contextDate = QDate::fromString(parser.value(contextDateOpt), Qt::ISODate);
     }
 
-    QFile file(parser.positionalArguments().at(0));
-    if (!file.open(QFile::ReadOnly)) {
-        std::cerr << qPrintable(file.errorString()) << std::endl;
-        return 1;
+    QFile file;
+    if (parser.positionalArguments().isEmpty()) {
+        file.open(stdin, QFile::ReadOnly);
+    } else {
+        file.setFileName(parser.positionalArguments().at(0));
+        if (!file.open(QFile::ReadOnly)) {
+            std::cerr << qPrintable(file.errorString()) << std::endl;
+            return 1;
+        }
     }
 
     const auto data = file.readAll();
 
-    if (IataBcbpParser::maybeIataBcbp(QString::fromLatin1(data))) {
+    if (IataBcbp::maybeIataBcbp(data)) {
         std::cout << "IATA Barcoded Boarding Pass" << std::endl;
-        // TODO
+        dumpIataBcbp(QString::fromUtf8(data), contextDate);
     } else if (SSBv3Ticket::maybeSSB(data)) {
         std::cout << "ERA SSB Ticket" << std::endl;
         dumpSsbv3Ticket(data);
