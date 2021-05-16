@@ -40,12 +40,8 @@ void VdvDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
 {
     const auto vdv = node.content<VdvTicket>();
 
-    QJsonObject org;
-    org.insert(QStringLiteral("@type"), QLatin1String("Organization"));
-    org.insert(QStringLiteral("identifier"), QString(QLatin1String("vdv:") + QString::number(vdv.issuerId())));
     QJsonObject trip;
     trip.insert(QStringLiteral("@type"), QLatin1String("TrainTrip"));
-    trip.insert(QStringLiteral("provider"), org);
     trip.insert(QStringLiteral("departureDay"), vdv.beginDateTime().date().toString(Qt::ISODate));
     QJsonObject seat;
     seat.insert(QStringLiteral("@type"), QLatin1String("Seat"));

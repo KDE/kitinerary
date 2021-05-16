@@ -53,12 +53,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 {
     const auto p = node.content<Uic9183Parser>();
 
-    QJsonObject org;
-    org.insert(QStringLiteral("@type"), QLatin1String("Organization"));
-    org.insert(QStringLiteral("identifier"), QString(QLatin1String("uic:") + p.carrierId()));
     QJsonObject trip;
     trip.insert(QStringLiteral("@type"), QLatin1String("TrainTrip"));
-    trip.insert(QStringLiteral("provider"), org);
     QJsonObject seat;
     seat.insert(QStringLiteral("@type"), QLatin1String("Seat"));
     seat.insert(QStringLiteral("seatingType"), p.seatingType());
@@ -124,7 +120,9 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 
     QJsonObject res;
     res.insert(QStringLiteral("@type"), QLatin1String("TrainReservation"));
-    res.insert(QStringLiteral("reservationFor"), trip);
+    if (trip.size() > 1) {
+        res.insert(QStringLiteral("reservationFor"), trip);
+    }
     res.insert(QStringLiteral("reservationNumber"), p.pnr());
     res.insert(QStringLiteral("reservedTicket"), ticket);
     res.insert(QStringLiteral("underName"), JsonLdDocument::toJson(p.person()));
