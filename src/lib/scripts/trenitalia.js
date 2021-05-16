@@ -53,19 +53,13 @@ function parsePdf(pdf) {
             }
 
             // see https://community.kde.org/KDE_PIM/KItinerary/Trenitalia_Barcode
-            var bitArray = Barcode.toBitArray(barcode);
-
-            var depUic = bitArray.readNumberMSB(14*8 + 4, 24);
-            var arrUic = bitArray.readNumberMSB(18*8 + 3, 24);
-            if (depUic != arrUic) {
-                if (bitArray.readNumberMSB(14*8, 4) == 0) {
-                    personalRes.reservationFor.departureStation.identifier = "uic:" + depUic;
-                }
-                if (bitArray.readNumberMSB(17*8 + 7, 4) == 0) {
-                    personalRes.reservationFor.arrivalStation.identifier = "uic:" + arrUic;
-                }
+            var ssb = Barcode.decodeEraSsbTicket(barcode)
+            personalRes.reservationFor.departureStation.identifier = "uic:" + (ssb.departureStationNum % 10000000)
+            if (ssb.departureStationNum != ssb.arrivalStationNum) {
+                personalRes.reservationFor.arrivalStation.identifier = "uic:" + (ssb.arrivalStationNum % 10000000)
             }
 
+            var bitArray = Barcode.toBitArray(barcode);
             var seatNum = bitArray.readNumberMSB(31*8 + 2, 7);
             if (seatNum > 0) {
                 personalRes.reservedTicket.ticketedSeat.seatNumber = "" + seatNum;
