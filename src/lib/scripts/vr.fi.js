@@ -6,6 +6,10 @@
 
 function parseSsbBarcode(ssb, node)
 {
+    // vending machine bought and/or newer tickets claim version 2, but they aren't...
+    if (ssb.version == 2) {
+        ssb = Barcode.decodeEraSsbTicket(ssb.rawData, 1);
+    }
     if (ssb.version != 1) {
         return;
     }
