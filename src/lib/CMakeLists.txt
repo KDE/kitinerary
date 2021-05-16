@@ -33,6 +33,7 @@ set(kitinerary_lib_srcs
     engine/scriptextractor.cpp
 
     era/ssbticketbase.cpp
+    era/ssbticketreader.cpp
     era/ssbv1ticket.cpp
     era/ssbv2ticket.cpp
     era/ssbv3ticket.cpp
