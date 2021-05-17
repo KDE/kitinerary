@@ -134,10 +134,10 @@ target_include_directories(KPimItinerary PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRE
 target_include_directories(KPimItinerary PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(KPimItinerary
     PUBLIC
-        Qt5::Core
+        Qt::Core
         KF5::Mime
     PRIVATE
-        Qt5::Qml
+        Qt::Qml
         KF5::Archive
         KF5::I18n
         KF5::Contacts

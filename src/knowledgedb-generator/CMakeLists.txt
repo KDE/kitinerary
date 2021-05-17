@@ -20,7 +20,7 @@ target_include_directories(generate-knowledgedb PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../lib/knowledgedb
     ${CMAKE_CURRENT_BINARY_DIR}/../lib
 )
-target_link_libraries(generate-knowledgedb PRIVATE Qt5::Network Qt5::Gui KOSM)
+target_link_libraries(generate-knowledgedb PRIVATE Qt::Network Qt::Gui KOSM)
 # extract all elements we are interested in (airports, terminals, stations at airports)
 osm_filter(OUTPUT airports.o5m FILTER --keep=\"iata=* or aeroway=terminal or public_transport=station or railway=station or railway=halt or railway=tram_stop\")
 

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 add_subdirectory(osm)
-if (TARGET Qt5::Network AND NOT CMAKE_CROSSCOMPILING AND OSM_PLANET_DIR AND OsmTools_FOUND)
+if (TARGET Qt::Network AND NOT CMAKE_CROSSCOMPILING AND OSM_PLANET_DIR AND OsmTools_FOUND)
     add_subdirectory(knowledgedb-generator)
 endif()
 add_subdirectory(lib)
