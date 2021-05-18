@@ -95,7 +95,7 @@ private Q_SLOTS:
         const auto refArray = QJsonDocument::fromJson(f.readAll()).array();
         QVERIFY(!refArray.isEmpty());
 
-        const auto res = IataBcbpParser::parse(message, QDate(2018, 4, 2));
+        const auto res = IataBcbpParser::parse(bcbp, QDate(2018, 4, 2));
         const auto resJson = JsonLdDocument::toJson(res);
 
         if (refArray != resJson) {
@@ -118,12 +118,6 @@ private Q_SLOTS:
     void testParserInvalid()
     {
         QFETCH(QString, message);
-        const auto res = IataBcbpParser::parse(message);
-        if (!res.isEmpty()) {
-            qDebug().noquote() << QJsonDocument(JsonLdDocument::toJson(res)).toJson();
-        }
-        QVERIFY(res.isEmpty());
-
         IataBcbp bcbp(message);
         QVERIFY(!bcbp.isValid());
     }

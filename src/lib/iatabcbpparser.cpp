@@ -6,6 +6,7 @@
 
 #include "iatabcbpparser.h"
 #include "logging.h"
+#include "iata/iatabcbp.h"
 
 #include <KItinerary/Flight>
 #include <KItinerary/Organization>
@@ -18,214 +19,70 @@
 
 using namespace KItinerary;
 
-namespace KItinerary {
-enum Constants {
-    UniqueMandatorySize = 23,
-    RepeatedMandatorySize = 37,
-    FormatCode = 'M',
-    BeginOfVersionNumber = '>'
-};
-
-static QStringRef stripLeadingZeros(const QStringRef &s)
+static QString stripLeadingZeros(const QString &s)
 {
     const auto it = std::find_if(s.begin(), s.end(), [](const QChar &c) { return c != QLatin1Char('0'); });
     const auto d = std::distance(s.begin(), it);
     return s.mid(d);
 }
 
-static int readHexValue(const QStringRef &s, int width)
-{
-    return s.mid(0, width).toInt(nullptr, 16);
-}
-
-static bool isValidAirportCode(const QString &s)
-{
-    return std::all_of(s.begin(), s.end(), [](const QChar c) { return c.isLetter() && c.isUpper(); });
-}
-
-static int parseRepeatedMandatorySection(const QStringRef& msg, FlightReservation& res)
-{
-    if (msg.size() < 24) { // pre-checking data, technically incomplete, but we can make use of this nevertheless
-        qCWarning(Log) << "IATA BCBP repeated mandatory section too short";
-        return -1; // error
-    }
-    res.setReservationNumber(msg.mid(0, 7).trimmed().toString());
-
-    Flight flight;
-    Airport airport;
-    airport.setIataCode(msg.mid(7, 3).toString());
-    flight.setDepartureAirport(airport);
-    airport.setIataCode(msg.mid(10, 3).toString());
-    flight.setArrivalAirport(airport);
-    if (!isValidAirportCode(flight.departureAirport().iataCode()) || !isValidAirportCode(flight.arrivalAirport().iataCode())) {
-        qCWarning(Log) << "IATA airport code format violation";
-        return -1;
-    }
-
-    Airline airline;
-    airline.setIataCode(msg.mid(13, 3).trimmed().toString());
-    flight.setAirline(airline);
-    flight.setFlightNumber(stripLeadingZeros(msg.mid(16, 5).trimmed()).toString());
-
-    // 3x Date of flight, as days since Jan 1st
-    // we don't know the year here, so use 1970, will be filled up or discarded by the caller
-    const auto days = msg.mid(21, 3).toInt() - 1;
-    flight.setDepartureDay(QDate(1970, 1, 1).addDays(days));
-    res.setReservationFor(flight);
-
-    if (msg.size() < RepeatedMandatorySize) {
-        return 0;
-    }
-
-    // 1x Compartment code
-
-    res.setAirplaneSeat(stripLeadingZeros(msg.mid(25, 4)).trimmed().toString());
-    res.setPassengerSequenceNumber(stripLeadingZeros(msg.mid(29, 5)).trimmed().toString());
-
-    // 1x Passenger status
-
-    // field size of conditional section + airline use section
-    return readHexValue(msg.mid(35), 2);
-}
-}
-
 QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &externalIssueDate)
 {
-    if (!IataBcbpParser::maybeIataBcbp(message)) {
-        qCWarning(Log) << "IATA BCBP code too short for unique mandatory section, or invalid mandatory section format";
+    IataBcbp bcbp(message);
+    if (!bcbp.isValid()) {
         return {};
     }
+    return parse(bcbp, externalIssueDate.isValid() ? externalIssueDate : QDate(1970, 1, 1));
+}
 
-    // parse unique mandatory section
-    const auto legCount = message.at(1).toLatin1() - '0';
+QVector<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDate &contextDate)
+{
+    const auto count = bcbp.uniqueMandatorySection().numberOfLegs();
+    const auto issueDate = bcbp.uniqueConditionalSection().dateOfIssue(contextDate);
+
     QVector<QVariant> result;
-    result.reserve(legCount);
-    FlightReservation res1;
+    result.reserve(count);
 
+    Person person;
     {
-        Person person;
-        const auto fullName = message.midRef(2, 20).trimmed();
-
+        const auto fullName = bcbp.uniqueMandatorySection().passengerName();
         const auto idx = fullName.indexOf(QLatin1Char('/'));
         if (idx > 0 && idx < fullName.size() - 1) {
-            person.setFamilyName(fullName.left(idx).toString());
-            person.setGivenName(fullName.mid(idx + 1).toString());
+            person.setFamilyName(fullName.left(idx));
+            person.setGivenName(fullName.mid(idx + 1));
         } else {
-            person.setName(fullName.toString());
+            person.setName(fullName);
         }
-        res1.setUnderName(person);
     }
 
-    {
-        Ticket ticket;
-        ticket.setTicketToken(QStringLiteral("aztecCode:") + message);
-        res1.setReservedTicket(ticket);
-    }
+    Ticket ticket;
+    ticket.setTicketToken(QStringLiteral("aztecCode:") + bcbp.rawData());
 
-    const auto varSize = parseRepeatedMandatorySection(message.midRef(UniqueMandatorySize), res1);
-    if (varSize < 0) { // parser error
-        return {};
-    }
-    int index = UniqueMandatorySize + RepeatedMandatorySize;
-    auto issueDate = externalIssueDate;
-    if (varSize > 0) {
-        if (message.size() < (index + varSize)) {
-            qCWarning(Log) << "IATA BCBP code too short for conditional section in first leg" << varSize << message.size();
-            return {};
-        }
+    for (auto i = 0; i < count; ++i) {
+        Flight flight;
 
-        // parse unique conditional section, if there is one, otherwise we skip all of this assuming "for airline use"
-        if (message.at(index) == QLatin1Char(BeginOfVersionNumber)) {
-            // 1x version number
-            // 2x field size of unique conditional section
-            const auto uniqCondSize = readHexValue(message.midRef(index + 2), 2);
-            if (uniqCondSize + 4 > varSize) {
-                qCWarning(Log) << "IATA BCBP unique conditional section has invalid size" << varSize << uniqCondSize;
-                return {};
-            }
+        const auto rms = bcbp.repeatedMandatorySection(i);
+        flight.setDepartureDay(rms.dateOfFlight(issueDate.isValid() ? issueDate : contextDate));
 
-            // 1x passenger description
-            // 1x source of checking
-            // 1x source of boarding pass issuance
+        Airport dep;
+        dep.setIataCode(rms.fromCityAirportCode());
+        flight.setDepartureAirport(dep);
+        Airport arr;
+        arr.setIataCode(rms.toCityAirportCode());
+        flight.setArrivalAirport(arr);
+        Airline airline;
+        airline.setIataCode(rms.operatingCarrierDesignator());
+        flight.setAirline(airline);
+        flight.setFlightNumber(stripLeadingZeros(rms.flightNumber()));
 
-            // 4x date of issue of boarding pass
-            // this only contains the last digit of the year (sic), but we assume it to be in the past
-            // so this still gives us a 10 year range of correctly determined times
-            if (uniqCondSize >= 11 && externalIssueDate.isValid() && message.at(index + 7).isDigit() && message.at(index + 10).isDigit()) {
-                const auto year = message.at(index + 7).toLatin1() - '0';
-                const auto days = message.midRef(index + 8, 3).toInt() - 1;
-                if (year < 0 || year > 9 || days < 0 || days > 365) {
-                    qCWarning(Log) << "IATA BCBP invalid boarding pass issue date format" << message.midRef(index + 7, 4);
-                    return {};
-                }
-
-                auto currentYear = externalIssueDate.year() - externalIssueDate.year() % 10 + year;
-                if (currentYear > externalIssueDate.year()) {
-                    currentYear -= 10;
-                }
-                issueDate = QDate(currentYear, 1, 1).addDays(days);
-            }
-
-            // 1x document type
-            // 3x airline code of boarding pass issuer
-            // 3x 13x baggage tag numbers
-
-            // skip repeated conditional section, containing mainly bonus program data
-        }
-
-        // skip for airline use section
-        index += varSize;
-    }
-
-    result.push_back(res1);
-
-    // all following legs only contain repeated sections, copy content from the unique ones from the first leg
-    for (int i = 1; i < legCount; ++i) {
-        if (message.size() < (index + RepeatedMandatorySize)) {
-            qCWarning(Log) << "IATA BCBP repeated mandatory section too short" << i;
-            return {};
-        }
-
-        FlightReservation res = res1;
-        const auto varSize = parseRepeatedMandatorySection(message.midRef(index), res);
-        if (varSize < 0) { // parser error
-            return {};
-        }
-        index += RepeatedMandatorySize;
-        if (message.size() < (index + varSize)) {
-            qCWarning(Log) << "IATA BCBP repeated conditional section too short" << i;
-            return {};
-        }
-
-        // skip repeated conditional section
-        // skip for airline use section
-
-        index += varSize;
-        result.push_back(res);
-    }
-
-    // optional security section at the end, not interesting for us
-
-    // complete departure dates with the now (hopefully known issue date)
-    for (auto it = result.begin(); it != result.end(); ++it) {
-        auto res = (*it).value<FlightReservation>();
-        auto flight = res.reservationFor().value<Flight>();
-
-        if (issueDate.isValid()) {
-            const auto days = flight.departureDay().dayOfYear() - 1;
-            QDate date(issueDate.year(), 1, 1);
-            date = date.addDays(days);
-            if (date >= issueDate) {
-                flight.setDepartureDay(date);
-            } else {
-                flight.setDepartureDay(QDate(issueDate.year() + 1, 1, 1).addDays(days));
-            }
-        } else {
-            flight.setDepartureDay(QDate());
-        }
-
+        FlightReservation res;
         res.setReservationFor(flight);
-        *it = res;
+        res.setPassengerSequenceNumber(stripLeadingZeros(rms.checkinSequenceNumber()));
+        res.setAirplaneSeat(stripLeadingZeros(rms.seatNumber()));
+        res.setReservationNumber(rms.operatingCarrierPNRCode());
+        res.setUnderName(person);
+        res.setReservedTicket(ticket);
+        result.push_back(std::move(res));
     }
 
     return result;
@@ -233,12 +90,5 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &ext
 
 bool IataBcbpParser::maybeIataBcbp(const QString &message)
 {
-    if (message.size() < UniqueMandatorySize) {
-        return false;
-    }
-    if (message.at(0) != QLatin1Char(FormatCode) || !message.at(1).isDigit()) {
-        return false;
-    }
-
-    return true;
+    return IataBcbp::maybeIataBcbp(message);
 }
