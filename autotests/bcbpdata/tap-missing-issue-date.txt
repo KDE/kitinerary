@@ -1,0 +1,43 @@
+IATA Barcoded Boarding Pass
+formatCode: M
+numberOfLegs: 1
+passengerName: DOE/JOHN
+electronicTicketIndicator: E
+version: 2
+fieldSize: 24
+passengerDescription: 0
+sourceOfCheckin: 
+sourceOfBoardingPassIssuance: 
+yearOfIssue: 0
+dayOfIssue: 0
+documentType: B
+airlineDesignatorOfBoardingPassIssuer: 1A
+baggageTagLicensePlateNumber1: 
+baggageTagLicensePlateNumber2: 
+baggageTagLicensePlateNumber3: 
+Date of issue: 
+Leg 1
+  operatingCarrierPNRCode: XXX007
+  fromCityAirportCode: LIS
+  toCityAirportCode: LCG
+  operatingCarrierDesignator: TP
+  flightNumber: 1080
+  dayOfFlight: 204
+  compartmentCode: Y
+  seatNumber: 002D
+  checkinSequenceNumber: 0003
+  passengerStatus: 3
+  variableFieldSize: 92
+  conditionalFieldSize: 41
+  airlineNumericCode: 047
+  documentNumber: 1234567890
+  selecteeIndicator: 0
+  internationalDocumentVerification: 
+  marketingCarrierDesignator: 
+  frequentFlyerAirlineDesignator: 
+  frequenFlyerNumber: 
+  idAdIndicator: 
+  freeBaggageAllowance: 
+  fastTrack: 
+  Airline use section: *306      09     BRND
+  Date of flight: 2018-07-23

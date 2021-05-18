@@ -1,0 +1,47 @@
+IATA Barcoded Boarding Pass
+formatCode: M
+numberOfLegs: 1
+passengerName: GRANDMAIRE/MELANIE
+electronicTicketIndicator: E
+version: 5
+fieldSize: 0
+passengerDescription: 
+sourceOfCheckin: 
+sourceOfBoardingPassIssuance: 
+yearOfIssue: 0
+dayOfIssue: 0
+documentType: 
+airlineDesignatorOfBoardingPassIssuer: 
+baggageTagLicensePlateNumber1: 
+baggageTagLicensePlateNumber2: 
+baggageTagLicensePlateNumber3: 
+Date of issue: 
+Leg 1
+  operatingCarrierPNRCode: ABC123
+  fromCityAirportCode: GVA
+  toCityAirportCode: CDG
+  operatingCarrierDesignator: AF
+  flightNumber: 0123
+  dayOfFlight: 339
+  compartmentCode: C
+  seatNumber: 002F
+  checkinSequenceNumber: 0025
+  passengerStatus: 1
+  variableFieldSize: 48
+  conditionalFieldSize: 42
+  airlineNumericCode: 057
+  documentNumber: 1234567890
+  selecteeIndicator: 
+  internationalDocumentVerification: 
+  marketingCarrierDesignator: AF
+  frequentFlyerAirlineDesignator: AF
+  frequenFlyerNumber: 1234567890123456
+  idAdIndicator: 
+  freeBaggageAllowance: 
+  fastTrack: Y
+  Airline use section: 
+  Date of flight: 2018-12-05
+Security:
+  type: 1
+  size: 8
+  securityData: ABCDEFGH

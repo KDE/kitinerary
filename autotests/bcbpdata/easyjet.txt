@@ -1,0 +1,43 @@
+IATA Barcoded Boarding Pass
+formatCode: M
+numberOfLegs: 1
+passengerName: DOE/JOHN
+electronicTicketIndicator: E
+version: 0
+fieldSize: 0
+passengerDescription: 
+sourceOfCheckin: 
+sourceOfBoardingPassIssuance: 
+yearOfIssue: 0
+dayOfIssue: 0
+documentType: 
+airlineDesignatorOfBoardingPassIssuer: 
+baggageTagLicensePlateNumber1: 
+baggageTagLicensePlateNumber2: 
+baggageTagLicensePlateNumber3: 
+Date of issue: 
+Leg 1
+  operatingCarrierPNRCode: ABCDEFG
+  fromCityAirportCode: MRS
+  toCityAirportCode: LGW
+  operatingCarrierDesignator: EZY
+  flightNumber: 8724
+  dayOfFlight: 99
+  compartmentCode: 
+  seatNumber: 3C
+  checkinSequenceNumber: 506
+  passengerStatus: 1
+  variableFieldSize: 10
+  conditionalFieldSize: 0
+  airlineNumericCode: 
+  documentNumber: 
+  selecteeIndicator: 
+  internationalDocumentVerification: 
+  marketingCarrierDesignator: 
+  frequentFlyerAirlineDesignator: 
+  frequenFlyerNumber: 
+  idAdIndicator: 
+  freeBaggageAllowance: 
+  fastTrack: 
+  Airline use section: xxxxxxxxxx
+  Date of flight: 2018-04-09

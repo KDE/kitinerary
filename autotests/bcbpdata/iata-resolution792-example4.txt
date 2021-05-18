@@ -1,0 +1,72 @@
+IATA Barcoded Boarding Pass
+formatCode: M
+numberOfLegs: 2
+passengerName: DESMARAIS/LUC
+electronicTicketIndicator: E
+version: 5
+fieldSize: 50
+passengerDescription: 1
+sourceOfCheckin: W
+sourceOfBoardingPassIssuance: W
+yearOfIssue: 1
+dayOfIssue: 325
+documentType: B
+airlineDesignatorOfBoardingPassIssuer: AC
+baggageTagLicensePlateNumber1: 0014123456002
+baggageTagLicensePlateNumber2: 0014123467001
+baggageTagLicensePlateNumber3: 0014123478901
+Date of issue: 2011-11-21
+Leg 1
+  operatingCarrierPNRCode: AB12C3
+  fromCityAirportCode: YUL
+  toCityAirportCode: FRA
+  operatingCarrierDesignator: AC
+  flightNumber: 0834
+  dayOfFlight: 326
+  compartmentCode: J
+  seatNumber: 003A
+  checkinSequenceNumber: 0027
+  passengerStatus: 1
+  variableFieldSize: 103
+  conditionalFieldSize: 42
+  airlineNumericCode: 014
+  documentNumber: 1234567890
+  selecteeIndicator: 
+  internationalDocumentVerification: 1
+  marketingCarrierDesignator: AC
+  frequentFlyerAirlineDesignator: AC
+  frequenFlyerNumber: 1234567890123
+  idAdIndicator: 
+  freeBaggageAllowance: 4PC
+  fastTrack: Y
+  Airline use section: LX58Z
+  Date of flight: 2011-11-22
+Leg 2
+  operatingCarrierPNRCode: DEF456
+  fromCityAirportCode: FRA
+  toCityAirportCode: GVA
+  operatingCarrierDesignator: LH
+  flightNumber: 3664
+  dayOfFlight: 327
+  compartmentCode: C
+  seatNumber: 012C
+  checkinSequenceNumber: 0002
+  passengerStatus: 1
+  variableFieldSize: 46
+  conditionalFieldSize: 42
+  airlineNumericCode: 014
+  documentNumber: 0987654321
+  selecteeIndicator: 
+  internationalDocumentVerification: 1
+  marketingCarrierDesignator: AC
+  frequentFlyerAirlineDesignator: AC
+  frequenFlyerNumber: 1234567890123
+  idAdIndicator: 
+  freeBaggageAllowance: 3PC
+  fastTrack: N
+  Airline use section: WQ
+  Date of flight: 2011-11-23
+Security:
+  type: 1
+  size: 8
+  securityData: ABCDEFGH

@@ -1,0 +1,43 @@
+IATA Barcoded Boarding Pass
+formatCode: M
+numberOfLegs: 1
+passengerName: DOE/JOHN
+electronicTicketIndicator: E
+version: 0
+fieldSize: 0
+passengerDescription: 
+sourceOfCheckin: 
+sourceOfBoardingPassIssuance: 
+yearOfIssue: 0
+dayOfIssue: 0
+documentType: 
+airlineDesignatorOfBoardingPassIssuer: 
+baggageTagLicensePlateNumber1: 
+baggageTagLicensePlateNumber2: 
+baggageTagLicensePlateNumber3: 
+Date of issue: 
+Leg 1
+  operatingCarrierPNRCode: XXX007
+  fromCityAirportCode: TXL
+  toCityAirportCode: BRU
+  operatingCarrierDesignator: SN
+  flightNumber: 2592
+  dayOfFlight: 110
+  compartmentCode: Y
+  seatNumber: 
+  checkinSequenceNumber: 
+  passengerStatus: 
+  variableFieldSize: 0
+  conditionalFieldSize: 0
+  airlineNumericCode: 
+  documentNumber: 
+  selecteeIndicator: 
+  internationalDocumentVerification: 
+  marketingCarrierDesignator: 
+  frequentFlyerAirlineDesignator: 
+  frequenFlyerNumber: 
+  idAdIndicator: 
+  freeBaggageAllowance: 
+  fastTrack: 
+  Airline use section: 
+  Date of flight: 2018-04-20
