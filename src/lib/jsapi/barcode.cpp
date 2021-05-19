@@ -10,7 +10,6 @@
 #include <pdf/pdfbarcodeutil_p.h>
 
 #include <KItinerary/BarcodeDecoder>
-#include <KItinerary/IataBcbpParser>
 #include <KItinerary/PdfDocument>
 #include <KItinerary/Uic9183Parser>
 #include <KItinerary/VdvTicket>
@@ -106,11 +105,6 @@ QVariant JsApi::Barcode::decodeUic9183(const QVariant &s) const
         return {};
     }
     return QVariant::fromValue(p);
-}
-
-QVariant JsApi::Barcode::decodeIataBcbp(const QString &s) const
-{
-    return QVariant::fromValue(IataBcbpParser::parse(s, m_contextDate.date()));
 }
 
 QVariant JsApi::Barcode::decodeVdvTicket(const QVariant &s) const

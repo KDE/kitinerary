@@ -53,10 +53,6 @@ public:
      *  @returns An instance of Uic9183Parser.
      */
     Q_INVOKABLE QVariant decodeUic9183(const QVariant &s) const;
-    /** Decode an IATA BCBP message from a flight boarding pass barcode.
-     *  @returns A JSON-LD structure representing the boarding pass.
-     */
-    Q_INVOKABLE QVariant decodeIataBcbp(const QString &s) const;
     /** Decode an VDV ticket barcode.
      *  @param s A QByteArray containing the raw VDV barcode data.
      *  @returns An instance of VdvTicket.
