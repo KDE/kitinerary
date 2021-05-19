@@ -4,9 +4,8 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "iatabcbpparser.h"
-
 #include "../lib/iata/iatabcbp.h"
+#include "../lib/iata/iatabcbpparser.h"
 
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Organization>

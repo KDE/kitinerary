@@ -11,7 +11,7 @@
 #include "flightpostprocessor_p.h"
 
 #include "extractorutil.h"
-#include "iatabcbpparser.h"
+#include "iata/iatabcbpparser.h"
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "mergeutil.h"

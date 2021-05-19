@@ -5,7 +5,7 @@
 */
 
 #include "iatabcbpextractor.h"
-#include <iatabcbpparser.h>
+#include <iata/iatabcbpparser.h>
 
 #include <KItinerary/ExtractorDocumentNode>
 #include <KItinerary/ExtractorResult>

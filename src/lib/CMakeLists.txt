@@ -41,6 +41,7 @@ set(kitinerary_lib_srcs
     extractors/iatabcbpextractor.cpp
 
     iata/iatabcbp.cpp
+    iata/iatabcbpparser.cpp
     iata/iatabcbpsections.cpp
 
     jsapi/barcode.cpp
@@ -110,7 +111,6 @@ set(kitinerary_lib_srcs
     file.cpp
     flightpostprocessor.cpp
     htmldocument.cpp
-    iatabcbpparser.cpp
     jsonlddocument.cpp
     jsonldimportfilter.cpp
     locationutil.cpp
