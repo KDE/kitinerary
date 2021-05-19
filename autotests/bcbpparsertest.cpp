@@ -55,6 +55,8 @@ private Q_SLOTS:
         // TAP missing boarding pass issue date
         QTest::newRow("no issue date") << QStringLiteral("M1DOE/JOHN            EXXX007 LISLCGTP 1080 204Y002D0003 35C>2180      B1A              2904712345678900                           *306      09     BRND") << QStringLiteral("tap-missing-issue-date");
 
+        // Qatar claiming zero-length field sizes
+        QTest::newRow("zero size conditional") << QStringLiteral("M1DOE/JANE            EXXX007 MXPDOHQR 0128 256Y042F0023 100>2180  0255BBR              2963456000789980                            0") << QStringLiteral("qatar-zero-size-conditional-section");
     }
 
     void testParserValid()
@@ -87,6 +89,9 @@ private Q_SLOTS:
         QCOMPARE(proc.exitCode(), 0);
         if (ticketDump != refOut) {
             qDebug().noquote() << ticketDump;
+            QFile failFile(ref.fileName() + QLatin1String(".fail"));
+            QVERIFY(failFile.open(QFile::WriteOnly));
+            failFile.write(ticketDump);
         }
         QVERIFY(ticketDump == refOut);
 
@@ -100,6 +105,9 @@ private Q_SLOTS:
 
         if (refArray != resJson) {
             qWarning().noquote() << QJsonDocument(resJson).toJson();
+            QFile failFile(f.fileName() + QLatin1String(".fail"));
+            QVERIFY(failFile.open(QFile::WriteOnly));
+            failFile.write(QJsonDocument(resJson).toJson());
         }
         QCOMPARE(resJson, refArray);
     }

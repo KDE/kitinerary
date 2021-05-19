@@ -1,0 +1,36 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "42F",
+        "passengerSequenceNumber": "23",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "QR"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "DOH"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "MXP"
+            },
+            "departureDay": "2018-09-13",
+            "flightNumber": "128"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "aztecCode:M1DOE/JANE            EXXX007 MXPDOHQR 0128 256Y042F0023 100>2180  0255BBR              2963456000789980                            0"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JANE"
+        }
+    }
+]

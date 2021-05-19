@@ -66,12 +66,17 @@ IataBcbpUniqueMandatorySection IataBcbp::uniqueMandatorySection() const
 
 bool IataBcbp::hasUniqueConditionalSection() const
 {
-    return (m_data.size() > (UniqueMandatorySize + RepeatedMandatorySize)) && (m_data.at(UniqueMandatorySize + RepeatedMandatorySize) == QLatin1Char('>'));
+    return (m_data.size() > (UniqueMandatorySize + RepeatedMandatorySize))
+        && (m_data.at(UniqueMandatorySize + RepeatedMandatorySize) == QLatin1Char('>'))
+        && repeatedMandatorySection(0).variableFieldSize() > MinimumUniqueConditionalSize;
 }
 
 IataBcbpUniqueConditionalSection IataBcbp::uniqueConditionalSection() const
 {
-    return IataBcbpUniqueConditionalSection(QStringView(m_data).mid(UniqueMandatorySize + RepeatedMandatorySize));
+    if (hasUniqueConditionalSection()) {
+        return IataBcbpUniqueConditionalSection(QStringView(m_data).mid(UniqueMandatorySize + RepeatedMandatorySize));
+    }
+    return IataBcbpUniqueConditionalSection(QStringView());
 }
 
 IataBcbpRepeatedMandatorySection IataBcbp::repeatedMandatorySection(int leg) const
