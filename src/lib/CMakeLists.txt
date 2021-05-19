@@ -182,7 +182,6 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         ExtractorValidator
         File
         HtmlDocument
-        IataBcbpParser
         JsonLdDocument
         LocationUtil
         MergeUtil

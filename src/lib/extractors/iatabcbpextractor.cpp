@@ -5,10 +5,10 @@
 */
 
 #include "iatabcbpextractor.h"
+#include <iatabcbpparser.h>
 
 #include <KItinerary/ExtractorDocumentNode>
 #include <KItinerary/ExtractorResult>
-#include <KItinerary/IataBcbpParser>
 
 using namespace KItinerary;
 
