@@ -4,9 +4,9 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parsePage(page)
+function parsePage(page, triggerNode)
 {
-    var res = JsonLd.newFlightReservation();
+    var res = triggerNode ? triggerNode.result[0] : JsonLd.newFlightReservation();
 
     var pnr = page.text.match(/\nBooking reference.*(.{6})\n/);
     if (!pnr)
@@ -47,21 +47,17 @@ function parsePage(page)
         res.boardingGroup = group[1];
     }
 
-    if (Context.barcode) {
-        res.reservedTicket.ticketToken = "azteccode:" + Context.barcode;
-    }
-
     return res;
 }
 
-function extractPdf(pdf) {
-    if (Context.pdfPageNumber >= 0) {
-        return parsePage(pdf.pages[Context.pdfPageNumber]);
+function extractPdf(pdf, node, triggerNode) {
+    if (triggerNode.location != undefined) {
+        return parsePage(pdf.pages[triggerNode.location], triggerNode);
     }
     var results = new Array();
     var pages = pdf.pages;
     for (var i = 0; i < pages.length; ++i) {
-        results.push(parsePage(pages[i]));
+        results.push(parsePage(pages[i], undefined));
     }
     return results;
 }
