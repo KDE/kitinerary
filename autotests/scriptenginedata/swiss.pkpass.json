@@ -227,11 +227,58 @@
             {
                 "childNodes": [
                 ],
-                "content": "M1KRAUSE/VOLKER       EXXX007 ZRHTXLLX 0962 258Y010E0143 15D>5180 M7258BLX              2A724xxxxxxxxxx0 LX LH 123456789012345     N*30600000K09         ",
+                "content": {
+                    "rawData": "M1KRAUSE/VOLKER       EXXX007 ZRHTXLLX 0962 258Y010E0143 15D>5180 M7258BLX              2A724xxxxxxxxxx0 LX LH 123456789012345     N*30600000K09         ",
+                    "uniqueConditionalSection": {
+                        "airlineDesignatorOfBoardingPassIssuer": "LX",
+                        "baggageTagLicensePlateNumber1": "",
+                        "baggageTagLicensePlateNumber2": "",
+                        "baggageTagLicensePlateNumber3": "",
+                        "dayOfIssue": 258,
+                        "documentType": "B",
+                        "fieldSize": 24,
+                        "passengerDescription": "0",
+                        "sourceOfBoardingPassIssuance": "M",
+                        "sourceOfCheckin": "",
+                        "version": 5,
+                        "yearOfIssue": 7
+                    },
+                    "uniqueMandatorySection": {
+                        "electronicTicketIndicator": "E",
+                        "formatCode": "M",
+                        "numberOfLegs": 1,
+                        "passengerName": "KRAUSE/VOLKER"
+                    }
+                },
                 "contextDateTime": "Invalid Date",
                 "isNull": false,
-                "mimeType": "text/plain",
+                "mimeType": "internal/iata-bcbp",
                 "result": [
+                    {
+                        "@context": "http://schema.org",
+                        "@type": "FlightReservation",
+                        "airplaneSeat": "10E",
+                        "passengerSequenceNumber": "143",
+                        "reservationFor": {
+                            "@type": "Flight",
+                            "airline": "[...]",
+                            "arrivalAirport": "[...]",
+                            "departureAirport": "[...]",
+                            "departureDay": "",
+                            "flightNumber": "962"
+                        },
+                        "reservationNumber": "XXX007",
+                        "reservationStatus": "http://schema.org/ReservationConfirmed",
+                        "reservedTicket": {
+                            "@type": "Ticket",
+                            "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 ZRHTXLLX 0962 258Y010E0143 15D>5180 M7258BLX              2A724xxxxxxxxxx0 LX LH 123456789012345     N*30600000K09         "
+                        },
+                        "underName": {
+                            "@type": "Person",
+                            "familyName": "KRAUSE",
+                            "givenName": "VOLKER"
+                        }
+                    }
                 ]
             }
         ],
@@ -460,12 +507,98 @@
         "isNull": false,
         "mimeType": "application/vnd.apple.pkpass",
         "result": [
+            {
+                "@context": "http://schema.org",
+                "@type": "FlightReservation",
+                "airplaneSeat": "10E",
+                "passengerSequenceNumber": "143",
+                "reservationFor": {
+                    "@type": "Flight",
+                    "airline": {
+                        "@type": "Airline",
+                        "iataCode": "LX",
+                        "name": "SWISS"
+                    },
+                    "arrivalAirport": {
+                        "@type": "Airport",
+                        "iataCode": "TXL"
+                    },
+                    "boardingTime": "0001-01-01T20:25:00",
+                    "departureAirport": {
+                        "@type": "Airport",
+                        "geo": {
+                            "@type": "GeoCoordinates",
+                            "latitude": 47.452301025390625,
+                            "longitude": 8.560830116271973
+                        },
+                        "iataCode": "ZRH"
+                    },
+                    "departureDay": "",
+                    "departureGate": "AB",
+                    "flightNumber": "962"
+                },
+                "reservationNumber": "XXX007",
+                "reservationStatus": "http://schema.org/ReservationConfirmed",
+                "reservedTicket": {
+                    "@type": "Ticket",
+                    "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 ZRHTXLLX 0962 258Y010E0143 15D>5180 M7258BLX              2A724xxxxxxxxxx0 LX LH 123456789012345     N*30600000K09         "
+                },
+                "underName": {
+                    "@type": "Person",
+                    "familyName": "KRAUSE",
+                    "givenName": "VOLKER"
+                }
+            }
         ]
     },
     {
         "triggerNodeEqualsNode": true
     },
     {
+        "data": [
+            {
+                "@context": "http://schema.org",
+                "@type": "FlightReservation",
+                "airplaneSeat": "10E",
+                "passengerSequenceNumber": "143",
+                "reservationFor": {
+                    "@type": "Flight",
+                    "airline": {
+                        "@type": "Airline",
+                        "iataCode": "LX",
+                        "name": "SWISS"
+                    },
+                    "arrivalAirport": {
+                        "@type": "Airport",
+                        "iataCode": "TXL"
+                    },
+                    "boardingTime": "0001-01-01T20:25:00",
+                    "departureAirport": {
+                        "@type": "Airport",
+                        "geo": {
+                            "@type": "GeoCoordinates",
+                            "latitude": 47.452301025390625,
+                            "longitude": 8.560830116271973
+                        },
+                        "iataCode": "ZRH"
+                    },
+                    "departureDay": "",
+                    "departureGate": "AB",
+                    "flightNumber": "962"
+                },
+                "reservationNumber": "XXX007",
+                "reservationStatus": "http://schema.org/ReservationConfirmed",
+                "reservedTicket": {
+                    "@type": "Ticket",
+                    "ticketToken": "aztecCode:M1KRAUSE/VOLKER       EXXX007 ZRHTXLLX 0962 258Y010E0143 15D>5180 M7258BLX              2A724xxxxxxxxxx0 LX LH 123456789012345     N*30600000K09         "
+                },
+                "underName": {
+                    "@type": "Person",
+                    "familyName": "KRAUSE",
+                    "givenName": "VOLKER"
+                }
+            }
+        ],
         "objectName": "",
         "pdfPageNumber": -1
     }

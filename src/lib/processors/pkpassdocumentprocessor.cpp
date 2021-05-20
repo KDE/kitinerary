@@ -77,7 +77,7 @@ void PkPassDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extr
         return;
     }
 
-    auto child = engine->documentNodeFactory()->createNode(barcodes[0].message(), u"text/plain");
+    auto child = engine->documentNodeFactory()->createNode(barcodes[0].message().toUtf8());
     node.appendChild(child);
 }
 

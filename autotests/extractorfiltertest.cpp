@@ -86,7 +86,7 @@ private Q_SLOTS:
         root.processor()->expandNode(root, &engine);
         QCOMPARE(root.childNodes().size(), 1);
         auto bcbp = root.childNodes()[0];
-        QCOMPARE(bcbp.mimeType(), QLatin1String("text/plain"));
+        QCOMPARE(bcbp.mimeType(), QLatin1String("internal/iata-bcbp"));
 
         ExtractorFilter filter;
         filter.setMimeType(s("application/vnd.apple.pkpass"));
