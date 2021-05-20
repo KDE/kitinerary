@@ -38,8 +38,6 @@ set(kitinerary_lib_srcs
     era/ssbv2ticket.cpp
     era/ssbv3ticket.cpp
 
-    extractors/iatabcbpextractor.cpp
-
     iata/iatabcbp.cpp
     iata/iatabcbpparser.cpp
     iata/iatabcbpsections.cpp

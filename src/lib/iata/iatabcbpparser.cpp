@@ -87,8 +87,3 @@ QVector<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDate &conte
 
     return result;
 }
-
-bool IataBcbpParser::maybeIataBcbp(const QString &message)
-{
-    return IataBcbp::maybeIataBcbp(message);
-}

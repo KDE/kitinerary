@@ -34,11 +34,6 @@ namespace IataBcbpParser
  */
 QVector<QVariant> parse(const QString &message, const QDate &externalIssueDate = QDate());
 KITINERARY_EXPORT QVector<QVariant> parse(const IataBcbp &bcbp, const QDate &contextDate);
-
-/** Quickly test if @p message could be a IATA BCBP code.
- *  This optimizes for speed rather than correctness, for use in barcode content auto-detection.
- */
-bool maybeIataBcbp(const QString &message);
 }
 
 }

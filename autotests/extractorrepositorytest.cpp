@@ -27,13 +27,11 @@ private Q_SLOTS:
         ExtractorRepository repo;
         const auto count = repo.extractors().size();
         QVERIFY(count > 0);
-        QVERIFY(repo.extractorByName(u"<IATA BCBP>"));
         QVERIFY(repo.extractorByName(u"chaos-communication-congress"));
         QVERIFY(!repo.extractorByName(u"I-DONT-EXIST"));
 
         repo.reload();
         QCOMPARE(repo.extractors().size(), count);
-        QVERIFY(repo.extractorByName(u"<IATA BCBP>"));
         QVERIFY(repo.extractorByName(u"chaos-communication-congress"));
         QVERIFY(!repo.extractorByName(u"I-DONT-EXIST"));
     }
@@ -61,10 +59,7 @@ private Q_SLOTS:
         root = engine.documentNodeFactory()->createNode(QStringLiteral("M1DOE/JOHN            EXXX007 TXLBRUSN 2592 110"), u"text/plain");
         QVERIFY(!root.isNull());
         engine.extractorRepository()->extractorsForNode(root, extractors);
-        QCOMPARE(extractors.size(), 1);
-        QVERIFY(extractors[0]->name().startsWith(QLatin1String("<IATA BCBP>")));
-        QVERIFY(!dynamic_cast<const ScriptExtractor*>(extractors[0]));
-        extractors.clear();
+        QCOMPARE(extractors.size(), 0);
     }
 };
 
