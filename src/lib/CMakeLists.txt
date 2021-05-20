@@ -69,6 +69,7 @@ set(kitinerary_lib_srcs
     processors/binarydocumentprocessor.cpp
     processors/externalprocessor.cpp
     processors/htmldocumentprocessor.cpp
+    processors/iatabcbpdocumentprocessor.cpp
     processors/icaldocumentprocessor.cpp
     processors/imagedocumentprocessor.cpp
     processors/jsonlddocumentprocessor.cpp

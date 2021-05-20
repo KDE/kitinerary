@@ -29,12 +29,13 @@
                 "childNodes": [
                     {
                         "childNodes": [
+                            "[...]"
                         ],
                         "content": "M1DRAGON/KONQUI       EXXX007 VIEMXPAK 1996 249J013C0042 167>5321WW8325BAK 0014123456002001414246700100141234789012A0141234567890 1AK AK 1234567890123    4PCYLX58Z^108ABCDEFGH",
                         "contextDateTime": "Mon Aug 19 20:23:28 2019 GMT+0200",
                         "isNull": false,
                         "location": 0,
-                        "mimeType": "text/plain",
+                        "mimeType": "application/octet-stream",
                         "result": [
                         ]
                     }

@@ -12,6 +12,7 @@
 #include "processors/binarydocumentprocessor.h"
 #include "processors/externalprocessor.h"
 #include "processors/htmldocumentprocessor.h"
+#include "processors/iatabcbpdocumentprocessor.h"
 #include "processors/icaldocumentprocessor.h"
 #include "processors/imagedocumentprocessor.h"
 #include "processors/jsonlddocumentprocessor.h"
@@ -115,6 +116,7 @@ void ExtractorDocumentNodeFactoryStatic::registerBuiltIn()
     registerProcessor<IcalEventProcessor>(u"internal/event");
     registerProcessor<ImageDocumentProcessor>(u"internal/qimage", {u"image/png"});
     registerProcessor<SsbDocumentProcessor>(u"internal/era-ssb");
+    registerProcessor<IataBcbpDocumentProcessor>(u"internal/iata-bcbp");
     registerProcessor<Uic9183DocumentProcessor>(u"internal/uic9183");
     registerProcessor<VdvDocumentProcessor>(u"internal/vdv");
     registerProcessor<IcalCalendarProcessor>(u"text/calendar");
