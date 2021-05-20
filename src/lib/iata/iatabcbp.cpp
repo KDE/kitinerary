@@ -134,7 +134,7 @@ IataBcbpSecuritySection IataBcbp::securitySection() const
     for (auto i = 0; i < uniqueMandatorySection().numberOfLegs(); ++i) {
         offset += RepeatedMandatorySize + IataBcbpRepeatedMandatorySection(QStringView(m_data).mid(offset)).variableFieldSize();
     }
-    return IataBcbpSecuritySection(m_data.mid(offset));
+    return IataBcbpSecuritySection(QStringView(m_data).mid(offset));
 }
 
 QString IataBcbp::rawData() const
