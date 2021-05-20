@@ -4,6 +4,8 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "config-kitinerary.h"
+
 #include <KItinerary/ExtractorDocumentNode>
 #include <KItinerary/ExtractorDocumentNodeFactory>
 #include <KItinerary/ExtractorDocumentProcessor>
@@ -123,6 +125,29 @@ private Q_SLOTS:
         QVERIFY(!filter.matches(root));
         filter.setPattern(s("Milan"));
         QVERIFY(filter.matches(root));
+    }
+
+    void testIataBcbpFilter()
+    {
+        QFile f(s(SOURCE_DIR "/extractordata/synthetic/iata-bcbp-demo.pdf"));
+        QVERIFY(f.open(QFile::ReadOnly));
+
+        ExtractorEngine engine;
+        engine.setData(f.readAll());
+        engine.extract();
+        const auto root = engine.rootDocumentNode();
+        QVERIFY(!root.isNull());
+
+#ifdef HAVE_ZXING
+        ExtractorFilter filter;
+        filter.setMimeType(s("internal/iata-bcbp"));
+        filter.setScope(ExtractorFilter::Descendants);
+        QVERIFY(filter.matches(root));
+
+        std::vector<ExtractorDocumentNode> matches;
+        filter.allMatches(root, matches);
+        QCOMPARE(matches.size(), 1);
+#endif
     }
 };
 

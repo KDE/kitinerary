@@ -156,7 +156,8 @@ static bool filterMachesNode(const ExtractorFilter &filter, ExtractorFilter::Sco
         return false;
     }
 
-    if (filter.mimeType() == node.mimeType() && node.processor()->matches(filter, node)) {
+    // filter without field/pattern always match, if the mimetype does
+    if (filter.mimeType() == node.mimeType() && ((filter.fieldName().isEmpty() && filter.pattern().isEmpty()) || node.processor()->matches(filter, node))) {
         if (matchMode == All) {
             matches.push_back(node);
         }
@@ -249,8 +250,14 @@ ExtractorFilter ExtractorFilter::fromJSValue(const QJSValue &js)
 {
     ExtractorFilter f;
     f.setMimeType(js.property(QLatin1String("mimeType")).toString());
-    f.setFieldName(js.property(QLatin1String("field")).toString());
-    f.setPattern(js.property(QLatin1String("match")).toString());
+    const auto fieldName = js.property(QLatin1String("field"));
+    if (fieldName.isString()) {
+        f.setFieldName(fieldName.toString());
+    }
+    const auto match = js.property(QLatin1String("match"));
+    if (match.isString()) {
+        f.setPattern(match.toString());
+    }
     f.setScope(readEnum<ExtractorFilter::Scope>(js.property(QLatin1String("scope")).toString(), ExtractorFilter::Current));
     return f;
 }

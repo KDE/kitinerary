@@ -6,7 +6,7 @@
 
 function main(pdf, node) {
     var res = [];
-    for (barcode of node.findChildNodes({ scope: "Descendants", mimeType: "text/plain", match: "M.*" })) {
+    for (barcode of node.findChildNodes({ scope: "Descendants", mimeType: "internal/iata-bcbp" })) {
         if (barcode.location == undefined)
             continue;
         res.push(parsePage(pdf.pages[barcode.location], barcode));
