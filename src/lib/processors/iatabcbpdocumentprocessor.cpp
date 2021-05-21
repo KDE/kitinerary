@@ -33,3 +33,22 @@ void IataBcbpDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_
     const auto bcbp = node.content<IataBcbp>();
     node.addResult(IataBcbpParser::parse(bcbp, node.contextDateTime().date()));
 }
+
+bool IataBcbpDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
+{
+    const auto bcbp = node.content<IataBcbp>();
+    const auto ums = bcbp.uniqueMandatorySection();
+    const auto ucs = bcbp.uniqueConditionalSection();
+    if (matchesGadget(filter, &ums) || matchesGadget(filter, &ucs)) {
+        return true;
+    }
+    const auto legCount = ums.numberOfLegs();
+    for (int i = 0; i < legCount; ++i) {
+        const auto rms = bcbp.repeatedMandatorySection(i);
+        const auto rcs = bcbp.repeatedConditionalSection(i);
+        if (matchesGadget(filter, &rms) || matchesGadget(filter, &rcs)) {
+            return true;
+        }
+    }
+    return false;
+}

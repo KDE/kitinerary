@@ -147,6 +147,10 @@ private Q_SLOTS:
         std::vector<ExtractorDocumentNode> matches;
         filter.allMatches(root, matches);
         QCOMPARE(matches.size(), 1);
+
+        filter.setFieldName(s("operatingCarrierDesignator"));
+        filter.setPattern(s("AK"));
+        QVERIFY(filter.matches(root));
 #endif
     }
 };
