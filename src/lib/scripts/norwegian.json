@@ -7,9 +7,9 @@
             "scope": "Ancestors"
         },
         {
-            "field": "reservationFor.airline.iataCode",
+            "field": "operatingCarrierDesignator",
             "match": "D[8Y]",
-            "mimeType": "application/ld+json",
+            "mimeType": "internal/iata-bcbp",
             "scope": "Descendants"
         }
     ],

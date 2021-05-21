@@ -4,9 +4,9 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function main(pdf) {
-    var res = Context.data[0];
-    var page = pdf.pages[Context.pdfPageNumber];
+function main(pdf, node, triggerNode) {
+    var res = triggerNode.result[0];
+    var page = pdf.pages[triggerNode.location];
 
     // needs to be done manually as we don't have PDF ctime for this to work automatically
     var date = page.text.match(/Date +(\d\d \w{3} \d\d)/);

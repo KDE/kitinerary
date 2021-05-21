@@ -2,7 +2,7 @@
     "mimeType": "application/pdf",
     "filter": [
         { "field": "From", "match": "americanairlines@aa.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
-        { "field": "reservationFor.airline.iataCode", "match": "AA", "mimeType": "application/ld+json", "scope": "Descendants" }
+        { "field": "operatingCarrierDesignator", "match": "AA", "mimeType": "internal/iata-bcbp", "scope": "Descendants" }
     ],
     "script": "americanairlines.js"
 }

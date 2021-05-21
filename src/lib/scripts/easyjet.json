@@ -8,9 +8,9 @@
     {
         "mimeType": "application/pdf",
         "filter": [
-            { "field": "reservationFor.airline.iataCode", "match": "EJU", "mimeType": "application/ld+json", "scope": "Descendants" },
-            { "field": "reservationFor.airline.iataCode", "match": "EZS", "mimeType": "application/ld+json", "scope": "Descendants" },
-            { "field": "reservationFor.airline.iataCode", "match": "EZY", "mimeType": "application/ld+json", "scope": "Descendants" }
+            { "field": "operatingCarrierDesignator", "match": "EJU", "mimeType": "internal/iata-bcbp", "scope": "Descendants" },
+            { "field": "operatingCarrierDesignator", "match": "EZS", "mimeType": "internal/iata-bcbp", "scope": "Descendants" },
+            { "field": "operatingCarrierDesignator", "match": "EZY", "mimeType": "internal/iata-bcbp", "scope": "Descendants" }
         ],
         "script": "easyjet.js",
         "function": "parsePdfBoardingPass"

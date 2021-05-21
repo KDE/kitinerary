@@ -10,7 +10,7 @@
         "mimeType": "application/pdf",
         "filter": [
             { "field": "From", "match": "brusselsairlines.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
-            { "field": "reservationFor.airline.iataCode", "match": "SN", "mimeType": "application/ld+json", "scope": "Descendants" }
+            { "field": "operatingCarrierDesignator", "match": "SN", "mimeType": "internal/iata-bcbp", "scope": "Descendants" }
         ],
         "script": "brusselsairlines-receipt.js"
     }

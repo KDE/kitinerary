@@ -4,10 +4,10 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function main(pdf)
+function main(pdf, node, triggerNode)
 {
-    var res = Context.data[0];
-    var page = pdf.pages[Context.pdfPageNumber];
+    var res = triggerNode.result[0];
+    var page = pdf.pages[triggerNode.location];
     var time = page.text.match(/Boarding\s+(\d{1,2}.\d{1,2}.\d{4})[\s.]+?(\d{2}:\d{2})/);
     if (time) {
         res.reservationFor.boardingTime = JsonLd.toDateTime(time[1] + time[2], "dd.MM.yyyyhh:mm", "en")

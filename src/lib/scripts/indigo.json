@@ -3,8 +3,8 @@
         "filter": [
             {
                 "match": "6E",
-                "field": "reservationFor.airline.iataCode",
-                "mimeType": "application/ld+json",
+                "field": "operatingCarrierDesignator",
+                "mimeType": "internal/iata-bcbp",
                 "scope": "Descendants"
             }
         ],

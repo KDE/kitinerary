@@ -66,11 +66,11 @@ function parseHtmlBooking(doc) {
     return reservations;
 }
 
-function parsePdfBoardingPass(pdf)
+function parsePdfBoardingPass(pdf, node, triggerNode)
 {
-    var res = Context.data[0];
+    var res = triggerNode.result[0];
 
-    var page = pdf.pages[Context.pdfPageNumber];
+    var page = pdf.pages[triggerNode.location];
     var rightCol = page.textInRect(0.65, 0, 1, 0.25);
     var depName = rightCol.match(/(?:from|Flying)\n\([A-Z]{3}\) ([^]*?)\n(?:to|Going)/);
     if (depName)
