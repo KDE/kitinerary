@@ -62,6 +62,11 @@ bool ExtractorDocumentProcessor::matches(const ExtractorFilter &filter, const Ex
 
     // Q_GADGET content
     const auto mo = QMetaType(node.content().userType()).metaObject();
+    return matchesGadget(filter, mo, node.content().constData());
+}
+
+bool ExtractorDocumentProcessor::matchesGadget(const ExtractorFilter &filter, const QMetaObject *mo, const void *obj)
+{
     if (!mo) {
         return false;
     }
@@ -70,7 +75,7 @@ bool ExtractorDocumentProcessor::matches(const ExtractorFilter &filter, const Ex
         return false;
     }
     const auto prop = mo->property(propIdx);
-    const auto value = prop.readOnGadget(node.content().constData());
+    const auto value = prop.readOnGadget(obj);
     return filter.matches(value.toString());
 }
 

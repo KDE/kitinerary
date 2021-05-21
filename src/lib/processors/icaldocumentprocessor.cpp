@@ -83,13 +83,7 @@ bool IcalEventProcessor::matches(const ExtractorFilter &filter, const ExtractorD
 {
 #ifdef HAVE_KCAL
     const auto event = node.content<KCalCore::Event::Ptr>();
-    const auto propIdx = KCalendarCore::Event::staticMetaObject.indexOfProperty(filter.fieldName().toUtf8().constData());
-    if (propIdx < 0) {
-        return false;
-    }
-    const auto prop = KCalendarCore::Event::staticMetaObject.property(propIdx);
-    const auto value = prop.readOnGadget(event.data());
-    return filter.matches(value.toString());
+    return matchesGadget(filter, event.data());
 #else
     return false;
 #endif

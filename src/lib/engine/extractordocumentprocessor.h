@@ -81,6 +81,13 @@ protected:
     {
         delete static_cast<T*>(node.content<Internal::OwnedPtr<T>>());
     }
+
+    static bool matchesGadget(const ExtractorFilter &filter, const QMetaObject *mo, const void *obj);
+    template <typename T>
+    static inline bool matchesGadget(const ExtractorFilter &filter, const T *obj)
+    {
+        return matchesGadget(filter, &T::staticMetaObject, obj);
+    }
 };
 
 }
