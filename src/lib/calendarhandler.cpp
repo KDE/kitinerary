@@ -247,7 +247,7 @@ static void fillFlightReservation(const QVector<QVariant> &reservations, const K
         desc.push_back(i18n("Boarding time: %1", QLocale().toString(boardingTime.time(), QLocale::ShortFormat)));
     }
     if (!departureGate.isEmpty()) {
-        desc.push_back(i18n("Departure gate: %1", departureGate));
+        desc.push_back(i18nc("flight departure gate", "Departure gate: %1", departureGate));
     }
 
     for (const auto &r : reservations) {
@@ -461,7 +461,7 @@ static void fillFoodReservation(const FoodEstablishmentReservation &reservation,
 
     QStringList desc;
     if (reservation.partySize() > 0) {
-        desc.push_back(i18n("Number Of People: %1", reservation.partySize()));
+        desc.push_back(i18n("Number of people: %1", reservation.partySize()));
     }
     if (!reservation.reservationNumber().isEmpty()) {
         desc.push_back(i18n("Reservation reference: %1", reservation.reservationNumber()));
@@ -478,7 +478,7 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
     const auto rentalCalPickup = reservation.pickupLocation();
     const auto addressPickUp = rentalCalPickup.address();
     const auto rentalCar = reservation.reservationFor().value<RentalCar>();
-    event->setSummary(i18n("Rental Car reservation: %1", rentalCar.name()));
+    event->setSummary(i18n("Rental car reservation: %1", rentalCar.name()));
     event->setLocation(formatAddressSingleLine(addressPickUp));
     fillGeoPosition(rentalCalPickup, event);
 
@@ -486,14 +486,13 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
     event->setDtEnd(reservation.dropoffTime());
     event->setAllDay(false);
     event->setTransparency(KCalendarCore::Event::Transparent);
-    event->setSummary(i18n("Rent car reservation: %1", rentalCar.name()));
 
     const QString pickUpAddress = formatAddress(addressPickUp);
     const auto rentalCalDropOff = reservation.dropoffLocation();
     const auto addressDropOff = rentalCalDropOff.address();
     const QString dropAddress = formatAddress(addressDropOff);
 
-    const QString description = i18n("Reservation reference: %1\nUnder name: %2\n\nPickUp location: %3\n\nDropoff Location: %4",
+    const QString description = i18n("Reservation reference: %1\nUnder name: %2\n\nPickup location: %3\n\nDropoff location: %4",
                                      reservation.reservationNumber(),
                                      reservation.underName().value<KItinerary::Person>().name(),
                                      pickUpAddress,
@@ -518,7 +517,7 @@ static void fillTaxiReservation(const TaxiReservation &reservation, const KCalen
     //TODO event->setSummary(i18n("Rent car reservation: %1", rentalCar.name()));
     const QString pickUpAddress = formatAddress(addressPickUp);
 
-    const QString description = i18n("Reservation reference: %1\nUnder name: %2\nPickUp location: %3",
+    const QString description = i18n("Reservation reference: %1\nUnder name: %2\nPickup location: %3",
                                      reservation.reservationNumber(),
                                      reservation.underName().value<KItinerary::Person>().name(),
                                      pickUpAddress);
