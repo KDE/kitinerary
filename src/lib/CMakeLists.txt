@@ -44,7 +44,6 @@ set(kitinerary_lib_srcs
 
     jsapi/barcode.cpp
     jsapi/bitarray.cpp
-    jsapi/context.cpp
     jsapi/jsonld.cpp
 
     knowledgedb/alphaid.cpp

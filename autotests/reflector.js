@@ -53,6 +53,5 @@ function dumpArgs(content, node, triggerNode)
     res.push(wrapper);
     res.push(dumpValue(node, 6));
     res.push({ triggerNodeEqualsNode: triggerNode == node });
-    res.push(dumpValue(Context, 6));
     return res;
 }

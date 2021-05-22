@@ -12,11 +12,7 @@
 #include "logging.h"
 
 #include "jsapi/barcode.h"
-#include "jsapi/context.h"
 #include "jsapi/jsonld.h"
-
-#include <KItinerary/Uic9183Parser>
-#include <KItinerary/VdvTicket>
 
 #include <QFile>
 #include <QJSEngine>
@@ -31,7 +27,6 @@ public:
     bool loadScript(const QString &fileName);
 
     JsApi::Barcode *m_barcodeApi = nullptr;
-    JsApi::Context *m_context = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
     QJSEngine m_engine;
 };
@@ -47,13 +42,11 @@ void ExtractorScriptEngine::ensureInitialized()
     }
 
     d = std::make_unique<ExtractorScriptEnginePrivate>();
-    d->m_context = new JsApi::Context; // will be deleted by QJSEngine taking ownership
     d->m_engine.installExtensions(QJSEngine::ConsoleExtension);
     d->m_jsonLdApi = new JsApi::JsonLd(&d->m_engine);
     d->m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), d->m_engine.newQObject(d->m_jsonLdApi));
     d->m_barcodeApi = new JsApi::Barcode;
     d->m_engine.globalObject().setProperty(QStringLiteral("Barcode"), d->m_engine.newQObject(d->m_barcodeApi));
-    d->m_engine.globalObject().setProperty(QStringLiteral("Context"), d->m_engine.newQObject(d->m_context));
 }
 
 void ExtractorScriptEngine::setBarcodeDecoder(BarcodeDecoder *barcodeDecoder)
@@ -113,31 +106,6 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
         node.setScriptEngine(nullptr);
         triggerNode.setScriptEngine(nullptr);
     });
-
-    // ### legacy context API, replace that by passing trigger node as a third argument eventually
-    if (triggerNode.result().isEmpty()) {
-        d->m_context->m_data = {};
-    } else {
-        d->m_context->m_data = d->m_engine.toScriptValue(triggerNode.result().jsonLdResult());
-    }
-
-    if (triggerNode.isA<Uic9183Parser>()) {
-        d->m_context->m_barcode = triggerNode.content<Uic9183Parser>().rawData();
-    } else if (triggerNode.isA<VdvTicket>()) {
-        d->m_context->m_barcode = triggerNode.content<VdvTicket>().rawData();
-    } else if (triggerNode.isA<QByteArray>()) {
-        d->m_context->m_barcode = triggerNode.content<QByteArray>();
-    } else if (triggerNode.isA<QString>()) {
-        d->m_context->m_barcode = triggerNode.content().toString();
-    } else {
-        d->m_context->m_barcode.clear();
-    }
-
-    if (triggerNode.location().isNull()) {
-        d->m_context->m_pdfPageNum = -1;
-    } else {
-        d->m_context->m_pdfPageNum = triggerNode.location().toInt();
-    }
 
     d->m_jsonLdApi->setContextDate(node.contextDateTime());
     d->m_barcodeApi->setContextDate(node.contextDateTime());
