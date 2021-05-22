@@ -230,11 +230,11 @@ function parseSecutixPdfItineraryV2(text, res)
     return reservations;
 }
 
-function parseSecutixPdf(pdf)
+function parseSecutixPdf(pdf, node, triggerNode)
 {
     // see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes#SNCF_Secutix_Tickets
     var res = JsonLd.newTrainReservation();
-    var code = Barcode.byteArrayToString(Context.barcode);
+    var code = Barcode.byteArrayToString(triggerNode.content);
     res.reservationNumber = code.substr(268, 9);
     res.reservationFor.departureStation.name = code.substr(277, 5);
     res.reservationFor.departureStation.identifier = "sncf:" + code.substr(277, 5);
@@ -242,11 +242,11 @@ function parseSecutixPdf(pdf)
     res.reservationFor.arrivalStation.identifier = "sncf:" + code.substr(282, 5);
     res.reservationFor.departureDay = JsonLd.toDateTime(code.substr(343, 8), "ddMMyyyy", "fr");
     res.reservedTicket.ticketedSeat.seatingType = code.substr(351, 1);
-    res.reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(Context.barcode);
+    res.reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(triggerNode.content);
     res.underName.familyName = code.substr(376, 19);
     res.underName.givenName = code.substr(395, 19);
 
-    var text = pdf.pages[Context.pdfPageNumber].text;
+    var text = pdf.pages[triggerNode.location].text;
     var pnr = text.match(res.reservationNumber + '[^\n]* ([A-Z0-9]{6})\n');
     var layoutVersion = 1;
     if (!pnr) {
@@ -255,7 +255,7 @@ function parseSecutixPdf(pdf)
     }
     res.reservationNumber = pnr[1];
 
-    var itineraryText = pdf.pages[Context.pdfPageNumber].textInRect(0.0, 0.0, 0.5, 1.0);
+    var itineraryText = pdf.pages[triggerNode.location].textInRect(0.0, 0.0, 0.5, 1.0);
     var reservations = layoutVersion == 1 ? parseSecutixPdfItineraryV1(itineraryText, res) : parseSecutixPdfItineraryV2(itineraryText, res);
     if (reservations.length == 0)
         return res;

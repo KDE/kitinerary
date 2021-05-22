@@ -4,9 +4,9 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parsePdf(pdf)
+function parsePdf(pdf, node, triggerNode)
 {
-    var obj = JSON.parse(Context.barcode);
+    var obj = JSON.parse(triggerNode.content);
     if (!obj)
         return null;
 
