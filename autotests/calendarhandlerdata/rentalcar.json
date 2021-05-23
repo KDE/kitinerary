@@ -1,0 +1,53 @@
+[{
+  "@context": "http://schema.org",
+  "@type": "RentalCarReservation",
+  "reservationNumber": "546323",
+  "reservationStatus": "http://schema.org/Confirmed",
+  "underName": {
+    "@type": "Person",
+    "name": "John Smith"
+  },
+  "reservationFor": {
+    "@type": "RentalCar",
+    "name": "Economy Class Car",
+    "model": "Civic",
+    "brand": {
+      "@type": "Brand",
+      "name": "Honda"
+    },
+    "rentalCompany": {
+      "@type": "Organization",
+      "name": "Hertz"
+    }
+  },
+  "pickupLocation": {
+    "@type": "Place",
+    "name": "Hertz San Diego Airport",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1500 Orange Avenue",
+      "addressLocality": "San Diego",
+      "addressRegion": "CA",
+      "postalCode": "94043",
+      "addressCountry": "US"
+    }
+  },
+  "pickupTime": "2027-08-05T16:00:00-07:00",
+  "dropoffLocation": {
+    "@type": "Place",
+    "name": "Hertz LAX",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1234 First Street",
+      "addressLocality": "Los Angeles",
+      "addressRegion": "CA",
+      "postalCode": "94043",
+      "addressCountry": "US"
+    }
+  },
+  "potentialAction": {
+    "@type": "ConfirmAction",
+    "target": "http://cheapcar.com/confirm?id=546323"
+  },
+  "dropoffTime": "2027-08-06T20:00:00-07:00"
+}]

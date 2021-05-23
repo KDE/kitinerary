@@ -464,7 +464,7 @@ static void fillFoodReservation(const FoodEstablishmentReservation &reservation,
         desc.push_back(i18n("Number of people: %1", reservation.partySize()));
     }
     if (!reservation.reservationNumber().isEmpty()) {
-        desc.push_back(i18n("Reservation reference: %1", reservation.reservationNumber()));
+        desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
     }
     const auto person = reservation.underName().value<KItinerary::Person>();
     if (!person.name().isEmpty()) {
@@ -479,7 +479,7 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
     const auto addressPickUp = rentalCalPickup.address();
     const auto rentalCar = reservation.reservationFor().value<RentalCar>();
     event->setSummary(i18n("Rental car reservation: %1", rentalCar.name()));
-    event->setLocation(formatAddressSingleLine(addressPickUp));
+    event->setLocation(rentalCalPickup.name());
     fillGeoPosition(rentalCalPickup, event);
 
     event->setDtStart(reservation.pickupTime());
@@ -487,18 +487,23 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
     event->setAllDay(false);
     event->setTransparency(KCalendarCore::Event::Transparent);
 
-    const QString pickUpAddress = formatAddress(addressPickUp);
-    const auto rentalCalDropOff = reservation.dropoffLocation();
-    const auto addressDropOff = rentalCalDropOff.address();
-    const QString dropAddress = formatAddress(addressDropOff);
+    QStringList desc;
+    if (!addressPickUp.isEmpty()) {
+        desc.push_back(i18n("Pickup location: %1\n%2\n", rentalCalPickup.name(), formatAddress(addressPickUp)));
+    }
+    const auto dropOff = reservation.dropoffLocation();
+    if (!dropOff.name().isEmpty()) {
+        desc.push_back(i18n("Dropoff location: %1\n%2\n", dropOff.name(), formatAddress(dropOff.address())));
+    }
+    if (!reservation.reservationNumber().isEmpty()) {
+        desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
+    }
+    const auto person = reservation.underName().value<KItinerary::Person>();
+    if (!person.name().isEmpty()) {
+        desc.push_back(i18n("Under name: %1", person.name()));
+    }
 
-    const QString description = i18n("Reservation reference: %1\nUnder name: %2\n\nPickup location: %3\n\nDropoff location: %4",
-                                     reservation.reservationNumber(),
-                                     reservation.underName().value<KItinerary::Person>().name(),
-                                     pickUpAddress,
-                                     dropAddress);
-
-    event->setDescription(description);
+    event->setDescription(desc.join(QLatin1Char('\n')));
 }
 
 static void fillTaxiReservation(const TaxiReservation &reservation, const KCalendarCore::Event::Ptr &event)
