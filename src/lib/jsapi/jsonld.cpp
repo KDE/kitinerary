@@ -211,6 +211,32 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
     return dt;
 }
 
+QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QJSValue &format, const QJSValue &localeName) const
+{
+    if (localeName.isString() && format.isString()) {
+        return toDateTime(dtStr, format.toString(), localeName.toString());
+    }
+    if (format.isArray()) {
+        const auto count = format.property(QLatin1String("length")).toInt();
+        for (auto i = 0; i < count; ++i) {
+            const auto dt = toDateTime(dtStr, format.property(i), localeName);
+            if (dt.isValid()) {
+                return dt;
+            }
+        }
+    }
+    if (format.isString() && localeName.isArray()) {
+        const auto count = localeName.property(QLatin1String("length")).toInt();
+        for (auto i = 0; i < count; ++i) {
+            const auto dt = toDateTime(dtStr, format.toString(), localeName.property(i).toString());
+            if (dt.isValid()) {
+                return dt;
+            }
+        }
+    }
+    return {};
+}
+
 QJSValue JsApi::JsonLd::toJson(const QVariant &v) const
 {
     if (v.canConvert<QVector<QVariant>>()) {

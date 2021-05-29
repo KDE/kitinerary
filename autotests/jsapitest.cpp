@@ -62,7 +62,7 @@ private Q_SLOTS:
 
         JsApi::JsonLd jsonLd(nullptr);
         jsonLd.setContextDate({{2018, 4, 1}, {}});
-        QCOMPARE(jsonLd.toDateTime(input, format, locale), result);
+        QCOMPARE(jsonLd.toDateTime(input, QJSValue(format), QJSValue(locale)), result);
     }
 
     void testToGeoCoordinates_data()

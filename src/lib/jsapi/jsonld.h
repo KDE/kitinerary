@@ -56,12 +56,12 @@ public:
      *  used by QLocale and QDateTime. If the year is not part of the date
      *  it is attempted to be recovered from the context date set on the
      *  ExtractorEngine (that is, the returned date will be after the context
-     *  date).
+     *  date). Can be a string or an array of strings, which are then tried sequentially.
      *  @param localeName The locale in which the string is formatted. This is
      *  relevant when the input contains for example localized month names or
-     *  month abbreviations.
+     *  month abbreviations. Can be a string or an array of strings.
      */
-    Q_INVOKABLE QDateTime toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const;
+    Q_INVOKABLE QDateTime toDateTime(const QString &dtStr, const QJSValue &format, const QJSValue &localeName) const;
     /** Convert object @p v to a JSON-LD object.
      *  This is useful when interacting with API returning regular data types,
      *  such as Uic9183Parser.
@@ -91,6 +91,7 @@ public:
     ///@endcond
 private:
     QJSValue newPlace(const QString &type) const;
+    QDateTime toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const;
     QJSEngine *m_engine;
     QDateTime m_contextDate;
 };

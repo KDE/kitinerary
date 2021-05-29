@@ -25,17 +25,13 @@ function parsePage(page, triggerNode)
     res.reservationFor.departureAirport.name = dep[2];
     res.reservationFor.departureAirport.iataCode = dep[3];
     res.reservationFor.departureTerminal = dep[4];
-    res.reservationFor.departureTime = JsonLd.toDateTime(flight[3] + dep[1], "dd MMM yyyyhh:mm", "en");
-    if (isNaN(res.reservationFor.departureTime.getTime()))
-        res.reservationFor.departureTime = JsonLd.toDateTime(flight[3] + dep[1], "yyyy MMM ddhh:mm", "en");
+    res.reservationFor.departureTime = JsonLd.toDateTime(flight[3] + dep[1], ["dd MMM yyyyhh:mm", "yyyy MMM ddhh:mm"] , "en");
 
     var arr = page.text.match(/\Arrival.*(\d{2}:\d{2}) (.*) \(([A-Z]{3})\)(.*)\n/);
     res.reservationFor.arrivalAirport.name = arr[2];
     res.reservationFor.arrivalAirport.iataCode = arr[3];
     res.reservationFor.arrivalTerminal = arr[4];
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(flight[3] + arr[1], "dd MMM yyyyhh:mm", "en");
-    if (isNaN(res.reservationFor.arrivalTime.getTime()))
-        res.reservationFor.arrivalTime= JsonLd.toDateTime(flight[3] + arr[1], "yyyy MMM ddhh:mm", "en");
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(flight[3] + arr[1], ["dd MMM yyyyhh:mm", "yyyy MMM ddhh:mm"], "en");
 
     var seat = page.text.match(/Seat.* (\d{1,3}[A-J]) .*\n/);
     if (seat) {
