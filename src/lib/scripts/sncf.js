@@ -280,10 +280,10 @@ function parseOuigoSummaryTime(htmlElem)
     var timeStr = htmlElem[0].recursiveContent;
     var time = timeStr.match(/(\d+ [^ ]+ \d+) +[^ ]+ (\d+:\d+)/);
     if (time) {
-        return JsonLd.toDateTime(time[1] + time[2], "dd MMMM yyyyhh:mm", "fr");
+        return JsonLd.toDateTime(time[1] + time[2], "d MMMM yyyyhh:mm", "fr");
     }
     time = timeStr.match(/(\d+ [^ ]+) +[^ ]+ +(\d+[:h]\d+)/);
-    return JsonLd.toDateTime(time[1] + time[2].replace('h', ':'), "dd MMMMhh:mm", "fr");
+    return JsonLd.toDateTime(time[1] + time[2].replace('h', ':'), "d MMMMhh:mm", "fr");
 }
 
 function parseOuigoSummary(html)
