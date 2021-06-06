@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "webshop@bremer-baeder.de",
+            "mimeType": "message/rfc822",
+            "scope": "Parent"
+        }
+    ],
+    "function": "parseTicket",
+    "mimeType": "application/pdf",
+    "script": "bremer-baeder.js"
+}
