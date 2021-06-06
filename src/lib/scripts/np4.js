@@ -26,15 +26,11 @@ function parseEvent(event)
         res.reservationFor.arrivalAirport.name = to[1];
 
     } else if (event.summary.startsWith("Mietwagen")) {
-        res = JsonLd.newObject("RentalCarReservation");
-        res.reservationFor = JsonLd.newObject("RentalCar");
-        res.reservationFor.rentalCompany = JsonLd.newObject("Organization");
+        res = JsonLd.newRentalCarReservation();
 
-        res.pickupLocation = JsonLd.newObject("Place");
         var pickup = event.description.match(/Abgabeort:\s*(.*)\n/);
         res.pickupLocation.name = pickup[1]; // TODO split address
 
-        res.dropoffLocation = JsonLd.newObject("Place");
         var dropoff = event.description.match(/Annahmeort:\s*(.*)\n/);
         res.dropoffLocation.name = dropoff[1]; // TODO dito
 

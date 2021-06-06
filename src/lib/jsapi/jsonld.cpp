@@ -121,7 +121,7 @@ QJSValue JsApi::JsonLd::newLodgingReservation() const
     return res;
 }
 
-QJSValue KItinerary::JsApi::JsonLd::newEventReservation() const
+QJSValue JsApi::JsonLd::newEventReservation() const
 {
     auto resFor = newObject(QStringLiteral("Event"));
     resFor.setProperty(QStringLiteral("location"), newPlace(QStringLiteral("Place")));
@@ -133,6 +133,37 @@ QJSValue KItinerary::JsApi::JsonLd::newEventReservation() const
     res.setProperty(QStringLiteral("reservedTicket"), ticket);
 
     const auto person = newObject(QStringLiteral("Person"));
+    res.setProperty(QStringLiteral("underName"), person);
+
+    return res;
+}
+
+QJSValue JsApi::JsonLd::newFoodEstablishmentReservation() const
+{
+    const auto person = newObject(QStringLiteral("Person"));
+    const auto resFor = newPlace(QStringLiteral("FoodEstablishment"));
+
+    auto res = newObject(QStringLiteral("FoodEstablishmentReservation"));
+    res.setProperty(QStringLiteral("reservationFor"), resFor);
+    res.setProperty(QStringLiteral("underName"), person);
+
+    return res;
+}
+
+QJSValue JsApi::JsonLd::newRentalCarReservation() const
+{
+    const auto pickup = newPlace(QStringLiteral("Place"));
+    const auto dropoff = newPlace(QStringLiteral("Place"));
+    const auto person = newObject(QStringLiteral("Person"));
+    const auto org = newObject(QStringLiteral("Organization"));
+
+    auto resFor = newObject(QStringLiteral("RentalCar"));
+    resFor.setProperty(QStringLiteral("rentalCompany"), org);
+
+    auto res = newObject(QStringLiteral("RentalCarReservation"));
+    res.setProperty(QStringLiteral("reservationFor"), resFor);
+    res.setProperty(QStringLiteral("pickupLocation"), pickup);
+    res.setProperty(QStringLiteral("dropoffLocation"), dropoff);
     res.setProperty(QStringLiteral("underName"), person);
 
     return res;

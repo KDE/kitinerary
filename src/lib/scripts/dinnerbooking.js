@@ -7,12 +7,10 @@
 function parseEvent(event)
 {
     var res;
-    res = JsonLd.newObject("FoodEstablishmentReservation");
-    res.reservationFor = JsonLd.newObject("FoodEstablishment");
+    res = JsonLd.newFoodEstablishmentReservation();
     res.reservationFor.name = event.organizer.name;
     res.startTime = event.dtStart.toJSON();
     res.endTime = event.dtEnd.toJSON();
-    res.reservationFor.address = JsonLd.newObject("PostalAddress");
     var addr = event.location.split(', ');
     res.reservationFor.address.streetAddress = addr[1];
     res.reservationFor.address.addressLocality = addr[2];
@@ -32,7 +30,6 @@ function parseEvent(event)
         res.reservationFor.url = url[1];
 
     if (event.attendees.length > 0) {
-        res.underName = JsonLd.newObject("Person");
         res.underName.name = event.attendees[0].name;
         res.underName.email = event.attendees[0].email;
     }

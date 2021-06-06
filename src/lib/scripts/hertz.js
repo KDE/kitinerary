@@ -5,7 +5,7 @@
 */
 
 function main(text) {
-    var res = JsonLd.newObject("RentalCarReservation");
+    var res = JsonLd.newRentalCarReservation();
 
     var bookingRef = text.match(/Your reservation number is\s+([A-Z0-9-]+)\s+/);
     if (!bookingRef)
@@ -13,7 +13,6 @@ function main(text) {
     res.reservationNumber = bookingRef[1];
 
     var idx = bookingRef.index + bookingRef[0].length;
-    res.underName = JsonLd.newObject("Person");
     var name = text.substr(idx).match(/Customer Name:\s+(.*)/);
     if (!name)
         return null;
@@ -25,8 +24,6 @@ function main(text) {
         return null;
     idx += renting.index + renting[0].length;
     var cityPickup = text.substr(idx).match(/City:\s+(.*)/);
-    res.pickupLocation = JsonLd.newObject("Place");
-    res.pickupLocation.address = JsonLd.newObject("PostalAddress");
     res.pickupLocation.address.addressLocality = cityPickup[1];
     idx += cityPickup.index + cityPickup[0].length;
 
@@ -53,8 +50,6 @@ function main(text) {
         return null;
     idx += returnCar.index + returnCar[0].length;
     var cityDropoff = text.substr(idx).match(/City:\s+(.*)/);
-    res.dropoffLocation = JsonLd.newObject("Place");
-    res.dropoffLocation.address = JsonLd.newObject("PostalAddress");
     res.dropoffLocation.address.addressLocality = cityDropoff[1];
     idx += cityDropoff.index + cityDropoff[0].length;
 
@@ -74,7 +69,6 @@ function main(text) {
     res.dropoffTime = JsonLd.toDateTime(dropOffDate[1], "ddd dd MMM yyyy hh:mm A", "en");
     idx += dropOffDate.index + dropOffDate[0].length;
 
-    res.reservationFor = JsonLd.newObject("RentalCar");
     //Fix me it seems to use 2 lines !
     var vehiculeType = text.substr(idx).match(/Vehicle:\s+(.*)\s+/)
     if (!vehiculeType)
@@ -82,7 +76,6 @@ function main(text) {
     res.reservationFor.model = vehiculeType[1];
     idx += vehiculeType.index + vehiculeType[0].length;
 
-    res.reservationFor.rentalCompany = JsonLd.newObject("Organization");
     res.reservationFor.rentalCompany.name = "Hertz"
 
     return res;

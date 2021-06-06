@@ -48,7 +48,14 @@ public:
      *  This can be used by extractor scripts to fill in the extracted information.
      */
     Q_INVOKABLE QJSValue newEventReservation() const;
-    // TODO add the same for restaurant and car rental reservation types
+    /** Convenience method that generates a full FoodEstablishmentReservation JS object.
+     *  This can be used by extractor scripts to fill in the extracted information.
+     */
+    Q_INVOKABLE QJSValue newFoodEstablishmentReservation() const;
+    /** Convenience method that generates a full RentalCarReservation JS object.
+     *  This can be used by extractor scripts to fill in the extracted information.
+     */
+    Q_INVOKABLE QJSValue newRentalCarReservation() const;
 
     /** Convert a date/time string to a date/time value.
      *  @param dtStr The input string containing a date/time value.
