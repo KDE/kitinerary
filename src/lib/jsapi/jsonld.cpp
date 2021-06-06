@@ -132,6 +132,9 @@ QJSValue KItinerary::JsApi::JsonLd::newEventReservation() const
     const auto ticket = newObject(QStringLiteral("Ticket"));
     res.setProperty(QStringLiteral("reservedTicket"), ticket);
 
+    const auto person = newObject(QStringLiteral("Person"));
+    res.setProperty(QStringLiteral("underName"), person);
+
     return res;
 }
 

@@ -19,15 +19,13 @@ function parseDateTime(text) {
 
 function parseHtml(doc) {
 
-    var res = JsonLd.newObject("LodgingReservation");
-    res.reservationFor = JsonLd.newObject("LodgingBusiness");
+    var res = JsonLd.newLodgingReservation();
 
     var nameElem = doc.eval("//td[@class=\"title-hotel\"]")[0];
     res.reservationFor.name = nameElem.content;
 
     var addrElem = nameElem.parent.nextSibling.nextSibling.nextSibling.firstChild;
     var addr = addrElem.content.match(/(.*), ?([^,]*)/);
-    res.reservationFor.address = JsonLd.newObject("PostalAddress");
     res.reservationFor.address.streetAddress = addr[1];
     res.reservationFor.address.addressLocality = addr[2];
     res.reservationFor.url = lastChild(addrElem).attribute("href");
@@ -48,7 +46,6 @@ function parseHtml(doc) {
         res.reservationNumber = bookingRef.content;
         var bookingRow = bookingRef.parent.nextSibling.nextSibling;
 
-        res.underName = JsonLd.newObject("Person");
         res.underName.name = bookingRow.firstChild.nextSibling.content;
         bookingRow = bookingRow.nextSibling.nextSibling;
 

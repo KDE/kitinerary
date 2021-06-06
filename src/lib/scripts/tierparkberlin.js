@@ -18,7 +18,6 @@ function parsePage(page, barcode) {
     const lines = page.text.split("\n")
     
     const res = JsonLd.newEventReservation()
-    res.underName = JsonLd.newObject("Person");
     
     let date = ""
     let startTime = ""
