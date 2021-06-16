@@ -40,8 +40,8 @@ if (NOT ANDROID)
     find_package(SharedMimeInfo 1.3 REQUIRED)
 endif()
 
-set(KMIME_VERSION "5.17.2")
-set(PIM_PKPASS "5.17.2")
+set(KMIME_VERSION "5.17.3")
+set(PIM_PKPASS "5.17.3")
 
 find_package(KF5Mime ${KMIME_VERSION} CONFIG REQUIRED)
 find_package(KF5CalendarCore ${KF5_MIN_VERSION} CONFIG)
