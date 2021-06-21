@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "BayIMCO@impfzentren.bayern",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "main",
+    "mimeType": "text/plain",
+    "script": "impfzentrum_bayern.js"
+}
