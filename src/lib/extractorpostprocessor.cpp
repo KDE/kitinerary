@@ -382,6 +382,8 @@ EventReservation ExtractorPostprocessorPrivate::processEventReservation(EventRes
 
 Event ExtractorPostprocessorPrivate::processEvent(Event event) const
 {
+    event.setName(event.name().trimmed());
+
     // normalize location to be a Place
     if (JsonLd::isA<PostalAddress>(event.location())) {
         Place place;
