@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "passTypeIdentifier",
+            "match": "pass\\.de\\.bs\\..*-baeder-suite",
+            "mimeType": "application/vnd.apple.pkpass",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseReservation",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "stuttgarter-baeder.js"
+}
