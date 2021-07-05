@@ -254,7 +254,7 @@ void CountryDbGenerator::writeCountryTable(QIODevice *out)
         out->write(", {");
         QStringList plugTypes;
         plugTypes.reserve((*countryIt).powerPlugTypes.size());
-        for (const auto &plugType : qAsConst((*countryIt).powerPlugTypes)) {
+        for (const auto &plugType : std::as_const((*countryIt).powerPlugTypes)) {
             const auto it = std::find_if(plug_type_table, plug_type_table_end, [plugType](const plug_type_mapping &elem) {
                 return QLatin1String(elem.wikidataId) == plugType;
             });

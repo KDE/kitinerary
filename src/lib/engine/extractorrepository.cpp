@@ -118,7 +118,7 @@ void ExtractorRepositoryPrivate::loadScriptExtractors()
     }
     searchDirs += QStringLiteral(":/org.kde.pim/kitinerary/extractors");
 
-    for (const auto &dir : qAsConst(searchDirs)) {
+    for (const auto &dir : std::as_const(searchDirs)) {
         QDirIterator it(dir, QDir::Files);
         while (it.hasNext()) {
             const auto fileName = it.next();

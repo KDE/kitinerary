@@ -239,7 +239,7 @@ void KItinerary::Generator::AirportDbGenerator::indexNames()
         stripAirportAllLanguages(l);
         l.erase(std::unique(l.begin(), l.end()), l.end());
         l.erase(std::remove_if(l.begin(), l.end(), [](const auto &s) { return s.size() <= 2; }), l.end());
-        for (const auto &s : qAsConst(l)) {
+        for (const auto &s : std::as_const(l)) {
             (*it).fragments.push_back(s);
             m_labelMap[s].push_back(it.value().iataCode);
         }
