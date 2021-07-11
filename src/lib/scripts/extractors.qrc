@@ -99,6 +99,8 @@
         <file>sncb.js</file>
         <file>sncf.json</file>
         <file>sncf.js</file>
+        <file>sro-nl.json</file>
+        <file>sro-nl.js</file>
         <file>stansted-express.json</file>
         <file>stansted-express.js</file>
         <file>stuttgarter-baeder.json</file>
