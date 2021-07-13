@@ -290,8 +290,10 @@ function parseOuigoSummary(html)
 {
     // TODO extract passenger names
     var res = JsonLd.newTrainReservation();
-    res.reservationFor.departureStation.name = html.eval('//*[@data-select="travel-summary-origin"]')[0].content;
-    res.reservationFor.arrivalStation.name = html.eval('//*[@data-select="travel-summary-destination"]')[0].content;
+    const origins = html.eval('//*[@data-select="travel-summary-origin"]');
+    res.reservationFor.departureStation.name = origins[0].content;
+    const destinations = html.eval('//*[@data-select="travel-summary-destination"]');
+    res.reservationFor.arrivalStation.name = destinations[0].content;
     res.reservationNumber = html.eval('//*[@data-select="travel-summary-reference"]')[0].content;
 
     res.reservationFor.departureTime = parseOuigoSummaryTime(html.eval('//*[@data-select="travel-departureDate"]'));
@@ -309,8 +311,8 @@ function parseOuigoSummary(html)
         return res;
     }
     var retour = JsonLd.newTrainReservation();
-    retour.reservationFor.departureStation.name = res.reservationFor.arrivalStation.name;
-    retour.reservationFor.arrivalStation.name = res.reservationFor.departureStation.name;
+    retour.reservationFor.departureStation.name = origins[1] ? origins[1].content : res.reservationFor.arrivalStation.name;
+    retour.reservationFor.arrivalStation.name = destinations[1] ? destinations[1].content : res.reservationFor.departureStation.name;
     retour.reservationFor.departureTime = parseOuigoSummaryTime(retourTime);
     trainNum = html.eval('//*[@data-select="passenger-detail-inwardFares"]//*[@class="passenger-detail__equipment"]');
     if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
