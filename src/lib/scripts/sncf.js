@@ -412,3 +412,24 @@ function parseOuigoTicket(pdf, node) {
     }
     return res;
 }
+
+function parseTerConfirmation(html) {
+    var reservations = new Array();
+    const refNum = html.eval('//td[@id="referenceContainer"]')[0].content;
+    const name = html.eval('//td[@id="nomReferenceContainer"]')[0].content;
+    const journeys = html.eval('//table[@id ="emailTrajet" or @id="emailTrajetRetour"]');
+    for (const journey of journeys) {
+        var res = JsonLd.newTrainReservation();
+        const dt = journey.eval('.//h2')[0].content.match(/ (\d.*)$/)[1];
+        res.reservationFor.departureDay = JsonLd.toDateTime(dt, "dd MMMM yyyy", "fr");
+        const ps = journey.eval('.//p');
+        res.reservationFor.departureStation.name = ps[0].content;
+        res.reservationFor.departureTime = JsonLd.toDateTime(ps[1].content.match(/ (\d.*)/)[1], "hh'h'mm", "fr");
+        res.reservationFor.arrivalStation.name = ps[2].content;
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(ps[3].content.match(/ (\d.*)/)[1], "hh'h'mm", "fr");
+        res.reservationNumber = refNum;
+        res.underName.name = name;
+        reservations.push(res);
+    }
+    return reservations;
+}
