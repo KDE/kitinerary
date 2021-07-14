@@ -1,0 +1,40 @@
+[
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "@order.eventbrite.com",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            },
+            {
+                "field": "From",
+                "match": "orders@eventbrite.com",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "fixAddress",
+        "mimeType": "text/html",
+        "script": "eventbrite.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "@order.eventbrite.com",
+                "mimeType": "message/rfc822",
+                "scope": "Current"
+            },
+            {
+                "field": "From",
+                "match": "orders@eventbrite.com",
+                "mimeType": "message/rfc822",
+                "scope": "Current"
+            }
+        ],
+        "function": "findBarcode",
+        "mimeType": "message/rfc822",
+        "script": "eventbrite.js"
+    }
+]

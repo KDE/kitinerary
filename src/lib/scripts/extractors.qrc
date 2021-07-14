@@ -48,6 +48,8 @@
         <file>eurowings.json</file>
         <file>eurowings.js</file>
         <file>eurowings-pkpass.js</file>
+        <file>eventbrite.json</file>
+        <file>eventbrite.js</file>
         <file>fcmtravel.json</file>
         <file>fcmtravel.js</file>
         <file>flixbus.json</file>
