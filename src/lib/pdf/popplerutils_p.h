@@ -23,12 +23,12 @@ namespace PopplerUtils
 {
     /** Returns the current pen. */
     QPen currentPen(GfxState *state);
-    /** Retruns the current brush. */
+    /** Returns the current brush. */
     QBrush currentBrush(GfxState *state);
     /** Returns the current transformation matrix. */
     QTransform currentTransform(GfxState *state);
 
-    /** Convets a Poppler path into a Qt path. */
+    /** Converts a Poppler path into a Qt path. */
     QPainterPath convertPath(const GfxPath *path, Qt::FillRule fillRule);
 }
 

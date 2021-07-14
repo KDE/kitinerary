@@ -93,7 +93,7 @@ private Q_SLOTS:
         QTest::newRow("empty") << QString() << QString() << false << false;
         QTest::newRow("equal") << QStringLiteral("Berlin") << QStringLiteral("Berlin") << true << true;
         QTest::newRow("not equal") << QStringLiteral("Nürnberg") << QStringLiteral("Valencia") << false << false;
-        QTest::newRow("case-insenstive") << QStringLiteral("Berlin") << QStringLiteral("BERLiN") << true << true;
+        QTest::newRow("case-insensitive") << QStringLiteral("Berlin") << QStringLiteral("BERLiN") << true << true;
         QTest::newRow("diacritic") << QStringLiteral("Düsseldorf") << QStringLiteral("Dusseldorf") << true << true;
         QTest::newRow("diacritic 2") << QStringLiteral("Rīga") << QStringLiteral("Riga") << true << true;
         QTest::newRow("diacritic case-insensitive") << QStringLiteral("København H") << QStringLiteral("KOEBENHAVN H") << true << true;

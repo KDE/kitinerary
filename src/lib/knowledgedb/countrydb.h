@@ -55,7 +55,7 @@ enum PowerPlugType : uint16_t {
 Q_DECLARE_FLAGS(PowerPlugTypes, PowerPlugType)
 Q_FLAG_NS(PowerPlugTypes)
 
-/** Returns the power plugs out of @p plugs that wont fit into @p sockets. */
+/** Returns the power plugs out of @p plugs that won't fit into @p sockets. */
 KITINERARY_EXPORT PowerPlugTypes incompatiblePowerPlugs(PowerPlugTypes plugs, PowerPlugTypes sockets);
 /** Returns the power sockets out pf @p sockets that are unable to receive plugs
  *  out of @p plugs, excluding those in @p plugs.
@@ -73,7 +73,7 @@ struct Country
 };
 
 
-/** Look up contry infromation by id. */
+/** Look up country information by id. */
 KITINERARY_EXPORT Country countryForId(CountryId id);
 
 /** Iterator access for the country information table. */

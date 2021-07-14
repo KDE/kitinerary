@@ -87,7 +87,7 @@ PostalAddress ExtractorUtil::extractPostalCode(PostalAddress addr)
     }
 
     // ### this so far only covers the typical European numerical prefix case, we probably want
-    // something for alpha-numeric and suffix cases too, if necessary we can also make this
+    // something for alphanumeric and suffix cases too, if necessary we can also make this
     // conditional on addr.addressCountry()
     static QRegularExpression patterns[] = {
         QRegularExpression(QStringLiteral("^(\\d{4,8}) (.*)$"), QRegularExpression::CaseInsensitiveOption),

@@ -15,7 +15,7 @@ namespace KItinerary {
  *  The content accessible by this functions is extracted from Wikidata and compiled
  *  into this library.
  *  @note The types in this namespace match the binary storage structure and thus
- *  are not intented for use in binary compatible APIs.
+ *  are not intended for use in binary compatible APIs.
  */
 namespace KnowledgeDb
 {

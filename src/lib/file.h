@@ -30,7 +30,7 @@ class FilePrivate;
  *
  *  A KItinerary::File can contain the following elements:
  *  - JSON-LD reservation objects (see KItinerary::Reservation). Each reservation has a UUID.
- *  - PkPass files. Their idenfifier is determined by their pass type idenfifier and their serial number.
+ *  - PkPass files. Their identifier is determined by their pass type identifier and their serial number.
  *  - JSON-LD document objects (see KItinerary::CreativeWork) and their associated file content. Each document has a UUID.
  *  - Application-specific data in custom namespaces.
  */
@@ -65,9 +65,9 @@ public:
     QVector<QString> reservations() const;
     /** Loads the reservation with the given identifier. */
     QVariant reservation(const QString &resId) const;
-    /** Add a reservation to this file. A new unique idenfifier will be generated for the reservation. */
+    /** Add a reservation to this file. A new unique identifier will be generated for the reservation. */
     void addReservation(const QVariant &res);
-    /** Add a reservation to this file. The given idenfifier will be used. */
+    /** Add a reservation to this file. The given identifier will be used. */
     void addReservation(const QString &id, const QVariant &res);
 
     /** Returns the pass identifier used in here for @p pass. */

@@ -93,7 +93,7 @@ static double scaleFromTransform(QTransform t, bool *shouldFlip = nullptr)
         }
         return std::max(std::abs(t.m11()), std::abs(t.m22()));
     }
-    qDebug() << "asymetric scale not supported yet" << t;
+    qDebug() << "asymmetric scale not supported yet" << t;
     return 1.0;
 }
 

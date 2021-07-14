@@ -184,7 +184,7 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
 
     if (JsonLd::canConvert<Reservation>(reservation) && JsonLd::convert<Reservation>(reservation).reservationStatus() == Reservation::ReservationCancelled) {
         event->setTransparency(KCalendarCore::Event::Transparent);
-        event->setSummary(i18nc("canceled train/flight/loding reservation", "Canceled: %1", event->summary()));
+        event->setSummary(i18nc("canceled train/flight/loading reservation", "Canceled: %1", event->summary()));
         event->clearAlarms();
     }
 

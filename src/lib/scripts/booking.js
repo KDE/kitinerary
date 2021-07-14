@@ -128,7 +128,7 @@ function parseHtml(doc, node)
 
     res.reservationFor.telephone = elem.eval(".//*[@class=\"u-phone\"]")[0].content;
 
-    // reservation id is the prefix in the mailto link, unlike other occurences this seems most reliably present
+    // reservation id is the prefix in the mailto link, unlike other occurrences this seems most reliably present
     var email = elem.eval(".//tr/td/a")[1].attribute("href").match(/mailto:(\d+)-/);
     if (email) {
         res.reservationNumber = email[1]

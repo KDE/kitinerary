@@ -103,7 +103,7 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
             return false;
         }
 
-        // one side is a minimal cancelation, matches the reservation number and has a plausible modification time
+        // one side is a minimal cancellation, matches the reservation number and has a plausible modification time
         // in this case don't bother comparing content (which will fail), we accept this directly
         if (isMinimalCancelationFor(lhs, rhsRes) || isMinimalCancelationFor(rhs, lhsRes)) {
             return true;
@@ -315,8 +315,8 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
         return false;
     }
 
-    // for unbound tickets, comparing the line number below wont help
-    // so we have to use the slightly less robust location comparisson
+    // for unbound tickets, comparing the line number below won't help
+    // so we have to use the slightly less robust location comparison
     if (!lhs.departureTime().isValid() && !rhs.departureTime().isValid()) {
         qCDebug(CompareLog) << "unbound trip" << lhs.departureStation().name() << rhs.departureStation().name() << lhs.arrivalStation().name() << rhs.arrivalStation().name();
         return lhs.departureStation().name() == rhs.departureStation().name() && lhs.arrivalStation().name() == rhs.arrivalStation().name();

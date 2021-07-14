@@ -29,7 +29,7 @@ ExtractorDocumentNode ImageDocumentProcessor::createNodeFromData(const QByteArra
 void ImageDocumentProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
 {
     // in case the barcode raw data (string or bytearray) gets detected as a type we handle,
-    // we nevertheless inject a raw data node inbetween. This is useful in cases where the
+    // we nevertheless inject a raw data node in between. This is useful in cases where the
     // content is parsable but that is actually not desired (e.g. JSON content in ticket barcodes).
 
     const auto b = engine->barcodeDecoder()->decodeBinary(node.content<QImage>());

@@ -25,7 +25,7 @@ class TrainStationIndex : public UnalignedNumber<2> {
     using UnalignedNumber<2>::UnalignedNumber;
 };
 
-/** Train station id to station index lookup table strcuture. */
+/** Train station id to station index lookup table structure. */
 template <typename T>
 struct TrainStationIdIndex {
     constexpr bool operator<(const TrainStationIdIndex &other) const
