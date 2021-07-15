@@ -4,7 +4,10 @@
 add_subdirectory(vdv/certs)
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
-set(kitinerary_lib_srcs
+add_library(KPimItinerary ${kitinerary_lib_srcs})
+add_library(KPim::Itinerary ALIAS KPimItinerary)
+
+target_sources(KPimItinerary PRIVATE
     datatypes/action.cpp
     datatypes/brand.cpp
     datatypes/bustrip.cpp
@@ -118,12 +121,10 @@ set(kitinerary_lib_srcs
     stringutil.cpp
 )
 kde_source_files_enable_exceptions(barcodedecoder.cpp qimagepurebinarizer.cpp)
-ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
-ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER compare-logging.h IDENTIFIER KItinerary::CompareLog CATEGORY_NAME org.kde.kitinerary.comparator)
-ecm_qt_declare_logging_category(kitinerary_lib_srcs HEADER validator-logging.h IDENTIFIER KItinerary::ValidatorLog CATEGORY_NAME org.kde.kitinerary.extractorValidator)
+ecm_qt_declare_logging_category(KPimItinerary HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
+ecm_qt_declare_logging_category(KPimItinerary HEADER compare-logging.h IDENTIFIER KItinerary::CompareLog CATEGORY_NAME org.kde.kitinerary.comparator)
+ecm_qt_declare_logging_category(KPimItinerary HEADER validator-logging.h IDENTIFIER KItinerary::ValidatorLog CATEGORY_NAME org.kde.kitinerary.extractorValidator)
 
-add_library(KPimItinerary ${kitinerary_lib_srcs})
-add_library(KPim::Itinerary ALIAS KPimItinerary)
 generate_export_header(KPimItinerary BASE_NAME KItinerary)
 set_target_properties(KPimItinerary PROPERTIES
     VERSION ${KITINERARY_VERSION}
