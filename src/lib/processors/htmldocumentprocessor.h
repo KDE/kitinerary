@@ -10,6 +10,8 @@
 
 namespace KItinerary {
 
+class HtmlElement;
+
 /** Processor for HTML documents. */
 class HtmlDocumentProcessor : public ExtractorDocumentProcessor
 {
@@ -20,6 +22,10 @@ public:
     void preExtract(ExtractorDocumentNode &node, const ExtractorEngine *engine) const override;
     QJSValue contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const override;
     void destroyNode(ExtractorDocumentNode &node) const override;
+
+private:
+    void expandElementRecursive(ExtractorDocumentNode &node, const HtmlElement &elem, const ExtractorEngine *engine) const;
+    void expandDataUrl(ExtractorDocumentNode &node, QStringView data, const ExtractorEngine *engine) const;
 };
 
 }

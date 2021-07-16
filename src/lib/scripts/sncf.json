@@ -14,19 +14,20 @@
             }
         ],
         "function": "parsePdf",
-        "script": "sncf.js",
-        "mimeType": "application/pdf"
+        "mimeType": "application/pdf",
+        "script": "sncf.js"
     },
     {
         "filter": [
             {
                 "match": "^i[01]CV",
-                "mimeType": "text/plain"
+                "mimeType": "text/plain",
+                "scope": "Current"
             }
         ],
         "function": "parseSncfBarcode",
-        "script": "sncf.js",
-        "mimeType": "text/plain"
+        "mimeType": "text/plain",
+        "script": "sncf.js"
     },
     {
         "filter": [
@@ -38,8 +39,8 @@
             }
         ],
         "function": "parseSncfPdfText",
-        "script": "sncf.js",
-        "mimeType": "text/plain"
+        "mimeType": "text/plain",
+        "script": "sncf.js"
     },
     {
         "filter": [
@@ -50,8 +51,8 @@
             }
         ],
         "function": "parseSecutixPdf",
-        "script": "sncf.js",
-        "mimeType": "application/pdf"
+        "mimeType": "application/pdf",
+        "script": "sncf.js"
     },
     {
         "filter": [
@@ -63,8 +64,8 @@
             }
         ],
         "function": "parseOuigoEmail",
-        "script": "sncf.js",
-        "mimeType": "text/html"
+        "mimeType": "text/html",
+        "script": "sncf.js"
     },
     {
         "filter": [
@@ -76,7 +77,26 @@
             }
         ],
         "function": "parseOuigoTicket",
-        "script": "sncf.js",
-        "mimeType": "application/pdf"
+        "mimeType": "application/pdf",
+        "script": "sncf.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "@ter-sncf.fr",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            },
+            {
+                "field": "From",
+                "match": "@ter.fr",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "parseTerConfirmation",
+        "mimeType": "text/html",
+        "script": "sncf.js"
     }
 ]

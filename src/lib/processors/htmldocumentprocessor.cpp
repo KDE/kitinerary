@@ -56,8 +56,12 @@ ExtractorDocumentNode HtmlDocumentProcessor::createNodeFromData(const QByteArray
 
 void HtmlDocumentProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
 {
-    // plain text fallback node
     const auto html = node.content<HtmlDocument*>();
+
+    // inline images
+    expandElementRecursive(node, html->root(), engine);
+
+    // plain text fallback node
     auto fallback = engine->documentNodeFactory()->createNode(html->root().recursiveContent(), u"text/plain");
     node.appendChild(fallback);
 }
@@ -246,4 +250,45 @@ QJSValue HtmlDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode
 void HtmlDocumentProcessor::destroyNode(ExtractorDocumentNode &node) const
 {
     destroyIfOwned<HtmlDocument>(node);
+}
+
+void HtmlDocumentProcessor::expandElementRecursive(ExtractorDocumentNode &node, const HtmlElement &elem, const ExtractorEngine *engine) const
+{
+    if (elem.name() == QLatin1String("img")) {
+        const auto src = elem.attribute(QLatin1String("src"));
+        if (src.startsWith(QLatin1String("data:"))) {
+            expandDataUrl(node, src, engine);
+        }
+    }
+
+    auto child = elem.firstChild();
+    while (!child.isNull()) {
+        expandElementRecursive(node, child, engine);
+        child = child.nextSibling();
+    }
+}
+
+void HtmlDocumentProcessor::expandDataUrl(ExtractorDocumentNode &node, QStringView data, const ExtractorEngine *engine) const
+{
+    const auto idx = data.indexOf(QLatin1Char(','));
+    if (idx < 0) {
+        return;
+    }
+    const auto header = data.mid(5, idx - 5);
+    const auto headerItems = header.split(QLatin1Char(';'));
+    if (headerItems.isEmpty()) {
+        return;
+    }
+
+    if (headerItems.front() != QLatin1String("image/png")) {
+        return;
+    }
+
+    auto imgData = data.mid(idx).toUtf8();
+    if (headerItems.back() == QLatin1String("base64")) {
+        imgData = QByteArray::fromBase64(imgData.trimmed());
+    }
+
+    auto child = engine->documentNodeFactory()->createNode(imgData, {}, headerItems.front());
+    node.appendChild(child);
 }

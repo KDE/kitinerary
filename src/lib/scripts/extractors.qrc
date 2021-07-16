@@ -48,6 +48,8 @@
         <file>eurowings.json</file>
         <file>eurowings.js</file>
         <file>eurowings-pkpass.js</file>
+        <file>eventbrite.json</file>
+        <file>eventbrite.js</file>
         <file>fcmtravel.json</file>
         <file>fcmtravel.js</file>
         <file>flixbus.json</file>
@@ -99,6 +101,8 @@
         <file>sncb.js</file>
         <file>sncf.json</file>
         <file>sncf.js</file>
+        <file>sro-nl.json</file>
+        <file>sro-nl.js</file>
         <file>stansted-express.json</file>
         <file>stansted-express.js</file>
         <file>stuttgarter-baeder.json</file>
@@ -109,6 +113,8 @@
         <file>terminland-de.js</file>
         <file>thalys.json</file>
         <file>thalys.js</file>
+        <file>ticketmaster.json</file>
+        <file>ticketmaster.js</file>
         <file>tierparkberlin.json</file>
         <file>tierparkberlin.js</file>
         <file>travelport-galileo.json</file>
