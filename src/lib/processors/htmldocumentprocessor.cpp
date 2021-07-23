@@ -26,7 +26,7 @@ Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KItinerary::HtmlDocument>)
 
 static bool contentStartsWith(const QByteArray &data, char s)
 {
-    for (const auto c : data) {
+    for (unsigned char c : data) {
         if (std::isspace(c)) {
             continue;
         }
@@ -91,7 +91,7 @@ static QByteArray fixupJson(const QByteArray &data)
     for (int idx = output.indexOf("\",\n"); idx > 0 && idx + 3 < output.size(); idx = output.indexOf("\",\n", idx)) {
         const auto comma = idx + 1;
         idx += 3;
-        while (idx < output.size() && std::isspace(output[idx])) {
+        while (idx < output.size() && std::isspace(static_cast<unsigned char>(output[idx]))) {
             ++idx;
         }
         if (idx < output.size() && output[idx] == '}') {

@@ -32,7 +32,7 @@ using namespace KItinerary;
 static bool contentStartsWith(const QByteArray &data, const char *str)
 {
     auto it = data.begin();
-    while (it != data.end() && std::isspace(*it)) {
+    while (it != data.end() && std::isspace(static_cast<unsigned char>(*it))) {
         ++it;
     }
 
