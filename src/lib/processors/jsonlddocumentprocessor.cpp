@@ -16,7 +16,7 @@ using namespace KItinerary;
 
 static bool contentStartsWith(const QByteArray &data, char s)
 {
-    for (const auto c : data) {
+    for (unsigned char c : data) {
         if (std::isspace(c)) {
             continue;
         }

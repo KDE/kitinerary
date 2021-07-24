@@ -18,7 +18,7 @@ using namespace KItinerary;
 
 bool TextDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return std::none_of(encodedData.begin(), encodedData.end(), [](auto c) { return std::iscntrl(c) && !std::isspace(c); })
+    return std::none_of(encodedData.begin(), encodedData.end(), [](unsigned char c) { return std::iscntrl(c) && !std::isspace(c); })
         || fileName.endsWith(QLatin1String(".txt"), Qt::CaseInsensitive);
 }
 
