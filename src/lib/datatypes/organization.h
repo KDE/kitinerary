@@ -31,6 +31,7 @@ class KITINERARY_EXPORT Organization
 {
     KITINERARY_BASE_GADGET(Organization)
     KITINERARY_PROPERTY(QString, name, setName)
+    KITINERARY_PROPERTY(QString, identifier, setIdentifier)
     KITINERARY_PROPERTY(QString, description, setDescription)
     KITINERARY_PROPERTY(QUrl, image, setImage)
     KITINERARY_PROPERTY(QUrl, logo, setLogo)

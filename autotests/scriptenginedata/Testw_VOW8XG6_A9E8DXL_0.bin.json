@@ -40,6 +40,13 @@
         "result": [
             {
                 "@type": "TrainReservation",
+                "reservationFor": {
+                    "@type": "TrainTrip",
+                    "provider": {
+                        "@type": "Organization",
+                        "identifier": "uic:0080"
+                    }
+                },
                 "reservationNumber": "9E8DXL",
                 "reservedTicket": {
                     "@type": "Ticket",

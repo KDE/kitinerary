@@ -18,6 +18,7 @@ class OrganizationPrivate: public QSharedData
     KITINERARY_PRIVATE_BASE_GADGET(Organization)
 public:
     QString name;
+    QString identifier;
     QString description;
     QUrl image;
     QUrl logo;
@@ -31,6 +32,7 @@ public:
 
 KITINERARY_MAKE_BASE_CLASS(Organization)
 KITINERARY_MAKE_PROPERTY(Organization, QString, name, setName)
+KITINERARY_MAKE_PROPERTY(Organization, QString, identifier, setIdentifier)
 KITINERARY_MAKE_PROPERTY(Organization, QString, description, setDescription)
 KITINERARY_MAKE_PROPERTY(Organization, QUrl, image, setImage)
 KITINERARY_MAKE_PROPERTY(Organization, QUrl, logo, setLogo)

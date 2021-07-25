@@ -24,6 +24,7 @@ function parseSsbBarcode(ssb, node)
     // for station codes see: https://rata.digitraffic.fi/api/v1/metadata/stations
     res.reservationFor.departureStation.identifier = "vrfi:" + ssb.departureStationAlpha;
     res.reservationFor.arrivalStation.identifier = "vrfi:" + ssb.arrivalStationAlpha;
+    res.reservationFor.provider.identifier = "uic:" + ssb.issuerCode;
 
     res.reservedTicket.ticketToken = "aztectbin:" + Barcode.toBase64(ssb.rawData);
     res.reservedTicket.ticketedSeat.seatingType = ssb.classOfTransport;

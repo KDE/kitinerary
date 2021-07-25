@@ -58,6 +58,7 @@ function parsePdf(pdf) {
             if (ssb.departureStationNum != ssb.arrivalStationNum) {
                 personalRes.reservationFor.arrivalStation.identifier = "uic:" + (ssb.arrivalStationNum % 10000000)
             }
+            personalRes.reservationFor.provider.identifier = "uic:" + ssb.issuerCode;
 
             var bitArray = Barcode.toBitArray(barcode);
             var seatNum = bitArray.readNumberMSB(31*8 + 2, 7);

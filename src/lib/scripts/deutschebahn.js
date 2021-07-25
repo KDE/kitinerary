@@ -231,6 +231,7 @@ function parsePdf(pdf, node, triggerNode) {
     var reservations = parseTicket(page.text, uic918ticket);
     for (var i = 0; i < reservations.length; ++i) {
         reservations[i].reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(triggerNode.content.rawData);
+        reservations[i].reservationFor.provider.identifier = "uic:" + triggerNode.content.carrierId;
         if (triggerNode.result.length > 0) {
             reservations[i].reservedTicket.name = triggerNode.result[0].reservedTicket.name;
             reservations[i].underName = triggerNode.result[0].underName;

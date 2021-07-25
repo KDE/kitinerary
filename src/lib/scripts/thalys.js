@@ -15,6 +15,7 @@ function parseSsbTicket(ssb, node) {
     res.reservationFor.arrivalStation.identifier = "benerail:" + ssb.type1ArrivalStationAlpha;
     res.reservationFor.departureDay = ssb.type1DepartureDay(node.contextDateTime)
     res.reservationFor.trainNumber = "THA " + ssb.type1TrainNumber.trim();
+    res.reservationFor.provider.identifier = "uic:" + ssb.issuerCode;
     res.reservedTicket.ticketedSeat.seatingType = ssb.classOfTravel;
     res.reservedTicket.ticketedSeat.seatSection = ssb.type1CoachNumber;
     res.reservedTicket.ticketedSeat.seatNumber = ssb.type1SeatNumber;
