@@ -85,6 +85,7 @@ Class::~Class() = default; \
 Class& Class::operator=(const Class &other) { d = other.d; return *this; } \
 QString Class::className() const { return QStringLiteral(#Class); } \
 Class::operator QVariant() const { return QVariant::fromValue(*this); } \
+const char* Class::typeName() { return #Class; } \
 static_assert(sizeof(Class) == sizeof(void*), "dptr must be the only member!"); \
 namespace detail { \
     static constexpr int property_counter(num<0>, tag<Class>) { return 1; } \

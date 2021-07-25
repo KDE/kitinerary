@@ -31,9 +31,82 @@
 #include <QUrl>
 #include <QTimeZone>
 
+#include <cassert>
 #include <cmath>
+#include <cstring>
 
 using namespace KItinerary;
+
+struct TypeInfo {
+    const char *name;
+    const QMetaObject *mo;
+    int metaTypeId;
+};
+
+static void registerBuiltInTypes(std::vector<TypeInfo> &r);
+static std::vector<TypeInfo>& typeResgistry()
+{
+    static std::vector<TypeInfo> s_typeResgistry;
+    if (s_typeResgistry.empty()) {
+        registerBuiltInTypes(s_typeResgistry);
+    }
+    return s_typeResgistry;
+}
+
+template <typename T>
+static void add(std::vector<TypeInfo> &registry)
+{
+    registry.push_back({ T::typeName(), &T::staticMetaObject, qMetaTypeId<T>() });
+}
+
+static void registerBuiltInTypes(std::vector<TypeInfo> &r)
+{
+    add<Action>(r);
+    add<Airline>(r);
+    add<Airport>(r);
+    add<Brand>(r);
+    add<BusReservation>(r);
+    add<BusStation>(r);
+    add<BusTrip>(r);
+    add<CancelAction>(r);
+    add<CheckInAction>(r);
+    add<CreativeWork>(r);
+    add<DigitalDocument>(r);
+    add<DownloadAction>(r);
+    add<EmailMessage>(r);
+    add<Event>(r);
+    add<EventReservation>(r);
+    add<Flight>(r);
+    add<FlightReservation>(r);
+    add<FoodEstablishment>(r);
+    add<FoodEstablishmentReservation>(r);
+    add<GeoCoordinates>(r);
+    add<LocalBusiness>(r);
+    add<LodgingBusiness>(r);
+    add<LodgingReservation>(r);
+    add<Organization>(r);
+    add<Person>(r);
+    add<Place>(r);
+    add<PostalAddress>(r);
+    add<RentalCar>(r);
+    add<RentalCarReservation>(r);
+    add<ReserveAction>(r);
+    add<Seat>(r);
+    add<Taxi>(r);
+    add<TaxiReservation>(r);
+    add<Ticket>(r);
+    add<TouristAttraction>(r);
+    add<TouristAttractionVisit>(r);
+    add<TrainReservation>(r);
+    add<TrainStation>(r);
+    add<TrainTrip>(r);
+    add<UpdateAction>(r);
+    add<ViewAction>(r);
+
+    assert(std::is_sorted(r.begin(), r.end(), [](const auto &lhs, const auto &rhs) {
+        return std::strcmp(lhs.name, rhs.name) < 0;
+    }));
+}
 
 static QVariant createInstance(const QJsonObject &obj);
 
@@ -177,62 +250,19 @@ static void createInstance(const QMetaObject *mo, void *v, const QJsonObject &ob
     }
 }
 
-template<typename T>
-static QVariant createInstance(const QJsonObject &obj)
-{
-    T t;
-    createInstance(&T::staticMetaObject, &t, obj);
-    return QVariant::fromValue(t);
-}
-
-#define MAKE_FACTORY(Class) \
-    if (type == QLatin1String(#Class)) \
-        return createInstance<Class>(obj)
-
 static QVariant createInstance(const QJsonObject &obj)
 {
     const auto type = obj.value(QLatin1String("@type")).toString();
-    MAKE_FACTORY(Action);
-    MAKE_FACTORY(Airline);
-    MAKE_FACTORY(Airport);
-    MAKE_FACTORY(Brand);
-    MAKE_FACTORY(BusReservation);
-    MAKE_FACTORY(BusStation);
-    MAKE_FACTORY(BusTrip);
-    MAKE_FACTORY(CancelAction);
-    MAKE_FACTORY(CheckInAction);
-    MAKE_FACTORY(CreativeWork);
-    MAKE_FACTORY(DigitalDocument);
-    MAKE_FACTORY(DownloadAction);
-    MAKE_FACTORY(EmailMessage);
-    MAKE_FACTORY(Event);
-    MAKE_FACTORY(EventReservation);
-    MAKE_FACTORY(Flight);
-    MAKE_FACTORY(FlightReservation);
-    MAKE_FACTORY(FoodEstablishment);
-    MAKE_FACTORY(FoodEstablishmentReservation);
-    MAKE_FACTORY(LocalBusiness);
-    MAKE_FACTORY(RentalCarReservation);
-    MAKE_FACTORY(RentalCar);
-    MAKE_FACTORY(ReserveAction);
-    MAKE_FACTORY(GeoCoordinates);
-    MAKE_FACTORY(LodgingBusiness);
-    MAKE_FACTORY(LodgingReservation);
-    MAKE_FACTORY(Organization);
-    MAKE_FACTORY(Person);
-    MAKE_FACTORY(Place);
-    MAKE_FACTORY(PostalAddress);
-    MAKE_FACTORY(Seat);
-    MAKE_FACTORY(TaxiReservation);
-    MAKE_FACTORY(Taxi);
-    MAKE_FACTORY(Ticket);
-    MAKE_FACTORY(TouristAttraction);
-    MAKE_FACTORY(TouristAttractionVisit);
-    MAKE_FACTORY(TrainReservation);
-    MAKE_FACTORY(TrainStation);
-    MAKE_FACTORY(TrainTrip);
-    MAKE_FACTORY(UpdateAction);
-    MAKE_FACTORY(ViewAction);
+
+    const auto& registry = typeResgistry();
+    const auto it = std::lower_bound(registry.begin(), registry.end(), type, [](const auto &lhs, const auto &rhs) {
+        return QLatin1String(lhs.name) < rhs;
+    });
+    if (it != registry.end() && QLatin1String((*it).name) == type) {
+        QVariant value((*it).metaTypeId, nullptr);
+        createInstance((*it).mo, value.data(), obj);
+        return value;
+    }
 
     if (type == QLatin1String("QDateTime")) {
         auto dt = QDateTime::fromString(obj.value(QLatin1String("@value")).toString(), Qt::ISODate);
@@ -242,7 +272,6 @@ static QVariant createInstance(const QJsonObject &obj)
 
     return {};
 }
-#undef MAKE_FACTORY
 
 QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
 {
@@ -524,4 +553,17 @@ QVariant JsonLdDocument::apply(const QVariant& lhs, const QVariant& rhs)
     }
 
     return res;
+}
+
+void JsonLdDocument::registerType(const char *typeName, const QMetaObject *mo, int metaTypeId)
+{
+    auto &registry = typeResgistry();
+    const auto it = std::lower_bound(registry.begin(), registry.end(), typeName, [](const auto &lhs, const auto *rhs) {
+        return std::strcmp(lhs.name, rhs) < 0;
+    });
+    if (it != registry.end() && std::strcmp((*it).name, typeName) == 0) {
+        qCWarning(Log) << "Type already registered:" << typeName;
+    } else {
+        registry.insert(it, { typeName, mo, metaTypeId });
+    }
 }

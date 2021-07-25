@@ -59,8 +59,16 @@ public:
     */
     KITINERARY_EXPORT static QVariant apply(const QVariant &lhs, const QVariant &rhs);
 
+    /** Register a custom type for deserialization. */
+    template <typename T>
+    inline void registerType()
+    {
+        registerType(T::typeName(), &T::staticMetaObject, qMetaTypeId<T>());
+    }
+
 private:
     KITINERARY_EXPORT static void writePropertyImpl(const QMetaObject *mo, void *obj, const char *name, const QVariant &value);
+    KITINERARY_EXPORT static void registerType(const char *typeName, const QMetaObject *mo, int metaTypeId);
 };
 
 template <typename T>
