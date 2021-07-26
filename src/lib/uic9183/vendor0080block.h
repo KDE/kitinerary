@@ -38,6 +38,8 @@ private:
 /** UIC 918.3 0080BL vendor data block sub-block. */
 class KITINERARY_EXPORT Vendor0080BLSubBlock
 {
+    Q_GADGET
+    Q_PROPERTY(QString content READ toString)
 public:
     Vendor0080BLSubBlock();
     Vendor0080BLSubBlock(const Uic9183Block &block, int offset);
@@ -72,7 +74,7 @@ class KITINERARY_EXPORT Vendor0080BLBlock
     Q_PROPERTY(int orderBlockCount READ orderBlockCount)
 
 public:
-    Vendor0080BLBlock(const Uic9183Block &block);
+    Vendor0080BLBlock(const Uic9183Block &block = Uic9183Block());
 
     bool isValid() const;
     int orderBlockCount() const;
@@ -84,6 +86,7 @@ public:
     Vendor0080BLSubBlock firstBlock() const;
     /** Finds a S-block by type. */
     Vendor0080BLSubBlock findSubBlock(const char id[3]) const;
+    Q_INVOKABLE QVariant findSubBlock(const QString &str) const;
 
     static constexpr const char RecordId[] = "0080BL";
 private:
@@ -101,7 +104,7 @@ class Vendor0080VUTicketData;
 class KITINERARY_EXPORT Vendor0080VUBlock
 {
 public:
-    Vendor0080VUBlock(const Uic9183Block &block);
+    Vendor0080VUBlock(const Uic9183Block &block = Uic9183Block());
     bool isValid() const;
 
     const Vendor0080VUCommonData* commonData() const;
@@ -114,3 +117,6 @@ private:
 
 }
 
+Q_DECLARE_METATYPE(KItinerary::Vendor0080BLBlock)
+Q_DECLARE_METATYPE(KItinerary::Vendor0080BLSubBlock)
+Q_DECLARE_METATYPE(KItinerary::Vendor0080VUBlock)

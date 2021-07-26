@@ -27,6 +27,30 @@ enum {
 // 4x field value length
 // nx field value
 
+// S001: price model (textual)
+// S002: product class (numeric: 0 = C, 1 = B, 2 = A)
+// S003: product class outbound (A, B, or C)
+// S004: produce class return
+// S009: [num adults]-[num adults with Bahncard]-[Bahncard type] (49 = BC25, 19,78 = BC50)
+// S012: number of children
+// S014: S[class of travel]
+// S015: departure station name (outbound)
+// S016: arrival station name (outbound)
+// S017: departure station name (return)
+// S018: arrival station name (return)
+// S019, S020: Rail&Fly specific
+// S021: via
+// S023: traveler name
+// S026: price type (numeric) (12 = Normalpreis, 13 = Sparpreis, 3 = Rail&Fly)
+// S027: id number (no longer used)
+// S028: [given name]#[family name]
+// S031: first day of validity, dd.MM.yyyy
+// S032: last day of validity, dd.MM.yyyy
+// S035: departure station IBNR without country prefix (outbound)
+// S036: arrival station IBNR without country prefix (outbound)
+// S040: number of persons?
+// S041: number of tickets?
+
 Vendor0080BLSubBlock::Vendor0080BLSubBlock() = default;
 
 Vendor0080BLSubBlock::Vendor0080BLSubBlock(const Uic9183Block &block, int offset)
@@ -205,6 +229,14 @@ Vendor0080BLSubBlock Vendor0080BLBlock::findSubBlock(const char id[3]) const
         sblock = sblock.nextBlock();
     }
     return {};
+}
+
+QVariant Vendor0080BLBlock::findSubBlock(const QString &str) const
+{
+    if (str.size() != 3) {
+        return {};
+    }
+    return QVariant::fromValue(findSubBlock(str.toUtf8().constData()));
 }
 
 int Vendor0080BLBlock::subblockOffset(const Uic9183Block& block)

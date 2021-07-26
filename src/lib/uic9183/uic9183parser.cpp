@@ -63,6 +63,12 @@ QVariant Uic9183Parser::block(const QString &name) const
         return {};
     }
 
+    if (name == QLatin1String("0080BL")) {
+        return QVariant::fromValue(findBlock<Vendor0080BLBlock>());
+    }
+    if (name == QLatin1String("0080VU")) {
+        return QVariant::fromValue(findBlock<Vendor0080VUBlock>());
+    }
     return QVariant::fromValue(findBlock(name.toUtf8().constData()));
 }
 
