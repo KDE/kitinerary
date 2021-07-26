@@ -87,6 +87,7 @@ QJSValue JsApi::JsonLd::newTrainReservation() const
     res.setProperty(QStringLiteral("reservationFor"), resFor);
     res.setProperty(QStringLiteral("underName"), person);
     res.setProperty(QStringLiteral("reservedTicket"), ticket);
+    res.setProperty(QStringLiteral("programMembershipUsed"), newObject(QStringLiteral("ProgramMembership")));
 
     return res;
 }
