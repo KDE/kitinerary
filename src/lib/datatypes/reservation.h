@@ -10,6 +10,7 @@
 #include "datatypes.h"
 #include "organization.h"
 #include "place.h"
+#include "programmembership.h"
 
 class QUrl;
 
@@ -45,6 +46,7 @@ public:
     KITINERARY_PROPERTY(QDateTime, modifiedTime, setModifiedTime)
     KITINERARY_PROPERTY(QVariantList, subjectOf, setSubjectOf)
     KITINERARY_PROPERTY(ReservationStatus, reservationStatus, setReservationStatus)
+    KITINERARY_PROPERTY(KItinerary::ProgramMembership, programMembershipUsed, setProgramMembershipUsed)
 
     // KDE extensions
     /** Pass type identifier of an associated Apple Wallet boarding pass.

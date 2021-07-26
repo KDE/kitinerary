@@ -26,6 +26,7 @@
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
 #include <KItinerary/Place>
+#include <KItinerary/ProgramMembership>
 #include <KItinerary/RentalCar>
 #include <KItinerary/Reservation>
 #include <KItinerary/Taxi>
@@ -403,12 +404,24 @@ Event ExtractorPostprocessorPrivate::processEvent(Event event) const
     return event;
 }
 
+ProgramMembership ExtractorPostprocessorPrivate::processProgramMembership(ProgramMembership program) const
+{
+    program.setProgramName(program.programName().simplified());
+     // avoid emitting spurious empty ProgramMembership objects caused by empty elements in JSON-LD/Microdata input
+    if (program.programName().isEmpty() && !program.programName().isNull()) {
+        program.setProgramName(QString());
+    }
+    program.setMember(processPerson(program.member()));
+    return program;
+}
+
 template <typename T>
 T ExtractorPostprocessorPrivate::processReservation(T res) const
 {
     res.setUnderName(processPerson(res.underName().template value<Person>()));
     res.setPotentialAction(processActions(res.potentialAction()));
     res.setReservationNumber(res.reservationNumber().trimmed());
+    res.setProgramMembershipUsed(processProgramMembership(res.programMembershipUsed()));
     return res;
 }
 

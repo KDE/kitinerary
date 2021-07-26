@@ -17,6 +17,7 @@
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
 #include <KItinerary/Place>
+#include <KItinerary/ProgramMembership>
 #include <KItinerary/Reservation>
 #include <KItinerary/RentalCar>
 #include <KItinerary/Taxi>
@@ -88,6 +89,7 @@ static void registerBuiltInTypes(std::vector<TypeInfo> &r)
     add<Person>(r);
     add<Place>(r);
     add<PostalAddress>(r);
+    add<ProgramMembership>(r);
     add<RentalCar>(r);
     add<RentalCarReservation>(r);
     add<ReserveAction>(r);

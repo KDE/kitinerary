@@ -156,6 +156,9 @@ static void filterReservation(QJsonObject &res)
         res.insert(QStringLiteral("reservationStatus"), resStat.replace(QLatin1String("http://schema.org/"), QLatin1String("http://schema.org/Reservation")));
     }
 
+    // legacy properties
+    renameProperty(res, "programMembership", "programMembershipUsed");
+
     // legacy potentialAction property
     renameProperty(res, "action", "potentialAction");
 
@@ -194,6 +197,12 @@ static void filterFoodEstablishment(QJsonObject &restaurant)
             migrateToAction(restaurant, "acceptsReservations", "ReserveAction", true);
         }
     }
+}
+
+static void filterProgramMembership(QJsonObject &program)
+{
+    renameProperty(program, "program", "programName");
+    renameProperty(program, "memberNumber", "membershipNumber");
 }
 
 static void filterActionTarget(QJsonObject &action)
@@ -278,6 +287,7 @@ static const struct {
     { "Flight", filterFlight },
     { "FoodEstablishment", filterFoodEstablishment },
     { "LodgingReservation", filterLodgingReservation },
+    { "ProgramMembership", filterProgramMembership },
     { "TrainTrip", filterTrainTrip },
 };
 

@@ -17,6 +17,7 @@ target_sources(KPimItinerary PRIVATE
     datatypes/organization.cpp
     datatypes/person.cpp
     datatypes/place.cpp
+    datatypes/programmembership.cpp
     datatypes/reservation.cpp
     datatypes/taxi.cpp
     datatypes/ticket.cpp
@@ -211,6 +212,7 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
         RentalCar
         Person
         Place
+        ProgramMembership
         Taxi
         Ticket
         TrainTrip

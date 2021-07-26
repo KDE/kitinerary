@@ -26,6 +26,7 @@ class GeoCoordinates;
 class LodgingReservation;
 class Person;
 class PostalAddress;
+class ProgramMembership;
 class RentalCar;
 class RentalCarReservation;
 class TaxiReservation;
@@ -57,6 +58,8 @@ public:
     RentalCar processRentalCar(RentalCar car) const;
     TaxiReservation processTaxiReservation(TaxiReservation res) const;
     Event processEvent(Event event) const;
+
+    ProgramMembership processProgramMembership(ProgramMembership program) const;
 
     template <typename T> T processReservation(T res) const;
     Person processPerson(Person person) const;

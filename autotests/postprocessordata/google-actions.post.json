@@ -23,10 +23,15 @@
                 "target": "http://cheapair.com/edit?id=RXJ34P"
             },
             {
-                 "@type": "ViewAction",
-                 "target": "http://cheapair.com/view/RXJ34P"
+                "@type": "ViewAction",
+                "target": "http://cheapair.com/view/RXJ34P"
             }
         ],
+        "programMembershipUsed": {
+            "@type": "ProgramMembership",
+            "membershipNumber": "4BY123111",
+            "programName": "StarAlliance"
+        },
         "reservationFor": {
             "@type": "Flight",
             "airline": {
