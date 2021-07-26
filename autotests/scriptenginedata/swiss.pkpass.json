@@ -259,6 +259,12 @@
                         "@type": "FlightReservation",
                         "airplaneSeat": "10E",
                         "passengerSequenceNumber": "143",
+                        "programMembershipUsed": {
+                            "@type": "ProgramMembership",
+                            "member": "[...]",
+                            "membershipNumber": "123456789012345",
+                            "programName": "LH"
+                        },
                         "reservationFor": {
                             "@type": "Flight",
                             "airline": "[...]",
@@ -512,6 +518,16 @@
                 "@type": "FlightReservation",
                 "airplaneSeat": "10E",
                 "passengerSequenceNumber": "143",
+                "programMembershipUsed": {
+                    "@type": "ProgramMembership",
+                    "member": {
+                        "@type": "Person",
+                        "familyName": "KRAUSE",
+                        "givenName": "VOLKER"
+                    },
+                    "membershipNumber": "123456789012345",
+                    "programName": "LH"
+                },
                 "reservationFor": {
                     "@type": "Flight",
                     "airline": {

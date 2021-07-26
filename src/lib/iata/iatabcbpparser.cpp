@@ -82,6 +82,16 @@ QVector<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDate &conte
         res.setReservationNumber(rms.operatingCarrierPNRCode());
         res.setUnderName(person);
         res.setReservedTicket(ticket);
+
+        const auto rcs = bcbp.repeatedConditionalSection(i);
+        if (!rcs.frequenFlyerNumber().isEmpty()) {
+            ProgramMembership program;
+            program.setMembershipNumber(rcs.frequenFlyerNumber());
+            program.setProgramName(rcs.frequentFlyerAirlineDesignator());
+            program.setMember(person);
+            res.setProgramMembershipUsed(program);
+        }
+
         result.push_back(std::move(res));
     }
 

@@ -5,6 +5,17 @@
         "airplaneSeat": "13C",
         "modifiedTime": "2019-08-19T19:23:28+01:00",
         "passengerSequenceNumber": "42",
+        "programMembershipUsed": {
+            "@type": "ProgramMembership",
+            "member": {
+                "@type": "Person",
+                "familyName": "DRAGON",
+                "givenName": "KONQUI",
+                "name": "KONQUI DRAGON"
+            },
+            "membershipNumber": "1234567890123",
+            "programName": "AK"
+        },
         "reservationFor": {
             "@type": "Flight",
             "airline": {

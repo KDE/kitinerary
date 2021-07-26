@@ -4,6 +4,16 @@
         "@type": "FlightReservation",
         "airplaneSeat": "23D",
         "passengerSequenceNumber": "999",
+        "programMembershipUsed": {
+            "@type": "ProgramMembership",
+            "member": {
+                "@type": "Person",
+                "familyName": "DOE",
+                "givenName": "JOHN"
+            },
+            "membershipNumber": "123456789012345",
+            "programName": "LH"
+        },
         "reservationFor": {
             "@type": "Flight",
             "airline": {

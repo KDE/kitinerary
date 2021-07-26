@@ -5,6 +5,17 @@
         "airplaneSeat": "17C",
         "modifiedTime": "2017-06-17T18:40:00+01:00",
         "passengerSequenceNumber": "40",
+        "programMembershipUsed": {
+            "@type": "ProgramMembership",
+            "member": {
+                "@type": "Person",
+                "familyName": "KRAUSE",
+                "givenName": "VOLKER",
+                "name": "VOLKER KRAUSE"
+            },
+            "membershipNumber": "123412341234012",
+            "programName": "LH"
+        },
         "reservationFor": {
             "@type": "Flight",
             "airline": {

@@ -4,6 +4,16 @@
         "@type": "FlightReservation",
         "airplaneSeat": "2F",
         "passengerSequenceNumber": "25",
+        "programMembershipUsed": {
+            "@type": "ProgramMembership",
+            "member": {
+                "@type": "Person",
+                "familyName": "GRANDMAIRE",
+                "givenName": "MELANIE"
+            },
+            "membershipNumber": "1234567890123456",
+            "programName": "AF"
+        },
         "reservationFor": {
             "@type": "Flight",
             "airline": {
@@ -28,9 +38,9 @@
             "ticketToken": "aztecCode:M1GRANDMAIRE/MELANIE  EABC123 GVACDGAF 0123 339C002F0025 130>5002A0571234567890  AF AF 1234567890123456    Y^108ABCDEFGH"
         },
         "underName": {
-           "@type": "Person",
-           "familyName": "GRANDMAIRE",
-           "givenName": "MELANIE"
+            "@type": "Person",
+            "familyName": "GRANDMAIRE",
+            "givenName": "MELANIE"
         }
     }
 ]

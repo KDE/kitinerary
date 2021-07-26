@@ -7,6 +7,17 @@
         "passengerSequenceNumber": "143",
         "pkpassPassTypeIdentifier": "pass.booking.swiss.com",
         "pkpassSerialNumber": "123456789",
+        "programMembershipUsed": {
+            "@type": "ProgramMembership",
+            "member": {
+                "@type": "Person",
+                "familyName": "KRAUSE",
+                "givenName": "VOLKER",
+                "name": "VOLKER KRAUSE"
+            },
+            "membershipNumber": "123456789012345",
+            "programName": "LH"
+        },
         "reservationFor": {
             "@type": "Flight",
             "airline": {

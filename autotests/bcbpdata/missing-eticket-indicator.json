@@ -4,6 +4,16 @@
         "@type": "FlightReservation",
         "airplaneSeat": "12C",
         "passengerSequenceNumber": "30",
+        "programMembershipUsed": {
+            "@type": "ProgramMembership",
+            "member": {
+                "@type": "Person",
+                "familyName": "DOE",
+                "givenName": "JOHN"
+            },
+            "membershipNumber": "123456789012345",
+            "programName": "LH"
+        },
         "reservationFor": {
             "@type": "Flight",
             "airline": {
@@ -28,9 +38,9 @@
             "ticketToken": "aztecCode:M1DOE/JOHN             XXX007 BRUTXLEW 8103 035Y012C0030 147>1181W 8033BEW 0000000000000291040000000000 0   LH 123456789012345     "
         },
         "underName": {
-           "@type": "Person",
-           "familyName": "DOE",
-           "givenName": "JOHN"
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHN"
         }
     }
 ]
