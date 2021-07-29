@@ -236,7 +236,8 @@ QVariant Vendor0080BLBlock::findSubBlock(const QString &str) const
     if (str.size() != 3) {
         return {};
     }
-    return QVariant::fromValue(findSubBlock(str.toUtf8().constData()));
+    const auto b = findSubBlock(str.toUtf8().constData());
+    return b.isNull() ? QVariant() : QVariant::fromValue(b);
 }
 
 int Vendor0080BLBlock::subblockOffset(const Uic9183Block& block)

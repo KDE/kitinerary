@@ -231,7 +231,22 @@ function parsePdf(pdf, node, triggerNode) {
     var reservations = parseTicket(page.text, uic918ticket);
     for (var i = 0; i < reservations.length; ++i) {
         reservations[i].reservedTicket.ticketToken = "aztecbin:" + Barcode.toBase64(triggerNode.content.rawData);
-        reservations[i].reservationFor.provider.identifier = "uic:" + triggerNode.content.carrierId;
+        if (triggerNode.mimeType == "internal/uic9183") {
+            reservations[i].reservationFor.provider.identifier = "uic:" + triggerNode.content.carrierId;
+            const block = triggerNode.content.block("0080BL").findSubBlock("009")
+            if (block) {
+                const bc = block.content.match(/\d+-\d+-(.*)/)[1];
+                switch (bc) {
+                    case "49":
+                        reservations[i].programMembershipUsed.programName = "BahnCard 25";
+                        break;
+                    case "19":
+                    case "78":
+                        reservations[i].programMembershipUsed.programName = "BahnCard 50";
+                        break;
+                }
+            }
+        }
         if (triggerNode.result.length > 0) {
             reservations[i].reservedTicket.name = triggerNode.result[0].reservedTicket.name;
             reservations[i].underName = triggerNode.result[0].underName;
