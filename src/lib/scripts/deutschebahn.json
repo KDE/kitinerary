@@ -56,5 +56,18 @@
         "function": "parseCancellation",
         "mimeType": "text/html",
         "script": "deutschebahn.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "carrierId",
+                "match": "80",
+                "mimeType": "internal/uic9183",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseBahncard",
+        "mimeType": "internal/uic9183",
+        "script": "deutschebahn.js"
     }
 ]

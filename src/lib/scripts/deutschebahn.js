@@ -270,3 +270,16 @@ function parseCancellation(html) {
     res.reservationFor = 1;
     return res;
 }
+
+function parseBahncard(code, node) {
+    if (code.ticketLayout.type != "RCT2" || !code.ticketLayout.text(0, 12, 40, 1).match(/BAHNCARD/i)) {
+        return;
+    }
+
+    var bc = JsonLd.newObject("ProgramMembership");
+    bc.programName = code.ticketLayout.text(1, 12, 40, 1);
+    bc.membershipNumber = code.ticketLayout.text(14, 11, 16, 1);
+    bc.member = node.result[0].underName;
+    bc.token = node.result[0].reservedTicket.ticketToken;
+    return bc.programName != undefined ? bc : undefined;
+}
