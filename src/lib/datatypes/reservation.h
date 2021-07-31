@@ -152,6 +152,14 @@ class KITINERARY_EXPORT TaxiReservation : public Reservation
     KITINERARY_PROPERTY(KItinerary::Place, pickupLocation, setPickupLocation)
 };
 
+/** A boat or ferry reservation.
+ *  @see https://schema.org/BoatReservation
+ */
+class KITINERARY_EXPORT BoatReservation : public Reservation
+{
+    KITINERARY_GADGET(BoatReservation)
+};
+
 
 }
 
@@ -163,5 +171,5 @@ Q_DECLARE_METATYPE(KItinerary::BusReservation)
 Q_DECLARE_METATYPE(KItinerary::FoodEstablishmentReservation)
 Q_DECLARE_METATYPE(KItinerary::EventReservation)
 Q_DECLARE_METATYPE(KItinerary::RentalCarReservation)
-
-
+Q_DECLARE_METATYPE(KItinerary::TaxiReservation)
+Q_DECLARE_METATYPE(KItinerary::BoatReservation)

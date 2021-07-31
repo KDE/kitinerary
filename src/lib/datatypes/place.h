@@ -97,6 +97,14 @@ class KITINERARY_EXPORT Airport : public Place
     KITINERARY_PROPERTY(QString, iataCode, setIataCode)
 };
 
+/** Boat or ferry terminal.
+ *  @see https://schema.org/BoatTerminal
+ */
+class KITINERARY_EXPORT BoatTerminal : public Place
+{
+    KITINERARY_GADGET(BoatTerminal)
+};
+
 /** Train station.
  *  @see https://schema.org/TrainStation
  */
@@ -128,6 +136,7 @@ Q_DECLARE_METATYPE(KItinerary::Place)
 Q_DECLARE_METATYPE(KItinerary::GeoCoordinates)
 Q_DECLARE_METATYPE(KItinerary::PostalAddress)
 Q_DECLARE_METATYPE(KItinerary::Airport)
+Q_DECLARE_METATYPE(KItinerary::BoatTerminal)
 Q_DECLARE_METATYPE(KItinerary::TrainStation)
 Q_DECLARE_METATYPE(KItinerary::BusStation)
 Q_DECLARE_METATYPE(KItinerary::TouristAttraction)

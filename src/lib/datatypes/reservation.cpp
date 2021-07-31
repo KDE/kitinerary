@@ -144,6 +144,13 @@ KITINERARY_MAKE_PROPERTY(TaxiReservation, Place, pickupLocation, setPickupLocati
 KITINERARY_MAKE_OPERATOR(TaxiReservation)
 
 
+class BoatReservationPrivate : public ReservationPrivate
+{
+    KITINERARY_PRIVATE_GADGET(BoatReservation)
+};
+KITINERARY_MAKE_SUB_CLASS(BoatReservation, Reservation)
+KITINERARY_MAKE_OPERATOR(BoatReservation)
+
 }
 
 template <>

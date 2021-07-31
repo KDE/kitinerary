@@ -103,6 +103,13 @@ KITINERARY_MAKE_SUB_CLASS(Airport, Place)
 KITINERARY_MAKE_PROPERTY(Airport, QString, iataCode, setIataCode)
 KITINERARY_MAKE_OPERATOR(Airport)
 
+class BoatTerminalPrivate : public PlacePrivate
+{
+    KITINERARY_PRIVATE_GADGET(BoatTerminal)
+};
+KITINERARY_MAKE_SUB_CLASS(BoatTerminal, Place)
+KITINERARY_MAKE_OPERATOR(BoatTerminal)
+
 class TrainStationPrivate : public PlacePrivate
 {
     KITINERARY_PRIVATE_GADGET(TrainStation)

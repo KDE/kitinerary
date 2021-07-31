@@ -9,6 +9,7 @@
 #include "logging.h"
 
 #include <KItinerary/Action>
+#include <KItinerary/BoatTrip>
 #include <KItinerary/Brand>
 #include <KItinerary/BusTrip>
 #include <KItinerary/CreativeWork>
@@ -65,6 +66,9 @@ static void registerBuiltInTypes(std::vector<TypeInfo> &r)
     add<Action>(r);
     add<Airline>(r);
     add<Airport>(r);
+    add<BoatReservation>(r);
+    add<BoatTerminal>(r);
+    add<BoatTrip>(r);
     add<Brand>(r);
     add<BusReservation>(r);
     add<BusStation>(r);

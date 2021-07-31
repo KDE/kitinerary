@@ -6,6 +6,7 @@
 
 #include "locationutil.h"
 
+#include <KItinerary/BoatTrip>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
@@ -30,7 +31,7 @@ bool LocationUtil::isLocationChange(const QVariant &res)
         }
         return !isSameLocation(pickup, dropoff);
     }
-    return JsonLd::isA<FlightReservation>(res) || JsonLd::isA<TrainReservation>(res) || JsonLd::isA<BusReservation>(res) || JsonLd::isA<TaxiReservation>(res);
+    return JsonLd::isA<FlightReservation>(res) || JsonLd::isA<TrainReservation>(res) || JsonLd::isA<BusReservation>(res) || JsonLd::isA<TaxiReservation>(res) || JsonLd::isA<BoatReservation>(res);
 }
 
 QVariant LocationUtil::arrivalLocation(const QVariant &res)
@@ -46,6 +47,9 @@ QVariant LocationUtil::arrivalLocation(const QVariant &res)
     }
     if (JsonLd::isA<RentalCarReservation>(res)) {
         return res.value<RentalCarReservation>().dropoffLocation();
+    }
+    if (JsonLd::isA<BoatReservation>(res)) {
+        return  res.value<BoatReservation>().reservationFor().value<BoatTrip>().arrivalBoatTerminal();
     }
     return {};
 }
@@ -66,6 +70,9 @@ QVariant LocationUtil::departureLocation(const QVariant &res)
     }
     if (JsonLd::isA<TaxiReservation>(res)) {
         return res.value<TaxiReservation>().pickupLocation();
+    }
+    if (JsonLd::isA<BoatReservation>(res)) {
+        return res.value<BoatReservation>().reservationFor().value<BoatTrip>().departureBoatTerminal();
     }
     return {};
 }

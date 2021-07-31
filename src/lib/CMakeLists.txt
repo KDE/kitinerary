@@ -9,6 +9,7 @@ add_library(KPim::Itinerary ALIAS KPimItinerary)
 
 target_sources(KPimItinerary PRIVATE
     datatypes/action.cpp
+    datatypes/boattrip.cpp
     datatypes/brand.cpp
     datatypes/bustrip.cpp
     datatypes/creativework.cpp
@@ -201,6 +202,7 @@ ecm_generate_headers(KItinerary_KnowledgeDb_FORWARDING_HEADERS
 ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
     HEADER_NAMES
         Action
+        BoatTrip
         Brand
         BusTrip
         CreativeWork
