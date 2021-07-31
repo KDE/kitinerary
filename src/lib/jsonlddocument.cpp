@@ -160,6 +160,11 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
     switch (prop.type()) {
     case QVariant::String:
         if (v.isDouble()) {
+            double i = 0.0;
+            const auto frac = std::modf(v.toDouble(), &i);
+            if (frac == 0.0) {
+                return QString::number(static_cast<uint64_t>(i));
+            }
             return QString::number(v.toDouble());
         }
         return v.toString();
