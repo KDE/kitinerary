@@ -11,6 +11,7 @@
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
 #include <KItinerary/Place>
+#include <KItinerary/ProgramMembership>
 #include <KItinerary/RentalCar>
 #include <KItinerary/Reservation>
 #include <KItinerary/Taxi>
@@ -36,6 +37,7 @@ public:
     bool filterFoodReservation(const FoodEstablishmentReservation &res) const;
     bool filterLocalBusiness(const LocalBusiness &business) const;
     bool filterReservation(const Reservation &res) const;
+    bool filterProgramMembership(const ProgramMembership &program) const;
 
     std::vector<const QMetaObject*> m_acceptedTypes;
     bool m_onlyComplete = true;
@@ -132,6 +134,11 @@ bool ExtractorValidatorPrivate::filterReservation(const Reservation &res) const
     return true;
 }
 
+bool ExtractorValidatorPrivate::filterProgramMembership(const ProgramMembership &program) const
+{
+    return (!program.membershipNumber().isEmpty() || !program.token().isEmpty()) && !program.programName().isEmpty();
+}
+
 template <typename T, bool (ExtractorValidatorPrivate::*F)(const T&) const>
 static inline bool callFilterWithType(const ExtractorValidatorPrivate *d, const QVariant &v)
 {
@@ -152,6 +159,7 @@ struct {
     FILTER(FoodEstablishmentReservation, filterFoodReservation),
     FILTER(LodgingReservation, filterLodgingReservation),
     FILTER(Reservation, filterReservation),
+    FILTER(ProgramMembership, filterProgramMembership),
 };
 #undef FILTER
 
