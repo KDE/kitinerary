@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_IATABCBP_H
-#define KITINERARY_IATABCBP_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "iatabcbpsections.h"
@@ -62,4 +61,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::IataBcbp)
 
-#endif // KITINERARY_IATABCBP_H

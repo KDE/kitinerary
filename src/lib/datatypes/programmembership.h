@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_PROGRAMMEMBERSHIP_H
-#define KITINERARY_PROGRAMMEMBERSHIP_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
@@ -40,4 +39,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::ProgramMembership)
 
-#endif // KITINERARY_PROGRAMMEMBERSHIP_H

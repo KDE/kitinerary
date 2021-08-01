@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_SSBTICKETREADER_H
-#define KITINERARY_SSBTICKETREADER_H
+#pragma once
 
 class QByteArray;
 class QVariant;
@@ -23,4 +22,3 @@ QVariant read(const QByteArray &data, int versionOverride = 0);
 
 }
 
-#endif // KITINERARY_SSBTICKETREADER_H

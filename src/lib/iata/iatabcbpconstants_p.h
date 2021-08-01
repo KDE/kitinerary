@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_IATABCBPCONSTANTS_H
-#define KITINERARY_IATABCBPCONSTANTS_H
+#pragma once
 
 namespace KItinerary {
 namespace IataBcbpConstants {
@@ -20,4 +19,3 @@ enum {
 }
 }
 
-#endif

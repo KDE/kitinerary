@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_BOATTRIP_H
-#define KITINERARY_BOATTRIP_H
+#pragma once
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
@@ -37,4 +36,3 @@ private:
 
 Q_DECLARE_METATYPE(KItinerary::BoatTrip)
 
-#endif // KITINERARY_BOATTRIP_H

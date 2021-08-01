@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_SSBTICKETBASE_H
-#define KITINERARY_SSBTICKETBASE_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -44,4 +43,3 @@ public: \
 
 }
 
-#endif // KITINERARY_SSBTICKETBASE_H

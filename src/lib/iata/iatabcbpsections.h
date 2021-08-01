@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KITINERARY_IATABCBPSECTIONS_H
-#define KITINERARY_IATABCBPSECTIONS_H
+#pragma once
 
 #include "kitinerary_export.h"
 
@@ -150,4 +149,3 @@ Q_DECLARE_METATYPE(KItinerary::IataBcbpUniqueConditionalSection)
 Q_DECLARE_METATYPE(KItinerary::IataBcbpRepeatedMandatorySection)
 Q_DECLARE_METATYPE(KItinerary::IataBcbpRepeatedConditionalSection)
 
-#endif // KITINERARY_IATABCBPSECTIONS_H
