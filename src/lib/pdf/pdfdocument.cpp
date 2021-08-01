@@ -201,7 +201,11 @@ int PdfDocument::fileSize() const
 }
 
 #ifdef HAVE_POPPLER
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(21, 8, 0)
+static QDateTime parsePdfDateTime(const GooString *str)
+#else
 static QDateTime parsePdfDateTime(const char *str)
+#endif
 {
     int year, month, day, hour, min, sec, tzHours, tzMins;
     char tz;
@@ -233,7 +237,9 @@ QDateTime PdfDocument::creationTime() const
     if (!dt) {
         return {};
     }
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(21, 8, 0)
+    return parsePdfDateTime(dt.get());
+#elif KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     return parsePdfDateTime(dt->c_str());
 #else
     return parsePdfDateTime(dt->getCString());
@@ -250,7 +256,9 @@ QDateTime PdfDocument::modificationTime() const
     if (!dt) {
         return {};
     }
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(21, 8, 0)
+    return parsePdfDateTime(dt.get());
+#elif KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     return parsePdfDateTime(dt->c_str());
 #else
     return parsePdfDateTime(dt->getCString());
