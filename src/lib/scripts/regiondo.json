@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "passTypeIdentifier",
+            "match": "pass.de.regiondo.pass",
+            "mimeType": "application/vnd.apple.pkpass",
+            "scope": "Current"
+        }
+    ],
+    "function": "parsePass",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "regiondo.js"
+}
