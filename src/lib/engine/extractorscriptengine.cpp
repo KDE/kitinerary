@@ -18,18 +18,31 @@
 #include <QJSEngine>
 #include <QJSValueIterator>
 #include <QScopeGuard>
+#include <QThread>
+#include <QTimer>
 
 using namespace KItinerary;
 
 namespace KItinerary {
 class ExtractorScriptEnginePrivate {
 public:
+    ~ExtractorScriptEnginePrivate();
     bool loadScript(const QString &fileName);
 
     JsApi::Barcode *m_barcodeApi = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
     QJSEngine m_engine;
+
+    QThread m_watchdogThread;
+    QTimer *m_watchdogTimer = nullptr;
 };
+}
+
+ExtractorScriptEnginePrivate::~ExtractorScriptEnginePrivate()
+{
+    m_watchdogTimer->deleteLater();
+    m_watchdogThread.quit();
+    m_watchdogThread.wait();
 }
 
 ExtractorScriptEngine::ExtractorScriptEngine() = default;
@@ -47,6 +60,13 @@ void ExtractorScriptEngine::ensureInitialized()
     d->m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), d->m_engine.newQObject(d->m_jsonLdApi));
     d->m_barcodeApi = new JsApi::Barcode;
     d->m_engine.globalObject().setProperty(QStringLiteral("Barcode"), d->m_engine.newQObject(d->m_barcodeApi));
+
+    d->m_watchdogThread.start();
+    d->m_watchdogTimer = new QTimer;
+    d->m_watchdogTimer->setInterval(std::chrono::seconds(1));
+    d->m_watchdogTimer->setSingleShot(true);
+    d->m_watchdogTimer->moveToThread(&d->m_watchdogThread);
+    QObject::connect(d->m_watchdogTimer, &QTimer::timeout, &d->m_engine, [this]() { d->m_engine.setInterrupted(true); }, Qt::DirectConnection);
 }
 
 void ExtractorScriptEngine::setBarcodeDecoder(BarcodeDecoder *barcodeDecoder)
@@ -55,10 +75,20 @@ void ExtractorScriptEngine::setBarcodeDecoder(BarcodeDecoder *barcodeDecoder)
     d->m_barcodeApi->setDecoder(barcodeDecoder);
 }
 
-static void printScriptError(const QJSValue &result)
+// produce the same output as the JS engine error result fileName property would have
+static QString fileNameToUrl(const QString &fileName)
 {
+    if (fileName.startsWith(QLatin1Char(':'))) {
+        return QLatin1String("qrc:/") + QStringView(fileName).mid(1);
+    }
+    return QUrl::fromLocalFile(fileName).toString();
+}
+
+static void printScriptError(const QJSValue &result, const QString &fileNameFallback)
+{
+    const auto fileName = result.property(QStringLiteral("fileName"));
     // don't change the formatting without adjusting KItinerary Workbench too!
-    qCWarning(Log).noquote().nospace() << "JS ERROR: [" << result.property(QStringLiteral("fileName")).toString()
+    qCWarning(Log).noquote().nospace() << "JS ERROR: [" << (fileName.isString() ? fileName.toString() : fileNameToUrl(fileNameFallback))
         << "]:" << result.property(QStringLiteral("lineNumber")).toInt() << ": " << result.toString();
 }
 
@@ -78,7 +108,7 @@ bool ExtractorScriptEnginePrivate::loadScript(const QString &fileName)
 
     auto result = m_engine.evaluate(QString::fromUtf8(f.readAll()), f.fileName());
     if (result.isError()) {
-        printScriptError(result);
+        printScriptError(result, fileName);
         return false;
     }
 
@@ -88,6 +118,13 @@ bool ExtractorScriptEnginePrivate::loadScript(const QString &fileName)
 ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor, const ExtractorDocumentNode &node, const ExtractorDocumentNode &triggerNode) const
 {
     const_cast<ExtractorScriptEngine*>(this)->ensureInitialized();
+
+    // watchdog setup
+    QMetaObject::invokeMethod(d->m_watchdogTimer, qOverload<>(&QTimer::start));
+    const auto watchdogStop = qScopeGuard([this]() {
+        QMetaObject::invokeMethod(d->m_watchdogTimer, qOverload<>(&QTimer::stop));
+    });
+    d->m_engine.setInterrupted(false);
 
     if (!d->loadScript(extractor->scriptFileName())) {
         return {};
@@ -117,7 +154,7 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
 
     const auto result = mainFunc.call(args);
     if (result.isError()) {
-        printScriptError(result);
+        printScriptError(result, extractor->scriptFileName());
         return {};
     }
 
