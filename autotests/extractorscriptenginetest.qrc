@@ -4,6 +4,7 @@
 -->
 <RCC>
     <qresource prefix="/">
+        <file>buggy.js</file>
         <file>reflector.js</file>
     </qresource>
 </RCC>

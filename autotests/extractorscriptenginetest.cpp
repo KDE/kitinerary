@@ -70,7 +70,6 @@ private Q_SLOTS:
 
     void testArguments()
     {
-
         QFETCH(QString, inputFile);
         QFETCH(QString, refFile);
 
@@ -95,6 +94,22 @@ private Q_SLOTS:
             qDebug().noquote() << QJsonDocument(result).toJson();
         }
         QCOMPARE(result, refResult);
+    }
+
+    void testInfiniteLoop()
+    {
+        QFile in(s(SOURCE_DIR "/scriptenginedata/plain-text.txt"));
+        QVERIFY(in.open(QFile::ReadOnly));
+
+        ExtractorEngine engine;
+        auto root = engine.documentNodeFactory()->createNode(in.readAll());
+        QVERIFY(!root.isNull());
+        expandRecursive(root, &engine);
+
+        ScriptExtractor extractor;
+        extractor.setScriptFileName(s(":/buggy.js"));
+        extractor.setScriptFunction(s("infiniteLoop"));
+        const auto result = extractor.extract(root, &engine).jsonLdResult();
     }
 };
 
