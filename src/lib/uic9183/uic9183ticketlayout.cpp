@@ -188,7 +188,8 @@ QString Uic9183TicketLayout::text(int row, int column, int width, int height) co
 
 QSize Uic9183TicketLayout::size() const
 {
-    int width = 0, height = 0;
+    int width = 0;
+    int height = 0;
     for (auto f = firstField(); !f.isNull(); f  = f.next()) {
         width = std::max(width, f.column() + f.width());
         height = std::max(height, f.row() + f.height());

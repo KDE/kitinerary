@@ -152,7 +152,8 @@ private Q_SLOTS:
 
     void testCompare()
     {
-        Place p1, p2; // base type
+        Place p1;
+        Place p2; // base type
         QCOMPARE(p1, p2);
         QCOMPARE(p1, p1);
         p1.setName(QStringLiteral("Berlin"));
@@ -162,7 +163,8 @@ private Q_SLOTS:
         p2.setName(QStringLiteral("Berlin"));
         QCOMPARE(p1, p2);
 
-        GeoCoordinates coord1, coord2; // primitive types
+        GeoCoordinates coord1;
+        GeoCoordinates coord2; // primitive types
         QCOMPARE(coord1, coord2);
         QCOMPARE(coord1, coord1);
         coord1 = { 52.5, 13.8 };
@@ -172,7 +174,8 @@ private Q_SLOTS:
         p2.setGeo({52.5, 13.8});
         QCOMPARE(p1, p2);
 
-        Airport a1, a2; // polymorphic types
+        Airport a1;
+        Airport a2; // polymorphic types
         a1.setIataCode(QStringLiteral("TXL"));
         a2.setIataCode(QStringLiteral("TXL"));
         QCOMPARE(a1, a2);

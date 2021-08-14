@@ -43,7 +43,8 @@ static std::tuple<QString, QString> splitAirportName(const QString &name)
             const auto name = trimAirportName(match.capturedRef(1));
 
             // try to recurse, sometimes this is indeed repeated...
-            QString recName, recTerminal;
+            QString recName;
+            QString recTerminal;
             std::tie(recName, recTerminal) = splitAirportName(name);
             if (recName == name || recTerminal.isEmpty()) {
                 return std::make_tuple(trimAirportName(match.capturedRef(1)), match.captured(2));
@@ -61,7 +62,8 @@ Flight ExtractorUtil::extractTerminals(Flight flight)
 {
     if (flight.departureTerminal().isEmpty()) {
         auto a = flight.departureAirport();
-        QString name, terminal;
+        QString name;
+        QString terminal;
         std::tie(name, terminal) = splitAirportName(a.name());
         a.setName(name);
         flight.setDepartureAirport(a);
@@ -70,7 +72,8 @@ Flight ExtractorUtil::extractTerminals(Flight flight)
 
     if (flight.arrivalTerminal().isEmpty()) {
         auto a = flight.arrivalAirport();
-        QString name, terminal;
+        QString name;
+        QString terminal;
         std::tie(name, terminal) = splitAirportName(a.name());
         a.setName(name);
         flight.setArrivalAirport(a);

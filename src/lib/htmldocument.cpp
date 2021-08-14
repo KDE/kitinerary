@@ -118,7 +118,8 @@ static QString normalizeSpaces(const QString &in)
 
     // convert non-breaking spaces and windows line break to normal ones, technically not correct
     // but way too often this confuses our regular expressions
-    bool leadingTrim = true, foundCR = false;
+    bool leadingTrim = true;
+    bool foundCR = false;
     for (const auto c : in) {
         // trim leading spaces while we are at it
         if (leadingTrim && c.isSpace()) {

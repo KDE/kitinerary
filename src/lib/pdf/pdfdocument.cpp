@@ -84,7 +84,10 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
     const auto page = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1);
     const auto pageRect = page->getCropBox();
 
-    double l, t, r, b;
+    double l;
+    double t;
+    double r;
+    double b;
     switch (page->getRotate()) {
         case 0:
             l = ratio(pageRect->x1, pageRect->x2, left);
@@ -207,7 +210,14 @@ static QDateTime parsePdfDateTime(const GooString *str)
 static QDateTime parsePdfDateTime(const char *str)
 #endif
 {
-    int year, month, day, hour, min, sec, tzHours, tzMins;
+    int year;
+    int month;
+    int day;
+    int hour;
+    int min;
+    int sec;
+    int tzHours;
+    int tzMins;
     char tz;
 
     if (!parseDateString(str, &year, &month, &day, &hour, &min, &sec, &tz, &tzHours, &tzMins)) {

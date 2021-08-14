@@ -60,7 +60,9 @@ static QString normalizeFragment(const QString &s)
 {
     auto res = StringUtil::normalize(s);
     // resolve abbreviations
-    if (res == QLatin1String("intl")) return QStringLiteral("international");
+    if (res == QLatin1String("intl")) {
+        return QStringLiteral("international");
+    }
 
     return res;
 }
@@ -209,7 +211,8 @@ std::vector<KnowledgeDb::IataCode> KnowledgeDb::iataCodesFromName(const QString 
     normalizedFragments.reserve(fragments.size());
     std::transform(fragments.begin(), fragments.end(), std::back_inserter(normalizedFragments), [](const auto &s) { return normalizeFragment(s); });
 
-    std::vector<IataCode> codes, candidates;
+    std::vector<IataCode> codes;
+    std::vector<IataCode> candidates;
     iataCodeForNameFragments(normalizedFragments, codes);
 
     // try again, with alternative translitarations of e.g. umlauts replaced

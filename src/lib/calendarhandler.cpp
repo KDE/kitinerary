@@ -75,7 +75,8 @@ QVector<QSharedPointer<KCalendarCore::Event> > CalendarHandler::findEvents(const
         return {};
     }
 
-    QVector<KCalendarCore::Event::Ptr> events, results;
+    QVector<KCalendarCore::Event::Ptr> events;
+    QVector<KCalendarCore::Event::Ptr> results;
     const auto dt = SortUtil::startDateTime(reservation).toTimeZone(calendar->timeZone()).date();
     if (dt.isValid()) {
         // we know the exact day to search at
