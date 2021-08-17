@@ -295,3 +295,33 @@ if (NOT ANDROID)
     install(FILES application-vnd-kde-itinerary.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
     update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR})
 endif()
+
+if (BUILD_QCH)
+    ecm_add_qch(
+        KPimItinerary_QCH
+        NAME KPimItinerary
+        BASE_NAME KPimItinerary
+        VERSION ${PIM_VERSION}
+        ORG_DOMAIN org.kde
+        SOURCES # using only public headers, to cover only public API
+        ${KItinerary_HEADERS}
+        ${KItinerary_AirportDb_HEADERS}
+        ${KItinerary_Datatypes_HEADERS}
+        ${KItinerary_KnowledgeDb_HEADERS}
+        ${KItinerary_Engine_HEADERS}
+        ${KItinerary_Pdf_HEADERS}
+        ${KItinerary_Uic9183_HEADERS}
+        ${KItinerary_Vdv_HEADERS}
+        MD_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md"
+        #IMAGE_DIRS "${CMAKE_SOURCE_DIR}/docs/pics"
+        LINK_QCHS
+            Qt5Core_QCH
+        INCLUDE_DIRS
+            ${CMAKE_CURRENT_BINARY_DIR}
+        BLANK_MACROS
+            KSIEVEUI_EXPORT
+        TAGFILE_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
+        QCH_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
+        COMPONENT Devel
+    )
+endif()
