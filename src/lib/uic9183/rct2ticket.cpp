@@ -104,12 +104,13 @@ QDate Rct2Ticket::firstDayOfValidity() const
     return d->firstDayOfValidity();
 }
 
-static const struct {
+static constexpr const struct {
     const char *name; // case folded
     Rct2Ticket::Type type;
 } rct2_ticket_type_map[] = {
-    { "ticket + reservation", Rct2Ticket::TransportReservation },
-    { "fahrschein + reservierung", Rct2Ticket::TransportReservation },
+    { "ticket+reservation", Rct2Ticket::TransportReservation },
+    { "fahrschein+reservierung", Rct2Ticket::TransportReservation },
+    { "menetjegy+helyjegy", Rct2Ticket::TransportReservation },
     { "upgrade", Rct2Ticket::Upgrade },
     { "aufpreis", Rct2Ticket::Upgrade },
     { "ticket", Rct2Ticket::Transport },
@@ -125,8 +126,8 @@ Rct2Ticket::Type Rct2Ticket::type() const
     // in theory: columns 15 - 18 blank, columns 19 - 51 ticket type (1-based indices!)
     // however, some providers overrun and also use the blank columns, so consider those too
     // if they are really empty, we trim them anyway.
-    const auto typeName1 = d->layout.text(0, 14, 38, 1).trimmed().toCaseFolded();
-    const auto typeName2 = d->layout.text(1, 14, 38, 1).trimmed().toCaseFolded(); // used for alternative language type name
+    const auto typeName1 = d->layout.text(0, 14, 38, 1).trimmed().remove(QLatin1Char(' ')).toCaseFolded();
+    const auto typeName2 = d->layout.text(1, 14, 38, 1).trimmed().remove(QLatin1Char(' ')).toCaseFolded(); // used for alternative language type name
 
     // prefer exact matches
     for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
