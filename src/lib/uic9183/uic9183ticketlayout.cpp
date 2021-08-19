@@ -178,7 +178,8 @@ QString Uic9183TicketLayout::text(int row, int column, int width, int height) co
             if (offset >= 0) {
                 s[f.row() + i - row] += lines.at(i).mid(offset).left(width);
             } else {
-                s[f.row() + i - row] += lines.at(i); // TODO left padding by offset, truncate by width + offset
+                s[f.row() + i - row] += QString(-offset, QLatin1Char(' '));
+                s[f.row() + i - row] += lines.at(i); // TODO truncate by width + offset
             }
         }
     }

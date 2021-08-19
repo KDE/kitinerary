@@ -151,12 +151,12 @@ QString Rct2Ticket::passengerName() const
 
 QDateTime Rct2Ticket::outboundDepartureTime() const
 {
-    return d->parseTime(d->layout.text(6, 1, 5, 1), d->layout.text(6, 7, 5, 1));
+    return d->parseTime(d->layout.text(6, 1, 5, 1).trimmed(), d->layout.text(6, 7, 5, 1).trimmed());
 }
 
 QDateTime Rct2Ticket::outboundArrivalTime() const
 {
-    return d->parseTime(d->layout.text(6, 52, 5, 1), d->layout.text(6, 58, 5, 1));
+    return d->parseTime(d->layout.text(6, 52, 5, 1).trimmed(), d->layout.text(6, 58, 5, 1).trimmed());
 }
 
 QString Rct2Ticket::outboundDepartureStation() const
