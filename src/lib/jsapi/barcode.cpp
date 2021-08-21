@@ -10,9 +10,6 @@
 #include <pdf/pdfbarcodeutil_p.h>
 
 #include <KItinerary/PdfDocument>
-#include <KItinerary/Uic9183Parser>
-#include <KItinerary/VdvTicket>
-#include <KItinerary/VdvTicketParser>
 
 #include <QImage>
 
@@ -78,25 +75,6 @@ QString JsApi::Barcode::decodeBarcode(const QVariant &img, BarcodeDecoder::Barco
         return m_decoder->decodeString(pdfImg.image(), hints);
     }
     return {};
-}
-
-QVariant JsApi::Barcode::decodeUic9183(const QVariant &s) const
-{
-    Uic9183Parser p;
-    p.parse(s.toByteArray());
-    if (!p.isValid()) {
-        return {};
-    }
-    return QVariant::fromValue(p);
-}
-
-QVariant JsApi::Barcode::decodeVdvTicket(const QVariant &s) const
-{
-    VdvTicketParser p;
-    if (!p.parse(s.toByteArray())) {
-        return {};
-    }
-    return QVariant::fromValue(p.ticket());
 }
 
 QVariant JsApi::Barcode::decodeEraSsbTicket(const QVariant &s, int versionOverride) const

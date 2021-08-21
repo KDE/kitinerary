@@ -50,16 +50,6 @@ public:
      */
     Q_INVOKABLE QString decodeAnyBarcode(const QVariant &img) const;
 
-    /** Decode an UIC 918.3 message from a train ticket Aztec code.
-     *  @param s A QByteArray containing the raw data from the barcode.
-     *  @returns An instance of Uic9183Parser.
-     */
-    Q_INVOKABLE QVariant decodeUic9183(const QVariant &s) const;
-    /** Decode an VDV ticket barcode.
-     *  @param s A QByteArray containing the raw VDV barcode data.
-     *  @returns An instance of VdvTicket.
-     */
-    Q_INVOKABLE QVariant decodeVdvTicket(const QVariant &s) const;
     /** Decode an ERA SSB ticket barcode.
      *  @param s A QByteArray containing the raw ERA SSB barcode data.
      *  @param versionOverride Override version auto-detection. Useful for tickets that are known to
