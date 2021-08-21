@@ -1,0 +1,16 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Rct2Ticket",
+        "coachNumber": "23",
+        "outboundArrivalStation": "MUENCHEN HBF",
+        "outboundArrivalTime": "2018-08-19T14:32:00",
+        "outboundClass": "2",
+        "outboundDepartureStation": "BUDAPEST-KELETI",
+        "outboundDepartureTime": "2018-08-19T07:40:00",
+        "passengerName": "Jőhn Á Doe",
+        "seatNumber": "101, 102",
+        "trainNumber": "RJX 42",
+        "type": "http://schema.org/TransportReservation"
+    }
+]

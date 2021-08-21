@@ -10,6 +10,7 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QRegularExpression>
 
 #include <cstring>
 
@@ -22,6 +23,7 @@ class Rct2TicketPrivate : public QSharedData
 public:
     QDate firstDayOfValidity() const;
     QDateTime parseTime(const QString &dateStr, const QString &timeStr) const;
+    QString reservationPatternCapture(QStringView name) const;
 
     Uic9183TicketLayout layout;
     QDateTime contextDt;
@@ -67,6 +69,24 @@ QDateTime Rct2TicketPrivate::parseTime(const QString &dateStr, const QString &ti
     return QDateTime({year, d.month(), d.day()}, t);
 }
 
+static constexpr const char* res_patterns[] = {
+    "ZUG +(?P<train_number>\\d+) +(?P<train_category>[A-Z][A-Z0-9]+) +WAGEN +(?P<coach>\\d+) +PLATZ +(?P<seat>\\d[\\d, ]+)"
+};
+
+QString Rct2TicketPrivate::reservationPatternCapture(QStringView name) const
+{
+    const auto text = layout.text(8, 0, 72, 1);
+    for (const auto *pattern : res_patterns) {
+        QRegularExpression re{QLatin1String(pattern), QRegularExpression::CaseInsensitiveOption};
+        Q_ASSERT(re.isValid());
+        const auto match = re.match(text);
+        if (match.hasMatch()) {
+            return match.captured(name);
+        }
+    }
+    return {};
+}
+
 
 // 6x "U_TLAY"
 // 2x version (always "01")
@@ -104,12 +124,13 @@ QDate Rct2Ticket::firstDayOfValidity() const
     return d->firstDayOfValidity();
 }
 
-static const struct {
+static constexpr const struct {
     const char *name; // case folded
     Rct2Ticket::Type type;
 } rct2_ticket_type_map[] = {
-    { "ticket + reservation", Rct2Ticket::TransportReservation },
-    { "fahrschein + reservierung", Rct2Ticket::TransportReservation },
+    { "ticket+reservation", Rct2Ticket::TransportReservation },
+    { "fahrschein+reservierung", Rct2Ticket::TransportReservation },
+    { "menetjegy+helyjegy", Rct2Ticket::TransportReservation },
     { "upgrade", Rct2Ticket::Upgrade },
     { "aufpreis", Rct2Ticket::Upgrade },
     { "ticket", Rct2Ticket::Transport },
@@ -125,8 +146,8 @@ Rct2Ticket::Type Rct2Ticket::type() const
     // in theory: columns 15 - 18 blank, columns 19 - 51 ticket type (1-based indices!)
     // however, some providers overrun and also use the blank columns, so consider those too
     // if they are really empty, we trim them anyway.
-    const auto typeName1 = d->layout.text(0, 14, 38, 1).trimmed().toCaseFolded();
-    const auto typeName2 = d->layout.text(1, 14, 38, 1).trimmed().toCaseFolded(); // used for alternative language type name
+    const auto typeName1 = d->layout.text(0, 14, 38, 1).trimmed().remove(QLatin1Char(' ')).toCaseFolded();
+    const auto typeName2 = d->layout.text(1, 14, 38, 1).trimmed().remove(QLatin1Char(' ')).toCaseFolded(); // used for alternative language type name
 
     // prefer exact matches
     for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
@@ -150,12 +171,12 @@ QString Rct2Ticket::passengerName() const
 
 QDateTime Rct2Ticket::outboundDepartureTime() const
 {
-    return d->parseTime(d->layout.text(6, 1, 5, 1), d->layout.text(6, 7, 5, 1));
+    return d->parseTime(d->layout.text(6, 1, 5, 1).trimmed(), d->layout.text(6, 7, 5, 1).trimmed());
 }
 
 QDateTime Rct2Ticket::outboundArrivalTime() const
 {
-    return d->parseTime(d->layout.text(6, 52, 5, 1), d->layout.text(6, 58, 5, 1));
+    return d->parseTime(d->layout.text(6, 52, 5, 1).trimmed(), d->layout.text(6, 58, 5, 1).trimmed());
 }
 
 QString Rct2Ticket::outboundDepartureStation() const
@@ -185,8 +206,13 @@ QString Rct2Ticket::trainNumber() const
 {
     const auto t = type();
     if (t == Reservation || t == TransportReservation || t == Upgrade) {
+        auto num = d->reservationPatternCapture(u"train_number");
+        if (!num.isEmpty()) {
+            return d->reservationPatternCapture(u"train_category") + QLatin1Char(' ') + num;
+        }
+
         const auto cat = d->layout.text(8, 13, 3, 1).trimmed();
-        auto num = d->layout.text(8, 7, 5, 1).trimmed();
+        num = d->layout.text(8, 7, 5, 1).trimmed();
 
         // check for train number bleeding into our left neighbour field (happens e.g. on ÖBB IRT/RES tickets)
         if (num.isEmpty() || num.at(0).isDigit()) {
@@ -213,7 +239,8 @@ QString Rct2Ticket::coachNumber() const
 {
     const auto t = type();
     if (t == Reservation || t == TransportReservation) {
-        return d->layout.text(8, 26, 3, 1).trimmed();
+        const auto coach = d->reservationPatternCapture(u"coach");
+        return coach.isEmpty() ? d->layout.text(8, 26, 3, 1).trimmed() : coach;
     }
     return {};
 }
@@ -222,6 +249,11 @@ QString Rct2Ticket::seatNumber() const
 {
     const auto t = type();
     if (t == Reservation || t == TransportReservation) {
+        const auto seat = d->reservationPatternCapture(u"seat");
+        if (!seat.isEmpty()) {
+            return seat;
+        }
+
         const auto row8 = d->layout.text(8, 48, 23, 1).trimmed();
         if (!row8.isEmpty()) {
             return row8;

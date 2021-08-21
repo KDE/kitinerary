@@ -78,6 +78,8 @@
         <file>korail.js</file>
         <file>lufthansa.json</file>
         <file>lufthansa-pkpass.js</file>
+        <file>mav.json</file>
+        <file>mav.js</file>
         <file>nationalexpress.json</file>
         <file>nationalexpress.js</file>
         <file>nh-hotels.json</file>
