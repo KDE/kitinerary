@@ -9,7 +9,6 @@
 #include <era/ssbticketreader.h>
 #include <pdf/pdfbarcodeutil_p.h>
 
-#include <KItinerary/BarcodeDecoder>
 #include <KItinerary/PdfDocument>
 #include <KItinerary/Uic9183Parser>
 #include <KItinerary/VdvTicket>
@@ -26,26 +25,12 @@ void JsApi::Barcode::setDecoder(BarcodeDecoder *decoder)
 
 QString JsApi::Barcode::decodePdf417(const QVariant &img) const
 {
-    if (img.userType() == qMetaTypeId<PdfImage>()) {
-        const auto pdfImg = img.value<PdfImage>();
-        if (!PdfBarcodeUtil::maybeBarcode(pdfImg, BarcodeDecoder::PDF417)) {
-            return {};
-        }
-        return m_decoder->decodeString(pdfImg.image(), BarcodeDecoder::PDF417);
-    }
-    return {};
+    return decodeBarcode(img, BarcodeDecoder::PDF417);
 }
 
 QString JsApi::Barcode::decodeAztec(const QVariant &img) const
 {
-    if (img.userType() == qMetaTypeId<PdfImage>()) {
-        const auto pdfImg = img.value<PdfImage>();
-        if (!PdfBarcodeUtil::maybeBarcode(pdfImg, BarcodeDecoder::Aztec)) {
-            return {};
-        }
-        return m_decoder->decodeString(pdfImg.image(), BarcodeDecoder::Aztec);
-    }
-    return {};
+    return decodeBarcode(img, BarcodeDecoder::Aztec);
 }
 
 QVariant JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
@@ -66,26 +51,12 @@ QVariant JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
 
 QString JsApi::Barcode::decodeQR(const QVariant &img) const
 {
-    if (img.userType() == qMetaTypeId<PdfImage>()) {
-        const auto pdfImg = img.value<PdfImage>();
-        if (!PdfBarcodeUtil::maybeBarcode(pdfImg, BarcodeDecoder::QRCode)) {
-            return {};
-        }
-        return m_decoder->decodeString(pdfImg.image(), BarcodeDecoder::QRCode);
-    }
-    return {};
+    return decodeBarcode(img, BarcodeDecoder::QRCode);
 }
 
 QString JsApi::Barcode::decodeDataMatrix(const QVariant &img) const
 {
-    if (img.userType() == qMetaTypeId<PdfImage>()) {
-        const auto pdfImg = img.value<PdfImage>();
-        if (!PdfBarcodeUtil::maybeBarcode(pdfImg, BarcodeDecoder::DataMatrix)) {
-            return {};
-        }
-        return m_decoder->decodeString(pdfImg.image(), BarcodeDecoder::DataMatrix);
-    }
-    return {};
+    return decodeBarcode(img, BarcodeDecoder::DataMatrix);
 }
 
 QString JsApi::Barcode::decodeAnyBarcode(const QVariant& img) const
@@ -93,6 +64,18 @@ QString JsApi::Barcode::decodeAnyBarcode(const QVariant& img) const
     if (img.userType() == qMetaTypeId<PdfImage>()) {
         const auto pdfImg = img.value<PdfImage>();
         return m_decoder->decodeString(pdfImg.image(), BarcodeDecoder::Any | BarcodeDecoder::IgnoreAspectRatio);
+    }
+    return {};
+}
+
+QString JsApi::Barcode::decodeBarcode(const QVariant &img, BarcodeDecoder::BarcodeTypes hints) const
+{
+    if (img.userType() == qMetaTypeId<PdfImage>()) {
+        const auto pdfImg = img.value<PdfImage>();
+        if (!PdfBarcodeUtil::maybeBarcode(pdfImg, hints)) {
+            return {};
+        }
+        return m_decoder->decodeString(pdfImg.image(), hints);
     }
     return {};
 }

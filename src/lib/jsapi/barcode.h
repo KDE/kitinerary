@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <KItinerary/BarcodeDecoder>
+
 #include <QDateTime>
 #include <QObject>
 
@@ -83,6 +85,8 @@ public:
     ///@endcond
 
 private:
+    QString decodeBarcode(const QVariant &img, BarcodeDecoder::BarcodeTypes hints) const;
+
     QDateTime m_contextDate;
     BarcodeDecoder *m_decoder = nullptr;
 };
