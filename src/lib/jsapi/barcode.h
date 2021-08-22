@@ -70,14 +70,12 @@ public:
     Q_INVOKABLE QString byteArrayToString(const QVariant &b) const;
 
     ///@cond internal
-    void setContextDate(const QDateTime &dt);
     void setDecoder(BarcodeDecoder *decoder);
     ///@endcond
 
 private:
     QString decodeBarcode(const QVariant &img, BarcodeDecoder::BarcodeTypes hints) const;
 
-    QDateTime m_contextDate;
     BarcodeDecoder *m_decoder = nullptr;
 };
 

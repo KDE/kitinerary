@@ -97,11 +97,6 @@ QVariant JsApi::Barcode::toBitArray(const QVariant &b) const
     return QVariant::fromValue(JsApi::BitArray(b.toByteArray()));
 }
 
-void JsApi::Barcode::setContextDate(const QDateTime &dt)
-{
-    m_contextDate = dt;
-}
-
 QString JsApi::Barcode::byteArrayToString(const QVariant &b) const
 {
     const auto ba = b.toByteArray();

@@ -145,7 +145,6 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
     });
 
     d->m_jsonLdApi->setContextDate(node.contextDateTime());
-    d->m_barcodeApi->setContextDate(node.contextDateTime());
 
     const auto nodeArg = d->m_engine.toScriptValue(node);
     const auto dataArg = nodeArg.property(QLatin1String("content"));
