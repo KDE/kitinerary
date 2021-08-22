@@ -5,7 +5,6 @@
 */
 
 #include "barcode.h"
-#include "bitarray.h"
 #include <era/ssbticketreader.h>
 #include <pdf/pdfbarcodeutil_p.h>
 
@@ -80,11 +79,6 @@ QString JsApi::Barcode::decodeBarcode(const QVariant &img, BarcodeDecoder::Barco
 QVariant JsApi::Barcode::decodeEraSsbTicket(const QVariant &s, int versionOverride) const
 {
     return SSBTicketReader::read(s.toByteArray(), versionOverride);
-}
-
-QVariant JsApi::Barcode::toBitArray(const QVariant &b) const
-{
-    return QVariant::fromValue(JsApi::BitArray(b.toByteArray()));
 }
 
 #include "moc_barcode.cpp"

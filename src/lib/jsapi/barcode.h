@@ -58,9 +58,6 @@ public:
      */
     Q_INVOKABLE QVariant decodeEraSsbTicket(const QVariant &s, int versionOverride = 0) const;
 
-    /** Converts the given QByteArray into a BitArray. */
-    Q_INVOKABLE QVariant toBitArray(const QVariant &b) const;
-
     ///@cond internal
     void setDecoder(BarcodeDecoder *decoder);
     ///@endcond

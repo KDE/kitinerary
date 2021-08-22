@@ -64,7 +64,7 @@ function parsePdf(pdf) {
                 personalRes.programMembershipUsed.programName = "CartaFRECCIA";
             }
 
-            var bitArray = Barcode.toBitArray(barcode);
+            var bitArray = ByteArray.toBitArray(barcode);
             var seatNum = bitArray.readNumberMSB(31*8 + 2, 7);
             if (seatNum > 0) {
                 personalRes.reservedTicket.ticketedSeat.seatNumber = "" + seatNum;

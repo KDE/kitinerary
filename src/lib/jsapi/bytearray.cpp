@@ -5,6 +5,7 @@
 */
 
 #include "bytearray.h"
+#include "bitarray.h"
 #include "logging.h"
 
 #include <QQmlEngine>
@@ -62,6 +63,11 @@ QString JsApi::ByteArray::decodeUtf8(const QByteArray &input) const
 QString JsApi::ByteArray::decodeLatin1(const QByteArray &input) const
 {
     return QString::fromLatin1(input.constData(), input.size());
+}
+
+QVariant JsApi::ByteArray::toBitArray(const QByteArray &input) const
+{
+    return QVariant::fromValue(JsApi::BitArray(input));
 }
 
 QJSValue JsApi::ByteArray::toArrayBuffer(const QByteArray &input) const

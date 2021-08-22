@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QJSValue>
+#include <QVariant>
 
 class QByteArray;
 
@@ -34,6 +35,9 @@ public:
     Q_INVOKABLE QString decodeUtf8(const QByteArray &input) const;
     /** Convert a QByteArray/ArrayBuffer to a string, assuming Latin1 encoding. */
     Q_INVOKABLE QString decodeLatin1(const QByteArray &input) const;
+
+    /** Converts the given QByteArray or JS ArrayBuffer into a BitArray. */
+    Q_INVOKABLE QVariant toBitArray(const QByteArray &input) const;
 
     /** Convert a QByteArray to a JS ArrayBuffer.
      *  This is mainly a migration aid until we return ArrayBuffers everywhere.
