@@ -49,6 +49,7 @@ target_sources(KPimItinerary PRIVATE
 
     jsapi/barcode.cpp
     jsapi/bitarray.cpp
+    jsapi/bytearray.cpp
     jsapi/jsonld.cpp
 
     knowledgedb/alphaid.cpp
@@ -142,6 +143,7 @@ target_link_libraries(KPimItinerary
         KF5::Mime
     PRIVATE
         Qt::Qml
+        Qt::QmlPrivate
         KF5::Archive
         KF5::I18n
         KF5::Contacts

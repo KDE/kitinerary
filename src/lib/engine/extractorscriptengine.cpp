@@ -12,6 +12,7 @@
 #include "logging.h"
 
 #include "jsapi/barcode.h"
+#include "jsapi/bytearray.h"
 #include "jsapi/jsonld.h"
 
 #include <QFile>
@@ -60,6 +61,7 @@ void ExtractorScriptEngine::ensureInitialized()
     d->m_engine.globalObject().setProperty(QStringLiteral("JsonLd"), d->m_engine.newQObject(d->m_jsonLdApi));
     d->m_barcodeApi = new JsApi::Barcode;
     d->m_engine.globalObject().setProperty(QStringLiteral("Barcode"), d->m_engine.newQObject(d->m_barcodeApi));
+    d->m_engine.globalObject().setProperty(QStringLiteral("ByteArray"), d->m_engine.newQObject(new JsApi::ByteArray));
 
     d->m_watchdogThread.start();
     d->m_watchdogTimer = new QTimer;

@@ -21,6 +21,19 @@ function parseTicket(pdf, node, triggerNode) {
         res.reservationFor.trainNumber = trip[6];
         res.reservedTicket.ticketedSeat.seatingType = trip[7];
         res.reservedTicket.ticketToken = "pdf417bin:" + Barcode.toBase64(triggerNode.content);
+
+        // see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
+        const outer = ByteArray.toArrayBuffer(triggerNode.content);
+        const inner = ByteArray.inflate(outer.slice(2));
+        if (inner.byteLength >=  217) {
+            const view = new DataView(inner);
+            res.reservationFor.departureStation.identifier = "uic:" + (view.getUint32(106, false) & 0xffffff);
+            res.reservationFor.arrivalStation.identifier = "uic:" + (view.getUint32(109, false) & 0xffffff);
+            res.reservationFor.provider.identifier = "uic:" + view.getUint16(18, false);
+            res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
+            res.underName.name = ByteArray.decodeUtf8(inner.slice(39, 39 + 45));
+        }
+
         reservations.push(res);
     }
     return reservations;
