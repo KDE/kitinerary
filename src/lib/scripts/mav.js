@@ -20,7 +20,7 @@ function parseTicket(pdf, node, triggerNode) {
         res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[1] + trip[5], "yyyy.MM.ddhh:mm", "hu");
         res.reservationFor.trainNumber = trip[6];
         res.reservedTicket.ticketedSeat.seatingType = trip[7];
-        res.reservedTicket.ticketToken = "pdf417bin:" + Barcode.toBase64(triggerNode.content);
+        res.reservedTicket.ticketToken = "pdf417bin:" + ByteArray.toBase64(triggerNode.content);
 
         // see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
         const outer = ByteArray.toArrayBuffer(triggerNode.content);

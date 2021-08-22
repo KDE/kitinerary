@@ -44,9 +44,24 @@ QJSValue JsApi::ByteArray::inflate(const QByteArray &input) const
     return toArrayBuffer(output);
 }
 
+QString JsApi::ByteArray::toBase64(const QByteArray &input) const
+{
+    return QString::fromUtf8(input.toBase64());
+}
+
+QJSValue JsApi::ByteArray::fromBase64(const QString &b64) const
+{
+    return toArrayBuffer(QByteArray::fromBase64(b64.toUtf8()));
+}
+
 QString JsApi::ByteArray::decodeUtf8(const QByteArray &input) const
 {
     return QString::fromUtf8(input);
+}
+
+QString JsApi::ByteArray::decodeLatin1(const QByteArray &input) const
+{
+    return QString::fromLatin1(input.constData(), input.size());
 }
 
 QJSValue JsApi::ByteArray::toArrayBuffer(const QByteArray &input) const

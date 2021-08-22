@@ -26,7 +26,7 @@ function parseSsbBarcode(ssb, node)
     res.reservationFor.arrivalStation.identifier = "vrfi:" + ssb.arrivalStationAlpha;
     res.reservationFor.provider.identifier = "uic:" + ssb.issuerCode;
 
-    res.reservedTicket.ticketToken = "aztectbin:" + Barcode.toBase64(ssb.rawData);
+    res.reservedTicket.ticketToken = "aztectbin:" + ByteArray.toBase64(ssb.rawData);
     res.reservedTicket.ticketedSeat.seatingType = ssb.classOfTransport;
 
     if (ssb.coachNumber > 0) {

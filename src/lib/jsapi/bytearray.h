@@ -25,8 +25,15 @@ public:
      */
     Q_INVOKABLE QJSValue inflate(const QByteArray &input) const;
 
+    /** Converts the given QByteArray or JS ArrayBuffer into an base64 encoded string. */
+    Q_INVOKABLE QString toBase64(const QByteArray &input) const;
+    /** Converts a given Base64 encoded string to a JS ArrayBuffer. */
+    Q_INVOKABLE QJSValue fromBase64(const QString &b64) const;
+
     /** Convert a QByteArray/ArrayBuffer to a string, assuming UTF-8 encoding. */
     Q_INVOKABLE QString decodeUtf8(const QByteArray &input) const;
+    /** Convert a QByteArray/ArrayBuffer to a string, assuming Latin1 encoding. */
+    Q_INVOKABLE QString decodeLatin1(const QByteArray &input) const;
 
     /** Convert a QByteArray to a JS ArrayBuffer.
      *  This is mainly a migration aid until we return ArrayBuffers everywhere.

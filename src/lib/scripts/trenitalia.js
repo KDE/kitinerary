@@ -37,7 +37,7 @@ function parsePdf(pdf) {
         var offset = 0;
         for (var j = 0; j < images.length; ++j) {
             var barcode = Barcode.decodeAztecBinary(images[j]);
-            var barcodeB64 = Barcode.toBase64(barcode);
+            var barcodeB64 = ByteArray.toBase64(barcode);
             if (!barcodeB64)
                 continue;
 
