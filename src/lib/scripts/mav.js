@@ -23,8 +23,7 @@ function parseTicket(pdf, node, triggerNode) {
         res.reservedTicket.ticketToken = "pdf417bin:" + ByteArray.toBase64(triggerNode.content);
 
         // see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
-        const outer = ByteArray.toArrayBuffer(triggerNode.content);
-        const inner = ByteArray.inflate(outer.slice(2));
+        const inner = ByteArray.inflate(triggerNode.content.slice(2));
         if (inner.byteLength >=  217) {
             const view = new DataView(inner);
             res.reservationFor.departureStation.identifier = "uic:" + (view.getUint32(106, false) & 0xffffff);

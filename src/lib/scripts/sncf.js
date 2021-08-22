@@ -234,17 +234,17 @@ function parseSecutixPdf(pdf, node, triggerNode)
 {
     // see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes#SNCF_Secutix_Tickets
     var res = JsonLd.newTrainReservation();
-    var code = ByteArray.decodeLatin1(triggerNode.content);
-    res.reservationNumber = code.substr(268, 9);
-    res.reservationFor.departureStation.name = code.substr(277, 5);
-    res.reservationFor.departureStation.identifier = "sncf:" + code.substr(277, 5);
-    res.reservationFor.arrivalStation.name = code.substr(282, 5);
-    res.reservationFor.arrivalStation.identifier = "sncf:" + code.substr(282, 5);
-    res.reservationFor.departureDay = JsonLd.toDateTime(code.substr(343, 8), "ddMMyyyy", "fr");
-    res.reservedTicket.ticketedSeat.seatingType = code.substr(351, 1);
+    var code = ByteArray.decodeLatin1(triggerNode.content.slice(260));
+    res.reservationNumber = code.substr(8, 9);
+    res.reservationFor.departureStation.name = code.substr(17, 5);
+    res.reservationFor.departureStation.identifier = "sncf:" + code.substr(17, 5);
+    res.reservationFor.arrivalStation.name = code.substr(22, 5);
+    res.reservationFor.arrivalStation.identifier = "sncf:" + code.substr(22, 5);
+    res.reservationFor.departureDay = JsonLd.toDateTime(code.substr(83, 8), "ddMMyyyy", "fr");
+    res.reservedTicket.ticketedSeat.seatingType = code.substr(91, 1);
     res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content);
-    res.underName.familyName = code.substr(376, 19);
-    res.underName.givenName = code.substr(395, 19);
+    res.underName.familyName = code.substr(116, 19);
+    res.underName.givenName = code.substr(135, 19);
 
     var text = pdf.pages[triggerNode.location].text;
     var pnr = text.match(res.reservationNumber + '[^\n]* ([A-Z0-9]{6})\n');

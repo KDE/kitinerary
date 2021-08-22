@@ -62,7 +62,7 @@ QString JsApi::ByteArray::decodeUtf8(const QByteArray &input) const
 
 QString JsApi::ByteArray::decodeLatin1(const QByteArray &input) const
 {
-    return QString::fromLatin1(input.constData(), input.size());
+    return QString::fromLatin1(input);
 }
 
 QVariant JsApi::ByteArray::toBitArray(const QByteArray &input) const

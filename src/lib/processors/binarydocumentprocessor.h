@@ -16,6 +16,7 @@ class BinaryDocumentProcessor : public ExtractorDocumentProcessor
 public:
     ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
     bool matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const override;
+    QJSValue contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const override;
 };
 
 }
