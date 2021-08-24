@@ -24,13 +24,22 @@ function parseTicket(pdf, node, triggerNode) {
 
         // see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
         const inner = ByteArray.inflate(triggerNode.content.slice(2));
-        if (inner.byteLength >=  217) {
-            const view = new DataView(inner);
+        const view = new DataView(inner);
+        if (view.getUInt8(28) == 0x81) {
             res.reservationFor.departureStation.identifier = "uic:" + (view.getUint32(106, false) & 0xffffff);
             res.reservationFor.arrivalStation.identifier = "uic:" + (view.getUint32(109, false) & 0xffffff);
             res.reservationFor.provider.identifier = "uic:" + view.getUint16(18, false);
             res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
             res.underName.name = ByteArray.decodeUtf8(inner.slice(39, 39 + 45));
+        }
+        for (var i = 0; i < view.getUInt8(30); ++i) {
+            const seatBlock = inner.slice(inner.byteLength - ((i+1) *57));
+            const seatView = new DataView(seatBlock);
+            if (seatView.getUInt8(22) == 0) { // surcharge block
+                continue;
+            }
+            res.reservedTicket.ticketedSeat.seatSection = ByteArray.decodeUtf8(seatBlock.slice(22, 25));
+            res.reservedTicket.ticketedSeat.seatNumber = seatView.getUInt16(25, false);
         }
 
         reservations.push(res);
