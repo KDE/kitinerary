@@ -55,7 +55,8 @@ public:
         QRCode, ///< QR code
         AztecCode, ///< Aztec code
         Code128, ///< Code 128 barcode
-        DataMatrix ///< A DataMatrix barcode
+        DataMatrix, ///< A DataMatrix barcode
+        PDF417, ///< A PDF417 barcode
     };
     Q_ENUM(TicketTokenType)
 

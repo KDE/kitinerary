@@ -53,6 +53,8 @@ Ticket::TicketTokenType Ticket::ticketTokenType() const
         return Code128;
     } else if (d->ticketToken.startsWith(QLatin1String("datamatrix:"), Qt::CaseInsensitive)) {
         return DataMatrix;
+    } else if (d->ticketToken.startsWith(QLatin1String("pdf417"), Qt::CaseInsensitive)) {
+        return PDF417;
     } else if (d->ticketToken.startsWith(QLatin1String("http"), Qt::CaseInsensitive)) {
         return Url;
     }
@@ -72,6 +74,11 @@ QString Ticket::ticketTokenData() const
         return ticketToken().mid(11);
     } else if (d->ticketToken.startsWith(QLatin1String("datamatrix:"), Qt::CaseInsensitive)) {
         return ticketToken().mid(11);
+    } else if (d->ticketToken.startsWith(QLatin1String("pdf417:"), Qt::CaseInsensitive)) {
+        return ticketToken().mid(7);
+    } else if (d->ticketToken.startsWith(QLatin1String("pdf417bin:"), Qt::CaseInsensitive)) {
+        const auto b = QByteArray::fromBase64(d->ticketToken.midRef(10).toLatin1());
+        return QString::fromLatin1(b.constData(), b.size());
     }
     return ticketToken();
 }
