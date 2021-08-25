@@ -266,16 +266,16 @@ function parseSecutixPdf(pdf, node, triggerNode)
     return reservations;
 }
 
-function parseOuigoEmail(html)
+function parseOuiEmail(html)
 {
     if (html.eval('//*[@data-select="travel-summary-reference"]').length > 0) {
-        return parseOuigoSummary(html);
+        return parseOuiSummary(html);
     } else {
-        return parseOuigoConfirmation(html);
+        return parseOuiConfirmation(html);
     }
 }
 
-function parseOuigoSummaryTime(htmlElem)
+function parseOuiSummaryTime(htmlElem)
 {
     var timeStr = htmlElem[0].recursiveContent;
     var time = timeStr.match(/(\d+ [^ ]+ \d+) +[^ ]+ (\d+:\d+)/);
@@ -286,7 +286,7 @@ function parseOuigoSummaryTime(htmlElem)
     return JsonLd.toDateTime(time[1] + time[2].replace('h', ':'), "d MMMMhh:mm", "fr");
 }
 
-function parseOuigoSummary(html)
+function parseOuiSummary(html)
 {
     // TODO extract passenger names
     var res = JsonLd.newTrainReservation();
@@ -296,7 +296,7 @@ function parseOuigoSummary(html)
     res.reservationFor.arrivalStation.name = destinations[0].content;
     res.reservationNumber = html.eval('//*[@data-select="travel-summary-reference"]')[0].content;
 
-    res.reservationFor.departureTime = parseOuigoSummaryTime(html.eval('//*[@data-select="travel-departureDate"]'));
+    res.reservationFor.departureTime = parseOuiSummaryTime(html.eval('//*[@data-select="travel-departureDate"]'));
 
     var trainNum = html.eval('//*[@data-select="passenger-detail-outwardFares"]//*[@class="passenger-detail__equipment"]');
     if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
@@ -313,7 +313,7 @@ function parseOuigoSummary(html)
     var retour = JsonLd.newTrainReservation();
     retour.reservationFor.departureStation.name = origins[1] ? origins[1].content : res.reservationFor.arrivalStation.name;
     retour.reservationFor.arrivalStation.name = destinations[1] ? destinations[1].content : res.reservationFor.departureStation.name;
-    retour.reservationFor.departureTime = parseOuigoSummaryTime(retourTime);
+    retour.reservationFor.departureTime = parseOuiSummaryTime(retourTime);
     trainNum = html.eval('//*[@data-select="passenger-detail-inwardFares"]//*[@class="passenger-detail__equipment"]');
     if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
         retour.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
@@ -322,7 +322,7 @@ function parseOuigoSummary(html)
     return [res, retour];
 }
 
-function parseOuigoConfirmation(html)
+function parseOuiConfirmation(html)
 {
     var reservations = new Array();
 
@@ -430,6 +430,38 @@ function parseTerConfirmation(html) {
         res.reservationNumber = refNum;
         res.underName.name = name;
         reservations.push(res);
+    }
+    return reservations;
+}
+
+function parseOuigoConfirmation(html) {
+    var reservations = new Array();
+    const refNum = html.eval('//strong')[1].content;
+    const tabs = html.eval('//table//table//table[@class = "rsz_320"]');
+    for (const tab of tabs) {
+        const text = tab.recursiveContent;
+        if (!text.match(/TRAJET/)) {
+            continue;
+        }
+
+        var idx = 0;
+        while (true) {
+            const date = text.substr(idx).match(/\w+ (\d{1,2} \w+ \d{4})/);
+            if (!date) {
+                break;
+            }
+            const leg = text.substr(idx).match(/(\d{2}h\d{2})\s+(.*?)\n\s+(\d{2}h\d{2})\s+(.*?)\n\s+TRAIN N° *(.*)\n/);
+            var res = JsonLd.newTrainReservation();
+            res.reservationNumber = refNum;
+            res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + leg[1], "d MMMM yyyyhh'h'mm", "fr");
+            res.reservationFor.departureStation.name = leg[2];
+            res.reservationFor.arrivalStation.name = leg[4];
+            res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + leg[3],  "d MMMM yyyyhh'h'mm", "fr");
+            res.reservationFor.trainNumber = leg[5];
+            reservations.push(res);
+
+            idx += leg[0].length + leg.index;
+        }
     }
     return reservations;
 }

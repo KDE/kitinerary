@@ -96,6 +96,8 @@
         <file>regiondo.js</file>
         <file>renfe.json</file>
         <file>renfe.js</file>
+        <file>ryanair.json</file>
+        <file>ryanair.js</file>
         <file>sas.json</file>
         <file>sas-boardingpass.js</file>
         <file>sas-receipt.js</file>

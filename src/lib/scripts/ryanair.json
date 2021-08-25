@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "operatingCarrierDesignator",
+            "match": "FR",
+            "mimeType": "internal/iata-bcbp",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parseBoardingPass",
+    "mimeType": "application/pdf",
+    "script": "ryanair.js"
+}

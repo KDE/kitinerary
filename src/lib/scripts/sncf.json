@@ -63,7 +63,7 @@
                 "scope": "Ancestors"
             }
         ],
-        "function": "parseOuigoEmail",
+        "function": "parseOuiEmail",
         "mimeType": "text/html",
         "script": "sncf.js"
     },
@@ -96,6 +96,19 @@
             }
         ],
         "function": "parseTerConfirmation",
+        "mimeType": "text/html",
+        "script": "sncf.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "ne-pas-repondre@pasngr.ouigo.com",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "parseOuigoConfirmation",
         "mimeType": "text/html",
         "script": "sncf.js"
     }
