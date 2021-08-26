@@ -240,6 +240,14 @@ ecm_generate_headers(KItinerary_Engine_FORWARDING_HEADERS
     REQUIRED_HEADERS KItinerary_Engine_HEADERS
     RELATIVE engine
 )
+ecm_generate_headers(KItinerary_Iata_FORWARDING_HEADERS
+    HEADER_NAMES
+        IataBcbp
+        IataBcbpSections
+    PREFIX KItinerary
+    REQUIRED_HEADERS KItinerary_Iata_HEADERS
+    RELATIVE iata
+)
 ecm_generate_headers(KItinerary_Pdf_FORWARDING_HEADERS
     HEADER_NAMES
         PdfDocument
@@ -276,6 +284,7 @@ install(FILES
     ${KItinerary_KnowledgeDb_FORWARDING_HEADERS}
     ${KItinerary_Datatypes_FORWARDING_HEADERS}
     ${KItinerary_Engine_FORWARDING_HEADERS}
+    ${KItinerary_Iata_FORWARDING_HEADERS}
     ${KItinerary_Pdf_FORWARDING_HEADERS}
     ${KItinerary_Uic9183_FORWARDING_HEADERS}
     ${KItinerary_Vdv_FORWARDING_HEADERS}
@@ -287,6 +296,7 @@ install(FILES
     ${KItinerary_Datatypes_HEADERS}
     ${KItinerary_KnowledgeDb_HEADERS}
     ${KItinerary_Engine_HEADERS}
+    ${KItinerary_Iata_HEADERS}
     ${KItinerary_Pdf_HEADERS}
     ${KItinerary_Uic9183_HEADERS}
     ${KItinerary_Vdv_HEADERS}
