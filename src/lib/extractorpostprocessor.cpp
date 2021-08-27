@@ -158,7 +158,7 @@ void ExtractorPostprocessorPrivate::mergeOrAppend(const QVariant &elem)
 QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservation res) const
 {
     // expand ticketToken for IATA BCBP data
-    const auto bcbp = res.reservedTicket().value<Ticket>().ticketTokenData();
+    const auto bcbp = res.reservedTicket().value<Ticket>().ticketTokenData().toString();
     if (!bcbp.isEmpty()) {
         const auto bcbpData = IataBcbpParser::parse(bcbp, m_contextDate);
         if (bcbpData.size() == 1) {

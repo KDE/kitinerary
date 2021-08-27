@@ -61,15 +61,14 @@ Ticket::TicketTokenType Ticket::ticketTokenType() const
     return Unknown;
 }
 
-QString Ticket::ticketTokenData() const
+QVariant Ticket::ticketTokenData() const
 {
     if (d->ticketToken.startsWith(QLatin1String("qrcode:"), Qt::CaseInsensitive)) {
         return ticketToken().mid(7);
     } else if (d->ticketToken.startsWith(QLatin1String("azteccode:"), Qt::CaseInsensitive)) {
         return ticketToken().mid(10);
     } else if (d->ticketToken.startsWith(QLatin1String("aztecbin:"), Qt::CaseInsensitive)) {
-        const auto b = QByteArray::fromBase64(d->ticketToken.midRef(9).toLatin1());
-        return QString::fromLatin1(b.constData(), b.size());
+        return QByteArray::fromBase64(d->ticketToken.midRef(9).toLatin1());
     } else if (d->ticketToken.startsWith(QLatin1String("barcode128:"), Qt::CaseInsensitive)) {
         return ticketToken().mid(11);
     } else if (d->ticketToken.startsWith(QLatin1String("datamatrix:"), Qt::CaseInsensitive)) {
@@ -77,8 +76,7 @@ QString Ticket::ticketTokenData() const
     } else if (d->ticketToken.startsWith(QLatin1String("pdf417:"), Qt::CaseInsensitive)) {
         return ticketToken().mid(7);
     } else if (d->ticketToken.startsWith(QLatin1String("pdf417bin:"), Qt::CaseInsensitive)) {
-        const auto b = QByteArray::fromBase64(d->ticketToken.midRef(10).toLatin1());
-        return QString::fromLatin1(b.constData(), b.size());
+        return QByteArray::fromBase64(d->ticketToken.midRef(10).toLatin1());
     }
     return ticketToken();
 }

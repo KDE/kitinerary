@@ -39,11 +39,8 @@ static bool equalAndPresent(const QString &lhs, const QString &rhs, Qt::CaseSens
 {
     return !lhs.isEmpty() && (lhs.compare(rhs, caseSensitive) == 0);
 }
-static bool equalAndPresent(const QDate &lhs, const QDate &rhs)
-{
-    return lhs.isValid() && lhs == rhs;
-}
-static bool equalAndPresent(const QDateTime &lhs, const QDateTime &rhs)
+template <typename T>
+static bool equalAndPresent(const T &lhs, const T &rhs)
 {
     return lhs.isValid() && lhs == rhs;
 }
@@ -53,7 +50,8 @@ static bool conflictIfPresent(const QString &lhs, const QString &rhs, Qt::CaseSe
 {
     return !lhs.isEmpty() && !rhs.isEmpty() && lhs.compare(rhs, caseSensitive) != 0;
 }
-static bool conflictIfPresent(const QDateTime &lhs, const QDateTime &rhs)
+template <typename T>
+static bool conflictIfPresent(const T &lhs, const T &rhs)
 {
     return lhs.isValid() && rhs.isValid() && lhs != rhs;
 }

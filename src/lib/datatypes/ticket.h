@@ -44,8 +44,10 @@ class KITINERARY_EXPORT Ticket
 
     /** The type of the content in ticketToken. */
     Q_PROPERTY(TicketTokenType ticketTokenType READ ticketTokenType STORED false)
-    /** The ticket token payload for barcodes, otherwise the same as ticketToken. */
-    Q_PROPERTY(QString ticketTokenData READ ticketTokenData STORED false)
+    /** The ticket token payload for barcodes, otherwise the same as ticketToken.
+     *  For binary content barcodes this is a QByteArray, otherwise a QString.
+     */
+    Q_PROPERTY(QVariant ticketTokenData READ ticketTokenData STORED false)
 
 public:
     /** The type of content in the ticketToken property. */
@@ -61,7 +63,7 @@ public:
     Q_ENUM(TicketTokenType)
 
     TicketTokenType ticketTokenType() const;
-    QString ticketTokenData() const;
+    QVariant ticketTokenData() const;
 private:
     QExplicitlySharedDataPointer<TicketPrivate> d;
 };
