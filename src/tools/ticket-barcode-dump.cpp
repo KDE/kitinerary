@@ -233,7 +233,7 @@ static void dumpVdv(const QByteArray &data)
     std::cout << "  version: " << ticket.trailer()->version << std::endl;
 }
 
-void dumpIataBcbp(const QString &data, const QDate &contextDate)
+void dumpIataBcbp(const QString &data, const QDateTime &contextDate)
 {
     IataBcbp ticket(data);
     if (!ticket.isValid()) {
@@ -255,7 +255,7 @@ void dumpIataBcbp(const QString &data, const QDate &contextDate)
         const auto rcs = ticket.repeatedConditionalSection(i);
         dumpGadget(&rcs, "  ");
         std::cout << "  Airline use section: " << qPrintable(ticket.airlineUseSection(i)) << std::endl;
-        std::cout << "  Date of flight: " << qPrintable(rms.dateOfFlight(issueDate.isValid() ? issueDate : contextDate).toString(Qt::ISODate)) << std::endl;
+        std::cout << "  Date of flight: " << qPrintable(rms.dateOfFlight(issueDate.isValid() ? QDateTime(issueDate, {}) : contextDate).toString(Qt::ISODate)) << std::endl;
     }
 
     if (ticket.hasSecuritySection()) {
@@ -302,7 +302,7 @@ int main(int argc, char **argv)
 
     if (IataBcbp::maybeIataBcbp(data)) {
         std::cout << "IATA Barcoded Boarding Pass" << std::endl;
-        dumpIataBcbp(QString::fromUtf8(data), contextDate);
+        dumpIataBcbp(QString::fromUtf8(data), QDateTime(contextDate, {}));
     } else if (SSBv3Ticket::maybeSSB(data)) {
         std::cout << "ERA SSB Ticket" << std::endl;
         dumpSsbv3Ticket(data);

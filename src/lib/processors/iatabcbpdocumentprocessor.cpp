@@ -31,7 +31,7 @@ ExtractorDocumentNode IataBcbpDocumentProcessor::createNodeFromData(const QByteA
 void IataBcbpDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     const auto bcbp = node.content<IataBcbp>();
-    node.addResult(IataBcbpParser::parse(bcbp, node.contextDateTime().date()));
+    node.addResult(IataBcbpParser::parse(bcbp, node.contextDateTime()));
 }
 
 bool IataBcbpDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const

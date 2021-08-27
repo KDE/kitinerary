@@ -8,7 +8,7 @@
 
 #include "kitinerary_export.h"
 
-#include <QDate>
+#include <QDateTime>
 #include <QMetaType>
 
 namespace KItinerary {
@@ -74,7 +74,7 @@ public:
     explicit IataBcbpUniqueConditionalSection(QStringView data);
     bool isValid() const;
 
-    Q_INVOKABLE QDate dateOfIssue(const QDate &contextDate = QDate::currentDate()) const;
+    Q_INVOKABLE QDate dateOfIssue(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 };
 
 /** Repeated mandatory sections of an IATA BCBP, occurs once per leg. */
@@ -102,7 +102,7 @@ public:
      *  @param contextDate A date before the flight to determine
      *  the full year which is not specified in the pass itself.
      */
-    Q_INVOKABLE QDate dateOfFlight(const QDate &contextDate = QDate::currentDate()) const;
+    Q_INVOKABLE QDate dateOfFlight(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 };
 
 /** Conditional (optional) sections of an IATA BCBP, occurs once per leg. */

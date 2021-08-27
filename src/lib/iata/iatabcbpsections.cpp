@@ -59,17 +59,17 @@ bool IataBcbpUniqueConditionalSection::isValid() const
     return true;
 }
 
-QDate IataBcbpUniqueConditionalSection::dateOfIssue(const QDate &contextDate) const
+QDate IataBcbpUniqueConditionalSection::dateOfIssue(const QDateTime &contextDate) const
 {
     const auto day = dayOfIssue() - 1;
     if (m_data.size() < 11 || day < 0) {
         return {};
     }
 
-    const auto year = contextDate.year() - contextDate.year() % 10 + yearOfIssue();
+    const auto year = contextDate.date().year() - contextDate.date().year() % 10 + yearOfIssue();
     const auto d = QDate(year, 1, 1).addDays(day);
     // TODO shouldn't this rather be d > contextDate?
-    if (year > contextDate.year()) {
+    if (year > contextDate.date().year()) {
         return QDate(year - 10, 1, 1).addDays(day);
     }
     return d;
@@ -97,14 +97,14 @@ bool IataBcbpRepeatedMandatorySection::isValid() const
         && dayOfFlight() <= 366;
 }
 
-QDate IataBcbpRepeatedMandatorySection::dateOfFlight(const QDate& contextDate) const
+QDate IataBcbpRepeatedMandatorySection::dateOfFlight(const QDateTime& contextDate) const
 {
     const auto day = dayOfFlight() - 1;
     if (day < 0) {
         return {}; // no set
     }
-    const auto d = QDate(contextDate.year(), 1, 1).addDays(day);
-    if (d < contextDate) {
+    const auto d = QDate(contextDate.date().year(), 1, 1).addDays(day);
+    if (d < contextDate.date()) {
         return QDate(d.year() + 1, 1, 1).addDays(day);
     }
     return d;

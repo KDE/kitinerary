@@ -26,16 +26,16 @@ static QString stripLeadingZeros(const QString &s)
     return s.mid(d);
 }
 
-QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDate &externalIssueDate)
+QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDateTime &externalIssueDate)
 {
     IataBcbp bcbp(message);
     if (!bcbp.isValid()) {
         return {};
     }
-    return parse(bcbp, externalIssueDate.isValid() ? externalIssueDate : QDate(1970, 1, 1));
+    return parse(bcbp, externalIssueDate.isValid() ? externalIssueDate : QDateTime({1970, 1, 1}, {}));
 }
 
-QVector<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDate &contextDate)
+QVector<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDateTime &contextDate)
 {
     const auto count = bcbp.uniqueMandatorySection().numberOfLegs();
     const auto issueDate = bcbp.uniqueConditionalSection().dateOfIssue(contextDate);
@@ -62,7 +62,7 @@ QVector<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDate &conte
         Flight flight;
 
         const auto rms = bcbp.repeatedMandatorySection(i);
-        flight.setDepartureDay(rms.dateOfFlight(issueDate.isValid() ? issueDate : contextDate));
+        flight.setDepartureDay(rms.dateOfFlight(issueDate.isValid() ? QDateTime(issueDate, {}) : contextDate));
 
         Airport dep;
         dep.setIataCode(rms.fromCityAirportCode());

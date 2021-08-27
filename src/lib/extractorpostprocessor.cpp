@@ -160,7 +160,7 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
     // expand ticketToken for IATA BCBP data
     const auto bcbp = res.reservedTicket().value<Ticket>().ticketTokenData();
     if (!bcbp.isEmpty()) {
-        const auto bcbpData = IataBcbpParser::parse(bcbp, m_contextDate.date());
+        const auto bcbpData = IataBcbpParser::parse(bcbp, m_contextDate);
         if (bcbpData.size() == 1) {
             res = JsonLdDocument::apply(bcbpData.at(0), res).value<FlightReservation>();
             // standardize on the BCBP booking reference, not some secondary one we might have in structured data for example
