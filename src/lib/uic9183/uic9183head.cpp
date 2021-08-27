@@ -8,6 +8,8 @@
 
 using namespace KItinerary;
 
+Uic9183Head::Uic9183Head() = default;
+
 // U_HEAD Block (version 1, size 53)
 // 4x issuing carrier id
 // 6x PNR
@@ -23,6 +25,8 @@ Uic9183Head::Uic9183Head(const Uic9183Block &block)
         m_data = block;
     }
 }
+
+Uic9183Head::~Uic9183Head() = default;
 
 bool Uic9183Head::isValid() const
 {

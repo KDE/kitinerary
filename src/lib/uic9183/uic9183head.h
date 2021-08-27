@@ -29,7 +29,9 @@ class KITINERARY_EXPORT Uic9183Head
     UIC_STR_PROPERTY(secondaryLanguage, 39, 2);
 
 public:
+    Uic9183Head();
     Uic9183Head(const Uic9183Block &block);
+    ~Uic9183Head();
 
     /** Returns @c true if this is a valid U_HEAD block. */
     bool isValid() const;
@@ -43,3 +45,4 @@ private:
 
 }
 
+Q_DECLARE_METATYPE(KItinerary::Uic9183Head)
