@@ -12,6 +12,7 @@
 #include <QString>
 
 #include <cstdint>
+#include <functional>
 
 namespace KItinerary {
 namespace KnowledgeDb {
@@ -76,6 +77,11 @@ public:
         return Internal::alphaIdToString(m_id, N);
     }
 
+    /** @internal for std::hash */
+    inline constexpr T value() const
+    {
+        return m_id;
+    }
 private:
     T m_id = {};
 };
@@ -91,3 +97,14 @@ inline QDebug operator<<(QDebug dbg, KItinerary::KnowledgeDb::AlphaId<T, N> id)
     return dbg;
 }
 
+namespace std {
+template <typename T, int N> struct hash<KItinerary::KnowledgeDb::AlphaId<T, N>>
+{
+    typedef KItinerary::KnowledgeDb::AlphaId<T, N> argument_type;
+    typedef std::size_t result_type;
+    result_type operator()(argument_type id) const noexcept
+    {
+        return std::hash<T>()(id.value());
+    }
+};
+}
