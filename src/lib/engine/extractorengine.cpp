@@ -69,12 +69,16 @@ void ExtractorEnginePrivate::processNode(ExtractorDocumentNode& node)
     std::vector<const AbstractExtractor*> extractors = m_additionalExtractors;
     m_repo.extractorsForNode(node, extractors);
 
+    ExtractorResult nodeResult;
     for (const auto &extractor : extractors) {
         auto res = extractor->extract(node, q);
         if (!res.isEmpty()) {
             m_usedExtractor = extractor->name();
-            node.setResult(std::move(res));
+            nodeResult.append(std::move(res));
         }
+    }
+    if (!nodeResult.isEmpty()) {
+        node.setResult(std::move(nodeResult));
     }
 
     node.processor()->postExtract(node);
