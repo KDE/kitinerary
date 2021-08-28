@@ -8,6 +8,7 @@
 #include "codegen.h"
 #include "wikidata.h"
 #include "../stringutil.h"
+#include "../knowledgedb/airportnametokenizer_p.h"
 
 #include <airportdb_p.h>
 
@@ -222,16 +223,12 @@ void AirportDbGenerator::improveCoordinates()
     }
 }
 
-void KItinerary::Generator::AirportDbGenerator::indexNames()
+void AirportDbGenerator::indexNames()
 {
     for (auto it = m_airportMap.begin(); it != m_airportMap.end(); ++it) {
-        auto l = StringUtil::normalize(it.value().label + QLatin1Char(' ') + it.value().alias)
-                 .split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")),
-                  Qt::SkipEmptyParts
-                );
-        std::for_each(l.begin(), l.end(), [](QString &s) {
-            s = s.toCaseFolded();
-        });
+        const auto normalized = StringUtil::normalize(QString(it.value().label + QLatin1Char(' ') + it.value().alias));
+        AirportNameTokenizer tokenizer(normalized);
+        auto l = tokenizer.toStringList();
         normalizeAbbreviations(l);
         std::sort(l.begin(), l.end());
         l.removeAll(it.value().iataCode.toCaseFolded());

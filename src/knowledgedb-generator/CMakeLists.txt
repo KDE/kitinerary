@@ -13,6 +13,7 @@ add_executable(generate-knowledgedb
     trainstationdbgenerator.cpp
     util.cpp
     ../lib/stringutil.cpp
+    ../lib/knowledgedb/airportnametokenizer.cpp
     ../lib/knowledgedb/stationidentifier.cpp
 )
 target_compile_definitions(generate-knowledgedb PRIVATE "KITINERARY_STATIC_DEFINE")
