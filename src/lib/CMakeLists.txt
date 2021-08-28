@@ -54,6 +54,7 @@ target_sources(KPimItinerary PRIVATE
 
     knowledgedb/alphaid.cpp
     knowledgedb/airportdb.cpp
+    knowledgedb/airportnametokenizer.cpp
     knowledgedb/countrydb.cpp
     knowledgedb/iatacode.cpp
     knowledgedb/knowledgedb.cpp
