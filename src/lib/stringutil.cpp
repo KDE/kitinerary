@@ -27,7 +27,7 @@ QChar StringUtil::normalize(QChar c)
     return n;
 }
 
-QString StringUtil::normalize(const QString &str)
+QString StringUtil::normalize(QStringView str)
 {
     QString out;
     out.reserve(str.size());

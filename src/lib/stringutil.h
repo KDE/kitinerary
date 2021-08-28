@@ -23,7 +23,7 @@ namespace StringUtil
     /** Strips out diacritics and converts to case-folded form.
      *  @internal only exported for unit tests
      */
-    KITINERARY_EXPORT QString normalize(const QString &str);
+    KITINERARY_EXPORT QString normalize(QStringView str);
 
     /** Assuming both sides are describing the same thing, this tries to find the "better" string.
      *  That is, prefer the one that didn't lose casing/unicode/etc in previous processing.
