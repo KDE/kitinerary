@@ -9,6 +9,7 @@
 #include <KItinerary/BarcodeDecoder>
 
 #include <QDateTime>
+#include <QJSValue>
 #include <QObject>
 
 namespace KItinerary {
@@ -32,9 +33,9 @@ public:
     Q_INVOKABLE QString decodeAztec(const QVariant &img) const;
     /** Decode a Aztec barcode image containing binary data.
      *  @param img An image containing the barcode, e.g. a PdfImage instance.
-     *  @return a QByteArray, which from the JS perspective is essentially an opque handle.
+     *  @return a JS ArrayBuffer
      */
-    Q_INVOKABLE QVariant decodeAztecBinary(const QVariant &img) const;
+    Q_INVOKABLE QJSValue decodeAztecBinary(const QVariant &img) const;
     /** Decode as QR barcode image.
      *  @param img An image containing the barcode, e.g. a PdfImage instance.
      */
@@ -56,7 +57,7 @@ public:
      *  fill their version field incorrectly.
      *  @returns An instance of SSBTicket.
      */
-    Q_INVOKABLE QVariant decodeEraSsbTicket(const QVariant &s, int versionOverride = 0) const;
+    Q_INVOKABLE QVariant decodeEraSsbTicket(const QByteArray &s, int versionOverride = 0) const;
 
     ///@cond internal
     void setDecoder(BarcodeDecoder *decoder);

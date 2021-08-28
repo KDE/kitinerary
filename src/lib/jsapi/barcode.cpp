@@ -11,6 +11,10 @@
 #include <KItinerary/PdfDocument>
 
 #include <QImage>
+#include <QQmlEngine>
+
+#include <private/qv4arraybuffer_p.h>
+#include <private/qv4engine_p.h>
 
 using namespace KItinerary;
 
@@ -29,7 +33,7 @@ QString JsApi::Barcode::decodeAztec(const QVariant &img) const
     return decodeBarcode(img, BarcodeDecoder::Aztec);
 }
 
-QVariant JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
+QJSValue JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
 {
     if (img.userType() == qMetaTypeId<PdfImage>()) {
         const auto pdfImg = img.value<PdfImage>();
@@ -40,7 +44,8 @@ QVariant JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
         if (content.isEmpty()) {
             return {};
         }
-        return content;
+        const auto engine = qjsEngine(this);
+        return QJSValue(engine->handle(), engine->handle()->newArrayBuffer(content)->asReturnedValue());
     }
     return {};
 }
@@ -76,9 +81,9 @@ QString JsApi::Barcode::decodeBarcode(const QVariant &img, BarcodeDecoder::Barco
     return {};
 }
 
-QVariant JsApi::Barcode::decodeEraSsbTicket(const QVariant &s, int versionOverride) const
+QVariant JsApi::Barcode::decodeEraSsbTicket(const QByteArray &s, int versionOverride) const
 {
-    return SSBTicketReader::read(s.toByteArray(), versionOverride);
+    return SSBTicketReader::read(s, versionOverride);
 }
 
 #include "moc_barcode.cpp"
