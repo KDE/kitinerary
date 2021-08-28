@@ -4,17 +4,12 @@
 */
 
 function parseBoardingPass(pdf, node, triggerNode) {
-    console.log(pdf);
     var res = triggerNode.result[0];
     const page = pdf.pages[triggerNode.location];
     const timesText = page.textInRect(0.5, 0.5, 1, 1);
-    console.log(timesText);
     const times = timesText.match(/\n(\d\d:\d\d)[\s\S]*?\n(\d\d:\d\d)[\s\S]*?\n(\d\d:\d\d)[\s\S]*?\n(\d\d:\d\d)[\s\S]*?\d\d:\d\d\./);
     res.reservationFor.boardingTime = JsonLd.toDateTime(times[2], "hh:mm", "en");
     res.reservationFor.departureTime = JsonLd.toDateTime(times[3], "hh:mm", "en");
     res.reservationFor.arrivalTime = JsonLd.toDateTime(times[4], "hh:mm", "en");
-
-    res.reservationFor.departureAirport.name = page.textInRect(0.5, 0.3, 0.75, 0.375);
-    res.reservationFor.arrivalAirport.name = page.textInRect(0.75, 0.3, 1, 0.375);
     return res;
 }

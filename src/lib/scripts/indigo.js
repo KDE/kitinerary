@@ -14,11 +14,6 @@ function main(pdf, node, triggerNode) {
     res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + depTime[1], "dd MMM yyhh:mm", "en");
     var boardingTime = page.text.match(/Boarding Time\s+(\d\d:\d\d)/);
     res.reservationFor.boardingTime = JsonLd.toDateTime(date[1] + boardingTime[1], "dd MMM yyhh:mm", "en");
-
-    var from = page.text.match(/From +(\S.+?)(?:\(|To|\s\s)/);
-    res.reservationFor.departureAirport.name = from[1];
-    var to = page.text.match(/To +(\S.+?)(?:\(|\s\s)/);
-    res.reservationFor.arrivalAirport.name = to[1];
     return res;
 }
 
