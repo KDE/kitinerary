@@ -438,65 +438,10 @@ static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs)
     return lhs.name() == rhs.name();
 }
 
-static bool containsNonAscii(const QString &s)
-{
-    for (const auto c : s) {
-        if (c.row() != 0 || c.cell() > 127) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-static bool isMixedCase(const QString &s)
-{
-    const auto upperCount = std::count_if(s.begin(), s.end(), [](auto c) { return c.isUpper(); });
-    return upperCount != s.size() && upperCount != 0;
-}
-
-/** Assuming both sides refer to the same thing, this tries to find the "better" one. */
-static QString mergeString(const QString &lhs, const QString &rhs)
-{
-    // prefer the one that exists at all
-    if (lhs.isEmpty()) {
-        return rhs;
-    }
-    if (rhs.isEmpty()) {
-        return lhs;
-    }
-
-    // prefer Unicode over ASCII normalization
-    const auto lhsNonAscii = containsNonAscii(lhs);
-    const auto rhsNonAscii = containsNonAscii(rhs);
-    if (lhsNonAscii && !rhsNonAscii) {
-        return lhs;
-    }
-    if (!lhsNonAscii && rhsNonAscii) {
-        return rhs;
-    }
-
-    // prefer better casing
-    const auto lhsMixedCase = isMixedCase(lhs);
-    const auto rhsMixedCase = isMixedCase(rhs);
-    if (lhsMixedCase && !rhsMixedCase) {
-        return lhs;
-    }
-    if (!lhsMixedCase && rhsMixedCase) {
-        return rhs;
-    }
-
-    // prefer longer == more detailed version
-    if (rhs.size() < lhs.size()) {
-        return lhs;
-    }
-    return rhs;
-}
-
 static Airline mergeValue(const Airline &lhs, const Airline &rhs)
 {
     auto a = JsonLdDocument::apply(lhs, rhs).value<Airline>();
-    a.setName(mergeString(lhs.name(), rhs.name()));
+    a.setName(StringUtil::betterString(lhs.name(), rhs.name()).toString());
     return a;
 }
 
@@ -509,9 +454,9 @@ static QDateTime mergeValue(const QDateTime &lhs, const QDateTime &rhs)
 static Person mergeValue(const Person &lhs, const Person &rhs)
 {
     auto p = JsonLdDocument::apply(lhs, rhs).value<Person>();
-    p.setFamilyName(mergeString(lhs.familyName(), rhs.familyName()));
-    p.setGivenName(mergeString(lhs.givenName(), rhs.givenName()));
-    p.setName(mergeString(lhs.name(), rhs.name()));
+    p.setFamilyName(StringUtil::betterString(lhs.familyName(), rhs.familyName()).toString());
+    p.setGivenName(StringUtil::betterString(lhs.givenName(), rhs.givenName()).toString());
+    p.setName(StringUtil::betterString(lhs.name(), rhs.name()).toString());
     return p;
 }
 

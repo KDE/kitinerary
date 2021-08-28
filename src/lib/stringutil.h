@@ -10,6 +10,7 @@
 
 class QChar;
 class QString;
+class QStringView;
 
 namespace KItinerary {
 
@@ -23,6 +24,11 @@ namespace StringUtil
      *  @internal only exported for unit tests
      */
     KITINERARY_EXPORT QString normalize(const QString &str);
+
+    /** Assuming both sides are describing the same thing, this tries to find the "better" string.
+     *  That is, prefer the one that didn't lose casing/unicode/etc in previous processing.
+     */
+    QStringView betterString(QStringView lhs, QStringView rhs);
 }
 
 }
