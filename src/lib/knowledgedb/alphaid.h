@@ -10,6 +10,7 @@
 
 #include <QDebug>
 #include <QString>
+#include <QStringView>
 
 #include <cstdint>
 #include <functional>
@@ -20,7 +21,7 @@ namespace KnowledgeDb {
 ///@cond internal
 namespace Internal {
     // "private" API for the template code below
-    KITINERARY_EXPORT uint16_t alphaIdFromString(const QString &s, int size);
+    KITINERARY_EXPORT uint16_t alphaIdFromString(QStringView s, int size);
     KITINERARY_EXPORT QString alphaIdToString(uint16_t id, int size);
 }
 ///@endcond
@@ -46,13 +47,13 @@ public:
         }
     }
     /** Create identifier from a QString. */
-    inline explicit AlphaId(const QString &s)
+    inline explicit AlphaId(QStringView s)
     {
         static_assert(sizeof(decltype(Internal::alphaIdFromString(s, N))) <= sizeof(T), "alphaIdFromString truncates result");
         m_id = Internal::alphaIdFromString(s, N);
     }
 
-    /** Returns @c true if this is a valid idenfier. */
+    /** Returns @c true if this is a valid identifier. */
     inline constexpr bool isValid() const
     {
         return m_id != 0;
