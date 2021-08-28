@@ -54,13 +54,13 @@ bool SSBv3Ticket::maybeSSB(const QByteArray& data)
     return (data.at(0) >> 4) == SSB_VERSION;
 }
 
-QDate SSBv3Ticket::issueDate(const QDate &contextDate)
+QDate SSBv3Ticket::issueDate(const QDateTime &contextDate)
 {
     if (m_data.isEmpty() || ticketTypeCode() > SSBv3Ticket::RPT) {
         return {};
     }
 
-    int year = contextDate.year();
+    int year = contextDate.date().year();
     if (year % 10 != yearOfIssue()) {
         year += (10 + yearOfIssue() - year % 10) % 10;
     }
@@ -69,7 +69,7 @@ QDate SSBv3Ticket::issueDate(const QDate &contextDate)
     return d;
 }
 
-QDate SSBv3Ticket::type1DepartureDay(const QDate& contextDate)
+QDate SSBv3Ticket::type1DepartureDay(const QDateTime& contextDate)
 {
     if (ticketTypeCode() != SSBv3Ticket::IRT_RES_BOA) {
         return {};

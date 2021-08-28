@@ -44,16 +44,16 @@ bool SSBv1Ticket::maybeSSB(const QByteArray& data)
     return (data.at(0) >> 4) == SSB_VERSION;
 }
 
-QDate SSBv1Ticket::firstDayOfValidity(const QDate &contextDate) const
+QDate SSBv1Ticket::firstDayOfValidity(const QDateTime &contextDate) const
 {
     if (!isValid() || firstDayOfValidityDay() == 0 || firstDayOfValidityDay() > 366) {
         return {};
     }
-    QDate d(contextDate.year(), 1, 1);
+    QDate d(contextDate.date().year(), 1, 1);
     return d.addDays(firstDayOfValidityDay() - 1);
 }
 
-QDateTime SSBv1Ticket::departureTime(const QDate &contextDate) const
+QDateTime SSBv1Ticket::departureTime(const QDateTime &contextDate) const
 {
     if (!isValid() || departureTimeSlot() == 0 || departureTimeSlot() > 48) {
         return {};

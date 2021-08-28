@@ -112,9 +112,9 @@ public:
     bool isValid() const;
 
     /** Date of issue. */
-    Q_INVOKABLE QDate issueDate(const QDate &contextDate = QDate::currentDate());
+    Q_INVOKABLE QDate issueDate(const QDateTime &contextDate = QDateTime::currentDateTime());
     /** Departure day for type 1 (IRT/RES/BOA) tickets. */
-    Q_INVOKABLE QDate type1DepartureDay(const QDate &contextDate = QDate::currentDate());
+    Q_INVOKABLE QDate type1DepartureDay(const QDateTime &contextDate = QDateTime::currentDateTime());
 
     /** Raw barcode data. */
     QByteArray rawData() const;

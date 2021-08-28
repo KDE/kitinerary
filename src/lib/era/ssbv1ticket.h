@@ -65,9 +65,9 @@ public:
     bool isValid() const;
 
     /** First day of validity. */
-    Q_INVOKABLE QDate firstDayOfValidity(const QDate &contextDate = QDate::currentDate()) const;
+    Q_INVOKABLE QDate firstDayOfValidity(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
     /** Decoded departure time slot. */
-    Q_INVOKABLE QDateTime departureTime(const QDate &contextDate = QDate::currentDate()) const;
+    Q_INVOKABLE QDateTime departureTime(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 
     /** Raw barcode data. */
     QByteArray rawData() const;
