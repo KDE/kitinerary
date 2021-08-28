@@ -8,6 +8,7 @@
 #include "extractorrepository.h"
 
 #include "logging.h"
+#include "extractors/genericboardingpassextractor.h"
 
 #include <KItinerary/ExtractorDocumentNode>
 #include <KItinerary/ExtractorDocumentProcessor>
@@ -57,6 +58,7 @@ void ExtractorRepositoryPrivate::loadAll()
 
 void ExtractorRepositoryPrivate::initBuiltInExtractors()
 {
+    addExtractor(std::make_unique<GenericBoardingPassExtractor>());
 }
 
 ExtractorRepository::ExtractorRepository()

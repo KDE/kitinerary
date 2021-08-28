@@ -33,7 +33,8 @@
                     "latitude": 45.630001068115234,
                     "longitude": 8.72305965423584
                 },
-                "iataCode": "MXP"
+                "iataCode": "MXP",
+                "name": "Milano Malpensa"
             },
             "departureAirport": {
                 "@type": "Airport",
@@ -46,7 +47,8 @@
                     "latitude": 48.120201110839844,
                     "longitude": 16.564300537109375
                 },
-                "iataCode": "VIE"
+                "iataCode": "VIE",
+                "name": "Vienna"
             },
             "departureDay": "2019-09-06",
             "flightNumber": "1996"

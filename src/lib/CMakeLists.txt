@@ -43,6 +43,8 @@ target_sources(KPimItinerary PRIVATE
     era/ssbv2ticket.cpp
     era/ssbv3ticket.cpp
 
+    extractors/genericboardingpassextractor.cpp
+
     iata/iatabcbp.cpp
     iata/iatabcbpparser.cpp
     iata/iatabcbpsections.cpp
