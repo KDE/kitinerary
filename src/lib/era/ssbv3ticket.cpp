@@ -54,7 +54,7 @@ bool SSBv3Ticket::maybeSSB(const QByteArray& data)
     return (data.at(0) >> 4) == SSB_VERSION;
 }
 
-QDate SSBv3Ticket::issueDate(const QDateTime &contextDate)
+QDate SSBv3Ticket::issueDate(const QDateTime &contextDate) const
 {
     if (m_data.isEmpty() || ticketTypeCode() > SSBv3Ticket::RPT) {
         return {};
@@ -69,7 +69,7 @@ QDate SSBv3Ticket::issueDate(const QDateTime &contextDate)
     return d;
 }
 
-QDate SSBv3Ticket::type1DepartureDay(const QDateTime& contextDate)
+QDate SSBv3Ticket::type1DepartureDay(const QDateTime& contextDate) const
 {
     if (ticketTypeCode() != SSBv3Ticket::IRT_RES_BOA) {
         return {};
