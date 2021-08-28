@@ -7,10 +7,10 @@
 #include "airportdb.h"
 #include "airportdb_p.h"
 #include "airportdb_data.cpp"
+#include "airportnametokenizer_p.h"
 #include "stringutil.h"
 
 #include <QDebug>
-#include <QRegularExpression>
 #include <QTimeZone>
 
 #include <algorithm>
@@ -196,15 +196,15 @@ static void iataCodeForNameFragments(const QStringList &fragments, std::vector<I
     iataCodeForNonUniqueFragments(fragments, codes);
 }
 
-static QStringList splitToFragments(const QString &name)
+static QStringList splitToFragments(QStringView name)
 {
-    return name.split(QRegularExpression(QStringLiteral("[ 0-9/'\"\\(\\)&\\,.–„-]")),
-                      Qt::SkipEmptyParts);
+    AirportNameTokenizer tokenizer(name);
+    return tokenizer.toStringList();
 }
 
 }
 
-std::vector<KnowledgeDb::IataCode> KnowledgeDb::iataCodesFromName(const QString &name)
+std::vector<KnowledgeDb::IataCode> KnowledgeDb::iataCodesFromName(QStringView name)
 {
     const auto fragments = splitToFragments(name);
     QStringList normalizedFragments;
@@ -241,7 +241,7 @@ std::vector<KnowledgeDb::IataCode> KnowledgeDb::iataCodesFromName(const QString 
     return codes;
 }
 
-KnowledgeDb::IataCode KnowledgeDb::iataCodeFromName(const QString &name)
+KnowledgeDb::IataCode KnowledgeDb::iataCodeFromName(QStringView name)
 {
     const auto fragments = splitToFragments(name);
     QStringList normalizedFragments;
