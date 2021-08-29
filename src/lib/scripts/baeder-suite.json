@@ -9,5 +9,5 @@
     ],
     "function": "parseReservation",
     "mimeType": "application/vnd.apple.pkpass",
-    "script": "stuttgarter-baeder.js"
+    "script": "baeder-suite.js"
 }

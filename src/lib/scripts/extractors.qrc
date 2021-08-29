@@ -24,6 +24,8 @@
         <file>aohostels.js</file>
         <file>availpro.json</file>
         <file>availpro.js</file>
+        <file>baeder-suite.json</file>
+        <file>baeder-suite.js</file>
         <file>booking.json</file>
         <file>booking.js</file>
         <file>bremer-baeder.json</file>
@@ -111,8 +113,6 @@
         <file>sro-nl.js</file>
         <file>stansted-express.json</file>
         <file>stansted-express.js</file>
-        <file>stuttgarter-baeder.json</file>
-        <file>stuttgarter-baeder.js</file>
         <file>swiss.json</file>
         <file>swiss.js</file>
         <file>terminland-de.json</file>
