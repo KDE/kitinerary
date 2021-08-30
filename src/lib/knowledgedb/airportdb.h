@@ -36,8 +36,6 @@ KITINERARY_EXPORT QTimeZone timezoneForAirport(IataCode iataCode);
 /** Returns the country the airport with IATA code @p iataCode is in. */
 KITINERARY_EXPORT CountryId countryForAirport(IataCode iataCode);
 
-/** Attempts to find the unique IATA code for the given airport name. */
-KITINERARY_EXPORT IataCode iataCodeFromName(QStringView name);
 /** Returns all possible IATA code candidates for the given airport name. */
 KITINERARY_EXPORT std::vector<IataCode> iataCodesFromName(QStringView name);
 }

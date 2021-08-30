@@ -224,7 +224,7 @@ std::vector<KnowledgeDb::IataCode> KnowledgeDb::iataCodesFromName(QStringView na
 
     // check if the name contained the IATA code as disambiguation already
     const auto code = iataCodeForIataCodeFragment(fragments);
-    if (code.isValid()) {
+    if (code.isValid() && std::find(codes.begin(), codes.end(), code) != codes.end()) {
         return {code};
     }
 
@@ -239,46 +239,6 @@ std::vector<KnowledgeDb::IataCode> KnowledgeDb::iataCodesFromName(QStringView na
         }
     }
     return codes;
-}
-
-KnowledgeDb::IataCode KnowledgeDb::iataCodeFromName(QStringView name)
-{
-    const auto fragments = splitToFragments(name);
-    QStringList normalizedFragments;
-    normalizedFragments.reserve(fragments.size());
-    std::transform(fragments.begin(), fragments.end(), std::back_inserter(normalizedFragments), [](const auto &s) { return normalizeFragment(s); });
-
-    std::vector<IataCode> codes;
-    iataCodeForNameFragments(normalizedFragments, codes);
-    if (codes.size() == 1) {
-        return codes[0];
-    }
-    codes.clear();
-
-    // try again, with alternative translitarations of e.g. umlauts replaced
-    applyTransliterations(normalizedFragments);
-    iataCodeForNameFragments(normalizedFragments, codes);
-    if (codes.size() == 1) {
-        return codes[0];
-    }
-    codes.clear();
-
-    // check if the name contained the IATA code as disambiguation already
-    const auto code = iataCodeForIataCodeFragment(fragments);
-    if (code.isValid()) {
-        return {code};
-    }
-
-    // attempt to cut off possibly confusing fancy terminal names
-    auto it = std::find(normalizedFragments.begin(), normalizedFragments.end(), QStringLiteral("terminal"));
-    if (it != normalizedFragments.end()) {
-        normalizedFragments.erase(it, normalizedFragments.end());
-        iataCodeForNameFragments(normalizedFragments, codes);
-    }
-    if (codes.size() == 1) {
-        return codes[0];
-    }
-    return {};
 }
 
 }

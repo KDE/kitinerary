@@ -132,13 +132,7 @@ void FlightPostProcessor::lookupAirportCodes(const Airport &airport, std::vector
         return;
     }
 
-    // TODO if we don't need this elsewhere, maybe merge those two methods and do this logic internally more efficiently?
-    const auto code = KnowledgeDb::iataCodeFromName(airport.name());
-    if (code.isValid()) {
-        codes.push_back(code);
-    } else {
-        codes = KnowledgeDb::iataCodesFromName(airport.name());
-    }
+    codes = KnowledgeDb::iataCodesFromName(airport.name());
 }
 
 void FlightPostProcessor::pickAirportByDistance(int duration, const std::vector<KnowledgeDb::IataCode>& startCodes, std::vector<KnowledgeDb::IataCode>& codes) const

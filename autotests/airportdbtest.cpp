@@ -15,6 +15,8 @@
 
 #include <cmath>
 
+Q_DECLARE_METATYPE(KItinerary::KnowledgeDb::IataCode)
+
 using namespace KItinerary;
 using namespace KItinerary::KnowledgeDb;
 
@@ -135,55 +137,57 @@ private Q_SLOTS:
         QCOMPARE(tz.id(), QByteArray("Asia/Shanghai"));
     }
 
-    void iataLookupTest()
+    void iataLookupTest_data()
     {
+        QTest::addColumn<QString>("name");
+        QTest::addColumn<KnowledgeDb::IataCode>("iataCode");
+
         // via unique fragment lookup
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Flughafen Berlin-Tegel")), KnowledgeDb::IataCode{"TXL"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("TEGEL")), KnowledgeDb::IataCode{"TXL"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Paris Charles de Gaulle")), KnowledgeDb::IataCode{"CDG"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Zürich")), KnowledgeDb::IataCode{"ZRH"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("AMSTERDAM, NL (SCHIPHOL AIRPORT)")), KnowledgeDb::IataCode{"AMS"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("London Heathrow")), KnowledgeDb::IataCode{"LHR"});
+        QTest::newRow("TXL1") << s("Flughafen Berlin-Tegel") << KnowledgeDb::IataCode{"TXL"};
+        QTest::newRow("TXL2") << s("TEGEL") << KnowledgeDb::IataCode{"TXL"};
+        QTest::newRow("CDG") << s("Paris Charles de Gaulle") << KnowledgeDb::IataCode{"CDG"};
+        QTest::newRow("ZRH") << s("Zürich") << KnowledgeDb::IataCode{"ZRH"};
+        QTest::newRow("AMS") << s("AMSTERDAM, NL (SCHIPHOL AIRPORT)") << KnowledgeDb::IataCode{"AMS"};
+        QTest::newRow("LHR") << s("London Heathrow") << KnowledgeDb::IataCode{"LHR"};
 
         // via non-unique fragment lookup
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("John F. Kennedy International Airport")), KnowledgeDb::IataCode{"JFK"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("San Francisco International")), KnowledgeDb::IataCode{"SFO"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Düsseldorf International")), KnowledgeDb::IataCode{"DUS"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("London City")), KnowledgeDb::IataCode{"LCY"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("DETROIT, MI (METROPOLITAN WAYNE CO)")), KnowledgeDb::IataCode{"DTW"});
-
-        // not unique
-        QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Flughafen Berlin")).isValid());
-        QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Charles de Gaulle Orly")).isValid());
-        QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Brussels Airport, BE")).isValid());
-        QVERIFY(!KnowledgeDb::iataCodeFromName(QStringLiteral("Frankfurt")).isValid());
+        QTest::newRow("JFK") << s("John F. Kennedy International Airport") << KnowledgeDb::IataCode{"JFK"};
+        QTest::newRow("SFO") << s("San Francisco International") << KnowledgeDb::IataCode{"SFO"};
+        QTest::newRow("DUS") << s("Düsseldorf International") << KnowledgeDb::IataCode{"DUS"};
+        QTest::newRow("LCY") << s("London City") << KnowledgeDb::IataCode{"LCY"};
+        QTest::newRow("DTW") << s("DETROIT, MI (METROPOLITAN WAYNE CO)") << KnowledgeDb::IataCode{"DTW"};
 
         // string normalization
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Sao Paulo-Guarulhos International")), KnowledgeDb::IataCode{"GRU"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("São Paulo-Guarulhos International")), KnowledgeDb::IataCode{"GRU"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Zurich")), KnowledgeDb::IataCode{"ZRH"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Dusseldorf International")), KnowledgeDb::IataCode{"DUS"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Almeria")), KnowledgeDb::IataCode{"LEI"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("ALMERÍA")), KnowledgeDb::IataCode{"LEI"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Keflavík")), KnowledgeDb::IataCode{"KEF"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Keflavik")), KnowledgeDb::IataCode{"KEF"});
+        QTest::newRow("GRU1") << s("Sao Paulo-Guarulhos International") << KnowledgeDb::IataCode{"GRU"};
+        QTest::newRow("GRU2") << s("São Paulo-Guarulhos International") << KnowledgeDb::IataCode{"GRU"};
+        QTest::newRow("ZRH2") << s("Zurich") << KnowledgeDb::IataCode{"ZRH"};
+        QTest::newRow("DUS2") << s("Dusseldorf International") << KnowledgeDb::IataCode{"DUS"};
+        QTest::newRow("LEI1") << s("Almeria") << KnowledgeDb::IataCode{"LEI"};
+        QTest::newRow("LEI2") << s("ALMERÍA") << KnowledgeDb::IataCode{"LEI"};
+        QTest::newRow("KEF1") << s("Keflavík") << KnowledgeDb::IataCode{"KEF"};
+        QTest::newRow("KEF2") << s("Keflavik") << KnowledgeDb::IataCode{"KEF"};
 
         // alternative transliterations
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Duesseldorf International")), KnowledgeDb::IataCode{"DUS"});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Zuerich")), KnowledgeDb::IataCode{"ZRH"});
+        QTest::newRow("DUS3") << s("Duesseldorf International") << KnowledgeDb::IataCode{"DUS"};
+        QTest::newRow("ZRH3") << s("Zuerich") << KnowledgeDb::IataCode{"ZRH"};
 
         // IATA code contained in name
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Frankfurt")), KnowledgeDb::IataCode{});
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("Frankfurt FRA")), KnowledgeDb::IataCode{"FRA"});
+        QTest::newRow("FRA") << s("Frankfurt FRA") << KnowledgeDb::IataCode{"FRA"};
 
         // multiple unique hits / unique hit on valid (but wrong) IATA code
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("GIMPO INTERNATIONAL TERMINAL I - SKY CITY INTERNATIONAL TERMINAL")), KnowledgeDb::IataCode{"GMP"});
+        QTest::newRow("GMP") << s("GIMPO INTERNATIONAL TERMINAL I - SKY CITY INTERNATIONAL TERMINAL") << KnowledgeDb::IataCode{"GMP"};
 
         // Amadeus/BCD airport names containing city/country data too, and using "INTL" abbreviation
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SAN FRANCISCO CA SAN FRANCISCO INTL")), KnowledgeDb::IataCode{"SFO"});
-        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("BEIJING CN CAPITAL INTL")), (std::vector<IataCode>{IataCode{"PEK"}, IataCode{"PKX"}}));
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("FRANKFURT DE - FRANKFURT INTL")), KnowledgeDb::IataCode{}); // ambigious with Frankfurt Hahn
-        QCOMPARE(KnowledgeDb::iataCodeFromName(QStringLiteral("SEATTLE US - SEATTLE TACOMA INTL")), KnowledgeDb::IataCode{"SEA"});
+        QTest::newRow("SFO2") << s("SAN FRANCISCO CA SAN FRANCISCO INTL") << KnowledgeDb::IataCode{"SFO"};
+        QTest::newRow("SEA") << s("SEATTLE US - SEATTLE TACOMA INTL") << KnowledgeDb::IataCode{"SEA"};
+    }
+
+    void iataLookupTest()
+    {
+        QFETCH(QString, name);
+        QFETCH(KnowledgeDb::IataCode, iataCode);
+
+        QCOMPARE(KnowledgeDb::iataCodesFromName(name), (std::vector<IataCode>{iataCode}));
     }
 
     void iataCodeMultiLookupTest()
@@ -199,8 +203,14 @@ private Q_SLOTS:
         // multiple unique hits / unique hit on valid (but wrong) IATA code
         QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("SEOUL KR GIMPO INTERNATIONAL TERMINAL I - SKY CITY INTERNATIONAL TERMINAL")), (std::vector<IataCode>{IataCode{"GMP"}, IataCode{"ICN"}}));
 
-        // "wrong" us of "international"
+        // "wrong" use of "international"
         QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("FRANKFURT DE - FRANKFURT INTL")), (std::vector<IataCode>{IataCode{"FRA"}, IataCode{"HHN"}}));
+
+        // not unique or conflicting
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("Flughafen Berlin")), (std::vector<IataCode>{IataCode{"BER"}, IataCode{"BML"}, IataCode{"TXL"}}));
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("Charles de Gaulle Orly")), (std::vector<IataCode>{IataCode{"CDG"}, IataCode{"ORY"}}));
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("Brussels Airport, BE")), (std::vector<IataCode>{IataCode{"BRU"}, IataCode{"CRL"}}));
+        QCOMPARE(KnowledgeDb::iataCodesFromName(QStringLiteral("BEIJING CN CAPITAL INTL")), (std::vector<IataCode>{IataCode{"PEK"}, IataCode{"PKX"}}));
     }
 
     void countryDataTest()
