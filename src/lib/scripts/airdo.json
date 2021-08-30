@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@airdo.co.jp",
+            "mimeType": "message/rfc822",
+            "scope": "Parent"
+        }
+    ],
+    "function": "parseConfirmation",
+    "mimeType": "text/plain",
+    "script": "airdo.js"
+}
