@@ -12,7 +12,7 @@
 #include "../lib/uic9183/uic9183header.h"
 #include "../lib/uic9183/vendor0080vublockdata.h"
 #include "../lib/vdv/vdvticketcontent.h"
-#include "../lib/tlv/berelement_p.h"
+#include "../lib/tlv/berelement.h"
 
 #include <kitinerary_version.h>
 
