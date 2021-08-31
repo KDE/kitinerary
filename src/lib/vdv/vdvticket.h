@@ -20,7 +20,7 @@ class VdvTicketHeader;
 class VdvTicketPrivate;
 class VdvTicketCommonTransactionData;
 class VdvTicketIssueData;
-struct VdvTicketTrailer;
+class VdvTicketTrailer;
 namespace BER { class Element; }
 
 /** Ticket information from a VDV barcode.

@@ -131,10 +131,12 @@ class KITINERARY_EXPORT VdvTicketIssueData
 };
 
 /** Ticket trailer, after padding. */
-struct VdvTicketTrailer
+class KITINERARY_EXPORT VdvTicketTrailer
 {
+    Q_GADGET
+public:
     const char identifier[3];
-    VdvNumber<2> version;
+    VDV_NUM_PROPERTY(version, 2)
 };
 
 #pragma pack(pop)
