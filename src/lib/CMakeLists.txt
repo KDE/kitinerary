@@ -269,6 +269,13 @@ ecm_generate_headers(KItinerary_Pdf_FORWARDING_HEADERS
     REQUIRED_HEADERS KItinerary_Pdf_HEADERS
     RELATIVE pdf
 )
+ecm_generate_headers(KItinerary_Tlv_FORWARDING_HEADERS
+    HEADER_NAMES
+        BERElement
+    PREFIX KItinerary
+    REQUIRED_HEADERS KItinerary_Tlv_HEADERS
+    RELATIVE tlv
+)
 ecm_generate_headers(KItinerary_Uic9183_FORWARDING_HEADERS
     HEADER_NAMES
         Rct2Ticket
@@ -282,10 +289,11 @@ ecm_generate_headers(KItinerary_Uic9183_FORWARDING_HEADERS
     REQUIRED_HEADERS KItinerary_Uic9183_HEADERS
     RELATIVE uic9183
 )
-
 ecm_generate_headers(KItinerary_Vdv_FORWARDING_HEADERS
     HEADER_NAMES
         VdvTicket
+        VdvBasicTypes
+        VdvTicketContent
         VdvTicketParser
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_Vdv_HEADERS
@@ -301,6 +309,7 @@ install(FILES
     ${KItinerary_Era_FORWARDING_HEADERS}
     ${KItinerary_Iata_FORWARDING_HEADERS}
     ${KItinerary_Pdf_FORWARDING_HEADERS}
+    ${KItinerary_Tlv_FORWARDING_HEADERS}
     ${KItinerary_Uic9183_FORWARDING_HEADERS}
     ${KItinerary_Vdv_FORWARDING_HEADERS}
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/KItinerary
@@ -313,6 +322,7 @@ install(FILES
     ${KItinerary_Engine_HEADERS}
     ${KItinerary_Era_HEADERS}
     ${KItinerary_Iata_HEADERS}
+    ${KItinerary_Tlv_HEADERS}
     ${KItinerary_Pdf_HEADERS}
     ${KItinerary_Uic9183_HEADERS}
     ${KItinerary_Vdv_HEADERS}
