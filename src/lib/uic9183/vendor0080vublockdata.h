@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "../vdv/vdvticketcontent.h"
+#include <KItinerary/VdvTicketContent>
 
 namespace KItinerary {
 
