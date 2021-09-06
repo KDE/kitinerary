@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: None
+# SPDX-License-Identifier: CC0-1.0
+
+Dependencies:
+- 'on': ['@all']
+  'require':
+    'frameworks/ki18n' : '@latest'
+    'frameworks/kcontacts' : '@latest'
+    'frameworks/kcalendarcore' : '@latest'
+    'kde/pim/kmime' : '@latest'
+    'kde/pim/kpkpass' : '@latest'
+    'third-party/zxing-cpp' : '@stable'
