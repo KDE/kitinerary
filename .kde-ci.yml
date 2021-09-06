@@ -7,6 +7,6 @@ Dependencies:
     'frameworks/ki18n' : '@latest'
     'frameworks/kcontacts' : '@latest'
     'frameworks/kcalendarcore' : '@latest'
-    'kde/pim/kmime' : '@latest'
-    'kde/pim/kpkpass' : '@latest'
+    'kde/pim/kmime' : '@same'
+    'kde/pim/kpkpass' : '@same'
     'third-party/zxing-cpp' : '@stable'
