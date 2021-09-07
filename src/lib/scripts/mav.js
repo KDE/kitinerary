@@ -14,20 +14,22 @@ function parseBarcode(data) {
     // see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
     const inner = ByteArray.inflate(data.slice(2));
     const view = new DataView(inner);
+    res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
+    res.reservationFor.provider.identifier = "uic:" + view.getUint16(18, false);
+    const tripBlockOffset = view.getUInt8(28) == 0x81 ? 107 : 43;
+    res.reservationFor.departureStation.identifier = "uic:" + (view.getUint32(tripBlockOffset - 1, false) & 0xffffff);
+    res.reservationFor.departureStation.name = "" + (view.getUint32(tripBlockOffset - 1, false) & 0xffffff);
+    res.reservationFor.arrivalStation.identifier = "uic:" + (view.getUint32(tripBlockOffset + 2 , false) & 0xffffff);
+    res.reservationFor.arrivalStation.name = "" + (view.getUint32(tripBlockOffset + 2, false) & 0xffffff);
+    res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(inner.slice(tripBlockOffset + 96, tripBlockOffset + 97));
+    res.reservationFor.departureDay = parseDateTime(view.getUint32(tripBlockOffset + 98, false));
     if (view.getUInt8(28) == 0x81) {
-        res.reservationFor.departureStation.identifier = "uic:" + (view.getUint32(106, false) & 0xffffff);
-        res.reservationFor.departureStation.name = "" + (view.getUint32(106, false) & 0xffffff);
-        res.reservationFor.arrivalStation.identifier = "uic:" + (view.getUint32(109, false) & 0xffffff);
-        res.reservationFor.arrivalStation.name = "" + (view.getUint32(109, false) & 0xffffff);
-        res.reservationFor.provider.identifier = "uic:" + view.getUint16(18, false);
-        res.reservationFor.departureDay = parseDateTime(view.getUint32(205, false));
-        res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
         res.underName.name = ByteArray.decodeUtf8(inner.slice(39, 39 + 45));
-        res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(inner.slice(203, 204));
     }
     for (var i = 0; i < view.getUInt8(30); ++i) {
         const seatBlock = inner.slice(inner.byteLength - ((i+1) *57));
         const seatView = new DataView(seatBlock);
+        res.reservationFor.trainNumber = ByteArray.decodeUtf8(seatBlock.slice(16, 16+5));
         if (seatView.getUInt8(22) == 0) { // surcharge block
             continue;
         }
@@ -54,7 +56,6 @@ function parseTicket(pdf, node, triggerNode) {
         res.reservationFor.departureTime = JsonLd.toDateTime(trip[1] + trip[2], "yyyy.MM.ddhh:mm", "hu");
         res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[1] + trip[5], "yyyy.MM.ddhh:mm", "hu");
         res.reservationFor.trainNumber = trip[6];
-        res.reservedTicket.ticketedSeat.seatingType = trip[7];
         reservations.push(res);
     }
     return reservations;
