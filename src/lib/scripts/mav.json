@@ -1,12 +1,26 @@
-{
-    "filter": [
-        {
-            "match": "^\\x04\\x03\\x1f\\x8b",
-            "mimeType": "application/octet-stream",
-            "scope": "Descendants"
-        }
-    ],
-    "function": "parseTicket",
-    "mimeType": "application/pdf",
-    "script": "mav.js"
-}
+[
+    {
+        "filter": [
+            {
+                "match": "^\\x04\\x03\\x1f\\x8b",
+                "mimeType": "application/octet-stream",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseBarcode",
+        "mimeType": "application/octet-stream",
+        "script": "mav.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^\\x04\\x03\\x1f\\x8b",
+                "mimeType": "application/octet-stream",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parseTicket",
+        "mimeType": "application/pdf",
+        "script": "mav.js"
+    }
+]
