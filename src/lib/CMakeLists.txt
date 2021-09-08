@@ -127,9 +127,27 @@ target_sources(KPimItinerary PRIVATE
     stringutil.cpp
 )
 kde_source_files_enable_exceptions(barcodedecoder.cpp qimagepurebinarizer.cpp)
-ecm_qt_declare_logging_category(KPimItinerary HEADER logging.h IDENTIFIER KItinerary::Log CATEGORY_NAME org.kde.kitinerary)
-ecm_qt_declare_logging_category(KPimItinerary HEADER compare-logging.h IDENTIFIER KItinerary::CompareLog CATEGORY_NAME org.kde.kitinerary.comparator)
-ecm_qt_declare_logging_category(KPimItinerary HEADER validator-logging.h IDENTIFIER KItinerary::ValidatorLog CATEGORY_NAME org.kde.kitinerary.extractorValidator)
+ecm_qt_declare_logging_category(KPimItinerary
+    HEADER logging.h
+    IDENTIFIER KItinerary::Log
+    CATEGORY_NAME org.kde.kitinerary
+    DESCRIPTION "KItinerary"
+    EXPORT KITINERARY
+)
+ecm_qt_declare_logging_category(KPimItinerary
+    HEADER compare-logging.h
+    IDENTIFIER KItinerary::CompareLog
+    CATEGORY_NAME org.kde.kitinerary.comparator
+    DESCRIPTION "KItinerary Comparison/Merging Logging"
+    EXPORT KITINERARY
+)
+ecm_qt_declare_logging_category(KPimItinerary
+    HEADER validator-logging.h
+    IDENTIFIER KItinerary::ValidatorLog
+    CATEGORY_NAME org.kde.kitinerary.extractorValidator
+    DESCRIPTION "KItinerary Extractor Validator Logging"
+    EXPORT KITINERARY
+)
 
 generate_export_header(KPimItinerary BASE_NAME KItinerary)
 set_target_properties(KPimItinerary PROPERTIES
@@ -334,6 +352,11 @@ if (NOT ANDROID)
     install(FILES application-vnd-kde-itinerary.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
     update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR})
 endif()
+ecm_qt_install_logging_categories(
+    EXPORT KITINERARY
+    FILE org_kde_kitinerary.categories
+    DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
+)
 
 if (BUILD_QCH)
     ecm_add_qch(

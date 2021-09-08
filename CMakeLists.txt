@@ -144,7 +144,6 @@ install(EXPORT KPimItineraryTargets
         FILE KPimItineraryTargets.cmake
         NAMESPACE KPim::
 )
-install(FILES org_kde_kitinerary.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_version.h
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM} COMPONENT Devel)
 
