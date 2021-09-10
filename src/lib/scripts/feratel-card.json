@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "passTypeIdentifier",
+            "match": "pass\\.com\\.feratel\\.card\\.mobile\\..*",
+            "mimeType": "application/vnd.apple.pkpass",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseReservation",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "feratel-card.js"
+}
