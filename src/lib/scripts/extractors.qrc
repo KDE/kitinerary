@@ -54,6 +54,8 @@
         <file>eventbrite.js</file>
         <file>fcmtravel.json</file>
         <file>fcmtravel.js</file>
+        <file>feratel-card.json</file>
+        <file>feratel-card.js</file>
         <file>flixbus.json</file>
         <file>flixbus.js</file>
         <file>hertz.js</file>
