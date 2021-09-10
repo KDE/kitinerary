@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@onepagebooking.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "main",
+    "mimeType": "text/plain",
+    "script": "onepagebooking.js"
+}
