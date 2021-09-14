@@ -1,0 +1,104 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "9A",
+        "boardingGroup": "B",
+        "modifiedTime": "2027-03-14T13:05:00-05:00",
+        "potentialAction": [
+            {
+                "@type": "CancelAction",
+                "target": "http://cheapair.com/cancel?id=RXJ34P"
+            },
+            {
+                "@type": "CheckInAction",
+                "target": "http://united.com/onlinecheckin.html"
+            },
+            {
+                "@type": "DownloadAction",
+                "target": "http://cheapair.com/download/RXJ34P.pdf"
+            },
+            {
+                "@type": "UpdateAction",
+                "target": "http://cheapair.com/edit?id=RXJ34P"
+            },
+            {
+                "@type": "ViewAction",
+                "target": "http://cheapair.com/view/RXJ34P"
+            }
+        ],
+        "programMembershipUsed": {
+            "@type": "ProgramMembership",
+            "membershipNumber": "4BY123111",
+            "programName": "StarAlliance"
+        },
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "UA",
+                "name": "United"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 40.63970184326172,
+                    "longitude": -73.77890014648438
+                },
+                "iataCode": "JFK",
+                "name": "John F. Kennedy International Airport"
+            },
+            "arrivalTerminal": "B",
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2027-03-05T06:30:00-05:00",
+                "timezone": "America/New_York"
+            },
+            "boardingTime": {
+                "@type": "QDateTime",
+                "@value": "2027-03-04T19:15:00-08:00",
+                "timezone": "America/Los_Angeles"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 37.6161994934082,
+                    "longitude": -122.39199829101562
+                },
+                "iataCode": "SFO",
+                "name": "San Francisco Airport"
+            },
+            "departureDay": "2027-03-04",
+            "departureGate": "11",
+            "departureTerminal": "B",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2027-03-04T20:15:00-08:00",
+                "timezone": "America/Los_Angeles"
+            },
+            "flightNumber": "110"
+        },
+        "reservationNumber": "RXJ34P",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "qrCode:123456789"
+        },
+        "underName": {
+            "@type": "Person",
+            "email": "eva@mail.com",
+            "name": "Eva Green"
+        },
+        "url": "http://cheapair.com/view/RXJ34P"
+    }
+]
