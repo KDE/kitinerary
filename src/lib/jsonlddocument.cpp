@@ -115,6 +115,7 @@ static void registerBuiltInTypes(std::vector<TypeInfo> &r)
 }
 
 static QVariant createInstance(const QJsonObject &obj);
+static QVariant createInstance(const QJsonObject &obj, const QMetaProperty &prop);
 
 // Eurowings workarounds...
 static const char* const fallbackDateTimePattern[] = {
@@ -241,7 +242,7 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
     if (prop.userType() == qMetaTypeId<QVariant>() && isEmptyJsonLdObject(obj)) {
         return {};
     }
-    return createInstance(obj);
+    return createInstance(obj, prop);
 }
 
 static void createInstance(const QMetaObject *mo, void *v, const QJsonObject &obj)
@@ -261,10 +262,8 @@ static void createInstance(const QMetaObject *mo, void *v, const QJsonObject &ob
     }
 }
 
-static QVariant createInstance(const QJsonObject &obj)
+static QVariant createInstance(const QJsonObject& obj, const QString &type)
 {
-    const auto type = obj.value(QLatin1String("@type")).toString();
-
     const auto& registry = typeResgistry();
     const auto it = std::lower_bound(registry.begin(), registry.end(), type, [](const auto &lhs, const auto &rhs) {
         return QLatin1String(lhs.name) < rhs;
@@ -279,6 +278,29 @@ static QVariant createInstance(const QJsonObject &obj)
         auto dt = QDateTime::fromString(obj.value(QLatin1String("@value")).toString(), Qt::ISODate);
         dt.setTimeZone(QTimeZone(obj.value(QLatin1String("timezone")).toString().toUtf8()));
         return dt;
+    }
+
+    return {};
+}
+
+static QVariant createInstance(const QJsonObject &obj)
+{
+    return createInstance(obj, obj.value(QLatin1String("@type")).toString());
+}
+
+static QVariant createInstance(const QJsonObject &obj, const QMetaProperty &prop)
+{
+    const auto type = obj.value(QLatin1String("@type")).toString();
+    if (!type.isEmpty()) {
+        return createInstance(obj, type);
+    }
+
+    // if @type is (wrongly) not specified, try to recover from our own knowledge of a property type
+    const auto mo = QMetaType::metaObjectForType(prop.userType());
+    if (mo) {
+        QVariant value(prop.userType(), nullptr);
+        createInstance(mo, value.data(), obj);
+        return value;
     }
 
     return {};
