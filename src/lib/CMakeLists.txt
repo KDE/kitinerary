@@ -55,6 +55,7 @@ target_sources(KPimItinerary PRIVATE
     jsapi/jsonld.cpp
 
     json/jsonldfilterengine.cpp
+    json/jsonldimportfilter.cpp
 
     knowledgedb/alphaid.cpp
     knowledgedb/airportdb.cpp
@@ -121,7 +122,6 @@ target_sources(KPimItinerary PRIVATE
     flightpostprocessor.cpp
     htmldocument.cpp
     jsonlddocument.cpp
-    jsonldimportfilter.cpp
     locationutil.cpp
     mergeutil.cpp
     qimagepurebinarizer.cpp

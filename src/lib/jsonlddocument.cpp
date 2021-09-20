@@ -5,7 +5,7 @@
 */
 
 #include "jsonlddocument.h"
-#include "jsonldimportfilter.h"
+#include "json/jsonldimportfilter.h"
 #include "logging.h"
 
 #include <KItinerary/Action>
