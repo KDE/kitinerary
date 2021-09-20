@@ -5,6 +5,7 @@
 */
 
 #include "jsonldimportfilter.h"
+#include "json/jsonldfilterengine.h"
 #include "logging.h"
 
 #include <QDebug>
@@ -19,10 +20,7 @@ using namespace KItinerary;
 
 // type normalization from full schema.org type hierarchy to our simplified subset
 // IMPORTANT: keep alphabetically sorted by fromType!
-static const struct {
-    const char* fromType;
-    const char* toType;
-} type_mapping[] = {
+static constexpr const JsonLdFilterEngine::TypeMapping type_mapping[] = {
     { "AutoDealer", "LocalBusiness" },
     { "AutoRepair", "LocalBusiness" },
     { "AutomotiveBusiness", "LocalBusiness" },
@@ -67,15 +65,6 @@ static const struct {
     { "Winery", "FoodEstablishment" },
 };
 
-static void renameProperty(QJsonObject &obj, const char *oldName, const char *newName)
-{
-    const auto value = obj.value(QLatin1String(oldName));
-    if (!value.isNull() && !obj.contains(QLatin1String(newName))) {
-        obj.insert(QLatin1String(newName), value);
-        obj.remove(QLatin1String(oldName));
-    }
-}
-
 static void migrateToAction(QJsonObject &obj, const char *propName, const char *typeName, bool remove)
 {
     const auto value = obj.value(QLatin1String(propName));
@@ -101,24 +90,11 @@ static void migrateToAction(QJsonObject &obj, const char *propName, const char *
     }
 }
 
-static void filterTrainTrip(QJsonObject &trip)
-{
-    // move TrainTrip::trainCompany to TrainTrip::provider (as defined by schema.org)
-    renameProperty(trip, "trainCompany", "provider");
-}
-
-static void filterLodgingReservation(QJsonObject &res)
-{
-    // check[in|out]Date -> check[in|out]Time (legacy Google format)
-    renameProperty(res, "checkinDate", "checkinTime");
-    renameProperty(res, "checkoutDate", "checkoutTime");
-}
-
 static void filterFlight(QJsonObject &res)
 {
     // move incomplete departureTime (ie. just ISO date, no time) to departureDay
     if (res.value(QLatin1String("departureTime")).toString().size() == 10) {
-        renameProperty(res, "departureTime", "departureDay");
+        JsonLd::renameProperty(res, "departureTime", "departureDay");
     }
 }
 
@@ -157,10 +133,10 @@ static void filterReservation(QJsonObject &res)
     }
 
     // legacy properties
-    renameProperty(res, "programMembership", "programMembershipUsed");
+    JsonLd::renameProperty(res, "programMembership", "programMembershipUsed");
 
     // legacy potentialAction property
-    renameProperty(res, "action", "potentialAction");
+    JsonLd::renameProperty(res, "action", "potentialAction");
 
     // move Google xxxUrl properties to Action instances
     migrateToAction(res, "cancelReservationUrl", "CancelAction", true);
@@ -170,17 +146,10 @@ static void filterReservation(QJsonObject &res)
     migrateToAction(res, "url", "ViewAction", false);
 
     // technically the wrong way (reservationId is the current schema.org standard), but hardly used anywhere (yet)
-    renameProperty(res, "reservationId", "reservationNumber");
+    JsonLd::renameProperty(res, "reservationId", "reservationNumber");
 
     // "typos"
-    renameProperty(res, "Url", "url");
-}
-
-static void filterBusTrip(QJsonObject &trip)
-{
-    renameProperty(trip, "arrivalStation", "arrivalBusStop");
-    renameProperty(trip, "departureStation", "departureBusStop");
-    renameProperty(trip, "busCompany", "provider");
+    JsonLd::renameProperty(res, "Url", "url");
 }
 
 static void filterFoodEstablishment(QJsonObject &restaurant)
@@ -197,12 +166,6 @@ static void filterFoodEstablishment(QJsonObject &restaurant)
             migrateToAction(restaurant, "acceptsReservations", "ReserveAction", true);
         }
     }
-}
-
-static void filterProgramMembership(QJsonObject &program)
-{
-    renameProperty(program, "program", "programName");
-    renameProperty(program, "memberNumber", "membershipNumber");
 }
 
 static void filterActionTarget(QJsonObject &action)
@@ -252,7 +215,7 @@ static void filterActionTarget(QJsonObject &action)
     }
 
     if (filteredTargetUrlString.isEmpty()) {
-        renameProperty(action, "url", "target");
+        JsonLd::renameProperty(action, "url", "target");
     } else {
         action.insert(QStringLiteral("target"), filteredTargetUrlString);
     }
@@ -279,68 +242,28 @@ static QJsonArray filterActions(const QJsonValue &v)
 
 // filter functions applied to objects of the corresponding (already normalized) type
 // IMPORTANT: keep alphabetically sorted by type!
-static const struct {
-    const char* type;
-    void(*filterFunc)(QJsonObject&);
-} type_filters[] = {
-    { "BusTrip", filterBusTrip },
+static constexpr const JsonLdFilterEngine::TypeFilter type_filters[] = {
     { "Flight", filterFlight },
     { "FoodEstablishment", filterFoodEstablishment },
-    { "LodgingReservation", filterLodgingReservation },
-    { "ProgramMembership", filterProgramMembership },
-    { "TrainTrip", filterTrainTrip },
 };
 
-static void filterRecursive(QJsonObject &obj);
+// property renaming
+// IMPORTANT: keep alphabetically sorted by type!
+static constexpr const JsonLdFilterEngine::PropertyMapping property_mappings[] = {
+    { "BusTrip", "arrivalStation", "arrivalBusStop" },
+    { "BusTrip", "busCompany", "provider" },
+    { "BusTrip", "departureStation", "departureBusStop" },
 
-static void filterRecursive(QJsonArray &array)
-{
-    for (auto it = array.begin(); it != array.end(); ++it) {
-        if ((*it).type() == QJsonValue::Object) {
-            QJsonObject subObj = (*it).toObject();
-            filterRecursive(subObj);
-            *it = subObj;
-        } else if ((*it).type() == QJsonValue::Array) {
-            QJsonArray array = (*it).toArray();
-            filterRecursive(array);
-            *it = array;
-        }
-    }
-}
+    // check[in|out]Date -> check[in|out]Time (legacy Google format)
+    { "LodgingReservation", "checkinDate", "checkinTime" },
+    { "LodgingReservation", "checkoutDate", "checkoutTime" },
 
-static void filterRecursive(QJsonObject &obj)
-{
-    auto type = obj.value(QLatin1String("@type")).toString().toUtf8();
+    { "ProgramMembership", "program", "programName" },
+    { "ProgramMembership", "memberNumber", "membershipNumber" },
 
-    // normalize type
-    const auto it = std::lower_bound(std::begin(type_mapping), std::end(type_mapping), type, [](const auto &lhs, const auto &rhs) {
-        return std::strcmp(lhs.fromType, rhs.constData()) < 0;
-    });
-    if (it != std::end(type_mapping) && std::strcmp((*it).fromType, type.constData()) == 0) {
-        type = it->toType;
-        obj.insert(QStringLiteral("@type"), QLatin1String(type));
-    }
-
-    for (auto it = obj.begin(); it != obj.end(); ++it) {
-        if ((*it).type() == QJsonValue::Object) {
-            QJsonObject subObj = (*it).toObject();
-            filterRecursive(subObj);
-            *it = subObj;
-        } else if ((*it).type() == QJsonValue::Array) {
-            QJsonArray array = (*it).toArray();
-            filterRecursive(array);
-            *it = array;
-        }
-    }
-
-    // apply filter functions
-    const auto filterIt = std::lower_bound(std::begin(type_filters), std::end(type_filters), type, [](const auto &lhs, const auto &rhs) {
-        return std::strcmp(lhs.type, rhs.constData()) < 0;
-    });
-    if (filterIt != std::end(type_filters) && std::strcmp((*filterIt).type, type.constData()) == 0) {
-        (*filterIt).filterFunc(obj);
-    }
-}
+    // move TrainTrip::trainCompany to TrainTrip::provider (as defined by schema.org)
+    { "TrainTrip", "trainCompany", "provider" },
+};
 
 static QJsonArray graphExpand(const QJsonObject &obj)
 {
@@ -377,10 +300,14 @@ QJsonArray JsonLdImportFilter::filterObject(const QJsonObject &obj)
 
     QJsonArray results;
 
+    JsonLdFilterEngine filterEngine;
+    filterEngine.setTypeMappings(type_mapping);
+    filterEngine.setTypeFilters(type_filters);
+    filterEngine.setPropertyMappings(property_mappings);
     for (const auto &type : types) {
         QJsonObject res(obj);
         res.insert(QStringLiteral("@type"), type);
-        filterRecursive(res);
+        filterEngine.filterRecursive(res);
 
         if (type.endsWith(QLatin1String("Reservation"))) {
             filterReservation(res);

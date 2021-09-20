@@ -54,6 +54,8 @@ target_sources(KPimItinerary PRIVATE
     jsapi/bytearray.cpp
     jsapi/jsonld.cpp
 
+    json/jsonldfilterengine.cpp
+
     knowledgedb/alphaid.cpp
     knowledgedb/airportdb.cpp
     knowledgedb/airportnametokenizer.cpp
