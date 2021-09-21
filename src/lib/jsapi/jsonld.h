@@ -57,6 +57,11 @@ public:
      */
     Q_INVOKABLE QJSValue newRentalCarReservation() const;
 
+    /** Convert a train reservation to a bus reservation. */
+    Q_INVOKABLE QJSValue trainToBusReservation(const QJSValue &trainRes) const;
+    /** Convert a bus reservation to a train reservation. */
+    Q_INVOKABLE QJSValue busToTrainReservation(const QJSValue &busRes) const;
+
     /** Convert a date/time string to a date/time value.
      *  @param dtStr The input string containing a date/time value.
      *  @param format The format of the input string. Same format specification as

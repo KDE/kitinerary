@@ -6,6 +6,8 @@
 
 #include "jsonld.h"
 
+#include "json/jsonldfilterengine.h"
+
 #include <KItinerary/JsonLdDocument>
 
 #include <QDebug>
@@ -169,6 +171,54 @@ QJSValue JsApi::JsonLd::newRentalCarReservation() const
     res.setProperty(QStringLiteral("underName"), person);
 
     return res;
+}
+
+static constexpr const JsonLdFilterEngine::TypeMapping train_to_bus_type_map[] = {
+    { "TrainReservation", "BusReservation" },
+    { "TrainStation", "BusStation" },
+    { "TrainTrip", "BusTrip" },
+};
+
+static constexpr const JsonLdFilterEngine::PropertyMapping train_to_bus_property_map[] = {
+    { "BusTrip", "arrivalStation", "arrivalBusStop" },
+    { "BusTrip", "departureStation", "departureBusStop" },
+    { "BusTrip", "trainName", "busName" },
+    { "BusTrip", "trainNumber", "busNumber" },
+};
+
+QJSValue JsApi::JsonLd::trainToBusReservation(const QJSValue &trainRes) const
+{
+    QJsonObject obj = QJsonValue::fromVariant(trainRes.toVariant()).toObject();
+    JsonLdFilterEngine filterEngine;
+    filterEngine.setTypeMappings(train_to_bus_type_map);
+    filterEngine.setPropertyMappings(train_to_bus_property_map);
+    filterEngine.filterRecursive(obj);
+    return m_engine->toScriptValue(obj);
+}
+
+static constexpr const JsonLdFilterEngine::TypeMapping bus_to_train_type_map[] = {
+    { "BusReservation", "TrainReservation" },
+    { "BusStation", "TrainStation" },
+    { "BusStop", "TrainStation" },
+    { "BusTrip", "TrainTrip" },
+};
+
+static constexpr const JsonLdFilterEngine::PropertyMapping bus_to_train_property_map[] = {
+    { "TrainTrip", "arrivalBusStop", "arrivalStation" },
+    { "TrainTrip", "departureBusStop", "departureStation" },
+    { "TrainTrip", "busCompany", "provider" },
+    { "TrainTrip", "busName", "trainName" },
+    { "TrainTrip", "busNumber", "trainNumber" },
+};
+
+QJSValue JsApi::JsonLd::busToTrainReservation(const QJSValue &busRes) const
+{
+    QJsonObject obj = QJsonValue::fromVariant(busRes.toVariant()).toObject();
+    JsonLdFilterEngine filterEngine;
+    filterEngine.setTypeMappings(bus_to_train_type_map);
+    filterEngine.setPropertyMappings(bus_to_train_property_map);
+    filterEngine.filterRecursive(obj);
+    return m_engine->toScriptValue(obj);
 }
 
 QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format, const QString &localeName) const

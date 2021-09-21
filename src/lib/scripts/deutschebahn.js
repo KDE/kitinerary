@@ -55,18 +55,6 @@ function parseArrival(res, line, year) {
     return true;
 }
 
-function convertToBus(res) {
-    res['@type'] = 'BusReservation';
-    res.reservationFor['@type'] = 'BusTrip';
-    res.reservationFor.departureBusStop = res.reservationFor.departureStation;
-    res.reservationFor.departureBusStop['@type'] = 'BusStop';
-    res.reservationFor.arrivalBusStop = res.reservationFor.arrivalStation;
-    res.reservationFor.arrivalBusStop['@type'] = 'BusStop';
-    res.reservationFor.busName = res.reservationFor.trainName;
-    res.reservationFor.busNumber = res.reservationFor.trainNumber;
-    res.reservedTicket.ticketedSeat = undefined;
-}
-
 function parseLegs(text, year, compact) {
     var reservations = new Array();
     var lines = text.split('\n');
@@ -180,7 +168,8 @@ function parseTicket(text, uic918ticket) {
         reservations[i].reservationNumber = bookingRef[1];
 
         if (reservations[i].reservationFor.trainNumber && reservations[i].reservationFor.trainNumber.startsWith("Bus")) {
-            convertToBus(reservations[i]);
+            reservations[i] = JsonLd.trainToBusReservation(reservations[i]);
+            reservations[i].reservedTicket.ticketedSeat = undefined;
         }
     }
     return reservations;

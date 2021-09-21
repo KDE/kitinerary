@@ -7,6 +7,8 @@
 #ifndef KITINERARY_JSONLDFILTERENGINE_H
 #define KITINERARY_JSONLDFILTERENGINE_H
 
+#include "kitinerary_export.h"
+
 #include <cstddef>
 
 class QJsonArray;
@@ -19,8 +21,10 @@ namespace JsonLd {
     void renameProperty(QJsonObject &obj, const char *oldName, const char *newName);
 }
 
-/** JSON-LD filtering for input normalization or type transforms. */
-class JsonLdFilterEngine
+/** JSON-LD filtering for input normalization or type transforms.
+ *  @internal only exported for unit tests
+ */
+class KITINERARY_EXPORT JsonLdFilterEngine
 {
 public:
     explicit JsonLdFilterEngine();
