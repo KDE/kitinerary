@@ -18,14 +18,14 @@ enum {
 SSBTicketBase::SSBTicketBase() = default;
 SSBTicketBase::~SSBTicketBase() = default;
 
-uint64_t SSBTicketBase::readNumber(int start, int length) const
+quint64 SSBTicketBase::readNumber(int start, int length) const
 {
     if (start < 0 || length < 1 || start / 8 >= m_data.size() || (start + length) / 8 >= m_data.size() || length > 63) {
         qWarning() << "invalid SSB read:" << start << length;
         return {};
     }
 
-    uint64_t num = 0;
+    quint64 num = 0;
     for (int i = 0; i < 8; ++i) {
         num <<= 8;
         num |= (uint8_t)*(m_data.constData() + (start / 8) + i);
