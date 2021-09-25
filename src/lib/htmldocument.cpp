@@ -366,4 +366,23 @@ HtmlDocument* HtmlDocument::fromData(const QByteArray &data, QObject *parent)
 #endif
 }
 
+HtmlDocument* HtmlDocument::fromString(const QString &data, QObject *parent)
+{
+#ifdef HAVE_LIBXML2
+    const auto utf8Data = data.toUtf8();
+    auto tree = htmlReadMemory(utf8Data.constData(), utf8Data.size(), nullptr, "utf-8", HTML_PARSE_RECOVER | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING | HTML_PARSE_NOBLANKS | HTML_PARSE_NONET | HTML_PARSE_COMPACT);
+    if (!tree) {
+        return nullptr;
+    }
+
+    auto doc = new HtmlDocument(parent);
+    doc->d->m_doc = tree;
+    return doc;
+#else
+    Q_UNUSED(data)
+    Q_UNUSED(parent)
+    return nullptr;
+#endif
+}
+
 #include "moc_htmldocument.cpp"

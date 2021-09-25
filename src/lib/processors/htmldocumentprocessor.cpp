@@ -42,9 +42,8 @@ bool HtmlDocumentProcessor::canHandleData(const QByteArray &encodedData, QString
         || fileName.endsWith(QLatin1String(".htm"), Qt::CaseInsensitive);
 }
 
-ExtractorDocumentNode HtmlDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
+static ExtractorDocumentNode nodeFromHtml(HtmlDocument *html)
 {
-    auto html = HtmlDocument::fromData(encodedData);
     if (!html || html->root().firstChild().isNull()) {
         return {};
     }
@@ -52,6 +51,19 @@ ExtractorDocumentNode HtmlDocumentProcessor::createNodeFromData(const QByteArray
     ExtractorDocumentNode node;
     node.setContent<Internal::OwnedPtr<HtmlDocument>>(html);
     return node;
+}
+
+ExtractorDocumentNode HtmlDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
+{
+    return nodeFromHtml(HtmlDocument::fromData(encodedData));
+}
+
+ExtractorDocumentNode HtmlDocumentProcessor::createNodeFromContent(const QVariant &decodedData) const
+{
+    if (decodedData.type() == QVariant::String) {
+        return nodeFromHtml(HtmlDocument::fromString(decodedData.toString()));
+    }
+    return ExtractorDocumentProcessor::createNodeFromContent(decodedData);
 }
 
 void HtmlDocumentProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
