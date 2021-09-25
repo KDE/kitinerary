@@ -49,6 +49,8 @@
         <file>easyairportparking-pkpass.js</file>
         <file>easyjet.json</file>
         <file>easyjet.js</file>
+        <file>eki-net.json</file>
+        <file>eki-net.js</file>
         <file>eurowings.json</file>
         <file>eurowings.js</file>
         <file>eurowings-pkpass.js</file>

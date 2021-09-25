@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "reservation@eki-net.com",
+            "mimeType": "message/rfc822",
+            "scope": "Parent"
+        }
+    ],
+    "function": "parseReservation",
+    "mimeType": "text/plain",
+    "script": "eki-net.js"
+}
