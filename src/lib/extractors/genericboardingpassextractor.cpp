@@ -11,6 +11,7 @@
 #include <knowledgedb/airportdb.h>
 #include <knowledgedb/airportnametokenizer_p.h>
 #include <pdf/pdfdocument.h>
+#include <text/timefinder_p.h>
 
 #include <KItinerary/ExtractorDocumentNode>
 #include <KItinerary/ExtractorResult>
@@ -119,6 +120,7 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
             flightRes.setReservationFor(flight);
             result.push_back(std::move(flightRes));
         }
+
     }
 
     return result;

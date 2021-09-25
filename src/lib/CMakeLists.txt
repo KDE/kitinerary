@@ -92,6 +92,8 @@ target_sources(KPimItinerary PRIVATE
 
     scripts/extractors.qrc
 
+    text/timefinder.cpp
+
     tlv/berelement.cpp
 
     uic9183/rct2ticket.cpp
