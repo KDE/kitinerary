@@ -86,6 +86,10 @@ public:
      *  @returns @c nullptr if loading fails or libxml was not found.
      */
     static HtmlDocument* fromData(const QByteArray &data, QObject *parent = nullptr);
+    /** Creates a HtmlDocument from a given (unicode) string.
+     *  @returns @c nullptr if loading fails or libxml was not found.
+     */
+    static HtmlDocument* fromString(const QString &data, QObject *parent = nullptr);
 
     /** Returns the root element of the document. */
     HtmlElement root() const;

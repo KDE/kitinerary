@@ -14,14 +14,16 @@ function parseConfirmation(html) {
             res.reservationNumber = elems[i].firstChild.nextSibling.recursiveContent;
         }
         if (title.match(/(Date of stay|Aufenthaltsdatum)/i)) {
-            var dt = elems[i].firstChild.nextSibling.recursiveContent.match(/(\d{2}([|/.])\d{2}[|/.]\d{4}).*(\d{2}[|/.]\d{2}[|/.]\d{4})/);
+            const dtStr = elems[i].firstChild.nextSibling.recursiveContent;
+            var dt = dtStr.match(/(\d{2}[|/.]\d{2}[|/.]\d{4}).*(\d{2}[|/.]\d{2}[|/.]\d{4})/);
+            if (!dt) { // US format
+                dt = dtStr.match(/([A-Z][a-z]{2}\. \d{2}, \d{4}).*([A-Z][a-z]{2}\. \d{2}, \d{4})/);
+            }
             if (dt) {
                 var separator = dt[2];
-                var format = ["dd", "MM", "yyyy"].join(separator);
-                var lang = (separator === "." ? "de" : "en");
-
-                res.checkinTime = JsonLd.toDateTime(dt[1], format, lang);
-                res.checkoutTime = JsonLd.toDateTime(dt[3], format, lang);
+                const formats = [ "dd.MM.yyyy", "dd/MM/yyyy", "MMM. dd, yyyy"];
+                res.checkinTime = JsonLd.toDateTime(dt[1], formats, "en");
+                res.checkoutTime = JsonLd.toDateTime(dt[2], formats, "en");
             }
         }
     }
