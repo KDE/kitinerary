@@ -1,8 +1,0 @@
-{
-    "mimeType": "application/pdf",
-    "filter": [
-        { "field": "From", "match": "@airbaltic.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
-        { "field": "operatingCarrierDesignator", "match": "BT", "mimeType": "internal/iata-bcbp", "scope": "Descendants" }
-    ],
-    "script": "airbaltic.js"
-}
