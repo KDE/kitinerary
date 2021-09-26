@@ -20,7 +20,7 @@ static bool isSeparator(QChar c)
 
 void TimeFinder::find(QStringView text)
 {
-    m_times.clear();
+    m_results.clear();
     findTimes(text);
     if (!m_results.empty()) {
         findDates(text);
@@ -100,9 +100,6 @@ void TimeFinder::findTimes(QStringView text)
             hour = 0;
         }
 
-        if (std::find(m_times.begin(), m_times.end(), QTime(hour, min)) == m_times.end()) {
-            m_times.push_back(QTime(hour, min));
-        }
         Result result;
         result.dateTime = QTime(hour, min);
         result.begin = rxTimeMatch.capturedStart();
@@ -177,11 +174,6 @@ void TimeFinder::mergeResults()
             ++it;
         }
     }
-}
-
-const std::vector<QTime>& TimeFinder::times() const
-{
-    return m_times;
 }
 
 const std::vector<TimeFinder::Result>& TimeFinder::results() const

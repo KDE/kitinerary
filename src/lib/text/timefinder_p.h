@@ -21,8 +21,6 @@ class TimeFinder
 public:
     void find(QStringView text);
 
-    const std::vector<QTime>& times() const;
-
     struct Result {
         int begin = -1;
         int end = -1;
@@ -36,7 +34,6 @@ private:
     void findDates(QStringView text);
     void mergeResults();
 
-    std::vector<QTime> m_times;
     std::vector<Result> m_results;
 };
 

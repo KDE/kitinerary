@@ -23,7 +23,6 @@
 #include <QDebug>
 #include <QTimeZone>
 
-#include <array>
 #include <unordered_map>
 
 using namespace KItinerary;
@@ -72,7 +71,7 @@ static bool isPlausibleBoardingTime(const QDateTime &boarding, const QDateTime &
     return boarding < departure && boarding.secsTo(departure) <= 3600;
 }
 
-static bool isPlausibleFlightTimes(const std::array<QDateTime, 3> &times, KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
+static bool isPlausibleFlightTimes(const std::vector<QDateTime> &times, KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
 {
     if (!isPlausibleBoardingTime(times[0], times[1])) {
         return false;
@@ -171,13 +170,25 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
         if (airportNames.size() == 2) {
             TimeFinder timeFinder;
             timeFinder.find(pageText);
-            if (timeFinder.times().size() == 3) {
-                std::array<QDateTime, 3> times;
-                std::transform(timeFinder.times().begin(), timeFinder.times().end(), times.begin(), [departureDay](QTime t) {
-                    return QDateTime(departureDay, t);
-                });
-                std::sort(times.begin(), times.end());
-
+            std::vector<QDateTime> times;
+            for (const auto &res : timeFinder.results()) {
+                switch (res.dateTime.type()) {
+                    case QVariant::Time:
+                        times.push_back(QDateTime(departureDay, res.dateTime.toTime()));
+                        break;
+                    case QVariant::DateTime:
+                        if (res.dateTime.toDateTime().date() == departureDay) {
+                            times.push_back(res.dateTime.toDateTime());
+                        }
+                        break;
+                    case QVariant::Date:
+                    default:
+                        break;
+                }
+            }
+            std::sort(times.begin(), times.end());
+            times.erase(std::unique(times.begin(), times.end()), times.end());
+            if (times.size() == 3) {
                 // apply what we found
                 if (isPlausibleFlightTimes(times, from, to)) {
                     for (auto &res : result) {
