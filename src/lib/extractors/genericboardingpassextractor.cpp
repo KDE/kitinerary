@@ -205,15 +205,19 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
             std::sort(times.begin(), times.end());
             times.erase(std::unique(times.begin(), times.end()), times.end());
             if (times.size() == 2) {
+                // boarding/departure only, and on the same day
                 if (isPlausibleBoardingTime(times[0], times[1]) && !isPlausibleFlightTime(times[0], times[1], from, to)) {
                     applyFlightTimes(result, times[0], times[1], {});
                 }
             } else if (times.size() == 3) {
+                // boarding/departure/arrival on the same day
                 if (isPlausibleBoardingTime(times[0], times[1]) && isPlausibleFlightTime(times[1], times[2], from, to)) {
                     applyFlightTimes(result, times[0], times[1], times[2]);
+                // boarding/departure on the same day, arrival on the next day
+                } else if (isPlausibleBoardingTime(times[1], times[2]) && isPlausibleFlightTime(times[2], times[0].addDays(1), from, to)) {
+                    applyFlightTimes(result, times[1], times[2], times[0].addDays(1));
                 }
 
-                // TODO handle arrival past midnight
                 // TODO handle boarding before midnight
             }
         }
