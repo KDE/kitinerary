@@ -71,17 +71,14 @@ static bool isPlausibleBoardingTime(const QDateTime &boarding, const QDateTime &
     return boarding < departure && boarding.secsTo(departure) <= 3600;
 }
 
-static bool isPlausibleFlightTimes(const std::vector<QDateTime> &times, KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
+static bool isPlausibleFlightTime(const QDateTime &fromTime, const QDateTime &toTime, KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
 {
-    if (!isPlausibleBoardingTime(times[0], times[1])) {
-        return false;
-    }
     const auto distance = airportDistance(from, to);
 
     // times are local, so convert them to the right timezone first
-    auto fromDt = times[1];
+    auto fromDt = fromTime;
     fromDt.setTimeZone(KnowledgeDb::timezoneForAirport(from));
-    auto toDt = times[2];
+    auto toDt = toTime;
     toDt.setTimeZone(KnowledgeDb::timezoneForAirport(to));
 
     const auto flightDuration = fromDt.secsTo(toDt);
@@ -89,6 +86,25 @@ static bool isPlausibleFlightTimes(const std::vector<QDateTime> &times, Knowledg
         return false;
     }
     return fromDt < toDt && FlightUtil::isPlausibleDistanceForDuration(distance, flightDuration);
+}
+
+static void applyFlightTimes(QVector<QVariant> &result, const QDateTime &boarding, const QDateTime &dep, const QDateTime &arr)
+{
+    for (auto &res : result) {
+        auto flightRes = res.value<FlightReservation>();
+        auto flight = flightRes.reservationFor().value<Flight>();
+        if (!flight.boardingTime().isValid() && boarding.isValid()) {
+            flight.setBoardingTime(boarding);
+        }
+        if (!flight.departureTime().isValid() && dep.isValid()) {
+            flight.setDepartureTime(dep);
+        }
+        if (!flight.arrivalTime().isValid() && arr.isValid()) {
+            flight.setArrivalTime(arr);
+        }
+        flightRes.setReservationFor(flight);
+        res = flightRes;
+    }
 }
 
 ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
@@ -188,24 +204,13 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
             }
             std::sort(times.begin(), times.end());
             times.erase(std::unique(times.begin(), times.end()), times.end());
-            if (times.size() == 3) {
-                // apply what we found
-                if (isPlausibleFlightTimes(times, from, to)) {
-                    for (auto &res : result) {
-                        auto flightRes = res.value<FlightReservation>();
-                        auto flight = flightRes.reservationFor().value<Flight>();
-                        if (!flight.boardingTime().isValid()) {
-                            flight.setBoardingTime(times[0]);
-                        }
-                        if (!flight.departureTime().isValid()) {
-                            flight.setDepartureTime(times[1]);
-                        }
-                        if (!flight.arrivalTime().isValid()) {
-                            flight.setArrivalTime(times[2]);
-                        }
-                        flightRes.setReservationFor(flight);
-                        res = flightRes;
-                    }
+            if (times.size() == 2) {
+                if (isPlausibleBoardingTime(times[0], times[1]) && !isPlausibleFlightTime(times[0], times[1], from, to)) {
+                    applyFlightTimes(result, times[0], times[1], {});
+                }
+            } else if (times.size() == 3) {
+                if (isPlausibleBoardingTime(times[0], times[1]) && isPlausibleFlightTime(times[1], times[2], from, to)) {
+                    applyFlightTimes(result, times[0], times[1], times[2]);
                 }
 
                 // TODO handle arrival past midnight
