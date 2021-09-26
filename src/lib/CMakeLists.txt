@@ -122,6 +122,7 @@ target_sources(KPimItinerary PRIVATE
     extractorvalidator.cpp
     file.cpp
     flightpostprocessor.cpp
+    flightutil.cpp
     htmldocument.cpp
     jsonlddocument.cpp
     locationutil.cpp

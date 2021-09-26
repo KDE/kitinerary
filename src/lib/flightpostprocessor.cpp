@@ -7,6 +7,7 @@
 #include "flightpostprocessor_p.h"
 #include "extractorpostprocessor_p.h"
 #include "extractorutil.h"
+#include "flightutil_p.h"
 #include "locationutil.h"
 
 #include "knowledgedb/airportdb.h"
@@ -20,11 +21,6 @@
 #include <QTimeZone>
 
 using namespace KItinerary;
-
-enum {
-    AirplaneSpeedLowerBound = 250, // km/h, turboprop aircraft, and a bit lower than average cruise speed to account for takeoff/landing
-    AirplaneSpeedUpperBound = 2140, // km/h, Concorde, so a bit excessive
-};
 
 Flight FlightPostProcessor::processFlight(Flight flight)
 {
@@ -146,12 +142,6 @@ void FlightPostProcessor::pickAirportByDistance(int duration, const std::vector<
         return;
     }
 
-    int lowerBoundDistance = AirplaneSpeedLowerBound * (duration / 3.6);
-    if (duration < 3600) { // for ultra short flights the takeoff/landing overhead is so big that our expected speed range doesn't work reliable anymore
-        lowerBoundDistance /= 2;
-    }
-    const int upperBoundDistance = AirplaneSpeedUpperBound * (duration / 3.6);
-
     for (auto it = codes.begin(); it != codes.end();) {
         const auto destCoord = KnowledgeDb::coordinateForAirport(*it);
         if (!destCoord.isValid()) {
@@ -162,7 +152,7 @@ void FlightPostProcessor::pickAirportByDistance(int duration, const std::vector<
         for (const auto startCode : startCodes) {
             const auto startCoord =  KnowledgeDb::coordinateForAirport(startCode);
             const auto dist = LocationUtil::distance({startCoord.latitude, startCoord.longitude}, {destCoord.latitude, destCoord.longitude});
-            outOfRange = outOfRange && (dist > upperBoundDistance || dist < lowerBoundDistance);
+            outOfRange = outOfRange && !FlightUtil::isPlausibleDistanceForDuration(dist, duration);
         }
         if (outOfRange) {
             it = codes.erase(it);
