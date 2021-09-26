@@ -36,6 +36,16 @@
                 "iataCode": "MXP",
                 "name": "Milano Malpensa"
             },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2019-09-06T17:20:00+02:00",
+                "timezone": "Europe/Rome"
+            },
+            "boardingTime": {
+                "@type": "QDateTime",
+                "@value": "2019-09-06T15:20:00+02:00",
+                "timezone": "Europe/Vienna"
+            },
             "departureAirport": {
                 "@type": "Airport",
                 "address": {
@@ -51,6 +61,11 @@
                 "name": "Vienna"
             },
             "departureDay": "2019-09-06",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2019-09-06T15:45:00+02:00",
+                "timezone": "Europe/Vienna"
+            },
             "flightNumber": "1996"
         },
         "reservationNumber": "XXX007",
