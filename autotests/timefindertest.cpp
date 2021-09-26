@@ -51,8 +51,8 @@ private Q_SLOTS:
 
         TimeFinder finder;
         finder.find(input);
-        QCOMPARE(finder.times().size(), 1);
-        QCOMPARE(finder.times()[0], time);
+        QCOMPARE(finder.results().size(), 1);
+        QCOMPARE(finder.results()[0].dateTime.toTime(), time);
     }
 
     void testTimeFinderNone_data()
@@ -80,17 +80,38 @@ private Q_SLOTS:
 
         TimeFinder finder;
         finder.find(input);
-        QCOMPARE(finder.times().size(), 0);
+        QCOMPARE(finder.results().size(), 0);
     }
 
     void testTimeFinderPlural()
     {
         TimeFinder finder;
         finder.find(u"from 09:00 to 17:00");
-        QCOMPARE(finder.times().size(), 2);
-        QCOMPARE(finder.times()[0], QTime(9, 0));
-        QCOMPARE(finder.times()[1], QTime(17, 0));
+        QCOMPARE(finder.results().size(), 2);
+        QCOMPARE(finder.results()[0].dateTime.toTime(), QTime(9, 0));
+        QCOMPARE(finder.results()[1].dateTime.toTime(), QTime(17, 0));
     }
+
+    void testTimeFinderDateTime_data()
+    {
+        QTest::addColumn<QString>("input");
+        QTest::addColumn<QDateTime>("dateTime");
+
+        QTest::newRow("US") << s("26 Sep 2021 16:43") << QDateTime({2021, 9, 26}, {16, 43});
+        QTest::newRow("US") << s("26.09.2021 16:43") << QDateTime({2021, 9, 26}, {16, 43});
+    }
+
+    void testTimeFinderDateTime()
+    {
+        QFETCH(QString, input);
+        QFETCH(QDateTime, dateTime);
+
+        TimeFinder finder;
+        finder.find(input);
+        QCOMPARE(finder.results().size(), 1);
+        QCOMPARE(finder.results()[0].dateTime.toDateTime(), dateTime);
+    }
+
 };
 
 QTEST_GUILESS_MAIN(TimeFinderTest)

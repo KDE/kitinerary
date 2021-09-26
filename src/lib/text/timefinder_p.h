@@ -9,6 +9,8 @@
 class QStringView;
 class QTime;
 
+#include <QVariant>
+
 #include <vector>
 
 namespace KItinerary {
@@ -21,8 +23,21 @@ public:
 
     const std::vector<QTime>& times() const;
 
+    struct Result {
+        int begin = -1;
+        int end = -1;
+        QVariant dateTime;
+    };
+
+    const std::vector<Result>& results() const;
+
 private:
+    void findTimes(QStringView text);
+    void findDates(QStringView text);
+    void mergeResults();
+
     std::vector<QTime> m_times;
+    std::vector<Result> m_results;
 };
 
 }
