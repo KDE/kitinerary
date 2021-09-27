@@ -104,7 +104,7 @@ ExtractorDocumentNode MimeDocumentProcessor::createNodeFromContent(const QVarian
     return node;
 }
 
-static void expandContentNode(ExtractorDocumentNode &node, KMime::Content *content, const ExtractorEngine *engine)
+static ExtractorDocumentNode expandContentNode(ExtractorDocumentNode &node, KMime::Content *content, const ExtractorEngine *engine)
 {
     QString fileName;
     const auto ct = content->contentType(false);
@@ -125,17 +125,33 @@ static void expandContentNode(ExtractorDocumentNode &node, KMime::Content *conte
         child = engine->documentNodeFactory()->createNode(content->decodedContent(), fileName);
     }
     node.appendChild(child);
+    return child;
 }
 
 static void expandContentNodeRecursive(ExtractorDocumentNode &node, KMime::Content *content, const ExtractorEngine *engine)
 {
+    const auto ct = content->contentType(false);
     const auto children = content->contents();
-    if (!content->contentType(false) || children.empty()) {
+    if (!ct || children.empty()) {
         expandContentNode(node, content, engine);
         return;
     }
 
-    // TODO special handling of multipart/related to add images to the corresponding HTML document
+    // special handling of multipart/related to add images to the corresponding HTML document
+    if (ct && ct->isMultipart() && ct->isSubtype("related") && ct->parameter(QLatin1String("type")) == QLatin1String("text/html") && children.size() >= 2) {
+        const auto child = children.front();
+        if (child->contentType(false) && child->contentType(false)->isHTMLText()) {
+            auto htmlNode = expandContentNode(node, child, engine);
+            for (auto it = std::next(children.begin()); it != children.end(); ++it) {
+                auto imgNode = expandContentNode(htmlNode, (*it), engine);
+                const auto cid = (*it)->contentID(false);
+                if (cid) {
+                    imgNode.setLocation(cid->identifier());
+                }
+            }
+            return;
+        }
+    }
 
     for (const auto child : children) {
         expandContentNodeRecursive(node, child, engine);
