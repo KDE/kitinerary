@@ -8,6 +8,6 @@
         }
     ],
     "function": "parseReservation",
-    "mimeType": "text/plain",
+    "mimeType": "text/html",
     "script": "eki-net.js"
 }

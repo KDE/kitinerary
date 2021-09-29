@@ -3,15 +3,23 @@
   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parseReservation(text)
+function parseReservation(html, node)
 {
-    var reservations = new Array();
+    const text = html.root.recursiveContent;
     const resNum = text.match(/予約番号\n(.*)\n/);
     const date = text.match(/乗車日.*?(\d.*)\n/);
     const trainInfo = text.match(/列車情報==([\s\S]*?)==/)[1];
     const legs = trainInfo.split(/\(\d列車目\)\n/);
+    var qrCode = undefined;
+    for (qrCodeNode of node.findChildNodes({ mimeType: "text/plain", scope: "Descendants" })) {
+        if (qrCodeNode.location == "qrcode") {
+            qrCode = qrCodeNode.content;
+            break;
+        }
+    }
+
+    var reservations = new Array();
     for (leg of legs) {
-        console.log(leg);
         const fromTo = leg.match(/区　間：(.*?)\((.*?)\)→(.*?)\((.*?)\)\n/);
         if (!fromTo) {
             continue;
@@ -34,6 +42,9 @@ function parseReservation(text)
         }
 
         res.reservationNumber = resNum[1];
+        if (qrCode) {
+            res.reservedTicket.ticketToken = "qrCode:" + qrCode;
+        }
         reservations.push(res);
     }
     return reservations;
