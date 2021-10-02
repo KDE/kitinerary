@@ -32,7 +32,7 @@ function main(content) {
 
     const price = content.match(/Gesamtpreis: (.*) EUR/)[1].replace(',', '.')
 
-    const numberAdults = content.match(/Anzahl der Erwachsener: ([0-9]+)/)[1]
+    const numberAdults = content.match(/Anzahl der Erwachsene[rn]: ([0-9]+)/)[1]
 
     const numberChildren = content.match(/Anzahl der Kinder: ([0-9]+)/)[1]
 
