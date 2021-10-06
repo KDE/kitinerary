@@ -7,7 +7,6 @@
 #include <../src/lib/jsapi/bitarray.h>
 
 #include <QByteArray>
-#include <QDebug>
 #include <QObject>
 #include <QTest>
 

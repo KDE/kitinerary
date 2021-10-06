@@ -12,7 +12,6 @@
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/PdfDocument>
 
-#include <QDebug>
 #include <QFile>
 #include <QTest>
 

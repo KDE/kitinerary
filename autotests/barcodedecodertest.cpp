@@ -7,7 +7,6 @@
 #include <config-kitinerary.h>
 #include <KItinerary/BarcodeDecoder>
 
-#include <QDebug>
 #include <QImage>
 #include <QObject>
 #include <QTest>

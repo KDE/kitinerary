@@ -6,7 +6,6 @@
 
 #include <tlv/berelement.cpp>
 
-#include <QDebug>
 #include <QObject>
 #include <QTest>
 

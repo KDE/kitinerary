@@ -7,7 +7,6 @@
 #include <KItinerary/DocumentUtil>
 #include <KItinerary/Reservation>
 
-#include <QDebug>
 #include <QObject>
 #include <QTest>
 #include <QVariant>

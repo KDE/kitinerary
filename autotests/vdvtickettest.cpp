@@ -6,7 +6,6 @@
 
 #include <vdv/vdvticketparser.h>
 
-#include <QDebug>
 #include <QObject>
 #include <QTest>
 

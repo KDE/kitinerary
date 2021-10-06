@@ -14,11 +14,8 @@
 #include <KItinerary/ScriptExtractor>
 
 #include <QDebug>
-#include <QDirIterator>
 #include <QFile>
-#include <QJsonArray>
 #include <QJsonDocument>
-#include <QJsonObject>
 #include <QTest>
 
 using namespace KItinerary;

@@ -9,7 +9,6 @@
 #include <KItinerary/Flight>
 #include <KItinerary/Place>
 
-#include <QDebug>
 #include <QTest>
 
 using namespace KItinerary;

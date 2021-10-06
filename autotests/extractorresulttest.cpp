@@ -7,7 +7,6 @@
 #include <KItinerary/ExtractorResult>
 #include <KItinerary/Place>
 
-#include <QDebug>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QTest>

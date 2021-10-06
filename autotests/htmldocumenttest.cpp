@@ -7,7 +7,6 @@
 #include <KItinerary/HtmlDocument>
 #include <config-kitinerary.h>
 
-#include <QDebug>
 #include <QFile>
 #include <QTest>
 

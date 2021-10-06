@@ -7,7 +7,6 @@
 #include <KItinerary/LocationUtil>
 #include <KItinerary/Place>
 
-#include <QDebug>
 #include <QObject>
 #include <QTest>
 

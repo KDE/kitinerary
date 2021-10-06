@@ -19,7 +19,6 @@
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
-#include <QJsonObject>
 #include <QObject>
 #include <QProcess>
 #include <QTest>

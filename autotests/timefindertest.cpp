@@ -5,7 +5,6 @@
 
 #include <text/timefinder.cpp>
 
-#include <QDebug>
 #include <QTest>
 
 using namespace KItinerary;

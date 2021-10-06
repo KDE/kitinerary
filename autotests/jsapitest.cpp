@@ -6,7 +6,6 @@
 
 #include <../src/lib/jsapi/jsonld.h>
 
-#include <QDebug>
 #include <QJSEngine>
 #include <QJSValue>
 #include <QObject>

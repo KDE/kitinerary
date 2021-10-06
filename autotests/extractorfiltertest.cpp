@@ -13,10 +13,7 @@
 #include <KItinerary/ExtractorFilter>
 #include <KItinerary/ExtractorResult>
 
-#include <QDebug>
 #include <QFile>
-#include <QJsonArray>
-#include <QJsonObject>
 #include <QTest>
 
 using namespace KItinerary;

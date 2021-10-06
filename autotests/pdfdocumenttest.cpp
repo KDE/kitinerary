@@ -7,9 +7,7 @@
 #include <KItinerary/PdfDocument>
 #include <config-kitinerary.h>
 
-#include <QDebug>
 #include <QFile>
-#include <QImage>
 #include <QObject>
 #include <QTest>
 

@@ -6,7 +6,6 @@
 
 #include <knowledgedb/airportnametokenizer_p.h>
 
-#include <QDebug>
 #include <QObject>
 #include <QTest>
 

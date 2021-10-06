@@ -6,7 +6,6 @@
 
 #include "stringutil.h"
 
-#include <QDebug>
 #include <QObject>
 #include <QTest>
 
