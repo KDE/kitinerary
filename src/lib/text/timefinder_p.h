@@ -7,7 +7,6 @@
 #define KITINERARY_TIMEFINDER_H
 
 class QStringView;
-class QTime;
 
 #include <QVariant>
 

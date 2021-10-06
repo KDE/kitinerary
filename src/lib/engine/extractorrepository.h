@@ -12,7 +12,6 @@
 #include <memory>
 #include <vector>
 
-class QJsonArray;
 class QJsonValue;
 class QString;
 
