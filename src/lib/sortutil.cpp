@@ -18,6 +18,8 @@
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
 
+#include "knowledgedb/airportdb.h"
+
 #include <QDateTime>
 #include <QTimeZone>
 
@@ -61,7 +63,9 @@ QDateTime SortUtil::startDateTime(const QVariant &elem)
         if (flight.boardingTime().isValid()) {
             return flight.boardingTime();
         }
-        return QDateTime(flight.departureDay(), QTime(23, 59, 59));
+        QDateTime dt(flight.departureDay(), QTime(23, 59, 59));
+        dt.setTimeZone(KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{flight.departureAirport().iataCode()}));
+        return dt;
     }
     if (JsonLd::isA<TrainTrip>(elem)) {
         const auto trip = elem.value<TrainTrip>();
@@ -119,7 +123,9 @@ QDateTime SortUtil::endDateTime(const QVariant &elem)
         if (flight.arrivalTime().isValid()) {
             return flight.arrivalTime();
         }
-        return QDateTime(flight.departureDay(), QTime(23, 59, 59));
+        QDateTime dt(flight.departureDay(), QTime(23, 59, 59));
+        dt.setTimeZone(KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{flight.arrivalAirport().iataCode()}));
+        return dt;
     }
     if (JsonLd::isA<TrainTrip>(elem)) {
         const auto trip = elem.value<TrainTrip>();
