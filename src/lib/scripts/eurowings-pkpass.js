@@ -12,5 +12,12 @@ function main(pass, node)
     if (pass.field["operatingcarrier"])
         res.reservationFor.airline.name = pass.field["operatingcarrier"].value;
 
+    const secondary = pass.secondaryFields;
+    const nameField = secondary.find(item => item.key === "name");
+    if (nameField) {
+        res.underName = JsonLd.newObject("Person");
+        res.underName.name = nameField.value;
+    }
+
     return res;
 }
