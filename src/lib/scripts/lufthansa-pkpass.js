@@ -21,5 +21,15 @@ function main(pass, node)
         res.underName.name = passengerName.value;
     }
 
+    const back = pass.backFields;
+    const cancelLink = back.find(item => item.key === "cancel");
+    if (cancelLink) {
+        const cancelUrl = cancelLink.value.match(/https:\/\/mobile.lufthansa.com\/service\/checkin\?[A-Z0-9=&]*[A-Z0-9=&]/i);
+        if (cancelUrl) {
+            res.potentialAction = JsonLd.newObject("CancelAction");
+            res.potentialAction.url = cancelUrl[1];
+        }
+    }
+
     return res;
 }
