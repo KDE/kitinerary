@@ -19,5 +19,10 @@ function main(pass, node)
         res.underName.name = nameField.value;
     }
 
+    const boardingGroup = secondary.find(item => item.key === "boardinggroup");
+    if (boardingGroup) {
+        res.boardingGroup = boardingGroup.value;
+    }
+
     return res;
 }
