@@ -23,6 +23,14 @@
 #include <QProcess>
 #include <QTest>
 
+void initLocale()
+{
+    // use some exotic locale to ensure the date/time parsing doesn't just work by luck
+    qputenv("LANG", "fr_FR");
+}
+
+Q_CONSTRUCTOR_FUNCTION(initLocale)
+
 using namespace KItinerary;
 
 /** Note: this test requires external test data that is not publicly available,
@@ -39,9 +47,6 @@ private:
 private Q_SLOTS:
     void initTestCase()
     {
-        // use some exotic locale to ensure the date/time parsing doesn't just work by luck
-        QLocale::setDefault(QLocale(QStringLiteral("fr_FR")));
-
         //m_engine.setUseSeparateProcess(true);
     }
 
