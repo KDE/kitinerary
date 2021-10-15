@@ -34,6 +34,16 @@ private Q_SLOTS:
         QFETCH(QString, out);
         QCOMPARE(StringUtil::normalize(in), out);
     }
+
+    void testPrefixSimilarity()
+    {
+        QCOMPARE(StringUtil::prefixSimilarity(QString(), QString()), 0.0f);
+        QCOMPARE(StringUtil::prefixSimilarity(u"aaa", QString()), 0.0f);
+        QCOMPARE(StringUtil::prefixSimilarity(u"aaaa", u"AA"), 0.5f);
+        QCOMPARE(StringUtil::prefixSimilarity(u"aba", u"aBa"), 1.0f);
+        QCOMPARE(StringUtil::prefixSimilarity(u"ab", u"aa"), 0.5f);
+        QCOMPARE(StringUtil::prefixSimilarity(u"ac", u"abbb"), 0.25f);
+    }
 };
 
 QTEST_APPLESS_MAIN(StringUtilTest)

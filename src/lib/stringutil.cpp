@@ -90,3 +90,23 @@ QStringView StringUtil::betterString(QStringView lhs, QStringView rhs)
     }
     return rhs;
 }
+
+float StringUtil::prefixSimilarity(QStringView s1, QStringView s2)
+{
+    if (s1.empty() || s2.empty()) {
+        return 0.0f;
+    }
+
+    if (s1.size() > s2.size()) {
+        std::swap(s1, s2);
+    }
+
+    for (int i = 0; i < s1.size(); ++i) {
+        if (s1[i].toCaseFolded() == s2[i].toCaseFolded()) {
+            continue;
+        }
+        return (float)i / (float)s2.size();
+    }
+
+    return (float)s1.size() / (float)s2.size();
+}

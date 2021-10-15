@@ -7,6 +7,7 @@
 #include "mergeutil.h"
 #include "logging.h"
 #include "compare-logging.h"
+#include "locationutil.h"
 #include "stringutil.h"
 #include "sortutil.h"
 
@@ -423,8 +424,14 @@ bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)
 
 static bool isSameEvent(const Event &lhs, const Event &rhs)
 {
-    return equalAndPresent(lhs.name(), rhs.name())
-        && equalAndPresent(lhs.startDate(), rhs.startDate());
+    if (!equalAndPresent(lhs.startDate(), rhs.startDate())) {
+        return false;
+    }
+
+    // event names can contain additional qualifiers, like for Adult/Child tickets,
+    // those don't change the event though
+    const auto namePrefix = StringUtil::prefixSimilarity(lhs.name(), rhs.name());
+    return namePrefix == 1.0f || (namePrefix > 0.65f && LocationUtil::isSameLocation(lhs.location(), rhs.location(), LocationUtil::Exact));
 }
 
 static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs)

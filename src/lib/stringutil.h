@@ -29,6 +29,12 @@ namespace StringUtil
      *  That is, prefer the one that didn't lose casing/unicode/etc in previous processing.
      */
     QStringView betterString(QStringView lhs, QStringView rhs);
+
+    /** Returns how much of the prefix of two given strings are equal, in
+     *  relation to the longer of the two input strings.
+     *  @internal only exported for unit tests
+     */
+    KITINERARY_EXPORT float prefixSimilarity(QStringView s1, QStringView s2);
 }
 
 }
