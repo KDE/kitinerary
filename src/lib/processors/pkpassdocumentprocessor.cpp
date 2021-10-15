@@ -215,6 +215,12 @@ static Event extractEventTicketPass(KPkPass::Pass *pass, Event event)
     // "relevantDate" is the best guess for the start time
     if (pass->relevantDate().isValid() && !event.startDate().isValid()) {
         event.setStartDate(pass->relevantDate());
+
+        // "expirationDate" is the best guess for the end time
+        if (pass->expirationDate().isValid() && pass->relevantDate().date() == pass->expirationDate().date() &&
+            pass->expirationDate() > pass->relevantDate() && !event.endDate().isValid()) {
+            event.setEndDate(pass->expirationDate());
+        }
     }
 
     // location is the best guess for the venue
