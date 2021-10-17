@@ -573,11 +573,8 @@ QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, co
         return dt;
     }
 
-    QTimeZone tz;
-    if (!place.address().addressCountry().isEmpty()) {
-        tz = KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(),
+    const auto tz = KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(),
                                                                        KnowledgeDb::CountryId{place.address().addressCountry()});
-    }
     if (!tz.isValid()) {
         return dt;
     }
