@@ -44,8 +44,9 @@ KnowledgeDb::CountryId KnowledgeDb::countryForTimezone(KnowledgeDb::Tz tz)
     return timezone_country_map[static_cast<std::underlying_type<KnowledgeDb::Tz>::type>(tz)];
 }
 
-KnowledgeDb::Tz KnowledgeDb::timezoneForCoordinate(float lat, float lon, bool *ambiguous)
+static KnowledgeDb::Tz timezoneForCoordinate(float lat, float lon, bool *ambiguous)
 {
+    using namespace KnowledgeDb;
     if (std::isnan(lat) || std::isnan(lon)) {
         return Tz::Undefined;
     }

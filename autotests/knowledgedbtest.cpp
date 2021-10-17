@@ -260,13 +260,13 @@ private Q_SLOTS:
         using namespace KnowledgeDb;
 
         // basic checks in all quadrants
-        QCOMPARE(timezoneForCoordinate(52.4, 13.1), Tz::Europe_Berlin);
-        QCOMPARE(timezoneForCoordinate(-8.0, -35.0), Tz::America_Recife);
-        QCOMPARE(timezoneForCoordinate(-36.5, 175.0), Tz::Pacific_Auckland);
-        QCOMPARE(timezoneForCoordinate(44.0, -79.5), Tz::America_Toronto);
+        QCOMPARE(timezoneForLocation(52.4, 13.1, {}), QTimeZone("Europe/Berlin"));
+        QCOMPARE(timezoneForLocation(-8.0, -35.0, {}), QTimeZone("America/Recife"));
+        QCOMPARE(timezoneForLocation(-36.5, 175.0, {}), QTimeZone("Pacific/Auckland"));
+        QCOMPARE(timezoneForLocation(44.0, -79.5, {}), QTimeZone("America/Toronto"));
 
         // Special case: Northern Vietnam has a Thai timezone
-        QCOMPARE(timezoneForCoordinate(21.0, 106.0), Tz::Asia_Bangkok);
+        QCOMPARE(timezoneForLocation(21.0, 106.0, {}), QTimeZone("Asia/Bangkok"));
 
         // Maastricht (NL), very close to the BE border
         QCOMPARE(timezoneForLocation(50.8505, 5.6881, CountryId{}), QTimeZone("Europe/Amsterdam"));
@@ -288,10 +288,8 @@ private Q_SLOTS:
         // Baarle, the ultimate special case, NL/BE differs house by house
         QCOMPARE(timezoneForLocation(51.44344, 4.93373, CountryId{"BE"}), QTimeZone("Europe/Brussels"));
         QCOMPARE(timezoneForLocation(51.44344, 4.93373, CountryId{"NL"}), QTimeZone("Europe/Amsterdam"));
-        bool ambiguous = false;
-        auto tz = timezoneForCoordinate(51.44344, 4.93373, &ambiguous);
-        QVERIFY(ambiguous);
-        QVERIFY(tz == Tz::Europe_Amsterdam || tz == Tz::Europe_Brussels);
+        const auto tz = timezoneForLocation(51.44344, 4.93373, {});
+        QVERIFY(tz == QTimeZone("Europe/Amsterdam") || tz == QTimeZone("Europe/Brussels"));
 
         // Eliat Airport (IL), close to JO, and with a minor timezone variation due to different weekends
         QCOMPARE(timezoneForLocation(29.72530, 35.00598, CountryId{"IL"}), QTimeZone("Asia/Jerusalem"));
@@ -305,11 +303,11 @@ private Q_SLOTS:
         QCOMPARE(timezoneForLocation(-31.4, -64.2, CountryId{"AR"}), QTimeZone("America/Argentina/Cordoba"));
 
         // polar regions
-        QCOMPARE(timezoneForCoordinate(-90.0, 0.0), Tz::Undefined);
-        QCOMPARE(timezoneForCoordinate(90.0, 0.0), Tz::Undefined);
+        QCOMPARE(timezoneForLocation(-90.0, 0.0, {}), QTimeZone());
+        QCOMPARE(timezoneForLocation(90.0, 0.0, {}), QTimeZone());
 
         // Hong Kong seems problematic on FreeBSD
-        QCOMPARE(timezoneForCoordinate(22.31600, 113.93688), Tz::Asia_Hong_Kong);
+        QCOMPARE(timezoneForLocation(22.31600, 113.93688, {}), QTimeZone("Asia/Hong_Kong"));
 
         // coordinates not provided
         QCOMPARE(timezoneForLocation(NAN, NAN, CountryId{"LU"}), QTimeZone("Europe/Luxembourg"));
