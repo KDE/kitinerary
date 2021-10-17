@@ -15,8 +15,9 @@
 
 using namespace KItinerary;
 
-const char* KnowledgeDb::tzId(KnowledgeDb::Tz tz)
+static const char* tzId(KnowledgeDb::Tz tz)
 {
+    using namespace KnowledgeDb;
     return timezone_names + timezone_names_offsets[static_cast<std::underlying_type<KnowledgeDb::Tz>::type>(tz)];
 }
 

@@ -18,11 +18,6 @@ using namespace KItinerary;
 using namespace KItinerary::KnowledgeDb;
 
 namespace KItinerary { namespace KnowledgeDb {
-char *toString(Tz tz)
-{
-    using QTest::toString;
-    return toString(tzId(tz));
-}
 char *toString(CountryId c)
 {
     using QTest::toString;

@@ -17,9 +17,6 @@ class QTimeZone;
 
 namespace KItinerary {
 namespace KnowledgeDb {
-    /** Returns the IANA timezone id for @p tz. */
-    KITINERARY_EXPORT const char* tzId(Tz tz);
-
     /** Returns the country for a given timezone.
      *  This is unique for most IANA timezones, but not guaranteed to be so,
      *  in which case an invalid country is returned.
