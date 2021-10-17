@@ -269,40 +269,40 @@ private Q_SLOTS:
         QCOMPARE(timezoneForCoordinate(21.0, 106.0), Tz::Asia_Bangkok);
 
         // Maastricht (NL), very close to the BE border
-        QCOMPARE(timezoneForLocation(50.8505, 5.6881, CountryId{}), Tz::Europe_Amsterdam);
-        QCOMPARE(timezoneForLocation(50.8505, 5.6881, CountryId{"NL"}), Tz::Europe_Amsterdam);
+        QCOMPARE(timezoneForLocation(50.8505, 5.6881, CountryId{}), QTimeZone("Europe/Amsterdam"));
+        QCOMPARE(timezoneForLocation(50.8505, 5.6881, CountryId{"NL"}), QTimeZone("Europe/Amsterdam"));
 
         // Aachen, at the BE/DE/NL corner
-        QCOMPARE(timezoneForLocation(50.7717, 6.04235, CountryId{}), Tz::Europe_Berlin);
-        QCOMPARE(timezoneForLocation(50.7717, 6.04235, CountryId{"DE"}), Tz::Europe_Berlin);
-        //QCOMPARE(timezoneForLocation(50.7727, 6.01565, CountryId{}), Tz::Europe_Brussels);
-        QCOMPARE(timezoneForLocation(50.7727, 6.01565, CountryId{"BE"}), Tz::Europe_Brussels);
+        QCOMPARE(timezoneForLocation(50.7717, 6.04235, CountryId{}), QTimeZone("Europe/Berlin"));
+        QCOMPARE(timezoneForLocation(50.7717, 6.04235, CountryId{"DE"}), QTimeZone("Europe/Berlin"));
+        //QCOMPARE(timezoneForLocation(50.7727, 6.01565, CountryId{}), QTimeZone("Europe/Brussels"));
+        QCOMPARE(timezoneForLocation(50.7727, 6.01565, CountryId{"BE"}), QTimeZone("Europe/Brussels"));
 
         // Geneva (CH), very close to the FR border
-        QCOMPARE(timezoneForLocation(46.23213, 6.10636, CountryId{"CH"}), Tz::Europe_Zurich);
+        QCOMPARE(timezoneForLocation(46.23213, 6.10636, CountryId{"CH"}), QTimeZone("Europe/Zurich"));
 
         // Busingen (DE), enclosed by CH, and in theory its own timezone (which we ignore)
-        QCOMPARE(timezoneForLocation(47.69947, 8.68833, CountryId{"DE"}), Tz::Europe_Berlin);
-        QCOMPARE(timezoneForLocation(47.67904, 8.68813, {}), Tz::Europe_Zurich);
+        QCOMPARE(timezoneForLocation(47.69947, 8.68833, CountryId{"DE"}), QTimeZone("Europe/Berlin"));
+        QCOMPARE(timezoneForLocation(47.67904, 8.68813, {}), QTimeZone("Europe/Zurich"));
 
         // Baarle, the ultimate special case, NL/BE differs house by house
-        QCOMPARE(timezoneForLocation(51.44344, 4.93373, CountryId{"BE"}), Tz::Europe_Brussels);
-        QCOMPARE(timezoneForLocation(51.44344, 4.93373, CountryId{"NL"}), Tz::Europe_Amsterdam);
+        QCOMPARE(timezoneForLocation(51.44344, 4.93373, CountryId{"BE"}), QTimeZone("Europe/Brussels"));
+        QCOMPARE(timezoneForLocation(51.44344, 4.93373, CountryId{"NL"}), QTimeZone("Europe/Amsterdam"));
         bool ambiguous = false;
         auto tz = timezoneForCoordinate(51.44344, 4.93373, &ambiguous);
         QVERIFY(ambiguous);
         QVERIFY(tz == Tz::Europe_Amsterdam || tz == Tz::Europe_Brussels);
 
         // Eliat Airport (IL), close to JO, and with a minor timezone variation due to different weekends
-        QCOMPARE(timezoneForLocation(29.72530, 35.00598, CountryId{"IL"}), Tz::Asia_Jerusalem);
-        QCOMPARE(timezoneForLocation(29.60908, 35.02038, CountryId{"JO"}), Tz::Asia_Amman);
+        QCOMPARE(timezoneForLocation(29.72530, 35.00598, CountryId{"IL"}), QTimeZone("Asia/Jerusalem"));
+        QCOMPARE(timezoneForLocation(29.60908, 35.02038, CountryId{"JO"}), QTimeZone("Asia/Amman"));
 
         // Tijuana (MX), close to US, tests equivalent tz search in the neighbouring country
-        QCOMPARE(timezoneForLocation(32.54274, -116.97505, CountryId{"MX"}), Tz::America_Tijuana);
-        QCOMPARE(timezoneForLocation(32.55783, -117.04773, CountryId{"US"}), Tz::America_Los_Angeles);
+        QCOMPARE(timezoneForLocation(32.54274, -116.97505, CountryId{"MX"}), QTimeZone("America/Tijuana"));
+        QCOMPARE(timezoneForLocation(32.55783, -117.04773, CountryId{"US"}), QTimeZone("America/Los_Angeles"));
 
         // Cordoba (AR), AR has several sub-zones that are all equivalent
-        QCOMPARE(timezoneForLocation(-31.4, -64.2, CountryId{"AR"}), Tz::America_Argentina_Cordoba);
+        QCOMPARE(timezoneForLocation(-31.4, -64.2, CountryId{"AR"}), QTimeZone("America/Argentina/Cordoba"));
 
         // polar regions
         QCOMPARE(timezoneForCoordinate(-90.0, 0.0), Tz::Undefined);

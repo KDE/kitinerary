@@ -279,7 +279,7 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, QDat
     const auto geo = station.geo();
     const KnowledgeDb::CountryId country{station.address().addressCountry()};
     if (geo.isValid()) {
-        tz = KnowledgeDb::toQTimeZone(KnowledgeDb::timezoneForLocation(geo.latitude(), geo.longitude(), country));
+        tz = KnowledgeDb::timezoneForLocation(geo.latitude(), geo.longitude(), country);
     } else {
         tz = KnowledgeDb::toQTimeZone(KnowledgeDb::timezoneForCountry(country));
     }
@@ -581,8 +581,8 @@ QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, co
 
     QTimeZone tz;
     if (!place.address().addressCountry().isEmpty()) {
-        tz = KnowledgeDb::toQTimeZone(KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(),
-                                                                       KnowledgeDb::CountryId{place.address().addressCountry()}));
+        tz = KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(),
+                                                                       KnowledgeDb::CountryId{place.address().addressCountry()});
     }
     if (!tz.isValid()) {
         return dt;

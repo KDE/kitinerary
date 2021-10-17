@@ -43,7 +43,7 @@ namespace KnowledgeDb {
      *  This combines the results of the two above individual queries
      *  to obtain better results close to borders.
      */
-    KITINERARY_EXPORT Tz timezoneForLocation(float lat, float lon, CountryId country);
+    KITINERARY_EXPORT QTimeZone timezoneForLocation(float lat, float lon, CountryId country);
 
     /** Returns the country for the given coordinate.
      *  The result will be the country identifier only if the underlying

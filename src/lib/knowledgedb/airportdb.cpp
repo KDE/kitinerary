@@ -43,7 +43,7 @@ QTimeZone timezoneForAirport(IataCode iataCode)
         return {};
     }
 
-    return KnowledgeDb::toQTimeZone(KnowledgeDb::timezoneForLocation((*it).coordinate.latitude, (*it).coordinate.longitude, (*it).country));
+    return KnowledgeDb::timezoneForLocation((*it).coordinate.latitude, (*it).coordinate.longitude, (*it).country);
 }
 
 KnowledgeDb::CountryId countryForAirport(IataCode iataCode)

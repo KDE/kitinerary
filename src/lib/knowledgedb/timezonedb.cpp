@@ -102,7 +102,7 @@ static bool isEquivalentTimezone(const QTimeZone &lhs, const QTimeZone &rhs)
     return true;
 }
 
-KnowledgeDb::Tz KnowledgeDb::timezoneForLocation(float lat, float lon, CountryId country)
+QTimeZone KnowledgeDb::timezoneForLocation(float lat, float lon, CountryId country)
 {
     bool ambiguous = false;
     const auto coordTz = timezoneForCoordinate(lat, lon, &ambiguous);
@@ -134,26 +134,28 @@ KnowledgeDb::Tz KnowledgeDb::timezoneForLocation(float lat, float lon, CountryId
         }
 
         if (!nonUnique && foundTz != Tz::Undefined) {
-            return foundTz;
+            return toQTimeZone(foundTz);
         }
     }
 
     // only one method found a result, let's use that one
     if (coordTz == Tz::Undefined || coordTz == countryTz) {
-        return countryTz;
+        return toQTimeZone(countryTz);
     }
     if (countryTz == Tz::Undefined) {
-        return coordTz;
+        return toQTimeZone(coordTz);
     }
 
     // if the coordinate-based timezone is also in @p country, that takes precedence
     // example: the various AR sub-zones, or the MY sub-zone
     if (country == countryFromCoord || !ambiguous) {
-        return coordTz;
+        return toQTimeZone(coordTz);
     }
 
     // if both timezones are equivalent, the country-based one wins, otherwise we use the coordinate one
-    return isEquivalentTimezone(toQTimeZone(coordTz), toQTimeZone(countryTz)) ? countryTz : coordTz;
+    const auto coordQtz = toQTimeZone(coordTz);
+    const auto countryQtz = toQTimeZone(countryTz);
+    return isEquivalentTimezone(coordQtz, countryQtz) ? countryQtz : coordQtz;
 }
 
 KnowledgeDb::CountryId KnowledgeDb::countryForCoordinate(float lat, float lon)
