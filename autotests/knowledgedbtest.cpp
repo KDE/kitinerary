@@ -310,6 +310,9 @@ private Q_SLOTS:
 
         // Hong Kong seems problematic on FreeBSD
         QCOMPARE(timezoneForCoordinate(22.31600, 113.93688), Tz::Asia_Hong_Kong);
+
+        // coordinates not provided
+        QCOMPARE(timezoneForLocation(NAN, NAN, CountryId{"LU"}), QTimeZone("Europe/Luxembourg"));
     }
 
     void testCountryFromCoordinate()

@@ -39,7 +39,7 @@ namespace KnowledgeDb {
      */
     KITINERARY_EXPORT Tz timezoneForCoordinate(float lat, float lon, bool *ambiguous = nullptr);
 
-    /** Returns the timezone for the given location consisting of coordinates and country.
+    /** Returns the timezone for the given location consisting of coordinates and/or country.
      *  This combines the results of the two above individual queries
      *  to obtain better results close to borders.
      */
