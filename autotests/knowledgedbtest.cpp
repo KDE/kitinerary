@@ -239,9 +239,9 @@ private Q_SLOTS:
     {
         using namespace KnowledgeDb;
 
-        QCOMPARE(toQTimeZone(timezoneForCountry(CountryId{"DE"})), QTimeZone("Europe/Berlin"));
-        QCOMPARE(toQTimeZone(timezoneForCountry(CountryId{"FR"})), QTimeZone("Europe/Paris"));
-        QCOMPARE(toQTimeZone(timezoneForCountry(CountryId{"BR"})), QTimeZone());
+        QCOMPARE(timezoneForLocation(NAN, NAN, CountryId{"DE"}), QTimeZone("Europe/Berlin"));
+        QCOMPARE(timezoneForLocation(NAN, NAN, CountryId{"FR"}), QTimeZone("Europe/Paris"));
+        QCOMPARE(timezoneForLocation(NAN, NAN, CountryId{"BR"}), QTimeZone());
     }
 
     void testCountryForTimezone()

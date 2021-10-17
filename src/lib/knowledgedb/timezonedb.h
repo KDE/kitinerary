@@ -20,14 +20,6 @@ namespace KnowledgeDb {
     /** Returns the IANA timezone id for @p tz. */
     KITINERARY_EXPORT const char* tzId(Tz tz);
 
-    /** Returns the corresponding QTimeZone. */
-    KITINERARY_EXPORT QTimeZone toQTimeZone(Tz tz);
-
-    /** Returns the timezone for the given country, as long as there is exactly
-     *  one timezone used in that country.
-     */
-    KITINERARY_EXPORT Tz timezoneForCountry(CountryId country);
-
     /** Returns the country for a given timezone.
      *  This is unique for most IANA timezones, but not guaranteed to be so,
      *  in which case an invalid country is returned.
@@ -40,8 +32,7 @@ namespace KnowledgeDb {
     KITINERARY_EXPORT Tz timezoneForCoordinate(float lat, float lon, bool *ambiguous = nullptr);
 
     /** Returns the timezone for the given location consisting of coordinates and/or country.
-     *  This combines the results of the two above individual queries
-     *  to obtain better results close to borders.
+     *  Either argument can be omitted, if both are available better results can be provided.
      */
     KITINERARY_EXPORT QTimeZone timezoneForLocation(float lat, float lon, CountryId country);
 

@@ -20,16 +20,17 @@ const char* KnowledgeDb::tzId(KnowledgeDb::Tz tz)
     return timezone_names + timezone_names_offsets[static_cast<std::underlying_type<KnowledgeDb::Tz>::type>(tz)];
 }
 
-QTimeZone KnowledgeDb::toQTimeZone(Tz tz)
+static QTimeZone toQTimeZone(KnowledgeDb::Tz tz)
 {
-    if (tz == Tz::Undefined) {
+    if (tz == KnowledgeDb::Tz::Undefined) {
         return {};
     }
     return QTimeZone(tzId(tz));
 }
 
-KnowledgeDb::Tz KnowledgeDb::timezoneForCountry(CountryId country)
+static KnowledgeDb::Tz timezoneForCountry(KnowledgeDb::CountryId country)
 {
+    using namespace KnowledgeDb;
     const auto it = std::lower_bound(std::begin(country_timezone_map), std::end(country_timezone_map), country);
     if (it != std::end(country_timezone_map) && (*it).country == country) {
         return (*it).timezone;
