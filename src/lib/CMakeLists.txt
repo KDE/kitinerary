@@ -174,6 +174,7 @@ target_link_libraries(KPimItinerary
         KF5::I18n
         KF5::Contacts
         KPim::PkPass
+        OpenSSL::Crypto
         ZLIB::ZLIB
 )
 if (HAVE_POPPLER)
@@ -196,9 +197,6 @@ if (HAVE_LIBXML2)
 endif()
 if (HAVE_PHONENUMBER)
     target_link_libraries(KPimItinerary PRIVATE PhoneNumber::PhoneNumber)
-endif()
-if (HAVE_OPENSSL_RSA)
-    target_link_libraries(KPimItinerary PRIVATE OpenSSL::Crypto)
 endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS

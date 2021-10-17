@@ -61,14 +61,6 @@ QString ExtractorCapabilities::capabilitiesString()
 #endif
         "\n"
 
-        "RSA support         : "
-#ifdef HAVE_OPENSSL_RSA
-            "openssl"
-#else
-            "not available"
-#endif
-        "\n"
-
         "Extractors          : ";
 
     auto caps = QString::fromLatin1(s);

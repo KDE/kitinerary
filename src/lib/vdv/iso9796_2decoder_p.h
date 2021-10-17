@@ -6,13 +6,9 @@
 
 #pragma once
 
-#include "config-kitinerary.h"
-
 #include <QByteArray>
 
-#ifdef HAVE_OPENSSL_RSA
 #include <openssl/rsa.h>
-#endif
 
 #include <cstdint>
 #include <memory>
@@ -44,9 +40,7 @@ public:
     QByteArray recoveredMessage() const;
 
 private:
-#ifdef HAVE_OPENSSL_RSA
     std::unique_ptr<RSA, void(*)(RSA*)> m_rsa;
-#endif
     QByteArray m_recoveredMsg;
 };
 

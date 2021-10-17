@@ -1,10 +1,6 @@
 # SPDX-FileCopyrightText: 2019 Volker Krause <vkrause@kde.org>
 # SPDX-License-Identifier: BSD-3-Clause
 
-if (NOT HAVE_OPENSSL_RSA)
-    return()
-endif()
-
 add_executable(vdv-cert-downloader
     cert-downloader.cpp
     ../vdvcertificate.cpp
