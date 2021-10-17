@@ -24,11 +24,6 @@ static_assert(trainstation_table_size < (1 << (sizeof(TrainStationIndex) * 8)), 
 }
 }
 
-Tz TrainStation::timezone() const
-{
-    return timezoneForLocation(coordinate.latitude, coordinate.longitude, country);
-}
-
 template <typename Id, std::size_t Size>
 static TrainStation lookupStation(Id id, const TrainStationIdIndex<Id>(&tab)[Size])
 {

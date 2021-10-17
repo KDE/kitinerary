@@ -47,8 +47,6 @@ struct TrainStationIdIndex {
 struct TrainStation {
     Coordinate coordinate;
     CountryId country;
-
-    KITINERARY_EXPORT Tz timezone() const;
 };
 
 
