@@ -5,6 +5,8 @@
 */
 
 #include "timezonedb.h"
+#include "countrydb.h"
+#include "timezonedb_data.h"
 #include "timezonedb_p.h"
 #include "timezonedb_data.cpp"
 #include "timezone_zindex.cpp"
@@ -40,9 +42,9 @@ static KnowledgeDb::Tz timezoneForCountry(KnowledgeDb::CountryId country)
     return Tz::Undefined;
 }
 
-KnowledgeDb::CountryId KnowledgeDb::countryForTimezone(KnowledgeDb::Tz tz)
+static KnowledgeDb::CountryId countryForTimezone(KnowledgeDb::Tz tz)
 {
-    return timezone_country_map[static_cast<std::underlying_type<KnowledgeDb::Tz>::type>(tz)];
+    return KnowledgeDb::timezone_country_map[static_cast<std::underlying_type<KnowledgeDb::Tz>::type>(tz)];
 }
 
 static KnowledgeDb::Tz timezoneForCoordinate(float lat, float lon, bool *ambiguous)
@@ -105,8 +107,9 @@ static bool isEquivalentTimezone(const QTimeZone &lhs, const QTimeZone &rhs)
     return true;
 }
 
-QTimeZone KnowledgeDb::timezoneForLocation(float lat, float lon, CountryId country)
+QTimeZone KnowledgeDb::timezoneForLocation(float lat, float lon, QStringView alpha2CountryCode)
 {
+    const auto country = CountryId{alpha2CountryCode};
     bool ambiguous = false;
     const auto coordTz = timezoneForCoordinate(lat, lon, &ambiguous);
     const auto countryTz = timezoneForCountry(country);
@@ -161,12 +164,12 @@ QTimeZone KnowledgeDb::timezoneForLocation(float lat, float lon, CountryId count
     return isEquivalentTimezone(coordQtz, countryQtz) ? countryQtz : coordQtz;
 }
 
-KnowledgeDb::CountryId KnowledgeDb::countryForCoordinate(float lat, float lon)
+QString KnowledgeDb::countryForCoordinate(float lat, float lon)
 {
     bool ambiguous = false;
     const auto tz = timezoneForCoordinate(lat, lon, &ambiguous);
     if (!ambiguous) {
-        return countryForTimezone(tz);
+        return countryForTimezone(tz).toString();
     }
     return {};
 }

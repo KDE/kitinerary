@@ -132,7 +132,7 @@ private Q_SLOTS:
         QCOMPARE(KnowledgeDb::timezoneForLocation(coord.latitude, coord.longitude, {}), QTimeZone("Asia/Hong_Kong"));
         const auto country = KnowledgeDb::countryForAirport(KnowledgeDb::IataCode{"HKG"});
         QCOMPARE(country, KnowledgeDb::CountryId{"CN"});
-        QCOMPARE(KnowledgeDb::timezoneForLocation(coord.latitude, coord.longitude, country), QTimeZone("Asia/Shanghai"));
+        QCOMPARE(KnowledgeDb::timezoneForLocation(coord.latitude, coord.longitude, u"CN"), QTimeZone("Asia/Shanghai"));
         tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{"HKG"});
         QCOMPARE(tz.id(), QByteArray("Asia/Shanghai"));
     }

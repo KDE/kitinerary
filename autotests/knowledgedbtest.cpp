@@ -234,20 +234,9 @@ private Q_SLOTS:
     {
         using namespace KnowledgeDb;
 
-        QCOMPARE(timezoneForLocation(NAN, NAN, CountryId{"DE"}), QTimeZone("Europe/Berlin"));
-        QCOMPARE(timezoneForLocation(NAN, NAN, CountryId{"FR"}), QTimeZone("Europe/Paris"));
-        QCOMPARE(timezoneForLocation(NAN, NAN, CountryId{"BR"}), QTimeZone());
-    }
-
-    void testCountryForTimezone()
-    {
-        using namespace KnowledgeDb;
-
-        QCOMPARE(countryForTimezone(Tz::Europe_Busingen), CountryId{"DE"});
-        QCOMPARE(countryForTimezone(Tz::America_Los_Angeles), CountryId{"US"});
-        QCOMPARE(countryForTimezone(Tz::Asia_Kuching), CountryId{"MY"});
-        QCOMPARE(countryForTimezone(Tz::Asia_Bangkok), CountryId{});
-        QCOMPARE(countryForTimezone(Tz::Asia_Ho_Chi_Minh), CountryId{"VN"});
+        QCOMPARE(timezoneForLocation(NAN, NAN, u"DE"), QTimeZone("Europe/Berlin"));
+        QCOMPARE(timezoneForLocation(NAN, NAN, u"FR"), QTimeZone("Europe/Paris"));
+        QCOMPARE(timezoneForLocation(NAN, NAN, u"BR"), QTimeZone());
     }
 
     void testTimezoneForLocation()
@@ -264,38 +253,38 @@ private Q_SLOTS:
         QCOMPARE(timezoneForLocation(21.0, 106.0, {}), QTimeZone("Asia/Bangkok"));
 
         // Maastricht (NL), very close to the BE border
-        QCOMPARE(timezoneForLocation(50.8505, 5.6881, CountryId{}), QTimeZone("Europe/Amsterdam"));
-        QCOMPARE(timezoneForLocation(50.8505, 5.6881, CountryId{"NL"}), QTimeZone("Europe/Amsterdam"));
+        QCOMPARE(timezoneForLocation(50.8505, 5.6881, QString()), QTimeZone("Europe/Amsterdam"));
+        QCOMPARE(timezoneForLocation(50.8505, 5.6881, u"NL"), QTimeZone("Europe/Amsterdam"));
 
         // Aachen, at the BE/DE/NL corner
-        QCOMPARE(timezoneForLocation(50.7717, 6.04235, CountryId{}), QTimeZone("Europe/Berlin"));
-        QCOMPARE(timezoneForLocation(50.7717, 6.04235, CountryId{"DE"}), QTimeZone("Europe/Berlin"));
-        //QCOMPARE(timezoneForLocation(50.7727, 6.01565, CountryId{}), QTimeZone("Europe/Brussels"));
-        QCOMPARE(timezoneForLocation(50.7727, 6.01565, CountryId{"BE"}), QTimeZone("Europe/Brussels"));
+        QCOMPARE(timezoneForLocation(50.7717, 6.04235, QString()), QTimeZone("Europe/Berlin"));
+        QCOMPARE(timezoneForLocation(50.7717, 6.04235, u"DE"), QTimeZone("Europe/Berlin"));
+        //QCOMPARE(timezoneForLocation(50.7727, 6.01565, QString()), QTimeZone("Europe/Brussels"));
+        QCOMPARE(timezoneForLocation(50.7727, 6.01565, u"BE"), QTimeZone("Europe/Brussels"));
 
         // Geneva (CH), very close to the FR border
-        QCOMPARE(timezoneForLocation(46.23213, 6.10636, CountryId{"CH"}), QTimeZone("Europe/Zurich"));
+        QCOMPARE(timezoneForLocation(46.23213, 6.10636, u"CH"), QTimeZone("Europe/Zurich"));
 
         // Busingen (DE), enclosed by CH, and in theory its own timezone (which we ignore)
-        QCOMPARE(timezoneForLocation(47.69947, 8.68833, CountryId{"DE"}), QTimeZone("Europe/Berlin"));
+        QCOMPARE(timezoneForLocation(47.69947, 8.68833, u"DE"), QTimeZone("Europe/Berlin"));
         QCOMPARE(timezoneForLocation(47.67904, 8.68813, {}), QTimeZone("Europe/Zurich"));
 
         // Baarle, the ultimate special case, NL/BE differs house by house
-        QCOMPARE(timezoneForLocation(51.44344, 4.93373, CountryId{"BE"}), QTimeZone("Europe/Brussels"));
-        QCOMPARE(timezoneForLocation(51.44344, 4.93373, CountryId{"NL"}), QTimeZone("Europe/Amsterdam"));
+        QCOMPARE(timezoneForLocation(51.44344, 4.93373, u"BE"), QTimeZone("Europe/Brussels"));
+        QCOMPARE(timezoneForLocation(51.44344, 4.93373, u"NL"), QTimeZone("Europe/Amsterdam"));
         const auto tz = timezoneForLocation(51.44344, 4.93373, {});
         QVERIFY(tz == QTimeZone("Europe/Amsterdam") || tz == QTimeZone("Europe/Brussels"));
 
         // Eliat Airport (IL), close to JO, and with a minor timezone variation due to different weekends
-        QCOMPARE(timezoneForLocation(29.72530, 35.00598, CountryId{"IL"}), QTimeZone("Asia/Jerusalem"));
-        QCOMPARE(timezoneForLocation(29.60908, 35.02038, CountryId{"JO"}), QTimeZone("Asia/Amman"));
+        QCOMPARE(timezoneForLocation(29.72530, 35.00598, u"IL"), QTimeZone("Asia/Jerusalem"));
+        QCOMPARE(timezoneForLocation(29.60908, 35.02038, u"JO"), QTimeZone("Asia/Amman"));
 
         // Tijuana (MX), close to US, tests equivalent tz search in the neighbouring country
-        QCOMPARE(timezoneForLocation(32.54274, -116.97505, CountryId{"MX"}), QTimeZone("America/Tijuana"));
-        QCOMPARE(timezoneForLocation(32.55783, -117.04773, CountryId{"US"}), QTimeZone("America/Los_Angeles"));
+        QCOMPARE(timezoneForLocation(32.54274, -116.97505, u"MX"), QTimeZone("America/Tijuana"));
+        QCOMPARE(timezoneForLocation(32.55783, -117.04773, u"US"), QTimeZone("America/Los_Angeles"));
 
         // Cordoba (AR), AR has several sub-zones that are all equivalent
-        QCOMPARE(timezoneForLocation(-31.4, -64.2, CountryId{"AR"}), QTimeZone("America/Argentina/Cordoba"));
+        QCOMPARE(timezoneForLocation(-31.4, -64.2, u"AR"), QTimeZone("America/Argentina/Cordoba"));
 
         // polar regions
         QCOMPARE(timezoneForLocation(-90.0, 0.0, {}), QTimeZone());
@@ -305,7 +294,7 @@ private Q_SLOTS:
         QCOMPARE(timezoneForLocation(22.31600, 113.93688, {}), QTimeZone("Asia/Hong_Kong"));
 
         // coordinates not provided
-        QCOMPARE(timezoneForLocation(NAN, NAN, CountryId{"LU"}), QTimeZone("Europe/Luxembourg"));
+        QCOMPARE(timezoneForLocation(NAN, NAN, u"LU"), QTimeZone("Europe/Luxembourg"));
     }
 
     void testCountryFromCoordinate()
@@ -313,24 +302,24 @@ private Q_SLOTS:
         using namespace KnowledgeDb;
 
         // basic tests
-        QCOMPARE(countryForCoordinate(52.4, 13.1), CountryId{"DE"});
-        QCOMPARE(countryForCoordinate(-8.0, -35.0), CountryId{"BR"});
-        QCOMPARE(countryForCoordinate(-36.5, 175.0), CountryId{"NZ"});
-        QCOMPARE(countryForCoordinate(44.0, -79.5), CountryId{"CA"});
+        QCOMPARE(countryForCoordinate(52.4, 13.1), QLatin1String{"DE"});
+        QCOMPARE(countryForCoordinate(-8.0, -35.0), QLatin1String{"BR"});
+        QCOMPARE(countryForCoordinate(-36.5, 175.0), QLatin1String{"NZ"});
+        QCOMPARE(countryForCoordinate(44.0, -79.5), QLatin1String{"CA"});
 
         // ambiguous locations
-        QCOMPARE(countryForCoordinate(51.44344, 4.93373), CountryId{});
+        QCOMPARE(countryForCoordinate(51.44344, 4.93373), QString());
 
         // special case: northern Vietnam has a non-VN timezone (not the case anywhere else in the world up to 2020a)
-        QCOMPARE(countryForCoordinate(21.0, 106.0), CountryId{});
-        QCOMPARE(countryForCoordinate(10.5, 107.0), CountryId{"VN"});
-        QCOMPARE(countryForCoordinate(13.7, 100.4), CountryId{});
+        QCOMPARE(countryForCoordinate(21.0, 106.0), QString());
+        QCOMPARE(countryForCoordinate(10.5, 107.0), QLatin1String{"VN"});
+        QCOMPARE(countryForCoordinate(13.7, 100.4), QString());
 
         // disputed areas
-        QCOMPARE(countryForCoordinate(45.0, 34.0), CountryId{});
+        QCOMPARE(countryForCoordinate(45.0, 34.0), QString());
 
         // overseas territories with separate ISO 3166-1 codes
-        QCOMPARE(countryForCoordinate(4.8, -52.3), CountryId{"GF"}); // could also be "FR"
+        QCOMPARE(countryForCoordinate(4.8, -52.3), QLatin1String{"GF"}); // could also be "FR"
     }
 
     void testUICCountryCodeLookup()

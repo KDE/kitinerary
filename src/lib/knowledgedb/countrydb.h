@@ -69,7 +69,6 @@ struct Country
     DrivingSide drivingSide;
     PowerPlugTypes powerPlugTypes;
     // TODO voltage/frequency
-    // TODO currency
 };
 
 

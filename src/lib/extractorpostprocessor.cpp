@@ -275,8 +275,7 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, QDat
         return dt;
     }
 
-    const KnowledgeDb::CountryId country{station.address().addressCountry()};
-    const auto tz = KnowledgeDb::timezoneForLocation(station.geo().latitude(), station.geo().longitude(), country);
+    const auto tz = KnowledgeDb::timezoneForLocation(station.geo().latitude(), station.geo().longitude(), station.address().addressCountry());
     if (!tz.isValid()) {
         return dt;
     }
@@ -489,10 +488,7 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
 #endif
 
     if (geo.isValid() && addr.addressCountry().isEmpty()) {
-        const auto isoCode = KnowledgeDb::countryForCoordinate(geo.latitude(), geo.longitude());
-        if (isoCode.isValid()) {
-            addr.setAddressCountry(isoCode.toString());
-        }
+        addr.setAddressCountry(KnowledgeDb::countryForCoordinate(geo.latitude(), geo.longitude()));
     }
 
     addr = ExtractorUtil::extractPostalCode(addr);
@@ -573,8 +569,7 @@ QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, co
         return dt;
     }
 
-    const auto tz = KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(),
-                                                                       KnowledgeDb::CountryId{place.address().addressCountry()});
+    const auto tz = KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(), place.address().addressCountry());
     if (!tz.isValid()) {
         return dt;
     }
