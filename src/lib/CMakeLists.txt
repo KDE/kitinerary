@@ -180,6 +180,9 @@ target_link_libraries(KPimItinerary
 if (HAVE_POPPLER)
     target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
 endif()
+if (TARGET KF5::I18nLocaleData)
+    target_link_libraries(KPimItinerary PRIVATE KF5::I18nLocaleData)
+endif()
 
 if (TARGET ZXing::ZXing)
     target_link_libraries(KPimItinerary PRIVATE ZXing::ZXing)

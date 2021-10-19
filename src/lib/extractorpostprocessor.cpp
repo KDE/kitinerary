@@ -34,7 +34,11 @@
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
 
+#if HAVE_KI18N_LOCALE_DATA
+#include <KCountry>
+#else
 #include <KContacts/Address>
+#endif
 
 #include <QDebug>
 #include <QJsonArray>
@@ -448,6 +452,20 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
 {
     // convert to ISO 3166-1 alpha-2 country codes
     if (addr.addressCountry().size() > 2) {
+#if HAVE_KI18N_LOCALE_DATA
+        QString alpha2Code;
+
+        // try ISO 3166-1 alpha-3, we get that e.g. from Flixbus
+        if (addr.addressCountry().size() == 3) {
+            alpha2Code = KCountry::fromAlpha3(addr.addressCountry()).alpha2();
+        }
+        if (alpha2Code.isEmpty()) {
+            alpha2Code = KCountry::fromName(addr.addressCountry()).alpha2();
+        }
+        if (!alpha2Code.isEmpty()) {
+            addr.setAddressCountry(alpha2Code);
+        }
+#else
         const auto isoCode = KContacts::Address::countryToISO(addr.addressCountry()).toUpper();
         if (!isoCode.isEmpty()) {
             addr.setAddressCountry(isoCode);
@@ -459,6 +477,7 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
                 addr.setAddressCountry(c.toString());
             }
         }
+#endif
     }
 
     // upper case country codes

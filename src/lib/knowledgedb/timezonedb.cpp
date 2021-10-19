@@ -4,19 +4,53 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "config-kitinerary.h"
+
 #include "timezonedb.h"
+#if !HAVE_KI18N_LOCALE_DATA
 #include "countrydb.h"
 #include "timezonedb_data.h"
 #include "timezonedb_p.h"
 #include "timezonedb_data.cpp"
 #include "timezone_zindex.cpp"
+#endif
 
+#if HAVE_KI18N_LOCALE_DATA
+#include <KCountry>
+#include <KTimeZone>
+#endif
+
+#include <QDebug>
 #include <QTimeZone>
 
 #include <cmath>
+#include <cstring>
 
 using namespace KItinerary;
 
+#if HAVE_KI18N_LOCALE_DATA
+static QTimeZone toQTimeZone(const char *tzId)
+{
+    if (!tzId || std::strcmp(tzId, "") == 0) {
+        return {};
+    }
+    return QTimeZone(tzId);
+}
+
+static QList<const char*> timezonesForCountry(const KCountry &country)
+{
+    auto tzs = country.timeZoneIds();
+    if (tzs.size() <= 1) {
+        return tzs;
+    }
+    // filter overseas territories that map back to a different country code
+    tzs.erase(std::remove_if(tzs.begin(), tzs.end(), [country](const char *tz) {
+        return !(KTimeZone::country(tz) == country);
+    }), tzs.end());
+    return tzs;
+}
+
+#else
 static const char* tzId(KnowledgeDb::Tz tz)
 {
     using namespace KnowledgeDb;
@@ -78,6 +112,7 @@ static KnowledgeDb::Tz timezoneForCoordinate(float lat, float lon, bool *ambiguo
     }
     return static_cast<Tz>((*std::prev(it)).tz);
 }
+#endif
 
 static bool compareOffsetData(const QTimeZone::OffsetData &lhs, const QTimeZone::OffsetData &rhs)
 {
@@ -109,6 +144,60 @@ static bool isEquivalentTimezone(const QTimeZone &lhs, const QTimeZone &rhs)
 
 QTimeZone KnowledgeDb::timezoneForLocation(float lat, float lon, QStringView alpha2CountryCode)
 {
+#if HAVE_KI18N_LOCALE_DATA
+    const auto coordTz = KTimeZone::fromLocation(lat, lon);
+    const auto coordZone = toQTimeZone(coordTz);
+
+    const auto country = KCountry::fromAlpha2(alpha2CountryCode);
+    const auto countryTzs = timezonesForCountry(country);
+    const auto countryFromTz = KTimeZone::country(coordTz);
+
+    // if we determine a different country than was provided, search for an equivalent timezone
+    // in the requested country
+    // example: Tijuana airport ending up in America/Los Angeles, and America/Tijuna being the only MX timezone equivalent to that
+    if (coordTz && countryFromTz.isValid() && country.isValid() && !(countryFromTz == country)) { // ### clean up once KCountry has op!=
+        bool nonUnique = false;
+        QTimeZone foundTz;
+
+        for (const char *countryTz : countryTzs) {
+            const auto t = toQTimeZone(countryTz);
+            if (!isEquivalentTimezone(t, coordZone)) {
+                continue;
+            }
+            if (foundTz.isValid()) {
+                nonUnique = true;
+                break;
+            }
+            foundTz = t;
+        }
+
+        if (!nonUnique && foundTz.isValid()) {
+            return foundTz;
+        }
+    }
+
+    // only one method found a result, let's use that one
+    if ((coordZone.isValid() && countryTzs.contains(coordTz)) || countryTzs.isEmpty()) {
+        return coordZone;
+    }
+    if (!coordZone.isValid() && countryTzs.size() == 1) {
+        return toQTimeZone(countryTzs.at(0));
+    }
+
+    // if the coordinate-based timezone is also in @p country, that takes precedence
+    // example: the various AR sub-zones, or the MY sub-zone
+    if (country == countryFromTz) {
+        return coordZone;
+    }
+
+    // if both timezones are equivalent, the country-based one wins, otherwise we use the coordinate one
+    if (countryTzs.size() == 1) {
+        const auto countryQtz = toQTimeZone(countryTzs.at(0));
+        return isEquivalentTimezone(coordZone, countryQtz) ? countryQtz : coordZone;
+    }
+    return coordZone;
+
+#else
     const auto country = CountryId{alpha2CountryCode};
     bool ambiguous = false;
     const auto coordTz = timezoneForCoordinate(lat, lon, &ambiguous);
@@ -162,14 +251,19 @@ QTimeZone KnowledgeDb::timezoneForLocation(float lat, float lon, QStringView alp
     const auto coordQtz = toQTimeZone(coordTz);
     const auto countryQtz = toQTimeZone(countryTz);
     return isEquivalentTimezone(coordQtz, countryQtz) ? countryQtz : coordQtz;
+#endif
 }
 
 QString KnowledgeDb::countryForCoordinate(float lat, float lon)
 {
+#if HAVE_KI18N_LOCALE_DATA
+    return KCountry::fromLocation(lat, lon).alpha2();
+#else
     bool ambiguous = false;
     const auto tz = timezoneForCoordinate(lat, lon, &ambiguous);
     if (!ambiguous) {
         return countryForTimezone(tz).toString();
     }
     return {};
+#endif
 }

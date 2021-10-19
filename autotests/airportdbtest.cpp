@@ -4,6 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include <config-kitinerary.h>
 #include <knowledgedb/airportdb.h>
 
 #include <KItinerary/LocationUtil>
@@ -34,6 +35,12 @@ char *toString(const CountryId &code)
     return toString(code.toString());
 }
 }}
+
+char *toString(const QTimeZone &tz)
+{
+    using QTest::toString;
+    return toString(tz.id());
+}
 
 class AirportDbTest : public QObject
 {

@@ -4,6 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "config-kitinerary.h"
 #include "countrydb.h"
 #include "countrydb_data.cpp"
 
@@ -88,6 +89,7 @@ PowerPlugTypes KnowledgeDb::incompatiblePowerSockets(PowerPlugTypes plugs, Power
     return failSockets & ~plugs;
 }
 
+#if !HAVE_KI18N_LOCALE_DATA
 KnowledgeDb::CountryId KnowledgeDb::countryIdFromIso3166_1alpha3(CountryId3 iso3Code)
 {
     const auto it = std::lower_bound(std::begin(iso_country_code_table), std::end(iso_country_code_table), iso3Code, [](const auto &lhs, CountryId3 rhs) {
@@ -99,6 +101,7 @@ KnowledgeDb::CountryId KnowledgeDb::countryIdFromIso3166_1alpha3(CountryId3 iso3
 
     return (*it).iso2Code;
 }
+#endif
 
 KnowledgeDb::CountryId KnowledgeDb::countryIdForUicCode(uint16_t uicCountryCode)
 {
