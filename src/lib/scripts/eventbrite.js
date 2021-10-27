@@ -7,9 +7,19 @@ function fixAddress(content, node) {
     if (node.result.length != 1) {
         return;
     }
+    var res = node.result[0];
+    // location can be a string rather than a place object
+    if (typeof res.reservationFor.location === "string") {
+        var place = JsonLd.newObject("Place");
+        place.name = res.reservationFor.location;
+        res.reservationFor.location = place;
+    }
+
     // streetAddress duplicates city and zip code without proper separation in
     // about half their emails...
-    var res = node.result[0];
+    if (!res.reservationFor.location.address) {
+        return res;
+    }
     var addr = res.reservationFor.location.address;
     if (addr.streetAddress.endsWith(addr.addressLocality)) {
         addr.streetAddress = addr.streetAddress.substr(0, addr.streetAddress.length - addr.addressLocality.length).trim();
