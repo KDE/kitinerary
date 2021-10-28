@@ -36,6 +36,8 @@ class KITINERARY_EXPORT VdvTicket
 
     /** VDV organization identifier of the ticket issuer. */
     Q_PROPERTY(int issuerId READ issuerId)
+    /** VDV organization identifier of the operator. */
+    Q_PROPERTY(int operatorId READ operatorId)
     /** Service class for this ticket. */
     Q_PROPERTY(ServiceClass serviceClass READ serviceClass)
     /** The person this ticket is valid for. */
@@ -55,6 +57,7 @@ public:
     QDateTime beginDateTime() const;
     QDateTime endDateTime() const;
     int issuerId() const;
+    int operatorId() const;
 
     enum ServiceClass {
         UnknownClass = 0,

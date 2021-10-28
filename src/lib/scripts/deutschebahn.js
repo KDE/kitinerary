@@ -235,6 +235,8 @@ function parsePdf(pdf, node, triggerNode) {
                         break;
                 }
             }
+        } else if (triggerNode.mimeType == "internal/vdv") {
+            reservations[i].reservationFor.provider.identifier = "vdv:" + triggerNode.content.operatorId;
         }
         if (triggerNode.result.length > 0) {
             reservations[i].reservedTicket.name = triggerNode.result[0].reservedTicket.name;

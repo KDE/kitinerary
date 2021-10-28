@@ -112,6 +112,12 @@ int VdvTicket::issuerId() const
     return hdr ? hdr->kvpOrgId : 0;
 }
 
+int VdvTicket::operatorId() const
+{
+    const auto hdr = header();
+    return hdr ? hdr->pvOrgId : 0;
+}
+
 VdvTicket::ServiceClass VdvTicket::serviceClass() const
 {
     const auto tlv = d->productData<VdvTicketBasicData>();
