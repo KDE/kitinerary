@@ -320,6 +320,8 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
     if (!lhs.departureTime().isValid() && !rhs.departureTime().isValid()) {
         qCDebug(CompareLog) << "unbound trip" << lhs.departureStation().name() << rhs.departureStation().name() << lhs.arrivalStation().name() << rhs.arrivalStation().name();
         return lhs.departureStation().name() == rhs.departureStation().name() && lhs.arrivalStation().name() == rhs.arrivalStation().name();
+    } else if (!equalAndPresent(lhs.departureTime(), rhs.departureTime())) {
+        return false;
     }
 
     if (lhs.trainNumber().isEmpty() || rhs.trainNumber().isEmpty()) {
