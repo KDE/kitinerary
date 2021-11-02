@@ -30,7 +30,6 @@
 #include <QLocale>
 
 #include <cstring>
-#include <memory>
 
 using namespace KItinerary;
 

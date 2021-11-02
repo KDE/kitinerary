@@ -20,7 +20,6 @@
 #include <QJsonObject>
 #include <QString>
 #include <QUuid>
-#include <memory>
 
 using namespace KItinerary;
 

@@ -5,7 +5,6 @@
 */
 
 #include "uic9183ticketlayout.h"
-#include "uic9183block.h"
 #include "logging.h"
 
 #include <QDateTime>

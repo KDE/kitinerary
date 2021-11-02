@@ -15,7 +15,6 @@
 #include <QImage>
 #include <QJSEngine>
 
-#include <unordered_set>
 
 using namespace KItinerary;
 
