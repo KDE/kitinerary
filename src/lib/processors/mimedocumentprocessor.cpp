@@ -96,7 +96,7 @@ ExtractorDocumentNode MimeDocumentProcessor::createNodeFromContent(const QVarian
     ExtractorDocumentNode node;
     node.setContent(content);
 
-    auto dateHdr = content->header<KMime::Headers::Date>();
+    const auto dateHdr = findHeader<KMime::Headers::Date>(content);
     if (dateHdr) {
         node.setContextDateTime(dateHdr->dateTime());
     }
