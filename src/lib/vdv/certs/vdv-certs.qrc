@@ -6,24 +6,34 @@
     <qresource prefix="/org.kde.pim/kitinerary/vdv/certs">
         <file>4445564456110111.vdv-cert</file>
         <file>4445564456110116.vdv-cert</file>
+        <file>4445564456110121.vdv-cert</file>
         <file>4445564456110211.vdv-cert</file>
         <file>4445564456110216.vdv-cert</file>
+        <file>4445564456110221.vdv-cert</file>
         <file>4445564456110311.vdv-cert</file>
         <file>4445564456110316.vdv-cert</file>
+        <file>4445564456110321.vdv-cert</file>
         <file>4445564456110411.vdv-cert</file>
         <file>4445564456110416.vdv-cert</file>
+        <file>4445564456110421.vdv-cert</file>
         <file>4445564456110511.vdv-cert</file>
         <file>4445564456110516.vdv-cert</file>
+        <file>4445564456110521.vdv-cert</file>
         <file>4445564456110611.vdv-cert</file>
         <file>4445564456110616.vdv-cert</file>
+        <file>4445564456110621.vdv-cert</file>
         <file>4445564456110711.vdv-cert</file>
         <file>4445564456110716.vdv-cert</file>
+        <file>4445564456110721.vdv-cert</file>
         <file>4445564456110811.vdv-cert</file>
         <file>4445564456110816.vdv-cert</file>
+        <file>4445564456110821.vdv-cert</file>
         <file>4555564456100106.vdv-cert</file>
         <file>4C55564456110913.vdv-cert</file>
         <file>4C55564456110916.vdv-cert</file>
+        <file>4C55564456110921.vdv-cert</file>
         <file>4C55564456111014.vdv-cert</file>
         <file>4C55564456111016.vdv-cert</file>
+        <file>4C55564456111021.vdv-cert</file>
     </qresource>
 </RCC>
