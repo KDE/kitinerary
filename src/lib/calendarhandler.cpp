@@ -29,6 +29,7 @@
 #include <KCalendarCore/Event>
 #endif
 
+#include <kcontacts_version.h>
 #include <KContacts/Address>
 
 #include <KLocalizedString>
@@ -45,7 +46,11 @@ static QString formatAddress(const PostalAddress &addr)
     a.setStreet(addr.streetAddress());
     a.setPostalCode(addr.postalCode());
     a.setLocality(addr.addressLocality());
+#if KContacts_VERSION <= QT_VERSION_CHECK(5, 88, 0)
     a.setCountry(KContacts::Address::ISOtoCountry(addr.addressCountry()));
+#else
+    a.setCountry(addr.addressCountry());
+#endif
     return a.formattedAddress();
 }
 
