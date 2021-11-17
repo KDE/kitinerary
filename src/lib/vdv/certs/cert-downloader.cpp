@@ -66,7 +66,13 @@ static void writeQrc(const std::vector<QString> &certNames)
     if (!qrc.open(QFile::WriteOnly)) {
         qFatal("Failed to open file %s: %s", qPrintable(qrc.fileName()), qPrintable(qrc.errorString()));
     }
-    qrc.write("<RCC>\n    <qresource prefix=\"/org.kde.pim/kitinerary/vdv/certs\">\n");
+    qrc.write(R"(<!--
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: CC0-1.0
+-->
+<RCC>
+    <qresource prefix="/org.kde.pim/kitinerary/vdv/certs">
+)");
     for (const auto &certName : certNames) {
         qrc.write("        <file>");
         qrc.write(certName.toUtf8());
@@ -108,7 +114,7 @@ static void decodeCert(const QString &certName)
         }
         cert.writeKey(&f);
     } else {
-        qFatal("%s is invalid", qPrintable(certName));
+        qWarning("%s is invalid", qPrintable(certName));
     }
 }
 
@@ -142,15 +148,17 @@ int main(int argc, char **argv)
     for (auto it = certNames.begin(); it != certNames.end();) {
         const auto cert = loadCert(*it);
         if (!cert.isValid()) {
-            qFatal("Invalid certificate: %s", qPrintable(*it));
+            qWarning("Invalid certificate: %s", qPrintable(*it));
+            it = certNames.erase(it);
+            continue;
         }
         if (!cert.isSelfSigned() && cert.endOfValidity().year() < 2019) {
             qDebug() << "discarding" << (*it) << "due to being expired" << cert.endOfValidity();
             QFile::rename((*it) + QLatin1String(".vdv-cert"), QLatin1Char('.') + (*it) + QLatin1String(".vdv-cert"));
             it = certNames.erase(it);
-        } else {
-            ++it;
+            continue;
         }
+        ++it;
     }
 
     // (5) write qrc file
