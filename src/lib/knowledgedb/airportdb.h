@@ -10,7 +10,6 @@
 #include "countrydb.h"
 #include "iatacode.h"
 #include "knowledgedb.h"
-#include "timezonedb.h"
 
 class QString;
 class QTimeZone;

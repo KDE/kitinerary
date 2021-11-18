@@ -47,7 +47,6 @@ namespace KItinerary {
 namespace KnowledgeDb {
 )");
     writeCountryTable(out);
-    writeIso3CodeTable(out);
     writeUicCodeTable(out);
     out->write(R"(
 }
@@ -61,10 +60,9 @@ namespace KnowledgeDb {
 bool CountryDbGenerator::fetchCountryList()
 {
     const auto countryArray = WikiData::query(R"(
-        SELECT DISTINCT ?country ?countryLabel ?isoCode ?iso3Code ?demolished WHERE {
+        SELECT DISTINCT ?country ?countryLabel ?isoCode ?demolished WHERE {
             ?country (wdt:P31/wdt:P279*) wd:Q6256.
             ?country wdt:P297 ?isoCode.
-            ?country wdt:P298 ?iso3Code.
             OPTIONAL { ?country wdt:P576 ?demolished. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
         } ORDER BY (?country))", "wikidata_country.json");
@@ -93,13 +91,6 @@ bool CountryDbGenerator::fetchCountryList()
         } else {
             m_isoCodeMap[isoCode] = uri;
         }
-
-        const auto iso3Code = countryObj.value(QLatin1String("iso3Code")).toObject().value(QLatin1String("value")).toString().toUpper();
-        if (iso3Code.size() != 3 || !Util::containsOnlyLetters(iso3Code)) {
-            qWarning() << "ISO 3166-1 alpha 3 format violation" << iso3Code << uri;
-            continue;
-        }
-        m_iso3CodeMap[iso3Code] = isoCode;
     }
 
     return true;
@@ -271,19 +262,6 @@ void CountryDbGenerator::writeCountryTable(QIODevice *out)
         out->write("}, // ");
         out->write((*countryIt).name.toUtf8());
         out->write("\n");
-    }
-    out->write("};\n\n");
-}
-
-void Generator::CountryDbGenerator::writeIso3CodeTable(QIODevice *out)
-{
-    out->write("static const IsoCountryCodeMapping iso_country_code_table[] = {\n");
-    for (const auto &kv : m_iso3CodeMap) {
-        out->write("    { CountryId3{\"");
-        out->write(kv.first.toUtf8());
-        out->write("\"}, CountryId{\"");
-        out->write(kv.second.toUtf8());
-        out->write("\"}},\n");
     }
     out->write("};\n\n");
 }

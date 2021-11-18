@@ -296,8 +296,6 @@ bool AirportDbGenerator::generate(QIODevice* out)
 #include "airportdb.h"
 #include "airportdb_p.h"
 #include "knowledgedb.h"
-#include "timezonedb.h"
-#include "timezonedb_data.h"
 
 #include <limits>
 

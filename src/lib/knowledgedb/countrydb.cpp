@@ -89,20 +89,6 @@ PowerPlugTypes KnowledgeDb::incompatiblePowerSockets(PowerPlugTypes plugs, Power
     return failSockets & ~plugs;
 }
 
-#if !HAVE_KI18N_LOCALE_DATA
-KnowledgeDb::CountryId KnowledgeDb::countryIdFromIso3166_1alpha3(CountryId3 iso3Code)
-{
-    const auto it = std::lower_bound(std::begin(iso_country_code_table), std::end(iso_country_code_table), iso3Code, [](const auto &lhs, CountryId3 rhs) {
-        return lhs.iso3Code < rhs;
-    });
-    if (it == std::end(iso_country_code_table) || (*it).iso3Code != iso3Code) {
-        return {};
-    }
-
-    return (*it).iso2Code;
-}
-#endif
-
 KnowledgeDb::CountryId KnowledgeDb::countryIdForUicCode(uint16_t uicCountryCode)
 {
     const auto it = std::lower_bound(std::begin(uic_country_code_table), std::end(uic_country_code_table), uicCountryCode, [](const auto &lhs, uint16_t rhs) {

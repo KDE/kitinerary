@@ -6,6 +6,7 @@
 
 #include <config-kitinerary.h>
 #include <knowledgedb/airportdb.h>
+#include <knowledgedb/timezonedb.h>
 
 #include <KItinerary/LocationUtil>
 

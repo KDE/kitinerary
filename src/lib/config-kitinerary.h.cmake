@@ -4,8 +4,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <ki18n_version.h> // ### temporary until we depend on >= KF 5.88
-
 #ifndef CONFIG_KITINERARY_H
 #define CONFIG_KITINERARY_H
 
@@ -37,12 +35,6 @@
 #cmakedefine HAVE_KCAL
 #cmakedefine HAVE_LIBXML2
 #cmakedefine HAVE_PHONENUMBER
-
-#if KI18N_VERSION >= K_VERSION_CHECK(5, 88, 0)
-#define HAVE_KI18N_LOCALE_DATA 1
-#else
-#define HAVE_KI18N_LOCALE_DATA 0
-#endif
 
 #define CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "${CMAKE_INSTALL_FULL_LIBEXECDIR_KF5}"
 

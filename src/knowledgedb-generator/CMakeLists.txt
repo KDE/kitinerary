@@ -9,7 +9,6 @@ add_executable(generate-knowledgedb
     airportdbgenerator.cpp
     countrydbgenerator.cpp
     osmairportdb.cpp
-    timezonedbgenerator.cpp
     trainstationdbgenerator.cpp
     util.cpp
     ../lib/stringutil.cpp
@@ -49,8 +48,6 @@ function(generate_db dbtype outfile)
     set(outfiles ${outfiles} PARENT_SCOPE)
 endfunction()
 generate_db(country countrydb_data.cpp)
-generate_db(timezone timezonedb_data.cpp)
-generate_db(timezoneheader timezonedb_data.h)
 generate_db(airport airportdb_data.cpp ${OSM_PLANET_DIR}/airports-bbox.osm)
 generate_db(trainstation trainstationdb_data.cpp)
 

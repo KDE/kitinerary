@@ -20,8 +20,6 @@ namespace KnowledgeDb {
 
 /** ISO 3166-1 alpha 2 country identifier. */
 using CountryId = AlphaId<uint16_t, 2>;
-/** ISO 3166-1 alpha 3 country identifier. */
-using CountryId3 = AlphaId<uint16_t, 3>;
 
 /** Driving side. */
 enum class DrivingSide : uint8_t {
@@ -80,8 +78,6 @@ KITINERARY_EXPORT const Country* countriesBegin();
 /** Iterator access for the country information table. */
 KITINERARY_EXPORT const Country* countriesEnd();
 
-/** Look up country ISO 3166-1 alpha 2 code from an ISO 3166-1 alpha 3 code. */
-KITINERARY_EXPORT CountryId countryIdFromIso3166_1alpha3(CountryId3 iso3Code);
 /** Look up country ISO code from a UIC country code. */
 KITINERARY_EXPORT CountryId countryIdForUicCode(uint16_t uicCountryCode);
 

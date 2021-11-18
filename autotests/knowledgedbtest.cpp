@@ -8,6 +8,7 @@
 
 #include <config-kitinerary.h>
 #include <knowledgedb/alphaid.h>
+#include <knowledgedb/timezonedb.h>
 #include <knowledgedb/trainstationdb.h>
 
 #include <QDebug>
@@ -291,11 +292,7 @@ private Q_SLOTS:
         QCOMPARE(timezoneForLocation(32.55783, -117.04773, u"US"), QTimeZone("America/Los_Angeles"));
 
         // Cordoba (AR), AR has several sub-zones that are all equivalent
-#if HAVE_KI18N_LOCALE_DATA
         QCOMPARE(timezoneForLocation(-31.4, -64.2, u"AR"), QTimeZone("America/Argentina/Buenos_Aires"));
-#else
-        QCOMPARE(timezoneForLocation(-31.4, -64.2, u"AR"), QTimeZone("America/Argentina/Cordoba"));
-#endif
 
         // polar regions
         QCOMPARE(timezoneForLocation(-90.0, 0.0, {}), QTimeZone());
@@ -308,38 +305,6 @@ private Q_SLOTS:
         QCOMPARE(timezoneForLocation(NAN, NAN, u"LU"), QTimeZone("Europe/Luxembourg"));
     }
 
-    void testCountryFromCoordinate()
-    {
-        using namespace KnowledgeDb;
-
-        // basic tests
-        QCOMPARE(countryForCoordinate(52.4, 13.1), QLatin1String{"DE"});
-        QCOMPARE(countryForCoordinate(-8.0, -35.0), QLatin1String{"BR"});
-        QCOMPARE(countryForCoordinate(-36.5, 175.0), QLatin1String{"NZ"});
-        QCOMPARE(countryForCoordinate(44.0, -79.5), QLatin1String{"CA"});
-
-        // ambiguous locations
-        QCOMPARE(countryForCoordinate(51.44344, 4.93373), QString());
-
-#if HAVE_KI18N_LOCALE_DATA
-        // special case: northern Vietnam has a non-VN timezone (not the case anywhere else in the world up to 2020a)
-        QCOMPARE(countryForCoordinate(21.0, 106.0), QLatin1String("VN"));
-        QCOMPARE(countryForCoordinate(10.5, 107.0), QLatin1String{"VN"});
-        QCOMPARE(countryForCoordinate(13.7, 100.4), QLatin1String("TH"));
-#else
-        // special case: northern Vietnam has a non-VN timezone (not the case anywhere else in the world up to 2020a)
-        QCOMPARE(countryForCoordinate(21.0, 106.0), QString());
-        QCOMPARE(countryForCoordinate(10.5, 107.0), QLatin1String{"VN"});
-        QCOMPARE(countryForCoordinate(13.7, 100.4), QString());
-
-        // disputed areas
-        QCOMPARE(countryForCoordinate(45.0, 34.0), QString());
-#endif
-
-        // overseas territories with separate ISO 3166-1 codes
-        QCOMPARE(countryForCoordinate(4.8, -52.3), QLatin1String{"GF"}); // could also be "FR"
-    }
-
     void testUICCountryCodeLookup()
     {
         using namespace KnowledgeDb;
@@ -347,16 +312,6 @@ private Q_SLOTS:
         QCOMPARE(KnowledgeDb::countryIdForUicCode(80), CountryId{"DE"});
         QCOMPARE(KnowledgeDb::countryIdForUicCode(0), CountryId{});
     }
-
-#if !HAVE_KI18N_LOCALE_DATA
-    void testIso3Lookup()
-    {
-        using namespace KnowledgeDb;
-
-        QCOMPARE(KnowledgeDb::countryIdFromIso3166_1alpha3(CountryId3{"ITA"}), CountryId{"IT"});
-        QCOMPARE(KnowledgeDb::countryIdFromIso3166_1alpha3(CountryId3{"FOO"}), CountryId{});
-    }
-#endif
 
     void testIndianRailwaysStationCodeLookup()
     {

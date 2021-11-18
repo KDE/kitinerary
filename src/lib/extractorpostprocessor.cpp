@@ -17,6 +17,7 @@
 #include "mergeutil.h"
 #include "sortutil.h"
 
+#include "knowledgedb/timezonedb.h"
 #include "knowledgedb/trainstationdb.h"
 
 #include <KItinerary/Action>
@@ -34,11 +35,7 @@
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
 
-#if HAVE_KI18N_LOCALE_DATA
 #include <KCountry>
-#else
-#include <KContacts/Address>
-#endif
 
 #include <QDebug>
 #include <QJsonArray>
@@ -452,7 +449,6 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
 {
     // convert to ISO 3166-1 alpha-2 country codes
     if (addr.addressCountry().size() > 2) {
-#if HAVE_KI18N_LOCALE_DATA
         QString alpha2Code;
 
         // try ISO 3166-1 alpha-3, we get that e.g. from Flixbus
@@ -465,19 +461,6 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
         if (!alpha2Code.isEmpty()) {
             addr.setAddressCountry(alpha2Code);
         }
-#else
-        const auto isoCode = KContacts::Address::countryToISO(addr.addressCountry()).toUpper();
-        if (!isoCode.isEmpty()) {
-            addr.setAddressCountry(isoCode);
-
-        // try ISO 3166-1 alpha-3, we get that e.g. from Flixbus
-        } else if (addr.addressCountry().size() == 3) {
-            const auto c = KnowledgeDb::countryIdFromIso3166_1alpha3(KnowledgeDb::CountryId3(addr.addressCountry()));
-            if (c.isValid()) {
-                addr.setAddressCountry(c.toString());
-            }
-        }
-#endif
     }
 
     // upper case country codes
@@ -507,7 +490,7 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
 #endif
 
     if (geo.isValid() && addr.addressCountry().isEmpty()) {
-        addr.setAddressCountry(KnowledgeDb::countryForCoordinate(geo.latitude(), geo.longitude()));
+        addr.setAddressCountry(KCountry::fromLocation(geo.latitude(), geo.longitude()).alpha2());
     }
 
     addr = ExtractorUtil::extractPostalCode(addr);

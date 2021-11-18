@@ -21,13 +21,6 @@ namespace KnowledgeDb {
      *  Either argument can be omitted, if both are available better results can be provided.
      */
     KITINERARY_EXPORT QTimeZone timezoneForLocation(float lat, float lon, QStringView alpha2CountryCode);
-
-    /** Returns the country for the given coordinate.
-     *  The result will be the country identifier only if the underlying
-     *  spatial index has no ambiguity at the requested locations, ie. this
-     *  will return less results than timezoneForCoordinate() for example.
-     */
-    KITINERARY_EXPORT QString countryForCoordinate(float lat, float lon);
 }
 }
 
