@@ -73,11 +73,6 @@ struct Country
 /** Look up country information by id. */
 KITINERARY_EXPORT Country countryForId(CountryId id);
 
-/** Iterator access for the country information table. */
-KITINERARY_EXPORT const Country* countriesBegin();
-/** Iterator access for the country information table. */
-KITINERARY_EXPORT const Country* countriesEnd();
-
 /** Look up country ISO code from a UIC country code. */
 KITINERARY_EXPORT CountryId countryIdForUicCode(uint16_t uicCountryCode);
 

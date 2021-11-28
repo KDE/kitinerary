@@ -29,16 +29,6 @@ Country KnowledgeDb::countryForId(CountryId id)
     return (*it);
 }
 
-const Country* KnowledgeDb::countriesBegin()
-{
-    return std::begin(country_table);
-}
-
-const Country* KnowledgeDb::countriesEnd()
-{
-    return std::end(country_table);
-}
-
 struct PowerPlugCompatMap {
     PowerPlugType plug;
     PowerPlugTypes sockets;
