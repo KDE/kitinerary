@@ -10,3 +10,9 @@ Dependencies:
     'frameworks/kcalendarcore' : '@latest'
     'pim/kmime' : '@same'
     'pim/kpkpass' : '@same'
+
+Options:
+  # exlucde large generated files that hang cppcheck
+  cppcheck-ignore-files:
+  - 'src/lib/knowledgedb/countrydb.cpp'
+  - 'src/lib/knowledgedb/countrydb_data.cpp'
