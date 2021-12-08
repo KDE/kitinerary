@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "match": "^\\d{13}.{37}[A-Z]{8}VIA",
@@ -7,6 +7,18 @@
         }
     ],
     "function": "parseBoardingPass",
-    "script": "viarail.js",
-    "mimeType": "application/pdf"
-}
+    "mimeType": "application/pdf",
+    "script": "viarail.js"
+},
+{
+    "filter": [
+        {
+            "match": "^\\d{13}.{37}[A-Z]{8}VIA",
+            "mimeType": "text/plain",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseBarcode",
+    "mimeType": "text/plain",
+    "script": "viarail.js"
+}]
