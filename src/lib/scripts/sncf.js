@@ -250,7 +250,7 @@ function parseSecutixPdf(pdf, node, triggerNode)
     var pnr = text.match(res.reservationNumber + '[^\n]* ([A-Z0-9]{6})\n');
     var layoutVersion = 1;
     if (!pnr) {
-        pnr = text.match(/PAO\s*:\s*([A-Z0-9]{6})\n/);
+        pnr = text.match(/(?:PAO|REF)\s*:\s*([A-Z0-9]{6,8})\n/);
         layoutVersion = 2;
     }
     res.reservationNumber = pnr[1];
