@@ -235,6 +235,7 @@ function parseSecutixPdf(pdf, node, triggerNode)
     // see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes#SNCF_Secutix_Tickets
     var res = JsonLd.newTrainReservation();
     var code = ByteArray.decodeLatin1(triggerNode.content.slice(260));
+    res.reservationFor.provider.identifier = 'uic:' + code.substr(4, 4);
     res.reservationNumber = code.substr(8, 9);
     res.reservationFor.departureStation.name = code.substr(17, 5);
     res.reservationFor.departureStation.identifier = "sncf:" + code.substr(17, 5);
@@ -262,6 +263,9 @@ function parseSecutixPdf(pdf, node, triggerNode)
 
     reservations[0].reservationFor.departureStation.identifier = res.reservationFor.departureStation.identifier;
     reservations[reservations.length - 1].reservationFor.arrivalStation.identifier = res.reservationFor.arrivalStation.identifier;
+    for (r of reservations) {
+        r.reservationFor.provider = res.reservationFor.provider;
+    }
 
     return reservations;
 }
