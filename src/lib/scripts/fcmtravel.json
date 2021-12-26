@@ -1,7 +1,7 @@
 {
     "filter": [
-        { "field": "From", "match": "@fcmtravel\.", "mimeType": "message/rfc822", "scope": "Ancestors" },
-        { "field": "From", "match": "@travellink\.", "mimeType": "message/rfc822", "scope": "Ancestors" }
+        { "field": "From", "match": "@fcmtravel\\.", "mimeType": "message/rfc822", "scope": "Ancestors" },
+        { "field": "From", "match": "@travellink\\.", "mimeType": "message/rfc822", "scope": "Ancestors" }
     ],
     "script": "fcmtravel.js",
     "mimeType": "text/plain"
