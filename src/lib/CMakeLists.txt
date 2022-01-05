@@ -131,6 +131,10 @@ target_sources(KPimItinerary PRIVATE
     sortutil.cpp
     stringutil.cpp
 )
+if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
+    set_target_properties(KPimItinerary PROPERTIES UNITY_BUILD ON)
+endif()
+
 kde_source_files_enable_exceptions(barcodedecoder.cpp qimagepurebinarizer.cpp)
 ecm_qt_declare_logging_category(KPimItinerary
     HEADER logging.h

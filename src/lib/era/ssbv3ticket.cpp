@@ -13,9 +13,9 @@
 using namespace KItinerary;
 
 enum {
-    SSB_DATA_SIZE = 114,
-    SSB_CHAR_WIDTH = 6,
-    SSB_VERSION = 3,
+    SSBV3_DATA_SIZE = 114,
+    SSBV3_CHAR_WIDTH = 6,
+    SSBV3_VERSION = 3,
 };
 
 SSBv3Ticket::SSBv3Ticket() = default;
@@ -41,17 +41,17 @@ QString SSBv3Ticket::readString(int start, int length) const
     QString res;
     res.resize(length);
     for (int i = 0; i < length; ++i) {
-        res[i] = QLatin1Char((uint8_t)readNumber(start + SSB_CHAR_WIDTH * i, SSB_CHAR_WIDTH) + 32);
+        res[i] = QLatin1Char((uint8_t)readNumber(start + SSBV3_CHAR_WIDTH * i, SSBV3_CHAR_WIDTH) + 32);
     }
     return res;
 }
 
 bool SSBv3Ticket::maybeSSB(const QByteArray& data)
 {
-    if (data.size() != SSB_DATA_SIZE) {
+    if (data.size() != SSBV3_DATA_SIZE) {
         return false;
     }
-    return (data.at(0) >> 4) == SSB_VERSION;
+    return (data.at(0) >> 4) == SSBV3_VERSION;
 }
 
 QDate SSBv3Ticket::issueDate(const QDateTime &contextDate) const

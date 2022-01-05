@@ -11,9 +11,9 @@
 using namespace KItinerary;
 
 enum {
-    SSB_DATA_SIZE_MIN = 67,
-    SSB_DATA_SIZE_MAX = 114,
-    SSB_VERSION = 2,
+    SSBV2_DATA_SIZE_MIN = 67,
+    SSBV2_DATA_SIZE_MAX = 114,
+    SSBV2_VERSION = 2,
 };
 
 SSBv2Ticket::SSBv2Ticket() = default;
@@ -36,10 +36,10 @@ bool SSBv2Ticket::isValid() const
 
 bool SSBv2Ticket::maybeSSB(const QByteArray& data)
 {
-    if (data.size() < SSB_DATA_SIZE_MIN || data.size() > SSB_DATA_SIZE_MAX) {
+    if (data.size() < SSBV2_DATA_SIZE_MIN || data.size() > SSBV2_DATA_SIZE_MAX) {
         return false;
     }
-    return (data.at(0) >> 4) == SSB_VERSION;
+    return (data.at(0) >> 4) == SSBV2_VERSION;
 }
 
 QByteArray SSBv2Ticket::rawData() const

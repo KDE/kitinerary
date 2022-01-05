@@ -375,7 +375,7 @@ EventReservation ExtractorPostprocessorPrivate::processEventReservation(EventRes
     return processReservation(res);
 }
 
-Event ExtractorPostprocessorPrivate::processEvent(Event event) const
+KItinerary::Event ExtractorPostprocessorPrivate::processEvent(KItinerary::Event event) const
 {
     event.setName(event.name().trimmed());
 
@@ -420,7 +420,7 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
 }
 
 
-Person ExtractorPostprocessorPrivate::processPerson(Person person) const
+KItinerary::Person ExtractorPostprocessorPrivate::processPerson(KItinerary::Person person) const
 {
     person.setName(person.name().simplified());
     person.setFamilyName(person.familyName().simplified());

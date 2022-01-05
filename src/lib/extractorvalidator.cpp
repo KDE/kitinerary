@@ -154,7 +154,7 @@ struct {
     FILTER(Flight, filterFlight),
     FILTER(TrainTrip, filterTrainTrip),
     FILTER(BusTrip, filterBusTrip),
-    FILTER(Event, filterEvent),
+    FILTER(KItinerary::Event, filterEvent),
     FILTER(LocalBusiness, filterLocalBusiness),
     FILTER(FoodEstablishmentReservation, filterFoodReservation),
     FILTER(LodgingReservation, filterLodgingReservation),
