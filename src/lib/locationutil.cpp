@@ -210,8 +210,6 @@ static QString applyTransliterations(const QString &s)
 
 static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationUtil::Accuracy accuracy)
 {
-    Q_UNUSED(accuracy) // TODO for city level we can strip station or airport suffixes for example
-
     if (lhs.isEmpty() || rhs.isEmpty()) {
         return false;
     }
@@ -221,13 +219,30 @@ static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationU
         return true;
     }
 
-    // check if any of the unicode normalization approaches helps
+    // check if any of the Unicode normalization approaches helps
     const auto lhsNormalized = stripDiacritics(lhs);
     const auto rhsNormalized = stripDiacritics(rhs);
     const auto lhsTransliterated = applyTransliterations(lhs);
     const auto rhsTransliterated = applyTransliterations(rhs);
-    return lhsNormalized.compare(rhsNormalized, Qt::CaseInsensitive) == 0 || lhsNormalized.compare(rhsTransliterated, Qt::CaseInsensitive) == 0
-        || lhsTransliterated.compare(rhsNormalized, Qt::CaseInsensitive) == 0 || lhsTransliterated.compare(rhsTransliterated, Qt::CaseInsensitive) == 0;
+    if (lhsNormalized.compare(rhsNormalized, Qt::CaseInsensitive) == 0 || lhsNormalized.compare(rhsTransliterated, Qt::CaseInsensitive) == 0
+        || lhsTransliterated.compare(rhsNormalized, Qt::CaseInsensitive) == 0 || lhsTransliterated.compare(rhsTransliterated, Qt::CaseInsensitive) == 0) {
+        return true;
+    }
+
+    if (accuracy == LocationUtil::CityLevel) {
+        // check for a common prefix
+        bool foundSeparator = false;
+        for (auto i = 0; i < std::min(lhsNormalized.size(), rhsNormalized.size()); ++i) {
+            if (lhsNormalized[i] != rhsNormalized[i]) {
+                return foundSeparator;
+            }
+            foundSeparator |= !lhsNormalized[i].isLetter();
+        }
+
+        return lhsNormalized.startsWith(rhsNormalized) || rhsNormalized.startsWith(lhsNormalized);
+    }
+
+    return false;
 }
 
 bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, LocationUtil::Accuracy accuracy)
@@ -246,10 +261,17 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
                 return d < (isAirport ? 2000 : 1000);
             }
             case CityLevel:
-                return d < 50000;
+                if (d >= 50000) {
+                    return false;
+                }
+                if (d < 2000) {
+                    return true;
+                }
+                if (d < 50000 && address(lhs).addressLocality().isEmpty() && name(lhs).isEmpty()) {
+                    return true;
+                }
                 break;
         }
-        return false;
     }
 
     const auto lhsAddr = address(lhs);

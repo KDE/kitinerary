@@ -80,6 +80,20 @@ private Q_SLOTS:
         QVERIFY(!LocationUtil::isSameLocation(txl, sxf, LocationUtil::Exact));
         QVERIFY(!LocationUtil::isSameLocation(txl, {}, LocationUtil::CityLevel));
         QVERIFY(!LocationUtil::isSameLocation({}, sxf, LocationUtil::Exact));
+
+
+        GeoCoordinates mnhCoord({49.47922, 8.46941});
+        GeoCoordinates lwhCoord({49.47716, 8.43406});
+        TrainStation mnh;
+        mnh.setGeo(mnhCoord);
+        TrainStation lwh;
+        lwh.setGeo(lwhCoord);
+        QVERIFY(LocationUtil::isSameLocation(mnh, lwh, LocationUtil::CityLevel)); // wrong, but we have no other information
+        mnh.setName(_("Mannheim Hbf"));
+        lwh.setName(_("Ludwigshafen (Rhein) Hauptbahnhof"));
+        QVERIFY(!LocationUtil::isSameLocation(mnh, lwh, LocationUtil::CityLevel));
+        lwh.setName(_("Mannheim (Rhein) West"));
+        QVERIFY(LocationUtil::isSameLocation(mnh, lwh, LocationUtil::CityLevel));
     }
 
     void testLocationNameCompare_data()
