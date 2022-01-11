@@ -9,8 +9,11 @@
 #include "kitinerary_export.h"
 
 #include <QSharedPointer>
-template <typename T> class QVector;
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+template<typename T> class QVector;
+#else
+template<typename T> class QList;
+#endif
 class QVariant;
 
 namespace KCalendarCore {

@@ -161,8 +161,11 @@ QString Uic9183TicketLayout::text(int row, int column, int width, int height) co
         // split field into lines
         // TODO this needs to follow the U_TLAY word-wrapping algorithm?
         const auto content = f.text();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         const auto lines = content.splitRef(QLatin1Char('\n'));
-
+#else
+        const auto lines = QStringView(content).split(QLatin1Char('\n'));
+#endif
         // cut out the right part of the line
         for (int i = 0; i < lines.size(); ++i) {
             if (f.row() + i < row) {

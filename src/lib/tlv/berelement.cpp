@@ -24,7 +24,7 @@ BER::Element::Element() = default;
 BER::Element::Element(const QByteArray &data, int offset, int size)
     : m_data(data)
     , m_offset(offset)
-    , m_dataSize(size < 0 ? data.size() : std::min(offset + size, data.size()))
+    , m_dataSize(size < 0 ? data.size() : std::min<int>(offset + size, data.size()))
 {
     assert(m_dataSize <= m_data.size());
     if (!isValid()) {

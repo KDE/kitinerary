@@ -38,8 +38,11 @@ QDate Rct2TicketPrivate::firstDayOfValidity() const
     if (it == f.end()) {
         return {};
     }
-
-    const auto dtStr = f.midRef(std::distance(f.begin(), it));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+     const auto dtStr = f.midRef(std::distance(f.begin(), it));
+#else
+    const auto dtStr = QStringView(f).mid(std::distance(f.begin(), it));
+#endif
     auto dt = QDate::fromString(dtStr.left(10).toString(), QStringLiteral("dd.MM.yyyy"));
     if (dt.isValid()) {
         return dt;
