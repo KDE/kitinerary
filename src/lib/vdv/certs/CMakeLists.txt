@@ -8,6 +8,6 @@ add_executable(vdv-cert-downloader
 )
 
 target_include_directories(vdv-cert-downloader PRIVATE ${CMAKE_BINARY_DIR}/src/lib ${CMAKE_CURRENT_SOURCE_DIR}/..)
-target_link_libraries(vdv-cert-downloader PRIVATE Qt::Core OpenSSL::Crypto KPimItinerary)
+target_link_libraries(vdv-cert-downloader PRIVATE Qt${QT_MAJOR_VERSION}::Core OpenSSL::Crypto KPimItinerary)
 
 add_custom_target(vdv-download-certs COMMAND vdv-cert-downloader WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
