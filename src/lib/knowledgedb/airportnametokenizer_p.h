@@ -9,7 +9,7 @@
 
 #include <QStringView>
 
-class QStringList;
+#include <QStringList>
 
 namespace KItinerary {
 

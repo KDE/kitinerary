@@ -68,7 +68,11 @@ QVariant Ticket::ticketTokenData() const
     } else if (d->ticketToken.startsWith(QLatin1String("azteccode:"), Qt::CaseInsensitive)) {
         return ticketToken().mid(10);
     } else if (d->ticketToken.startsWith(QLatin1String("aztecbin:"), Qt::CaseInsensitive)) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         return QByteArray::fromBase64(d->ticketToken.midRef(9).toLatin1());
+#else
+        return QByteArray::fromBase64(QStringView(d->ticketToken).mid(9).toLatin1());
+#endif
     } else if (d->ticketToken.startsWith(QLatin1String("barcode128:"), Qt::CaseInsensitive)) {
         return ticketToken().mid(11);
     } else if (d->ticketToken.startsWith(QLatin1String("datamatrix:"), Qt::CaseInsensitive)) {
@@ -76,7 +80,11 @@ QVariant Ticket::ticketTokenData() const
     } else if (d->ticketToken.startsWith(QLatin1String("pdf417:"), Qt::CaseInsensitive)) {
         return ticketToken().mid(7);
     } else if (d->ticketToken.startsWith(QLatin1String("pdf417bin:"), Qt::CaseInsensitive)) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         return QByteArray::fromBase64(d->ticketToken.midRef(10).toLatin1());
+#else
+        return QByteArray::fromBase64(QStringView(d->ticketToken).mid(10).toLatin1());
+#endif
     }
     return ticketToken();
 }
