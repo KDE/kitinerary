@@ -351,13 +351,8 @@ QJSValue JsApi::JsonLd::toGeoCoordinates(const QString &mapUrl)
         if (match.hasMatch()) {
             auto geo = m_engine->newObject();
             geo.setProperty(QStringLiteral("@type"), QStringLiteral("GeoCoordinates"));
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            geo.setProperty(QStringLiteral("latitude"), match.capturedRef(1).toDouble());
-            geo.setProperty(QStringLiteral("longitude"), match.capturedRef(2).toDouble());
-#else
             geo.setProperty(QStringLiteral("latitude"), match.capturedView(1).toDouble());
             geo.setProperty(QStringLiteral("longitude"), match.capturedView(2).toDouble());
-#endif
             return geo;
         }
     }

@@ -7,9 +7,8 @@
 #ifndef KITINERARY_AIRPORTNAMETOKENIZER_H
 #define KITINERARY_AIRPORTNAMETOKENIZER_H
 
-#include <QStringView>
-
 #include <QStringList>
+#include <QStringView>
 
 namespace KItinerary {
 

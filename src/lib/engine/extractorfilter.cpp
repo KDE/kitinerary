@@ -136,11 +136,7 @@ void ExtractorFilter::setScope(Scope scope)
 
 static QString valueForJsonPath(const QJsonObject &obj, const QString &path)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    const auto pathSections = path.splitRef(QLatin1Char('.'));
-#else
     const auto pathSections = QStringView(path).split(QLatin1Char('.'));
-#endif
     QJsonValue v(obj);
     for (const auto &pathSection : pathSections) {
         if (!v.isObject()) {

@@ -6,8 +6,6 @@
 
 #include "airportnametokenizer_p.h"
 
-#include <QStringList>
-
 using namespace KItinerary;
 
 AirportNameTokenizer::AirportNameTokenizer(QStringView text)

@@ -240,20 +240,12 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
     } else if (id.startsWith(QLatin1String("ibnr:")) && id.size() == 12) {
         const auto record = KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{id.mid(5).toUInt()});
         applyStationData(record, station);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        const auto country = KnowledgeDb::countryIdForUicCode(id.midRef(5, 2).toUShort()).toString();
-#else
         const auto country = KnowledgeDb::countryIdForUicCode(QStringView(id).mid(5, 2).toUShort()).toString();
-#endif
         applyStationCountry(country, station);
     } else if (id.startsWith(QLatin1String("uic:")) && id.size() == 11) {
         const auto record = KnowledgeDb::stationForUic(KnowledgeDb::UICStation{id.mid(4).toUInt()});
         applyStationData(record, station);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        const auto country = KnowledgeDb::countryIdForUicCode(id.midRef(4, 2).toUShort()).toString();
-#else
         const auto country = KnowledgeDb::countryIdForUicCode(QStringView(id).mid(4, 2).toUShort()).toString();
-#endif
         applyStationCountry(country, station);
     } else if (id.startsWith(QLatin1String("ir:")) && id.size() > 4) {
         const auto record = KnowledgeDb::stationForIndianRailwaysStationCode(id.mid(3));
