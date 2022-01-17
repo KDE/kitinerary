@@ -41,6 +41,7 @@ Flight FlightPostProcessor::processFlight(Flight flight)
     flight = ExtractorUtil::extractTerminals(flight);
     flight.setDepartureTerminal(flight.departureTerminal().simplified());
     flight.setArrivalTerminal(flight.arrivalTerminal().simplified());
+    flight.setFlightNumber(flight.flightNumber().simplified());
 
     // arrival less than a day before departure is an indication of the extractor failing to detect day rollover
     if (duration < 0 && duration > -3600*24) {
