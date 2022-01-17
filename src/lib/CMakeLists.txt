@@ -167,11 +167,11 @@ target_link_libraries(KPimItinerary
     PUBLIC
         Qt::Core
         KF5::Mime
+        KF5::I18n # for ki18n_version.h in semi-public headers, needed for KF5.91+, not needed in master anymore
     PRIVATE
         Qt::Qml
         Qt::QmlPrivate
         KF5::Archive
-        KF5::I18n
         KF5::Contacts
         KPim::PkPass
         OpenSSL::Crypto
