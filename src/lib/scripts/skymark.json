@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "reserve@skymark.jp",
+            "mimeType": "message/rfc822",
+            "scope": "Parent"
+        }
+    ],
+    "function": "parseBooking",
+    "mimeType": "text/plain",
+    "script": "skymark.js"
+}
