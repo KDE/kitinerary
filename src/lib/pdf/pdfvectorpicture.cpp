@@ -107,8 +107,8 @@ QImage PdfVectorPicture::renderToImage() const
     if (d->image.isNull()) {
         bool shouldFlip = false;
         const double scale = (RenderDPI / 72.0) * scaleFromTransform(d->transform, &shouldFlip); // 1/72 dpi is the unit for the vector coordinates
-        const int width = boundingRect().width() * scale;
-        const int height = boundingRect().height() * scale;
+        const int width = std::ceil(boundingRect().width() * scale);
+        const int height = std::ceil(boundingRect().height() * scale);
         d->image = QImage(width, height, QImage::Format_Grayscale8);
         d->image.fill(Qt::white);
         QPainter p(&d->image);
