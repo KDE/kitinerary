@@ -92,6 +92,34 @@ static bool isRelevantStroke(const QPen &pen)
     return !qFuzzyCompare(pen.widthF(), 0.0) && pen.color() == Qt::black;
 }
 
+static bool isRectangularPath(const QPainterPath &path)
+{
+    qreal x = 0.0, y = 0.0;
+    for (int i = 0; i < path.elementCount(); ++i) {
+        const auto elem = path.elementAt(i);
+        switch (elem.type) {
+            case QPainterPath::MoveToElement:
+                x = elem.x;
+                y = elem.y;
+                break;
+            case QPainterPath::LineToElement:
+                if (x != elem.x && y != elem.y) {
+                    qDebug() << "path contains diagonal line, discarding";
+                    return false;
+                }
+                x = elem.x;
+                y = elem.y;
+                break;
+            case QPainterPath::CurveToElement:
+            case QPainterPath::CurveToDataElement:
+                qDebug() << "path contains a curve, discarding";
+                return false;
+        }
+    }
+
+    return true;
+}
+
 void PdfExtractorOutputDevice::stroke(GfxState *state)
 {
     const auto pen = PopplerUtils::currentPen(state);
@@ -100,6 +128,9 @@ void PdfExtractorOutputDevice::stroke(GfxState *state)
     }
 
     const auto path = PopplerUtils::convertPath(state->getPath(), Qt::WindingFill);
+    if (!isRectangularPath(path)) {
+        return;
+    }
     const auto t = PopplerUtils::currentTransform(state);
     m_vectorOps.push_back(VectorOp{VectorOp::Path, t, {path, pen, QBrush()}});
 }
