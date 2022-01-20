@@ -10,3 +10,9 @@ Dependencies:
     'frameworks/kcalendarcore' : '@latest'
     'pim/kmime' : '@same'
     'pim/kpkpass' : '@same'
+
+Options:
+  # exlucde large generated files from cppcheck, takes way to long to run
+  cppcheck-ignore-files:
+  - 'src/lib/knowledgedb/trainstationdb.cpp'
+  - 'src/lib/knowledgedb/trainstationdb_data.cpp'
