@@ -129,6 +129,27 @@ private Q_SLOTS:
         QCOMPARE(LocationUtil::isSameLocation(lhs, rhs, LocationUtil::Exact), exactEqual);
         QCOMPARE(LocationUtil::isSameLocation(rhs, lhs, LocationUtil::Exact), exactEqual);
     }
+
+    void testGeoUri()
+    {
+        Place p;
+        QVERIFY(LocationUtil::geoUri(p).isEmpty());
+
+        GeoCoordinates coord(45.5137, 9.21139);
+        p.setGeo(coord);
+        QCOMPARE(LocationUtil::geoUri(p), QUrl(QStringLiteral("geo:45.5137,9.21139")));
+        QCOMPARE(p.geoUri(), QUrl(QStringLiteral("geo:45.5137,9.21139")));
+
+        PostalAddress addr;
+        addr.setStreetAddress(QStringLiteral("Piazza della Scienza"));
+        addr.setAddressLocality(QStringLiteral("Milan"));
+        addr.setAddressCountry(QStringLiteral("IT"));
+        p.setAddress(addr);
+        QCOMPARE(LocationUtil::geoUri(p), QUrl(QStringLiteral("geo:45.5137,9.21139")));
+
+        p.setGeo({});
+        QCOMPARE(LocationUtil::geoUri(p), QUrl(QStringLiteral("geo:0,0?q=Piazza della Scienza, Milan, IT")));
+    }
 };
 
 QTEST_APPLESS_MAIN(LocationUtilTest)

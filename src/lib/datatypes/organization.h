@@ -41,6 +41,13 @@ class KITINERARY_EXPORT Organization
     KITINERARY_PROPERTY(KItinerary::PostalAddress, address, setAddress)
     KITINERARY_PROPERTY(KItinerary::GeoCoordinates, geo, setGeo)
     KITINERARY_PROPERTY(QVariantList, potentialAction, setPotentialAction)
+
+    /** @see LocationUtil::geoUri() */
+    Q_PROPERTY(QUrl geoUri READ geoUri STORED false)
+
+public:
+    QUrl geoUri() const;
+
 protected:
     ///@cond internal
     QExplicitlySharedDataPointer<OrganizationPrivate> d;

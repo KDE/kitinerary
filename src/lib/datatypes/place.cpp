@@ -6,6 +6,7 @@
 
 #include "place.h"
 #include "datatypes_p.h"
+#include "locationutil.h"
 
 #include <cmath>
 
@@ -90,6 +91,11 @@ KITINERARY_MAKE_PROPERTY(Place, GeoCoordinates, geo, setGeo)
 KITINERARY_MAKE_PROPERTY(Place, QString, telephone, setTelephone)
 KITINERARY_MAKE_PROPERTY(Place, QString, identifier, setIdentifier)
 KITINERARY_MAKE_OPERATOR(Place)
+
+QUrl Place::geoUri() const
+{
+    return LocationUtil::geoUri(*this);
+}
 
 
 class AirportPrivate : public PlacePrivate

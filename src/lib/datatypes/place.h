@@ -10,6 +10,7 @@
 
 #include "datatypes.h"
 
+#include <QUrl>
 
 namespace KItinerary {
 
@@ -82,6 +83,13 @@ class KITINERARY_EXPORT Place
      *  @see http://schema.org/docs/datamodel.html#identifierBg
      */
     KITINERARY_PROPERTY(QString, identifier, setIdentifier)
+
+    /** @see LocationUtil::geoUri() */
+    Q_PROPERTY(QUrl geoUri READ geoUri STORED false)
+
+public:
+    QUrl geoUri() const;
+
 protected:
     ///@cond internal
     QExplicitlySharedDataPointer<PlacePrivate> d;

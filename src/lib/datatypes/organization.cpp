@@ -6,6 +6,7 @@
 
 #include "organization.h"
 #include "datatypes_p.h"
+#include "locationutil.h"
 
 #include <QUrl>
 
@@ -43,6 +44,11 @@ KITINERARY_MAKE_PROPERTY(Organization, PostalAddress, address, setAddress)
 KITINERARY_MAKE_PROPERTY(Organization, KItinerary::GeoCoordinates, geo, setGeo)
 KITINERARY_MAKE_PROPERTY(Organization, QVariantList, potentialAction, setPotentialAction)
 KITINERARY_MAKE_OPERATOR(Organization)
+
+QUrl Organization::geoUri() const
+{
+    return LocationUtil::geoUri(*this);
+}
 
 class AirlinePrivate : public OrganizationPrivate
 {

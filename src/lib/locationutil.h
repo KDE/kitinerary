@@ -9,6 +9,7 @@
 #include "kitinerary_export.h"
 
 class QString;
+class QUrl;
 class QVariant;
 
 namespace KItinerary {
@@ -68,6 +69,9 @@ enum Accuracy {
  *  @param accuracy Defines how closely the locations have to match.
  */
 bool KITINERARY_EXPORT isSameLocation(const QVariant &lhs, const QVariant &rhs, Accuracy accuracy = Exact);
+
+/** Returns a geo: URI for the given location. */
+QUrl KITINERARY_EXPORT geoUri(const QVariant &location);
 
 }
 

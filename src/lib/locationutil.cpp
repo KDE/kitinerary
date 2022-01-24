@@ -16,6 +16,8 @@
 #include <KItinerary/Visit>
 
 #include <QDebug>
+#include <QUrl>
+#include <QUrlQuery>
 
 #include <cmath>
 
@@ -291,4 +293,41 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
     }
 
     return isSameLocationName(name(lhs), name(rhs), accuracy);
+}
+
+QUrl LocationUtil::geoUri(const QVariant &location)
+{
+    QUrl url;
+    url.setScheme(QStringLiteral("geo"));
+
+    const auto geo = LocationUtil::geo(location);
+    if (geo.isValid()) {
+        url.setPath(QString::number(geo.latitude()) + QLatin1Char(',') + QString::number(geo.longitude()));
+        return url;
+    }
+
+    const auto addr = LocationUtil::address(location);
+    if (!addr.isEmpty()) {
+        url.setPath(QStringLiteral("0,0"));
+
+        QStringList q;
+        if (!addr.streetAddress().isEmpty()) {
+            q.push_back(addr.streetAddress());
+        }
+        if (!addr.addressLocality().isEmpty()) {
+            q.push_back(addr.postalCode().isEmpty() ? addr.addressLocality() : (addr.postalCode() + QLatin1Char(' ') + addr.addressLocality()));
+        }
+        if (!addr.addressRegion().isEmpty()) {
+            q.push_back(addr.addressRegion());
+        }
+        if (!addr.addressCountry().isEmpty()) {
+            q.push_back(addr.addressCountry());
+        }
+        QUrlQuery query;
+        query.addQueryItem(QStringLiteral("q"), q.join(QLatin1String(", ")));
+        url.setQuery(query);
+        return url;
+    }
+
+    return {};
 }
