@@ -232,7 +232,7 @@ void BarcodeDecoder::decodeZxing(const QImage &img, BarcodeDecoder::BarcodeTypes
 
 #ifdef ZXING_USE_READBARCODE
     hints.setBinarizer(ZXing::Binarizer::FixedThreshold);
-    hints.setIsPure(true);
+    hints.setIsPure((format & BarcodeDecoder::IgnoreAspectRatio) == 0);
 
     // convert if img is in a format ZXing can't handle directly
     const auto res = zxingImageFormat(img.format()) == ZXing::ImageFormat::None ?
