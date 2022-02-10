@@ -97,7 +97,7 @@ private:
     mutable std::unordered_map<qint64, Result> m_cache;
 };
 
-}
+Q_DECLARE_OPERATORS_FOR_FLAGS(BarcodeDecoder::BarcodeTypes)
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KItinerary::BarcodeDecoder::BarcodeTypes)
+}
 

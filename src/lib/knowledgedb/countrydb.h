@@ -51,6 +51,7 @@ enum PowerPlugType : uint16_t {
 };
 
 Q_DECLARE_FLAGS(PowerPlugTypes, PowerPlugType)
+Q_DECLARE_OPERATORS_FOR_FLAGS(PowerPlugTypes)
 Q_FLAG_NS(PowerPlugTypes)
 
 /** Returns the power plugs out of @p plugs that won't fit into @p sockets. */
@@ -79,7 +80,6 @@ KITINERARY_EXPORT CountryId countryIdForUicCode(uint16_t uicCountryCode);
 }
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KItinerary::KnowledgeDb::PowerPlugTypes)
 Q_DECLARE_METATYPE(KItinerary::KnowledgeDb::DrivingSide)
 Q_DECLARE_METATYPE(KItinerary::KnowledgeDb::PowerPlugTypes)
 

@@ -78,8 +78,9 @@ private:
     QExplicitlySharedDataPointer<PdfImagePrivate> d;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(PdfImage::LoadingHints)
+
 }
 
 Q_DECLARE_METATYPE(KItinerary::PdfImage)
-Q_DECLARE_OPERATORS_FOR_FLAGS(KItinerary::PdfImage::LoadingHints)
 
