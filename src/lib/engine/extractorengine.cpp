@@ -48,6 +48,7 @@ public:
     BarcodeDecoder m_barcodeDecoder;
     QString m_usedExtractor;
     ExtractorScriptEngine m_scriptEngine;
+    ExtractorEngine::Hints m_hints = ExtractorEngine::NoHint;
 };
 
 }
@@ -135,6 +136,16 @@ void ExtractorEngine::setContext(const QVariant &data, QStringView mimeType)
 void ExtractorEngine::setContextDate(const QDateTime &dt)
 {
     d->m_contextNode.setContextDateTime(dt);
+}
+
+ExtractorEngine::Hints ExtractorEngine::hints() const
+{
+    return d->m_hints;
+}
+
+void ExtractorEngine::setHints(ExtractorEngine::Hints hints)
+{
+    d->m_hints = hints;
 }
 
 QJsonArray ExtractorEngine::extract()

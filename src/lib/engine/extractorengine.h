@@ -153,6 +153,20 @@ public:
      */
     void setAdditionalExtractors(std::vector<const AbstractExtractor*> &&extractors);
 
+    /** Hints about the document to extract based on application knowledge that
+     *  can help the extractor.
+     */
+    enum Hint {
+        NoHint = 0,
+        ExtractFullPageRasterImages = 1, ///< perform expensive image processing on (PDF) documents containing full page raster images
+    };
+    Q_DECLARE_FLAGS(Hints, Hint)
+
+    /** The currently set extraction hints. */
+    Hints hints() const;
+    /** Set extraction hints. */
+    void setHints(Hints hints);
+
     /** Perform the actual extraction, and return the JSON-LD data
      *  that has been found.
      */
@@ -189,6 +203,8 @@ public:
 private:
     std::unique_ptr<ExtractorEnginePrivate> d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ExtractorEngine::Hints)
 
 }
 

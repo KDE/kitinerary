@@ -106,6 +106,28 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
                 m_imageIds.insert(img.objectId());
             }
         }
+
+        // handle full page raster images
+        if ((engine->hints() & ExtractorEngine::ExtractFullPageRasterImages) && page.imageCount() == 1 && page.text().isEmpty()) {
+            qDebug() << "full page raster image";
+            auto img = page.image(0);
+            if (img.hasObjectId() &&  m_imageIds.find(img.objectId()) != m_imageIds.end()) { // already handled
+                continue;
+            }
+
+            img.setLoadingHints(PdfImage::NoHint); // don't abort on color
+            const auto imgData = img.image();
+            if (imgData.isNull()) {
+                continue;
+            }
+
+            auto childNode = engine->documentNodeFactory()->createNode(imgData, u"internal/qimage");
+            childNode.setLocation(i);
+            node.appendChild(childNode);
+            if (img.hasObjectId()) {
+                m_imageIds.insert(img.objectId());
+            }
+        }
     }
 
     // fallback node for implicit conversion to plain text
