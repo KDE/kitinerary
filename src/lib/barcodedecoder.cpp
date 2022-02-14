@@ -29,7 +29,7 @@ using namespace KItinerary;
 enum {
     // unit is pixels, assuming landscape orientation
     MinSourceImageHeight = 10,
-    MinSourceImageWidth = 30,
+    MinSourceImageWidth = 26,
     // OEBB uses 1044x1044 for its UIC 918.3 Aztec code
     MaxSourceImageHeight = 1100, // TODO what's a realistic value here?
     MaxSourceImageWidth = 2000
