@@ -16,3 +16,5 @@ Options:
   cppcheck-ignore-files:
   - 'src/lib/knowledgedb/countrydb.cpp'
   - 'src/lib/knowledgedb/countrydb_data.cpp'
+  - 'src/lib/knowledgedb/trainstationdb.cpp'
+  - 'src/lib/knowledgedb/trainstationdb_data.cpp'
