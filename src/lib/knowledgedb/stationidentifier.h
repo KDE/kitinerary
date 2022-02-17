@@ -7,6 +7,8 @@
 #pragma once
 
 #include "kitinerary_export.h"
+
+#include "alphaid.h"
 #include "knowledgedb.h"
 
 class QString;
@@ -120,6 +122,8 @@ private:
     }
 };
 
-}
-}
+/** Amtrak staion codes. */
+using AmtrakStationCode = AlphaId<uint16_t, 3>;
 
+}
+}

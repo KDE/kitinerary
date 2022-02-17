@@ -38,6 +38,8 @@ bool TrainStationDbGenerator::generate(QIODevice *out)
      || !fetch("P722", "uic", m_uicMap)
      || !fetch("P8181", "sncf", m_sncfIdMap)
      || !fetch("P8448", "benerail", m_benerailIdMap)
+     || !fetch("P238", "iata", m_iataMap)
+     || !fetch("P4803", "amtrak", m_amtrakMap)
      || !fetchIndianRailwaysStationCode()
      || !fetchFinishStationCodes()
     ) {
@@ -64,6 +66,8 @@ namespace KnowledgeDb {
     writeIdMap(out, m_uicMap, "uic", "UICStation");
     writeIdMap(out, m_sncfIdMap, "sncfStationId", "SncfStationId");
     writeIdMap(out, m_benerailIdMap, "benerail", "BenerailStationId");
+    writeIdMap(out, m_iataMap, "iata", "IataCode");
+    writeIdMap(out, m_amtrakMap, "amtrak", "AmtrakStationCode");
     writeIndianRailwaysMap(out);
     writeVRMap(out);
     out->write(R"(
@@ -98,7 +102,7 @@ bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map
         }
 
         const auto uri = insertOrMerge(stationObj);
-        const auto idStr = stationObj.value(QLatin1String("id")).toObject().value(QLatin1String("value")).toString();
+        const auto idStr = stationObj.value(QLatin1String("id")).toObject().value(QLatin1String("value")).toString().toUpper();
         const auto id = Id(idStr);
         if (!id.isValid()) {
             ++m_idFormatViolations;
@@ -397,6 +401,8 @@ void TrainStationDbGenerator::printSummary()
     qDebug() << "Benerail station code index:" << m_benerailIdMap.size() << "elements";
     qDebug() << "Indian Railwaiys station code index:" << m_indianRailwaysMap.size() << "elements";
     qDebug() << "VR (Finland) station code index:" << m_vrfiMap.size() << "elements";
+    qDebug() << "IATA location code index:" << m_iataMap.size() << "elements";
+    qDebug() << "Amtrak station code index:" << m_amtrakMap.size() << "elements";
     qDebug() << "Identifier collisions:" << m_idConflicts;
     qDebug() << "Identifier format violations:" << m_idFormatViolations;
     qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;

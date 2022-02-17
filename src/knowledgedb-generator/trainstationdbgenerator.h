@@ -8,6 +8,7 @@
 
 #include <knowledgedb.h>
 #include <stationidentifier.h>
+#include <iatacode.h>
 
 #include <QByteArray>
 #include <QString>
@@ -63,6 +64,8 @@ private:
     std::map<KnowledgeDb::BenerailStationId, QUrl> m_benerailIdMap;
     std::map<QString, QUrl> m_indianRailwaysMap;
     std::map<KnowledgeDb::VRStationCode, QUrl> m_vrfiMap;
+    std::map<KnowledgeDb::IataCode, QUrl> m_iataMap;
+    std::map<KnowledgeDb::AmtrakStationCode, QUrl> m_amtrakMap;
 
     int m_idConflicts = 0;
     int m_idFormatViolations = 0;
