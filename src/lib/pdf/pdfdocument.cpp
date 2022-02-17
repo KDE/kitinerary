@@ -301,7 +301,7 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
     obj.initNull();
     auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), &obj);
 #endif
-    std::unique_ptr<PDFDoc> popplerDoc(new PDFDoc(stream, nullptr, nullptr));
+    std::unique_ptr<PDFDoc> popplerDoc(new PDFDoc(stream));
     if (!popplerDoc->isOk()) {
         qCWarning(Log) << "Got invalid PDF document!" << popplerDoc->getErrorCode();
         return nullptr;
