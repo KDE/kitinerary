@@ -257,6 +257,12 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
     } else if (id.startsWith(QLatin1String("vrfi:")) && id.size() >= 7 && id.size() <= 9) {
         const auto record = KnowledgeDb::stationForVRStationCode(KnowledgeDb::VRStationCode(id.mid(5)));
         applyStationData(record, station);
+    } else if (id.startsWith(QLatin1String("iata:")) && id.size() == 8) {
+        const auto record = KnowledgeDb::stationForIataCode(KnowledgeDb::IataCode(QStringView(id).mid(5)));
+        applyStationData(record, station);
+    } else if (id.startsWith(QLatin1String("amtrak:")) && id.size() == 10) {
+        const auto record = KnowledgeDb::stationForAmtrakStationCode(KnowledgeDb::AmtrakStationCode(QStringView(id).mid(7)));
+        applyStationData(record, station);
     }
 
     return processPlace(station);

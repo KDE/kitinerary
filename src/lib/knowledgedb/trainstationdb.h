@@ -69,6 +69,12 @@ KITINERARY_EXPORT TrainStation stationForVRStationCode(VRStationCode vrStation);
 /** Lookup train station data by Benerail station identifier. */
 KITINERARY_EXPORT TrainStation stationForBenerailId(BenerailStationId id);
 
+/** Lookup train station data by IATA location code. */
+KITINERARY_EXPORT TrainStation stationForIataCode(IataCode iataCode);
+
+/** Lookup train station data by Amtrak station code. */
+KITINERARY_EXPORT TrainStation stationForAmtrakStationCode(AmtrakStationCode code);
+
 }
 }
 

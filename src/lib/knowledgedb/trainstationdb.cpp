@@ -72,3 +72,13 @@ TrainStation KnowledgeDb::stationForBenerailId(BenerailStationId id)
 {
     return lookupStation(id, benerail_table);
 }
+
+TrainStation KnowledgeDb::stationForIataCode(IataCode iataCode)
+{
+    return lookupStation(iataCode, iata_table);
+}
+
+TrainStation KnowledgeDb::stationForAmtrakStationCode(AmtrakStationCode code)
+{
+    return lookupStation(code, amtrak_table);
+}
