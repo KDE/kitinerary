@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^M\\d.* \\d{13}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parseTicket",
+    "mimeType": "application/pdf",
+    "script": "airfrance.js"
+}
