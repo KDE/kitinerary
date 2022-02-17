@@ -29,6 +29,18 @@ function parseTicket(pdf, node, triggerNode) {
         legs.push(leg);
     }
 
+    // station codes
+    const codes = text.match(/\n([A-Z]{3})  +([A-Z]{3})  +[^ ].*\n/);
+    if (legs.length == 1) {
+        legs[0].reservationFor.departureStation.identifier = 'amtrak:' + codes[1];
+        legs[0].reservationFor.arrivalStation.identifier = 'amtrak:' + codes[2];
+    } else if (legs.length == 2 && legs[0].reservationFor.departureStation.name == legs[1].reservationFor.arrivalStation.name && legs[0].reservationFor.arrivalStation.name == legs[1].reservationFor.departureStation.name) {
+        legs[0].reservationFor.departureStation.identifier = 'amtrak:' + codes[1];
+        legs[0].reservationFor.arrivalStation.identifier = 'amtrak:' + codes[2];
+        legs[1].reservationFor.departureStation.identifier = 'amtrak:' + codes[2];
+        legs[1].reservationFor.arrivalStation.identifier = 'amtrak:' + codes[1];
+    }
+
     var reservations = new Array();
     const pasHdr = text.match(/PASSENGERS \((\d+)\).*\n/);
     const pasCount = pasHdr[1];
