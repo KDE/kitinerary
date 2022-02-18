@@ -1,0 +1,48 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2021-04-30T15:00:00Z",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 48.10329818725586,
+                    "longitude": -1.6725000143051147
+                },
+                "identifier": "iata:ZFJ",
+                "name": "Rennes"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2021-05-01T09:00:00+02:00",
+                "timezone": "Europe/Paris"
+            },
+            "departureDay": "2021-05-01",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "identifier": "iata:CDG",
+                "name": "Paris"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2021-05-01T06:00:00+02:00",
+                "timezone": "Europe/Paris"
+            },
+            "trainNumber": "AF1234"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]
+

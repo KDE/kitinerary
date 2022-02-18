@@ -1,0 +1,23 @@
+[
+    {
+        "@type": "TrainReservation",
+        "modifiedTime": "2021-04-30T15:00:00Z",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "identifier": "iata:ZFJ",
+                "name": "Rennes"
+            },
+            "arrivalTime": "2021-05-01T09:00:00.000",
+            "departureStation": {
+                "@type": "TrainStation",
+                "identifier": "iata:CDG",
+                "name": "Paris"
+            },
+            "departureTime": "2021-05-01T06:00:00.000",
+            "trainNumber": "AF1234"
+        },
+        "reservationNumber": "XXX007"
+    }
+]

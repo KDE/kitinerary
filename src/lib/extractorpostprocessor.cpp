@@ -17,6 +17,7 @@
 #include "mergeutil.h"
 #include "sortutil.h"
 
+#include "knowledgedb/airportdb.h"
 #include "knowledgedb/timezonedb.h"
 #include "knowledgedb/trainstationdb.h"
 
@@ -258,8 +259,12 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
         const auto record = KnowledgeDb::stationForVRStationCode(KnowledgeDb::VRStationCode(id.mid(5)));
         applyStationData(record, station);
     } else if (id.startsWith(QLatin1String("iata:")) && id.size() == 8) {
-        const auto record = KnowledgeDb::stationForIataCode(KnowledgeDb::IataCode(QStringView(id).mid(5)));
+        const auto iataCode = KnowledgeDb::IataCode(QStringView(id).mid(5));
+        const auto record = KnowledgeDb::stationForIataCode(iataCode);
         applyStationData(record, station);
+        // fall back to the airport with the matching IATA code for the country information
+        // we cannot use the coordinate though, as that points to the actual airport, not the station
+        applyStationCountry(KnowledgeDb::countryForAirport(iataCode).toString(), station);
     } else if (id.startsWith(QLatin1String("amtrak:")) && id.size() == 10) {
         const auto record = KnowledgeDb::stationForAmtrakStationCode(KnowledgeDb::AmtrakStationCode(QStringView(id).mid(7)));
         applyStationData(record, station);
