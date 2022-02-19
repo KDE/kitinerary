@@ -20,11 +20,6 @@ namespace ExtractorUtil
  *  @internal Only exported for unit tests.
  */
 KITINERARY_EXPORT Flight extractTerminals(Flight flight);
-
-/** Try to extract postal codes included in the city name field.
- *  @internal Only exported for unit tests.
- */
-KITINERARY_EXPORT PostalAddress extractPostalCode(PostalAddress addr);
 }
 
 }

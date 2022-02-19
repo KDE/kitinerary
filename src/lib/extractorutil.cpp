@@ -82,28 +82,3 @@ Flight ExtractorUtil::extractTerminals(Flight flight)
 
     return flight;
 }
-
-PostalAddress ExtractorUtil::extractPostalCode(PostalAddress addr)
-{
-    if (!addr.postalCode().isEmpty() || addr.addressLocality().isEmpty()) {
-        return addr;
-    }
-
-    // ### this so far only covers the typical European numerical prefix case, we probably want
-    // something for alphanumeric and suffix cases too, if necessary we can also make this
-    // conditional on addr.addressCountry()
-    static QRegularExpression patterns[] = {
-        QRegularExpression(QStringLiteral("^(\\d{4,8}) (.*)$"), QRegularExpression::CaseInsensitiveOption),
-    };
-
-    for (const auto &re : patterns) {
-        const auto match = re.match(addr.addressLocality());
-        if (match.hasMatch()) {
-            addr.setAddressLocality(match.captured(2));
-            addr.setPostalCode(match.captured(1));
-            break;
-        }
-    }
-
-    return addr;
-}

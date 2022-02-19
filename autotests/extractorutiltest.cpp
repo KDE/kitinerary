@@ -61,36 +61,6 @@ private Q_SLOTS:
         const auto out2 = ExtractorUtil::extractTerminals(out);
         QCOMPARE(out, out2);
     }
-
-    void testPostalCodeExtraction_data()
-    {
-        QTest::addColumn<QString>("input");
-        QTest::addColumn<QString>("city");
-        QTest::addColumn<QString>("postalCode");
-
-        QTest::newRow("empty") << QString() << QString() << QString();
-        QTest::newRow("no code") << s("PARIS") << s("PARIS") << QString();
-        QTest::newRow("prefix 1") << s("1060 Brussels") << s("Brussels") << s("1060");
-        QTest::newRow("prefix 2") << s("171060 Brussels") << s("Brussels") << s("171060");
-        QTest::newRow("prefix 3") << s("75012 Paris Some Suffix") << s("Paris Some Suffix") << s("75012");
-    }
-
-    void testPostalCodeExtraction()
-    {
-        QFETCH(QString, input);
-        QFETCH(QString, city);
-        QFETCH(QString, postalCode);
-
-        PostalAddress a;
-        a.setAddressLocality(input);
-
-        const auto out = ExtractorUtil::extractPostalCode(a);
-        QCOMPARE(out.addressLocality(), city);
-        QCOMPARE(out.postalCode(), postalCode);
-
-        const auto out2 = ExtractorUtil::extractPostalCode(out);
-        QCOMPARE(out, out2);
-    }
 };
 
 QTEST_GUILESS_MAIN(ExtractorUtilTest)

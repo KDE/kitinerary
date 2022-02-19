@@ -13,6 +13,7 @@ function parseReservation(html) {
     var addr = h4s[2].nextSibling.content.match(/(.*)\n+(.*)/);
     res.reservationFor.location.address.streetAddress = addr[1];
     res.reservationFor.location.address.addressLocality = addr[2];
+    res.reservationFor.location.address.addressCountry = 'DE';
 
     var links = html.eval('//a');
     res.modifyReservationUrl = links[links.length - 1].attribute('href');

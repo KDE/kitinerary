@@ -31,6 +31,7 @@ ecm_add_test(htmldocumenttest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPi
 ecm_add_test(barcodedecodertest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary Qt${QT_MAJOR_VERSION}::Gui)
 ecm_add_test(pkpassextractortest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary KPim::PkPass)
 ecm_add_test(extractorutiltest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)
+ecm_add_test(addressparsertest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary KF5::Contacts)
 ecm_add_test(timefindertest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)
 ecm_add_test(postprocessortest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)
 ecm_add_test(extractorvalidatortest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)

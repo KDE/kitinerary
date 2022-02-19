@@ -10,12 +10,12 @@
 #include "extractorvalidator.h"
 #include "flightpostprocessor_p.h"
 
-#include "extractorutil.h"
 #include "iata/iatabcbpparser.h"
 #include "jsonlddocument.h"
 #include "logging.h"
 #include "mergeutil.h"
 #include "sortutil.h"
+#include "text/addressparser_p.h"
 
 #include "knowledgedb/airportdb.h"
 #include "knowledgedb/timezonedb.h"
@@ -504,7 +504,10 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
         addr.setAddressCountry(KCountry::fromLocation(geo.latitude(), geo.longitude()).alpha2());
     }
 
-    addr = ExtractorUtil::extractPostalCode(addr);
+    AddressParser addrParser;
+    addrParser.setFallbackCountry(KCountry::fromQLocale(QLocale().country()).alpha2());
+    addrParser.parse(addr);
+    addr = addrParser.result();
     return addr;
 }
 
