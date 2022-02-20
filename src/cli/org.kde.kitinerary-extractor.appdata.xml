@@ -8,6 +8,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.0+</project_license>
   <name>KItinerary Command Line Extractor</name>
+  <name xml:lang="ar">مستخرج مسار الرحلة بسطر الأوامر</name>
   <name xml:lang="ca">Extractor del KItinerary per a la línia d'ordres</name>
   <name xml:lang="ca-valencia">Extractor del KItinerary per a la línia d'ordres</name>
   <name xml:lang="cs">Extraktor v příkazové řádce pro KItinerary</name>
@@ -36,6 +37,7 @@
   <name xml:lang="x-test">xxKItinerary Command Line Extractorxx</name>
   <name xml:lang="zh-CN">KItinerary 命令行导出工具</name>
   <summary>Command line reservation data extractor.</summary>
+  <summary xml:lang="ar">مستخرج بيانات الحجوزات بسطر الأوامر.</summary>
   <summary xml:lang="ca">Extractor de les dades de reserves mitjançant la línia d'ordres.</summary>
   <summary xml:lang="ca-valencia">Extractor de les dades de reserves mitjançant la línia d'ordres.</summary>
   <summary xml:lang="cs">Extraktor dat rezervací v příkazové řádce.</summary>
@@ -67,6 +69,7 @@
     <p>
     Command line extractor for itinerary data, for integrating into 3rd party applications.
     </p>
+    <p xml:lang="ar">مستخرج مسار الرحلة بسطر الأوامر.</p>
     <p xml:lang="ca">Extractor de les dades d'itineraris mitjançant la línia d'ordres, per a la integració en aplicacions de tercers.</p>
     <p xml:lang="ca-valencia">Extractor de les dades d'itineraris mitjançant la línia d'ordres, per a la integració en aplicacions de tercers.</p>
     <p xml:lang="da">Kommandolinjeværktøj til at udtrække rejseplan-data, til integration med tredjepartsprogrammer.</p>
