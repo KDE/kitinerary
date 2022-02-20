@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KItinerary Extractor
+Name[ar]=مستخرج مسار الرحلة ك
 Name[ca]=Extractor del KItinerary
 Name[ca@valencia]=Extractor del KItinerary
 Name[cs]=Extraktor KItinerary
@@ -27,6 +28,7 @@ Name[uk]=Засіб видобування KItinerary
 Name[x-test]=xxKItinerary Extractorxx
 Name[zh_CN]=KItinerary 导出工具
 GenericName=KItinerary command line extractor
+GenericName[ar]=مستخرج مسار الرحلة بسطر الأوامر
 GenericName[ca]=Extractor del KItinerary per a la línia d'ordres
 GenericName[ca@valencia]=Extractor del KItinerary per a la línia d'ordres
 GenericName[cs]=Extraktor v příkazové řádce pro KItinerary
@@ -57,6 +59,7 @@ Exec=kitinerary-extractor %f
 Icon=map-globe
 Type=Application
 Comment=Command line reservation data extractor.
+Comment[ar]=مستخرج بيانات الحجوزات بسطر الأوامر.
 Comment[ca]=Extractor de les dades de reserves mitjançant la línia d'ordres.
 Comment[ca@valencia]=Extractor de les dades de reserves mitjançant la línia d'ordres.
 Comment[cs]=Extraktor dat rezervací v příkazové řádce.
