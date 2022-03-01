@@ -9,7 +9,7 @@ UID:KIT-1234567890-1b22236a-21ff-4885-8c99-b3b2bbca062c
 LAST-MODIFIED:20171227T111649Z
 DESCRIPTION:Check-in: 3:00 PM\nCheck-out: 12:00 PM\nPhone: +358101234567\nWebsite: https://www.booking.com/hotel/fi/palace-sello.html?aid=123456&label=postbooking_confemail\nJohn Doe\nBooking reference: 1234567890
 SUMMARY:Hotel reservation: Glo Hotel Sello
-LOCATION:Leppävaarankatu 1\, 02600 ESPOO\, FINLAND
+LOCATION:Leppävaarankatu 1\, FI-02600 Espoo\, FINLAND
 DTSTART;VALUE=DATE:20170919
 DTEND;VALUE=DATE:20170921
 TRANSP:TRANSPARENT

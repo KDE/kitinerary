@@ -45,6 +45,7 @@ static QString formatAddress(const PostalAddress &addr)
     a.setStreet(addr.streetAddress());
     a.setPostalCode(addr.postalCode());
     a.setLocality(addr.addressLocality());
+    a.setRegion(addr.addressRegion());
     a.setCountry(addr.addressCountry());
     return a.formattedAddress();
 }

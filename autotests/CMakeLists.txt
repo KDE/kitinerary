@@ -35,7 +35,7 @@ ecm_add_test(timefindertest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim:
 ecm_add_test(postprocessortest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)
 ecm_add_test(extractorvalidatortest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)
 if (TARGET KF5::CalendarCore)
-    ecm_add_test(calendarhandlertest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)
+    ecm_add_test(calendarhandlertest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary KF5::Contacts)
     ecm_add_test(extractortest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary KPim::PkPass)
 endif()
 ecm_add_test(documentutiltest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)

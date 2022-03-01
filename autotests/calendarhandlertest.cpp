@@ -10,6 +10,7 @@
 
 #include <KCalendarCore/ICalFormat>
 #include <KCalendarCore/MemoryCalendar>
+#include <kcontacts_version.h>
 
 #include <QDebug>
 #include <QFile>
@@ -101,7 +102,10 @@ private Q_SLOTS:
 
         QCOMPARE(newEvent->dtStart(), refEvent->dtStart());
         QCOMPARE(newEvent->dtEnd(), refEvent->dtEnd());
+#if KContacts_VERSION >= QT_VERSION_CHECK(5, 92, 0)
+        QCOMPARE(newEvent->description(), refEvent->description());
         QVERIFY(*newEvent == *refEvent);
+#endif
     }
 
     void testFindEvent_data()
