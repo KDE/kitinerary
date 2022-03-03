@@ -373,13 +373,16 @@ static bool isSameTouristAttraction(const TouristAttraction &lhs, const TouristA
 }
 
 // compute the "difference" between @p lhs and @p rhs
-static QString diffString(const QString &lhs, const QString &rhs)
+static QString diffString(const QString &rawLhs, const QString &rawRhs)
 {
+    const auto lhs = StringUtil::normalize(rawLhs);
+    const auto rhs = StringUtil::normalize(rawRhs);
+
     QString diff;
     // this is just a basic linear-time heuristic, this would need to be more something like
     // the Levenstein Distance algorithm
     for (int i = 0, j = 0; i < lhs.size() || j < rhs.size();) {
-        if (i < lhs.size() && j < rhs.size() && StringUtil::normalize(lhs[i]) == StringUtil::normalize(rhs[j])) {
+        if (i < lhs.size() && j < rhs.size() && lhs[i] == rhs[j]) {
             ++i;
             ++j;
             continue;

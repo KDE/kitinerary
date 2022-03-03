@@ -26,6 +26,8 @@ private Q_SLOTS:
         QTest::newRow("normalized") << _("normal") << _("normal");
         QTest::newRow("case-folding") << _("NORMAL") << _("normal");
         QTest::newRow("umlaut") << _("NöRMÄl") << _("normal");
+        QTest::newRow("ligature1") << _("ﬁnish") << _("finish");
+        QTest::newRow("ligature2") << _("oﬀ") << _("off");
     }
 
     void testNormalize()
