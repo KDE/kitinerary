@@ -287,7 +287,7 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, QDat
         return dt;
     }
 
-    const auto tz = KnowledgeDb::timezoneForLocation(station.geo().latitude(), station.geo().longitude(), station.address().addressCountry());
+    const auto tz = KnowledgeDb::timezoneForLocation(station.geo().latitude(), station.geo().longitude(), station.address().addressCountry(), station.address().addressRegion());
     if (!tz.isValid()) {
         return dt;
     }
@@ -582,7 +582,7 @@ QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, co
         return dt;
     }
 
-    const auto tz = KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(), place.address().addressCountry());
+    const auto tz = KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(), place.address().addressCountry(), place.address().addressRegion());
     if (!tz.isValid()) {
         return dt;
     }

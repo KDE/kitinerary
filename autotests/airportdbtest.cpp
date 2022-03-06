@@ -137,10 +137,10 @@ private Q_SLOTS:
         const auto coord = KnowledgeDb::coordinateForAirport(KnowledgeDb::IataCode{"HKG"});
         QVERIFY(coord.isValid());
         QVERIFY(LocationUtil::distance(coord.latitude, coord.longitude, 22.31600, 113.93688) < 500);
-        QCOMPARE(KnowledgeDb::timezoneForLocation(coord.latitude, coord.longitude, {}), QTimeZone("Asia/Hong_Kong"));
+        QCOMPARE(KnowledgeDb::timezoneForLocation(coord.latitude, coord.longitude, {}, {}), QTimeZone("Asia/Hong_Kong"));
         const auto country = KnowledgeDb::countryForAirport(KnowledgeDb::IataCode{"HKG"});
         QCOMPARE(country, KnowledgeDb::CountryId{"CN"});
-        QCOMPARE(KnowledgeDb::timezoneForLocation(coord.latitude, coord.longitude, u"CN"), QTimeZone("Asia/Shanghai"));
+        QCOMPARE(KnowledgeDb::timezoneForLocation(coord.latitude, coord.longitude, u"CN", {}), QTimeZone("Asia/Shanghai"));
         tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{"HKG"});
         QCOMPARE(tz.id(), QByteArray("Asia/Shanghai"));
     }

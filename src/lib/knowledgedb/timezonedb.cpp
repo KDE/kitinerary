@@ -68,13 +68,17 @@ static bool isEquivalentTimezone(const QTimeZone &lhs, const QTimeZone &rhs)
     return true;
 }
 
-QTimeZone KnowledgeDb::timezoneForLocation(float lat, float lon, QStringView alpha2CountryCode)
+QTimeZone KnowledgeDb::timezoneForLocation(float lat, float lon, QStringView alpha2CountryCode, QStringView regionCode)
 {
+
     const auto coordTz = KTimeZone::fromLocation(lat, lon);
     const auto coordZone = toQTimeZone(coordTz);
 
     const auto country = KCountry::fromAlpha2(alpha2CountryCode);
-    const auto countryTzs = timezonesForCountry(country);
+    auto countryTzs = KCountrySubdivision::fromCode(QString(alpha2CountryCode + QLatin1Char('-') + regionCode)).timeZoneIds();
+    if (countryTzs.isEmpty()) {
+        countryTzs = timezonesForCountry(country);
+    }
     const auto countryFromTz = KTimeZone::country(coordTz);
 
     // if we determine a different country than was provided, search for an equivalent timezone

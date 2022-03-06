@@ -9,14 +9,10 @@ BEGIN:VEVENT
 DTSTAMP:20171227T111649Z
 X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "RentalCarReservation"\,"dropoffLocation":{"@type":"Place"\,"address":
- {"@type":"PostalAddress"\,"addressCountry":"US"\,"addressLocality":"Los 
- Angeles"\,"addressRegion":"CA"\,"postalCode":"94043"\,"streetAddress":
- "1234 First Street"}\,"name":"Hertz LAX"}\,"dropoffTime":"2027-08-06T20:
- 00:00-07:00"\,"pickupLocation":{"@type":"Place"\,"address":{"@type":
- "PostalAddress"\,"addressCountry":"US"\,"addressLocality":"San 
- Diego"\,"addressRegion":"CA"\,"postalCode":"94043"\,"streetAddress":"1500 
- Orange Avenue"}\,"name":"Hertz San Diego Airport"}\,"pickupTime":
- "2027-08-05T16:00:00-07:00"\,"reservationFor":{"@type":
+ {"@type":"PostalAddress"\,"addressCountry":"US"\,"addressLocality":"Los Angeles"\,"addressRegion":"CA"\,"postalCode":"94043"\,"streetAddress":
+ "1234 First Street"}\,"name":"Hertz LAX"}\,"dropoffTime":{"@type":"QDateTime"\,"@value":"2027-08-06T20:00:00-07:00"\,"timezone":"America/Los_Angeles"}\,"pickupLocation":{"@type":"Place"\,"address":{"@type":
+ "PostalAddress"\,"addressCountry":"US"\,"addressLocality":"San Diego"\,"addressRegion":"CA"\,"postalCode":"94043"\,"streetAddress":"1500 Orange Avenue"}\,"name":"Hertz San Diego Airport"}\,"pickupTime":{"@type":"QDateTime"\,"@value":"2027-08-05T16:00:00-07:00"\,"timezone":"America/Los_Angeles"}
+ \,"reservationFor":{"@type":
  "RentalCar"\,"brand":{"@type":"Brand"\,"name":"Honda"}\,"model":
  "Civic"\,"name":"Economy Class Car"\,"rentalCompany":{"@type":
  "Organization"\,"name":"Hertz"}}\,"reservationNumber":
@@ -30,8 +26,8 @@ DESCRIPTION:Pickup location: Hertz San Diego Airport\n1500 Orange
  Avenue\nSAN DIEGO\, CA 94043\n\nUNITED STATES\n\nDropoff location: Hertz LAX\n1234 First Street\nLOS ANGELES\, CA 94043\n\nUNITED STATES\n\nBooking reference: 546323\nUnder name: John Smith
 SUMMARY:Rental car reservation: Economy Class Car
 LOCATION:Hertz San Diego Airport
-DTSTART;TZID="UTC-07:00":20270805T160000
-DTEND;TZID="UTC-07:00":20270806T200000
+DTSTART;TZID=America/Los_Angeles:20270805T160000
+DTEND;TZID=America/Los_Angeles:20270806T200000
 TRANSP:TRANSPARENT
 END:VEVENT
 END:VCALENDAR

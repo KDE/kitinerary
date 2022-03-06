@@ -20,7 +20,7 @@ namespace KnowledgeDb {
     /** Returns the timezone for the given location consisting of coordinates and/or country.
      *  Either argument can be omitted, if both are available better results can be provided.
      */
-    KITINERARY_EXPORT QTimeZone timezoneForLocation(float lat, float lon, QStringView alpha2CountryCode);
+    KITINERARY_EXPORT QTimeZone timezoneForLocation(float lat, float lon, QStringView alpha2CountryCode, QStringView regionCode);
 }
 }
 
