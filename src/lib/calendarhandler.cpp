@@ -47,7 +47,7 @@ static QString formatAddress(const PostalAddress &addr)
     a.setLocality(addr.addressLocality());
     a.setRegion(addr.addressRegion());
     a.setCountry(addr.addressCountry());
-    return a.formattedAddress();
+    return a.formatted(KContacts::AddressFormatStyle::Postal);
 }
 
 static QString formatAddressSingleLine(const PostalAddress &addr)
