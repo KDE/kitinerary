@@ -158,7 +158,7 @@ function parsePdf(pdf) {
         }
         if (legs.length > 0) {
             for (var j = 0; j < legs.length; ++j) {
-                if (barcode) {
+                if (barcode && j < barcodeRes.length) {
                     legs[j].underName = barcodeRes[j].underName;
                     legs[j].reservedTicket.ticketToken = "aztecCode:" + barcode;
                     legs[j].reservationFor.departureStation.identifier = barcodeRes[j].reservationFor.departureStation.identifier;
