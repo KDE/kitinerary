@@ -29,6 +29,7 @@
 #include <KCalendarCore/Event>
 #endif
 
+#include <kcontacts_version.h>
 #include <KContacts/Address>
 
 #include <KLocalizedString>
@@ -39,7 +40,7 @@
 
 using namespace KItinerary;
 
-static QString formatAddress(const PostalAddress &addr)
+static KContacts::Address convertAddress(const PostalAddress &addr)
 {
     KContacts::Address a;
     a.setStreet(addr.streetAddress());
@@ -47,12 +48,25 @@ static QString formatAddress(const PostalAddress &addr)
     a.setLocality(addr.addressLocality());
     a.setRegion(addr.addressRegion());
     a.setCountry(addr.addressCountry());
-    return a.formatted(KContacts::AddressFormatStyle::Postal);
+    return a;
+}
+
+static QString formatAddress(const PostalAddress &addr)
+{
+#if KContacts_VERSION >= QT_VERSION_CHECK(5, 92, 0)
+    return convertAddress(addr).formatted(KContacts::AddressFormatStyle::MultiLineInternational);
+#else
+    return convertAddress(addr).formattedAddress();
+#endif
 }
 
 static QString formatAddressSingleLine(const PostalAddress &addr)
 {
+#if KContacts_VERSION >= QT_VERSION_CHECK(5, 92, 0)
+    return convertAddress(addr).formatted(KContacts::AddressFormatStyle::SingleLineInternational);
+#else
     return formatAddress(addr).replace(QLatin1String("\n\n"), QLatin1String("\n")).replace(QLatin1Char('\n'), QLatin1String(", "));
+#endif
 }
 
 #ifdef HAVE_KCAL
