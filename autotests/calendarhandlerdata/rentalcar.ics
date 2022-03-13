@@ -23,7 +23,7 @@ CREATED:20171227T111649Z
 UID:KIT-1234567890-1b22236a-21ff-4885-8c99-b3b2bbca062c
 LAST-MODIFIED:20171227T111649Z
 DESCRIPTION:Pickup location: Hertz San Diego Airport\n1500 Orange 
- Avenue\nSAN DIEGO\, CA 94043\n\nUNITED STATES\n\nDropoff location: Hertz LAX\n1234 First Street\nLOS ANGELES\, CA 94043\n\nUNITED STATES\n\nBooking reference: 546323\nUnder name: John Smith
+ Avenue\nSan Diego\, CA 94043\nUnited States\n\nDropoff location: Hertz LAX\n1234 First Street\nLos Angeles\, CA 94043\nUnited States\n\nBooking reference: 546323\nUnder name: John Smith
 SUMMARY:Rental car reservation: Economy Class Car
 LOCATION:Hertz San Diego Airport
 DTSTART;TZID=America/Los_Angeles:20270805T160000
