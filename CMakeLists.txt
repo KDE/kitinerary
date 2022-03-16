@@ -49,7 +49,7 @@ find_package(KF5CalendarCore ${KF5_MIN_VERSION} CONFIG)
 find_package(KF5Contacts ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KPimPkPass ${PIM_PKPASS} CONFIG REQUIRED)
 find_package(Poppler COMPONENTS Core)
-set_package_properties("Poppler" PROPERTIES TYPE OPTIONAL PURPOSE "Support for extraction from PDF booking confirmations.")
+set_package_properties("Poppler" PROPERTIES TYPE REQUIRED PURPOSE "Support for extraction from PDF booking confirmations.")
 find_package(ZXing CONFIG)
 set_package_properties("ZXing" PROPERTIES TYPE OPTIONAL PURPOSE "Support for barcode decoding." URL "https://github.com/nu-book/zxing-cpp")
 find_package(ZLIB REQUIRED)
@@ -65,10 +65,6 @@ set_package_properties(OsmTools PROPERTIES TYPE OPTIONAL PURPOSE "Needed only fo
 if (NOT ANDROID)
     set_package_properties(KF5CalendarCore PROPERTIES TYPE REQUIRED)
     set_package_properties(LibXml2 PROPERTIES TYPE REQUIRED)
-else()
-    # force Poppler on Android, to avoid silent failures on binary factory when its
-    # Poppler build broke, which then results in feature regressions in KDE Itinerary
-    set_package_properties(Poppler PROPERTIES TYPE REQUIRED)
 endif()
 
 if(TARGET Poppler::Core)
