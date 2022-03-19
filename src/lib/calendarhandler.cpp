@@ -7,6 +7,7 @@
 #include "config-kitinerary.h"
 #include "calendarhandler.h"
 #include "jsonlddocument.h"
+#include "locationutil_p.h"
 #include "logging.h"
 #include "mergeutil.h"
 #include "sortutil.h"
@@ -29,7 +30,6 @@
 #include <KCalendarCore/Event>
 #endif
 
-#include <kcontacts_version.h>
 #include <KContacts/Address>
 
 #include <KLocalizedString>
@@ -40,33 +40,14 @@
 
 using namespace KItinerary;
 
-static KContacts::Address convertAddress(const PostalAddress &addr)
-{
-    KContacts::Address a;
-    a.setStreet(addr.streetAddress());
-    a.setPostalCode(addr.postalCode());
-    a.setLocality(addr.addressLocality());
-    a.setRegion(addr.addressRegion());
-    a.setCountry(addr.addressCountry());
-    return a;
-}
-
 static QString formatAddress(const PostalAddress &addr)
 {
-#if KContacts_VERSION >= QT_VERSION_CHECK(5, 92, 0)
-    return convertAddress(addr).formatted(KContacts::AddressFormatStyle::MultiLineInternational);
-#else
-    return convertAddress(addr).formattedAddress();
-#endif
+    return LocationUtil::toAddress(addr).formatted(KContacts::AddressFormatStyle::MultiLineInternational);
 }
 
 static QString formatAddressSingleLine(const PostalAddress &addr)
 {
-#if KContacts_VERSION >= QT_VERSION_CHECK(5, 92, 0)
-    return convertAddress(addr).formatted(KContacts::AddressFormatStyle::SingleLineInternational);
-#else
-    return formatAddress(addr).replace(QLatin1String("\n\n"), QLatin1String("\n")).replace(QLatin1Char('\n'), QLatin1String(", "));
-#endif
+    return LocationUtil::toAddress(addr).formatted(KContacts::AddressFormatStyle::SingleLineInternational);
 }
 
 #ifdef HAVE_KCAL

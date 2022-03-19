@@ -148,7 +148,7 @@ private Q_SLOTS:
         QCOMPARE(LocationUtil::geoUri(p), QUrl(QStringLiteral("geo:45.5137,9.21139")));
 
         p.setGeo({});
-        QCOMPARE(LocationUtil::geoUri(p), QUrl(QStringLiteral("geo:0,0?q=Piazza della Scienza, Milan, IT")));
+        QCOMPARE(LocationUtil::geoUri(p), QUrl(QStringLiteral("geo:0,0?q=Piazza della Scienza,MILAN,IT")));
     }
 };
 

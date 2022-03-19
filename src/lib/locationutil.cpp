@@ -5,6 +5,7 @@
 */
 
 #include "locationutil.h"
+#include "locationutil_p.h"
 
 #include <KItinerary/BoatTrip>
 #include <KItinerary/BusTrip>
@@ -15,6 +16,8 @@
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
 
+#include <KContacts/Address>
+
 #include <QDebug>
 #include <QUrl>
 #include <QUrlQuery>
@@ -22,6 +25,17 @@
 #include <cmath>
 
 using namespace KItinerary;
+
+KContacts::Address LocationUtil::toAddress(const PostalAddress &addr)
+{
+    KContacts::Address a;
+    a.setStreet(addr.streetAddress());
+    a.setPostalCode(addr.postalCode());
+    a.setLocality(addr.addressLocality());
+    a.setRegion(addr.addressRegion());
+    a.setCountry(addr.addressCountry());
+    return a;
+}
 
 bool LocationUtil::isLocationChange(const QVariant &res)
 {
@@ -309,22 +323,8 @@ QUrl LocationUtil::geoUri(const QVariant &location)
     const auto addr = LocationUtil::address(location);
     if (!addr.isEmpty()) {
         url.setPath(QStringLiteral("0,0"));
-
-        QStringList q;
-        if (!addr.streetAddress().isEmpty()) {
-            q.push_back(addr.streetAddress());
-        }
-        if (!addr.addressLocality().isEmpty()) {
-            q.push_back(addr.postalCode().isEmpty() ? addr.addressLocality() : (addr.postalCode() + QLatin1Char(' ') + addr.addressLocality()));
-        }
-        if (!addr.addressRegion().isEmpty()) {
-            q.push_back(addr.addressRegion());
-        }
-        if (!addr.addressCountry().isEmpty()) {
-            q.push_back(addr.addressCountry());
-        }
         QUrlQuery query;
-        query.addQueryItem(QStringLiteral("q"), q.join(QLatin1String(", ")));
+        query.addQueryItem(QStringLiteral("q"), toAddress(addr).formatted(KContacts::AddressFormatStyle::GeoUriQuery));
         url.setQuery(query);
         return url;
     }
