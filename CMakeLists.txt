@@ -71,7 +71,7 @@ if(TARGET Poppler::Core)
     # check if we have private Poppler headers
     find_file(HAVE_POPPLER_UNSTABLE_HEADERS "OutputDev.h" PATHS ${Poppler_INCLUDE_DIRS} NO_DEFAULT_PATH)
     if (NOT HAVE_POPPLER_UNSTABLE_HEADERS)
-        message(WARNING "Poppler was not build with ENABLE_UNSTABLE_API_ABI_HEADER - building without PDF support!")
+        message(FATAL_ERROR "Poppler was not build with ENABLE_UNSTABLE_API_ABI_HEADER!")
         set(HAVE_POPPLER FALSE)
     else()
         set(HAVE_POPPLER TRUE)
