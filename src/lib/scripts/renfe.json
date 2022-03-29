@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "match": "^\\d{13}.*\\S{6}(\\.\\.\\S{5}| +)?$",
@@ -9,4 +9,16 @@
     "function": "parsePdf",
     "script": "renfe.js",
     "mimeType": "application/pdf"
-}
+}, {
+    "filter": [
+        {
+            "field": "passTypeIdentifier",
+            "match": "pass.com.renfe-RenfeTicket",
+            "mimeType": "application/vnd.apple.pkpass",
+            "scope": "Current"
+        }
+    ],
+    "function": "parsePkPass",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "renfe.js"
+}]
