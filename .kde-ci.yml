@@ -16,3 +16,4 @@ Options:
   cppcheck-ignore-files:
   - 'src/lib/knowledgedb/trainstationdb.cpp'
   - 'src/lib/knowledgedb/trainstationdb_data.cpp'
+  require-passing-tests-on: [ 'Linux', 'FreeBSD' ]
