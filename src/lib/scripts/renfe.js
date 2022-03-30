@@ -21,6 +21,11 @@ function parseBarcode(barcode)
 
     if (barcode.length > 56)
         return null;
+
+    // trim not set combined commuter section, so merging with a document that has that set works properly
+    if (barcode.substr(49, 7) == '..00000')
+        barcode = barcode.substr(0, 49);
+
     var res = JsonLd.newTrainReservation();
     res.reservedTicket.ticketToken = "qrCode:" + barcode;
     res.reservationFor.trainNumber = barcode.substr(29, 5);
