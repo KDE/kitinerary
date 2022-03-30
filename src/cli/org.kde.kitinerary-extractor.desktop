@@ -2,7 +2,7 @@
 Name=KItinerary Extractor
 Name[ar]=مستخرج مسار الرحلة ك
 Name[ca]=Extractor del KItinerary
-Name[ca@valencia]=Extractor del KItinerary
+Name[ca@valencia]=Extractor de KItinerary
 Name[cs]=Extraktor KItinerary
 Name[da]=KItinerary-udtrækker
 Name[en_GB]=KItinerary Extractor
@@ -30,7 +30,7 @@ Name[zh_CN]=KItinerary 导出工具
 GenericName=KItinerary command line extractor
 GenericName[ar]=مستخرج مسار الرحلة بسطر الأوامر
 GenericName[ca]=Extractor del KItinerary per a la línia d'ordres
-GenericName[ca@valencia]=Extractor del KItinerary per a la línia d'ordres
+GenericName[ca@valencia]=Extractor de KItinerary per a la línia d'ordres
 GenericName[cs]=Extraktor v příkazové řádce pro KItinerary
 GenericName[da]=KItinerary kommandolinjeudtrækker
 GenericName[en_GB]=KItinerary command line extractor
