@@ -49,7 +49,7 @@ function parsePdf(pdf, node, triggerNode)
     res.reservationFor.departureStation.name = dep[1];
     res.reservationFor.departureTime = JsonLd.toDateTime(dep[2] + dep[3], "dd/MM/yyyyhh:mm", "es");
 
-    var arr = text.match(/(?:Llegada|Destino:)\s+(.*?) {2,}([\d\/]+) +(\d\d:\d\d)\n *(\S+) /);
+    var arr = text.match(/(?:Llegada|Destino:)\s+(.*?) {2,}([\d\/]+) +(\d\d:\d\d)\n(?:.* )?([A-Z]+) +(\d+)/);
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2] + arr[3], "dd/MM/yyyyhh:mm", "es");
     res.reservationFor.trainName = arr[4];
