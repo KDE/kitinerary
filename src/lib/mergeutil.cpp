@@ -57,6 +57,13 @@ static bool conflictIfPresent(const T &lhs, const T &rhs)
     return lhs.isValid() && rhs.isValid() && lhs != rhs;
 }
 
+/** Checks that @p lhs and @p rhs have a different prefix is they are both set. */
+template <typename T>
+static bool prefixConflictIfPresent(const T &lhs, const T &rhs)
+{
+    return !lhs.isEmpty() && !rhs.isEmpty() && !lhs.startsWith(rhs) && !rhs.startsWith(lhs);
+}
+
 static bool isSameFlight(const Flight &lhs, const Flight &rhs);
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs);
 static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs);
@@ -68,6 +75,7 @@ static bool isSameEvent(const Event &lhs, const Event &rhs);
 static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs);
 static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs);
 static bool isMinimalCancelationFor(const QVariant &r, const Reservation &cancel);
+static bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs);
 
 bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 {
@@ -98,7 +106,9 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         // flight ticket tokens (IATA BCBP) can differ, so we need to compare the relevant bits in them manually
         // this however happens automatically as they are unpacked to other fields by post-processing
         // so we can simply skip this here for flights
-        if (!JsonLd::isA<FlightReservation>(lhs) && conflictIfPresent(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())) {
+        // for other ticket tokens (e.g. Renfe), shorter and longer versions of the same token exist as well
+        // so we look for matching prefixes here
+        if (!JsonLd::isA<FlightReservation>(lhs) && !isSameTicketToken(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())) {
             return false;
         }
 
@@ -557,4 +567,24 @@ bool isMinimalCancelationFor(const QVariant &r, const Reservation &cancel)
         return false;
     }
     return SortUtil::startDateTime(r) > cancel.modifiedTime();
+}
+
+bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs)
+{
+    if (lhs.isNull() || rhs.isNull()) {
+        return true;
+    }
+    if (lhs.userType() != rhs.userType()) {
+        return false;
+    }
+
+    if (lhs.type() == QVariant::String) {
+        return !prefixConflictIfPresent(lhs.toString(), rhs.toString());
+    }
+    if (lhs.type() == QVariant::ByteArray) {
+        return !prefixConflictIfPresent(lhs.toByteArray(), rhs.toByteArray());
+    }
+
+    qCWarning(CompareLog) << "unhandled ticket token type" << lhs << rhs;
+    return false;
 }
