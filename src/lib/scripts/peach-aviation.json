@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@resmail.flypeach.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "parseReservation",
+    "mimeType": "text/plain",
+    "script": "peach-aviation.js"
+}
