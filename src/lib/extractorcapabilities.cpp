@@ -11,6 +11,10 @@
 
 #include <KItinerary/ExtractorRepository>
 
+#ifdef HAVE_KCAL
+#include <kcalendarcore_version.h>
+#endif
+
 #include <QString>
 
 using namespace KItinerary;
@@ -39,7 +43,7 @@ QString ExtractorCapabilities::capabilitiesString()
 
         "iCal support        : "
 #ifdef HAVE_KCAL
-            "kcal"
+            "kcal (" KCALENDARCORE_VERSION_STRING ")"
 #else
             "not available"
 #endif
