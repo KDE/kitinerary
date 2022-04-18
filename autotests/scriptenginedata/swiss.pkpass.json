@@ -148,6 +148,12 @@
             },
             "foregroundColor": "#000000",
             "groupingIdentifier": "",
+            "hasBackground": false,
+            "hasFooter": false,
+            "hasIcon": false,
+            "hasLogo": false,
+            "hasStrip": false,
+            "hasThumbnail": false,
             "headerFields": [
                 {
                     "changeMessage": "seatchangeMessage",
@@ -436,6 +442,12 @@
             },
             "foregroundColor": "#000000",
             "groupingIdentifier": "",
+            "hasBackground": false,
+            "hasFooter": false,
+            "hasIcon": false,
+            "hasLogo": false,
+            "hasStrip": false,
+            "hasThumbnail": false,
             "headerFields": [
                 {
                     "changeMessage": "seatchangeMessage",

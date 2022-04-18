@@ -16,6 +16,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QJsonDocument>
+#include <QProcess>
 #include <QTest>
 
 using namespace KItinerary;
@@ -90,7 +91,15 @@ private Q_SLOTS:
         const auto refResult = QJsonDocument::fromJson(ref.readAll()).array();
 
         if (result != refResult) {
-            qDebug().noquote() << QJsonDocument(result).toJson();
+            QFile failFile(refFile + QLatin1String(".fail"));
+            QVERIFY(failFile.open(QFile::WriteOnly));
+            failFile.write(QJsonDocument(result).toJson());
+            failFile.close();
+
+            QProcess proc;
+            proc.setProcessChannelMode(QProcess::ForwardedChannels);
+            proc.start(QStringLiteral("diff"), {QStringLiteral("-u"), refFile, failFile.fileName()});
+            QVERIFY(proc.waitForFinished());
         }
         QCOMPARE(result, refResult);
     }
