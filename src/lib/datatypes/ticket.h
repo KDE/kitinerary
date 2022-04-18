@@ -8,6 +8,7 @@
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
+#include "token.h"
 
 namespace KItinerary {
 
@@ -43,26 +44,28 @@ class KITINERARY_EXPORT Ticket
     KITINERARY_PROPERTY(QString, ticketToken, setTicketToken)
 
     /** The type of the content in ticketToken. */
-    Q_PROPERTY(TicketTokenType ticketTokenType READ ticketTokenType STORED false)
+    Q_PROPERTY(KItinerary::Token::TokenType ticketTokenType READ ticketTokenType STORED false)
     /** The ticket token payload for barcodes, otherwise the same as ticketToken.
      *  For binary content barcodes this is a QByteArray, otherwise a QString.
      */
     Q_PROPERTY(QVariant ticketTokenData READ ticketTokenData STORED false)
 
 public:
-    /** The type of content in the ticketToken property. */
+    /** The type of content in the ticketToken property.
+     *  @deprecated Use Token::TokenType instead.
+     */
     enum TicketTokenType {
-        Unknown, ///< Unknown or empty ticket token
-        Url, ///< A download URL
-        QRCode, ///< QR code
-        AztecCode, ///< Aztec code
-        Code128, ///< Code 128 barcode
-        DataMatrix, ///< A DataMatrix barcode
-        PDF417, ///< A PDF417 barcode
+        Unknown = Token::Unknown, ///< Unknown or empty ticket token
+        Url = Token::Url, ///< A download URL
+        QRCode = Token::QRCode, ///< QR code
+        AztecCode = Token::AztecCode, ///< Aztec code
+        Code128 = Token::Code128, ///< Code 128 barcode
+        DataMatrix = Token::DataMatrix, ///< A DataMatrix barcode
+        PDF417 = Token::PDF417, ///< A PDF417 barcode
     };
     Q_ENUM(TicketTokenType)
 
-    TicketTokenType ticketTokenType() const;
+    Token::TokenType ticketTokenType() const;
     QVariant ticketTokenData() const;
 private:
     QExplicitlySharedDataPointer<TicketPrivate> d;

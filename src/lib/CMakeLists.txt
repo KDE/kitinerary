@@ -22,6 +22,7 @@ target_sources(KPimItinerary PRIVATE
     datatypes/reservation.cpp
     datatypes/taxi.cpp
     datatypes/ticket.cpp
+    datatypes/token.cpp
     datatypes/traintrip.cpp
     datatypes/rentalcar.cpp
     datatypes/visit.cpp
@@ -251,6 +252,7 @@ ecm_generate_headers(KItinerary_Datatypes_FORWARDING_HEADERS
         ProgramMembership
         Taxi
         Ticket
+        Token
         TrainTrip
         Visit
     PREFIX KItinerary

@@ -9,6 +9,7 @@
 #include "kitinerary_export.h"
 #include "datatypes.h"
 #include "person.h"
+#include "token.h"
 
 namespace KItinerary {
 
@@ -30,6 +31,17 @@ class KITINERARY_EXPORT ProgramMembership
       * @see Ticket::ticketToken
       */
     KITINERARY_PROPERTY(QString, token, setToken)
+
+    /** The type of the token. */
+    Q_PROPERTY(KItinerary::Token::TokenType tokenType READ tokenType STORED false)
+    /** The token payload for barcodes, otherwise the same as ticketToken.
+     *  For binary content barcodes this is a QByteArray, otherwise a QString.
+     */
+    Q_PROPERTY(QVariant tokenData READ tokenData STORED false)
+
+public:
+    Token::TokenType tokenType() const;
+    QVariant tokenData() const;
 
 private:
     QExplicitlySharedDataPointer<ProgramMembershipPrivate> d;

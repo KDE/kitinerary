@@ -28,4 +28,14 @@ KITINERARY_MAKE_OPERATOR(ProgramMembership)
 
 }
 
+Token::TokenType ProgramMembership::tokenType() const
+{
+    return Token::tokenType(d->token);
+}
+
+QVariant ProgramMembership::tokenData() const
+{
+    return Token::tokenData(d->token);
+}
+
 #include "moc_programmembership.cpp"
