@@ -61,7 +61,7 @@ public:
 
     /** Register a custom type for deserialization. */
     template <typename T>
-    inline void registerType()
+    static inline void registerType()
     {
         registerType(T::typeName(), &T::staticMetaObject, qMetaTypeId<T>());
     }
