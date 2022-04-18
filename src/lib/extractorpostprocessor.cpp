@@ -117,6 +117,11 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
             elem = d->processEvent(elem.value<Event>());
         }
 
+        // non-reservation types
+        else if (JsonLd::isA<ProgramMembership>(elem)) {
+            elem = d->processProgramMembership(elem.value<ProgramMembership>());
+        }
+
         d->mergeOrAppend(elem);
     }
 }
