@@ -9,5 +9,11 @@
         "filter": [ { "field": "From", "match": "@booking.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
         "script": "booking.js",
         "function": "parseHtml"
+    },
+    {
+        "mimeType": "text/html",
+        "filter": [ { "field": "From", "match": "@booking.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
+        "script": "booking.js",
+        "function": "parseHtmlAlternative"
     }
 ]

@@ -87,6 +87,36 @@ function main(text, node) {
     }
 }
 
+function parseHtmlCommon(doc, node, res)
+{
+    const aElems = doc.eval('//a');
+    for (aElem of aElems) {
+        const href = aElem.attribute('href');
+        if (href.startsWith('tel:')) {
+            res.reservationFor.telephone = aElem.content;
+        } else if (href.startsWith('mailto:')) {
+            res.reservationFor.email = href.substr(7);
+            // reservation id is the prefix in the mailto link, unlike other occurrences this seems most reliably present
+            res.reservationNumber = href.match(/mailto:(\d+)-/)[1];
+        } else if (aElem.attribute('universal') == 'true') {
+            res.reservationFor.name = aElem.content;
+        } else if (aElem.content.match(/modify/) && href.startsWith("https:")) {
+            res.modifyReservationUrl = href;
+        }
+    }
+
+    const times = doc.eval('//time');
+    res.checkinTime = times[0].attribute("datetime");
+    res.checkoutTime = times[1].attribute("datetime");
+
+    const guest = doc.root.recursiveContent.match(/(?:Guest name|Nombre del huésped|Name des Gastes)[\n\s]+?(\S.*)\n/);
+    if (guest) {
+        res.underName.name = guest[1];
+    }
+
+    return res;
+}
+
 function parseHtml(doc, node)
 {
     if (node.result.length > 0)
@@ -125,19 +155,20 @@ function parseHtml(doc, node)
             res.reservationStatus = "ReservationCancelled"
         }
     }
-
     res.reservationFor.telephone = elem.eval(".//*[@class=\"u-phone\"]")[0].content;
+    return parseHtmlCommon(doc, node, res);
+}
 
-    // reservation id is the prefix in the mailto link, unlike other occurrences this seems most reliably present
-    var email = elem.eval(".//tr/td/a")[1].attribute("href").match(/mailto:(\d+)-/);
-    if (email) {
-        res.reservationNumber = email[1]
-    }
+function parseHtmlAlternative(doc, node)
+{
+    if (node.result.length > 0)
+        return null; // this is just backup if we have no structured data
+    var res = JsonLd.newLodgingReservation();
 
-    elem = doc.eval("//table[@class=\"mg_conf_booking_summary\"]")[0];
-    var times = elem.eval(".//time");
-    res.checkinTime = times[0].attribute("datetime");
-    res.checkoutTime = times[1].attribute("datetime");
-
-    return res;
+    const addrElems = doc.eval('//address')[0].content.split(',\n');
+    res.reservationFor.address.streetAddress = addrElems[0];
+    res.reservationFor.address.addressLocality = addrElems[1];
+    res.reservationFor.address.postalCode = addrElems[2];
+    res.reservationFor.address.addressCountry = addrElems[3];
+    return parseHtmlCommon(doc, node, res);
 }
