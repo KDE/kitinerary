@@ -75,6 +75,8 @@ KITINERARY_EXPORT TrainStation stationForIataCode(IataCode iataCode);
 /** Lookup train station data by Amtrak station code. */
 KITINERARY_EXPORT TrainStation stationForAmtrakStationCode(AmtrakStationCode code);
 
+/** Lookup train station data by Via Rail station code. */
+KITINERARY_EXPORT TrainStation stationForViaRailStationCode(ViaRailStationCode code);
 }
 }
 

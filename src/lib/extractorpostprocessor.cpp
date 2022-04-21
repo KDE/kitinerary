@@ -273,6 +273,9 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
     } else if (id.startsWith(QLatin1String("amtrak:")) && id.size() == 10) {
         const auto record = KnowledgeDb::stationForAmtrakStationCode(KnowledgeDb::AmtrakStationCode(QStringView(id).mid(7)));
         applyStationData(record, station);
+    } else if (id.startsWith(QLatin1String("via:")) && id.size() == 8) {
+        const auto record = KnowledgeDb::stationForViaRailStationCode(KnowledgeDb::ViaRailStationCode(QStringView(id).mid(4)));
+        applyStationData(record, station);
     }
 
     return processPlace(station);
