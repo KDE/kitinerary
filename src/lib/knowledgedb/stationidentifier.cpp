@@ -85,3 +85,5 @@ QString VRStationCode::toString() const
 
     return s;
 }
+
+static_assert(sizeof(ViaRailStationCode) == 3);

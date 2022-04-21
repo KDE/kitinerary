@@ -40,6 +40,7 @@ bool TrainStationDbGenerator::generate(QIODevice *out)
      || !fetch("P8448", "benerail", m_benerailIdMap)
      || !fetch("P238", "iata", m_iataMap)
      || !fetch("P4803", "amtrak", m_amtrakMap)
+     || !fetch("P10653", "viarail", m_viaRailMap)
      || !fetchIndianRailwaysStationCode()
      || !fetchFinishStationCodes()
     ) {
@@ -68,6 +69,7 @@ namespace KnowledgeDb {
     writeIdMap(out, m_benerailIdMap, "benerail", "BenerailStationId");
     writeIdMap(out, m_iataMap, "iata", "IataCode");
     writeIdMap(out, m_amtrakMap, "amtrak", "AmtrakStationCode");
+    writeIdMap(out, m_viaRailMap, "viarail", "ViaRailStationCode");
     writeIndianRailwaysMap(out);
     writeVRMap(out);
     out->write(R"(
@@ -404,6 +406,7 @@ void TrainStationDbGenerator::printSummary()
     qDebug() << "VR (Finland) station code index:" << m_vrfiMap.size() << "elements";
     qDebug() << "IATA location code index:" << m_iataMap.size() << "elements";
     qDebug() << "Amtrak station code index:" << m_amtrakMap.size() << "elements";
+    qDebug() << "Via Rail station code index:" << m_viaRailMap.size() << "elements";
     qDebug() << "Identifier collisions:" << m_idConflicts;
     qDebug() << "Identifier format violations:" << m_idFormatViolations;
     qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;

@@ -124,6 +124,8 @@ private:
 
 /** Amtrak staion codes. */
 using AmtrakStationCode = AlphaId<uint16_t, 3>;
+/** Via Rail station code. */
+using ViaRailStationCode = AlphaId<UnalignedNumber<3>, 4>;
 
 }
 }
