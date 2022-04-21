@@ -86,13 +86,29 @@ public:
         return m_value < other.m_value;
     }
 
+    inline constexpr UnalignedNumber<N>& operator=(uint32_t num)
+    {
+        setValue(num);
+        return *this;
+    }
+    inline constexpr UnalignedNumber<N>& operator|=(uint32_t num)
+    {
+        setValue(value() | num);
+        return *this;
+    }
+
+    inline constexpr operator uint32_t() const
+    {
+        return value();
+    }
+
     inline constexpr uint32_t value() const
     {
         return UnalignedNumber<N-1>::value() | (m_value << (N-1)*8);
     }
 
 protected:
-    inline void setValue(uint32_t num)
+    inline constexpr void setValue(uint32_t num)
     {
         m_value = (num & (0xFF << (N-1)*8)) >> (N-1)*8;
         UnalignedNumber<N-1>::setValue(num);
@@ -128,7 +144,7 @@ public:
     }
 
 protected:
-    inline void setValue(uint32_t num)
+    inline constexpr void setValue(uint32_t num)
     {
         m_value = num & 0xFF;
     }
