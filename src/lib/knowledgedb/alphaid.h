@@ -21,8 +21,8 @@ namespace KnowledgeDb {
 ///@cond internal
 namespace Internal {
     // "private" API for the template code below
-    KITINERARY_EXPORT uint16_t alphaIdFromString(QStringView s, int size);
-    KITINERARY_EXPORT QString alphaIdToString(uint16_t id, int size);
+    KITINERARY_EXPORT uint32_t alphaIdFromString(QStringView s, int size);
+    KITINERARY_EXPORT QString alphaIdToString(uint32_t id, int size);
 }
 ///@endcond
 
@@ -49,7 +49,6 @@ public:
     /** Create identifier from a QString. */
     inline explicit AlphaId(QStringView s)
     {
-        static_assert(sizeof(decltype(Internal::alphaIdFromString(s, N))) <= sizeof(T), "alphaIdFromString truncates result");
         m_id = Internal::alphaIdFromString(s, N);
     }
 

@@ -8,9 +8,9 @@
 
 using namespace KItinerary;
 
-uint16_t KnowledgeDb::Internal::alphaIdFromString(QStringView s, int size)
+uint32_t KnowledgeDb::Internal::alphaIdFromString(QStringView s, int size)
 {
-    uint16_t res = {};
+    uint32_t res = {};
     if (size != s.size()) {
         return res;
     }
@@ -26,7 +26,7 @@ uint16_t KnowledgeDb::Internal::alphaIdFromString(QStringView s, int size)
     return res;
 }
 
-QString KnowledgeDb::Internal::alphaIdToString(uint16_t id, int size)
+QString KnowledgeDb::Internal::alphaIdToString(uint32_t id, int size)
 {
     if (id == 0) {
         return {};
