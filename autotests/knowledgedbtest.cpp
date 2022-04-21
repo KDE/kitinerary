@@ -8,7 +8,7 @@
 
 #include <config-kitinerary.h>
 #include <knowledgedb/alphaid.h>
-#include <knowledgedb/timezonedb.h>
+#include <knowledgedb/timezonedb.cpp>
 #include <knowledgedb/trainstationdb.h>
 
 #include <QDebug>

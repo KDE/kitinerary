@@ -18,7 +18,7 @@
 #include "text/addressparser_p.h"
 
 #include "knowledgedb/airportdb.h"
-#include "knowledgedb/timezonedb.h"
+#include "knowledgedb/timezonedb_p.h"
 #include "knowledgedb/trainstationdb.h"
 
 #include <KItinerary/Action>

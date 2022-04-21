@@ -4,9 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "config-kitinerary.h"
-
-#include "timezonedb.h"
+#include "timezonedb_p.h"
 
 #include <KCountry>
 #include <KTimeZone>

@@ -9,7 +9,7 @@
 #include "airportdb_data.cpp"
 #include "airportnametokenizer_p.h"
 #include "stringutil.h"
-#include "timezonedb.h"
+#include "timezonedb_p.h"
 
 #include <QDebug>
 #include <QTimeZone>
