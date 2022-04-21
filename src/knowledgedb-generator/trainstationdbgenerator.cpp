@@ -83,11 +83,12 @@ template<typename Id>
 bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map<Id, QUrl> &idMap)
 {
     const auto stationArray = WikiData::query(QLatin1String(R"(
-        SELECT DISTINCT ?station ?stationLabel ?id ?coord ?replacedBy WHERE {
+        SELECT DISTINCT ?station ?stationLabel ?id ?coord ?replacedBy ?dateOfOfficialClosure WHERE {
             ?station (wdt:P31/wdt:P279*) wd:Q55488.
             ?station wdt:)") + QString::fromUtf8(prop) + QLatin1String(R"( ?id.
             OPTIONAL { ?station wdt:P625 ?coord. }
             OPTIONAL { ?station wdt:P1366 ?replacedBy. }
+            OPTIONAL { ?station wdt:P3999 ?dateOfOfficialClosure. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
         } ORDER BY (?station))"), QLatin1String("wikidata_trainstation_") + QString::fromUtf8(name) + QLatin1String(".json"));
     if (stationArray.isEmpty()) {
@@ -97,7 +98,7 @@ bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map
 
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
-        if (stationObj.contains(QLatin1String("replacedBy"))) {
+        if (stationObj.contains(QLatin1String("replacedBy")) || stationObj.contains(QLatin1String("dateOfOfficialClosure"))) {
             continue;
         }
 
