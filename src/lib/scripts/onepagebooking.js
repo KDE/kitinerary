@@ -59,3 +59,18 @@ function main(content) {
 
     return res
 }
+
+function parsePkPass(pass)
+{
+    var res = JsonLd.newLodgingReservation();
+    res.reservationFor.name = pass.organizationName;
+    res.checkinTime = JsonLd.toDateTime(pass.field['BGcheckin'].value.substr(0, 18), 'dd.MM.yyyy - hh:mm', 'de');
+    res.checkoutTime = JsonLd.toDateTime(pass.field['BGcheckout'].value.substr(0, 18), 'dd.MM.yyyy - hh:mm', 'de');
+    res.reservationFor.geo.latitude = pass.locations[0].latitude;
+    res.reservationFor.geo.longitude = pass.locations[0].longitude;
+    res.reservationFor.address.streetAddress = pass.field['address'].value;
+    res.reservationFor.telephone = pass.field['phone'].value;
+    res.reservationNumber = pass.field['bookId'].value;
+    res.underName.name = pass.field['guestname'].value;
+    return res;
+}
