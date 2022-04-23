@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "field": "From",
@@ -10,4 +10,17 @@
     "function": "main",
     "mimeType": "text/plain",
     "script": "onepagebooking.js"
-}
+},
+{
+    "filter": [
+        {
+            "field": "passTypeIdentifier",
+            "match": "pass.onepagebooking.com",
+            "mimeType": "application/vnd.apple.pkpass",
+            "scope": "Current"
+        }
+    ],
+    "function": "parsePkPass",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "onepagebooking.js"
+}]

@@ -6,12 +6,12 @@
 
 function main(content) {
 
-    const resId = content.match(/Buchungsnummer:(.+)/)[1]
+    const resId = content.match(/Buchungsnummer:\n?\s*(.+)/)[1]
 
-    const arrivalDate = content.match(/Anreisetag: (.+)/)[1]
-    const departureDate = content.match(/Abreisetag: (.+)/)[1]
+    const arrivalDate = content.match(/Anreisetag:\n? (.+)/)[1]
+    const departureDate = content.match(/Abreisetag:\n? (.+)/)[1]
 
-    const guestName = content.match(/Gastname: (Herr|Frau) (.+)/)[2]
+    const guestName = content.match(/Gastname:\n? (?:Herr|Frau)? ?(.+)/)[1]
 
     const addressBlock = content.match(/Ihr\n(.*)\n(.*)\n(.*)/)
 
@@ -30,11 +30,11 @@ function main(content) {
     const telephone = content.match(/Tel.: (.*)/)[1]
     const email = content.match(/E-Mail:  (.*)/)[1]
 
-    const price = content.match(/Gesamtpreis: (.*) EUR/)[1].replace(',', '.')
+    const price = content.match(/Gesamtpreis:\n? (.*) EUR/)[1].replace(',', '.')
 
-    const numberAdults = content.match(/Anzahl der Erwachsene[rn]: ([0-9]+)/)[1]
+    const numberAdults = content.match(/Anzahl der Erwachsene[rn]:\n? ([0-9]+)/)[1]
 
-    const numberChildren = content.match(/Anzahl der Kinder: ([0-9]+)/)[1]
+    const numberChildren = content.match(/Anzahl der Kinder:\n? ([0-9]+)/)[1]
 
     var res = JsonLd.newLodgingReservation()
 
@@ -58,4 +58,19 @@ function main(content) {
     res.reservationFor.numChildren = numberChildren
 
     return res
+}
+
+function parsePkPass(pass)
+{
+    var res = JsonLd.newLodgingReservation();
+    res.reservationFor.name = pass.organizationName;
+    res.checkinTime = JsonLd.toDateTime(pass.field['BGcheckin'].value.substr(0, 18), 'dd.MM.yyyy - hh:mm', 'de');
+    res.checkoutTime = JsonLd.toDateTime(pass.field['BGcheckout'].value.substr(0, 18), 'dd.MM.yyyy - hh:mm', 'de');
+    res.reservationFor.geo.latitude = pass.locations[0].latitude;
+    res.reservationFor.geo.longitude = pass.locations[0].longitude;
+    res.reservationFor.address.streetAddress = pass.field['address'].value;
+    res.reservationFor.telephone = pass.field['phone'].value;
+    res.reservationNumber = pass.field['bookId'].value;
+    res.underName.name = pass.field['guestname'].value;
+    return res;
 }
