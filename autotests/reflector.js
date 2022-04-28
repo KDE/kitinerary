@@ -8,10 +8,11 @@ function dumpValue(value, depth)
 {
     if (value === undefined || value === null
         || typeof value == "boolean"
-        || typeof value == "number"
-        || typeof value == "string")
+        || typeof value == "number")
     {
         return value;
+    } else if (typeof value == "string") {
+        return value.replace('\r\n', '\n');
     } else if (typeof value == "object") {
         if (depth == 0) {
             return "[...]";

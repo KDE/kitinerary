@@ -19,6 +19,12 @@ using namespace KItinerary;
 
 #define s(x) QStringLiteral(x)
 
+#ifdef Q_OS_WINDOWS
+#define LINEBREAK "\r\n"
+#else
+#define LINEBREAK "\n"
+#endif
+
 class ExtractorDocumentNodeTest : public QObject
 {
     Q_OBJECT
@@ -69,7 +75,7 @@ private Q_SLOTS:
         auto c3 = root.childNodes()[2];
         QVERIFY(!c3.isNull());
         QCOMPARE(c3.mimeType(), QLatin1String("text/plain"));
-        QCOMPARE(c3.content<QString>(), QLatin1String("This is the first page.\nIt contains a PDF 417 barcode.\nThis is the second page.\nIt contains an Aztec code.\n"));
+        QCOMPARE(c3.content<QString>(), QLatin1String("This is the first page." LINEBREAK "It contains a PDF 417 barcode." LINEBREAK "This is the second page." LINEBREAK "It contains an Aztec code." LINEBREAK));
 
         auto c1 = root.childNodes()[0];
         QVERIFY(!c1.isNull());
