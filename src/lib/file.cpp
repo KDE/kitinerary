@@ -12,7 +12,7 @@
 
 #include <KPkPass/Pass>
 
-#include <KArchive/KZip>
+#include <KZip>
 
 #include <QDebug>
 #include <QJsonArray>
@@ -192,7 +192,7 @@ QVector<QString> File::passes() const
             if (!subEntry.endsWith(QLatin1String(".pkpass"))) {
                 continue;
             }
-            passIds.push_back(entry + QLatin1Char('/') + subEntry.leftRef(subEntry.size() - 7));
+            passIds.push_back(entry + QLatin1Char('/') + QStringView(subEntry).left(subEntry.size() - 7));
         }
     }
     return passIds;

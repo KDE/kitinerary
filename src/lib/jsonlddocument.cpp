@@ -32,6 +32,7 @@
 #include <QMetaProperty>
 #include <QUrl>
 #include <QTimeZone>
+#include <QSequentialIterable>
 
 #include <cassert>
 #include <cmath>
