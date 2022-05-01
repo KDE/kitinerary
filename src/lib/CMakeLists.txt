@@ -183,9 +183,7 @@ target_link_libraries(KPimItinerary
         OpenSSL::Crypto
         ZLIB::ZLIB
 )
-if (HAVE_POPPLER)
-    target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
-endif()
+target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
 if (TARGET KF5::I18nLocaleData)
     target_link_libraries(KPimItinerary PRIVATE KF5::I18nLocaleData)
 endif()

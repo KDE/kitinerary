@@ -129,9 +129,6 @@ private Q_SLOTS:
         QFile f(s(SOURCE_DIR "/extractordata/synthetic/iata-bcbp-demo.pdf"));
         QVERIFY(f.open(QFile::ReadOnly));
 
-#ifndef HAVE_POPPLER
-        QSKIP("No Poppler support");
-#endif
         ExtractorEngine engine;
         engine.setData(f.readAll());
         engine.extract();

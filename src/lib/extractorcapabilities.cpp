@@ -33,13 +33,7 @@ QString ExtractorCapabilities::capabilitiesString()
 #endif
         "\n"
 
-        "PDF support         : "
-#ifdef HAVE_POPPLER
-              "poppler (" KPOPPLER_VERSION_STRING ")"
-#else
-              "not available"
-#endif
-        "\n"
+        "PDF support         : poppler (" KPOPPLER_VERSION_STRING ")\n"
 
         "iCal support        : "
 #ifdef HAVE_KCAL

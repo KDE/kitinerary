@@ -13,7 +13,6 @@
 
 using namespace KItinerary;
 
-#ifdef HAVE_POPPLER
 PdfExtractorOutputDevice::PdfExtractorOutputDevice()
     : TextOutputDev(nullptr, false, 0, false, false)
 {
@@ -233,5 +232,3 @@ void PdfExtractorOutputDevice::addVectorImage(const PdfVectorPicture &pic)
     img.d->m_vectorPicture = pic;
     m_images.push_back(img);
 }
-
-#endif

@@ -17,11 +17,9 @@
 #include <QImage>
 #include <QScopedValueRollback>
 
-#ifdef HAVE_POPPLER
 #include <DateInfo.h>
 #include <PDFDoc.h>
 #include <Stream.h>
-#endif
 
 #include <cmath>
 
@@ -33,7 +31,6 @@ void PdfPagePrivate::load()
         return;
     }
 
-#ifdef HAVE_POPPLER
     PopplerGlobalParams gp;
     PdfExtractorOutputDevice device;
     m_doc->m_popplerDoc->displayPageSlice(&device, m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
@@ -50,7 +47,6 @@ void PdfPagePrivate::load()
     for (auto it = m_images.begin(); it != m_images.end(); ++it) {
         (*it).d->m_page = this;
     }
-#endif
     m_loaded = true;
 }
 
@@ -69,16 +65,13 @@ QString PdfPage::text() const
     return d->m_text;
 }
 
-#ifdef HAVE_POPPLER
 static double ratio(double begin, double end, double ratio)
 {
     return begin + (end - begin) * ratio;
 }
-#endif
 
 QString PdfPage::textInRect(double left, double top, double right, double bottom) const
 {
-#ifdef HAVE_POPPLER
     PopplerGlobalParams gp;
 
     const auto page = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1);
@@ -114,13 +107,6 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
 #else
     return QString::fromUtf8(s->getCString());
 #endif
-#else
-    Q_UNUSED(left)
-    Q_UNUSED(top)
-    Q_UNUSED(right)
-    Q_UNUSED(bottom)
-    return {};
-#endif
 }
 
 int PdfPage::imageCount() const
@@ -148,7 +134,6 @@ QVariantList PdfPage::imagesInRect(double left, double top, double right, double
 {
     d->load();
     QVariantList l;
-#ifdef HAVE_POPPLER
     PopplerGlobalParams gp;
     const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
 
@@ -159,12 +144,6 @@ QVariantList PdfPage::imagesInRect(double left, double top, double right, double
             l.push_back(QVariant::fromValue(img));
         }
     }
-#else
-    Q_UNUSED(left)
-    Q_UNUSED(top)
-    Q_UNUSED(right)
-    Q_UNUSED(bottom)
-#endif
     return l;
 }
 
@@ -186,11 +165,7 @@ QString PdfDocument::text() const
 
 int PdfDocument::pageCount() const
 {
-#ifdef HAVE_POPPLER
     return d->m_popplerDoc->getNumPages();
-#else
-    return 0;
-#endif
 }
 
 PdfPage PdfDocument::page(int index) const
@@ -203,7 +178,6 @@ int PdfDocument::fileSize() const
     return d->m_pdfData.size();
 }
 
-#ifdef HAVE_POPPLER
 #if KPOPPLER_VERSION >= QT_VERSION_CHECK(21, 8, 0)
 static QDateTime parsePdfDateTime(const GooString *str)
 #else
@@ -238,11 +212,9 @@ static QDateTime parsePdfDateTime(const char *str)
     }
     return QDateTime(date, time, Qt::UTC);
 }
-#endif
 
 QDateTime PdfDocument::creationTime() const
 {
-#ifdef HAVE_POPPLER
     std::unique_ptr<GooString> dt(d->m_popplerDoc->getDocInfoCreatDate());
     if (!dt) {
         return {};
@@ -254,14 +226,10 @@ QDateTime PdfDocument::creationTime() const
 #else
     return parsePdfDateTime(dt->getCString());
 #endif
-#else
-    return {};
-#endif
 }
 
 QDateTime PdfDocument::modificationTime() const
 {
-#ifdef HAVE_POPPLER
     std::unique_ptr<GooString> dt(d->m_popplerDoc->getDocInfoModDate());
     if (!dt) {
         return {};
@@ -272,9 +240,6 @@ QDateTime PdfDocument::modificationTime() const
     return parsePdfDateTime(dt->c_str());
 #else
     return parsePdfDateTime(dt->getCString());
-#endif
-#else
-    return {};
 #endif
 }
 
@@ -288,7 +253,6 @@ QVariantList PdfDocument::pagesVariant() const
 
 PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
 {
-#ifdef HAVE_POPPLER
     PopplerGlobalParams gp;
 
     std::unique_ptr<PdfDocument> doc(new PdfDocument(parent));
@@ -317,11 +281,6 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
 
     doc->d->m_popplerDoc = std::move(popplerDoc);
     return doc.release();
-#else
-    Q_UNUSED(data)
-    Q_UNUSED(parent)
-    return nullptr;
-#endif
 }
 
 bool PdfDocument::maybePdf(const QByteArray &data)

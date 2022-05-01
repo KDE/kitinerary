@@ -13,17 +13,14 @@
 #include <QDebug>
 #include <QScopedValueRollback>
 
-#ifdef HAVE_POPPLER
 #include <Gfx.h>
 #include <GlobalParams.h>
 #include <PDFDoc.h>
 #include <Stream.h>
 #include <OutputDev.h>
-#endif
 
 using namespace KItinerary;
 
-#ifdef HAVE_POPPLER
 // legacy image loading
 #if KPOPPLER_VERSION < QT_VERSION_CHECK(0, 69, 0)
 namespace KItinerary {
@@ -128,7 +125,6 @@ QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
     m_page->m_doc->m_imageData[m_refNum] = img;
     return img;
 }
-#endif
 
 QImage PdfImagePrivate::load()
 {
@@ -137,7 +133,6 @@ QImage PdfImagePrivate::load()
         return (*it).second;
     }
 
-#ifdef HAVE_POPPLER
     PopplerGlobalParams gp;
 
 #if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 69, 0)
@@ -148,10 +143,6 @@ QImage PdfImagePrivate::load()
     std::unique_ptr<ImageLoaderOutputDevice> device(new ImageLoaderOutputDevice(this));
     m_page->m_doc->m_popplerDoc->displayPageSlice(device.get(), m_page->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
     return device->image();
-#endif
-
-#else
-    return {};
 #endif
 }
 

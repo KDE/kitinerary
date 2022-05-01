@@ -45,9 +45,7 @@ public:
     // image data in here is stored in its source form, without applied transformations
     std::unordered_map<int, QImage> m_imageData;
     std::vector<PdfPage> m_pages;
-#ifdef HAVE_POPPLER
     std::unique_ptr<PDFDoc> m_popplerDoc;
-#endif
 };
 
 }

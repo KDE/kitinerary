@@ -5,7 +5,6 @@
 */
 
 #include <KItinerary/PdfDocument>
-#include <config-kitinerary.h>
 
 #include <QFile>
 #include <QObject>
@@ -32,7 +31,6 @@ private Q_SLOTS:
     {
         QFile f(QStringLiteral(SOURCE_DIR "/misc/test.pdf"));
         QVERIFY(f.open(QFile::ReadOnly));
-#ifdef HAVE_POPPLER
         QVERIFY(PdfDocument::maybePdf(f.readAll()));
         f.seek(0);
         std::unique_ptr<PdfDocument> doc(PdfDocument::fromData(f.readAll()));
@@ -73,7 +71,6 @@ private Q_SLOTS:
 
         QCOMPARE(doc->creationTime(), QDateTime({2018, 4, 29}, {11, 41, 28}, Qt::OffsetFromUTC, 7200));
         QCOMPARE(doc->modificationTime(), QDateTime());
-#endif
     }
 
     void testInvalidPdfDocument()

@@ -6,14 +6,10 @@
 
 #pragma once
 
-#include <config-kitinerary.h>
-
 #include "pdfvectorpicture_p.h"
 #include "popplertypes_p.h"
 
-#ifdef HAVE_POPPLER
 #include <TextOutputDev.h>
-#endif
 
 #include <vector>
 
@@ -22,7 +18,6 @@ namespace KItinerary {
 class PdfImage;
 class PdfVectorPicture;
 
-#ifdef HAVE_POPPLER
 class PdfExtractorOutputDevice : public TextOutputDev
 {
 public:
@@ -54,8 +49,6 @@ public:
     };
     std::vector<VectorOp> m_vectorOps;
 };
-
-#endif
 
 }
 

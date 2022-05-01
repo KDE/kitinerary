@@ -9,7 +9,6 @@
 
 #include <qglobal.h>
 
-#ifdef HAVE_POPPLER
 #include <GlobalParams.h>
 
 #include <memory>
@@ -42,5 +41,3 @@ PopplerGlobalParams::~PopplerGlobalParams()
     std::swap(globalParams, m_prev);
 #endif
 }
-
-#endif

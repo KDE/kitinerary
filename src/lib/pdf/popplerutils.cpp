@@ -14,8 +14,6 @@
 
 #include <memory>
 
-#ifdef HAVE_POPPLER
-
 #include <GfxState.h>
 
 using namespace KItinerary;
@@ -98,5 +96,3 @@ QPainterPath PopplerUtils::convertPath(const GfxPath *path, Qt::FillRule fillRul
     }
     return qpp;
 }
-
-#endif

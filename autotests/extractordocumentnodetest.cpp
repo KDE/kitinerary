@@ -60,9 +60,6 @@ private Q_SLOTS:
 
         QFile f(QStringLiteral(SOURCE_DIR "/misc/test.pdf"));
         QVERIFY(f.open(QFile::ReadOnly));
-#ifndef HAVE_POPPLER
-        QSKIP("No Poppler support");
-#endif
         auto root = engine.documentNodeFactory()->createNode(f.readAll());
         QVERIFY(!root.isNull());
         QCOMPARE(root.mimeType(), QLatin1String("application/pdf"));
@@ -103,9 +100,6 @@ private Q_SLOTS:
 
         QFile f(QStringLiteral(SOURCE_DIR "/misc/test.pdf"));
         QVERIFY(f.open(QFile::ReadOnly));
-#ifndef HAVE_POPPLER
-        QSKIP("No Poppler support");
-#endif
         std::unique_ptr<PdfDocument> pdf(PdfDocument::fromData(f.readAll()));
         auto root = engine.documentNodeFactory()->createNode(QVariant::fromValue(pdf.get()), u"application/pdf");
         QVERIFY(!root.isNull());

@@ -7,7 +7,6 @@
 #ifndef CONFIG_KITINERARY_H
 #define CONFIG_KITINERARY_H
 
-#cmakedefine HAVE_POPPLER
 // namespaced by "K" to not interfere with defines poppler provides itself
 #define KPOPPLER_VERSION_STRING "@Poppler_VERSION@"
 #define KPOPPLER_VERSION_MAJOR @POPPLER_VERSION_MAJOR@
