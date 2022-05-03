@@ -58,7 +58,7 @@ find_package(LibXml2 MODULE)
 set_package_properties("LibXml2" PROPERTIES PURPOSE "Support for extraction from HTML booking confirmations." URL "http://libxml.org")
 find_package(PhoneNumber OPTIONAL_COMPONENTS PhoneNumber QUIET)
 set_package_properties("PhoneNumber" PROPERTIES PURPOSE "Parsing and geo-coding of phone numbers.")
-find_package(OpenSSL 1.1 REQUIRED)
+find_package(OpenSSL 1.1 REQUIRED COMPONENTS Crypto)
 find_package(OsmTools)
 set_package_properties(OsmTools PROPERTIES TYPE OPTIONAL PURPOSE "Needed only for regenereating the airport database (ie. you most likely don't need this)")
 
