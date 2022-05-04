@@ -164,6 +164,7 @@ function parsePdf(pdf) {
                     legs[j].reservationFor.departureStation.identifier = barcodeRes[j].reservationFor.departureStation.identifier;
                     legs[j].reservationFor.arrivalStation.identifier = barcodeRes[j].reservationFor.arrivalStation.identifier;
                     legs[j].reservedTicket.ticketedSeat.seatingType = barcodeRes[j].reservedTicket.ticketedSeat.seatingType;
+                    legs[j].reservationNumber = barcodeRes[j].reservationNumber;
                 }
                 reservations.push(legs[j]);
             }
