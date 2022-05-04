@@ -1,8 +1,24 @@
 /*
-   SPDX-FileCopyrightText: 2017-2019 Volker Krause <vkrause@kde.org>
-
+   SPDX-FileCopyrightText: 2017-2022 Volker Krause <vkrause@kde.org>
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
+
+// see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes#Tariff_Codes
+const tariffs = {
+    'CF00': 'Ayant Droit Avec Fichet',
+    'CF90': 'Ayant Droit Sans Fichet',
+    'CJ11': 'Carte Jeune',
+    'CW00': 'Carte Advantage Adulte',
+    'CW11': 'Carte Advantage Adulte',
+    'CW12': 'Carte Advantage Adulte',
+    'CW25': 'Carte Advantage Adulte',
+    'EF11': 'Carte Enfant+',
+    'EF99': 'Carte Enfant+',
+    'IR00': 'Interrail',
+    'IR01': 'Interrail',
+    'SE11': 'Carte Advantage Senior',
+    'SR50': 'Carte Senior'
+};
 
 function parseSncfPdfText(text) {
     var reservations = new Array();
@@ -115,6 +131,7 @@ function parseSncfBarcode(barcode)
     res1.reservationFor.trainNumber = barcode.substr(43, 5);
     res1.reservedTicket.ticketToken = "aztecCode:" + barcode;
     res1.reservedTicket.ticketedSeat.seatingType = barcode.substr(110, 1);
+    res1.programMembershipUsed.programName = tariffs[barcode.substr(111, 4)];
     reservations.push(res1);
 
     if (barcode.substr(115, 1) != '0') {
@@ -165,6 +182,7 @@ function parsePdf(pdf) {
                     legs[j].reservationFor.arrivalStation.identifier = barcodeRes[j].reservationFor.arrivalStation.identifier;
                     legs[j].reservedTicket.ticketedSeat.seatingType = barcodeRes[j].reservedTicket.ticketedSeat.seatingType;
                     legs[j].reservationNumber = barcodeRes[j].reservationNumber;
+                    legs[j].programMembershipUsed = barcodeRes[j].programMembershipUsed;
                 }
                 reservations.push(legs[j]);
             }
@@ -199,6 +217,7 @@ function parseSecutixPdfItineraryV1(text, res)
         leg.underName = res.underName;
         leg.reservationNumber = res.reservationNumber;
         leg.reservedTicket = res.reservedTicket;
+        leg.programMembershipUsed = res.programMembershipUsed;
 
         reservations.push(leg);
     }
@@ -225,6 +244,7 @@ function parseSecutixPdfItineraryV2(text, res)
         leg.underName = res.underName;
         leg.reservationNumber = res.reservationNumber;
         leg.reservedTicket = res.reservedTicket;
+        leg.programMembershipUsed = res.programMembershipUsed;
 
         reservations.push(leg);
     }
@@ -247,6 +267,7 @@ function parseSecutixPdf(pdf, node, triggerNode)
     res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content);
     res.underName.familyName = code.substr(116, 19);
     res.underName.givenName = code.substr(135, 19);
+    res.programMembershipUsed.programName = tariffs[code.substr(92, 4)];
 
     var text = pdf.pages[triggerNode.location].text;
     var pnr = text.match(res.reservationNumber + '[^\n]* ([A-Z0-9]{6})\n');

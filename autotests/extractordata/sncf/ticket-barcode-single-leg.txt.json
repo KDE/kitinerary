@@ -3,6 +3,10 @@
         "@context": "http://schema.org",
         "@type": "TrainReservation",
         "modifiedTime": "2017-12-29T18:46:02+01:00",
+        "programMembershipUsed": {
+            "@type": "ProgramMembership",
+            "programName": "Ayant Droit Avec Fichet"
+        },
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {
