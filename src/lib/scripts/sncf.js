@@ -491,3 +491,12 @@ function parseOuigoConfirmation(html) {
     }
     return reservations;
 }
+
+// see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes#Carte_Advantage
+function parseSncfCarte(code) {
+    var carte = JsonLd.newObject("ProgramMembership");
+    carte.programName = tariffs[code.substr(111, 4)];
+    carte.membershipNumber = code.substr(53, 17);
+    carte.token = 'aztec:' + code;
+    return carte.programName != undefined ? carte : undefined;
+}
