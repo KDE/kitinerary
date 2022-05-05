@@ -500,3 +500,13 @@ function parseSncfCarte(code) {
     carte.token = 'aztec:' + code;
     return carte.programName != undefined ? carte : undefined;
 }
+
+function parseSncfCartePdf(pdf, node, barcode) {
+    const text = pdf.pages[barcode.location].text;
+    var carte = node.result[0];
+    carte.member = JsonLd.newObject("Person");
+    carte.member.familyName = text.match(/Nom\s*:\s*(.*)/)[1];
+    carte.member.givenName = text.match(/Prénom\s*:\s*(.*)/)[1];
+    // TODO validity period, once the data model supports that
+    return carte;
+}

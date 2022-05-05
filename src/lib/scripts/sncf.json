@@ -123,5 +123,17 @@
         "function": "parseSncfCarte",
         "mimeType": "text/plain",
         "script": "sncf.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^h0FV",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parseSncfCartePdf",
+        "mimeType": "application/pdf",
+        "script": "sncf.js"
     }
 ]
