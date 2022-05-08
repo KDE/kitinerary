@@ -486,7 +486,7 @@ static Ticket mergeValue(const Ticket &lhs, const Ticket &rhs)
 {
     auto t = JsonLdDocument::apply(lhs, rhs).value<Ticket>();
     // prefer barcode ticket tokens over URLs
-    if (t.ticketTokenType() == Ticket::Url && lhs.ticketTokenType() != Ticket::Url && lhs.ticketTokenType() != Ticket::Unknown) {
+    if (t.ticketTokenType() == Token::Url && lhs.ticketTokenType() != Token::Url && lhs.ticketTokenType() != Token::Unknown) {
         t.setTicketToken(lhs.ticketToken());
     }
     return t;
