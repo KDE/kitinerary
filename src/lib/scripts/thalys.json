@@ -24,5 +24,18 @@
         "function": "parseReservation",
         "script": "thalys.js",
         "mimeType": "text/html"
+    },
+    {
+        "filter": [
+            {
+                "mimeType": "internal/era-ssb",
+                "field": "issuerCode",
+                "match": "3018",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parsePdfTicket",
+        "script": "thalys.js",
+        "mimeType": "application/pdf"
     }
 ]
