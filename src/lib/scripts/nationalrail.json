@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^06[A-Z0-9]{9}00",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parseTicket",
+    "mimeType": "application/pdf",
+    "script": "nationalrail.js"
+}
