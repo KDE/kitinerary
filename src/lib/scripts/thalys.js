@@ -65,7 +65,6 @@ function parsePdfTicket(pdf, node, triggerNode)
     res.reservationFor.departureTime = res.reservationFor.departureDay.substr(0, 11) + dep[2];
 
     const arr = page.textInRect(0.35, 0.15, 0.65, 0.3).match(/([\s\S]+)\nARRIVÉE À\n(\d\d:\d\d)/);
-    console.log(page.textInRect(0.35, 0.15, 0.65, 0.3));
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalTime = res.reservationFor.departureDay.substr(0, 11) + arr[2];
 
