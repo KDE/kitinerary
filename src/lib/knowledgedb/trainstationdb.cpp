@@ -87,3 +87,8 @@ TrainStation KnowledgeDb::stationForViaRailStationCode(ViaRailStationCode code)
 {
     return lookupStation(code, viarail_table);
 }
+
+TrainStation KnowledgeDb::stationForUkRailwayStationCode(UKRailwayStationCode code)
+{
+    return lookupStation(code, uk_table);
+}

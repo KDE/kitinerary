@@ -77,6 +77,9 @@ KITINERARY_EXPORT TrainStation stationForAmtrakStationCode(AmtrakStationCode cod
 
 /** Lookup train station data by Via Rail station code. */
 KITINERARY_EXPORT TrainStation stationForViaRailStationCode(ViaRailStationCode code);
+
+/** Lookup train station data by UK railway station code. */
+KITINERARY_EXPORT TrainStation stationForUkRailwayStationCode(UKRailwayStationCode code);
 }
 }
 
