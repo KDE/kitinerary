@@ -67,6 +67,7 @@ private:
     std::map<KnowledgeDb::IataCode, QUrl> m_iataMap;
     std::map<KnowledgeDb::AmtrakStationCode, QUrl> m_amtrakMap;
     std::map<KnowledgeDb::ViaRailStationCode, QUrl> m_viaRailMap;
+    std::map<KnowledgeDb::UKRailwayStationCode, QUrl> m_ukMap;
 
     int m_idConflicts = 0;
     int m_idFormatViolations = 0;

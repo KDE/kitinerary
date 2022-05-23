@@ -126,6 +126,7 @@ private:
 using AmtrakStationCode = AlphaId<uint16_t, 3>;
 /** Via Rail station code. */
 using ViaRailStationCode = AlphaId<UnalignedNumber<3>, 4>;
-
+/** UK railway station code. */
+using UKRailwayStationCode = AlphaId<uint16_t, 3>;
 }
 }
