@@ -22,8 +22,10 @@ function parsePkPass(pass, node)
     res.reservationFor.departureDay = JsonLd.toDateTime(pass.field["travelDate"].value, "dd/MM/yyyy", "en");
     res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
     res.reservationFor.departureStation.name = expandStationName(pass.field["from"].value);
+    res.reservationFor.departureStation.identifier = 'uk:' + pass.field["from"].value;
     res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
     res.reservationFor.arrivalStation.name = expandStationName(pass.field["to"].value);
+    res.reservationFor.arrivalStation.identifier = 'uk:' + pass.field["to"].value;
 
     return res;
 }
