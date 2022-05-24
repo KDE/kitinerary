@@ -21,11 +21,13 @@ function fixAddress(content, node) {
         return res;
     }
     var addr = res.reservationFor.location.address;
-    if (addr.streetAddress.endsWith(addr.addressLocality)) {
-        addr.streetAddress = addr.streetAddress.substr(0, addr.streetAddress.length - addr.addressLocality.length).trim();
-    }
-    if (addr.streetAddress.endsWith(addr.postalCode)) {
-        addr.streetAddress = addr.streetAddress.substr(0, addr.streetAddress.length - addr.postalCode.length);
+    for (var i of [0, 1]) {
+        if (addr.streetAddress.endsWith(addr.addressLocality)) {
+            addr.streetAddress = addr.streetAddress.substr(0, addr.streetAddress.length - addr.addressLocality.length).trim();
+        }
+        if (addr.streetAddress.endsWith(addr.postalCode)) {
+            addr.streetAddress = addr.streetAddress.substr(0, addr.streetAddress.length - addr.postalCode.length).trim();
+        }
     }
     res.reservationFor.location.address = addr;
     return res;
