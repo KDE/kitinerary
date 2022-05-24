@@ -6,6 +6,8 @@
 
 #include "stringutil.h"
 
+#include <KCharsets>
+
 #include <QDebug>
 #include <QString>
 
@@ -110,4 +112,9 @@ float StringUtil::prefixSimilarity(QStringView s1, QStringView s2)
     }
 
     return (float)s1.size() / (float)s2.size();
+}
+
+QString StringUtil::clean(const QString &s)
+{
+    return KCharsets::resolveEntities(s).simplified();
 }

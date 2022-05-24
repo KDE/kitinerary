@@ -5,6 +5,7 @@
 */
 
 #include "extractorvalidator.h"
+#include "stringutil.h"
 
 #include <QDateTime>
 #include <QVariant>
@@ -78,7 +79,7 @@ public:
 
 template<typename T> inline T ExtractorPostprocessorPrivate::processPlace(T place)
 {
-    place.setName(place.name().simplified());
+    place.setName(StringUtil::clean(place.name()));
     auto addr = processAddress(place.address(), place.telephone(), place.geo());
     place.setAddress(addr);
     place.setTelephone(processPhoneNumber(place.telephone(), place.address()));

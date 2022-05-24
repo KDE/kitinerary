@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "stringutil.h"
+#include "../src/lib/stringutil.cpp"
 
 #include <QObject>
 #include <QTest>
@@ -45,6 +45,15 @@ private Q_SLOTS:
         QCOMPARE(StringUtil::prefixSimilarity(u"aba", u"aBa"), 1.0f);
         QCOMPARE(StringUtil::prefixSimilarity(u"ab", u"aa"), 0.5f);
         QCOMPARE(StringUtil::prefixSimilarity(u"ac", u"abbb"), 0.25f);
+    }
+
+    void testClean()
+    {
+        QCOMPARE(StringUtil::clean(QString()), QString());
+        QCOMPARE(StringUtil::clean(QStringLiteral("Lech Wa&#322;&#281;sa Airport")), QStringLiteral("Lech Wałęsa Airport"));
+        QCOMPARE(StringUtil::clean(QStringLiteral("On-demand services: MobilityData&#39;s GOFS project &amp;amp; going further")),
+                 QLatin1String("On-demand services: MobilityData's GOFS project &amp; going further"));
+
     }
 };
 

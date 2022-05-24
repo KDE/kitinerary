@@ -9,6 +9,7 @@
 #include "extractorpostprocessor_p.h"
 #include "extractorvalidator.h"
 #include "flightpostprocessor_p.h"
+#include "stringutil.h"
 
 #include "iata/iatabcbpparser.h"
 #include "jsonlddocument.h"
@@ -399,7 +400,7 @@ EventReservation ExtractorPostprocessorPrivate::processEventReservation(EventRes
 
 KItinerary::Event ExtractorPostprocessorPrivate::processEvent(KItinerary::Event event) const
 {
-    event.setName(event.name().trimmed());
+    event.setName(StringUtil::clean(event.name()));
 
     // normalize location to be a Place
     if (JsonLd::isA<PostalAddress>(event.location())) {

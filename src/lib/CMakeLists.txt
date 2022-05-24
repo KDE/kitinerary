@@ -178,6 +178,7 @@ target_link_libraries(KPimItinerary
         Qt${QT_MAJOR_VERSION}::QmlPrivate
         KF5::Archive
         KF5::I18n
+        KF5::Codecs
         KF5::Contacts
         KPim::PkPass
         OpenSSL::Crypto

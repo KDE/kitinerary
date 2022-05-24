@@ -4,7 +4,7 @@
 find_package(Qt${QT_MAJOR_VERSION}Test ${QT_REQUIRED_VERSION} CONFIG REQUIRED)
 add_definitions(-DSOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 
-ecm_add_test(stringutiltest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)
+ecm_add_test(stringutiltest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary KF5::Codecs)
 ecm_add_test(datatypestest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test Qt${QT_MAJOR_VERSION}::Qml KPim::Itinerary)
 ecm_add_test(jsonlddocumenttest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)
 ecm_add_test(mergeutiltest.cpp LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Test KPim::Itinerary)

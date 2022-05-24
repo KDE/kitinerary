@@ -8,6 +8,7 @@ Dependencies:
     'frameworks/ki18n' : '@latest'
     'frameworks/kcontacts' : '@latest'
     'frameworks/kcalendarcore' : '@latest'
+    'frameworks/kcodecs' : '@latest'
     'pim/kmime' : '@same'
     'pim/kpkpass' : '@same'
 
