@@ -348,13 +348,23 @@ QVariant JsonLdDocument::fromJsonSingular(const QJsonObject &obj)
     return createInstance(normalized.at(0).toObject());
 }
 
-static bool valueIsNull(const QVariant &v)
+bool JsonLd::valueIsNull(const QVariant &v)
 {
     if (v.type() == QVariant::Url) {
         return !v.toUrl().isValid();
     }
     if (v.type() == qMetaTypeId<float>()) {
         return std::isnan(v.toFloat());
+    }
+    // starting with Qt6, QVariant::isNull is "shallow" and would miss the following as well
+    if (v.type() == QVariant::String) {
+        return v.toString().isNull();
+    }
+    if (v.type() == QVariant::DateTime) {
+        return v.toDateTime().isNull();
+    }
+    if (v.type() == QVariant::Date) {
+        return v.toDate().isNull();
     }
     return v.isNull();
 }
@@ -451,7 +461,7 @@ static QJsonValue toJsonValue(const QVariant &v)
         }
 
         const auto value = prop.readOnGadget(v.constData());
-        if (!valueIsNull(value)) {
+        if (!JsonLd::valueIsNull(value)) {
             const auto jsVal = toJsonValue(value);
             if (jsVal.type() != QJsonValue::Null) {
                 obj.insert(QString::fromUtf8(prop.name()), jsVal);
@@ -593,7 +603,7 @@ QVariant JsonLdDocument::apply(const QVariant& lhs, const QVariant& rhs)
         if ((QMetaType::typeFlags(pv.userType()) & QMetaType::IsGadget) && QMetaType(pv.userType()).metaObject()) {
             pv = apply(prop.readOnGadget(lhs.constData()), pv);
         }
-        if (!pv.isNull()) {
+        if (!JsonLd::valueIsNull(pv)) {
             prop.writeOnGadget(res.data(), pv);
         }
     }

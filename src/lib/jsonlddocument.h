@@ -17,6 +17,17 @@ struct QMetaObject;
 
 namespace KItinerary {
 
+namespace JsonLd {
+
+/** Checks whether @p v holds a null-like value.
+ *  This is similar to QVariant::isNull in Qt5, but differs
+ *  from the "shallow" QVariant::isNull in Qt6 which doesn't
+ *  check the content at all.
+ */
+KITINERARY_EXPORT bool valueIsNull(const QVariant &v);
+
+}
+
 /** Serialization/deserialization code for JSON-LD data.
  *  @see https://www.w3.org/TR/json-ld/
  */
