@@ -30,8 +30,10 @@ inline bool isA(const QVariant &value)
 template <typename T>
 inline bool canConvert(const QVariant &value)
 {
-    const auto mo = QMetaType(value.userType()).metaObject();
-    if (!mo) {
+    const auto mt = QMetaType(value.userType());
+    // for enums/flags, this is the enclosing meta object starting with Qt6!
+    const auto mo = mt.metaObject();
+    if ((mt.flags() & QMetaType::IsGadget) == 0 || !mo) {
         return false;
     }
     return mo->inherits(&T::staticMetaObject);

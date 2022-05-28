@@ -590,7 +590,7 @@ QVariant JsonLdDocument::apply(const QVariant& lhs, const QVariant& rhs)
         }
 
         auto pv = prop.readOnGadget(rhs.constData());
-        if (QMetaType(pv.userType()).metaObject()) {
+        if ((QMetaType::typeFlags(pv.userType()) & QMetaType::IsGadget) && QMetaType(pv.userType()).metaObject()) {
             pv = apply(prop.readOnGadget(lhs.constData()), pv);
         }
         if (!pv.isNull()) {

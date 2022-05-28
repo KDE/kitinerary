@@ -533,6 +533,7 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
         auto lv = prop.readOnGadget(lhs.constData());
         auto rv = prop.readOnGadget(rhs.constData());
         auto mt = rv.userType();
+        const auto metaType = QMetaType(mt);
 
         if (mt == qMetaTypeId<Airline>()) {
             rv = mergeValue(lv.value<Airline>(), rv.value<Airline>());
@@ -542,7 +543,7 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
             rv = mergeValue(lv.toDateTime(), rv.toDateTime());
         } else if (mt == qMetaTypeId<Ticket>()) {
             rv = mergeValue(lv.value<Ticket>(), rv.value<Ticket>());
-        } else if (QMetaType(mt).metaObject()) {
+        } else if ((metaType.flags() & QMetaType::IsGadget) && metaType.metaObject()) {
             rv = merge(prop.readOnGadget(lhs.constData()), rv);
         }
 
