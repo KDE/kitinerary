@@ -175,18 +175,18 @@ target_link_libraries(KPimItinerary
         KF5::Mime
     PRIVATE
         Qt${QT_MAJOR_VERSION}::Qml
-        Qt${QT_MAJOR_VERSION}::QmlPrivate
         KF5::Archive
         KF5::I18n
+        KF5::I18nLocaleData
         KF5::Codecs
         KF5::Contacts
         KPim::PkPass
+        Poppler::Core
         OpenSSL::Crypto
         ZLIB::ZLIB
 )
-target_link_libraries(KPimItinerary PRIVATE Poppler::Core)
-if (TARGET KF5::I18nLocaleData)
-    target_link_libraries(KPimItinerary PRIVATE KF5::I18nLocaleData)
+if (QT_MAJOR_VERSION EQUAL "5")
+    target_link_libraries(KPimItinerary PRIVATE Qt5::QmlPrivate)  # for QByteArray -> ArrayBuffer conversion
 endif()
 
 if (TARGET ZXing::ZXing)
