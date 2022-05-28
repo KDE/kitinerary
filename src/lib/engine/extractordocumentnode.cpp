@@ -81,6 +81,11 @@ ExtractorDocumentNode& ExtractorDocumentNode::operator=(ExtractorDocumentNode &&
     return *this;
 }
 
+bool ExtractorDocumentNode::operator==(const ExtractorDocumentNode &other) const
+{
+    return d.get() == other.d.get();
+}
+
 bool ExtractorDocumentNode::isNull() const
 {
     return d->content.isNull() || !d->processor || d->mimeType.isEmpty();

@@ -86,6 +86,8 @@ public:
     ExtractorDocumentNode& operator=(const ExtractorDocumentNode &other);
     ExtractorDocumentNode& operator=(ExtractorDocumentNode &&other);
 
+    bool operator==(const ExtractorDocumentNode &other) const;
+
     /** Returns @c true if this is a null instance. */
     bool isNull() const;
 
