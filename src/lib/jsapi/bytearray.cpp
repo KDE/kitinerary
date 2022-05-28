@@ -59,12 +59,16 @@ QJSValue JsApi::ByteArray::fromBase64(const QString &b64) const
 
 QString JsApi::ByteArray::decodeUtf8(const QByteArray &input) const
 {
-    return QString::fromUtf8(input);
+    // explicitly truncate at the first null byte, Qt6 doesn't do that automatically anymore
+    const auto idx = input.indexOf('\0');
+    return QString::fromUtf8(input.constData(), idx >= 0 ? idx : input.size());
 }
 
 QString JsApi::ByteArray::decodeLatin1(const QByteArray &input) const
 {
-    return QString::fromLatin1(input);
+    // explicitly truncate at the first null byte, Qt6 doesn't do that automatically anymore
+    const auto idx = input.indexOf('\0');
+    return QString::fromLatin1(input.constData(), idx >= 0 ? idx : input.size());
 }
 
 QVariant JsApi::ByteArray::toBitArray(const QByteArray &input) const
