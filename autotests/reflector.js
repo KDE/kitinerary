@@ -40,10 +40,18 @@ function dumpValue(value, depth)
             if (prop == "parent" || prop == "firstChild" || prop == "nextSibling" || value[prop] === undefined || value[prop] === null || typeof value[prop] == "function") {
                 continue;
             }
-            obj[prop] = dumpValue(value[prop], depth - 1);
-            empty = false;
+            const v = dumpValue(value[prop], depth - 1);
+            if (v != undefined) { // ### Qt5 behavior compat, remove with Qt6
+                obj[prop] = v;
+            }
+            if (v) { // ### Qt5 behavior compat, remove with Qt6
+                empty = false;
+            }
         }
 
+        if (empty && Object.keys(obj).length >= 1) {
+            return undefined; // ### Qt5 behavior compat, remove with Qt6
+        }
         // implicitly convertible (color, date, opaque types, etc)
         if (empty) {
             let s = value.toString();
