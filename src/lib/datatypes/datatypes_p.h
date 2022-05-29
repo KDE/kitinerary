@@ -40,6 +40,14 @@ template <typename T> inline bool equals(typename parameter_type<T>::type lhs, t
     return lhs == rhs;
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+// compare QVariant contents (no longer the default with Qt6)
+template <> inline bool equals<QVariant>(const QVariant &lhs, const QVariant &rhs)
+{
+    return lhs.isNull() == rhs.isNull() && (lhs.isNull() || QVariant::compare(lhs, rhs) == QPartialOrdering::Equivalent);
+}
+#endif
+
 // QDateTime::operator== is true for two instances referring to the same point in time
 // we however want to know if two instances contain exactly the same information
 template <> inline bool equals<QDateTime>(const QDateTime &lhs, const QDateTime &rhs)
