@@ -17,6 +17,16 @@ function dumpValue(value, depth)
         if (depth == 0) {
             return "[...]";
         }
+        if (value instanceof ArrayBuffer) {
+            const view = new DataView(value);
+            for (let i = 0; i < view.byteLength; ++i) {
+                const c = view.getUInt8(i);
+                if (c < 0x20 && c != 0x0A && c != 0x0D) {
+                    return "<binary: " + view.byteLength + " bytes>";
+                }
+            }
+            return value;
+        }
         if (value.length != undefined) {
             var arr = new Array();
             for (var i = 0; i < value.length; ++i) {
