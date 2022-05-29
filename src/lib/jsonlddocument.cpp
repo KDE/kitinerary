@@ -188,6 +188,9 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         } else {
             auto str = v.toString();
             dt = QDateTime::fromString(str, Qt::ISODate);
+            if (dt.isNull()) {
+                dt = QDateTime::fromString(QString(str).simplified().remove(QLatin1Char(' ')), Qt::ISODate);
+            }
             for (unsigned int i = 0; i < fallbackDateTimePatternCount && dt.isNull(); ++i) {
                 dt = QDateTime::fromString(str, QString::fromLatin1(fallbackDateTimePattern[i]));
             }
