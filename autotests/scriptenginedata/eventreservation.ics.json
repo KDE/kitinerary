@@ -1,6 +1,6 @@
 [
     {
-        "content": "QVariant(KCalendarCore::Calendar::Ptr, )"
+        "content": "KCalendarCore::Calendar"
     },
     {
         "childNodes": [
@@ -78,7 +78,7 @@
                 ]
             }
         ],
-        "content": "QVariant(KCalendarCore::Calendar::Ptr, )",
+        "content": "KCalendarCore::Calendar",
         "contextDateTime": "Invalid Date",
         "isNull": false,
         "mimeType": "text/calendar",

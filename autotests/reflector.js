@@ -34,8 +34,12 @@ function dumpValue(value, depth)
             empty = false;
         }
 
-        // implicitly convertible (color, date, etC)
+        // implicitly convertible (color, date, opaque types, etc)
         if (empty) {
+            let s = value.toString();
+            if (s.match(/QVariant.*KCalendarCore::Calendar/)) { // normalize opaque shared pointer handle
+                return 'KCalendarCore::Calendar';
+            }
             return value.toString();
         } else {
             return obj;
