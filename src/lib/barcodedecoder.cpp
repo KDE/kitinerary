@@ -217,7 +217,7 @@ static ZXing::ImageFormat zxingImageFormat(QImage::Format format)
 
 static ZXing::Result zxingReadBarcode(const QImage &img, const ZXing::DecodeHints &hints)
 {
-    return ZXing::ReadBarcode({img.bits(), img.width(), img.height(), zxingImageFormat(img.format()), img.bytesPerLine()}, hints);
+    return ZXing::ReadBarcode({img.bits(), img.width(), img.height(), zxingImageFormat(img.format()), static_cast<int>(img.bytesPerLine())}, hints);
 }
 #endif
 
