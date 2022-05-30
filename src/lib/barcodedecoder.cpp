@@ -36,7 +36,7 @@ enum {
 };
 
 
-static constexpr const auto SQUARE_MAX_ASPECT = 1.2f;
+static constexpr const auto SQUARE_MAX_ASPECT = 1.25f;
 static constexpr const auto PDF417_MIN_ASPECT = 1.5f;
 static constexpr const auto PDF417_MAX_ASPECT = 6.0f;
 static constexpr const auto ANY1D_MIN_ASPECT = 6.0f;
