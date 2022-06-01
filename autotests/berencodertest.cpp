@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <tlv/berelement.cpp>
+#include <tlv/berelement.h>
 
 #include <QBuffer>
 #include <QObject>
