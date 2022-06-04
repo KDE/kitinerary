@@ -40,7 +40,7 @@ function parsePdf(pdf, node, triggerNode)
 
     // generate the second ticket for public transport
     var pt = JsonLd.clone(res);
-    pt.reservedTicket.ticketToken = triggerNode.result[0].reservedTicket.ticketToken;
+    pt.reservedTicket.ticketToken = 'aztecbin:' + ByteArray.toBase64(triggerNode.content.rawData);
     pt.reservedTicket.name = "Public Transport";
 
     var reservations = new Array();

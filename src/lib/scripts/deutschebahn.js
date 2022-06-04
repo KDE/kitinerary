@@ -222,7 +222,7 @@ function parsePdf(pdf, node, triggerNode) {
         reservations[i].reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content.rawData);
         if (triggerNode.mimeType == "internal/uic9183") {
             reservations[i].reservationFor.provider.identifier = "uic:" + triggerNode.content.carrierId;
-            const block = triggerNode.content.block("0080BL").findSubBlock("009")
+            let block = triggerNode.content.block("0080BL").findSubBlock("009")
             if (block) {
                 const bc = block.content.match(/\d+-\d+-(.*)/)[1];
                 switch (bc) {
@@ -235,15 +235,19 @@ function parsePdf(pdf, node, triggerNode) {
                         break;
                 }
             }
+            block = triggerNode.content.block('0080BL').findSubBlock('001');
+            if (block)
+                reservations[i].reservedTicket.name = block.content;
+            if (reservations[i].reservedTicket.ticketedSeat)
+                reservations[i].reservedTicket.ticketedSeat.seatingType = triggerNode.content.seatingType;
+            reservations[i].underName = JsonLd.toJson(triggerNode.content.person);
         } else if (triggerNode.mimeType == "internal/vdv") {
             reservations[i].reservationFor.provider.identifier = "vdv:" + triggerNode.content.operatorId;
-        }
-        if (triggerNode.result.length > 0) {
-            reservations[i].reservedTicket.name = triggerNode.result[0].reservedTicket.name;
-            reservations[i].underName = triggerNode.result[0].underName;
             if (reservations[i].reservedTicket.ticketedSeat) {
-                reservations[i].reservedTicket.ticketedSeat.seatingType = triggerNode.result[0].reservedTicket.ticketedSeat.seatingType;
+                const c = triggerNode.content.seatingClass;
+                reservations[i].reservedTicket.ticketedSeat.seatingType = (c == 1 || c == 3) ? '1' : '2';
             }
+            reservations[i].underName = JsonLd.toJson(triggerNode.content.person);
         }
     }
 
@@ -270,7 +274,7 @@ function parseBahncard(code, node) {
     var bc = JsonLd.newObject("ProgramMembership");
     bc.programName = code.ticketLayout.text(1, 12, 40, 1);
     bc.membershipNumber = code.ticketLayout.text(14, 11, 16, 1);
-    bc.member = node.result[0].underName;
-    bc.token = node.result[0].reservedTicket.ticketToken;
+    bc.member = JsonLd.toJson(code.person);
+    bc.token = 'aztecbin:' + ByteArray.toBase64(code.rawData);
     return bc.programName != undefined ? bc : undefined;
 }
