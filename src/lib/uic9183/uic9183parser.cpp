@@ -126,6 +126,21 @@ QString Uic9183Parser::pnr() const
     return findBlock<Uic9183Head>().ticketKey().left(6);
 }
 
+QString Uic9183Parser::name() const
+{
+    // DB vendor block
+    const auto b = findBlock<Vendor0080BLBlock>();
+    if (b.isValid()) {
+        const auto sblock = b.findSubBlock("001");
+        if (!sblock.isNull()) {
+            return QString::fromUtf8(sblock.content(), sblock.contentSize());
+        }
+    }
+
+    // TODO RCT2 tickets
+    return {};
+}
+
 QString Uic9183Parser::carrierId() const
 {
     return findBlock<Uic9183Head>().issuerCompanyCodeString();
