@@ -121,6 +121,8 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
         // non-reservation types
         else if (JsonLd::isA<ProgramMembership>(elem)) {
             elem = d->processProgramMembership(elem.value<ProgramMembership>());
+        } else if (JsonLd::isA<Ticket>(elem)) {
+            elem = d->processTicket(elem.value<Ticket>());
         }
 
         d->mergeOrAppend(elem);
@@ -421,6 +423,14 @@ KItinerary::Event ExtractorPostprocessorPrivate::processEvent(KItinerary::Event 
     return event;
 }
 
+Ticket ExtractorPostprocessorPrivate::processTicket(Ticket ticket) const
+{
+    ticket.setName(StringUtil::clean(ticket.name()));
+    ticket.setTicketNumber(ticket.ticketNumber().simplified());
+    ticket.setUnderName(processPerson(ticket.underName()));
+    return ticket;
+}
+
 ProgramMembership ExtractorPostprocessorPrivate::processProgramMembership(ProgramMembership program) const
 {
     program.setProgramName(program.programName().simplified());
@@ -439,6 +449,10 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
     res.setPotentialAction(processActions(res.potentialAction()));
     res.setReservationNumber(res.reservationNumber().trimmed());
     res.setProgramMembershipUsed(processProgramMembership(res.programMembershipUsed()));
+
+    if (JsonLd::isA<Ticket>(res.reservedTicket())) {
+        res.setReservedTicket(processTicket(res.reservedTicket().template value<Ticket>()));
+    }
     return res;
 }
 

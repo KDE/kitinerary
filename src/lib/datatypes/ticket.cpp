@@ -33,14 +33,20 @@ class TicketPrivate : public QSharedData
 {
 public:
     QString name;
+    Organization issuedBy;
+    QString ticketNumber;
     Seat ticketedSeat;
     QString ticketToken;
+    Person underName;
 };
 
 KITINERARY_MAKE_SIMPLE_CLASS(Ticket)
 KITINERARY_MAKE_PROPERTY(Ticket, QString, name, setName)
+KITINERARY_MAKE_PROPERTY(Ticket, Organization, issuedBy, setIssuedBy)
+KITINERARY_MAKE_PROPERTY(Ticket, QString, ticketNumber, setTicketNumber)
 KITINERARY_MAKE_PROPERTY(Ticket, Seat, ticketedSeat, setTicketedSeat)
 KITINERARY_MAKE_PROPERTY(Ticket, QString, ticketToken, setTicketToken)
+KITINERARY_MAKE_PROPERTY(Ticket, Person, underName, setUnderName)
 KITINERARY_MAKE_OPERATOR(Ticket)
 
 Token::TokenType Ticket::ticketTokenType() const

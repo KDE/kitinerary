@@ -31,6 +31,7 @@ class ProgramMembership;
 class RentalCar;
 class RentalCarReservation;
 class TaxiReservation;
+class Ticket;
 class TouristAttractionVisit;
 class TrainReservation;
 class TrainStation;
@@ -60,6 +61,7 @@ public:
     TaxiReservation processTaxiReservation(TaxiReservation res) const;
     Event processEvent(Event event) const;
 
+    Ticket processTicket(Ticket ticket) const;
     ProgramMembership processProgramMembership(ProgramMembership program) const;
 
     template <typename T> T processReservation(T res) const;

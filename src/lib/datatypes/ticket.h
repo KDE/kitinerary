@@ -8,6 +8,8 @@
 
 #include "kitinerary_export.h"
 #include "datatypes.h"
+#include "organization.h"
+#include "person.h"
 #include "token.h"
 
 namespace KItinerary {
@@ -37,6 +39,8 @@ class KITINERARY_EXPORT Ticket
 {
     KITINERARY_GADGET(Ticket)
     KITINERARY_PROPERTY(QString, name, setName)
+    KITINERARY_PROPERTY(KItinerary::Organization, issuedBy, setIssuedBy)
+    KITINERARY_PROPERTY(QString, ticketNumber, setTicketNumber)
     KITINERARY_PROPERTY(KItinerary::Seat, ticketedSeat, setTicketedSeat)
     /** The raw ticket token string.
      *  @see ticketTokenType, ticketTokenData
@@ -49,6 +53,8 @@ class KITINERARY_EXPORT Ticket
      *  For binary content barcodes this is a QByteArray, otherwise a QString.
      */
     Q_PROPERTY(QVariant ticketTokenData READ ticketTokenData STORED false)
+
+    KITINERARY_PROPERTY(KItinerary::Person, underName, setUnderName)
 
 public:
     /** The type of content in the ticketToken property.
