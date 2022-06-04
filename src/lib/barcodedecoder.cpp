@@ -249,7 +249,7 @@ void BarcodeDecoder::decodeZxing(const QImage &img, BarcodeDecoder::BarcodeTypes
         if (std::any_of(res.text().begin(), res.text().end(), [](const auto c) { return c > 255; })) {
             result.contentType &= ~Result::ByteArray;
         }
-        if (std::any_of(res.text().begin(), res.text().end(), [](const auto c) { return c < 20; })) {
+        if (std::any_of(res.text().begin(), res.text().end(), [](const auto c) { return c < 0x20; })) {
             result.contentType &= ~Result::String;
         }
 
