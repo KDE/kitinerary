@@ -53,6 +53,11 @@ public:
     /** Serialize instantiated data type to JSON-LD. */
     static KITINERARY_EXPORT QJsonObject toJson(const QVariant &data);
 
+    /** JSON-LD serrialization of an invidividual data value.
+     *  Unlike the above this also works with primitive types.
+     */
+    static KITINERARY_EXPORT QJsonValue toJsonValue(const QVariant &data);
+
     /** Read property @p name on object @p obj. */
     static KITINERARY_EXPORT QVariant readProperty(const QVariant &obj, const char *name);
     /** Set property @p name on object @p obj to value @p value. */

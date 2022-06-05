@@ -385,7 +385,7 @@ static QString typeName(const QMetaObject *mo, const QVariant &v)
     return QString::fromUtf8(mo->className());
 }
 
-static QJsonValue toJsonValue(const QVariant &v)
+QJsonValue JsonLdDocument::toJsonValue(const QVariant &v)
 {
     const auto mo = QMetaType(v.userType()).metaObject();
     if (!mo) {
@@ -482,7 +482,7 @@ QJsonArray JsonLdDocument::toJson(const QVector<QVariant> &data)
 {
     QJsonArray a;
     for (const auto &d : data) {
-        const auto value = ::toJsonValue(d);
+        const auto value = toJsonValue(d);
         if (!value.isObject()) {
             continue;
         }
@@ -495,7 +495,7 @@ QJsonArray JsonLdDocument::toJson(const QVector<QVariant> &data)
 
 QJsonObject JsonLdDocument::toJson(const QVariant& data)
 {
-    const auto value = ::toJsonValue(data);
+    const auto value = toJsonValue(data);
     if (!value.isObject()) {
         return {};
     }

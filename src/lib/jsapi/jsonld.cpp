@@ -329,7 +329,7 @@ QJSValue JsApi::JsonLd::toJson(const QVariant &v) const
         return m_engine->toScriptValue(JsonLdDocument::toJson(v.value<QVector<QVariant>>()));
     }
 
-    const auto json = JsonLdDocument::toJson(v);
+    const auto json = JsonLdDocument::toJsonValue(v);
     return m_engine->toScriptValue(json);
 }
 
