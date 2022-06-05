@@ -10,6 +10,7 @@
         "outboundDepartureTime": "2018-08-19T07:40:00",
         "passengerName": "Jőhn Á Doe",
         "seatNumber": "101, 102",
+        "title": "MENETJEGY+HELYJEGY",
         "trainNumber": "RJX 42",
         "type": "http://schema.org/TransportReservation"
     }

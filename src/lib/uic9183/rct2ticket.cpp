@@ -163,6 +163,17 @@ Rct2Ticket::Type Rct2Ticket::type() const
     return Unknown;
 }
 
+QString Rct2Ticket::title() const
+{
+    // somewhat standard compliant layout
+    if (d->layout.text(0, 15, 3, 1).trimmed().isEmpty()) {
+        return d->layout.text(0, 18, 33, 1).trimmed();
+    }
+
+    // "creative" layout
+    return d->layout.text(0, 0, 52, 1).trimmed();
+}
+
 QString Rct2Ticket::passengerName() const
 {
     return d->layout.text(0, 52, 19, 1).trimmed();

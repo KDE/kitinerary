@@ -137,7 +137,12 @@ QString Uic9183Parser::name() const
         }
     }
 
-    // TODO RCT2 tickets
+    // RCT2
+    const auto rct2 = rct2Ticket();
+    if (rct2.isValid()) {
+        return rct2.title();
+    }
+
     return {};
 }
 

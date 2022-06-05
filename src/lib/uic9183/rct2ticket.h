@@ -24,6 +24,7 @@ class KITINERARY_EXPORT Rct2Ticket
     Q_GADGET
     Q_PROPERTY(QDate firstDayOfValidity READ firstDayOfValidity)
     Q_PROPERTY(Type type READ type)
+    Q_PROPERTY(QString title READ title)
     Q_PROPERTY(QString passengerName READ passengerName)
     Q_PROPERTY(QDateTime outboundDepartureTime READ outboundDepartureTime)
     Q_PROPERTY(QDateTime outboundArrivalTime READ outboundArrivalTime)
@@ -64,6 +65,9 @@ public:
     Q_ENUM(Type);
     /** Returns the ticket type. */
     Type type() const;
+
+    /** Name or title of the ticket. */
+    QString title() const;
 
     /** Name of the passenger this ticket is for. */
     QString passengerName() const;

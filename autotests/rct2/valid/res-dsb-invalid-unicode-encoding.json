@@ -9,6 +9,7 @@
         "outboundDepartureStation": "København",
         "outboundDepartureTime": "2018-12-08T17:22:00",
         "seatNumber": "103",
+        "title": "RESERVATION",
         "trainNumber": "267",
         "type": "http://schema.org/Reservation"
     }
