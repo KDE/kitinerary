@@ -25,7 +25,6 @@ function parsePage(pdf, node, triggerNode) {
     // look for non-elided station names
     const text = pdf.pages[triggerNode.location].text;
     const legs = text.match(/VON +-> NACH.*\n.*? ([A-Z].*) +-> (.*?)  .*\n.*? ([\w\*].*) +-> (.*?)  /);
-    console.log(legs);
     if (!legs) { return triggerNode.result; }
 
     var reservations = [];

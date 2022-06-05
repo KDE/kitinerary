@@ -15,6 +15,8 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include <zlib.h>
 
@@ -154,12 +156,26 @@ QString Uic9183Parser::carrierId() const
 QDateTime Uic9183Parser::validFrom() const
 {
     // DB vendor block
-    const auto b = findBlock<Vendor0080BLBlock>();
-    if (b.isValid() && b.orderBlockCount() == 1) {
+    if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid() && b.orderBlockCount() == 1) {
         return QDateTime(b.orderBlock(0).validFrom(), {0, 0, 0});
     }
 
-    // TODO RCT2 tickets?
+    // ÖBB vender block
+    if (const auto b = findBlock("118199"); !b.isNull()) {
+        const auto obj = QJsonDocument::fromJson(QByteArray::fromRawData(b.content(), b.contentSize())).object();
+        auto dt = QDateTime::fromString(obj.value(QLatin1String("V")).toString(), QStringLiteral("yyMMddhhmm"));
+        if (dt.date().year() < 2000) {
+            dt = dt.addYears(100);
+        }
+        dt.setTimeSpec(Qt::UTC);
+        return dt;
+    }
+
+    // RCT2
+    if (const auto  rct2 = rct2Ticket(); rct2.isValid()) {
+        return QDateTime(rct2.firstDayOfValidity(), {0, 0, 0});
+    }
+
     return {};
 }
 
@@ -171,7 +187,17 @@ QDateTime Uic9183Parser::validUntil() const
         return QDateTime(b.orderBlock(0).validTo(), {23, 59, 59});
     }
 
-    // TODO RCT2 tickets?
+    // ÖBB vender block
+    if (const auto b = findBlock("118199"); !b.isNull()) {
+        const auto obj = QJsonDocument::fromJson(QByteArray::fromRawData(b.content(), b.contentSize())).object();
+        auto dt = QDateTime::fromString(obj.value(QLatin1String("B")).toString(), QStringLiteral("yyMMddhhmm"));
+        if (dt.date().year() < 2000) {
+            dt = dt.addYears(100);
+        }
+        dt.setTimeSpec(Qt::UTC);
+        return dt;
+    }
+
     return {};
 }
 
