@@ -38,6 +38,8 @@ class KITINERARY_EXPORT Uic9183Parser
     Q_PROPERTY(QString pnr READ pnr)
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString carrierId READ carrierId)
+    Q_PROPERTY(QDateTime validFrom READ validFrom)
+    Q_PROPERTY(QDateTime validUntil READ validUntil)
     Q_PROPERTY(KItinerary::Person person READ person)
     Q_PROPERTY(QString outboundDepartureStationId READ outboundDepartureStationId)
     Q_PROPERTY(QString outboundArrivalStationId READ outboundArrivalStationId)
@@ -69,6 +71,10 @@ public:
     QString name() const;
     /** The UIC carrier code. */
     QString carrierId() const;
+    /** Begin of validity. */
+    QDateTime validFrom() const;
+    /** End of validity. */
+    QDateTime validUntil() const;
     /** The person this ticket is issued to. */
     Person person() const;
 

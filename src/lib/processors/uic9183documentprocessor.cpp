@@ -146,6 +146,12 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     ticket.insert(QStringLiteral("issuedBy"), provider);
     ticket.insert(QStringLiteral("ticketNumber"), p.pnr());
     ticket.insert(QStringLiteral("underName"), JsonLdDocument::toJson(p.person()));
+    if (p.validFrom().isValid()) {
+        ticket.insert(QStringLiteral("validFrom"), JsonLdDocument::toJsonValue(p.validFrom()));
+    }
+    if (p.validUntil().isValid()) {
+        ticket.insert(QStringLiteral("validUntil"), JsonLdDocument::toJsonValue(p.validUntil()));
+    }
     node.addResult(QJsonArray({ticket}));
 }
 

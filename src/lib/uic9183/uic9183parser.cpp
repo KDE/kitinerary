@@ -146,6 +146,30 @@ QString Uic9183Parser::carrierId() const
     return findBlock<Uic9183Head>().issuerCompanyCodeString();
 }
 
+QDateTime Uic9183Parser::validFrom() const
+{
+    // DB vendor block
+    const auto b = findBlock<Vendor0080BLBlock>();
+    if (b.isValid() && b.orderBlockCount() == 1) {
+        return QDateTime(b.orderBlock(0).validFrom(), {0, 0, 0});
+    }
+
+    // TODO RCT2 tickets?
+    return {};
+}
+
+QDateTime Uic9183Parser::validUntil() const
+{
+    // DB vendor block
+    const auto b = findBlock<Vendor0080BLBlock>();
+    if (b.isValid() && b.orderBlockCount() == 1) {
+        return QDateTime(b.orderBlock(0).validTo(), {23, 59, 59});
+    }
+
+    // TODO RCT2 tickets?
+    return {};
+}
+
 Person Uic9183Parser::person() const
 {
     // Deutsche Bahn vendor block
