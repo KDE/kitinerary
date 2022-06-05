@@ -14,6 +14,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QObject>
+#include <QProcess>
 #include <QTest>
 
 using namespace KItinerary;
@@ -63,6 +64,15 @@ private Q_SLOTS:
         const auto resJson = JsonLdDocument::toJson(QVector<QVariant>({QVariant::fromValue(rct2)}));
         if (refArray != resJson) {
             qWarning().noquote() << QJsonDocument(resJson).toJson();
+            QFile failFile(refFile + QLatin1String(".fail"));
+            QVERIFY(failFile.open(QFile::WriteOnly));
+            failFile.write(QJsonDocument(resJson).toJson());
+            failFile.close();
+
+            QProcess proc;
+            proc.setProcessChannelMode(QProcess::ForwardedChannels);
+            proc.start(QStringLiteral("diff"), {QStringLiteral("-u"), refFile, failFile.fileName()});
+            QVERIFY(proc.waitForFinished());
         }
         QCOMPARE(resJson, refArray);
     }
