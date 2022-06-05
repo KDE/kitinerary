@@ -251,6 +251,27 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         return isSameTouristAttractionVisit(l, r);
     }
 
+    // top-level tickets
+    if (JsonLd::isA<Ticket>(lhs)) {
+        const auto lhsTicket = lhs.value<Ticket>();
+        const auto rhsTicket = rhs.value<Ticket>();
+
+        // underName either matches or is not set
+        const auto lhsUN = lhsTicket.underName();
+        const auto rhsUN = rhsTicket.underName();
+        if (!lhsUN.name().isEmpty() && !rhsUN.name().isEmpty() &&  !isSamePerson(lhsUN, rhsUN)) {
+            return false;
+        }
+
+        if (conflictIfPresent(lhsTicket.ticketNumber(), rhsTicket.ticketNumber())
+         || conflictIfPresent(lhsTicket.name(), rhsTicket.name())
+         || conflictIfPresent(lhsTicket.validFrom(), rhsTicket.validFrom())
+         || !isSameTicketToken(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())
+        ) {
+            return false;
+        }
+    }
+
     return true;
 }
 
