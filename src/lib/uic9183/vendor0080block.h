@@ -80,7 +80,7 @@ public:
     int orderBlockCount() const;
 
     /** Order block at index @p i. */
-    Vendor0080BLOrderBlock orderBlock(int i) const;
+    Q_INVOKABLE KItinerary::Vendor0080BLOrderBlock orderBlock(int i) const;
 
     /** First S-block, for iterating. */
     Vendor0080BLSubBlock firstBlock() const;

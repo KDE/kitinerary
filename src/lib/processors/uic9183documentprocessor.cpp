@@ -11,6 +11,7 @@
 #include <KItinerary/Uic9183Parser>
 #include <KItinerary/Rct2Ticket>
 #include <uic9183/uic9183head.h>
+#include <uic9183/vendor0080block.h>
 
 #include <KLocalizedString>
 
@@ -19,6 +20,11 @@
 #include <QJsonObject>
 
 using namespace KItinerary;
+
+Uic9183DocumentProcessor::Uic9183DocumentProcessor()
+{
+    qRegisterMetaType<KItinerary::Vendor0080BLOrderBlock>();
+}
 
 bool Uic9183DocumentProcessor::canHandleData(const QByteArray &encodedData, [[maybe_unused]] QStringView fileName) const
 {

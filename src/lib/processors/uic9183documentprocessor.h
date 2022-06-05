@@ -14,6 +14,7 @@ namespace KItinerary {
 class Uic9183DocumentProcessor : public ExtractorDocumentProcessor
 {
 public:
+    explicit Uic9183DocumentProcessor();
     bool canHandleData(const QByteArray &encodedData, QStringView fileName) const override;
     ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
     void expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const override;
