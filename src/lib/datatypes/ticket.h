@@ -56,6 +56,10 @@ class KITINERARY_EXPORT Ticket
 
     KITINERARY_PROPERTY(KItinerary::Person, underName, setUnderName)
 
+    /** Non-standard extension for ticket validity time ranges. */
+    KITINERARY_PROPERTY(QDateTime, validFrom, setValidFrom)
+    KITINERARY_PROPERTY(QDateTime, validUntil, setValidUntil)
+
 public:
     /** The type of content in the ticketToken property.
      *  @deprecated Use Token::TokenType instead.

@@ -39,6 +39,10 @@ class KITINERARY_EXPORT ProgramMembership
      */
     Q_PROPERTY(QVariant tokenData READ tokenData STORED false)
 
+    /** Non-standard extension for ticket validity time ranges. */
+    KITINERARY_PROPERTY(QDateTime, validFrom, setValidFrom)
+    KITINERARY_PROPERTY(QDateTime, validUntil, setValidUntil)
+
 public:
     Token::TokenType tokenType() const;
     QVariant tokenData() const;

@@ -17,6 +17,8 @@ public:
     QString membershipNumber;
     Person member;
     QString token;
+    QDateTime validFrom;
+    QDateTime validUntil;
 };
 
 KITINERARY_MAKE_SIMPLE_CLASS(ProgramMembership)
@@ -24,6 +26,8 @@ KITINERARY_MAKE_PROPERTY(ProgramMembership, QString, programName, setProgramName
 KITINERARY_MAKE_PROPERTY(ProgramMembership, QString, membershipNumber, setMembershipNumber)
 KITINERARY_MAKE_PROPERTY(ProgramMembership, Person, member, setMember)
 KITINERARY_MAKE_PROPERTY(ProgramMembership, QString, token, setToken)
+KITINERARY_MAKE_PROPERTY(ProgramMembership, QDateTime, validFrom, setValidFrom)
+KITINERARY_MAKE_PROPERTY(ProgramMembership, QDateTime, validUntil, setValidUntil)
 KITINERARY_MAKE_OPERATOR(ProgramMembership)
 
 }
