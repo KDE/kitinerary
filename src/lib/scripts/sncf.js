@@ -507,6 +507,8 @@ function parseSncfCartePdf(pdf, node, barcode) {
     carte.member = JsonLd.newObject("Person");
     carte.member.familyName = text.match(/Nom\s*:\s*(.*)/)[1];
     carte.member.givenName = text.match(/Prénom\s*:\s*(.*)/)[1];
-    // TODO validity period, once the data model supports that
+    const validity = text.match(/Du\s+(\d{2}\/\d{2}\/\d{4})\s+au\s+(\d{2}\/\d{2}\/\d{4})/);
+    carte.validFrom = JsonLd.toDateTime(validity[1], 'dd/MM/yyyy', 'fr');
+    carte.validTo = JsonLd.toDateTime(validity[2] + ' 23:59:59', 'dd/MM/yyyy hh:mm:ss', 'fr');
     return carte;
 }
