@@ -276,5 +276,7 @@ function parseBahncard(code, node) {
     bc.membershipNumber = code.ticketLayout.text(14, 11, 16, 1);
     bc.member = JsonLd.toJson(code.person);
     bc.token = 'aztecbin:' + ByteArray.toBase64(code.rawData);
+    bc.validFrom = JsonLd.readQDateTime(code, 'validFrom');
+    bc.validUntil = JsonLd.readQDateTime(code, 'validUntil');
     return bc.programName != undefined ? bc : undefined;
 }
