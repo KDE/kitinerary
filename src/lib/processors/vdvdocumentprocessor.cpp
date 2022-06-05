@@ -40,9 +40,6 @@ void VdvDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
 {
     const auto vdv = node.content<VdvTicket>();
 
-    QJsonObject trip;
-    trip.insert(QStringLiteral("@type"), QLatin1String("TrainTrip"));
-    trip.insert(QStringLiteral("departureDay"), vdv.beginDateTime().date().toString(Qt::ISODate));
     QJsonObject seat;
     seat.insert(QStringLiteral("@type"), QLatin1String("Seat"));
     switch (vdv.serviceClass()) {
@@ -63,13 +60,12 @@ void VdvDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
     ticket.insert(QStringLiteral("ticketedSeat"), seat);
     if (vdv.serviceClass() == VdvTicket::FirstClassUpgrade) {
         ticket.insert(QStringLiteral("name"), i18n("Upgrade"));
+    } else {
+        ticket.insert(QStringLiteral("name"), i18n("Ticket"));
     }
-
-    QJsonObject res;
-    res.insert(QStringLiteral("@type"), QLatin1String("TrainReservation"));
-    res.insert(QStringLiteral("reservationFor"), trip);
-    res.insert(QStringLiteral("reservationNumber"), vdv.ticketNumber());
-    res.insert(QStringLiteral("reservedTicket"), ticket);
-    res.insert(QStringLiteral("underName"), JsonLdDocument::toJson(vdv.person()));
-    node.addResult(QJsonArray({res}));
+    ticket.insert(QStringLiteral("ticketNumber"), vdv.ticketNumber());
+    ticket.insert(QStringLiteral("validFrom"), JsonLdDocument::toJsonValue(vdv.beginDateTime()));
+    ticket.insert(QStringLiteral("validUntil"), JsonLdDocument::toJsonValue(vdv.endDateTime()));
+    ticket.insert(QStringLiteral("underName"), JsonLdDocument::toJson(vdv.person()));
+    node.addResult(QJsonArray({ticket}));
 }
