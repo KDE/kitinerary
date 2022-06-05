@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "issuerId",
+            "match": "6385",
+            "mimeType": "internal/vdv",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdfTicket",
+    "mimeType": "application/pdf",
+    "script": "bvg.js"
+}
