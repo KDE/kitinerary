@@ -13,6 +13,7 @@
   <name xml:lang="ca-valencia">Extractor de KItinerary per a la llínea d'ordres</name>
   <name xml:lang="cs">Extraktor v příkazové řádce pro KItinerary</name>
   <name xml:lang="da">KItinerary kommandolinjeudtrækker</name>
+  <name xml:lang="de">KItinerary-Extraktor für die Befehlszeile</name>
   <name xml:lang="en-GB">KItinerary Command Line Extractor</name>
   <name xml:lang="es">Extractor de línea de órdenes de KItinerary</name>
   <name xml:lang="et">KItinerary käsurea hankija</name>
@@ -43,6 +44,7 @@
   <summary xml:lang="ca-valencia">Extractor de les dades de reserves mitjançant la llínea d'ordres.</summary>
   <summary xml:lang="cs">Extraktor dat rezervací v příkazové řádce.</summary>
   <summary xml:lang="da">Kommandolinjeværktøj til at udtrække reservationsdata.</summary>
+  <summary xml:lang="de">Reservierungsdaten-Extraktor für die Befehlszeile.</summary>
   <summary xml:lang="en-GB">Command line reservation data extractor.</summary>
   <summary xml:lang="es">Extractor de línea de órdenes de reserva de datos.</summary>
   <summary xml:lang="et">Käsurea reserveerimisandmete hankija.</summary>
@@ -75,6 +77,7 @@
     <p xml:lang="ca">Extractor de les dades d'itineraris mitjançant la línia d'ordres, per a la integració en aplicacions de tercers.</p>
     <p xml:lang="ca-valencia">Extractor de les dades d'itineraris mitjançant la llínea d'ordres, per a la integració en aplicacions de tercers.</p>
     <p xml:lang="da">Kommandolinjeværktøj til at udtrække rejseplan-data, til integration med tredjepartsprogrammer.</p>
+    <p xml:lang="de">Reisedaten-Extraktor für die Befehlszeile zur Integration in Drittanwendungen.</p>
     <p xml:lang="en-GB">Command line extractor for itinerary data, for integrating into 3rd party applications.</p>
     <p xml:lang="es">Extractor de línea de órdenes para datos de itinerario. para integración en aplicaciones de terceros.</p>
     <p xml:lang="et">Käsurea reisiandmete hankija, mida lõimida kolmanda poole rakendustega.</p>
