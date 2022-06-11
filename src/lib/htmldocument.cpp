@@ -10,7 +10,7 @@
 #include <QDebug>
 #include <QVariant>
 
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
 #include <libxml/HTMLparser.h>
 #include <libxml/xpath.h>
 #endif
@@ -20,7 +20,7 @@ using namespace KItinerary;
 namespace KItinerary {
 class HtmlDocumentPrivate {
 public:
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     ~HtmlDocumentPrivate() {
         xmlFreeDoc(m_doc);
     }
@@ -37,7 +37,7 @@ HtmlElement::HtmlElement()
 
 HtmlElement::~HtmlElement() = default;
 
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
 HtmlElement::HtmlElement(xmlNode *dd)
     : d(dd)
 {
@@ -59,7 +59,7 @@ bool HtmlElement::isNull() const
 
 QString HtmlElement::name() const
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (d) {
         return QString::fromUtf8(reinterpret_cast<const char*>(d->name));
     }
@@ -69,7 +69,7 @@ QString HtmlElement::name() const
 
 QString HtmlElement::attribute(const QString &attr) const
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (d) {
         const auto val = std::unique_ptr<xmlChar, decltype(xmlFree)>(xmlGetProp(d, reinterpret_cast<const xmlChar*>(attr.toUtf8().constData())), xmlFree);
         return QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
@@ -82,7 +82,7 @@ QString HtmlElement::attribute(const QString &attr) const
 
 HtmlElement HtmlElement::parent() const
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (d && d->parent && d->parent->type == XML_ELEMENT_NODE) {
         return HtmlElement(d->parent);
     }
@@ -92,7 +92,7 @@ HtmlElement HtmlElement::parent() const
 
 HtmlElement HtmlElement::firstChild() const
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (d) {
         return HtmlElement(xmlFirstElementChild(d));
     }
@@ -102,7 +102,7 @@ HtmlElement HtmlElement::firstChild() const
 
 HtmlElement HtmlElement::nextSibling() const
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (d) {
         return HtmlElement(xmlNextElementSibling(d));
     }
@@ -110,7 +110,7 @@ HtmlElement HtmlElement::nextSibling() const
     return {};
 }
 
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
 static QString normalizeSpaces(const QString &in)
 {
     QString out;
@@ -151,7 +151,7 @@ static QString normalizeSpaces(const QString &in)
 
 QString HtmlElement::content() const
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (!d) {
         return {};
     }
@@ -187,7 +187,7 @@ QString HtmlElement::content() const
     return {};
 }
 
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
 static void recursiveContent(_xmlNode *node, QString &s)
 {
     switch (node->type) {
@@ -229,7 +229,7 @@ static void recursiveContent(_xmlNode *node, QString &s)
 
 QString HtmlElement::recursiveContent() const
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (!d) {
         return {};
     }
@@ -244,7 +244,7 @@ QString HtmlElement::recursiveContent() const
 
 QVariant HtmlElement::eval(const QString &xpath) const
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (!d) {
         return {};
     }
@@ -289,7 +289,7 @@ QVariant HtmlElement::eval(const QString &xpath) const
 
 bool HtmlElement::hasAttribute(const QString& attr) const
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (!d) {
         return false;
     }
@@ -311,7 +311,7 @@ bool HtmlElement::hasAttribute(const QString& attr) const
 QStringList HtmlElement::attributes() const
 {
     QStringList l;
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (!d) {
         return l;
     }
@@ -334,7 +334,7 @@ bool HtmlElement::operator==(const HtmlElement &other) const
 
 HtmlElement HtmlDocument::root() const
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     if (!d->m_doc) {
         return {};
     }
@@ -351,7 +351,7 @@ QVariant HtmlDocument::eval(const QString &xpath) const
 
 HtmlDocument* HtmlDocument::fromData(const QByteArray &data, QObject *parent)
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     auto tree = htmlReadMemory(data.constData(), data.size(), nullptr, nullptr, HTML_PARSE_RECOVER | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING | HTML_PARSE_NOBLANKS | HTML_PARSE_NONET | HTML_PARSE_COMPACT);
     if (!tree) {
         return nullptr;
@@ -369,7 +369,7 @@ HtmlDocument* HtmlDocument::fromData(const QByteArray &data, QObject *parent)
 
 HtmlDocument* HtmlDocument::fromString(const QString &data, QObject *parent)
 {
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
     const auto utf8Data = data.toUtf8();
     auto tree = htmlReadMemory(utf8Data.constData(), utf8Data.size(), nullptr, "utf-8", HTML_PARSE_RECOVER | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING | HTML_PARSE_NOBLANKS | HTML_PARSE_NONET | HTML_PARSE_COMPACT);
     if (!tree) {

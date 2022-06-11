@@ -7,7 +7,7 @@
 #pragma once
 
 #include "config-kitinerary.h"
-#if defined(HAVE_ZXING) && !defined(ZXING_USE_READBARCODE)
+#if HAVE_ZXING && !ZXING_USE_READBARCODE
 
 #include <QImage>
 

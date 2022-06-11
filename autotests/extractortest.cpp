@@ -111,7 +111,7 @@ private Q_SLOTS:
             QSKIP("nothing extracted");
             return;
         }
-#ifndef HAVE_ZXING
+#if !HAVE_ZXING
         if (jsonResult.isEmpty()) {
             QSKIP("nothing extracted, but ZXing is missing!");
             return;

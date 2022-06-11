@@ -11,7 +11,7 @@
 
 #include <KItinerary/ExtractorRepository>
 
-#ifdef HAVE_KCAL
+#if HAVE_KCAL
 #include <kcalendarcore_version.h>
 #endif
 
@@ -26,7 +26,7 @@ QString ExtractorCapabilities::capabilitiesString()
         "Qt version          : " QT_VERSION_STR "\n"
 
         "HTML support        : "
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
               "libxml2"
 #else
               "not available"
@@ -36,7 +36,7 @@ QString ExtractorCapabilities::capabilitiesString()
         "PDF support         : poppler (" KPOPPLER_VERSION_STRING ")\n"
 
         "iCal support        : "
-#ifdef HAVE_KCAL
+#if HAVE_KCAL
             "kcal (" KCALENDARCORE_VERSION_STRING ")"
 #else
             "not available"
@@ -44,7 +44,7 @@ QString ExtractorCapabilities::capabilitiesString()
         "\n"
 
         "Barcode decoder     : "
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
             "zxing (" ZXING_VERSION_STRING ")"
 #else
             "not available"
@@ -52,7 +52,7 @@ QString ExtractorCapabilities::capabilitiesString()
         "\n"
 
         "Phone number decoder: "
-#ifdef HAVE_PHONENUMBER
+#if HAVE_PHONENUMBER
             "libphonenumber"
 #else
             "not available"

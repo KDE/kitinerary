@@ -56,7 +56,7 @@ private Q_SLOTS:
         QTest::newRow("text/plain") << s(SOURCE_DIR "/scriptenginedata/plain-text.txt") << s(SOURCE_DIR "/scriptenginedata/plain-text.txt.json");
         QTest::newRow("pkpass") << s(SOURCE_DIR "/pkpassdata/swiss.pkpass") << s(SOURCE_DIR "/scriptenginedata/swiss.pkpass.json");
         QTest::newRow("IATA BCBP PDF") << s(SOURCE_DIR "/extractordata/synthetic/iata-bcbp-demo.pdf")
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
             << s(SOURCE_DIR "/scriptenginedata/iata-bcbp-demo.pdf.json");
 #else
             << s(SOURCE_DIR "/scriptenginedata/iata-bcbp-demo.pdf-no-zxing.json");

@@ -20,7 +20,7 @@ private Q_SLOTS:
     {
         QFile f(QStringLiteral(SOURCE_DIR "/structureddata/os-two-leg-invalid-microdata.html"));
         QVERIFY(f.open(QFile::ReadOnly));
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
         std::unique_ptr<HtmlDocument> doc(HtmlDocument::fromData(f.readAll()));
         QVERIFY(doc);
         auto elem = doc->root();
@@ -64,7 +64,7 @@ private Q_SLOTS:
     {
         QFile f(QStringLiteral(SOURCE_DIR "/structureddata/hotel-json-ld-fallback.html"));
         QVERIFY(f.open(QFile::ReadOnly));
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
         std::unique_ptr<HtmlDocument> doc(HtmlDocument::fromData(f.readAll()));
         QVERIFY(doc);
         auto elem = doc->root();
@@ -89,7 +89,7 @@ private Q_SLOTS:
     {
         QFile f(QStringLiteral(SOURCE_DIR "/misc/test.html"));
         QVERIFY(f.open(QFile::ReadOnly));
-#ifdef HAVE_LIBXML2
+#if HAVE_LIBXML2
         std::unique_ptr<HtmlDocument> doc(HtmlDocument::fromData(f.readAll().replace("<CR>", "\r")));
         QVERIFY(doc);
         auto elem = doc->root();

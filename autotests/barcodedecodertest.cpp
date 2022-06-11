@@ -43,7 +43,7 @@ private Q_SLOTS:
         QVERIFY(!img.isNull());
 
         BarcodeDecoder decoder;
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::PDF417), QStringLiteral("PDF417 is a stacked linear barcode symbol format used in a variety of applications, primarily transport, identification cards, and inventory management."));
 #endif
     }
@@ -53,18 +53,18 @@ private Q_SLOTS:
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/aztec.png"));
         QVERIFY(!img.isNull());
         BarcodeDecoder decoder;
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
 #endif
         img.load(QStringLiteral(SOURCE_DIR "/barcodes/aztec-partial-quiet-zone.png"));
         QVERIFY(!img.isNull());
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("KF5::Prison - The KDE barcode generation framework."));
 #endif
 
         img.load(QStringLiteral(SOURCE_DIR "/barcodes/uic918-3star.png"));
         QVERIFY(!img.isNull());
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
         const auto b = decoder.decodeBinary(img, BarcodeDecoder::Aztec);
         QCOMPARE(b.size(), 351);
         QVERIFY(b.startsWith("OTI010080000020"));
@@ -91,7 +91,7 @@ private Q_SLOTS:
         QVERIFY(!img.isNull());
 
         BarcodeDecoder decoder;
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::QRCode), result);
 #endif
 
@@ -135,7 +135,7 @@ private Q_SLOTS:
         BarcodeDecoder decoder;
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/aztec.png"));
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::PDF417), QString());
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::AnySquare), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
@@ -154,7 +154,7 @@ private Q_SLOTS:
     {
         BarcodeDecoder decoder;
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/aztec.png"));
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
         QCOMPARE(decoder.decodeBinary(img, BarcodeDecoder::Any), QByteArray("This is an example Aztec symbol for Wikipedia."));
 
@@ -185,7 +185,7 @@ private Q_SLOTS:
         QVERIFY(!img.isNull());
 
         BarcodeDecoder decoder;
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any2D), QString());
         QCOMPARE(decoder.decodeString(img, type), QLatin1String("123456789"));
         QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any1D), QLatin1String("123456789"));

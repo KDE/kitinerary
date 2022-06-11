@@ -45,7 +45,7 @@
 #include <QTimeZone>
 #include <QUrl>
 
-#ifdef HAVE_PHONENUMBER
+#if HAVE_PHONENUMBER
 #include <phonenumbers/phonenumberutil.h>
 #endif
 
@@ -510,7 +510,7 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
     addr.setAddressLocality(addr.addressLocality().simplified());
     addr.setAddressRegion(addr.addressRegion().simplified());
 
-#ifdef HAVE_PHONENUMBER
+#if HAVE_PHONENUMBER
     // recover country from phone number, if we have that
     if (!phoneNumber.isEmpty() && addr.addressCountry().size() != 2) {
         const auto phoneStr = phoneNumber.toStdString();
@@ -539,7 +539,7 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
 
 QString ExtractorPostprocessorPrivate::processPhoneNumber(const QString &phoneNumber, const PostalAddress &addr)
 {
-#ifdef HAVE_PHONENUMBER
+#if HAVE_PHONENUMBER
     // or complete the phone number if we know the country
     if (!phoneNumber.isEmpty() && addr.addressCountry().size() == 2) {
         auto phoneStr = phoneNumber.toStdString();

@@ -5,7 +5,7 @@
 */
 
 #include "qimagepurebinarizer.h"
-#if defined(HAVE_ZXING) && !defined(ZXING_USE_READBARCODE)
+#if HAVE_ZXING && !ZXING_USE_READBARCODE
 
 #include <ZXing/BitArray.h>
 

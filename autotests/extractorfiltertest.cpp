@@ -135,7 +135,7 @@ private Q_SLOTS:
         const auto root = engine.rootDocumentNode();
         QVERIFY(!root.isNull());
 
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
         ExtractorFilter filter;
         filter.setMimeType(s("internal/iata-bcbp"));
         filter.setScope(ExtractorFilter::Descendants);

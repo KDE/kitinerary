@@ -13,7 +13,7 @@
 #include <KItinerary/ExtractorFilter>
 #include <KItinerary/ExtractorResult>
 
-#ifdef HAVE_KCAL
+#if HAVE_KCAL
 #include <KCalendarCore/ICalFormat>
 #include <KCalendarCore/MemoryCalendar>
 #endif
@@ -52,7 +52,7 @@ bool IcalCalendarProcessor::canHandleData(const QByteArray &encodedData, QString
 
 ExtractorDocumentNode IcalCalendarProcessor::createNodeFromData(const QByteArray &encodedData) const
 {
-#ifdef HAVE_KCAL
+#if HAVE_KCAL
     KCalendarCore::Calendar::Ptr calendar(new KCalendarCore::MemoryCalendar(QTimeZone::systemTimeZone()));
     KCalendarCore::ICalFormat format;
     if (format.fromRawString(calendar, encodedData)) {
@@ -69,7 +69,7 @@ ExtractorDocumentNode IcalCalendarProcessor::createNodeFromData(const QByteArray
 
 void IcalCalendarProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
 {
-#ifdef HAVE_KCAL
+#if HAVE_KCAL
     const auto cal = node.content<KCalendarCore::Calendar::Ptr>();
     for (const auto &event : cal->events()) {
         auto child = engine->documentNodeFactory()->createNode(QVariant::fromValue(event), u"internal/event");
@@ -81,7 +81,7 @@ void IcalCalendarProcessor::expandNode(ExtractorDocumentNode &node, const Extrac
 
 bool IcalEventProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
 {
-#ifdef HAVE_KCAL
+#if HAVE_KCAL
     const auto event = node.content<KCalCore::Event::Ptr>();
     return matchesGadget(filter, event.data());
 #else
@@ -91,7 +91,7 @@ bool IcalEventProcessor::matches(const ExtractorFilter &filter, const ExtractorD
 
 void IcalEventProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
-#ifdef HAVE_KCAL
+#if HAVE_KCAL
     const auto event = node.content<KCalCore::Event::Ptr>();
     const auto data = event->customProperty("KITINERARY", "RESERVATION");
     if (!data.isEmpty()) {
@@ -102,7 +102,7 @@ void IcalEventProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]
 
 QJSValue IcalEventProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const
 {
-#ifdef HAVE_KCAL
+#if HAVE_KCAL
     return engine->toScriptValue(*node.content<KCalendarCore::Event::Ptr>().data());
 #else
     return {};

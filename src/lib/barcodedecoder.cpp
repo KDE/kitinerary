@@ -14,8 +14,8 @@
 #include <QImage>
 #include <QString>
 
-#ifdef HAVE_ZXING
-#ifdef ZXING_USE_READBARCODE
+#if HAVE_ZXING
+#if ZXING_USE_READBARCODE
 #include <ZXing/ReadBarcode.h>
 #else
 #include <ZXing/DecodeHints.h>
@@ -137,7 +137,7 @@ bool BarcodeDecoder::maybeBarcode(int width, int height, BarcodeDecoder::Barcode
     return isPlausibleSize(width, height, hint) && isPlausibleAspectRatio(width, height, hint);
 }
 
-#ifdef HAVE_ZXING
+#if HAVE_ZXING
 struct {
     BarcodeDecoder::BarcodeType type;
     ZXing::BarcodeFormat zxingType;
@@ -191,7 +191,7 @@ BarcodeDecoder::BarcodeType formatToType(ZXing::BarcodeFormat format)
     return BarcodeDecoder::None;
 }
 
-#ifdef ZXING_USE_READBARCODE
+#if ZXING_USE_READBARCODE
 static ZXing::ImageFormat zxingImageFormat(QImage::Format format)
 {
     switch (format) {
@@ -230,7 +230,7 @@ void BarcodeDecoder::decodeZxing(const QImage &img, BarcodeDecoder::BarcodeTypes
     hints.setPossibleFormats(typeToFormats(format));
 #endif
 
-#ifdef ZXING_USE_READBARCODE
+#if ZXING_USE_READBARCODE
     hints.setBinarizer(ZXing::Binarizer::FixedThreshold);
     hints.setIsPure((format & BarcodeDecoder::IgnoreAspectRatio) == 0);
 
@@ -293,7 +293,7 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
     if (aspectRatio > PDF417_MIN_ASPECT && aspectRatio < PDF417_MAX_ASPECT && (hint  & PDF417) && (result.negative & hint & PDF417) != (hint & PDF417)) {
         auto normalizedImg = img;
         // newer ZXing versions handle rotated/flipped codes themselves correctly
-#ifndef ZXING_USE_READBARCODE
+#if !ZXING_USE_READBARCODE
         if (normalizedImg.width() < normalizedImg.height()) {
             QTransform tf;
             tf.rotate(-90);
@@ -302,7 +302,7 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
 #endif
 
         decodeZxing(normalizedImg, PDF417, result);
-#ifndef ZXING_USE_READBARCODE
+#if !ZXING_USE_READBARCODE
         if (result.positive & PDF417) {
             return;
         }

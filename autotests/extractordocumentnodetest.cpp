@@ -83,7 +83,7 @@ private Q_SLOTS:
         QCOMPARE(c1.location().toInt(), 0);
 
         c1.processor()->expandNode(c1, &engine);
-#ifndef HAVE_ZXING
+#if !HAVE_ZXING
         QSKIP("No ZXing support");
 #endif
         QCOMPARE(c1.childNodes().size(), 1);
@@ -113,7 +113,7 @@ private Q_SLOTS:
         QCOMPARE(c2.location().toInt(), 1);
 
         c2.processor()->expandNode(c2, &engine);
-#ifndef HAVE_ZXING
+#if !HAVE_ZXING
         QSKIP("No ZXing support");
 #endif
         QCOMPARE(c2.childNodes().size(), 1);
