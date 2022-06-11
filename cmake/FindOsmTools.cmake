@@ -32,7 +32,7 @@ endif()
 
 set_package_properties(OsmTools PROPERTIES
     URL "https://gitlab.com/osm-c-tools/osmctools"
-    DESCRIPTION "Tols to convert, filter and update OpenStreetMap data files"
+    DESCRIPTION "Tools to convert, filter and update OpenStreetMap data files"
 )
 
 mark_as_advanced(OSMCONVERT_EXECUTABLE OSMFILTER_EXECUTABLE OSMCONVERT_EXECUTABLE WGET_EXECUTABLE)
