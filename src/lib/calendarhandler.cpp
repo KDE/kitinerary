@@ -64,7 +64,18 @@ static void fillRentalCarReservation(const RentalCarReservation &reservation, co
 static void fillTaxiReservation(const TaxiReservation &reservation, const KCalendarCore::Event::Ptr &event);
 #endif
 
-QVector<QSharedPointer<KCalendarCore::Event> > CalendarHandler::findEvents(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation)
+QVector<QSharedPointer<KCalendarCore::Event>> CalendarHandler::findEvents(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation)
+{
+#if HAVE_KCAL
+    return findEvents(calendar.data(), reservation);
+#else
+    Q_UNUSED(calendar)
+    Q_UNUSED(reservation)
+    return {};
+#endif
+}
+
+QVector<QSharedPointer<KCalendarCore::Event>> CalendarHandler::findEvents(KCalendarCore::Calendar *calendar, const QVariant &reservation)
 {
 #if HAVE_KCAL
     if (!(JsonLd::canConvert<Reservation>(reservation) || JsonLd::canConvert<KItinerary::Event>(reservation)) || !calendar) {

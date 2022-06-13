@@ -32,6 +32,7 @@ namespace CalendarHandler
      *  (e.g. all trip segments covered by the same reservation number).
      *  @since 20.08
      */
+    KITINERARY_EXPORT QVector<QSharedPointer<KCalendarCore::Event>> findEvents(KCalendarCore::Calendar *calendar, const QVariant &reservation);
     KITINERARY_EXPORT QVector<QSharedPointer<KCalendarCore::Event>> findEvents(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation);
 
     /** Attempts to find an event in @p calendar for @p reservation.
