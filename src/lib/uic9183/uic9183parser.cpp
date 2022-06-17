@@ -125,7 +125,8 @@ bool Uic9183Parser::isValid() const
 
 QString Uic9183Parser::pnr() const
 {
-    return findBlock<Uic9183Head>().ticketKey().left(6);
+    const auto key = findBlock<Uic9183Head>().ticketKey();
+    return key.startsWith(QLatin1Char(' ')) ? key.trimmed() : key.left(6);
 }
 
 QString Uic9183Parser::name() const
