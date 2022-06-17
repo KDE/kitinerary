@@ -26,11 +26,19 @@ class KITINERARY_EXPORT Rct2Ticket
     Q_PROPERTY(Type type READ type)
     Q_PROPERTY(QString title READ title)
     Q_PROPERTY(QString passengerName READ passengerName)
+
     Q_PROPERTY(QDateTime outboundDepartureTime READ outboundDepartureTime)
     Q_PROPERTY(QDateTime outboundArrivalTime READ outboundArrivalTime)
     Q_PROPERTY(QString outboundDepartureStation READ outboundDepartureStation)
     Q_PROPERTY(QString outboundArrivalStation READ outboundArrivalStation)
     Q_PROPERTY(QString outboundClass READ outboundClass)
+
+    Q_PROPERTY(QDateTime returnDepartureTime READ returnDepartureTime)
+    Q_PROPERTY(QDateTime returnArrivalTime READ returnArrivalTime)
+    Q_PROPERTY(QString returnDepartureStation READ returnDepartureStation)
+    Q_PROPERTY(QString returnArrivalStation READ returnArrivalStation)
+    Q_PROPERTY(QString returnClass READ returnClass)
+
     Q_PROPERTY(QString trainNumber READ trainNumber)
     Q_PROPERTY(QString coachNumber READ coachNumber)
     Q_PROPERTY(QString seatNumber READ seatNumber)
@@ -82,6 +90,17 @@ public:
     QString outboundArrivalStation() const;
     /** Class of the outbound segment. */
     QString outboundClass() const;
+
+    /** Departure time of the return segment, if present. */
+    QDateTime returnDepartureTime() const;
+    /** Arrival time of the return segment, if present. */
+    QDateTime returnArrivalTime() const;
+    /** Departure station of the return segment, if present. */
+    QString returnDepartureStation() const;
+    /** Arrival station of the return segment, if present. */
+    QString returnArrivalStation() const;
+    /** Class of the return segment, if present. */
+    QString returnClass() const;
 
     /** Train number (for reservation tickets). */
     QString trainNumber() const;

@@ -190,27 +190,52 @@ QDateTime Rct2Ticket::outboundArrivalTime() const
     return d->parseTime(d->layout.text(6, 52, 5, 1).trimmed(), d->layout.text(6, 58, 5, 1).trimmed());
 }
 
-QString Rct2Ticket::outboundDepartureStation() const
+static QString rct2Clean(const QString &s)
 {
-    const auto s = d->layout.text(6, 13, 17, 1).trimmed();
     if (s == QLatin1Char('*')) { // * is used to mark unset fields
         return {};
     }
     return s;
+}
+
+QString Rct2Ticket::outboundDepartureStation() const
+{
+    return rct2Clean(d->layout.text(6, 13, 17, 1).trimmed());
 }
 
 QString Rct2Ticket::outboundArrivalStation() const
 {
-    const auto s = d->layout.text(6, 34, 17, 1).trimmed();
-    if (s == QLatin1Char('*')) { // * is used to mark unset fields
-        return {};
-    }
-    return s;
+    return rct2Clean(d->layout.text(6, 34, 17, 1).trimmed());
 }
 
 QString Rct2Ticket::outboundClass() const
 {
-    return d->layout.text(6, 66, 5, 1).trimmed();
+    return rct2Clean(d->layout.text(6, 66, 5, 1).trimmed());
+}
+
+QDateTime Rct2Ticket::returnDepartureTime() const
+{
+    return d->parseTime(d->layout.text(7, 1, 5, 1).trimmed(), d->layout.text(7, 7, 5, 1).trimmed());
+}
+
+QDateTime Rct2Ticket::returnArrivalTime() const
+{
+    return d->parseTime(d->layout.text(7, 52, 5, 1).trimmed(), d->layout.text(7, 58, 5, 1).trimmed());
+}
+
+QString Rct2Ticket::returnDepartureStation() const
+{
+    return rct2Clean(d->layout.text(7, 13, 17, 1).trimmed());
+}
+
+QString Rct2Ticket::returnArrivalStation() const
+{
+    return rct2Clean(d->layout.text(7, 34, 17, 1).trimmed());
+}
+
+QString Rct2Ticket::returnClass() const
+{
+    return rct2Clean(d->layout.text(7, 66, 5, 1).trimmed());
 }
 
 QString Rct2Ticket::trainNumber() const
