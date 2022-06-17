@@ -136,6 +136,7 @@ static constexpr const struct {
     { "billet", Rct2Ticket::Transport },
     { "fahrkarte", Rct2Ticket::Transport },
     { "fahrschein", Rct2Ticket::Transport },
+    { "cestovny listok", Rct2Ticket::Transport },
     { "reservation", Rct2Ticket::Reservation },
     { "reservierung", Rct2Ticket::Reservation },
 };
