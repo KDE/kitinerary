@@ -55,12 +55,22 @@ void Uic9183DocumentProcessor::expandNode(ExtractorDocumentNode &node, [[maybe_u
     }
 }
 
+static QJsonObject makeStation(const QString &name)
+{
+    QJsonObject station;
+    station.insert(QStringLiteral("@type"), QLatin1String("TrainStation"));
+    station.insert(QStringLiteral("name"), name);
+    return station;
+}
+
 void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     const auto p = node.content<Uic9183Parser>();
 
     QJsonObject trip;
     trip.insert(QLatin1String("@type"), QLatin1String("TrainTrip"));
+    QJsonObject returnTrip;
+    returnTrip.insert(QLatin1String("@type"), QLatin1String("TrainTrip"));
     QJsonObject provider;
     provider.insert(QLatin1String("@type"), QLatin1String("Organization"));
     provider.insert(QLatin1String("identifier"), QJsonValue(QLatin1String("uic:") + p.carrierId()));
@@ -82,25 +92,34 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
             case Rct2Ticket::Transport:
             case Rct2Ticket::Upgrade:
             {
-                QJsonObject dep;
-                dep.insert(QStringLiteral("@type"), QLatin1String("TrainStation"));
-                dep.insert(QStringLiteral("name"), rct2.outboundDepartureStation());
-                trip.insert(QStringLiteral("departureStation"), dep);
-
-                QJsonObject arr;
-                arr.insert(QStringLiteral("@type"), QLatin1String("TrainStation"));
-                arr.insert(QStringLiteral("name"), rct2.outboundArrivalStation());
-                trip.insert(QStringLiteral("arrivalStation"), arr);
+                trip.insert(QStringLiteral("departureStation"), makeStation(rct2.outboundDepartureStation()));
+                trip.insert(QStringLiteral("arrivalStation"), makeStation(rct2.outboundArrivalStation()));
 
                 if (rct2.outboundDepartureTime().isValid()) {
-                    trip.insert(QStringLiteral("departureDay"), rct2.outboundDepartureTime().date().toString(Qt::ISODate));
+                    trip.insert(QStringLiteral("departureDay"),  JsonLdDocument::toJsonValue(rct2.outboundDepartureTime().date()));
                 } else {
-                    trip.insert(QStringLiteral("departureDay"), rct2.firstDayOfValidity().toString(Qt::ISODate));
+                    trip.insert(QStringLiteral("departureDay"),  JsonLdDocument::toJsonValue(rct2.firstDayOfValidity()));
                 }
 
                 if (rct2.outboundDepartureTime() != rct2.outboundArrivalTime()) {
-                    trip.insert(QStringLiteral("departureTime"), rct2.outboundDepartureTime().toString(Qt::ISODate));
-                    trip.insert(QStringLiteral("arrivalTime"), rct2.outboundArrivalTime().toString(Qt::ISODate));
+                    trip.insert(QStringLiteral("departureTime"),  JsonLdDocument::toJsonValue(rct2.outboundDepartureTime()));
+                    trip.insert(QStringLiteral("arrivalTime"),  JsonLdDocument::toJsonValue(rct2.outboundArrivalTime()));
+                }
+
+                if (rct2.type() == Rct2Ticket::Transport && !rct2.returnDepartureStation().isEmpty()) {
+                    returnTrip.insert(QStringLiteral("departureStation"), makeStation(rct2.returnDepartureStation()));
+                    returnTrip.insert(QStringLiteral("arrivalStation"), makeStation(rct2.returnArrivalStation()));
+
+                    if (rct2.returnDepartureTime().isValid()) {
+                        returnTrip.insert(QStringLiteral("departureDay"),  JsonLdDocument::toJsonValue(rct2.returnDepartureTime().date()));
+                    } else {
+                        returnTrip.insert(QStringLiteral("departureDay"),  JsonLdDocument::toJsonValue(rct2.firstDayOfValidity()));
+                    }
+
+                    if (rct2.returnDepartureTime() != rct2.returnArrivalTime()) {
+                        returnTrip.insert(QStringLiteral("departureTime"), JsonLdDocument::toJsonValue(rct2.returnDepartureTime()));
+                        returnTrip.insert(QStringLiteral("arrivalTime"), JsonLdDocument::toJsonValue(rct2.returnArrivalTime()));
+                    }
                 }
 
                 break;
@@ -131,13 +150,21 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     if (trip.size() > 1) {
         trip.insert(QLatin1String("provider"), provider);
 
+        QJsonArray results;
         QJsonObject res;
         res.insert(QStringLiteral("@type"), QLatin1String("TrainReservation"));
         res.insert(QStringLiteral("reservationFor"), trip);
         res.insert(QStringLiteral("reservationNumber"), p.pnr());
         res.insert(QStringLiteral("reservedTicket"), ticket);
         res.insert(QStringLiteral("underName"), JsonLdDocument::toJson(p.person()));
-        node.addResult(QJsonArray({res}));
+        results.push_back(res);
+
+        if (returnTrip.size() > 1) {
+            res.insert(QStringLiteral("reservationFor"), returnTrip);
+            results.push_back(res);
+        }
+
+        node.addResult(results);
         return;
     }
 
