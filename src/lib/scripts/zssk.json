@@ -1,12 +1,26 @@
-{
-    "filter": [
-        {
-            "match": "^\\x04\\x01",
-            "mimeType": "application/octet-stream",
-            "scope": "Current"
-        }
-    ],
-    "function": "parseDomesticBarcode",
-    "mimeType": "application/octet-stream",
-    "script": "zssk.js"
-}
+[
+    {
+        "filter": [
+            {
+                "match": "^\\x04\\x01",
+                "mimeType": "application/octet-stream",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseDomesticBarcode",
+        "mimeType": "application/octet-stream",
+        "script": "zssk.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^\\x04\\x01",
+                "mimeType": "application/octet-stream",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parseDomesticPdf",
+        "mimeType": "application/pdf",
+        "script": "zssk.js"
+    }
+]
