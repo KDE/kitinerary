@@ -159,5 +159,7 @@
         <file>vr.fi.js</file>
         <file>vueling.json</file>
         <file>vueling.js</file>
+        <file>zssk.json</file>
+        <file>zssk.js</file>
     </qresource>
 </RCC>
