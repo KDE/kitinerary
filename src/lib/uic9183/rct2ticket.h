@@ -70,7 +70,7 @@ public:
         Upgrade, ///< Update Document (UPG)
         Unknown ///< ticket type could not be detected, or ticket type not supported yet
     };
-    Q_ENUM(Type);
+    Q_ENUM(Type)
     /** Returns the ticket type. */
     Type type() const;
 
