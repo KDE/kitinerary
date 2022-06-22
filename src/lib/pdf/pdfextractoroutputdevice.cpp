@@ -53,7 +53,7 @@ void PdfExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* s
     pdfImg.d->m_height = height;
     // deal with aspect-ratio changing scaling
     const auto sourceAspectRatio = (double)width / (double)height;
-    const auto targetAspectRatio = state->getCTM()[0] / -state->getCTM()[3];
+    const auto targetAspectRatio = std::abs(state->getCTM()[0] / -state->getCTM()[3]);
     if (!qFuzzyCompare(sourceAspectRatio, targetAspectRatio) && qFuzzyIsNull(state->getCTM()[1]) && qFuzzyIsNull(state->getCTM()[2])) {
         if (targetAspectRatio > sourceAspectRatio) {
             pdfImg.d->m_width = width * targetAspectRatio / sourceAspectRatio;
