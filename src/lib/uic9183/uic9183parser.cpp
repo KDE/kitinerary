@@ -125,8 +125,22 @@ bool Uic9183Parser::isValid() const
 
 QString Uic9183Parser::pnr() const
 {
-    const auto key = findBlock<Uic9183Head>().ticketKey();
-    return key.startsWith(QLatin1Char(' ')) ? key.trimmed() : key.left(6);
+    const auto head = findBlock<Uic9183Head>();
+    const auto key = head.ticketKey().trimmed();
+    const auto issuerId = head.issuerCompanyCodeNumeric();
+
+    // try to make this match what's printed on the matching tickets...
+    if (issuerId == 80 && (key.size() == 8 || key.size() == 9) && key.at(6) == QLatin1Char('-') && key.at(7).isDigit()) {
+        return key.left(6); // DB domestic
+    }
+    if (issuerId == 80 && key.size() == 13 && key.endsWith(QLatin1String("0101"))) {
+        return key.left(9); // DB domestic part of an international order
+    }
+    if (issuerId == 1184 && key.size() == 9 && key.at(7) == QLatin1Char('_') && key.at(8).isDigit()) {
+        return key.left(7); // NS
+    }
+
+    return key;
 }
 
 QString Uic9183Parser::name() const
