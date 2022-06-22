@@ -8,6 +8,8 @@
 #include "uic9183block.h"
 #include "logging.h"
 
+#include <string.h>
+
 using namespace KItinerary;
 
 int Uic9183Utils::readAsciiEncodedNumber(const char* data, int size, int offset, int length)
@@ -46,7 +48,7 @@ QString Uic9183Utils::readUtf8String(const char* data, int size, int offset, int
         return {};
     }
 
-    return QString::fromUtf8(data + offset, length);
+    return QString::fromUtf8(data + offset, strnlen(data + offset, length));
 }
 
 QString Uic9183Utils::readUtf8String(const QByteArray& data, int offset, int length)
