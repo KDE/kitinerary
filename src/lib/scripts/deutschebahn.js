@@ -165,7 +165,9 @@ function parseTicket(text, uic918ticket) {
     // where it is relative to the itinerary
     var bookingRef = text.match(/(?:Auftragsnummer|Auftrag \(NVS\)):\s*([A-Z0-9]{6,9})\n/);
     for (var i = 0; i < reservations.length; ++i) {
-        reservations[i].reservationNumber = bookingRef[1];
+        if (bookingRef) {
+            reservations[i].reservationNumber = bookingRef[1];
+        }
 
         if (reservations[i].reservationFor.trainNumber && reservations[i].reservationFor.trainNumber.startsWith("Bus")) {
             reservations[i] = JsonLd.trainToBusReservation(reservations[i]);
@@ -221,6 +223,7 @@ function parsePdf(pdf, node, triggerNode) {
     for (var i = 0; i < reservations.length; ++i) {
         reservations[i].reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content.rawData);
         if (triggerNode.mimeType == "internal/uic9183") {
+            reservations[i].reservationNumber = triggerNode.content.pnr;
             reservations[i].reservationFor.provider.identifier = "uic:" + triggerNode.content.carrierId;
             let block = triggerNode.content.block("0080BL").findSubBlock("009")
             if (block) {
