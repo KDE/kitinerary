@@ -61,6 +61,12 @@
                 "match": "oui.sncf",
                 "mimeType": "message/rfc822",
                 "scope": "Ancestors"
+            },
+            {
+                "field": "From",
+                "match": "noreply@connect.sncf",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
             }
         ],
         "function": "parseOuiEmail",
