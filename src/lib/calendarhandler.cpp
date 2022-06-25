@@ -118,18 +118,6 @@ QVector<QSharedPointer<KCalendarCore::Event>> CalendarHandler::findEvents(KCalen
 #endif
 }
 
-QSharedPointer<KCalendarCore::Event> CalendarHandler::findEvent(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation)
-{
-#if HAVE_KCAL
-    const auto evs = findEvents(calendar, reservation);
-    return evs.empty() ? KCalendarCore::Event::Ptr() : evs.at(0);
-#else
-    Q_UNUSED(calendar)
-    Q_UNUSED(reservation)
-    return {};
-#endif
-}
-
 QVector<QVariant> CalendarHandler::reservationsForEvent(const QSharedPointer<KCalendarCore::Event> &event)
 {
 #if HAVE_KCAL

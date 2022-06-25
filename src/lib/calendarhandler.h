@@ -35,11 +35,6 @@ namespace CalendarHandler
     KITINERARY_EXPORT QVector<QSharedPointer<KCalendarCore::Event>> findEvents(KCalendarCore::Calendar *calendar, const QVariant &reservation);
     KITINERARY_EXPORT QVector<QSharedPointer<KCalendarCore::Event>> findEvents(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation);
 
-    /** Attempts to find an event in @p calendar for @p reservation.
-     *  @deprecated since 20.08 use findEvents instead.
-     */
-    KITINERARY_DEPRECATED_EXPORT QSharedPointer<KCalendarCore::Event> findEvent(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation);
-
     /** Returns the reservations for this event.
      *  In case of a mult-travler trip, the result contains more than one reservation.
      */
