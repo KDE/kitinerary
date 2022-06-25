@@ -1,5 +1,5 @@
 /*
-   SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2017-2022 Volker Krause <vkrause@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -39,4 +39,22 @@ function main(text) {
     }
 
     return reservations;
+}
+
+function parseEvent(event)
+{
+    let res = JsonLd.newFlightReservation();
+    res.reservationFor.departureTime = JsonLd.readQDateTime(event, 'dtStart');
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(event, 'dtEnd');
+
+    res.reservationNumber = event.description.match(/Booking reference: (.*)\n/)[1];
+    const flight = event.description.match(/Airline: (.*)\nFlight number: (.{2}) (.*)\n/);
+    res.reservationFor.airline.name = flight[1];
+    res.reservationFor.airline.iataCode = flight[2];
+    res.reservationFor.flightNumber = flight[3];
+
+    res.reservationFor.departureAirport.name = event.location;
+    res.reservationFor.arrivalAirport.name = event.description.match(/At: (.*)\n/)[1];
+
+    return res;
 }

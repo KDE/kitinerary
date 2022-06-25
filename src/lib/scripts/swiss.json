@@ -3,5 +3,18 @@
         "mimeType": "text/plain",
         "filter": [ { "field": "From", "match": "noreply@swiss.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
         "script": "swiss.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "uid",
+                "match": "@swiss.com$",
+                "mimeType": "internal/event",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseEvent",
+        "mimeType": "internal/event",
+        "script": "swiss.js"
     }
 ]
