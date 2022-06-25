@@ -283,3 +283,13 @@ function parseBahncard(code, node) {
     bc.validUntil = JsonLd.readQDateTime(code, 'validUntil');
     return bc.programName != undefined ? bc : undefined;
 }
+
+function parseEvent(event) {
+    let res = JsonLd.newTrainReservation();
+    const names = event.summary.match(/(.*) -> (.*)/);
+    res.reservationFor.departureStation.name = names[1];
+    res.reservationFor.departureTime = JsonLd.readQDateTime(event, 'dtStart');
+    res.reservationFor.arrivalStation.name = names[2];
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(event, 'dtEnd');
+    return res;
+}

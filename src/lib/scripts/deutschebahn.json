@@ -75,5 +75,18 @@
         "function": "parseBahncard",
         "mimeType": "internal/uic9183",
         "script": "deutschebahn.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "uid",
+                "match": "^bahn\\d{14}$",
+                "mimeType": "internal/event",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseEvent",
+        "mimeType": "internal/event",
+        "script": "deutschebahn.js"
     }
 ]
