@@ -1,0 +1,53 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Köln Hbf"
+            },
+            "arrivalTime": "2014-01-24T12:09:00",
+            "departureDay": "2014-01-24",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Berlin Hbf"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2014-01-24T07:46:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "trainNumber": "ICE 123"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "BusReservation",
+        "reservationFor": {
+            "@type": "BusTrip",
+            "arrivalBusStop": {
+                "@type": "BusStation",
+                "name": "Bonn Hbf"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2014-01-24T13:45:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "busNumber": "Bus 42",
+            "departureBusStop": {
+                "@type": "BusStation",
+                "name": "Köln Hbf"
+            },
+            "departureTime": "2014-01-24T12:17:00"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]
+
+

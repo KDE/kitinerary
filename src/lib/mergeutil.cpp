@@ -615,9 +615,16 @@ bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs)
     return false;
 }
 
+static bool isCompatibleLocationChange(const QVariant &lhs, const QVariant &rhs)
+{
+    const bool lhsTrainOrBus = JsonLd::isA<TrainReservation>(lhs) || JsonLd::isA<BusReservation>(lhs);
+    const bool rhsTrainOrBus = JsonLd::isA<TrainReservation>(rhs) || JsonLd::isA<BusReservation>(rhs);
+    return (lhsTrainOrBus && rhsTrainOrBus) || (JsonLd::isA<FlightReservation>(lhs) && JsonLd::isA<FlightReservation>(rhs));
+}
+
 bool MergeUtil::hasSameDeparture(const QVariant &lhs, const QVariant &rhs)
 {
-    if (lhs.userType() != rhs.userType() || !JsonLd::isA<TrainReservation>(lhs)) {
+    if (!isCompatibleLocationChange(lhs, rhs)) {
         return false;
     }
     const auto lhsRes = JsonLd::convert<Reservation>(lhs);
@@ -631,7 +638,7 @@ bool MergeUtil::hasSameDeparture(const QVariant &lhs, const QVariant &rhs)
 
 bool MergeUtil::hasSameArrival(const QVariant &lhs, const QVariant &rhs)
 {
-    if (lhs.userType() != rhs.userType() || !JsonLd::isA<TrainReservation>(lhs)) {
+    if (!isCompatibleLocationChange(lhs, rhs)) {
         return false;
     }
     const auto lhsRes = JsonLd::convert<Reservation>(lhs);
