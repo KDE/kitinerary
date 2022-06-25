@@ -114,18 +114,6 @@ static void filterReservation(QJsonObject &res)
         }
     }
 
-    // unpack reservationFor array - if we ever encounter more than one element in here we'd need to multiply the result
-    const auto resFor = res.value(QLatin1String("reservationFor"));
-    if (resFor.isArray()) {
-        const auto a = resFor.toArray();
-        if (a.size() > 1) {
-            qCWarning(Log) << "Found reservationFor array with" << a.size() << "elements!";
-        }
-        if (!a.isEmpty()) {
-            res.insert(QStringLiteral("reservationFor"), a.at(0));
-        }
-    }
-
     // normalize reservationStatus enum
     auto resStat = res.value(QLatin1String("reservationStatus")).toString();
     if (!resStat.isEmpty() && !resStat.contains(QLatin1String("/Reservation"))) {
@@ -331,7 +319,16 @@ QJsonArray JsonLdImportFilter::filterObject(const QJsonObject &obj)
             }
         }
 
-        results.push_back(res);
+        // unpack reservationFor array - multiply the result for each entry in here
+        const auto resFor = res.value(QLatin1String("reservationFor"));
+        if (const auto a = resFor.toArray(); !a.isEmpty()) {
+            for (const auto &entry : a) {
+                res.insert(QLatin1String("reservationFor"), entry);
+                results.push_back(res);
+            }
+        } else {
+            results.push_back(res);
+        }
     }
 
     return results;

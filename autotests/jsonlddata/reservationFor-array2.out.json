@@ -1,0 +1,50 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL"
+            },
+            "arrivalTime": "1970-01-01T01:00:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "SXF"
+            },
+            "departureTime": "1970-01-01T00:45:00",
+            "flightNumber": "1234"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "AB"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "SXF"
+            },
+            "arrivalTime": "1970-01-02T01:00:00",
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "TXL"
+            },
+            "departureTime": "1970-01-02T00:45:00",
+            "flightNumber": "4321"
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]
