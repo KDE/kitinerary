@@ -36,7 +36,7 @@ set(QT_REQUIRED_VERSION "5.15.2")
 
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Gui Qml)
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Contacts CalendarCore I18n)
 if (NOT ANDROID)
     find_package(SharedMimeInfo 1.3 REQUIRED)
 endif()
@@ -45,8 +45,6 @@ set(KMIME_VERSION "5.20.40")
 set(PIM_PKPASS "5.20.40")
 
 find_package(KF5Mime ${KMIME_VERSION} CONFIG REQUIRED)
-find_package(KF5CalendarCore ${KF5_MIN_VERSION} CONFIG)
-find_package(KF5Contacts ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KPimPkPass ${PIM_PKPASS} CONFIG REQUIRED)
 find_package(Poppler COMPONENTS Core)
 set_package_properties("Poppler" PROPERTIES TYPE REQUIRED PURPOSE "Support for extraction from PDF booking confirmations.")
