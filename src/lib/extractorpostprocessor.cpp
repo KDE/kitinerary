@@ -131,10 +131,40 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
 
 QVector<QVariant> ExtractorPostprocessor::result() const
 {
-    if (!d->m_resultFinalized && d->m_validationEnabled) {
-        d->m_data.erase(std::remove_if(d->m_data.begin(), d->m_data.end(), [this](const auto &elem) {
-            return !d->m_validator.isValidElement(elem);
-        }), d->m_data.end());
+    if (!d->m_resultFinalized) {
+        if (d->m_validationEnabled) {
+            d->m_data.erase(std::remove_if(d->m_data.begin(), d->m_data.end(), [this](const auto &elem) {
+                return !d->m_validator.isValidElement(elem);
+            }), d->m_data.end());
+        }
+
+        // search for "triangular" patterns, ie. a location change element that has a matching departure
+        // and matching arrival to two different other location change elements (A->C vs A->B + B->C).
+        // we remove those, as the fine-granular results are better
+        if (d->m_data.size() >= 3) {
+            for (auto it = d->m_data.begin(); it != d->m_data.end();) {
+                auto depIt = it;
+                auto arrIt = it;
+                for (auto it2 = d->m_data.begin(); it2 != d->m_data.end(); ++it2) {
+                    if (it == it2) {
+                        continue;
+                    }
+                    if (MergeUtil::hasSameDeparture(*it, *it2)) {
+                        depIt = it2;
+                    }
+                    if (MergeUtil::hasSameArrival(*it, *it2)) {
+                        arrIt = it2;
+                    }
+                }
+
+                if (depIt != it && arrIt != it && depIt != arrIt) {
+                    it = d->m_data.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+        }
+
         d->m_resultFinalized = true;
     }
 

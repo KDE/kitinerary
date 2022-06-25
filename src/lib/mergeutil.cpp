@@ -74,8 +74,27 @@ static bool isSameTouristAttraction(const TouristAttraction &lhs, const TouristA
 static bool isSameEvent(const Event &lhs, const Event &rhs);
 static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs);
 static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs);
+static bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes);
 static bool isMinimalCancelationFor(const QVariant &r, const Reservation &cancel);
 static bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs);
+
+bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes)
+{
+    // underName either matches or is not set
+    const auto lhsUN = lhsRes.underName().value<Person>();
+    const auto rhsUN = rhsRes.underName().value<Person>();
+    if (!lhsUN.name().isEmpty() && !rhsUN.name().isEmpty() &&  !MergeUtil::isSamePerson(lhsUN, rhsUN)) {
+        return false;
+    }
+
+    const auto lhsTicket = lhsRes.reservedTicket().value<Ticket>();
+    const auto rhsTicket = rhsRes.reservedTicket().value<Ticket>();
+    if (conflictIfPresent(lhsTicket.ticketedSeat().seatNumber(), rhsTicket.ticketedSeat().seatNumber(), Qt::CaseInsensitive)) {
+        return false;
+    }
+
+    return true;
+}
 
 bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 {
@@ -90,19 +109,12 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
     if (JsonLd::canConvert<Reservation>(lhs)) {
         const auto lhsRes = JsonLd::convert<Reservation>(lhs);
         const auto rhsRes = JsonLd::convert<Reservation>(rhs);
-
-        // for all: underName either matches or is not set
-        const auto lhsUN = lhsRes.underName().value<Person>();
-        const auto rhsUN = rhsRes.underName().value<Person>();
-        if (!lhsUN.name().isEmpty() && !rhsUN.name().isEmpty() &&  !isSamePerson(lhsUN, rhsUN)) {
+        if (!isSameReservation(lhsRes, rhsRes)) {
             return false;
         }
 
         const auto lhsTicket = lhsRes.reservedTicket().value<Ticket>();
         const auto rhsTicket = rhsRes.reservedTicket().value<Ticket>();
-        if (conflictIfPresent(lhsTicket.ticketedSeat().seatNumber(), rhsTicket.ticketedSeat().seatNumber(), Qt::CaseInsensitive)) {
-            return false;
-        }
         // flight ticket tokens (IATA BCBP) can differ, so we need to compare the relevant bits in them manually
         // this however happens automatically as they are unpacked to other fields by post-processing
         // so we can simply skip this here for flights
@@ -601,4 +613,32 @@ bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs)
 
     qCWarning(CompareLog) << "unhandled ticket token type" << lhs << rhs;
     return false;
+}
+
+bool MergeUtil::hasSameDeparture(const QVariant &lhs, const QVariant &rhs)
+{
+    if (lhs.userType() != rhs.userType() || !JsonLd::isA<TrainReservation>(lhs)) {
+        return false;
+    }
+    const auto lhsRes = JsonLd::convert<Reservation>(lhs);
+    const auto rhsRes = JsonLd::convert<Reservation>(rhs);
+    if (!isSameReservation(lhsRes, rhsRes) || SortUtil::startDateTime(lhs) != SortUtil::startDateTime(rhs)) {
+        return false;
+    }
+
+    return LocationUtil::isSameLocation(LocationUtil::departureLocation(lhs), LocationUtil::departureLocation(rhs), LocationUtil::Exact);
+}
+
+bool MergeUtil::hasSameArrival(const QVariant &lhs, const QVariant &rhs)
+{
+    if (lhs.userType() != rhs.userType() || !JsonLd::isA<TrainReservation>(lhs)) {
+        return false;
+    }
+    const auto lhsRes = JsonLd::convert<Reservation>(lhs);
+    const auto rhsRes = JsonLd::convert<Reservation>(rhs);
+    if (!isSameReservation(lhsRes, rhsRes) || SortUtil::endDateTime(lhs) != SortUtil::endDateTime(rhs)) {
+        return false;
+    }
+
+    return LocationUtil::isSameLocation(LocationUtil::arrivalLocation(lhs), LocationUtil::arrivalLocation(rhs), LocationUtil::Exact);
 }

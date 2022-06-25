@@ -40,11 +40,24 @@ KITINERARY_EXPORT bool isSame(const QVariant &lhs, const QVariant &rhs);
 KITINERARY_EXPORT bool isSamePerson(const Person &lhs, const Person &rhs);
 
 /**
+ * Checks whether two transport reservation elements refer to the same departure.
+ * This considers time, location and mode of transport.
+ */
+bool hasSameDeparture(const QVariant &lhs, const QVariant &rhs);
+
+/**
+ * Checks whether two transport reservation elements refer to the same arrival.
+ * This considers time, location and mode of transport.
+ */
+bool hasSameArrival(const QVariant &lhs, const QVariant &rhs);
+
+/**
  * Merge the two given objects.
  * This is the same as JsonLdDocument::apply in most cases, but if one side
  * can be determined to be "better", that one is preferred.
  */
 KITINERARY_EXPORT QVariant merge(const QVariant &lhs, const QVariant &rhs);
+
 }
 
 }
