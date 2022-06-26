@@ -361,14 +361,17 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
     // so we have to use the slightly less robust location comparison
     if (!lhs.departureTime().isValid() && !rhs.departureTime().isValid()) {
         qCDebug(CompareLog) << "unbound trip" << lhs.departureStation().name() << rhs.departureStation().name() << lhs.arrivalStation().name() << rhs.arrivalStation().name();
-        return lhs.departureStation().name() == rhs.departureStation().name() && lhs.arrivalStation().name() == rhs.arrivalStation().name();
-    } else if (!equalAndPresent(lhs.departureTime(), rhs.departureTime())) {
+        return LocationUtil::isSameLocation(lhs.departureStation(), rhs.departureStation(), LocationUtil::Exact)
+            && LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::Exact);
+    } else if (!equalAndPresent(lhs.departureTime(), rhs.departureTime()) || conflictIfPresent(lhs.arrivalTime(), rhs.arrivalTime())) {
         return false;
     }
 
+    // if we don't have train numbers, also fall back to the less robust location comparison
     if (lhs.trainNumber().isEmpty() || rhs.trainNumber().isEmpty()) {
         qCDebug(CompareLog) << "missing train number" << lhs.trainNumber() << rhs.trainNumber();
-        return false;
+        return LocationUtil::isSameLocation(lhs.departureStation(), rhs.departureStation(), LocationUtil::Exact)
+            && LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::Exact);
     }
 
     const auto isSameLine = isSameLineName(lhs.trainNumber(), rhs.trainNumber());
