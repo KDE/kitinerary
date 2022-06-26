@@ -82,3 +82,20 @@ function parsePdf(pdf) {
 
     return reservations;
 }
+
+function parseEvent(event)
+{
+    let res = JsonLd.newTrainReservation();
+    res.reservationFor.departureTime = JsonLd.readQDateTime(event, 'dtStart');
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(event, 'dtEnd');
+    res.reservationFor.departureStation.name = event.location;
+    res.reservationFor.arrivalStation.name = event.description.match(event.location + "-(.*?);")[1];
+    res.reservationFor.trainNumber = event.description.match(/Train: (.*?),/)[1];
+    res.reservationNumber = event.description.match(/pnr code ([A-Z0-9]{6})\b/)[1];
+    const seat = event.description.match(/Coach (.*?), Position (.*?)[;\b]/);
+    if (seat) {
+        res.reservedTicket.ticketedSeat.seatSection = seat[1];
+        res.reservedTicket.ticketedSeat.seatNumber = seat[2];
+    }
+    return res;
+}
