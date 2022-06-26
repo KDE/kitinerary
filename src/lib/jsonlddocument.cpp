@@ -359,6 +359,9 @@ bool JsonLd::valueIsNull(const QVariant &v)
     if (v.type() == qMetaTypeId<float>()) {
         return std::isnan(v.toFloat());
     }
+    if (v.type() == QVariant::List) {
+        return v.toList().isEmpty();
+    }
     // starting with Qt6, QVariant::isNull is "shallow" and would miss the following as well
     if (v.type() == QVariant::String) {
         return v.toString().isNull();
