@@ -29,6 +29,7 @@
 #include <QDebug>
 #include <QMetaObject>
 #include <QMetaProperty>
+#include <QTimeZone>
 #include <QVariant>
 
 #include <cmath>
@@ -505,6 +506,10 @@ static Airline mergeValue(const Airline &lhs, const Airline &rhs)
 
 static QDateTime mergeValue(const QDateTime &lhs, const QDateTime &rhs)
 {
+    // if both sides have a timezone, prefer non-UTC
+    if (lhs.isValid() && lhs.timeSpec() == Qt::TimeZone && rhs.isValid() && rhs.timeSpec() == Qt::TimeZone) {
+        return rhs.timeZone() == QTimeZone::utc() ? lhs : rhs;
+    }
     // prefer value with timezone
     return lhs.isValid() && lhs.timeSpec() == Qt::TimeZone && rhs.timeSpec() != Qt::TimeZone ? lhs : rhs;
 }

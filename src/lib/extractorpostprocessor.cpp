@@ -326,28 +326,7 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, QDat
     if (dt.date().year() <= 1970 && departureDay.isValid()) { // we just have the time, but not the day
         dt.setDate(departureDay);
     }
-
-    if (dt.timeSpec() == Qt::TimeZone) {
-        return dt;
-    }
-
-    const auto tz = KnowledgeDb::timezoneForLocation(station.geo().latitude(), station.geo().longitude(), station.address().addressCountry(), station.address().addressRegion());
-    if (!tz.isValid()) {
-        return dt;
-    }
-
-    // prefer our timezone over externally provided UTC offset, if they match
-    if (dt.timeSpec() == Qt::OffsetFromUTC && tz.offsetFromUtc(dt) != dt.offsetFromUtc()) {
-        return dt;
-    }
-
-    if (dt.timeSpec() == Qt::OffsetFromUTC || dt.timeSpec() == Qt::LocalTime) {
-        dt.setTimeSpec(Qt::TimeZone);
-        dt.setTimeZone(tz);
-    } else if (dt.timeSpec() == Qt::UTC) {
-        dt = dt.toTimeZone(tz);
-    }
-    return dt;
+    return processTimeForLocation(dt, station);
 }
 
 BusReservation ExtractorPostprocessorPrivate::processBusReservation(BusReservation res) const
@@ -637,7 +616,7 @@ QVariantList ExtractorPostprocessorPrivate::processActions(QVariantList actions)
 template <typename T>
 QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, const T &place) const
 {
-    if (!dt.isValid() || dt.timeSpec() == Qt::TimeZone) {
+    if (!dt.isValid() || (dt.timeSpec() == Qt::TimeZone && dt.timeZone() != QTimeZone::utc())) {
         return dt;
     }
 
@@ -655,7 +634,7 @@ QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, co
     if (dt.timeSpec() == Qt::OffsetFromUTC || dt.timeSpec() == Qt::LocalTime) {
         dt.setTimeSpec(Qt::TimeZone);
         dt.setTimeZone(tz);
-    } else if (dt.timeSpec() == Qt::UTC) {
+    } else if (dt.timeSpec() == Qt::UTC || (dt.timeSpec() == Qt::TimeZone && dt.timeZone() == QTimeZone::utc())) {
         dt = dt.toTimeZone(tz);
     }
     return dt;

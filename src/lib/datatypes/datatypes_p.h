@@ -7,6 +7,7 @@
 #pragma once
 
 #include <QDateTime>
+#include <QTimeZone>
 
 namespace KItinerary {
 
@@ -52,7 +53,10 @@ template <> inline bool equals<QVariant>(const QVariant &lhs, const QVariant &rh
 // we however want to know if two instances contain exactly the same information
 template <> inline bool equals<QDateTime>(const QDateTime &lhs, const QDateTime &rhs)
 {
-    return lhs.timeSpec() == rhs.timeSpec() && lhs == rhs;
+    if (lhs.timeSpec() != rhs.timeSpec() || lhs != rhs) {
+        return false;
+    }
+    return lhs.timeSpec() == Qt::TimeZone ? lhs.timeZone() == rhs.timeZone() : true;
 }
 
 // QString::operator== ignores null vs empty
