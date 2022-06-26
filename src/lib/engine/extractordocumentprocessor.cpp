@@ -7,6 +7,7 @@
 #include "extractordocumentprocessor.h"
 #include "extractorfilter.h"
 #include "extractorresult.h"
+#include "logging.h"
 
 #include <QJSEngine>
 #include <QJSValue>
@@ -65,18 +66,35 @@ bool ExtractorDocumentProcessor::matches(const ExtractorFilter &filter, const Ex
     return matchesGadget(filter, mo, node.content().constData());
 }
 
-bool ExtractorDocumentProcessor::matchesGadget(const ExtractorFilter &filter, const QMetaObject *mo, const void *obj)
+static bool matchesGadgetInternal(const ExtractorFilter &filter, QStringView propName, const QMetaObject *mo, const void *obj)
 {
     if (!mo) {
         return false;
     }
-    const auto propIdx = mo->indexOfProperty(filter.fieldName().toUtf8().constData());
+
+    const auto propNameIdx = propName.indexOf(QLatin1Char('.'));
+    if (propNameIdx == 0 || propName.isEmpty()) {
+        qCWarning(Log) << "invalid gadget property name:" << propName << filter.fieldName();
+        return false;
+    }
+
+    const auto propIdx = mo->indexOfProperty(propName.left(propNameIdx < 0 ? propName.size() : propNameIdx).toUtf8().constData());
     if (propIdx < 0) {
         return false;
     }
     const auto prop = mo->property(propIdx);
     const auto value = prop.readOnGadget(obj);
+
+    if (propNameIdx > 0) { // recursive matching
+        const auto mo = QMetaType(value.userType()).metaObject();
+        return matchesGadgetInternal(filter, propName.mid(propNameIdx + 1), mo, value.constData());
+    }
     return filter.matches(value.toString());
+}
+
+bool ExtractorDocumentProcessor::matchesGadget(const ExtractorFilter &filter, const QMetaObject *mo, const void *obj)
+{
+    return matchesGadgetInternal(filter, filter.fieldName(), mo, obj);
 }
 
 void ExtractorDocumentProcessor::postExtract([[maybe_unused]] ExtractorDocumentNode &node) const
