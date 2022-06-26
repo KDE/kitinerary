@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "uid",
+            "match": "@tickets.gwr.com$",
+            "mimeType": "internal/event",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseEvent",
+    "mimeType": "internal/event",
+    "script": "gwr.js"
+}
