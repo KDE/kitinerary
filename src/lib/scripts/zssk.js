@@ -17,7 +17,7 @@ function parseDateTime(s)
 // see https://community.kde.org/KDE_PIM/KItinerary/ZSSK_Barcode
 function parseDomesticBarcode(data) {
     const payload = ByteArray.decodeUtf8(ByteArray.inflate(data.slice(3))).split('\n');
-    if (payload.length != 34) {
+    if (payload.length > 34 || payload.length < 32) {
         return;
     }
 
@@ -25,7 +25,7 @@ function parseDomesticBarcode(data) {
     res.reservationNumber = payload[1];
     res.reservationFor.departureStation.name = payload[6];
     res.reservationFor.arrivalStation.name = payload[7];
-    const trainNum = payload[8].match(/(\d+)\[(\d)\.tr\.\]/);
+    const trainNum = payload[8].match(/(\d+)\[(?:(\d)\.tr\.|\*)]/);
     res.reservationFor.trainNumber = trainNum[1];
     res.reservedTicket.ticketedSeat.seatingType = trainNum[2];
     res.reservationFor.departureTime = parseDateTime(payload[9]);
@@ -33,12 +33,14 @@ function parseDomesticBarcode(data) {
     res.programMembershipUsed.membershipNumber = payload[20];
     res.reservedTicket.name = payload[24];
     const tariff = payload[25].match(/(.*): \d/);
-    if (payload[20]) {
+    if (tariff && payload[20]) {
         res.programMembershipUsed.name = tariff[1];
     }
-    const km = payload[30].match(/Km: \d+ NO-(.*)-\d\.tr\./);
-    res.reservationFor.trainName = km[1];
-    const seat = payload[31].match(/Vlak: \d+ Vozeň: (\d+) Miesto: (\d+)/);
+    if (payload.length == 34) {
+        const km = payload[30].match(/Km: \d+ (?:NO|ŽTO)-(.*)-(?:\d\.tr\.|\*)/);
+        res.reservationFor.trainName = km[1];
+    }
+    const seat = payload[payload.length == 34 ? 31 : 30].match(/Vlak: \d+ Vozeň: (\d+) Miesto: (\d+)/);
     if (seat) {
         res.reservedTicket.ticketedSeat.seatSection = seat[1];
         res.reservedTicket.ticketedSeat.seatNumber = seat[2];
