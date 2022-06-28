@@ -52,7 +52,7 @@ function parseDomesticBarcode(data) {
 function parseDomesticPdf(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
     // TODO multi-leg support?
-    const leg = text.match(/\d{2}\.\d{2}.\d{2} +\d{2}:\d{2} +.*  -> .*  +(\d{2}\.\d{2}\.\d{2} +\d{2}:\d{2})/);
+    const leg = text.match(/\d{2}\.\d{2}.\d{2} +\d{2}:\d{2} +.*  -> .* +(\d{2}\.\d{2}\.\d{2} +\d{2}:\d{2})/);
     let res = triggerNode.result[0];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[1], 'dd.MM.yy hh:mm', 'sk');
     return res;
