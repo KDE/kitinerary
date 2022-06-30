@@ -111,6 +111,10 @@ private Q_SLOTS:
         QTest::newRow("diacritic 2") << QStringLiteral("Rīga") << QStringLiteral("Riga") << true << true;
         QTest::newRow("diacritic case-insensitive") << QStringLiteral("København H") << QStringLiteral("KOEBENHAVN H") << true << true;
         QTest::newRow("diacritic transliteration") << QStringLiteral("Zürich") << QStringLiteral("ZUERICH") << true << true;
+
+        QTest::newRow("random-suffix-1") << QStringLiteral("Berlin") << QStringLiteral("Berlin (tief)") << true << false;
+        QTest::newRow("random-suffix-2") << QStringLiteral("München Hbf") << QStringLiteral("München Hbf Gl.27-36") << true << false;
+        QTest::newRow("random-suffix-3") << QStringLiteral("Berlin") << QStringLiteral("Berlin+City") << true << false;
     }
 
     void testLocationNameCompare()
