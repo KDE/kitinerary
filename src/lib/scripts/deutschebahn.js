@@ -215,6 +215,32 @@ function parseReservation(pdf) {
     return reservations;
 }
 
+function applyUic9183ToReservation(res, uicCode)
+{
+    res.reservationNumber = uicCode.pnr;
+    res.reservationFor.provider.identifier = "uic:" + uicCode.carrierId;
+    const bl = uicCode.block('0080BL');
+    let sb = bl.findSubBlock('009');
+    if (sb) {
+        const bc = sb.content.match(/\d+-\d+-(.*)/)[1];
+        switch (bc) {
+            case "49":
+                res.programMembershipUsed.programName = "BahnCard 25";
+                break;
+            case "19":
+            case "78":
+                res.programMembershipUsed.programName = "BahnCard 50";
+                break;
+        }
+    }
+    sb = bl.findSubBlock('001');
+    if (sb)
+        res.reservedTicket.name = sb.content;
+    if (res.reservedTicket.ticketedSeat)
+        res.reservedTicket.ticketedSeat.seatingType = uicCode.seatingType;
+    res.underName = JsonLd.toJson(uicCode.person);
+}
+
 function parsePdf(pdf, node, triggerNode) {
     var page = pdf.pages[triggerNode.location];
     var uic918ticket = triggerNode.mimeType == "internal/uic9183" ? triggerNode.content : null;
@@ -223,27 +249,7 @@ function parsePdf(pdf, node, triggerNode) {
     for (var i = 0; i < reservations.length; ++i) {
         reservations[i].reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content.rawData);
         if (triggerNode.mimeType == "internal/uic9183") {
-            reservations[i].reservationNumber = triggerNode.content.pnr;
-            reservations[i].reservationFor.provider.identifier = "uic:" + triggerNode.content.carrierId;
-            let block = triggerNode.content.block("0080BL").findSubBlock("009")
-            if (block) {
-                const bc = block.content.match(/\d+-\d+-(.*)/)[1];
-                switch (bc) {
-                    case "49":
-                        reservations[i].programMembershipUsed.programName = "BahnCard 25";
-                        break;
-                    case "19":
-                    case "78":
-                        reservations[i].programMembershipUsed.programName = "BahnCard 50";
-                        break;
-                }
-            }
-            block = triggerNode.content.block('0080BL').findSubBlock('001');
-            if (block)
-                reservations[i].reservedTicket.name = block.content;
-            if (reservations[i].reservedTicket.ticketedSeat)
-                reservations[i].reservedTicket.ticketedSeat.seatingType = triggerNode.content.seatingType;
-            reservations[i].underName = JsonLd.toJson(triggerNode.content.person);
+            applyUic9183ToReservation(reservations[i], triggerNode.content);
         } else if (triggerNode.mimeType == "internal/vdv") {
             reservations[i].reservationFor.provider.identifier = "vdv:" + triggerNode.content.operatorId;
             if (reservations[i].reservedTicket.ticketedSeat) {
@@ -269,19 +275,46 @@ function parseCancellation(html) {
     return res;
 }
 
-function parseBahncard(code, node) {
-    if (code.ticketLayout.type != "RCT2" || !code.ticketLayout.text(0, 12, 40, 1).match(/BAHNCARD/i)) {
-        return;
+function parseUic9183(code, node) {
+    // Bahncard code
+    if (code.ticketLayout && code.ticketLayout.type == "RCT2" && code.ticketLayout.text(0, 12, 40, 1).match(/BAHNCARD/i)) {
+        var bc = JsonLd.newObject("ProgramMembership");
+        bc.programName = code.ticketLayout.text(1, 12, 40, 1);
+        bc.membershipNumber = code.ticketLayout.text(14, 11, 16, 1);
+        bc.member = JsonLd.toJson(code.person);
+        bc.token = 'aztecbin:' + ByteArray.toBase64(code.rawData);
+        bc.validFrom = JsonLd.readQDateTime(code, 'validFrom');
+        bc.validUntil = JsonLd.readQDateTime(code, 'validUntil');
+        return bc.programName != undefined ? bc : undefined;
     }
 
-    var bc = JsonLd.newObject("ProgramMembership");
-    bc.programName = code.ticketLayout.text(1, 12, 40, 1);
-    bc.membershipNumber = code.ticketLayout.text(14, 11, 16, 1);
-    bc.member = JsonLd.toJson(code.person);
-    bc.token = 'aztecbin:' + ByteArray.toBase64(code.rawData);
-    bc.validFrom = JsonLd.readQDateTime(code, 'validFrom');
-    bc.validUntil = JsonLd.readQDateTime(code, 'validUntil');
-    return bc.programName != undefined ? bc : undefined;
+    // domestic ticket code
+    const bl = code.block('0080BL');
+    if (bl) {
+        let res = JsonLd.newTrainReservation();
+        res.reservedTicket = node.result[0];
+        applyUic9183ToReservation(res, code);
+        res.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('031').content, 'dd.mm.yyyy', 'de');
+        res.reservationFor.departureStation.name = bl.findSubBlock('015').content;
+        res.reservationFor.departureStation.identifier = code.outboundDepartureStationId;
+        res.reservationFor.arrivalStation.name = bl.findSubBlock('016').content;
+        res.reservationFor.arrivalStation.identifier = code.outboundArrivalStationId;
+
+        if (!bl.findSubBlock('017')) {
+            return res;
+        }
+
+        let ret = JsonLd.newTrainReservation();
+        ret.reservedTicket = node.result[0];
+        applyUic9183ToReservation(ret, code);
+        ret.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('032').content, 'dd.mm.yyyy', 'de');
+        ret.reservationFor.departureStation.name = bl.findSubBlock('017').content;
+        ret.reservationFor.departureStation.identifier = ret.reservationFor.departureStation.name === res.reservationFor.arrivalStation.name ? code.outboundArrivalStationId : undefined;
+        ret.reservationFor.arrivalStation.name = bl.findSubBlock('018').content;
+        ret.reservationFor.arrivalStation.identifier = ret.reservationFor.arrivalStation.name === res.reservationFor.departureStation.name ? code.outboundDepartureStationId : undefined;
+
+        return [res, ret];
+    }
 }
 
 function parseEvent(event) {

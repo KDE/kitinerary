@@ -72,7 +72,7 @@
                 "scope": "Current"
             }
         ],
-        "function": "parseBahncard",
+        "function": "parseUic9183",
         "mimeType": "internal/uic9183",
         "script": "deutschebahn.js"
     },
