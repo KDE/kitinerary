@@ -33,7 +33,6 @@
     #endif
 #endif
 
-#cmakedefine01 HAVE_KCAL
 #cmakedefine01 HAVE_LIBXML2
 #cmakedefine01 HAVE_PHONENUMBER
 

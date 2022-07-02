@@ -11,6 +11,7 @@ target_include_directories(kitinerary-extractor PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(kitinerary-extractor
     KPimItinerary
     KPim::PkPass
+    KF5::CalendarCore
 )
 
 option(KITINERARY_STANDALONE_CLI_EXTRACTOR "Build stand-alone command line extractor (this should be off, unless you are building the dedicated Flatpak for this" OFF)

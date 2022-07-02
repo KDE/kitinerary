@@ -11,9 +11,7 @@
 
 #include <KItinerary/ExtractorRepository>
 
-#if HAVE_KCAL
 #include <kcalendarcore_version.h>
-#endif
 
 #include <QString>
 
@@ -35,13 +33,7 @@ QString ExtractorCapabilities::capabilitiesString()
 
         "PDF support         : poppler (" KPOPPLER_VERSION_STRING ")\n"
 
-        "iCal support        : "
-#if HAVE_KCAL
-            "kcal (" KCALENDARCORE_VERSION_STRING ")"
-#else
-            "not available"
-#endif
-        "\n"
+        "iCal support        : kcal (" KCALENDARCORE_VERSION_STRING ")\n"
 
         "Barcode decoder     : "
 #if HAVE_ZXING

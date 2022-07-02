@@ -24,11 +24,9 @@
 #include <KItinerary/TrainTrip>
 #include <KItinerary/Visit>
 
-#if HAVE_KCAL
 #include <KCalendarCore/Alarm>
 #include <KCalendarCore/Calendar>
 #include <KCalendarCore/Event>
-#endif
 
 #include <KContacts/Address>
 
@@ -50,7 +48,6 @@ static QString formatAddressSingleLine(const PostalAddress &addr)
     return LocationUtil::toAddress(addr).formatted(KContacts::AddressFormatStyle::SingleLineInternational);
 }
 
-#if HAVE_KCAL
 using namespace KCalendarCore;
 static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
 static void fillTrainReservation(const TrainReservation &reservation, const KCalendarCore::Event::Ptr &event);
@@ -62,22 +59,14 @@ static void fillGeoPosition(const QVariant &place, const KCalendarCore::Event::P
 static void fillFoodReservation(const FoodEstablishmentReservation &reservation, const KCalendarCore::Event::Ptr &event);
 static void fillRentalCarReservation(const RentalCarReservation &reservation, const KCalendarCore::Event::Ptr &event);
 static void fillTaxiReservation(const TaxiReservation &reservation, const KCalendarCore::Event::Ptr &event);
-#endif
 
 QVector<QSharedPointer<KCalendarCore::Event>> CalendarHandler::findEvents(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation)
 {
-#if HAVE_KCAL
     return findEvents(calendar.data(), reservation);
-#else
-    Q_UNUSED(calendar)
-    Q_UNUSED(reservation)
-    return {};
-#endif
 }
 
 QVector<QSharedPointer<KCalendarCore::Event>> CalendarHandler::findEvents(KCalendarCore::Calendar *calendar, const QVariant &reservation)
 {
-#if HAVE_KCAL
     if (!(JsonLd::canConvert<Reservation>(reservation) || JsonLd::canConvert<KItinerary::Event>(reservation)) || !calendar) {
         return {};
     }
@@ -111,28 +100,17 @@ QVector<QSharedPointer<KCalendarCore::Event>> CalendarHandler::findEvents(KCalen
     }
 
     return results;
-#else
-    Q_UNUSED(calendar)
-    Q_UNUSED(reservation)
-    return {};
-#endif
 }
 
 QVector<QVariant> CalendarHandler::reservationsForEvent(const QSharedPointer<KCalendarCore::Event> &event)
 {
-#if HAVE_KCAL
     const auto payload = event->customProperty("KITINERARY", "RESERVATION").toUtf8();
     const auto json = QJsonDocument::fromJson(payload).array();
     return JsonLdDocument::fromJson(json);
-#else
-    Q_UNUSED(event)
-    return {};
-#endif
 }
 
 bool CalendarHandler::canCreateEvent(const QVariant &reservation)
 {
-#if HAVE_KCAL
     if (JsonLd::isA<FlightReservation>(reservation)) {
         const auto f = reservation.value<FlightReservation>().reservationFor().value<Flight>();
         if (f.departureTime().isValid() && f.arrivalTime().isValid()) {
@@ -140,10 +118,6 @@ bool CalendarHandler::canCreateEvent(const QVariant &reservation)
         }
     }
     return SortUtil::startDateTime(reservation).isValid();
-#else
-    Q_UNUSED(reservation)
-    return false;
-#endif
 }
 
 void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalendarCore::Event> &event)
@@ -152,7 +126,6 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
         return;
     }
 
-#if HAVE_KCAL
     // TODO pass reservationS into all functions below for multi-traveler support
     const auto &reservation = reservations.at(0);
     const int typeId = reservation.userType();
@@ -190,12 +163,8 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
 
     const auto payload = QJsonDocument(JsonLdDocument::toJson(reservations)).toJson(QJsonDocument::Compact);
     event->setCustomProperty("KITINERARY", "RESERVATION", QString::fromUtf8(payload));
-#else
-    Q_UNUSED(event)
-#endif
 }
 
-#if HAVE_KCAL
 static QString airportDisplayCode(const Airport &airport)
 {
     return airport.iataCode().isEmpty() ? airport.name() : airport.iataCode();
@@ -525,4 +494,3 @@ static void fillTaxiReservation(const TaxiReservation &reservation, const KCalen
     event->setDescription(description);
 }
 
-#endif

@@ -178,6 +178,7 @@ target_link_libraries(KPimItinerary
         KF5::Archive
         KF5::I18n
         KF5::I18nLocaleData
+        KF5::CalendarCore
         KF5::Codecs
         KF5::Contacts
         KPim::PkPass
@@ -195,9 +196,6 @@ elseif (TARGET ZXing::Core)
     target_link_libraries(KPimItinerary PRIVATE ZXing::Core)
 endif()
 
-if (HAVE_KCAL)
-    target_link_libraries(KPimItinerary PUBLIC KF5::CalendarCore)
-endif()
 if (HAVE_LIBXML2)
     target_compile_definitions(KPimItinerary PRIVATE ${LIBXML2_DEFINITIONS})
     target_include_directories(KPimItinerary PRIVATE ${LIBXML2_INCLUDE_DIR})
