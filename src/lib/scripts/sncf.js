@@ -80,7 +80,7 @@ function parseInouiPdfText(page)
         return reservations;
     var pos = date.index + date[0].length;
     while (true) {
-        var dep = text.substr(pos).match(/(\d+[h:]\d+) +(.*)\n/);
+        var dep = text.substr(pos).match(/(\d{2}[h:]\d{2}) +(.*)\n/);
         if (!dep)
             break;
         pos += dep.index + dep[0].length;
@@ -89,7 +89,7 @@ function parseInouiPdfText(page)
         res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + dep[1], ["d MMMM yyyyhh'h'mm", "dd MMMM yyyyhh:mm"], ["fr", "en"]);
         res.reservationFor.departureStation.name = dep[2];
 
-        var arr = text.substr(pos).match(/(\d+[h:]\d+) +(.*)\n/);
+        var arr = text.substr(pos).match(/(\d{2}[h:]\d{2}) +(.*)\n/);
         if (!arr)
             break;
         var endPos = arr.index + arr[0].length;
