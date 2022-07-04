@@ -14,13 +14,19 @@ function parseRegistration(html) {
     res.modifyReservationUrl = html.eval('//a')[0].attribute('href');
 
     var time = html.eval('//div/div/p/strong/..')[0].content.match(/\((.*)\s+-\s+(.*)\)/);
-    res.reservationFor.startDate = JsonLd.toDateTime(time[1], "dd MMM yyyy, hh:mm", "en");
-    res.reservationFor.endDate = JsonLd.toDateTime(time[2], "dd MMM yyyy, hh:mm", "en");
+    res.reservationFor.startDate = JsonLd.toDateTime(time[1], "d MMM yyyy, hh:mm", "en");
+    res.reservationFor.endDate = JsonLd.toDateTime(time[2], "d MMM yyyy, hh:mm", "en");
 
-    const dds = html.eval('//dd');
-    if (dds.length >= 2) {
-        res.underName.givenName = dds[0].content;
-        res.underName.familyName = dds[1].content;
+    let dd = html.eval('//dl')[0].firstChild;
+    while (!dd.nextSibling.isNull) {
+        const label = dd.content;
+        dd = dd.nextSibling;
+        if (label.match(/First Name/)) {
+            res.underName.givenName = dd.content;
+        } else if (label.match(/Last Name/)) {
+            res.underName.familyName = dd.content;
+        }
+        dd = dd.nextSibling;
     }
 
     return res;
