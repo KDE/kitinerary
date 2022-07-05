@@ -74,9 +74,12 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     QJsonObject provider;
     provider.insert(QLatin1String("@type"), QLatin1String("Organization"));
     provider.insert(QLatin1String("identifier"), QJsonValue(QLatin1String("uic:") + p.carrierId()));
+
     QJsonObject seat;
     seat.insert(QLatin1String("@type"), QLatin1String("Seat"));
-    seat.insert(QLatin1String("seatingType"), p.seatingType());
+    if (const auto seatingType = p.seatingType(); !seatingType.isEmpty()) {
+        seat.insert(QLatin1String("seatingType"), seatingType);
+    }
 
     const auto rct2 = p.rct2Ticket();
     if (rct2.isValid()) {
