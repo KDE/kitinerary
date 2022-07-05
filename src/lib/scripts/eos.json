@@ -1,0 +1,10 @@
+[
+    {
+        "mimeType": "internal/uic9183",
+        "filter": [
+            { "field": "ticketLayout.type", "match": "EOSU", "mimeType": "internal/uic9183", "scope": "Current" }
+        ],
+        "script": "eos.js",
+        "function": "parseTicket"
+    }
+]
