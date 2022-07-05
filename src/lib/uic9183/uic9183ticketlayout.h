@@ -12,6 +12,7 @@
 
 #include <QExplicitlySharedDataPointer>
 #include <QMetaType>
+#include <QSize>
 
 class QSize;
 
@@ -63,6 +64,7 @@ class KITINERARY_EXPORT Uic9183TicketLayout
     Q_GADGET
     /** Ticket type (e.g. RCT2). */
     Q_PROPERTY(QString type READ type)
+    Q_PROPERTY(QSize size READ size)
 
 public:
     Uic9183TicketLayout();
