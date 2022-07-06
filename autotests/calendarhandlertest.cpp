@@ -71,7 +71,7 @@ private Q_SLOTS:
 
         MemoryCalendar::Ptr refCal(new MemoryCalendar(QTimeZone::systemTimeZone()));
         ICalFormat format;
-        format.load(refCal, icalFile);
+        QVERIFY(format.load(refCal, icalFile));
 
         const auto refEvents = refCal->rawEvents(KCalendarCore::EventSortStartDate, KCalendarCore::SortDirectionAscending);
         QCOMPARE(refEvents.size(), 1);
@@ -141,7 +141,7 @@ private Q_SLOTS:
 
         MemoryCalendar::Ptr refCal(new MemoryCalendar(QTimeZone::systemTimeZone()));
         ICalFormat format;
-        format.load(refCal, icalFile);
+        QVERIFY(format.load(refCal, icalFile));
 
         const auto events = CalendarHandler::findEvents(refCal, postproc.result().at(0));
         QCOMPARE(events.size(), 1);
@@ -158,7 +158,7 @@ private Q_SLOTS:
 
         MemoryCalendar::Ptr refCal(new MemoryCalendar(QTimeZone::systemTimeZone()));
         ICalFormat format;
-        format.load(refCal, QStringLiteral(SOURCE_DIR "/calendarhandlerdata/to-be-cancelled.ics"));
+        QVERIFY(format.load(refCal, QStringLiteral(SOURCE_DIR "/calendarhandlerdata/to-be-cancelled.ics")));
 
         const auto events = CalendarHandler::findEvents(refCal, cancel);
         QCOMPARE(events.size(), 2);
