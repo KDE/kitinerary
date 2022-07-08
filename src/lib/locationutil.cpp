@@ -224,6 +224,30 @@ static QString applyTransliterations(const QString &s)
     return res;
 }
 
+static bool compareSpaceCaseInsenstive(const QString &lhs, const QString &rhs)
+{
+    auto lit = lhs.begin();
+    auto rit = rhs.begin();
+    while (true) {
+        while ((*lit).isSpace() && lit != lhs.end()) {
+            ++lit;
+        }
+        while ((*rit).isSpace() && rit != rhs.end()) {
+            ++rit;
+        }
+        if (lit == lhs.end() || rit == rhs.end()) {
+            break;
+        }
+        if ((*lit).toCaseFolded() != (*rit).toCaseFolded()) {
+            return false;
+        }
+        ++lit;
+        ++rit;
+    }
+
+    return lit == lhs.end() && rit == rhs.end();
+}
+
 static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationUtil::Accuracy accuracy)
 {
     if (lhs.isEmpty() || rhs.isEmpty()) {
@@ -240,8 +264,8 @@ static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationU
     const auto rhsNormalized = stripDiacritics(rhs);
     const auto lhsTransliterated = applyTransliterations(lhs);
     const auto rhsTransliterated = applyTransliterations(rhs);
-    if (lhsNormalized.compare(rhsNormalized, Qt::CaseInsensitive) == 0 || lhsNormalized.compare(rhsTransliterated, Qt::CaseInsensitive) == 0
-        || lhsTransliterated.compare(rhsNormalized, Qt::CaseInsensitive) == 0 || lhsTransliterated.compare(rhsTransliterated, Qt::CaseInsensitive) == 0) {
+    if (compareSpaceCaseInsenstive(lhsNormalized, rhsNormalized) || compareSpaceCaseInsenstive(lhsNormalized, rhsTransliterated)
+        || compareSpaceCaseInsenstive(lhsTransliterated, rhsNormalized) || compareSpaceCaseInsenstive(lhsTransliterated, rhsTransliterated)) {
         return true;
     }
 
