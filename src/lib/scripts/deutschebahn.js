@@ -46,7 +46,7 @@ function parseArrival(res, line, year) {
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2] + ' ' + arr[3] + ' ' + year + ' ' + arr[4], "dd MM yyyy hh:mm", "de");
     var idx = arr.index + arr[0].length;
-    var platform = line.substr(idx).match(/^ {1,3}(.*?)(?=(  | IC|$))/);
+    var platform = line.substr(idx).match(/^ {1,3}(.*?)(?=(  | IC| \d Fenster| \d Gang|$))/);
     if (platform) {
         idx += platform.index + platform[0].length;
         res.reservationFor.arrivalPlatform = platform[1];
