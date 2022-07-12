@@ -35,6 +35,9 @@ function parseBarcode(barcode)
     res.reservationFor.departureStation.identifier = "uic:71" + barcode.substr(13, 5);
     res.reservationFor.arrivalStation.identifier = "uic:71" + barcode.substr(18, 5);
     res.reservationFor.departureDay = JsonLd.toDateTime(barcode.substr(23, 6), 'ddMMyy', 'es');
+
+    res.reservationFor.departureStation.name = barcode.substr(13, 5);
+    res.reservationFor.arrivalStation.name = barcode.substr(18, 5);
     return res;
 }
 

@@ -21,4 +21,16 @@
     "function": "parsePkPass",
     "mimeType": "application/vnd.apple.pkpass",
     "script": "renfe.js"
+},
+{
+    "filter": [
+        {
+            "match": "^\\d{29}.*\\S{6}(\\.\\.\\S{5}| +)?$",
+            "mimeType": "text/plain",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseBarcode",
+    "script": "renfe.js",
+    "mimeType": "text/plain"
 }]
