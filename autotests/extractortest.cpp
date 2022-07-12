@@ -60,7 +60,7 @@ private Q_SLOTS:
                 continue;
             }
 
-            QDirIterator it(baseDir.path(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass"), QStringLiteral("*.ics"), QStringLiteral("*.eml"), QStringLiteral("*.mbox"), QStringLiteral("*.bin")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
+            QDirIterator it(baseDir.path(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass"), QStringLiteral("*.ics"), QStringLiteral("*.eml"), QStringLiteral("*.mbox"), QStringLiteral("*.bin"), QStringLiteral("*.png")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
             while (it.hasNext()) {
                 it.next();
                 // ignore context files
@@ -80,11 +80,10 @@ private Q_SLOTS:
     {
         QFETCH(QString, contextFile);
         QFETCH(QString, inputFile);
-        if (contextFile.isEmpty()) {
-            return;
-        }
 
         m_engine.clear();
+        m_engine.setHints(inputFile.endsWith(QLatin1String(".png")) ? ExtractorEngine::ExtractFullPageRasterImages : ExtractorEngine::NoHint);
+
         QFile inFile(inputFile);
         QVERIFY(inFile.open(QFile::ReadOnly));
 
