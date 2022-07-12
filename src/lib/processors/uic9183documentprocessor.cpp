@@ -55,12 +55,27 @@ void Uic9183DocumentProcessor::expandNode(ExtractorDocumentNode &node, [[maybe_u
     }
 }
 
-static QJsonObject makeStation(const QString &name)
+static QJsonValue makeStation(const QString &name)
 {
+    if (name.isEmpty()) {
+        return {};
+    }
+
     QJsonObject station;
     station.insert(QStringLiteral("@type"), QLatin1String("TrainStation"));
     station.insert(QStringLiteral("name"), name);
     return station;
+}
+
+static bool isValidTrip(const QJsonObject &trip)
+{
+    if (trip.size() <= 1) {
+        return false;
+    }
+
+    return trip.contains(QLatin1String("departureDay"))
+        && trip.value(QLatin1String("departureStation")).isObject()
+        && trip.value(QLatin1String("arrivalStation")).isObject();
 }
 
 void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
@@ -150,7 +165,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     }
 
     // we have enough for a full TrainReservation result
-    if (trip.size() > 1) {
+    if (isValidTrip(trip)) {
         trip.insert(QLatin1String("provider"), provider);
 
         QJsonArray results;
@@ -162,7 +177,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
         res.insert(QStringLiteral("underName"), JsonLdDocument::toJson(p.person()));
         results.push_back(res);
 
-        if (returnTrip.size() > 1) {
+        if (isValidTrip(returnTrip)) {
             res.insert(QStringLiteral("reservationFor"), returnTrip);
             results.push_back(res);
         }
