@@ -188,7 +188,13 @@ QDateTime Uic9183Parser::validFrom() const
 
     // RCT2
     if (const auto  rct2 = rct2Ticket(); rct2.isValid()) {
-        return QDateTime(rct2.firstDayOfValidity(), {0, 0, 0});
+        const auto dt = rct2.firstDayOfValidity();
+        if (dt.month() != 1 || dt.day() != 1 || !rct2.outboundDepartureStation().isEmpty()) {
+            return QDateTime(dt, {0, 0, 0});
+        }
+        // firstDayOfValidity is just a year, and we have wildcard station names
+        const auto dep = rct2.outboundDepartureTime();
+        return dep.isValid() ? dep : QDateTime(dt, {0, 0, 0});
     }
 
     return {};
