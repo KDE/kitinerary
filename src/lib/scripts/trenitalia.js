@@ -4,7 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parsePdf(pdf) {
+function parsePdf(pdf, node) {
     var reservations = new Array();
 
     for (var i = 0; i < pdf.pageCount; ++i) {
@@ -33,27 +33,25 @@ function parsePdf(pdf) {
         res.reservationFor.departureStation.name = dest[1];
         res.reservationFor.arrivalStation.name = dest[2];
 
-        var images = page.images;
+        const barcodes = node.findChildNodes({ scope: "Descendants", mimeType: "internal/era-ssb", field: "issuerCode", match: "83" });
         var offset = 0;
-        for (var j = 0; j < images.length; ++j) {
-            var barcode = Barcode.decodeAztecBinary(images[j]);
-            var barcodeB64 = barcode ? ByteArray.toBase64(barcode) : undefined;
-            if (!barcodeB64)
+        for (let j = 0; j < barcodes.length; ++j) {
+            if (barcodes[j].location != i) {
                 continue;
-
+            }
+            const ssb = barcodes[j].content;
             var personalRes = JsonLd.clone(res);
-            personalRes.reservedTicket.ticketToken = "aztecbin:" + barcodeB64;
+            personalRes.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(ssb.rawData);
 
             var name = text.substr(offset).match(/(?:Passenger Name|Nome Passeggero(?:\/Passenger\n name)?).*\n(?:    .*\n)* ?((?:\w+|\-\-).*?)(?:  |\n)/);
             offset += name.index + name[0].length;
             if (name[1] !== "--") {
                 personalRes.underName.name = name[1];
             } else {
-                personalRes.underName.name = "Passenger " + j;
+                personalRes.underName.name = "Passenger " + (j + 1);
             }
 
             // see https://community.kde.org/KDE_PIM/KItinerary/Trenitalia_Barcode
-            const ssb = Barcode.decodeEraSsbTicket(barcode)
             personalRes.reservationFor.departureStation.identifier = "uic:" + (ssb.departureStationNum % 10000000)
             if (ssb.departureStationNum != ssb.arrivalStationNum) {
                 personalRes.reservationFor.arrivalStation.identifier = "uic:" + (ssb.arrivalStationNum % 10000000)
