@@ -1,5 +1,13 @@
 [
     {
+        "mimeType": "internal/era-ssb",
+        "filter": [
+            { "mimeType": "internal/era-ssb", "field": "issuerCode", "match": "83", "scope": "Current" }
+        ],
+        "script": "trenitalia.js",
+        "function": "parseSsb"
+    },
+    {
         "mimeType": "application/pdf",
         "filter": [
             { "mimeType": "internal/era-ssb", "field": "issuerCode", "match": "83", "scope": "Descendants" }
