@@ -9,6 +9,7 @@
 #include "kitinerary_export.h"
 #include "ssbticketbase.h"
 
+#include <QDateTime>
 #include <QMetaType>
 
 namespace KItinerary {
@@ -26,8 +27,8 @@ class KITINERARY_EXPORT SSBv2Ticket : protected SSBTicketBase
     SSB_NUM_PROPERTY(numberOfTickets, 23, 6)
     SSB_NUM_PROPERTY(numberOfAdultPassengers, 29, 7)
     SSB_NUM_PROPERTY(numberOfChildPassengers, 36, 7)
-    SSB_NUM_PROPERTY(firstDayOfValidity, 43, 9)
-    SSB_NUM_PROPERTY(lastDayOfValidity, 52, 9)
+    SSB_NUM_PROPERTY(firstDayOfValidityDay, 43, 9)
+    SSB_NUM_PROPERTY(lastDayOfValidityDay, 52, 9)
     SSB_NUM_PROPERTY(customerNumberType, 61, 1)
     SSB_LONG_PROPERTY(customerNumber, 62, 47)
     SSB_NUM_PROPERTY(departureStationType, 109, 1)
@@ -60,6 +61,11 @@ public:
 
     /** Returns @c true if this is a valid SSB ticket. */
     bool isValid() const;
+
+    /** First day of validity. */
+    Q_INVOKABLE QDate firstDayOfValidity(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    /** Last day of validity. */
+    Q_INVOKABLE QDate lastDayOfValidity(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 
     /** Raw barcode data. */
     QByteArray rawData() const;

@@ -98,6 +98,9 @@ public:
      */
     Q_INVOKABLE QJSValue readQDateTime(const QVariant &obj, const QString &propName) const;
 
+    /** @see JsonLdDocument::apply. */
+    Q_INVOKABLE QJSValue apply(const QJSValue &lhs, const QJSValue &rhs) const;
+
     ///@cond internal
     void setContextDate(const QDateTime &dt);
     ///@endcond

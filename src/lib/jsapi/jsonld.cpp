@@ -376,6 +376,14 @@ QJSValue JsApi::JsonLd::readQDateTime(const QVariant &obj, const QString &propNa
     return toJson(dt);
 }
 
+QJSValue JsApi::JsonLd::apply(const QJSValue &lhs, const QJSValue &rhs) const
+{
+    const auto lhsVar = JsonLdDocument::fromJsonSingular(QJsonValue::fromVariant(lhs.toVariant()).toObject());
+    const auto rhsVar = JsonLdDocument::fromJsonSingular(QJsonValue::fromVariant(rhs.toVariant()).toObject());
+    const auto v = JsonLdDocument::apply(lhsVar, rhsVar);
+    return toJson(v);
+}
+
 void JsApi::JsonLd::setContextDate(const QDateTime& dt)
 {
     m_contextDate = dt;

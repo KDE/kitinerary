@@ -4,7 +4,48 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parsePdf(pdf) {
+// see https://community.kde.org/KDE_PIM/KItinerary/Trenitalia_Barcode
+function parseSsb(ssb, node) {
+    let res = JsonLd.newTrainReservation();
+    res.reservationFor.departureStation.name = "" + (ssb.departureStationNum % 10000000);
+    res.reservationFor.departureStation.identifier = "uic:" + (ssb.departureStationNum % 10000000);
+    if (ssb.departureStationNum != ssb.arrivalStationNum) {
+        res.reservationFor.arrivalStation.name = "" + (ssb.arrivalStationNum % 10000000);
+        res.reservationFor.arrivalStation.identifier = "uic:" + (ssb.arrivalStationNum % 10000000);
+    }
+    res.reservationFor.provider.identifier = "uic:" + ssb.issuerCode;
+    if (ssb.customerNumber > 0) {
+        res.programMembershipUsed.membershipNumber = ssb.customerNumber;
+        res.programMembershipUsed.programName = "CartaFRECCIA";
+    }
+
+    if (ssb.firstDayOfValidityDay == ssb.lastDayOfValidityDay) {
+        res.reservationFor.departureDay = ssb.firstDayOfValidity(node.contextDateTime)
+    }
+
+    res.reservationFor.trainNumber = ssb.readNumber(22*8 + 2, 16);
+
+    const seatNum = ssb.readNumber(31*8 + 2, 7);
+    if (seatNum > 0) {
+        res.reservedTicket.ticketedSeat.seatNumber = "" + seatNum;
+        const seatCol = ssb.readNumber(32*8 + 3, 4);
+        if (seatCol > 0) {
+            res.reservedTicket.ticketedSeat.seatNumber += seatCol.toString(16).toUpperCase();
+        }
+
+        res.reservedTicket.ticketedSeat.seatSection = ssb.readNumber(30*8 +6, 4)
+    }
+
+    res.reservationNumber = ssb.readString(33*8 + 6, 6);
+    if (res.reservationNumber === '000000') {
+        res.reservationNumber = ssb.readNumber(58*8 + 4, 32);
+    }
+
+    res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(ssb.rawData);
+    return res;
+}
+
+function parsePdf(pdf, node) {
     var reservations = new Array();
 
     for (var i = 0; i < pdf.pageCount; ++i) {
@@ -33,49 +74,27 @@ function parsePdf(pdf) {
         res.reservationFor.departureStation.name = dest[1];
         res.reservationFor.arrivalStation.name = dest[2];
 
-        var images = page.images;
+        const barcodes = node.findChildNodes({ scope: "Descendants", mimeType: "internal/era-ssb", field: "issuerCode", match: "83" });
         var offset = 0;
-        for (var j = 0; j < images.length; ++j) {
-            var barcode = Barcode.decodeAztecBinary(images[j]);
-            var barcodeB64 = barcode ? ByteArray.toBase64(barcode) : undefined;
-            if (!barcodeB64)
+        for (let j = 0; j < barcodes.length; ++j) {
+            if (barcodes[j].location != i) {
                 continue;
-
-            var personalRes = JsonLd.clone(res);
-            personalRes.reservedTicket.ticketToken = "aztecbin:" + barcodeB64;
-
+            }
+            let personalRes = JsonLd.clone(res);
             var name = text.substr(offset).match(/(?:Passenger Name|Nome Passeggero(?:\/Passenger\n name)?).*\n(?:    .*\n)* ?((?:\w+|\-\-).*?)(?:  |\n)/);
             offset += name.index + name[0].length;
             if (name[1] !== "--") {
                 personalRes.underName.name = name[1];
             } else {
-                personalRes.underName.name = "Passenger " + j;
+                personalRes.underName.name = "Passenger " + (j + 1);
             }
 
-            // see https://community.kde.org/KDE_PIM/KItinerary/Trenitalia_Barcode
-            const ssb = Barcode.decodeEraSsbTicket(barcode)
-            personalRes.reservationFor.departureStation.identifier = "uic:" + (ssb.departureStationNum % 10000000)
-            if (ssb.departureStationNum != ssb.arrivalStationNum) {
-                personalRes.reservationFor.arrivalStation.identifier = "uic:" + (ssb.arrivalStationNum % 10000000)
-            }
-            personalRes.reservationFor.provider.identifier = "uic:" + ssb.issuerCode;
-            if (ssb.customerNumber > 0) {
-                personalRes.programMembershipUsed.membershipNumber = ssb.customerNumber;
-                personalRes.programMembershipUsed.programName = "CartaFRECCIA";
-            }
-
-            const seatNum = ssb.readNumber(31*8 + 2, 7);
-            if (seatNum > 0) {
-                personalRes.reservedTicket.ticketedSeat.seatNumber = "" + seatNum;
-                const seatCol = ssb.readNumber(32*8 + 3, 4);
-                if (seatCol > 0) {
-                    personalRes.reservedTicket.ticketedSeat.seatNumber += seatCol.toString(16).toUpperCase();
-                }
-
-                var coach = text.match(/(?:Coaches|Carrozza|Wagen)(?:\/Coach)?: +(\S+)/);
+            var coach = text.match(/(?:Coaches|Carrozza|Wagen)(?:\/Coach)?: +(\S+)/);
+            if (coach) {
                 personalRes.reservedTicket.ticketedSeat.seatSection = coach[1];
             }
 
+            personalRes = JsonLd.apply(barcodes[j].result[0], personalRes);
             reservations.push(personalRes);
         }
     }
