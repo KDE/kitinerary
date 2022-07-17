@@ -47,7 +47,11 @@ BarcodeDecoder::~BarcodeDecoder() = default;
 
 bool BarcodeDecoder::isBarcode(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
 {
-    if (maybeBarcode(img.width(), img.height(), hint) == None) {
+    if ((hint & IgnoreAspectRatio) == 0) {
+        hint = maybeBarcode(img.width(), img.height(), hint);
+    }
+
+    if (hint == None) {
         return false;
     }
 
@@ -58,7 +62,11 @@ bool BarcodeDecoder::isBarcode(const QImage &img, BarcodeDecoder::BarcodeTypes h
 
 QByteArray BarcodeDecoder::decodeBinary(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
 {
-    if (maybeBarcode(img.width(), img.height(), hint) == None) {
+    if ((hint & IgnoreAspectRatio) == 0) {
+        hint = maybeBarcode(img.width(), img.height(), hint);
+    }
+
+    if (hint == None) {
         return {};
     }
 
@@ -73,7 +81,11 @@ QByteArray BarcodeDecoder::decodeBinary(const QImage &img, BarcodeDecoder::Barco
 
 QString BarcodeDecoder::decodeString(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
 {
-    if (maybeBarcode(img.width(), img.height(), hint) == None) {
+    if ((hint & IgnoreAspectRatio) == 0) {
+        hint = maybeBarcode(img.width(), img.height(), hint);
+    }
+
+    if (hint == None) {
         return {};
     }
 
@@ -306,42 +318,5 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
         return;
     }
 
-    if (hint & IgnoreAspectRatio) {
-        decodeZxing(img, hint, result);
-        return;
-    }
-
-    const auto aspectRatio = img.width() < img.height() ?
-        (float)img.height() / (float)img.width() :
-        (float)img.width() / (float)img.height();
-
-    if (aspectRatio < SQUARE_MAX_ASPECT && (hint & AnySquare) && (result.negative & hint & AnySquare) != (hint & AnySquare)) {
-        decodeZxing(img, hint & AnySquare, result);
-    }
-
-    if (aspectRatio > PDF417_MIN_ASPECT && aspectRatio < PDF417_MAX_ASPECT && (hint  & PDF417) && (result.negative & hint & PDF417) != (hint & PDF417)) {
-        auto normalizedImg = img;
-        // newer ZXing versions handle rotated/flipped codes themselves correctly
-#if !ZXING_USE_READBARCODE
-        if (normalizedImg.width() < normalizedImg.height()) {
-            QTransform tf;
-            tf.rotate(-90);
-            normalizedImg = normalizedImg.transformed(tf);
-        }
-#endif
-
-        decodeZxing(normalizedImg, PDF417, result);
-#if !ZXING_USE_READBARCODE
-        if (result.positive & PDF417) {
-            return;
-        }
-        // try flipped around the x axis, zxing doesn't detect that, but it's e.g. encountered in SAS passes
-        result.negative &= ~PDF417;
-        decodeZxing(normalizedImg.transformed(QTransform{1, 0, 0, -1, 0, 0}), PDF417, result);
-#endif
-    }
-
-    if (aspectRatio > ANY1D_MIN_ASPECT && (hint & Any1D) && (result.negative & hint & Any1D) != (hint & Any1D)) {
-        decodeZxing(img, hint & Any1D, result);
-    }
+    decodeZxing(img, hint, result);
 }
