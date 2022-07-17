@@ -99,14 +99,14 @@ private Q_SLOTS:
 
     void testPlausibilityCheck()
     {
-        QVERIFY(!BarcodeDecoder::maybeBarcode(10, 10, BarcodeDecoder::Any));
-        QVERIFY(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::Any));
-        QVERIFY(!BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::PDF417));
-        QVERIFY(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::Aztec));
-        QVERIFY(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::AnySquare));
-        QVERIFY(BarcodeDecoder::maybeBarcode(100, 180, BarcodeDecoder::PDF417));
-        QVERIFY(BarcodeDecoder::maybeBarcode(180, 100, BarcodeDecoder::PDF417));
-        QVERIFY(!BarcodeDecoder::maybeBarcode(180, 100, BarcodeDecoder::AnySquare));
+        QCOMPARE(BarcodeDecoder::maybeBarcode(10, 10, BarcodeDecoder::Any), BarcodeDecoder::None);
+        QCOMPARE(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::Any), BarcodeDecoder::AnySquare);
+        QCOMPARE(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::PDF417), BarcodeDecoder::None);
+        QCOMPARE(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::Aztec), BarcodeDecoder::Aztec);
+        QCOMPARE(BarcodeDecoder::maybeBarcode(100, 100, BarcodeDecoder::AnySquare), BarcodeDecoder::AnySquare);
+        QCOMPARE(BarcodeDecoder::maybeBarcode(100, 180, BarcodeDecoder::PDF417), BarcodeDecoder::PDF417);
+        QCOMPARE(BarcodeDecoder::maybeBarcode(180, 100, BarcodeDecoder::PDF417), BarcodeDecoder::PDF417);
+        QCOMPARE(BarcodeDecoder::maybeBarcode(180, 100, BarcodeDecoder::AnySquare), BarcodeDecoder::None);
     }
 
     void testNoCode()

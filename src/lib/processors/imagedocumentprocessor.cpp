@@ -31,9 +31,10 @@ void ImageDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extra
     // check whether we possibly have a full PDF page raster image here
     const auto img = node.content<QImage>();
     BarcodeDecoder::BarcodeTypes barcodeHints = BarcodeDecoder::Any2D;
-    if (engine->hints() & ExtractorEngine::ExtractFullPageRasterImages && !BarcodeDecoder::maybeBarcode(img.width(), img.height(), barcodeHints)) {
+    if (engine->hints() & ExtractorEngine::ExtractFullPageRasterImages) {
         barcodeHints |= BarcodeDecoder::IgnoreAspectRatio;
     }
+    barcodeHints = BarcodeDecoder::maybeBarcode(img.width(), img.height(), barcodeHints);
 
     // in case the barcode raw data (string or bytearray) gets detected as a type we handle,
     // we nevertheless inject a raw data node in between. This is useful in cases where the

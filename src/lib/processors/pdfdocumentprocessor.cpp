@@ -90,7 +90,7 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
                 continue;
             }
 
-            if (!PdfBarcodeUtil::maybeBarcode(img)) {
+            if (PdfBarcodeUtil::maybeBarcode(img, BarcodeDecoder::Any2D) == BarcodeDecoder::None) {
                 continue;
             }
 

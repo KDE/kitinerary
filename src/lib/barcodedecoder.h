@@ -67,15 +67,15 @@ public:
      *  to perform them manually if a cheaper way to obtain the image dimension exists
      *  that does not require a full QImage creation.
      */
-    static bool isPlausibleSize(int width, int height, BarcodeTypes hint);
+    static BarcodeTypes isPlausibleSize(int width, int height, BarcodeTypes hint);
 
     /** Checks if the given image dimensions are a barcode of type @p hint.
      *  See above.
      */
-    static bool isPlausibleAspectRatio(int width, int height, BarcodeTypes hint);
+    static BarcodeTypes isPlausibleAspectRatio(int width, int height, BarcodeTypes hint);
 
     /** The combination of the above. */
-    static bool maybeBarcode(int width, int height, BarcodeTypes hint);
+    static BarcodeTypes maybeBarcode(int width, int height, BarcodeTypes hint);
 
 private:
     struct Result {

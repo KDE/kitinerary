@@ -14,22 +14,24 @@ enum {
     MinTargetImageHeight = 28,
     MinTargetImageWidth = 36,
     MaxTargetImageHeight = 252,
-    MaxTargetImageWidth = 252,
+    MaxTargetImageWidth2D = 252,
 };
 
-bool PdfBarcodeUtil::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint)
+BarcodeDecoder::BarcodeTypes PdfBarcodeUtil::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint)
 {
     const auto w = img.width();
     const auto h = img.height();
 
-    if (!BarcodeDecoder::isPlausibleSize(img.sourceWidth(), img.sourceHeight(), hint) || !BarcodeDecoder::isPlausibleAspectRatio(w, h, hint)) {
-        return false;
-    }
-
     // image target size checks
-    if (std::min(w, h) < MinTargetImageHeight || std::max(w, h) < MinTargetImageWidth || h > MaxTargetImageHeight || w > MaxTargetImageWidth) {
-        return false;
+    if (std::min(w, h) < MinTargetImageHeight || std::max(w, h) < MinTargetImageWidth || std::min(w, h) > MaxTargetImageHeight) {
+        return BarcodeDecoder::None;
     }
 
-    return true;
+    if (std::max(w, h) > MaxTargetImageWidth2D) {
+        hint &= ~BarcodeDecoder::Any2D;
+    }
+
+    hint = BarcodeDecoder::isPlausibleSize(img.sourceWidth(), img.sourceHeight(), hint);
+    hint = BarcodeDecoder::isPlausibleAspectRatio(w, h, hint);
+    return hint;
 }
