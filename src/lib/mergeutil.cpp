@@ -523,6 +523,17 @@ static Person mergeValue(const Person &lhs, const Person &rhs)
     return p;
 }
 
+static int ticketTokenSize(const QVariant &v)
+{
+    if (v.type() == QVariant::String) {
+        return v.toString().size();
+    }
+    if (v.type() == QVariant::ByteArray) {
+        return v.toByteArray().size();
+    }
+    return 0;
+}
+
 static Ticket mergeValue(const Ticket &lhs, const Ticket &rhs)
 {
     auto t = JsonLdDocument::apply(lhs, rhs).value<Ticket>();
@@ -581,6 +592,8 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
             rv = mergeValue(lv.value<Ticket>(), rv.value<Ticket>());
         } else if ((metaType.flags() & QMetaType::IsGadget) && metaType.metaObject()) {
             rv = merge(prop.readOnGadget(lhs.constData()), rv);
+        } else if (mt == QVariant::String) {
+            rv = StringUtil::betterString(lv.toString(), rv.toString()).toString();
         }
 
         if (!JsonLd::valueIsNull(rv)) {
