@@ -45,28 +45,9 @@ static constexpr const auto ANY1D_MIN_ASPECT = 6.0f;
 BarcodeDecoder::BarcodeDecoder() = default;
 BarcodeDecoder::~BarcodeDecoder() = default;
 
-bool BarcodeDecoder::isBarcode(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
-{
-    if ((hint & IgnoreAspectRatio) == 0) {
-        hint = maybeBarcode(img.width(), img.height(), hint);
-    }
-
-    if (hint == None) {
-        return false;
-    }
-
-    auto &result = m_cache[img.cacheKey()];
-    decodeIfNeeded(img, hint, result);
-    return hint & result.positive;
-}
-
 QByteArray BarcodeDecoder::decodeBinary(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
 {
-    if ((hint & IgnoreAspectRatio) == 0) {
-        hint = maybeBarcode(img.width(), img.height(), hint);
-    }
-
-    if (hint == None) {
+    if (hint == None || img.isNull()) {
         return {};
     }
 
@@ -81,11 +62,7 @@ QByteArray BarcodeDecoder::decodeBinary(const QImage &img, BarcodeDecoder::Barco
 
 QString BarcodeDecoder::decodeString(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
 {
-    if ((hint & IgnoreAspectRatio) == 0) {
-        hint = maybeBarcode(img.width(), img.height(), hint);
-    }
-
-    if (hint == None) {
+    if (hint == None || img.isNull()) {
         return {};
     }
 

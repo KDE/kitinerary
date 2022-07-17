@@ -50,14 +50,17 @@ public:
     };
     Q_DECLARE_FLAGS(BarcodeTypes, BarcodeType)
 
-    /** Checks if @p img contains a barcode of type @p hint. */
-    bool isBarcode(const QImage &img, BarcodeTypes hint = Any2D) const;
+    /** Decodes a binary payload barcode in @p img of type @p hint.
+     *  @param hint has to be validated by something of the likes of maybeBarcode()
+     *  before.
+     */
+    QByteArray decodeBinary(const QImage &img, BarcodeTypes hint) const;
 
-    /** Decodes a binary payload barcode in @p img of type @p hint. */
-    QByteArray decodeBinary(const QImage &img, BarcodeTypes hint = Any2D) const;
-
-    /** Decodes a textual payload barcode in @p img of type @p hint. */
-    QString decodeString(const QImage &img, BarcodeTypes hint = Any2D) const;
+    /** Decodes a textual payload barcode in @p img of type @p hint.
+     *  @param hint has to be validated by something of the likes of maybeBarcode()
+     *  before.
+     */
+    QString decodeString(const QImage &img, BarcodeTypes hint) const;
 
     /** Clears the internal cache. */
     void clearCache();
