@@ -29,13 +29,12 @@ function parsePdf(pdf, node, triggerNode)
     res.reservationFor.endDate = end;
 
     // search for the QR code with the actual event code
-    var images = pdf.pages[triggerNode.location].images;
-    for (var i = 0; i < images.length; ++i) {
-        var code = Barcode.decodeQR(images[i]);
-        if (code) {
-            res.reservedTicket.ticketToken = "qrcode:" + code;
-            break;
+    const barcodes = node.findChildNodes({ scope: "Descendants", mimeType: "text/plain", match: "^[0-9a-z]{40}$" });
+    for (let i = 0; i < barcodes.length; ++i) {
+        if (barcodes[i].location != triggerNode.location) {
+            continue;
         }
+        res.reservedTicket.ticketToken = "qrcode:" + barcodes[i].content;
     }
 
     // generate the second ticket for public transport
