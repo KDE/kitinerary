@@ -529,6 +529,9 @@ static Ticket mergeValue(const Ticket &lhs, const Ticket &rhs)
     // prefer barcode ticket tokens over URLs
     if (t.ticketTokenType() == Token::Url && lhs.ticketTokenType() != Token::Url && lhs.ticketTokenType() != Token::Unknown) {
         t.setTicketToken(lhs.ticketToken());
+    } else if (lhs.ticketTokenType() != Token::Url && rhs.ticketTokenType() != Token::Url
+            && lhs.ticketTokenType() != Token::Unknown && rhs.ticketTokenType() != Token::Unknown) {
+        t.setTicketToken(ticketTokenSize(lhs.ticketTokenData()) > ticketTokenSize(rhs.ticketTokenData()) ? lhs.ticketToken() : rhs.ticketToken());
     }
     return t;
 }
