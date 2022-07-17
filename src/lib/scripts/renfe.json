@@ -25,7 +25,7 @@
 {
     "filter": [
         {
-            "match": "^\\d{29}.*\\S{6}(\\.\\.\\S{5}| +)?$",
+            "match": "^\\d{29}.*(\\S{6}(\\.\\.\\S{5}| +))?$",
             "mimeType": "text/plain",
             "scope": "Current"
         }

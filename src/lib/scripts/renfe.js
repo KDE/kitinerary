@@ -14,12 +14,13 @@ function parseBarcode(barcode)
     // 5x train number
     // 3x coach number
     // 3x seat number
-    // 3x unknown number
+    // 2x unknown number
+    // 1x unknown number
     // 6x "localizador" ~ PNR?
     // ".." (optional)
     // 5x "CombinadoCercanias" (optional)
 
-    if (barcode.length > 56)
+    if (barcode.trim().length > 56)
         return null;
 
     // trim not set combined commuter section, so merging with a document that has that set works properly
