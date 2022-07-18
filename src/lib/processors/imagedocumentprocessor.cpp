@@ -29,9 +29,15 @@ ExtractorDocumentNode ImageDocumentProcessor::createNodeFromData(const QByteArra
 
 void ImageDocumentProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
 {
-    // check whether we possibly have a full PDF page raster image here
+    // skip barcode extraction if somebody else already did that (such as the PDF processor)
+    if (!node.childNodes().empty()) {
+        return;
+    }
+
     const auto img = node.content<QImage>();
+
     BarcodeDecoder::BarcodeTypes barcodeHints = BarcodeDecoder::Any2D;
+    // check whether we possibly have a full PDF page raster image here
     if (engine->hints() & ExtractorEngine::ExtractFullPageRasterImages) {
         barcodeHints |= BarcodeDecoder::IgnoreAspectRatio;
     }

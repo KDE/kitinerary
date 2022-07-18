@@ -5,6 +5,7 @@
 */
 
 #include "pdfdocumentprocessor.h"
+#include "barcodedocumentprocessorhelper.h"
 #include "pdf/pdfbarcodeutil_p.h"
 
 #include <KItinerary/BarcodeDecoder>
@@ -90,7 +91,8 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
                 continue;
             }
 
-            if (PdfBarcodeUtil::maybeBarcode(img, BarcodeDecoder::Any2D) == BarcodeDecoder::None) {
+            const auto barcodeHints = PdfBarcodeUtil::maybeBarcode(img, BarcodeDecoder::Any2D);
+            if (barcodeHints == BarcodeDecoder::None) {
                 continue;
             }
 
@@ -105,6 +107,10 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
             if (img.hasObjectId()) {
                 m_imageIds.insert(img.objectId());
             }
+
+            // technically not our job to do this here rather than letting the image node processor handle this
+            // but we have the output aspect ratio of the barcode only here, which gives better decoding hints
+            BarcodeDocumentProcessorHelper::expandNode(imgData, barcodeHints, childNode, engine);
         }
 
         // handle full page raster images
