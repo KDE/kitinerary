@@ -71,6 +71,14 @@ public:
      */
     int objectId() const;
 
+    /** Returns whether this is a raster or vector image. */
+    bool isVectorImage() const;
+
+    /** If this is a vector image, this returns the number
+     *  of vector path elemets.
+     */
+    int pathElementsCount() const;
+
 private:
     friend class PdfExtractorOutputDevice;
     friend class PdfPagePrivate;

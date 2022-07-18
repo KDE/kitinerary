@@ -15,6 +15,9 @@ enum {
     MinTargetImageWidth = 36,
     MaxTargetImageHeight = 252,
     MaxTargetImageWidth2D = 252,
+    // vector path complexity limits
+    MinPathElementCount2D = 400,
+    MaxPathElementCount2D = 4000,
 };
 
 BarcodeDecoder::BarcodeTypes PdfBarcodeUtil::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint)
@@ -33,5 +36,18 @@ BarcodeDecoder::BarcodeTypes PdfBarcodeUtil::maybeBarcode(const PdfImage &img, B
 
     hint = BarcodeDecoder::isPlausibleSize(img.sourceWidth(), img.sourceHeight(), hint);
     hint = BarcodeDecoder::isPlausibleAspectRatio(w, h, hint);
+
+    if (img.isVectorImage()) {
+        hint = isPlausiblePath(img.pathElementsCount(), hint);
+    }
+
+    return hint;
+}
+
+BarcodeDecoder::BarcodeTypes PdfBarcodeUtil::isPlausiblePath(int elementCount, BarcodeDecoder::BarcodeTypes hint)
+{
+    if (elementCount < MinPathElementCount2D || elementCount > MaxPathElementCount2D) {
+        hint &= ~BarcodeDecoder::Any2D;
+    }
     return hint;
 }

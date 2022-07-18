@@ -5,6 +5,7 @@
 */
 
 #include "pdfextractoroutputdevice_p.h"
+#include "pdfbarcodeutil_p.h"
 #include "pdfimage.h"
 #include "pdfimage_p.h"
 #include "popplerutils_p.h"
@@ -219,7 +220,7 @@ void PdfExtractorOutputDevice::finalize()
 
 void PdfExtractorOutputDevice::addVectorImage(const PdfVectorPicture &pic)
 {
-    if (pic.pathElementsCount() < 400) { // not complex enough for a barcode
+    if (PdfBarcodeUtil::isPlausiblePath(pic.pathElementsCount(), BarcodeDecoder::Any) == BarcodeDecoder::None) {
         return;
     }
 

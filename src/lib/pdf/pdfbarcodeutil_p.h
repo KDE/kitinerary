@@ -16,7 +16,10 @@ class PdfImage;
 namespace PdfBarcodeUtil
 {
     /** Quick pre-check without image decoding if @p img might be a barcode. */
-    BarcodeDecoder::BarcodeTypes maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint = BarcodeDecoder::Any2D);
+    BarcodeDecoder::BarcodeTypes maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint);
+
+    /** Check whether a vector path with @p elementCount could be a barcode. */
+    BarcodeDecoder::BarcodeTypes isPlausiblePath(int elementCount, BarcodeDecoder::BarcodeTypes hint);
 }
 
 }

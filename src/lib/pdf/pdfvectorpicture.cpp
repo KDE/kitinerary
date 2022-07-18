@@ -35,6 +35,11 @@ PdfVectorPicture::PdfVectorPicture(const PdfVectorPicture&) = default;
 PdfVectorPicture::~PdfVectorPicture() = default;
 PdfVectorPicture& PdfVectorPicture::operator=(const PdfVectorPicture&) = default;
 
+bool PdfVectorPicture::isNull() const
+{
+    return d->strokes.empty();
+}
+
 void PdfVectorPicture::setStrokes(std::vector<PdfVectorPicture::PathStroke> &&strokes)
 {
     d.detach();

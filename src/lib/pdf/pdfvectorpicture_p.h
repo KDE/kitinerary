@@ -27,6 +27,8 @@ public:
     ~PdfVectorPicture();
     PdfVectorPicture& operator=(const PdfVectorPicture&);
 
+    bool isNull() const;
+
     struct PathStroke {
         QPainterPath path;
         QPen pen;

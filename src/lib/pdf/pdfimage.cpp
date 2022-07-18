@@ -214,3 +214,13 @@ int PdfImage::objectId() const
 {
     return d->m_refNum;
 }
+
+bool PdfImage::isVectorImage() const
+{
+    return !d->m_vectorPicture.isNull();
+}
+
+int PdfImage::pathElementsCount() const
+{
+    return d->m_vectorPicture.pathElementsCount();
+}
