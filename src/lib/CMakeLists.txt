@@ -76,6 +76,7 @@ target_sources(KPimItinerary PRIVATE
     pdf/popplerglobalparams.cpp
     pdf/popplerutils.cpp
 
+    processors/barcodedocumentprocessorhelper.cpp
     processors/binarydocumentprocessor.cpp
     processors/externalprocessor.cpp
     processors/htmldocumentprocessor.cpp

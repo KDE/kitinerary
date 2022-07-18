@@ -5,6 +5,7 @@
 */
 
 #include "imagedocumentprocessor.h"
+#include "barcodedocumentprocessorhelper.h"
 
 #include <KItinerary/BarcodeDecoder>
 #include <KItinerary/ExtractorDocumentNodeFactory>
@@ -36,33 +37,5 @@ void ImageDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extra
     }
     barcodeHints = BarcodeDecoder::maybeBarcode(img.width(), img.height(), barcodeHints);
 
-    // in case the barcode raw data (string or bytearray) gets detected as a type we handle,
-    // we nevertheless inject a raw data node in between. This is useful in cases where the
-    // content is parsable but that is actually not desired (e.g. JSON content in ticket barcodes).
-
-    const auto b = engine->barcodeDecoder()->decodeBinary(img, barcodeHints);
-    if (!b.isEmpty()) {
-        auto c = engine->documentNodeFactory()->createNode(b);
-        if (c.isA<QByteArray>() || c.isA<QString>()) {
-            node.appendChild(c);
-            return;
-        }
-        auto rawNode = engine->documentNodeFactory()->createNode(QVariant::fromValue(b), u"application/octet-stream");
-        rawNode.appendChild(c);
-        node.appendChild(rawNode);
-        return;
-    }
-
-    const auto s = engine->barcodeDecoder()->decodeString(img, barcodeHints);
-    if (!s.isEmpty()) {
-        auto c = engine->documentNodeFactory()->createNode(s.toUtf8());
-        if (c.isA<QByteArray>() || c.isA<QString>()) {
-            node.appendChild(c);
-            return;
-        }
-        auto rawNode = engine->documentNodeFactory()->createNode(QVariant::fromValue(s), u"text/plain");
-        rawNode.appendChild(c);
-        node.appendChild(rawNode);
-        return;
-    }
+    BarcodeDocumentProcessorHelper::expandNode(img, barcodeHints, node, engine);
 }
