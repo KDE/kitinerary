@@ -36,7 +36,7 @@ void ImageDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extra
 
     const auto img = node.content<QImage>();
 
-    BarcodeDecoder::BarcodeTypes barcodeHints = BarcodeDecoder::Any2D;
+    BarcodeDecoder::BarcodeTypes barcodeHints = BarcodeDecoder::Any2D | BarcodeDecoder::Any1D;
     // check whether we possibly have a full PDF page raster image here
     if (engine->hints() & ExtractorEngine::ExtractFullPageRasterImages) {
         barcodeHints |= BarcodeDecoder::IgnoreAspectRatio;

@@ -11,13 +11,17 @@ using namespace KItinerary;
 
 enum {
     // unit is 1/72 inch, assuming landscape orientation
-    MinTargetImageHeight = 28,
+    MinTargetImageHeight2D = 28,
+    MinTargetImageHeight1D = 20,
     MinTargetImageWidth = 36,
     MaxTargetImageHeight = 252,
     MaxTargetImageWidth2D = 252,
+    MaxTargetImageWidth1D = 272,
     // vector path complexity limits
     MinPathElementCount2D = 400,
     MaxPathElementCount2D = 4000,
+    MinPathElementCount1D = 200,
+    MaxPathElementCount1D = 400,
 };
 
 BarcodeDecoder::BarcodeTypes PdfBarcodeUtil::maybeBarcode(const PdfImage &img, BarcodeDecoder::BarcodeTypes hint)
@@ -26,12 +30,15 @@ BarcodeDecoder::BarcodeTypes PdfBarcodeUtil::maybeBarcode(const PdfImage &img, B
     const auto h = img.height();
 
     // image target size checks
-    if (std::min(w, h) < MinTargetImageHeight || std::max(w, h) < MinTargetImageWidth || std::min(w, h) > MaxTargetImageHeight) {
+    if (std::max(w, h) < MinTargetImageWidth || std::min(w, h) > MaxTargetImageHeight) {
         return BarcodeDecoder::None;
     }
 
-    if (std::max(w, h) > MaxTargetImageWidth2D) {
+    if (std::max(w, h) > MaxTargetImageWidth2D || std::min(w, h) < MinTargetImageHeight2D) {
         hint &= ~BarcodeDecoder::Any2D;
+    }
+    if (std::max(w, h) > MaxTargetImageWidth1D || std::min(w, h) < MinTargetImageHeight1D) {
+        hint &= ~BarcodeDecoder::Any1D;
     }
 
     hint = BarcodeDecoder::isPlausibleSize(img.sourceWidth(), img.sourceHeight(), hint);
@@ -48,6 +55,9 @@ BarcodeDecoder::BarcodeTypes PdfBarcodeUtil::isPlausiblePath(int elementCount, B
 {
     if (elementCount < MinPathElementCount2D || elementCount > MaxPathElementCount2D) {
         hint &= ~BarcodeDecoder::Any2D;
+    }
+    if (elementCount < MinPathElementCount1D || elementCount > MaxPathElementCount1D) {
+        hint &= ~BarcodeDecoder::Any1D;
     }
     return hint;
 }

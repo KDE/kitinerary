@@ -91,7 +91,7 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
                 continue;
             }
 
-            const auto barcodeHints = PdfBarcodeUtil::maybeBarcode(img, BarcodeDecoder::Any2D);
+            const auto barcodeHints = PdfBarcodeUtil::maybeBarcode(img, BarcodeDecoder::Any2D | BarcodeDecoder::Any1D);
             if (barcodeHints == BarcodeDecoder::None) {
                 continue;
             }

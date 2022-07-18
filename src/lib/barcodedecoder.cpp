@@ -40,7 +40,8 @@ enum {
 static constexpr const auto SQUARE_MAX_ASPECT = 1.25f;
 static constexpr const auto PDF417_MIN_ASPECT = 1.5f;
 static constexpr const auto PDF417_MAX_ASPECT = 6.0f;
-static constexpr const auto ANY1D_MIN_ASPECT = 6.0f;
+static constexpr const auto ANY1D_MIN_ASPECT = 4.0f;
+static constexpr const auto ANY1D_MAX_ASPECT = 8.0f;
 
 BarcodeDecoder::BarcodeDecoder() = default;
 BarcodeDecoder::~BarcodeDecoder() = default;
@@ -118,7 +119,7 @@ BarcodeDecoder::BarcodeTypes BarcodeDecoder::isPlausibleAspectRatio(int width, i
     }
 
     // 1D
-    if (aspectRatio < ANY1D_MIN_ASPECT) {
+    if (aspectRatio < ANY1D_MIN_ASPECT || aspectRatio > ANY1D_MAX_ASPECT) {
         hint &= ~Any1D;
     }
 
