@@ -16,6 +16,8 @@
 
 namespace KItinerary {
 
+class BoatReservation;
+class BoatTrip;
 class BusReservation;
 class BusTrip;
 class Event;
@@ -51,6 +53,9 @@ public:
 
     BusReservation processBusReservation(BusReservation res) const;
     BusTrip processBusTrip(BusTrip trip) const;
+
+    BoatReservation processBoatReservation(BoatReservation res) const;
+    BoatTrip processBoatTrip(BoatTrip trip) const;
 
     LodgingReservation processLodgingReservation(LodgingReservation res) const;
     FoodEstablishmentReservation processFoodEstablishmentReservation(FoodEstablishmentReservation res) const;

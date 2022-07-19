@@ -23,6 +23,7 @@
 #include "knowledgedb/trainstationdb.h"
 
 #include <KItinerary/Action>
+#include <KItinerary/BoatTrip>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
@@ -101,6 +102,8 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
             elem = d->processTouristAttractionVisit(elem.value<TouristAttractionVisit>());
         } else if (JsonLd::isA<BusReservation>(elem)) {
             elem = d->processBusReservation(elem.value<BusReservation>());
+        } else if (JsonLd::isA<BoatReservation>(elem)) {
+            elem = d->processBoatReservation(elem.value<BoatReservation>());
         } else if (JsonLd::isA<EventReservation>(elem)) {
             elem = d->processEventReservation(elem.value<EventReservation>());
         } else if (JsonLd::isA<RentalCarReservation>(elem)) {
@@ -345,6 +348,23 @@ BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
     trip.setArrivalTime(processTimeForLocation(trip.arrivalTime(), trip.arrivalBusStop()));
     trip.setBusNumber(trip.busNumber().simplified());
     trip.setBusName(trip.busName().simplified());
+    return trip;
+}
+
+BoatReservation ExtractorPostprocessorPrivate::processBoatReservation(BoatReservation res) const
+{
+    if (res.reservationFor().isValid()) {
+        res.setReservationFor(processBoatTrip(res.reservationFor().value<BoatTrip>()));
+    }
+    return res;
+}
+
+BoatTrip ExtractorPostprocessorPrivate::processBoatTrip(BoatTrip trip) const
+{
+    trip.setDepartureBoatTerminal(processPlace(trip.departureBoatTerminal()));
+    trip.setArrivalBoatTerminal(processPlace(trip.arrivalBoatTerminal()));
+    trip.setDepartureTime(processTimeForLocation(trip.departureTime(), trip.departureBoatTerminal()));
+    trip.setArrivalTime(processTimeForLocation(trip.arrivalTime(), trip.arrivalBoatTerminal()));
     return trip;
 }
 
