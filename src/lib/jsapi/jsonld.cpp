@@ -173,6 +173,25 @@ QJSValue JsApi::JsonLd::newRentalCarReservation() const
     return res;
 }
 
+QJSValue JsApi::JsonLd::newBoatReservation() const
+{
+    const auto dep = newPlace(QStringLiteral("BoatTerminal"));
+    const auto arr = newPlace(QStringLiteral("BoatTerminal"));
+    const auto person = newObject(QStringLiteral("Person"));
+    const auto ticket = newObject(QStringLiteral("Ticket"));
+
+    auto resFor = newObject(QStringLiteral("BoatTrip"));
+    resFor.setProperty(QStringLiteral("departureBoatTerminal"), dep);
+    resFor.setProperty(QStringLiteral("arrivalBoatTerminal"), arr);
+
+    auto res = newObject(QStringLiteral("BoatReservation"));
+    res.setProperty(QStringLiteral("reservationFor"), resFor);
+    res.setProperty(QStringLiteral("underName"), person);
+    res.setProperty(QStringLiteral("reservedTicket"), ticket);
+
+    return res;
+}
+
 static constexpr const JsonLdFilterEngine::TypeMapping train_to_bus_type_map[] = {
     { "TrainReservation", "BusReservation" },
     { "TrainStation", "BusStation" },
