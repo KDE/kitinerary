@@ -12,6 +12,7 @@
 #include "mergeutil.h"
 #include "sortutil.h"
 
+#include <KItinerary/BoatTrip>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
@@ -52,6 +53,7 @@ using namespace KCalendarCore;
 static void fillFlightReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
 static void fillTrainReservation(const TrainReservation &reservation, const KCalendarCore::Event::Ptr &event);
 static void fillBusReservation(const BusReservation &reservation, const KCalendarCore::Event::Ptr &event);
+static void fillBoatReservation(const BoatReservation &reservation, const KCalendarCore::Event::Ptr &event);
 static void fillLodgingReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
 static void fillEvent(const KItinerary::Event &ev, const KCalendarCore::Event::Ptr &event);
 static void fillEventReservation(const QVector<QVariant> &reservations, const KCalendarCore::Event::Ptr &event);
@@ -137,6 +139,8 @@ void CalendarHandler::fillEvent(const QVector<QVariant> &reservations, const QSh
         fillTrainReservation(reservation.value<TrainReservation>(), event);
     } else if (typeId == qMetaTypeId<BusReservation>()) {
         fillBusReservation(reservation.value<BusReservation>(), event);
+    } else if (typeId == qMetaTypeId<BoatReservation>()) {
+        fillBoatReservation(reservation.value<BoatReservation>(), event);
     } else if (JsonLd::isA<EventReservation>(reservation)) {
         fillEventReservation(reservations, event);
     } else if  (JsonLd::isA<Event>(reservation)) {
@@ -289,6 +293,30 @@ static void fillBusReservation(const BusReservation &reservation, const KCalenda
     }
     if (!reservation.reservationNumber().isEmpty()) {
         desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
+    }
+    event->setDescription(desc.join(QLatin1Char('\n')));
+}
+
+static void fillBoatReservation(const KItinerary::BoatReservation &reservation, const KCalendarCore::Event::Ptr &event)
+{
+    const auto trip = reservation.reservationFor().value<BoatTrip>();
+    const auto depTerminal = trip.departureBoatTerminal();
+    const auto arrTerminal = trip.arrivalBoatTerminal();
+
+    event->setSummary(i18n("Ferry from %1 to %2", depTerminal.name(), arrTerminal.name()));
+    event->setLocation(depTerminal.name());
+    fillGeoPosition(depTerminal, event);
+    event->setDtStart(trip.departureTime());
+    event->setDtEnd(trip.arrivalTime());
+    event->setAllDay(false);
+
+    QStringList desc;
+    const auto ticket = reservation.reservedTicket().value<Ticket>();
+    if (!reservation.reservationNumber().isEmpty()) {
+        desc.push_back(i18n("Booking reference: %1", reservation.reservationNumber()));
+    }
+    if (!ticket.ticketNumber().isEmpty() && ticket.ticketNumber() != reservation.reservationNumber()) {
+        desc.push_back(i18n("Ticket number: %1", ticket.ticketNumber()));
     }
     event->setDescription(desc.join(QLatin1Char('\n')));
 }
