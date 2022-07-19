@@ -7,6 +7,7 @@
 #include "extractorvalidator.h"
 #include "validator-logging.h"
 
+#include <KItinerary/BoatTrip>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
@@ -34,6 +35,7 @@ public:
     bool filterFlight(const Flight &flight) const;
     bool filterTrainTrip(const TrainTrip &trip) const;
     bool filterBusTrip(const BusTrip &trip) const;
+    bool filterBoatTrip(const BoatTrip &trip) const;
     bool filterEvent(const Event &event) const;
     bool filterFoodReservation(const FoodEstablishmentReservation &res) const;
     bool filterLocalBusiness(const LocalBusiness &business) const;
@@ -83,23 +85,31 @@ bool ExtractorValidatorPrivate::filterFlight(const Flight &flight) const
 }
 
 template <typename T>
-static bool filterTrainOrBusStation(const T &station)
+static bool filterPlace(const T &place)
 {
-    return !station.name().isEmpty();
+    return !place.name().isEmpty();
 }
 
 bool ExtractorValidatorPrivate::filterTrainTrip(const TrainTrip &trip) const
 {
-    return filterTrainOrBusStation(trip.departureStation())
-           && filterTrainOrBusStation(trip.arrivalStation())
+    return filterPlace(trip.departureStation())
+           && filterPlace(trip.arrivalStation())
            && trip.departureDay().isValid();
 }
 
 bool ExtractorValidatorPrivate::filterBusTrip(const BusTrip &trip) const
 {
-    return filterTrainOrBusStation(trip.departureBusStop())
-           && filterTrainOrBusStation(trip.arrivalBusStop())
+    return filterPlace(trip.departureBusStop())
+           && filterPlace(trip.arrivalBusStop())
            && trip.departureTime().isValid() && trip.arrivalTime().isValid();
+}
+
+bool ExtractorValidatorPrivate::filterBoatTrip(const BoatTrip &trip) const
+{
+    return filterPlace(trip.departureBoatTerminal())
+        && filterPlace(trip.arrivalBoatTerminal())
+        && trip.departureTime().isValid()
+        && trip.arrivalTime().isValid();
 }
 
 bool ExtractorValidatorPrivate::filterEvent(const Event &event) const
@@ -161,6 +171,7 @@ struct {
     FILTER(Flight, filterFlight),
     FILTER(TrainTrip, filterTrainTrip),
     FILTER(BusTrip, filterBusTrip),
+    FILTER(BoatTrip, filterBoatTrip),
     FILTER(KItinerary::Event, filterEvent),
     FILTER(LocalBusiness, filterLocalBusiness),
     FILTER(FoodEstablishmentReservation, filterFoodReservation),
