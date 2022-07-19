@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "pdflink.h"
 #include "pdfvectorpicture_p.h"
 #include "popplertypes_p.h"
 
@@ -35,6 +36,7 @@ public:
     void stroke(GfxState *state) override;
     void fill(GfxState *state) override;
     void eoFill(GfxState *state) override;
+    void processLink(AnnotLink *link) override;
 
     void addVectorImage(const PdfVectorPicture &pic);
 
@@ -48,6 +50,9 @@ public:
         PdfVectorPicture::PathStroke stroke;
     };
     std::vector<VectorOp> m_vectorOps;
+
+    // extracted links
+    std::vector<PdfLink> m_links;
 };
 
 }

@@ -72,6 +72,7 @@ target_sources(KPimItinerary PRIVATE
     pdf/pdfdocument.cpp
     pdf/pdfextractoroutputdevice.cpp
     pdf/pdfimage.cpp
+    pdf/pdflink.cpp
     pdf/pdfvectorpicture.cpp
     pdf/popplerglobalparams.cpp
     pdf/popplerutils.cpp
@@ -294,6 +295,7 @@ ecm_generate_headers(KItinerary_Pdf_FORWARDING_HEADERS
     HEADER_NAMES
         PdfDocument
         PdfImage
+        PdfLink
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_Pdf_HEADERS
     RELATIVE pdf

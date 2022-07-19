@@ -34,6 +34,7 @@ void PdfPagePrivate::load()
     PopplerGlobalParams gp;
     PdfExtractorOutputDevice device;
     m_doc->m_popplerDoc->displayPageSlice(&device, m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
+    m_doc->m_popplerDoc->processLinks(&device, m_pageNum + 1);
     device.finalize();
     const auto pageRect = m_doc->m_popplerDoc->getPage(m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
@@ -47,6 +48,12 @@ void PdfPagePrivate::load()
     for (auto it = m_images.begin(); it != m_images.end(); ++it) {
         (*it).d->m_page = this;
     }
+
+    m_links = std::move(device.m_links);
+    for (auto &link : m_links) {
+        link.convertToPageRect(pageRect);
+    }
+
     m_loaded = true;
 }
 
@@ -144,6 +151,27 @@ QVariantList PdfPage::imagesInRect(double left, double top, double right, double
             l.push_back(QVariant::fromValue(img));
         }
     }
+    return l;
+}
+
+int PdfPage::linkCount() const
+{
+    d->load();
+    return d->m_links.size();
+}
+
+PdfLink PdfPage::link(int index) const
+{
+    d->load();
+    return d->m_links[index];
+}
+
+QVariantList PdfPage::linksVariant() const
+{
+    d->load();
+    QVariantList l;
+    l.reserve(d->m_links.size());
+    std::transform(d->m_links.begin(), d->m_links.end(), std::back_inserter(l), [](const PdfLink &link) { return QVariant::fromValue(link); });
     return l;
 }
 

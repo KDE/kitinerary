@@ -22,6 +22,7 @@ namespace KItinerary {
 
 class PdfDocumentPrivate;
 class PdfImage;
+class PdfLink;
 class PdfPage;
 
 class PdfPagePrivate : public QSharedData {
@@ -32,6 +33,7 @@ public:
     bool m_loaded = false;
     QString m_text;
     std::vector<PdfImage> m_images;
+    std::vector<PdfLink> m_links;
     PdfDocumentPrivate *m_doc;
 };
 

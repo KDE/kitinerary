@@ -5,6 +5,7 @@
 */
 
 #include <KItinerary/PdfDocument>
+#include <KItinerary/PdfLink>
 
 #include <QFile>
 #include <QObject>
@@ -71,6 +72,24 @@ private Q_SLOTS:
 
         QCOMPARE(doc->creationTime(), QDateTime({2018, 4, 29}, {11, 41, 28}, Qt::OffsetFromUTC, 7200));
         QCOMPARE(doc->modificationTime(), QDateTime());
+    }
+
+    void testPdfLink()
+    {
+        QFile f(QStringLiteral(SOURCE_DIR "/misc/link.pdf"));
+        QVERIFY(f.open(QFile::ReadOnly));
+        QVERIFY(PdfDocument::maybePdf(f.readAll()));
+        f.seek(0);
+        std::unique_ptr<PdfDocument> doc(PdfDocument::fromData(f.readAll()));
+        QVERIFY(doc);
+
+        QCOMPARE(doc->pageCount(), 1);
+        const auto page = doc->page(0);
+        QCOMPARE(page.linkCount(), 1);
+        const auto link = page.link(0);
+        QCOMPARE(link.url(), QLatin1String("https://kde.org"));
+        qDebug() << link.area();
+        QVERIFY(link.area().isValid());
     }
 
     void testInvalidPdfDocument()

@@ -20,6 +20,7 @@
 
 namespace KItinerary {
 
+class PdfLink;
 class PdfPagePrivate;
 
 /** A page in a PDF document.
@@ -29,6 +30,7 @@ class KITINERARY_EXPORT PdfPage
     Q_GADGET
     Q_PROPERTY(QString text READ text)
     Q_PROPERTY(QVariantList images READ imagesVariant)
+    Q_PROPERTY(QVariantList links READ linksVariant)
 public:
     PdfPage();
     PdfPage(const PdfPage&);
@@ -54,8 +56,15 @@ public:
      */
     Q_INVOKABLE QVariantList imagesInRect(double left, double top, double right, double bottom) const;
 
+    /** The number of links found in this document. */
+    int linkCount() const;
+
+    /** The n-th link found in this document. */
+    PdfLink link(int index) const;
+
 private:
     QVariantList imagesVariant() const;
+    QVariantList linksVariant() const;
 
     friend class PdfDocument;
     QExplicitlySharedDataPointer<PdfPagePrivate> d;

@@ -10,6 +10,10 @@
 #include "pdfimage_p.h"
 #include "popplerutils_p.h"
 
+#include <Annot.h>
+#include <Link.h>
+#include <Page.h>
+
 #include <QDebug>
 
 using namespace KItinerary;
@@ -232,4 +236,22 @@ void PdfExtractorOutputDevice::addVectorImage(const PdfVectorPicture &pic)
     img.d->m_transform = pic.transform();
     img.d->m_vectorPicture = pic;
     m_images.push_back(img);
+}
+
+void PdfExtractorOutputDevice::processLink(AnnotLink *link)
+{
+    TextOutputDev::processLink(link);
+    if (!link->isOk() || link->getAction()->getKind() != actionURI) {
+        return;
+    }
+
+    const auto uriLink = static_cast<LinkURI*>(link->getAction());
+    double xd1, yd1, xd2, yd2;
+    link->getRect(&xd1, &yd1, &xd2, &yd2);
+
+    double xu1, yu1, xu2, yu2;
+    cvtDevToUser(xd1, yd1, &xu1, &yu1);
+    cvtDevToUser(xd2, yd2, &xu2, &yu2);
+    PdfLink l(QString::fromStdString(uriLink->getURI()), QRectF(QPointF(std::min(xu1, xu2), std::min(yu1, yu2)), QPointF(std::max(xu1, xu2), std::max(yu1, yu2))));
+    m_links.push_back(std::move(l));
 }
