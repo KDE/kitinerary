@@ -22,6 +22,8 @@ Token::TokenType Token::tokenType(QStringView token)
         return DataMatrix;
     } else if (token.startsWith(QLatin1String("pdf417"), Qt::CaseInsensitive)) {
         return PDF417;
+    } else if (token.startsWith(QLatin1String("code39:"), Qt::CaseInsensitive)) {
+        return Code39;
     } else if (token.startsWith(QLatin1String("http"), Qt::CaseInsensitive)) {
         return Url;
     }
@@ -44,6 +46,9 @@ QVariant Token::tokenData(const QString &token)
         return token.mid(7);
     } else if (token.startsWith(QLatin1String("pdf417bin:"), Qt::CaseInsensitive)) {
         return QByteArray::fromBase64(QStringView(token).mid(10).toLatin1());
+    } else if (token.startsWith(QLatin1String("code39:"), Qt::CaseInsensitive)) {
+        return token.mid(7);
     }
+
     return token;
 }
