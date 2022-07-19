@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^GN-\\d{7}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parseTicket",
+    "mimeType": "application/pdf",
+    "script": "gnv.it.js"
+}
