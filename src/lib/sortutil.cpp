@@ -6,6 +6,7 @@
 
 #include "sortutil.h"
 
+#include <KItinerary/BoatTrip>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
@@ -77,6 +78,9 @@ QDateTime SortUtil::startDateTime(const QVariant &elem)
     if (JsonLd::isA<BusTrip>(elem)) {
         return elem.value<BusTrip>().departureTime();
     }
+    if (JsonLd::isA<BoatTrip>(elem)) {
+        return elem.value<BoatTrip>().departureTime();
+    }
     if (JsonLd::isA<Event>(elem)) {
         return elem.value<Event>().startDate();
     }
@@ -136,6 +140,9 @@ QDateTime SortUtil::endDateTime(const QVariant &elem)
     }
     if (JsonLd::isA<BusTrip>(elem)) {
         return elem.value<BusTrip>().arrivalTime();
+    }
+    if (JsonLd::isA<BoatTrip>(elem)) {
+        return elem.value<BoatTrip>().arrivalTime();
     }
 
     return {};
