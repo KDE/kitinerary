@@ -167,8 +167,8 @@ function parseHtmlAlternative(doc, node)
 
     const addrElems = doc.eval('//address')[0].content.split(',\n');
     res.reservationFor.address.streetAddress = addrElems[0];
-    res.reservationFor.address.addressLocality = addrElems[1];
-    res.reservationFor.address.postalCode = addrElems[2];
-    res.reservationFor.address.addressCountry = addrElems[3];
+    res.reservationFor.address.addressLocality = addrElems[addrElems.length - 3];
+    res.reservationFor.address.postalCode = addrElems[addrElems.length - 2];
+    res.reservationFor.address.addressCountry = addrElems[addrElems.length - 1];
     return parseHtmlCommon(doc, node, res);
 }
