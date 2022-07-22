@@ -1,0 +1,18 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "notification@blablacar.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        },
+        {
+            "match": "^(?:[^\\|]*\\|){16}[^\\|]*$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "main",
+    "mimeType": "application/pdf",
+    "script": "blablacar-bus.js"
+}
