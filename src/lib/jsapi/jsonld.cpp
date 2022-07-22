@@ -99,7 +99,10 @@ QJSValue JsApi::JsonLd::newBusReservation() const
     const auto dep = newPlace(QStringLiteral("BusStation"));
     const auto arr = newPlace(QStringLiteral("BusStation"));
     const auto person = newObject(QStringLiteral("Person"));
-    const auto ticket = newObject(QStringLiteral("Ticket"));
+    const auto seat = newObject(QStringLiteral("Seat"));
+
+    auto ticket = newObject(QStringLiteral("Ticket"));
+    ticket.setProperty(QStringLiteral("ticketedSeat"), seat);
 
     auto resFor = newObject(QStringLiteral("BusTrip"));
     resFor.setProperty(QStringLiteral("departureBusStop"), dep);
