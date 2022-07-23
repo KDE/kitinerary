@@ -26,7 +26,8 @@ ExtractorDocumentNode BinaryDocumentProcessor::createNodeFromData(const QByteArr
 
 bool BinaryDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
 {
-    return filter.matches(QString::fromLatin1(node.content<QByteArray>()));
+    const auto b = node.content<QByteArray>();
+    return filter.matches(QString::fromLatin1(b.constData(), b.size()));
 }
 
 QJSValue BinaryDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const
