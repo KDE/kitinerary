@@ -9,9 +9,9 @@ function parseDateTime(value)
     return new Date(value * 1000 + base.getTime());
 }
 
+// see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
 function parseBarcode(data) {
     var res = JsonLd.newTrainReservation();
-    // see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
     const inner = ByteArray.inflate(data.slice(2));
     const view = new DataView(inner);
     res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
@@ -35,6 +35,21 @@ function parseBarcode(data) {
         }
         res.reservedTicket.ticketedSeat.seatSection = ByteArray.decodeUtf8(seatBlock.slice(22, 25));
         res.reservedTicket.ticketedSeat.seatNumber = seatView.getUInt16(25, false);
+    }
+    res.reservedTicket.ticketToken = "pdf417bin:" + ByteArray.toBase64(data);
+    return res;
+}
+
+function parseBarcodeAlternative(data)
+{
+    var res = JsonLd.newTrainReservation();
+    res.reservationNumber = ByteArray.decodeUtf8(data.slice(2, 19));
+    res.reservationFor.provider.identifier = "uic:" + ByteArray.decodeUtf8(data.slice(20, 24));
+
+    const inner = ByteArray.inflate(data.slice(24));
+    const header2 = new DataView(inner.slice(0, 19));
+    if (header2.getUInt8(8) == 0x81) {
+        res.underName.name = ByteArray.decodeUtf8(inner.slice(19, 19 + 45));
     }
     res.reservedTicket.ticketToken = "pdf417bin:" + ByteArray.toBase64(data);
     return res;
