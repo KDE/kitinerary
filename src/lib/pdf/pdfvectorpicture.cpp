@@ -144,7 +144,7 @@ int PdfVectorPicture::sourceWidth() const
 int PdfVectorPicture::sourceHeight() const
 {
     // 1/72 dpi is the unit for the vector coordinates
-    return boundingRect().width() * (RenderDPI / 72.0);
+    return boundingRect().height() * (RenderDPI / 72.0);
 }
 
 int PdfVectorPicture::width() const
