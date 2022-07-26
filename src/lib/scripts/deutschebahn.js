@@ -329,7 +329,7 @@ function parseEvent(event) {
     let reservations = [];
     let idx = 0;
     while (true) {
-        const trip = event.description.substr(idx).match(/ab (\d{2}:\d{2}) (.*?)(?:\n|- Gleis (.*) \((.*)\)\n)an (\d{2}:\d{2}) (.*?)(?:\n| - Gleis (.*)\n)/);
+        const trip = event.description.substr(idx).match(/(\d{2}:\d{2}) (.*?)(?:- (?:Gleis|platform|voie|Vía|Spor|Kolej|binario|Peron) (.*?))?(?: \((.*\d+)\))?\n.* (\d{2}:\d{2}) (.*?)(?:\n| - (?:Gleis|platform|voie|Vía|Spor|Kolej|binario|Peron) (.*)\n)/);
         if (!trip) {
             break;
         }
@@ -344,6 +344,10 @@ function parseEvent(event) {
         res.reservationFor.arrivalStation.name = trip[6];
         res.reservationFor.arrivalTime = JsonLd.toDateTime(date + trip[5], 'yyyy-MM-ddhh:mm', 'de');
         res.reservationFor.arrivalPlatform = trip[7];
+
+        if (trip[4] && trip[4].match(/^Bus[ \d]/)) {
+            res = JsonLd.trainToBusReservation(res);
+        }
 
         reservations.push(res);
     }

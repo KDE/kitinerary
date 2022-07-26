@@ -1,0 +1,92 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Verona Porta Nuova"
+            },
+            "arrivalTime": "2022-07-26T14:40:00",
+            "departureDay": "2022-07-26",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Rovereto"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-26T13:57:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "trainName": "FA 8519"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Milano Centrale"
+            },
+            "arrivalTime": "2022-07-26T16:15:00",
+            "departureDay": "2022-07-26",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Verona Porta Nuova"
+            },
+            "departureTime": "2022-07-26T15:02:00",
+            "trainName": "FA 9736"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "1",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Brig"
+            },
+            "arrivalTime": "2022-07-26T19:14:00",
+            "departureDay": "2022-07-26",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Milano Centrale"
+            },
+            "departureTime": "2022-07-26T17:20:00",
+            "trainName": "EC 36"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Randa"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-26T20:52:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureDay": "2022-07-26",
+            "departurePlatform": "14",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Brig Bahnhofplatz"
+            },
+            "departureTime": "2022-07-26T19:52:00",
+            "trainName": "RE 265"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

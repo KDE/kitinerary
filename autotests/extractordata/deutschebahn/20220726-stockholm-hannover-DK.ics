@@ -1,0 +1,33 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+X-LOTUS-CHARSET:UTF-8
+PRODID:http://www.hacon.de
+METHOD:PUBLISH
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+X-LIC-LOCATION:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:20220726112100@hafas
+CLASS:PUBLIC
+SUMMARY:Stockholm Central -> Hannover Hbf
+DTSTART;TZID=Europe/Berlin:20220726T112100
+DTEND;TZID=Europe/Berlin:20220727T000000
+DTSTAMP:20220726T111500Z
+DESCRIPTION:Rejse: Stockholm Central til Hannover Hbf\nDato: 26.07.22\n-\nfra 11:21 Stockholm Central  (X2   531)\ntil 15:48 Malmö Central \n\nfra 16:13 Malmö Central  (R   1077)\ntil 16:49 Koebenhavn H - Spor 1\n\nfra 17:17 Koebenhavn H - Spor 5 (IC  1199)\ntil 21:58 Hamburg Hbf - Spor 13\n\nfra 22:12 Hamburg Hbf - Spor 14 (ICE 1689)\ntil 00:00 Hannover Hbf - Spor 7\n-\nVarighed: 12:39 \, Omstigninger 3\n\nAlle angivelser uden ansvar. Forbehold mod ændringer i køreplanen. Kontroller venligst kort tid inden rejsen den aktuelle køreplan under: www.bahn.de\n 
+END:VEVENT
+END:VCALENDAR

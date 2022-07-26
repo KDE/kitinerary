@@ -1,0 +1,95 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Malmö Central"
+            },
+            "arrivalTime": "2022-07-26T15:48:00",
+            "departureDay": "2022-07-26",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Stockholm Central"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-26T11:21:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "trainName": "X2 531"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "1",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Koebenhavn H"
+            },
+            "arrivalTime": "2022-07-26T16:49:00",
+            "departureDay": "2022-07-26",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Malmö Central"
+            },
+            "departureTime": "2022-07-26T16:13:00",
+            "trainName": "R 1077"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "13",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Hamburg Hbf"
+            },
+            "arrivalTime": "2022-07-26T21:58:00",
+            "departureDay": "2022-07-26",
+            "departurePlatform": "5",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Koebenhavn H"
+            },
+            "departureTime": "2022-07-26T17:17:00",
+            "trainName": "IC 1199"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "7",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Hannover Hbf"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-27T00:00:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureDay": "2022-07-26",
+            "departurePlatform": "14",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Hamburg Hbf"
+            },
+            "departureTime": "2022-07-26T22:12:00",
+            "trainName": "ICE 1689"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

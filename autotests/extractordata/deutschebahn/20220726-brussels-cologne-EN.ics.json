@@ -1,0 +1,32 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "4 A-C",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Köln Hbf"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-26T14:15:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureDay": "2022-07-26",
+            "departurePlatform": "3",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Bruxelles Midi"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-26T12:25:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "trainName": "ICE 315"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

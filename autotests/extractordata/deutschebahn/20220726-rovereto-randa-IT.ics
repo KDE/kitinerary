@@ -1,0 +1,33 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+X-LOTUS-CHARSET:UTF-8
+PRODID:http://www.hacon.de
+METHOD:PUBLISH
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+X-LIC-LOCATION:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:20220726135700@hafas
+CLASS:PUBLIC
+SUMMARY:Rovereto -> Randa
+DTSTART;TZID=Europe/Berlin:20220726T135700
+DTEND;TZID=Europe/Berlin:20220726T205200
+DTSTAMP:20220726T111800Z
+DESCRIPTION:Viaggio: Rovereto a Randa\nData: 26.07.22\n-\nda 13:57 Rovereto  (FA  8519)\na 14:40 Verona Porta Nuova \n\nda 15:02 Verona Porta Nuova  (FA  9736)\na 16:15 Milano Centrale \n\nda 17:20 Milano Centrale  (EC    36)\na 19:14 Brig - binario 1\n\nda Brig  (tratto a piedi)\na Brig Bahnhofplatz \n\nda 19:52 Brig Bahnhofplatz - binario 14 (RE   265)\na 20:52 Randa \n-\nDurata: 6:55 \, Cambi 3\n\nTutte le informazioni senza garanzia. Sono possibili eventuali modifiche dell'orario ferroviario. Si prega di ricontrollare l'orario poco prima del viaggio sotto il link: www.bahn.de\n 
+END:VEVENT
+END:VCALENDAR
