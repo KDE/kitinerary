@@ -11,6 +11,7 @@
 #include "stringutil.h"
 #include "sortutil.h"
 
+#include <KItinerary/BoatTrip>
 #include <KItinerary/BusTrip>
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
@@ -68,6 +69,7 @@ static bool prefixConflictIfPresent(const T &lhs, const T &rhs)
 static bool isSameFlight(const Flight &lhs, const Flight &rhs);
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs);
 static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs);
+static bool isSameBoatTrip(const BoatTrip &lhs, const BoatTrip &rhs);
 static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs);
 static bool isSameFoodEstablishment(const FoodEstablishment &lhs, const FoodEstablishment &rhs);
 static bool isSameTouristAttractionVisit(const TouristAttractionVisit &lhs, const TouristAttractionVisit &rhs);
@@ -175,6 +177,21 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         const auto lhsTrip = lhs.value<BusTrip>();
         const auto rhsTrip = rhs.value<BusTrip>();
         return isSameBusTrip(lhsTrip, rhsTrip);
+    }
+
+    // boat
+    if (JsonLd::isA<BoatReservation>(lhs)) {
+        const auto lhsRes = lhs.value<BoatReservation>();
+        const auto rhsRes = rhs.value<BoatReservation>();
+        if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
+            return false;
+        }
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor());
+    }
+    if (JsonLd::isA<BoatTrip>(lhs)) {
+        const auto lhsTrip = lhs.value<BoatTrip>();
+        const auto rhsTrip = rhs.value<BoatTrip>();
+        return isSameBoatTrip(lhsTrip, rhsTrip);
     }
 
     // hotel: booking ref, checkin day, name match
@@ -389,6 +406,13 @@ static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs)
     }
 
     return lhs.busName() == rhs.busName() && lhs.busNumber() == rhs.busNumber() && lhs.departureTime() == rhs.departureTime();
+}
+
+static bool isSameBoatTrip(const BoatTrip& lhs, const BoatTrip& rhs)
+{
+    return lhs.departureTime() == rhs.departureTime()
+        && LocationUtil::isSameLocation(lhs.departureBoatTerminal(), rhs.departureBoatTerminal())
+        && LocationUtil::isSameLocation(lhs.arrivalBoatTerminal(), rhs.arrivalBoatTerminal());
 }
 
 static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs)
