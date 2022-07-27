@@ -1,0 +1,76 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "9",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Münster(Westf)Hbf"
+            },
+            "arrivalTime": "2022-07-26T15:00:00",
+            "departureDay": "2022-07-26",
+            "departurePlatform": "14",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Hamburg Hbf"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-26T12:46:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "trainName": "IC 2311"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "4",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Hamm(Westf)Hbf"
+            },
+            "arrivalTime": "2022-07-26T15:37:00",
+            "departureDay": "2022-07-26",
+            "departurePlatform": "3",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Münster(Westf)Hbf"
+            },
+            "departureTime": "2022-07-26T15:10:00",
+            "trainName": "RB 90027"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "18",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Dortmund Hbf"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-26T16:05:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureDay": "2022-07-26",
+            "departurePlatform": "10",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Hamm(Westf)Hbf"
+            },
+            "departureTime": "2022-07-26T15:44:00",
+            "trainName": "RE 89726"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

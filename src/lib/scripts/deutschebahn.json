@@ -83,6 +83,12 @@
                 "match": "^bahn\\d{14}$",
                 "mimeType": "internal/event",
                 "scope": "Current"
+            },
+            {
+                "field": "uid",
+                "match": "^\\d{14}@hafas$",
+                "mimeType": "internal/event",
+                "scope": "Current"
             }
         ],
         "function": "parseEvent",

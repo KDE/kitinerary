@@ -1,0 +1,53 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "6",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Köln Hbf"
+            },
+            "arrivalTime": "2022-07-26T11:33:00",
+            "departureDay": "2022-07-26",
+            "departurePlatform": "19",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Frankfurt(Main)Hbf"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-26T10:26:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "trainName": "ICE 16"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Paris Nord"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-26T16:05:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureDay": "2022-07-26",
+            "departurePlatform": "8 D-G",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Köln Hbf"
+            },
+            "departureTime": "2022-07-26T12:42:00",
+            "trainName": "THA 9448"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

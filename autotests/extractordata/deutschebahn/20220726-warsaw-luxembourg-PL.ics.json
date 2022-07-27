@@ -1,0 +1,116 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "3",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Koblenz Hbf"
+            },
+            "arrivalTime": "2022-07-26T05:11:00",
+            "departureDay": "2022-07-26",
+            "departurePlatform": "4",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Nürnberg Hbf"
+            },
+            "departureTime": "2022-07-26T01:41:00",
+            "trainName": "NJ 40490"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "11 Süd",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Trier Hbf"
+            },
+            "arrivalTime": "2022-07-26T07:31:00",
+            "departureDay": "2022-07-26",
+            "departurePlatform": "9",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Koblenz Hbf"
+            },
+            "departureTime": "2022-07-26T06:03:00",
+            "trainName": "RE 4100"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "BusReservation",
+        "reservationFor": {
+            "@type": "BusTrip",
+            "arrivalBusStop": {
+                "@type": "BusStation",
+                "name": "Luxembourg"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-27T08:31:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "busName": "Bus51016",
+            "departureBusStop": {
+                "@type": "BusStation",
+                "name": "Trier Hbf"
+            },
+            "departureTime": "2022-07-26T07:41:00"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "10",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Berlin Gesundbrunnen"
+            },
+            "arrivalTime": "2022-07-26T18:15:00",
+            "departureDay": "2022-07-26",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Warszawa Centralna"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-07-26T12:15:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "trainName": "EC 44"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "8",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Nürnberg Hbf"
+            },
+            "arrivalTime": "2022-07-26T22:56:00",
+            "departureDay": "2022-07-26",
+            "departurePlatform": "7",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Berlin Gesundbrunnen"
+            },
+            "departureTime": "2022-07-26T19:55:00",
+            "trainName": "ICE 1109"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

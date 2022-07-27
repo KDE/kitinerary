@@ -1,0 +1,33 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+X-LOTUS-CHARSET:UTF-8
+PRODID:http://www.hacon.de
+METHOD:PUBLISH
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+X-LIC-LOCATION:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:20220726121500@hafas
+CLASS:PUBLIC
+SUMMARY:Warszawa Centralna -> Luxembourg
+DTSTART;TZID=Europe/Berlin:20220726T121500
+DTEND;TZID=Europe/Berlin:20220727T083100
+DTSTAMP:20220726T112100Z
+DESCRIPTION:Podró¿: Warszawa Centralna do Luxembourg\nData: 26.07.22\n-\nodj. 12:15 Warszawa Centralna  (EC    44)\nprz. 18:15 Berlin Gesundbrunnen - Peron 10\n\nodj. 19:55 Berlin Gesundbrunnen - Peron 7 (ICE 1109)\nprz. 22:56 Nürnberg Hbf - Peron 8\n\nodj. 01:41 Nürnberg Hbf - Peron 4 (NJ 40490)\nprz. 05:11 Koblenz Hbf - Peron 3\n\nodj. 06:03 Koblenz Hbf - Peron 9 (RE  4100)\nprz. 07:31 Trier Hbf - Peron 11 Süd\n\nodj. 07:41 Trier Hbf  (Bus51016)\nprz. 08:31 Luxembourg \n-\nCzas przejazdu: 20:16 \, Przesiadki 4\n\nNie ponosimy odpowiedzialno¶ci za tre¶æ danych. Zastrzega siê mo¿liwo¶æ zmiany rozk³adu jazdy. Sprawd¼ tu¿ przed podró¿± aktualny rozk³ad jazdy: www.bahn.de\n 
+END:VEVENT
+END:VCALENDAR
