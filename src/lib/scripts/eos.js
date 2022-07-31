@@ -4,6 +4,18 @@
 */
 
 function parseTicket(ticket, node) {
+    // U_TLAY block in UIC 918.3 container with type "EOSU",
+    // up to 9 rows of content
+    // 0: Traveler name
+    // 1: Ticket name/tariff
+    // 2: Area of validity
+    // 3: Time range of validity
+    // 4: empty?
+    // 5: Traveler birth date
+    // 6: empty? (optional)
+    // 7: departure station (optional)
+    // 8: arrival station (optional)
+
     var res = JsonLd.newTrainReservation();
     res.reservedTicket = node.result[0];
 
