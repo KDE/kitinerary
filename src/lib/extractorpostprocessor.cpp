@@ -365,6 +365,13 @@ BoatTrip ExtractorPostprocessorPrivate::processBoatTrip(BoatTrip trip) const
     trip.setArrivalBoatTerminal(processPlace(trip.arrivalBoatTerminal()));
     trip.setDepartureTime(processTimeForLocation(trip.departureTime(), trip.departureBoatTerminal()));
     trip.setArrivalTime(processTimeForLocation(trip.arrivalTime(), trip.arrivalBoatTerminal()));
+
+    // arrival less than a day before departure is an indication of the extractor failing to detect day rollover
+    const auto duration = trip.departureTime().secsTo(trip.arrivalTime());
+    if (duration < 0 && duration > -3600*24) {
+        trip.setArrivalTime(trip.arrivalTime().addDays(1));
+    }
+
     return trip;
 }
 
