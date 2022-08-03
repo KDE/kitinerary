@@ -6,7 +6,6 @@
 
 #pragma once
 
-class QChar;
 class QString;
 class QStringView;
 

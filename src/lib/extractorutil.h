@@ -11,7 +11,6 @@
 namespace KItinerary {
 
 class Flight;
-class PostalAddress;
 
 /** Data extraction utility functions. */
 namespace ExtractorUtil
