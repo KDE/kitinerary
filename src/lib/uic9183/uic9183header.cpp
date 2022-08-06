@@ -19,6 +19,12 @@ enum {
     ZlibHeaderSize = 2
 };
 
+static bool isZlibHeader(const QByteArray &data, int offset)
+{
+    // check for zlib headers 0x789C or 0x78DA
+    return ((uint8_t)data[offset] == 0x78 && ((uint8_t)data[offset + 1] == 0x9C || (uint8_t)data[offset + 1] == 0xDA));
+}
+
 Uic9183Header::Uic9183Header() = default;
 Uic9183Header::Uic9183Header(const QByteArray& data)
 {
@@ -33,14 +39,17 @@ Uic9183Header::Uic9183Header(const QByteArray& data)
     if (version != 1 && version != 2) {
         return;
     }
-    const auto offset = PrefixSize + (version == 1 ? SignatureSizeV1 : SignatureSizeV2) + SuffixSize;
+    auto offset = PrefixSize + (version == 1 ? SignatureSizeV1 : SignatureSizeV2) + SuffixSize;
     if (data.size() < offset + ZlibHeaderSize) {
         return;
     }
 
-    // check for zlib headers 0x789C or 0x78DA
-    if ((uint8_t)data[offset] != 0x78 || ((uint8_t)data[offset + 1] != 0x9C && (uint8_t)data[offset + 1] != 0xDA)) {
+    // compressedMessageOffset() contains workarounds for wrong version claims, which the above check doesn't do yet
+    m_data = data;
+    offset = compressedMessageOffset();
+    if (!isZlibHeader(data, offset)) {
         qCWarning(Log) << "UIC 918-3 payload has wrong zlib header.";
+        m_data.clear();
         return;
     }
 
@@ -56,7 +65,17 @@ int Uic9183Header::signatureSize() const
 {
     switch (version()) {
         case 1: return SignatureSizeV1;
-        case 2: return SignatureSizeV2;
+        case 2:
+        {
+            // workaround some tickets claiming version 2 but actually being version 1...
+            if (isZlibHeader(m_data, PrefixSize + SignatureSizeV2 + SuffixSize)) {
+                return SignatureSizeV2;
+            }
+            if (isZlibHeader(m_data, PrefixSize + SignatureSizeV1 + SuffixSize)) {
+                return SignatureSizeV1;
+            }
+            return SignatureSizeV2;
+        }
     };
     return 0;
 }
