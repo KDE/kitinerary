@@ -151,10 +151,13 @@ QString Uic9183TicketLayout::text(int row, int column, int width, int height) co
     }
 
     for (auto f = firstField(); !f.isNull(); f = f.next()) {
-        if (f.row() + f.height() - 1 < row || f.row() > row + height - 1) {
+        // there's non-compliant samples out there with zero field sizes...
+        const auto effectiveHeight = std::max(f.height(), 1);
+        if (f.row() + effectiveHeight - 1 < row || f.row() > row + height - 1) {
             continue;
         }
-        if (f.column() + f.width() - 1 < column || f.column() > column + width - 1) {
+        const auto effectiveFieldWidth = f.width() > 0 ? f.width() : f.size();
+        if (f.column() + effectiveFieldWidth - 1 < column || f.column() > column + width - 1) {
             continue;
         }
 
