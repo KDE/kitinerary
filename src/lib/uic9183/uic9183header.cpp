@@ -55,18 +55,18 @@ bool Uic9183Header::isValid() const
 int Uic9183Header::signatureSize() const
 {
     switch (version()) {
-        case 1: return 50;
-        case 2: return 64;
+        case 1: return SignatureSizeV1;
+        case 2: return SignatureSizeV2;
     };
     return 0;
 }
 
 int Uic9183Header::compressedMessageSize() const
 {
-    return Uic9183Utils::readAsciiEncodedNumber(m_data, 14 + signatureSize(), 4);
+    return Uic9183Utils::readAsciiEncodedNumber(m_data, PrefixSize + signatureSize(), 4);
 }
 
 int Uic9183Header::compressedMessageOffset() const
 {
-    return PrefixSize + (version() == 1 ? SignatureSizeV1 : SignatureSizeV2) + SuffixSize;
+    return PrefixSize + signatureSize() + SuffixSize;
 }
