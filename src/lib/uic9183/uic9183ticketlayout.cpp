@@ -9,7 +9,6 @@
 
 #include <QDateTime>
 #include <QDebug>
-#include <QSize>
 
 #include <cstring>
 
