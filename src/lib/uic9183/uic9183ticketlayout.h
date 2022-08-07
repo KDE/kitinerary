@@ -14,7 +14,6 @@
 #include <QMetaType>
 #include <QSize>
 
-class QSize;
 
 namespace KItinerary {
 
