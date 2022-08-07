@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "field": "uid",
@@ -10,4 +10,17 @@
     "function": "parseEvent",
     "mimeType": "internal/event",
     "script": "trainline.js"
-}
+},
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@trainline.fr",
+            "mimeType": "message/rfc822",
+            "scope": "Current"
+        }
+    ],
+    "function": "fixBrokenSncfTicketTokens",
+    "mimeType": "message/rfc822",
+    "script": "trainline.js"
+}]
