@@ -41,8 +41,8 @@ if (NOT ANDROID)
     find_package(SharedMimeInfo 1.3 REQUIRED)
 endif()
 
-set(KMIME_VERSION "5.20.90")
-set(PIM_PKPASS "5.20.90")
+set(KMIME_VERSION "5.21.0")
+set(PIM_PKPASS "5.21.0")
 
 find_package(KF5Mime ${KMIME_VERSION} CONFIG REQUIRED)
 find_package(KPimPkPass ${PIM_PKPASS} CONFIG REQUIRED)
