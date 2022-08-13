@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: none
 
 ---
-Checks:          'clang-diagnostic-*,-clang-diagnostic-gnu-zero-variadic-macro-arguments,-clang-diagnostic-unknown-warning-option,clang-analyzer-*,bugprone-*,misc-*,modernize-*,performance-*,readability-*,-readability-implicit-bool-conversion'
+Checks:          'clang-diagnostic-*,-clang-diagnostic-gnu-zero-variadic-macro-arguments,-clang-diagnostic-unknown-warning-option,clang-analyzer-*,bugprone-*,misc-*,modernize-*,performance-*,readability-*,-readability-implicit-bool-conversion,-modernize-use-trailing-return-type'
 FormatStyle:     none
 CheckOptions:    
   - key:             readability-implicit-bool-conversion.AllowIntegerConditions
