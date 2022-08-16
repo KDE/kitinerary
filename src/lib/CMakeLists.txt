@@ -94,6 +94,7 @@ target_sources(KPimItinerary PRIVATE
     scripts/extractors.qrc
 
     text/addressparser.cpp
+    text/terminalfinder.cpp
     text/timefinder.cpp
 
     tlv/berelement.cpp
