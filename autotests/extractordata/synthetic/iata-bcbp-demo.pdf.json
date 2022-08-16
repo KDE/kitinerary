@@ -36,6 +36,7 @@
                 "iataCode": "MXP",
                 "name": "Milano Malpensa"
             },
+            "arrivalTerminal": "1",
             "arrivalTime": {
                 "@type": "QDateTime",
                 "@value": "2019-09-06T17:20:00+02:00",
