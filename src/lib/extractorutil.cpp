@@ -5,6 +5,7 @@
 */
 
 #include "extractorutil.h"
+#include "text/terminalfinder_p.h"
 
 #include <KItinerary/Flight>
 #include <KItinerary/Place>
@@ -31,27 +32,19 @@ static QString trimAirportName(QStringView in)
 
 static std::tuple<QString, QString> splitAirportName(const QString &name)
 {
-    static QRegularExpression patterns[] = {
-        QRegularExpression(QStringLiteral("^(.*) \\((?:terminal|aerogare) (.*)\\)$"), QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression(QStringLiteral("^(.*) \\((.*) (?:terminal|aerogare)\\)$"), QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression(QStringLiteral("^(.*)[ -](?:terminal|aerogare) (.*)$"), QRegularExpression::CaseInsensitiveOption),
-    };
+    static TerminalFinder finder(u"^.*", u"$");
+    const auto result = finder.find(name);
+    if (result.hasResult()) {
+        const auto airportName = trimAirportName(QStringView(name).left(result.start));
 
-    for (const auto &re : patterns) {
-        const auto match = re.match(name);
-        if (match.hasMatch()) {
-            const auto name = trimAirportName(match.capturedView(1));
-
-            // try to recurse, sometimes this is indeed repeated...
-            QString recName;
-            QString recTerminal;
-            std::tie(recName, recTerminal) = splitAirportName(name);
-            if (recName == name || recTerminal.isEmpty()) {
-                return std::make_tuple(trimAirportName(match.capturedView(1)), match.captured(2));
-            } else {
-                return std::make_tuple(recName, recTerminal);
-            }
-            break;
+        // try to recurse, sometimes this is indeed repeated...
+        QString recName;
+        QString recTerminal;
+        std::tie(recName, recTerminal) = splitAirportName(airportName);
+        if (recName == name || recTerminal.isEmpty()) {
+            return std::make_tuple(airportName, result.name);
+        } else {
+            return std::make_tuple(recName, recTerminal);
         }
     }
 

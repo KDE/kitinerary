@@ -13,6 +13,7 @@
 #include <knowledgedb/airportdb.h>
 #include <knowledgedb/airportnametokenizer_p.h>
 #include <pdf/pdfdocument.h>
+#include <text/terminalfinder_p.h>
 #include <text/timefinder_p.h>
 
 #include <KItinerary/ExtractorDocumentNode>
@@ -109,6 +110,8 @@ static void applyFlightTimes(QVector<QVariant> &result, const QDateTime &boardin
 
 ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
+    static TerminalFinder terminalFinder(u"^", u"(?=\\b|\\s|$)");
+
     QVector<QVariant> fullResult;
 
     const auto pdf = node.content<PdfDocument*>();
@@ -128,6 +131,7 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
         // 1 determine which airports we need to look for on the same page
         const auto pageNum = (*it).location().toInt();
         std::unordered_map<KnowledgeDb::IataCode, QStringList> airportNames;
+        std::unordered_map<KnowledgeDb::IataCode, QString> terminalNames;
         for (auto it2 = it; it2 != bcbpNodes.end() && (*it2).location().toInt() == pageNum; ++it2) {
             const auto flightReservations = (*it).result().result();
             for (const auto &flightRes : flightReservations) {
@@ -135,10 +139,12 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
                 if (!flight.departureAirport().iataCode().isEmpty()) {
                     from = KnowledgeDb::IataCode{flight.departureAirport().iataCode()};
                     airportNames[from] = QStringList();
+                    terminalNames[from] = QString();
                 }
                 if (!flight.arrivalAirport().iataCode().isEmpty()) {
                     to = KnowledgeDb::IataCode{flight.arrivalAirport().iataCode()};
                     airportNames[to] = QStringList();
+                    terminalNames[to] = QString();
                 }
                 departureDay = flight.departureDay();
             }
@@ -163,6 +169,13 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
                 if (it2 != airportNames.end()) {
                     qCDebug(Log) << "  found candidate:" << s << iataCodes;
                     mergeOrAppend((*it2).second, s);
+
+                    // look for a following terminal name at the position after s
+                    const auto offset = s.size() + s.data() - pageText.data();
+                    const auto res = terminalFinder.find(QStringView(pageText).mid(offset));
+                    if (res.hasResult()) {
+                        terminalNames[(*it2).first] = res.name;
+                    }
                 }
             }
         }
@@ -175,9 +188,11 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
             auto airport = flight.departureAirport();
             airport.setName(airportNames[KnowledgeDb::IataCode{airport.iataCode()}].join(QLatin1Char(' ')));
             flight.setDepartureAirport(airport);
+            flight.setDepartureTerminal(terminalNames[KnowledgeDb::IataCode{airport.iataCode()}]);
             airport = flight.arrivalAirport();
             airport.setName(airportNames[KnowledgeDb::IataCode{airport.iataCode()}].join(QLatin1Char(' ')));
             flight.setArrivalAirport(airport);
+            flight.setArrivalTerminal(terminalNames[KnowledgeDb::IataCode{airport.iataCode()}]);
             flightRes.setReservationFor(flight);
             result.push_back(std::move(flightRes));
         }
