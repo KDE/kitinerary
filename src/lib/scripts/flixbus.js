@@ -9,7 +9,7 @@ function main(content, node) {
     var res = node.result;
     for (var i = 0; i < res.length; ++i) {
         var ticketToken = res[i].reservedTicket.ticketToken;
-        res[i].reservedTicket.ticketToken = ticketToken.replace(/^https?:\/\/api\.meinfernbus\.(..)\/qrcode\/..\//, "qrCode:https://shop.flixbus.$1/pdfqr/");
+        res[i].reservedTicket.ticketToken = ticketToken.replace(/^https?:\/\/api\.(?:flixbus|meinfernbus)\..{2,3}\/qrcode\/(..)\//, "qrCode:https://shop.flixbus.$1/pdfqr/");
 
         // their schema.org annotations also claim train trips are bus trips, fix that
         if (res[i].reservationFor.departureBusStop.name.endsWith(" (FlixTrain)") && res[i].reservationFor.arrivalBusStop.name.endsWith(" (FlixTrain)")) {

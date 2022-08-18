@@ -1,7 +1,7 @@
 {
     "filter": [
         {
-            "match": "FlixMobility",
+            "match": "(?:FlixMobility|Flix SE)",
             "field": "reservationFor.busCompany.name",
             "mimeType": "application/ld+json"
         }
