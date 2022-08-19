@@ -26,7 +26,7 @@ function parseDate(year, baseDate, overrideDate, time)
     return JsonLd.toDateTime(s, 'd MMM yyyy hh:mm', ['en', 'fr']);
 }
 
-function parseLocation(place, addr1, addr2)
+function parseLocation(place, addr1, addr2, links)
 {
     if (!addr1)
         return;
@@ -35,12 +35,14 @@ function parseLocation(place, addr1, addr2)
     const idx = addr1.lastIndexOf(',');
     place.address.streetAddress = addr1.substring(0, idx);
     place.address.addressLocality = addr1.substr(idx + 1);
+    place.geo = JsonLd.toGeoCoordinates(links.shift().url);
 }
 
 function parsePdfTicket(pdf, node, triggerNode)
 {
     const page = pdf.pages[triggerNode.location];
     const text = page.textInRect(0.0, 0.05, 0.5, 0.5);
+    const links = page.linksInRect(0.0, 0.0, 0.5, 0.5);
     const resNum = triggerNode.content.match(/pdfqr\/(\d+)\//)[1];
     const date = text.match(/^\S+,? (\d+ \S+) (\d{4})\n/);
     let idx = date.index + date[0].length;
@@ -62,14 +64,14 @@ function parsePdfTicket(pdf, node, triggerNode)
         res.reservedTicket.ticketToken = 'qrCode:' + triggerNode.content;
         res.reservationFor.departureTime = parseDate(date[2], date[1], dep[3], dep[1]);
         res.reservationFor.departureBusStop.name = dep[2];
-        parseLocation(res.reservationFor.departureBusStop, dep[4], dep[5]);
+        parseLocation(res.reservationFor.departureBusStop, dep[4], dep[5], links);
 
         res.reservationFor.busNumber = bus[1];
         res.reservationFor.busName = bus[2];
 
         res.reservationFor.arrivalTime = parseDate(date[2], date[1], arr[1], arr[2]);
         res.reservationFor.arrivalBusStop.name = arr[3];
-        parseLocation(res.reservationFor.arrivalBusStop, arr[4], arr[5]);
+        parseLocation(res.reservationFor.arrivalBusStop, arr[4], arr[5], links);
 
         reservations.push(res);
     }
