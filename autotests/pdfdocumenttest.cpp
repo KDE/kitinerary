@@ -86,10 +86,17 @@ private Q_SLOTS:
         QCOMPARE(doc->pageCount(), 1);
         const auto page = doc->page(0);
         QCOMPARE(page.linkCount(), 1);
-        const auto link = page.link(0);
+        auto link = page.link(0);
         QCOMPARE(link.url(), QLatin1String("https://kde.org"));
         qDebug() << link.area();
         QVERIFY(link.area().isValid());
+
+        QCOMPARE(page.linksInRect(0.0, 0.0, 1.0, 1.0).size(), 1);
+        QCOMPARE(page.linksInRect(0.0, 0.0, 1.0, 0.5).size(), 1);
+        link = page.linksInRect(0.0, 0.0, 0.5, 0.5).at(0).value<PdfLink>();
+        QCOMPARE(link.url(), QLatin1String("https://kde.org"));
+        QCOMPARE(page.linksInRect(0.0, 0.0, 0.2, 0.5).size(), 1);
+        QCOMPARE(page.linksInRect(0.0, 0.5, 1.0, 1.0).size(), 0);
     }
 
     void testInvalidPdfDocument()

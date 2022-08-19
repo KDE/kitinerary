@@ -62,6 +62,12 @@ public:
     /** The n-th link found in this document. */
     PdfLink link(int index) const;
 
+    /** Returns all links in the specified sub-rect of this page.
+     *  All parameters are relative values between @c 0 and @c 1 of the entire page size.
+     *  Links are sorted top to bottom / left to right based on their top left corner.
+     */
+    Q_INVOKABLE QVariantList linksInRect(double left, double top, double right, double bottom) const;
+
 private:
     QVariantList imagesVariant() const;
     QVariantList linksVariant() const;

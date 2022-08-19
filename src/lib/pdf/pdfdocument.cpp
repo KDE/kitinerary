@@ -175,6 +175,31 @@ QVariantList PdfPage::linksVariant() const
     return l;
 }
 
+QVariantList PdfPage::linksInRect(double left, double top, double right, double bottom) const
+{
+    QRectF bbox(QPointF(left, top), QPointF(right, bottom));
+    d->load();
+
+    QVariantList l;
+    for (const auto &link : d->m_links) {
+        if (!link.area().intersects(bbox)) {
+            continue;
+        }
+        l.push_back(QVariant::fromValue(link));
+    }
+
+    std::sort(l.begin(), l.end(), [](const auto &lhs, const auto &rhs) {
+        const auto lhsLink = lhs.template value<PdfLink>();
+        const auto rhsLink = rhs.template value<PdfLink>();
+        if (lhsLink.area().top() == rhsLink.area().top()) {
+            return lhsLink.area().left() < rhsLink.area().left();
+        }
+        return lhsLink.area().top() < rhsLink.area().top();
+    });
+
+    return l;
+}
+
 
 PdfDocument::PdfDocument(QObject *parent)
     : QObject(parent)
