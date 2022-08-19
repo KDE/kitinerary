@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "match": "(?:FlixMobility|Flix SE)",
@@ -9,4 +9,16 @@
     "function": "main",
     "script": "flixbus.js",
     "mimeType": "text/html"
-}
+},
+{
+    "filter": [
+        {
+            "match": "^https://shop\\.(?:global\\.)?flixbus\\.[a-z]{2,3}/pdfqr/",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdfTicket",
+    "mimeType": "application/pdf",
+    "script": "flixbus.js"
+}]
