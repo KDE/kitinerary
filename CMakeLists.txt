@@ -69,7 +69,7 @@ if(TARGET Poppler::Core)
     # check if we have private Poppler headers
     find_file(HAVE_POPPLER_UNSTABLE_HEADERS "OutputDev.h" PATHS ${Poppler_INCLUDE_DIRS} NO_DEFAULT_PATH)
     if (NOT HAVE_POPPLER_UNSTABLE_HEADERS)
-        message(FATAL_ERROR "Poppler was not build with ENABLE_UNSTABLE_API_ABI_HEADER!")
+        message(FATAL_ERROR "Poppler was not build with ENABLE_UNSTABLE_API_ABI_HEADERS!")
     endif()
 endif()
 string(REGEX MATCH "([0-9]+)\.0*([0-9]+)\.0*([0-9]+)" _match ${Poppler_VERSION})
