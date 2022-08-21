@@ -113,12 +113,15 @@ static bool isAirportName(const QString &name, KnowledgeDb::IataCode iataCode)
 
 static bool isPlausibeGate(const QString &s)
 {
+    if (s.isEmpty() || s.size() > 10 || s.count(QLatin1Char('-')) > 1 || s.count(QLatin1Char(' ')) > 2) {
+        return false;
+    }
     for (const auto &c : s) {
-        if (c.isLetter() || c.isDigit()) {
-            return true;
+        if (!c.isLetter() && !c.isDigit() && c != QLatin1Char(' ') && c != QLatin1Char(' ')) {
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
