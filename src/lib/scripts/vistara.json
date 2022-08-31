@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "operatingCarrierDesignator",
+            "match": "UK",
+            "mimeType": "internal/iata-bcbp",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parseBoardingPass",
+    "mimeType": "application/pdf",
+    "script": "vistara.js"
+}
