@@ -10,23 +10,41 @@ function parseTicket(pdf, node, triggerNode) {
     var legs = new Array();
     var idx = 0;
     while (true) {
-        const train = text.substr(idx).match(/TRAIN  +\w.*?  +(.*?) +DEPARTS\s+ARRIVES \(\w{3} (.*)\)\n\s*(\d+)\s+(\w{3} \d{1,2}), (\d{4})\n\s*(.*)?\n?\s*\d+ (.*) Seats?\n?  +(\d{1,2}:\d{2} [AP]M) +(\d{1,2}:\d{2} [AP]M)/);
-        if (!train) {
-            break;
-        }
-        idx += train.index + train[0].length;
-
-        var leg = JsonLd.newTrainReservation();
+        let leg = JsonLd.newTrainReservation();
+        leg.reservationNumber = triggerNode.content.substr(0, 6);
         leg.reservedTicket.ticketToken = 'qrcode:' + triggerNode.content;
-        leg.reservationFor.trainNumber = train[3];
-        leg.reservationFor.departureTime = JsonLd.toDateTime(train[4] + ' ' + train[5] + ' ' + train[8], 'MMM d yyyy h:mm AP', 'en');
-        leg.reservationFor.arrivalTime = JsonLd.toDateTime(train[2] + ' ' + train[5] + ' ' + train[9], 'MMM d yyyy h:mm AP', 'en');
-        leg.reservedTicket.ticketedSeat.seatingType = train[7];
 
-        const stations = (train[1] + ' ' + (train[6] ?? '')).match(/(.*) - (.*)/);
-        leg.reservationFor.departureStation.name = stations[1];
-        leg.reservationFor.arrivalStation.name = stations[2];
-        legs.push(leg);
+        // format variant 1
+        let train = text.substr(idx).match(/TRAIN  +\w.*?  +(.*?) +DEPARTS\s+ARRIVES \(\w{3} (.*)\)\n\s*(\d+)\s+(\w{3} \d{1,2}), (\d{4})\n\s*(.*)?\n?\s*\d+ (.*) Seats?\n?  +(\d{1,2}:\d{2} [AP]M) +(\d{1,2}:\d{2} [AP]M)/);
+        if (train) {
+            leg.reservationFor.trainNumber = train[3];
+            leg.reservationFor.departureTime = JsonLd.toDateTime(train[4] + ' ' + train[5] + ' ' + train[8], 'MMM d yyyy h:mm AP', 'en');
+            leg.reservationFor.arrivalTime = JsonLd.toDateTime(train[2] + ' ' + train[5] + ' ' + train[9], 'MMM d yyyy h:mm AP', 'en');
+            leg.reservedTicket.ticketedSeat.seatingType = train[7];
+
+            const stations = (train[1] + ' ' + (train[6] ?? '')).match(/(.*) - (.*)/);
+            leg.reservationFor.departureStation.name = stations[1];
+            leg.reservationFor.arrivalStation.name = stations[2];
+            idx += train.index + train[0].length;
+            legs.push(leg);
+            continue;
+        }
+
+        // format variant 2
+        train = text.substr(idx).match(/TRAIN .* DEPARTS +ARRIVES\n *(\d+)  +([A-Z][a-z]{2} \d{1,2}, \d{4})  +(\d{1,2}:\d{2} [AP]M)  +(\d{1,2}:\d{2} [AP]M)\n  +(.*?)  +(.*)\n *\d+ (.*) Seat/);
+        if (train) {
+            leg.reservationFor.trainNumber = train[1];
+            leg.reservationFor.departureTime = JsonLd.toDateTime(train[2] + ' ' + train[3], 'MMM d, yyyy h:mm AP', 'en');
+            leg.reservationFor.departureStation.name = train[5];
+            leg.reservationFor.arrivalTime = JsonLd.toDateTime(train[2] + ' ' + train[4], 'MMM d, yyyy h:mm AP', 'en');
+            leg.reservationFor.arrivalStation.name = train[6];
+            leg.reservedTicket.ticketedSeat.seatingType = train[7];
+            idx += train.index + train[0].length;
+            legs.push(leg);
+            continue;
+        }
+
+        break;
     }
 
     // station codes
