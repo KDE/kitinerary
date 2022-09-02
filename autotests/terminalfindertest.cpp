@@ -42,6 +42,7 @@ private Q_SLOTS:
         QTest::newRow("DEL2") << s(" (T3)") << 5 << s("3");
         QTest::newRow("DEL3") << s(" T2 some other text") << 3 << s("2");
         QTest::newRow("DEL4") << s(" (T3) more information") << 5 << s("3");
+        QTest::newRow("DEL5") << s(" (T1C) ") << 6 << s("1C");
         QTest::newRow("FRA") << s(", Terminal 2 (FRA)\nMadrid (MAD)") << 12 << s("2");
     }
 
