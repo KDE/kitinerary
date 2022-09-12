@@ -230,7 +230,7 @@ function parseSecutixPdfItineraryV2(text, res)
     var reservations = new Array();
     var pos = 0;
     while (true) {
-        var data = text.substr(pos).match(/(\d+h\d+)\n(.*)\n(.*)\n(\d+h\d+)\n(.*)\n/);
+        var data = text.substr(pos).match(/ *(\d+h\d+)\n *(.*)\n *(.*)\n(?: *Voiture (\d+) - Place (\d+)\n.*\n.*\n)? *(\d+h\d+)\n(.*)\n/);
         if (!data)
             break;
         pos += data.index + data[0].length;
@@ -239,12 +239,14 @@ function parseSecutixPdfItineraryV2(text, res)
         leg.reservationFor.departureStation.name = data[2];
         leg.reservationFor.departureDay = res.reservationFor.departureDay;
         leg.reservationFor.departureTime = JsonLd.toDateTime(data[1], "hh'h'mm", "fr");
-        leg.reservationFor.arrivalStation.name = data[5];
-        leg.reservationFor.arrivalTime = JsonLd.toDateTime(data[4], "hh'h'mm", "fr");
+        leg.reservationFor.arrivalStation.name = data[7];
+        leg.reservationFor.arrivalTime = JsonLd.toDateTime(data[6], "hh'h'mm", "fr");
         leg.reservationFor.trainNumber = data[3];
         leg.underName = res.underName;
         leg.reservationNumber = res.reservationNumber;
         leg.reservedTicket = res.reservedTicket;
+        leg.reservedTicket.ticketedSeat.seatSection = data[4];
+        leg.reservedTicket.ticketedSeat.seatNumber = data[5];
         leg.programMembershipUsed = res.programMembershipUsed;
 
         reservations.push(leg);
@@ -512,4 +514,25 @@ function parseSncfCartePdf(pdf, node, barcode) {
     carte.validFrom = JsonLd.toDateTime(validity[1], 'dd/MM/yyyy', 'fr');
     carte.validTo = JsonLd.toDateTime(validity[2] + ' 23:59:59', 'dd/MM/yyyy hh:mm:ss', 'fr');
     return carte;
+}
+
+// see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes#SNCF_Normandie_Tickets
+// PDF layout matches that of the "secutix" v2
+function parseSncfNormandie(pdf, node, triggerNode) {
+    let res = JsonLd.newTrainReservation();
+    res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content);
+
+    const page = pdf.pages[triggerNode.location];
+    const textRight = page.textInRect(0.5, 0.0, 1.0, 1.0);
+    const pnr = textRight.match(/(.*)\n(.*)\n\d{2}\/\d{2}\/\d{4} +(?:PAO|REF)\s*:\s*([A-Z0-9]{6,8})\n/);
+    res.reservationNumber = pnr[3];
+    res.underName.givenName = pnr[2];
+    res.underName.familyName = pnr[1];
+    res.reservedTicket.ticketedSeat.seatingType = textRight.match(/Classe (.*)\n/)[1];
+
+    const textLeft = pdf.pages[triggerNode.location].textInRect(0.0, 0.0, 0.5, 1.0);
+    const date = textLeft.match(/(\d{1,2} \S+ \d{4})/)[1];
+    res.reservationFor.departureDay = JsonLd.toDateTime(date, 'd MMMM yyyy', 'fr');
+    let reservations = parseSecutixPdfItineraryV2(textLeft, res);
+    return reservations;
 }
