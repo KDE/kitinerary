@@ -141,5 +141,17 @@
         "function": "parseSncfCartePdf",
         "mimeType": "application/pdf",
         "script": "sncf.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^\\x01UcP",
+                "mimeType": "application/octet-stream",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parseSncfNormandie",
+        "mimeType": "application/pdf",
+        "script": "sncf.js"
     }
 ]
