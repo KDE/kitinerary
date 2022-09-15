@@ -62,6 +62,8 @@
         <file>eurowings-pkpass.js</file>
         <file>eventbrite.json</file>
         <file>eventbrite.js</file>
+        <file>eventim.json</file>
+        <file>eventim.js</file>
         <file>fcmtravel.json</file>
         <file>fcmtravel.js</file>
         <file>feratel-card.json</file>
