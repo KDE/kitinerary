@@ -77,6 +77,7 @@ class KITINERARY_EXPORT PdfDocument : public QObject
     Q_PROPERTY(QVariantList pages READ pagesVariant CONSTANT)
     Q_PROPERTY(QDateTime creationTime READ creationTime CONSTANT)
     Q_PROPERTY(QDateTime modificationTime READ modificationTime CONSTANT)
+    Q_PROPERTY(QString producer READ producer CONSTANT)
 
 public:
     explicit PdfDocument(QObject *parent = nullptr);
@@ -98,6 +99,9 @@ public:
     QDateTime creationTime() const;
     /** Modification time as specified in the PDF file. */
     QDateTime modificationTime() const;
+
+    /** The document producer. */
+    QString producer() const;
 
     /** Creates a PdfDocument from the given raw data.
      *  @returns @c nullptr if loading fails or Poppler was not found.

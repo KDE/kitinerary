@@ -243,6 +243,15 @@ QDateTime PdfDocument::modificationTime() const
 #endif
 }
 
+QString PdfDocument::producer() const
+{
+    std::unique_ptr<GooString> s(d->m_popplerDoc->getDocInfoProducer());
+    if (!s) {
+        return {};
+    }
+    return QString::fromUtf8(s->c_str());
+}
+
 QVariantList PdfDocument::pagesVariant() const
 {
     QVariantList l;
