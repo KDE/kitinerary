@@ -126,16 +126,6 @@ static bool isPlausibeGate(const QString &s)
 
 static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
 {
-    // "relevantDate" is the best guess for the boarding time
-    if (pass->relevantDate().isValid() && !flight.boardingTime().isValid()) {
-        const auto tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{flight.departureAirport().iataCode()});
-        if (tz.isValid()) {
-            flight.setBoardingTime(pass->relevantDate().toTimeZone(tz));
-        } else {
-            flight.setBoardingTime(pass->relevantDate());
-        }
-    }
-
     // search for missing information by field key
     const auto fields = pass->fields();
     for (const auto &field : fields) {
@@ -158,7 +148,17 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
         }
     }
 
-    // search for missing information in field content
+    // "relevantDate" is the best guess for the boarding time if we didn't find an explicit field for it
+    if (pass->relevantDate().isValid() && !flight.boardingTime().isValid()) {
+        const auto tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{flight.departureAirport().iataCode()});
+        if (tz.isValid()) {
+            flight.setBoardingTime(pass->relevantDate().toTimeZone(tz));
+        } else {
+            flight.setBoardingTime(pass->relevantDate());
+        }
+    }
+
+   // search for missing information in field content
     const auto depIata = KnowledgeDb::IataCode(flight.departureAirport().iataCode());
     const auto arrIata = KnowledgeDb::IataCode(flight.arrivalAirport().iataCode());
     const auto frontFields = frontFieldsForPass(pass);
