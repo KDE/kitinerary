@@ -79,13 +79,13 @@ private Q_SLOTS:
         QCOMPARE(c1.mimeType(), QLatin1String("internal/qimage"));
         QVERIFY(!c1.parent().isNull());
         QCOMPARE(c1.content().userType(), qMetaTypeId<QImage>());
+#if !HAVE_ZXING
+        QSKIP("No ZXing support");
+#endif
         QCOMPARE(c1.childNodes().size(), 1); // barcode already expanded by the PDF processor
         QCOMPARE(c1.location().toInt(), 0);
 
         c1.processor()->expandNode(c1, &engine);
-#if !HAVE_ZXING
-        QSKIP("No ZXing support");
-#endif
         QCOMPARE(c1.childNodes().size(), 1);
         auto c11 = c1.childNodes()[0];
         QVERIFY(!c11.isNull());
