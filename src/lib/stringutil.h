@@ -29,6 +29,9 @@ namespace StringUtil
 
     /** Cleans up extra white spaces and XML entities from @p s. */
     QString clean(const QString &s);
+
+    /** Transliterate diacritics or other special characters. */
+    QString transliterate(QStringView s);
 }
 
 }
