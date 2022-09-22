@@ -143,6 +143,11 @@ private Q_SLOTS:
             {_("DANIEL VRATIL"), {}, {} },
             {_("DANIEL VRATIL"), _("DANIEL"), _("VRATIL") }
         };
+
+        QTest::newRow("transliteration") << QVector<QStringList> {
+            {_("Bjärn Lastname"), {}, {} },
+            {_("BJAERN LASTNAME"), _("BJAERN"), _("LASTNAME") },
+        };
     }
 
     void testIsSamePerson()

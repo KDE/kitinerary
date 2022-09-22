@@ -470,8 +470,21 @@ static bool isNameEqualish(const QString &lhs, const QString &rhs)
 
 bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)
 {
-    return isNameEqualish(lhs.name(), rhs.name()) ||
-        (isNameEqualish(lhs.givenName(), rhs.givenName()) && isNameEqualish(lhs.familyName(), rhs.familyName()));
+    if (isNameEqualish(lhs.name(), rhs.name()) ||
+        (isNameEqualish(lhs.givenName(), rhs.givenName()) && isNameEqualish(lhs.familyName(), rhs.familyName()))) {
+        return true;
+    }
+
+    const auto lhsNameT = StringUtil::transliterate(lhs.name());
+    const auto lhsGivenNameT = StringUtil::transliterate(lhs.givenName());
+    const auto lhsFamilyNameT = StringUtil::transliterate(lhs.familyName());
+
+    const auto rhsNameT = StringUtil::transliterate(rhs.name());
+    const auto rhsGivenNameT = StringUtil::transliterate(rhs.givenName());
+    const auto rhsFamilyNameT = StringUtil::transliterate(rhs.familyName());
+
+    return isNameEqualish(lhsNameT, rhsNameT) ||
+        (isNameEqualish(lhsGivenNameT, rhsGivenNameT) && isNameEqualish(lhsFamilyNameT, rhsFamilyNameT));
 }
 
 static bool isSameEvent(const Event &lhs, const Event &rhs)
