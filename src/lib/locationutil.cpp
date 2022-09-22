@@ -6,6 +6,7 @@
 
 #include "locationutil.h"
 #include "locationutil_p.h"
+#include "stringutil.h"
 
 #include <KItinerary/BoatTrip>
 #include <KItinerary/BusTrip>
@@ -189,41 +190,6 @@ static QString stripDiacritics(const QString &s)
     return res;
 }
 
-// keep this ordered (see https://en.wikipedia.org/wiki/List_of_Unicode_characters)
-struct {
-    ushort key;
-    const char* replacement;
-} static const transliteration_map[] = {
-    { u'ä', "ae" },
-    { u'ö', "oe" },
-    { u'ø', "oe" },
-    { u'ü', "ue" }
-};
-
-static QString applyTransliterations(const QString &s)
-{
-    QString res;
-    res.reserve(s.size());
-
-    for (const auto c : s) {
-        const auto it = std::lower_bound(std::begin(transliteration_map), std::end(transliteration_map), c, [](const auto &lhs, const auto rhs) {
-            return QChar(lhs.key) < rhs;
-        });
-        if (it != std::end(transliteration_map) && QChar((*it).key) == c) {
-            res += QString::fromUtf8((*it).replacement);
-            continue;
-        }
-
-        if (c.decompositionTag() == QChar::Canonical) { // see above
-            res += c.decomposition().at(0);
-        } else {
-            res += c;
-        }
-    }
-
-    return res;
-}
-
 static bool compareSpaceCaseInsenstive(const QString &lhs, const QString &rhs)
 {
     auto lit = lhs.begin();
@@ -262,8 +228,8 @@ static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationU
     // check if any of the Unicode normalization approaches helps
     const auto lhsNormalized = stripDiacritics(lhs);
     const auto rhsNormalized = stripDiacritics(rhs);
-    const auto lhsTransliterated = applyTransliterations(lhs);
-    const auto rhsTransliterated = applyTransliterations(rhs);
+    const auto lhsTransliterated = StringUtil::transliterate(lhs);
+    const auto rhsTransliterated = StringUtil::transliterate(rhs);
     if (compareSpaceCaseInsenstive(lhsNormalized, rhsNormalized) || compareSpaceCaseInsenstive(lhsNormalized, rhsTransliterated)
         || compareSpaceCaseInsenstive(lhsTransliterated, rhsNormalized) || compareSpaceCaseInsenstive(lhsTransliterated, rhsTransliterated)) {
         return true;

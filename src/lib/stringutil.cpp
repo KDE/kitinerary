@@ -118,3 +118,38 @@ QString StringUtil::clean(const QString &s)
 {
     return KCharsets::resolveEntities(s).simplified();
 }
+
+// keep this ordered (see https://en.wikipedia.org/wiki/List_of_Unicode_characters)
+struct {
+    ushort key;
+    const char* replacement;
+} static const transliteration_map[] = {
+    { u'ä', "ae" },
+    { u'ö', "oe" },
+    { u'ø', "oe" },
+    { u'ü', "ue" }
+};
+
+QString StringUtil::transliterate(QStringView s)
+{
+    QString res;
+    res.reserve(s.size());
+
+    for (const auto c : s) {
+        const auto it = std::lower_bound(std::begin(transliteration_map), std::end(transliteration_map), c, [](const auto &lhs, const auto rhs) {
+            return QChar(lhs.key) < rhs;
+        });
+        if (it != std::end(transliteration_map) && QChar((*it).key) == c) {
+            res += QString::fromUtf8((*it).replacement);
+            continue;
+        }
+
+        if (c.decompositionTag() == QChar::Canonical) { // see above
+            res += c.decomposition().at(0);
+        } else {
+            res += c;
+        }
+    }
+
+    return res;
+}
