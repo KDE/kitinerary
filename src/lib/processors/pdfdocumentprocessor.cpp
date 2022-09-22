@@ -49,6 +49,12 @@ static void applyContextDateTime(PdfDocument *pdf, ExtractorDocumentNode &node)
       return;
     }
 
+    // ignore broken PDF times for this specific PDFsharp version (used by Eurowings)
+    if (pdf->producer() == QLatin1String("PDFsharp 1.32.2602-g (www.pdfsharp.net)")
+        && pdf->creationTime().date() == QDate(2019, 05, 02)) {
+      return;
+    }
+
     auto dt = pdf->modificationTime();
     if (!dt.isValid()) {
         dt = pdf->creationTime();
