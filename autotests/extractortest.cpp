@@ -86,7 +86,8 @@ private Q_SLOTS:
         m_engine.setHints(inputFile.endsWith(QLatin1String(".png")) ? ExtractorEngine::ExtractFullPageRasterImages : ExtractorEngine::NoHint);
 
         QFile inFile(inputFile);
-        QVERIFY(inFile.open(QFile::ReadOnly));
+        const auto openFlags = inputFile.endsWith(QLatin1String(".txt")) ? QFile::Text : QFile::ReadOnly;
+        QVERIFY(inFile.open(QFile::ReadOnly | openFlags));
 
         QFile cf(contextFile);
         KMime::Message contextMsg;
