@@ -6,6 +6,8 @@
 
 #include <config-kitinerary.h>
 
+#include "testhelpers.h"
+
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPostprocessor>
 #include <KItinerary/ExtractorValidator>
@@ -20,7 +22,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QObject>
-#include <QProcess>
 #include <QTest>
 
 void initLocale()
@@ -154,19 +155,7 @@ private Q_SLOTS:
         QFile f(refFile);
         QVERIFY(f.open(QFile::ReadOnly));
         const auto refDoc = QJsonDocument::fromJson(f.readAll());
-        if (refDoc.array() != encodedResult) {
-            QFile failFile(refFile + QLatin1String(".fail"));
-            QVERIFY(failFile.open(QFile::WriteOnly));
-            failFile.write(QJsonDocument(encodedResult).toJson());
-            failFile.close();
-
-            QProcess proc;
-            proc.setProcessChannelMode(QProcess::ForwardedChannels);
-            proc.start(QStringLiteral("diff"), {QStringLiteral("-u"), refFile, failFile.fileName()});
-            QVERIFY(proc.waitForFinished());
-        }
-
-        QCOMPARE(refDoc.array(), encodedResult);
+        QVERIFY(Test::compareJson(refFile, encodedResult, refDoc.array()));
     }
 
     void testNegative()
