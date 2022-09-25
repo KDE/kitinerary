@@ -111,6 +111,9 @@ static QByteArray fixupJson(const QByteArray &data)
         }
     }
 
+    // Airbnb applies XML entity encoding...
+    output.replace("&quot;", "\"");
+
     return output;
 }
 
