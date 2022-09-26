@@ -7,4 +7,7 @@ if (TARGET Qt::Network AND NOT CMAKE_CROSSCOMPILING AND OSM_PLANET_DIR AND OsmTo
 endif()
 add_subdirectory(lib)
 add_subdirectory(cli)
-add_subdirectory(tools)
+option(BUILD_TOOLS "Build development tools" ON)
+if (BUILD_TOOLS)
+    add_subdirectory(tools)
+endif()
