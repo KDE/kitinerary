@@ -90,7 +90,7 @@ endif()
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kitinerary\")
 
-ecm_set_disabled_deprecation_versions(QT 5.15.2 KF 5.98.0)
+ecm_set_disabled_deprecation_versions(QT 5.15.2 KF 5.99.0)
 
 
 
