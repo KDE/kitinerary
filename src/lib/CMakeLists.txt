@@ -1,7 +1,9 @@
 # SPDX-FileCopyrightText: 2018-2021 Volker Krause <vkrause@kde.org>
 # SPDX-License-Identifier: BSD-3-Clause
 
-add_subdirectory(vdv/certs)
+if (BUILD_TOOLS)
+    add_subdirectory(vdv/certs)
+endif()
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 add_library(KPimItinerary ${kitinerary_lib_srcs})
