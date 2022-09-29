@@ -100,7 +100,7 @@ function parseInouiPdfText(page)
         var detailsText = text.substr(pos, endPos - arr[0].length);
         var train = detailsText.match(/^ *(.*?) *-/);
         res.reservationFor.trainNumber = train[1];
-        var seat = detailsText.match(/(?:Voiture|Coach) *(\d+) *(?:Place|Seat) *(\d+)/);
+        var seat = detailsText.match(/(?:Voiture|Coach|Wagen) *(\d+) *(?:Place|Seat|Platz) *(\d+)/);
         if (seat) {
             res.reservedTicket.ticketedSeat.seatSection = seat[1];
             res.reservedTicket.ticketedSeat.seatNumber = seat[2];
