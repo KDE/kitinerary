@@ -291,7 +291,7 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
             break;
         case CityLevel:
             if (!lhsAddr.addressLocality().isEmpty()) {
-                return lhsAddr.addressLocality() == rhsAddr.addressLocality();
+                return isSameLocationName(lhsAddr.addressLocality(), rhsAddr.addressLocality(), LocationUtil::Exact);
             }
             break;
     }

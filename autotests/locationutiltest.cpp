@@ -42,6 +42,7 @@ private Q_SLOTS:
         Airport txlAddress;
         txlAddress.setAddress(addr);
         Airport sxfAddress;
+        addr.setAddressLocality(_("BERLIN"));
         sxfAddress.setAddress(addr);
 
         QVERIFY(LocationUtil::isSameLocation(txlAddress, sxfAddress, LocationUtil::CityLevel));

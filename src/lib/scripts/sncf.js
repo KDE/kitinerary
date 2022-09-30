@@ -76,7 +76,7 @@ function parseInouiPdfText(page)
     var reservations = new Array();
     var text = page.textInRect(0.0, 0.0, 0.5, 1.0);
 
-    var date = text.match(/(\d+ [^ ]+ \d{4})\n/)
+    var date = text.match(/(\d+\.? [^ ]+ \d{4})\n/)
     if (!date)
         return reservations;
     var pos = date.index + date[0].length;
@@ -87,20 +87,20 @@ function parseInouiPdfText(page)
         pos += dep.index + dep[0].length;
 
         var res = JsonLd.newTrainReservation();
-        res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + dep[1], ["d MMMM yyyyhh'h'mm", "dd MMMM yyyyhh:mm"], ["fr", "en"]);
+        res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + dep[1], ["d MMMM yyyyhh'h'mm", "dd MMMM yyyyhh:mm", "dd. MMMM yyyyhh:mm"], ["fr", "en", "de"]);
         res.reservationFor.departureStation.name = dep[2];
 
         var arr = text.substr(pos).match(/(\d{2}[h:]\d{2}) +(.*)\n/);
         if (!arr)
             break;
         var endPos = arr.index + arr[0].length;
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + arr[1], ["d MMMM yyyyhh'h'mm", "dd MMMM yyyyhh:mm"], ["fr", "en"]);
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + arr[1], ["d MMMM yyyyhh'h'mm", "dd MMMM yyyyhh:mm", "dd. MMMM yyyyhh:mm"], ["fr", "en", "de"]);
         res.reservationFor.arrivalStation.name = arr[2];
 
         var detailsText = text.substr(pos, endPos - arr[0].length);
         var train = detailsText.match(/^ *(.*?) *-/);
         res.reservationFor.trainNumber = train[1];
-        var seat = detailsText.match(/(?:Voiture|Coach) *(\d+) *(?:Place|Seat) *(\d+)/);
+        var seat = detailsText.match(/(?:Voiture|Coach|Wagen) *(\d+) *(?:Place|Seat|Platz) *(\d+)/);
         if (seat) {
             res.reservedTicket.ticketedSeat.seatSection = seat[1];
             res.reservedTicket.ticketedSeat.seatNumber = seat[2];
