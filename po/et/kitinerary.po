@@ -1,0 +1,230 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kitinerary package.
+#
+# Marek Laane <qiilaq69@gmail.com>, 2019, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kitinerary\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-20 00:46+0000\n"
+"PO-Revision-Date: 2020-03-21 10:48+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.12.2\n"
+
+#: calendarhandler.cpp:160
+#, fuzzy, kde-format
+#| msgctxt "canceled train/flight/loding reservation"
+#| msgid "Canceled: %1"
+msgctxt "canceled train/flight/loading reservation"
+msgid "Canceled: %1"
+msgstr "Tühistatud: %1"
+
+#: calendarhandler.cpp:186
+#, kde-format
+msgid "Flight %1 from %2 to %3"
+msgstr "Lend %1, %2 - %3"
+
+#: calendarhandler.cpp:205
+#, kde-format
+msgid "Boarding for flight %1"
+msgstr "Lennule %1 minek"
+
+#: calendarhandler.cpp:207
+#, kde-format
+msgid "Boarding for flight %1 at gate %2"
+msgstr "Lennule %1 minek väravas %2"
+
+#: calendarhandler.cpp:216
+#, kde-format
+msgid "Boarding time: %1"
+msgstr "Lennulemineku aeg: %1"
+
+#: calendarhandler.cpp:219
+#, fuzzy, kde-format
+#| msgid "Departure gate: %1"
+msgctxt "flight departure gate"
+msgid "Departure gate: %1"
+msgstr "Väljumisvärav: %1"
+
+#: calendarhandler.cpp:229
+#, kde-format
+msgid "Boarding group: %1"
+msgstr "Pardalemineku grupp: %1"
+
+#: calendarhandler.cpp:232 calendarhandler.cpp:264 calendarhandler.cpp:292
+#, kde-format
+msgid "Seat: %1"
+msgstr "Koht: %1"
+
+#: calendarhandler.cpp:235 calendarhandler.cpp:270 calendarhandler.cpp:295
+#: calendarhandler.cpp:316 calendarhandler.cpp:362 calendarhandler.cpp:418
+#: calendarhandler.cpp:459 calendarhandler.cpp:491
+#, kde-format
+msgid "Booking reference: %1"
+msgstr "Reserveeringu number: %1"
+
+#: calendarhandler.cpp:247
+#, kde-format
+msgid "Train %1 from %2 to %3"
+msgstr "Rong %1, %2 - %3"
+
+#: calendarhandler.cpp:256
+#, kde-format
+msgid "Departure platform: %1"
+msgstr "Väljumise platvorm: %1"
+
+#: calendarhandler.cpp:261
+#, kde-format
+msgid "Coach: %1"
+msgstr "Vagun: %1"
+
+#: calendarhandler.cpp:267
+#, kde-format
+msgid "Arrival platform: %1"
+msgstr "Saabumise platvorm: %1"
+
+#: calendarhandler.cpp:281
+#, kde-format
+msgid "Bus %1 from %2 to %3"
+msgstr "Buss %1, %2 - %3"
+
+#: calendarhandler.cpp:306
+#, fuzzy, kde-format
+#| msgid "Train %1 from %2 to %3"
+msgid "Ferry from %1 to %2"
+msgstr "Rong %1, %2 - %3"
+
+#: calendarhandler.cpp:319
+#, kde-format
+msgid "Ticket number: %1"
+msgstr ""
+
+#: calendarhandler.cpp:329
+#, kde-format
+msgid "Hotel reservation: %1"
+msgstr "Hotelli reserveering: %1"
+
+#: calendarhandler.cpp:340
+#, kde-format
+msgid "Check-in: %1"
+msgstr "Sisseregistreerimine: %1"
+
+#: calendarhandler.cpp:343
+#, kde-format
+msgid "Check-out: %1"
+msgstr "Väljaregistreerimine: %1"
+
+#: calendarhandler.cpp:346
+#, kde-format
+msgid "Phone: %1"
+msgstr "Telefon: %1"
+
+#: calendarhandler.cpp:349
+#, kde-format
+msgid "Email: %1"
+msgstr "E-post: %1"
+
+#: calendarhandler.cpp:352
+#, kde-format
+msgid "Website: %1"
+msgstr "Veebilehekülg: %1"
+
+#: calendarhandler.cpp:395
+#, kde-format
+msgid "Entrance for %1"
+msgstr "%1 sissepääs"
+
+#: calendarhandler.cpp:442
+#, kde-format
+msgid "Restaurant reservation: %1"
+msgstr "Restorani reserveering: %1"
+
+#: calendarhandler.cpp:456
+#, fuzzy, kde-format
+#| msgid "Number Of People: %1"
+msgid "Number of people: %1"
+msgstr "Inimeste arv: %1"
+
+#: calendarhandler.cpp:463 calendarhandler.cpp:495
+#, kde-format
+msgid "Under name: %1"
+msgstr "Nimi: %1"
+
+#: calendarhandler.cpp:473
+#, fuzzy, kde-format
+#| msgid "Rental Car reservation: %1"
+msgid "Rental car reservation: %1"
+msgstr "Üüriauto reserveering: %1"
+
+#: calendarhandler.cpp:484
+#, kde-format
+msgid ""
+"Pickup location: %1\n"
+"%2\n"
+msgstr ""
+
+#: calendarhandler.cpp:488
+#, kde-format
+msgid ""
+"Dropoff location: %1\n"
+"%2\n"
+msgstr ""
+
+#: calendarhandler.cpp:517
+#, fuzzy, kde-format
+#| msgid ""
+#| "Reservation reference: %1\n"
+#| "Under name: %2\n"
+#| "PickUp location: %3"
+msgid ""
+"Reservation reference: %1\n"
+"Under name: %2\n"
+"Pickup location: %3"
+msgstr ""
+"Reserveeringu number: %1\n"
+"Nimi: %2\n"
+"Kättesaamise koht: %3"
+
+#~ msgid "Reservation reference: %1"
+#~ msgstr "Reserveeringu number: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "Reservation reference: %1\n"
+#~| "Under name: %2\n"
+#~| "\n"
+#~| "PickUp location: %3\n"
+#~| "\n"
+#~| "Dropoff Location: %4"
+#~ msgid ""
+#~ "Reservation reference: %1\n"
+#~ "Under name: %2\n"
+#~ "\n"
+#~ "Pickup location: %3\n"
+#~ "\n"
+#~ "Dropoff location: %4"
+#~ msgstr ""
+#~ "Reserveeringu number: %1\n"
+#~ "Nimi: %2\n"
+#~ "\n"
+#~ "Kättesaamise koht: %3\n"
+#~ "\n"
+#~ "Mahajätmise koht: %4"
+
+#~ msgid "Rent car reservation: %1"
+#~ msgstr "Üüriauto reserveering: %1"
+
+#~ msgid ""
+#~ "Check-in: %1\n"
+#~ "Check-out: %2\n"
+#~ "Booking reference: %3"
+#~ msgstr ""
+#~ "Sisseregistreerimine: %1\n"
+#~ "Väljaregistreerimine: %2\n"
+#~ "Broneerimisnumber: %3"

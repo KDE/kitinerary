@@ -1,0 +1,211 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Safa Alfulaij <safa1996alfulaij@gmail.com>, 2018.
+# Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-20 00:46+0000\n"
+"PO-Revision-Date: 2022-08-08 23:06+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: Arabic <kde-l10n-ar@kde.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 21.07.70\n"
+
+#: calendarhandler.cpp:160
+#, kde-format
+msgctxt "canceled train/flight/loading reservation"
+msgid "Canceled: %1"
+msgstr "تم إلغاء: %1"
+
+#: calendarhandler.cpp:186
+#, kde-format
+msgid "Flight %1 from %2 to %3"
+msgstr "رحلة %1 من %2 إلى %3"
+
+#: calendarhandler.cpp:205
+#, kde-format
+msgid "Boarding for flight %1"
+msgstr "ركوب الرحلة %1"
+
+#: calendarhandler.cpp:207
+#, kde-format
+msgid "Boarding for flight %1 at gate %2"
+msgstr "ركوب الرحلة %1 من البوابة %2"
+
+#: calendarhandler.cpp:216
+#, kde-format
+msgid "Boarding time: %1"
+msgstr "وقت الركوب: %1"
+
+#: calendarhandler.cpp:219
+#, kde-format
+msgctxt "flight departure gate"
+msgid "Departure gate: %1"
+msgstr "بوابة المغادرة: %1"
+
+#: calendarhandler.cpp:229
+#, kde-format
+msgid "Boarding group: %1"
+msgstr "مجموعة الركوب: %1"
+
+#: calendarhandler.cpp:232 calendarhandler.cpp:264 calendarhandler.cpp:292
+#, kde-format
+msgid "Seat: %1"
+msgstr "المقعد: %1"
+
+#: calendarhandler.cpp:235 calendarhandler.cpp:270 calendarhandler.cpp:295
+#: calendarhandler.cpp:316 calendarhandler.cpp:362 calendarhandler.cpp:418
+#: calendarhandler.cpp:459 calendarhandler.cpp:491
+#, kde-format
+msgid "Booking reference: %1"
+msgstr "مرجع الحجز: %1"
+
+#: calendarhandler.cpp:247
+#, kde-format
+msgid "Train %1 from %2 to %3"
+msgstr "قطار %1 من %2 إلى %3"
+
+#: calendarhandler.cpp:256
+#, kde-format
+msgid "Departure platform: %1"
+msgstr "منصة الإقلاع: %1"
+
+#: calendarhandler.cpp:261
+#, kde-format
+msgid "Coach: %1"
+msgstr "الحافلة: %1"
+
+#: calendarhandler.cpp:267
+#, kde-format
+msgid "Arrival platform: %1"
+msgstr "منصة الوصول: %1"
+
+#: calendarhandler.cpp:281
+#, kde-format
+msgid "Bus %1 from %2 to %3"
+msgstr "حافلة %1 من %2 إلى %3"
+
+#: calendarhandler.cpp:306
+#, kde-format
+msgid "Ferry from %1 to %2"
+msgstr "عبّارة من %1 إلى %2"
+
+#: calendarhandler.cpp:319
+#, kde-format
+msgid "Ticket number: %1"
+msgstr "رقم التذكرة: %1"
+
+#: calendarhandler.cpp:329
+#, kde-format
+msgid "Hotel reservation: %1"
+msgstr "حجز الفندق: %1"
+
+#: calendarhandler.cpp:340
+#, kde-format
+msgid "Check-in: %1"
+msgstr "تسجيل الوصول: %1"
+
+#: calendarhandler.cpp:343
+#, kde-format
+msgid "Check-out: %1"
+msgstr "تسجيل الخروج: %1"
+
+#: calendarhandler.cpp:346
+#, kde-format
+msgid "Phone: %1"
+msgstr "الهاتف: %1"
+
+#: calendarhandler.cpp:349
+#, kde-format
+msgid "Email: %1"
+msgstr "البريد الإلكتروني: %1"
+
+#: calendarhandler.cpp:352
+#, kde-format
+msgid "Website: %1"
+msgstr "موقع الوِبّ: %1"
+
+#: calendarhandler.cpp:395
+#, kde-format
+msgid "Entrance for %1"
+msgstr "دخول لـ%1"
+
+#: calendarhandler.cpp:442
+#, kde-format
+msgid "Restaurant reservation: %1"
+msgstr "حجز مطعم: %1"
+
+#: calendarhandler.cpp:456
+#, kde-format
+msgid "Number of people: %1"
+msgstr "عدد الأشخاص: %1"
+
+#: calendarhandler.cpp:463 calendarhandler.cpp:495
+#, kde-format
+msgid "Under name: %1"
+msgstr "تحت اسم: %1"
+
+#: calendarhandler.cpp:473
+#, kde-format
+msgid "Rental car reservation: %1"
+msgstr "حجز سيارة مستأجرة: %1"
+
+#: calendarhandler.cpp:484
+#, kde-format
+msgid ""
+"Pickup location: %1\n"
+"%2\n"
+msgstr ""
+"موقع الاستلام : %1\n"
+"%2\n"
+
+#: calendarhandler.cpp:488
+#, kde-format
+msgid ""
+"Dropoff location: %1\n"
+"%2\n"
+msgstr ""
+"موقع الترك: %1\n"
+"%2\n"
+
+#: calendarhandler.cpp:517
+#, kde-format
+msgid ""
+"Reservation reference: %1\n"
+"Under name: %2\n"
+"Pickup location: %3"
+msgstr ""
+"رمز الحجز: %1\n"
+"تحت اسم: %2\n"
+"موقع الركوب : %3"
+
+#, fuzzy
+#~| msgid "Booking reference: %1"
+#~ msgid "Reservation reference: %1"
+#~ msgstr "مرجع الحجز: %1"
+
+#, fuzzy
+#~| msgid "Hotel reservation: %1"
+#~ msgid "Rent car reservation: %1"
+#~ msgstr "حجز الفندق: %1"
+
+#~ msgid ""
+#~ "Check-in: %1\n"
+#~ "Check-out: %2\n"
+#~ "Booking reference: %3"
+#~ msgstr ""
+#~ "وقت الدخول: %1\n"
+#~ "وقت الخروج: %2\n"
+#~ "مرجع الحجز: %3"
+
+#~ msgctxt "<street>, <postal code> <city>, <country>"
+#~ msgid "%1, %2 %3, %4"
+#~ msgstr "‏⁨%1⁩، ⁨%2⁩⁨ ‏%3⁩، ⁨%4⁩"

@@ -1,0 +1,216 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kitinerary package.
+#
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kitinerary\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-20 00:46+0000\n"
+"PO-Revision-Date: 2022-07-21 07:47+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 22.04.1\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+
+#: calendarhandler.cpp:160
+#, kde-format
+msgctxt "canceled train/flight/loading reservation"
+msgid "Canceled: %1"
+msgstr "Preklicano: %1"
+
+#: calendarhandler.cpp:186
+#, kde-format
+msgid "Flight %1 from %2 to %3"
+msgstr "Let %1 od %2 do %3"
+
+#: calendarhandler.cpp:205
+#, kde-format
+msgid "Boarding for flight %1"
+msgstr "Vkrcanje na let %1"
+
+#: calendarhandler.cpp:207
+#, kde-format
+msgid "Boarding for flight %1 at gate %2"
+msgstr "Vkrcanje na let %1 na izhodu %2"
+
+#: calendarhandler.cpp:216
+#, kde-format
+msgid "Boarding time: %1"
+msgstr "Čas vkrcanja: %1"
+
+#: calendarhandler.cpp:219
+#, kde-format
+msgctxt "flight departure gate"
+msgid "Departure gate: %1"
+msgstr "Izhodna vrata: %1"
+
+#: calendarhandler.cpp:229
+#, kde-format
+msgid "Boarding group: %1"
+msgstr "Vkrcavanje skupine: %1"
+
+#: calendarhandler.cpp:232 calendarhandler.cpp:264 calendarhandler.cpp:292
+#, kde-format
+msgid "Seat: %1"
+msgstr "Sedež: %1"
+
+#: calendarhandler.cpp:235 calendarhandler.cpp:270 calendarhandler.cpp:295
+#: calendarhandler.cpp:316 calendarhandler.cpp:362 calendarhandler.cpp:418
+#: calendarhandler.cpp:459 calendarhandler.cpp:491
+#, kde-format
+msgid "Booking reference: %1"
+msgstr "Referenca rezervacije: %1"
+
+#: calendarhandler.cpp:247
+#, kde-format
+msgid "Train %1 from %2 to %3"
+msgstr "Vlak %1 od %2 do %3"
+
+#: calendarhandler.cpp:256
+#, kde-format
+msgid "Departure platform: %1"
+msgstr "Odhodni peron: %1"
+
+#: calendarhandler.cpp:261
+#, kde-format
+msgid "Coach: %1"
+msgstr "Kombi: %1"
+
+#: calendarhandler.cpp:267
+#, kde-format
+msgid "Arrival platform: %1"
+msgstr "Peron prihoda: %1"
+
+#: calendarhandler.cpp:281
+#, kde-format
+msgid "Bus %1 from %2 to %3"
+msgstr "Avtobus %1 od %2 do %3"
+
+#: calendarhandler.cpp:306
+#, kde-format
+msgid "Ferry from %1 to %2"
+msgstr "Trajekt od %1 do %2"
+
+#: calendarhandler.cpp:319
+#, kde-format
+msgid "Ticket number: %1"
+msgstr "Številka vozovnice: %1"
+
+#: calendarhandler.cpp:329
+#, kde-format
+msgid "Hotel reservation: %1"
+msgstr "Hotelska rezervacija: %1"
+
+#: calendarhandler.cpp:340
+#, kde-format
+msgid "Check-in: %1"
+msgstr "Prihod v hotel: %1"
+
+#: calendarhandler.cpp:343
+#, kde-format
+msgid "Check-out: %1"
+msgstr "Odhod iz hotela: %1"
+
+#: calendarhandler.cpp:346
+#, kde-format
+msgid "Phone: %1"
+msgstr "Telefon: %1"
+
+#: calendarhandler.cpp:349
+#, kde-format
+msgid "Email: %1"
+msgstr "E-pošta: %1"
+
+#: calendarhandler.cpp:352
+#, kde-format
+msgid "Website: %1"
+msgstr "Spletna stran: %1"
+
+#: calendarhandler.cpp:395
+#, kde-format
+msgid "Entrance for %1"
+msgstr "Vhod za %1"
+
+#: calendarhandler.cpp:442
+#, kde-format
+msgid "Restaurant reservation: %1"
+msgstr "Rezervacija restavracije: %1"
+
+#: calendarhandler.cpp:456
+#, kde-format
+msgid "Number of people: %1"
+msgstr "Število oseb: %1"
+
+#: calendarhandler.cpp:463 calendarhandler.cpp:495
+#, kde-format
+msgid "Under name: %1"
+msgstr "Pod imenom: %1"
+
+#: calendarhandler.cpp:473
+#, kde-format
+msgid "Rental car reservation: %1"
+msgstr "Rezervacija najema avtomobila: %1"
+
+#: calendarhandler.cpp:484
+#, kde-format
+msgid ""
+"Pickup location: %1\n"
+"%2\n"
+msgstr ""
+"Kraj prevzema: %1\n"
+"%2\n"
+
+#: calendarhandler.cpp:488
+#, kde-format
+msgid ""
+"Dropoff location: %1\n"
+"%2\n"
+msgstr ""
+"Kraj vrnitve: %1\n"
+"%2\n"
+
+#: calendarhandler.cpp:517
+#, kde-format
+msgid ""
+"Reservation reference: %1\n"
+"Under name: %2\n"
+"Pickup location: %3"
+msgstr ""
+"Referenca rezervacije: %1\n"
+"Pod imenom: %2\n"
+"Kraj prevzema: %3"
+
+#~ msgid "Reservation reference: %1"
+#~ msgstr "Referenca rezervacije: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "Reservation reference: %1\n"
+#~| "Under name: %2\n"
+#~| "\n"
+#~| "PickUp location: %3\n"
+#~| "\n"
+#~| "Dropoff Location: %4"
+#~ msgid ""
+#~ "Reservation reference: %1\n"
+#~ "Under name: %2\n"
+#~ "\n"
+#~ "Pickup location: %3\n"
+#~ "\n"
+#~ "Dropoff location: %4"
+#~ msgstr ""
+#~ "Referenca rezervacije: %1\n"
+#~ "Pod imenom: %2\n"
+#~ "\n"
+#~ "Kraj prevzema: %3\n"
+#~ "\n"
+#~ "Kraj oddaje: %4"
+
+#~ msgid "Rent car reservation: %1"
+#~ msgstr "Rezervacija najema avtomobila: %1"

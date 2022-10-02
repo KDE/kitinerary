@@ -1,0 +1,234 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Alexander Potashev <aspotashev@gmail.com>, 2018.
+# Alexander Yavorsky <kekcuha@gmail.com>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-20 00:46+0000\n"
+"PO-Revision-Date: 2021-05-30 10:05+0300\n"
+"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 21.04.1\n"
+
+#: calendarhandler.cpp:160
+#, fuzzy, kde-format
+#| msgctxt "canceled train/flight/loding reservation"
+#| msgid "Canceled: %1"
+msgctxt "canceled train/flight/loading reservation"
+msgid "Canceled: %1"
+msgstr "Отменено: %1"
+
+#: calendarhandler.cpp:186
+#, kde-format
+msgid "Flight %1 from %2 to %3"
+msgstr "Рейс %1 из %2 в %3"
+
+#: calendarhandler.cpp:205
+#, kde-format
+msgid "Boarding for flight %1"
+msgstr "Посадка на рейс %1"
+
+#: calendarhandler.cpp:207
+#, kde-format
+msgid "Boarding for flight %1 at gate %2"
+msgstr "Посадка на рейс %1 на выходе %2"
+
+#: calendarhandler.cpp:216
+#, kde-format
+msgid "Boarding time: %1"
+msgstr "Время посадки: %1"
+
+#: calendarhandler.cpp:219
+#, kde-format
+msgctxt "flight departure gate"
+msgid "Departure gate: %1"
+msgstr "Выход на посадку: %1"
+
+#: calendarhandler.cpp:229
+#, kde-format
+msgid "Boarding group: %1"
+msgstr "Группа при посадке: %1"
+
+#: calendarhandler.cpp:232 calendarhandler.cpp:264 calendarhandler.cpp:292
+#, kde-format
+msgid "Seat: %1"
+msgstr "Место: %1"
+
+#: calendarhandler.cpp:235 calendarhandler.cpp:270 calendarhandler.cpp:295
+#: calendarhandler.cpp:316 calendarhandler.cpp:362 calendarhandler.cpp:418
+#: calendarhandler.cpp:459 calendarhandler.cpp:491
+#, kde-format
+msgid "Booking reference: %1"
+msgstr "Код бронирования: %1"
+
+#: calendarhandler.cpp:247
+#, kde-format
+msgid "Train %1 from %2 to %3"
+msgstr "Поезд %1 из %2 в %3"
+
+#: calendarhandler.cpp:256
+#, kde-format
+msgid "Departure platform: %1"
+msgstr "Отправление с платформы: %1"
+
+#: calendarhandler.cpp:261
+#, kde-format
+msgid "Coach: %1"
+msgstr "Вагон: %1"
+
+#: calendarhandler.cpp:267
+#, kde-format
+msgid "Arrival platform: %1"
+msgstr "Прибытие на платформу: %1"
+
+#: calendarhandler.cpp:281
+#, kde-format
+msgid "Bus %1 from %2 to %3"
+msgstr "Автобус %1 из %2 в %3"
+
+#: calendarhandler.cpp:306
+#, fuzzy, kde-format
+#| msgid "Train %1 from %2 to %3"
+msgid "Ferry from %1 to %2"
+msgstr "Поезд %1 из %2 в %3"
+
+#: calendarhandler.cpp:319
+#, kde-format
+msgid "Ticket number: %1"
+msgstr ""
+
+#: calendarhandler.cpp:329
+#, kde-format
+msgid "Hotel reservation: %1"
+msgstr "Бронирование гостиницы: %1"
+
+#: calendarhandler.cpp:340
+#, kde-format
+msgid "Check-in: %1"
+msgstr "Регистрация заезда: %1"
+
+#: calendarhandler.cpp:343
+#, kde-format
+msgid "Check-out: %1"
+msgstr "Регистрация отъезда: %1"
+
+#: calendarhandler.cpp:346
+#, kde-format
+msgid "Phone: %1"
+msgstr "Телефон: %1"
+
+#: calendarhandler.cpp:349
+#, kde-format
+msgid "Email: %1"
+msgstr "Адрес эл. почты: %1"
+
+#: calendarhandler.cpp:352
+#, kde-format
+msgid "Website: %1"
+msgstr "Веб-сайт: %1"
+
+#: calendarhandler.cpp:395
+#, kde-format
+msgid "Entrance for %1"
+msgstr "Имя: %1"
+
+#: calendarhandler.cpp:442
+#, kde-format
+msgid "Restaurant reservation: %1"
+msgstr "Бронирование ресторана: %1"
+
+#: calendarhandler.cpp:456
+#, kde-format
+msgid "Number of people: %1"
+msgstr "Количество посетителей: %1"
+
+#: calendarhandler.cpp:463 calendarhandler.cpp:495
+#, kde-format
+msgid "Under name: %1"
+msgstr "Имя для резервирования: %1"
+
+#: calendarhandler.cpp:473
+#, kde-format
+msgid "Rental car reservation: %1"
+msgstr "Бронирование автомобиля: %1"
+
+#: calendarhandler.cpp:484
+#, kde-format
+msgid ""
+"Pickup location: %1\n"
+"%2\n"
+msgstr ""
+"Место получения: %1\n"
+"%2\n"
+
+#: calendarhandler.cpp:488
+#, kde-format
+msgid ""
+"Dropoff location: %1\n"
+"%2\n"
+msgstr ""
+"Место сдачи: %1\n"
+"%2\n"
+
+#: calendarhandler.cpp:517
+#, kde-format
+msgid ""
+"Reservation reference: %1\n"
+"Under name: %2\n"
+"Pickup location: %3"
+msgstr ""
+"Код бронирования: %1\n"
+"Имя для бронирования: %2\n"
+"Место получения: %3"
+
+#~ msgid "Reservation reference: %1"
+#~ msgstr "Код бронирования: %1"
+
+#, fuzzy
+#~| msgid ""
+#~| "Reservation reference: %1\n"
+#~| "Under name: %2\n"
+#~| "\n"
+#~| "PickUp location: %3\n"
+#~| "\n"
+#~| "Dropoff Location: %4"
+#~ msgid ""
+#~ "Reservation reference: %1\n"
+#~ "Under name: %2\n"
+#~ "\n"
+#~ "Pickup location: %3\n"
+#~ "\n"
+#~ "Dropoff location: %4"
+#~ msgstr ""
+#~ "Код бронирования: %1\n"
+#~ "Имя для бронирование %2\n"
+#~ "\n"
+#~ "Место получения: %3\n"
+#~ "\n"
+#~ "Место возврата: %4"
+
+#~ msgid "Rent car reservation: %1"
+#~ msgstr "Бронирование автомобиля в прокат: %1"
+
+#~ msgid ""
+#~ "Check-in: %1\n"
+#~ "Check-out: %2\n"
+#~ "Booking reference: %3"
+#~ msgstr ""
+#~ "Заезд: %1\n"
+#~ "Выезд: %2\n"
+#~ "Код бронирования: %3"
+
+# на русском: <country>, <postal code>, <city>, <street> --aspotashev
+#~ msgctxt "<street>, <postal code> <city>, <country>"
+#~ msgid "%1, %2 %3, %4"
+#~ msgstr "%4, %2, %3, %1"
