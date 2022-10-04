@@ -23,11 +23,11 @@ const tariffs = {
 
 function parseSncfPdfText(text) {
     var reservations = new Array();
-    var bookingRef = text.match(/(?:DOSSIER VOYAGE|BOOKING FILE REFERENCE|REFERENCE NUMBER) ?: +([A-Z0-9]{6})/);
+    var bookingRef = text.match(/(?:DOSSIER VOYAGE|BOOKING FILE REFERENCE|REFERENCE NUMBER|REISEREFERENZ) ?: +([A-Z0-9]{6})/);
 
     var pos = 0;
     while (true) {
-        var header = text.substr(pos).match(/ +(?:Départ \/ Arrivée|Departure \/ Arrival).*\n/);
+        var header = text.substr(pos).match(/ +(?:Départ \/ Arrivée|Departure \/ Arrival|Abfahrt \/ Ankunft).*\n/);
         if (!header)
             break;
         var index = header.index + header[0].length;
@@ -35,28 +35,28 @@ function parseSncfPdfText(text) {
         var res = JsonLd.newTrainReservation();
         res.reservationNumber = bookingRef[1];
 
-        var depLine = text.substr(pos + index).match(/\n {2,3}([\w -]+?)  +(\d{2}\/\d{2}) (?:à|at) (\d{2}[h:]\d{2})/);
+        var depLine = text.substr(pos + index).match(/\n {2,3}([\w -]+?)  +(\d{2}[\/\.]\d{2}) (?:à|at|um) (\d{2}[h:]\d{2})/);
         if (!depLine)
             break;
         index += depLine.index + depLine[0].length;
         res.reservationFor.departureStation.name = depLine[1];
-        res.reservationFor.departureTime = JsonLd.toDateTime(depLine[2] + " " + depLine[3], ["dd/MM hh'h'mm", "dd/MM hh:mm"], "fr");
+        res.reservationFor.departureTime = JsonLd.toDateTime(depLine[2] + " " + depLine[3], ["dd/MM hh'h'mm", "dd/MM hh:mm", "dd.MM hh:mm"], "fr");
 
-        var arrLine = text.substr(pos + index).match(/\n {2,3}([\w -]+?)  +(\d{2}\/\d{2}) (?:à|at) (\d{2}[h:]\d{2})/);
+        var arrLine = text.substr(pos + index).match(/\n {2,3}([\w -]+?)  +(\d{2}[\/\.]\d{2}) (?:à|at|um) (\d{2}[h:]\d{2})/);
         if (!arrLine)
             break;
         index += arrLine.index + arrLine[0].length;
         res.reservationFor.arrivalStation.name = arrLine[1];
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(arrLine[2] + " " + arrLine[3], ["dd/MM hh'h'mm", "dd/MM hh:mm"], "fr");
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(arrLine[2] + " " + arrLine[3], ["dd/MM hh'h'mm", "dd/MM hh:mm", "dd.MM hh:mm"], "fr");
 
         // parse seat, train number, etc from the text for one leg
         // since the stations are vertically centered, the stuff we are looking for might be at different
         // positions relative to them
         var legText = text.substring(pos + header.index + header[0].length, pos + index);
-        var trainNumber = legText.match(/TRAIN (?:N°|NUMBER) ?(\d{3,5})/);
+        var trainNumber = legText.match(/(?:TRAIN N°|TRAIN NUMBER|ZUGNUMMER) ?(\d{3,5})/);
         if (trainNumber)
             res.reservationFor.trainNumber = trainNumber[1];
-        var seatRes = legText.match(/(?:VOITURE|COACH) (\d+) - (?:PLACE|SEAT) (\d+)/);
+        var seatRes = legText.match(/(?:VOITURE|COACH|WAGEN) (\d+) - (?:PLACE|SEAT|PLATZ) (\d+)/);
         if (seatRes) {
             res.reservedTicket.ticketedSeat.seatSection = seatRes[1];
             res.reservedTicket.ticketedSeat.seatNumber = seatRes[2];
