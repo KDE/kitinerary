@@ -40,6 +40,7 @@
         "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketNumber": "123456789",
             "ticketToken": "aztecCode:i0CVXXX007123456789121101/01/1970CHGVAFRAVG5432101/110123456789012345678                DOE               JOHN2    1FRAVGFRXYT04321\n",
             "ticketedSeat": {
                 "@type": "Seat",
@@ -94,6 +95,7 @@
         "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketNumber": "123456789",
             "ticketToken": "aztecCode:i0CVXXX007123456789121101/01/1970CHGVAFRAVG5432101/110123456789012345678                DOE               JOHN2    1FRAVGFRXYT04321\n",
             "ticketedSeat": {
                 "@type": "Seat",

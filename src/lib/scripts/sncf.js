@@ -131,6 +131,7 @@ function parseSncfBarcode(barcode)
     res1.reservationFor.departureDay = JsonLd.toDateTime(barcode.substr(48, 5), "dd/MM", "fr");
     res1.reservationFor.trainNumber = barcode.substr(43, 5);
     res1.reservedTicket.ticketToken = "aztecCode:" + barcode;
+    res1.reservedTicket.ticketNumber = barcode.substr(10, 9);
     res1.reservedTicket.ticketedSeat.seatingType = barcode.substr(110, 1);
     res1.programMembershipUsed.programName = tariffs[barcode.substr(111, 4)];
     reservations.push(res1);
@@ -177,13 +178,7 @@ function parsePdf(pdf) {
         if (legs.length > 0) {
             for (var j = 0; j < legs.length; ++j) {
                 if (barcode && j < barcodeRes.length) {
-                    legs[j].underName = barcodeRes[j].underName;
-                    legs[j].reservedTicket.ticketToken = "aztecCode:" + barcode;
-                    legs[j].reservationFor.departureStation.identifier = barcodeRes[j].reservationFor.departureStation.identifier;
-                    legs[j].reservationFor.arrivalStation.identifier = barcodeRes[j].reservationFor.arrivalStation.identifier;
-                    legs[j].reservedTicket.ticketedSeat.seatingType = barcodeRes[j].reservedTicket.ticketedSeat.seatingType;
-                    legs[j].reservationNumber = barcodeRes[j].reservationNumber;
-                    legs[j].programMembershipUsed = barcodeRes[j].programMembershipUsed;
+                    legs[j] = JsonLd.apply(barcodeRes[j], legs[j]);
                 }
                 reservations.push(legs[j]);
             }
@@ -267,6 +262,7 @@ function parseSecutixPdf(pdf, node, triggerNode)
     res.reservationFor.arrivalStation.identifier = "sncf:" + code.substr(22, 5);
     res.reservationFor.departureDay = JsonLd.toDateTime(code.substr(83, 8), "ddMMyyyy", "fr");
     res.reservedTicket.ticketedSeat.seatingType = code.substr(91, 1);
+    res.reservedTicket.ticketNumber = code.substr(8, 9);
     res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content);
     res.underName.familyName = code.substr(116, 19);
     res.underName.givenName = code.substr(135, 19);
