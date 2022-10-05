@@ -60,6 +60,10 @@ function parsePdfTicket(pdf, node, triggerNode)
     const page = pdf.pages[triggerNode.location];
     var res = triggerNode.result[0];
 
+    // determine departure day - this is in the ERA SSB code, but seems to occasionally be off by one day?
+    const depDay = page.text.match(/\d\d\/\d{2}\/\d{4} +(\d{2})\/(\d{2})\/(\d{4})/);
+    res.reservationFor.departureDay = depDay[3] + '-' + depDay[2] + '-' + depDay[1] + 'T00:00:00';
+
     const dep = page.textInRect(0.0, 0.15, 0.35, 0.3).match(/([\s\S]+)\n(?:DÉPART À|ABFAHRT)\n(\d\d:\d\d)/);
     res.reservationFor.departureStation.name = dep[1];
     res.reservationFor.departureTime = res.reservationFor.departureDay.substr(0, 11) + dep[2];
