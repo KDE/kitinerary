@@ -41,3 +41,13 @@ function parseHtmlBooking(doc) {
 
     return reservations;
 }
+
+function parsePdfBoardingPass(pdf, node, triggerNode) {
+    let res = triggerNode.result[0];
+    const page = pdf.pages[triggerNode.location];
+    const topRight = page.textInRect(0.5, 0.0, 1.0, 0.5);
+    const times = topRight.match(/(\d{2}:\d{2}) H +(\d{2}:\d{2}) H/);
+    res.reservationFor.departureTime = JsonLd.toDateTime(times[1], "hh:mm", "en");
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(times[2], "hh:mm", "en");
+    return res;
+}
