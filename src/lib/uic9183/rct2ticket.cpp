@@ -139,6 +139,7 @@ static constexpr const struct {
     { "cestovny listok", Rct2Ticket::Transport },
     { "reservation", Rct2Ticket::Reservation },
     { "reservierung", Rct2Ticket::Reservation },
+    { "interrail", Rct2Ticket::RailPass },
 };
 
 Rct2Ticket::Type Rct2Ticket::type() const
@@ -166,6 +167,11 @@ Rct2Ticket::Type Rct2Ticket::type() const
 
 QString Rct2Ticket::title() const
 {
+    // RPT has shorter title fields
+    if (type() == Rct2Ticket::RailPass) {
+        return d->layout.text(0, 18, 19, 1);
+    }
+
     // somewhat standard compliant layout
     if (d->layout.text(0, 15, 3, 1).trimmed().isEmpty()) {
         return d->layout.text(0, 18, 33, 1).trimmed();
@@ -200,12 +206,12 @@ static QString rct2Clean(const QString &s)
 
 QString Rct2Ticket::outboundDepartureStation() const
 {
-    return rct2Clean(d->layout.text(6, 13, 17, 1).trimmed());
+    return type() != RailPass ? rct2Clean(d->layout.text(6, 13, 17, 1).trimmed()) : QString();
 }
 
 QString Rct2Ticket::outboundArrivalStation() const
 {
-    return rct2Clean(d->layout.text(6, 34, 17, 1).trimmed());
+    return type() != RailPass ? rct2Clean(d->layout.text(6, 34, 17, 1).trimmed()) : QString();
 }
 
 QString Rct2Ticket::outboundClass() const
@@ -225,12 +231,12 @@ QDateTime Rct2Ticket::returnArrivalTime() const
 
 QString Rct2Ticket::returnDepartureStation() const
 {
-    return rct2Clean(d->layout.text(7, 13, 17, 1).trimmed());
+    return type() != RailPass ? rct2Clean(d->layout.text(7, 13, 17, 1).trimmed()) : QString();
 }
 
 QString Rct2Ticket::returnArrivalStation() const
 {
-    return rct2Clean(d->layout.text(7, 34, 17, 1).trimmed());
+    return type() != RailPass ? rct2Clean(d->layout.text(7, 34, 17, 1).trimmed()) : QString();
 }
 
 QString Rct2Ticket::returnClass() const

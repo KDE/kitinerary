@@ -219,6 +219,15 @@ QDateTime Uic9183Parser::validUntil() const
         return dt;
     }
 
+    // RCT2 RPT according to ERA TAP TSI Annex B.6
+    if (const auto rct2 = rct2Ticket(); rct2.isValid() && rct2.type() == Rct2Ticket::RailPass) {
+        const auto validityRange = ticketLayout().text(3, 1, 36, 1).trimmed();
+        const auto idx = std::max(validityRange.lastIndexOf(QLatin1Char(' ')), validityRange.lastIndexOf(QLatin1Char('-')));
+        if (idx > 0) {
+            return QDateTime(QDate::fromString(validityRange.mid(idx + 1), QStringLiteral("dd.MM.yyyy")), {23, 59, 59});
+        }
+    }
+
     return {};
 }
 
