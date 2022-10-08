@@ -193,7 +193,7 @@ QSize Uic9183TicketLayout::size() const
     int height = 0;
     for (auto f = firstField(); !f.isNull(); f  = f.next()) {
         width = std::max(width, f.column() + f.width());
-        height = std::max(height, f.row() + f.height());
+        height = std::max(height, f.row() + std::max(1, f.height()));
     }
     return QSize(width, height);
 }
