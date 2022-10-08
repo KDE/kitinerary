@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "carrierId",
+            "match": "0004",
+            "mimeType": "internal/uic9183",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseBarcode",
+    "mimeType": "internal/uic9183",
+    "script": "pkp.js"
+}
