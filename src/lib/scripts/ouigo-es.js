@@ -27,3 +27,19 @@ function parseBarcode(content) {
     res.reservedTicket.ticketedSeat.seatNumber = content.substr(55, 3);
     return res;
 }
+
+function parsePdf(pdf, node, triggerNode) {
+    const page = pdf.pages[triggerNode.location];
+    let res = triggerNode.result[0];
+
+    const topLeft = page.textInRect(0.0, 0.0, 0.5, 0.5);
+    const stations = topLeft.match(/\n(.*)\n\d\d:\d\d\n(.*)\n(\d\d:\d\d)/);
+    res.reservationFor.departureStation.name = stations[1];
+    res.reservationFor.arrivalStation.name = stations[2];
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(stations[3], "hh:mm", "es");
+
+    const topRight = page.textInRect(0.5, 0.0, 1.0, 0.5);
+    res.underName.name = topRight.match(/^(.*)\n/)[1];
+    res.reservationNumber = topRight.match(/  +([A-Z0-9]{6})\n/)[1];
+    return res;
+}
