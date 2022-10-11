@@ -10,6 +10,7 @@ add_library(KPim::Itinerary ALIAS KPimItinerary)
 target_sources(KPimItinerary PRIVATE
     asn1/berelement.cpp
     asn1/bitvector.cpp
+    asn1/uperdecoder.cpp
 
     datatypes/action.cpp
     datatypes/boattrip.cpp

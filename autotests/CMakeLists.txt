@@ -20,6 +20,7 @@ ecm_add_test(extractorscriptenginetest.cpp extractorscriptenginetest.qrc TEST_NA
 ecm_add_test(berdecodertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
 ecm_add_test(berencodertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
 ecm_add_test(bcbpparsertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
+ecm_add_test(uperdecodertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
 ecm_add_test(uic9183parsertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
 ecm_add_test(vdvtickettest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
 ecm_add_test(rct2parsertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
