@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <QByteArray>
+#include <asn1/bitvector.h>
 #include <QMetaType>
 
 namespace KItinerary {
@@ -25,7 +25,7 @@ public:
     Q_INVOKABLE quint64 readNumberMSB(int startBit, int size) const;
 
 private:
-    QByteArray m_data;
+    BitVector m_data;
 };
 
 }}
