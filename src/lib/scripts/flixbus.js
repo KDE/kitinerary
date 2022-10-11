@@ -23,7 +23,7 @@ function main(content, node) {
 function parseDate(year, baseDate, overrideDate, time)
 {
     const s = (overrideDate ? overrideDate.trim() : baseDate) + ' ' + year + ' ' + time;
-    return JsonLd.toDateTime(s, 'd MMM yyyy hh:mm', ['en', 'fr']);
+    return JsonLd.toDateTime(s, 'd MMM yyyy hh:mm', ['en', 'fr', 'pl']);
 }
 
 function parseLocation(place, addr1, addr2, links)
@@ -51,7 +51,7 @@ function parsePdfTicket(pdf, node, triggerNode)
         const dep = text.substr(idx).match(/(\d\d:\d\d)  +(.*)\n(\d{1,2} \S+)?(?:  + (.*?)(?:\n|,\n  +(.*)\n))?/);
         if (!dep) break;
         idx += dep.index + dep[0].length;
-        const bus = text.substr(idx).match(/^[ ]+ Bus +(.*)\n[ ]+(?:Direction|à destination de) (.*)\n/);
+        const bus = text.substr(idx).match(/^[ ]+ (?:Bus|Autobus) +(.*)\n[ ]+(?:Direction|à destination de|Kierunek) (.*)\n/);
         if (!bus) break;
         idx += bus.index + bus[0].length;
         const arr = text.substr(idx).match(/^(\d{1,2} \S+\n)?(\d\d:\d\d)  +(.*)\n(?:  + (.*?)(?:\n|,\n  +(.*)\n))?/);
