@@ -8,6 +8,8 @@ add_library(KPimItinerary ${kitinerary_lib_srcs})
 add_library(KPim::Itinerary ALIAS KPimItinerary)
 
 target_sources(KPimItinerary PRIVATE
+    asn1/berelement.cpp
+
     datatypes/action.cpp
     datatypes/boattrip.cpp
     datatypes/brand.cpp
@@ -98,8 +100,6 @@ target_sources(KPimItinerary PRIVATE
     text/addressparser.cpp
     text/terminalfinder.cpp
     text/timefinder.cpp
-
-    tlv/berelement.cpp
 
     uic9183/rct2ticket.cpp
     uic9183/uic9183block.cpp
@@ -301,12 +301,12 @@ ecm_generate_headers(KItinerary_Pdf_FORWARDING_HEADERS
     REQUIRED_HEADERS KItinerary_Pdf_HEADERS
     RELATIVE pdf
 )
-ecm_generate_headers(KItinerary_Tlv_FORWARDING_HEADERS
+ecm_generate_headers(KItinerary_Asn1_FORWARDING_HEADERS
     HEADER_NAMES
         BERElement
     PREFIX KItinerary
-    REQUIRED_HEADERS KItinerary_Tlv_HEADERS
-    RELATIVE tlv
+    REQUIRED_HEADERS KItinerary_Asn1_HEADERS
+    RELATIVE asn1
 )
 ecm_generate_headers(KItinerary_Uic9183_FORWARDING_HEADERS
     HEADER_NAMES
@@ -336,13 +336,13 @@ ecm_generate_headers(KItinerary_Vdv_FORWARDING_HEADERS
 install(TARGETS KPimItinerary EXPORT KPimItineraryTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
     ${KItinerary_FORWARDING_HEADERS}
-    ${KItinerary_KnowledgeDb_FORWARDING_HEADERS}
+    ${KItinerary_Asn1_FORWARDING_HEADERS}
     ${KItinerary_Datatypes_FORWARDING_HEADERS}
     ${KItinerary_Engine_FORWARDING_HEADERS}
     ${KItinerary_Era_FORWARDING_HEADERS}
     ${KItinerary_Iata_FORWARDING_HEADERS}
+    ${KItinerary_KnowledgeDb_FORWARDING_HEADERS}
     ${KItinerary_Pdf_FORWARDING_HEADERS}
-    ${KItinerary_Tlv_FORWARDING_HEADERS}
     ${KItinerary_Uic9183_FORWARDING_HEADERS}
     ${KItinerary_Vdv_FORWARDING_HEADERS}
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/KItinerary
@@ -350,12 +350,12 @@ install(FILES
 install(FILES
     ${KItinerary_HEADERS}
     ${KItinerary_AirportDb_HEADERS}
+    ${KItinerary_Asn1_HEADERS}
     ${KItinerary_Datatypes_HEADERS}
     ${KItinerary_KnowledgeDb_HEADERS}
     ${KItinerary_Engine_HEADERS}
     ${KItinerary_Era_HEADERS}
     ${KItinerary_Iata_HEADERS}
-    ${KItinerary_Tlv_HEADERS}
     ${KItinerary_Pdf_HEADERS}
     ${KItinerary_Uic9183_HEADERS}
     ${KItinerary_Vdv_HEADERS}

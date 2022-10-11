@@ -9,7 +9,7 @@
 #include "vdvdata_p.h"
 #include "logging.h"
 
-#include "../tlv/berelement.h"
+#include "../asn1/berelement.h"
 
 #include <QDebug>
 

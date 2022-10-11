@@ -8,7 +8,7 @@
 #include "vdvdata_p.h"
 #include "iso9796_2decoder_p.h"
 
-#include "../tlv/berelement.h"
+#include "../asn1/berelement.h"
 
 #include <QDate>
 #include <QDebug>

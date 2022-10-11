@@ -4,6 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "../lib/asn1/berelement.h"
 #include "../lib/era/ssbv1ticket.h"
 #include "../lib/era/ssbv2ticket.h"
 #include "../lib/era/ssbv3ticket.h"
@@ -12,7 +13,6 @@
 #include "../lib/uic9183/uic9183header.h"
 #include "../lib/uic9183/vendor0080vublockdata.h"
 #include "../lib/vdv/vdvticketcontent.h"
-#include "../lib/tlv/berelement.h"
 
 #include <kitinerary_version.h>
 
