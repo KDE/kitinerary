@@ -42,6 +42,7 @@ target_sources(KPimItinerary PRIVATE
     engine/extractorscriptengine.cpp
     engine/scriptextractor.cpp
 
+    era/fcbticket.cpp
     era/ssbticketbase.cpp
     era/ssbticketreader.cpp
     era/ssbv1ticket.cpp

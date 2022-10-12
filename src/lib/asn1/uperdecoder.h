@@ -52,6 +52,21 @@ public:
         return result;
     }
 
+    /** Read a sequence-of field with unrestricted size. */
+    template <typename T>
+    inline QList<T> readSequenceOf()
+    {
+        const auto size = readLengthDeterminant();
+        QList<T> result;
+        result.reserve(size);
+        for (size_type i = 0; i < size; ++i) {
+            T element;
+            element.decode(*this);
+            result.push_back(std::move(element));
+        }
+        return result;
+    }
+
 private:
     BitVector m_data;
     size_type m_idx = {};
