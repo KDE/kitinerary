@@ -5,6 +5,7 @@
 */
 
 #include "../lib/asn1/berelement.h"
+#include "../lib/era/fcbticket.h"
 #include "../lib/era/ssbv1ticket.h"
 #include "../lib/era/ssbv2ticket.h"
 #include "../lib/era/ssbv3ticket.h"
@@ -149,6 +150,9 @@ static void dumpUic9183(const QByteArray &data)
                           << " format: " << field.format() << "]: " << qPrintable(field.text())
                           << std::endl;
             }
+        } else if (block.isA<Fcb::UicRailTicketData>()) {
+            Fcb::UicRailTicketData fcb(block);
+            dumpGadget(&fcb, "  ");
         } else if (block.isA<Vendor0080BLBlock>()) {
             Vendor0080BLBlock vendor(block);
             dumpGadget(&vendor, "  ");
