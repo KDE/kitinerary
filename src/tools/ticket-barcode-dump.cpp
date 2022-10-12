@@ -38,16 +38,35 @@ using namespace KItinerary;
 template <typename T>
 static void dumpGadget(const T *gadget, const char* indent = "")
 {
-    if (!gadget) {
+    dumpGadget(gadget, &T::staticMetaObject, indent);
+}
+
+static void dumpGadget(const void *gadget, const QMetaObject *mo, const char* indent)
+{
+    if (!gadget || !mo) {
         return;
     }
-    for (auto i = 0; i < T::staticMetaObject.propertyCount(); ++i) {
-        const auto prop = T::staticMetaObject.property(i);
+    for (auto i = 0; i < mo->propertyCount(); ++i) {
+        const auto prop = mo->property(i);
         if (!prop.isStored()) {
             continue;
         }
         const auto value = prop.readOnGadget(gadget);
         std::cout << indent << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
+        if (const auto childMo = QMetaType::metaObjectForType(value.userType())) {
+            QByteArray childIndent(indent);
+            childIndent.push_back(' ');
+            dumpGadget(value.constData(), childMo, childIndent.constData());
+        } else if (value.canConvert<QVariantList>() && value.type() != QVariant::String && value.type() != QVariant::ByteArray) {
+            auto iterable = value.value<QSequentialIterable>();
+            int idx = 0;
+            QByteArray childIndent(indent);
+            childIndent.append("  ");
+            for (const QVariant &v : iterable) {
+                std::cout << indent << " [" << idx++ << "]:" << std::endl;
+                dumpGadget(v.constData(), QMetaType::metaObjectForType(v.userType()), childIndent.constData());
+            }
+        }
     }
 }
 
