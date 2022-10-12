@@ -20,7 +20,12 @@ private Q_SLOTS:
     void testReadNumbers()
     {
         UPERDecoder d(BitVector(QByteArray::fromHex("723004D580D1845E168AEAE4C2D2D840845CAC5C500550E8")));
-        d.seek(20);
+        QCOMPARE(d.readBoolean(), false);
+        QCOMPARE(d.readBitset<4>(), std::bitset<4>(0b1110));
+        QCOMPARE(d.offset(), 5);
+        QCOMPARE(d.readBoolean(), false);
+        QCOMPARE(d.readBitset<14>(), std::bitset<14>(0b10001100000000));
+        QCOMPARE(d.offset(), 20);
         QCOMPARE(d.readConstrainedWholeNumber(1, 32000), 9901);
         QCOMPARE(d.offset(), 35);
         QCOMPARE(d.readConstrainedWholeNumber(2016, 2269), 2022);
@@ -31,6 +36,14 @@ private Q_SLOTS:
         QCOMPARE(d.offset(), 63);
         QCOMPARE(d.readUtf8String(), QLatin1String("Eurail B.V."));
         QCOMPARE(d.offset(), 159);
+        QCOMPARE(d.readBoolean(), false);
+        QCOMPARE(d.readBoolean(), false);
+        QCOMPARE(d.readBoolean(), true);
+        QCOMPARE(d.offset(), 162);
+
+        d = UPERDecoder(BitVector(QByteArray::fromHex("22FB162E1BC9")));
+        d.seek(13);
+        QCOMPARE(d.readIA5String(4, 4), "1187");
     }
 };
 

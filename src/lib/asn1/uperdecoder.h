@@ -35,6 +35,23 @@ public:
     /** Read UTF-8 string. */
     QString readUtf8String();
 
+    /** Read boolean value. */
+    bool readBoolean();
+
+    /** Read a IA5String (7 bit ASCII).
+     *  @see X.691 §30
+     */
+    QByteArray readIA5String(size_type minLenght = 0, size_type maxLength = -1);
+
+    /** Read an @tparam N sized bitmap. */
+    template <std::size_t N>
+    inline std::bitset<N> readBitset()
+    {
+        auto result = m_data.bitsetAt<N>(m_idx);
+        m_idx += N;
+        return result;
+    }
+
 private:
     BitVector m_data;
     size_type m_idx = {};

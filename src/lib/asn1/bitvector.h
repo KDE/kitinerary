@@ -9,6 +9,7 @@
 #include <QByteArray>
 #include <QDebug>
 
+#include <bitset>
 #include <cassert>
 #include <type_traits>
 
@@ -50,6 +51,17 @@ public:
 
     /** Returns @p bytes starting at bit offset @p index. */
     QByteArray byteArrayAt(size_type index, size_type bytes) const;
+
+    /** Reads a std::bitset from @p index. */
+    template <std::size_t N>
+    std::bitset<N> bitsetAt(size_type index) const
+    {
+        std::bitset<N> result = {};
+        for (size_type i = 0; i < (size_type)N; ++i) {
+            result[N - i - 1] = at(index + i);
+        }
+        return result;
+    }
 
 private:
     QByteArray m_data;
