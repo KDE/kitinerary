@@ -29,6 +29,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QMetaProperty>
+#include <QSequentialIterable>
 
 #include <iostream>
 
