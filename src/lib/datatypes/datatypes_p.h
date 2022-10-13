@@ -26,7 +26,7 @@ template <> struct num<0> { static constexpr int value = 0; };
 // type tag, to avoid unwanted overload resolution on arguments other than num<>
 template <typename T> struct tag {};
 
-// SFINAE helper to determine if we have a polimorphic or a simple value type
+// SFINAE helper to determine if we have a polymorphic or a simple value type
 template <typename T>
 struct base_type {
     template <typename U> static typename U::super_type test(typename U::super_type*);
