@@ -29,14 +29,20 @@ void UPERDecoder::seek(UPERDecoder::size_type index)
 int64_t UPERDecoder::readConstrainedWholeNumber(int64_t minimum, int64_t maximum)
 {
     assert(minimum <= maximum);
-    const uint64_t range = maximum - minimum + 1;
-    if (range == 1) {
-        return 0;
-    }
+    const uint64_t range = maximum - minimum;
     const size_type bits = 64 - std::countl_zero(range);
     const auto result = m_data.valueAtMSB<int64_t>(m_idx, bits);
     m_idx += bits;
     return result + minimum;
+}
+
+int64_t UPERDecoder::readUnconstrainedWholeNumber()
+{
+    const auto len = readLengthDeterminant();
+    assert(len <= 8); // TODO
+    int64_t result = m_data.valueAtMSB<int64_t>(m_idx, 8 * len);
+    m_idx += 8 * len;
+    return result; // TODO convert negative numbers
 }
 
 UPERDecoder::size_type UPERDecoder::readLengthDeterminant()

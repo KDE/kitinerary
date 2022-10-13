@@ -8,6 +8,8 @@
 
 #include "bitvector.h"
 
+#include <QMetaEnum>
+
 namespace KItinerary {
 
 /** Decoder for data encoded according to X.691 ASN.1 Unaligned Packed Encoding Rules (UPER). */
@@ -26,6 +28,11 @@ public:
      *  @see X.691 §11.5
      */
     int64_t readConstrainedWholeNumber(int64_t minimum, int64_t maximum);
+
+    /** Read unconstrained whole number.
+     *  @see X.691 §11.8
+     */
+    int64_t readUnconstrainedWholeNumber();
 
     /** Read length determinant.
      * @see X.691 §11.9
@@ -52,7 +59,9 @@ public:
         return result;
     }
 
-    /** Read a sequence-of field with unrestricted size. */
+    /** Read a sequence-of field with unrestricted size.
+     *  @see X.691 §20
+     */
     template <typename T>
     inline QList<T> readSequenceOf()
     {
@@ -65,6 +74,23 @@ public:
             result.push_back(std::move(element));
         }
         return result;
+    }
+
+    /** Read enumerated value.
+     *  @see X.691 §14
+     */
+    template <typename T>
+    inline T readEnumerated()
+    {
+        const auto me = QMetaEnum::fromType<T>();
+        const auto idx = readConstrainedWholeNumber(0, me.keyCount() - 1);
+        return static_cast<T>(me.value(idx));
+    }
+    template <typename T>
+    inline T readEnumeratedWithExtensionMarker()
+    {
+        assert(!readBoolean()); // TODO
+        return readEnumerated<T>();
     }
 
 private:
