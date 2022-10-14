@@ -7,54 +7,57 @@
 
 #include "asn1/uperdecoder.h"
 
+#define FCB_READ_CONSTAINED_INT(Name, Min, Max) \
+    if (Name ## IsSet()) \
+        Name = decoder.readConstrainedWholeNumber(Min, Max)
+
+#define FCB_READ_UNCONSTRAINED_INT(Name) \
+    if (Name ## IsSet()) \
+        Name = decoder.readUnconstrainedWholeNumber()
+
+#define FCB_READ_IA5STRING(Name) \
+    if (Name ## IsSet()) \
+        Name = decoder.readIA5String()
+
+#define FCB_READ_UTF8STRING(Name) \
+    if (Name ## IsSet()) \
+        Name = decoder.readUtf8String()
+
+#define FCB_READ_EXTENDED_ENUM(Name) \
+    if (Name ## IsSet()) \
+        Name = decoder.readEnumeratedWithExtensionMarker<decltype(Name)>()
+
+#define FCB_READ_INT_IA5_PAIR(Name, Min, Max) \
+    FCB_READ_CONSTAINED_INT(Name ## Num, Min, Max); \
+    FCB_READ_IA5STRING(Name ## IA5)
+
+#define FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(Name) \
+    FCB_READ_UNCONSTRAINED_INT(Name ## Num); \
+    FCB_READ_IA5STRING(Name ## IA5)
+
 using namespace KItinerary;
 
 void Fcb::IssuingData::decode(UPERDecoder &decoder)
 {
     assert(!decoder.readBoolean()); // TODO extension marker
     m_optionals = decoder.readBitset<14>();
-    if (securityProviderNumIsSet()) {
-        securityProviderNum = decoder.readConstrainedWholeNumber(1, 32000);
-    }
-    if (securityProviderIA5IsSet()) {
-        securityProviderIA5 = decoder.readIA5String();
-    }
-    if (issuerNumIsSet()) {
-        issuerNum = decoder.readConstrainedWholeNumber(1, 32000);
-    }
-    if (issuerIA5IsSet()) {
-        issuerIA5 = decoder.readIA5String();
-    }
+    FCB_READ_INT_IA5_PAIR(securityProvider, 1, 32000);
+    FCB_READ_INT_IA5_PAIR(issuer, 1, 32000);
     issuingYear = decoder.readConstrainedWholeNumber(2016, 2269);
     issuingDay = decoder.readConstrainedWholeNumber(1, 366);
-    if (issuingTimeIsSet()) {
-        issuingTime = decoder.readConstrainedWholeNumber(0, 1440);
-    }
-    if (issuerNameIsSet()) {
-        issuerName = decoder.readUtf8String();
-    }
+    FCB_READ_CONSTAINED_INT(issuingTime, 0, 1440);
+    FCB_READ_UTF8STRING(issuerName);
     specimen = decoder.readBoolean();
     securePaperTicket = decoder.readBoolean();
     activated = decoder.readBoolean();
     if (currencyIsSet()) {
         currency = decoder.readIA5String(3, 3);
     }
-    if (currencyFractIsSet()) {
-        currencyFract = decoder.readConstrainedWholeNumber(1, 3);
-    }
-    if (issuerPNRIsSet()) {
-        issuerPNR = decoder.readIA5String();
-    }
+    FCB_READ_CONSTAINED_INT(currencyFract, 1, 3);
+    FCB_READ_IA5STRING(issuerPNR);
     assert(!m_optionals[4]); // TODO ExtensionData
-    if (issuedOnTrainNumIsSet()) {
-        issuedOnTrainNum = decoder.readUnconstrainedWholeNumber();
-    }
-    if (issuedOnTrainNumIsSet()) {
-        issuedOnTrainIA5 = decoder.readIA5String();
-    }
-    if (issuedOnLineIsSet()) {
-        issuedOnLine = decoder.readUnconstrainedWholeNumber();
-    }
+    FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(issuedOnTrain);
+    FCB_READ_UNCONSTRAINED_INT(issuedOnLine);
     assert(!m_optionals[0]); // TODO GeoCoordinateType
 }
 
@@ -63,55 +66,25 @@ void Fcb::TravelerType::decode(UPERDecoder &decoder)
     assert(!decoder.readBoolean()); // TODO extension marker
 
     m_optionals = decoder.readBitset<17>();
-    if (firstNameIsSet()) {
-        firstName = decoder.readUtf8String();
-    }
-    if (secondNameIsSet()) {
-        secondName = decoder.readUtf8String();
-    }
-    if (lastNameIsSet()) {
-        lastName = decoder.readUtf8String();
-    }
-    if (idCardIsSet()) {
-        idCard = decoder.readIA5String();
-    }
-    if (passportIdIsSet()) {
-        passportId = decoder.readIA5String();
-    }
-    if (titleIsSet()) {
-        title = decoder.readIA5String(1, 3);
-    }
-    if (genderIsSet()) {
-        gender = decoder.readEnumeratedWithExtensionMarker<GenderType>();
-    }
-    if (customerIdIA5IsSet()) {
-        customerIdIA5 = decoder.readIA5String();
-    }
-    if (customerIdNumIsSet()) {
-        customerIdNum = decoder.readUnconstrainedWholeNumber();
-    }
-    if (yearOfBirthIsSet()) {
-        yearOfBirth = decoder.readConstrainedWholeNumber(1901, 2155);
-    }
-    if (dayOfBirthIsSet()) {
-        dayOfBirth = decoder.readConstrainedWholeNumber(0, 370);
-    }
+    FCB_READ_UTF8STRING(firstName);
+    FCB_READ_UTF8STRING(secondName);
+    FCB_READ_UTF8STRING(lastName);
+    FCB_READ_IA5STRING(idCard);
+    FCB_READ_IA5STRING(passportId);
+    FCB_READ_IA5STRING(title);
+    FCB_READ_EXTENDED_ENUM(gender);
+    FCB_READ_IA5STRING(customerIdIA5);
+    FCB_READ_UNCONSTRAINED_INT(customerIdNum);
+    FCB_READ_CONSTAINED_INT(yearOfBirth, 1901, 2155);
+    FCB_READ_CONSTAINED_INT(dayOfBirth, 0, 370);
     ticketHolder = decoder.readBoolean();
-    if (passengerTypeIsSet()) {
-        passengerType = decoder.readEnumeratedWithExtensionMarker<PassengerType>();
-    }
+    FCB_READ_EXTENDED_ENUM(passengerType);
     if (passengerWithReducedMobilityIsSet()) {
         passengerWithReducedMobility = decoder.readBoolean();
     }
-    if (countryOfResidenceIsSet()) {
-        countryOfResidence = decoder.readConstrainedWholeNumber(1, 999);
-    }
-    if (countryOfPassportIsSet()) {
-        countryOfPassport = decoder.readConstrainedWholeNumber(1, 999);
-    }
-    if (countryOfIdCardIsSet()) {
-        countryOfIdCard = decoder.readConstrainedWholeNumber(1, 999);
-    }
+    FCB_READ_CONSTAINED_INT(countryOfResidence, 1, 999);
+    FCB_READ_CONSTAINED_INT(countryOfPassport, 1, 999);
+    FCB_READ_CONSTAINED_INT(countryOfIdCard, 1, 999);
     assert(!m_optionals[0]); // TODO status
 }
 
@@ -126,43 +99,20 @@ void Fcb::TravelerData::decode(UPERDecoder &decoder)
     if (preferredLanguageIsSet()) {
         preferredLanguage = decoder.readIA5String(2, 2);
     }
-    if (groupNameIsSet()) {
-        groupName = decoder.readUtf8String();
-    }
+    FCB_READ_UTF8STRING(groupName);
 }
 
 void Fcb::TrainLinkType::decode(UPERDecoder &decoder)
 {
     m_optionals = decoder.readBitset<9>();
-    if (trainNumIsSet()) {
-        trainNum = decoder.readUnconstrainedWholeNumber();
-    }
-    if (trainIA5IsSet()) {
-        trainIA5 = decoder.readIA5String();
-    }
+    FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(train);
     travelDate = decoder.readConstrainedWholeNumber(-1, 370);
     departureTime = decoder.readConstrainedWholeNumber(0, 1440);
-    if (departureUTCOffsetIsSet()) {
-        departureUTCOffset = decoder.readConstrainedWholeNumber(-60, 60);
-    }
-    if (fromStationNumIsSet()) {
-        fromStationNum = decoder.readConstrainedWholeNumber(1, 9999999);
-    }
-    if (fromStationIA5IsSet()) {
-        fromStationIA5 = decoder.readIA5String();
-    }
-    if (toStationNumIsSet()) {
-        toStationNum = decoder.readConstrainedWholeNumber(1, 9999999);
-    }
-    if (toStationIA5IsSet()) {
-        toStationIA5 = decoder.readIA5String();
-    }
-    if (fromStationNameUTF8IsSet()) {
-        fromStationNameUTF8 = decoder.readUtf8String();
-    }
-    if (toStationNameUTF8IsSet()) {
-        toStationNameUTF8 = decoder.readUtf8String();
-    }
+    FCB_READ_CONSTAINED_INT(departureUTCOffset, -60, 60);
+    FCB_READ_INT_IA5_PAIR(fromStation, 1, 9999999);
+    FCB_READ_INT_IA5_PAIR(toStation, 1, 9999999);
+    FCB_READ_UTF8STRING(fromStationNameUTF8);
+    FCB_READ_UTF8STRING(toStationNameUTF8);
 }
 
 void Fcb::RegionalValidityType::decode(UPERDecoder &decoder)
@@ -194,86 +144,37 @@ void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
     assert(!decoder.readBoolean()); // TODO extension marker
 
     m_optionals = decoder.readBitset<38>();
-    if (referenceNumIsSet()) {
-        referenceNum = decoder.readUnconstrainedWholeNumber();
-    }
-    if (referenceIA5IsSet()) {
-        referenceIA5 = decoder.readIA5String();
-    }
-    if (productOwnerNumIsSet()) {
-        productOwnerNum = decoder.readConstrainedWholeNumber(1, 32000);
-    }
-    if (productOwnerIA5IsSet()) {
-        productOwnerIA5 = decoder.readIA5String();
-    }
-    if (productIdNumIsSet()) {
-        productIdNum = decoder.readConstrainedWholeNumber(0, 32000);
-    }
-    if (productIdIA5IsSet()) {
-        productIdIA5 = decoder.readIA5String();
-    }
-    if (extIssuerIdIsSet()) {
-        extIssuerId = decoder.readUnconstrainedWholeNumber();
-    }
-    if (issuerAutorizationIdIsSet()) {
-        issuerAutorizationId = decoder.readUnconstrainedWholeNumber();
-    }
+    FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(reference);
+    FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_UNCONSTRAINED_INT(extIssuerId);
+    FCB_READ_UNCONSTRAINED_INT(issuerAutorizationId);
     returnIncluded = decoder.readBoolean();
     if (stationCodeTableIsSet()) {
         stationCodeTable = decoder.readEnumerated<CodeTableType>();
     }
-    if (fromStationNumIsSet()) {
-        fromStationNum = decoder.readConstrainedWholeNumber(1, 9999999);
-    }
-    if (fromStationIA5IsSet()) {
-        fromStationIA5 = decoder.readIA5String();
-    }
-    if (toStationNumIsSet()) {
-        toStationNum = decoder.readConstrainedWholeNumber(1, 9999999);
-    }
-    if (toStationIA5IsSet()) {
-        toStationIA5 = decoder.readIA5String();
-    }
-    if (fromStationNameUTF8IsSet()) {
-        fromStationNameUTF8 = decoder.readUtf8String();
-    }
-    if (toStationNameUTF8IsSet()) {
-        toStationNameUTF8 = decoder.readUtf8String();
-    }
-    if (validRegionDescIsSet()) {
-        validRegionDesc = decoder.readUtf8String();
-    }
+    FCB_READ_INT_IA5_PAIR(fromStation, 1, 9999999);
+    FCB_READ_INT_IA5_PAIR(toStation, 1, 9999999);
+    FCB_READ_UTF8STRING(fromStationNameUTF8);
+    FCB_READ_UTF8STRING(toStationNameUTF8);
+    FCB_READ_UTF8STRING(validRegionDesc);
     if (validRegionIsSet()) {
         validRegion = decoder.readSequenceOf<RegionalValidityType>();
     }
     if (returnDescriptionIsSet()) {
         returnDescription.decode(decoder);
     }
-    if (validFromDayIsSet()) {
-        validFromDay = decoder.readConstrainedWholeNumber(-1, 700);
-    }
-    if (validFromTimeIsSet()) {
-        validFromTime = decoder.readConstrainedWholeNumber(0, 1440);
-    }
-    if (validFromUTCOffsetIsSet()) {
-        validFromUTCOffset = decoder.readConstrainedWholeNumber(-60, 60);
-    }
-    if (validUntilDayIsSet()) {
-        validUntilDay = decoder.readConstrainedWholeNumber(0, 370);
-    }
-    if (validUntilTimeIsSet()) {
-        validUntilTime = decoder.readConstrainedWholeNumber(0, 1440);
-    }
-    if (validUntilUTCOffsetIsSet()) {
-        validUntilUTCOffset = decoder.readConstrainedWholeNumber(-60, 60);
-    }
+    FCB_READ_CONSTAINED_INT(validFromDay, -1, 700);
+    FCB_READ_CONSTAINED_INT(validFromTime, 0, 1440);
+    FCB_READ_CONSTAINED_INT(validFromUTCOffset, -60, 60);
+    FCB_READ_CONSTAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_CONSTAINED_INT(validUntilTime, 0, 1440);
+    FCB_READ_CONSTAINED_INT(validUntilUTCOffset, -60, 60);
     // TODO activatedDay
     if (classCodeIsSet()) {
         classCode = decoder.readEnumeratedWithExtensionMarker<TravelClassType>();
     }
-    if (serviceLevelIsSet()) {
-        serviceLevel = decoder.readIA5String(1, 2);
-    }
+    FCB_READ_IA5STRING(serviceLevel);
     // TODO
 }
 
