@@ -170,7 +170,7 @@ void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
     FCB_READ_CONSTAINED_INT(validUntilDay, 0, 370);
     FCB_READ_CONSTAINED_INT(validUntilTime, 0, 1440);
     FCB_READ_CONSTAINED_INT(validUntilUTCOffset, -60, 60);
-    // TODO activatedDay
+    assert(!activatedDayIsSet()); // TODO activatedDay
     if (classCodeIsSet()) {
         classCode = decoder.readEnumeratedWithExtensionMarker<TravelClassType>();
     }
