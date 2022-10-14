@@ -34,6 +34,8 @@
 #include <QVariant>
 
 #include <cmath>
+#include <cstring>
+#include <set>
 
 using namespace KItinerary;
 
@@ -560,6 +562,28 @@ static Person mergeValue(const Person &lhs, const Person &rhs)
     return p;
 }
 
+static QVariantList mergeSubjectOf(const QVariantList &lhs, const QVariantList &rhs)
+{
+    std::set<QString> mergedSet;
+    for (const auto &v : lhs) {
+        if (v.type() != QVariant::String) {
+            return rhs.isEmpty() ? lhs : rhs;
+        }
+        mergedSet.insert(v.toString());
+    }
+    for (const auto &v : rhs) {
+        if (v.type() != QVariant::String) {
+            return rhs.isEmpty() ? lhs : rhs;
+        }
+        mergedSet.insert(v.toString());
+    }
+
+    QVariantList result;
+    result.reserve(mergedSet.size());
+    std::copy(mergedSet.begin(), mergedSet.end(), std::back_inserter(result));
+    return result;
+}
+
 static int ticketTokenSize(const QVariant &v)
 {
     if (v.type() == QVariant::String) {
@@ -629,6 +653,8 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
             rv = mergeValue(lv.value<Ticket>(), rv.value<Ticket>());
         } else if ((metaType.flags() & QMetaType::IsGadget) && metaType.metaObject()) {
             rv = merge(prop.readOnGadget(lhs.constData()), rv);
+        } else if (mt == QVariant::List && std::strcmp(prop.name(), "subjectOf") == 0) {
+            rv = mergeSubjectOf(lv.toList(), rv.toList());
         } else if (mt == QVariant::String) {
             rv = StringUtil::betterString(lv.toString(), rv.toString()).toString();
         }
