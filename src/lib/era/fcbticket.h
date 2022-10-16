@@ -34,6 +34,11 @@ public:
     void decode(UPERDecoder &decoder);
 };
 
+class GeoCoordinateType {
+    UPER_GADGET
+    // TODO
+};
+
 class IssuingData {
     UPER_GADGET
     UPER_ELEMENT_OPTIONAL(int, securityProviderNum)
@@ -54,12 +59,8 @@ class IssuingData {
     UPER_ELEMENT_OPTIONAL(int, issuedOnTrainNum)
     UPER_ELEMENT_OPTIONAL(QByteArray, issuedOnTrainIA5)
     UPER_ELEMENT_OPTIONAL(int, issuedOnLine)
-    // TODO pointOfSale GeoCoordinateType OPTIONAL
-public:
-    void decode(UPERDecoder &decoder);
-
-private:
-    std::bitset<14> m_optionals;
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::GeoCoordinateType, pointOfSale)
+    UPER_GADGET_FINALIZE
 };
 
 enum GenderType {
@@ -82,6 +83,15 @@ enum PassengerType {
 };
 Q_ENUM_NS(PassengerType)
 
+class CustomerStatusType {
+    UPER_GADGET
+    UPER_ELEMENT_OPTIONAL(int, statusProviderNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, statusProviderIA5)
+    UPER_ELEMENT_OPTIONAL(int, customStatus)
+    UPER_ELEMENT_OPTIONAL(QByteArray, customerStatusDescr)
+    UPER_GADGET_FINALIZE
+};
+
 class TravelerType {
     UPER_GADGET
     UPER_ELEMENT_OPTIONAL(QString, firstName)
@@ -101,12 +111,8 @@ class TravelerType {
     UPER_ELEMENT_OPTIONAL(int, countryOfResidence)
     UPER_ELEMENT_OPTIONAL(int, countryOfPassport)
     UPER_ELEMENT_OPTIONAL(int, countryOfIdCard)
-    // TODO status SEQUENCE OF CustomerStatusType OPTIONAL
-public:
-    void decode(UPERDecoder &decoder);
-
-private:
-    std::bitset<17> m_optionals;
+    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::CustomerStatusType>, status)
+    UPER_GADGET_FINALIZE
 };
 
 class TravelerData {
@@ -114,11 +120,7 @@ class TravelerData {
     UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::TravelerType>, traveler)
     UPER_ELEMENT_OPTIONAL(QByteArray, preferredLanguage)
     UPER_ELEMENT_OPTIONAL(QString, groupName)
-public:
-    void decode(UPERDecoder &decoder);
-
-private:
-    std::bitset<3> m_optionals;
+    UPER_GADGET_FINALIZE
 };
 
 enum CodeTableType {
@@ -143,10 +145,7 @@ class TrainLinkType {
     UPER_ELEMENT_OPTIONAL(QByteArray, toStationIA5)
     UPER_ELEMENT_OPTIONAL(QString, fromStationNameUTF8)
     UPER_ELEMENT_OPTIONAL(QString, toStationNameUTF8)
-public:
-    void decode(UPERDecoder &decoder);
-private:
-    std::bitset<9> m_optionals;
+    UPER_GADGET_FINALIZE
 };
 
 class RegionalValidityType {
@@ -181,6 +180,16 @@ class TariffType {
 };
 
 class VatDetailType {
+    UPER_GADGET
+    // TODO
+};
+
+class IncludedOpenTicketType {
+    UPER_GADGET
+    // TODO
+};
+
+class LuggageRestrictionType {
     UPER_GADGET
     // TODO
 };
@@ -223,26 +232,27 @@ class OpenTicketData {
     UPER_ELEMENT_OPTIONAL(int, price)
     UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::VatDetailType>, vatDetail)
     UPER_ELEMENT_OPTIONAL(QString, infoText)
-    // TODO includedAddOns SEQUENCE OF IncludedOpenTicketType OPTIONAL
-    // TODO luggage LuggageRestrictionType OPTIONAL
-    // TODO extension ExtensionData OPTIONAL
-public:
-    void decode(UPERDecoder &decoder);
+    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::IncludedOpenTicketType>, includedAddOns)
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::LuggageRestrictionType, luggage)
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ExtensionData, extension)
+    UPER_GADGET_FINALIZE
+};
 
-private:
-    std::bitset<38> m_optionals;
+class TokenType {
+    UPER_GADGET
+    // TODO
 };
 
 class DocumentData {
     UPER_GADGET
-    // TODO token  TokenType OPTIONAL
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::TokenType, token)
     UPER_ELEMENT(QVariant, ticket)
+    UPER_GADGET_FINALIZE
+};
 
-public:
-    void decode(UPERDecoder &decoder);
-
-private:
-    std::bitset<1> m_optionals;
+class ControlData {
+    UPER_GADGET
+    // TODO
 };
 
 class KITINERARY_EXPORT UicRailTicketData {
@@ -250,32 +260,38 @@ class KITINERARY_EXPORT UicRailTicketData {
     UPER_ELEMENT(KItinerary::Fcb::IssuingData, issuingDetail)
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::TravelerData, travelerDetail)
     UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::DocumentData>, transportDocument)
-    // TODO
-    // controlDetail ControlData OPTIONAL
-    // extension SEQUENCE OF ExtensionData OPTIONAL
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ControlData, controlDetail)
+    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::ExtensionData>, extension)
+    UPER_GADGET_FINALIZE
 public:
     UicRailTicketData();
     UicRailTicketData(const Uic9183Block &block);
-
-    void decode(UPERDecoder &decoder);
 
     static constexpr const char RecordId[] = "U_FLEX";
 
 private:
     Uic9183Block m_block;
-    std::bitset<4> m_optionals;
 };
 
 }
 }
 
+Q_DECLARE_METATYPE(KItinerary::Fcb::ExtensionData)
+Q_DECLARE_METATYPE(KItinerary::Fcb::GeoCoordinateType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::IssuingData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::TravelerType)
+Q_DECLARE_METATYPE(KItinerary::Fcb::CustomerStatusType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::TravelerData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::RegionalValidityType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::ReturnRouteDescriptionType)
+Q_DECLARE_METATYPE(KItinerary::Fcb::TariffType)
+Q_DECLARE_METATYPE(KItinerary::Fcb::VatDetailType)
+Q_DECLARE_METATYPE(KItinerary::Fcb::IncludedOpenTicketType)
+Q_DECLARE_METATYPE(KItinerary::Fcb::LuggageRestrictionType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::OpenTicketData)
+Q_DECLARE_METATYPE(KItinerary::Fcb::TokenType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::DocumentData)
+Q_DECLARE_METATYPE(KItinerary::Fcb::ControlData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::UicRailTicketData)
 
 #endif // KITINERARY_FCBTICKET_H

@@ -49,4 +49,11 @@ private: \
     inline bool Name ## IsSet() const { return m_optionals[m_optionals.size() - _uper_ ## Name ## OptionalIndex - 1]; }
 }
 
+#define UPER_GADGET_FINALIZE \
+public: \
+    void decode(UPERDecoder &decoder); \
+private: \
+    static constexpr auto _uper_OptionalCount = decltype(_uper_optional_counter(detail::num<>()))::value; \
+    std::bitset<_uper_OptionalCount> m_optionals;
+
 #endif // KITINERARY_UPERELEMENT_H
