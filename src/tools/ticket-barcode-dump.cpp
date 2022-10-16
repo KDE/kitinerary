@@ -65,8 +65,12 @@ static void dumpGadget(const void *gadget, const QMetaObject *mo, const char* in
             QByteArray childIndent(indent);
             childIndent.append("  ");
             for (const QVariant &v : iterable) {
-                std::cout << indent << " [" << idx++ << "]:" << std::endl;
-                dumpGadget(v.constData(), QMetaType::metaObjectForType(v.userType()), childIndent.constData());
+                if (QMetaType::metaObjectForType(v.userType())) {
+                    std::cout << indent << " [" << idx++ << "]:" << std::endl;
+                    dumpGadget(v.constData(), QMetaType::metaObjectForType(v.userType()), childIndent.constData());
+                } else {
+                    std::cout << indent << " [" << idx++ << "]: "  << qPrintable(v.toString()) << std::endl;
+                }
             }
         }
     }
