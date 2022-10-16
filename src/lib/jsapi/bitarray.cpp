@@ -6,6 +6,8 @@
 
 #include "bitarray.h"
 
+#include "asn1/bitvectorview.h"
+
 #include <QDebug>
 
 #include <cstdint>
@@ -22,9 +24,10 @@ BitArray::~BitArray() = default;
 
 quint64 BitArray::readNumberMSB(int startBit, int size) const
 {
-    if (m_data.size() < startBit + size || size < 0 || size > 64 || startBit < 0) {
+    BitVectorView view(std::string_view(m_data.constData(), m_data.size()));
+    if ((int)view.size() < startBit + size || size < 0 || size > 64 || startBit < 0) {
         return 0;
     }
 
-    return m_data.valueAtMSB<quint64>(startBit, size);
+    return view.valueAtMSB<quint64>(startBit, size);
 }

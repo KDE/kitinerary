@@ -9,7 +9,7 @@
 
 using namespace KItinerary;
 
-UPERDecoder::UPERDecoder(const BitVector &data)
+UPERDecoder::UPERDecoder(BitVectorView data)
     : m_data(data)
 {
 }
@@ -71,17 +71,8 @@ bool UPERDecoder::readBoolean()
     return m_data.at(m_idx++) != 0;
 }
 
-QByteArray UPERDecoder::readIA5String(size_type minLength, size_type maxLength)
+QByteArray UPERDecoder::readIA5StringData(size_type len)
 {
-    size_type len = 0;
-    if (minLength == maxLength) {
-        len = minLength;
-    } else if (maxLength > 0) {
-        len = readConstrainedWholeNumber(minLength, maxLength);
-    } else {
-        len = readLengthDeterminant();
-    }
-
     QByteArray result;
     result.reserve(len);
     for (size_type i = 0; i < len; ++i) {
@@ -89,6 +80,21 @@ QByteArray UPERDecoder::readIA5String(size_type minLength, size_type maxLength)
         m_idx += 7;
         result.push_back(c);
     }
-
     return result;
+}
+
+QByteArray UPERDecoder::readIA5String()
+{
+    return readIA5StringData(readLengthDeterminant());
+}
+
+QByteArray UPERDecoder::readIA5String(size_type minLength, size_type maxLength)
+{
+    size_type len = 0;
+    if (minLength == maxLength) {
+        len = minLength;
+    } else {
+        len = readConstrainedWholeNumber(minLength, maxLength);
+    }
+    return readIA5StringData(len);
 }

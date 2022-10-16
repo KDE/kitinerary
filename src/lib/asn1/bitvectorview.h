@@ -6,24 +6,24 @@
 #ifndef KITINERARY_BITVECTOR_H
 #define KITINERARY_BITVECTOR_H
 
-#include <QByteArray>
-#include <QDebug>
-
 #include <bitset>
 #include <cassert>
+#include <string_view>
 #include <type_traits>
+
+class QByteArray;
 
 namespace KItinerary {
 
-/** Vector for working with data that isn't byte-aligned. */
-class BitVector
+/** Non-owning bit-level view for working with data that isn't byte-aligned. */
+class BitVectorView
 {
 public:
-    BitVector();
-    explicit BitVector(const QByteArray &data);
-    ~BitVector();
+    BitVectorView();
+    explicit BitVectorView(std::string_view data);
+    ~BitVectorView();
 
-    using size_type = QByteArray::size_type;
+    using size_type = std::string_view::size_type;
 
     /** Size of this vector in bits. */
     size_type size() const;
@@ -64,7 +64,7 @@ public:
     }
 
 private:
-    QByteArray m_data;
+    std::string_view m_data;
 };
 
 }

@@ -7,6 +7,8 @@
 
 #include "asn1/uperdecoder.h"
 
+#include <QDebug>
+
 #define FCB_READ_CONSTAINED_INT(Name, Min, Max) \
     if (Name ## IsSet()) \
         Name = decoder.readConstrainedWholeNumber(Min, Max)
@@ -202,7 +204,7 @@ Fcb::UicRailTicketData::UicRailTicketData() = default;
 Fcb::UicRailTicketData::UicRailTicketData(const Uic9183Block &block)
     : m_block(block)
 {
-    UPERDecoder decoder(BitVector(QByteArray(block.content(), block.contentSize()))); // TODO make BitVector a view
+    UPERDecoder decoder(BitVectorView(std::string_view(block.content(), block.contentSize())));
     decode(decoder);
 }
 

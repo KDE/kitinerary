@@ -6,7 +6,7 @@
 #ifndef KITINERARY_UPERDECODER_H
 #define KITINERARY_UPERDECODER_H
 
-#include "bitvector.h"
+#include "bitvectorview.h"
 
 #include <QMetaEnum>
 
@@ -16,10 +16,10 @@ namespace KItinerary {
 class UPERDecoder
 {
 public:
-    explicit UPERDecoder(const BitVector &data);
+    explicit UPERDecoder(BitVectorView data);
     ~UPERDecoder();
 
-    using size_type = BitVector::size_type;
+    using size_type = BitVectorView::size_type;
 
     size_type offset() const;
     void seek(size_type index);
@@ -45,10 +45,15 @@ public:
     /** Read boolean value. */
     bool readBoolean();
 
-    /** Read a IA5String (7 bit ASCII).
+    /** Read an unconstrained IA5String (7 bit ASCII).
      *  @see X.691 §30
      */
-    QByteArray readIA5String(size_type minLenght = 0, size_type maxLength = -1);
+    QByteArray readIA5String();
+
+    /** Read length-constrained IA5String (7 bit ASCII).
+     *  @see X.691 §30
+     */
+    QByteArray readIA5String(size_type minLenght, size_type maxLength);
 
     /** Read an @tparam N sized bitmap. */
     template <std::size_t N>
@@ -94,7 +99,9 @@ public:
     }
 
 private:
-    BitVector m_data;
+    QByteArray readIA5StringData(size_type len);
+
+    BitVectorView m_data;
     size_type m_idx = {};
 };
 

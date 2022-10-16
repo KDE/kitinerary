@@ -3,32 +3,34 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "bitvector.h"
+#include "bitvectorview.h"
+
+#include <QByteArray>
 
 using namespace KItinerary;
 
-BitVector::BitVector() = default;
+BitVectorView::BitVectorView() = default;
 
-BitVector::BitVector(const QByteArray& data)
+BitVectorView::BitVectorView(std::string_view data)
     : m_data(data)
 {
 }
 
-BitVector::~BitVector() = default;
+BitVectorView::~BitVectorView() = default;
 
-BitVector::size_type BitVector::size() const
+BitVectorView::size_type BitVectorView::size() const
 {
     return m_data.size() * 8;
 }
 
-uint8_t BitVector::at(BitVector::size_type index) const
+uint8_t BitVectorView::at(BitVectorView::size_type index) const
 {
     const auto majIdx = index / 8;
     const auto minIdx = 7 - (index % 8);
     return (m_data.at(majIdx) & (1 << minIdx)) >> minIdx;
 }
 
-QByteArray BitVector::byteArrayAt(BitVector::size_type index, BitVector::size_type bytes) const
+QByteArray BitVectorView::byteArrayAt(BitVectorView::size_type index, BitVectorView::size_type bytes) const
 {
     QByteArray result;
     result.reserve(bytes);

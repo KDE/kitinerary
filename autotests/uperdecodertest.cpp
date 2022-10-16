@@ -5,7 +5,7 @@
 
 #include <asn1/uperdecoder.h>
 #include <asn1/uperdecoder.cpp>
-#include <asn1/bitvector.cpp>
+#include <asn1/bitvectorview.cpp>
 
 #include <QDebug>
 #include <QObject>
@@ -19,7 +19,8 @@ class UPERDecoderTest : public QObject
 private Q_SLOTS:
     void testReadNumbers()
     {
-        UPERDecoder d(BitVector(QByteArray::fromHex("723004D580D1845E168AEAE4C2D2D840845CAC5C500550E8")));
+        auto data = QByteArray::fromHex("723004D580D1845E168AEAE4C2D2D840845CAC5C500550E8");
+        UPERDecoder d(BitVectorView(std::string_view(data.constData(), data.size())));
         QCOMPARE(d.readBoolean(), false);
         QCOMPARE(d.readBitset<4>(), std::bitset<4>(0b1110));
         QCOMPARE(d.offset(), 5);
@@ -41,7 +42,8 @@ private Q_SLOTS:
         QCOMPARE(d.readBoolean(), true);
         QCOMPARE(d.offset(), 162);
 
-        d = UPERDecoder(BitVector(QByteArray::fromHex("22FB162E1BC9")));
+        data = QByteArray::fromHex("22FB162E1BC9");
+        d = UPERDecoder(BitVectorView(std::string_view(data.constData(), data.size())));
         d.seek(13);
         QCOMPARE(d.readIA5String(4, 4), "1187");
     }
