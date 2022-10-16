@@ -153,6 +153,17 @@ void Fcb::ReturnRouteDescriptionType::decode(UPERDecoder &decoder)
     assert(false);
 }
 
+void Fcb::CardReferenceType::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_INT_IA5_PAIR(cardIssuer, 1, 32000);
+    FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(cardId);
+    FCB_READ_UTF8STRING(cardName);
+    FCB_READ_UNCONSTRAINED_INT(cardType);
+    FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(leadingCardId);
+    FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(trailingCardId);
+}
+
 void Fcb::TariffType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
@@ -166,7 +177,7 @@ void Fcb::TariffType::decode(UPERDecoder &decoder)
     // FCB_READ_CUSTOM(seriesDataDetails); TODO
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(tariffId);
     FCB_READ_UTF8STRING(tariffDesc);
-    // FCB_READ_SEQUENCE_OF_CUSTOM(reductionCard); TODO
+    FCB_READ_SEQUENCE_OF_CUSTOM(reductionCard);
 }
 
 void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
@@ -209,6 +220,41 @@ void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
+void Fcb::PassData::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(reference);
+    FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_CONSTAINED_INT(passType, 1, 250);
+    FCB_READ_UTF8STRING(passDescription);
+    FCB_READ_EXTENDED_ENUM(classCode);
+    FCB_READ_CONSTAINED_INT(validFromDay, -1, 700);
+    FCB_READ_CONSTAINED_INT(validFromTime, 0, 1440);
+    FCB_READ_CONSTAINED_INT(validFromUTCOffset, -60, 60);
+    FCB_READ_CONSTAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_CONSTAINED_INT(validUntilTime, 0, 1440);
+    FCB_READ_CONSTAINED_INT(validUntilUTCOffset, -60, 60);
+    // FCB_READ_CUSTOM(validityPeriodDetails); TODO
+    FCB_READ_CONSTAINED_INT(numberOfValidityDays, 0, 370);
+    FCB_READ_CONSTAINED_INT(numberOfPossibleTrips, 1, 250);
+    FCB_READ_CONSTAINED_INT(numberOfDaysOfTravel, 1, 250);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(activatedDay, 0, 370);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(countries, 1, 250);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(includedCarrierNum, 1, 32000);
+    // TODO includedCarrierIA5		SEQUENCE OF IA5String			OPTIONAL,
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(excludedCarrierNum, 1, 32000);
+    // TODO excludedCarrierIA5		SEQUENCE OF IA5String			OPTIONAL,
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(includedServiceBrands, 1, 32000);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(excludedServiceBrands, 1, 32000);
+    // FCB_READ_SEQUENCE_OF_CUSTOM(validRegion); TOODO
+    FCB_READ_SEQUENCE_OF_CUSTOM(tariffs);
+    FCB_READ_UNCONSTRAINED_INT(price);
+    // FCB_READ_SEQUENCE_OF_CUSTOM(vatDetail); TODO
+    FCB_READ_UTF8STRING(infoText);
+    FCB_READ_CUSTOM(extension);
+}
+
 void Fcb::DocumentData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
@@ -222,6 +268,13 @@ void Fcb::DocumentData::decode(UPERDecoder &decoder)
             OpenTicketData t;
             t.decode(decoder);
             ticket = QVariant::fromValue(t);
+            break;
+        }
+        case 3: {
+            PassData p;
+            p.decode(decoder);
+            ticket = QVariant::fromValue(p);
+            break;
         }
     }
 }
@@ -229,7 +282,18 @@ void Fcb::DocumentData::decode(UPERDecoder &decoder)
 void Fcb::ControlData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
-    // TODO
+    FCB_READ_SEQUENCE_OF_CUSTOM(identificationByCardReference);
+    identificationByIdCard = decoder.readBoolean();
+    identificationByPassportId = decoder.readBoolean();
+    FCB_READ_UNCONSTRAINED_INT(identificationItem);
+    passportValidationRequired = decoder.readBoolean();
+    onlineValidationRequired = decoder.readBoolean();
+    FCB_READ_CONSTAINED_INT(randomDetailedValidationRequired, 0, 99);
+    ageCheckRequired = decoder.readBoolean();
+    reductionCardCheckRequired = decoder.readBoolean();
+    FCB_READ_UTF8STRING(infoText);
+    //FCB_READ_SEQUENCE_OF_CUSTOM(includedTickets); TODO
+    FCB_READ_CUSTOM(extension);
 }
 
 Fcb::UicRailTicketData::UicRailTicketData() = default;

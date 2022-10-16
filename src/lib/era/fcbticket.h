@@ -184,7 +184,17 @@ class SeriesDetailType {
 
 class CardReferenceType {
     UPER_EXTENDABLE_GADGET
-    // TODO
+    UPER_ELEMENT_OPTIONAL(int, cardIssuerNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, cardIssuerIA5)
+    UPER_ELEMENT_OPTIONAL(int, cardIdNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, cardIdIA5)
+    UPER_ELEMENT_OPTIONAL(QString, cardName)
+    UPER_ELEMENT_OPTIONAL(int, cardType)
+    UPER_ELEMENT_OPTIONAL(int, leadingCardIdNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, leadingCardIdIA5)
+    UPER_ELEMENT_OPTIONAL(int, trailingCardIdNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, trailingCardIdIA5)
+    UPER_GADGET_FINALIZE
 };
 
 class TariffType {
@@ -263,6 +273,48 @@ class OpenTicketData {
     UPER_GADGET_FINALIZE
 };
 
+class ValidityPeriodDetailType {
+    // TODO
+};
+
+class PassData {
+    UPER_EXTENDABLE_GADGET
+    UPER_ELEMENT_OPTIONAL(int, referenceNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, referenceIA5)
+    UPER_ELEMENT_OPTIONAL(int, productOwnerNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, productOwnerIA5)
+    UPER_ELEMENT_OPTIONAL(int, productIdNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, productIdIA5)
+    UPER_ELEMENT_OPTIONAL(int, passType)
+    UPER_ELEMENT_OPTIONAL(QString, passDescription)
+    UPER_ELEMENT_DEFAULT(KItinerary::Fcb::TravelClassType, classCode, second)
+    UPER_ELEMENT_DEFAULT(int, validFromDay, 0)
+    UPER_ELEMENT_OPTIONAL(int, validFromTime)
+    UPER_ELEMENT_OPTIONAL(int, validFromUTCOffset)
+    UPER_ELEMENT_DEFAULT(int, validUntilDay, 0)
+    UPER_ELEMENT_OPTIONAL(int, validUntilTime)
+    UPER_ELEMENT_OPTIONAL(int, validUntilUTCOffset)
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ValidityPeriodDetailType, validityPeriodDetails)
+    UPER_ELEMENT_OPTIONAL(int, numberOfValidityDays)
+    UPER_ELEMENT_OPTIONAL(int, numberOfPossibleTrips)
+    UPER_ELEMENT_OPTIONAL(int, numberOfDaysOfTravel)
+    UPER_ELEMENT_OPTIONAL(QList<int>, activatedDay)
+    UPER_ELEMENT_OPTIONAL(QList<int>, countries)
+    UPER_ELEMENT_OPTIONAL(QList<int>, includedCarrierNum)
+    UPER_ELEMENT_OPTIONAL(QList<QByteArray>, includedCarrierIA5)
+    UPER_ELEMENT_OPTIONAL(QList<int>, excludedCarrierNum)
+    UPER_ELEMENT_OPTIONAL(QList<QByteArray>, excludedCarrierIA5)
+    UPER_ELEMENT_OPTIONAL(QList<int>, includedServiceBrands)
+    UPER_ELEMENT_OPTIONAL(QList<int>, excludedServiceBrands)
+    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::RegionalValidityType>, validRegion)
+    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::TariffType>, tariffs)
+    UPER_ELEMENT_OPTIONAL(int, price)
+    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::VatDetailType>, vatDetail)
+    UPER_ELEMENT_OPTIONAL(QString, infoText)
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ExtensionData, extension)
+    UPER_GADGET_FINALIZE
+};
+
 class TokenType {
     UPER_GADGET
     UPER_ELEMENT_OPTIONAL(int, tokenProviderNum)
@@ -295,7 +347,7 @@ class ControlData {
     UPER_ELEMENT_OPTIONAL(int, randomDetailedValidationRequired)
     UPER_ELEMENT(bool, ageCheckRequired)
     UPER_ELEMENT(bool, reductionCardCheckRequired)
-    UPER_ELEMENT_OPTIONAL(QString, infoString)
+    UPER_ELEMENT_OPTIONAL(QString, infoText)
     UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::TicketLinkType>, includedTickets)
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ExtensionData, extension)
     UPER_GADGET_FINALIZE
@@ -337,6 +389,8 @@ Q_DECLARE_METATYPE(KItinerary::Fcb::VatDetailType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::IncludedOpenTicketType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::LuggageRestrictionType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::OpenTicketData)
+Q_DECLARE_METATYPE(KItinerary::Fcb::ValidityPeriodDetailType)
+Q_DECLARE_METATYPE(KItinerary::Fcb::PassData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::TokenType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::DocumentData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::CardReferenceType)
