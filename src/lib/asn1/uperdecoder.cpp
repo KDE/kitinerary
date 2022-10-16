@@ -98,3 +98,14 @@ QByteArray UPERDecoder::readIA5String(size_type minLength, size_type maxLength)
     }
     return readIA5StringData(len);
 }
+
+QList<int> UPERDecoder::readSequenceOfConstrainedWholeNumber(int64_t minimum, int64_t maximum)
+{
+   const auto size = readLengthDeterminant();
+    QList<int> result;
+    result.reserve(size);
+    for (size_type i = 0; i < size; ++i) {
+        result.push_back(readConstrainedWholeNumber(minimum, maximum));
+    }
+    return result;
+}

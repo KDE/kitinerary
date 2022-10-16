@@ -30,8 +30,7 @@ class ExtensionData {
     UPER_GADGET
     UPER_ELEMENT(QByteArray, extensionId)
     UPER_ELEMENT(QByteArray, extensionData)
-public:
-    void decode(UPERDecoder &decoder);
+    UPER_GADGET_FINALIZE
 };
 
 class GeoCoordinateType {
@@ -40,7 +39,7 @@ class GeoCoordinateType {
 };
 
 class IssuingData {
-    UPER_GADGET
+    UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, securityProviderNum)
     UPER_ELEMENT_OPTIONAL(QByteArray, securityProviderIA5)
     UPER_ELEMENT_OPTIONAL(int, issuerNum)
@@ -93,7 +92,7 @@ class CustomerStatusType {
 };
 
 class TravelerType {
-    UPER_GADGET
+    UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QString, firstName)
     UPER_ELEMENT_OPTIONAL(QString, secondName)
     UPER_ELEMENT_OPTIONAL(QString, lastName)
@@ -116,7 +115,7 @@ class TravelerType {
 };
 
 class TravelerData {
-    UPER_GADGET
+    UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::TravelerType>, traveler)
     UPER_ELEMENT_OPTIONAL(QByteArray, preferredLanguage)
     UPER_ELEMENT_OPTIONAL(QString, groupName)
@@ -149,14 +148,14 @@ class TrainLinkType {
 };
 
 class RegionalValidityType {
-    UPER_GADGET
+    UPER_EXTENDABLE_GADGET
     UPER_ELEMENT(QVariant, value)
 public:
     void decode(UPERDecoder &decoder);
 };
 
 class ReturnRouteDescriptionType {
-    UPER_GADGET
+    UPER_EXTENDABLE_GADGET
     // TODO
 public:
     void decode(UPERDecoder &decoder);
@@ -174,9 +173,35 @@ enum TravelClassType {
 };
 Q_ENUM_NS(TravelClassType)
 
-class TariffType {
+class RouteSectionType {
     UPER_GADGET
     // TODO
+};
+
+class SeriesDetailType {
+    UPER_GADGET
+};
+
+class CardReferenceType {
+    UPER_EXTENDABLE_GADGET
+    // TODO
+};
+
+class TariffType {
+    UPER_EXTENDABLE_GADGET
+    UPER_ELEMENT_DEFAULT(int, numberOfPassengers, 1)
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::PassengerType, passengerType)
+    UPER_ELEMENT_OPTIONAL(int, ageBelow)
+    UPER_ELEMENT_OPTIONAL(int, ageAbove)
+    UPER_ELEMENT_OPTIONAL(QList<int>, travelerid)
+    UPER_ELEMENT(bool, restrictedToCountryOfResidence)
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::RouteSectionType, restrictedToRouteSection)
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::SeriesDetailType, seriesDataDetails)
+    UPER_ELEMENT_OPTIONAL(int, tariffIdNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, tariffIdIA5)
+    UPER_ELEMENT_OPTIONAL(QString, tariffDesc)
+    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::CardReferenceType>, reductionCard)
+    UPER_GADGET_FINALIZE
 };
 
 class VatDetailType {
@@ -185,17 +210,17 @@ class VatDetailType {
 };
 
 class IncludedOpenTicketType {
-    UPER_GADGET
+    UPER_EXTENDABLE_GADGET
     // TODO
 };
 
 class LuggageRestrictionType {
-    UPER_GADGET
+    UPER_EXTENDABLE_GADGET
     // TODO
 };
 
 class OpenTicketData {
-    UPER_GADGET
+    UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, referenceNum)
     UPER_ELEMENT_OPTIONAL(QByteArray, referenceIA5)
     UPER_ELEMENT_OPTIONAL(int, productOwnerNum)
@@ -240,23 +265,44 @@ class OpenTicketData {
 
 class TokenType {
     UPER_GADGET
-    // TODO
+    UPER_ELEMENT_OPTIONAL(int, tokenProviderNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, tokenProviderIA5)
+    UPER_ELEMENT_OPTIONAL(QByteArray, tokenSpecification)
+    UPER_ELEMENT(QByteArray, token)
+    UPER_GADGET_FINALIZE
 };
 
 class DocumentData {
-    UPER_GADGET
+    UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::TokenType, token)
     UPER_ELEMENT(QVariant, ticket)
     UPER_GADGET_FINALIZE
 };
 
-class ControlData {
-    UPER_GADGET
+class TicketLinkType {
+    UPER_EXTENDABLE_GADGET
     // TODO
 };
 
+class ControlData {
+    UPER_EXTENDABLE_GADGET
+    UPER_ELEMENT_OPTIONAL(QList <KItinerary::Fcb::CardReferenceType>, identificationByCardReference)
+    UPER_ELEMENT(bool, identificationByIdCard)
+    UPER_ELEMENT(bool, identificationByPassportId)
+    UPER_ELEMENT_OPTIONAL(int, identificationItem)
+    UPER_ELEMENT(bool, passportValidationRequired)
+    UPER_ELEMENT(bool, onlineValidationRequired)
+    UPER_ELEMENT_OPTIONAL(int, randomDetailedValidationRequired)
+    UPER_ELEMENT(bool, ageCheckRequired)
+    UPER_ELEMENT(bool, reductionCardCheckRequired)
+    UPER_ELEMENT_OPTIONAL(QString, infoString)
+    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::TicketLinkType>, includedTickets)
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ExtensionData, extension)
+    UPER_GADGET_FINALIZE
+};
+
 class KITINERARY_EXPORT UicRailTicketData {
-    UPER_GADGET
+    UPER_EXTENDABLE_GADGET
     UPER_ELEMENT(KItinerary::Fcb::IssuingData, issuingDetail)
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::TravelerData, travelerDetail)
     UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::DocumentData>, transportDocument)
@@ -284,6 +330,8 @@ Q_DECLARE_METATYPE(KItinerary::Fcb::CustomerStatusType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::TravelerData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::RegionalValidityType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::ReturnRouteDescriptionType)
+Q_DECLARE_METATYPE(KItinerary::Fcb::RouteSectionType)
+Q_DECLARE_METATYPE(KItinerary::Fcb::SeriesDetailType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::TariffType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::VatDetailType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::IncludedOpenTicketType)
@@ -291,6 +339,8 @@ Q_DECLARE_METATYPE(KItinerary::Fcb::LuggageRestrictionType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::OpenTicketData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::TokenType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::DocumentData)
+Q_DECLARE_METATYPE(KItinerary::Fcb::CardReferenceType)
+Q_DECLARE_METATYPE(KItinerary::Fcb::TicketLinkType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::ControlData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::UicRailTicketData)
 

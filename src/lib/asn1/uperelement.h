@@ -6,6 +6,8 @@
 #ifndef KITINERARY_UPERELEMENT_H
 #define KITINERARY_UPERELEMENT_H
 
+#include "uperdecoder.h"
+
 namespace KItinerary {
 
 // The property counter thing is based on the approach described here https://woboq.com/blog/verdigris-implementation-tricks.html
@@ -17,9 +19,17 @@ template <int N = 255> struct num : public num<N - 1> {
 template <> struct num<0> { static constexpr int value = 0; };
 }
 
+// start of an ASN.1 SEQUENCE definition
 #define UPER_GADGET \
     Q_GADGET \
-    static constexpr detail::num<0> _uper_optional_counter(detail::num<0>) { return {}; }
+    static constexpr detail::num<0> _uper_optional_counter(detail::num<0>) { return {}; } \
+    static constexpr bool _uper_ExtensionMarker = false;
+
+// same as UPER_GADGET, for SEQUENCES with an extension marker
+#define UPER_EXTENDABLE_GADGET \
+    Q_GADGET \
+    static constexpr detail::num<0> _uper_optional_counter(detail::num<0>) { return {}; } \
+    static constexpr bool _uper_ExtensionMarker = true;
 
 #define UPER_ELEMENT(Type, Name) \
 public: \
@@ -54,6 +64,12 @@ public: \
     void decode(UPERDecoder &decoder); \
 private: \
     static constexpr auto _uper_OptionalCount = decltype(_uper_optional_counter(detail::num<>()))::value; \
-    std::bitset<_uper_OptionalCount> m_optionals;
+    std::bitset<_uper_OptionalCount> m_optionals; \
+    inline void decodeSequence(UPERDecoder &decoder) { \
+        if constexpr (_uper_ExtensionMarker) { \
+            assert(!decoder.readBoolean()); /* TODO either handle this properly, or switch to an error state. */ \
+        } \
+        m_optionals = decoder.readBitset<_uper_OptionalCount>(); \
+    }
 
 #endif // KITINERARY_UPERELEMENT_H

@@ -80,6 +80,7 @@ public:
         }
         return result;
     }
+    QList<int> readSequenceOfConstrainedWholeNumber(int64_t minimum, int64_t maximum);
 
     /** Read enumerated value.
      *  @see X.691 §14
