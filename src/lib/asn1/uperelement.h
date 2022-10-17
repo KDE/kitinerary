@@ -31,6 +31,14 @@ template <> struct num<0> { static constexpr int value = 0; };
     static constexpr detail::num<0> _uper_optional_counter(detail::num<0>) { return {}; } \
     static constexpr bool _uper_ExtensionMarker = true;
 
+// ASN.1 ENUMERATED definitions, with or without extension marker
+#define UPER_ENUM(Name) \
+    Q_ENUM_NS(Name) \
+    constexpr bool uperHasExtensionMarker(Name) { return false; }
+#define UPER_EXTENABLE_ENUM(Name) \
+    Q_ENUM_NS(Name) \
+    constexpr bool uperHasExtensionMarker(Name) { return true; }
+
 #define UPER_ELEMENT(Type, Name) \
 public: \
     Type Name = {}; \
