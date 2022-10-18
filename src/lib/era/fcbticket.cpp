@@ -42,6 +42,10 @@
     if (Name ## IsSet()) \
         Name = decoder.readSequenceOfConstrainedWholeNumber(Min, Max)
 
+#define FCB_READ_SEQUENCE_OF_IA5STRING(Name) \
+    if (Name ## IsSet()) \
+        Name = decoder.readSequenceOfIA5String()
+
 #define FCB_READ_SEQUENCE_OF_CUSTOM(Name) \
     if (Name ## IsSet()) \
         Name = decoder.readSequenceOf<decltype(Name)::value_type>();
@@ -212,6 +216,36 @@ void Fcb::CardReferenceType::decode(UPERDecoder &decoder)
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(trailingCardId);
 }
 
+void Fcb::PlacesType::decode(KItinerary::UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_IA5STRING(coach);
+    FCB_READ_IA5STRING(placeString);
+    FCB_READ_UTF8STRING(placeDescription);
+    FCB_READ_SEQUENCE_OF_IA5STRING(placeIA5);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(placeNum, 1, 254);
+}
+
+void Fcb::CompartmentDetailsType::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_CONSTRAINED_INT(coachType, 1, 99);
+    FCB_READ_CONSTRAINED_INT(compartmentType, 1, 99);
+    FCB_READ_CONSTRAINED_INT(specialAllocation, 1, 99);
+    FCB_READ_UTF8STRING(coachTypeDescr);
+    FCB_READ_UTF8STRING(compartmentTypeDescr);
+    FCB_READ_UTF8STRING(specialAllocationDescr);
+    FCB_READ_ENUM(position);
+}
+
+void Fcb::BerthDetailData::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    berthType = decoder.readEnumerated<BerthTypeType>();
+    numberOfBerths = decoder.readConstrainedWholeNumber(1, 999);
+    FCB_READ_ENUM(gender);
+}
+
 void Fcb::TariffType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
@@ -255,7 +289,7 @@ void Fcb::IncludedOpenTicketType::decode(UPERDecoder &decoder)
     FCB_READ_ENUM(classCode);
     // TODO serviceLevel
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
-    // TODO carrierIA5
+    FCB_READ_SEQUENCE_OF_IA5STRING(carrierIA5);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(includedServiceBrands, 1, 32000);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(excludedServiceBrands, 1, 32000);
     FCB_READ_SEQUENCE_OF_CUSTOM(tariffs);
@@ -277,6 +311,50 @@ void Fcb::LuggageRestrictionType::decode(UPERDecoder &decoder)
     FCB_READ_CONSTRAINED_INT(maxHandLuggagePieces, 0, 99);
     FCB_READ_CONSTRAINED_INT(maxNonHandLuggagePieces, 0, 99);
     FCB_READ_SEQUENCE_OF_CUSTOM(registeredLuggage);
+}
+
+void Fcb::ReservationData::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(train);
+    FCB_READ_CONSTRAINED_INT(departureDate, -1, 370);
+    FCB_READ_IA5STRING(referenceIA5);
+    FCB_READ_UNCONSTRAINED_INT(referenceNum);
+    FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_CONSTRAINED_INT(serviceBrand, 0, 32000);
+    FCB_READ_UTF8STRING(serviceBrandAbrUTF8);
+    FCB_READ_UTF8STRING(serviceBrandNameUTF8);
+    FCB_READ_ENUM(service);
+    FCB_READ_ENUM(stationCodeTable);
+    FCB_READ_INT_IA5_PAIR(fromStation, 1, 9999999);
+    FCB_READ_INT_IA5_PAIR(toStation, 1, 9999999);
+    FCB_READ_UTF8STRING(fromStationNameUTF8);
+    FCB_READ_UTF8STRING(toStationNameUTF8);
+    FCB_READ_CONSTRAINED_INT(departureTime, 0, 1440);
+    FCB_READ_CONSTRAINED_INT(departureUTCOffset, -60, 60);
+    FCB_READ_CONSTRAINED_INT(arrivalDate, 0, 20);
+    FCB_READ_CONSTRAINED_INT(arrivalTime, 0, 1440);
+    FCB_READ_CONSTRAINED_INT(arrivalUTCOffset, -60, 60);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
+    FCB_READ_SEQUENCE_OF_IA5STRING(carrierIA5);
+    FCB_READ_ENUM(classCode);
+    // TODO serviceLevel		IA5String (SIZE(1..2))			OPTIONAL,
+    FCB_READ_CUSTOM(places);
+    FCB_READ_CUSTOM(additionalPlaces);
+    FCB_READ_CUSTOM(bicyclePlaces);
+    FCB_READ_CUSTOM(compartmentDetails);
+    FCB_READ_CONSTRAINED_INT(numberOfOverbooked, 0, 200);
+    FCB_READ_SEQUENCE_OF_CUSTOM(berth);
+    FCB_READ_SEQUENCE_OF_CUSTOM(tariffs);
+    FCB_READ_ENUM(priceType);
+    FCB_READ_UNCONSTRAINED_INT(price);
+    FCB_READ_SEQUENCE_OF_CUSTOM(vatDetail);
+    FCB_READ_CONSTRAINED_INT(typeOfSupplement, 0, 9);
+    FCB_READ_CONSTRAINED_INT(numberOfSupplements, 0, 200);
+    FCB_READ_CUSTOM(luggage);
+    FCB_READ_UTF8STRING(infoText);
+    FCB_READ_CUSTOM(extension);
 }
 
 void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
@@ -306,7 +384,7 @@ void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
     FCB_READ_ENUM(classCode);
     FCB_READ_IA5STRING(serviceLevel); // TODO this is size constrained!
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
-    // TODO carrierIA5
+    FCB_READ_SEQUENCE_OF_IA5STRING(carrierIA5);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(includedServiceBrands, 1, 32000);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(excludedServiceBrands, 1, 32000);
     FCB_READ_SEQUENCE_OF_CUSTOM(tariffs);
@@ -365,9 +443,9 @@ void Fcb::PassData::decode(UPERDecoder &decoder)
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(activatedDay, 0, 370);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(countries, 1, 250);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(includedCarrierNum, 1, 32000);
-    // TODO includedCarrierIA5		SEQUENCE OF IA5String			OPTIONAL,
+    FCB_READ_SEQUENCE_OF_IA5STRING(includedCarrierIA5);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(excludedCarrierNum, 1, 32000);
-    // TODO excludedCarrierIA5		SEQUENCE OF IA5String			OPTIONAL,
+    FCB_READ_SEQUENCE_OF_IA5STRING(excludedCarrierIA5);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(includedServiceBrands, 1, 32000);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(excludedServiceBrands, 1, 32000);
     FCB_READ_SEQUENCE_OF_CUSTOM(validRegion);
@@ -387,6 +465,12 @@ void Fcb::DocumentData::decode(UPERDecoder &decoder)
     const auto choiceIdx = decoder.readConstrainedWholeNumber(0, 11);
     switch (choiceIdx) {
         // TODO
+        case 0: {
+            ReservationData r;
+            r.decode(decoder);
+            ticket = QVariant::fromValue(r);
+            break;
+        }
         case 2: {
             OpenTicketData t;
             t.decode(decoder);
