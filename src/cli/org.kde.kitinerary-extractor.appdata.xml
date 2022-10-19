@@ -23,6 +23,7 @@
   <name xml:lang="ia">KItinerary extractor de commando in linea</name>
   <name xml:lang="id">KItinerary Command Line Extractor</name>
   <name xml:lang="it">Estrattore a riga di comando di KItinerary</name>
+  <name xml:lang="ka">KItinerary ბრძანების სტრიქონის ექსტრაქტორი</name>
   <name xml:lang="ko">KItinerary 명령행 추출기</name>
   <name xml:lang="nl">Extractor van opdrachtregel van KItinerary</name>
   <name xml:lang="nn">Kommandolinje­basert uthentar for KItinerary</name>
@@ -54,6 +55,7 @@
   <summary xml:lang="ia">Extractor de datos de reservation como commando in linea</summary>
   <summary xml:lang="id">Pengekstrak data reservasi baris perintah.</summary>
   <summary xml:lang="it">Estrattore di dati di prenotazioni a riga di comando.</summary>
+  <summary xml:lang="ka">ბრძანების სტრიქონის რეზერვაციის მონაცემების ექსტრაქტორი.</summary>
   <summary xml:lang="ko">명령행 예약 데이터 추출기입니다.</summary>
   <summary xml:lang="nl">Gegevensextractor van reservering op de opdrachtregel.</summary>
   <summary xml:lang="nn">Kommandolinje­basert uthentar for reservasjonsdata.</summary>
