@@ -100,8 +100,38 @@ public:
         return readEnumerated<T>();
     }
 
+    /** Read a choice value.
+     *  @see X.691 §23
+     */
+    template <typename... Ts>
+    inline QVariant readChoiceWithExtensionMarker()
+    {
+        assert(!readBoolean()); // TODO
+        constexpr auto count = sizeof...(Ts);
+        const auto choiceIdx = readConstrainedWholeNumber(0, count - 1);
+        assert(choiceIdx < (int)count); // TODO
+        return readChoiceElement<Ts...>(choiceIdx);
+    }
+
 private:
     QByteArray readIA5StringData(size_type len);
+
+    template <typename T, typename T1, typename... Ts>
+    inline QVariant readChoiceElement(int choiceIdx)
+    {
+        if (choiceIdx == 0) {
+            return readChoiceElement<T>(choiceIdx);
+        }
+        return readChoiceElement<T1, Ts...>(choiceIdx - 1);
+    }
+    template <typename T>
+    inline QVariant readChoiceElement(int choiceIdx)
+    {
+        assert(choiceIdx == 0);
+        T value;
+        value.decode(*this);
+        return QVariant::fromValue(value);
+    }
 
     BitVectorView m_data;
     size_type m_idx = {};

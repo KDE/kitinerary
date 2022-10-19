@@ -21,6 +21,10 @@
     if (Name ## IsSet()) \
         Name = decoder.readIA5String()
 
+#define FCB_READ_IA5STRING_CONSTRAINED(Name, Min, Max) \
+    if (Name ## IsSet()) \
+        Name = decoder.readIA5String(Min, Max)
+
 #define FCB_READ_UTF8STRING(Name) \
     if (Name ## IsSet()) \
         Name = decoder.readUtf8String()
@@ -79,6 +83,13 @@ void Fcb::GeoCoordinateType::decode(UPERDecoder &decoder)
     FCB_READ_ENUM(accuracy);
 }
 
+void Fcb::DeltaCoordinate::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    longitude = decoder.readUnconstrainedWholeNumber();
+    latitude = decoder.readUnconstrainedWholeNumber();
+}
+
 void Fcb::IssuingData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
@@ -91,9 +102,7 @@ void Fcb::IssuingData::decode(UPERDecoder &decoder)
     specimen = decoder.readBoolean();
     securePaperTicket = decoder.readBoolean();
     activated = decoder.readBoolean();
-    if (currencyIsSet()) {
-        currency = decoder.readIA5String(3, 3);
-    }
+    FCB_READ_IA5STRING_CONSTRAINED(currency, 3, 3);
     FCB_READ_CONSTRAINED_INT(currencyFract, 1, 3);
     FCB_READ_IA5STRING(issuerPNR);
     FCB_READ_CUSTOM(extension);
@@ -139,9 +148,7 @@ void Fcb::TravelerData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_SEQUENCE_OF_CUSTOM(traveler);
-    if (preferredLanguageIsSet()) {
-        preferredLanguage = decoder.readIA5String(2, 2);
-    }
+    FCB_READ_IA5STRING_CONSTRAINED(preferredLanguage, 2, 2);
     FCB_READ_UTF8STRING(groupName);
 }
 
@@ -158,22 +165,55 @@ void Fcb::TrainLinkType::decode(UPERDecoder &decoder)
     FCB_READ_UTF8STRING(toStationNameUTF8);
 }
 
+void Fcb::ViaStationType::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_ENUM(stationCodeTable);
+    FCB_READ_INT_IA5_PAIR(station, 1, 9999999);
+    FCB_READ_SEQUENCE_OF_CUSTOM(alternativeRoutes);
+    FCB_READ_SEQUENCE_OF_CUSTOM(route);
+    border = decoder.readBoolean();
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
+    FCB_READ_SEQUENCE_OF_IA5STRING(carrierIA5);
+    FCB_READ_UNCONSTRAINED_INT(seriesId);
+    FCB_READ_UNCONSTRAINED_INT(routeId);
+}
+
+void Fcb::ZoneType::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_INT_IA5_PAIR(carrier, 1, 32000);
+    FCB_READ_ENUM(stationCodeTable);
+    FCB_READ_INT_IA5_PAIR(entryStation, 1, 9999999);
+    FCB_READ_INT_IA5_PAIR(terminatingStation, 1, 9999999);
+    FCB_READ_UNCONSTRAINED_INT(city);
+    // TODO zoneId 					SEQUENCE OF INTEGER 			OPTIONAL,
+    // TODO binaryZoneId	    		OCTET STRING					OPTIONAL,
+    FCB_READ_IA5STRING(nutsCode);
+}
+
+void Fcb::LineType::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_INT_IA5_PAIR(carrier, 1, 32000);
+    // TODO lineId 					SEQUENCE OF INTEGER OPTIONAL,
+    FCB_READ_ENUM(stationCodeTable);
+    FCB_READ_INT_IA5_PAIR(entryStation, 1, 9999999);
+    FCB_READ_INT_IA5_PAIR(terminatingStation, 1, 9999999);
+    FCB_READ_CONSTRAINED_INT(city, 1, 9999999);
+    // TODO binaryZoneId				OCTET STRING			OPTIONAL
+}
+
+void Fcb::PolygoneType::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    firstEdge.decode(decoder);
+    edges = decoder.readSequenceOf<DeltaCoordinate>();
+}
+
 void Fcb::RegionalValidityType::decode(UPERDecoder &decoder)
 {
-    assert(!decoder.readBoolean()); // TODO extension marker
-    const auto choice = decoder.readConstrainedWholeNumber(0, 4);
-    switch (choice) {
-        case 0:
-        {
-            TrainLinkType v;
-            v.decode(decoder);
-            value = QVariant::fromValue(v);
-            break;
-        }
-        default:
-            qDebug() << choice; // TODO
-            assert(false);
-    }
+    value = decoder.readChoiceWithExtensionMarker<TrainLinkType, ViaStationType, ZoneType, LineType, PolygoneType>();
 }
 
 void Fcb::ReturnRouteDescriptionType::decode(UPERDecoder &decoder)
@@ -287,7 +327,7 @@ void Fcb::IncludedOpenTicketType::decode(UPERDecoder &decoder)
     FCB_READ_CONSTRAINED_INT(validUntilTime, 0, 1440);
     FCB_READ_CONSTRAINED_INT(validUntilUTCOffset, -60, 60);
     FCB_READ_ENUM(classCode);
-    // TODO serviceLevel
+    FCB_READ_IA5STRING_CONSTRAINED(serviceLevel, 1, 2);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
     FCB_READ_SEQUENCE_OF_IA5STRING(carrierIA5);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(includedServiceBrands, 1, 32000);
@@ -339,7 +379,7 @@ void Fcb::ReservationData::decode(UPERDecoder &decoder)
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
     FCB_READ_SEQUENCE_OF_IA5STRING(carrierIA5);
     FCB_READ_ENUM(classCode);
-    // TODO serviceLevel		IA5String (SIZE(1..2))			OPTIONAL,
+    FCB_READ_IA5STRING_CONSTRAINED(serviceLevel, 1, 2);
     FCB_READ_CUSTOM(places);
     FCB_READ_CUSTOM(additionalPlaces);
     FCB_READ_CUSTOM(bicyclePlaces);
@@ -353,6 +393,51 @@ void Fcb::ReservationData::decode(UPERDecoder &decoder)
     FCB_READ_CONSTRAINED_INT(typeOfSupplement, 0, 9);
     FCB_READ_CONSTRAINED_INT(numberOfSupplements, 0, 200);
     FCB_READ_CUSTOM(luggage);
+    FCB_READ_UTF8STRING(infoText);
+    FCB_READ_CUSTOM(extension);
+}
+
+void Fcb::CarCarriageReservationData::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(train);
+    FCB_READ_CONSTRAINED_INT(beginLoadingDate, -1, 370);
+    FCB_READ_CONSTRAINED_INT(beginLoadingTime, 0, 1440);
+    FCB_READ_CONSTRAINED_INT(endLoadingTime, 0, 1440);
+    FCB_READ_CONSTRAINED_INT(loadingUTCOffset, -60, 60);
+    FCB_READ_IA5STRING(referenceIA5);
+    FCB_READ_UNCONSTRAINED_INT(referenceNum);
+    FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_CONSTRAINED_INT(serviceBrand, 0, 32000);
+    FCB_READ_UTF8STRING(serviceBrandAbrUTF8);
+    FCB_READ_UTF8STRING(serviceBrandNameUTF8);
+    FCB_READ_ENUM(stationCodeTable);
+    FCB_READ_INT_IA5_PAIR(fromStation, 1, 9999999);
+    FCB_READ_INT_IA5_PAIR(toStation, 1, 9999999);
+    FCB_READ_UTF8STRING(fromStationNameUTF8);
+    FCB_READ_UTF8STRING(toStationNameUTF8);
+    FCB_READ_IA5STRING(coach);
+    FCB_READ_IA5STRING(place);
+    FCB_READ_CUSTOM(compartmentDetails);
+    FCB_READ_IA5STRING(numberPlate);
+    FCB_READ_IA5STRING(trailerPlate);
+    carCategory = decoder.readConstrainedWholeNumber(0, 9);
+    FCB_READ_CONSTRAINED_INT(boatCategory, 0, 9);
+    textileRoof = decoder.readBoolean();
+    FCB_READ_ENUM(roofRackType);
+    FCB_READ_CONSTRAINED_INT(roofRackHeight, 0, 99);
+    FCB_READ_CONSTRAINED_INT(attachedBoats, 0, 2);
+    FCB_READ_CONSTRAINED_INT(attachedBicycles, 0, 4);
+    FCB_READ_CONSTRAINED_INT(attachedSurfboards, 0, 5);
+    FCB_READ_CONSTRAINED_INT(loadingListEntry, 0, 999);
+    FCB_READ_ENUM(loadingDeck);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
+    FCB_READ_SEQUENCE_OF_IA5STRING(carrierIA5);
+    tariff.decode(decoder);
+    FCB_READ_ENUM(priceType);
+    FCB_READ_UNCONSTRAINED_INT(price);
+    FCB_READ_SEQUENCE_OF_CUSTOM(vatDetail);
     FCB_READ_UTF8STRING(infoText);
     FCB_READ_CUSTOM(extension);
 }
@@ -382,7 +467,7 @@ void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
     FCB_READ_CONSTRAINED_INT(validUntilUTCOffset, -60, 60);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(activatedDay, 0, 370);
     FCB_READ_ENUM(classCode);
-    FCB_READ_IA5STRING(serviceLevel); // TODO this is size constrained!
+    FCB_READ_IA5STRING_CONSTRAINED(serviceLevel, 1, 2);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
     FCB_READ_SEQUENCE_OF_IA5STRING(carrierIA5);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(includedServiceBrands, 1, 32000);
@@ -456,34 +541,110 @@ void Fcb::PassData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
+void Fcb::VoucherData::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_IA5STRING(referenceIA5);
+    FCB_READ_UNCONSTRAINED_INT(referenceNum);
+    FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    validFromYear = decoder.readConstrainedWholeNumber(2016, 2269);
+    validFromDay = decoder.readConstrainedWholeNumber(0, 370);
+    validUntilYear = decoder.readConstrainedWholeNumber(2016, 2269);
+    validUntilDay = decoder.readConstrainedWholeNumber(0, 370);
+    FCB_READ_UNCONSTRAINED_INT(value);
+    FCB_READ_CONSTRAINED_INT(type, 1, 32000);
+    FCB_READ_UTF8STRING(infoText);
+    FCB_READ_CUSTOM(extension);
+}
+
+void Fcb::CustomerCardData::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_CUSTOM(customer);
+    FCB_READ_IA5STRING(cardIdIA5);
+    FCB_READ_UNCONSTRAINED_INT(cardIdNum);
+    validFromYear = decoder.readConstrainedWholeNumber(2016, 2269);
+    FCB_READ_CONSTRAINED_INT(validFromDay, 0, 370);
+    FCB_READ_CONSTRAINED_INT(validUntilYear, 0, 250);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_ENUM(classCode);
+    FCB_READ_CONSTRAINED_INT(cardType, 1, 1000);
+    FCB_READ_UTF8STRING(cardTypeDescr);
+    FCB_READ_UNCONSTRAINED_INT(customerStatus);
+    FCB_READ_IA5STRING(customerStatusDescr);
+    // TODO includedServices    SEQUENCE OF INTEGER 	OPTIONAL,
+    FCB_READ_CUSTOM(extension);
+}
+
+void Fcb::CountermarkData::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    // TODO
+}
+
+void Fcb::ParkingGroundData::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    // TODO
+}
+
+void Fcb::FIPTicketData::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    // TODO
+}
+
+void Fcb::StationPassageData::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    // TODO
+}
+
+void Fcb::DelayConfirmation::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    // TODO
+}
+
+void Fcb::TokenType::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(tokenProvider);
+    FCB_READ_IA5STRING(tokenSpecification);
+    // TODO token OCTET STRING
+}
+
 void Fcb::DocumentData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
-    assert(!m_optionals[0]); // TODO token
+    FCB_READ_CUSTOM(token);
+    ticket = decoder.readChoiceWithExtensionMarker<
+        ReservationData,
+        CarCarriageReservationData,
+        OpenTicketData,
+        PassData,
+        VoucherData,
+        CustomerCardData,
+        CountermarkData,
+        ParkingGroundData,
+        FIPTicketData,
+        StationPassageData,
+        ExtensionData,
+        DelayConfirmation
+    >();
+}
 
-    assert(!decoder.readBoolean()); // TODO extension marker for CHOICE
-    const auto choiceIdx = decoder.readConstrainedWholeNumber(0, 11);
-    switch (choiceIdx) {
-        // TODO
-        case 0: {
-            ReservationData r;
-            r.decode(decoder);
-            ticket = QVariant::fromValue(r);
-            break;
-        }
-        case 2: {
-            OpenTicketData t;
-            t.decode(decoder);
-            ticket = QVariant::fromValue(t);
-            break;
-        }
-        case 3: {
-            PassData p;
-            p.decode(decoder);
-            ticket = QVariant::fromValue(p);
-            break;
-        }
-    }
+void Fcb::TicketLinkType::decode(UPERDecoder &decoder)
+{
+    decodeSequence(decoder);
+    FCB_READ_IA5STRING(referenceIA5);
+    FCB_READ_UNCONSTRAINED_INT(referenceNum);
+    FCB_READ_UTF8STRING(issuerName);
+    FCB_READ_IA5STRING(issuerPNR);
+    FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
+    FCB_READ_ENUM(ticketType);
+    FCB_READ_ENUM(linkMode);
 }
 
 void Fcb::ControlData::decode(UPERDecoder &decoder)
@@ -499,7 +660,7 @@ void Fcb::ControlData::decode(UPERDecoder &decoder)
     ageCheckRequired = decoder.readBoolean();
     reductionCardCheckRequired = decoder.readBoolean();
     FCB_READ_UTF8STRING(infoText);
-    //FCB_READ_SEQUENCE_OF_CUSTOM(includedTickets); TODO
+    FCB_READ_SEQUENCE_OF_CUSTOM(includedTickets);
     FCB_READ_CUSTOM(extension);
 }
 

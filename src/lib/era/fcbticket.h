@@ -198,19 +198,40 @@ class ViaStationType {
     UPER_ELEMENT(bool, border)
     UPER_ELEMENT_OPTIONAL(QList<int>, carrierNum)
     UPER_ELEMENT_OPTIONAL(QList<QByteArray>, carrierIA5)
-    UPER_ELEMENT(int, seriesId)
-    UPER_ELEMENT(int, routeId)
+    UPER_ELEMENT_OPTIONAL(int, seriesId)
+    UPER_ELEMENT_OPTIONAL(int, routeId)
     UPER_GADGET_FINALIZE
 };
 
 class ZoneType {
     UPER_EXTENDABLE_GADGET
-    // TODO
+    UPER_ELEMENT_OPTIONAL(int, carrierNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, carrierIA5)
+    UPER_ELEMENT_DEFAULT(KItinerary::Fcb::CodeTableType, stationCodeTable, stationUIC)
+    UPER_ELEMENT_OPTIONAL(int, entryStationNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, entryStationIA5)
+    UPER_ELEMENT_OPTIONAL(int, terminatingStationNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, terminatingStationIA5)
+    UPER_ELEMENT_OPTIONAL(int, city)
+    UPER_ELEMENT_OPTIONAL(QList<int>, zoneId)
+    UPER_ELEMENT_OPTIONAL(QByteArray, binaryZoneId)
+    UPER_ELEMENT_OPTIONAL(QByteArray, nutsCode)
+    UPER_GADGET_FINALIZE
 };
 
 class LineType {
     UPER_EXTENDABLE_GADGET
-    // TODO
+    UPER_ELEMENT_OPTIONAL(int, carrierNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, carrierIA5)
+    UPER_ELEMENT_OPTIONAL(QList<int>, lineId)
+    UPER_ELEMENT_DEFAULT(KItinerary::Fcb::CodeTableType, stationCodeTable, stationUIC)
+    UPER_ELEMENT_OPTIONAL(int, entryStationNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, entryStationIA5)
+    UPER_ELEMENT_OPTIONAL(int, terminatingStationNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, terminatingStationIA5)
+    UPER_ELEMENT_OPTIONAL(int, city)
+    UPER_ELEMENT_OPTIONAL(QByteArray, binaryZoneId)
+    UPER_GADGET_FINALIZE
 };
 
 class PolygoneType {
@@ -223,8 +244,7 @@ class PolygoneType {
 class RegionalValidityType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT(QVariant, value)
-public:
-    void decode(UPERDecoder &decoder);
+    UPER_GADGET_FINALIZE
 };
 
 class ReturnRouteDescriptionType {
@@ -687,30 +707,81 @@ class CustomerCardData {
     UPER_ELEMENT_OPTIONAL(int, cardType)
     UPER_ELEMENT_OPTIONAL(QString, cardTypeDescr)
     UPER_ELEMENT_OPTIONAL(int, customerStatus)
-    UPER_ELEMENT_OPTIONAL(QString, customerStatusDescr)
+    UPER_ELEMENT_OPTIONAL(QByteArray, customerStatusDescr)
     UPER_ELEMENT_OPTIONAL(QList<int>, includedServices)
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ExtensionData, extension)
     UPER_GADGET_FINALIZE
 };
 
 class CountermarkData {
-    // TODO
+    UPER_EXTENDABLE_GADGET
+    UPER_ELEMENT_OPTIONAL(QByteArray, referenceIA5)
+    UPER_ELEMENT_OPTIONAL(int, referenceNum)
+    UPER_ELEMENT_OPTIONAL(int, productOwnerNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, productOwnerIA5)
+    UPER_ELEMENT_OPTIONAL(int, productIdNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, productIdIA5)
+    UPER_ELEMENT_OPTIONAL(QByteArray, ticketReferenceIA5)
+    UPER_ELEMENT_OPTIONAL(int, ticketReferenceNum)
+    UPER_ELEMENT(int, numberOfCountermark)
+    UPER_ELEMENT(int, totalOfCountermarks)
+    UPER_ELEMENT(QString, groupName)
+    UPER_ELEMENT_DEFAULT(KItinerary::Fcb::CodeTableType, stationCodeTable, stationUIC)
+    UPER_ELEMENT_OPTIONAL(int, fromStationNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, fromStationIA5)
+    UPER_ELEMENT_OPTIONAL(int, toStationNum)
+    UPER_ELEMENT_OPTIONAL(QByteArray, toStationIA5)
+    UPER_ELEMENT_OPTIONAL(QString, fromStationNameUTF8)
+    UPER_ELEMENT_OPTIONAL(QString, toStationNameUTF8)
+    UPER_ELEMENT_OPTIONAL(QString, validRegionDesc)
+    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::RegionalValidityType>, validRegion)
+    UPER_ELEMENT(bool, returnIncluded)
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ReturnRouteDescriptionType, returnDescription)
+    UPER_ELEMENT_DEFAULT(int, validFromDay, 0)
+    UPER_ELEMENT_OPTIONAL(int, validFromTime)
+    UPER_ELEMENT_OPTIONAL(int, validFromUTCOffset)
+    UPER_ELEMENT_DEFAULT(int, validUntilDay, 0)
+    UPER_ELEMENT_OPTIONAL(int, validUntilTime)
+    UPER_ELEMENT_OPTIONAL(int, validUntilUTCOffset)
+    UPER_ELEMENT_DEFAULT(KItinerary::Fcb::TravelClassType, classCode, second)
+    UPER_ELEMENT_OPTIONAL(QList<int>, carrierNum)
+    UPER_ELEMENT_OPTIONAL(QList<QByteArray>, carrierIA5)
+    UPER_ELEMENT_OPTIONAL(QList<int>, includedServiceBrands)
+    UPER_ELEMENT_OPTIONAL(QList<int>, excludedServiceBrands)
+    UPER_ELEMENT_OPTIONAL(QString, infoText)
+    UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ExtensionData, extension)
+    UPER_GADGET_FINALIZE
 };
 
 class ParkingGroundData {
+    UPER_EXTENDABLE_GADGET
     // TODO
+    UPER_GADGET_FINALIZE
 };
 
 class FIPTicketData {
+    UPER_EXTENDABLE_GADGET
     // TODO
+    UPER_GADGET_FINALIZE
 };
 
 class StationPassageData {
+    UPER_EXTENDABLE_GADGET
     // TODO
+    UPER_GADGET_FINALIZE
 };
 
+enum ConfirmationType {
+    trainDelayConfirmation = 0,
+    travelerDelayConfirmation = 1,
+    trainLinkedTicketDelay = 2,
+};
+UPER_EXTENABLE_ENUM(ConfirmationType)
+
 class DelayConfirmation {
+    UPER_EXTENDABLE_GADGET
     // TODO
+    UPER_GADGET_FINALIZE
 };
 
 class TokenType {
@@ -827,6 +898,11 @@ Q_DECLARE_METATYPE(KItinerary::Fcb::ValidityPeriodDetailType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::PassData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::VoucherData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::CustomerCardData)
+Q_DECLARE_METATYPE(KItinerary::Fcb::CountermarkData)
+Q_DECLARE_METATYPE(KItinerary::Fcb::ParkingGroundData)
+Q_DECLARE_METATYPE(KItinerary::Fcb::FIPTicketData)
+Q_DECLARE_METATYPE(KItinerary::Fcb::StationPassageData)
+Q_DECLARE_METATYPE(KItinerary::Fcb::DelayConfirmation)
 Q_DECLARE_METATYPE(KItinerary::Fcb::TokenType)
 Q_DECLARE_METATYPE(KItinerary::Fcb::DocumentData)
 Q_DECLARE_METATYPE(KItinerary::Fcb::CardReferenceType)
