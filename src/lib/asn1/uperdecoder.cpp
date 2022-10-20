@@ -110,6 +110,17 @@ QList<int> UPERDecoder::readSequenceOfConstrainedWholeNumber(int64_t minimum, in
     return result;
 }
 
+QList<int> UPERDecoder::readSequenceOfUnconstrainedWholeNumber()
+{
+   const auto size = readLengthDeterminant();
+    QList<int> result;
+    result.reserve(size);
+    for (size_type i = 0; i < size; ++i) {
+        result.push_back(readUnconstrainedWholeNumber());
+    }
+    return result;
+}
+
 QList<QByteArray> UPERDecoder::readSequenceOfIA5String()
 {
     const auto size = readLengthDeterminant();
