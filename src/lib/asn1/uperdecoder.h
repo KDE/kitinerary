@@ -55,6 +55,11 @@ public:
      */
     QByteArray readIA5String(size_type minLenght, size_type maxLength);
 
+    /** Read unconstrained octet string (8 bit data).
+     * @see X.691 §17
+     */
+    QByteArray readOctetString();
+
     /** Read an @tparam N sized bitmap. */
     template <std::size_t N>
     inline std::bitset<N> readBitset()

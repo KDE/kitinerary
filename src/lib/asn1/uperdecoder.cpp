@@ -99,6 +99,14 @@ QByteArray UPERDecoder::readIA5String(size_type minLength, size_type maxLength)
     return readIA5StringData(len);
 }
 
+QByteArray UPERDecoder::readOctetString()
+{
+    const auto len = readLengthDeterminant();
+    const auto res = m_data.byteArrayAt(m_idx, len);
+    m_idx += len * 8;
+    return res;
+}
+
 QList<int> UPERDecoder::readSequenceOfConstrainedWholeNumber(int64_t minimum, int64_t maximum)
 {
    const auto size = readLengthDeterminant();

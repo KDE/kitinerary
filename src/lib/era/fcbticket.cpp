@@ -29,6 +29,10 @@
     if (Name ## IsSet()) \
         Name = decoder.readUtf8String()
 
+#define FCB_READ_OCTETSTRING(Name) \
+    if (Name ## IsSet()) \
+        Name = decoder.readOctetString()
+
 #define FCB_READ_ENUM(Name) \
     do { if (Name ## IsSet()) { \
         if constexpr (uperHasExtensionMarker(decltype(Name){})) { \
@@ -72,7 +76,7 @@ void Fcb::ExtensionData::decode(KItinerary::UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     extensionId = decoder.readIA5String();
-    // extensionData =  TODO
+    extensionData = decoder.readOctetString();
 }
 
 void Fcb::GeoCoordinateType::decode(UPERDecoder &decoder)
@@ -192,7 +196,7 @@ void Fcb::ZoneType::decode(UPERDecoder &decoder)
     FCB_READ_INT_IA5_PAIR(terminatingStation, 1, 9999999);
     FCB_READ_UNCONSTRAINED_INT(city);
     FCB_READ_SEQUENCE_OF_UNCONTRAINED_INT(zoneId);
-    // TODO binaryZoneId	    		OCTET STRING					OPTIONAL,
+    FCB_READ_OCTETSTRING(binaryZoneId);
     FCB_READ_IA5STRING(nutsCode);
 }
 
@@ -205,7 +209,7 @@ void Fcb::LineType::decode(UPERDecoder &decoder)
     FCB_READ_INT_IA5_PAIR(entryStation, 1, 9999999);
     FCB_READ_INT_IA5_PAIR(terminatingStation, 1, 9999999);
     FCB_READ_CONSTRAINED_INT(city, 1, 9999999);
-    // TODO binaryZoneId				OCTET STRING			OPTIONAL
+    FCB_READ_OCTETSTRING(binaryZoneId);
 }
 
 void Fcb::PolygoneType::decode(UPERDecoder &decoder)
@@ -643,13 +647,44 @@ void Fcb::ParkingGroundData::decode(UPERDecoder &decoder)
 void Fcb::FIPTicketData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
-    // TODO
+    FCB_READ_IA5STRING(referenceIA5);
+    FCB_READ_UNCONSTRAINED_INT(referenceNum);
+    FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_CONSTRAINED_INT(validFromDay, -1, 700);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(activatedDay, 0, 370);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
+    FCB_READ_SEQUENCE_OF_IA5STRING(carrierIA5);
+    numberOfTravelDays = decoder.readConstrainedWholeNumber(1, 200);
+    includesSupplements = decoder.readBoolean();
+    FCB_READ_ENUM(classCode);
+    FCB_READ_CUSTOM(extension);
 }
 
 void Fcb::StationPassageData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
-    // TODO
+    FCB_READ_IA5STRING(referenceIA5);
+    FCB_READ_UNCONSTRAINED_INT(referenceNum);
+    FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_UTF8STRING(productName);
+    FCB_READ_ENUM(stationCodeTable);
+    FCB_READ_SEQUENCE_OF_UNCONTRAINED_INT(stationNum);
+    FCB_READ_SEQUENCE_OF_IA5STRING(stationIA5);
+    // TODO stationNameUTF8  	SEQUENCE OF UTF8String 		OPTIONAL,
+    FCB_READ_SEQUENCE_OF_UNCONTRAINED_INT(areaCodeNum);
+    FCB_READ_SEQUENCE_OF_IA5STRING(areaCodeIA5);
+    // TODO areaNameUTF8  		SEQUENCE OF UTF8String 		OPTIONAL,
+    validFromDay = decoder.readConstrainedWholeNumber(-1, 700);
+    FCB_READ_CONSTRAINED_INT(validFromTime, 0, 1440);
+    FCB_READ_CONSTRAINED_INT(validFromUTCOffset, -60, 60);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_CONSTRAINED_INT(validUntilTime, 0, 1400);
+    FCB_READ_CONSTRAINED_INT(validUntilUTCOffset, -60, 60);
+    FCB_READ_UNCONSTRAINED_INT(numberOfDaysValid);
+    FCB_READ_CUSTOM(extension);
 }
 
 void Fcb::DelayConfirmation::decode(UPERDecoder &decoder)
@@ -677,7 +712,7 @@ void Fcb::TokenType::decode(UPERDecoder &decoder)
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(tokenProvider);
     FCB_READ_IA5STRING(tokenSpecification);
-    // TODO token OCTET STRING
+    token = decoder.readOctetString();
 }
 
 void Fcb::DocumentData::decode(UPERDecoder &decoder)
