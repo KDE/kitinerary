@@ -139,3 +139,14 @@ QList<QByteArray> UPERDecoder::readSequenceOfIA5String()
     }
     return result;
 }
+
+QList<QString> UPERDecoder::readSequenceOfUtf8String()
+{
+    const auto size = readLengthDeterminant();
+    QList<QString> result;
+    result.reserve(size);
+    for (size_type i = 0; i < size; ++i) {
+        result.push_back(readUtf8String());
+    }
+    return result;
+}

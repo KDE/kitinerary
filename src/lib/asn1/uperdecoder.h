@@ -88,6 +88,7 @@ public:
     QList<int> readSequenceOfConstrainedWholeNumber(int64_t minimum, int64_t maximum);
     QList<int> readSequenceOfUnconstrainedWholeNumber();
     QList<QByteArray> readSequenceOfIA5String();
+    QList<QString> readSequenceOfUtf8String();
 
     /** Read enumerated value.
      *  @see X.691 §14

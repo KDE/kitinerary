@@ -58,6 +58,10 @@
     if (Name ## IsSet()) \
         Name = decoder.readSequenceOfIA5String()
 
+#define FCB_READ_SEQUENCE_OF_UTF8STRING(Name) \
+    if (Name ## IsSet()) \
+        Name = decoder.readSequenceOfUtf8String()
+
 #define FCB_READ_SEQUENCE_OF_CUSTOM(Name) \
     if (Name ## IsSet()) \
         Name = decoder.readSequenceOf<decltype(Name)::value_type>();
@@ -673,10 +677,10 @@ void Fcb::StationPassageData::decode(UPERDecoder &decoder)
     FCB_READ_ENUM(stationCodeTable);
     FCB_READ_SEQUENCE_OF_UNCONTRAINED_INT(stationNum);
     FCB_READ_SEQUENCE_OF_IA5STRING(stationIA5);
-    // TODO stationNameUTF8  	SEQUENCE OF UTF8String 		OPTIONAL,
+    FCB_READ_SEQUENCE_OF_UTF8STRING(stationNameUTF8);
     FCB_READ_SEQUENCE_OF_UNCONTRAINED_INT(areaCodeNum);
     FCB_READ_SEQUENCE_OF_IA5STRING(areaCodeIA5);
-    // TODO areaNameUTF8  		SEQUENCE OF UTF8String 		OPTIONAL,
+    FCB_READ_SEQUENCE_OF_UTF8STRING(areaNameUTF8);
     validFromDay = decoder.readConstrainedWholeNumber(-1, 700);
     FCB_READ_CONSTRAINED_INT(validFromTime, 0, 1440);
     FCB_READ_CONSTRAINED_INT(validFromUTCOffset, -60, 60);
