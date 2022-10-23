@@ -67,21 +67,20 @@ QVariant Uic9183Parser::block(const QString &name) const
         return {};
     }
 
-    if (name == QLatin1String(Uic9183Head::RecordId)) {
-        return QVariant::fromValue(findBlock<Uic9183Head>());
+#define BLOCK_FROM_NAME(Type) \
+    if (name == QLatin1String(Type::RecordId)) { \
+        const auto block = findBlock<Type>(); \
+        return block.isValid() ? QVariant::fromValue(block) : QVariant(); \
     }
-    if (name == QLatin1String(Uic9183TicketLayout::RecordId)) {
-        return QVariant::fromValue(ticketLayout());
-    }
-    if (name == QLatin1String(Fcb::UicRailTicketData::RecordId)) {
-        return QVariant::fromValue(findBlock<Fcb::UicRailTicketData>());
-    }
-    if (name == QLatin1String(Vendor0080BLBlock::RecordId)) {
-        return QVariant::fromValue(findBlock<Vendor0080BLBlock>());
-    }
-    if (name == QLatin1String(Vendor0080VUBlock::RecordId)) {
-        return QVariant::fromValue(findBlock<Vendor0080VUBlock>());
-    }
+
+    BLOCK_FROM_NAME(Uic9183Head)
+    BLOCK_FROM_NAME(Uic9183TicketLayout)
+    BLOCK_FROM_NAME(Fcb::UicRailTicketData)
+    BLOCK_FROM_NAME(Vendor0080BLBlock)
+    BLOCK_FROM_NAME(Vendor0080VUBlock)
+
+#undef BLOCK_FROM_NAME
+
     return QVariant::fromValue(findBlock(name.toUtf8().constData()));
 }
 

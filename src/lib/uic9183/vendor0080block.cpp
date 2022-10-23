@@ -233,7 +233,7 @@ Vendor0080BLSubBlock Vendor0080BLBlock::findSubBlock(const char id[3]) const
 
 QVariant Vendor0080BLBlock::findSubBlock(const QString &str) const
 {
-    if (str.size() != 3) {
+    if (str.size() != 3 || !isValid()) {
         return {};
     }
     const auto b = findSubBlock(str.toUtf8().constData());
