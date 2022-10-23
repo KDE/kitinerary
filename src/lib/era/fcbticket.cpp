@@ -772,6 +772,9 @@ Fcb::UicRailTicketData::UicRailTicketData() = default;
 Fcb::UicRailTicketData::UicRailTicketData(const Uic9183Block &block)
     : m_block(block)
 {
+    if (block.isNull()) {
+        return;
+    }
     UPERDecoder decoder(BitVectorView(std::string_view(block.content(), block.contentSize())));
     decode(decoder);
     if (decoder.hasError()) {

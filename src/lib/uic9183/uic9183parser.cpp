@@ -252,9 +252,19 @@ QDateTime Uic9183Parser::validUntil() const
 
 Person Uic9183Parser::person() const
 {
+    // ERA FCB
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && fcb.travelerDetailIsSet() && fcb.travelerDetail.traveler.size() == 1) {
+        const auto traveler = fcb.travelerDetail.traveler.at(0);
+        Person p;
+        p.setGivenName(QString(traveler.firstName + QLatin1Char(' ') + traveler.secondName).trimmed());
+        p.setFamilyName(traveler.lastName);
+        if (traveler.firstNameIsSet() || traveler.lastNameIsSet()) {
+            return p;
+        }
+    }
+
     // Deutsche Bahn vendor block
-    const auto b = findBlock<Vendor0080BLBlock>();
-    if (b.isValid()) {
+    if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid()) {
         // S028 contains family and given name separated by a '#', UTF-8 encoded
         auto sblock = b.findSubBlock("028");
         if (!sblock.isNull()) {
