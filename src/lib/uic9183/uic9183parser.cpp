@@ -172,7 +172,19 @@ QString Uic9183Parser::name() const
 
 QString Uic9183Parser::carrierId() const
 {
-    return findBlock<Uic9183Head>().issuerCompanyCodeString();
+    if (const auto head = findBlock<Uic9183Head>(); head.isValid()) {
+        return head.issuerCompanyCodeString();
+    }
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid()) {
+        const auto issue = fcb.issuingDetail;
+        if (issue.issuerNumIsSet()) {
+            return QString::number(issue.issuerNum);
+        }
+        if (issue.issuerIA5IsSet()) {
+            return QString::fromLatin1(issue.issuerIA5);
+        }
+    }
+    return header().signerCompanyCode();
 }
 
 QDateTime Uic9183Parser::validFrom() const
