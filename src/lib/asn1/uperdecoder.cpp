@@ -39,7 +39,10 @@ int64_t UPERDecoder::readConstrainedWholeNumber(int64_t minimum, int64_t maximum
 int64_t UPERDecoder::readUnconstrainedWholeNumber()
 {
     const auto len = readLengthDeterminant();
-    assert(len <= 8); // TODO
+    if (len > 8) {
+        setError("Encountered INTEGER bigger than 64bit, not implemented.");
+        return 0;
+    }
     int64_t result = m_data.valueAtMSB<int64_t>(m_idx, 8 * len);
     m_idx += 8 * len;
     return result; // TODO convert negative numbers
@@ -53,8 +56,7 @@ UPERDecoder::size_type UPERDecoder::readLengthDeterminant()
         return len;
     }
 
-    // TODO
-    assert(false);
+    setError("Encountered not implemented length determinant variant.");
     return 0;
 }
 
@@ -149,4 +151,19 @@ QList<QString> UPERDecoder::readSequenceOfUtf8String()
         result.push_back(readUtf8String());
     }
     return result;
+}
+
+bool UPERDecoder::hasError() const
+{
+    return !m_error.isEmpty();
+}
+
+QByteArray UPERDecoder::errorMessage() const
+{
+    return m_error;
+}
+
+void UPERDecoder::setError(const char *msg)
+{
+    m_error = "uPER decoding error at offset " + QByteArray::number((qint64)m_idx) + ": " + msg;
 }

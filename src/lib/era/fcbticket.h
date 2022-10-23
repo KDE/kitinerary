@@ -928,6 +928,8 @@ public:
 
     static constexpr const char RecordId[] = "U_FLEX";
 
+    bool isValid() const;
+
 private:
     Uic9183Block m_block;
 };

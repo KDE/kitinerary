@@ -5,9 +5,8 @@
 
 #include "fcbticket.h"
 
+#include "logging.h"
 #include "asn1/uperdecoder.h"
-
-#include <QDebug>
 
 #define FCB_READ_CONSTRAINED_INT(Name, Min, Max) \
     if (Name ## IsSet()) \
@@ -775,6 +774,10 @@ Fcb::UicRailTicketData::UicRailTicketData(const Uic9183Block &block)
 {
     UPERDecoder decoder(BitVectorView(std::string_view(block.content(), block.contentSize())));
     decode(decoder);
+    if (decoder.hasError()) {
+        qCWarning(Log) << decoder.errorMessage();
+        m_block = {};
+    }
 }
 
 void Fcb::UicRailTicketData::decode(UPERDecoder &decoder)
@@ -784,6 +787,11 @@ void Fcb::UicRailTicketData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(travelerDetail);
     FCB_READ_SEQUENCE_OF_CUSTOM(transportDocument)
     FCB_READ_CUSTOM(controlDetail)
+}
+
+bool Fcb::UicRailTicketData::isValid() const
+{
+    return !m_block.isNull();
 }
 
 #include "moc_fcbticket.cpp"

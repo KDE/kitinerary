@@ -75,7 +75,10 @@ private: \
     std::bitset<_uper_OptionalCount> m_optionals; \
     inline void decodeSequence(UPERDecoder &decoder) { \
         if constexpr (_uper_ExtensionMarker) { \
-            assert(!decoder.readBoolean()); /* TODO either handle this properly, or switch to an error state. */ \
+            if (decoder.readBoolean()) { \
+                decoder.setError("SEQUENCE with extension marker set not implemented."); \
+                return; \
+            } \
         } \
         m_optionals = decoder.readBitset<_uper_OptionalCount>(); \
     }

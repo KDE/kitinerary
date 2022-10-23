@@ -103,7 +103,10 @@ public:
     template <typename T>
     inline T readEnumeratedWithExtensionMarker()
     {
-        assert(!readBoolean()); // TODO
+        if (readBoolean()) {
+            setError("CHOICE with extension marker set not implemented.");
+            return {};
+        }
         return readEnumerated<T>();
     }
 
@@ -113,12 +116,28 @@ public:
     template <typename... Ts>
     inline QVariant readChoiceWithExtensionMarker()
     {
-        assert(!readBoolean()); // TODO
+        if (readBoolean()) {
+            setError("CHOICE with extension marker set not implemented.");
+            return {};
+        }
         constexpr auto count = sizeof...(Ts);
         const auto choiceIdx = readConstrainedWholeNumber(0, count - 1);
-        assert(choiceIdx < (int)count); // TODO
+        if (choiceIdx > (int)count) {
+            setError("Invalid CHOICE index.");
+            return {};
+        }
         return readChoiceElement<Ts...>(choiceIdx);
     }
+
+    /** Reading at any point encountered an error.
+     *  As uPER gives us no way to recover from that, everything
+     *  read has to be considered invalid.
+     */
+    bool hasError() const;
+    QByteArray errorMessage() const;
+
+    /** Put the decoder into the error state. */
+    void setError(const char *msg);
 
 private:
     QByteArray readIA5StringData(size_type len);
@@ -142,6 +161,7 @@ private:
 
     BitVectorView m_data;
     size_type m_idx = {};
+    QByteArray m_error;
 };
 
 }
