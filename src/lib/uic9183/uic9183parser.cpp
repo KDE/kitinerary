@@ -331,10 +331,34 @@ QString Uic9183Parser::outboundArrivalStationId() const
     return {};
 }
 
+static QString fcbClassCodeToString(Fcb::TravelClassType classCode)
+{
+    switch (classCode) {
+        case Fcb::notApplicable: return {};
+        case Fcb::first: return QString::number(1);
+        case Fcb::second: return QString::number(2);
+        default:
+            qCWarning(Log) << "Unhandled FCB class code" << classCode;
+    }
+    return {};
+}
+
 QString Uic9183Parser::seatingType() const
 {
-    const auto b = findBlock<Vendor0080BLBlock>();;
-    if (b.isValid()) {
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && fcb.transportDocument.size() == 1) {
+        const auto doc = fcb.transportDocument.at(0);
+        if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            return fcbClassCodeToString(doc.ticket.value<Fcb::ReservationData>().classCode);
+        }
+        if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            return fcbClassCodeToString(doc.ticket.value<Fcb::OpenTicketData>().classCode);
+        }
+        if (doc.ticket.userType() == qMetaTypeId<Fcb::PassData>()) {
+            return fcbClassCodeToString(doc.ticket.value<Fcb::PassData>().classCode);
+        }
+    }
+
+    if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid()) {
         // S014 contains the class, possibly with a leading 'S' for some reason
         const auto sblock = b.findSubBlock("014");
         if (!sblock.isNull()) {
@@ -343,8 +367,7 @@ QString Uic9183Parser::seatingType() const
         }
     }
 
-    const auto rct2 = rct2Ticket();
-    if (rct2.isValid()) {
+    if (const auto rct2 = rct2Ticket(); rct2.isValid()) {
         return rct2.outboundClass();
     }
     return {};
