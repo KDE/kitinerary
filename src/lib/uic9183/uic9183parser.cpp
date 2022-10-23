@@ -13,6 +13,8 @@
 #include "uic9183ticketlayout.h"
 #include "vendor0080block.h"
 
+#include "era/fcbticket.h"
+
 #include <QDateTime>
 #include <QDebug>
 #include <QJsonDocument>
@@ -68,10 +70,16 @@ QVariant Uic9183Parser::block(const QString &name) const
     if (name == QLatin1String(Uic9183Head::RecordId)) {
         return QVariant::fromValue(findBlock<Uic9183Head>());
     }
-    if (name == QLatin1String("0080BL")) {
+    if (name == QLatin1String(Uic9183TicketLayout::RecordId)) {
+        return QVariant::fromValue(ticketLayout());
+    }
+    if (name == QLatin1String(Fcb::UicRailTicketData::RecordId)) {
+        return QVariant::fromValue(findBlock<Fcb::UicRailTicketData>());
+    }
+    if (name == QLatin1String(Vendor0080BLBlock::RecordId)) {
         return QVariant::fromValue(findBlock<Vendor0080BLBlock>());
     }
-    if (name == QLatin1String("0080VU")) {
+    if (name == QLatin1String(Vendor0080VUBlock::RecordId)) {
         return QVariant::fromValue(findBlock<Vendor0080VUBlock>());
     }
     return QVariant::fromValue(findBlock(name.toUtf8().constData()));
