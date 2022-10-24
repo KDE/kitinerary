@@ -10,6 +10,7 @@
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Uic9183Parser>
 #include <KItinerary/Rct2Ticket>
+#include <era/fcbticket.h>
 #include <uic9183/uic9183head.h>
 #include <uic9183/vendor0080block.h>
 
@@ -50,8 +51,11 @@ void Uic9183DocumentProcessor::expandNode(ExtractorDocumentNode &node, [[maybe_u
     // while that is usually correct it cannot contain a time zone, unlike the (often) enclosing PDF document´
     if (!node.contextDateTime().isValid()) {
         const auto p = node.content<Uic9183Parser>();
-        const auto u_head = p.findBlock<Uic9183Head>();
-        node.setContextDateTime(u_head.issuingDateTime());
+        if (const auto u_flex = p.findBlock<Fcb::UicRailTicketData>(); u_flex.isValid()) {
+            node.setContextDateTime(u_flex.issuingDetail.issueingDateTime());
+        } else if (const auto u_head = p.findBlock<Uic9183Head>(); u_head.isValid()) {
+            node.setContextDateTime(u_head.issuingDateTime());
+        }
     }
 }
 

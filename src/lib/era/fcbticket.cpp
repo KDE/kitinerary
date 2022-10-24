@@ -122,6 +122,16 @@ void Fcb::IssuingData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(pointOfSale);
 }
 
+QDateTime Fcb::IssuingData::issueingDateTime() const
+{
+    QDate date(issuingYear, 1, 1);
+    date = date.addDays(issuingDay - 1);
+    if (issuingTimeIsSet()) {
+        return QDateTime(date, QTime(0,0).addSecs(issuingTime * 60), Qt::UTC);
+    }
+    return QDateTime(date, {});
+}
+
 void Fcb::CustomerStatusType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);

@@ -10,6 +10,7 @@
 
 #include "asn1/uperelement.h"
 
+#include <QDateTime>
 #include <QList>
 #include <QVariant>
 
@@ -101,6 +102,10 @@ class IssuingData {
     UPER_ELEMENT_OPTIONAL(int, issuedOnLine)
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::GeoCoordinateType, pointOfSale)
     UPER_GADGET_FINALIZE
+
+    Q_PROPERTY(QDateTime issueingDateTime READ issueingDateTime)
+public:
+    QDateTime issueingDateTime() const;
 };
 
 enum GenderType {
