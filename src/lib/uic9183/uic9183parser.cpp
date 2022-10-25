@@ -189,6 +189,21 @@ QString Uic9183Parser::carrierId() const
 
 QDateTime Uic9183Parser::validFrom() const
 {
+    // ERA FCB
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
+        const auto issue = fcb.issuingDetail.issueingDateTime();
+        const auto doc = fcb.transportDocument.at(0).ticket;
+        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            return doc.value<Fcb::ReservationData>().departureDateTime(issue);
+        }
+        if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            return doc.value<Fcb::OpenTicketData>().validFrom(issue);
+        }
+        if (doc.userType() == qMetaTypeId<Fcb::PassData>()) {
+            return doc.value<Fcb::PassData>().validFrom(issue);
+        }
+    }
+
     // DB vendor block
     if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid() && b.orderBlockCount() == 1) {
         return QDateTime(b.orderBlock(0).validFrom(), {0, 0, 0});
@@ -221,6 +236,21 @@ QDateTime Uic9183Parser::validFrom() const
 
 QDateTime Uic9183Parser::validUntil() const
 {
+    // ERA FCB
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
+        const auto issue = fcb.issuingDetail.issueingDateTime();
+        const auto doc = fcb.transportDocument.at(0).ticket;
+        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            return doc.value<Fcb::ReservationData>().arrivalDateTime(issue);
+        }
+        if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            return doc.value<Fcb::OpenTicketData>().validUntil(issue);
+        }
+        if (doc.userType() == qMetaTypeId<Fcb::PassData>()) {
+            return doc.value<Fcb::PassData>().validUntil(issue);
+        }
+    }
+
     // DB vendor block
     const auto b = findBlock<Vendor0080BLBlock>();
     if (b.isValid() && b.orderBlockCount() == 1) {
