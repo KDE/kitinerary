@@ -501,6 +501,10 @@ class ReservationData {
     UPER_ELEMENT_OPTIONAL(QString, infoText)
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ExtensionData, extension)
     UPER_GADGET_FINALIZE
+
+public:
+    Q_INVOKABLE QDateTime departureDateTime(const QDateTime &issueingDateTime) const;
+    Q_INVOKABLE QDateTime arrivalDateTime(const QDateTime &issueingDateTime) const;
 };
 
 enum RoofRackType {
@@ -615,6 +619,10 @@ class OpenTicketData {
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::LuggageRestrictionType, luggage)
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ExtensionData, extension)
     UPER_GADGET_FINALIZE
+
+public:
+    Q_INVOKABLE QDateTime validFrom(const QDateTime &issueingDateTime) const;
+    Q_INVOKABLE QDateTime validUntil(const QDateTime &issueingDateTime) const;
 };
 
 class TimeRangeType {
@@ -678,6 +686,10 @@ class PassData {
     UPER_ELEMENT_OPTIONAL(QString, infoText)
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ExtensionData, extension)
     UPER_GADGET_FINALIZE
+
+public:
+    Q_INVOKABLE QDateTime validFrom(const QDateTime &issueingDateTime) const;
+    Q_INVOKABLE QDateTime validUntil(const QDateTime &issueingDateTime) const;
 };
 
 class VoucherData {

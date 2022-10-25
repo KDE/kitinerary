@@ -418,6 +418,30 @@ void Fcb::ReservationData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
+QDateTime Fcb::ReservationData::departureDateTime(const QDateTime &issueingDateTime) const
+{
+    QDate date = issueingDateTime.date().addDays(departureDate);
+    QTime time = QTime(0, 0).addSecs(departureTime);
+    if (departureUTCOffsetIsSet()) {
+        return QDateTime(date, time, Qt::OffsetFromUTC, -departureUTCOffset * 15 * 60);
+    }
+    return QDateTime(date, time);
+}
+
+QDateTime Fcb::ReservationData::arrivalDateTime(const QDateTime &issueingDateTime) const
+{
+    const auto departureDt = departureDateTime(issueingDateTime);
+    QDate date = departureDt.date().addDays(arrivalDate);
+    QTime time = QTime(0, 0).addSecs(arrivalTime);
+    if (arrivalUTCOffsetIsSet()) {
+        return QDateTime(date, time, Qt::OffsetFromUTC, -arrivalUTCOffset * 15 * 60);
+    }
+    if (departureDt.timeSpec() == Qt::OffsetFromUTC) {
+        return QDateTime(date, time, Qt::OffsetFromUTC, departureDt.offsetFromUtc());
+    }
+    return QDateTime(date, time);
+}
+
 void Fcb::CarCarriageReservationData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
@@ -502,6 +526,30 @@ void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
+QDateTime Fcb::OpenTicketData::validFrom(const QDateTime &issueingDateTime) const
+{
+    QDate date = issueingDateTime.date().addDays(validFromDay);
+    QTime time = validFromTimeIsSet() ? QTime(0, 0).addSecs(validFromTime) : QTime();
+    if (validFromUTCOffsetIsSet()) {
+        return QDateTime(date, time, Qt::OffsetFromUTC, -validFromUTCOffset * 15 * 60);
+    }
+    return QDateTime(date, time);
+}
+
+QDateTime Fcb::OpenTicketData::validUntil(const QDateTime &issueingDateTime) const
+{
+    const auto validFromDt = validFrom(issueingDateTime);
+    QDate date = validFromDt.date().addDays(validUntilDay);
+    QTime time = validUntilDayIsSet() ? QTime(0, 0).addSecs(validUntilTime) : QTime(23, 59, 59);
+    if (validUntilUTCOffsetIsSet()) {
+        return QDateTime(date, time, Qt::OffsetFromUTC, -validUntilUTCOffset * 15 * 60);
+    }
+    if (validFromDt.timeSpec() == Qt::OffsetFromUTC) {
+        return QDateTime(date, time, Qt::OffsetFromUTC, validFromDt.offsetFromUtc());
+    }
+    return QDateTime(date, time);
+}
+
 void Fcb::TimeRangeType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
@@ -560,6 +608,30 @@ void Fcb::PassData::decode(UPERDecoder &decoder)
     FCB_READ_SEQUENCE_OF_CUSTOM(vatDetail);
     FCB_READ_UTF8STRING(infoText);
     FCB_READ_CUSTOM(extension);
+}
+
+QDateTime Fcb::PassData::validFrom(const QDateTime &issueingDateTime) const
+{
+    QDate date = issueingDateTime.date().addDays(validFromDay);
+    QTime time = validFromTimeIsSet() ? QTime(0, 0).addSecs(validFromTime) : QTime();
+    if (validFromUTCOffsetIsSet()) {
+        return QDateTime(date, time, Qt::OffsetFromUTC, -validFromUTCOffset * 15 * 60);
+    }
+    return QDateTime(date, time);
+}
+
+QDateTime Fcb::PassData::validUntil(const QDateTime &issueingDateTime) const
+{
+    const auto validFromDt = validFrom(issueingDateTime);
+    QDate date = validFromDt.date().addDays(validUntilDay);
+    QTime time = validUntilDayIsSet() ? QTime(0, 0).addSecs(validUntilTime) : QTime(23, 59, 59);
+    if (validUntilUTCOffsetIsSet()) {
+        return QDateTime(date, time, Qt::OffsetFromUTC, -validUntilUTCOffset * 15 * 60);
+    }
+    if (validFromDt.timeSpec() == Qt::OffsetFromUTC) {
+        return QDateTime(date, time, Qt::OffsetFromUTC, validFromDt.offsetFromUtc());
+    }
+    return QDateTime(date, time);
 }
 
 void Fcb::VoucherData::decode(UPERDecoder &decoder)
