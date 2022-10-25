@@ -491,7 +491,7 @@ class ReservationData {
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::CompartmentDetailsType, compartmentDetails)
     UPER_ELEMENT_DEFAULT(int, numberOfOverbooked, 0)
     UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::BerthDetailData>, berth)
-    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::TariffType>, tariffs)
+    UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::TariffType>, tariffs) // "tariff" in the official ASN.1 spec, but that inconsistent with the other document types
     UPER_ELEMENT_DEFAULT(KItinerary::Fcb::PriceTypeType, priceType, travelPrice)
     UPER_ELEMENT_OPTIONAL(int, price)
     UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::VatDetailType>, vatDetail)

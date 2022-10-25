@@ -130,31 +130,90 @@ bool Uic9183Parser::isValid() const
     return !d->m_payload.isEmpty();
 }
 
+template <typename T>
+static QString fcbReference(const T &data)
+{
+    if (!data.referenceIA5.isEmpty()) {
+        return QString::fromLatin1(data.referenceIA5);
+    }
+    if (data.referenceNumIsSet()) {
+        return QString::number(data.referenceNum);
+    }
+    return {};
+}
+
 QString Uic9183Parser::pnr() const
 {
-    const auto head = findBlock<Uic9183Head>();
-    const auto key = head.ticketKey().trimmed();
-    const auto issuerId = head.issuerCompanyCodeNumeric();
+    if (const auto head = findBlock<Uic9183Head>(); head.isValid()) {
+        const auto key = head.ticketKey().trimmed();
+        const auto issuerId = head.issuerCompanyCodeNumeric();
 
-    // try to make this match what's printed on the matching tickets...
-    if (issuerId == 80 && (key.size() == 8 || key.size() == 9) && key.at(6) == QLatin1Char('-') && key.at(7).isDigit()) {
-        return key.left(6); // DB domestic
-    }
-    if (issuerId == 80 && key.size() == 13 && key.endsWith(QLatin1String("0101"))) {
-        return key.left(9); // DB domestic part of an international order
-    }
-    if (issuerId == 1184 && key.size() == 9 && key.at(7) == QLatin1Char('_') && key.at(8).isDigit()) {
-        return key.left(7); // NS
+        // try to make this match what's printed on the matching tickets...
+        if (issuerId == 80 && (key.size() == 8 || key.size() == 9) && key.at(6) == QLatin1Char('-') && key.at(7).isDigit()) {
+            return key.left(6); // DB domestic
+        }
+        if (issuerId == 80 && key.size() == 13 && key.endsWith(QLatin1String("0101"))) {
+            return key.left(9); // DB domestic part of an international order
+        }
+        if (issuerId == 1184 && key.size() == 9 && key.at(7) == QLatin1Char('_') && key.at(8).isDigit()) {
+            return key.left(7); // NS
+        }
+
+        return key;
     }
 
-    return key;
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid()) {
+        if (!fcb.issuingDetail.issuerPNR.isEmpty()) {
+            return QString::fromLatin1(fcb.issuingDetail.issuerPNR);
+        }
+        if (!fcb.transportDocument.isEmpty()) {
+            const auto doc = fcb.transportDocument.at(0);
+            QString pnr;
+            if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+                pnr = fcbReference(doc.ticket.value<Fcb::ReservationData>());
+            } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+                pnr = fcbReference(doc.ticket.value<Fcb::OpenTicketData>());
+            } else if (doc.ticket.userType() == qMetaTypeId<Fcb::PassData>()) {
+                pnr = fcbReference(doc.ticket.value<Fcb::PassData>());
+            }
+            if (!pnr.isEmpty()) {
+                return pnr;
+            }
+        }
+    }
+
+    return {};
+}
+
+template <typename T>
+static QString fcbTariffName(const T &data)
+{
+    if (data.tariffs.isEmpty()) {
+        return {};
+    }
+    return data.tariffs.at(0).tariffDesc;
 }
 
 QString Uic9183Parser::name() const
 {
+    // ERA FCB
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
+        const auto doc = fcb.transportDocument.at(0);
+        QString name;
+        if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            name = fcbTariffName(doc.ticket.value<Fcb::ReservationData>());
+        } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            name = fcbTariffName(doc.ticket.value<Fcb::OpenTicketData>());
+        } else if (doc.ticket.userType() == qMetaTypeId<Fcb::PassData>()) {
+            name = fcbTariffName(doc.ticket.value<Fcb::PassData>());
+        }
+        if (!name.isEmpty()) {
+            return name;
+        }
+    }
+
     // DB vendor block
-    const auto b = findBlock<Vendor0080BLBlock>();
-    if (b.isValid()) {
+    if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid()) {
         const auto sblock = b.findSubBlock("001");
         if (!sblock.isNull()) {
             return QString::fromUtf8(sblock.content(), sblock.contentSize());
@@ -162,8 +221,7 @@ QString Uic9183Parser::name() const
     }
 
     // RCT2
-    const auto rct2 = rct2Ticket();
-    if (rct2.isValid()) {
+    if (const auto rct2 = rct2Ticket(); rct2.isValid()) {
         return rct2.title();
     }
 
