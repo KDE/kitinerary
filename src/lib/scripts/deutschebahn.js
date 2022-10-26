@@ -218,7 +218,7 @@ function parseReservation(pdf) {
 function applyUic9183ToReservation(res, uicCode)
 {
     res.reservationNumber = uicCode.pnr;
-    res.reservationFor.provider.identifier = "uic:" + uicCode.carrierId;
+    res.reservationFor.provider = JsonLd.toJson(uicCode.issuer);
     const bl = uicCode.block('0080BL');
     let sb = bl.findSubBlock('009');
     if (sb) {

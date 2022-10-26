@@ -2,6 +2,35 @@
     {
         "content": {
             "carrierId": "0080",
+            "issuer": {
+                "address": {
+                    "addressCountry": "",
+                    "addressLocality": "",
+                    "addressRegion": "",
+                    "className": "PostalAddress",
+                    "isEmpty": true,
+                    "postalCode": "",
+                    "streetAddress": ""
+                },
+                "className": "Organization",
+                "description": "",
+                "email": "",
+                "geo": {
+                    "className": "GeoCoordinates",
+                    "isValid": false,
+                    "latitude": null,
+                    "longitude": null
+                },
+                "geoUri": "",
+                "identifier": "uic:0080",
+                "image": "",
+                "logo": "",
+                "name": "",
+                "potentialAction": [
+                ],
+                "telephone": "",
+                "url": ""
+            },
             "name": "Normalpreis",
             "outboundArrivalStationId": "",
             "outboundDepartureStationId": "",
@@ -24,6 +53,35 @@
         ],
         "content": {
             "carrierId": "0080",
+            "issuer": {
+                "address": {
+                    "addressCountry": "",
+                    "addressLocality": "",
+                    "addressRegion": "",
+                    "className": "PostalAddress",
+                    "isEmpty": true,
+                    "postalCode": "",
+                    "streetAddress": ""
+                },
+                "className": "Organization",
+                "description": "",
+                "email": "",
+                "geo": {
+                    "className": "GeoCoordinates",
+                    "isValid": false,
+                    "latitude": null,
+                    "longitude": null
+                },
+                "geoUri": "",
+                "identifier": "uic:0080",
+                "image": "",
+                "logo": "",
+                "name": "",
+                "potentialAction": [
+                ],
+                "telephone": "",
+                "url": ""
+            },
             "name": "Normalpreis",
             "outboundArrivalStationId": "",
             "outboundDepartureStationId": "",
@@ -47,6 +105,7 @@
             {
                 "@type": "Ticket",
                 "issuedBy": {
+                    "@context": "http://schema.org",
                     "@type": "Organization",
                     "identifier": "uic:0080"
                 },

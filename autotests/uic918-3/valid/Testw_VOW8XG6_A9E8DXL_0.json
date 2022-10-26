@@ -3,6 +3,10 @@
         "@context": "http://schema.org",
         "@type": "Uic9183Parser",
         "carrierId": "0080",
+        "issuer": {
+            "@type": "Organization",
+            "identifier": "uic:0080"
+        },
         "name": "Normalpreis",
         "person": {
             "@type": "Person",

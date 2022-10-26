@@ -245,6 +245,16 @@ QString Uic9183Parser::carrierId() const
     return header().signerCompanyCode();
 }
 
+Organization Uic9183Parser::issuer() const
+{
+    Organization issuer;
+    issuer.setIdentifier(QLatin1String("uic:") + carrierId());
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && fcb.issuingDetail.issuerNameIsSet()) {
+        issuer.setName(fcb.issuingDetail.issuerName);
+    }
+    return issuer;
+}
+
 QDateTime Uic9183Parser::validFrom() const
 {
     // ERA FCB

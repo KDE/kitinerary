@@ -90,9 +90,6 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     trip.insert(QLatin1String("@type"), QLatin1String("TrainTrip"));
     QJsonObject returnTrip;
     returnTrip.insert(QLatin1String("@type"), QLatin1String("TrainTrip"));
-    QJsonObject provider;
-    provider.insert(QLatin1String("@type"), QLatin1String("Organization"));
-    provider.insert(QLatin1String("identifier"), QJsonValue(QLatin1String("uic:") + p.carrierId()));
 
     QJsonObject seat;
     seat.insert(QLatin1String("@type"), QLatin1String("Seat"));
@@ -170,7 +167,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 
     // we have enough for a full TrainReservation result
     if (isValidTrip(trip)) {
-        trip.insert(QLatin1String("provider"), provider);
+        trip.insert(QLatin1String("provider"), JsonLdDocument::toJson(p.issuer()));
 
         QJsonArray results;
         QJsonObject res;
@@ -192,7 +189,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 
     // only Ticket
     ticket.insert(QStringLiteral("name"), p.name());
-    ticket.insert(QStringLiteral("issuedBy"), provider);
+    ticket.insert(QStringLiteral("issuedBy"), JsonLdDocument::toJson(p.issuer()));
     ticket.insert(QStringLiteral("ticketNumber"), p.pnr());
     ticket.insert(QStringLiteral("underName"), JsonLdDocument::toJson(p.person()));
     if (p.validFrom().isValid()) {

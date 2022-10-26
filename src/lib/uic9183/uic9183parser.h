@@ -8,6 +8,7 @@
 
 #include "kitinerary_export.h"
 
+#include <KItinerary/Organization>
 #include <KItinerary/Person>
 
 #include <QExplicitlySharedDataPointer>
@@ -38,6 +39,7 @@ class KITINERARY_EXPORT Uic9183Parser
     Q_PROPERTY(QString pnr READ pnr)
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString carrierId READ carrierId)
+    Q_PROPERTY(KItinerary::Organization issuer READ issuer)
     Q_PROPERTY(QDateTime validFrom READ validFrom)
     Q_PROPERTY(QDateTime validUntil READ validUntil)
     Q_PROPERTY(KItinerary::Person person READ person)
@@ -71,6 +73,8 @@ public:
     QString name() const;
     /** The UIC carrier code. */
     QString carrierId() const;
+    /** Full issuer organization element. */
+    Organization issuer() const;
     /** Begin of validity. */
     QDateTime validFrom() const;
     /** End of validity. */
