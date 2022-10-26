@@ -1,0 +1,5 @@
+[{
+    "mimeType": "application/vnd.apple.pkpass",
+    "filter": [ { "field": "passTypeIdentifier", "match": "pass.com.aegeanair.mbp", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
+    "script": "aegean.js"
+}]
