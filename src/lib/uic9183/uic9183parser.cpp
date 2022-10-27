@@ -399,34 +399,42 @@ Person Uic9183Parser::person() const
     return {};
 }
 
-QString Uic9183Parser::outboundDepartureStationId() const
+TrainStation Uic9183Parser::outboundDepartureStation() const
 {
-    const auto b = findBlock<Vendor0080BLBlock>();
-    if (b.isValid()) {
+    TrainStation station;
+
+    if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid()) {
+        if (const auto sblock = b.findSubBlock("015"); !sblock.isNull()) {
+            station.setName(sblock.toString());
+        }
         // S035 contains the IBNR, possible with leading '80' country code and leading 0 stripped
-        const auto sblock = b.findSubBlock("035");
-        if (!sblock.isNull() && sblock.contentSize() <= 7) {
+        if (const auto sblock = b.findSubBlock("035"); !sblock.isNull() && sblock.contentSize() <= 7) {
             QString ibnr = QStringLiteral("ibnr:8000000");
             const auto s = sblock.toString();
-            return ibnr.replace(ibnr.size() - s.size(), s.size(), s);
+            station.setIdentifier(ibnr.replace(ibnr.size() - s.size(), s.size(), s));
         }
     }
-    return {};
+
+    return station;
 }
 
-QString Uic9183Parser::outboundArrivalStationId() const
+TrainStation Uic9183Parser::outboundArrivalStation() const
 {
-    const auto b = findBlock<Vendor0080BLBlock>();
-    if (b.isValid()) {
+    TrainStation station;
+
+    if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid()) {
+        if (const auto sblock = b.findSubBlock("016"); !sblock.isNull()) {
+            station.setName(sblock.toString());
+        }
         // S036 contains the IBNR, possible with leading '80' country code and leading 0 stripped
-        const auto sblock = b.findSubBlock("036");
-        if (!sblock.isNull() && sblock.contentSize() <= 7) {
+        if (const auto sblock = b.findSubBlock("036"); !sblock.isNull() && sblock.contentSize() <= 7) {
             QString ibnr = QStringLiteral("ibnr:8000000");
             const auto s = sblock.toString();
-            return ibnr.replace(ibnr.size() - s.size(), s.size(), s);
+            station.setIdentifier(ibnr.replace(ibnr.size() - s.size(), s.size(), s));
         }
     }
-    return {};
+
+    return station;
 }
 
 static QString fcbClassCodeToString(Fcb::TravelClassType classCode)

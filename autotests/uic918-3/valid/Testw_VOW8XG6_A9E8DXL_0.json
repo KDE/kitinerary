@@ -8,6 +8,14 @@
             "identifier": "uic:0080"
         },
         "name": "Normalpreis",
+        "outboundArrivalStation": {
+             "@type": "TrainStation",
+             "name": "Frankfurt(Main)+City"
+         },
+        "outboundDepartureStation": {
+             "@type": "TrainStation",
+             "name": "Köln"
+         },
         "person": {
             "@type": "Person",
             "familyName": "häöür Räß",

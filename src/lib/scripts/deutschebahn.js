@@ -141,8 +141,8 @@ function parseTicket(text, uic918ticket) {
 
         // for outward journeys we have station ids from the UIC 918-3 code
         if (uic918ticket && header[1] === "Hin") {
-            reservations[0].reservationFor.departureStation.identifier = uic918ticket.outboundDepartureStationId;
-            reservations[reservations.length - 1].reservationFor.arrivalStation.identifier = uic918ticket.outboundArrivalStationId;
+            reservations[0].reservationFor.departureStation.identifier = uic918ticket.outboundDepartureStation.identifier;
+            reservations[reservations.length - 1].reservationFor.arrivalStation.identifier = uic918ticket.outboundArrivalStation.identifier;
             returnResIndex = reservations.length;
         } else {
             // propagate station ids from outward to return journey
@@ -290,15 +290,13 @@ function parseUic9183(code, node) {
 
     // domestic ticket code
     const bl = code.block('0080BL');
-    if (bl) {
+    if (bl && code.outboundDepartureStation.name && code.outboundArrivalStation.name) {
         let res = JsonLd.newTrainReservation();
         res.reservedTicket = node.result[0];
         applyUic9183ToReservation(res, code);
         res.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('031').content, 'dd.mm.yyyy', 'de');
-        res.reservationFor.departureStation.name = bl.findSubBlock('015').content;
-        res.reservationFor.departureStation.identifier = code.outboundDepartureStationId;
-        res.reservationFor.arrivalStation.name = bl.findSubBlock('016').content;
-        res.reservationFor.arrivalStation.identifier = code.outboundArrivalStationId;
+        res.reservationFor.departureStation = JsonLd.toJson(code.outboundDepartureStation);
+        res.reservationFor.arrivalStation = JsonLd.toJson(code.outboundArrivalStation);
 
         if (!bl.findSubBlock('017')) {
             return res;
@@ -309,9 +307,9 @@ function parseUic9183(code, node) {
         applyUic9183ToReservation(ret, code);
         ret.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('032').content, 'dd.mm.yyyy', 'de');
         ret.reservationFor.departureStation.name = bl.findSubBlock('017').content;
-        ret.reservationFor.departureStation.identifier = ret.reservationFor.departureStation.name === res.reservationFor.arrivalStation.name ? code.outboundArrivalStationId : undefined;
+        ret.reservationFor.departureStation.identifier = ret.reservationFor.departureStation.name === res.reservationFor.arrivalStation.name ? code.outboundArrivalStation.identifier : undefined;
         ret.reservationFor.arrivalStation.name = bl.findSubBlock('018').content;
-        ret.reservationFor.arrivalStation.identifier = ret.reservationFor.arrivalStation.name === res.reservationFor.departureStation.name ? code.outboundDepartureStationId : undefined;
+        ret.reservationFor.arrivalStation.identifier = ret.reservationFor.arrivalStation.name === res.reservationFor.departureStation.name ? code.outboundDepartureStation.identifier : undefined;
 
         return [res, ret];
     }

@@ -32,8 +32,50 @@
                 "url": ""
             },
             "name": "Normalpreis",
-            "outboundArrivalStationId": "",
-            "outboundDepartureStationId": "",
+            "outboundArrivalStation": {
+                "address": {
+                    "addressCountry": "",
+                    "addressLocality": "",
+                    "addressRegion": "",
+                    "className": "PostalAddress",
+                    "isEmpty": true,
+                    "postalCode": "",
+                    "streetAddress": ""
+                },
+                "className": "TrainStation",
+                "geo": {
+                    "className": "GeoCoordinates",
+                    "isValid": false,
+                    "latitude": null,
+                    "longitude": null
+                },
+                "geoUri": "",
+                "identifier": "",
+                "name": "Frankfurt(Main)+City",
+                "telephone": ""
+            },
+            "outboundDepartureStation": {
+                "address": {
+                    "addressCountry": "",
+                    "addressLocality": "",
+                    "addressRegion": "",
+                    "className": "PostalAddress",
+                    "isEmpty": true,
+                    "postalCode": "",
+                    "streetAddress": ""
+                },
+                "className": "TrainStation",
+                "geo": {
+                    "className": "GeoCoordinates",
+                    "isValid": false,
+                    "latitude": null,
+                    "longitude": null
+                },
+                "geoUri": "",
+                "identifier": "",
+                "name": "Köln",
+                "telephone": ""
+            },
             "person": {
                 "className": "Person",
                 "email": "",
@@ -83,8 +125,50 @@
                 "url": ""
             },
             "name": "Normalpreis",
-            "outboundArrivalStationId": "",
-            "outboundDepartureStationId": "",
+            "outboundArrivalStation": {
+                "address": {
+                    "addressCountry": "",
+                    "addressLocality": "",
+                    "addressRegion": "",
+                    "className": "PostalAddress",
+                    "isEmpty": true,
+                    "postalCode": "",
+                    "streetAddress": ""
+                },
+                "className": "TrainStation",
+                "geo": {
+                    "className": "GeoCoordinates",
+                    "isValid": false,
+                    "latitude": null,
+                    "longitude": null
+                },
+                "geoUri": "",
+                "identifier": "",
+                "name": "Frankfurt(Main)+City",
+                "telephone": ""
+            },
+            "outboundDepartureStation": {
+                "address": {
+                    "addressCountry": "",
+                    "addressLocality": "",
+                    "addressRegion": "",
+                    "className": "PostalAddress",
+                    "isEmpty": true,
+                    "postalCode": "",
+                    "streetAddress": ""
+                },
+                "className": "TrainStation",
+                "geo": {
+                    "className": "GeoCoordinates",
+                    "isValid": false,
+                    "latitude": null,
+                    "longitude": null
+                },
+                "geoUri": "",
+                "identifier": "",
+                "name": "Köln",
+                "telephone": ""
+            },
             "person": {
                 "className": "Person",
                 "email": "",

@@ -10,6 +10,7 @@
 
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
+#include <KItinerary/Place>
 
 #include <QExplicitlySharedDataPointer>
 #include <QMetaType>
@@ -43,8 +44,8 @@ class KITINERARY_EXPORT Uic9183Parser
     Q_PROPERTY(QDateTime validFrom READ validFrom)
     Q_PROPERTY(QDateTime validUntil READ validUntil)
     Q_PROPERTY(KItinerary::Person person READ person)
-    Q_PROPERTY(QString outboundDepartureStationId READ outboundDepartureStationId)
-    Q_PROPERTY(QString outboundArrivalStationId READ outboundArrivalStationId)
+    Q_PROPERTY(KItinerary::TrainStation outboundDepartureStation READ outboundDepartureStation)
+    Q_PROPERTY(KItinerary::TrainStation outboundArrivalStation READ outboundArrivalStation)
     Q_PROPERTY(QString seatingType READ seatingType)
     /** U_TLAY ticket layout block, if present, @c null otherwise. */
     Q_PROPERTY(QVariant ticketLayout READ ticketLayoutVariant)
@@ -82,10 +83,10 @@ public:
     /** The person this ticket is issued to. */
     Person person() const;
 
-    /** Station identifier for the departure station of the outbound trip. */
-    QString outboundDepartureStationId() const;
-    /** Station identifier for the arrival station of the outbound trip. */
-    QString outboundArrivalStationId() const;
+    /** Station object for the departure station of the outbound trip. */
+    TrainStation outboundDepartureStation() const;
+    /** Station object for the arrival station of the outbound trip. */
+    TrainStation outboundArrivalStation() const;
 
     /** @see Ticket::seatingType */
     QString seatingType() const;
