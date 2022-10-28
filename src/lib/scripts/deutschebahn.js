@@ -233,9 +233,7 @@ function applyUic9183ToReservation(res, uicCode)
                 break;
         }
     }
-    sb = bl.findSubBlock('001');
-    if (sb)
-        res.reservedTicket.name = sb.content;
+    res.reservedTicket.name = uicCode.name
     if (res.reservedTicket.ticketedSeat)
         res.reservedTicket.ticketedSeat.seatingType = uicCode.seatingType;
     res.underName = JsonLd.toJson(uicCode.person);
