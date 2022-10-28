@@ -14,6 +14,7 @@
 #include "vendor0080block.h"
 
 #include "era/fcbticket.h"
+#include "era/fcbutil.h"
 
 #include <QDateTime>
 #include <QDebug>
@@ -403,6 +404,12 @@ TrainStation Uic9183Parser::outboundDepartureStation() const
 {
     TrainStation station;
 
+    // RTC2 ticket layout
+    if (const auto rtc2 = rct2Ticket(); rtc2.isValid()) {
+        station.setName(rtc2.outboundDepartureStation());
+    }
+
+    // DB vendor block
     if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid()) {
         if (const auto sblock = b.findSubBlock("015"); !sblock.isNull()) {
             station.setName(sblock.toString());
@@ -415,12 +422,31 @@ TrainStation Uic9183Parser::outboundDepartureStation() const
         }
     }
 
+    // ERA FCB
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
+        const auto doc = fcb.transportDocument.at(0);
+        if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            const auto irt = doc.ticket.value<Fcb::ReservationData>();
+            station.setName(irt.fromStationNameUTF8);
+            station.setIdentifier(FcbUtil::fromStationIdentifier(irt));
+        } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+            station.setName(nrt.fromStationNameUTF8);
+            station.setIdentifier(FcbUtil::fromStationIdentifier(nrt));
+        }
+    }
+
     return station;
 }
 
 TrainStation Uic9183Parser::outboundArrivalStation() const
 {
     TrainStation station;
+
+    // RTC2 ticket layout
+    if (const auto rtc2 = rct2Ticket(); rtc2.isValid()) {
+        station.setName(rtc2.outboundArrivalStation());
+    }
 
     if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid()) {
         if (const auto sblock = b.findSubBlock("016"); !sblock.isNull()) {
@@ -431,6 +457,20 @@ TrainStation Uic9183Parser::outboundArrivalStation() const
             QString ibnr = QStringLiteral("ibnr:8000000");
             const auto s = sblock.toString();
             station.setIdentifier(ibnr.replace(ibnr.size() - s.size(), s.size(), s));
+        }
+    }
+
+    // ERA FCB
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
+        const auto doc = fcb.transportDocument.at(0);
+        if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            const auto irt = doc.ticket.value<Fcb::ReservationData>();
+            station.setName(irt.toStationNameUTF8);
+            station.setIdentifier(FcbUtil::toStationIdentifier(irt));
+        } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+            station.setName(nrt.toStationNameUTF8);
+            station.setIdentifier(FcbUtil::toStationIdentifier(nrt));
         }
     }
 

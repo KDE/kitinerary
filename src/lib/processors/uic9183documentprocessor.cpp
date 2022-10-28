@@ -78,8 +78,8 @@ static bool isValidTrip(const QJsonObject &trip)
     }
 
     return trip.contains(QLatin1String("departureDay"))
-        && trip.value(QLatin1String("departureStation")).isObject()
-        && trip.value(QLatin1String("arrivalStation")).isObject();
+        && !trip.value(QLatin1String("departureStation")).toObject().value(QLatin1String("name")).toString().isEmpty()
+        && !trip.value(QLatin1String("arrivalStation")).toObject().value(QLatin1String("name")).toString().isEmpty();
 }
 
 void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
@@ -111,8 +111,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
             case Rct2Ticket::Transport:
             case Rct2Ticket::Upgrade:
             {
-                trip.insert(QStringLiteral("departureStation"), makeStation(rct2.outboundDepartureStation()));
-                trip.insert(QStringLiteral("arrivalStation"), makeStation(rct2.outboundArrivalStation()));
+                trip.insert(QStringLiteral("departureStation"), JsonLdDocument::toJson(p.outboundDepartureStation()));
+                trip.insert(QStringLiteral("arrivalStation"), JsonLdDocument::toJson(p.outboundArrivalStation()));
 
                 if (rct2.outboundDepartureTime().isValid()) {
                     trip.insert(QStringLiteral("departureDay"),  JsonLdDocument::toJsonValue(rct2.outboundDepartureTime().date()));
