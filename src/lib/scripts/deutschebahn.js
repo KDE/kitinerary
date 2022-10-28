@@ -220,17 +220,19 @@ function applyUic9183ToReservation(res, uicCode)
     res.reservationNumber = uicCode.pnr;
     res.reservationFor.provider = JsonLd.toJson(uicCode.issuer);
     const bl = uicCode.block('0080BL');
-    let sb = bl.findSubBlock('009');
-    if (sb) {
-        const bc = sb.content.match(/\d+-\d+-(.*)/)[1];
-        switch (bc) {
-            case "49":
-                res.programMembershipUsed.programName = "BahnCard 25";
-                break;
-            case "19":
-            case "78":
-                res.programMembershipUsed.programName = "BahnCard 50";
-                break;
+    if (bl) {
+        const sb = bl.findSubBlock('009');
+        if (sb) {
+            const bc = sb.content.match(/\d+-\d+-(.*)/)[1];
+            switch (bc) {
+                case "49":
+                    res.programMembershipUsed.programName = "BahnCard 25";
+                    break;
+                case "19":
+                case "78":
+                    res.programMembershipUsed.programName = "BahnCard 50";
+                    break;
+            }
         }
     }
     res.reservedTicket.name = uicCode.name
