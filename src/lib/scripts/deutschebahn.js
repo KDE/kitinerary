@@ -120,14 +120,14 @@ function parseTicket(text, uic918ticket) {
     var returnResIndex = 0;
     while (true) {
         // find itinerary headers
-        var header = text.substr(pos).match(/Ihre Reiseverbindung[\S ]+(Hin|Rück)fahrt am [0-9]{2}.[0-9]{2}.([0-9]{4}).*\n/);
+        var header = text.substr(pos).match(/Ihre Reiseverbindung[\S ]+(Hin|Rück|Einfache )[fF]ahrt am [0-9]{2}.[0-9]{2}.([0-9]{4}).*\n/);
         if (!header)
             break;
         var idx = header.index + header[0].length;
         var year = header[2];
 
         // determine ticket type
-        var domesticHeader = text.substr(pos + idx).match(/  Reservierung\n/);
+        var domesticHeader = text.substr(pos + idx).match(/  Reservierung(?: \/ Hinweise)?\n/);
         var intlHeader = text.substr(pos + idx).match(/(Produkte\/Reservierung|Fahrt\/Reservierung).*\n/);
         if (domesticHeader) {
             idx += domesticHeader.index + domesticHeader[0].length;
@@ -140,7 +140,7 @@ function parseTicket(text, uic918ticket) {
         }
 
         // for outward journeys we have station ids from the UIC 918-3 code
-        if (uic918ticket && header[1] === "Hin") {
+        if (uic918ticket && header[1] !== "Rück") {
             reservations[0].reservationFor.departureStation.identifier = uic918ticket.outboundDepartureStation.identifier;
             reservations[reservations.length - 1].reservationFor.arrivalStation.identifier = uic918ticket.outboundArrivalStation.identifier;
             returnResIndex = reservations.length;
@@ -312,6 +312,18 @@ function parseUic9183(code, node) {
         ret.reservationFor.arrivalStation.identifier = ret.reservationFor.arrivalStation.name === res.reservationFor.departureStation.name ? code.outboundDepartureStation.identifier : undefined;
 
         return [res, ret];
+    }
+
+    const fcb = code.block('U_FLEX');
+    if (fcb && code.outboundDepartureStation.name && code.outboundArrivalStation.name) {
+        let res = JsonLd.newTrainReservation();
+        res.reservedTicket = node.result[0];
+        applyUic9183ToReservation(res, code);
+        // TODO needs different handling based on document type
+        res.reservationFor.departureDay = fcb.transportDocument[0].ticket.validFrom(fcb.issuingDetail.issueingDateTime);
+        res.reservationFor.departureStation = JsonLd.toJson(code.outboundDepartureStation);
+        res.reservationFor.arrivalStation = JsonLd.toJson(code.outboundArrivalStation);
+        return res;
     }
 }
 
