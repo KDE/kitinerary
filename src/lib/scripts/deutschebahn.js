@@ -306,11 +306,8 @@ function parseUic9183(code, node) {
         ret.reservedTicket = node.result[0];
         applyUic9183ToReservation(ret, code);
         ret.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('032').content, 'dd.mm.yyyy', 'de');
-        ret.reservationFor.departureStation.name = bl.findSubBlock('017').content;
-        ret.reservationFor.departureStation.identifier = ret.reservationFor.departureStation.name === res.reservationFor.arrivalStation.name ? code.outboundArrivalStation.identifier : undefined;
-        ret.reservationFor.arrivalStation.name = bl.findSubBlock('018').content;
-        ret.reservationFor.arrivalStation.identifier = ret.reservationFor.arrivalStation.name === res.reservationFor.departureStation.name ? code.outboundDepartureStation.identifier : undefined;
-
+        ret.reservationFor.departureStation = JsonLd.toJson(code.returnDepartureStation);
+        ret.reservationFor.arrivalStation = JsonLd.toJson(code.returnArrivalStation);
         return [res, ret];
     }
 

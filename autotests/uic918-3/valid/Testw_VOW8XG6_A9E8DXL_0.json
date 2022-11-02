@@ -22,6 +22,14 @@
             "givenName": "kíck_-_:.,stû R"
         },
         "pnr": "9E8DXL",
+        "returnArrivalStation": {
+            "@type": "TrainStation",
+             "name": "Köln"
+        },
+        "returnDepartureStation": {
+            "@type": "TrainStation",
+            "name": "Frankfurt(Main)+City"
+        },
         "seatingType": "2"
     }
 ]

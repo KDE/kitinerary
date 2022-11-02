@@ -46,6 +46,8 @@ class KITINERARY_EXPORT Uic9183Parser
     Q_PROPERTY(KItinerary::Person person READ person)
     Q_PROPERTY(KItinerary::TrainStation outboundDepartureStation READ outboundDepartureStation)
     Q_PROPERTY(KItinerary::TrainStation outboundArrivalStation READ outboundArrivalStation)
+    Q_PROPERTY(KItinerary::TrainStation returnDepartureStation READ returnDepartureStation)
+    Q_PROPERTY(KItinerary::TrainStation returnArrivalStation READ returnArrivalStation)
     Q_PROPERTY(QString seatingType READ seatingType)
     /** U_TLAY ticket layout block, if present, @c null otherwise. */
     Q_PROPERTY(QVariant ticketLayout READ ticketLayoutVariant)
@@ -87,6 +89,10 @@ public:
     TrainStation outboundDepartureStation() const;
     /** Station object for the arrival station of the outbound trip. */
     TrainStation outboundArrivalStation() const;
+    /** Station object for the departure station of the return trip. */
+    TrainStation returnDepartureStation() const;
+    /** Station object for the arrival station of the return trip. */
+    TrainStation returnArrivalStation() const;
 
     /** @see Ticket::seatingType */
     QString seatingType() const;

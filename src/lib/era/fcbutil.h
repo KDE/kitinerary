@@ -21,32 +21,36 @@ public:
     *  in the format needed for output with our JSON-LD format.
     */
     template <typename T>
-    static QString fromStationIdentifier(const T &doc)
+    static QString fromStationIdentifier(Fcb::CodeTableType stationCodeTable, const T &doc)
     {
-        switch (doc.stationCodeTable) {
+        switch (stationCodeTable) {
             case Fcb::stationUIC:
             case Fcb::stationUICReservation:
                 return stringifyUicStationIdentifier(doc.fromStationNum, doc.fromStationIA5);
             default:
-                qCWarning(Log) << "Unhandled station code table:" << doc.stationCodeTable;
+                qCWarning(Log) << "Unhandled station code table:" << stationCodeTable;
         }
         return stringifyStationIdentifier(doc.fromStationNumIsSet(), doc.fromStationNum, doc.fromStationIA5);
     }
+    template <typename T>
+    static QString fromStationIdentifier(const T &doc) { return fromStationIdentifier(doc.stationCodeTable, doc); }
     /** Arrival station identifier for a travel document,
     *  in the format needed for output with our JSON-LD format.
     */
     template <typename T>
-    static QString toStationIdentifier(const T &doc)
+    static QString toStationIdentifier(Fcb::CodeTableType stationCodeTable, const T &doc)
     {
-        switch (doc.stationCodeTable) {
+        switch (stationCodeTable) {
             case Fcb::stationUIC:
             case Fcb::stationUICReservation:
                 return stringifyUicStationIdentifier(doc.toStationNum, doc.toStationIA5);
             default:
-                qCWarning(Log) << "Unhandled station code table:" << doc.stationCodeTable;
+                qCWarning(Log) << "Unhandled station code table:" << stationCodeTable;
         }
         return stringifyStationIdentifier(doc.toStationNumIsSet(), doc.toStationNum, doc.toStationIA5);
     }
+    template <typename T>
+    static QString toStationIdentifier(const T &doc) { return toStationIdentifier(doc.stationCodeTable, doc); }
 
 private:
     static QString stringifyUicStationIdentifier(int num, const QByteArray &ia5);

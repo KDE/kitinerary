@@ -477,6 +477,84 @@ TrainStation Uic9183Parser::outboundArrivalStation() const
     return station;
 }
 
+TrainStation Uic9183Parser::returnDepartureStation() const
+{
+    TrainStation station;
+
+    // RTC2 ticket layout
+    if (const auto rtc2 = rct2Ticket(); rtc2.isValid()) {
+        station.setName(rtc2.returnDepartureStation());
+    }
+
+    const auto outboundArrival = outboundArrivalStation();
+    // DB vendor block
+    if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid()) {
+        if (const auto sblock = b.findSubBlock("017"); !sblock.isNull()) {
+            station.setName(sblock.toString());
+        }
+        if (outboundArrival.name() == station.name()) {
+            station.setIdentifier(outboundArrival.identifier());
+        }
+    }
+
+    // ERA FCB
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
+        const auto doc = fcb.transportDocument.at(0);
+        if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+            if (nrt.returnIncluded && nrt.returnDescriptionIsSet()) {
+                station.setName(nrt.returnDescription.fromStationNameUTF8);
+                station.setIdentifier(FcbUtil::fromStationIdentifier(nrt.stationCodeTable, nrt.returnDescription));
+            } else if (nrt.returnIncluded) {
+                if (outboundArrival.name() == station.name()) {
+                    station.setIdentifier(outboundArrival.identifier());
+                }
+            }
+        }
+    }
+
+    return station;
+}
+
+TrainStation Uic9183Parser::returnArrivalStation() const
+{
+    TrainStation station;
+
+    // RTC2 ticket layout
+    if (const auto rtc2 = rct2Ticket(); rtc2.isValid()) {
+        station.setName(rtc2.returnArrivalStation());
+    }
+
+    const auto outboundDeparture = outboundDepartureStation();
+    // DB vendor block
+    if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid()) {
+        if (const auto sblock = b.findSubBlock("018"); !sblock.isNull()) {
+            station.setName(sblock.toString());
+        }
+        if (outboundDeparture.name() == station.name()) {
+            station.setIdentifier(outboundDeparture.identifier());
+        }
+    }
+
+    // ERA FCB
+    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
+        const auto doc = fcb.transportDocument.at(0);
+        if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+            if (nrt.returnIncluded && nrt.returnDescriptionIsSet()) {
+                station.setName(nrt.returnDescription.toStationNameUTF8);
+                station.setIdentifier(FcbUtil::toStationIdentifier(nrt.stationCodeTable, nrt.returnDescription));
+            } else if (nrt.returnIncluded) {
+                if (outboundDeparture.name() == station.name()) {
+                    station.setIdentifier(outboundDeparture.identifier());
+                }
+            }
+        }
+    }
+
+    return station;
+}
+
 static QString fcbClassCodeToString(Fcb::TravelClassType classCode)
 {
     switch (classCode) {

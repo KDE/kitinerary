@@ -59,18 +59,6 @@ void Uic9183DocumentProcessor::expandNode(ExtractorDocumentNode &node, [[maybe_u
     }
 }
 
-static QJsonValue makeStation(const QString &name)
-{
-    if (name.isEmpty()) {
-        return {};
-    }
-
-    QJsonObject station;
-    station.insert(QStringLiteral("@type"), QLatin1String("TrainStation"));
-    station.insert(QStringLiteral("name"), name);
-    return station;
-}
-
 static bool isValidTrip(const QJsonObject &trip)
 {
     if (trip.size() <= 1) {
@@ -125,9 +113,9 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     trip.insert(QStringLiteral("arrivalTime"),  JsonLdDocument::toJsonValue(rct2.outboundArrivalTime()));
                 }
 
-                if (rct2.type() == Rct2Ticket::Transport && !rct2.returnDepartureStation().isEmpty()) {
-                    returnTrip.insert(QStringLiteral("departureStation"), makeStation(rct2.returnDepartureStation()));
-                    returnTrip.insert(QStringLiteral("arrivalStation"), makeStation(rct2.returnArrivalStation()));
+                if (rct2.type() == Rct2Ticket::Transport && !p.returnDepartureStation().name().isEmpty()) {
+                    returnTrip.insert(QStringLiteral("departureStation"), JsonLdDocument::toJson(p.returnDepartureStation()));
+                    returnTrip.insert(QStringLiteral("arrivalStation"), JsonLdDocument::toJson(p.returnArrivalStation()));
 
                     if (rct2.returnDepartureTime().isValid()) {
                         returnTrip.insert(QStringLiteral("departureDay"),  JsonLdDocument::toJsonValue(rct2.returnDepartureTime().date()));

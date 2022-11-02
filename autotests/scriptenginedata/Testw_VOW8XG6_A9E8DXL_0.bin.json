@@ -85,6 +85,50 @@
             },
             "pnr": "9E8DXL",
             "rawData": "<binary: 442 bytes>",
+            "returnArrivalStation": {
+                "address": {
+                    "addressCountry": "",
+                    "addressLocality": "",
+                    "addressRegion": "",
+                    "className": "PostalAddress",
+                    "isEmpty": true,
+                    "postalCode": "",
+                    "streetAddress": ""
+                },
+                "className": "TrainStation",
+                "geo": {
+                    "className": "GeoCoordinates",
+                    "isValid": false,
+                    "latitude": null,
+                    "longitude": null
+                },
+                "geoUri": "",
+                "identifier": "",
+                "name": "Köln",
+                "telephone": ""
+            },
+            "returnDepartureStation": {
+                "address": {
+                    "addressCountry": "",
+                    "addressLocality": "",
+                    "addressRegion": "",
+                    "className": "PostalAddress",
+                    "isEmpty": true,
+                    "postalCode": "",
+                    "streetAddress": ""
+                },
+                "className": "TrainStation",
+                "geo": {
+                    "className": "GeoCoordinates",
+                    "isValid": false,
+                    "latitude": null,
+                    "longitude": null
+                },
+                "geoUri": "",
+                "identifier": "",
+                "name": "Frankfurt(Main)+City",
+                "telephone": ""
+            },
             "seatingType": "2",
             "validFrom": "Invalid Date",
             "validUntil": "Invalid Date"
@@ -178,6 +222,50 @@
             },
             "pnr": "9E8DXL",
             "rawData": "<binary: 442 bytes>",
+            "returnArrivalStation": {
+                "address": {
+                    "addressCountry": "",
+                    "addressLocality": "",
+                    "addressRegion": "",
+                    "className": "PostalAddress",
+                    "isEmpty": true,
+                    "postalCode": "",
+                    "streetAddress": ""
+                },
+                "className": "TrainStation",
+                "geo": {
+                    "className": "GeoCoordinates",
+                    "isValid": false,
+                    "latitude": null,
+                    "longitude": null
+                },
+                "geoUri": "",
+                "identifier": "",
+                "name": "Köln",
+                "telephone": ""
+            },
+            "returnDepartureStation": {
+                "address": {
+                    "addressCountry": "",
+                    "addressLocality": "",
+                    "addressRegion": "",
+                    "className": "PostalAddress",
+                    "isEmpty": true,
+                    "postalCode": "",
+                    "streetAddress": ""
+                },
+                "className": "TrainStation",
+                "geo": {
+                    "className": "GeoCoordinates",
+                    "isValid": false,
+                    "latitude": null,
+                    "longitude": null
+                },
+                "geoUri": "",
+                "identifier": "",
+                "name": "Frankfurt(Main)+City",
+                "telephone": ""
+            },
             "seatingType": "2",
             "validFrom": "Invalid Date",
             "validUntil": "Invalid Date"
