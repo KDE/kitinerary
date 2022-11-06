@@ -216,7 +216,8 @@ static QString rct2Clean(const QString &s)
 
 QString Rct2Ticket::outboundDepartureStation() const
 {
-    return type() != RailPass ? rct2Clean(d->layout.text(6, 13, 17, 1).trimmed()) : QString();
+    // 6, 13, 17, 1 would be according to spec, but why stick to that...
+    return type() != RailPass ? rct2Clean(d->layout.text(6, 12, 18, 1).trimmed()) : QString();
 }
 
 QString Rct2Ticket::outboundArrivalStation() const
@@ -241,7 +242,8 @@ QDateTime Rct2Ticket::returnArrivalTime() const
 
 QString Rct2Ticket::returnDepartureStation() const
 {
-    return type() != RailPass ? rct2Clean(d->layout.text(7, 13, 17, 1).trimmed()) : QString();
+    // 7, 13, 17, 1 would be according to spec, but you can guess by now how well that is followed...
+    return type() != RailPass ? rct2Clean(d->layout.text(7, 12, 18, 1).trimmed()) : QString();
 }
 
 QString Rct2Ticket::returnArrivalStation() const
