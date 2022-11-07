@@ -12,6 +12,7 @@
 #include "uic9183header.h"
 #include "uic9183ticketlayout.h"
 #include "vendor0080block.h"
+#include "vendor1154block.h"
 
 #include "era/fcbticket.h"
 #include "era/fcbutil.h"
@@ -79,6 +80,7 @@ QVariant Uic9183Parser::block(const QString &name) const
     BLOCK_FROM_NAME(Fcb::UicRailTicketData)
     BLOCK_FROM_NAME(Vendor0080BLBlock)
     BLOCK_FROM_NAME(Vendor0080VUBlock)
+    BLOCK_FROM_NAME(Vendor1154UTBlock)
 
 #undef BLOCK_FROM_NAME
 

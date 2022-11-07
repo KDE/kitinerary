@@ -115,6 +115,7 @@ target_sources(KPimItinerary PRIVATE
     uic9183/uic9183utils.cpp
     uic9183/vendor0080block.cpp
     uic9183/vendor0080vublockdata.cpp
+    uic9183/vendor1154block.cpp
 
     vdv/iso9796_2decoder.cpp
     vdv/vdvcertificate.cpp
@@ -323,6 +324,7 @@ ecm_generate_headers(KItinerary_Uic9183_FORWARDING_HEADERS
         Uic9183Utils
         Vendor0080Block
         Vendor0080VUBlockData
+        Vendor1154Block
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_Uic9183_HEADERS
     RELATIVE uic9183
