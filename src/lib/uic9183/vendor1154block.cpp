@@ -7,6 +7,8 @@
 #include "uic9183utils.h"
 #include "logging.h"
 
+#include <QVariant>
+
 using namespace KItinerary;
 
 // 1154UT vendor block sub-block format
