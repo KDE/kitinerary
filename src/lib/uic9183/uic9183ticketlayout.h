@@ -96,6 +96,9 @@ public:
      */
     Uic9183TicketLayoutField firstField() const;
 
+    /** All fields covering the given area. */
+    std::vector<Uic9183TicketLayoutField> fields(int row, int column, int width, int height) const;
+
     static constexpr const char RecordId[] = "U_TLAY";
 private:
     QExplicitlySharedDataPointer<Uic9183TicketLayoutPrivate> d;

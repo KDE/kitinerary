@@ -137,6 +137,7 @@ static constexpr const struct {
     { "fahrkarte", Rct2Ticket::Transport },
     { "fahrschein", Rct2Ticket::Transport },
     { "cestovny listok", Rct2Ticket::Transport },
+    { "jizdenka", Rct2Ticket::Transport },
     { "reservation", Rct2Ticket::Reservation },
     { "reservierung", Rct2Ticket::Reservation },
     { "interrail", Rct2Ticket::RailPass },
@@ -159,6 +160,15 @@ Rct2Ticket::Type Rct2Ticket::type() const
     for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
         if (typeName1.contains(QLatin1String(it->name)) || typeName2.contains(QLatin1String(it->name))) {
             return it->type;
+        }
+    }
+
+    // alternatively, check all fields covering the title area, for even more creative placements...
+    for (const auto &f : d->layout.fields(0, 14, 38, 2)) {
+        for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
+            if (f.text().toCaseFolded().contains(QLatin1String(it->name))) {
+                return it->type;
+            }
         }
     }
 
@@ -206,7 +216,8 @@ static QString rct2Clean(const QString &s)
 
 QString Rct2Ticket::outboundDepartureStation() const
 {
-    return type() != RailPass ? rct2Clean(d->layout.text(6, 13, 17, 1).trimmed()) : QString();
+    // 6, 13, 17, 1 would be according to spec, but why stick to that...
+    return type() != RailPass ? rct2Clean(d->layout.text(6, 12, 18, 1).trimmed()) : QString();
 }
 
 QString Rct2Ticket::outboundArrivalStation() const
@@ -231,7 +242,8 @@ QDateTime Rct2Ticket::returnArrivalTime() const
 
 QString Rct2Ticket::returnDepartureStation() const
 {
-    return type() != RailPass ? rct2Clean(d->layout.text(7, 13, 17, 1).trimmed()) : QString();
+    // 7, 13, 17, 1 would be according to spec, but you can guess by now how well that is followed...
+    return type() != RailPass ? rct2Clean(d->layout.text(7, 12, 18, 1).trimmed()) : QString();
 }
 
 QString Rct2Ticket::returnArrivalStation() const

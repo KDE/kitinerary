@@ -99,7 +99,7 @@ int Vendor0080BLSubBlock::contentSize() const
     if (isNull()) {
         return 0;
     }
-    return QByteArray(m_block.content() + m_offset + SBlockLengthOffset, SBlockLengthSize).toInt();
+    return Uic9183Utils::readAsciiEncodedNumber(m_block.content(), m_block.size(), m_offset + SBlockLengthOffset, SBlockLengthSize);
 }
 
 const char* Vendor0080BLSubBlock::id() const
