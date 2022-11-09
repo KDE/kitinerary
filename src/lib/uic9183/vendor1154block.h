@@ -52,7 +52,7 @@ public:
     /** First S-block, for iterating. */
     Vendor1154UTSubBlock firstBlock() const;
     /** Finds a S-block by type. */
-    Vendor1154UTSubBlock findSubBlock(const char id[3]) const;
+    Vendor1154UTSubBlock findSubBlock(const char id[2]) const;
     Q_INVOKABLE QVariant findSubBlock(const QString &str) const;
 
     static constexpr const char RecordId[] = "1154UT";
