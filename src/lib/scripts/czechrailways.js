@@ -149,3 +149,35 @@ function main(text) {
         reservations[i].reservationNumber = bookingRef[1];
     return reservations;
 }
+
+// ### this is based on an international ticket, do domestic ones look the same?
+function parsePdfTicket(content, node, triggerNode) {
+    const page = content.pages[triggerNode.location];
+    const text = page.textInRect(0.0, 0.0, 0.675, 1.0);
+    let idx = 0;
+    let reservations = [];
+    while (true) {
+        // TODO this doesn't consider seat reservations yet, lacking corresponding samples
+        let leg = text.substr(idx).match(/\n(.*?)  +(\d\d\.\d\d\.) +(\d\d:\d\d) +(.*?)\n(.*?)  +(\d\d.\d\d.) +(\d\d:\d\d)/);
+        if (!leg) {
+            break;
+        }
+        let res = JsonLd.newTrainReservation();
+        res.reservationFor.departureStation.name = leg[1];
+        res.reservationFor.departureTime = JsonLd.toDateTime(leg[2] + leg[3], 'dd.MM.hh:mm', 'cz');
+        res.reservationFor.arrivalStation.name = leg[5];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[6] + leg[7], 'dd.MM.hh:mm', 'cz');
+        res.reservationFor.trainNumber = leg[4];
+
+        if (triggerNode.result[0]['@type'] == 'TrainReservation') {
+            res = JsonLd.apply(triggerNode.result[0], res);
+        } else {
+            res.reservedTicket = triggerNode.result[0];
+        }
+
+        reservations.push(res);
+        idx += leg.index + leg[0].length;
+    }
+
+    return reservations;
+}
