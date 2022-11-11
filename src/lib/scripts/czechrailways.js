@@ -171,6 +171,8 @@ function parsePdfTicket(content, node, triggerNode) {
 
         if (triggerNode.result[0]['@type'] == 'TrainReservation') {
             res = JsonLd.apply(triggerNode.result[0], res);
+            res.reservationNumber = triggerNode.content.block('1154UT').findSubBlock('KK').content;
+            res.reservedTicket.ticketNumber = triggerNode.result[0].reservationNumber;
         } else {
             res.reservedTicket = triggerNode.result[0];
         }

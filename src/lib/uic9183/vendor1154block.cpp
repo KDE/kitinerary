@@ -133,7 +133,7 @@ Vendor1154UTSubBlock Vendor1154UTBlock::findSubBlock(const char id[SubBlockTypeS
 
 QVariant Vendor1154UTBlock::findSubBlock(const QString &str) const
 {
-    if (str.size() != 3 || !isValid()) {
+    if (str.size() != 2 || !isValid()) {
         return {};
     }
     const auto b = findSubBlock(str.toUtf8().constData());
