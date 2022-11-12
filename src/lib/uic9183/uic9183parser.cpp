@@ -291,6 +291,15 @@ QDateTime Uic9183Parser::validFrom() const
         return dt;
     }
 
+    // CD vender block
+    if (const auto b = findBlock<Vendor1154UTBlock>(); b.isValid()) {
+        const auto subBlock = b.findSubBlock("OD");
+        qDebug() << subBlock.toString();
+        if (!subBlock.isNull()) {
+            return QDateTime::fromString(subBlock.toString(), QStringLiteral("dd.MM.yyyy hh:mm"));
+        }
+    }
+
     // RCT2
     if (const auto  rct2 = rct2Ticket(); rct2.isValid()) {
         const auto dt = rct2.firstDayOfValidity();
@@ -323,8 +332,7 @@ QDateTime Uic9183Parser::validUntil() const
     }
 
     // DB vendor block
-    const auto b = findBlock<Vendor0080BLBlock>();
-    if (b.isValid() && b.orderBlockCount() == 1) {
+    if (const auto b = findBlock<Vendor0080BLBlock>(); b.isValid() && b.orderBlockCount() == 1) {
         return QDateTime(b.orderBlock(0).validTo(), {23, 59, 59});
     }
 
@@ -338,6 +346,16 @@ QDateTime Uic9183Parser::validUntil() const
         dt.setTimeSpec(Qt::UTC);
         return dt;
     }
+
+    // CD vender block
+    if (const auto b = findBlock<Vendor1154UTBlock>(); b.isValid()) {
+        const auto subBlock = b.findSubBlock("DO");
+        qDebug() << subBlock.toString();
+        if (!subBlock.isNull()) {
+            return QDateTime::fromString(subBlock.toString(), QStringLiteral("dd.MM.yyyy hh:mm"));
+        }
+    }
+
 
     // RCT2 RPT according to ERA TAP TSI Annex B.6
     if (const auto rct2 = rct2Ticket(); rct2.isValid() && rct2.type() == Rct2Ticket::RailPass) {
@@ -384,6 +402,15 @@ Person Uic9183Parser::person() const
         if (!sblock.isNull()) {
             Person p;
             p.setName(sblock.toString());
+            return p;
+        }
+    }
+    // CD vender block
+    if (const auto b = findBlock<Vendor1154UTBlock>(); b.isValid()) {
+        const auto subBlock = b.findSubBlock("KJ");
+        if (!subBlock.isNull()) {
+            Person p;
+            p.setName(subBlock.toString());
             return p;
         }
     }

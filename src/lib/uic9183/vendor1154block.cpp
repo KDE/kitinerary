@@ -121,11 +121,11 @@ Vendor1154UTSubBlock Vendor1154UTBlock::firstBlock() const
     return Vendor1154UTSubBlock(m_block, 0);
 }
 
-Vendor1154UTSubBlock Vendor1154UTBlock::findSubBlock(const char id[3]) const
+Vendor1154UTSubBlock Vendor1154UTBlock::findSubBlock(const char id[SubBlockTypeSize]) const
 {
     auto sblock = firstBlock();
     while (!sblock.isNull()) {
-        if (strncmp(sblock.id(), id, 3) == 0) {
+        if (strncmp(sblock.id(), id, SubBlockTypeSize) == 0) {
             return sblock;
         }
         sblock = sblock.nextBlock();
@@ -135,7 +135,7 @@ Vendor1154UTSubBlock Vendor1154UTBlock::findSubBlock(const char id[3]) const
 
 QVariant Vendor1154UTBlock::findSubBlock(const QString &str) const
 {
-    if (str.size() != 3 || !isValid()) {
+    if (str.size() != 2 || !isValid()) {
         return {};
     }
     const auto b = findSubBlock(str.toUtf8().constData());

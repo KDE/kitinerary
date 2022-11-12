@@ -1,8 +1,21 @@
-{
+[{
     "filter": [
         { "field": "From", "match": "info@cd.cz", "mimeType": "message/rfc822", "scope": "Ancestors" },
         { "field": "From", "match": "eshop@cd.cz", "mimeType": "message/rfc822", "scope": "Ancestors" }
     ],
     "script": "czechrailways.js",
     "mimeType": "text/plain"
-}
+},
+{
+    "filter": [
+        {
+            "field": "carrierId",
+            "match": "^1154$",
+            "mimeType": "internal/uic9183",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdfTicket",
+    "mimeType": "application/pdf",
+    "script": "czechrailways.js"
+}]
