@@ -13,7 +13,7 @@
 
 using namespace KItinerary;
 
-void JsonLd::renameProperty(QJsonObject &obj, const char *oldName, const char *newName)
+void KItinerary::JsonLd::renameProperty(QJsonObject &obj, const char *oldName, const char *newName)
 {
     const auto value = obj.value(QLatin1String(oldName));
     if (!value.isUndefined() && !obj.contains(QLatin1String(newName))) {
