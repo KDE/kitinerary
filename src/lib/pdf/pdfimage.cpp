@@ -138,8 +138,26 @@ QImage PdfImagePrivate::load()
 #if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 69, 0)
     const auto xref = m_page->m_doc->m_popplerDoc->getXRef();
     const auto obj = xref->fetch(refNum(), refGen());
-    return load(obj.getStream(), m_colorMap.get());
+
+    switch (m_ref.m_type) {
+        case PdfImageType::Image:
+            return load(obj.getStream(), m_colorMap.get());
+        case PdfImageType::Mask:
+        {
+            const auto dict = obj.getStream()->getDict();
+            const auto maskObj = dict->lookup("Mask");
+            return load(maskObj.getStream(), m_colorMap.get());
+        }
+        case PdfImageType::SMask:
+            return {}; // TODO
+    }
+
+    return {};
 #else
+    if (m_ref.m_type != PdfImageType::Image) {
+        return {};
+    }
+
     std::unique_ptr<ImageLoaderOutputDevice> device(new ImageLoaderOutputDevice(this));
     m_page->m_doc->m_popplerDoc->displayPageSlice(device.get(), m_page->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
     return device->image();
