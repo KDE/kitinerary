@@ -85,9 +85,9 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
 {
     const auto doc = node.content<PdfDocument*>();
 
-    m_imageIds.clear();
     for (int i = 0; i < doc->pageCount(); ++i) {
         const auto page = doc->page(i);
+        m_imageIds.clear();
 
         for (int j = 0; j < page.imageCount(); ++j) {
             auto img = page.image(j);
