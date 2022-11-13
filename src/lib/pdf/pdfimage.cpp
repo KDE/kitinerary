@@ -80,6 +80,22 @@ static inline bool isColor(GfxRGB rgb)
 
 QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
 {
+    if (m_format == QImage::Format_Mono) { // bitmasks are not stored as image streams
+        auto img = QImage(m_sourceWidth, m_sourceHeight, QImage::Format_Mono); // TODO implicit Format_Grayscale8 conversion
+        str->reset();
+        const int rowSize = (m_sourceWidth + 7) / 8;
+        for (int y = 0; y < m_sourceHeight; ++y) {
+            auto imgData = img.scanLine(y);
+            for (int x = 0; x < rowSize; x++) {
+                const auto c = str->getChar();
+                *imgData++ = c ^ 0xff;
+            }
+        }
+
+        m_page->m_doc->m_imageData[m_ref] = img;
+        return img;
+    }
+
     auto img = QImage(m_sourceWidth, m_sourceHeight, (m_loadingHints & PdfImage::ConvertToGrayscaleHint) ? QImage::Format_Grayscale8 : m_format);
     const auto bytesPerPixel = colorMap->getNumPixelComps();
     std::unique_ptr<ImageStream> imgStream(new ImageStream(str, m_sourceWidth, bytesPerPixel, colorMap->getBits()));
