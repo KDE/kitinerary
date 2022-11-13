@@ -28,11 +28,13 @@ public:
     QImage load(Stream *str, GfxImageColorMap *colorMap);
 
     // pixel data
-    int m_refNum = -1;
-    int m_refGen = -1;
+    PdfImageRef m_ref;
     QImage::Format m_format = QImage::Format_Invalid;
     PdfPagePrivate *m_page = nullptr;
     std::unique_ptr<GfxImageColorMap> m_colorMap;
+
+    constexpr inline int refNum() const { return m_ref.m_refNum; }
+    constexpr inline int refGen() const { return m_ref.m_refGen; }
 
     // vector data
     PdfVectorPicture m_vectorPicture;

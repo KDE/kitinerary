@@ -60,7 +60,7 @@ void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *st
         return;
     }
 
-    if (ref->isRef() && d->m_refNum != ref->getRef().num) {
+    if (ref->isRef() && d->refNum() != ref->getRef().num) {
         return;
     }
 
@@ -122,13 +122,13 @@ QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
     }
     imgStream->close();
 
-    m_page->m_doc->m_imageData[m_refNum] = img;
+    m_page->m_doc->m_imageData[m_ref] = img;
     return img;
 }
 
 QImage PdfImagePrivate::load()
 {
-    const auto it = m_page->m_doc->m_imageData.find(m_refNum);
+    const auto it = m_page->m_doc->m_imageData.find(m_ref);
     if (it != m_page->m_doc->m_imageData.end()) {
         return (*it).second;
     }
@@ -137,7 +137,7 @@ QImage PdfImagePrivate::load()
 
 #if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 69, 0)
     const auto xref = m_page->m_doc->m_popplerDoc->getXRef();
-    const auto obj = xref->fetch(m_refNum, m_refGen);
+    const auto obj = xref->fetch(refNum(), refGen());
     return load(obj.getStream(), m_colorMap.get());
 #else
     std::unique_ptr<ImageLoaderOutputDevice> device(new ImageLoaderOutputDevice(this));
@@ -207,12 +207,12 @@ QImage PdfImage::image() const
 
 bool PdfImage::hasObjectId() const
 {
-    return d->m_refNum >= 0;
+    return !d->m_ref.isNull();
 }
 
-int PdfImage::objectId() const
+PdfImageRef PdfImage::objectId() const
 {
-    return d->m_refNum;
+    return d->m_ref;
 }
 
 bool PdfImage::isVectorImage() const

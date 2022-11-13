@@ -46,8 +46,7 @@ void PdfExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* s
     }
 
     PdfImage pdfImg;
-    pdfImg.d->m_refNum = ref->getRef().num;
-    pdfImg.d->m_refGen = ref->getRef().gen;
+    pdfImg.d->m_ref = PdfImageRef(ref->getRef().num, ref->getRef().gen);
 
 #if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 69, 0)
     pdfImg.d->m_colorMap.reset(colorMap->copy());
