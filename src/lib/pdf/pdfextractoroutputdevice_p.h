@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "pdfimage.h"
 #include "pdflink.h"
 #include "pdfvectorpicture_p.h"
 #include "popplertypes_p.h"
@@ -27,8 +28,10 @@ public:
     // call once displaying has been completed
     void finalize();
 
+    // raster image operations
     bool needNonText() override { return true; }
     void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, PopplerMaskColors *maskColors, bool inlineImg) override;
+    void drawMaskedImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, Stream *maskStr, int maskWidth, int maskHeight, bool maskInvert, bool maskInterpolate) override;
 
     // operations used to detect vector barcodes
     void saveState(GfxState *state) override;
@@ -36,8 +39,11 @@ public:
     void stroke(GfxState *state) override;
     void fill(GfxState *state) override;
     void eoFill(GfxState *state) override;
+
+    // links
     void processLink(AnnotLink *link) override;
 
+    void addRasterImage(GfxState *state, Object *ref, int width, int height, GfxImageColorMap *colorMap, PdfImageType type);
     void addVectorImage(const PdfVectorPicture &pic);
 
     // extracted images
