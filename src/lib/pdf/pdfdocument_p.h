@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "pdfimage.h"
+
 #include <config-kitinerary.h>
 
 #include <QImage>
@@ -21,7 +23,6 @@ class PDFDoc;
 namespace KItinerary {
 
 class PdfDocumentPrivate;
-class PdfImage;
 class PdfLink;
 class PdfPage;
 
@@ -45,7 +46,7 @@ public:
     // and is referenced by the object id from PdfImage to avoid
     // expensive loading/decoding of multiple occurrences of the same image
     // image data in here is stored in its source form, without applied transformations
-    std::unordered_map<int, QImage> m_imageData;
+    std::unordered_map<PdfImageRef, QImage> m_imageData;
     std::vector<PdfPage> m_pages;
     std::unique_ptr<PDFDoc> m_popplerDoc;
 };

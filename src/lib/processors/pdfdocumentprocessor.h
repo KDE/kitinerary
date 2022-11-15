@@ -7,6 +7,7 @@
 #pragma once
 
 #include <KItinerary/ExtractorDocumentProcessor>
+#include <KItinerary/PdfImage>
 
 #include <unordered_set>
 
@@ -27,7 +28,7 @@ public:
     void destroyNode(ExtractorDocumentNode &node) const override;
 
 private:
-    mutable std::unordered_set<int> m_imageIds;
+    mutable std::unordered_set<PdfImageRef> m_imageIds;
 };
 
 }
