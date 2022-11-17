@@ -92,6 +92,7 @@ class KITINERARY_EXPORT PdfDocument : public QObject
     Q_PROPERTY(QVariantList pages READ pagesVariant CONSTANT)
     Q_PROPERTY(QDateTime creationTime READ creationTime CONSTANT)
     Q_PROPERTY(QDateTime modificationTime READ modificationTime CONSTANT)
+    Q_PROPERTY(QString title READ title CONSTANT)
     Q_PROPERTY(QString producer READ producer CONSTANT)
 
 public:
@@ -115,6 +116,8 @@ public:
     /** Modification time as specified in the PDF file. */
     QDateTime modificationTime() const;
 
+    /** The document title. */
+    QString title() const;
     /** The document producer. */
     QString producer() const;
 
