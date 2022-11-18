@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "title",
+            "match": "^Confirmation de votre réservation \\d+$",
+            "mimeType": "application/pdf",
+            "scope": "Current"
+        }
+    ],
+    "function": "parsePdf",
+    "mimeType": "application/pdf",
+    "script": "bateliers-arcachon.js"
+}
