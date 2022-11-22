@@ -592,7 +592,7 @@ QString ExtractorPostprocessorPrivate::processPhoneNumber(const QString &phoneNu
 #else
     Q_UNUSED(addr)
 #endif
-    return phoneNumber;
+    return phoneNumber.simplified();
 }
 
 QVariantList ExtractorPostprocessorPrivate::processActions(QVariantList actions) const
