@@ -16,7 +16,7 @@ function parseHtml(doc) {
 
     var hotelInfo = elems[3].eval(".//table//table");
     var row = hotelInfo[0].firstChild;
-    var addr = row.recursiveContent.match(/([^\n]+)\n\s+([^\n]+)\n\s+([^\n]+)/);
+    var addr = row.recursiveContent.match(/([^\n]+)[\n\s]+([^\n]+)\n\s*([^\n]+)/);
     res.reservationFor.name = addr[1];
     res.reservationFor.address.streetAddress = addr[2];
     res.reservationFor.address.addressLocality = addr[3];

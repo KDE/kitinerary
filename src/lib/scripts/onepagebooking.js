@@ -8,10 +8,10 @@ function main(content) {
 
     const resId = content.match(/Buchungsnummer:\n?\s*(.+)/)[1]
 
-    const arrivalDate = content.match(/Anreisetag:\n? (.+)/)[1]
-    const departureDate = content.match(/Abreisetag:\n? (.+)/)[1]
+    const arrivalDate = content.match(/Anreisetag:\n? *(.+)/)[1]
+    const departureDate = content.match(/Abreisetag:\n? *(.+)/)[1]
 
-    const guestName = content.match(/Gastname:\n? (?:Herr|Frau)? ?(.+)/)[1]
+    const guestName = content.match(/Gastname:\n? *(?:Herr|Frau)? ?(.+)/)[1]
 
     const addressBlock = content.match(/Ihr\n(.*)\n(.*)\n(.*)/)
 
@@ -28,13 +28,13 @@ function main(content) {
     address.streetAddress = street
 
     const telephone = content.match(/Tel.: (.*)/)[1]
-    const email = content.match(/E-Mail:  (.*)/)[1]
+    const email = content.match(/E-Mail: +(.*)/)[1]
 
-    const price = content.match(/Gesamtpreis:\n? (.*) EUR/)[1].replace(',', '.')
+    const price = content.match(/Gesamtpreis:\n? *(.*) EUR/)[1].replace(',', '.')
 
-    const numberAdults = content.match(/Anzahl der Erwachsene[rn]:\n? ([0-9]+)/)[1]
+    const numberAdults = content.match(/Anzahl der Erwachsene[rn]:\n? *([0-9]+)/)[1]
 
-    const numberChildren = content.match(/Anzahl der Kinder:\n? ([0-9]+)/)[1]
+    const numberChildren = content.match(/Anzahl der Kinder:\n? *([0-9]+)/)[1]
 
     var res = JsonLd.newLodgingReservation()
 

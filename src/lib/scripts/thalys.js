@@ -34,7 +34,7 @@ function parseReservation(html, node) {
     res.reservationNumber = ref[2];
 
     var schedule = html.eval('//table[@class="schedule"]')[0].eval(".//tr");
-    var stations = schedule[1].recursiveContent.match(/(.*)\n.*\n(.*)/);
+    var stations = schedule[1].recursiveContent.match(/(.*)[\n\s]+\d{2}:\d{2}[\n\s](.*)/);
     res.reservationFor.departureStation.name = stations[1];
     res.reservationFor.arrivalStation.name = stations[2];
 
@@ -43,7 +43,7 @@ function parseReservation(html, node) {
     res.reservationFor.arrivalTime = JsonLd.toDateTime(ref[1] + times[2], "dd/MM/yyyyhh:mm", "en");
 
     var detailsElem = html.eval('//table[@class="detailtrain"]')[0];
-    var details = detailsElem.recursiveContent.match(/(\d{4})\n[\s\S]*?(\d{1})\n[\s\S]*?(\d{1,2})\n[\s\S]*?(\d{1,3})/);
+    var details = detailsElem.recursiveContent.match(/(\d{4})[\n\s][\s\S]*?(\d{1})[\n\s][\s\S]*?(\d{1,2})[\n\s][\s\S]*?(\d{1,3})/);
     res.reservationFor.trainNumber = "THA " + details[1];
     res.reservedTicket.ticketedSeat.seatingType = details[2];
     res.reservedTicket.ticketedSeat.seatSection = details[3];
