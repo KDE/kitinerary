@@ -111,10 +111,17 @@ HtmlElement HtmlElement::nextSibling() const
 }
 
 #if HAVE_LIBXML2
-static QString normalizeSpaces(const QString &in)
+static void normalizingAppend(QString &out, const QString &in)
 {
-    QString out;
-    out.reserve(in.size());
+    if (in.isEmpty()) {
+        return;
+    }
+
+    const bool needsLeadingSpace = !out.isEmpty() && !out.back().isSpace();
+    out.reserve(out.size() + in.size() + (needsLeadingSpace ? 1 : 0));
+    if (needsLeadingSpace) {
+        out.push_back(QChar::Space);
+    }
 
     // convert non-breaking spaces and windows line break to normal ones, technically not correct
     // but way too often this confuses our regular expressions
@@ -144,8 +151,12 @@ static QString normalizeSpaces(const QString &in)
             out.push_back(c);
         }
     }
+}
 
-    return out.trimmed(); // trailing trim can be done without copying
+static void normalizingLineBreakAppend(QString &s)
+{
+    s = s.trimmed();
+    s.push_back(QChar::LineFeed);
 }
 #endif
 
@@ -162,12 +173,12 @@ QString HtmlElement::content() const
         switch (node->type) {
             case XML_TEXT_NODE:
             case XML_CDATA_SECTION_NODE:
-                s += QString::fromUtf8(reinterpret_cast<const char*>(node->content));
+                normalizingAppend(s, QString::fromUtf8(reinterpret_cast<const char*>(node->content)));
                 break;
             case XML_ENTITY_REF_NODE:
             {
                 const auto val = std::unique_ptr<xmlChar, decltype(xmlFree)>(xmlNodeGetContent(node), xmlFree);
-                s += QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
+                normalizingAppend(s, QString::fromUtf8(reinterpret_cast<const char*>(val.get())));
                 break;
             }
             case XML_ELEMENT_NODE:
@@ -182,7 +193,7 @@ QString HtmlElement::content() const
         node = node->next;
     }
 
-    return normalizeSpaces(s);
+    return s.trimmed(); // trailing trim can be done without copying
 #endif
     return {};
 }
@@ -193,22 +204,20 @@ static void recursiveContent(_xmlNode *node, QString &s)
     switch (node->type) {
         case XML_TEXT_NODE:
         case XML_CDATA_SECTION_NODE:
-            s += QString::fromUtf8(reinterpret_cast<const char*>(node->content));
+            normalizingAppend(s, QString::fromUtf8(reinterpret_cast<const char*>(node->content)));
             return;
         case XML_ENTITY_REF_NODE:
         {
             const auto val = std::unique_ptr<xmlChar, decltype(xmlFree)>(xmlNodeGetContent(node), xmlFree);
-            s += QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
+            normalizingAppend(s, QString::fromUtf8(reinterpret_cast<const char*>(val.get())));
             break;
         }
         case XML_ELEMENT_NODE:
         {
-            if (qstricmp(reinterpret_cast<const char*>(node->name), "br") == 0) {
-                s += QLatin1Char('\n');
-            } else if (qstricmp(reinterpret_cast<const char*>(node->name), "style") == 0) {
+            if (qstricmp(reinterpret_cast<const char*>(node->name), "style") == 0) {
                 return;
-            } else {
-                s += QLatin1Char(' ');
+            } else if (qstricmp(reinterpret_cast<const char*>(node->name), "table") == 0) {
+                normalizingLineBreakAppend(s);
             }
             break;
         }
@@ -224,6 +233,15 @@ static void recursiveContent(_xmlNode *node, QString &s)
         recursiveContent(child, s);
         child = child->next;
     }
+
+    if (node->type == XML_ELEMENT_NODE) {
+        for (const auto elemName : { "br", "p", "tr" }) {
+            if (qstricmp(reinterpret_cast<const char*>(node->name), elemName) == 0) {
+                normalizingLineBreakAppend(s);
+                break;
+            }
+        }
+    }
 }
 #endif
 
@@ -236,7 +254,7 @@ QString HtmlElement::recursiveContent() const
 
     QString s;
     ::recursiveContent(d, s);
-    return normalizeSpaces(s);
+    return s.trimmed(); // trailing trim can be done without copying
 #else
     return {};
 #endif

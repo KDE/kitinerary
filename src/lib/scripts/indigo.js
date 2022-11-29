@@ -27,7 +27,7 @@ function parseHtml(doc) {
         var res = JsonLd.newFlightReservation();
         res.reservationNumber = pnr;
 
-        var f = row.recursiveContent.match(/(.*)\n(.*)\n\s*(\d{2}:\d{2})\s*\n\s*([A-Z0-9]{2}) *(\d{1,4})\s*\n(?:.*\n)*\s*(\d{2}:\d{2})\s*\n(.*)\n\s*(\d{2}:\d{2})/);
+        var f = row.recursiveContent.match(/(\d{2} \S{3} \d{2})[\n\s](.*)[\n\s]\s*(\d{2}:\d{2})[\n\s]\s*([A-Z0-9]{2}) *(\d{1,4})[\s\n]*(?:.*)*\s*(\d{2}:\d{2})\s*(.*)\s*(\d{2}:\d{2})/);
 
         res.reservationFor.departureAirport.name = f[2];
         res.reservationFor.arrivalAirport.name = f[7];

@@ -475,7 +475,7 @@ function parseOuigoConfirmation(html) {
             if (!date) {
                 break;
             }
-            const leg = text.substr(idx).match(/(\d{2}h\d{2})\s+(.*?)\n\s+(\d{2}h\d{2})\s+(.*?)\n\s+TRAIN N° *(.*)\n/);
+            const leg = text.substr(idx).match(/(\d{2}h\d{2})\s+(.*?)\n\s*(\d{2}h\d{2})\s*(.*?)\n\s*TRAIN N° *(.*)\n/);
             var res = JsonLd.newTrainReservation();
             res.reservationNumber = refNum;
             res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + leg[1], "d MMMM yyyyhh'h'mm", "fr");

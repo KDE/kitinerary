@@ -12,7 +12,7 @@ regExMap['en_US']['hotelInformation'] = / *(.+), (.+), (.+), (.+) -\s+Phone: (\+
 regExMap['en_US']['hotelName'] = /\[checkmark\.png\] (.*) is expecting you on/;
 regExMap['en_US']['arrivalDate'] = /Check-in *([A-z]+ [0-9]{1,2} [A-z]+ [0-9]+) \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2})[^\)]*\)/;
 regExMap['en_US']['departureDate'] = /Check-out *([1-z]+ [0-9]{1,2} [A-z]+ [0-9]+) \(.* ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['en_US']['person'] = /Guest name +(.*) Edit guest name/;
+regExMap['en_US']['person'] = /Guest name[\n\s]+(.*?)(?:\n| Edit guest name)/;
 regExMap['en_US']['dateFormat'] = "dddd d MMMM yyyy hh:mm";
 
 regExMap['fr_FR'] = [];
@@ -22,7 +22,7 @@ regExMap['fr_FR']['hotelInformation'] = /(.+), (.+), (.+), (.+) -\s+Téléphone 
 regExMap['fr_FR']['hotelName'] = /L'établissement (.*) vous attend le/;
 regExMap['fr_FR']['arrivalDate'] = /Arrivée  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/;
 regExMap['fr_FR']['departureDate'] = /Départ  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \([0-9]{1,2}:[0-9]{2} - ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['fr_FR']['person'] = /Clients +(.*) Modifier le nom du client/;
+regExMap['fr_FR']['person'] = /Clients[\n\s]+(.*?)(?:\n| Modifier le nom du client)/;
 regExMap['fr_FR']['dateFormat'] = "dddd d MMMM yyyy hh:mm";
 
 regExMap['de_DE'] = [];
@@ -32,8 +32,11 @@ regExMap['de_DE']['hotelInformation'] = /(.+), (.+), (.+), (.+) -\s+Telefon: (\+
 regExMap['de_DE']['hotelName'] = /\[checkmark.png\] Die Unterkunft (.*)\s+erwartet Sie/;
 regExMap['de_DE']['arrivalDate'] = /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(ab ([0-9]{1,2}:[0-9]{2})\)/;
 regExMap['de_DE']['departureDate'] = /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(bis ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['de_DE']['person'] = /Name des Gastes +(.*) Name des Gastes bearbeiten/;
+regExMap['de_DE']['person'] = /Name des Gastes[\n\s]+(.*?)(?:\n| Name des Gastes bearbeiten)/;
 regExMap['de_DE']['dateFormat'] = "dddd, d. MMMM yyyy hh:mm";
+
+regExMap['es_ES'] = [];
+regExMap['es_ES']['person'] = /Nombre del huésped[\n\s]+(.*?)\n/;
 
 function main(text, node) {
     if (node.result.length > 0)
@@ -43,7 +46,7 @@ function main(text, node) {
     for (var locale in regExMap) {
         var bookingRef = text.match(regExMap[locale]['bookingRef']);
         // If no booking reference go to the next locale
-        if (!bookingRef)
+        if (!bookingRef || !regExMap[locale]['bookingRef'])
             continue;
         res.reservationNumber = bookingRef[1];
 
@@ -109,9 +112,13 @@ function parseHtmlCommon(doc, node, res)
     res.checkinTime = times[0].attribute("datetime");
     res.checkoutTime = times[1].attribute("datetime");
 
-    const guest = doc.root.recursiveContent.match(/(?:Guest name|Nombre del huésped|Name des Gastes)[\n\s]+?(\S.*)\n/);
-    if (guest) {
-        res.underName.name = guest[1];
+    const text = doc.root.recursiveContent;
+    for (let locale in regExMap) {
+         const name = text.match(regExMap[locale]['person']);
+         if (name) {
+             res.underName.name = name[1];
+             break;
+         }
     }
 
     return res;
