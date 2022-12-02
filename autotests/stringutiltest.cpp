@@ -55,6 +55,33 @@ private Q_SLOTS:
                  QLatin1String("On-demand services: MobilityData's GOFS project &amp; going further"));
 
     }
+
+    void testBetterString_data()
+    {
+        QTest::addColumn<QString>("s1");
+        QTest::addColumn<QString>("s2");
+        QTest::addColumn<QString>("result");
+
+        QTest::newRow("empty") << QString() << QString() << QString();
+        QTest::newRow("single-case") << _("TEST") << _("test") << _("TEST");
+        QTest::newRow("single-case-inv") << _("test") << _("TEST") << _("TEST");
+        QTest::newRow("mixed-case") << _("TEST") << _("Test") << _("Test");
+        QTest::newRow("mixed-case-inv") << _("Test") << _("TEST") << _("Test");
+        QTest::newRow("single-case-space") << _("TEST NAME 1") << _("test name 1") << _("TEST NAME 1");
+        QTest::newRow("mixed-case-space") << _("TEST NAME 2") << _("Test Name 2") << _("Test Name 2");
+        QTest::newRow("mixed-case-space-inv") << _("Test name 2") << _("TEST NAME 2") << _("Test name 2");
+        QTest::newRow("french-name") << _("Test NAME") << _("Test Name") << _("Test Name");
+        QTest::newRow("french-name-inv") << _("Test Name") << _("Test NAME") << _("Test Name");
+    }
+
+    void testBetterString()
+    {
+        QFETCH(QString, s1);
+        QFETCH(QString, s2);
+        QFETCH(QString, result);
+
+        QCOMPARE(StringUtil::betterString(s1, s2), result);
+    }
 };
 
 QTEST_APPLESS_MAIN(StringUtilTest)

@@ -61,6 +61,7 @@ private Q_SLOTS:
         QTest::newRow("mixed-case in context") << s("Prenom: Konqi The\nNom: Dragon\nmore text") << s("KONQI THE DRAGON");
         QTest::newRow("use in text") << s("Konquering the world with dragonfire") << s("KONQI THE DRAGON");
         QTest::newRow("diacritics") << s("Könqi The Drägon") << s("Könqi The Drägon");
+        QTest::newRow("french-style") << s("Konqi The DRAGON") << s("Konqi The DRAGON");
     }
 
     void testOptimizeFullName()

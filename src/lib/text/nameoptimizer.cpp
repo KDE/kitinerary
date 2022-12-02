@@ -68,7 +68,7 @@ QString NameOptimizer::optimizeNameString(const QString &text, const QString &na
             continue;
         }
 
-        if (StringUtil::betterString(name, QStringView(text).mid(i, name.size())) != name) {
+        if (StringUtil::betterString(QStringView(text).mid(i, name.size()), name) != name) {
             return text.mid(i, name.size());
         }
     }

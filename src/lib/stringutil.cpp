@@ -53,8 +53,24 @@ static bool containsNonAscii(QStringView s)
 
 static bool isMixedCase(QStringView s)
 {
+    const auto letterCount = std::count_if(s.begin(), s.end(), [](auto c) { return c.isLetter(); });
     const auto upperCount = std::count_if(s.begin(), s.end(), [](auto c) { return c.isUpper(); });
-    return upperCount != s.size() && upperCount != 0;
+    return upperCount != letterCount && upperCount != 0;
+}
+
+static int longestUpperCaseSubstring(QStringView s)
+{
+    int globalCount = 0;
+    int count = 0;
+    for (const auto c : s) {
+        if (c.isUpper()) {
+            ++count;
+            continue;
+        }
+        globalCount = std::max(globalCount, count);
+        count = 0;
+    }
+    return std::max(globalCount, count);
 }
 
 QStringView StringUtil::betterString(QStringView lhs, QStringView rhs)
@@ -85,6 +101,24 @@ QStringView StringUtil::betterString(QStringView lhs, QStringView rhs)
     }
     if (!lhsMixedCase && rhsMixedCase) {
         return rhs;
+    }
+
+    if (lhs.size() == rhs.size()) {
+        if (lhsMixedCase && rhsMixedCase) {
+            if (longestUpperCaseSubstring(lhs) > longestUpperCaseSubstring(rhs)) {
+                return rhs;
+            } else if (longestUpperCaseSubstring(lhs) < longestUpperCaseSubstring(rhs)) {
+                return lhs;
+            }
+        }
+        if (!lhsMixedCase && !rhsMixedCase) {
+            if (longestUpperCaseSubstring(lhs) > longestUpperCaseSubstring(rhs)) {
+                return lhs;
+            }
+            else if (longestUpperCaseSubstring(lhs) < longestUpperCaseSubstring(rhs)) {
+                return rhs;
+            }
+        }
     }
 
     // prefer longer == more detailed version
