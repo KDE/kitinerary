@@ -4,6 +4,8 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "testhelpers.h"
+
 #include <KItinerary/Flight>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/MergeUtil>
@@ -310,14 +312,14 @@ private Q_SLOTS:
         const auto mergedL2R = MergeUtil::merge(lhs, rhs);
         auto mergedJson = QJsonDocument(JsonLdDocument::toJson(QVector<QVariant>({mergedL2R})));
         if (mergedJson != expected) {
-            qDebug().noquote() << mergedJson.toJson();
+            Test::compareJson(baseName + QLatin1String(".merged.json"), mergedJson, expected);
         }
         QCOMPARE(mergedJson, expected);
 
         const auto mergedR2L = MergeUtil::merge(rhs, lhs);
         mergedJson = QJsonDocument(JsonLdDocument::toJson(QVector<QVariant>({mergedR2L})));
         if (mergedJson != expected) {
-            qDebug().noquote() << mergedJson.toJson();
+            Test::compareJson(baseName + QLatin1String(".merged.json"), mergedJson, expected);
         }
         QCOMPARE(mergedJson, expected);
     }
