@@ -17,6 +17,7 @@
   <name xml:lang="en-GB">KItinerary Command Line Extractor</name>
   <name xml:lang="es">Extractor de línea de órdenes de KItinerary</name>
   <name xml:lang="et">KItinerary käsurea hankija</name>
+  <name xml:lang="eu">KItinerary komando-lerroko erauzlea</name>
   <name xml:lang="fi">KItineraryn komentorivijäsennin</name>
   <name xml:lang="fr">Extracteur KItinerary en ligne de commande</name>
   <name xml:lang="gl">Extractor de liña de ordes de KItinerary</name>
@@ -35,7 +36,7 @@
   <name xml:lang="sk">Extraktor cez príkazový riadok pre KItinerary</name>
   <name xml:lang="sl">KItinerary ekstraktor ukazne vrstice</name>
   <name xml:lang="sv">Kitinerary extrahering på kommandoraden</name>
-  <name xml:lang="tr">KItinerary Komut Satırı Çıkarıcısı</name>
+  <name xml:lang="tr">KItinerary Komut Satırı Çıkarıcı</name>
   <name xml:lang="uk">Командний засіб видобування KItinerary</name>
   <name xml:lang="x-test">xxKItinerary Command Line Extractorxx</name>
   <name xml:lang="zh-CN">KItinerary 命令行导出工具</name>
@@ -49,6 +50,7 @@
   <summary xml:lang="en-GB">Command line reservation data extractor.</summary>
   <summary xml:lang="es">Extractor de línea de órdenes de reserva de datos.</summary>
   <summary xml:lang="et">Käsurea reserveerimisandmete hankija.</summary>
+  <summary xml:lang="eu">Komando-lerroko erreserbako datu-erauzlea.</summary>
   <summary xml:lang="fi">Komentorivin varaustietojäsennin.</summary>
   <summary xml:lang="fr">Extracteur de données de réservation en ligne de commande.</summary>
   <summary xml:lang="gl">Extractor de datos de reservas de liña de ordes.</summary>
@@ -83,6 +85,7 @@
     <p xml:lang="en-GB">Command line extractor for itinerary data, for integrating into 3rd party applications.</p>
     <p xml:lang="es">Extractor de línea de órdenes para datos de itinerario. para integración en aplicaciones de terceros.</p>
     <p xml:lang="et">Käsurea reisiandmete hankija, mida lõimida kolmanda poole rakendustega.</p>
+    <p xml:lang="eu">Ibilbide-datuen komando-lerroko erauzlea, hirugarrenen aplikazioetan bateratzeko.</p>
     <p xml:lang="fi">Komentorivijäsennin varaustiedoille kolmannen osapuolen sovelluksia varten.</p>
     <p xml:lang="fr">Extracteur en ligne de commande pour les données d'itinéraires, afin de les intégrer à des applications tierces.</p>
     <p xml:lang="gl">Extractor de liña de ordes de datos de itinerarios, para integrar con aplicacións de terceiros.</p>
