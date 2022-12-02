@@ -7,6 +7,7 @@
 #define KITINERARY_NAMEOPTIMIZER_H
 
 class QString;
+class QVariant;
 
 namespace KItinerary {
 
@@ -20,6 +21,7 @@ class NameOptimizer
 {
 public:
     static Person optimizeName(const QString &text, Person person);
+    static QVariant optimizeNameRecursive(const QString &text, QVariant object);
 
 private:
     static QString optimizeNameString(const QString &text, const QString &name);

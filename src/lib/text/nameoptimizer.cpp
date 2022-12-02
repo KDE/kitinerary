@@ -9,6 +9,7 @@
 #include <KItinerary/Person>
 
 #include <QDebug>
+#include <QMetaProperty>
 
 using namespace KItinerary;
 
@@ -73,4 +74,28 @@ QString NameOptimizer::optimizeNameString(const QString &text, const QString &na
     }
 
     return name;
+}
+
+QVariant NameOptimizer::optimizeNameRecursive(const QString &text, QVariant object)
+{
+    if (JsonLd::isA<Person>(object)) {
+        return optimizeName(text, object.value<Person>());
+    }
+
+    const auto mo = QMetaType(object.userType()).metaObject();
+    if (!mo) {
+        return object;
+    }
+
+    for (int i = 0; i < mo->propertyCount(); ++i) {
+        const auto prop = mo->property(i);
+        const auto subMo = QMetaType(prop.userType()).metaObject();
+        if (!prop.isStored() || (!subMo && prop.userType() != QMetaType::QVariant)) {
+            continue;
+        }
+        const auto value = optimizeNameRecursive(text, prop.readOnGadget(object.constData()));
+        prop.writeOnGadget(object.data(), value);
+    }
+
+    return object;
 }
