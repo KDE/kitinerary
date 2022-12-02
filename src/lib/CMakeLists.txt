@@ -103,6 +103,7 @@ target_sources(KPimItinerary PRIVATE
     scripts/extractors.qrc
 
     text/addressparser.cpp
+    text/nameoptimizer.cpp
     text/terminalfinder.cpp
     text/timefinder.cpp
 
