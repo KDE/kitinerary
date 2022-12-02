@@ -7,10 +7,12 @@
 #include "pdfdocumentprocessor.h"
 #include "barcodedocumentprocessorhelper.h"
 #include "pdf/pdfbarcodeutil_p.h"
+#include "text/nameoptimizer_p.h"
 
 #include <KItinerary/BarcodeDecoder>
 #include <KItinerary/ExtractorDocumentNodeFactory>
 #include <KItinerary/ExtractorEngine>
+#include <KItinerary/ExtractorResult>
 #include <KItinerary/PdfDocument>
 
 #include <QImage>
@@ -144,6 +146,24 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
     // fallback node for implicit conversion to plain text
     auto fallback = engine->documentNodeFactory()->createNode(doc->text(), u"text/plain");
     node.appendChild(fallback);
+}
+
+void PdfDocumentProcessor::postExtract(ExtractorDocumentNode &node) const
+{
+    // find the text node we can run the optimizer on
+    if (node.childNodes().empty()) {
+        return;
+    }
+    const QString text = node.childNodes().back().content<QString>();
+
+    // run name optimizer on all results
+    QVector<QVariant> result;
+    const auto res = node.result().result();
+    result.reserve(res.size());
+    for (const auto &r : res) {
+        result.push_back(NameOptimizer::optimizeNameRecursive(text, r));
+    }
+    node.setResult(std::move(result));
 }
 
 QJSValue PdfDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const

@@ -9,9 +9,9 @@
             "@type": "ProgramMembership",
             "member": {
                 "@type": "Person",
-                "familyName": "DRAGON",
+                "familyName": "Dragon",
                 "givenName": "KONQUI",
-                "name": "KONQUI DRAGON"
+                "name": "KONQUI Dragon"
             },
             "membershipNumber": "1234567890123",
             "programName": "AK"
@@ -77,9 +77,9 @@
         },
         "underName": {
             "@type": "Person",
-            "familyName": "DRAGON",
+            "familyName": "Dragon",
             "givenName": "KONQUI",
-            "name": "KONQUI DRAGON"
+            "name": "KONQUI Dragon"
         }
     }
 ]
