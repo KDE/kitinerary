@@ -75,6 +75,33 @@ private Q_SLOTS:
         p = NameOptimizer::optimizeName(input, p);
         QCOMPARE(p.name(), expectedName);
     }
+
+    void testPrefixCleaning_data()
+    {
+        QTest::addColumn<QString>("input");
+        QTest::addColumn<QString>("text");
+        QTest::addColumn<QString>("expected");
+
+        QTest::newRow("suffix-space-end") << s("KONQI THE DR") << s("Dragon/Konqi The") << s("Konqi The");
+        QTest::newRow("suffix-no-space-end") << s("KONQI THEDR") << s("Dragon/Konqi The") << s("Konqi The");
+        QTest::newRow("suffix-space") << s("KONQI THE MR") << s("Mr Konqi The Dragon") << s("Konqi The");
+        QTest::newRow("suffix-no-space") << s("KONQI THEMR") << s("Mr Konqi The Dragon") << s("Konqi The");
+    }
+    void testPrefixCleaning()
+    {
+        QFETCH(QString, input);
+        QFETCH(QString, text);
+        QFETCH(QString, expected);
+
+
+        Person p;
+        p.setGivenName(input);
+        p.setFamilyName(s("DRAGON"));
+
+        p = NameOptimizer::optimizeName(text, p);
+        QCOMPARE(p.givenName(), expected);
+        QCOMPARE(p.familyName(), QLatin1String("Dragon"));
+    }
 };
 
 QTEST_GUILESS_MAIN(NameOptimizerTest)

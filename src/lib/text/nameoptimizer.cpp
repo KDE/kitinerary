@@ -25,15 +25,37 @@ Person NameOptimizer::optimizeName(const QString &text, Person person)
     return person;
 }
 
+static const char* name_prefixes[] = {
+    "DR", "MR", "MRS", "MS"
+};
+
+static bool isNamePrefix(QStringView s)
+{
+    s = s.trimmed();
+    return std::any_of(std::begin(name_prefixes), std::end(name_prefixes), [s](const char *prefix) { return s == QLatin1String(prefix); });
+}
+
 QString NameOptimizer::optimizeNameString(const QString &text, const QString &name)
 {
     if (name.size() < 2) {
         return name;
     }
 
-    for (int i = 0; i < text.size() - name.size() + 1; ++i) {
+    for (int i = 0; i < text.size(); ++i) {
         bool mismatch = false;
+        auto nameLen = name.size();
         for (int j = 0; j < name.size(); ++j) {
+            // reached the end of text
+            if (i + j >= text.size()) {
+                // remainder is either a prefix placed as suffix (see below), or we are unsuccessful
+                if (isNamePrefix(QStringView(name).mid(j))) {
+                    nameLen = j;
+                } else {
+                    return name;
+                }
+                break;
+            }
+
             auto c1 = text.at(i+j).toCaseFolded();
             auto c2 = name.at(j).toCaseFolded();
 
@@ -53,6 +75,12 @@ QString NameOptimizer::optimizeNameString(const QString &text, const QString &na
                 }
             }
 
+            // mismatch: check if the remainder is a name prefix (yes, those also occur frequently as suffixes of name parts in IATA BCBP for example)
+            if (isNamePrefix(QStringView(name).mid(j))) {
+                nameLen = QStringView(name).left(j).trimmed().size();
+                break;
+            }
+
             mismatch = true;
             break;
         }
@@ -64,12 +92,12 @@ QString NameOptimizer::optimizeNameString(const QString &text, const QString &na
         if (i > 0 && text.at(i-1).isLetter()) {
             continue;
         }
-        if (i + name.size() < text.size() && text.at(i + name.size()).isLetter()) {
+        if (i + nameLen < text.size() && text.at(i + nameLen).isLetter()) {
             continue;
         }
 
-        if (StringUtil::betterString(QStringView(text).mid(i, name.size()), name) != name) {
-            return text.mid(i, name.size());
+        if (StringUtil::betterString(QStringView(text).mid(i, nameLen), name) != name) {
+            return text.mid(i, nameLen);
         }
     }
 
