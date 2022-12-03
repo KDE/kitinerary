@@ -20,7 +20,7 @@ class Person;
 class NameOptimizer
 {
 public:
-    static Person optimizeName(const QString &text, Person person);
+    static Person optimizeName(const QString &text, const Person &person);
     static QVariant optimizeNameRecursive(const QString &text, QVariant object);
 
 private:

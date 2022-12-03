@@ -10,19 +10,31 @@
 
 #include <QDebug>
 #include <QMetaProperty>
+#include <QRegularExpression>
 
 using namespace KItinerary;
 
-Person NameOptimizer::optimizeName(const QString &text, Person person)
+Person NameOptimizer::optimizeName(const QString &text, const Person &person)
 {
-    if (person.givenName().isEmpty() && person.familyName().isEmpty()) {
-        person.setName(optimizeNameString(text, person.name().trimmed()));
-        return person;
+    Person p(person);
+    if (p.givenName().isEmpty() && p.familyName().isEmpty()) {
+        p.setName(optimizeNameString(text, p.name().trimmed()));
+        return p;
     }
 
-    person.setFamilyName(optimizeNameString(text, person.familyName().trimmed()));
-    person.setGivenName(optimizeNameString(text, person.givenName().trimmed()));
-    return person;
+    p.setFamilyName(optimizeNameString(text, p.familyName().trimmed()));
+    p.setGivenName(optimizeNameString(text, p.givenName().trimmed()));
+
+    // check for IATA BCBP truncation effects
+    if (person.familyName() != p.familyName() && person.givenName() == p.givenName() && (person.familyName().size() + person.givenName().size()) == 19) {
+        QRegularExpression rx(QLatin1String("(?:^|\\s)(") + p.givenName() + QLatin1String("\\w+) ") + p.familyName() + QLatin1String("(?:$|\\s)"), QRegularExpression::CaseInsensitiveOption);
+        const auto match = rx.match(text);
+        if (match.hasMatch()) {
+            p.setGivenName(match.captured(1));
+        }
+    }
+
+    return p;
 }
 
 static const char* name_prefixes[] = {

@@ -93,7 +93,6 @@ private Q_SLOTS:
         QFETCH(QString, text);
         QFETCH(QString, expected);
 
-
         Person p;
         p.setGivenName(input);
         p.setFamilyName(s("DRAGON"));
@@ -101,6 +100,30 @@ private Q_SLOTS:
         p = NameOptimizer::optimizeName(text, p);
         QCOMPARE(p.givenName(), expected);
         QCOMPARE(p.familyName(), QLatin1String("Dragon"));
+    }
+
+    void testGivenNameCompletion_data()
+    {
+        QTest::addColumn<QString>("input");
+        QTest::addColumn<QString>("text");
+        QTest::addColumn<QString>("expected");
+
+        QTest::newRow("truncated-no-context") << s("SUPERLONGFIRS") << s("Superlongfirstname Dragon") << s("Superlongfirstname");
+        QTest::newRow("truncated-context") << s("SUPERLONGFIRS") << s("Passenger name: Superlongfirstname Dragon\nmore text") << s("Superlongfirstname");
+    }
+
+    void testGivenNameCompletion()
+    {
+        QFETCH(QString, input);
+        QFETCH(QString, text);
+        QFETCH(QString, expected);
+
+        Person p;
+        p.setFamilyName(s("DRAGON"));
+        p.setGivenName(input);
+        p = NameOptimizer::optimizeName(text, p);
+
+        QCOMPARE(p.givenName(), expected);
     }
 };
 
