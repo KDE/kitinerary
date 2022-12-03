@@ -50,5 +50,6 @@ QVariant Token::tokenData(const QString &token)
         return token.mid(7);
     }
 
-    return token;
+    // Qt 6 only does shallow isNull checks, so make sure empty strings produce empty variants
+    return token.isEmpty() ? QVariant() : QVariant(token);
 }
