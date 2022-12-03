@@ -118,7 +118,7 @@ QVariant NameOptimizer::optimizeNameRecursive(const QString &text, QVariant obje
     for (int i = 0; i < mo->propertyCount(); ++i) {
         const auto prop = mo->property(i);
         const auto subMo = QMetaType(prop.userType()).metaObject();
-        if (!prop.isStored() || (!subMo && prop.userType() != QMetaType::QVariant)) {
+        if (!prop.isStored() || prop.isEnumType()|| (!subMo && prop.userType() != QMetaType::QVariant)) {
             continue;
         }
         const auto value = optimizeNameRecursive(text, prop.readOnGadget(object.constData()));
