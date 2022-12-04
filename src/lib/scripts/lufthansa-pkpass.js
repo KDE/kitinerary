@@ -14,13 +14,6 @@ function main(pass, node)
     res.reservationFor.departureAirport.name = pass.field["origin"].label;
     res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
 
-    const secondary = pass.secondaryFields;
-    const passengerName = secondary.find(item => item.key === "passenger");
-    if (passengerName) {
-        res.underName = JsonLd.newObject("Person");
-        res.underName.name = passengerName.value;
-    }
-
     const back = pass.backFields;
     const cancelLink = back.find(item => item.key === "cancel");
     if (cancelLink) {
