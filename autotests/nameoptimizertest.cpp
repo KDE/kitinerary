@@ -110,6 +110,12 @@ private Q_SLOTS:
 
         QTest::newRow("truncated-no-context") << s("SUPERLONGFIRS") << s("Superlongfirstname Dragon") << s("Superlongfirstname");
         QTest::newRow("truncated-context") << s("SUPERLONGFIRS") << s("Passenger name: Superlongfirstname Dragon\nmore text") << s("Superlongfirstname");
+        QTest::newRow("slash-no-context") << s("SUPERLONGFIRS") << s("Dragon/Superlongfirstname") << s("Superlongfirstname");
+        QTest::newRow("slash-context") << s("SUPERLONGFIRS") << s("Passenger name: Mr Dragon / Superlongfirstname\nmore text") << s("Superlongfirstname");
+        QTest::newRow("comma-no-context") << s("SUPERLONGFIRS") << s("Dragon, Superlongfirstname") << s("Superlongfirstname");
+        QTest::newRow("comma-context") << s("SUPERLONGFIRS") << s("Passenger name: Mr Dragon, Superlongfirstname\nmore text") << s("Superlongfirstname");
+        QTest::newRow("uppper-no-context") << s("SUPERLONGFIRS") << s("SUPERLONGFIRSTNAME DRAGON") << s("SUPERLONGFIRSTNAME");
+        QTest::newRow("truncated-context") << s("SUPERLONGFIRS") << s("Passenger name: SUPERLONGFIRSTNAME DRAGON\nmore text") << s("SUPERLONGFIRSTNAME");
     }
 
     void testGivenNameCompletion()

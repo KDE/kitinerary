@@ -14,6 +14,12 @@
 
 using namespace KItinerary;
 
+static const char* name_truncation_pattern[] = {
+    "(?:^|\\s)(%1\\w+) %2(?:$|\\s)",
+    "(?:^|\\s)%2 ?/ ?(%1\\w+)(?:$|\\s)",
+    "(?:^|\\s)%2, (%1\\w+)(?:$|\\s)",
+};
+
 Person NameOptimizer::optimizeName(const QString &text, const Person &person)
 {
     Person p(person);
@@ -26,11 +32,15 @@ Person NameOptimizer::optimizeName(const QString &text, const Person &person)
     p.setGivenName(optimizeNameString(text, p.givenName().trimmed()));
 
     // check for IATA BCBP truncation effects
-    if (person.familyName() != p.familyName() && person.givenName() == p.givenName() && (person.familyName().size() + person.givenName().size()) == 19) {
-        QRegularExpression rx(QLatin1String("(?:^|\\s)(") + p.givenName() + QLatin1String("\\w+) ") + p.familyName() + QLatin1String("(?:$|\\s)"), QRegularExpression::CaseInsensitiveOption);
-        const auto match = rx.match(text);
-        if (match.hasMatch()) {
-            p.setGivenName(match.captured(1));
+    // IATA BCBP has a 20 character size limit, with one character used for separating name parts
+    if (person.givenName() == p.givenName() && (person.familyName().size() + person.givenName().size()) == 19 && person.givenName().size() >= 3) {
+        for (auto pattern : name_truncation_pattern) {
+            QRegularExpression rx(QLatin1String(pattern).arg(QRegularExpression::escape(p.givenName()), QRegularExpression::escape(p.familyName())), QRegularExpression::CaseInsensitiveOption);
+            const auto match = rx.match(text);
+            if (match.hasMatch()) {
+                p.setGivenName(match.captured(1));
+                break;
+            }
         }
     }
 
