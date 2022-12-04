@@ -17,6 +17,7 @@
 #include <KItinerary/Ticket>
 
 #include <knowledgedb/airportdb.h>
+#include <text/nameoptimizer_p.h>
 
 #include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>
@@ -242,6 +243,15 @@ static Event extractEventTicketPass(KPkPass::Pass *pass, Event event)
     return event;
 }
 
+static Person extractPerson(const KPkPass::Pass *pass, Person person)
+{
+    const auto fields = pass->fields();
+    for (const auto &field : fields) {
+        person = NameOptimizer::optimizeName(field.valueDisplayString(), person);
+    }
+    return person;
+}
+
 void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     const auto pass = node.content<KPkPass::Pass*>();
@@ -309,6 +319,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
                     {
                         auto flightRes = res.value<FlightReservation>();
                         flightRes.setReservationFor(extractBoardingPass(pass, flightRes.reservationFor().value<Flight>()));
+                        flightRes.setUnderName(extractPerson(pass, flightRes.underName().value<Person>()));
                         res = flightRes;
                         break;
                     }
