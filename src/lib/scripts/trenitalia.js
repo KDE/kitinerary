@@ -64,12 +64,12 @@ function parsePdf(pdf, node) {
         }
         res.reservationFor.trainNumber = train[1];
 
-        var departure_time = text.match(/(?:Hours|Ore|Stunden)(?:\/Time)? (\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
-        var arrival_time = text.substr(departure_time.index + departure_time[0].length).match(/(?:Hours|Ore|Stunden)(?:\/Time)? (\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
+        var departure_time = text.match(/(?:Hours|Ore|Stunden|Heure)(?:\/Time)? (\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
+        var arrival_time = text.substr(departure_time.index + departure_time[0].length).match(/(?:Hours|Ore|Stunden|Heure)(?:\/Time)? (\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
         res.reservationFor.departureTime = JsonLd.toDateTime(departure_time[2] + departure_time[1], "dd/MM/yyyyhh:mm", "it");
         res.reservationFor.arrivalTime = JsonLd.toDateTime(arrival_time[2] + arrival_time[1], "dd/MM/yyyyhh:mm", "it");
 
-        var header = text.match(/(?:Stazione di Arrivo|Arrival station|Ankunft Bahnhof)/);
+        var header = text.match(/(?:Stazione di Arrivo|Arrival station|Ankunft Bahnhof|Gare d'arrivée)/);
         var dest = text.substr(header.index + header[0].length).match(/\n *((?:\w+\.? )*\w+\.?)  +((?:\w+\.? )*\w+\.?)(?:  |\n)/);
         res.reservationFor.departureStation.name = dest[1];
         res.reservationFor.arrivalStation.name = dest[2];
@@ -81,7 +81,7 @@ function parsePdf(pdf, node) {
                 continue;
             }
             let personalRes = JsonLd.clone(res);
-            var name = text.substr(offset).match(/(?:Passenger Name|Nome Passeggero(?:\/Passenger\n name)?).*\n(?:    .*\n)* ?((?:\w+|\-\-).*?)(?:  |\n)/);
+            var name = text.substr(offset).match(/(?:Passenger Name|Nome Passeggero|Nom du Passager)(?:\/Passenger\n name)?.*\n(?:    .*\n)* ?((?:\w+|\-\-).*?)(?:  |\n)/);
             offset += name.index + name[0].length;
             if (name[1] !== "--") {
                 personalRes.underName.name = name[1];
@@ -89,7 +89,7 @@ function parsePdf(pdf, node) {
                 personalRes.underName.name = "Passenger " + (j + 1);
             }
 
-            var coach = text.match(/(?:Coaches|Carrozza|Wagen)(?:\/Coach)?: +(\S+)/);
+            var coach = text.match(/(?:Coaches|Carrozza|Wagen|Voiture)(?:\/Coach)?: +(\S+)/);
             if (coach) {
                 personalRes.reservedTicket.ticketedSeat.seatSection = coach[1];
             }
