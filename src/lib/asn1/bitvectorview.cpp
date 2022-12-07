@@ -27,6 +27,9 @@ uint8_t BitVectorView::at(BitVectorView::size_type index) const
 {
     const auto majIdx = index / 8;
     const auto minIdx = 7 - (index % 8);
+    if (majIdx >= m_data.size()) {
+        return 0;
+    }
     return (m_data.at(majIdx) & (1 << minIdx)) >> minIdx;
 }
 
