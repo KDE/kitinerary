@@ -55,8 +55,18 @@ UPERDecoder::size_type UPERDecoder::readLengthDeterminant()
     if ((len & 0x80) == 0x00) {
         return len;
     }
+    if ((len & 0xc0) == 0x80) {
+        return ((len & 0x7f) << 8) | readConstrainedWholeNumber(0, 255);
+    }
 
-    setError("Encountered not implemented length determinant variant.");
+    switch (len) {
+        case 0xc1: return 16384;
+        case 0xc2: return 32768;
+        case 0xc3: return 49152;
+        case 0xc4: return 65536;
+    }
+
+    setError("Encountered invalid length determinant.");
     return 0;
 }
 
