@@ -21,8 +21,8 @@ static bool isPlausibleChar(uint8_t c)
 }
 
 struct Result {
-    std::size_t offset;
-    int length;
+    BitVectorView::size_type offset;
+    QByteArray::size_type length;
     QByteArray data;
 };
 
