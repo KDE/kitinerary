@@ -8,3 +8,7 @@ target_link_libraries(ticket-barcode-dump KPimItinerary)
 add_executable(extractor-document-dump extractor-document-dump.cpp)
 target_include_directories(extractor-document-dump PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(extractor-document-dump KPimItinerary)
+
+add_executable(uper-strings uper-strings.cpp)
+target_include_directories(uper-strings PRIVATE ${CMAKE_BINARY_DIR})
+target_link_libraries(uper-strings KPimItinerary)
