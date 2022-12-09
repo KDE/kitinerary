@@ -11,6 +11,7 @@ Dependencies:
     'frameworks/kcodecs' : '@latest'
     'pim/kmime' : '@same'
     'pim/kpkpass' : '@same'
+    'third-party/zxing-cpp': '@latest'
 
 Options:
   # exlucde large generated files from cppcheck, takes way to long to run
