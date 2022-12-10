@@ -151,7 +151,7 @@ private:
         return readChoiceElement<T1, Ts...>(choiceIdx - 1);
     }
     template <typename T>
-    inline QVariant readChoiceElement(int choiceIdx)
+    inline QVariant readChoiceElement([[maybe_unused]] int choiceIdx)
     {
         assert(choiceIdx == 0);
         T value;
