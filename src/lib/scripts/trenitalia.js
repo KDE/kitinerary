@@ -58,30 +58,35 @@ function parsePdf(pdf, node) {
             res.reservationNumber = pnr[1];
         }
 
-        var train = text.match(/(?:Train|Treno|Zug): (.*)\n/);
+        const leftHeaderText = page.textInRect(0.0, 0.15, 0.33, 0.25);
+        const midHeaderText = page.textInRect(0.33, 0.15, 0.65, 0.25);
+        const rightHeaderText = page.textInRect(0.65, 0.15, 1.0, 0.25);
+
+        const train = rightHeaderText.match(/(?:Train|Treno|Zug)(?:\/Train)?:[ \n](.*)\n/);
         if (!train) {
             break;
         }
         res.reservationFor.trainNumber = train[1];
 
-        var departure_time = text.match(/(?:Hours|Ore|Stunden|Heure)(?:\/Time)? (\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
-        var arrival_time = text.substr(departure_time.index + departure_time[0].length).match(/(?:Hours|Ore|Stunden|Heure)(?:\/Time)? (\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
+        const departure_time = leftHeaderText.match(/(\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
+        const arrival_time = midHeaderText.match(/(\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
         res.reservationFor.departureTime = JsonLd.toDateTime(departure_time[2] + departure_time[1], "dd/MM/yyyyhh:mm", "it");
         res.reservationFor.arrivalTime = JsonLd.toDateTime(arrival_time[2] + arrival_time[1], "dd/MM/yyyyhh:mm", "it");
 
-        var header = text.match(/(?:Stazione di Arrivo|Arrival station|Ankunft Bahnhof|Gare d'arrivée)/);
-        var dest = text.substr(header.index + header[0].length).match(/\n *((?:\w+\.? )*\w+\.?)  +((?:\w+\.? )*\w+\.?)(?:  |\n)/);
-        res.reservationFor.departureStation.name = dest[1];
-        res.reservationFor.arrivalStation.name = dest[2];
+        const dep = leftHeaderText.match(/(?:Stazione di Partenza|Departure station|Abfahrtsbahnhof|Gare de départ)(?:\/From)?\n+(.*)\n/);
+        res.reservationFor.departureStation.name = dep[1];
+        const arr = midHeaderText.match(/(?:Stazione di Arrivo|Arrival station|Ankunft Bahnhof|Gare d'arrivée)(?:\/To)?\n+(.*)\n/);
+        res.reservationFor.arrivalStation.name = arr[1];
 
-        const barcodes = node.findChildNodes({ scope: "Descendants", mimeType: "internal/era-ssb", field: "issuerCode", match: "83" });
+        const barcodes = node.findChildNodes({ scope: "Descendants", mimeType: "internal/era-ssb", field: "issuerCode", match: "83" }).concat(node.findChildNodes({ scope: "Descendants", mimeType: "internal/uic9183", field: "carrierId", match: "83" }));
         var offset = 0;
+        const passengerColumn = page.textInRect(0.0, 0.3, 0.27, 1.0);
         for (let j = 0; j < barcodes.length; ++j) {
             if (barcodes[j].location != i) {
                 continue;
             }
             let personalRes = JsonLd.clone(res);
-            var name = text.substr(offset).match(/(?:Passenger Name|Nome Passeggero|Nom du Passager)(?:\/Passenger\n name)?.*\n(?:    .*\n)* ?((?:\w+|\-\-).*?)(?:  |\n)/);
+            var name = passengerColumn.substr(offset).match(/(?:Passenger Name|Nome Passeggero|Nom du Passager)(?:\/Passenger\n *name)?.*\n(?:    .*\n)* *((?:\w+|\-\-).*?)(?:  |\n)/);
             offset += name.index + name[0].length;
             if (name[1] !== "--") {
                 personalRes.underName.name = name[1];
@@ -94,7 +99,11 @@ function parsePdf(pdf, node) {
                 personalRes.reservedTicket.ticketedSeat.seatSection = coach[1];
             }
 
-            personalRes = JsonLd.apply(barcodes[j].result[0], personalRes);
+            if (barcodes[j].result[0]['@type'] == 'TrainReservation') {
+                personalRes = JsonLd.apply(barcodes[j].result[0], personalRes);
+            } else {
+                personalRes.reservedTicket = JsonLd.apply(barcodes[j].result[0], personalRes.reservedTicket);
+            }
             reservations.push(personalRes);
         }
     }

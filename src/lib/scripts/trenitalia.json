@@ -10,7 +10,8 @@
     {
         "mimeType": "application/pdf",
         "filter": [
-            { "mimeType": "internal/era-ssb", "field": "issuerCode", "match": "83", "scope": "Descendants" }
+            { "mimeType": "internal/era-ssb", "field": "issuerCode", "match": "83", "scope": "Descendants" },
+            { "mimeType": "internal/uic9183", "field": "carrierId", "match": "83", "scope": "Descendants" }
         ],
         "script": "trenitalia.js",
         "function": "parsePdf"
