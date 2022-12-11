@@ -8,6 +8,7 @@
 
 #include <bitset>
 #include <cassert>
+#include <cstdint>
 #include <string_view>
 #include <type_traits>
 
