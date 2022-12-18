@@ -35,13 +35,7 @@ QString ExtractorCapabilities::capabilitiesString()
 
         "iCal support        : kcal (" KCALENDARCORE_VERSION_STRING ")\n"
 
-        "Barcode decoder     : "
-#if HAVE_ZXING
-            "zxing (" ZXING_VERSION_STRING ")"
-#else
-            "not available"
-#endif
-        "\n"
+        "Barcode decoder     : ZXing (" ZXING_VERSION_STRING ")\n"
 
         "Phone number decoder: "
 #if HAVE_PHONENUMBER

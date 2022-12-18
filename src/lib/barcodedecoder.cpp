@@ -14,7 +14,6 @@
 #include <QImage>
 #include <QString>
 
-#if HAVE_ZXING
 #define ZX_USE_UTF8 1
 #if ZXING_USE_READBARCODE
 #include <ZXing/ReadBarcode.h>
@@ -22,7 +21,6 @@
 #include <ZXing/DecodeHints.h>
 #include <ZXing/MultiFormatReader.h>
 #include <ZXing/Result.h>
-#endif
 #endif
 
 using namespace KItinerary;
@@ -131,7 +129,6 @@ BarcodeDecoder::BarcodeTypes BarcodeDecoder::maybeBarcode(int width, int height,
     return isPlausibleSize(width, height, hint) & isPlausibleAspectRatio(width, height, hint);
 }
 
-#if HAVE_ZXING
 struct {
     BarcodeDecoder::BarcodeType type;
     ZXing::BarcodeFormat zxingType;
@@ -286,9 +283,6 @@ void BarcodeDecoder::decodeZxing(const QImage &img, BarcodeDecoder::BarcodeTypes
         result.negative |= format;
     }
 }
-#else
-void BarcodeDecoder::decodeZxing(const QImage&, BarcodeDecoder::BarcodeTypes, BarcodeDecoder::Result&) const {}
-#endif
 
 void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTypes hint, BarcodeDecoder::Result &result) const
 {

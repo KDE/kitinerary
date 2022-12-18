@@ -14,7 +14,6 @@
 #define KPOPPLER_VERSION_PATCH @POPPLER_VERSION_PATCH@
 #define KPOPPLER_VERSION ((@POPPLER_VERSION_MAJOR@<<16)|(@POPPLER_VERSION_MINOR@<<8)|(@POPPLER_VERSION_PATCH@))
 
-#cmakedefine01 HAVE_ZXING
 #define ZXING_VERSION_STRING "@ZXing_VERSION@"
 #define ZXING_VERSION_MAJOR @ZXing_VERSION_MAJOR@
 #define ZXING_VERSION_MINOR @ZXing_VERSION_MINOR@
@@ -25,12 +24,10 @@
 #define K_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 // this might compile with older versions too, but it only actually works post 1.1.1
-#if HAVE_ZXING
-    #if ZXING_VERSION > K_VERSION_CHECK(1, 1, 1)
-        #define ZXING_USE_READBARCODE 1
-    #else
-        #define ZXING_USE_READBARCODE 0
-    #endif
+#if ZXING_VERSION > K_VERSION_CHECK(1, 1, 1)
+    #define ZXING_USE_READBARCODE 1
+#else
+    #define ZXING_USE_READBARCODE 0
 #endif
 
 #cmakedefine01 HAVE_LIBXML2

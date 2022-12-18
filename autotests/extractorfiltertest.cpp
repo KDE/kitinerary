@@ -4,8 +4,6 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "config-kitinerary.h"
-
 #include <KItinerary/ExtractorDocumentNode>
 #include <KItinerary/ExtractorDocumentNodeFactory>
 #include <KItinerary/ExtractorDocumentProcessor>
@@ -135,7 +133,6 @@ private Q_SLOTS:
         const auto root = engine.rootDocumentNode();
         QVERIFY(!root.isNull());
 
-#if HAVE_ZXING
         ExtractorFilter filter;
         filter.setMimeType(s("internal/iata-bcbp"));
         filter.setScope(ExtractorFilter::Descendants);
@@ -148,7 +145,6 @@ private Q_SLOTS:
         filter.setFieldName(s("operatingCarrierDesignator"));
         filter.setPattern(s("AK"));
         QVERIFY(filter.matches(root));
-#endif
     }
 };
 

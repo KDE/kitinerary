@@ -4,8 +4,6 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <config-kitinerary.h>
-
 #include "testhelpers.h"
 
 #include <KItinerary/ExtractorEngine>
@@ -112,12 +110,6 @@ private Q_SLOTS:
             QSKIP("nothing extracted");
             return;
         }
-#if !HAVE_ZXING
-        if (jsonResult.isEmpty()) {
-            QSKIP("nothing extracted, but ZXing is missing!");
-            return;
-        }
-#endif
         QVERIFY(!jsonResult.isEmpty());
         const auto result = JsonLdDocument::fromJson(jsonResult);
         ExtractorPostprocessor postproc;

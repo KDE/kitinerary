@@ -4,8 +4,6 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "config-kitinerary.h"
-
 #include <KItinerary/ExtractorDocumentNode>
 #include <KItinerary/ExtractorDocumentNodeFactory>
 #include <KItinerary/ExtractorDocumentProcessor>
@@ -79,9 +77,6 @@ private Q_SLOTS:
         QCOMPARE(c1.mimeType(), QLatin1String("internal/qimage"));
         QVERIFY(!c1.parent().isNull());
         QCOMPARE(c1.content().userType(), qMetaTypeId<QImage>());
-#if !HAVE_ZXING
-        QSKIP("No ZXing support");
-#endif
         QCOMPARE(c1.childNodes().size(), 1); // barcode already expanded by the PDF processor
         QCOMPARE(c1.location().toInt(), 0);
 
@@ -113,9 +108,6 @@ private Q_SLOTS:
         QCOMPARE(c2.location().toInt(), 1);
 
         c2.processor()->expandNode(c2, &engine);
-#if !HAVE_ZXING
-        QSKIP("No ZXing support");
-#endif
         QCOMPARE(c2.childNodes().size(), 1);
         auto c21 = c2.childNodes()[0];
         QVERIFY(!c21.isNull());

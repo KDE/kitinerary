@@ -4,7 +4,6 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "config-kitinerary.h"
 #include "testhelpers.h"
 
 #include <KItinerary/ExtractorDocumentNode>
@@ -56,11 +55,7 @@ private Q_SLOTS:
         QTest::newRow("text/plain") << s(SOURCE_DIR "/scriptenginedata/plain-text.txt") << s(SOURCE_DIR "/scriptenginedata/plain-text.txt.json");
         QTest::newRow("pkpass") << s(SOURCE_DIR "/pkpassdata/swiss.pkpass") << s(SOURCE_DIR "/scriptenginedata/swiss.pkpass.json");
         QTest::newRow("IATA BCBP PDF") << s(SOURCE_DIR "/extractordata/synthetic/iata-bcbp-demo.pdf")
-#if HAVE_ZXING
             << s(SOURCE_DIR "/scriptenginedata/iata-bcbp-demo.pdf.json");
-#else
-            << s(SOURCE_DIR "/scriptenginedata/iata-bcbp-demo.pdf-no-zxing.json");
-#endif
         QTest::newRow("ical") << s(SOURCE_DIR "/extractordata/ical/eventreservation.ics") << s(SOURCE_DIR "/scriptenginedata/eventreservation.ics.json");
         QTest::newRow("uic9183") << s(SOURCE_DIR "/uic918-3/valid/Testw_VOW8XG6_A9E8DXL_0.bin") << s(SOURCE_DIR "/scriptenginedata/Testw_VOW8XG6_A9E8DXL_0.bin.json");
         QTest::newRow("html") << s(SOURCE_DIR "/structureddata/google-flight-reservation-json-ld.html") << s(SOURCE_DIR "/scriptenginedata/google-flight-reservation-json-ld.html.json");
