@@ -16,8 +16,14 @@ function main(html) {
     var hotelName = html.eval('/html/body/table/tr/td/table/tr/td/div/div/div/div/table/tr/td/table/tr/td/div/h2')[0].recursiveContent;
     res.reservationFor.name = 'Premier Inn ' + hotelName;
 
-    // Not sure how to split this up generically
-    // res.reservationFor.address = html.eval('/html/body/table/tr/td/table/tr/td/div/div/div/div/table/tr/td/table/tr/td/div/table/tbody/tr/td')[1].recursiveContent;
+    // This works for the example I have. I'm not sure how brittle it will be
+    // with other examples
+    var address = html.eval('/html/body/table/tr/td/table/tr/td/div/div/div/div/table/tr/td/table/tr/td/div/table/tbody/tr/td')[1].recursiveContent.split(', ');
+    res.reservationFor.address.streetAddress = address[0];
+    res.reservationFor.address.addressLocality = address[1];
+    res.reservationFor.address.addressRegion = address[2];
+    res.reservationFor.address.addressCountry = address[3];
+    res.reservationFor.address.postalCode = address[4];
 
     res.underName.name = html.eval('/html/body/table/tr/td/table/tr/td/div/div/div/div/div/table/tr/td/table/tr/td/div/p')[0].recursiveContent.split('\n')[0];
     
