@@ -1,3 +1,8 @@
+/*
+   SPDX-FileCopyrightText: 2022 Robin Grindrod <robingrindrod@live.ie>
+
+   SPDX-License-Identifier: LGPL-2.0-or-later
+*/
 
 function main(html) {
     var res = JsonLd.newLodgingReservation();
