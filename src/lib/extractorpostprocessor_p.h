@@ -32,6 +32,7 @@ class PostalAddress;
 class ProgramMembership;
 class RentalCar;
 class RentalCarReservation;
+class Seat;
 class TaxiReservation;
 class Ticket;
 class TouristAttractionVisit;
@@ -68,6 +69,7 @@ public:
 
     Ticket processTicket(Ticket ticket) const;
     ProgramMembership processProgramMembership(ProgramMembership program) const;
+    Seat processSeat(Seat seat) const;
 
     template <typename T> T processReservation(T res) const;
     Person processPerson(Person person) const;

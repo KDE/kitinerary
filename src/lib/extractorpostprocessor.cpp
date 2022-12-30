@@ -464,6 +464,7 @@ Ticket ExtractorPostprocessorPrivate::processTicket(Ticket ticket) const
     ticket.setName(StringUtil::clean(ticket.name()));
     ticket.setTicketNumber(ticket.ticketNumber().simplified());
     ticket.setUnderName(processPerson(ticket.underName()));
+    ticket.setTicketedSeat(processSeat(ticket.ticketedSeat()));
     return ticket;
 }
 
@@ -476,6 +477,14 @@ ProgramMembership ExtractorPostprocessorPrivate::processProgramMembership(Progra
     }
     program.setMember(processPerson(program.member()));
     return program;
+}
+
+Seat ExtractorPostprocessorPrivate::processSeat(Seat seat) const
+{
+    seat.setSeatSection(seat.seatSection().simplified());
+    seat.setSeatRow(seat.seatRow().simplified());
+    seat.setSeatNumber(seat.seatNumber().simplified());
+    return seat;
 }
 
 template <typename T>
