@@ -15,7 +15,12 @@ function parsePkPass(pass, node) {
     const addr = loc[1].match(/(.*), (.*?)$/);
     res.reservationFor.location.address.streetAddress = addr[1];
     res.reservationFor.location.address.addressLocality = addr[2];
-    res.reservedTicket.ticketedSeat.seatNumber = pass.field['KEY_BACK_SEATLINE'].value;
+    res.reservedTicket.ticketedSeat.seatSection = pass.field['KEY_AUX_SEAT_2'].value;
+    res.reservedTicket.ticketedSeat.seatRow = pass.field['KEY_AUX_SEAT_3'].value;
+    res.reservedTicket.ticketedSeat.seatNumber = pass.field['KEY_AUX_SEAT_4'].value;
+    if (!res.reservedTicket.ticketedSeat.seatNumber) {
+        res.reservedTicket.ticketedSeat.seatNumber = pass.field['KEY_BACK_SEATLINE'].value;
+    }
     return res;
 }
 
