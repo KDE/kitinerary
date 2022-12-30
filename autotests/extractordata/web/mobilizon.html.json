@@ -1,0 +1,31 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "description": "Jedes Jahr werden weltweit 1,5 Milliarden Smartphones hergestellt und genauso viele mit Ablauf der Updates nach kurzer Nutzungsdauer weggeworfen. Mit Upcycling Android zeigt die Free Software Foundation Europe auf, wie mit Hilfe der Installation Freier Software Betriebssysteme Telefone durch Flashen länger genutzt werden können. Wir werden Beispieltelefone mitbringen, auf welchen Freie Software Betriebssysteme ausprobiert oder auch von den Teilnehmern selbst geflasht werden können. Währenddessen beantworten wir Fragen rund ums Flashen und zeigen mit F-Droid und microG zudem eine Welt voller Freier Software.   Der Workshop findet statt am 20.01.2023 von 16:00 - 20:00 Uhr im Clubraum in der Branddirektion der Alte Feuerwache Köln, Melchiorstraße 3, 50670 Köln. Wenn Sie selbst ein Handy flashen wollen, bringen Sie bitte Ihren eigenen Laptop mit. Wenn Sie Ihr eigenes Handy flashen wollen, machen Sie bitte vorher ein Backup der Daten, die Ihnen wichtig sind. Plätze sind begrenzt, bitte treten sie dem Event hier bei um sich für den Workshop anzumelden. Für Fragen und Rückmeldungen können sie uns auch an upcycling@fsfe.org schreiben.",
+        "endDate": {
+            "@type": "QDateTime",
+            "@value": "2023-01-20T20:00:00+01:00",
+            "timezone": "Europe/Berlin"
+        },
+        "image": "https://mobilize.berlin/media/e57fd69e0cb3b47ef0b0953e61a6f10777345b875cc1f5cdcfaf35ca56a02cde.png?name=1670592919209.png",
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "DE",
+                "addressLocality": "Cologne",
+                "addressRegion": "North Rhine-Westphalia",
+                "postalCode": "50670",
+                "streetAddress": "3 Melchiorstraße"
+            },
+            "name": "Bürgerzentrum Alte Feuerwache"
+        },
+        "name": "Upcycling Android Workshop",
+        "startDate": {
+            "@type": "QDateTime",
+            "@value": "2023-01-20T16:00:00+01:00",
+            "timezone": "Europe/Berlin"
+        }
+    }
+]

@@ -65,6 +65,19 @@ static constexpr const JsonLdFilterEngine::TypeMapping type_mapping[] = {
     { "Winery", "FoodEstablishment" },
 };
 
+static void unpackArray(QJsonObject &obj, QLatin1String key)
+{
+    const auto val = obj.value(key);
+    if (!val.isArray()) {
+        return;
+    }
+    const auto arr = val.toArray();
+    if (arr.isEmpty()) {
+        return;
+    }
+    obj.insert(key, arr.at(0));
+}
+
 static void migrateToAction(QJsonObject &obj, const char *propName, const char *typeName, bool remove)
 {
     const auto value = obj.value(QLatin1String(propName));
@@ -227,10 +240,15 @@ static QJsonArray filterActions(const QJsonValue &v)
     return actions;
 }
 
+static void filterEvent(QJsonObject &obj)
+{
+    unpackArray(obj, QLatin1String("location"));
+}
 
 // filter functions applied to objects of the corresponding (already normalized) type
 // IMPORTANT: keep alphabetically sorted by type!
 static constexpr const JsonLdFilterEngine::TypeFilter type_filters[] = {
+    { "Event", filterEvent },
     { "Flight", filterFlight },
     { "FoodEstablishment", filterFoodEstablishment },
 };
@@ -306,12 +324,8 @@ QJsonArray JsonLdImportFilter::filterObject(const QJsonObject &obj)
             res.insert(QStringLiteral("potentialAction"), filterActions(actions));
         }
 
-        auto image = res.value(QLatin1String("image"));
-        if (image.isArray()) {
-            res.insert(QStringLiteral("image"), image.toArray().first());
-        }
-
-        image = res.value(QLatin1String("image"));
+        unpackArray(res, QLatin1String("image"));
+        const auto image = res.value(QLatin1String("image"));
         if (image.isObject()) {
             const auto imageObject = image.toObject();
             if (imageObject.value(QLatin1String("@type")).toString() == QLatin1String("ImageObject")) {
