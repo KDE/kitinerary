@@ -51,6 +51,10 @@ function parseBarcodeAlternative(data)
     if (header2.getUInt8(8) == 0x81) {
         res.underName.name = ByteArray.decodeUtf8(inner.slice(19, 19 + 45));
     }
+
+    const ticketBlockOffset = header2.getUInt8(8) == 0x81 ? 87 : 23;
+    res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(inner.slice(ticketBlockOffset + 96, ticketBlockOffset + 97));
+
     res.reservedTicket.ticketToken = "pdf417bin:" + ByteArray.toBase64(data);
     return res;
 }
