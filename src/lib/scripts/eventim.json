@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "field": "passTypeIdentifier",
@@ -10,4 +10,15 @@
     "function": "parsePkPass",
     "mimeType": "application/vnd.apple.pkpass",
     "script": "eventim.js"
-}
+},{
+    "filter": [
+        {
+            "match": "[Tt]icket[Dd]irect \\(print@home Ticket\\)",
+            "mimeType": "text/plain",
+            "scope": "Children"
+        }
+    ],
+    "function": "parseTicketDirect",
+    "mimeType": "application/pdf",
+    "script": "eventim.js"
+}]

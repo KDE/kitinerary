@@ -136,7 +136,8 @@ QJSValue JsApi::JsonLd::newEventReservation() const
     auto res = newObject(QStringLiteral("EventReservation"));
     res.setProperty(QStringLiteral("reservationFor"), resFor);
 
-    const auto ticket = newObject(QStringLiteral("Ticket"));
+    auto ticket = newObject(QStringLiteral("Ticket"));
+    ticket.setProperty(QStringLiteral("ticketedSeat"), newObject(QStringLiteral("Seat")));
     res.setProperty(QStringLiteral("reservedTicket"), ticket);
 
     const auto person = newObject(QStringLiteral("Person"));
