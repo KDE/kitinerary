@@ -21,16 +21,21 @@ function parseHtml(doc) {
 
     var res = JsonLd.newLodgingReservation();
 
-    var nameElem = doc.eval("//td[@class=\"title-hotel\"]")[0];
+    var nameElem = doc.eval("//td[@class=\"title-hotel\" or @class=\"hotel-title\"]")[0];
     res.reservationFor.name = nameElem.content;
 
-    var addrElem = nameElem.parent.nextSibling.nextSibling.nextSibling.firstChild;
+    let addrElem = doc.eval("//td[@class=\"hotel-address\"]");
+    if (addrElem.length > 0) {
+        addrElem = addrElem[0];
+    } else {
+        addrElem = nameElem.parent.nextSibling.nextSibling.nextSibling.firstChild;
+    }
     var addr = addrElem.content.match(/(.*), ?([^,]*)/);
     res.reservationFor.address.streetAddress = addr[1];
     res.reservationFor.address.addressLocality = addr[2];
     res.reservationFor.url = lastChild(addrElem).attribute("href");
 
-    var linkRoot = addrElem.parent.nextSibling.nextSibling;
+    var linkRoot = addrElem.parent.parent;
     var links = linkRoot.eval(".//a");
     for (var i = 0; i < links.length; ++i) {
         var url = links[i].attribute("href");
@@ -41,7 +46,6 @@ function parseHtml(doc) {
     }
 
     var bookingRef = doc.eval("//table//tr/td/table//tr/td[2]")[0];
-    console.log(bookingRef.recursiveContent)
     if (bookingRef.content) {
         res.reservationNumber = bookingRef.content;
         var bookingRow = bookingRef.parent.nextSibling.nextSibling;
@@ -56,11 +60,19 @@ function parseHtml(doc) {
         bookingRow = bookingRow.nextSibling.nextSibling;
         res.checkoutTime = parseDateTime(bookingRow.firstChild.nextSibling.content);
     } else {
-        res.reservationNumber = doc.eval("//td[@class='table-confirmation text-bold']/a")[0].content;
+        const resNumElem = doc.eval("//td[@class='table-confirmation text-bold']/a");
+        if (resNumElem.length > 0) {
+            res.reservationNumber = resNumElem[0].content;
 
-        dts = doc.eval("//td[2]/strong");
-        res.checkinTime = parseDateTime(dts[0].content);
-        res.checkoutTime = parseDateTime(dts[1].content);
+            dts = doc.eval("//td[2]/strong");
+            res.checkinTime = parseDateTime(dts[0].content);
+            res.checkoutTime = parseDateTime(dts[1].content);
+        } else {
+            const text = doc.root.recursiveContent;
+            res.reservationNumber = text.match(/Reservation number:[\n ](\d+)/)[1];
+            res.checkinTime = parseDateTime(text.match(/Check-in:[\n ](.*)/i)[1]);
+            res.checkoutTime = parseDateTime(text.match(/Check-out:[\n ](.*)/i)[1]);
+        }
     }
     return res;
 }
