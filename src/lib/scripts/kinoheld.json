@@ -1,0 +1,5 @@
+[{
+    "mimeType": "application/vnd.apple.pkpass",
+    "filter": [ { "field": "passTypeIdentifier", "match": "pass.de.live.kinoheld", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
+    "script": "kinoheld.js"
+}]
