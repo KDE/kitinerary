@@ -151,7 +151,7 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         return isSameFlight(lhsFlight, rhsFlight);
     }
 
-    // train: booking ref, train number and depature day match
+    // train: booking ref, train number and departure day match
     if (JsonLd::isA<TrainReservation>(lhs)) {
         const auto lhsRes = lhs.value<TrainReservation>();
         const auto rhsRes = rhs.value<TrainReservation>();
