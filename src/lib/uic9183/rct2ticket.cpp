@@ -141,8 +141,10 @@ static constexpr const struct {
     { "fahrschein", Rct2Ticket::Transport },
     { "cestovny listok", Rct2Ticket::Transport },
     { "jizdenka", Rct2Ticket::Transport },
+    { "menetjegy", Rct2Ticket::Transport },
     { "reservation", Rct2Ticket::Reservation },
     { "reservierung", Rct2Ticket::Reservation },
+    { "helyjegy", Rct2Ticket::Reservation },
     { "interrail", Rct2Ticket::RailPass },
 };
 

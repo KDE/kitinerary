@@ -84,3 +84,39 @@ function parseTicket(pdf, node, triggerNode) {
     }
     return reservations;
 }
+
+function parseInternationalUic9183(uic9183, node)
+{
+    let res = node.result[0];
+    const rct2 = uic9183.ticketLayout;
+    const train = rct2.text(14, 1, 30, 1).match(/ZUGBINDUNG: (.*?) (.*)?/); // why is this in German??
+    if (train[2] && train[2] != "null") {
+        res.reservationFor.trainNumber = train[2] + ' ' + train[1];
+    } else {
+        res.reservationFor.trainNumber = train[1];
+    }
+    return res;
+}
+
+function parseInternationalTicket(pdf, node, triggerNode)
+{
+    const text = pdf.pages[triggerNode.location].text;
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        let leg = text.substr(idx).match(/(\d\d\.\d\d\.) (\d\d:\d\d) (.*) → (\d\d:\d\d) (.*?)  (.*)/);
+        if (!leg)
+            break;
+        idx = leg.index + leg[0].length;
+
+        let res = JsonLd.newTrainReservation();
+        res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + leg[2], 'dd.MM.hh:mm', 'hu');
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[1] + leg[4], 'dd.MM.hh:mm', 'hu');
+        res.reservationFor.departureStation.name = leg[3];
+        res.reservationFor.arrivalStation.name = leg[5];
+        res.reservationFor.trainNumber = leg[6];
+        res = JsonLd.apply(triggerNode.result[0], res);
+        reservations.push(res);
+    }
+    return reservations;
+}

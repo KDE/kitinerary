@@ -39,5 +39,31 @@
         "function": "parseTicket",
         "mimeType": "application/pdf",
         "script": "mav.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "carrierId",
+                "match": "1155",
+                "mimeType": "internal/uic9183",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseInternationalUic9183",
+        "mimeType": "internal/uic9183",
+        "script": "mav.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "carrierId",
+                "match": "1155",
+                "mimeType": "internal/uic9183",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parseInternationalTicket",
+        "mimeType": "application/pdf",
+        "script": "mav.js"
     }
 ]
