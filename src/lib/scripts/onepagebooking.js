@@ -34,7 +34,7 @@ function main(content) {
 
     const numberAdults = content.match(/Anzahl der Erwachsene[rn]:\n? *([0-9]+)/)[1]
 
-    const numberChildren = content.match(/Anzahl der Kinder:\n? *([0-9]+)/)[1]
+    const numberChildren = content.match(/Anzahl der Kinder:\n? *([0-9]+)/);
 
     var res = JsonLd.newLodgingReservation()
 
@@ -55,7 +55,7 @@ function main(content) {
     res.priceCurrency = "EUR"
 
     res.reservationFor.numAdults = numberAdults
-    res.reservationFor.numChildren = numberChildren
+    res.reservationFor.numChildren = numberChildren ? numberChildren[1] : undefined;
 
     return res
 }
