@@ -383,8 +383,19 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
         qCDebug(CompareLog) << "unbound trip" << lhs.departureStation().name() << rhs.departureStation().name() << lhs.arrivalStation().name() << rhs.arrivalStation().name();
         return LocationUtil::isSameLocation(lhs.departureStation(), rhs.departureStation(), LocationUtil::Exact)
             && LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::Exact);
-    } else if (!equalAndPresent(lhs.departureTime(), rhs.departureTime()) || conflictIfPresent(lhs.arrivalTime(), rhs.arrivalTime())) {
+    } else if (!equalAndPresent(lhs.departureTime(), rhs.departureTime())) {
         return false;
+    }
+
+    // arrival times (when present) should either match exactly, or be almost the same at a matching arrival location
+    // (tickets even for the same connection booked on the same day sometimes have slight variation in the arrival time...)
+    if (conflictIfPresent(lhs.arrivalTime(), rhs.arrivalTime())) {
+        if (std::abs(lhs.arrivalTime().secsTo(rhs.arrivalTime())) > 180) {
+            return false;
+        }
+        if (!LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::Exact)) {
+            return false;
+        }
     }
 
     // if we don't have train numbers, also fall back to the less robust location comparison
