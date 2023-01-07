@@ -127,7 +127,8 @@ struct {
     { u'ä', "ae" },
     { u'ö', "oe" },
     { u'ø', "oe" },
-    { u'ü', "ue" }
+    { u'ü', "ue" },
+    { u'ő', "oe" },
 };
 
 QString StringUtil::transliterate(QStringView s)
