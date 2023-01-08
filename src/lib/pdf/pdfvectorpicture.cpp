@@ -65,8 +65,8 @@ QRectF PdfVectorPicture::boundingRect() const
         return {};
     }
 
-    double maxPenWidth = 0.0;
     if (d->boundingRect.isEmpty()) {
+        double maxPenWidth = 0.0;
         for (const auto &stroke : d->strokes) {
             d->boundingRect = d->boundingRect.united(stroke.path.boundingRect());
             maxPenWidth = std::max(maxPenWidth, stroke.pen.widthF());
