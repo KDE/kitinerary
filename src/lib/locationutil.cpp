@@ -214,6 +214,20 @@ static bool compareSpaceCaseInsenstive(const QString &lhs, const QString &rhs)
     return lit == lhs.end() && rit == rhs.end();
 }
 
+static bool hasCommonPrefix(QStringView lhs, QStringView rhs)
+{
+    // check for a common prefix
+    bool foundSeparator = false;
+    for (auto i = 0; i < std::min(lhs.size(), rhs.size()); ++i) {
+        if (lhs[i].toCaseFolded() != rhs[i].toCaseFolded()) {
+            return foundSeparator;
+        }
+        foundSeparator |= !lhs[i].isLetter();
+    }
+
+    return lhs.startsWith(rhs, Qt::CaseInsensitive) || rhs.startsWith(lhs, Qt::CaseInsensitive);
+}
+
 static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationUtil::Accuracy accuracy)
 {
     if (lhs.isEmpty() || rhs.isEmpty()) {
@@ -237,15 +251,7 @@ static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationU
 
     if (accuracy == LocationUtil::CityLevel) {
         // check for a common prefix
-        bool foundSeparator = false;
-        for (auto i = 0; i < std::min(lhsNormalized.size(), rhsNormalized.size()); ++i) {
-            if (lhsNormalized[i] != rhsNormalized[i]) {
-                return foundSeparator;
-            }
-            foundSeparator |= !lhsNormalized[i].isLetter();
-        }
-
-        return lhsNormalized.startsWith(rhsNormalized) || rhsNormalized.startsWith(lhsNormalized);
+        return hasCommonPrefix(lhsNormalized, rhsNormalized) || hasCommonPrefix(lhsTransliterated, rhsTransliterated);
     }
 
     return false;

@@ -63,9 +63,12 @@ QDateTime Rct2TicketPrivate::parseTime(const QString &dateStr, const QString &ti
     }
 
     const auto validDt = firstDayOfValidity();
-    const auto year = validDt.isValid() ? validDt.year() : contextDt.date().year();
-
-    return QDateTime({year, d.month(), d.day()}, t);
+    const auto baseDate = validDt.isValid() ? validDt : contextDt.date();
+    auto dt = QDateTime({baseDate.year(), d.month(), d.day()}, t);
+    if (dt.isValid() && dt.date() < baseDate) {
+        dt = dt.addYears(1);
+    }
+    return dt;
 }
 
 static constexpr const char* res_patterns[] = {
@@ -138,8 +141,10 @@ static constexpr const struct {
     { "fahrschein", Rct2Ticket::Transport },
     { "cestovny listok", Rct2Ticket::Transport },
     { "jizdenka", Rct2Ticket::Transport },
+    { "menetjegy", Rct2Ticket::Transport },
     { "reservation", Rct2Ticket::Reservation },
     { "reservierung", Rct2Ticket::Reservation },
+    { "helyjegy", Rct2Ticket::Reservation },
     { "interrail", Rct2Ticket::RailPass },
 };
 

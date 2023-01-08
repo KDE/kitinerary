@@ -9,25 +9,28 @@ function parseDateTime(value)
     return new Date(value * 1000 + base.getTime());
 }
 
+function parseUicStationCode(value)
+{
+    value &= 0xffffff;
+    return value < 1000000 ? undefined : "uic:" + value;
+}
+
 // see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
-function parseBarcode(data) {
-    var res = JsonLd.newTrainReservation();
-    const inner = ByteArray.inflate(data.slice(2));
-    const view = new DataView(inner);
-    res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
-    res.reservationFor.provider.identifier = "uic:" + view.getUint16(18, false);
-    const tripBlockOffset = view.getUInt8(28) == 0x81 ? 107 : 43;
-    res.reservationFor.departureStation.identifier = "uic:" + (view.getUint32(tripBlockOffset - 1, false) & 0xffffff);
+// data starts at offset 20 in the header block, at which point both formats are structurally identical
+function parseBarcodeCommon(res, data) {
+    const view = new DataView(data);
+    const tripBlockOffset = view.getUInt8(8) == 0x81 ? 87 : 23;
+    res.reservationFor.departureStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset - 1, false));
     res.reservationFor.departureStation.name = "" + (view.getUint32(tripBlockOffset - 1, false) & 0xffffff);
-    res.reservationFor.arrivalStation.identifier = "uic:" + (view.getUint32(tripBlockOffset + 2 , false) & 0xffffff);
+    res.reservationFor.arrivalStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset + 2 , false));
     res.reservationFor.arrivalStation.name = "" + (view.getUint32(tripBlockOffset + 2, false) & 0xffffff);
-    res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(inner.slice(tripBlockOffset + 96, tripBlockOffset + 97));
+    res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(tripBlockOffset + 96, tripBlockOffset + 97));
     res.reservationFor.departureDay = parseDateTime(view.getUint32(tripBlockOffset + 98, false));
-    if (view.getUInt8(28) == 0x81) {
-        res.underName.name = ByteArray.decodeUtf8(inner.slice(39, 39 + 45));
+    if (view.getUInt8(8) == 0x81) {
+        res.underName.name = ByteArray.decodeUtf8(data.slice(19, 19 + 45));
     }
-    for (var i = 0; i < view.getUInt8(30); ++i) {
-        const seatBlock = inner.slice(inner.byteLength - ((i+1) *57));
+    for (var i = 0; i < view.getUInt8(10); ++i) {
+        const seatBlock = data.slice(data.byteLength - ((i+1) *57));
         const seatView = new DataView(seatBlock);
         res.reservationFor.trainNumber = ByteArray.decodeUtf8(seatBlock.slice(16, 16+5));
         if (seatView.getUInt8(22) == 0) { // surcharge block
@@ -36,6 +39,15 @@ function parseBarcode(data) {
         res.reservedTicket.ticketedSeat.seatSection = ByteArray.decodeUtf8(seatBlock.slice(22, 25));
         res.reservedTicket.ticketedSeat.seatNumber = seatView.getUInt16(25, false);
     }
+}
+
+function parseBarcode(data) {
+    var res = JsonLd.newTrainReservation();
+    const inner = ByteArray.inflate(data.slice(2));
+    const view = new DataView(inner);
+    res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
+    res.reservationFor.provider.identifier = "uic:" + view.getUint16(18, false);
+    parseBarcodeCommon(res, inner.slice(20));
     res.reservedTicket.ticketToken = "pdf417bin:" + ByteArray.toBase64(data);
     return res;
 }
@@ -47,14 +59,7 @@ function parseBarcodeAlternative(data)
     res.reservationFor.provider.identifier = "uic:" + ByteArray.decodeUtf8(data.slice(20, 24));
 
     const inner = ByteArray.inflate(data.slice(24));
-    const header2 = new DataView(inner.slice(0, 19));
-    if (header2.getUInt8(8) == 0x81) {
-        res.underName.name = ByteArray.decodeUtf8(inner.slice(19, 19 + 45));
-    }
-
-    const ticketBlockOffset = header2.getUInt8(8) == 0x81 ? 87 : 23;
-    res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(inner.slice(ticketBlockOffset + 96, ticketBlockOffset + 97));
-
+    parseBarcodeCommon(res, inner);
     res.reservedTicket.ticketToken = "pdf417bin:" + ByteArray.toBase64(data);
     return res;
 }
@@ -75,6 +80,42 @@ function parseTicket(pdf, node, triggerNode) {
         res.reservationFor.departureTime = JsonLd.toDateTime(trip[1] + trip[2], ["yyyy.MM.ddhh:mm", "dd.MM.yyyyhh:mm"], "hu");
         res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[1] + trip[5], ["yyyy.MM.ddhh:mm", "dd.MM.yyyyhh:mm"], "hu");
         res.reservationFor.trainNumber = trip[6];
+        reservations.push(res);
+    }
+    return reservations;
+}
+
+function parseInternationalUic9183(uic9183, node)
+{
+    let res = node.result[0];
+    const rct2 = uic9183.ticketLayout;
+    const train = rct2.text(14, 1, 30, 1).match(/ZUGBINDUNG: (.*?) (.*)?/); // why is this in German??
+    if (train[2] && train[2] != "null") {
+        res.reservationFor.trainNumber = train[2] + ' ' + train[1];
+    } else {
+        res.reservationFor.trainNumber = train[1];
+    }
+    return res;
+}
+
+function parseInternationalTicket(pdf, node, triggerNode)
+{
+    const text = pdf.pages[triggerNode.location].text;
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        let leg = text.substr(idx).match(/(\d\d\.\d\d\.) (\d\d:\d\d) (.*) → (\d\d:\d\d) (.*?)  (.*)/);
+        if (!leg)
+            break;
+        idx = leg.index + leg[0].length;
+
+        let res = JsonLd.newTrainReservation();
+        res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + leg[2], 'dd.MM.hh:mm', 'hu');
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[1] + leg[4], 'dd.MM.hh:mm', 'hu');
+        res.reservationFor.departureStation.name = leg[3];
+        res.reservationFor.arrivalStation.name = leg[5];
+        res.reservationFor.trainNumber = leg[6];
+        res = JsonLd.apply(triggerNode.result[0], res);
         reservations.push(res);
     }
     return reservations;
