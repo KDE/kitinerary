@@ -51,7 +51,7 @@ public:
 
     constexpr inline bool isNull() const
     {
-        return m_refNum >= 0;
+        return m_refNum < 0;
     }
 
     constexpr inline bool operator==(const PdfImageRef &other) const
