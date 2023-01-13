@@ -342,7 +342,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
     node.setResult(QVector<QVariant>({res}));
 }
 
-void PkPassDocumentProcessor::postExtract(ExtractorDocumentNode &node) const
+void PkPassDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     const auto pass = node.content<KPkPass::Pass*>();
     if (pass->passTypeIdentifier().isEmpty() || pass->serialNumber().isEmpty()) {

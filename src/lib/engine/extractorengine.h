@@ -159,6 +159,7 @@ public:
     enum Hint {
         NoHint = 0,
         ExtractFullPageRasterImages = 1, ///< perform expensive image processing on (PDF) documents containing full page raster images
+        ExtractGenericIcalEvents = 2, ///< generate Event objects for generic ical events.
     };
     Q_DECLARE_FLAGS(Hints, Hint)
 

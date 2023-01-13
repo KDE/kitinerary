@@ -97,7 +97,7 @@ bool ExtractorDocumentProcessor::matchesGadget(const ExtractorFilter &filter, co
     return matchesGadgetInternal(filter, filter.fieldName(), mo, obj);
 }
 
-void ExtractorDocumentProcessor::postExtract([[maybe_unused]] ExtractorDocumentNode &node) const
+void ExtractorDocumentProcessor::postExtract([[maybe_unused]] ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
 }
 

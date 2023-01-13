@@ -81,7 +81,13 @@ private Q_SLOTS:
         QFETCH(QString, inputFile);
 
         m_engine.clear();
-        m_engine.setHints(inputFile.endsWith(QLatin1String(".png")) ? ExtractorEngine::ExtractFullPageRasterImages : ExtractorEngine::NoHint);
+        if (inputFile.endsWith(QLatin1String(".png"))) {
+            m_engine.setHints(ExtractorEngine::ExtractFullPageRasterImages);
+        } else if (inputFile.endsWith(QLatin1String(".ics"))) {
+            m_engine.setHints(ExtractorEngine::ExtractGenericIcalEvents);
+        } else {
+            m_engine.setHints(ExtractorEngine::NoHint);
+        }
 
         QFile inFile(inputFile);
         const auto openFlags = inputFile.endsWith(QLatin1String(".txt")) ? QFile::Text : QFile::ReadOnly;

@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//foss.events//foss.events//
+BEGIN:VEVENT
+SUMMARY:Akademy
+DTSTART;VALUE=DATE:20221001
+DTEND;VALUE=DATE:20221008
+DTSTAMP:20230110T205735
+UID:event_1649185028@foss.events
+SEQUENCE:0
+DESCRIPTION:Akademy is the annual world summit of KDE\, one of the largest
+  Free Software communities in the world. It is a free\, non-commercial eve
+ nt organized by the KDE Community.\n\nKDE is an international team co-oper
+ ating on development and distribution of Free\, Open Source Software for d
+ esktop and portable computing. Our community has developed a wide variety 
+ of applications for communication\, work\, education\, and entertainment. 
+ We have a strong focus on finding innovative solutions to old and new prob
+ lems\, creating an energetic and open atmosphere for experimentation.\n\n\
+ n\nRead everything about Akademy in a nutshell on // foss.events: https://
+ foss.events/2022/10-01-akademy.html\n\nOfficial Homepage: https://akademy.
+ kde.org/2022\n\nFind your way: https://www.openstreetmap.org/relation/8906
+ 511\n
+GEO:41.39061;2.11379
+LOCATION:Universitat Politècnica de Catalunya\, Barcelona\, Spain
+URL:https://foss.events/2022/10-01-akademy.html
+END:VEVENT
+END:VCALENDAR

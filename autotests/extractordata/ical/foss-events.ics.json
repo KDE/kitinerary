@@ -1,0 +1,32 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "description": "Akademy is the annual world summit of KDE, one of the largest Free Software communities in the world. It is a free, non-commercial event organized by the KDE Community.\n\nKDE is an international team co-operating on development and distribution of Free, Open Source Software for desktop and portable computing. Our community has developed a wide variety of applications for communication, work, education, and entertainment. We have a strong focus on finding innovative solutions to old and new problems, creating an energetic and open atmosphere for experimentation.\n\n\n\nRead everything about Akademy in a nutshell on // foss.events: https://foss.events/2022/10-01-akademy.html\n\nOfficial Homepage: https://akademy.kde.org/2022\n\nFind your way: https://www.openstreetmap.org/relation/8906511\n",
+        "endDate": {
+            "@type": "QDateTime",
+            "@value": "2022-10-07T23:59:59+02:00",
+            "timezone": "Europe/Madrid"
+        },
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "ES"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 41.39060974121094,
+                "longitude": 2.1137900352478027
+            },
+            "name": "Universitat Politècnica de Catalunya, Barcelona, Spain"
+        },
+        "name": "Akademy",
+        "startDate": {
+            "@type": "QDateTime",
+            "@value": "2022-10-01T00:00:00+02:00",
+            "timezone": "Europe/Madrid"
+        },
+        "url": "https://foss.events/2022/10-01-akademy.html"
+    }
+]

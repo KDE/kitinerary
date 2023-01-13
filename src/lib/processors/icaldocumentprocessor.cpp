@@ -7,10 +7,12 @@
 #include "icaldocumentprocessor.h"
 #include "logging.h"
 
+#include <KItinerary/Event>
 #include <KItinerary/ExtractorDocumentNodeFactory>
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorFilter>
 #include <KItinerary/ExtractorResult>
+#include <KItinerary/Place>
 
 #include <KCalendarCore/ICalFormat>
 #include <KCalendarCore/MemoryCalendar>
@@ -85,6 +87,42 @@ void IcalEventProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]
     if (!data.isEmpty()) {
         node.addResult(QJsonDocument::fromJson(data.toUtf8()).array());
     }
+}
+
+void IcalEventProcessor::postExtract(ExtractorDocumentNode &node, const ExtractorEngine* engine) const
+{
+    if (!node.result().isEmpty() || (engine->hints() & ExtractorEngine::ExtractGenericIcalEvents) == 0) {
+        return;
+    }
+
+    const auto event = node.content<KCalCore::Event::Ptr>();
+    if (event->recurs() || event->hasRecurrenceId()) {
+        return;
+    }
+
+    Event e;
+    e.setName(event->summary());
+    e.setDescription(event->description());
+    e.setUrl(event->url());
+
+    if (event->allDay()) {
+        e.setStartDate(QDateTime(event->dtStart().date(), {0, 0}, Qt::LocalTime));
+        e.setEndDate(QDateTime(event->dtEnd().date(), {23, 59, 59}, Qt::LocalTime));
+    } else {
+        e.setStartDate(event->dtStart());
+        e.setEndDate(event->dtEnd());
+    }
+
+    Place venue;
+    venue.setName(event->location()); // TODO attempt to detect addresses in here
+    if (event->hasGeo()) {
+        venue.setGeo({event->geoLatitude(), event->geoLongitude()});
+    }
+    e.setLocation(venue);
+
+    // TODO attachments?
+
+    node.addResult(QVector<QVariant>{QVariant::fromValue(e)});
 }
 
 QJSValue IcalEventProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const

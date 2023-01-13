@@ -24,7 +24,7 @@ public:
     ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
     ExtractorDocumentNode createNodeFromContent(const QVariant &decodedData) const override;
     void expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const override;
-    void postExtract(ExtractorDocumentNode &node) const override;
+    void postExtract(ExtractorDocumentNode &node, const ExtractorEngine *engine) const override;
     QJSValue contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const override;
     void destroyNode(ExtractorDocumentNode &node) const override;
 

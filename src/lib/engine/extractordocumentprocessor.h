@@ -62,7 +62,7 @@ public:
      *  This can be used for applying document type specific data to the extracted result.
      *  The default implementation does nothing.
      */
-    virtual void postExtract(ExtractorDocumentNode &node) const;
+    virtual void postExtract(ExtractorDocumentNode &node, const ExtractorEngine *engine) const;
 
     /** Create a QJSValue for the node content.
      *  The default implementation is sufficient if the content is a QObject pointer, QGadget value,

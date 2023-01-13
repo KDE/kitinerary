@@ -81,7 +81,7 @@ void ExtractorEnginePrivate::processNode(ExtractorDocumentNode& node)
         node.setResult(std::move(nodeResult));
     }
 
-    node.processor()->postExtract(node);
+    node.processor()->postExtract(node, q);
 
     // set modification time for all results that don't have it yet
     if (node.contextDateTime().isValid()) {

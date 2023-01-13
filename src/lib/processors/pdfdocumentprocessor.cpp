@@ -148,7 +148,7 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
     node.appendChild(fallback);
 }
 
-void PdfDocumentProcessor::postExtract(ExtractorDocumentNode &node) const
+void PdfDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     // find the text node we can run the optimizer on
     if (node.childNodes().empty()) {
