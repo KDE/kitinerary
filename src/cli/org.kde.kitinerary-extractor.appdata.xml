@@ -36,7 +36,7 @@
   <name xml:lang="sk">Extraktor cez príkazový riadok pre KItinerary</name>
   <name xml:lang="sl">KItinerary ekstraktor ukazne vrstice</name>
   <name xml:lang="sv">Kitinerary extrahering på kommandoraden</name>
-  <name xml:lang="tr">KItinerary Komut Satırı Çıkarıcı</name>
+  <name xml:lang="tr">K Yolcu Belgesi Komut Satırı Çıkarıcısı</name>
   <name xml:lang="uk">Командний засіб видобування KItinerary</name>
   <name xml:lang="x-test">xxKItinerary Command Line Extractorxx</name>
   <name xml:lang="zh-CN">KItinerary 命令行导出工具</name>
@@ -69,7 +69,7 @@
   <summary xml:lang="sk">Extraktor dát pre rezerváciu cez príkazový riadok.</summary>
   <summary xml:lang="sl">Ekstraktor podatkov o rezervaciji v ukazni vrstici.</summary>
   <summary xml:lang="sv">Extrahering av reservationsdata på kommandoraden</summary>
-  <summary xml:lang="tr">Komut sayırı ayırma veri çıkarıcısı.</summary>
+  <summary xml:lang="tr">Komut satırında çalışan rezervasyon verisi çıkarıcı.</summary>
   <summary xml:lang="uk">Програма для видобування даних бронювання, керування якою відбувається з командного рядка.</summary>
   <summary xml:lang="x-test">xxCommand line reservation data extractor.xx</summary>
   <summary xml:lang="zh-CN">命令行行程预订数据导出工具。</summary>
@@ -104,7 +104,7 @@
     <p xml:lang="sk">Extraktor cez príkazový riadok pre dáta itinerára na integráciu do aplikácií tretích strán.</p>
     <p xml:lang="sl">Ekstraktor ukazne vrstice za potovalne podatke za integracijo aplikacije tretje osebe.</p>
     <p xml:lang="sv">Extrahering av reseinformation på kommandoraden, för att integrera med tredjepartsprogram.</p>
-    <p xml:lang="tr">Üçüncü parti uygulamalarla tümleştirmek için yolculuk verisi komut satırı çıkarıcısı.</p>
+    <p xml:lang="tr">Üçüncü parti uygulamalarla tümleştirmek için komut satırında çalışan yolcu belgesi verisi çıkarıcısı.</p>
     <p xml:lang="uk">Програма, керування якою відбувається з командного рядка, для видобування даних бронювання. Призначено для інтеграції зі сторонніми програмами.</p>
     <p xml:lang="x-test">xxCommand line extractor for itinerary data, for integrating into 3rd party applications.xx</p>
     <p xml:lang="zh-CN">命令行行程数据导出工具，用于与第三方应用程序进行整合。</p>
