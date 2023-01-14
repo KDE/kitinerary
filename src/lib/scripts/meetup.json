@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "uid",
+            "match": "@meetup.com",
+            "mimeType": "internal/event",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseEvent",
+    "mimeType": "internal/event",
+    "script": "meetup.js"
+}

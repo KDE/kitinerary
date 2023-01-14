@@ -114,6 +114,8 @@
         <file>lufthansa-pkpass.js</file>
         <file>mav.json</file>
         <file>mav.js</file>
+        <file>meetup.json</file>
+        <file>meetup.js</file>
         <file>nationalexpress.json</file>
         <file>nationalexpress.js</file>
         <file>nationalrail.json</file>
