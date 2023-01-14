@@ -135,6 +135,29 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
 QVector<QVariant> ExtractorPostprocessor::result() const
 {
     if (!d->m_resultFinalized) {
+        // fold elements we have reservations for into those reservations
+        for (auto it = d->m_data.begin(); it != d->m_data.end();) {
+            if (JsonLd::isA<Reservation>(*it)) {
+                ++it;
+                continue;
+            }
+
+            bool merged = false;
+            for (auto it2 = d->m_data.begin(); it2 != d->m_data.end(); ++it2) {
+                const auto resFor = JsonLdDocument::readProperty(*it2, "reservationFor");
+                if (MergeUtil::isSame(resFor, *it)) {
+                    JsonLdDocument::writeProperty(*it2, "reservationFor", MergeUtil::merge(resFor, *it));
+                    merged = true;
+                }
+            }
+
+            if (merged) {
+                it = d->m_data.erase(it);
+            } else {
+                ++it;
+            }
+        }
+
         if (d->m_validationEnabled) {
             d->m_data.erase(std::remove_if(d->m_data.begin(), d->m_data.end(), [this](const auto &elem) {
                 return !d->m_validator.isValidElement(elem);
