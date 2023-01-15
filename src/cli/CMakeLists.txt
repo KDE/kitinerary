@@ -6,15 +6,18 @@ if (ANDROID)
     return()
 endif()
 
+option(KITINERARY_STANDALONE_CLI_EXTRACTOR "Build stand-alone command line extractor (this should be off, unless you are building the dedicated Flatpak for this" OFF)
+
 add_executable(kitinerary-extractor main.cpp)
 target_include_directories(kitinerary-extractor PRIVATE ${CMAKE_BINARY_DIR})
+if (KITINERARY_STANDALONE_CLI_EXTRACTOR)
+    target_compile_definitions(kitinerary-extractor PRIVATE -DKITINERARY_STANDALONE_CLI_EXTRACTOR)
+endif()
 target_link_libraries(kitinerary-extractor
     KPimItinerary
     KPim::PkPass
     KF5::CalendarCore
 )
-
-option(KITINERARY_STANDALONE_CLI_EXTRACTOR "Build stand-alone command line extractor (this should be off, unless you are building the dedicated Flatpak for this" OFF)
 
 if (KITINERARY_STANDALONE_CLI_EXTRACTOR)
     install(TARGETS kitinerary-extractor DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
