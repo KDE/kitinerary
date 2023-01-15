@@ -37,7 +37,8 @@
                     "status": 0,
                     "summary": "Akademy 2019",
                     "transparency": 0,
-                    "uid": "KIT-1234567890-1b22236a-21ff-4885-8c99-b3b2bbca062c"
+                    "uid": "KIT-1234567890-1b22236a-21ff-4885-8c99-b3b2bbca062c",
+                    "url": ""
                 },
                 "contextDateTime": "Invalid Date",
                 "isNull": false,
