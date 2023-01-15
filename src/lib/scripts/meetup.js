@@ -21,8 +21,7 @@ function parseEvent(event) {
     } else {
         res.location.name = event.location;
     }
-    res.location.geo.latitude = event.geoLatitude;
-    res.location.geo.longitude = event.geoLongitude;
+    // explicitly not use geo coordinates, they only point to the city, not the exact location
     res.description = event.description;
     res.url = event.url;
     return res;

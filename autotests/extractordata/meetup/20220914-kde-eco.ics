@@ -1,0 +1,48 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Meetup//Meetup Events v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Events - Green Coding
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+TZURL:http://tzurl.org/zoneinfo-outlook/Europe/Berlin
+X-LIC-LOCATION:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20220914T084831Z
+DTSTART;TZID=Europe/Berlin:20220914T183000
+DTEND;TZID=Europe/Berlin:20220914T203000
+STATUS:CONFIRMED
+SUMMARY:Sustainable Software - KDE Eco [x] Green Coding Berlin
+DESCRIPTION:Green Coding\nWednesday\, September 14 at 6:30 PM\n\nThis tim
+ e we have teamed with The KDE Eco Team to co-host host another Meetup fo
+ r the Green Software Community in Berlin. In this talk Joseph P. De Ve..
+ .\n\nhttps://www.meetup.com/green-coding/events/287887811/
+ORGANIZER;CN=Meetup Reminder:MAILTO:info@meetup.com
+CLASS:PUBLIC
+CREATED:20220817T210148Z
+GEO:52.52;13.38
+LOCATION:betahaus | Kreuzberg (Rudi-Dutschke-Straße 23\, Berlin\, BE\, Ge
+ rmany 10969)
+URL:https://www.meetup.com/green-coding/events/287887811/
+SEQUENCE:4
+LAST-MODIFIED:20220817T210234Z
+UID:event_287887811@meetup.com
+END:VEVENT
+END:VCALENDAR

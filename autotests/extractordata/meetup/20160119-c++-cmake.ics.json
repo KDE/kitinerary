@@ -1,0 +1,29 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "description": "Die Berlin C++ Meetup Gruppe\nTuesday, January 19 at 7:00 PM\n\nDear C++ Community Berlin, we wish you a Happy New Year! For our January Meetup we have Stephen Kelly from Ableton speaking about a very interesting C...\n\nhttp://www.meetup.com/berlincplusplus/events/227896427/",
+        "endDate": {
+            "@type": "QDateTime",
+            "@value": "2016-01-19T22:00:00+01:00",
+            "timezone": "Europe/Berlin"
+        },
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "DE",
+                "addressLocality": "Berlin",
+                "streetAddress": "Rungestraße 20"
+            },
+            "name": "C Base"
+        },
+        "name": "January Meetup - Stephen Kelly : Toward better CMake IDE integration",
+        "startDate": {
+            "@type": "QDateTime",
+            "@value": "2016-01-19T19:00:00+01:00",
+            "timezone": "Europe/Berlin"
+        },
+        "url": "http://www.meetup.com/berlincplusplus/events/227896427/"
+    }
+]

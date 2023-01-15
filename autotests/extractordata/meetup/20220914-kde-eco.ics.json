@@ -1,0 +1,30 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "description": "Green Coding\nWednesday, September 14 at 6:30 PM\n\nThis time we have teamed with The KDE Eco Team to co-host host another Meetup for the Green Software Community in Berlin. In this talk Joseph P. De Ve...\n\nhttps://www.meetup.com/green-coding/events/287887811/",
+        "endDate": {
+            "@type": "QDateTime",
+            "@value": "2022-09-14T20:30:00+02:00",
+            "timezone": "Europe/Berlin"
+        },
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "DE",
+                "addressLocality": "Berlin",
+                "addressRegion": "BE",
+                "streetAddress": "Rudi-Dutschke-Straße 23"
+            },
+            "name": "betahaus | Kreuzberg"
+        },
+        "name": "Sustainable Software - KDE Eco [x] Green Coding Berlin",
+        "startDate": {
+            "@type": "QDateTime",
+            "@value": "2022-09-14T18:30:00+02:00",
+            "timezone": "Europe/Berlin"
+        },
+        "url": "https://www.meetup.com/green-coding/events/287887811/"
+    }
+]
