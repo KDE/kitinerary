@@ -25,6 +25,7 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDebug>
+#include <QDir>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -94,6 +95,17 @@ int main(int argc, char** argv)
     QCoreApplication::setOrganizationDomain(QStringLiteral("kde.org"));
     QCoreApplication::setOrganizationName(QStringLiteral("KDE"));
     QCoreApplication app(argc, argv);
+
+#ifdef KITINERARY_STANDALONE_CLI_EXTRACTOR
+    // set additional data file search path relative to the current binary location
+    // NOTE: QCoreApplication::applicationDirPath is only valid once QCoreApplication has been created
+    auto xdgDataDirs = qgetenv("XDG_DATA_DIRS");
+    if (!xdgDataDirs.isEmpty()) {
+        xdgDataDirs += QDir::listSeparator().toLatin1();
+    }
+    xdgDataDirs += QString(QCoreApplication::applicationDirPath() + QDir::separator() + QLatin1String("..") + QDir::separator() + QLatin1String("share")).toUtf8();
+    qputenv("XDG_DATA_DIRS", xdgDataDirs);
+#endif
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("Command line itinerary extractor."));
