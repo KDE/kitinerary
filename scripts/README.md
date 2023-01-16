@@ -23,10 +23,6 @@ environment variables that influence that (`LANG`, `LANGUAGE`, `LC_ALL`, etc).
 
 This also implies that Glibc locale data has to be installed on the system, Gettext will not work without those.
 
-## Known Issues
-
-- zlib isn't linked statically yet
-
 ## Local builds
 
 If you want to locally reproduce the same build, this can be done by running the commands from the build scripts in the
