@@ -153,7 +153,7 @@ bool Class::operator==(const Class &other) const \
     if (!detail::property_equals(detail::num<>(), detail::tag<this_type>(), lhs, rhs)) { \
         return false; \
     } \
-    if (detail::base_type<this_type>::is_valid) { \
+    if constexpr (detail::base_type<this_type>::is_valid) { \
         typedef typename detail::base_type<this_type>::type super_type; \
         return detail::property_equals(detail::num<>(), detail::tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs)); \
     } \
