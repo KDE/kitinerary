@@ -31,11 +31,24 @@
 #include <QMetaObject>
 #include <QMetaProperty>
 #include <QTimeZone>
-#include <QVariant>
 
 #include <cmath>
 #include <cstring>
 #include <set>
+
+namespace KItinerary {
+struct CompareFunc {
+    int metaTypeId;
+    std::function<bool(const QVariant &, const QVariant &)> func;
+};
+
+static bool operator<(const CompareFunc &lhs, int rhs)
+{
+    return lhs.metaTypeId < rhs;
+}
+
+static std::vector<CompareFunc> s_mergeCompareFuncs;
+}
 
 using namespace KItinerary;
 
@@ -302,6 +315,12 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         ) {
             return false;
         }
+    }
+
+    // custom comparators
+    const auto it = std::lower_bound(s_mergeCompareFuncs.begin(), s_mergeCompareFuncs.end(), lhs.userType());
+    if (it != s_mergeCompareFuncs.end() && (*it).metaTypeId == lhs.userType()) {
+        return (*it).func(lhs, rhs);
     }
 
     return true;
@@ -746,4 +765,14 @@ bool MergeUtil::hasSameArrival(const QVariant &lhs, const QVariant &rhs)
     }
 
     return LocationUtil::isSameLocation(LocationUtil::arrivalLocation(lhs), LocationUtil::arrivalLocation(rhs), LocationUtil::Exact);
+}
+
+void MergeUtil::registerComparator(int metaTypeId, std::function<bool (const QVariant&, const QVariant&)> &&func)
+{
+    auto it = std::lower_bound(s_mergeCompareFuncs.begin(), s_mergeCompareFuncs.end(), metaTypeId);
+    if (it != s_mergeCompareFuncs.end() && (*it).metaTypeId == metaTypeId) {
+        (*it).func = std::move(func);
+    } else {
+        s_mergeCompareFuncs.insert(it, {metaTypeId, std::move(func)});
+    }
 }
