@@ -14,20 +14,22 @@ include:
 # Manual job for building a fully static extractor binary for e.g. use by Nextcloud
 static-extractor:
   stage: build
-  # TODO this gives us glibc >= 2.25 support, is that old enough?
-  image: opensuse/leap:15.2
+  image: centos:centos7
   tags:
     - Linux
   when: manual
   script:
     - export BUILD_ROOT=/builds
     - export STAGING_ROOT=/builds/staging
-    - scripts/setup-opensuse-leap.sh
+    - scripts/setup-centos.sh
+    - source /opt/rh/rh-git227/enable
+    - source /opt/rh/devtoolset-11/enable
     - scripts/build-openssl.sh
     - scripts/build-iso-codes.sh
     - scripts/build-static-qt.sh
     - scripts/build-cmake-modules.sh
     - scripts/collect-data-files.sh
+    - strip build/bin/kitinerary-extractor
   artifacts:
     expire_in: 1 week
     when: on_success

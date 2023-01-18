@@ -6,8 +6,7 @@ This is done by the `static-extractor` Gitlab job, the scripts in this folder ar
 
 ## Supported platforms
 
-In its current form the target platform needs to have at least GLIBC 2.25. Further reducing that should be possible
-by using an older image for the build and retrofitting newer CMake and newer compilers.
+Anything x86_64 with GLIBC 2.17 or newer.
 
 ## Deployment
 
@@ -29,7 +28,7 @@ If you want to locally reproduce the same build, this can be done by running the
 order specified in `.gitlab-ci.yml` in an environment set up like follows:
 
 ```
-docker run -it --rm opensuse/leap:15.2
+docker run -it --rm centos:centos7
 export CI_PROJECT_PATH=pim/kitinerary
 export BUILD_ROOT=/builds
 export STAGING_ROOT=/builds/staging
