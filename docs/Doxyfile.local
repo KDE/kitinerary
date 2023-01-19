@@ -2,7 +2,8 @@
 # SPDX-FileCopyrightText: none
 
 EXTRACT_STATIC = NO
-EXCLUDE_PATTERNS += */knowledgedb-generator/*
+EXCLUDE_PATTERNS += */knowledgedb-generator/* \
+                    */internal/*
 PREDEFINED += \
     KITINERARY_EXPORT="" \
     KITINERARY_PROPERTY(type,name,setter)="Q_PROPERTY(type name READ name WRITE setter)"

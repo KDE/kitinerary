@@ -6,25 +6,14 @@
 
 #pragma once
 
+#include "internal/instance_counter.h"
+
 #include <QDateTime>
 #include <QTimeZone>
 
 namespace KItinerary {
 
 namespace detail {
-
-// Helper types for the auto-generated operator==
-// This is based on the approach described here https://woboq.com/blog/verdigris-implementation-tricks.html
-
-// numerical index of properties, done in a way that we can daisy-chain overloads with it
-template <int N = 255> struct num : public num<N - 1> {
-    static constexpr int value = N;
-    static constexpr num<N - 1> prev() { return {}; }
-};
-template <> struct num<0> { static constexpr int value = 0; };
-
-// type tag, to avoid unwanted overload resolution on arguments other than num<>
-template <typename T> struct tag {};
 
 // SFINAE helper to determine if we have a polymorphic or a simple value type
 template <typename T>
