@@ -6,9 +6,9 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 set(PIM_VERSION "5.22.42")
 project(KItinerary VERSION ${PIM_VERSION})
 
-set(KF5_MIN_VERSION "5.91.0")
+set(KF_MIN_VERSION "5.91.0")
 
-find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
+find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 set(CMAKE_CXX_STANDARD 20)
 
@@ -36,7 +36,7 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
 set(QT_REQUIRED_VERSION "5.15.2")
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Gui Qml)
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Contacts CalendarCore I18n)
+find_package(KF5 ${KF_MIN_VERSION} REQUIRED COMPONENTS Contacts CalendarCore I18n)
 if (NOT ANDROID)
     find_package(SharedMimeInfo 1.3 REQUIRED)
 endif()
