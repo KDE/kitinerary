@@ -372,6 +372,10 @@ install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/kitinerary
 )
+install(FILES
+    internal/parameter_type.h
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/kitinerary/internal
+)
 if (NOT ANDROID)
     install(FILES application-vnd-kde-itinerary.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
     update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR})

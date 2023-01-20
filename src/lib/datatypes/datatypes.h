@@ -6,11 +6,11 @@
 
 #pragma once
 
+#include "internal/parameter_type.h"
+
 #include <QMetaType>
 #include <QSharedDataPointer>
 #include <QVariant>
-
-#include <type_traits>
 
 class QString;
 
@@ -48,16 +48,6 @@ inline T convert(const QVariant &value)
 {
     return T(*static_cast<const T*>(value.constData()));
 }
-
-}
-
-namespace detail {
-
-template <typename T>
-struct parameter_type
-{
-    using type = typename std::conditional<std::is_fundamental<T>::value, T, const T&>::type;
-};
 
 }
 }

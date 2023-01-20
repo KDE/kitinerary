@@ -7,6 +7,7 @@
 #pragma once
 
 #include "internal/instance_counter.h"
+#include "internal/parameter_type.h"
 
 #include <QDateTime>
 #include <QTimeZone>
