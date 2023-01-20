@@ -69,3 +69,8 @@ build-static-qt-module qtdeclarative -- \
     -no-feature-qml-worker-script
 
 build-static-qt-module qttools
+
+# Patch .prl files to use static zlib
+for i in `find $STAGING_ROOT -name "*.prl"`; do
+    sed -i -e 's,-lz,/usr/lib64/libz.a,g' $i
+done

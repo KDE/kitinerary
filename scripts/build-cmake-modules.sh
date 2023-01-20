@@ -32,6 +32,7 @@ function build_cmake_module() {
         -DCMAKE_PREFIX_PATH=$STAGING_ROOT \
         -DCMAKE_INSTALL_PREFIX=$STAGING_ROOT \
         -DCMAKE_EXE_LINKER_FLAGS="-Wl,--as-needed" \
+        -DZLIB_USE_STATIC_LIBS=ON \
         $@ -DCMAKE_BUILD_TYPE=Release ..
 
     make -j 4
@@ -66,7 +67,7 @@ build_cmake_module https://github.com/libical/libical.git libical v3.0.14 \
     -DCMAKE_DISABLE_FIND_PACKAGE_BDB=ON
 
 build_cmake_module https://gitlab.gnome.org/GNOME/libxml2.git libxml2 master \
-    -DLIBXML2_WITH_PYTHON=OFF -DLIBXML2_WITH_DEBUG=OFF -DLIBXML2_WITH_LZMA=OFF
+    -DLIBXML2_WITH_PYTHON=OFF -DLIBXML2_WITH_DEBUG=OFF -DLIBXML2_WITH_LZMA=OFF -DLIBXML2_WITH_ZLIB=OFF
 
 build_cmake_module https://github.com/nu-book/zxing-cpp.git zxing-cpp v2.0.0 \
     -DBUILD_SHARED_LIBRARY=OFF  -DBUILD_EXAMPLES=OFF -DBUILD_BLACKBOX_TESTS=OFF -DBUILD_UNIT_TESTS=OFF -DBUILD_PYTHON_MODULE=OFF
