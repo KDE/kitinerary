@@ -8,6 +8,7 @@
 
 #include "internal/instance_counter.h"
 #include "internal/parameter_type.h"
+#include "internal/strict_equal.h"
 
 #include <QDateTime>
 #include <QTimeZone>
@@ -24,41 +25,6 @@ struct base_type {
     using type = decltype(test<T>(nullptr));
     static constexpr const bool is_valid = !std::is_same<type, T>::value;
 };
-
-// customization hook for comparison for certain types
-template <typename T> inline bool equals(typename parameter_type<T>::type lhs, typename parameter_type<T>::type rhs)
-{
-    return lhs == rhs;
-}
-
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-// compare QVariant contents (no longer the default with Qt6)
-template <> inline bool equals<QVariant>(const QVariant &lhs, const QVariant &rhs)
-{
-    return lhs.isNull() == rhs.isNull() && (lhs.isNull() || QVariant::compare(lhs, rhs) == QPartialOrdering::Equivalent);
-}
-#endif
-
-// QDateTime::operator== is true for two instances referring to the same point in time
-// we however want to know if two instances contain exactly the same information
-template <> inline bool equals<QDateTime>(const QDateTime &lhs, const QDateTime &rhs)
-{
-    if (lhs.timeSpec() != rhs.timeSpec() || lhs != rhs) {
-        return false;
-    }
-    return lhs.timeSpec() == Qt::TimeZone ? lhs.timeZone() == rhs.timeZone() : true;
-}
-
-// QString::operator== ignores null vs empty
-// we probably don't care either, but until that's decided this makes the existing tests pass
-template <> inline bool equals<QString>(const QString &lhs, const QString &rhs)
-{
-    if (lhs.isEmpty() && rhs.isEmpty()) {
-        return lhs.isNull() == rhs.isNull();
-    }
-    return lhs == rhs;
-}
-
 }
 
 #define KITINERARY_PRIVATE_BASE_GADGET(Class) \
@@ -117,7 +83,7 @@ Class::Class() : Base(s_ ## Class ## _shared_null()->data()) {}
 #define KITINERARY_MAKE_PROPERTY(Class, Type, Name, SetName) \
 Type Class::Name() const { return static_cast<const Class ## Private*>(d.data())->Name; } \
 void Class::SetName(detail::parameter_type<Type>::type value) { \
-    if (detail::equals<Type>(static_cast<Class ## Private*>(d.data())->Name, value)) { return; } \
+    if (detail::strict_equal<Type>(static_cast<Class ## Private*>(d.data())->Name, value)) { return; } \
     d.detach(); \
     static_cast<Class ## Private*>(d.data())->Name = value; \
 } \
@@ -125,7 +91,7 @@ namespace detail { \
     static constexpr int property_counter(num<property_counter(num<>(), tag<Class>())> n, tag<Class>) { return decltype(n)::value + 1; } \
     static inline bool property_equals(num<property_counter(num<>(), tag<Class>())> n, tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) \
     { \
-        if (equals<Type>(lhs->Name, rhs->Name)) { return property_equals(n.prev(), tag<Class ## Private>(), lhs, rhs); } \
+        if (strict_equal<Type>(lhs->Name, rhs->Name)) { return property_equals(n.prev(), tag<Class ## Private>(), lhs, rhs); } \
         return false; \
     } \
 }
