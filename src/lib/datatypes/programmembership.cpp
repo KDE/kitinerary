@@ -21,7 +21,7 @@ public:
     QDateTime validUntil;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(ProgramMembership)
+KITINERARY_MAKE_CLASS(ProgramMembership)
 KITINERARY_MAKE_PROPERTY(ProgramMembership, QString, programName, setProgramName)
 KITINERARY_MAKE_PROPERTY(ProgramMembership, QString, membershipNumber, setMembershipNumber)
 KITINERARY_MAKE_PROPERTY(ProgramMembership, Person, member, setMember)

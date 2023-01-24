@@ -29,7 +29,7 @@ class OrganizationPrivate;
 
 class KITINERARY_EXPORT Organization
 {
-    KITINERARY_BASE_GADGET(Organization)
+    KITINERARY_GADGET(Organization)
     KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(QString, identifier, setIdentifier)
     KITINERARY_PROPERTY(QString, description, setDescription)
@@ -61,7 +61,7 @@ class AirlinePrivate;
  */
 class KITINERARY_EXPORT Airline : public Organization
 {
-    KITINERARY_BASE_GADGET(Airline)
+    KITINERARY_GADGET(Airline)
     KITINERARY_PROPERTY(QString, iataCode, setIataCode)
 };
 
@@ -72,8 +72,10 @@ class LocalBusinessPrivate;
  */
 class KITINERARY_EXPORT LocalBusiness : public Organization
 {
-    KITINERARY_BASE_GADGET(LocalBusiness)
+    KITINERARY_GADGET(LocalBusiness)
 };
+
+class LodgingBusinessPrivate;
 
 /** Hotel.
  *  @see https://schema.org/LodgingBusiness
@@ -82,6 +84,8 @@ class KITINERARY_EXPORT LodgingBusiness: public LocalBusiness
 {
     KITINERARY_GADGET(LodgingBusiness)
 };
+
+class FoodEstablishmentPrivate;
 
 /** Food-related business (such as a restaurant, or a bakery).
  * @see https://schema.org/FoodEstablishment

@@ -21,7 +21,7 @@ public:
     float longitude = NAN;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(GeoCoordinates)
+KITINERARY_MAKE_CLASS(GeoCoordinates)
 KITINERARY_MAKE_PROPERTY(GeoCoordinates, float, latitude, setLatitude)
 KITINERARY_MAKE_PROPERTY(GeoCoordinates, float, longitude, setLongitude)
 
@@ -57,7 +57,7 @@ public:
     QString addressCountry;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(PostalAddress)
+KITINERARY_MAKE_CLASS(PostalAddress)
 KITINERARY_MAKE_PROPERTY(PostalAddress, QString, streetAddress, setStreetAddress)
 KITINERARY_MAKE_PROPERTY(PostalAddress, QString, addressLocality, setAddressLocality)
 KITINERARY_MAKE_PROPERTY(PostalAddress, QString, postalCode, setPostalCode)
@@ -84,7 +84,7 @@ public:
     QString identifier;
 };
 
-KITINERARY_MAKE_BASE_CLASS(Place)
+KITINERARY_MAKE_CLASS(Place)
 KITINERARY_MAKE_PROPERTY(Place, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Place, PostalAddress, address, setAddress)
 KITINERARY_MAKE_PROPERTY(Place, GeoCoordinates, geo, setGeo)
@@ -105,7 +105,7 @@ public:
     QString iataCode;
 };
 
-KITINERARY_MAKE_SUB_CLASS(Airport, Place)
+KITINERARY_MAKE_DERIVED_CLASS(Airport, Place)
 KITINERARY_MAKE_PROPERTY(Airport, QString, iataCode, setIataCode)
 KITINERARY_MAKE_OPERATOR(Airport)
 
@@ -113,28 +113,28 @@ class BoatTerminalPrivate : public PlacePrivate
 {
     KITINERARY_PRIVATE_GADGET(BoatTerminal)
 };
-KITINERARY_MAKE_SUB_CLASS(BoatTerminal, Place)
+KITINERARY_MAKE_DERIVED_CLASS(BoatTerminal, Place)
 KITINERARY_MAKE_OPERATOR(BoatTerminal)
 
 class TrainStationPrivate : public PlacePrivate
 {
     KITINERARY_PRIVATE_GADGET(TrainStation)
 };
-KITINERARY_MAKE_SUB_CLASS(TrainStation, Place)
+KITINERARY_MAKE_DERIVED_CLASS(TrainStation, Place)
 KITINERARY_MAKE_OPERATOR(TrainStation)
 
 class BusStationPrivate : public PlacePrivate
 {
     KITINERARY_PRIVATE_GADGET(BusStation)
 };
-KITINERARY_MAKE_SUB_CLASS(BusStation, Place)
+KITINERARY_MAKE_DERIVED_CLASS(BusStation, Place)
 KITINERARY_MAKE_OPERATOR(BusStation)
 
 class TouristAttractionPrivate: public PlacePrivate
 {
     KITINERARY_PRIVATE_GADGET(TouristAttraction)
 };
-KITINERARY_MAKE_SUB_CLASS(TouristAttraction, Place)
+KITINERARY_MAKE_DERIVED_CLASS(TouristAttraction, Place)
 KITINERARY_MAKE_OPERATOR(TouristAttraction)
 
 }

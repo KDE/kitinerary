@@ -31,7 +31,7 @@ public:
     Organization provider;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(Flight)
+KITINERARY_MAKE_CLASS(Flight)
 KITINERARY_MAKE_PROPERTY(Flight, QString, flightNumber, setFlightNumber)
 KITINERARY_MAKE_PROPERTY(Flight, Airline, airline, setAirline)
 KITINERARY_MAKE_PROPERTY(Flight, Airport, departureAirport, setDepartureAirport)

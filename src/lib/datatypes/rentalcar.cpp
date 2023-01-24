@@ -23,7 +23,7 @@ public:
     Brand brand;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(RentalCar)
+KITINERARY_MAKE_CLASS(RentalCar)
 KITINERARY_MAKE_PROPERTY(RentalCar, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(RentalCar, QString, model, setModel)
 KITINERARY_MAKE_PROPERTY(RentalCar, Organization, rentalCompany, setRentalCompany)

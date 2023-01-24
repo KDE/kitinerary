@@ -28,7 +28,7 @@ public:
     QString trainNumber;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(TrainTrip)
+KITINERARY_MAKE_CLASS(TrainTrip)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QString, arrivalPlatform, setArrivalPlatform)
 KITINERARY_MAKE_PROPERTY(TrainTrip, TrainStation, arrivalStation, setArrivalStation)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QDateTime, arrivalTime, setArrivalTime)

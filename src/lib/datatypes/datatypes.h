@@ -65,10 +65,6 @@ public: \
     inline bool operator!=(const Class &other) const { return !(*this == other); } \
     operator QVariant () const; \
     static const char* typeName(); \
-private:
-
-#define KITINERARY_BASE_GADGET(Class) \
-    KITINERARY_GADGET(Class) \
 protected: \
     Class(Class ## Private *dd); \
 private:

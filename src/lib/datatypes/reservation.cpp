@@ -35,7 +35,7 @@ public:
     ProgramMembership programMembershipUsed;
 };
 
-KITINERARY_MAKE_BASE_CLASS(Reservation)
+KITINERARY_MAKE_CLASS(Reservation)
 KITINERARY_MAKE_PROPERTY(Reservation, QString, reservationNumber, setReservationNumber)
 KITINERARY_MAKE_PROPERTY(Reservation, QVariant, reservationFor, setReservationFor)
 KITINERARY_MAKE_PROPERTY(Reservation, QVariant, reservedTicket, setReservedTicket)
@@ -58,7 +58,7 @@ public:
     QDateTime checkinTime;
     QDateTime checkoutTime;
 };
-KITINERARY_MAKE_SUB_CLASS(LodgingReservation, Reservation)
+KITINERARY_MAKE_DERIVED_CLASS(LodgingReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkinTime, setCheckinTime)
 KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkoutTime, setCheckoutTime)
 KITINERARY_MAKE_OPERATOR(LodgingReservation)
@@ -73,7 +73,7 @@ public:
     QString boardingGroup;
 };
 
-KITINERARY_MAKE_SUB_CLASS(FlightReservation, Reservation)
+KITINERARY_MAKE_DERIVED_CLASS(FlightReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(FlightReservation, QString, passengerSequenceNumber, setPassengerSequenceNumber)
 KITINERARY_MAKE_PROPERTY(FlightReservation, QString, airplaneSeat, setAirplaneSeat)
 KITINERARY_MAKE_PROPERTY(FlightReservation, QString, boardingGroup, setBoardingGroup)
@@ -83,14 +83,14 @@ class TrainReservationPrivate : public ReservationPrivate
 {
     KITINERARY_PRIVATE_GADGET(TrainReservation)
 };
-KITINERARY_MAKE_SUB_CLASS(TrainReservation, Reservation)
+KITINERARY_MAKE_DERIVED_CLASS(TrainReservation, Reservation)
 KITINERARY_MAKE_OPERATOR(TrainReservation)
 
 class BusReservationPrivate : public ReservationPrivate
 {
     KITINERARY_PRIVATE_GADGET(BusReservation)
 };
-KITINERARY_MAKE_SUB_CLASS(BusReservation, Reservation)
+KITINERARY_MAKE_DERIVED_CLASS(BusReservation, Reservation)
 KITINERARY_MAKE_OPERATOR(BusReservation)
 
 class FoodEstablishmentReservationPrivate : public ReservationPrivate
@@ -101,7 +101,7 @@ public:
     QDateTime startTime;
     int partySize = 0;
 };
-KITINERARY_MAKE_SUB_CLASS(FoodEstablishmentReservation, Reservation)
+KITINERARY_MAKE_DERIVED_CLASS(FoodEstablishmentReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, endTime, setEndTime)
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, int, partySize, setPartySize)
 KITINERARY_MAKE_PROPERTY(FoodEstablishmentReservation, QDateTime, startTime, setStartTime)
@@ -111,7 +111,7 @@ class EventReservationPrivate : public ReservationPrivate
 {
     KITINERARY_PRIVATE_GADGET(EventReservation)
 };
-KITINERARY_MAKE_SUB_CLASS(EventReservation, Reservation)
+KITINERARY_MAKE_DERIVED_CLASS(EventReservation, Reservation)
 KITINERARY_MAKE_OPERATOR(EventReservation)
 
 class RentalCarReservationPrivate : public ReservationPrivate
@@ -123,7 +123,7 @@ public:
     Place pickupLocation;
     Place dropoffLocation;
 };
-KITINERARY_MAKE_SUB_CLASS(RentalCarReservation, Reservation)
+KITINERARY_MAKE_DERIVED_CLASS(RentalCarReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(RentalCarReservation, QDateTime, dropoffTime, setDropoffTime)
 KITINERARY_MAKE_PROPERTY(RentalCarReservation, QDateTime, pickupTime, setPickupTime)
 KITINERARY_MAKE_PROPERTY(RentalCarReservation, Place, pickupLocation, setPickupLocation)
@@ -138,7 +138,7 @@ public:
     QDateTime pickupTime;
     Place pickupLocation;
 };
-KITINERARY_MAKE_SUB_CLASS(TaxiReservation, Reservation)
+KITINERARY_MAKE_DERIVED_CLASS(TaxiReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(TaxiReservation, QDateTime, pickupTime, setPickupTime)
 KITINERARY_MAKE_PROPERTY(TaxiReservation, Place, pickupLocation, setPickupLocation)
 KITINERARY_MAKE_OPERATOR(TaxiReservation)
@@ -148,7 +148,7 @@ class BoatReservationPrivate : public ReservationPrivate
 {
     KITINERARY_PRIVATE_GADGET(BoatReservation)
 };
-KITINERARY_MAKE_SUB_CLASS(BoatReservation, Reservation)
+KITINERARY_MAKE_DERIVED_CLASS(BoatReservation, Reservation)
 KITINERARY_MAKE_OPERATOR(BoatReservation)
 
 }

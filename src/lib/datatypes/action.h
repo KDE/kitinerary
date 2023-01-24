@@ -20,7 +20,7 @@ class ActionPrivate;
  */
 class KITINERARY_EXPORT Action
 {
-    KITINERARY_BASE_GADGET(Action)
+    KITINERARY_GADGET(Action)
     KITINERARY_PROPERTY(QUrl, target, setTarget)
     KITINERARY_PROPERTY(QVariant, result, setResult)
 protected:
@@ -28,6 +28,8 @@ protected:
     QExplicitlySharedDataPointer<ActionPrivate> d;
     ///@endcond
 };
+
+class CancelActionPrivate;
 
 /** Cancel action.
  *  @see https://schema.org/CancelAction
@@ -37,6 +39,8 @@ class KITINERARY_EXPORT CancelAction : public Action
     KITINERARY_GADGET(CancelAction)
 };
 
+class CheckInActionPrivate;
+
 /** Check-in action.
  *  @see https://schema.org/CheckInAction
  */
@@ -44,6 +48,8 @@ class KITINERARY_EXPORT CheckInAction : public Action
 {
     KITINERARY_GADGET(CheckInAction)
 };
+
+class DownloadActionPrivate;
 
 /** Download action.
  *  @see https://schema.org/DownloadAction
@@ -53,6 +59,8 @@ class KITINERARY_EXPORT DownloadAction : public Action
     KITINERARY_GADGET(DownloadAction)
 };
 
+class ReserveActionPrivate;
+
 /** Reserve action.
  *  @see https://schema.org/ReserveAction
  */
@@ -61,6 +69,8 @@ class KITINERARY_EXPORT ReserveAction : public Action
     KITINERARY_GADGET(ReserveAction)
 };
 
+class UpdateActionPrivate;
+
 /** Edit/update action.
  *  @see https://schema.org/UpdateAction
  */
@@ -68,6 +78,8 @@ class KITINERARY_EXPORT UpdateAction : public Action
 {
     KITINERARY_GADGET(UpdateAction)
 };
+
+class ViewActionPrivate;
 
 /** View action.
  *  @see https://schema.org/ViewAction

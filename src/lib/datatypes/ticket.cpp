@@ -22,7 +22,7 @@ public:
     QString seatingType;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(Seat)
+KITINERARY_MAKE_CLASS(Seat)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatNumber, setSeatNumber)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatRow, setSeatRow)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatSection, setSeatSection)
@@ -42,7 +42,7 @@ public:
     QDateTime validUntil;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(Ticket)
+KITINERARY_MAKE_CLASS(Ticket)
 KITINERARY_MAKE_PROPERTY(Ticket, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Ticket, Organization, issuedBy, setIssuedBy)
 KITINERARY_MAKE_PROPERTY(Ticket, QString, ticketNumber, setTicketNumber)

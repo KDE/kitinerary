@@ -35,7 +35,7 @@ public:
     };
     Q_ENUM(ReservationStatus)
 
-    KITINERARY_BASE_GADGET(Reservation)
+    KITINERARY_GADGET(Reservation)
     KITINERARY_PROPERTY(QString, reservationNumber, setReservationNumber)
     KITINERARY_PROPERTY(QVariant, reservationFor, setReservationFor)
     KITINERARY_PROPERTY(QVariant, reservedTicket, setReservedTicket)
@@ -63,6 +63,8 @@ protected:
     ///@endcond
 };
 
+class LodgingReservationPrivate;
+
 /** A hotel reservation.
  *  @see https://schema.org/LodgingReservation
  *  @see https://developers.google.com/gmail/markup/reference/hotel-reservation
@@ -73,6 +75,8 @@ class KITINERARY_EXPORT LodgingReservation : public Reservation
     KITINERARY_PROPERTY(QDateTime, checkinTime, setCheckinTime)
     KITINERARY_PROPERTY(QDateTime, checkoutTime, setCheckoutTime)
 };
+
+class FlightReservationPrivate;
 
 /** A flight reservation.
  *  @see https://schema.org/FlightReservation
@@ -93,6 +97,8 @@ class KITINERARY_EXPORT FlightReservation : public Reservation
     KITINERARY_PROPERTY(QString, boardingGroup, setBoardingGroup)
 };
 
+class TrainReservationPrivate;
+
 /** A train reservation.
  *  @see https://schema.org/TrainReservation
  */
@@ -101,6 +107,8 @@ class KITINERARY_EXPORT TrainReservation : public Reservation
     KITINERARY_GADGET(TrainReservation)
 };
 
+class BusReservationPrivate;
+
 /** A bus reservation.
  *  @see https://schema.org/BusReservation
  */
@@ -108,6 +116,8 @@ class KITINERARY_EXPORT BusReservation : public Reservation
 {
     KITINERARY_GADGET(BusReservation)
 };
+
+class FoodEstablishmentReservationPrivate;
 
 /** A restaurant reservation.
  *  @see https://schema.org/FoodEstablishmentReservation
@@ -121,6 +131,8 @@ class KITINERARY_EXPORT FoodEstablishmentReservation : public Reservation
     KITINERARY_PROPERTY(QDateTime, startTime, setStartTime)
 };
 
+class EventReservationPrivate;
+
 /** An event reservation.
  *  @see https://schema.org/EventReservation
  *  @see https://developers.google.com/gmail/markup/reference/event-reservation
@@ -129,6 +141,8 @@ class KITINERARY_EXPORT EventReservation : public Reservation
 {
     KITINERARY_GADGET(EventReservation)
 };
+
+class RentalCarReservationPrivate;
 
 /** A Rental Car reservation.
  *  @see https://developers.google.com/gmail/markup/reference/rental-car
@@ -142,6 +156,8 @@ class KITINERARY_EXPORT RentalCarReservation : public Reservation
     KITINERARY_PROPERTY(KItinerary::Place, dropoffLocation, setDropoffLocation)
 };
 
+class TaxiReservationPrivate;
+
 /** A Taxi reservation.
  *  @see https://schema.org/TaxiReservation
  */
@@ -151,6 +167,8 @@ class KITINERARY_EXPORT TaxiReservation : public Reservation
     KITINERARY_PROPERTY(QDateTime, pickupTime, setPickupTime)
     KITINERARY_PROPERTY(KItinerary::Place, pickupLocation, setPickupLocation)
 };
+
+class BoatReservationPrivate;
 
 /** A boat or ferry reservation.
  *  @see https://schema.org/BoatReservation

@@ -20,7 +20,7 @@ public:
     QString encodingFormat;
 };
 
-KITINERARY_MAKE_BASE_CLASS(CreativeWork)
+KITINERARY_MAKE_CLASS(CreativeWork)
 KITINERARY_MAKE_PROPERTY(CreativeWork, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(CreativeWork, QString, description, setDescription)
 KITINERARY_MAKE_PROPERTY(CreativeWork, QString, encodingFormat, setEncodingFormat)
@@ -30,14 +30,14 @@ class DigitalDocumentPrivate : public CreativeWorkPrivate
 {
     KITINERARY_PRIVATE_GADGET(DigitalDocument)
 };
-KITINERARY_MAKE_SUB_CLASS(DigitalDocument, CreativeWork)
+KITINERARY_MAKE_DERIVED_CLASS(DigitalDocument, CreativeWork)
 KITINERARY_MAKE_OPERATOR(DigitalDocument)
 
 class EmailMessagePrivate : public CreativeWorkPrivate
 {
     KITINERARY_PRIVATE_GADGET(EmailMessage)
 };
-KITINERARY_MAKE_SUB_CLASS(EmailMessage, CreativeWork)
+KITINERARY_MAKE_DERIVED_CLASS(EmailMessage, CreativeWork)
 KITINERARY_MAKE_OPERATOR(EmailMessage)
 
 }

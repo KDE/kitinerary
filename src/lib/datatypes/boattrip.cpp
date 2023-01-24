@@ -23,7 +23,7 @@ public:
     QDateTime departureTime;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(BoatTrip)
+KITINERARY_MAKE_CLASS(BoatTrip)
 KITINERARY_MAKE_PROPERTY(BoatTrip, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(BoatTrip, BoatTerminal, arrivalBoatTerminal, setArrivalBoatTerminal)
 KITINERARY_MAKE_PROPERTY(BoatTrip, QDateTime, arrivalTime, setArrivalTime)

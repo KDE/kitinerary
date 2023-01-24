@@ -48,6 +48,7 @@ private:
 
 #define KITINERARY_MAKE_CLASS_IMPL(Class) \
 Q_GLOBAL_STATIC_WITH_ARGS(QExplicitlySharedDataPointer<Class ## Private>, s_ ## Class ## _shared_null, (new Class ## Private)) \
+Class::Class() : Class(s_ ## Class ## _shared_null()->data()) {} \
 Class::Class(const Class&) = default; \
 Class::~Class() = default; \
 Class& Class::operator=(const Class &other) { d = other.d; return *this; } \
@@ -60,23 +61,13 @@ namespace detail { \
     static constexpr bool property_equals(num<0>, tag<Class ## Private>, const Class ## Private *, const Class ## Private *) { return true; } \
 }
 
-#define KITINERARY_MAKE_SIMPLE_CLASS(Class) \
+#define KITINERARY_MAKE_CLASS(Class) \
 KITINERARY_MAKE_CLASS_IMPL(Class) \
-Class::Class() : d(*s_ ## Class ## _shared_null()) {}
-
-#define KITINERARY_MAKE_BASE_CLASS(Class) \
-KITINERARY_MAKE_CLASS_IMPL(Class) \
-Class::Class() : d(*s_ ## Class ## _shared_null()) {} \
 Class::Class(Class ## Private *dd) : d(dd) {}
 
-#define KITINERARY_MAKE_INTERMEDIATE_CLASS(Class, Base) \
+#define KITINERARY_MAKE_DERIVED_CLASS(Class, Base) \
 KITINERARY_MAKE_CLASS_IMPL(Class) \
-Class::Class() : Base(s_ ## Class ## _shared_null()->data()) {} \
 Class::Class(Class ## Private *dd) : Base(dd) {}
-
-#define KITINERARY_MAKE_SUB_CLASS(Class, Base) \
-KITINERARY_MAKE_CLASS_IMPL(Class) \
-Class::Class() : Base(s_ ## Class ## _shared_null()->data()) {}
 
 #define K_D(Class) auto d = static_cast<Class ## Private *>(this->d.data())
 

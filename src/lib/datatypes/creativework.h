@@ -19,7 +19,7 @@ class CreativeWorkPrivate;
  */
 class KITINERARY_EXPORT CreativeWork
 {
-    KITINERARY_BASE_GADGET(CreativeWork)
+    KITINERARY_GADGET(CreativeWork)
     /** Name of the file. */
     KITINERARY_PROPERTY(QString, name, setName)
     /** Human readable description. */
@@ -33,6 +33,8 @@ protected:
     ///@endcond
 };
 
+class DigitalDocumentPrivate;
+
 /** Description of a document.
  *  @see https://schema.org/DigitalDocument
  */
@@ -40,6 +42,8 @@ class KITINERARY_EXPORT DigitalDocument : public CreativeWork
 {
     KITINERARY_GADGET(DigitalDocument)
 };
+
+class EmailMessagePrivate;
 
 /** Description of an email.
  *  @see https://schema.org/EmailMessage

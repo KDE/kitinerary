@@ -31,7 +31,7 @@ public:
     QVariantList potentialAction;
 };
 
-KITINERARY_MAKE_BASE_CLASS(Organization)
+KITINERARY_MAKE_CLASS(Organization)
 KITINERARY_MAKE_PROPERTY(Organization, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Organization, QString, identifier, setIdentifier)
 KITINERARY_MAKE_PROPERTY(Organization, QString, description, setDescription)
@@ -57,7 +57,7 @@ public:
     QString iataCode;
 };
 
-KITINERARY_MAKE_SUB_CLASS(Airline, Organization)
+KITINERARY_MAKE_DERIVED_CLASS(Airline, Organization)
 KITINERARY_MAKE_PROPERTY(Airline, QString, iataCode, setIataCode)
 KITINERARY_MAKE_OPERATOR(Airline)
 
@@ -65,21 +65,21 @@ class LocalBusinessPrivate : public OrganizationPrivate
 {
     KITINERARY_PRIVATE_GADGET(LocalBusiness)
 };
-KITINERARY_MAKE_INTERMEDIATE_CLASS(LocalBusiness, Organization)
+KITINERARY_MAKE_DERIVED_CLASS(LocalBusiness, Organization)
 KITINERARY_MAKE_OPERATOR(LocalBusiness)
 
 class FoodEstablishmentPrivate: public LocalBusinessPrivate
 {
     KITINERARY_PRIVATE_GADGET(FoodEstablishment)
 };
-KITINERARY_MAKE_SUB_CLASS(FoodEstablishment, LocalBusiness)
+KITINERARY_MAKE_DERIVED_CLASS(FoodEstablishment, LocalBusiness)
 KITINERARY_MAKE_OPERATOR(FoodEstablishment)
 
 class LodgingBusinessPrivate : public LocalBusinessPrivate
 {
     KITINERARY_PRIVATE_GADGET(LodgingBusiness)
 };
-KITINERARY_MAKE_SUB_CLASS(LodgingBusiness, LocalBusiness)
+KITINERARY_MAKE_DERIVED_CLASS(LodgingBusiness, LocalBusiness)
 KITINERARY_MAKE_OPERATOR(LodgingBusiness)
 
 }

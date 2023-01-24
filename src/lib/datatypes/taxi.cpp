@@ -20,7 +20,7 @@ public:
     QString name;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(Taxi)
+KITINERARY_MAKE_CLASS(Taxi)
 KITINERARY_MAKE_PROPERTY(Taxi, QString, name, setName)
 KITINERARY_MAKE_OPERATOR(Taxi)
 }

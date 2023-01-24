@@ -27,7 +27,7 @@ public:
     QVariant location;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(Event)
+KITINERARY_MAKE_CLASS(Event)
 KITINERARY_MAKE_PROPERTY(Event, QString, name, setName)
 KITINERARY_MAKE_PROPERTY(Event, QString, description, setDescription)
 KITINERARY_MAKE_PROPERTY(Event, QUrl, image, setImage)

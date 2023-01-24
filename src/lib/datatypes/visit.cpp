@@ -21,7 +21,7 @@ public:
     QDateTime departureTime;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(TouristAttractionVisit)
+KITINERARY_MAKE_CLASS(TouristAttractionVisit)
 KITINERARY_MAKE_PROPERTY(TouristAttractionVisit, TouristAttraction, touristAttraction, setTouristAttraction)
 KITINERARY_MAKE_PROPERTY(TouristAttractionVisit, QDateTime, arrivalTime, setArrivalTime)
 KITINERARY_MAKE_PROPERTY(TouristAttractionVisit, QDateTime, departureTime, setDepartureTime)

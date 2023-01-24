@@ -27,7 +27,7 @@ public:
     Organization provider;
 };
 
-KITINERARY_MAKE_SIMPLE_CLASS(BusTrip)
+KITINERARY_MAKE_CLASS(BusTrip)
 KITINERARY_MAKE_PROPERTY(BusTrip, QString, arrivalPlatform, setArrivalPlatform)
 KITINERARY_MAKE_PROPERTY(BusTrip, BusStation, arrivalBusStop, setArrivalBusStop)
 KITINERARY_MAKE_PROPERTY(BusTrip, QDateTime, arrivalTime, setArrivalTime)

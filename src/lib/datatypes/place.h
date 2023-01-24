@@ -67,7 +67,7 @@ class PlacePrivate;
  */
 class KITINERARY_EXPORT Place
 {
-    KITINERARY_BASE_GADGET(Place)
+    KITINERARY_GADGET(Place)
     KITINERARY_PROPERTY(QString, name, setName)
     KITINERARY_PROPERTY(KItinerary::PostalAddress, address, setAddress)
     KITINERARY_PROPERTY(KItinerary::GeoCoordinates, geo, setGeo)
@@ -96,6 +96,8 @@ protected:
     ///@endcond
 };
 
+class AirportPrivate;
+
 /** Airport.
  *  @see https://schema.org/Airport.
  */
@@ -105,6 +107,8 @@ class KITINERARY_EXPORT Airport : public Place
     KITINERARY_PROPERTY(QString, iataCode, setIataCode)
 };
 
+class BoatTerminalPrivate;
+
 /** Boat or ferry terminal.
  *  @see https://schema.org/BoatTerminal
  */
@@ -112,6 +116,8 @@ class KITINERARY_EXPORT BoatTerminal : public Place
 {
     KITINERARY_GADGET(BoatTerminal)
 };
+
+class TrainStationPrivate;
 
 /** Train station.
  *  @see https://schema.org/TrainStation
@@ -121,6 +127,8 @@ class KITINERARY_EXPORT TrainStation : public Place
     KITINERARY_GADGET(TrainStation)
 };
 
+class BusStationPrivate;
+
 /** Bus station.
  *  @see https://schema.org/BusStation
  */
@@ -129,6 +137,7 @@ class KITINERARY_EXPORT BusStation : public Place
     KITINERARY_GADGET(BusStation)
 };
 
+class TouristAttractionPrivate;
 
 /** Tourist attraction (e.g. Museum, sight, etc.).
  * @see https://schema.org/TouristAttraction
