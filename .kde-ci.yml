@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 Dependencies:
-- 'on': ['@all']
+- 'on': ['Linux/Qt5', 'FreeBSD/Qt5', 'Windows/Qt5', 'Android/Qt5']
   'require':
     'frameworks/extra-cmake-modules': '@latest'
     'frameworks/ki18n' : '@latest'
@@ -11,6 +11,17 @@ Dependencies:
     'frameworks/kcodecs' : '@latest'
     'pim/kmime' : '@same'
     'pim/kpkpass' : '@same'
+    'third-party/zxing-cpp': '@latest'
+
+- 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6', 'Android/Qt6']
+  'require':
+    'frameworks/extra-cmake-modules': '@latest-kf6'
+    'frameworks/ki18n' : '@latest-kf6'
+    'frameworks/kcontacts' : '@latest-kf6'
+    'frameworks/kcalendarcore' : '@latest-kf6'
+    'frameworks/kcodecs' : '@latest-kf6'
+    'pim/kmime' : '@latest-kf6'
+    'pim/kpkpass' : '@latest-kf6'
     'third-party/zxing-cpp': '@latest'
 
 Options:

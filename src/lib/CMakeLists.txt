@@ -187,12 +187,12 @@ target_link_libraries(KPimItinerary
         KF5::Mime
     PRIVATE
         Qt::Qml
-        KF5::Archive
-        KF5::I18n
-        KF5::I18nLocaleData
-        KF5::CalendarCore
-        KF5::Codecs
-        KF5::Contacts
+        KF${KF_MAJOR_VERSION}::Archive
+        KF${KF_MAJOR_VERSION}::I18n
+        KF${KF_MAJOR_VERSION}::I18nLocaleData
+        KF${KF_MAJOR_VERSION}::CalendarCore
+        KF${KF_MAJOR_VERSION}::Codecs
+        KF${KF_MAJOR_VERSION}::Contacts
         KPim::PkPass
         Poppler::Core
         OpenSSL::Crypto

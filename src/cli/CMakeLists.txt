@@ -16,7 +16,7 @@ endif()
 target_link_libraries(kitinerary-extractor
     KPimItinerary
     KPim::PkPass
-    KF5::CalendarCore
+    KF${KF_MAJOR_VERSION}::CalendarCore
 )
 
 if (KITINERARY_STANDALONE_CLI_EXTRACTOR)

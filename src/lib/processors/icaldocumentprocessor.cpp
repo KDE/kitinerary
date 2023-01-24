@@ -76,13 +76,13 @@ void IcalCalendarProcessor::expandNode(ExtractorDocumentNode &node, const Extrac
 
 bool IcalEventProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
 {
-    const auto event = node.content<KCalCore::Event::Ptr>();
+    const auto event = node.content<KCalendarCore::Event::Ptr>();
     return matchesGadget(filter, event.data());
 }
 
 void IcalEventProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
-    const auto event = node.content<KCalCore::Event::Ptr>();
+    const auto event = node.content<KCalendarCore::Event::Ptr>();
     const auto data = event->customProperty("KITINERARY", "RESERVATION");
     if (!data.isEmpty()) {
         node.addResult(QJsonDocument::fromJson(data.toUtf8()).array());
@@ -95,7 +95,7 @@ void IcalEventProcessor::postExtract(ExtractorDocumentNode &node, const Extracto
         return;
     }
 
-    const auto event = node.content<KCalCore::Event::Ptr>();
+    const auto event = node.content<KCalendarCore::Event::Ptr>();
     if (event->recurs() || event->hasRecurrenceId()) {
         return;
     }
