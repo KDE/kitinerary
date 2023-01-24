@@ -56,7 +56,7 @@ private Q_SLOTS:
         img.load(QStringLiteral(SOURCE_DIR "/barcodes/aztec-partial-quiet-zone.png"));
         QVERIFY(!img.isNull());
         QVERIFY(BarcodeDecoder::maybeBarcode(img.width(), img.height(), BarcodeDecoder::Any) & BarcodeDecoder::Aztec);
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("KF${KF_MAJOR_VERSION}::Prison - The KDE barcode generation framework."));
+        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("KF5::Prison - The KDE barcode generation framework."));
 
         img.load(QStringLiteral(SOURCE_DIR "/barcodes/uic918-3star.png"));
         QVERIFY(!img.isNull());
