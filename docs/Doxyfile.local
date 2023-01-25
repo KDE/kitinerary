@@ -3,7 +3,20 @@
 
 EXTRACT_STATIC = NO
 EXCLUDE_PATTERNS += */knowledgedb-generator/* \
-                    */internal/*
+                    */internal/* \
+                    */src/osm/*
 PREDEFINED += \
     KITINERARY_EXPORT="" \
-    KITINERARY_PROPERTY(type,name,setter)="Q_PROPERTY(type name READ name WRITE setter)"
+    KITINERARY_PROPERTY(type,name,setter)="Q_PROPERTY(type name READ name WRITE setter)" \
+    IATA_HEX_PROPERTY(name,start,len)="Q_PROPERTY(int name READ name)" \
+    IATA_NUM_PROPERTY(name,start,len)="Q_PROPERTY(int name READ name)" \
+    IATA_STR_PROPERTY(name,start,len)="Q_PROPERTY(QString name READ name)" \
+    VDV_DATE_PROPERTY(name)="Q_PROPERTY(QDate name READ name)" \
+    VDV_DATETIME_PROPERTY(name)="Q_PROPERTY(QDateTime name READ name)" \
+    VDV_NUM_PROPERTY(name)="Q_PROPERTY(uint name READ name)" \
+    SSB_NUM_PROPERTY(name,start,len)="Q_PROPERTY(int name READ name)" \
+    SSB_LONG_PROPERTY(name,start,len)="Q_PROPERTY(quint64 name READ name)" \
+    SSB_STR_PROPERTY(name,start,len)="Q_PROPERTY(QString name READ name)" \
+    UPER_ELEMENT(type,name)="Q_PROPERTY(type name READ name)" \
+    UPER_ELEMENT_OPTIONAL(type,name)="Q_PROPERTY(type name READ name)" \
+    UPER_ELEMENT_DEFAULT(type,name,def)="Q_PROPERTY(type name READ name)"

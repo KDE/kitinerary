@@ -27,6 +27,7 @@ namespace Fcb {
 
 Q_NAMESPACE
 
+/** Generic extension data. */
 class ExtensionData {
     UPER_GADGET
     UPER_ELEMENT(QByteArray, extensionId)
@@ -61,6 +62,7 @@ enum HemisphereLatitudeType {
 };
 UPER_ENUM(HemisphereLatitudeType)
 
+/** Geographic coordinate. */
 class GeoCoordinateType {
     UPER_GADGET
     UPER_ELEMENT_DEFAULT(KItinerary::Fcb::GeoUnitType, geoUnit, milliDegree)
@@ -73,6 +75,7 @@ class GeoCoordinateType {
     UPER_GADGET_FINALIZE
 };
 
+/** Delta encoding of a geographic coordinate. */
 class DeltaCoordinate {
     UPER_GADGET
     UPER_ELEMENT(int, longitude)
@@ -80,6 +83,7 @@ class DeltaCoordinate {
     UPER_GADGET_FINALIZE
 };
 
+/** Issuing information. */
 class IssuingData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, securityProviderNum)
@@ -128,6 +132,7 @@ enum PassengerType {
 };
 UPER_EXTENABLE_ENUM(PassengerType)
 
+/** Customer status information. */
 class CustomerStatusType {
     UPER_GADGET
     UPER_ELEMENT_OPTIONAL(int, statusProviderNum)
@@ -137,6 +142,7 @@ class CustomerStatusType {
     UPER_GADGET_FINALIZE
 };
 
+/** Information about a single traveler. */
 class TravelerType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QString, firstName)
@@ -160,6 +166,7 @@ class TravelerType {
     UPER_GADGET_FINALIZE
 };
 
+/** A set of traverlers. */
 class TravelerData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::TravelerType>, traveler)
@@ -177,6 +184,7 @@ enum CodeTableType {
 };
 UPER_ENUM(CodeTableType)
 
+/** Reference to a specific train journey. */
 class TrainLinkType {
     UPER_GADGET
     UPER_ELEMENT_OPTIONAL(int, trainNum)
@@ -193,6 +201,7 @@ class TrainLinkType {
     UPER_GADGET_FINALIZE
 };
 
+/** A set of via stations. */
 class ViaStationType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_DEFAULT(KItinerary::Fcb::CodeTableType, stationCodeTable, stationUIC)
@@ -208,6 +217,7 @@ class ViaStationType {
     UPER_GADGET_FINALIZE
 };
 
+/** A tariff zone. */
 class ZoneType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, carrierNum)
@@ -224,6 +234,7 @@ class ZoneType {
     UPER_GADGET_FINALIZE
 };
 
+/** */
 class LineType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, carrierNum)
@@ -239,6 +250,7 @@ class LineType {
     UPER_GADGET_FINALIZE
 };
 
+/** A geographic polygon. */
 class PolygoneType {
     UPER_GADGET
     UPER_ELEMENT(KItinerary::Fcb::GeoCoordinateType, firstEdge)
@@ -246,6 +258,14 @@ class PolygoneType {
     UPER_GADGET_FINALIZE
 };
 
+/** Regional validity information.
+ *  Can be one of:
+ *  - TrainLinkType
+ *  - ViaStationType
+ *  - ZoneType
+ *  - LineType
+ *  - PolygoneType
+ */
 class RegionalValidityType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT(QVariant, value)
@@ -297,6 +317,7 @@ class SeriesDetailType {
     UPER_GADGET_FINALIZE
 };
 
+/** Customer card information. */
 class CardReferenceType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, cardIssuerNum)
@@ -320,6 +341,7 @@ enum ServiceType {
 };
 UPER_ENUM(ServiceType)
 
+/** Seat information. */
 class PlacesType {
     UPER_GADGET
     UPER_ELEMENT_OPTIONAL(QByteArray, coach)
@@ -337,6 +359,7 @@ enum class CompartmentPositionType {
 };
 UPER_ENUM(CompartmentPositionType)
 
+/** Compartment information. */
 class CompartmentDetailsType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, coachType)
@@ -368,6 +391,7 @@ enum class CompartmentGenderType {
 };
 UPER_EXTENABLE_ENUM(CompartmentGenderType)
 
+/** Berth information. */
 class BerthDetailData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT(KItinerary::Fcb::BerthTypeType, berthType)
@@ -376,6 +400,7 @@ class BerthDetailData {
     UPER_GADGET_FINALIZE
 };
 
+/** Tariff information. */
 class TariffType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_DEFAULT(int, numberOfPassengers, 1)
@@ -401,6 +426,7 @@ enum PriceTypeType {
 };
 UPER_ENUM(PriceTypeType)
 
+/** VAT information. */
 class VatDetailType {
     UPER_GADGET
     UPER_ELEMENT(int, country)
@@ -410,6 +436,7 @@ class VatDetailType {
     UPER_GADGET_FINALIZE
 };
 
+/** Open tickets included into a reservation. */
 class IncludedOpenTicketType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, productOwnerNum)
@@ -438,6 +465,7 @@ class IncludedOpenTicketType {
     UPER_GADGET_FINALIZE
 };
 
+/** Luggage information. */
 class RegisteredLuggageType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QByteArray, registrationId)
@@ -446,6 +474,7 @@ class RegisteredLuggageType {
     UPER_GADGET_FINALIZE
 };
 
+/** Luggage restriction information. */
 class LuggageRestrictionType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_DEFAULT(int, maxHandLuggagePieces, 3)
@@ -454,6 +483,7 @@ class LuggageRestrictionType {
     UPER_GADGET_FINALIZE
 };
 
+/** Reservation document (IRT, RES). */
 class ReservationData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, trainNum)
@@ -527,6 +557,7 @@ enum class LoadingDeckType {
 };
 UPER_ENUM(LoadingDeckType)
 
+/** Car carriage reservation document. */
 class CarCarriageReservationData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, trainNum)
@@ -577,6 +608,7 @@ class CarCarriageReservationData {
     UPER_GADGET_FINALIZE
 };
 
+/** Open ticket document (NRT). */
 class OpenTicketData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, referenceNum)
@@ -625,6 +657,7 @@ public:
     Q_INVOKABLE QDateTime validUntil(const QDateTime &issueingDateTime) const;
 };
 
+/** Time range. */
 class TimeRangeType {
     UPER_GADGET
     UPER_ELEMENT(int, fromTime)
@@ -632,6 +665,7 @@ class TimeRangeType {
     UPER_GADGET_FINALIZE
 };
 
+/** Validity time period. */
 class ValidityPeriodType {
     UPER_GADGET
     UPER_ELEMENT_DEFAULT(int, validFromDay, 0)
@@ -643,6 +677,7 @@ class ValidityPeriodType {
     UPER_GADGET_FINALIZE
 };
 
+/** Set of validity time period. */
 class ValidityPeriodDetailType {
     UPER_GADGET
     UPER_ELEMENT_OPTIONAL(QList<KItinerary::Fcb::ValidityPeriodDetailType>, validityPeriod)
@@ -650,6 +685,7 @@ class ValidityPeriodDetailType {
     UPER_GADGET_FINALIZE
 };
 
+/** Rail pass document (RPT). */
 class PassData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(int, referenceNum)
@@ -692,6 +728,7 @@ public:
     Q_INVOKABLE QDateTime validUntil(const QDateTime &issueingDateTime) const;
 };
 
+/** Voucher document. */
 class VoucherData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QByteArray, referenceIA5)
@@ -711,6 +748,7 @@ class VoucherData {
     UPER_GADGET_FINALIZE
 };
 
+/** Customer card document. */
 class CustomerCardData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::TravelerType, customer)
@@ -730,6 +768,7 @@ class CustomerCardData {
     UPER_GADGET_FINALIZE
 };
 
+/** Countermark document. */
 class CountermarkData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QByteArray, referenceIA5)
@@ -770,6 +809,7 @@ class CountermarkData {
     UPER_GADGET_FINALIZE
 };
 
+/** Parking ground document. */
 class ParkingGroundData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QByteArray, referenceIA5)
@@ -795,6 +835,7 @@ class ParkingGroundData {
     UPER_GADGET_FINALIZE
 };
 
+/** FIP ticket document. */
 class FIPTicketData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QByteArray, referenceIA5)
@@ -815,6 +856,7 @@ class FIPTicketData {
     UPER_GADGET_FINALIZE
 };
 
+/** Station passage document. */
 class StationPassageData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QByteArray, referenceIA5)
@@ -863,6 +905,7 @@ enum LinkMode {
 };
 UPER_EXTENABLE_ENUM(LinkMode)
 
+/** */
 class TicketLinkType {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QByteArray, referenceIA5)
@@ -876,6 +919,7 @@ class TicketLinkType {
     UPER_GADGET_FINALIZE
 };
 
+/** Delay confirmation document. */
 class DelayConfirmation {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QByteArray, referenceIA5)
@@ -898,6 +942,7 @@ class DelayConfirmation {
     UPER_GADGET_FINALIZE
 };
 
+/** Ticket token. */
 class TokenType {
     UPER_GADGET
     UPER_ELEMENT_OPTIONAL(int, tokenProviderNum)
@@ -907,6 +952,21 @@ class TokenType {
     UPER_GADGET_FINALIZE
 };
 
+/** Variant wrapper for specific document types.
+ *  Can be one of:
+ *  - ReservationData
+ *  - CarCarriageReservationData
+ *  - OpenTicketData
+ *  - PassData
+ *  - VoucherData
+ *  - CustomerCardData
+ *  - CountermarkData
+ *  - ParkingGroundData
+ *  - FIPTicketData
+ *  - StationPassageData
+ *  - ExtensionData
+ *  - DelayConfirmation
+ */
 class DocumentData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::TokenType, token)
@@ -914,6 +974,7 @@ class DocumentData {
     UPER_GADGET_FINALIZE
 };
 
+/** Ticket control data. */
 class ControlData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(QList <KItinerary::Fcb::CardReferenceType>, identificationByCardReference)
@@ -931,6 +992,7 @@ class ControlData {
     UPER_GADGET_FINALIZE
 };
 
+/** Top-level type for the ERA FCB ticket structure. */
 class KITINERARY_EXPORT UicRailTicketData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT(KItinerary::Fcb::IssuingData, issuingDetail)
