@@ -10,9 +10,6 @@
 #include "internal/parameter_type.h"
 #include "internal/strict_equal.h"
 
-#include <QDateTime>
-#include <QTimeZone>
-
 namespace KItinerary {
 
 namespace detail {
@@ -68,8 +65,6 @@ Class::Class(Class ## Private *dd) : d(dd) {}
 #define KITINERARY_MAKE_DERIVED_CLASS(Class, Base) \
 KITINERARY_MAKE_CLASS_IMPL(Class) \
 Class::Class(Class ## Private *dd) : Base(dd) {}
-
-#define K_D(Class) auto d = static_cast<Class ## Private *>(this->d.data())
 
 #define KITINERARY_MAKE_PROPERTY(Class, Type, Name, SetName) \
 Type Class::Name() const { return static_cast<const Class ## Private*>(d.data())->Name; } \
