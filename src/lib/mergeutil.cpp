@@ -596,13 +596,13 @@ static QVariantList mergeSubjectOf(const QVariantList &lhs, const QVariantList &
 {
     std::set<QString> mergedSet;
     for (const auto &v : lhs) {
-        if (v.type() != QVariant::String) {
+        if (v.userType() != QMetaType::QString) {
             return rhs.isEmpty() ? lhs : rhs;
         }
         mergedSet.insert(v.toString());
     }
     for (const auto &v : rhs) {
-        if (v.type() != QVariant::String) {
+        if (v.userType() != QMetaType::QString) {
             return rhs.isEmpty() ? lhs : rhs;
         }
         mergedSet.insert(v.toString());
@@ -616,10 +616,10 @@ static QVariantList mergeSubjectOf(const QVariantList &lhs, const QVariantList &
 
 static int ticketTokenSize(const QVariant &v)
 {
-    if (v.type() == QVariant::String) {
+    if (v.userType() == QMetaType::QString) {
         return v.toString().size();
     }
-    if (v.type() == QVariant::ByteArray) {
+    if (v.userType() == QMetaType::QByteArray) {
         return v.toByteArray().size();
     }
     return 0;
@@ -677,15 +677,15 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
             rv = mergeValue(lv.value<Airline>(), rv.value<Airline>());
         } else if (mt == qMetaTypeId<Person>()) {
             rv = mergeValue(lv.value<Person>(), rv.value<Person>());
-        } else if (mt == qMetaTypeId<QDateTime>()) {
+        } else if (mt == QMetaType::QDateTime) {
             rv = mergeValue(lv.toDateTime(), rv.toDateTime());
         } else if (mt == qMetaTypeId<Ticket>()) {
             rv = mergeValue(lv.value<Ticket>(), rv.value<Ticket>());
         } else if ((metaType.flags() & QMetaType::IsGadget) && metaType.metaObject()) {
             rv = merge(prop.readOnGadget(lhs.constData()), rv);
-        } else if (mt == QVariant::List && std::strcmp(prop.name(), "subjectOf") == 0) {
+        } else if (mt == QMetaType::QVariantList && std::strcmp(prop.name(), "subjectOf") == 0) {
             rv = mergeSubjectOf(lv.toList(), rv.toList());
-        } else if (mt == QVariant::String) {
+        } else if (mt == QMetaType::QString) {
             rv = StringUtil::betterString(lv.toString(), rv.toString()).toString();
         }
 
@@ -721,10 +721,10 @@ bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs)
         return false;
     }
 
-    if (lhs.type() == QVariant::String) {
+    if (lhs.userType() == QMetaType::QString) {
         return !prefixConflictIfPresent(lhs.toString(), rhs.toString());
     }
-    if (lhs.type() == QVariant::ByteArray) {
+    if (lhs.userType() == QMetaType::QByteArray) {
         return !prefixConflictIfPresent(lhs.toByteArray(), rhs.toByteArray());
     }
 

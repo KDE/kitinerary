@@ -385,7 +385,7 @@ QJSValue JsApi::JsonLd::toGeoCoordinates(const QString &mapUrl)
 
 QJSValue JsApi::JsonLd::readQDateTime(const QVariant &obj, const QString &propName) const
 {
-    const auto mo = QMetaType::metaObjectForType(obj.userType());
+    const auto mo = QMetaType(obj.userType()).metaObject();
     if (!mo) {
         return {};
     }

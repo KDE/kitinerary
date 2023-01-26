@@ -60,7 +60,7 @@ ExtractorDocumentNode HtmlDocumentProcessor::createNodeFromData(const QByteArray
 
 ExtractorDocumentNode HtmlDocumentProcessor::createNodeFromContent(const QVariant &decodedData) const
 {
-    if (decodedData.type() == QVariant::String) {
+    if (decodedData.userType() == QMetaType::QString) {
         return nodeFromHtml(HtmlDocument::fromString(decodedData.toString()));
     }
     return ExtractorDocumentProcessor::createNodeFromContent(decodedData);

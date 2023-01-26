@@ -163,8 +163,8 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         return key;
     }
 
-    switch (prop.type()) {
-    case QVariant::String:
+    switch (prop.userType()) {
+    case QMetaType::QString:
         if (v.isDouble()) {
             double i = 0.0;
             const auto frac = std::modf(v.toDouble(), &i);
@@ -174,9 +174,9 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
             return QString::number(v.toDouble());
         }
         return v.toString();
-    case QVariant::Date:
+    case QMetaType::QDate:
         return QDate::fromString(v.toString(), Qt::ISODate);
-    case QVariant::DateTime:
+    case QMetaType::QDateTime:
     {
         QDateTime dt;
         if (v.isObject()) {
@@ -205,25 +205,20 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
 
         return dt;
     }
-    case QVariant::Double:
+    case QMetaType::Double:
+    case QMetaType::Float:
         return doubleValue(v);
-    case QVariant::Int:
+    case QMetaType::Int:
         if (v.isDouble()) {
             return v.toDouble();
         }
         return v.toString().toInt();
-    case QVariant::Time:
+    case QMetaType::QTime:
         return QTime::fromString(v.toString(), Qt::ISODate);
-    case QVariant::Url:
+    case QMetaType::QUrl:
         return QUrl(v.toString());
-    default:
-        break;
-    }
-    if (prop.type() == qMetaTypeId<float>()) {
-        return doubleValue(v);
-    }
-
-    if (prop.userType() == qMetaTypeId<QVariantList>()) {
+    case QMetaType::QVariantList:
+    {
         QVariantList l;
         if (v.isArray()) {
             const auto array = v.toArray();
@@ -240,6 +235,9 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
             }
         }
         return QVariant::fromValue(l);
+    }
+    default:
+        break;
     }
 
     const auto obj = v.toObject();
@@ -304,7 +302,7 @@ static QVariant createInstance(const QJsonObject &obj, const QMetaProperty &prop
     }
 
     // if @type is (wrongly) not specified, try to recover from our own knowledge of a property type
-    const auto mo = QMetaType::metaObjectForType(prop.userType());
+    const auto mo = QMetaType(prop.userType()).metaObject();
     if (mo) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QVariant value(prop.userType(), nullptr);
@@ -353,24 +351,20 @@ QVariant JsonLdDocument::fromJsonSingular(const QJsonObject &obj)
 
 bool JsonLd::valueIsNull(const QVariant &v)
 {
-    if (v.type() == QVariant::Url) {
-        return !v.toUrl().isValid();
-    }
-    if (v.type() == qMetaTypeId<float>()) {
-        return std::isnan(v.toFloat());
-    }
-    if (v.type() == QVariant::List) {
-        return v.toList().isEmpty();
-    }
-    // starting with Qt6, QVariant::isNull is "shallow" and would miss the following as well
-    if (v.type() == QVariant::String) {
-        return v.toString().isNull();
-    }
-    if (v.type() == QVariant::DateTime) {
-        return v.toDateTime().isNull();
-    }
-    if (v.type() == QVariant::Date) {
-        return v.toDate().isNull();
+    switch (v.userType()) {
+        case QMetaType::QUrl:
+            return !v.toUrl().isValid();
+        case QMetaType::Float:
+            return std::isnan(v.toFloat());
+        case QMetaType::QVariantList:
+            return v.toList().isEmpty();
+        // starting with Qt6, QVariant::isNull is "shallow" and would miss the following as well
+        case QMetaType::QString:
+            return v.toString().isNull();
+        case QMetaType::QDateTime:
+            return v.toDateTime().isNull();
+        case QMetaType::QDate:
+            return v.toDate().isNull();
     }
     return v.isNull();
 }
@@ -393,16 +387,16 @@ QJsonValue JsonLdDocument::toJsonValue(const QVariant &v)
     const auto mo = QMetaType(v.userType()).metaObject();
     if (!mo) {
         // basic types
-        switch (v.type()) {
-        case QVariant::String:
+        switch (v.userType()) {
+        case QMetaType::QString:
             return v.toString();
-        case QVariant::Double:
+        case QMetaType::Double:
             return v.toDouble();
-        case QVariant::Int:
+        case QMetaType::Int:
             return v.toInt();
-        case QVariant::Date:
+        case QMetaType::QDate:
             return v.toDate().toString(Qt::ISODate);
-        case QVariant::DateTime:
+        case QMetaType::QDateTime:
         {
             const auto dt = v.toDateTime();
             if (dt.timeSpec() == Qt::TimeZone) {
@@ -414,17 +408,16 @@ QJsonValue JsonLdDocument::toJsonValue(const QVariant &v)
             }
             return v.toDateTime().toString(Qt::ISODate);
         }
-        case QVariant::Time:
+        case QMetaType::QTime:
             return v.toTime().toString(Qt::ISODate);
-        case QVariant::Url:
+        case QMetaType::QUrl:
             return v.toUrl().toString();
-        case QVariant::Bool:
+        case QMetaType::Bool:
             return v.toBool();
+        case QMetaType::Float:
+            return v.toFloat();
         default:
             break;
-        }
-        if (v.userType() == qMetaTypeId<float>()) {
-            return v.toFloat();
         }
 
         if (v.canConvert<QVariantList>()) {
@@ -461,7 +454,7 @@ QJsonValue JsonLdDocument::toJsonValue(const QVariant &v)
             }
             obj.insert(QString::fromUtf8(prop.name()), value);
             continue;
-        } else if (QMetaType::typeFlags(prop.userType()) & QMetaType::IsEnumeration) { // external enums
+        } else if (QMetaType(prop.userType()).flags() & QMetaType::IsEnumeration) { // external enums
             obj.insert(QString::fromUtf8(prop.name()), prop.readOnGadget(v.constData()).toString());
             continue;
         }
@@ -570,28 +563,28 @@ QVariant JsonLdDocument::apply(const QVariant& lhs, const QVariant& rhs)
             continue;
         }
 
-        if (prop.isEnumType() && rhs.type() == QVariant::String) { // internal enums in this QMO
+        if (prop.isEnumType() && rhs.userType() == QMetaType::QString) { // internal enums in this QMO
             const auto key = prop.enumerator().keyToValue(rhs.toString().toUtf8().constData());
             prop.writeOnGadget(res.data(), key);
             continue;
         }
-        if ((QMetaType::typeFlags(prop.userType()) & QMetaType::IsEnumeration) && rhs.type() == QVariant::String) { // external enums
+        if ((QMetaType(prop.userType()).flags() & QMetaType::IsEnumeration) && rhs.userType() == QMetaType::QString) { // external enums
             const QMetaType mt(prop.userType());
             const auto mo = mt.metaObject();
             if (!mo) {
-                qCWarning(Log) << "No meta object found for enum type:" << prop.type();
+                qCWarning(Log) << "No meta object found for enum type:" << prop.typeName();
                 continue;
             }
             const auto enumIdx = mo->indexOfEnumerator(prop.typeName() + strlen(mo->className()) + 2);
             if (enumIdx < 0) {
-                qCWarning(Log) << "Could not find QMetaEnum for" << prop.type();
+                qCWarning(Log) << "Could not find QMetaEnum for" << prop.typeName();
                 continue;
             }
             const auto me = mo->enumerator(enumIdx);
             bool success = false;
             const auto numValue = me.keyToValue(rhs.toString().toUtf8().constData(), &success);
             if (!success) {
-                qCWarning(Log) << "Unknown enum value" << rhs.toString() << "for" << prop.type();
+                qCWarning(Log) << "Unknown enum value" << rhs.toString() << "for" << prop.typeName();
                 continue;
             }
             auto valueData = mt.create();
@@ -606,7 +599,7 @@ QVariant JsonLdDocument::apply(const QVariant& lhs, const QVariant& rhs)
         }
 
         auto pv = prop.readOnGadget(rhs.constData());
-        if ((QMetaType::typeFlags(pv.userType()) & QMetaType::IsGadget) && QMetaType(pv.userType()).metaObject()) {
+        if ((QMetaType(pv.userType()).flags() & QMetaType::IsGadget) && QMetaType(pv.userType()).metaObject()) {
             pv = apply(prop.readOnGadget(lhs.constData()), pv);
         }
         if (!JsonLd::valueIsNull(pv)) {

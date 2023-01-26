@@ -119,7 +119,7 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
     std::vector<ExtractorDocumentNode> bcbpNodes;
     m_filter.allMatches(node, bcbpNodes);
     std::remove_if(bcbpNodes.begin(), bcbpNodes.end(), [](const auto &node) {
-        return node.location().type() != QVariant::Int || node.result().isEmpty();
+        return node.location().userType() != QMetaType::Int || node.result().isEmpty();
     });
     std::sort(bcbpNodes.begin(), bcbpNodes.end(), [](const auto &lhs, const auto &rhs) { return lhs.location().toInt() < rhs.location().toInt(); });
 
@@ -203,16 +203,16 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
             timeFinder.find(pageText);
             std::vector<QDateTime> times;
             for (const auto &res : timeFinder.results()) {
-                switch (res.dateTime.type()) {
-                    case QVariant::Time:
+                switch (res.dateTime.userType()) {
+                    case QMetaType::QTime:
                         times.push_back(QDateTime(departureDay, res.dateTime.toTime()));
                         break;
-                    case QVariant::DateTime:
+                    case QMetaType::QDateTime:
                         if (res.dateTime.toDateTime().date() == departureDay) {
                             times.push_back(res.dateTime.toDateTime());
                         }
                         break;
-                    case QVariant::Date:
+                    case QMetaType::QDate:
                     default:
                         break;
                 }

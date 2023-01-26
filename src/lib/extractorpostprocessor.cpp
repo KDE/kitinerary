@@ -599,7 +599,11 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
     }
 
     AddressParser addrParser;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    addrParser.setFallbackCountry(KCountry::fromQLocale(QLocale().territory()).alpha2());
+#else
     addrParser.setFallbackCountry(KCountry::fromQLocale(QLocale().country()).alpha2());
+#endif
     addrParser.parse(addr);
     addr = addrParser.result();
     return addr;

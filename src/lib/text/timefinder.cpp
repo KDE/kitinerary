@@ -166,7 +166,7 @@ void TimeFinder::mergeResults()
 
     for (auto it = m_results.begin(); it != m_results.end() && it != std::prev(m_results.end());) {
         auto nextIt = std::next(it);
-        if ((*it).end + 1 == (*nextIt).begin && (*it).dateTime.type() == QVariant::Date && (*nextIt).dateTime.type() == QVariant::Time) {
+        if ((*it).end + 1 == (*nextIt).begin && (*it).dateTime.userType() == QMetaType::QDate && (*nextIt).dateTime.userType() == QMetaType::QTime) {
             (*it).end = (*nextIt).end;
             (*it).dateTime = QDateTime((*it).dateTime.toDate(), (*nextIt).dateTime.toTime());
             it = m_results.erase(nextIt);

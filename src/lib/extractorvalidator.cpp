@@ -184,7 +184,7 @@ struct {
 
 bool ExtractorValidatorPrivate::filterElement(const QVariant &elem) const
 {
-    auto mo = QMetaType::metaObjectForType(elem.userType());
+    auto mo = QMetaType(elem.userType()).metaObject();
     if (!mo) {
         qCDebug(ValidatorLog) << "Element discarded due to non-gadget type:" << elem.typeName();
         return false;
@@ -210,7 +210,7 @@ bool ExtractorValidatorPrivate::isSupportedTopLevelType(const QVariant &elem) co
         return true;
     }
 
-    auto mo = QMetaType::metaObjectForType(elem.userType());
+    auto mo = QMetaType(elem.userType()).metaObject();
     if (!mo) {
         qCDebug(ValidatorLog) << "Element discarded due to non-gadget top-level type:" << elem.typeName();
         return false;

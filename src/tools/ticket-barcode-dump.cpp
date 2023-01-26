@@ -55,19 +55,19 @@ static void dumpGadget(const void *gadget, const QMetaObject *mo, const char* in
         }
         const auto value = prop.readOnGadget(gadget);
         std::cout << indent << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
-        if (const auto childMo = QMetaType::metaObjectForType(value.userType())) {
+        if (const auto childMo = QMetaType(value.userType()).metaObject()) {
             QByteArray childIndent(indent);
             childIndent.push_back(' ');
             dumpGadget(value.constData(), childMo, childIndent.constData());
-        } else if (value.canConvert<QVariantList>() && value.type() != QVariant::String && value.type() != QVariant::ByteArray) {
+        } else if (value.canConvert<QVariantList>() && value.userType() != QMetaType::QString && value.userType() != QMetaType::QByteArray) {
             auto iterable = value.value<QSequentialIterable>();
             int idx = 0;
             QByteArray childIndent(indent);
             childIndent.append("  ");
             for (const QVariant &v : iterable) {
-                if (QMetaType::metaObjectForType(v.userType())) {
+                if (QMetaType(v.userType()).metaObject()) {
                     std::cout << indent << " [" << idx++ << "]:" << std::endl;
-                    dumpGadget(v.constData(), QMetaType::metaObjectForType(v.userType()), childIndent.constData());
+                    dumpGadget(v.constData(), QMetaType(v.userType()).metaObject(), childIndent.constData());
                 } else {
                     std::cout << indent << " [" << idx++ << "]: "  << qPrintable(v.toString()) << std::endl;
                 }
