@@ -52,6 +52,10 @@ inline T convert(const QVariant &value)
 }
 }
 
+/** Macro to mark a vocabulary type class.
+ *  Adds Qt introspection, value type semantics, comparison operators and additional
+ *  type information needed for JSON-LD (de)serialziation and QML access.
+ */
 #define KITINERARY_GADGET(Class) \
     Q_GADGET \
     Q_PROPERTY(QString className READ className STORED false CONSTANT) \
@@ -69,6 +73,9 @@ protected: \
     Class(Class ## Private *dd); \
 private:
 
+/** Macro to add a vocabulary type property.
+ *  This adds Qt introspection and declarations for getter and setter methods.
+ */
 #define KITINERARY_PROPERTY(Type, Name, SetName) \
     Q_PROPERTY(Type Name READ Name WRITE SetName STORED true) \
 public: \

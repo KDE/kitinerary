@@ -12,6 +12,7 @@
 
 namespace KItinerary {
 
+///@cond internal
 namespace detail {
 
 // SFINAE helper to determine if we have a polymorphic or a simple value type
@@ -57,15 +58,28 @@ namespace detail { \
     static constexpr int property_counter(num<0>, tag<Class>) { return 1; } \
     static constexpr bool property_equals(num<0>, tag<Class ## Private>, const Class ## Private *, const Class ## Private *) { return true; } \
 }
+///@endcond
 
+/** Macro to generate the value type and introspection implementation for a vocabulary type.
+ *  This provides the implementation of KITINERARY_GADGET.
+ */
 #define KITINERARY_MAKE_CLASS(Class) \
 KITINERARY_MAKE_CLASS_IMPL(Class) \
 Class::Class(Class ## Private *dd) : d(dd) {}
 
+/** Macro to generate the value type and introspection implementation for a derived vocabulary type.
+ *  This provides the implementation of KITINERARY_GADGET.
+ */
 #define KITINERARY_MAKE_DERIVED_CLASS(Class, Base) \
 KITINERARY_MAKE_CLASS_IMPL(Class) \
 Class::Class(Class ## Private *dd) : Base(dd) {}
 
+/** Macro to generate the implementation of a vocabulary property type.
+ *  This generates the definitions for the declaration the KITINERARY_PROPERTY macro
+ *  produces, as well as implementation details needed for the automatic comparison
+ *  operator.
+ *  @see KITINERARY_MAKE_OPERATOR
+ */
 #define KITINERARY_MAKE_PROPERTY(Class, Type, Name, SetName) \
 Type Class::Name() const { return static_cast<const Class ## Private*>(d.data())->Name; } \
 void Class::SetName(detail::parameter_type<Type>::type value) { \
@@ -82,6 +96,12 @@ namespace detail { \
     } \
 }
 
+/** Generates the implementation of the comparison operator for vocabulary type @p Class.
+ *  The generated operator==() implementation will check all properties for strict equality,
+ *  as well as call operator==() of a base class if present.
+ *  This relies on KITINERARY_MAKE_PROPERTY to generate supporting code and thus has to be
+ *  called after all properties have been generated.
+ */
 #define KITINERARY_MAKE_OPERATOR(Class) \
 bool Class::operator==(const Class &other) const \
 { \
