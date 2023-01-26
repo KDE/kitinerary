@@ -103,7 +103,7 @@ function parseHtmlCommon(doc, node, res)
             res.reservationNumber = href.match(/mailto:(\d+)-/)[1];
         } else if (aElem.attribute('universal') == 'true') {
             res.reservationFor.name = aElem.content;
-        } else if (aElem.content.match(/modify/) && href.startsWith("https:")) {
+        } else if (!res.modifyReservationUrl && href.startsWith("https:") && (href.match(/pbsource=email_change;/) || href.match(/pbsource=conf_email_modify;/))) {
             res.modifyReservationUrl = href;
         }
     }
