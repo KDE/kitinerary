@@ -294,7 +294,7 @@ function parseUic9183(code, node) {
         let res = JsonLd.newTrainReservation();
         res.reservedTicket = node.result[0];
         applyUic9183ToReservation(res, code);
-        res.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('031').content, 'dd.mm.yyyy', 'de');
+        res.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('031').content, 'dd.MM.yyyy', 'de');
         res.reservationFor.departureStation = JsonLd.toJson(code.outboundDepartureStation);
         res.reservationFor.arrivalStation = JsonLd.toJson(code.outboundArrivalStation);
 
@@ -305,7 +305,7 @@ function parseUic9183(code, node) {
         let ret = JsonLd.newTrainReservation();
         ret.reservedTicket = node.result[0];
         applyUic9183ToReservation(ret, code);
-        ret.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('032').content, 'dd.mm.yyyy', 'de');
+        ret.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('032').content, 'dd.MM.yyyy', 'de');
         ret.reservationFor.departureStation = JsonLd.toJson(code.returnDepartureStation);
         ret.reservationFor.arrivalStation = JsonLd.toJson(code.returnArrivalStation);
         return [res, ret];
