@@ -127,14 +127,6 @@ static const char* const fallbackDateTimePattern[] = {
 };
 static const auto fallbackDateTimePatternCount = sizeof(fallbackDateTimePattern) / sizeof(const char *);
 
-static double doubleValue(const QJsonValue &v)
-{
-    if (v.isDouble()) {
-        return v.toDouble();
-    }
-    return v.toString().toDouble();
-}
-
 static bool isEmptyJsonLdObject(const QJsonObject &obj)
 {
     for (auto it = obj.begin(); it != obj.end(); ++it) {
@@ -205,8 +197,16 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
 
         return dt;
     }
-    case QVariant::Double:
-        return doubleValue(v);
+    case QMetaType::Double:
+    case QMetaType::Float:
+    {
+        if (v.isDouble()) {
+            return v.toDouble();
+        }
+        bool ok = false;
+        const auto res = v.toString().toDouble(&ok);
+        return ok ? res : QVariant();
+    }
     case QVariant::Int:
         if (v.isDouble()) {
             return v.toDouble();
@@ -218,9 +218,6 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         return QUrl(v.toString());
     default:
         break;
-    }
-    if (prop.type() == qMetaTypeId<float>()) {
-        return doubleValue(v);
     }
 
     if (prop.userType() == qMetaTypeId<QVariantList>()) {
@@ -262,7 +259,9 @@ static void createInstance(const QMetaObject *mo, void *v, const QJsonObject &ob
         }
         const auto prop = mo->property(idx);
         const auto value = propertyValue(prop, it.value());
-        prop.writeOnGadget(v, value);
+        if (!value.isNull()) {
+            prop.writeOnGadget(v, value);
+        }
     }
 }
 
