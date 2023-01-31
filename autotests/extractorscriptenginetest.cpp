@@ -14,6 +14,8 @@
 #include <KItinerary/ExtractorResult>
 #include <KItinerary/ScriptExtractor>
 
+#include <kcalendarcore_version.h>
+
 #include <QDebug>
 #include <QFile>
 #include <QJsonDocument>
@@ -61,7 +63,9 @@ private Q_SLOTS:
 #else
             << s(SOURCE_DIR "/scriptenginedata/iata-bcbp-demo.pdf-no-zxing.json");
 #endif
+#if KCALENDARCORE_VERSION >= QT_VERSION_CHECK(5, 103, 0)
         QTest::newRow("ical") << s(SOURCE_DIR "/extractordata/ical/eventreservation.ics") << s(SOURCE_DIR "/scriptenginedata/eventreservation.ics.json");
+#endif
         QTest::newRow("uic9183") << s(SOURCE_DIR "/uic918-3/valid/Testw_VOW8XG6_A9E8DXL_0.bin") << s(SOURCE_DIR "/scriptenginedata/Testw_VOW8XG6_A9E8DXL_0.bin.json");
         QTest::newRow("html") << s(SOURCE_DIR "/structureddata/google-flight-reservation-json-ld.html") << s(SOURCE_DIR "/scriptenginedata/google-flight-reservation-json-ld.html.json");
     }
