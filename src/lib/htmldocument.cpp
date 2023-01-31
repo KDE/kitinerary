@@ -26,6 +26,7 @@ public:
     }
 
     xmlDocPtr m_doc;
+    QByteArray m_rawData;
 #endif
 };
 }
@@ -362,6 +363,11 @@ HtmlElement HtmlDocument::root() const
 #endif
 }
 
+QString HtmlDocument::rawData() const
+{
+    return QString::fromUtf8(d->m_rawData);
+}
+
 QVariant HtmlDocument::eval(const QString &xpath) const
 {
     return root().eval(xpath);
@@ -377,6 +383,7 @@ HtmlDocument* HtmlDocument::fromData(const QByteArray &data, QObject *parent)
 
     auto doc = new HtmlDocument(parent);
     doc->d->m_doc = tree;
+    doc->d->m_rawData = data;
     return doc;
 #else
     Q_UNUSED(data)
@@ -388,7 +395,7 @@ HtmlDocument* HtmlDocument::fromData(const QByteArray &data, QObject *parent)
 HtmlDocument* HtmlDocument::fromString(const QString &data, QObject *parent)
 {
 #if HAVE_LIBXML2
-    const auto utf8Data = data.toUtf8();
+    auto utf8Data = data.toUtf8();
     auto tree = htmlReadMemory(utf8Data.constData(), utf8Data.size(), nullptr, "utf-8", HTML_PARSE_RECOVER | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING | HTML_PARSE_NOBLANKS | HTML_PARSE_NONET | HTML_PARSE_COMPACT);
     if (!tree) {
         return nullptr;
@@ -396,6 +403,7 @@ HtmlDocument* HtmlDocument::fromString(const QString &data, QObject *parent)
 
     auto doc = new HtmlDocument(parent);
     doc->d->m_doc = tree;
+    doc->d->m_rawData = std::move(utf8Data);
     return doc;
 #else
     Q_UNUSED(data)

@@ -79,6 +79,7 @@ class KITINERARY_EXPORT HtmlDocument : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(KItinerary::HtmlElement root READ root)
+    Q_PROPERTY(QString rawData READ rawData CONSTANT)
 public:
     ~HtmlDocument();
 
@@ -93,6 +94,9 @@ public:
 
     /** Returns the root element of the document. */
     HtmlElement root() const;
+
+    /** Returns the raw textual HTML data. */
+    QString rawData() const;
 
     /** Evaluate an XPath expression relative to the document root. */
     Q_INVOKABLE QVariant eval(const QString &xpath) const;

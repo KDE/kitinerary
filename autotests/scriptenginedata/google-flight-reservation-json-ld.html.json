@@ -2,6 +2,7 @@
     {
         "content": {
             "objectName": "",
+            "rawData": "<!-- https://developers.google.com/gmail/markup/reference/flight-reservation -->\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"http://schema.org\",\n  \"@type\": \"FlightReservation\",\n  \"reservationNumber\": \"RXJ34P\",\n  \"reservationStatus\": \"http://schema.org/Confirmed\",\n  \"underName\": {\n    \"@type\": \"Person\",\n    \"name\": \"Eva Green\"\n  },\n  \"reservationFor\": {\n    \"@type\": \"Flight\",\n    \"flightNumber\": \"110\",\n    \"airline\": {\n      \"@type\": \"Airline\",\n      \"name\": \"United\",\n      \"iataCode\": \"UA\"\n    },\n    \"departureAirport\": {\n      \"@type\": \"Airport\",\n      \"name\": \"San Francisco Airport\",\n      \"iataCode\": \"SFO\"\n    },\n    \"departureTime\": \"2027-03-04T20:15:00-08:00\",\n    \"arrivalAirport\": {\n      \"@type\": \"Airport\",\n      \"name\": \"John F. Kennedy International Airport\",\n      \"iataCode\": \"JFK\"\n    },\n    \"arrivalTime\": \"2027-03-05T06:30:00-05:00\"\n  }\n}\n</script>\n",
             "root": {
                 "content": "",
                 "isNull": false,
@@ -25,6 +26,7 @@
         ],
         "content": {
             "objectName": "",
+            "rawData": "<!-- https://developers.google.com/gmail/markup/reference/flight-reservation -->\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"http://schema.org\",\n  \"@type\": \"FlightReservation\",\n  \"reservationNumber\": \"RXJ34P\",\n  \"reservationStatus\": \"http://schema.org/Confirmed\",\n  \"underName\": {\n    \"@type\": \"Person\",\n    \"name\": \"Eva Green\"\n  },\n  \"reservationFor\": {\n    \"@type\": \"Flight\",\n    \"flightNumber\": \"110\",\n    \"airline\": {\n      \"@type\": \"Airline\",\n      \"name\": \"United\",\n      \"iataCode\": \"UA\"\n    },\n    \"departureAirport\": {\n      \"@type\": \"Airport\",\n      \"name\": \"San Francisco Airport\",\n      \"iataCode\": \"SFO\"\n    },\n    \"departureTime\": \"2027-03-04T20:15:00-08:00\",\n    \"arrivalAirport\": {\n      \"@type\": \"Airport\",\n      \"name\": \"John F. Kennedy International Airport\",\n      \"iataCode\": \"JFK\"\n    },\n    \"arrivalTime\": \"2027-03-05T06:30:00-05:00\"\n  }\n}\n</script>\n",
             "root": {
                 "content": "",
                 "isNull": false,
