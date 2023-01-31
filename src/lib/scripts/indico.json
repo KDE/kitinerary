@@ -5,6 +5,12 @@
             "match": "^\\[Indico\\] ",
             "mimeType": "message/rfc822",
             "scope": "Ancestors"
+        },
+        {
+            "field": "Subject",
+            "match": "^Registration modified ",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
         }
     ],
     "function": "parseRegistration",
