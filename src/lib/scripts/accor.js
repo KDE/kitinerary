@@ -47,5 +47,10 @@ function parseConfirmation(html) {
     res.reservationFor.address.addressLocality = addr[2];
     res.reservationFor.address.addressCountry = addr[3];
 
+    // this is in an HTML comment...
+    if (html.rawData.match(/TARS - AH - Client - Cancellation - Email/)) {
+        res.reservationStatus = "ReservationCancelled"
+    }
+
     return res;
 }
