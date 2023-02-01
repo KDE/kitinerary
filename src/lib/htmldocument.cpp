@@ -365,7 +365,11 @@ HtmlElement HtmlDocument::root() const
 
 QString HtmlDocument::rawData() const
 {
+#if HAVE_LIBXML2
     return QString::fromUtf8(d->m_rawData);
+#else
+    return {};
+#endif
 }
 
 QVariant HtmlDocument::eval(const QString &xpath) const
