@@ -81,7 +81,7 @@ private Q_SLOTS:
         QFETCH(QString, inputFile);
 
         m_engine.clear();
-        if (inputFile.endsWith(QLatin1String(".png"))) {
+        if (inputFile.endsWith(QLatin1String(".png")) || inputFile.endsWith(QLatin1String(".pdf"))) {
             m_engine.setHints(ExtractorEngine::ExtractFullPageRasterImages);
         } else if (inputFile.endsWith(QLatin1String(".ics"))) {
             m_engine.setHints(ExtractorEngine::ExtractGenericIcalEvents);
