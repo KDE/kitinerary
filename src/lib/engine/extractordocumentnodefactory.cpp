@@ -10,6 +10,7 @@
 #include "logging.h"
 
 #include "processors/binarydocumentprocessor.h"
+#include "processors/eradocumentprocessor.h"
 #include "processors/externalprocessor.h"
 #include "processors/htmldocumentprocessor.h"
 #include "processors/iatabcbpdocumentprocessor.h"
@@ -19,7 +20,6 @@
 #include "processors/mimedocumentprocessor.h"
 #include "processors/pdfdocumentprocessor.h"
 #include "processors/pkpassdocumentprocessor.h"
-#include "processors/ssbdocumentprocessor.h"
 #include "processors/textdocumentprocessor.h"
 #include "processors/uic9183documentprocessor.h"
 #include "processors/vdvdocumentprocessor.h"
@@ -115,6 +115,7 @@ void ExtractorDocumentNodeFactoryStatic::registerBuiltIn()
     registerProcessor<PkPassDocumentProcessor>(u"application/vnd.apple.pkpass");
     registerProcessor<IcalEventProcessor>(u"internal/event");
     registerProcessor<ImageDocumentProcessor>(u"internal/qimage", {u"image/png"});
+    registerProcessor<ElbDocumentProcessor>(u"internal/era-elb");
     registerProcessor<SsbDocumentProcessor>(u"internal/era-ssb");
     registerProcessor<IataBcbpDocumentProcessor>(u"internal/iata-bcbp");
     registerProcessor<Uic9183DocumentProcessor>(u"internal/uic9183");

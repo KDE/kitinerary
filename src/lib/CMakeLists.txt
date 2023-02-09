@@ -45,6 +45,7 @@ target_sources(KPimItinerary PRIVATE
     engine/extractorscriptengine.cpp
     engine/scriptextractor.cpp
 
+    era/elbticket.cpp
     era/fcbticket.cpp
     era/fcbutil.cpp
     era/ssbticketbase.cpp
@@ -88,6 +89,7 @@ target_sources(KPimItinerary PRIVATE
 
     processors/barcodedocumentprocessorhelper.cpp
     processors/binarydocumentprocessor.cpp
+    processors/eradocumentprocessor.cpp
     processors/externalprocessor.cpp
     processors/htmldocumentprocessor.cpp
     processors/iatabcbpdocumentprocessor.cpp
@@ -97,7 +99,6 @@ target_sources(KPimItinerary PRIVATE
     processors/mimedocumentprocessor.cpp
     processors/pdfdocumentprocessor.cpp
     processors/pkpassdocumentprocessor.cpp
-    processors/ssbdocumentprocessor.cpp
     processors/textdocumentprocessor.cpp
     processors/uic9183documentprocessor.cpp
     processors/vdvdocumentprocessor.cpp
