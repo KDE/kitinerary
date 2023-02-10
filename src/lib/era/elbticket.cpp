@@ -25,6 +25,38 @@ ELBTicketSegment ELBTicket::segment2() const
     return segment;
 }
 
+static QDate dateFromDayCount(int year, int day, const QDateTime &contextDate)
+{
+    const auto y = contextDate.date().year() - contextDate.date().year() % 10 + year;
+    const auto d = QDate(y, 1, 1).addDays(day - 1);
+    if (y > contextDate.date().year()) {
+        return QDate(y - 10, 1, 1).addDays(day - 1);
+    }
+    return d;
+}
+
+QDate ELBTicket::emissionDate(const QDateTime &contextDate) const
+{
+    return dateFromDayCount(year(), emissionDay(), contextDate);
+}
+
+QDate ELBTicket::validFromDate(const QDateTime &contextDate) const
+{
+    return dateFromDayCount(beginValidityDay() < emissionDay() ? year() + 1 : year(), beginValidityDay(), contextDate);
+}
+
+QDate ELBTicket::validUntilDate(const QDateTime &contextDate) const
+{
+    auto y = year();
+    if (beginValidityDay() < emissionDay()) {
+        ++y;
+    }
+    if (endValidityDay() < beginValidityDay()) {
+        ++y;
+    }
+    return dateFromDayCount(y, endValidityDay(), contextDate);
+}
+
 QString ELBTicket::readString(int start, int len) const
 {
     if (m_data.size() <= start + len) {
@@ -46,7 +78,6 @@ int ELBTicket::readNumber(int start, int len) const
     return QByteArray(m_data.constData() + start, len).toInt();
 #endif
 }
-
 
 bool ELBTicket::maybeELBTicket(const QByteArray &data)
 {
@@ -81,7 +112,17 @@ std::optional<ELBTicket> ELBTicket::parse(const QByteArray &data)
 
 ELBTicketSegment::~ELBTicketSegment() = default;
 
+QDate ELBTicketSegment::departureDate(const QDateTime &contextDate) const
+{
+    return dateFromDayCount(departureDay() < m_ticket.emissionDay() ? m_ticket.year() + 1 : m_ticket.year(), departureDay(), contextDate);
+}
+
 QString ELBTicketSegment::readString(int start, int len) const
 {
     return m_ticket.readString(m_offset + start, len);
+}
+
+int ELBTicketSegment::readNumber(int start, int len) const
+{
+    return m_ticket.readNumber(m_offset + start, len);
 }

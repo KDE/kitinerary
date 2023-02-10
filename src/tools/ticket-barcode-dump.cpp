@@ -5,6 +5,7 @@
 */
 
 #include "../lib/asn1/berelement.h"
+#include "../lib/era/elbticket.h"
 #include "../lib/era/fcbticket.h"
 #include "../lib/era/ssbv1ticket.h"
 #include "../lib/era/ssbv2ticket.h"
@@ -346,6 +347,9 @@ int main(int argc, char **argv)
     } else if (VdvTicketParser::maybeVdvTicket(data)) {
         std::cout << "VDV Ticket" << std::endl;
         dumpVdv(data);
+    } else if (auto ticket = ELBTicket::parse(data); ticket) {
+        std::cout << "ERA ELB Ticket" << std::endl;
+        dumpGadget(&*ticket);
     } else {
         std::cout << "Unknown content" << std::endl;
         return 1;

@@ -6,7 +6,10 @@
 #ifndef KITINERARY_ELBTICKET_H
 #define KITINERARY_ELBTICKET_H
 
+#include "kitinerary_export.h"
+
 #include <QByteArray>
+#include <QDateTime>
 #include <QMetaType>
 
 #include <optional>
@@ -22,12 +25,12 @@ public: \
     inline int Name() const { return readNumber(Start, Len); } \
     Q_PROPERTY(int Name READ Name)
 
-class ELBTicketSegment;
+class KITINERARY_EXPORT ELBTicketSegment;
 
 /** ERA (Element List Barcode) ELB ticket barcode.
  *  @see ERA TAP TSI TD B.12 Digital Security Elements For Rail Passenger Ticketing - §8 ELB - Element List Barcode
  */
-class ELBTicket
+class KITINERARY_EXPORT ELBTicket
 {
     Q_GADGET
     // decoding info
@@ -62,6 +65,10 @@ public:
     static bool maybeELBTicket(const QByteArray &data);
     static std::optional<ELBTicket> parse(const QByteArray &data);
 
+    QDate emissionDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    QDate validFromDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    QDate validUntilDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+
 private:
     friend class ELBTicketSegment;
     QString readString(int start, int len) const;
@@ -70,14 +77,14 @@ private:
 };
 
 /** Segment block of an ERA ELB ticket .*/
-class ELBTicketSegment
+class KITINERARY_EXPORT ELBTicketSegment
 {
     Q_GADGET
     ELB_STR_PROPERTY(departureStation, 0, 5)
     ELB_STR_PROPERTY(arrivalStation, 5, 5)
     ELB_STR_PROPERTY(trainNumber, 10, 6)
     ELB_STR_PROPERTY(securityCode, 16, 4)
-    ELB_STR_PROPERTY(departureDay, 20, 3)
+    ELB_NUM_PROPERTY(departureDay, 20, 3)
     ELB_STR_PROPERTY(coachNumber, 23, 3)
     ELB_STR_PROPERTY(seatNumber, 26, 3)
     ELB_STR_PROPERTY(classOfTransport, 29, 1)
@@ -86,9 +93,12 @@ class ELBTicketSegment
 public:
     ~ELBTicketSegment();
 
+    QDate departureDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+
 private:
     friend class ELBTicket;
     QString readString(int start, int len) const;
+    int readNumber(int start, int len) const;
     ELBTicket m_ticket;
     int m_offset;
 };
