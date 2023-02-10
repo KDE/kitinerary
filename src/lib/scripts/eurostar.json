@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "futureUse",
+            "match": "^.0019",
+            "mimeType": "internal/era-elb",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseBarcode",
+    "mimeType": "internal/era-elb",
+    "script": "eurostar.js"
+}

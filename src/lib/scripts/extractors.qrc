@@ -63,6 +63,8 @@
         <file>eki-net.js</file>
         <file>eos.json</file>
         <file>eos.js</file>
+        <file>eurostar.json</file>
+        <file>eurostar.js</file>
         <file>eurowings.json</file>
         <file>eurowings.js</file>
         <file>eurowings-pkpass.js</file>
