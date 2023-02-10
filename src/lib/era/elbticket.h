@@ -56,6 +56,7 @@ class KITINERARY_EXPORT ELBTicket
     Q_PROPERTY(KItinerary::ELBTicketSegment segment1 READ segment1)
     Q_PROPERTY(KItinerary::ELBTicketSegment segment2 READ segment2)
 
+    Q_PROPERTY(QString rawData READ rawData)
 public:
     ~ELBTicket();
 
@@ -65,10 +66,11 @@ public:
     static bool maybeELBTicket(const QByteArray &data);
     static std::optional<ELBTicket> parse(const QByteArray &data);
 
-    QDate emissionDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
-    QDate validFromDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
-    QDate validUntilDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE QDate emissionDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE QDate validFromDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE QDate validUntilDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 
+    QString rawData() const;
 private:
     friend class ELBTicketSegment;
     QString readString(int start, int len) const;
@@ -93,7 +95,7 @@ class KITINERARY_EXPORT ELBTicketSegment
 public:
     ~ELBTicketSegment();
 
-    QDate departureDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE QDate departureDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 
 private:
     friend class ELBTicket;

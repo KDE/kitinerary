@@ -57,6 +57,11 @@ QDate ELBTicket::validUntilDate(const QDateTime &contextDate) const
     return dateFromDayCount(y, endValidityDay(), contextDate);
 }
 
+QString ELBTicket::rawData() const
+{
+    return QString::fromUtf8(m_data);
+}
+
 QString ELBTicket::readString(int start, int len) const
 {
     if (m_data.size() <= start + len) {
