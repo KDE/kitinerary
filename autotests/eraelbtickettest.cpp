@@ -17,11 +17,14 @@ class EraElbTicketTest: public QObject
 private Q_SLOTS:
     void parseElbTicket()
     {
+        // standard ERA ELB single segment
         auto ticket = ELBTicket::parse("eRIVXXX007123456789121110019ELGAA  01003006034216GBSPXBEBMI09116 91160340130422    XX");
         QVERIFY(ticket);
         QCOMPARE(ticket->pnr(), QLatin1String("XXX007"));
         QCOMPARE(ticket->numberAdults(), 1);
         QCOMPARE(ticket->numberChildren(), 0);
+        QVERIFY(ticket->segment1().isValid());
+        QVERIFY(!ticket->segment2().isValid());
         QCOMPARE(ticket->segment1().arrivalStation(), QLatin1String("BEBMI"));
 
         QDateTime contextDt({2022, 2, 1}, { 8, 0 }, Qt::UTC);
@@ -29,6 +32,12 @@ private Q_SLOTS:
         QCOMPARE(ticket->validFromDate(contextDt), QDate(2013, 2, 3));
         QCOMPARE(ticket->validUntilDate(contextDt), QDate(2013, 8, 4));
         QCOMPARE(ticket->segment1().departureDate(contextDt), QDate(2013, 2, 3));
+
+        // single segment with Eurostar signature (?) trailer
+        ticket = ELBTicket::parse("eRIVXXX007123456789121110019ELGAA  01003006034216GBSPXBEBMI09116 91160340130422    XXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        QVERIFY(ticket);
+        QVERIFY(ticket->segment1().isValid());
+        QVERIFY(!ticket->segment2().isValid());
     }
 };
 

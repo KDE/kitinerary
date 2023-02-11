@@ -56,7 +56,7 @@ class KITINERARY_EXPORT ELBTicket
     Q_PROPERTY(KItinerary::ELBTicketSegment segment1 READ segment1)
     Q_PROPERTY(KItinerary::ELBTicketSegment segment2 READ segment2)
 
-    Q_PROPERTY(QString rawData READ rawData)
+    Q_PROPERTY(QString rawData READ rawData STORED false)
 public:
     ~ELBTicket();
 
@@ -92,8 +92,11 @@ class KITINERARY_EXPORT ELBTicketSegment
     ELB_STR_PROPERTY(classOfTransport, 29, 1)
     ELB_STR_PROPERTY(tariffCode, 30, 4)
     ELB_STR_PROPERTY(classOfService, 34, 2)
+
+    Q_PROPERTY(bool isValid READ isValid STORED false)
 public:
     ~ELBTicketSegment();
+    bool isValid() const;
 
     Q_INVOKABLE QDate departureDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 

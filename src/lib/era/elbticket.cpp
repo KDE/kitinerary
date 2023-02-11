@@ -5,6 +5,8 @@
 
 #include "elbticket.h"
 
+#include <QDebug>
+
 using namespace KItinerary;
 
 ELBTicket::~ELBTicket() = default;
@@ -22,7 +24,7 @@ ELBTicketSegment ELBTicket::segment2() const
     ELBTicketSegment segment;
     segment.m_ticket = *this;
     segment.m_offset = 85;
-    return segment;
+    return segment.isValid() ? segment : ELBTicketSegment{};
 }
 
 static QDate dateFromDayCount(int year, int day, const QDateTime &contextDate)
@@ -111,11 +113,24 @@ std::optional<ELBTicket> ELBTicket::parse(const QByteArray &data)
         return {};
     }
 
+    if (!ticket.segment1().isValid()) {
+        return {};
+    }
+
     return ticket;
 }
 
 
 ELBTicketSegment::~ELBTicketSegment() = default;
+
+bool ELBTicketSegment::isValid() const
+{
+    if (m_ticket.m_data.size() < m_offset + 36) {
+        return false;
+    }
+
+    return departureDay() > 0 && (classOfTransport() == QLatin1Char('1') || classOfTransport() == QLatin1Char('2'));
+}
 
 QDate ELBTicketSegment::departureDate(const QDateTime &contextDate) const
 {
