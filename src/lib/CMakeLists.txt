@@ -286,6 +286,7 @@ ecm_generate_headers(KItinerary_Engine_FORWARDING_HEADERS
 )
 ecm_generate_headers(KItinerary_Era_FORWARDING_HEADERS
     HEADER_NAMES
+        ELBTicket
         SSBTicketBase
         SSBv1Ticket
         SSBv2Ticket
