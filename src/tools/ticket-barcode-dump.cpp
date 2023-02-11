@@ -117,6 +117,34 @@ static void dumpSsbv1Ticket(const QByteArray &data)
     std::cout << "Departure time: " << qPrintable(ticket.departureTime().toString(Qt::ISODate)) << std::endl;
 }
 
+static void dumpElbTicketSegment(const ELBTicketSegment &segment)
+{
+    dumpGadget(&segment, "  ");
+    std::cout << "  Departure date: "  << qPrintable(segment.departureDate().toString(Qt::ISODate)) << std::endl;
+}
+
+static void dumpElbTicket(const ELBTicket &ticket)
+{
+    const auto mo = &ELBTicket::staticMetaObject;
+    for (auto i = 0; i < mo->propertyCount(); ++i) {
+        const auto prop = mo->property(i);
+        if (!prop.isStored() || QMetaType(prop.userType()).metaObject()) {
+            continue;
+        }
+        const auto value = prop.readOnGadget(&ticket);
+        std::cout << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
+    }
+    std::cout << "Emission date: " << qPrintable(ticket.emissionDate().toString(Qt::ISODate)) << std::endl;
+    std::cout << "Valid from: " << qPrintable(ticket.validFromDate().toString(Qt::ISODate)) << std::endl;
+    std::cout << "Valid until: " << qPrintable(ticket.validUntilDate().toString(Qt::ISODate)) << std::endl;
+    std::cout << std::endl << "Segment 1:" << std::endl;
+    dumpElbTicketSegment(ticket.segment1());
+    if (ticket.segment2().isValid()) {
+        std::cout << std::endl << "Segment 2:" << std::endl;
+        dumpElbTicketSegment(ticket.segment2());
+    }
+}
+
 static void dumpRawData(const char *data, std::size_t size)
 {
     bool isText = true;
@@ -349,7 +377,7 @@ int main(int argc, char **argv)
         dumpVdv(data);
     } else if (auto ticket = ELBTicket::parse(data); ticket) {
         std::cout << "ERA ELB Ticket" << std::endl;
-        dumpGadget(&*ticket);
+        dumpElbTicket(*ticket);
     } else {
         std::cout << "Unknown content" << std::endl;
         return 1;
