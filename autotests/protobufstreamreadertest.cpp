@@ -34,7 +34,7 @@ private Q_SLOTS:
         QFETCH(QByteArray, input);
         QFETCH(uint64_t, output);
 
-        ProtobufStreamReader r({input.constBegin(), input.constEnd()});
+        ProtobufStreamReader r(std::string_view(input.constBegin(), input.size()));
         QCOMPARE(r.peekVarint(), output);
         QCOMPARE(r.peekVarint(), output);
         QCOMPARE(r.readVarint(), output);
@@ -57,7 +57,7 @@ private Q_SLOTS:
         QFETCH(uint64_t, fieldNum);
         QFETCH(ProtobufStreamReader::WireType, wireType);
 
-        ProtobufStreamReader r({input.constBegin(), input.constEnd()});
+        ProtobufStreamReader r(std::string_view(input.constBegin(), input.size()));
         QCOMPARE(r.fieldNumber(), fieldNum);
         QCOMPARE(r.wireType(), wireType);
         QCOMPARE(r.fieldNumber(), fieldNum);
