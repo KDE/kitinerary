@@ -103,6 +103,8 @@ target_sources(KPimItinerary PRIVATE
     processors/uic9183documentprocessor.cpp
     processors/vdvdocumentprocessor.cpp
 
+    protobuf/protobufstreamreader.cpp
+
     scripts/extractors.qrc
 
     text/addressparser.cpp
