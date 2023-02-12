@@ -8,6 +8,8 @@
 
 #include <string_view>
 
+class QString;
+
 namespace KItinerary {
 
 /** Protocol Buffers stream reader.
@@ -43,6 +45,24 @@ public:
      *  Assumes the cursor is on the beginning of a field. The cursor does not advance.
      */
     WireType wireType();
+
+    /** Reads a field of type LEN.
+     *  This assumes the cursor is placed at the beginning of a field with wire type LEN.
+     *  The cursor is advanced to after the field.
+     */
+    std::string_view readLengthDelimitedRecord();
+
+    /** Reads a string.
+     *  This assumes the cursor is placed at the beginning of a field with wire type LEN
+     *  containing a string. The cursor is advanced to after the field.
+     */
+    QString readString();
+
+    /** Reads a nested message.
+     *  This assumes the cursor is placed at the beginning of a field with wire type LEN
+     *  containing a sub-message. The cursor is advanced to after the field.
+     */
+    ProtobufStreamReader readSubMessage();
 
 private:
     std::string_view m_data;

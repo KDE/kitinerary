@@ -63,6 +63,19 @@ private Q_SLOTS:
         QCOMPARE(r.fieldNumber(), fieldNum);
         QCOMPARE(r.wireType(), wireType);
     }
+
+    void testLengthDelimitedRecord()
+    {
+        const auto stringData = QByteArray::fromHex("120774657374696e67");
+        ProtobufStreamReader r(std::string_view(stringData.constData(), stringData.size()));
+        QCOMPARE(r.readString(), QLatin1String("testing"));
+
+        const auto subMessage = QByteArray::fromHex("1a03089601");
+        r = ProtobufStreamReader(std::string_view(subMessage.constData(), subMessage.size()));
+        auto subR = r.readSubMessage();
+        QCOMPARE(subR.readVarint(), 8);
+        QCOMPARE(subR.readVarint(), 150);
+    }
 };
 
 QTEST_GUILESS_MAIN(ProtobufStreamReaderTest)

@@ -49,3 +49,27 @@ ProtobufStreamReader::WireType ProtobufStreamReader::wireType()
 {
     return static_cast<WireType>(peekVarint() & 0b111);
 }
+
+std::string_view ProtobufStreamReader::readLengthDelimitedRecord()
+{
+    if (wireType() != LEN) {
+        return {};
+    }
+    readVarint(); // skip field number and wire type
+    const auto len = readVarint();
+    if (m_cursor + len <= m_data.size()) {
+        return std::string_view(m_data.begin() + m_cursor, len);
+    }
+    return {};
+}
+
+QString ProtobufStreamReader::readString()
+{
+    const auto data = readLengthDelimitedRecord();
+    return QString::fromUtf8(data.begin(), data.size());
+}
+
+ProtobufStreamReader ProtobufStreamReader::readSubMessage()
+{
+    return ProtobufStreamReader(readLengthDelimitedRecord());
+}
