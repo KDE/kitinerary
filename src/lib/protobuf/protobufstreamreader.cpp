@@ -50,6 +50,12 @@ ProtobufStreamReader::WireType ProtobufStreamReader::wireType()
     return static_cast<WireType>(peekVarint() & 0b111);
 }
 
+uint64_t ProtobufStreamReader::readVarintField()
+{
+    readVarint(); // skip field number and wire type
+    return readVarint();
+}
+
 std::string_view ProtobufStreamReader::readLengthDelimitedRecord()
 {
     if (wireType() != LEN) {
@@ -58,7 +64,9 @@ std::string_view ProtobufStreamReader::readLengthDelimitedRecord()
     readVarint(); // skip field number and wire type
     const auto len = readVarint();
     if (m_cursor + len <= m_data.size()) {
-        return std::string_view(m_data.begin() + m_cursor, len);
+        auto data = std::string_view(m_data.begin() + m_cursor, len);
+        m_cursor += len;
+        return data;
     }
     return {};
 }
@@ -72,4 +80,28 @@ QString ProtobufStreamReader::readString()
 ProtobufStreamReader ProtobufStreamReader::readSubMessage()
 {
     return ProtobufStreamReader(readLengthDelimitedRecord());
+}
+
+bool ProtobufStreamReader::atEnd() const
+{
+    return m_cursor >= m_data.size();
+}
+
+void ProtobufStreamReader::skip()
+{
+    switch (wireType()) {
+        case VARINT:
+            readVarintField();
+            break;
+        case LEN:
+            readLengthDelimitedRecord();
+            break;
+        case I64:
+        case I32:
+        case SGROUP:
+        case EGROUP:
+            qWarning() << "encountered deprecated or unsupported protobuf wire type!" << wireType();
+            m_cursor = m_data.size();
+            break;
+    }
 }

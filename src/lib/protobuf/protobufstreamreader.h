@@ -22,11 +22,6 @@ public:
     explicit ProtobufStreamReader(std::string_view data);
     ~ProtobufStreamReader();
 
-    /** Read Base 128 varint value from the current stream position and advances the cursor. */
-    uint64_t readVarint();
-    /** Read Base 128 varint value from the current stream position without advancing the cursor. */
-    uint64_t peekVarint();
-
     /** Returns the number of the current field.
      *  Assumes the cursor is on the beginning of a field. The cursor does not advance.
      */
@@ -46,6 +41,12 @@ public:
      */
     WireType wireType();
 
+    /** Read a field of type VARINT.
+     *  This assumes the cursor is placed at the beginning of a field with wire type VARINT.
+     *  The cursor is advanced to after the field.
+     */
+    uint64_t readVarintField();
+
     /** Reads a field of type LEN.
      *  This assumes the cursor is placed at the beginning of a field with wire type LEN.
      *  The cursor is advanced to after the field.
@@ -63,6 +64,19 @@ public:
      *  containing a sub-message. The cursor is advanced to after the field.
      */
     ProtobufStreamReader readSubMessage();
+
+    /** Returns @c true when having reached the end of the stream. */
+    bool atEnd() const;
+
+    /** Skips over the next field in the stream. */
+    void skip();
+
+    ///@cond internal
+    /** Read Base 128 varint value from the current stream position and advances the cursor. */
+    uint64_t readVarint();
+    /** Read Base 128 varint value from the current stream position without advancing the cursor. */
+    uint64_t peekVarint();
+    ///@endcond
 
 private:
     std::string_view m_data;
