@@ -19,7 +19,7 @@ ecm_add_test(extractorrepositorytest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary
 ecm_add_test(extractorscriptenginetest.cpp extractorscriptenginetest.qrc TEST_NAME extractorscriptenginetest LINK_LIBRARIES Qt::Test KPim::Itinerary KF${KF_MAJOR_VERSION}::CalendarCore)
 ecm_add_test(berdecodertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
 ecm_add_test(berencodertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
-ecm_add_test(protobufstreamreadertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
+ecm_add_test(protobufstreamreadertest.cpp ../src/lib/protobuf/protobufstreamreader.cpp TEST_NAME protobufstreamreadertest LINK_LIBRARIES Qt::Test KPim::Itinerary)
 ecm_add_test(bcbpparsertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
 ecm_add_test(uperdecodertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)
 ecm_add_test(uic9183parsertest.cpp LINK_LIBRARIES Qt::Test KPim::Itinerary)

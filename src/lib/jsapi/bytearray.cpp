@@ -8,6 +8,8 @@
 #include "bitarray.h"
 #include "logging.h"
 
+#include "protobuf/protobufstreamreader.h"
+
 #include <QQmlEngine>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -74,6 +76,11 @@ QString JsApi::ByteArray::decodeLatin1(const QByteArray &input) const
 QVariant JsApi::ByteArray::toBitArray(const QByteArray &input) const
 {
     return QVariant::fromValue(JsApi::BitArray(input));
+}
+
+QVariant JsApi::ByteArray::toProtobufStreamReader(const QByteArray &input) const
+{
+    return QVariant::fromValue(ProtobufStreamReader(input));
 }
 
 QJSValue JsApi::ByteArray::toArrayBuffer(const QByteArray &input) const

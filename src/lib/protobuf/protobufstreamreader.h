@@ -6,6 +6,9 @@
 #ifndef KITINERARY_PROTOBUFSTREAMREADER_H
 #define KITINERARY_PROTOBUFSTREAMREADER_H
 
+#include <QByteArray>
+#include <QMetaType>
+
 #include <string_view>
 
 class QString;
@@ -18,14 +21,17 @@ namespace KItinerary {
  */
 class ProtobufStreamReader
 {
+    Q_GADGET
 public:
+    explicit ProtobufStreamReader();
     explicit ProtobufStreamReader(std::string_view data);
+    explicit ProtobufStreamReader(const QByteArray &data);
     ~ProtobufStreamReader();
 
     /** Returns the number of the current field.
      *  Assumes the cursor is on the beginning of a field. The cursor does not advance.
      */
-    uint64_t fieldNumber();
+    Q_INVOKABLE quint64 fieldNumber();
 
     enum WireType {
         VARINT,
@@ -35,17 +41,18 @@ public:
         EGROUP,
         I32,
     };
+    Q_ENUM(WireType)
 
     /** Returns the wire type of the current field.
      *  Assumes the cursor is on the beginning of a field. The cursor does not advance.
      */
-    WireType wireType();
+    Q_INVOKABLE WireType wireType();
 
     /** Read a field of type VARINT.
      *  This assumes the cursor is placed at the beginning of a field with wire type VARINT.
      *  The cursor is advanced to after the field.
      */
-    uint64_t readVarintField();
+    Q_INVOKABLE quint64 readVarintField();
 
     /** Reads a field of type LEN.
      *  This assumes the cursor is placed at the beginning of a field with wire type LEN.
@@ -57,19 +64,19 @@ public:
      *  This assumes the cursor is placed at the beginning of a field with wire type LEN
      *  containing a string. The cursor is advanced to after the field.
      */
-    QString readString();
+    Q_INVOKABLE QString readString();
 
     /** Reads a nested message.
      *  This assumes the cursor is placed at the beginning of a field with wire type LEN
      *  containing a sub-message. The cursor is advanced to after the field.
      */
-    ProtobufStreamReader readSubMessage();
+    Q_INVOKABLE KItinerary::ProtobufStreamReader readSubMessage();
 
     /** Returns @c true when having reached the end of the stream. */
-    bool atEnd() const;
+    Q_INVOKABLE bool atEnd() const;
 
     /** Skips over the next field in the stream. */
-    void skip();
+    Q_INVOKABLE void skip();
 
     ///@cond internal
     /** Read Base 128 varint value from the current stream position and advances the cursor. */
@@ -79,10 +86,13 @@ public:
     ///@endcond
 
 private:
+    QByteArray m_ownedData;
     std::string_view m_data;
     std::string_view::size_type m_cursor = 0;
 };
 
 }
+
+Q_DECLARE_METATYPE(KItinerary::ProtobufStreamReader)
 
 #endif // KITINERARY_PROTOBUFSTREAMREADER_H

@@ -39,6 +39,9 @@ public:
     /** Converts the given QByteArray or JS ArrayBuffer into a BitArray. */
     Q_INVOKABLE QVariant toBitArray(const QByteArray &input) const;
 
+    /** Creates a Protocol Buffers stream reader for the given JS ArrayBuffer. */
+    Q_INVOKABLE QVariant toProtobufStreamReader(const QByteArray &input) const;
+
     /** Convert a QByteArray to a JS ArrayBuffer.
      *  This is mainly a migration aid until we return ArrayBuffers everywhere.
      */

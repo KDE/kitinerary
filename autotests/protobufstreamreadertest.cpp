@@ -3,7 +3,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "../lib/protobuf/protobufstreamreader.cpp"
+#include "../lib/protobuf/protobufstreamreader.h"
 
 #include <QDebug>
 #include <QObject>

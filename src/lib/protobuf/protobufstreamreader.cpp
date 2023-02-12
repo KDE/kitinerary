@@ -9,8 +9,16 @@
 
 using namespace KItinerary;
 
+ProtobufStreamReader::ProtobufStreamReader() = default;
+
 ProtobufStreamReader::ProtobufStreamReader(std::string_view data)
     : m_data(data)
+{
+}
+
+ProtobufStreamReader::ProtobufStreamReader(const QByteArray &data)
+    : m_ownedData(data)
+    , m_data(std::string_view(data.constData(), data.size()))
 {
 }
 
@@ -40,7 +48,7 @@ uint64_t ProtobufStreamReader::peekVarint()
     return result;
 }
 
-uint64_t ProtobufStreamReader::fieldNumber()
+quint64 ProtobufStreamReader::fieldNumber()
 {
     return peekVarint() >> 3;
 }
@@ -50,7 +58,7 @@ ProtobufStreamReader::WireType ProtobufStreamReader::wireType()
     return static_cast<WireType>(peekVarint() & 0b111);
 }
 
-uint64_t ProtobufStreamReader::readVarintField()
+quint64 ProtobufStreamReader::readVarintField()
 {
     readVarint(); // skip field number and wire type
     return readVarint();
