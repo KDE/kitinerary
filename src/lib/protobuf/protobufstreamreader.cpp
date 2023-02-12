@@ -72,7 +72,7 @@ std::string_view ProtobufStreamReader::readLengthDelimitedRecord()
     readVarint(); // skip field number and wire type
     const auto len = readVarint();
     if (m_cursor + len <= m_data.size()) {
-        auto data = std::string_view(m_data.begin() + m_cursor, len);
+        auto data = m_data.substr(m_cursor, len);
         m_cursor += len;
         return data;
     }
@@ -82,7 +82,7 @@ std::string_view ProtobufStreamReader::readLengthDelimitedRecord()
 QString ProtobufStreamReader::readString()
 {
     const auto data = readLengthDelimitedRecord();
-    return QString::fromUtf8(data.begin(), data.size());
+    return QString::fromUtf8(data.data(), data.size());
 }
 
 ProtobufStreamReader ProtobufStreamReader::readSubMessage()
