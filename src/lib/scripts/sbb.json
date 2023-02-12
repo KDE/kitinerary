@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "sbbclient@sbb.ch",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "parseQrCode",
+    "mimeType": "application/octet-stream",
+    "script": "sbb.js"
+}
