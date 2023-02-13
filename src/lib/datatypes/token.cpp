@@ -12,7 +12,7 @@ using namespace KItinerary;
 
 Token::TokenType Token::tokenType(QStringView token)
 {
-    if (token.startsWith(QLatin1String("qrcode:"), Qt::CaseInsensitive)) {
+    if (token.startsWith(QLatin1String("qrcode"), Qt::CaseInsensitive)) {
         return QRCode;
     } else if (token.startsWith(QLatin1String("aztec"), Qt::CaseInsensitive)) {
         return AztecCode;
@@ -34,6 +34,8 @@ QVariant Token::tokenData(const QString &token)
 {
     if (token.startsWith(QLatin1String("qrcode:"), Qt::CaseInsensitive)) {
         return token.mid(7);
+    } if (token.startsWith(QLatin1String("qrcodebin:"), Qt::CaseInsensitive)) {
+        return QByteArray::fromBase64(token.mid(10).toLatin1());
     } else if (token.startsWith(QLatin1String("azteccode:"), Qt::CaseInsensitive)) {
         return token.mid(10);
     } else if (token.startsWith(QLatin1String("aztecbin:"), Qt::CaseInsensitive)) {
