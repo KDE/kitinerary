@@ -12,6 +12,7 @@ function readTime(stream)
 // see https://community.kde.org/KDE_PIM/KItinerary/SBB_Barcode
 function parseQrCode(content) {
     let res = JsonLd.newTrainReservation();
+    res.reservedTicket.ticketToken = 'qrcodebin:' + ByteArray.toBase64(content);
     let top = ByteArray.toProtobufStreamReader(content);
     while (!top.atEnd()) {
         switch (top.fieldNumber()) {
@@ -95,5 +96,14 @@ function parseQrCode(content) {
                 top.skip();
         }
     }
+
+    // convert unbound passes to a Ticket
+    if (!res.reservationFor.departureStation.name) {
+        res.reservedTicket.underName = res.underName;
+        res.reservedTicket.validFrom = res.reservationFor.departureTime;
+        res.reservedTicket.validUntil = res.reservationFor.arrivalTime;
+        return res.reservedTicket;
+    }
+
     return res;
 }
