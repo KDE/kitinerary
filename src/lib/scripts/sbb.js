@@ -13,6 +13,7 @@ function readTime(stream)
 function parseQrCode(content) {
     let res = JsonLd.newTrainReservation();
     res.reservedTicket.ticketToken = 'qrcodebin:' + ByteArray.toBase64(content);
+    res.reservationFor.provider.identifier = 'uic:1085';
     let top = ByteArray.toProtobufStreamReader(content);
     while (!top.atEnd()) {
         switch (top.fieldNumber()) {
@@ -97,11 +98,18 @@ function parseQrCode(content) {
         }
     }
 
+    // convert unbound tickets
+    if (!res.reservationFor.trainNumber) {
+        res.reservedTicket.validFrom = res.reservationFor.departureTime;
+        res.reservedTicket.validUntil = res.reservationFor.arrivalTime;
+        res.reservationFor.departureDay = res.reservationFor.departureTime;
+        res.reservationFor.departureTime = undefined;
+        res.reservationFor.arrivalTime = undefined;
+    }
+
     // convert unbound passes to a Ticket
     if (!res.reservationFor.departureStation.name) {
         res.reservedTicket.underName = res.underName;
-        res.reservedTicket.validFrom = res.reservationFor.departureTime;
-        res.reservedTicket.validUntil = res.reservationFor.arrivalTime;
         return res.reservedTicket;
     }
 
