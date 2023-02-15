@@ -114,7 +114,7 @@ void ExtractorDocumentNodeFactoryStatic::registerBuiltIn()
     registerProcessor<PdfDocumentProcessor>(u"application/pdf");
     registerProcessor<PkPassDocumentProcessor>(u"application/vnd.apple.pkpass");
     registerProcessor<IcalEventProcessor>(u"internal/event");
-    registerProcessor<ImageDocumentProcessor>(u"internal/qimage", {u"image/png"});
+    registerProcessor<ImageDocumentProcessor>(u"internal/qimage", {u"image/png", u"image/jpeg"});
     registerProcessor<ElbDocumentProcessor>(u"internal/era-elb");
     registerProcessor<SsbDocumentProcessor>(u"internal/era-ssb");
     registerProcessor<IataBcbpDocumentProcessor>(u"internal/iata-bcbp");
