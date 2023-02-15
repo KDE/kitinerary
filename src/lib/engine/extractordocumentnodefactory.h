@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <kitinerary_export.h>
+#include "kitinerary_export.h"
 
 #include <QString>
 #include <QStringView>
