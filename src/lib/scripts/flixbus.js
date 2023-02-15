@@ -23,7 +23,7 @@ function main(content, node) {
 function parseDate(year, baseDate, overrideDate, time)
 {
     const s = (overrideDate ? overrideDate.trim() : baseDate) + ' ' + year + ' ' + time;
-    return JsonLd.toDateTime(s, 'd MMM yyyy hh:mm', ['en', 'fr', 'pl']);
+    return JsonLd.toDateTime(s, 'd MMM yyyy hh:mm', ['en', 'fr', 'pl', 'nl']);
 }
 
 function parseLocation(place, addr1, addr2, links)
@@ -45,33 +45,36 @@ function parsePdfTicket(pdf, node, triggerNode)
     const links = page.linksInRect(0.0, 0.0, 0.5, 0.5);
     const resNum = triggerNode.content.match(/pdfqr\/(\d+)\//)[1];
     const date = text.match(/^\S+,? (\d+ \S+) (\d{4})\n/);
-    let idx = date.index + date[0].length;
+
+    const timeColumn = page.textInRect(0.0, 0.1, 0.125, 0.5);
+    const stationColumn = page.textInRect(0.125, 0.1, 0.5, 0.5);
+
+    let idxTime = 0;
+    let idxStations = 0;
     let reservations = [];
     while (true) {
-        const dep = text.substr(idx).match(/(\d\d:\d\d)  +(.*)\n(\d{1,2} \S+)?(?:  + (.*?)(?:\n|,\n  +(.*)\n))?/);
-        if (!dep) break;
-        idx += dep.index + dep[0].length;
-        const bus = text.substr(idx).match(/^[ ]+ (?:Bus|Autobus) +(.*)\n[ ]+(?:Direction|à destination de|Kierunek) (.*)\n/);
-        if (!bus) break;
-        idx += bus.index + bus[0].length;
-        const arr = text.substr(idx).match(/^(\d{1,2} \S+\n)?(\d\d:\d\d)  +(.*)\n(?:  + (.*?)(?:\n|,\n  +(.*)\n))?/);
-        if (!arr) break;
-        idx += arr.index + arr[0].length;
+        const times = timeColumn.substr(idxTime).match(/(\d\d:\d\d)\n([^:]*?\n)?([^:]*?\n)?(\d\d:\d\d)/);
+        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n).*(?:Bus|Autobus) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting) (.*)\n(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
+        if (!times || !stations) {
+            break;
+        }
+        idxTime += times.index + times[0].length;
+        idxStations += stations.index + stations[0].length;
 
         let res = JsonLd.newBusReservation();
         res.reservationNumber = resNum;
 
         res.reservedTicket.ticketToken = 'qrCode:' + triggerNode.content;
-        res.reservationFor.departureTime = parseDate(date[2], date[1], dep[3], dep[1]);
-        res.reservationFor.departureBusStop.name = dep[2];
-        parseLocation(res.reservationFor.departureBusStop, dep[4], dep[5], links);
+        res.reservationFor.departureTime = parseDate(date[2], date[1], times[3] ? times[2] : null, times[1]);
+        res.reservationFor.departureBusStop.name = stations[1];
+        parseLocation(res.reservationFor.departureBusStop, stations[2], stations[3], links);
 
-        res.reservationFor.busNumber = bus[1];
-        res.reservationFor.busName = bus[2];
+        res.reservationFor.busNumber = stations[4];
+        res.reservationFor.busName = stations[5];
 
-        res.reservationFor.arrivalTime = parseDate(date[2], date[1], arr[1], arr[2]);
-        res.reservationFor.arrivalBusStop.name = arr[3];
-        parseLocation(res.reservationFor.arrivalBusStop, arr[4], arr[5], links);
+        res.reservationFor.arrivalTime = parseDate(date[2], date[1], times[3] ? times[3] : times[2], times[4]);
+        res.reservationFor.arrivalBusStop.name = stations[6];
+        parseLocation(res.reservationFor.arrivalBusStop, stations[7], stations[8], links);
 
         reservations.push(res);
     }
