@@ -75,8 +75,11 @@ static bool conflictIfPresent(const T &lhs, const T &rhs)
 }
 
 /** Checks that @p lhs and @p rhs have a different prefix is they are both set. */
-template <typename T>
-static bool prefixConflictIfPresent(const T &lhs, const T &rhs)
+static bool prefixConflictIfPresent(const QString &lhs, const QString &rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
+{
+    return !lhs.isEmpty() && !rhs.isEmpty() && !lhs.startsWith(rhs, caseSensitive) && !rhs.startsWith(lhs, caseSensitive);
+}
+static bool prefixConflictIfPresent(const QByteArray &lhs, const QByteArray &rhs)
 {
     return !lhs.isEmpty() && !rhs.isEmpty() && !lhs.startsWith(rhs) && !rhs.startsWith(lhs);
 }
@@ -722,7 +725,7 @@ bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs)
     }
 
     if (lhs.userType() == QMetaType::QString) {
-        return !prefixConflictIfPresent(lhs.toString(), rhs.toString());
+        return !prefixConflictIfPresent(lhs.toString(), rhs.toString(), Qt::CaseInsensitive);
     }
     if (lhs.userType() == QMetaType::QByteArray) {
         return !prefixConflictIfPresent(lhs.toByteArray(), rhs.toByteArray());
