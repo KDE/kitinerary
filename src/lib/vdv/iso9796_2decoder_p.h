@@ -8,7 +8,7 @@
 
 #include <QByteArray>
 
-#include <openssl/rsa.h>
+#include <openssl/opensslpp_p.h>
 
 #include <cstdint>
 #include <memory>
@@ -40,7 +40,7 @@ public:
     QByteArray recoveredMessage() const;
 
 private:
-    std::unique_ptr<RSA, void(*)(RSA*)> m_rsa;
+    openssl::rsa_ptr m_rsa;
     QByteArray m_recoveredMsg;
 };
 

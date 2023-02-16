@@ -6,6 +6,8 @@
 
 #include "iso9796_2decoder_p.h"
 
+#include <openssl/bignum_p.h>
+
 #include <QDebug>
 
 #include <openssl/bn.h>
@@ -14,7 +16,7 @@
 using namespace KItinerary;
 
 Iso9796_2Decoder::Iso9796_2Decoder()
-    : m_rsa(RSA_new(), RSA_free)
+    : m_rsa(RSA_new())
 {
 }
 
@@ -22,9 +24,9 @@ Iso9796_2Decoder::~Iso9796_2Decoder() = default;
 
 void Iso9796_2Decoder::setRsaParameters(const uint8_t *modulus, uint16_t modulusSize, const uint8_t *exponent, uint16_t exponentSize)
 {
-    const auto n = BN_bin2bn(modulus, modulusSize, nullptr);
-    const auto e = BN_bin2bn(exponent, exponentSize, nullptr);
-    RSA_set0_key(m_rsa.get(), n, e, nullptr); // takes ownership of n and e
+    auto n = Bignum::fromByteArray(modulus, modulusSize);
+    auto e = Bignum::fromByteArray(exponent, exponentSize);
+    RSA_set0_key(m_rsa.get(), n.release(), e.release(), nullptr);
 }
 
 void Iso9796_2Decoder::addWithRecoveredMessage(const uint8_t *data, int size)
