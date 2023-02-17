@@ -83,16 +83,30 @@ QByteArray Rsp6Decoder::decode(const QByteArray &data)
 
     // decrypt payload, try all keys for the current issuer until we find one that works
     QByteArray decrypted;
+    QByteArray depadded;
     for (const auto &rsa : keys) {
         decrypted.resize(RSA_size(rsa.get()));
-        const auto decryptedSize = RSA_public_decrypt(decoded.size(), reinterpret_cast<const uint8_t*>(decoded.data()), reinterpret_cast<uint8_t*>(decrypted.data()), rsa.get(), RSA_PKCS1_PADDING);
+        const auto decryptedSize = RSA_public_decrypt(decoded.size(), reinterpret_cast<const uint8_t*>(decoded.data()), reinterpret_cast<uint8_t*>(decrypted.data()), rsa.get(), RSA_NO_PADDING);
         if (decryptedSize < 0) {
             qDebug() << "RSA error:" << ERR_error_string(ERR_get_error(), nullptr);
             continue;
         }
-        decrypted.resize(decryptedSize);
-        break;
+
+        // we don't know the padding scheme, so we have to try all of them
+        depadded.resize(decryptedSize);
+        // PKCS#1 type 1
+        auto depaddedSize = RSA_padding_check_PKCS1_type_1((uint8_t*)depadded.data(), depadded.size(), (const uint8_t*)decrypted.data(), decrypted.size(), RSA_size(rsa.get()));
+        if (depaddedSize > 0) {
+            depadded.resize(depaddedSize);
+            return depadded;
+        }
+        // PKCS#1 type 2
+        depaddedSize = RSA_padding_check_PKCS1_type_2((uint8_t*)depadded.data(), depadded.size(), (const uint8_t*)decrypted.data(), decrypted.size(), RSA_size(rsa.get()));
+        if (depaddedSize > 0) {
+            depadded.resize(depaddedSize);
+            return depadded;
+        }
     }
 
-    return decrypted;
+    return {};
 }
