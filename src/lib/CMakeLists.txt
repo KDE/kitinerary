@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 if (BUILD_TOOLS)
+    add_subdirectory(rsp)
     add_subdirectory(vdv/certs)
 endif()
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
@@ -104,6 +105,9 @@ target_sources(KPimItinerary PRIVATE
     processors/vdvdocumentprocessor.cpp
 
     protobuf/protobufstreamreader.cpp
+
+    rsp/rsp6decoder.cpp
+    rsp/keys/rsp6-keys.qrc
 
     scripts/extractors.qrc
 

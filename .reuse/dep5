@@ -11,6 +11,6 @@ Files: src/lib/scripts/*.json
 Copyright: none
 License: CC0-1.0
 
-Files: src/lib/vdv/certs/*.vdv-cert
+Files: src/lib/vdv/certs/*.vdv-cert src/lib/rsp/keys/*.json
 Copyright: none
 License: CC0-1.0

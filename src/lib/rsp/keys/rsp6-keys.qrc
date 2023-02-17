@@ -1,0 +1,45 @@
+<!--
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: CC0-1.0
+-->
+<RCC>
+  <qresource prefix="/org.kde.pim/kitinerary/rsp6/keys/">
+    <file>AA.json</file>
+    <file>AC.json</file>
+    <file>AO.json</file>
+    <file>AT.json</file>
+    <file>CB.json</file>
+    <file>CP.json</file>
+    <file>CS.json</file>
+    <file>CT.json</file>
+    <file>DF.json</file>
+    <file>EN.json</file>
+    <file>EV.json</file>
+    <file>F7.json</file>
+    <file>FJ.json</file>
+    <file>GR.json</file>
+    <file>HX.json</file>
+    <file>IB.json</file>
+    <file>OP.json</file>
+    <file>OR.json</file>
+    <file>PC.json</file>
+    <file>PI.json</file>
+    <file>RC.json</file>
+    <file>RE.json</file>
+    <file>RP.json</file>
+    <file>SE.json</file>
+    <file>SR.json</file>
+    <file>T2.json</file>
+    <file>TK.json</file>
+    <file>TR.json</file>
+    <file>TT.json</file>
+    <file>TV.json</file>
+    <file>UC.json</file>
+    <file>VE.json</file>
+    <file>YO.json</file>
+    <file>ZE.json</file>
+    <file>ZS.json</file>
+    <file>ZT.json</file>
+    <file>ZX.json</file>
+  </qresource>
+</RCC>

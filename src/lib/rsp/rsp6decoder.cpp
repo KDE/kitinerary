@@ -10,6 +10,10 @@
 
 #include <QByteArray>
 #include <QDebug>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include <openssl/err.h>
 
@@ -32,16 +36,32 @@ static QByteArray decodeBase45Backward(const char *begin, const char *end)
     return result;
 }
 
-static openssl::rsa_ptr loadKey(std::string_view keyId)
+static std::vector<openssl::rsa_ptr> loadKeys(std::string_view keyId)
 {
-    qDebug() << "looking for key:" << QByteArray(keyId.data(), keyId.size());
-    // TODO load correct key
-    auto modulus = Bignum::fromByteArray(QByteArray::fromHex("9774021C2BAD13DC31C1EC8192E084D60D82DC327016862E95ED093AD41CC9082A6015631C8E6B8148A15EC9856E2A5E16519E52EDC0C3DF2836935055EF53E1738293256464F0AD4AE3C01AE3CDD910CB1CBDC0AB35C1AD8CF0A9376B3921DEE3D1FC26FFA3409C4DC8F813A5E326D78C63ABA9A59120D74043DBA1141047AF"));
-    auto exponent = Bignum::fromByteArray(QByteArray::fromHex("10001"));
+    qDebug() << "looking for key:" << QLatin1String(keyId.data(), keyId.size());
 
-    openssl::rsa_ptr rsa(RSA_new());
-    RSA_set0_key(rsa.get(), modulus.release(), exponent.release(), nullptr);
-    return rsa;
+    const QString keyFileName = QLatin1String(":/org.kde.pim/kitinerary/rsp6/keys/") + QLatin1String(keyId.data(), keyId.size()) + QLatin1String(".json");
+    QFile keyFile(keyFileName);
+    if (!keyFile.open(QFile::ReadOnly)) {
+        qWarning() << "failed to open RSP-6 key file:" << keyFileName << keyFile.errorString();
+        return {};
+    }
+
+    const auto keysArray = QJsonDocument::fromJson(keyFile.readAll()).array();
+    std::vector<openssl::rsa_ptr> keys;
+    keys.reserve(keysArray.size());
+
+    for (const auto &keyVal : keysArray) {
+        const auto keyObj = keyVal.toObject();
+        auto n = Bignum::fromByteArray(QByteArray::fromBase64(keyObj.value(QLatin1String("n")).toString().toLatin1()));
+        auto e = Bignum::fromByteArray(QByteArray::fromBase64(keyObj.value(QLatin1String("e")).toString().toLatin1()));
+
+        openssl::rsa_ptr rsa(RSA_new());
+        RSA_set0_key(rsa.get(), n.release(), e.release(), nullptr);
+        keys.push_back(std::move(rsa));
+    }
+
+    return keys;
 }
 
 QByteArray Rsp6Decoder::decode(const QByteArray &data)
@@ -52,22 +72,27 @@ QByteArray Rsp6Decoder::decode(const QByteArray &data)
     }
 
     // load RSA key
-    const auto rsa = loadKey(std::string_view(data.data() + 13, 2));
-    if (!rsa) {
+    const auto keys = loadKeys(std::string_view(data.data() + 13, 2));
+    if (keys.empty()) {
+        qWarning() << "no RSP-6 key found for issuer:" << QByteArray(data.data() + 13 , 2);
         return {};
     }
 
     // remove base26 transport encoding
     const auto decoded = decodeBase45Backward(data.begin() + 15, data.end());
 
-    // decrypt payload
+    // decrypt payload, try all keys for the current issuer until we find one that works
     QByteArray decrypted;
-    decrypted.resize(RSA_size(rsa.get()));
-    const auto decryptedSize = RSA_public_decrypt(decoded.size(), reinterpret_cast<const uint8_t*>(decoded.data()), reinterpret_cast<uint8_t*>(decrypted.data()), rsa.get(), RSA_PKCS1_PADDING);
-    if (decryptedSize < 0) {
-        qWarning() << "RSA error:" << ERR_error_string(ERR_get_error(), nullptr);
-        return {};
+    for (const auto &rsa : keys) {
+        decrypted.resize(RSA_size(rsa.get()));
+        const auto decryptedSize = RSA_public_decrypt(decoded.size(), reinterpret_cast<const uint8_t*>(decoded.data()), reinterpret_cast<uint8_t*>(decrypted.data()), rsa.get(), RSA_PKCS1_PADDING);
+        if (decryptedSize < 0) {
+            qDebug() << "RSA error:" << ERR_error_string(ERR_get_error(), nullptr);
+            continue;
+        }
+        decrypted.resize(decryptedSize);
+        break;
     }
-    decrypted.resize(decryptedSize);
+
     return decrypted;
 }
