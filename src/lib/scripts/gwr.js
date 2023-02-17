@@ -12,6 +12,5 @@ function parseEvent(event) {
     res.reservationFor.departureStation.identifier = 'uk:' + trip[2];
     res.reservationFor.arrivalStation.name = trip[3];
     res.reservationFor.arrivalStation.identifier = 'uk:' + trip[4];
-    res.reservationNumber = event.description.match(/Booking Reference: (.*)\n/)[1];
     return res;
 }
