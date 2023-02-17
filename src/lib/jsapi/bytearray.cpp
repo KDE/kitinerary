@@ -9,6 +9,7 @@
 #include "logging.h"
 
 #include "protobuf/protobufstreamreader.h"
+#include "rsp/rsp6decoder.h"
 
 #include <QQmlEngine>
 
@@ -81,6 +82,11 @@ QVariant JsApi::ByteArray::toBitArray(const QByteArray &input) const
 QVariant JsApi::ByteArray::toProtobufStreamReader(const QByteArray &input) const
 {
     return QVariant::fromValue(ProtobufStreamReader(input));
+}
+
+QJSValue JsApi::ByteArray::decodeRsp6Ticket(const QString &text) const
+{
+    return toArrayBuffer(Rsp6Decoder::decode(text.toLatin1()));
 }
 
 QJSValue JsApi::ByteArray::toArrayBuffer(const QByteArray &input) const

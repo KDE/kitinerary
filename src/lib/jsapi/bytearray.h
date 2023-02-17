@@ -42,6 +42,9 @@ public:
     /** Creates a Protocol Buffers stream reader for the given JS ArrayBuffer. */
     Q_INVOKABLE QVariant toProtobufStreamReader(const QByteArray &input) const;
 
+    /** Decode/decrypt a UK RSP-6 ticket barcode. */
+    Q_INVOKABLE QJSValue decodeRsp6Ticket(const QString &text) const;
+
     /** Convert a QByteArray to a JS ArrayBuffer.
      *  This is mainly a migration aid until we return ArrayBuffers everywhere.
      */
