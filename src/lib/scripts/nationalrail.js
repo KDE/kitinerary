@@ -75,6 +75,9 @@ function parseRSP6(text) {
     for (let i = 0; i < rsp6.readNumberMSB(386, 4); ++i) {
         res.reservationFor.trainNumber = readRSP6String(rsp6, 390 + offset, 2) + rsp6.readNumberMSB(402 + offset, 14);
         res.reservedTicket.ticketedSeat.seatSection = readRSP6String(rsp6, 416 + offset, 1);
+        if (res.reservedTicket.ticketedSeat.seatSection == '*') {
+            res.reservedTicket.ticketedSeat.seatSection = null;
+        }
         const seatLetter = readRSP6String(rsp6, 422 + offset, 1);
         const seatNum = rsp6.readNumberMSB(428 + offset, 7);
         if (seatLetter || seatNum) {
@@ -86,6 +89,8 @@ function parseRSP6(text) {
     if (rsp6.readNumberMSB(385, 1)) {
         console.log("free text", readRSP6String(390 + offset, 51));
     }
+
+    res.reservedTicket.ticketToken = 'aztec:' + text;
     return res;
 }
 
@@ -94,7 +99,6 @@ function parseTicket(pdf, node, triggerNode) {
     var res = triggerNode.result[0];
     const header = text.match(/= +(\d{2}[ -][A-Z][a-z]{2}[ -]\d{4}) +(?:Out: |Ret: )?([A-Z]{3}) ?- ?([A-Z]{3})\n(.*)  +(.*)/);
     const date = header[1].replace(/-/g, ' ');
-    const seat = text.match(/DEPART +COACH +SEAT\n(.*) +(\d{2}:\d{2}) +(.*?)  +(.*)\n/);
     const itinerary = text.match(/Itinerary.*\n +(.*)\n +(\d{2}:\d{2})\n +([\S\s]*?)\n +(\d{2}:\d{2})\n +(.*)/);
 
     res.reservationFor.departureStation.identifier = 'uk:' + header[2];
@@ -111,12 +115,6 @@ function parseTicket(pdf, node, triggerNode) {
         res.reservationFor.arrivalStation.name = header[5];
         res.reservationFor.departureDay = JsonLd.toDateTime(date, 'dd MMM yyyy', 'en');
     }
-    if (seat && seat[4] != '*') {
-        res.reservedTicket.ticketedSeat.seatSection = seat[3];
-        res.reservedTicket.ticketedSeat.seatNumber = seat[4];
-    }
 
-    res.reservationNumber = text.match(/Ticket Number (.*)/)[1];
-    res.reservedTicket.ticketToken = 'aztec:' + triggerNode.content;
     return res;
 }
