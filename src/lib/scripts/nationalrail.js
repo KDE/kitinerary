@@ -30,7 +30,7 @@ function parseTicket(pdf, node, triggerNode) {
         res.reservedTicket.ticketedSeat.seatNumber = seat[4];
     }
 
-    res.reservationMumber = text.match(/Ticket Number (.*)/)[1];
+    res.reservationNumber = text.match(/Ticket Number (.*)/)[1];
     res.reservedTicket.ticketToken = 'aztec:' + triggerNode.content;
     return res;
 }
