@@ -28,7 +28,9 @@ function parseRSP6(text) {
 
     let res = JsonLd.newTrainReservation();
     res.reservationNumber = text.substr(13, 2) + readRSP6String(rsp6, 8, 9);
+    res.reservationFor.departureStation.name = readRSP6String(rsp6, 109, 4);
     res.reservationFor.departureStation.identifier = 'nlc:' + readRSP6String(rsp6, 109, 4);
+    res.reservationFor.arrivalStation.name = readRSP6String(rsp6, 133, 4);
     res.reservationFor.arrivalStation.identifier = 'nlc:' + readRSP6String(rsp6, 133, 4);
 
     const departureTime = readRSP6DateTime(rsp6, 211);
