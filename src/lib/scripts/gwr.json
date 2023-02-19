@@ -5,6 +5,12 @@
             "match": "@tickets.gwr.com$",
             "mimeType": "internal/event",
             "scope": "Current"
+        },
+        {
+            "field": "uid",
+            "match": "nreproduction.local$",
+            "mimeType": "internal/event",
+            "scope": "Current"
         }
     ],
     "function": "parseEvent",

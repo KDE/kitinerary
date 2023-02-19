@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+PRODID:-//OJP/Thales//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+DTSTAMP:20230219T115625Z
+UID:20230219T115625Z-C50900@liv1-ojpapp101.nreproduction.local
+CATEGORIES:Travel
+DTSTART:20230220T124000
+DTEND:20230220T173200
+SUMMARY:Journey Details: Glasgow Central (GLC) to London Kings Cross (KGX
+ )
+DESCRIPTION:Journey Details: Glasgow Central (GLC) to London Euston (EUS)
+ \, dep 12:40\, arr 17:12\nTrain Company: Avanti West Coast\nMode of Tran
+ sport: Train\n\nJourney Details: London Euston (EUS) to London Kings Cro
+ ss (KGX)\, dep 17:27\, arr 17:32\nMode of Transport: Underground\n\n
+LOCATION:Glasgow Central Rail Station\, UK
+ORGANIZER;CN=National Rail Enquiries:MAILTO:NREServiceDesk@smart421.com
+END:VEVENT
+END:VCALENDAR

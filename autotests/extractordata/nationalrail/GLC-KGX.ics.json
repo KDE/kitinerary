@@ -1,0 +1,98 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "GB"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 51.52840042114258,
+                    "longitude": -0.1331000030040741
+                },
+                "identifier": "uk:EUS",
+                "name": "London Euston"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2023-02-20T17:12:00+00:00",
+                "timezone": "Europe/London"
+            },
+            "departureDay": "2023-02-20",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "GB"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 55.8588981628418,
+                    "longitude": -4.258220195770264
+                },
+                "identifier": "uk:GLC",
+                "name": "Glasgow Central"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2023-02-20T12:40:00+00:00",
+                "timezone": "Europe/London"
+            }
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "GB"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 51.53089904785156,
+                    "longitude": -0.12330599874258041
+                },
+                "identifier": "uk:KGX",
+                "name": "London Kings Cross"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2023-02-20T17:32:00+00:00",
+                "timezone": "Europe/London"
+            },
+            "departureDay": "2023-02-20",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "GB"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 51.52840042114258,
+                    "longitude": -0.1331000030040741
+                },
+                "identifier": "uk:EUS",
+                "name": "London Euston"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2023-02-20T17:27:00+00:00",
+                "timezone": "Europe/London"
+            }
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]
