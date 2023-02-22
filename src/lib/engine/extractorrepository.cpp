@@ -28,6 +28,7 @@ static void initResources() // must be outside of a namespace
 {
     Q_INIT_RESOURCE(extractors);
     Q_INIT_RESOURCE(vdv_certs);
+    Q_INIT_RESOURCE(rsp6_keys);
 }
 
 namespace KItinerary {
