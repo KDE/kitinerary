@@ -12,7 +12,7 @@
 
 #include <cmath>
 
-enum { RenderDPI = 150 }; // target dpi for rendering
+constexpr inline const auto  RenderDPI = 150.0; // target dpi for rendering
 
 using namespace KItinerary;
 
