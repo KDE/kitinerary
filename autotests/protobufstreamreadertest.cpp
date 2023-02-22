@@ -46,9 +46,9 @@ private Q_SLOTS:
         QTest::addColumn<uint64_t>("fieldNum");
         QTest::addColumn<ProtobufStreamReader::WireType>("wireType");
 
-        QTest::newRow("number") << QByteArray::fromHex("089601") << 1ul << ProtobufStreamReader::VARINT;
-        QTest::newRow("string-testing") << QByteArray::fromHex("120774657374696e67") << 2ul << ProtobufStreamReader::LEN;
-        QTest::newRow("sub-message") << QByteArray::fromHex("1a03089601") << 3ul << ProtobufStreamReader::LEN;
+        QTest::newRow("number") << QByteArray::fromHex("089601") << (uint64_t)1 << ProtobufStreamReader::VARINT;
+        QTest::newRow("string-testing") << QByteArray::fromHex("120774657374696e67") << (uint64_t)2 << ProtobufStreamReader::LEN;
+        QTest::newRow("sub-message") << QByteArray::fromHex("1a03089601") << (uint64_t)3 << ProtobufStreamReader::LEN;
     }
 
     void testFieldRead()
