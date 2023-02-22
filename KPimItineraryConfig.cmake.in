@@ -6,7 +6,7 @@
 
 include(CMakeFindDependencyMacro)
 find_dependency(Qt@QT_MAJOR_VERSION@Gui "@QT_REQUIRED_VERSION@")
-find_dependency(KF5Mime "@KMIME_VERSION@")
+find_dependency(KPim@KF_MAJOR_VERSION@Mime "@KMIME_VERSION@")
 find_dependency(KF@KF_MAJOR_VERSION@CalendarCore "@KF_MIN_VERSION@")
 find_dependency(KF@KF_MAJOR_VERSION@Contacts "@KF_MIN_VERSION@")
 find_dependency(KPimPkPass "@PIM_PKPASS@")

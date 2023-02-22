@@ -191,7 +191,7 @@ target_include_directories(KPimItinerary PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(KPimItinerary
     PUBLIC
         Qt::Core
-        KF5::Mime
+        KPim${KF_MAJOR_VERSION}::Mime
     PRIVATE
         Qt::Qml
         KF${KF_MAJOR_VERSION}::Archive
