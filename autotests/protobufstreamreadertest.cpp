@@ -22,11 +22,11 @@ private Q_SLOTS:
         QTest::addColumn<QByteArray>("input");
         QTest::addColumn<uint64_t>("output");
 
-        QTest::newRow("empty") << QByteArray() << 0ul;
-        QTest::newRow("0") << QByteArray("\x00", 1) << 0ul;
-        QTest::newRow("150") << QByteArray("\x96\x01") << 150ul;
-        QTest::newRow("7") << QByteArray("\x07\01\00", 3) << 7ul;
-        QTest::newRow("1579970760000") << QByteArray("\xC0\x9A\xE2\xEC\xFD\x2D") << 1579970760000ul;
+        QTest::newRow("empty") << QByteArray() << (uint64_t)0;
+        QTest::newRow("0") << QByteArray("\x00", 1) << (uint64_t)0;
+        QTest::newRow("150") << QByteArray("\x96\x01") << (uint64_t)150;
+        QTest::newRow("7") << QByteArray("\x07\01\00", 3) << (uint64_t)7;
+        QTest::newRow("1579970760000") << QByteArray("\xC0\x9A\xE2\xEC\xFD\x2D") << (uint64_t)1579970760000;
     }
 
     void testVarint()
