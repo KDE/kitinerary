@@ -10,10 +10,8 @@
 
 using namespace KItinerary;
 
-enum {
-    AirplaneSpeedLowerBound = 250, // km/h, turboprop aircraft, and a bit lower than average cruise speed to account for takeoff/landing
-    AirplaneSpeedUpperBound = 2140, // km/h, Concorde, so a bit excessive
-};
+constexpr inline const auto AirplaneSpeedLowerBound = 250; // km/h, turboprop aircraft, and a bit lower than average cruise speed to account for takeoff/landing
+constexpr inline const auto AirplaneSpeedUpperBound = 2140; // km/h, Concorde, so a bit excessive
 
 bool FlightUtil::isPlausibleDistanceForDuration(int distance, int duration)
 {
