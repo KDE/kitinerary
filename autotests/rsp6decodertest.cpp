@@ -5,6 +5,8 @@
 
 #include "../lib/rsp/rsp6decoder.cpp"
 
+#include <KItinerary/ExtractorEngine>
+
 #include <QDebug>
 #include <QObject>
 #include <QTest>
@@ -15,6 +17,13 @@ class Rsp6DecoderTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase()
+    {
+        // work around to get the qrc data with the RSP-6 keys loaded,
+        // which would be omitted when linking with --as-needed here
+        ExtractorEngine engine;
+    }
+
     void testDecode()
     {
         const QByteArray input("06DNQL4XHVK00TTRCGPUQWNTHPGHWBPOUTKRWXAJKGHFBAPBCTOGUZQVTZTKKDEBQXPGRWZJRJBXJZPOHNJGIPDJWEGYWJXLVPGEEZBCUUELIJMOINPRZMSDQCZJGLIZLUTQHXMTPKWCMJISUXQLORAOVYXSOLGXXGMVUDXTMHAYMBLUTKPUPFCRNNTDBBDLNWSBPDUXYKSIMJSBYBURSCPUMFBZPEUTECHTIOXAH");
