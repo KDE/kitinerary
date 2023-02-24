@@ -146,6 +146,15 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
                 continue;
             }
         }
+        // departure time
+        if (!flight.departureTime().isValid() && field.key().contains(QLatin1String("departure"), Qt::CaseInsensitive)) {
+            const auto time = QTime::fromString(field.value().toString());
+            if (time.isValid()) {
+                // this misses date, but the postprocessor will fill that in
+                flight.setDepartureTime(QDateTime(QDate(1, 1, 1), time));
+                continue;
+            }
+        }
     }
 
     // "relevantDate" is the best guess for the boarding time if we didn't find an explicit field for it
