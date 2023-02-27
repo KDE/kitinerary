@@ -405,8 +405,17 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
         qCDebug(CompareLog) << "unbound trip" << lhs.departureStation().name() << rhs.departureStation().name() << lhs.arrivalStation().name() << rhs.arrivalStation().name();
         return LocationUtil::isSameLocation(lhs.departureStation(), rhs.departureStation(), LocationUtil::Exact)
             && LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::Exact);
-    } else if (!equalAndPresent(lhs.departureTime(), rhs.departureTime())) {
-        return false;
+    } else if (lhs.departureTime().isValid() && rhs.departureTime().isValid()) {
+        // if we have both departure times, they have to match
+        if (!equalAndPresent(lhs.departureTime(), rhs.departureTime())) {
+            return false;
+        }
+    } else {
+        // only one departure time exists, so check if the locations don't conflict and rely on the train number for the rest
+        if (!LocationUtil::isSameLocation(lhs.departureStation(), rhs.departureStation(), LocationUtil::CityLevel)
+            || !LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::CityLevel)) {
+            return false;
+        }
     }
 
     // arrival times (when present) should either match exactly, or be almost the same at a matching arrival location
@@ -431,7 +440,7 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
     qCDebug(CompareLog) << "left:" << lhs.trainName() << lhs.trainNumber() << lhs.departureTime();
     qCDebug(CompareLog) << "right:" << rhs.trainName() << rhs.trainNumber() << rhs.departureTime();
     qCDebug(CompareLog) << "same line:" << isSameLine;
-    return !conflictIfPresent(lhs.trainName(),rhs.trainName()) && isSameLine && lhs.departureTime().date() == rhs.departureTime().date();
+    return !conflictIfPresent(lhs.trainName(),rhs.trainName()) && isSameLine;
 }
 
 static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs)
