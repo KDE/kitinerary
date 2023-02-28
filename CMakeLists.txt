@@ -28,10 +28,6 @@ include(ECMAddQch)
 option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
 add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
 
-ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
-    VERSION_HEADER kitinerary_version.h
-    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfigVersion.cmake"
-)
 
 set(QT_REQUIRED_VERSION "5.15.2")
 if (QT_MAJOR_VERSION STREQUAL "6")
@@ -41,6 +37,10 @@ if (QT_MAJOR_VERSION STREQUAL "6")
 else()
     set(KF_MAJOR_VERSION "5")
 endif()
+ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
+    VERSION_HEADER kitinerary_version.h
+    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryConfigVersion.cmake"
+)
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Gui Qml)
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS Contacts CalendarCore I18n)
@@ -97,8 +97,9 @@ ecm_set_disabled_deprecation_versions(QT 5.15.2  KF 5.103.0)
 
 
 
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPimItinerary")
-set(KDE_INSTALL_INCLUDEDIR_PIM ${KDE_INSTALL_INCLUDEDIR}/KPim)
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPim${KF_MAJOR_VERSION}Itinerary")
+set(KITINERARY_KF5_COMPAT FALSE)
+set(KDE_INSTALL_INCLUDEDIR_PIM ${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION})
 
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
@@ -115,20 +116,20 @@ feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAG
 
 configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KPimItineraryConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryConfig.cmake"
     INSTALL_DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
 )
 
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfig.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfigVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryConfigVersion.cmake"
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         COMPONENT Devel)
 
-install(EXPORT KPimItineraryTargets
+install(EXPORT KPim${KF_MAJOR_VERSION}ItineraryTargets
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        FILE KPimItineraryTargets.cmake
-        NAMESPACE KPim::
+        FILE KPim${KF_MAJOR_VERSION}ItineraryTargets.cmake
+        NAMESPACE KPim${KF_MAJOR_VERSION}::
 )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_version.h
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM} COMPONENT Devel)
@@ -136,10 +137,41 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_version.h
 ki18n_install(po)
 if (BUILD_QCH)
     ecm_install_qch_export(
-        TARGETS KPimItinerary_QCH
-        FILE KPimItineraryQchTargets.cmake
+        TARGETS KPim${KF_MAJOR_VERSION}Itinerary_QCH
+        FILE KPim${KF_MAJOR_VERSION}ItineraryQchTargets.cmake
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         COMPONENT Devel
     )
-    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KPimItineraryQchTargets.cmake\")")
+    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KPim${KF_MAJOR_VERSION}ItineraryQchTargets.cmake\")")
 endif()
+
+
+#if (QT_MAJOR_VERSION STREQUAL "5")
+##
+# TODO: Backwards compatiblity. Remove in next major version
+##
+set(CMAKECONFIG_INSTALL_DIR_KF5 "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPimItinerary")
+set(KITINERARY_KF5_COMPAT TRUE)
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/KPimItineraryConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfig.cmake"
+    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR_KF5}
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfig.cmake"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF5}"
+    COMPONENT Devel
+)
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryConfigVersion.cmake"
+    RENAME "KPimItineraryConfigVersion.cmake"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF5}"
+    COMPONENT Devel
+)
+install(EXPORT KPim${KF_MAJOR_VERSION}ItineraryTargets
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF5}"
+    FILE KPim${KF_MAJOR_VERSION}ItineraryTargets.cmake
+    NAMESPACE KPim::
+)
+#endif()

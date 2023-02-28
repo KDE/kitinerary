@@ -24,5 +24,15 @@ if (NOT @BUILD_SHARED_LIBS@)
     endif()
 endif()
 
-include("${CMAKE_CURRENT_LIST_DIR}/KPimItineraryTargets.cmake")
+if (@KITINERARY_KF5_COMPAT@)
+    message(WARNING "\n"
+                    "************* DEPRECATION WARNING *************\n"
+		    "Using find_package(KPimItinerary) and KPim::Itinerary targets is deprecated. "
+                    "Please use find_package(KPim@KF_MAJOR_VERSION@Itinerary) and KPim@KF_MAJOR_VERSION@::Itinerary instead. This backwards "
+                    "compatibility will be removed in the next major version.\n"
+                    "***********************************************\n")
+endif()
+
+
+include("${CMAKE_CURRENT_LIST_DIR}/KPim@KF_MAJOR_VERSION@ItineraryTargets.cmake")
 @PACKAGE_INCLUDE_QCHTARGETS@

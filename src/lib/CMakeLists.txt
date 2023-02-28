@@ -7,10 +7,10 @@ if (BUILD_TOOLS)
 endif()
 configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
-add_library(KPimItinerary ${kitinerary_lib_srcs})
-add_library(KPim::Itinerary ALIAS KPimItinerary)
+add_library(KPim${KF_MAJOR_VERSION}Itinerary ${kitinerary_lib_srcs})
+add_library(KPim${KF_MAJOR_VERSION}::Itinerary ALIAS KPim${KF_MAJOR_VERSION}Itinerary)
 
-target_sources(KPimItinerary PRIVATE
+target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     asn1/berelement.cpp
     asn1/bitvectorview.cpp
     asn1/uperdecoder.cpp
@@ -153,25 +153,25 @@ target_sources(KPimItinerary PRIVATE
     stringutil.cpp
 )
 if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
-    set_target_properties(KPimItinerary PROPERTIES UNITY_BUILD ON)
+    set_target_properties(KPim${KF_MAJOR_VERSION}Itinerary PROPERTIES UNITY_BUILD ON)
 endif()
 
 kde_source_files_enable_exceptions(barcodedecoder.cpp qimagepurebinarizer.cpp)
-ecm_qt_declare_logging_category(KPimItinerary
+ecm_qt_declare_logging_category(KPim${KF_MAJOR_VERSION}Itinerary
     HEADER logging.h
     IDENTIFIER KItinerary::Log
     CATEGORY_NAME org.kde.kitinerary
     DESCRIPTION "KItinerary"
     EXPORT KITINERARY
 )
-ecm_qt_declare_logging_category(KPimItinerary
+ecm_qt_declare_logging_category(KPim${KF_MAJOR_VERSION}Itinerary
     HEADER compare-logging.h
     IDENTIFIER KItinerary::CompareLog
     CATEGORY_NAME org.kde.kitinerary.comparator
     DESCRIPTION "KItinerary Comparison/Merging Logging"
     EXPORT KITINERARY
 )
-ecm_qt_declare_logging_category(KPimItinerary
+ecm_qt_declare_logging_category(KPim${KF_MAJOR_VERSION}Itinerary
     HEADER validator-logging.h
     IDENTIFIER KItinerary::ValidatorLog
     CATEGORY_NAME org.kde.kitinerary.extractorValidator
@@ -179,16 +179,16 @@ ecm_qt_declare_logging_category(KPimItinerary
     EXPORT KITINERARY
 )
 
-generate_export_header(KPimItinerary BASE_NAME KItinerary)
-set_target_properties(KPimItinerary PROPERTIES
+generate_export_header(KPim${KF_MAJOR_VERSION}Itinerary BASE_NAME KItinerary)
+set_target_properties(KPim${KF_MAJOR_VERSION}Itinerary PROPERTIES
     VERSION ${KITINERARY_VERSION}
     SOVERSION ${KITINERARY_SOVERSION}
     EXPORT_NAME Itinerary
 )
-target_include_directories(KPimItinerary INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_PIM}>")
-target_include_directories(KPimItinerary PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
-target_include_directories(KPimItinerary PRIVATE ${CMAKE_BINARY_DIR})
-target_link_libraries(KPimItinerary
+target_include_directories(KPim${KF_MAJOR_VERSION}Itinerary INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_PIM}>")
+target_include_directories(KPim${KF_MAJOR_VERSION}Itinerary PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
+target_include_directories(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE ${CMAKE_BINARY_DIR})
+target_link_libraries(KPim${KF_MAJOR_VERSION}Itinerary
     PUBLIC
         Qt::Core
         KPim${KF_MAJOR_VERSION}::Mime
@@ -206,22 +206,22 @@ target_link_libraries(KPimItinerary
         ZLIB::ZLIB
 )
 if (QT_MAJOR_VERSION EQUAL "5")
-    target_link_libraries(KPimItinerary PRIVATE Qt5::QmlPrivate)  # for QByteArray -> ArrayBuffer conversion
+    target_link_libraries(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE Qt5::QmlPrivate)  # for QByteArray -> ArrayBuffer conversion
 endif()
 
 if (TARGET ZXing::ZXing)
-    target_link_libraries(KPimItinerary PRIVATE ZXing::ZXing)
+    target_link_libraries(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE ZXing::ZXing)
 elseif (TARGET ZXing::Core)
-    target_link_libraries(KPimItinerary PRIVATE ZXing::Core)
+    target_link_libraries(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE ZXing::Core)
 endif()
 
 if (HAVE_LIBXML2)
-    target_compile_definitions(KPimItinerary PRIVATE ${LIBXML2_DEFINITIONS})
-    target_include_directories(KPimItinerary PRIVATE ${LIBXML2_INCLUDE_DIR})
-    target_link_libraries(KPimItinerary PRIVATE ${LIBXML2_LIBRARIES})
+    target_compile_definitions(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE ${LIBXML2_DEFINITIONS})
+    target_include_directories(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE ${LIBXML2_INCLUDE_DIR})
+    target_link_libraries(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE ${LIBXML2_LIBRARIES})
 endif()
 if (HAVE_PHONENUMBER)
-    target_link_libraries(KPimItinerary PRIVATE PhoneNumber::PhoneNumber)
+    target_link_libraries(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE PhoneNumber::PhoneNumber)
 endif()
 
 ecm_generate_headers(KItinerary_FORWARDING_HEADERS
@@ -351,7 +351,7 @@ ecm_generate_headers(KItinerary_Vdv_FORWARDING_HEADERS
     RELATIVE vdv
 )
 
-install(TARGETS KPimItinerary EXPORT KPimItineraryTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KPim${KF_MAJOR_VERSION}Itinerary EXPORT KPim${KF_MAJOR_VERSION}ItineraryTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
     ${KItinerary_FORWARDING_HEADERS}
     ${KItinerary_Asn1_FORWARDING_HEADERS}
@@ -396,9 +396,9 @@ ecm_qt_install_logging_categories(
 
 if (BUILD_QCH)
     ecm_add_qch(
-        KPimItinerary_QCH
-        NAME KPimItinerary
-        BASE_NAME KPimItinerary
+        KPim${KF_MAJOR_VERSION}Itinerary_QCH
+        NAME KPim${KF_MAJOR_VERSION}Itinerary
+        BASE_NAME KPim${KF_MAJOR_VERSION}Itinerary
         VERSION ${PIM_VERSION}
         ORG_DOMAIN org.kde
         SOURCES # using only public headers, to cover only public API

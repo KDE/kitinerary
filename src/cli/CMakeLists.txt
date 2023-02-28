@@ -14,7 +14,7 @@ if (KITINERARY_STANDALONE_CLI_EXTRACTOR)
     target_compile_definitions(kitinerary-extractor PRIVATE -DKITINERARY_STANDALONE_CLI_EXTRACTOR)
 endif()
 target_link_libraries(kitinerary-extractor
-    KPimItinerary
+    KPim${KF_MAJOR_VERSION}Itinerary
     KPim::PkPass
     KF${KF_MAJOR_VERSION}::CalendarCore
 )
