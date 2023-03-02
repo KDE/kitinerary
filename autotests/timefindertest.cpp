@@ -52,6 +52,8 @@ private Q_SLOTS:
         finder.find(input);
         QCOMPARE(finder.results().size(), 1);
         QCOMPARE(finder.results()[0].dateTime.toTime(), time);
+
+        QCOMPARE(finder.findSingularTime(input), time);
     }
 
     void testTimeFinderNone_data()
@@ -80,6 +82,7 @@ private Q_SLOTS:
         TimeFinder finder;
         finder.find(input);
         QCOMPARE(finder.results().size(), 0);
+        QCOMPARE(finder.findSingularTime(input), QTime());
     }
 
     void testTimeFinderPlural()
@@ -89,6 +92,8 @@ private Q_SLOTS:
         QCOMPARE(finder.results().size(), 2);
         QCOMPARE(finder.results()[0].dateTime.toTime(), QTime(9, 0));
         QCOMPARE(finder.results()[1].dateTime.toTime(), QTime(17, 0));
+
+        QCOMPARE(finder.findSingularTime(u"from 09:00 to 17:00"), QTime());
     }
 
     void testTimeFinderDateTime_data()
@@ -110,7 +115,6 @@ private Q_SLOTS:
         QCOMPARE(finder.results().size(), 1);
         QCOMPARE(finder.results()[0].dateTime.toDateTime(), dateTime);
     }
-
 };
 
 QTEST_GUILESS_MAIN(TimeFinderTest)

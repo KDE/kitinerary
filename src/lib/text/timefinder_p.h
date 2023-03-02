@@ -18,7 +18,13 @@ namespace KItinerary {
 class TimeFinder
 {
 public:
+    /** Search for all occurences of date/time values in @p text. */
     void find(QStringView text);
+
+    /** Like the above, but assume there is exactly one time value in @p text.
+     *  If anything else is found, returns an invalid QTime.
+     */
+    QTime findSingularTime(QStringView text);
 
     struct Result {
         int begin = -1;

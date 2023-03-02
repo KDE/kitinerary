@@ -27,9 +27,20 @@ void TimeFinder::find(QStringView text)
         mergeResults();
     }
 
+#ifdef TIMEFINDER_DEBUG
     for (const auto &res : m_results) {
         qDebug() << "  " << res.dateTime << res.begin << res.end;
     }
+#endif
+}
+
+QTime TimeFinder::findSingularTime(QStringView text)
+{
+    find(text);
+    if (m_results.size() != 1 || m_results[0].dateTime.userType() != QMetaType::QTime) {
+        return {};
+    }
+    return m_results[0].dateTime.toTime();
 }
 
 void TimeFinder::findTimes(QStringView text)

@@ -18,6 +18,7 @@
 
 #include <knowledgedb/airportdb.h>
 #include <text/nameoptimizer_p.h>
+#include <text/timefinder_p.h>
 
 #include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>
@@ -128,11 +129,12 @@ static bool isPlausibeGate(const QString &s)
 static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
 {
     // search for missing information by field key
+    TimeFinder timeFinder;
     const auto fields = pass->fields();
     for (const auto &field : fields) {
         // boarding time
         if (!flight.boardingTime().isValid() && field.key().contains(QLatin1String("boarding"), Qt::CaseInsensitive)) {
-            const auto time = QTime::fromString(field.value().toString());
+            const auto time = timeFinder.findSingularTime(field.value().toString());
             if (time.isValid()) {
                 // this misses date, but the postprocessor will fill that in
                 flight.setBoardingTime(QDateTime(QDate(1, 1, 1), time));
@@ -149,7 +151,7 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
         }
         // departure time
         if (!flight.departureTime().isValid() && field.key().contains(QLatin1String("departure"), Qt::CaseInsensitive)) {
-            const auto time = QTime::fromString(field.value().toString());
+            const auto time = timeFinder.findSingularTime(field.value().toString());
             if (time.isValid()) {
                 // this misses date, but the postprocessor will fill that in
                 flight.setDepartureTime(QDateTime(QDate(1, 1, 1), time));
