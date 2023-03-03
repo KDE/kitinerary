@@ -73,6 +73,10 @@ static bool conflictIfPresent(const T &lhs, const T &rhs)
 {
     return lhs.isValid() && rhs.isValid() && lhs != rhs;
 }
+static bool conflictIfPresent(const Person &lhs, const Person &rhs)
+{
+    return !lhs.name().isEmpty() && !rhs.name().isEmpty() && !MergeUtil::isSamePerson(lhs, rhs);
+}
 
 /** Checks that @p lhs and @p rhs have a different prefix is they are both set. */
 static bool prefixConflictIfPresent(const QString &lhs, const QString &rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
@@ -102,9 +106,7 @@ static bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs);
 bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes)
 {
     // underName either matches or is not set
-    const auto lhsUN = lhsRes.underName().value<Person>();
-    const auto rhsUN = rhsRes.underName().value<Person>();
-    if (!lhsUN.name().isEmpty() && !rhsUN.name().isEmpty() &&  !MergeUtil::isSamePerson(lhsUN, rhsUN)) {
+    if (conflictIfPresent(lhsRes.underName().value<Person>(), rhsRes.underName().value<Person>())) {
         return false;
     }
 
@@ -304,14 +306,8 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         const auto lhsTicket = lhs.value<Ticket>();
         const auto rhsTicket = rhs.value<Ticket>();
 
-        // underName either matches or is not set
-        const auto lhsUN = lhsTicket.underName();
-        const auto rhsUN = rhsTicket.underName();
-        if (!lhsUN.name().isEmpty() && !rhsUN.name().isEmpty() &&  !isSamePerson(lhsUN, rhsUN)) {
-            return false;
-        }
-
-        if (conflictIfPresent(lhsTicket.ticketNumber(), rhsTicket.ticketNumber())
+        if (conflictIfPresent(lhsTicket.underName(), rhsTicket.underName())
+         || conflictIfPresent(lhsTicket.ticketNumber(), rhsTicket.ticketNumber())
          || conflictIfPresent(lhsTicket.name(), rhsTicket.name())
          || conflictIfPresent(lhsTicket.validFrom(), rhsTicket.validFrom())
          || !isSameTicketToken(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())
@@ -325,14 +321,8 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         const auto lhsPM = lhs.value<ProgramMembership>();
         const auto rhsPM = rhs.value<ProgramMembership>();
 
-        // underName either matches or is not set
-        const auto lhsMem = lhsPM.member();
-        const auto rhsMem = rhsPM.member();
-        if (!lhsMem.name().isEmpty() && !rhsMem.name().isEmpty() &&  !isSamePerson(lhsMem, rhsMem)) {
-            return false;
-        }
-
-        if (conflictIfPresent(lhsPM.programName(), rhsPM.programName())
+        if (conflictIfPresent(lhsPM.member(), rhsPM.member())
+         || conflictIfPresent(lhsPM.programName(), rhsPM.programName())
          || conflictIfPresent(lhsPM.membershipNumber(), rhsPM.membershipNumber())
          || conflictIfPresent(lhsPM.validFrom(), rhsPM.validFrom())
          || conflictIfPresent(lhsPM.validUntil(), rhsPM.validUntil())
