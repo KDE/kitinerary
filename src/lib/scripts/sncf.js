@@ -504,11 +504,11 @@ function parseSncfCartePdf(pdf, node, barcode) {
     const text = pdf.pages[barcode.location].text;
     var carte = node.result[0];
     carte.member = JsonLd.newObject("Person");
-    carte.member.familyName = text.match(/Nom\s*:\s*(.*)/)[1];
-    carte.member.givenName = text.match(/Prénom\s*:\s*(.*)/)[1];
-    const validity = text.match(/Du\s+(\d{2}\/\d{2}\/\d{4})\s+au\s+(\d{2}\/\d{2}\/\d{4})/);
-    carte.validFrom = JsonLd.toDateTime(validity[1], 'dd/MM/yyyy', 'fr');
-    carte.validTo = JsonLd.toDateTime(validity[2] + ' 23:59:59', 'dd/MM/yyyy hh:mm:ss', 'fr');
+    carte.member.familyName = text.match(/(?:Nom|Name)\s*:\s*(.*)/)[1];
+    carte.member.givenName = text.match(/(?:Prénom|Vorname)\s*:\s*(.*)/)[1];
+    const validity = text.match(/(?:Du|Vom)\s+(\d{2}[\/\.]\d{2}[\/\.]\d{4})\s+(?:au|bis zum)\s+(\d{2}[\/\.]\d{2}[\/\.]\d{4})/);
+    carte.validFrom = JsonLd.toDateTime(validity[1], ['dd/MM/yyyy', 'dd.MM.yyyy'], 'fr');
+    carte.validUntil = JsonLd.toDateTime(validity[2] + ' 23:59:59', ['dd/MM/yyyy hh:mm:ss', 'dd.MM.yyyy hh:mm:ss'], 'fr');
     return carte;
 }
 
