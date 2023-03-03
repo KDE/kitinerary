@@ -1,0 +1,34 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "identifier": "TAY／4",
+                "name": "桃園 (Taoyuan)"
+            },
+            "arrivalTime": "2021-05-13T09:32:00",
+            "departureDay": "2021-05-13",
+            "departureStation": {
+                "@type": "TrainStation",
+                "identifier": "TPE／2",
+                "name": "台北 (Taipei)"
+            },
+            "departureTime": "2021-05-13T09:11:00",
+            "trainNumber": "813"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "qrCode:240011130430703760167000081300220210513091100004202105130932000100010020000007001003000000008000600000000000002021051310D09D",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "1C",
+                "seatSection": "7"
+            }
+        }
+    }
+]
