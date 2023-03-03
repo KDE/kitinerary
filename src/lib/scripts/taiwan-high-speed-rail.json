@@ -1,0 +1,11 @@
+{
+    "filter": [
+        {
+            "match": "^[a-zA-Z0-9]{124}$",
+            "mimeType": "text/plain"
+        }
+    ],
+    "function": "main",
+    "mimeType": "text/plain",
+    "script": "taiwan-high-speed-rail.js"
+}
