@@ -106,7 +106,8 @@ static bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs);
 bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes)
 {
     // underName either matches or is not set
-    if (conflictIfPresent(lhsRes.underName().value<Person>(), rhsRes.underName().value<Person>())) {
+    if (conflictIfPresent(lhsRes.underName().value<Person>(), rhsRes.underName().value<Person>())
+     || conflictIfPresent(lhsRes.reservationNumber(), rhsRes.reservationNumber())) {
         return false;
     }
 
@@ -218,9 +219,6 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
     if (JsonLd::isA<LodgingReservation>(lhs)) {
         const auto lhsRes = lhs.value<LodgingReservation>();
         const auto rhsRes = rhs.value<LodgingReservation>();
-        if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
-            return false;
-        }
         return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.checkinTime().date() == rhsRes.checkinTime().date();
     }
     if (JsonLd::isA<LodgingBusiness>(lhs)) {
