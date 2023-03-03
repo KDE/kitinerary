@@ -320,6 +320,28 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         }
     }
 
+    // program memberships
+    if (JsonLd::isA<ProgramMembership>(lhs)) {
+        const auto lhsPM = lhs.value<ProgramMembership>();
+        const auto rhsPM = rhs.value<ProgramMembership>();
+
+        // underName either matches or is not set
+        const auto lhsMem = lhsPM.member();
+        const auto rhsMem = rhsPM.member();
+        if (!lhsMem.name().isEmpty() && !rhsMem.name().isEmpty() &&  !isSamePerson(lhsMem, rhsMem)) {
+            return false;
+        }
+
+        if (conflictIfPresent(lhsPM.programName(), rhsPM.programName())
+         || conflictIfPresent(lhsPM.membershipNumber(), rhsPM.membershipNumber())
+         || conflictIfPresent(lhsPM.validFrom(), rhsPM.validFrom())
+         || conflictIfPresent(lhsPM.validUntil(), rhsPM.validUntil())
+         || !isSameTicketToken(lhsPM.tokenData(), rhsPM.tokenData())
+        ) {
+            return false;
+        }
+    }
+
     // custom comparators
     const auto it = std::lower_bound(s_mergeCompareFuncs.begin(), s_mergeCompareFuncs.end(), lhs.userType());
     if (it != s_mergeCompareFuncs.end() && (*it).metaTypeId == lhs.userType()) {
