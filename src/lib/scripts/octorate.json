@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "url",
+            "match": "octorate.com/octobook",
+            "mimeType": "internal/event",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseEvent",
+    "mimeType": "internal/event",
+    "script": "octorate.js"
+}
