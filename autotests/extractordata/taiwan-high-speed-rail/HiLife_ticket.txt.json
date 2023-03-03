@@ -1,0 +1,34 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "identifier": "TPE／2",
+                "name": "台北 (Taipei)"
+            },
+            "arrivalTime": "2022-01-25T15:29:00",
+            "departureDay": "2022-01-25",
+            "departureStation": {
+                "@type": "TrainStation",
+                "identifier": "ZUY／12",
+                "name": "左營 (Zuoying)"
+            },
+            "departureTime": "2022-01-25T13:55:00",
+            "trainNumber": "132"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "qrCode:230010024634702208098000013201220220125135500002202201251529000100000010010006013001000000170500600000000000002022012510CC6E",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "13A",
+                "seatSection": "6"
+            }
+        }
+    }
+]
