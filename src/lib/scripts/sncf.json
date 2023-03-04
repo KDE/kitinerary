@@ -153,5 +153,18 @@
         "function": "parseSncfNormandie",
         "mimeType": "application/pdf",
         "script": "sncf.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "url",
+                "match": "sncf-connect.com/.*TRIP_IMPORT",
+                "mimeType": "internal/event",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseEvent",
+        "mimeType": "internal/event",
+        "script": "sncf.js"
     }
 ]

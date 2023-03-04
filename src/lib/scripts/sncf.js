@@ -532,3 +532,22 @@ function parseSncfNormandie(pdf, node, triggerNode) {
     let reservations = parseSecutixPdfItineraryV2(textLeft, res);
     return reservations;
 }
+
+function parseEvent(ev)
+{
+    let res = JsonLd.newTrainReservation();
+    const names = ev.description.match(/ +(.*) -> (.*)\n/);
+    res.reservationFor.departureStation.name = names[1];
+    res.reservationFor.departureTime = JsonLd.readQDateTime(ev, 'dtStart');
+    res.reservationFor.arrivalStation.name = names[2];
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(ev, 'dtEnd');
+    res.reservationFor.trainNumber = ev.description.match(/ +([A-Z ]+ \d+)\n/i)[1];
+    const seat = ev.description.match(/ +(?:VOITURE|COACH|WAGEN) (\d+) - (?:PLACE|SEAT|PLATZ) (\d+)/i);
+    if (seat) {
+        res.reservedTicket.ticketedSeat.seatSection = seat[1];
+        res.reservedTicket.ticketedSeat.seatNumber = seat[2];
+    }
+    res.reservationNumber = ev.uid.substr(0, 6);
+    res.url = ev.url;
+    return res;
+}
