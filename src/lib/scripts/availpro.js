@@ -7,21 +7,21 @@
 function parseHtml(doc) {
     var elems = doc.eval("/html/body/table/tr/td/table/tr/td/table");
 
-    var bookingRef = elems[1].recursiveContent.match(/Reference\s*(\S+)/);
+    var bookingRef = (doc.eval('//*[@id="t-w--courtesy-message"]')[0] ?? elems[1]).recursiveContent.match(/Reference\s*(\S+)/);
     if (!bookingRef)
         return null;
 
     var res = JsonLd.newLodgingReservation();
     res.reservationNumber = bookingRef[1];
 
-    var hotelInfo = elems[3].eval(".//table//table");
+    var hotelInfo = (doc.eval('//*[@id="t-w--hotel-info"]')[0] ?? elems[3]).eval(".//table//table");
     var row = hotelInfo[0].firstChild;
     var addr = row.recursiveContent.match(/([^\n]+)[\n\s]+([^\n]+)\n\s*([^\n]+)/);
     res.reservationFor.name = addr[1];
     res.reservationFor.address.streetAddress = addr[2];
     res.reservationFor.address.addressLocality = addr[3];
     row = row.nextSibling;
-    res.reservationFor.geo = JsonLd.toGeoCoordinates(row.firstChild.firstChild.attribute("href"));
+    res.reservationFor.geo = JsonLd.toGeoCoordinates(doc.eval('//a[starts-with(@href,"http://maps.google.")]')[0].attribute("href"));
 
     var links = hotelInfo[1].eval(".//a");
     for (var i = 0; i < links.length; ++i) {
@@ -36,14 +36,15 @@ function parseHtml(doc) {
 
     var booking = elems[5].firstChild.firstChild.firstChild;
     row = booking.firstChild;
-    res.underName.name = row.firstChild.nextSibling.content;
+    res.underName.name = (doc.eval('//*[@id="t-summary--guest-name"]/tr')[0] ??row).firstChild.nextSibling.content;
     row = row.nextSibling.nextSibling.nextSibling;
 
-    var checkin = row.recursiveContent.match(/from (\d{1,2}:\d{2})\)\s*(.*)/);
-    res.checkinTime = JsonLd.toDateTime(checkin[2] + checkin[1], "dddd, MMMM dd, yyyyhh:mm", "en");
+    const checkin = (doc.eval('//*[@id="t-summary--check-in"]/tr')[0] ?? row).recursiveContent.match(/from (\d{1,2}:\d{2}(?: AM| PM)?)\)\s*(.*)/);
+    res.checkinTime = JsonLd.toDateTime(checkin[2] + checkin[1], ["dddd, MMMM dd, yyyyhh:mm", "dddd, MMMM dd, yyyyhh:mm AP"], "en");
     row = row.nextSibling;
-    var checkout = row.recursiveContent.match(/until (\d{1,2}:\d{2})\)\s*(.*)/);
-    res.checkoutTime = JsonLd.toDateTime(checkout[2] + checkout[1], "dddd, MMMM dd, yyyyhh:mm", "en");
+    const checkout = (doc.eval('//*[@id="t-summary--check-out"]/tr')[0] ??row).recursiveContent.match(/until (\d{1,2}:\d{2}(?: AM| PM)?)\)\s*(.*)/);
+    res.checkoutTime = JsonLd.toDateTime(checkout[2] + checkout[1], ["dddd, MMMM dd, yyyyhh:mm", "dddd, MMMM dd, yyyyhh:mm AP"], "en");
 
+    res.modifyReservationUrl = doc.eval('//a[@target="_blank"]')[0].attribute('href');
     return res;
 }

@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "field": "From",
@@ -10,4 +10,16 @@
     "function": "parseHtmlBooking",
     "script": "nationalexpress.js",
     "mimeType": "text/html"
-}
+},
+{
+    "filter": [
+        {
+            "match": "^EU[A-Z0-9]{6}:\\d+:",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdf",
+    "script": "nationalexpress.js",
+    "mimeType": "application/pdf"
+}]
