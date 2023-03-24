@@ -113,6 +113,15 @@ if(BUILD_TESTING)
    add_subdirectory(autotests)
 endif()
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+if (BUILD_QCH)
+    ecm_install_qch_export(
+        TARGETS KPim${KF_MAJOR_VERSION}Itinerary_QCH
+        FILE KPim${KF_MAJOR_VERSION}ItineraryQchTargets.cmake
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+        COMPONENT Devel
+    )
+    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KPim${KF_MAJOR_VERSION}ItineraryQchTargets.cmake\")")
+endif()
 
 configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KPimItineraryConfig.cmake.in"
@@ -135,15 +144,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_version.h
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM} COMPONENT Devel)
 
 ki18n_install(po)
-if (BUILD_QCH)
-    ecm_install_qch_export(
-        TARGETS KPim${KF_MAJOR_VERSION}Itinerary_QCH
-        FILE KPim${KF_MAJOR_VERSION}ItineraryQchTargets.cmake
-        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        COMPONENT Devel
-    )
-    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KPim${KF_MAJOR_VERSION}ItineraryQchTargets.cmake\")")
-endif()
 
 
 #if (QT_MAJOR_VERSION STREQUAL "5")
