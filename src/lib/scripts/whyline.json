@@ -1,0 +1,27 @@
+[
+    {
+        "filter": [
+            {
+                "field": "uid",
+                "match": "@whyline.com$",
+                "mimeType": "internal/event",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseEvent",
+        "mimeType": "internal/event",
+        "script": "whyline.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^https://.*whyline.com/",
+                "mimeType": "text/plain",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseBarcode",
+        "mimeType": "text/plain",
+        "script": "whyline.js"
+    }
+]
