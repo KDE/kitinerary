@@ -284,7 +284,10 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (lhsRes.reservationNumber() != rhsRes.reservationNumber()) {
             return false;
         }
-        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor());
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) ||
+            // TODO replace by more general handling of incremental updates for existing elements,
+            // similar to how minimal cancellations are handled above
+            ((lhsRes.reservationFor().isNull() ^ rhsRes.reservationFor().isNull()) && equalAndPresent(lhsRes.reservationNumber(), rhsRes.reservationNumber()));
     }
     if (JsonLd::isA<Event>(lhs)) {
         const auto lhsEv = lhs.value<Event>();
