@@ -20,3 +20,34 @@ function main(pass, node)
 
     return res;
 }
+
+function parseHtmlConfirmation(html)
+{
+    let reservations = [];
+    const pnr = html.root.eval('//div[starts-with(@class, "bookCode")]')[0].recursiveContent;
+
+    const flights = html.root.eval('//table[@class="flightBoundLineRecap" or @class="detailContainer"]');
+    let date = "";
+    for (flight of flights) {
+        if (flight.attribute('class') == 'flightBoundLineRecap') {
+            date = flight.eval('.//strong')[0].content.match(/\S+ (.*)/)[1];
+            continue;
+        }
+        let res = JsonLd.newFlightReservation();
+        res.reservationNumber = pnr;
+
+        const origin = flight.eval('.//*[@class="originDateAirport"]')[0].recursiveContent.match(/(\d\d:\d\d)\s+(.*)/);
+        res.reservationFor.departureAirport.name = origin[2];
+        res.reservationFor.departureTime = JsonLd.toDateTime(date + ' ' + origin[1], 'dd.MMM hh:mm', ['en', 'de']);
+        const destination = flight.eval('.//*[@class="destinationDateAirport"]')[0].recursiveContent.match(/(\d\d:\d\d)\s+(.*)/);
+        res.reservationFor.arrivalAirport.name = destination[2];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(date + ' ' + destination[1], 'dd.MMM hh:mm', ['en', 'de']);
+        const airline = flight.eval('.//div[@class="aircraftAndAirline"]/div')[0].content.match(/([A-Z0-9]{2})(\d{1,4})/);
+        res.reservationFor.airline.iataCode = airline[1];
+        res.reservationFor.flightNumber = airline[2];
+
+        reservations.push(res);
+    }
+
+    return reservations;
+}

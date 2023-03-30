@@ -80,6 +80,11 @@
                 "match": "ne-pas-repondre@pasngr.ouigo.com",
                 "mimeType": "message/rfc822",
                 "scope": "Ancestors"
+            },
+            {
+                "match": "^0[A-Za-z0-9=+\\/]{172}$",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
             }
         ],
         "function": "parseOuigoTicket",
