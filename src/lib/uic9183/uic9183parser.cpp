@@ -362,7 +362,7 @@ QDateTime Uic9183Parser::validUntil() const
 
 
     // RCT2 RPT according to ERA TAP TSI Annex B.6
-    if (const auto rct2 = rct2Ticket(); rct2.isValid() && rct2.type() == Rct2Ticket::RailPass) {
+    if (const auto rct2 = rct2Ticket(); rct2.isValid() && (rct2.type() == Rct2Ticket::RailPass || rct2.type() == Rct2Ticket::Unknown)) {
         const auto validityRange = ticketLayout().text(3, 1, 36, 1).trimmed();
         const auto idx = std::max(validityRange.lastIndexOf(QLatin1Char(' ')), validityRange.lastIndexOf(QLatin1Char('-')));
         if (idx > 0) {
