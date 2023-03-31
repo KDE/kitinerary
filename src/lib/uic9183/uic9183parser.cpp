@@ -284,11 +284,13 @@ QDateTime Uic9183Parser::validFrom() const
     if (const auto b = findBlock("118199"); !b.isNull()) {
         const auto obj = QJsonDocument::fromJson(QByteArray::fromRawData(b.content(), b.contentSize())).object();
         auto dt = QDateTime::fromString(obj.value(QLatin1String("V")).toString(), QStringLiteral("yyMMddhhmm"));
-        if (dt.date().year() < 2000) {
-            dt = dt.addYears(100);
+        if (dt.isValid()) { // ÖBB VorteilsCard barcodes have an empty vendor block
+            if (dt.date().year() < 2000) {
+                dt = dt.addYears(100);
+            }
+            dt.setTimeSpec(Qt::UTC);
+            return dt;
         }
-        dt.setTimeSpec(Qt::UTC);
-        return dt;
     }
 
     // CD vender block
@@ -340,11 +342,13 @@ QDateTime Uic9183Parser::validUntil() const
     if (const auto b = findBlock("118199"); !b.isNull()) {
         const auto obj = QJsonDocument::fromJson(QByteArray::fromRawData(b.content(), b.contentSize())).object();
         auto dt = QDateTime::fromString(obj.value(QLatin1String("B")).toString(), QStringLiteral("yyMMddhhmm"));
-        if (dt.date().year() < 2000) {
-            dt = dt.addYears(100);
+        if (dt.isValid()) { // ÖBB VorteilsCard barcodes have an empty vendor block
+            if (dt.date().year() < 2000) {
+                dt = dt.addYears(100);
+            }
+            dt.setTimeSpec(Qt::UTC);
+            return dt;
         }
-        dt.setTimeSpec(Qt::UTC);
-        return dt;
     }
 
     // CD vender block
