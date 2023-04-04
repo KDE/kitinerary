@@ -14,9 +14,9 @@ if (KITINERARY_STANDALONE_CLI_EXTRACTOR)
     target_compile_definitions(kitinerary-extractor PRIVATE -DKITINERARY_STANDALONE_CLI_EXTRACTOR)
 endif()
 target_link_libraries(kitinerary-extractor
-    KPim${KF_MAJOR_VERSION}Itinerary
+    KPim6Itinerary
     KPim::PkPass
-    KF${KF_MAJOR_VERSION}::CalendarCore
+    KF6::CalendarCore
 )
 
 if (KITINERARY_STANDALONE_CLI_EXTRACTOR)
@@ -24,5 +24,5 @@ if (KITINERARY_STANDALONE_CLI_EXTRACTOR)
     install(PROGRAMS org.kde.kitinerary-extractor.desktop DESTINATION ${KDE_INSTALL_APPDIR})
     install(FILES org.kde.kitinerary-extractor.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 else()
-    install(TARGETS kitinerary-extractor DESTINATION ${KF5_LIBEXEC_INSTALL_DIR})
+    install(TARGETS kitinerary-extractor DESTINATION ${KF6_LIBEXEC_INSTALL_DIR})
 endif()

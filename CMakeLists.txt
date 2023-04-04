@@ -29,7 +29,7 @@ option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, 
 add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
 
 
-set(QT_REQUIRED_VERSION "5.15.2")
+set(QT_REQUIRED_VERSION "6.4.0")
 if (QT_MAJOR_VERSION STREQUAL "6")
     set(QT_REQUIRED_VERSION "6.4.0")
     set(KF_MIN_VERSION "5.240.0")
@@ -39,11 +39,11 @@ else()
 endif()
 ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
     VERSION_HEADER kitinerary_version.h
-    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryConfigVersion.cmake"
+    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryConfigVersion.cmake"
 )
 
-find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Gui Qml)
-find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS Contacts CalendarCore I18n)
+find_package(Qt6 ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Gui Qml)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS Contacts CalendarCore I18n)
 if (NOT ANDROID)
     find_package(SharedMimeInfo 1.3 REQUIRED)
 endif()
@@ -51,7 +51,7 @@ endif()
 set(KMIME_VERSION "5.23.40")
 set(PIM_PKPASS "5.23.40")
 
-find_package(KPim${KF_MAJOR_VERSION}Mime ${KMIME_VERSION} CONFIG REQUIRED)
+find_package(KPim6Mime ${KMIME_VERSION} CONFIG REQUIRED)
 find_package(KPimPkPass ${PIM_PKPASS} CONFIG REQUIRED)
 find_package(Poppler COMPONENTS Core)
 set_package_properties("Poppler" PROPERTIES TYPE REQUIRED PURPOSE "Support for extraction from PDF booking confirmations.")
@@ -68,7 +68,7 @@ find_package(OsmTools)
 set_package_properties(OsmTools PROPERTIES TYPE OPTIONAL PURPOSE "Needed only for regenereating the airport database (ie. you most likely don't need this)")
 
 if (NOT ANDROID)
-    set_package_properties(KF${KF_MAJOR_VERSION}CalendarCore PROPERTIES TYPE REQUIRED)
+    set_package_properties(KF6CalendarCore PROPERTIES TYPE REQUIRED)
     set_package_properties(LibXml2 PROPERTIES TYPE REQUIRED)
 endif()
 
@@ -97,9 +97,9 @@ ecm_set_disabled_deprecation_versions(QT 5.15.2  KF 5.105.0)
 
 
 
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPim${KF_MAJOR_VERSION}Itinerary")
-set(KITINERARY_KF5_COMPAT FALSE)
-set(KDE_INSTALL_INCLUDEDIR_PIM ${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION})
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPim6Itinerary")
+set(KITINERARY_KF6_COMPAT FALSE)
+set(KDE_INSTALL_INCLUDEDIR_PIM ${KDE_INSTALL_INCLUDEDIR}/KPim6)
 
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
@@ -115,30 +115,30 @@ endif()
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 if (BUILD_QCH)
     ecm_install_qch_export(
-        TARGETS KPim${KF_MAJOR_VERSION}Itinerary_QCH
-        FILE KPim${KF_MAJOR_VERSION}ItineraryQchTargets.cmake
+        TARGETS KPim6Itinerary_QCH
+        FILE KPim6ItineraryQchTargets.cmake
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         COMPONENT Devel
     )
-    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KPim${KF_MAJOR_VERSION}ItineraryQchTargets.cmake\")")
+    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KPim6ItineraryQchTargets.cmake\")")
 endif()
 
 configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KPimItineraryConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryConfig.cmake"
     INSTALL_DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
 )
 
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryConfig.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryConfigVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryConfigVersion.cmake"
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         COMPONENT Devel)
 
-install(EXPORT KPim${KF_MAJOR_VERSION}ItineraryTargets
+install(EXPORT KPim6ItineraryTargets
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        FILE KPim${KF_MAJOR_VERSION}ItineraryTargets.cmake
-        NAMESPACE KPim${KF_MAJOR_VERSION}::
+        FILE KPim6ItineraryTargets.cmake
+        NAMESPACE KPim6::
 )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_version.h
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM} COMPONENT Devel)
@@ -150,34 +150,34 @@ ki18n_install(po)
 ##
 # TODO: Backwards compatiblity. Remove in next major version
 ##
-set(CMAKECONFIG_INSTALL_DIR_KF5 "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPimItinerary")
-set(KITINERARY_KF5_COMPAT TRUE)
+set(CMAKECONFIG_INSTALL_DIR_KF6 "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPimItinerary")
+set(KITINERARY_KF6_COMPAT TRUE)
 configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KPimItineraryConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfig.cmake"
-    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR_KF5}
+    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR_KF6}
 )
 
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfig.cmake"
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF5}"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF6}"
     COMPONENT Devel
 )
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryConfigVersion.cmake"
     RENAME "KPimItineraryConfigVersion.cmake"
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF5}"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF6}"
     COMPONENT Devel
 )
-install(EXPORT KPim${KF_MAJOR_VERSION}ItineraryTargets
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF5}"
-    FILE KPim${KF_MAJOR_VERSION}ItineraryTargets.cmake
+install(EXPORT KPim6ItineraryTargets
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF6}"
+    FILE KPim6ItineraryTargets.cmake
     NAMESPACE KPim::
 )
 if (BUILD_QCH)
     install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}ItineraryQchTargets.cmake"
-        DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF5}"
+        "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryQchTargets.cmake"
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF6}"
         COMPONENT Devel
     )
 endif()

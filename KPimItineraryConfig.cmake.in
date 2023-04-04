@@ -5,14 +5,14 @@
 @PACKAGE_INIT@
 
 include(CMakeFindDependencyMacro)
-find_dependency(Qt@QT_MAJOR_VERSION@Gui "@QT_REQUIRED_VERSION@")
-find_dependency(KPim@KF_MAJOR_VERSION@Mime "@KMIME_VERSION@")
+find_dependency(Qt6Gui "@QT_REQUIRED_VERSION@")
+find_dependency(KPim6Mime "@KMIME_VERSION@")
 # Compat
 if ("@KF_MAJOR_VERSION@" EQUAL "5")
     find_dependency(KF5Mime "@KMIME_VERSION@")
 endif()
-find_dependency(KF@KF_MAJOR_VERSION@CalendarCore "@KF_MIN_VERSION@")
-find_dependency(KF@KF_MAJOR_VERSION@Contacts "@KF_MIN_VERSION@")
+find_dependency(KF6CalendarCore "@KF_MIN_VERSION@")
+find_dependency(KF6Contacts "@KF_MIN_VERSION@")
 find_dependency(KPimPkPass "@PIM_PKPASS@")
 
 if (NOT @BUILD_SHARED_LIBS@)
@@ -28,11 +28,11 @@ if (@KITINERARY_KF5_COMPAT@)
     message(WARNING "\n"
                     "************* DEPRECATION WARNING *************\n"
 		    "Using find_package(KPimItinerary) and KPim::Itinerary targets is deprecated. "
-                    "Please use find_package(KPim@KF_MAJOR_VERSION@Itinerary) and KPim@KF_MAJOR_VERSION@::Itinerary instead. This backwards "
+                    "Please use find_package(KPim6Itinerary) and KPim6::Itinerary instead. This backwards "
                     "compatibility will be removed in the next major version.\n"
                     "***********************************************\n")
 endif()
 
 
-include("${CMAKE_CURRENT_LIST_DIR}/KPim@KF_MAJOR_VERSION@ItineraryTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/KPim6ItineraryTargets.cmake")
 @PACKAGE_INCLUDE_QCHTARGETS@
