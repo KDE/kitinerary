@@ -307,8 +307,8 @@ function parseOuiSummaryTime(htmlElem)
     if (time) {
         return JsonLd.toDateTime(time[1] + time[2], "d MMMM yyyyhh:mm", "fr");
     }
-    time = timeStr.match(/(\d+ [^ ]+) +[^ ]+ +(\d+[:h]\d+)/);
-    return JsonLd.toDateTime(time[1] + time[2].replace('h', ':'), "d MMMMhh:mm", "fr");
+    time = timeStr.match(/(\d+\.? [^ ]+(?: \d{4})?) +[^ ]+ +(\d+[:h]\d+)/);
+    return JsonLd.toDateTime(time[1] + ' ' + time[2].replace('h', ':'), ["d MMMM hh:mm", "d. MMMM yyyy hh:mm"], ["fr", "en", "de"]);
 }
 
 function parseOuiSummary(html)
