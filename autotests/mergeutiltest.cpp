@@ -115,9 +115,9 @@ private Q_SLOTS:
     {
         // we do not need to consider cases here that ExtractorPostprocessor eliminates for us
         // such as filling the full name or honoric prefixes
-        QTest::addColumn<QVector<QStringList>>("data");
+        QTest::addColumn<QList<QStringList>>("data");
 
-        QTest::newRow("simple name") << QVector<QStringList> {
+        QTest::newRow("simple name") << QList<QStringList>{
             {_("Volker Krause"), {}, {}},
             {_("VOLKER KRAUSE"), {}, {}},
             {_("VOLKER KRAUSE"), _("Volker"), _("Krause")},
@@ -125,10 +125,9 @@ private Q_SLOTS:
             {_("VOLKER KRAUSE"), _("Volker"), {}},
             // IATA BCBP artifacts
             {_("VOLKERMR KRAUSE"), _("VOLKERMR"), _("KRAUSE")},
-            {_("VOLKER MR KRAUSE"), _("VOLKER MR"), _("KRAUSE")}
-        };
+            {_("VOLKER MR KRAUSE"), _("VOLKER MR"), _("KRAUSE")}};
 
-        QTest::newRow("double family name") << QVector<QStringList> {
+        QTest::newRow("double family name") << QList<QStringList>{
             {_("Andreas Cord-Landwehr"), {}, {}},
             {_("ANDREAS CORD-LANDWEHR"), {}, {}},
             {_("ANDREAS CORD-LANDWEHR"), _("Andreas"), _("Cord-Landwehr")},
@@ -136,25 +135,23 @@ private Q_SLOTS:
             {_("Andreas Cordlandwehr"), {}, {}},
             {_("ANDREAS CORDLANDWEHR"), _("ANDREAS"), _("CORDLANDWEHR")},
             {_("ANDREAS CORD LANDWEHR"), _("ANDREAS"), _("CORD LANDWEHR")},
-            {_("ANDREAS CORD LANDWEHR"), {}, {}}
-        };
+            {_("ANDREAS CORD LANDWEHR"), {}, {}}};
 
-        QTest::newRow("diacritic") << QVector<QStringList> {
-            {_("Daniel Vrátil"), {}, {} },
-            {_("Daniel Vrátil"), _("Daniel"), _("Vrátil") },
-            {_("DANIEL VRATIL"), {}, {} },
-            {_("DANIEL VRATIL"), _("DANIEL"), _("VRATIL") }
-        };
+        QTest::newRow("diacritic") << QList<QStringList>{
+            {_("Daniel Vrátil"), {}, {}},
+            {_("Daniel Vrátil"), _("Daniel"), _("Vrátil")},
+            {_("DANIEL VRATIL"), {}, {}},
+            {_("DANIEL VRATIL"), _("DANIEL"), _("VRATIL")}};
 
-        QTest::newRow("transliteration") << QVector<QStringList> {
-            {_("Bjärn Lastname"), {}, {} },
-            {_("BJAERN LASTNAME"), _("BJAERN"), _("LASTNAME") },
+        QTest::newRow("transliteration") << QList<QStringList>{
+            {_("Bjärn Lastname"), {}, {}},
+            {_("BJAERN LASTNAME"), _("BJAERN"), _("LASTNAME")},
         };
     }
 
     void testIsSamePerson()
     {
-        QFETCH(QVector<QStringList>, data);
+        QFETCH(QList<QStringList>, data);
 
         for(int i = 0; i < data.size(); ++i) {
             Person lhs;
@@ -182,12 +179,12 @@ private Q_SLOTS:
 
     void testIsNotSamePerson()
     {
-        QVector<QStringList> data {
-            { _("Volker Krause"), {}, {} },
-            { _("Andreas Cord-Landwehr"), _("Andread"), _("Cord-Landwehr") },
-            { _("GIVEN1 GIVEN2 FAMILY1"), {}, {} },
-            { _("V K"), {}, {} },
-            {_("Daniel Vrátil"), _("Daniel"), _("Vrátil") },
+        QList<QStringList> data{
+            {_("Volker Krause"), {}, {}},
+            {_("Andreas Cord-Landwehr"), _("Andread"), _("Cord-Landwehr")},
+            {_("GIVEN1 GIVEN2 FAMILY1"), {}, {}},
+            {_("V K"), {}, {}},
+            {_("Daniel Vrátil"), _("Daniel"), _("Vrátil")},
         };
 
         for(int i = 0; i < data.size(); ++i) {
@@ -310,14 +307,16 @@ private Q_SLOTS:
         const auto expected = QJsonDocument::fromJson(readFile(baseName + QLatin1String(".merged.json")));
 
         const auto mergedL2R = MergeUtil::merge(lhs, rhs);
-        auto mergedJson = QJsonDocument(JsonLdDocument::toJson(QVector<QVariant>({mergedL2R})));
+        auto mergedJson =
+            QJsonDocument(JsonLdDocument::toJson(QList<QVariant>({mergedL2R})));
         if (mergedJson != expected) {
             Test::compareJson(baseName + QLatin1String(".merged.json"), mergedJson, expected);
         }
         QCOMPARE(mergedJson, expected);
 
         const auto mergedR2L = MergeUtil::merge(rhs, lhs);
-        mergedJson = QJsonDocument(JsonLdDocument::toJson(QVector<QVariant>({mergedR2L})));
+        mergedJson =
+            QJsonDocument(JsonLdDocument::toJson(QList<QVariant>({mergedR2L})));
         if (mergedJson != expected) {
             Test::compareJson(baseName + QLatin1String(".merged.json"), mergedJson, expected);
         }

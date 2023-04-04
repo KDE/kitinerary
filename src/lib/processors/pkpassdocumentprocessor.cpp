@@ -93,9 +93,8 @@ QJSValue PkPassDocumentProcessor::contentToScriptValue(const ExtractorDocumentNo
     return engine->toScriptValue(node.content<KPkPass::Pass*>());
 }
 
-static QVector<KPkPass::Field> frontFieldsForPass(KPkPass::Pass *pass)
-{
-    QVector<KPkPass::Field> fields;
+static QList<KPkPass::Field> frontFieldsForPass(KPkPass::Pass *pass) {
+    QList<KPkPass::Field> fields;
     fields += pass->headerFields();
     fields += pass->primaryFields();
     fields += pass->secondaryFields();
@@ -350,7 +349,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
         default:
             break;
     }
-    node.setResult(QVector<QVariant>({res}));
+    node.setResult(QList<QVariant>({res}));
 }
 
 void PkPassDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const

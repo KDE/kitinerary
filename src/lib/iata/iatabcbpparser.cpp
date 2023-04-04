@@ -26,8 +26,8 @@ static QString stripLeadingZeros(const QString &s)
     return s.mid(d);
 }
 
-QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDateTime &externalIssueDate)
-{
+QList<QVariant> IataBcbpParser::parse(const QString &message,
+                                      const QDateTime &externalIssueDate) {
     IataBcbp bcbp(message);
     if (!bcbp.isValid()) {
         return {};
@@ -35,12 +35,12 @@ QVector<QVariant> IataBcbpParser::parse(const QString& message, const QDateTime 
     return parse(bcbp, externalIssueDate.isValid() ? externalIssueDate : QDateTime({1970, 1, 1}, {}));
 }
 
-QVector<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDateTime &contextDate)
-{
+QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp,
+                                      const QDateTime &contextDate) {
     const auto count = bcbp.uniqueMandatorySection().numberOfLegs();
     const auto issueDate = bcbp.uniqueConditionalSection().dateOfIssue(contextDate);
 
-    QVector<QVariant> result;
+    QList<QVariant> result;
     result.reserve(count);
 
     Person person;

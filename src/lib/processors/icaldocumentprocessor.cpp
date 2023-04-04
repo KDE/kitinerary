@@ -122,7 +122,7 @@ void IcalEventProcessor::postExtract(ExtractorDocumentNode &node, const Extracto
 
     // TODO attachments?
 
-    node.addResult(QVector<QVariant>{QVariant::fromValue(e)});
+    node.addResult(QList<QVariant>{QVariant::fromValue(e)});
 }
 
 QJSValue IcalEventProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const

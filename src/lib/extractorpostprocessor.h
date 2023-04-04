@@ -8,8 +8,8 @@
 
 #include "kitinerary_export.h"
 
+#include <QList>
 #include <QVariant>
-#include <QVector>
 
 #include <memory>
 
@@ -69,12 +69,12 @@ public:
     /** This will normalize and augment the given data elements and merge them with
      *  already added data elements if applicable.
      */
-    void process(const QVector<QVariant> &data);
+    void process(const QList<QVariant> &data);
 
     /** This returns the final result of all previously executed processing steps
      *  followed by sorting and filtering out all invalid data elements.
      */
-    QVector<QVariant> result() const;
+    QList<QVariant> result() const;
 
     /** The date the reservation(s) processed here have been made, if known.
      *  This is used for determining the year of incomplete dates provided by

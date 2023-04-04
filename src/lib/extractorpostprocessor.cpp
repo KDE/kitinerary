@@ -84,8 +84,7 @@ ExtractorPostprocessor::ExtractorPostprocessor()
 ExtractorPostprocessor::ExtractorPostprocessor(ExtractorPostprocessor &&) noexcept = default;
 ExtractorPostprocessor::~ExtractorPostprocessor() = default;
 
-void ExtractorPostprocessor::process(const QVector<QVariant> &data)
-{
+void ExtractorPostprocessor::process(const QList<QVariant> &data) {
     d->m_resultFinalized = false;
     d->m_data.reserve(d->m_data.size() + data.size());
     for (auto elem : data) {
@@ -132,8 +131,7 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
     }
 }
 
-QVector<QVariant> ExtractorPostprocessor::result() const
-{
+QList<QVariant> ExtractorPostprocessor::result() const {
     if (!d->m_resultFinalized) {
         // fold elements we have reservations for into those reservations
         for (auto it = d->m_data.begin(); it != d->m_data.end();) {

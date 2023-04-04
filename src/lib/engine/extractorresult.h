@@ -9,8 +9,8 @@
 #include "kitinerary_export.h"
 
 #include <QJsonArray>
+#include <QList>
 #include <QVariant>
-#include <QVector>
 
 namespace KItinerary {
 
@@ -22,7 +22,7 @@ class KITINERARY_EXPORT ExtractorResult
 public:
     ExtractorResult();
     ExtractorResult(const QJsonArray &result);
-    ExtractorResult(const QVector<QVariant> &result);
+    ExtractorResult(const QList<QVariant> &result);
     ~ExtractorResult();
 
     /** Checks if there is any relevant result set in here. */
@@ -33,14 +33,14 @@ public:
     /** JSON-LD data extracted from this document or page. */
     QJsonArray jsonLdResult() const;
     /** Result in decoded form. */
-    QVector<QVariant> result() const;
+    QList<QVariant> result() const;
 
     /** Append another result to this one. */
     void append(ExtractorResult &&other);
 
 private:
     mutable QJsonArray m_jsonLdResult;
-    mutable QVector<QVariant> m_result;
+    mutable QList<QVariant> m_result;
 };
 
 }

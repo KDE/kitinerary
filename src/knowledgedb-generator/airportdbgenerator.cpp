@@ -377,7 +377,7 @@ static const char nameN_string_table[] =
         QByteArray str;
         uint16_t strOffset;
         uint16_t iataMapOffset;
-        QVector<QString> iataList;
+        QList<QString> iataList;
     };
     std::vector<stringN_index_t> stringN_offsets;
     stringN_offsets.reserve(m_labelMap.size() - string_offsets.size());

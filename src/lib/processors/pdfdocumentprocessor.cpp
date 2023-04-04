@@ -157,7 +157,7 @@ void PdfDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unus
     const QString text = node.childNodes().back().content<QString>();
 
     // run name optimizer on all results
-    QVector<QVariant> result;
+    QList<QVariant> result;
     const auto res = node.result().result();
     result.reserve(res.size());
     for (const auto &r : res) {

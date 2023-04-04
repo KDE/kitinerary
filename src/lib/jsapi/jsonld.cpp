@@ -348,8 +348,9 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QJSValue &format
 
 QJSValue JsApi::JsonLd::toJson(const QVariant &v) const
 {
-    if (v.canConvert<QVector<QVariant>>()) {
-        return m_engine->toScriptValue(JsonLdDocument::toJson(v.value<QVector<QVariant>>()));
+    if (v.canConvert<QList<QVariant>>()) {
+        return m_engine->toScriptValue(
+            JsonLdDocument::toJson(v.value<QList<QVariant>>()));
     }
 
     const auto json = JsonLdDocument::toJsonValue(v);

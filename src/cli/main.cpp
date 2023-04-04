@@ -36,37 +36,39 @@
 
 using namespace KItinerary;
 
-static QVector<QVector<QVariant>> batchReservations(const QVector<QVariant> &reservations)
-{
-    using namespace KItinerary;
+static QList<QList<QVariant>>
+batchReservations(const QList<QVariant> &reservations) {
+  using namespace KItinerary;
 
-    QVector<QVector<QVariant>> batches;
-    QVector<QVariant> batch;
+  QList<QList<QVariant>> batches;
+  QList<QVariant> batch;
 
-    for (const auto &res : reservations) {
-        if (batch.isEmpty()) {
-            batch.push_back(res);
-            continue;
-        }
+  for (const auto &res : reservations) {
+    if (batch.isEmpty()) {
+      batch.push_back(res);
+      continue;
+    }
 
-        if (JsonLd::canConvert<Reservation>(res) && JsonLd::canConvert<Reservation>(batch.at(0))) {
-            const auto trip1 = JsonLd::convert<Reservation>(res).reservationFor();
-            const auto trip2 = JsonLd::convert<Reservation>(batch.at(0)).reservationFor();
-            if (KItinerary::MergeUtil::isSame(trip1, trip2)) {
-                batch.push_back(res);
-                continue;
-            }
-        }
-
-        batches.push_back(batch);
-        batch.clear();
+    if (JsonLd::canConvert<Reservation>(res) &&
+        JsonLd::canConvert<Reservation>(batch.at(0))) {
+      const auto trip1 = JsonLd::convert<Reservation>(res).reservationFor();
+      const auto trip2 =
+          JsonLd::convert<Reservation>(batch.at(0)).reservationFor();
+      if (KItinerary::MergeUtil::isSame(trip1, trip2)) {
         batch.push_back(res);
+        continue;
+      }
     }
 
-    if (!batch.isEmpty()) {
-        batches.push_back(batch);
-    }
-    return batches;
+    batches.push_back(batch);
+    batch.clear();
+    batch.push_back(res);
+  }
+
+  if (!batch.isEmpty()) {
+    batches.push_back(batch);
+  }
+  return batches;
 }
 
 static void printCapabilities()

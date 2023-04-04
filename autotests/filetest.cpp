@@ -118,8 +118,8 @@ private Q_SLOTS:
         QVERIFY(f.open(File::Write));
         QVERIFY(f.errorString().isEmpty());
 
-        QCOMPARE(f.passes(), QVector<QString>());
-        QCOMPARE(f.reservations(), QVector<QString>());
+        QCOMPARE(f.passes(), QList<QString>());
+        QCOMPARE(f.reservations(), QList<QString>());
         QCOMPARE(f.passData(QStringLiteral("1234")), QByteArray());
         QCOMPARE(f.reservation(QStringLiteral("1234")), QVariant());
 
@@ -129,7 +129,7 @@ private Q_SLOTS:
         QCOMPARE(f.documentInfo(QStringLiteral("foo")), QVariant());
         QCOMPARE(f.documentData(QStringLiteral("foo")), QByteArray());
 
-        QCOMPARE(f.listCustomData(QStringLiteral("foo")), QVector<QString>());
+        QCOMPARE(f.listCustomData(QStringLiteral("foo")), QList<QString>());
         QCOMPARE(f.customData(QStringLiteral("a / b"), QStringLiteral("c")), QByteArray());
         QCOMPARE(f.customData(QString(), QString()), QByteArray());
     }

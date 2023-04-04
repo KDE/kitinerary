@@ -8,9 +8,9 @@
 #include "datatypes_p.h"
 
 #include <QDateTime>
+#include <QList>
 #include <QUrl>
 #include <QVariant>
-#include <QVector>
 
 using namespace KItinerary;
 

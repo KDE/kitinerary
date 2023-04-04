@@ -34,7 +34,7 @@ public:
         QString alias;
         QString country;
         QByteArray tz;
-        QVector<QString> fragments; // name string fragments used for indexing
+        QList<QString> fragments; // name string fragments used for indexing
         int tzOffset;
         KnowledgeDb::Coordinate coord;
     };
@@ -51,7 +51,7 @@ private:
     QHash<QUrl, Airport> m_airportMap;
     QMap<QString, QUrl> m_iataMap;
     // mapping IATA codes to indexed string fragments
-    QMap<QString, QVector<QString>> m_labelMap;
+    QMap<QString, QList<QString>> m_labelMap;
 
     int m_iataCollisions = 0;
     int m_coordinateConflicts = 0;

@@ -317,9 +317,8 @@ static QVariant createInstance(const QJsonObject &obj, const QMetaProperty &prop
     return {};
 }
 
-QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
-{
-    QVector<QVariant> l;
+QList<QVariant> JsonLdDocument::fromJson(const QJsonArray &array) {
+    QList<QVariant> l;
     l.reserve(array.size());
     for (const auto &obj : array) {
         l.append(JsonLdDocument::fromJson(obj.toObject()));
@@ -327,10 +326,9 @@ QVector<QVariant> JsonLdDocument::fromJson(const QJsonArray &array)
     return l;
 }
 
-QVector<QVariant> JsonLdDocument::fromJson(const QJsonObject &obj)
-{
+QList<QVariant> JsonLdDocument::fromJson(const QJsonObject &obj) {
     const auto normalized = JsonLdImportFilter::filterObject(obj);
-    QVector<QVariant> result;
+    QList<QVariant> result;
     result.reserve(normalized.size());
     for (const auto &n : normalized) {
         const auto v = createInstance(n.toObject());
@@ -475,8 +473,7 @@ QJsonValue JsonLdDocument::toJsonValue(const QVariant &v)
     return {};
 }
 
-QJsonArray JsonLdDocument::toJson(const QVector<QVariant> &data)
-{
+QJsonArray JsonLdDocument::toJson(const QList<QVariant> &data) {
     QJsonArray a;
     for (const auto &d : data) {
         const auto value = toJsonValue(d);

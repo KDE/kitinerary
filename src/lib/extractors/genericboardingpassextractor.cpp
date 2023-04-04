@@ -89,8 +89,8 @@ static bool isPlausibleFlightTime(const QDateTime &fromTime, const QDateTime &to
     return fromDt < toDt && FlightUtil::isPlausibleDistanceForDuration(distance, flightDuration);
 }
 
-static void applyFlightTimes(QVector<QVariant> &result, const QDateTime &boarding, const QDateTime &dep, const QDateTime &arr)
-{
+static void applyFlightTimes(QList<QVariant> &result, const QDateTime &boarding,
+                             const QDateTime &dep, const QDateTime &arr) {
     for (auto &res : result) {
         auto flightRes = res.value<FlightReservation>();
         auto flight = flightRes.reservationFor().value<Flight>();
@@ -112,7 +112,7 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
 {
     static TerminalFinder terminalFinder(u"^", u"(?=\\b|\\s|$)");
 
-    QVector<QVariant> fullResult;
+    QList<QVariant> fullResult;
 
     const auto pdf = node.content<PdfDocument*>();
 
@@ -126,7 +126,7 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
     for (auto it = bcbpNodes.begin(); it != bcbpNodes.end(); ++it) {
         QDate departureDay;
         KnowledgeDb::IataCode from, to;
-        QVector<QVariant> result;
+        QList<QVariant> result;
 
         // 1 determine which airports we need to look for on the same page
         const auto pageNum = (*it).location().toInt();

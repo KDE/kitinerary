@@ -96,8 +96,7 @@ void File::close()
     d->zipFile.reset();
 }
 
-QVector<QString> File::reservations() const
-{
+QList<QString> File::reservations() const {
     Q_ASSERT(d->zipFile);
     const auto resDir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("reservations")));
     if (!resDir) {
@@ -105,7 +104,7 @@ QVector<QString> File::reservations() const
     }
 
     const auto entries = resDir->entries();
-    QVector<QString> res;
+    QList<QString> res;
     res.reserve(entries.size());
     for (const auto &entry : entries) {
         if (!entry.endsWith(QLatin1String(".json"))) {
@@ -171,8 +170,7 @@ QString File::passId(const QString &passTypeIdenfier, const QString &serialNumbe
     return passTypeIdenfier + QLatin1Char('/') + QString::fromUtf8(serialNumber.toUtf8().toBase64(QByteArray::Base64UrlEncoding));
 }
 
-QVector<QString> File::passes() const
-{
+QList<QString> File::passes() const {
     Q_ASSERT(d->zipFile);
     const auto passDir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("passes")));
     if (!passDir) {
@@ -180,7 +178,7 @@ QVector<QString> File::passes() const
     }
 
     const auto entries = passDir->entries();
-    QVector<QString> passIds;
+    QList<QString> passIds;
     for (const auto &entry : entries) {
         const auto subdir = dynamic_cast<const KArchiveDirectory*>(passDir->entry(entry));
         if (!subdir) {
@@ -225,15 +223,14 @@ void File::addPass(const QString &passId, const QByteArray& rawData)
     d->zipFile->writeFile(QLatin1String("passes/") + passId + QLatin1String(".pkpass"), rawData);
 }
 
-QVector<QString> File::documents() const
-{
+QList<QString> File::documents() const {
     const auto docDir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("documents")));
     if (!docDir) {
         return {};
     }
 
     const auto entries = docDir->entries();
-    QVector<QString> res;
+    QList<QString> res;
     res.reserve(entries.size());
     for (const auto &entry : entries) {
         if (docDir->entry(entry)->isDirectory()) {
@@ -329,8 +326,7 @@ void File::addDocument(const QString &id, const QVariant &docInfo, const QByteAr
     d->zipFile->writeFile(QLatin1String("documents/") + id + QLatin1Char('/') + fileName, docData);
 }
 
-QVector<QString> File::listCustomData(const QString &scope) const
-{
+QList<QString> File::listCustomData(const QString &scope) const {
     Q_ASSERT(d->zipFile);
     const auto dir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("custom/") + scope));
     if (!dir) {
@@ -338,7 +334,7 @@ QVector<QString> File::listCustomData(const QString &scope) const
     }
 
     const auto entries = dir->entries();
-    QVector<QString> res;
+    QList<QString> res;
     res.reserve(entries.size());
     std::copy(entries.begin(), entries.end(), std::back_inserter(res));
     return res;

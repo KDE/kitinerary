@@ -8,7 +8,7 @@
 
 #include "kitinerary_export.h"
 
-#include <QVector>
+#include <QList>
 
 #include <memory>
 
@@ -62,7 +62,7 @@ public:
     void close();
 
     /** Lists the identifiers of all reservations in this file. */
-    QVector<QString> reservations() const;
+    QList<QString> reservations() const;
     /** Loads the reservation with the given identifier. */
     QVariant reservation(const QString &resId) const;
     /** Add a reservation to this file. A new unique identifier will be generated for the reservation. */
@@ -75,7 +75,7 @@ public:
     static QString passId(const QString &passTypeIdenfier, const QString &serialNumber);
 
     /** Lists all pkpass files in this file. */
-    QVector<QString> passes() const;
+    QList<QString> passes() const;
     /** Pass data for the given pass id. */
     QByteArray passData(const QString &passId) const;
     /** Add a pkpass file to this file. */
@@ -89,7 +89,7 @@ public:
     static QString normalizeDocumentFileName(const QString &name);
 
     /** Lists all document identifiers. */
-    QVector<QString> documents() const;
+    QList<QString> documents() const;
     /** Loads the document meta data of document @p id. */
     QVariant documentInfo(const QString &id) const;
     /** Loads the content of document @p id. */
@@ -98,7 +98,7 @@ public:
     void addDocument(const QString &id, const QVariant &docInfo, const QByteArray &docData);
 
     /** List custom data in the given namespace. */
-    QVector<QString> listCustomData(const QString &scope) const;
+    QList<QString> listCustomData(const QString &scope) const;
     /** Returns the custom data in the given namespace and with the given id. */
     QByteArray customData(const QString &scope, const QString &id) const;
     /** Adds a custom data element with identifier @p id in to namespace @p scope. */

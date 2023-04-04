@@ -8,8 +8,8 @@
 #include "stringutil.h"
 
 #include <QDateTime>
+#include <QList>
 #include <QVariant>
-#include <QVector>
 
 #ifndef KITINERARY_EXTRACTORPOSTPROCESSOR_P_H
 #define KITINERARY_EXTRACTORPOSTPROCESSOR_P_H
@@ -79,7 +79,7 @@ public:
     QVariantList processActions(QVariantList actions) const;
     template <typename T> QDateTime processTimeForLocation(QDateTime dt, const T &place) const;
 
-    QVector<QVariant> m_data;
+    QList<QVariant> m_data;
     QDateTime m_contextDate;
     ExtractorValidator m_validator;
     bool m_resultFinalized = false;

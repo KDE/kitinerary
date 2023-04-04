@@ -10,7 +10,7 @@
 
 #include <QSharedPointer>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-template<typename T> class QVector;
+template <typename T> class QList;
 #else
 template<typename T> class QList;
 #endif
@@ -32,24 +32,33 @@ namespace CalendarHandler
      *  (e.g. all trip segments covered by the same reservation number).
      *  @since 20.08
      */
-    KITINERARY_EXPORT QVector<QSharedPointer<KCalendarCore::Event>> findEvents(KCalendarCore::Calendar *calendar, const QVariant &reservation);
-    KITINERARY_EXPORT QVector<QSharedPointer<KCalendarCore::Event>> findEvents(const QSharedPointer<KCalendarCore::Calendar> &calendar, const QVariant &reservation);
+KITINERARY_EXPORT QList<QSharedPointer<KCalendarCore::Event>>
+findEvents(KCalendarCore::Calendar *calendar, const QVariant &reservation);
+KITINERARY_EXPORT QList<QSharedPointer<KCalendarCore::Event>>
+findEvents(const QSharedPointer<KCalendarCore::Calendar> &calendar,
+           const QVariant &reservation);
 
-    /** Returns the reservations for this event.
-     *  In case of a mult-travler trip, the result contains more than one reservation.
-     */
-    KITINERARY_EXPORT QVector<QVariant> reservationsForEvent(const QSharedPointer<KCalendarCore::Event> &event);
+/** Returns the reservations for this event.
+ *  In case of a mult-travler trip, the result contains more than one
+ * reservation.
+ */
+KITINERARY_EXPORT QList<QVariant>
+reservationsForEvent(const QSharedPointer<KCalendarCore::Event> &event);
 
-    /** Checks if the given @p reservation contains enough information to create an iCal event from it. */
-    KITINERARY_EXPORT bool canCreateEvent(const QVariant &reservation);
+/** Checks if the given @p reservation contains enough information to create an
+ * iCal event from it. */
+KITINERARY_EXPORT bool canCreateEvent(const QVariant &reservation);
 
-    /** Fills @p event with details of @p reservations.
-     *  Can be used on new events or to update existing ones.
-     *  @param reservations When passing more than one reservation here, those must be for the same multi-traveler trip.
-     *  That is, MergeUtil::isSame() returns true for Reservation::reservationFor for each pair of values.
-     *  @param event The event.
-     */
-    KITINERARY_EXPORT void fillEvent(const QVector<QVariant> &reservations, const QSharedPointer<KCalendarCore::Event> &event);
+/** Fills @p event with details of @p reservations.
+ *  Can be used on new events or to update existing ones.
+ *  @param reservations When passing more than one reservation here, those must
+ * be for the same multi-traveler trip. That is, MergeUtil::isSame() returns
+ * true for Reservation::reservationFor for each pair of values.
+ *  @param event The event.
+ */
+KITINERARY_EXPORT void
+fillEvent(const QList<QVariant> &reservations,
+          const QSharedPointer<KCalendarCore::Event> &event);
 }
 
 }

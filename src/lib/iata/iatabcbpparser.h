@@ -9,7 +9,7 @@
 #include "kitinerary_export.h"
 
 #include <QDateTime>
-#include <QVector>
+#include <QList>
 
 #include <memory>
 
@@ -32,8 +32,10 @@ namespace IataBcbpParser
  *  @param externalIssueDate The date the boarding pass was issued (or a sufficiently close approximation).
  *  This is necessary as by default the BCBP data only contains day and month of the flight, not the year.
  */
-QVector<QVariant> parse(const QString &message, const QDateTime &externalIssueDateTime = QDateTime());
-KITINERARY_EXPORT QVector<QVariant> parse(const IataBcbp &bcbp, const QDateTime &contextDate);
+QList<QVariant> parse(const QString &message,
+                      const QDateTime &externalIssueDateTime = QDateTime());
+KITINERARY_EXPORT QList<QVariant> parse(const IataBcbp &bcbp,
+                                        const QDateTime &contextDate);
 }
 
 }

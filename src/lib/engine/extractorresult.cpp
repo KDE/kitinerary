@@ -17,10 +17,8 @@ ExtractorResult::ExtractorResult(const QJsonArray &result)
 {
 }
 
-ExtractorResult::ExtractorResult(const QVector<QVariant>& result)
-    : m_result(result)
-{
-}
+ExtractorResult::ExtractorResult(const QList<QVariant> &result)
+    : m_result(result) {}
 
 ExtractorResult::~ExtractorResult() = default;
 
@@ -42,8 +40,7 @@ QJsonArray ExtractorResult::jsonLdResult() const
     return m_jsonLdResult;
 }
 
-QVector<QVariant> ExtractorResult::result() const
-{
+QList<QVariant> ExtractorResult::result() const {
     if (m_result.isEmpty()) {
         m_result = JsonLdDocument::fromJson(m_jsonLdResult);
     }
