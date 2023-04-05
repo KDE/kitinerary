@@ -13,17 +13,6 @@ Dependencies:
     'pim/kpkpass' : '@same'
     'third-party/zxing-cpp': '@latest'
 
-- 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6', 'Android/Qt6']
-  'require':
-    'frameworks/extra-cmake-modules': '@latest-kf6'
-    'frameworks/ki18n' : '@latest-kf6'
-    'frameworks/kcontacts' : '@latest-kf6'
-    'frameworks/kcalendarcore' : '@latest-kf6'
-    'frameworks/kcodecs' : '@latest-kf6'
-    'pim/kmime' : '@latest-kf6'
-    'pim/kpkpass' : '@latest-kf6'
-    'third-party/zxing-cpp': '@latest'
-
 Options:
   # exlucde large generated files from cppcheck, takes way to long to run
   cppcheck-ignore-files:
