@@ -54,7 +54,7 @@
         "filter": [
             {
                 "field": "From",
-                "match": "buchungsbestaetigung@bahn.de",
+                "match": "buchungsbestaetigung@bahn.de|noreply@deutschebahn.com",
                 "mimeType": "message/rfc822",
                 "scope": "Ancestors"
             }
