@@ -200,7 +200,7 @@ target_link_libraries(KPim6Itinerary
         KF6::CalendarCore
         KF6::Codecs
         KF6::Contacts
-        KPim::PkPass
+        KPim6::PkPass
         Poppler::Core
         OpenSSL::Crypto
         ZLIB::ZLIB
