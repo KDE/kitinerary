@@ -10,11 +10,6 @@
 
 #include <QQmlEngine>
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <private/qv4arraybuffer_p.h>
-#include <private/qv4engine_p.h>
-#endif
-
 using namespace KItinerary;
 
 ExtractorDocumentNode BinaryDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
@@ -32,9 +27,5 @@ bool BinaryDocumentProcessor::matches(const ExtractorFilter &filter, const Extra
 
 QJSValue BinaryDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    return QJSValue(engine->handle(), engine->handle()->newArrayBuffer(node.content<QByteArray>())->asReturnedValue());
-#else
     return QJSValue(QJSManagedValue(QVariant(node.content<QByteArray>()), engine));
-#endif
 }

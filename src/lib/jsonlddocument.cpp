@@ -272,11 +272,7 @@ static QVariant createInstance(const QJsonObject& obj, const QString &type)
         return QLatin1String(lhs.name) < rhs;
     });
     if (it != registry.end() && QLatin1String((*it).name) == type) {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        QVariant value((*it).metaTypeId, nullptr);
-#else
         QVariant value(QMetaType((*it).metaTypeId), nullptr);
-#endif
         createInstance((*it).mo, value.data(), obj);
         return value;
     }
@@ -305,11 +301,7 @@ static QVariant createInstance(const QJsonObject &obj, const QMetaProperty &prop
     // if @type is (wrongly) not specified, try to recover from our own knowledge of a property type
     const auto mo = QMetaType(prop.userType()).metaObject();
     if (mo) {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        QVariant value(prop.userType(), nullptr);
-#else
         QVariant value(prop.metaType(), nullptr);
-#endif
         createInstance(mo, value.data(), obj);
         return value;
     }
@@ -587,11 +579,7 @@ QVariant JsonLdDocument::apply(const QVariant& lhs, const QVariant& rhs)
             }
             auto valueData = mt.create();
             *reinterpret_cast<int*>(valueData) = numValue;
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            QVariant value(prop.userType(), valueData);
-#else
             QVariant value(prop.metaType(), valueData);
-#endif
             prop.writeOnGadget(res.data(), value);
             continue;
         }

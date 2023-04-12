@@ -79,11 +79,7 @@ int ELBTicket::readNumber(int start, int len) const
         return -1;
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     return QByteArrayView(m_data.constData() + start, len).toInt();
-#else
-    return QByteArray(m_data.constData() + start, len).toInt();
-#endif
 }
 
 bool ELBTicket::maybeELBTicket(const QByteArray &data)

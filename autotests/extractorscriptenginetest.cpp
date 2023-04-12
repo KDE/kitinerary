@@ -58,9 +58,7 @@ private Q_SLOTS:
         QTest::newRow("pkpass") << s(SOURCE_DIR "/pkpassdata/swiss.pkpass") << s(SOURCE_DIR "/scriptenginedata/swiss.pkpass.json");
         QTest::newRow("IATA BCBP PDF") << s(SOURCE_DIR "/extractordata/synthetic/iata-bcbp-demo.pdf")
             << s(SOURCE_DIR "/scriptenginedata/iata-bcbp-demo.pdf.json");
-#if KCALENDARCORE_VERSION >= QT_VERSION_CHECK(5, 103, 0)
         QTest::newRow("ical") << s(SOURCE_DIR "/extractordata/ical/eventreservation.ics") << s(SOURCE_DIR "/scriptenginedata/eventreservation.ics.json");
-#endif
         QTest::newRow("uic9183") << s(SOURCE_DIR "/uic918-3/valid/Testw_VOW8XG6_A9E8DXL_0.bin") << s(SOURCE_DIR "/scriptenginedata/Testw_VOW8XG6_A9E8DXL_0.bin.json");
         QTest::newRow("html") << s(SOURCE_DIR "/structureddata/google-flight-reservation-json-ld.html") << s(SOURCE_DIR "/scriptenginedata/google-flight-reservation-json-ld.html.json");
     }

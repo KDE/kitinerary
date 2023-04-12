@@ -13,11 +13,6 @@
 #include <QImage>
 #include <QQmlEngine>
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <private/qv4arraybuffer_p.h>
-#include <private/qv4engine_p.h>
-#endif
-
 using namespace KItinerary;
 
 void JsApi::Barcode::setDecoder(BarcodeDecoder *decoder)
@@ -47,11 +42,7 @@ QJSValue JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
             return {};
         }
         const auto engine = qjsEngine(this);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        return QJSValue(engine->handle(), engine->handle()->newArrayBuffer(content)->asReturnedValue());
-#else
         return QJSValue(QJSManagedValue(QVariant(content), engine));
-#endif
     }
     return {};
 }

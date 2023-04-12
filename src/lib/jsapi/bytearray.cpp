@@ -13,11 +13,6 @@
 
 #include <QQmlEngine>
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <private/qv4arraybuffer_p.h>
-#include <private/qv4engine_p.h>
-#endif
-
 #include <zlib.h>
 
 using namespace KItinerary;
@@ -92,9 +87,5 @@ QJSValue JsApi::ByteArray::decodeRsp6Ticket(const QString &text) const
 QJSValue JsApi::ByteArray::toArrayBuffer(const QByteArray &input) const
 {
     const auto engine = qjsEngine(this);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    return QJSValue(engine->handle(), engine->handle()->newArrayBuffer(input)->asReturnedValue());
-#else
     return QJSValue(QJSManagedValue(QVariant(input), engine));
-#endif
 }
