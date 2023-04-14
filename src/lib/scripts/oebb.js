@@ -41,3 +41,19 @@ function parsePage(pdf, node, triggerNode) {
 
     return reservations;
 }
+
+function parseUic9183(code, node) {
+    // VorteilsCard
+    if (code.ticketLayout && code.ticketLayout.type == "RCT2" && code.ticketLayout.text(0, 0, 50, 1).match(/VORTEILSCARD/i)) {
+        var card = JsonLd.newObject("ProgramMembership");
+        card.programName = code.ticketLayout.text(0, 0, 50, 1);
+        card.membershipNumber = code.ticketLayout.text(1, 1, 16, 1);
+        card.member = JsonLd.newObject("Person");
+        card.member.givenName = code.ticketLayout.text(1, 52, 19 ,1);
+        card.member.familyName = code.ticketLayout.text(2, 52, 19 ,1);
+        card.token = 'aztecbin:' + ByteArray.toBase64(code.rawData);
+        card.validFrom = JsonLd.readQDateTime(code, 'validFrom');
+        card.validUntil = JsonLd.readQDateTime(code, 'validUntil');
+        return card.programName != undefined ? card : undefined;
+    }
+}
