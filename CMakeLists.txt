@@ -6,7 +6,8 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 set(PIM_VERSION "5.23.40")
 project(KItinerary VERSION ${PIM_VERSION})
 
-set(KF_MIN_VERSION "5.91.0")
+set(QT_REQUIRED_VERSION "6.4.0")
+set(KF_MIN_VERSION "5.240.0")
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
@@ -29,14 +30,6 @@ option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, 
 add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
 
 
-set(QT_REQUIRED_VERSION "6.4.0")
-if (QT_MAJOR_VERSION STREQUAL "6")
-    set(QT_REQUIRED_VERSION "6.4.0")
-    set(KF_MIN_VERSION "5.240.0")
-    set(KF_MAJOR_VERSION "6")
-else()
-    set(KF_MAJOR_VERSION "5")
-endif()
 ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
     VERSION_HEADER kitinerary_version.h
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryConfigVersion.cmake"
@@ -145,40 +138,3 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_version.h
 
 ki18n_install(po)
 
-
-#if (QT_MAJOR_VERSION STREQUAL "5")
-##
-# TODO: Backwards compatiblity. Remove in next major version
-##
-set(CMAKECONFIG_INSTALL_DIR_KF6 "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPimItinerary")
-set(KITINERARY_KF6_COMPAT TRUE)
-configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/KPimItineraryConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfig.cmake"
-    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR_KF6}
-)
-
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/KPimItineraryConfig.cmake"
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF6}"
-    COMPONENT Devel
-)
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryConfigVersion.cmake"
-    RENAME "KPimItineraryConfigVersion.cmake"
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF6}"
-    COMPONENT Devel
-)
-install(EXPORT KPim6ItineraryTargets
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF6}"
-    FILE KPim6ItineraryTargets.cmake
-    NAMESPACE KPim::
-)
-if (BUILD_QCH)
-    install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryQchTargets.cmake"
-        DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF6}"
-        COMPONENT Devel
-    )
-endif()
-#endif()
