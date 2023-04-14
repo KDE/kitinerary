@@ -9,7 +9,7 @@ find_dependency(Qt6Gui "@QT_REQUIRED_VERSION@")
 find_dependency(KPim6Mime "@KMIME_VERSION@")
 find_dependency(KF6CalendarCore "@KF_MIN_VERSION@")
 find_dependency(KF6Contacts "@KF_MIN_VERSION@")
-find_dependency(KPimPkPass "@PIM_PKPASS@")
+find_dependency(KPim6PkPass "@PIM_PKPASS@")
 
 if (NOT @BUILD_SHARED_LIBS@)
     find_dependency(ZLIB)
