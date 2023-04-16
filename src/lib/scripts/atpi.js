@@ -3,6 +3,20 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+function parseTravellerFromEvent(event, res)
+{
+    let reservations = [];
+    const travData = event.description.match(/Traveller\n\n(\d\. .* \/ .*\n)+/);
+    for (trav of travData[1].trim().split(/\n/)) {
+        const name = trav.match(/\d\. (.*) \/ (.*)/);
+        let r = JsonLd.clone(res);
+        r.underName.familyName = name[1];
+        r.underName.givenName = name[2];
+        reservations.push(r);
+    }
+    return reservations;
+}
+
 function parseFlightEvent(event) {
     let res = JsonLd.newFlightReservation();
     const summary = event.summary.match(/([A-Z0-9]{2}) +(\d{1,4}) ([A-Z]{3})\/([A-Z]{3})/);
@@ -20,7 +34,7 @@ function parseFlightEvent(event) {
     res.reservationFor.arrivalAirport.name = arr[1];
     res.reservationFor.arrivalTerminal = arr[2];
     res.reservationNumber = event.description.match(/Airline reference: (.*)/)[1];
-    return res;
+    return parseTravellerFromEvent(event, res);
 }
 
 function parseHotelEvent(event) {
@@ -34,6 +48,5 @@ function parseHotelEvent(event) {
     res.reservationFor.address.postalCode = addr[4].match(/[A-Z]{2}/) ? addr[3] : addr[4];
     res.reservationFor.address.addressCountry = addr[4].match(/[A-Z]{2}/) ? addr[4] : addr[3];
     res.reservationFor.telephone = '+' + addr[5];
-    console.log(event);
-    return res;
+    return parseTravellerFromEvent(event, res);
 }
