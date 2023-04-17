@@ -25,3 +25,27 @@ function parsePdf(pdf) {
     }
     return reservations;
 }
+
+function parseInternationalPdf(pdf, node, triggerNode) {
+    const page = pdf.pages[triggerNode.location].text;
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        const leg = page.substr(idx).match(/(\d\d\/\d\d\/\d{4}) (\d\d:\d\d) (.*?) +-> +(\d\d:\d\d) (.*?)  +(.*?)  +(.*?)  +(.*)\n/);
+        if (!leg) {
+            break;
+        }
+        idx += leg.index + leg[0].length;
+
+        let res = JsonLd.clone(triggerNode.result[0]);
+        res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + ' ' + leg[2], 'dd/MM/yyyy hh:mm', 'nl');
+        res.reservationFor.departureStation.name = leg[3];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[1] + ' ' + leg[4], 'dd/MM/yyyy hh:mm', 'nl');
+        res.reservationFor.arrivalStation.name = leg[5];
+        res.reservationFor.trainNumber = leg[6];
+        res.reservedTicket.ticketedSeat.seatSection = leg[7];
+        res.reservedTicket.ticketedSeat.seatNumber = leg[8];
+        reservations.push(res);
+    }
+    return reservations;
+}
