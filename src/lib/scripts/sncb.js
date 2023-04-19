@@ -6,14 +6,15 @@
 
 function parsePage(page) {
     var res = JsonLd.newTrainReservation();
-    res.reservationFor.departureStation.name = page.text.match(/De:\s+(.*)\n/)[1];
-    res.reservationFor.arrivalStation.name = page.text.match(/A:\s+(.*)\n/)[1];
-    var date = page.text.match(/Date du voyage:\s+(\d\d)\/(\d\d)\/(\d{4})\n/);
+    res.reservationFor.departureStation.name = page.text.match(/(?:De|From):\s+(.*)\n/)[1];
+    res.reservationFor.arrivalStation.name = page.text.match(/(?:A|TO):\s+(.*)\n/)[1];
+    var date = page.text.match(/(?:Date du voyage|Travel date):\s+(\d\d)\/(\d\d)\/(\d{4})\n/);
     res.reservationFor.departureDay = date[3] + "-" + date[2] + "-" + date[1];
-    res.underName.givenName = page.text.match(/Prénom:\s+(.*)\n/)[1];
-    res.underName.familyName = page.text.match(/Nom:\s+(.*)\n/)[1];
-    res.reservedTicket.ticketedSeat.seatingType = page.text.match(/Classe:\s+(.*)\n/)[1];
+    res.underName.givenName = page.text.match(/(?:Prénom|Firstname):\s+(.*)\n/)[1];
+    res.underName.familyName = page.text.match(/(?:Nom|Lastname):\s+(.*)\n/)[1];
+    res.reservedTicket.ticketedSeat.seatingType = page.text.match(/Classe?:\s+(.*)\n/)[1];
     res.reservedTicket.ticketToken = "barcode128:" + page.text.match(/\s+([A-Z\d-]{15})\n/)[1];
+    res.reservedTicket.name = page.text.match(/(?:Type de billet|Ticket type):\s+(.*)\n/)[1];
     return res;
 }
 
