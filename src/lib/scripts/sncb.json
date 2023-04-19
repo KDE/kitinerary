@@ -6,6 +6,11 @@
                 "match": "ticketonline@b-rail.be",
                 "mimeType": "message/rfc822",
                 "scope": "Ancestors"
+            },
+            {
+                "match": "^[A-Z][A-Z0-9]{14}$",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
             }
         ],
         "function": "parsePdf",
