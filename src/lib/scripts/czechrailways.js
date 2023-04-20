@@ -157,17 +157,20 @@ function parsePdfTicket(content, node, triggerNode) {
     let idx = 0;
     let reservations = [];
     while (true) {
-        // TODO this doesn't consider seat reservations yet, lacking corresponding samples
-        let leg = text.substr(idx).match(/\n(.*?)  +(\d\d\.\d\d\.) +(\d\d:\d\d) +(.*?)\n(.*?)  +(\d\d.\d\d.) +(\d\d:\d\d)/);
+        let leg = text.substr(idx).match(/\n(.*?)  +(\d\d\.\d\d\.) +(\d\d:\d\d) +(.*?)(?:  +(\d+) +(\d+))?\n(.*?)  +(\d\d.\d\d.) +(\d\d:\d\d)/);
         if (!leg) {
             break;
         }
         let res = JsonLd.newTrainReservation();
         res.reservationFor.departureStation.name = leg[1];
         res.reservationFor.departureTime = JsonLd.toDateTime(leg[2] + leg[3], 'dd.MM.hh:mm', 'cz');
-        res.reservationFor.arrivalStation.name = leg[5];
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[6] + leg[7], 'dd.MM.hh:mm', 'cz');
+        res.reservationFor.arrivalStation.name = leg[7];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[8] + leg[9], 'dd.MM.hh:mm', 'cz');
         res.reservationFor.trainNumber = leg[4];
+        if (leg[5] && leg[6]) {
+            res.reservedTicket.ticketedSeat.seatSection = leg[5];
+            res.reservedTicket.ticketedSeat.seatNumber = leg[6];
+        }
 
         if (triggerNode.result[0]['@type'] == 'TrainReservation') {
             res = JsonLd.apply(triggerNode.result[0], res);
@@ -181,5 +184,29 @@ function parsePdfTicket(content, node, triggerNode) {
         idx += leg.index + leg[0].length;
     }
 
+    return reservations;
+}
+
+function parseEvent(event) {
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        const leg = event.description.substr(idx).match(/(.*)\n(.*) (\d\d):(\d\d)\n(.*) (\d\d):(\d\d)\n.* (\d+),.* (\d+)/);
+        if (!leg)
+            break;
+        idx += leg.index + leg[0].length;
+
+        let res = JsonLd.newTrainReservation();
+        res.reservationFor.trainNumber = leg[1];
+        res.reservationFor.departureStation.name = leg[2];
+        res.reservationFor.departureTime = new Date(event.dtStart);
+        res.reservationFor.departureTime.setHours(leg[3], leg[4]);
+        res.reservationFor.arrivalStation.name = leg[5];
+        res.reservationFor.arrivalTime = new Date(event.dtStart);
+        res.reservationFor.arrivalTime.setHours(leg[6], leg[7]);
+        res.reservedTicket.ticketedSeat.seatSection = leg[8];
+        res.reservedTicket.ticketedSeat.seatNumber = leg[9];
+        reservations.push(res);
+    }
     return reservations;
 }

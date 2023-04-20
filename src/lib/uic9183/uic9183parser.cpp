@@ -158,8 +158,8 @@ QString Uic9183Parser::pnr() const
         if (issuerId == 80 && key.size() == 13 && key.endsWith(QLatin1String("0101"))) {
             return key.left(9); // DB domestic part of an international order
         }
-        if (issuerId == 1184 && key.size() == 9 && key.at(7) == QLatin1Char('_') && key.at(8).isDigit()) {
-            return key.left(7); // NS
+        if ((issuerId == 1088 || issuerId == 1184) && key.size() == 9 && key.at(7) == QLatin1Char('_') && key.at(8).isDigit()) {
+            return key.left(7); // SNCB and NS
         }
 
         return key;
