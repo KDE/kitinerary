@@ -18,4 +18,17 @@
     "function": "parsePdfTicket",
     "mimeType": "application/pdf",
     "script": "czechrailways.js"
+},
+{
+    "filter": [
+        {
+            "field": "uid",
+            "match": "@www\\.cd\\.cz$",
+            "mimeType": "internal/event",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseEvent",
+    "mimeType": "internal/event",
+    "script": "czechrailways.js"
 }]
