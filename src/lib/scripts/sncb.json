@@ -1,13 +1,33 @@
-{
-    "filter": [
-        {
-            "field": "From",
-            "match": "ticketonline@b-rail.be",
-            "mimeType": "message/rfc822",
-            "scope": "Ancestors"
-        }
-    ],
-    "function": "parsePdf",
-    "script": "sncb.js",
-    "mimeType": "application/pdf"
-}
+[
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "ticketonline@b-rail.be",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            },
+            {
+                "match": "^[A-Z][A-Z0-9]{14}$",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parsePdf",
+        "script": "sncb.js",
+        "mimeType": "application/pdf"
+    },
+    {
+        "filter": [
+            {
+                "field": "carrierId",
+                "match": "1088",
+                "mimeType": "internal/uic9183",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parseInternationalPdf",
+        "mimeType": "application/pdf",
+        "script": "sncb.js"
+    }
+]

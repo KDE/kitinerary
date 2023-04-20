@@ -264,6 +264,13 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
     trip.setArrivalTime(processTrainTripTime(trip.arrivalTime(), trip.departureDay(), trip.arrivalStation()));
     trip.setTrainNumber(trip.trainNumber().simplified());
     trip.setTrainName(trip.trainName().simplified());
+
+    // arrival less than a day before departure is an indication of the extractor failing to detect day rollover
+    const auto duration = trip.departureTime().secsTo(trip.arrivalTime());
+    if (duration < 0 && duration > -3600*24 && trip.departureTime().timeSpec() == trip.arrivalTime().timeSpec()) {
+        trip.setArrivalTime(trip.arrivalTime().addDays(1));
+    }
+
     return trip;
 }
 

@@ -72,7 +72,8 @@ QDateTime Rct2TicketPrivate::parseTime(const QString &dateStr, const QString &ti
 }
 
 static constexpr const char* res_patterns[] = {
-    "ZUG +(?P<train_number>\\d+) +(?P<train_category>[A-Z][A-Z0-9]+) +WAGEN +(?P<coach>\\d+) +PLATZ +(?P<seat>\\d[\\d, ]+)"
+    "ZUG +(?P<train_number>\\d+) +(?P<train_category>[A-Z][A-Z0-9]+) +WAGEN +(?P<coach>\\d+) +PLATZ +(?P<seat>\\d[\\d, ]+)",
+    "ZUG +(?P<train_number>\\d+) +WAGEN +(?P<coach>\\d+) +PLATZ +(?P<seat>\\d[\\d, ]+)",
 };
 
 QString Rct2TicketPrivate::reservationPatternCapture(QStringView name) const
