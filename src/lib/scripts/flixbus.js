@@ -22,8 +22,11 @@ function main(content, node) {
 
 function parseDate(year, baseDate, overrideDate, time)
 {
+    baseDate = baseDate.replace('.', '');
+    if (overrideDate)
+        overrideDate = overrideDate.replace('.', '');
     const s = (overrideDate ? overrideDate.trim() : baseDate) + ' ' + year + ' ' + time;
-    return JsonLd.toDateTime(s, 'd MMM yyyy hh:mm', ['en', 'fr', 'pl', 'nl']);
+    return JsonLd.toDateTime(s, 'd MMM yyyy hh:mm', ['en', 'fr', 'pl', 'nl', 'de']);
 }
 
 function parseLocation(place, addr1, addr2, links)
@@ -44,7 +47,7 @@ function parsePdfTicket(pdf, node, triggerNode)
     const text = page.textInRect(0.0, 0.05, 0.5, 0.5);
     const links = page.linksInRect(0.0, 0.0, 0.5, 0.5);
     const resNum = triggerNode.content.match(/pdfqr\/(\d+)\//)[1];
-    const date = text.match(/^\S+,? (\d+ \S+) (\d{4})\n/);
+    const date = text.match(/^\S+,? (\d+\.? \S+) (\d{4})\n/);
 
     const timeColumn = page.textInRect(0.0, 0.1, 0.125, 0.5);
     const stationColumn = page.textInRect(0.125, 0.1, 0.5, 0.5);
@@ -54,7 +57,7 @@ function parsePdfTicket(pdf, node, triggerNode)
     let reservations = [];
     while (true) {
         const times = timeColumn.substr(idxTime).match(/(\d\d:\d\d)\n([^:]*?\n)?([^:]*?\n)?(\d\d:\d\d)/);
-        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n).*(?:Bus|Autobus) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting) (.*)\n(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
+        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n).*(?:Bus|Autobus) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung) (.*)\n(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
         if (!times || !stations) {
             break;
         }
