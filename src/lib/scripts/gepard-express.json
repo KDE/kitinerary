@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^a:7:{s:",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdf",
+    "mimeType": "application/pdf",
+    "script": "gepard-express.js"
+}
