@@ -17,7 +17,7 @@ struct {
     { " ?\\((?:terminal|aerogare) (?<name>\\w.*)\\)", QRegularExpression::CaseInsensitiveOption },
     { " ?\\((?<name>\\w.*) (?:terminal|aerogare)\\)", QRegularExpression::CaseInsensitiveOption },
     { "(?:, | ?- ?| )(?:terminal|aerogare) (?<name>\\w.*?)", QRegularExpression::CaseInsensitiveOption },
-    { " T(?<name>\\d[A-Z]?)", QRegularExpression::NoPatternOption },
+    { " T-?(?<name>\\d[A-Z]?)", QRegularExpression::NoPatternOption },
     { " ?\\(T(?<name>\\d[A-Z]?)\\)", QRegularExpression::NoPatternOption },
 };
 
