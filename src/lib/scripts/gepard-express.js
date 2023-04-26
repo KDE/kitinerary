@@ -5,21 +5,24 @@
 
 function parsePdf(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
-    const legs = text.split(/.* -> .*\n/).slice(1);
+    const legs = text.split(/  +(?=.* ->)/).slice(1);
     let reservations = [];
     for (leg of legs) {
         let res = JsonLd.newBusReservation();
-        res.reservationFor.departureBusStop.name = leg.match(/Origin station +(.*)/)[1];
-        res.reservationFor.departureTime = JsonLd.toDateTime(leg.match(/Departure date and time +(.*)/)[1], 'dd.M.yyyy hh:mm', 'cz');
+        const stops = leg.match(/(.*) -> (.*)/);
+        res.reservationFor.departureBusStop.name = stops[1];
+        res.reservationFor.arrivalBusStop.name = stops[2];
+        const times = leg.match(/ (\d{1,2}\.\d{1,2}\.\d{4} \d\d:\d\d)\n[\s\S]+ (\d{1,2}\.\d{1,2}\.\d{4} \d\d:\d\d)\n/);
+        res.reservationFor.departureTime = JsonLd.toDateTime(times[1], 'dd.M.yyyy hh:mm', 'cz');
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(times[2], 'dd.M.yyyy hh:mm', 'cz');
         res.reservationFor.departurePlatform = leg.match(/Platform +(.*)/)[1];
-        res.reservationFor.arrivalBusStop.name = leg.match(/Destination station +(.*)/)[1];
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg.match(/Arrival date and time +(.*)/)[1], 'dd.M.yyyy hh:mm', 'cz');
         res.reservationNumber = triggerNode.content.match(/s:4:"code";s:\d+:"(.*?)"/)[1];
         res.underName.name = triggerNode.content.match(/s:8:"fullName";s:\d+:"(.*?)"/)[1];
         res.reservedTicket.ticketToken = 'qrcode:' + triggerNode.content;
         reservations.push(res);
-        res.reservedTicket.ticketedSeat.seatNumber = leg.match(/Seat +(.*?) \(/)[1];
+        const seat = leg.match(/(?:Seat|sedadla:) +(.*?) \(/);
+        if (seat)
+            res.reservedTicket.ticketedSeat.seatNumber = seat[1];
     }
-    // while (true) {
     return reservations;
 }

@@ -72,7 +72,7 @@ function parsePdfTicket(pdf, node, triggerNode)
         res.reservationFor.departureBusStop.name = stations[1];
         parseLocation(res.reservationFor.departureBusStop, stations[2], stations[3], links);
 
-        res.reservationFor.busNumber = stations[4];
+        res.reservationFor.busNumber = stations[4].match(/(.*?)(?:  |$)/)[1];
         res.reservationFor.busName = stations[5];
 
         res.reservationFor.arrivalTime = parseDate(date[2], date[1], times[3] ? times[3] : times[2], times[4]);
