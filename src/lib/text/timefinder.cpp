@@ -83,7 +83,7 @@ void TimeFinder::findTimes(QStringView text)
         i = rxTimeMatch.capturedEnd();
         QRegularExpressionMatch rxApMatch;
         for (const auto &rx : rxApSuffixes) {
-            rxApMatch = rx.match(text, i, QRegularExpression::NormalMatch, QRegularExpression::AnchoredMatchOption);
+            rxApMatch = rx.match(text, i, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
             if (rxApMatch.hasMatch()) {
                 break;
             }
