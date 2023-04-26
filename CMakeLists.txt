@@ -33,6 +33,7 @@ add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt 
 ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
     VERSION_HEADER kitinerary_version.h
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryConfigVersion.cmake"
+    SOVERSION 6
 )
 
 find_package(Qt6 ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Gui Qml)
