@@ -205,10 +205,6 @@ target_link_libraries(KPim6Itinerary
         OpenSSL::Crypto
         ZLIB::ZLIB
 )
-if (QT_MAJOR_VERSION EQUAL "5")
-    target_link_libraries(KPim6Itinerary PRIVATE Qt5::QmlPrivate)  # for QByteArray -> ArrayBuffer conversion
-endif()
-
 if (TARGET ZXing::ZXing)
     target_link_libraries(KPim6Itinerary PRIVATE ZXing::ZXing)
 elseif (TARGET ZXing::Core)
