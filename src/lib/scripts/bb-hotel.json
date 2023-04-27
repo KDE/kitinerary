@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "noreply@email.hotel-bb.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "parseConfirmation",
+    "mimeType": "text/html",
+    "script": "bb-hotel.js"
+}
