@@ -5,7 +5,6 @@
 
 function parseConfirmation(html) {
     const text = html.root.recursiveContent;
-    console.log(text);
 
     let res = JsonLd.newLodgingReservation();
     res.reservationNumber = text.match(/Buchungsnummer: (.*)/)[1];
@@ -18,5 +17,8 @@ function parseConfirmation(html) {
     const dates = text.match(/(\d\d\/\d\d\/\d{4}) \(.* (\d\d).*\)\n[\s\S]+\n(\d\d\/\d\d\/\d{4}) \(.* (\d\d).*\)/);
     res.checkinTime = JsonLd.toDateTime(dates[1] + ' ' + dates[2], 'dd/MM/yyyy hh', 'de');
     res.checkoutTime = JsonLd.toDateTime(dates[3] + ' ' + dates[4], 'dd/MM/yyyy hh', 'de');
+    res.reservationFor.telephone = html.root.eval('//a[starts-with(@href, "tel:")]')[0].content;
+    res.reservationFor.email = html.root.eval('//a[starts-with(@href, "mailto:")]')[0].content;
+    res.modifyReservationUrl = html.root.eval('//a[contains(@href, "my-booking")]')[0].attribute('href');
     return res;
 }
