@@ -79,6 +79,24 @@ QDate SSBv3Ticket::type1DepartureDay(const QDateTime& contextDate) const
     return d.addDays(type1DepartureDate());
 }
 
+QDate SSBv3Ticket::type2ValidFrom(const QDateTime &contextDate) const
+{
+    if (ticketTypeCode() != SSBv3Ticket::NRT) {
+        return {};
+    }
+
+    return issueDate(contextDate).addDays(type2FirstDayOfValidity());
+}
+
+QDate SSBv3Ticket::type2ValidUntil(const QDateTime& contextDate) const
+{
+    if (ticketTypeCode() != SSBv3Ticket::NRT) {
+        return {};
+    }
+
+    return issueDate(contextDate).addDays(type2LastDayOfValidity());
+}
+
 QByteArray SSBv3Ticket::rawData() const
 {
     return m_data;

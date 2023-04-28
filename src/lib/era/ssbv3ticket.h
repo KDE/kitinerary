@@ -115,6 +115,10 @@ public:
     Q_INVOKABLE QDate issueDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
     /** Departure day for type 1 (IRT/RES/BOA) tickets. */
     Q_INVOKABLE QDate type1DepartureDay(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    /** First day of validity for type 2 (NRT) tickets. */
+    Q_INVOKABLE QDate type2ValidFrom(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    /** Last day of validity for type 2 (NRT) tickets. */
+    Q_INVOKABLE QDate type2ValidUntil(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 
     /** Raw barcode data. */
     QByteArray rawData() const;
