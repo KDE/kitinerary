@@ -95,10 +95,19 @@ static void dumpSsbv3Ticket(const QByteArray &data)
         std::cout << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
     }
 
-    if (ticket.ticketTypeCode() == SSBv3Ticket::IRT_RES_BOA) {
-        std::cout << std::endl;
-        std::cout << "Issuing day: " << qPrintable(ticket.issueDate().toString(Qt::ISODate)) << std::endl;
-        std::cout << "Departure day: " << qPrintable(ticket.type1DepartureDay().toString(Qt::ISODate)) << std::endl;
+    std::cout << std::endl;
+    std::cout << "Issuing day: " << qPrintable(ticket.issueDate().toString(Qt::ISODate)) << std::endl;
+    switch (ticket.ticketTypeCode()) {
+        case SSBv3Ticket::IRT_RES_BOA:
+            std::cout << "Departure day: " << qPrintable(ticket.type1DepartureDay().toString(Qt::ISODate)) << std::endl;
+            break;
+        case SSBv3Ticket::NRT:
+            std::cout << "Valid from: " << qPrintable(ticket.type2ValidFrom().toString(Qt::ISODate)) << std::endl;
+            std::cout << "Valid until: " << qPrintable(ticket.type2ValidUntil().toString(Qt::ISODate)) << std::endl;
+            break;
+        case SSBv3Ticket::GRT:
+        case SSBv3Ticket::RPT:
+            break;
     }
 }
 
