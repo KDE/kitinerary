@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^G\\d{9}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdfTicket",
+    "mimeType": "application/pdf",
+    "script": "grimaldi-lines.js"
+}

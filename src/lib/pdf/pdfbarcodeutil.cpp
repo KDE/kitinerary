@@ -20,7 +20,7 @@ enum {
     // vector path complexity limits
     MinPathElementCount2D = 400,
     MaxPathElementCount2D = 5400,
-    MinPathElementCount1D = 200,
+    MinPathElementCount1D = 150,
     MaxPathElementCount1D = 400,
 };
 
