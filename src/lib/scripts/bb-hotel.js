@@ -20,5 +20,18 @@ function parseConfirmation(html) {
     res.reservationFor.telephone = html.root.eval('//a[starts-with(@href, "tel:")]')[0].content;
     res.reservationFor.email = html.root.eval('//a[starts-with(@href, "mailto:")]')[0].content;
     res.modifyReservationUrl = html.root.eval('//a[contains(@href, "my-booking")]')[0].attribute('href');
-    return res;
+
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        const p = text.substr(idx).match(/(.*)\n.*\n.* x \d+\n.*€\n/);
+        if (!p)
+            break;
+        idx += p.index + p[0].length;
+        let r = JsonLd.clone(res);
+        r.underName.name = p[1];
+        reservations.push(r);
+    }
+
+    return reservations.length ? reservations : res;
 }
