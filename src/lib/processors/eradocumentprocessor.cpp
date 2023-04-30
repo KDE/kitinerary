@@ -104,6 +104,6 @@ void SsbDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
         res.setReservationFor(trip);
         ticket.setTicketedSeat(seat);
         res.setReservedTicket(ticket);
-        node.addResult(QVector<QVariant>{QVariant::fromValue(res)});
+        node.addResult(QList<QVariant>{QVariant::fromValue(res)});
     }
 }
