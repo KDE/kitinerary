@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Adrian Chaves <adrian@chaves.io>, 2018, 2019, 2020.
+# Adrian Chaves <adrian@chaves.io>, 2018, 2019, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-07-20 00:46+0000\n"
-"PO-Revision-Date: 2020-02-16 23:04+0100\n"
+"PO-Revision-Date: 2023-04-30 11:00+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -15,14 +15,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #: calendarhandler.cpp:160
-#, fuzzy, kde-format
-#| msgid "Coach: %1"
+#, kde-format
 msgctxt "canceled train/flight/loading reservation"
 msgid "Canceled: %1"
-msgstr "Coche: %1"
+msgstr "Cancelada: %1"
 
 #: calendarhandler.cpp:186
 #, kde-format
@@ -45,8 +44,7 @@ msgid "Boarding time: %1"
 msgstr "Hora de embarque: %1"
 
 #: calendarhandler.cpp:219
-#, fuzzy, kde-format
-#| msgid "Departure gate: %1"
+#, kde-format
 msgctxt "flight departure gate"
 msgid "Departure gate: %1"
 msgstr "Porta de saída: %1"
@@ -94,15 +92,14 @@ msgid "Bus %1 from %2 to %3"
 msgstr "Bus %1 de %2 a %3"
 
 #: calendarhandler.cpp:306
-#, fuzzy, kde-format
-#| msgid "Train %1 from %2 to %3"
+#, kde-format
 msgid "Ferry from %1 to %2"
-msgstr "Tren %1 de %2 a %3"
+msgstr "Transbordador de %1 a %2"
 
 #: calendarhandler.cpp:319
 #, kde-format
 msgid "Ticket number: %1"
-msgstr ""
+msgstr "Número de tícket: %1"
 
 #: calendarhandler.cpp:329
 #, kde-format
@@ -112,28 +109,27 @@ msgstr "Reserva de hotel: %1"
 #: calendarhandler.cpp:340
 #, kde-format
 msgid "Check-in: %1"
-msgstr ""
+msgstr "Entrada: %1"
 
 #: calendarhandler.cpp:343
 #, kde-format
 msgid "Check-out: %1"
-msgstr ""
+msgstr "Saída: %1"
 
 #: calendarhandler.cpp:346
 #, kde-format
 msgid "Phone: %1"
-msgstr ""
+msgstr "Teléfono: %1"
 
 #: calendarhandler.cpp:349
 #, kde-format
 msgid "Email: %1"
-msgstr ""
+msgstr "Correo electrónico: %1"
 
 #: calendarhandler.cpp:352
-#, fuzzy, kde-format
-#| msgid "Seat: %1"
+#, kde-format
 msgid "Website: %1"
-msgstr "Asento: %1"
+msgstr "Sitio web: %1"
 
 #: calendarhandler.cpp:395
 #, kde-format
@@ -146,8 +142,7 @@ msgid "Restaurant reservation: %1"
 msgstr "Reserva de restaurante: %1"
 
 #: calendarhandler.cpp:456
-#, fuzzy, kde-format
-#| msgid "Number Of People: %1"
+#, kde-format
 msgid "Number of people: %1"
 msgstr "Número de persoas: %1"
 
@@ -157,8 +152,7 @@ msgid "Under name: %1"
 msgstr "A nome de: %1"
 
 #: calendarhandler.cpp:473
-#, fuzzy, kde-format
-#| msgid "Rental Car reservation: %1"
+#, kde-format
 msgid "Rental car reservation: %1"
 msgstr "Reserva de coche de alugamento: %1"
 
@@ -168,6 +162,8 @@ msgid ""
 "Pickup location: %1\n"
 "%2\n"
 msgstr ""
+"Lugar de recollida: %1\n"
+"%2\n"
 
 #: calendarhandler.cpp:488
 #, kde-format
@@ -175,13 +171,11 @@ msgid ""
 "Dropoff location: %1\n"
 "%2\n"
 msgstr ""
+"Lugar de chegada: %1\n"
+"%2\n"
 
 #: calendarhandler.cpp:517
-#, fuzzy, kde-format
-#| msgid ""
-#| "Reservation reference: %1\n"
-#| "Under name: %2\n"
-#| "PickUp location: %3"
+#, kde-format
 msgid ""
 "Reservation reference: %1\n"
 "Under name: %2\n"
