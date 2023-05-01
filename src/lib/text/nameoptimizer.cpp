@@ -57,6 +57,18 @@ static bool isNamePrefix(QStringView s)
     return std::any_of(std::begin(name_prefixes), std::end(name_prefixes), [s](const char *prefix) { return s == QLatin1String(prefix); });
 }
 
+static QStringView stripNamePrefix(QStringView s)
+{
+    for (auto prefix : name_prefixes) {
+        QLatin1String p(prefix);
+        if (s.endsWith(p) && s.size() > p.size() && s[s.size() - p.size() - 1] == QLatin1Char(' ')) {
+            return s.left(s.size() - p.size() - 1);
+        }
+    }
+
+    return s;
+}
+
 static bool isSameChar(QChar c1, QChar c2)
 {
     if (c1 == c2) {
@@ -131,7 +143,7 @@ QString NameOptimizer::optimizeNameString(const QString &text, const QString &na
 
         const auto betterName = QStringView(text).mid(i, nameLen).trimmed();
         if (StringUtil::betterString(betterName, name) != name) {
-            return betterName.toString();
+            return stripNamePrefix(betterName).toString();
         }
     }
 

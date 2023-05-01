@@ -139,6 +139,12 @@ private Q_SLOTS:
         p.setGivenName(s("KONQI"));
         p = NameOptimizer::optimizeName(s("KONQI THE DRAGON"), p);
         QCOMPARE(p.familyName(), s("THE DRAGON"));
+
+        p.setFamilyName(s("THEDRAGON"));
+        p.setGivenName(s("KONQIDR"));
+        p = NameOptimizer::optimizeName(s("KONQI DR THE DRAGON"), p);
+        QCOMPARE(p.familyName(), s("THE DRAGON"));
+        QCOMPARE(p.givenName(), s("KONQI"));
     }
 };
 
