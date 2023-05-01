@@ -50,7 +50,7 @@ function parsePdfBoardingPass(pdf, node, triggerNode) {
     res.reservationFor.departureTime = JsonLd.toDateTime(times[1], "hh:mm", "en");
     res.reservationFor.arrivalTime = JsonLd.toDateTime(times[2], "hh:mm", "en");
     const topLeft = page.textInRect(0.0, 0.0, 0.5, 1.0);
-    const grp = topLeft.match(/(?:Group|Grupo) +(\d)/i);
+    const grp = topLeft.match(/(?:Group|Grupo|Gruppe) +(\d)/i);
     if (grp) {
         res.boardingGroup = grp[1];
     }
