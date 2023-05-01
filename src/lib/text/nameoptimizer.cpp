@@ -57,6 +57,25 @@ static bool isNamePrefix(QStringView s)
     return std::any_of(std::begin(name_prefixes), std::end(name_prefixes), [s](const char *prefix) { return s == QLatin1String(prefix); });
 }
 
+static bool isSameChar(QChar c1, QChar c2)
+{
+    if (c1 == c2) {
+        return true;
+    }
+
+    if (c1.decompositionTag() != c2.decompositionTag()) {
+        if (c1.decompositionTag() == QChar::Canonical) {
+            c1 = c1.decomposition().at(0);
+        }
+        if (c2.decompositionTag() == QChar::Canonical) {
+            c2 = c2.decomposition().at(0);
+        }
+        return c1 == c2;
+    }
+
+    return false;
+}
+
 QString NameOptimizer::optimizeNameString(const QString &text, const QString &name)
 {
     if (name.size() < 2) {
@@ -65,41 +84,33 @@ QString NameOptimizer::optimizeNameString(const QString &text, const QString &na
 
     for (int i = 0; i < text.size(); ++i) {
         bool mismatch = false;
-        auto nameLen = name.size();
-        for (int j = 0; j < name.size(); ++j) {
+        int nameLen = 0;
+        for (int j = 0; j < name.size(); ++j, ++nameLen) {
             // reached the end of text
-            if (i + j >= text.size()) {
+            if (i + nameLen >= text.size()) {
                 // remainder is either a prefix placed as suffix (see below), or we are unsuccessful
-                if (isNamePrefix(QStringView(name).mid(j))) {
-                    nameLen = j;
-                } else {
-                    return name;
+                if (!isNamePrefix(QStringView(name).mid(j))) {
+                    mismatch = true;
                 }
                 break;
             }
 
-            auto c1 = text.at(i+j).toCaseFolded();
+            auto c1 = text.at(i+nameLen).toCaseFolded();
             auto c2 = name.at(j).toCaseFolded();
 
-            if (c1 == c2) {
+            if (isSameChar(c1, c2)) {
                 continue;
             }
 
-            if (c1.decompositionTag() != c2.decompositionTag()) {
-                if (c1.decompositionTag() == QChar::Canonical) {
-                    c1 = c1.decomposition().at(0);
-                }
-                if (c2.decompositionTag() == QChar::Canonical) {
-                    c2 = c2.decomposition().at(0);
-                }
-                if (c1 == c2) {
-                    continue;
-                }
+            // expand spaces missing in name
+            if (nameLen > 0 && c1 == QLatin1Char(' ') && (i + nameLen + 1) < text.size() && isSameChar(text.at(i+nameLen+1).toCaseFolded(), c2)) {
+                ++nameLen;
+                continue;
             }
 
             // mismatch: check if the remainder is a name prefix (yes, those also occur frequently as suffixes of name parts in IATA BCBP for example)
             if (isNamePrefix(QStringView(name).mid(j))) {
-                nameLen = QStringView(name).left(j).trimmed().size();
+                nameLen = QStringView(name).left(nameLen).trimmed().size();
                 break;
             }
 
@@ -118,8 +129,9 @@ QString NameOptimizer::optimizeNameString(const QString &text, const QString &na
             continue;
         }
 
-        if (StringUtil::betterString(QStringView(text).mid(i, nameLen), name) != name) {
-            return text.mid(i, nameLen);
+        const auto betterName = QStringView(text).mid(i, nameLen).trimmed();
+        if (StringUtil::betterString(betterName, name) != name) {
+            return betterName.toString();
         }
     }
 
