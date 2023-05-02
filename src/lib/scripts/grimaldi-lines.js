@@ -14,5 +14,20 @@ function parsePdfTicket(pdf, node, triggerNode) {
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2], 'dd/MM/yy hh:mm', 'it');
     res.reservationNumber = triggerNode.content;
     res.reservedTicket.ticketToken = 'barcode128:' + triggerNode.content;
-    return res;
+
+    let idx = 0;
+    let reservations = [res];
+    while (true) {
+        const pas = text.substr(idx).match(/  +(.*?)  +[MF]  +\d\d-\d\d-\d{4}\n/);
+        if (!pas)
+            break;
+        idx += pas.index + pas[0].length;
+        let r = JsonLd.clone(res);
+        const name = pas[1].split(/  +/);
+        r.underName.familyName = name[0];
+        r.underName.givenName = name[1];
+        // TODO: per-passenger ticket tokens
+        reservations.push(r);
+    }
+    return reservations;
 }

@@ -1,0 +1,26 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080",
+            "name": "DB AG"
+        },
+        "name": "Deutschlandticket",
+        "ticketNumber": "J7EJ5KNN",
+        "ticketToken": "aztecbin:I1VUMDExMDgwVFQwMDUwLAIUaF474Q5HKwSfP4bJ3CWga/66E1ACFD9cK3OOzpglLvERyv9+ycn9TpbqAAAAADAzODd4nAuN93B1dDEwNDAwNTY0sDDwMnf1MvX282NAAkBZEyMDI2OgtIGJi6uLa2h8iI9jJFDYyMwgwMfR0wCk38QASBkZgICpX2JuqpWBKULE3DsnsbgYKGYG5BhBxMwCUouK9awMjODKDI3cD+/JKclMz07NLAFKGFqC1ILMNgzLz1MwMNQzMNUDuUTBwMDKwIDLKbMYLGgGFTQGCgLVWoKMA+oyNPRJzUxU8C9KT8xLNDCFi4MoM7jZQGVg5xhagHmWbokZRdmJRSWpEEmwqKG5S2ppSXFyRk5iXkpJZnJ2aklovJuPa4ShsYGhqVHSJoa2h7wHT7s3iApyNLLKtXjliwVHFi9X4Gps4Jhx6tIhnnlPzh26c2jGxIYmNYZ4hhOCSns5QrIjs+bYqJnJymx9+PSyBksDC5dKQA2DCX+3gxATQ5ey9urFs6Wdk7mLlRd7S0drLxCYqcC5hYHBNWPqzJ0JZ7sKPhhwtjs4bPut1SCk4FB1Uds04WADBwcHAAcxge4=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Organa",
+            "givenName": "Leia",
+            "name": "Leia Organa"
+        },
+        "validFrom": "2023-05-01T00:00:00+02:00",
+        "validUntil": "2023-06-01T00:03:00+02:00"
+    }
+]
