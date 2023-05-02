@@ -1,0 +1,17 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "name": "Deutschlandticket",
+        "ticketNumber": "2099643",
+        "ticketToken": "aztecbin:noGAcCGqbL4sBzo3/kOD7wj1EhQvyK2NciRfyGSyr10XpjR/kGwTlKxLfXpmRnDS6vft4BmcB+iiccTNWkQBqOyD/OGi8lEP2KA5vsu6fPVzVp4dpLhocyUSBfekTORtnFkZAp7srho5vOQFGWsDmZbFKs4X/WBylo9/KKh4WeoYBc+aDwAAAAAAAAAAAABWRFYRCX8hgchfN4HAOfLABJIEWvFRilfF13NDSKABrFDMrUDcfzcaNKY828sW63tyxXfYpVHFn89CBrRAy54q04/zDpd9C44NShkBAfJ18d+GMOECTHS1qOp8AD1lteIBFOzalpJeuhRYSc4m/XSERlk94RpuFWo4TLvHq57lz8fV/GlaHzwUSrdPKRUSUHnr60OBKipr75sIyT3HKLShbyHyvJ4G33KAHsCtKurbzVbeU1k4RNAVont2Pxzlpt3M/d3DuAkGsIDC0LmOXzgBgUIIREVWRFYRAhY=",
+        "underName": {
+            "@type": "Person",
+            "familyName": "Mustermann",
+            "givenName": "Max",
+            "name": "Max Mustermann"
+        },
+        "validFrom": "2023-03-01T00:00:00",
+        "validUntil": "2023-03-31T23:59:58"
+    }
+]
