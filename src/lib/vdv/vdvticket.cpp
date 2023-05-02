@@ -78,8 +78,14 @@ VdvTicket::VdvTicket(const QByteArray &data, const QByteArray &rawData)
     offset += prodTransactionBlock.size();
     offset += sizeof(VdvTicketIssueData);
 
-    // 0 padding to reach at least 111 bytes
-    offset += std::max(111 - offset - (int)sizeof(VdvTicketTrailer), 0);
+    // 0 padding to reach the minimum size
+    // 111 in the specs known to us, but seems to vary in practice, so be flexible and
+    // just align with the input end
+    if (data.size() < offset + (int)sizeof(VdvTicketTrailer)) {
+        qCWarning(Log) << "Ticket data too small for VDV ticket trailer" << offset;
+        return;
+    }
+    offset = data.size() - (int)sizeof(VdvTicketTrailer);
 
     const auto trailer = reinterpret_cast<const VdvTicketTrailer*>(data.constData() + offset);
     if (memcmp(trailer->identifier, "VDV", 3) != 0) {
@@ -216,10 +222,8 @@ const VdvTicketIssueData* VdvTicket::issueData() const
 
 const VdvTicketTrailer* VdvTicket::trailer() const
 {
-    auto offset = sizeof(VdvTicketHeader) + productData().size()
-                      + sizeof(VdvTicketCommonTransactionData) + productSpecificTransactionData().size()
-                      + sizeof(VdvTicketIssueData);
-    offset += std::max<int>(111 - offset - sizeof(VdvTicketTrailer), 0); // padding to 111 bytes
+    // see above
+    const auto offset = d->m_data.size() - (int)sizeof(VdvTicketTrailer);
     return d->m_data.isEmpty() ? nullptr : reinterpret_cast<const VdvTicketTrailer*>(d->m_data.constData() + offset);
 }
 

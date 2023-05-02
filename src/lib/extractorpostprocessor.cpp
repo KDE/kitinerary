@@ -384,7 +384,7 @@ BoatReservation ExtractorPostprocessorPrivate::processBoatReservation(BoatReserv
     if (res.reservationFor().isValid()) {
         res.setReservationFor(processBoatTrip(res.reservationFor().value<BoatTrip>()));
     }
-    return res;
+    return processReservation(res);
 }
 
 BoatTrip ExtractorPostprocessorPrivate::processBoatTrip(BoatTrip trip) const

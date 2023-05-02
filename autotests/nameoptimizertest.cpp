@@ -131,6 +131,21 @@ private Q_SLOTS:
 
         QCOMPARE(p.givenName(), expected);
     }
+
+    void testSpaceExpansion()
+    {
+        Person p;
+        p.setFamilyName(s("THEDRAGON"));
+        p.setGivenName(s("KONQI"));
+        p = NameOptimizer::optimizeName(s("KONQI THE DRAGON"), p);
+        QCOMPARE(p.familyName(), s("THE DRAGON"));
+
+        p.setFamilyName(s("THEDRAGON"));
+        p.setGivenName(s("KONQIDR"));
+        p = NameOptimizer::optimizeName(s("KONQI DR THE DRAGON"), p);
+        QCOMPARE(p.familyName(), s("THE DRAGON"));
+        QCOMPARE(p.givenName(), s("KONQI"));
+    }
 };
 
 QTEST_GUILESS_MAIN(NameOptimizerTest)

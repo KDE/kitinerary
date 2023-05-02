@@ -7,15 +7,14 @@
 #include "vdvdocumentprocessor.h"
 
 #include <KItinerary/ExtractorResult>
-#include <KItinerary/JsonLdDocument>
+#include <KItinerary/Ticket>
 #include <KItinerary/VdvTicket>
+#include <KItinerary/VdvTicketContent>
 #include <KItinerary/VdvTicketParser>
 
 #include <KLocalizedString>
 
 #include <QByteArray>
-#include <QJsonArray>
-#include <QJsonObject>
 
 using namespace KItinerary;
 
@@ -40,32 +39,34 @@ void VdvDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
 {
     const auto vdv = node.content<VdvTicket>();
 
-    QJsonObject seat;
-    seat.insert(QStringLiteral("@type"), QLatin1String("Seat"));
+    Seat seat;
     switch (vdv.serviceClass()) {
+        case VdvTicket::UnknownClass:
+            break;
         case VdvTicket::FirstClass:
         case VdvTicket::FirstClassUpgrade:
-            seat.insert(QStringLiteral("seatingType"), QStringLiteral("1"));
+            seat.setSeatingType(QStringLiteral("1"));
             break;
         case VdvTicket::SecondClass:
-            seat.insert(QStringLiteral("seatingType"), QStringLiteral("2"));
+            seat.setSeatingType(QStringLiteral("2"));
             break;
         default:
             break;
     }
 
-    QJsonObject ticket;
-    ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
-    ticket.insert(QStringLiteral("ticketToken"), QString(QLatin1String("aztecbin:") + QString::fromLatin1(vdv.rawData().toBase64())));
-    ticket.insert(QStringLiteral("ticketedSeat"), seat);
+    Ticket ticket;
+    ticket.setTicketToken(QLatin1String("aztecbin:") + QString::fromLatin1(vdv.rawData().toBase64()));
+    ticket.setTicketedSeat(seat);
     if (vdv.serviceClass() == VdvTicket::FirstClassUpgrade) {
-        ticket.insert(QStringLiteral("name"), i18n("Upgrade"));
+        ticket.setName(i18n("Upgrade"));
+    } else if (const auto hdr = vdv.header(); hdr && hdr->productId == 9999) {
+        ticket.setName(QLatin1String("Deutschlandticket"));
     } else {
-        ticket.insert(QStringLiteral("name"), i18n("Ticket"));
+        ticket.setName(i18n("Ticket"));
     }
-    ticket.insert(QStringLiteral("ticketNumber"), vdv.ticketNumber());
-    ticket.insert(QStringLiteral("validFrom"), JsonLdDocument::toJsonValue(vdv.beginDateTime()));
-    ticket.insert(QStringLiteral("validUntil"), JsonLdDocument::toJsonValue(vdv.endDateTime()));
-    ticket.insert(QStringLiteral("underName"), JsonLdDocument::toJson(vdv.person()));
-    node.addResult(QJsonArray({ticket}));
+    ticket.setTicketNumber(vdv.ticketNumber());
+    ticket.setValidFrom(vdv.beginDateTime());
+    ticket.setValidUntil(vdv.endDateTime());
+    ticket.setUnderName(vdv.person());
+    node.addResult(QVector<QVariant>({ticket}));
 }
