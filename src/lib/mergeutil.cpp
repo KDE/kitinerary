@@ -219,10 +219,7 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
     if (JsonLd::isA<LodgingReservation>(lhs)) {
         const auto lhsRes = lhs.value<LodgingReservation>();
         const auto rhsRes = rhs.value<LodgingReservation>();
-        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor())
-            && lhsRes.checkinTime().isValid()
-            && lhsRes.checkinTime().date() == rhsRes.checkinTime().date()
-            && (!lhsRes.checkoutTime().isValid() || !rhsRes.checkoutTime().isValid() || lhsRes.checkoutTime().date() == rhsRes.checkoutTime().date());
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.checkinTime().date() == rhsRes.checkinTime().date();
     }
     if (JsonLd::isA<LodgingBusiness>(lhs)) {
         const auto lhsHotel = lhs.value<LodgingBusiness>();
