@@ -219,7 +219,10 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
     if (JsonLd::isA<LodgingReservation>(lhs)) {
         const auto lhsRes = lhs.value<LodgingReservation>();
         const auto rhsRes = rhs.value<LodgingReservation>();
-        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.checkinTime().date() == rhsRes.checkinTime().date();
+        return isSame(lhsRes.reservationFor(), rhsRes.reservationFor())
+            && lhsRes.checkinTime().isValid()
+            && lhsRes.checkinTime().date() == rhsRes.checkinTime().date()
+            && (!lhsRes.checkoutTime().isValid() || !rhsRes.checkoutTime().isValid() || lhsRes.checkoutTime().date() == rhsRes.checkoutTime().date());
     }
     if (JsonLd::isA<LodgingBusiness>(lhs)) {
         const auto lhsHotel = lhs.value<LodgingBusiness>();
@@ -589,6 +592,27 @@ static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs)
 {
     //TODO verify
     return lhs.name() == rhs.name();
+}
+
+bool MergeUtil::isSameIncidence(const QVariant &lhs, const QVariant &rhs)
+{
+    if (lhs.userType() != rhs.userType() || !JsonLd::canConvert<Reservation>(lhs) || !JsonLd::canConvert<Reservation>(rhs)) {
+        return false;
+    }
+
+    // special case for LodgingReservation, their time range is in the Reservation object
+    if (JsonLd::isA<LodgingReservation>(lhs)) {
+        const auto lhsHotel = lhs.value<LodgingReservation>();
+        const auto rhsHotel = rhs.value<LodgingReservation>();
+        if (lhsHotel.checkinTime().date() != rhsHotel.checkinTime().date() ||
+            lhsHotel.checkoutTime().date() != rhsHotel.checkoutTime().date()) {
+            return false;
+        }
+    }
+
+    const auto lhsTrip = JsonLd::convert<Reservation>(lhs).reservationFor();
+    const auto rhsTrip = JsonLd::convert<Reservation>(rhs).reservationFor();
+    return MergeUtil::isSame(lhsTrip, rhsTrip);
 }
 
 static Airline mergeValue(const Airline &lhs, const Airline &rhs)

@@ -43,6 +43,15 @@ public:
     KITINERARY_EXPORT static bool isSamePerson(const Person &lhs, const Person &rhs);
 
     /**
+     *  Checks whether to elements refer to the same thing, just for different people.
+     *  For example two reservations for the same trip or event, but with separate tickets
+     *  for different attendees.
+     *  This is useful for batching elements together.
+     *  @since 5.23.41
+     */
+    KITINERARY_EXPORT static bool isSameIncidence(const QVariant &lhs, const QVariant &rhs);
+
+    /**
      * Checks whether two transport reservation elements refer to the same departure.
      * This considers time, location and mode of transport.
      */

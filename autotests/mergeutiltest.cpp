@@ -323,6 +323,28 @@ private Q_SLOTS:
         }
         QCOMPARE(mergedJson, expected);
     }
+
+    void testIsSameIncidence()
+    {
+        const auto lhsFlight = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(QLatin1String(SOURCE_DIR "/calendarhandlerdata/flight.json"))).array()).first().value<FlightReservation>();
+        auto rhsFlight = lhsFlight;
+        Person p = rhsFlight.underName().value<Person>();
+        p.setName(QLatin1String("Jane Doe"));
+        rhsFlight.setUnderName(p);
+        QVERIFY(!MergeUtil::isSame(lhsFlight, rhsFlight));
+        QVERIFY(MergeUtil::isSameIncidence(lhsFlight, rhsFlight));
+
+        const auto lhsHotel = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(QLatin1String(SOURCE_DIR "/calendarhandlerdata/hotel.json"))).array()).first().value<LodgingReservation>();
+        auto rhsHotel = lhsHotel;
+        p = rhsHotel.underName().value<Person>();
+        p.setName(QLatin1String("Jane Doe"));
+        rhsHotel.setUnderName(p);
+        QVERIFY(!MergeUtil::isSame(lhsHotel, rhsHotel));
+        QVERIFY(MergeUtil::isSameIncidence(lhsHotel, rhsHotel));
+        rhsHotel.setCheckinTime(rhsHotel.checkoutTime().addDays(2));
+        QVERIFY(!MergeUtil::isSame(lhsHotel, rhsHotel));
+        QVERIFY(!MergeUtil::isSameIncidence(lhsHotel, rhsHotel));
+    }
 };
 
 QTEST_APPLESS_MAIN(MergeUtilTest)
