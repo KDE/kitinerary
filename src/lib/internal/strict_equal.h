@@ -27,14 +27,12 @@ inline bool strict_equal(typename parameter_type<T>::type lhs, typename paramete
     return lhs == rhs;
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 // compare QVariant contents (no longer the default with Qt6)
 template <> inline
 bool strict_equal<QVariant>(const QVariant &lhs, const QVariant &rhs)
 {
     return lhs.isNull() == rhs.isNull() && (lhs.isNull() || QVariant::compare(lhs, rhs) == QPartialOrdering::Equivalent);
 }
-#endif
 
 // QDateTime::operator== is true for two instances referring to the same point in time
 // we however want to know if two instances contain exactly the same information
