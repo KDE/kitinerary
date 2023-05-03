@@ -94,5 +94,18 @@
         "function": "parseEvent",
         "mimeType": "internal/event",
         "script": "deutschebahn.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "carrierId",
+                "match": "2080",
+                "mimeType": "internal/uic9183",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseDBRegioBusUic",
+        "mimeType": "internal/uic9183",
+        "script": "deutschebahn.js"
     }
 ]
