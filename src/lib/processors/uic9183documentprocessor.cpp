@@ -9,6 +9,7 @@
 #include <KItinerary/ExtractorResult>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Uic9183Parser>
+#include <KItinerary/Uic9183TicketLayout>
 #include <KItinerary/Rct2Ticket>
 #include <era/fcbticket.h>
 #include <uic9183/uic9183head.h>
@@ -24,6 +25,7 @@ using namespace KItinerary;
 
 Uic9183DocumentProcessor::Uic9183DocumentProcessor()
 {
+    qRegisterMetaType<KItinerary::Uic9183TicketLayoutField>();
     qRegisterMetaType<KItinerary::Vendor0080BLOrderBlock>();
 }
 
