@@ -599,6 +599,9 @@ bool MergeUtil::isSameIncidence(const QVariant &lhs, const QVariant &rhs)
 
     // special case for LodgingReservation, their time range is in the Reservation object
     if (JsonLd::isA<LodgingReservation>(lhs)) {
+        if (MergeUtil::isSame(lhs, rhs)) { // incremental updates can have deviating times, that is ok
+            return true;
+        }
         const auto lhsHotel = lhs.value<LodgingReservation>();
         const auto rhsHotel = rhs.value<LodgingReservation>();
         if (lhsHotel.checkinTime().date() != rhsHotel.checkinTime().date() ||
