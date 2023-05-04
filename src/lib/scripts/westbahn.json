@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^https://westbahn.at/t/",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parseTicket",
+    "mimeType": "application/pdf",
+    "script": "westbahn.js"
+}
