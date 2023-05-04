@@ -13,8 +13,6 @@
 #include <KItinerary/ExtractorResult>
 #include <KItinerary/ScriptExtractor>
 
-#include <kcalendarcore_version.h>
-
 #include <QDebug>
 #include <QFile>
 #include <QJsonDocument>
