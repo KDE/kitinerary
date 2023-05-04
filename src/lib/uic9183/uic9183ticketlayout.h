@@ -36,6 +36,8 @@ class KITINERARY_EXPORT Uic9183TicketLayoutField
     UIC_NUM_PROPERTY(size, 9 + m_offset, 4)
     UIC_STR_PROPERTY(text, 13 + m_offset, size())
 
+    Q_PROPERTY(bool isNull READ isNull STORED false)
+    Q_PROPERTY(KItinerary::Uic9183TicketLayoutField next READ next STORED false)
 public:
     Uic9183TicketLayoutField();
     /** Create a new U_TLAY field starting at @p offset in @p block.
@@ -64,7 +66,7 @@ class KITINERARY_EXPORT Uic9183TicketLayout
     /** Ticket type (e.g. RCT2). */
     Q_PROPERTY(QString type READ type)
     Q_PROPERTY(QSize size READ size)
-
+    Q_PROPERTY(KItinerary::Uic9183TicketLayoutField firstField READ firstField STORED false)
 public:
     Uic9183TicketLayout();
     /** Parse U_TLAY ticket layout block in @p data.

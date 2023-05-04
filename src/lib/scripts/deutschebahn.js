@@ -367,3 +367,24 @@ function parseEvent(event) {
 
     return res;
 }
+
+function parseDBRegioBusUic(uic, node)
+{
+    let ticket = node.result[0];
+    if (uic.ticketLayout.type != 'PLAI' || ticket.name !== '')
+        return;
+
+    ticket.name = uic.ticketLayout.firstField.text;
+    for (let f = uic.ticketLayout.firstField; f && !f.isNull; f = f.next) {
+        const validFrom = f.text.match(/Erster Gültigkeitstag: (.*)/);
+        if (validFrom) {
+            ticket.validFrom = JsonLd.toDateTime(validFrom[1], 'dd.MM.yyyy', 'de');
+        }
+        const name = f.text.match(/Name Fahrtberechtigter: (.*)/);
+        if (name) {
+            ticket.underName = JsonLd.newObject('Person');
+            ticket.underName.name = name[1];
+        }
+    }
+    return ticket;
+}

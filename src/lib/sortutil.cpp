@@ -151,6 +151,13 @@ QDateTime SortUtil::endDateTime(const QVariant &elem)
 bool SortUtil::isBefore(const QVariant &lhs, const QVariant &rhs)
 {
     if (startDateTime(lhs) == startDateTime(rhs) && lhs.userType() == rhs.userType() && JsonLd::canConvert<Reservation>(lhs)) {
+        // sort by end date if available next, e.g. for overlapping hotel bookings
+        const auto lhsEndDt = endDateTime(lhs);
+        const auto rhsEndDt = endDateTime(rhs);
+        if (JsonLd::isA<LodgingReservation>(lhs) && lhsEndDt.isValid() && rhsEndDt.isValid() && lhsEndDt != rhsEndDt) {
+            return lhsEndDt < rhsEndDt;
+        }
+
         // for multi-traveler reservations, sort by traveler name to achieve a stable result
         const auto lhsRes = JsonLd::convert<Reservation>(lhs);
         const auto rhsRes = JsonLd::convert<Reservation>(rhs);
