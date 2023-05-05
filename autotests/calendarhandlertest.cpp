@@ -83,6 +83,8 @@ private Q_SLOTS:
         newEvent->setUid(refEvent->uid());
         newEvent->setLastModified(refEvent->lastModified());
         newEvent->setCreated(refEvent->created());
+        // normalize the effect of CLDR 42
+        newEvent->setDescription(newEvent->description().replace(QStringLiteral("\u202F"), QLatin1String(" ")));
 
         if (*newEvent != *refEvent) {
             qDebug().noquote() << "Actual: " << format.toICalString(newEvent).remove(QLatin1Char('\r'));
