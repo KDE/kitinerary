@@ -549,10 +549,21 @@ static bool isNameEqualish(const QString &lhs, const QString &rhs)
     return true;
 }
 
+static bool isPartialName(const Person &fullName, const Person &partialName)
+{
+    if (fullName.familyName().isEmpty() || fullName.givenName().isEmpty() || !partialName.givenName().isEmpty()) {
+        return false;
+    }
+    return isNameEqualish(fullName.familyName(), partialName.name());
+}
+
 bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)
 {
     if (isNameEqualish(lhs.name(), rhs.name()) ||
         (isNameEqualish(lhs.givenName(), rhs.givenName()) && isNameEqualish(lhs.familyName(), rhs.familyName()))) {
+        return true;
+    }
+    if (isPartialName(lhs, rhs) || isPartialName(rhs, lhs)) {
         return true;
     }
 
