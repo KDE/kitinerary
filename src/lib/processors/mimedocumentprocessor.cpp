@@ -121,6 +121,8 @@ static ExtractorDocumentNode expandContentNode(ExtractorDocumentNode &node, KMim
         child = engine->documentNodeFactory()->createNode(content->decodedText(), u"text/plain");
     } else if (ct && ct->isHTMLText()) {
         child = engine->documentNodeFactory()->createNode(content->decodedText(), u"text/html");
+    } else if (content->bodyIsMessage()) {
+        child = engine->documentNodeFactory()->createNode(QVariant::fromValue(content->bodyAsMessage().get()), u"message/rfc822");
     } else {
         child = engine->documentNodeFactory()->createNode(content->decodedContent(), fileName);
     }
@@ -154,7 +156,11 @@ static void expandContentNodeRecursive(ExtractorDocumentNode &node, KMime::Conte
     }
 
     for (const auto child : children) {
-        expandContentNodeRecursive(node, child, engine);
+        if (child->bodyIsMessage()) {
+            expandContentNode(node, child, engine); // do not recurse into nested emails, we want those as dedicated nodes
+        } else {
+            expandContentNodeRecursive(node, child, engine);
+        }
     }
 }
 

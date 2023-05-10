@@ -37,7 +37,9 @@ function parseBarcodeCommon(res, data) {
             continue;
         }
         res.reservedTicket.ticketedSeat.seatSection = ByteArray.decodeUtf8(seatBlock.slice(22, 25));
-        res.reservedTicket.ticketedSeat.seatNumber = seatView.getUInt16(25, false);
+        if (seatView.getUInt16(25, false) !== 0) {
+            res.reservedTicket.ticketedSeat.seatNumber = seatView.getUInt16(25, false);
+        }
     }
 }
 
