@@ -147,6 +147,11 @@ private Q_SLOTS:
             {_("Bjärn Lastname"), {}, {}},
             {_("BJAERN LASTNAME"), _("BJAERN"), _("LASTNAME")},
         };
+
+        QTest::newRow("partial") << QVector<QStringList> {
+            {_("VOLKER KRAUSE"), _("Volker"), _("Krause")},
+            {_("KRAUSE"),{}, {}}
+        };
     }
 
     void testIsSamePerson()
