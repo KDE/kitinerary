@@ -142,6 +142,24 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
         }
     }
 
+    const auto fcb = p.findBlock<Fcb::UicRailTicketData>();
+    if (fcb.isValid() && !fcb.transportDocument.isEmpty()) {
+        const auto issueDt = fcb.issuingDetail.issueingDateTime();
+        const auto doc = fcb.transportDocument.at(0);
+        if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            const auto irt = doc.ticket.value<Fcb::ReservationData>();
+            trip.setDepartureStation(p.outboundDepartureStation());
+            trip.setArrivalStation(p.outboundArrivalStation());
+            trip.setDepartureTime(irt.departureDateTime(issueDt));
+        } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+            trip.setDepartureStation(p.outboundDepartureStation());
+            trip.setArrivalStation(p.outboundArrivalStation());
+            trip.setDepartureDay(nrt.validFrom(issueDt).date());
+            // TODO handle nrt.returnIncluded
+        }
+    }
+
     ticket.setTicketedSeat(seat);
 
     // we have enough for a full TrainReservation result
