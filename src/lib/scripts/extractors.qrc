@@ -69,6 +69,8 @@
         <file>eki-net.js</file>
         <file>eos.json</file>
         <file>eos.js</file>
+        <file>european-sleeper.json</file>
+        <file>european-sleeper.js</file>
         <file>eurostar.json</file>
         <file>eurostar.js</file>
         <file>eurowings.json</file>
