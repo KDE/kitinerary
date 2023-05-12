@@ -34,6 +34,7 @@ public:
         DataMatrix, ///< A DataMatrix barcode
         PDF417, ///< A PDF417 barcode
         Code39, ///< A Code 39 barcode
+        EAN13, ///< A EAN13 barcode
     };
     Q_ENUM(TokenType)
 
