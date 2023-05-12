@@ -371,7 +371,7 @@ function parseEvent(event) {
 function parseDBRegioBusUic(uic, node)
 {
     let ticket = node.result[0];
-    if (uic.ticketLayout.type != 'PLAI' || ticket.name !== '')
+    if (uic.ticketLayout.type != 'PLAI' || ticket.name)
         return;
 
     ticket.name = uic.ticketLayout.firstField.text;

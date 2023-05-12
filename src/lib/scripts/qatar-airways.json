@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "Thank you for choosing Qatar Airways.",
+            "mimeType": "text/plain",
+            "scope": "Children"
+        }
+    ],
+    "function": "parseETicket",
+    "mimeType": "application/pdf",
+    "script": "qatar-airways.js"
+}

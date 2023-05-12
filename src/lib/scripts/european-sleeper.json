@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "carrierId",
+            "match": "5188",
+            "mimeType": "internal/uic9183",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parseTicket",
+    "mimeType": "application/pdf",
+    "script": "european-sleeper.js"
+}

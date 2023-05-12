@@ -275,9 +275,9 @@
         "mimeType": "internal/uic9183",
         "result": [
             {
+                "@context": "http://schema.org",
                 "@type": "Ticket",
                 "issuedBy": {
-                    "@context": "http://schema.org",
                     "@type": "Organization",
                     "identifier": "uic:0080"
                 },
@@ -289,7 +289,6 @@
                     "seatingType": "2"
                 },
                 "underName": {
-                    "@context": "http://schema.org",
                     "@type": "Person",
                     "familyName": "häöür Räß",
                     "givenName": "kíck_-_:.,stû R"

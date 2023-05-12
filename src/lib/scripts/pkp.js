@@ -12,6 +12,7 @@ function parseBarcode(content, node) {
     res.reservedTicket.name = layout.text(2, 0, 72, 1);
     res.reservationFor.departureTime = JsonLd.toDateTime(layout.text(10, 0, 72, 1) + ' ' + layout.text(11, 0, 72, 1), 'hh:mm dd.MM', 'pl');
     res.reservationFor.arrivalTime = JsonLd.toDateTime(layout.text(14, 0, 72, 1) + ' ' + layout.text(15, 0, 72, 1), 'hh:mm dd.MM', 'pl');
+    res.reservedTicket.ticketedSeat = JsonLd.newObject('Seat');
     res.reservedTicket.ticketedSeat.seatingType = layout.text(16, 0, 72, 1);
     res.reservationFor.trainNumber = layout.text(18, 0, 72, 1);
     res.reservedTicket.ticketedSeat.seatNumber = layout.text(23, 0, 72, 1);
