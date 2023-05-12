@@ -17,6 +17,7 @@ function parsePdfTicket(pdf, node, triggerNode) {
 
     let idx = 0;
     let reservations = [res];
+    let tokenPrefix = 10001;
     while (true) {
         const pas = text.substr(idx).match(/  +(.*?)  +[MF]  +\d\d-\d\d-\d{4}\n/);
         if (!pas)
@@ -26,7 +27,7 @@ function parsePdfTicket(pdf, node, triggerNode) {
         const name = pas[1].split(/  +/);
         r.underName.familyName = name[0];
         r.underName.givenName = name[1];
-        // TODO: per-passenger ticket tokens
+        r.reservedTicket.ticketToken = 'ean13:' + tokenPrefix++ + triggerNode.content.substr(3);
         reservations.push(r);
     }
     return reservations;
