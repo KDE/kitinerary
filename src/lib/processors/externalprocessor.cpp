@@ -25,9 +25,10 @@ using namespace KItinerary;
 ExternalProcessor::ExternalProcessor()
 {
     // find external extractor
-    QFileInfo fi(QLatin1String(CMAKE_INSTALL_FULL_LIBEXECDIR_KF6) + QLatin1String("/kitinerary-extractor"));
+    const QString filepath = QLatin1String(CMAKE_INSTALL_FULL_LIBEXECDIR_KF6) + QLatin1String("/kitinerary-extractor");
+    QFileInfo fi(filepath);
     if (!fi.exists() && !fi.isFile() && !fi.isExecutable()) {
-        qCCritical(Log) << "Cannot find external extractor:" << fi.fileName();
+        qCCritical(Log) << "filePath : " << filepath << "Cannot find external extractor:" << fi.fileName();
         return;
     }
     m_externalExtractor = fi.canonicalFilePath();
