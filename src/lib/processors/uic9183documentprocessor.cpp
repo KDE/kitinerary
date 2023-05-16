@@ -72,6 +72,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 
     TrainTrip trip, returnTrip;
     Ticket ticket;
+    ticket.setName(p.name());
     ticket.setTicketToken(QLatin1String("aztecbin:") + QString::fromLatin1(p.rawData().toBase64()));
     Seat seat;
     if (const auto seatingType = p.seatingType(); !seatingType.isEmpty()) {
@@ -186,7 +187,6 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     }
 
     // only Ticket
-    ticket.setName(p.name());
     ticket.setIssuedBy(p.issuer());
     ticket.setTicketNumber(p.pnr());
     ticket.setUnderName(p.person());
