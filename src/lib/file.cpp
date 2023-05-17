@@ -146,7 +146,7 @@ QVariant File::reservation(const QString &resId) const
 
 void File::addReservation(const QVariant &res)
 {
-    addReservation(QUuid::createUuid().toString(), res);
+    addReservation(QUuid::createUuid().toString(QUuid::WithoutBraces), res);
 }
 
 void File::addReservation(const QString &id, const QVariant &res)
