@@ -310,18 +310,6 @@ function parseUic9183(code, node) {
         ret.reservationFor.arrivalStation = JsonLd.toJson(code.returnArrivalStation);
         return [res, ret];
     }
-
-    const fcb = code.block('U_FLEX');
-    if (fcb && code.outboundDepartureStation.name && code.outboundArrivalStation.name) {
-        let res = JsonLd.newTrainReservation();
-        res.reservedTicket = node.result[0];
-        applyUic9183ToReservation(res, code);
-        // TODO needs different handling based on document type
-        res.reservationFor.departureDay = fcb.transportDocument[0].ticket.validFrom(fcb.issuingDetail.issueingDateTime);
-        res.reservationFor.departureStation = JsonLd.toJson(code.outboundDepartureStation);
-        res.reservationFor.arrivalStation = JsonLd.toJson(code.outboundArrivalStation);
-        return res;
-    }
 }
 
 function parseEvent(event) {
