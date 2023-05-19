@@ -36,5 +36,17 @@
         "function": "findBarcode",
         "mimeType": "message/rfc822",
         "script": "eventbrite.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^\\d{23}$",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parsePdf",
+        "mimeType": "application/pdf",
+        "script": "eventbrite.js"
     }
 ]
