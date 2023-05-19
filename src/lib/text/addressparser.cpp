@@ -23,8 +23,15 @@ void AddressParser::setFallbackCountry(const QString &countryCode)
 void AddressParser::parse(PostalAddress addr)
 {
     m_address = addr;
-    if (m_address.postalCode().isEmpty() && !m_address.addressLocality().isEmpty()) {
+    if ((m_address.postalCode().isEmpty() && !m_address.addressLocality().isEmpty()) ||
+        (!m_address.postalCode().isEmpty() && m_address.addressLocality().contains(m_address.postalCode())))
+    {
         splitPostalCode();
+    }
+
+    // crude fallback if the above doesn't work (yet), e.g. in the UK
+    if (!m_address.postalCode().isEmpty() && m_address.addressLocality().contains(m_address.postalCode())) {
+        m_address.setAddressLocality(m_address.addressLocality().remove(m_address.postalCode()).trimmed());
     }
 }
 
