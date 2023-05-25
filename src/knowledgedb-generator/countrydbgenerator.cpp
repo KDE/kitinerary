@@ -61,8 +61,8 @@ bool CountryDbGenerator::fetchCountryList()
 {
     const auto countryArray = WikiData::query(R"(
         SELECT DISTINCT ?country ?countryLabel ?isoCode ?demolished WHERE {
-            ?country (wdt:P31/wdt:P279*) wd:Q6256.
-            ?country wdt:P297 ?isoCode.
+            { ?country wdt:P31/wdt:P279* wd:Q6256. } UNION { ?country p:P31 [ ps:P31 [ wdt:279* wd:Q6256 ] ]. }
+            ?country p:P297 [ ps:P297 ?isoCode ].
             OPTIONAL { ?country wdt:P576 ?demolished. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
         } ORDER BY (?country))", "wikidata_country.json");
