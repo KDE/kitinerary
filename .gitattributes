@@ -2,3 +2,4 @@
 # SPDX-FileCopyrightText: none
 
 *.rct2 -text
+src/lib/knowledgedb/trainstationdb_data.cpp binary
