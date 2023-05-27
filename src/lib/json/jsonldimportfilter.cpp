@@ -325,6 +325,17 @@ QJsonArray JsonLdImportFilter::filterObject(const QJsonObject &obj)
         res.insert(QStringLiteral("@type"), type);
         filterEngine.filterRecursive(res);
 
+        // fold mainEntityOfPage into res
+        if (const auto mainEntityOfPage = res.value(QLatin1String("mainEntityOfPage")).toObject(); !mainEntityOfPage.isEmpty()) {
+            res.remove(QLatin1String("mainEntityOfPage"));
+            for (auto it = mainEntityOfPage.begin(); it != mainEntityOfPage.end(); ++it) {
+                if (it.key().startsWith(QLatin1Char('@')) || res.contains(it.key())) {
+                    continue;
+                }
+                res.insert(it.key(), it.value());
+            }
+        }
+
         if (type.endsWith(QLatin1String("Reservation"))) {
             filterReservation(res);
         }
