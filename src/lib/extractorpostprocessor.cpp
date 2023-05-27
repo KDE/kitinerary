@@ -119,6 +119,8 @@ void ExtractorPostprocessor::process(const QVector<QVariant> &data)
             elem = d->processPlace(elem.value<FoodEstablishment>());
         } else if (JsonLd::isA<Event>(elem)) {
             elem = d->processEvent(elem.value<Event>());
+        } else if (JsonLd::isA<LocalBusiness>(elem)) {
+            elem = d->processPlace(elem.value<LocalBusiness>());
         }
 
         // non-reservation types
