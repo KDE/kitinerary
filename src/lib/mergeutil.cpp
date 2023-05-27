@@ -100,7 +100,7 @@ static bool isSameEvent(const Event &lhs, const Event &rhs);
 static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs);
 static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs);
 static bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes);
-static bool isMinimalCancelationFor(const QVariant &r, const Reservation &cancel);
+static bool isMinimalCancelationFor(const Reservation &res, const Reservation &cancel);
 static bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs);
 
 bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes)
@@ -150,7 +150,7 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 
         // one side is a minimal cancellation, matches the reservation number and has a plausible modification time
         // in this case don't bother comparing content (which will fail), we accept this directly
-        if (isMinimalCancelationFor(lhs, rhsRes) || isMinimalCancelationFor(rhs, lhsRes)) {
+        if (isMinimalCancelationFor(lhsRes, rhsRes) || isMinimalCancelationFor(rhsRes, lhsRes)) {
             return true;
         }
     }
@@ -757,10 +757,9 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
     return res;
 }
 
-bool isMinimalCancelationFor(const QVariant &r, const Reservation &cancel)
+bool isMinimalCancelationFor(const Reservation &res, const Reservation &cancel)
 {
-    const auto res = JsonLd::convert<Reservation>(r);
-    if (res.reservationStatus() == Reservation::ReservationCancelled || cancel.reservationStatus() != Reservation::ReservationCancelled) {
+    if (cancel.reservationStatus() != Reservation::ReservationCancelled) {
         return false;
     }
     if (!equalAndPresent(res.reservationNumber(), cancel.reservationNumber())) {
@@ -769,7 +768,7 @@ bool isMinimalCancelationFor(const QVariant &r, const Reservation &cancel)
     if (!cancel.modifiedTime().isValid() || !cancel.reservationFor().isNull()) {
         return false;
     }
-    return SortUtil::startDateTime(r) > cancel.modifiedTime();
+    return SortUtil::startDateTime(res) > cancel.modifiedTime();
 }
 
 bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs)
