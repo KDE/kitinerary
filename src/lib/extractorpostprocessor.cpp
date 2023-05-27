@@ -584,6 +584,7 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
 
     // normalize strings
     addr.setStreetAddress(addr.streetAddress().simplified());
+    addr.setPostalCode(addr.postalCode().simplified());
     addr.setAddressLocality(addr.addressLocality().simplified());
     addr.setAddressRegion(addr.addressRegion().simplified());
 
