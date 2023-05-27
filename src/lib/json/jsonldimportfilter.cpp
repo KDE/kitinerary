@@ -245,12 +245,22 @@ static void filterEvent(QJsonObject &obj)
     unpackArray(obj, QLatin1String("location"));
 }
 
+static void filterPostalAddress(QJsonObject &obj)
+{
+    // unpack country objects
+    auto country = obj.value(QLatin1String("addressCountry"));
+    if (country.isObject()) {
+        obj.insert(QLatin1String("addressCountry"), country.toObject().value(QLatin1String("name")));
+    }
+}
+
 // filter functions applied to objects of the corresponding (already normalized) type
 // IMPORTANT: keep alphabetically sorted by type!
 static constexpr const JsonLdFilterEngine::TypeFilter type_filters[] = {
     { "Event", filterEvent },
     { "Flight", filterFlight },
     { "FoodEstablishment", filterFoodEstablishment },
+    { "PostalAddress", filterPostalAddress },
 };
 
 // property renaming
