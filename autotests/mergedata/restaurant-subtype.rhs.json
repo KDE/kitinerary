@@ -1,0 +1,20 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FoodEstablishment",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "DE",
+            "addressLocality": "Berlin",
+            "addressRegion": "Berlin",
+            "postalCode": "10963",
+            "streetAddress": "6 Tempelhofer Ufer"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 52.49776077270508,
+            "longitude": 13.387200355529785
+        },
+        "name": "Blue Nile"
+    }
+]

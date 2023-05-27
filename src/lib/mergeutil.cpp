@@ -119,12 +119,25 @@ bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes)
     return true;
 }
 
+bool isSubType(const QVariant &lhs, const QVariant &rhs)
+{
+    const auto lhsMt = QMetaType(lhs.userType());
+    const auto rhsMt = QMetaType(rhs.userType());
+    const auto lhsMo = lhsMt.metaObject();
+    const auto rhsMo = rhsMt.metaObject();
+    // for enums/flags, this is the enclosing meta object starting with Qt6!
+    if (!lhsMo || !rhsMo || (lhsMt.flags() & QMetaType::IsGadget) == 0  || (rhsMt.flags() & QMetaType::IsGadget) == 0) {
+        return false;
+    }
+    return lhsMo->inherits(rhsMo);
+}
+
 bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 {
     if (lhs.isNull() || rhs.isNull()) {
         return false;
     }
-    if (lhs.userType() != rhs.userType()) {
+    if (!isSubType(lhs, rhs) && !isSubType(rhs, lhs)) {
         return false;
     }
 
@@ -327,6 +340,10 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         ) {
             return false;
         }
+    }
+
+    if (lhs.userType() != rhs.userType()) {
+        return false;
     }
 
     // custom comparators
@@ -673,7 +690,7 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
     if (lhs.isNull()) {
         return rhs;
     }
-    if (lhs.userType() != rhs.userType()) {
+    if (!isSubType(lhs, rhs) && !isSubType(rhs, lhs)) {
         qCWarning(Log) << "type mismatch during merging:" << lhs << rhs;
         return {};
     }
@@ -688,6 +705,10 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
     }
 
     auto res = lhs;
+    if (lhs.userType() != rhs.userType() && isSubType(rhs, lhs)) {
+        res = rhs;
+    }
+
     const auto mo = QMetaType(res.userType()).metaObject();
     for (int i = 0; i < mo->propertyCount(); ++i) {
         const auto prop = mo->property(i);
