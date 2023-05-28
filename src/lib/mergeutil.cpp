@@ -92,8 +92,7 @@ static bool isSameFlight(const Flight &lhs, const Flight &rhs);
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs);
 static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs);
 static bool isSameBoatTrip(const BoatTrip &lhs, const BoatTrip &rhs);
-static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs);
-static bool isSameFoodEstablishment(const FoodEstablishment &lhs, const FoodEstablishment &rhs);
+static bool isSameLocalBusiness(const LocalBusiness &lhs, const LocalBusiness &rhs);
 static bool isSameTouristAttractionVisit(const TouristAttractionVisit &lhs, const TouristAttractionVisit &rhs);
 static bool isSameTouristAttraction(const TouristAttraction &lhs, const TouristAttraction &rhs);
 static bool isSameEvent(const Event &lhs, const Event &rhs);
@@ -120,12 +119,25 @@ bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes)
     return true;
 }
 
+bool isSubType(const QVariant &lhs, const QVariant &rhs)
+{
+    const auto lhsMt = QMetaType(lhs.userType());
+    const auto rhsMt = QMetaType(rhs.userType());
+    const auto lhsMo = lhsMt.metaObject();
+    const auto rhsMo = rhsMt.metaObject();
+    // for enums/flags, this is the enclosing meta object starting with Qt6!
+    if (!lhsMo || !rhsMo || (lhsMt.flags() & QMetaType::IsGadget) == 0  || (rhsMt.flags() & QMetaType::IsGadget) == 0) {
+        return false;
+    }
+    return lhsMo->inherits(rhsMo);
+}
+
 bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 {
     if (lhs.isNull() || rhs.isNull()) {
         return false;
     }
-    if (lhs.userType() != rhs.userType()) {
+    if (!isSubType(lhs, rhs) && !isSubType(rhs, lhs)) {
         return false;
     }
 
@@ -221,11 +233,6 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         const auto rhsRes = rhs.value<LodgingReservation>();
         return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.checkinTime().date() == rhsRes.checkinTime().date();
     }
-    if (JsonLd::isA<LodgingBusiness>(lhs)) {
-        const auto lhsHotel = lhs.value<LodgingBusiness>();
-        const auto rhsHotel = rhs.value<LodgingBusiness>();
-        return isSameLodingBusiness(lhsHotel, rhsHotel);
-    }
 
     // Rental Car
     if (JsonLd::isA<RentalCarReservation>(lhs)) {
@@ -271,10 +278,12 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
 
         return isSame(lhsRes.reservationFor(), rhsRes.reservationFor()) && lhsRes.startTime().date() == endTime.date();
     }
-    if (JsonLd::isA<FoodEstablishment>(lhs)) {
-        const auto lhsRestaurant = lhs.value<FoodEstablishment>();
-        const auto rhsRestaurant = rhs.value<FoodEstablishment>();
-        return isSameFoodEstablishment(lhsRestaurant, rhsRestaurant);
+
+    // generic busniess (hotel, restaurant)
+    if (JsonLd::canConvert<LocalBusiness>(lhs)) {
+        const auto lhsBusiness = JsonLd::convert<LocalBusiness>(lhs);
+        const auto rhsBusiness = JsonLd::convert<LocalBusiness>(rhs);
+        return isSameLocalBusiness(lhsBusiness, rhsBusiness);
     }
 
     // event reservation
@@ -331,6 +340,10 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         ) {
             return false;
         }
+    }
+
+    if (lhs.userType() != rhs.userType()) {
+        return false;
     }
 
     // custom comparators
@@ -472,18 +485,13 @@ static bool isSameBoatTrip(const BoatTrip& lhs, const BoatTrip& rhs)
         && LocationUtil::isSameLocation(lhs.arrivalBoatTerminal(), rhs.arrivalBoatTerminal());
 }
 
-static bool isSameLodingBusiness(const LodgingBusiness &lhs, const LodgingBusiness &rhs)
+static bool isSameLocalBusiness(const LocalBusiness &lhs, const LocalBusiness &rhs)
 {
     if (lhs.name().isEmpty() || rhs.name().isEmpty()) {
         return false;
     }
 
-    return lhs.name() == rhs.name();
-}
-
-static bool isSameFoodEstablishment(const FoodEstablishment &lhs, const FoodEstablishment &rhs)
-{
-    if (lhs.name().isEmpty() || rhs.name().isEmpty()) {
+    if (!LocationUtil::isSameLocation(lhs, rhs)) {
         return false;
     }
 
@@ -706,7 +714,7 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
     if (lhs.isNull()) {
         return rhs;
     }
-    if (lhs.userType() != rhs.userType()) {
+    if (!isSubType(lhs, rhs) && !isSubType(rhs, lhs)) {
         qCWarning(Log) << "type mismatch during merging:" << lhs << rhs;
         return {};
     }
@@ -721,6 +729,10 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
     }
 
     auto res = lhs;
+    if (lhs.userType() != rhs.userType() && isSubType(rhs, lhs)) {
+        res = rhs;
+    }
+
     const auto mo = QMetaType(res.userType()).metaObject();
     for (int i = 0; i < mo->propertyCount(); ++i) {
         const auto prop = mo->property(i);

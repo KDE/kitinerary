@@ -245,12 +245,22 @@ static void filterEvent(QJsonObject &obj)
     unpackArray(obj, QLatin1String("location"));
 }
 
+static void filterPostalAddress(QJsonObject &obj)
+{
+    // unpack country objects
+    auto country = obj.value(QLatin1String("addressCountry"));
+    if (country.isObject()) {
+        obj.insert(QLatin1String("addressCountry"), country.toObject().value(QLatin1String("name")));
+    }
+}
+
 // filter functions applied to objects of the corresponding (already normalized) type
 // IMPORTANT: keep alphabetically sorted by type!
 static constexpr const JsonLdFilterEngine::TypeFilter type_filters[] = {
     { "Event", filterEvent },
     { "Flight", filterFlight },
     { "FoodEstablishment", filterFoodEstablishment },
+    { "PostalAddress", filterPostalAddress },
 };
 
 // property renaming
@@ -314,6 +324,17 @@ QJsonArray JsonLdImportFilter::filterObject(const QJsonObject &obj)
         QJsonObject res(obj);
         res.insert(QStringLiteral("@type"), type);
         filterEngine.filterRecursive(res);
+
+        // fold mainEntityOfPage into res
+        if (const auto mainEntityOfPage = res.value(QLatin1String("mainEntityOfPage")).toObject(); !mainEntityOfPage.isEmpty()) {
+            res.remove(QLatin1String("mainEntityOfPage"));
+            for (auto it = mainEntityOfPage.begin(); it != mainEntityOfPage.end(); ++it) {
+                if (it.key().startsWith(QLatin1Char('@')) || res.contains(it.key())) {
+                    continue;
+                }
+                res.insert(it.key(), it.value());
+            }
+        }
 
         if (type.endsWith(QLatin1String("Reservation"))) {
             filterReservation(res);
