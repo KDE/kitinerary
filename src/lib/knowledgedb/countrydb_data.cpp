@@ -19,7 +19,6 @@ static const Country country_table[] = {
     {CountryId{"AM"}, DrivingSide::Right, {TypeC|TypeF}}, // Armenia
     {CountryId{"AO"}, DrivingSide::Right, {TypeC}}, // Angola
     {CountryId{"AR"}, DrivingSide::Right, {TypeC|TypeI}}, // Argentina
-    {CountryId{"AS"}, DrivingSide::Right, {TypeA|TypeB|TypeF|TypeI}}, // American Samoa
     {CountryId{"AT"}, DrivingSide::Right, {TypeC|TypeF}}, // Austria
     {CountryId{"AU"}, DrivingSide::Left, {TypeI}}, // Australia
     {CountryId{"AW"}, DrivingSide::Right, {TypeA|TypeB|TypeF}}, // Aruba
@@ -36,8 +35,9 @@ static const Country country_table[] = {
     {CountryId{"BN"}, DrivingSide::Left, {TypeG}}, // Brunei
     {CountryId{"BO"}, DrivingSide::Right, {TypeA|TypeC}}, // Bolivia
     {CountryId{"BR"}, DrivingSide::Right, {TypeC|TypeN}}, // Brazil
-    {CountryId{"BS"}, DrivingSide::Left, {TypeA|TypeB}}, // Bahamas
+    {CountryId{"BS"}, DrivingSide::Left, {TypeA|TypeB}}, // The Bahamas
     {CountryId{"BT"}, DrivingSide::Left, {TypeC|TypeD|TypeF|TypeG|TypeM}}, // Bhutan
+    {CountryId{"BU"}, DrivingSide::Right, {TypeC|TypeD|TypeF|TypeG}}, // Myanmar
     {CountryId{"BW"}, DrivingSide::Left, {TypeD|TypeG|TypeM}}, // Botswana
     {CountryId{"BY"}, DrivingSide::Right, {TypeC|TypeF}}, // Belarus
     {CountryId{"BZ"}, DrivingSide::Right, {TypeA|TypeB|TypeG}}, // Belize
@@ -56,7 +56,7 @@ static const Country country_table[] = {
     {CountryId{"CU"}, DrivingSide::Right, {TypeA|TypeB}}, // Cuba
     {CountryId{"CV"}, DrivingSide::Right, {TypeC|TypeF}}, // Cape Verde
     {CountryId{"CW"}, DrivingSide::Right, {TypeA|TypeB}}, // Curaçao
-    {CountryId{"CY"}, DrivingSide::Left, {TypeG}}, // Republic of Cyprus
+    {CountryId{"CY"}, DrivingSide::Left, {TypeG}}, // Cyprus
     {CountryId{"CZ"}, DrivingSide::Right, {TypeC|TypeE}}, // Czech Republic
     {CountryId{"DE"}, DrivingSide::Right, {TypeC|TypeF}}, // Germany
     {CountryId{"DJ"}, DrivingSide::Right, {TypeC|TypeE}}, // Djibouti
@@ -81,8 +81,9 @@ static const Country country_table[] = {
     {CountryId{"GD"}, DrivingSide::Left, {TypeG}}, // Grenada
     {CountryId{"GE"}, DrivingSide::Right, {TypeC|TypeF}}, // Georgia
     {CountryId{"GH"}, DrivingSide::Right, {TypeD|TypeG}}, // Ghana
+    {CountryId{"GI"}, DrivingSide::Right, {TypeC|TypeG}}, // Gibraltar
     {CountryId{"GL"}, DrivingSide::Right, {TypeC|TypeE|TypeF|TypeK}}, // Greenland
-    {CountryId{"GM"}, DrivingSide::Right, {TypeG}}, // Gambia
+    {CountryId{"GM"}, DrivingSide::Right, {TypeG}}, // The Gambia
     {CountryId{"GN"}, DrivingSide::Right, {TypeC|TypeF|TypeK}}, // Guinea
     {CountryId{"GQ"}, DrivingSide::Right, {TypeC|TypeE}}, // Equatorial Guinea
     {CountryId{"GR"}, DrivingSide::Right, {TypeC|TypeF}}, // Greece
@@ -94,7 +95,7 @@ static const Country country_table[] = {
     {CountryId{"HT"}, DrivingSide::Right, {TypeA|TypeB}}, // Haiti
     {CountryId{"HU"}, DrivingSide::Right, {TypeC|TypeF}}, // Hungary
     {CountryId{"ID"}, DrivingSide::Left, {TypeC|TypeF}}, // Indonesia
-    {CountryId{"IE"}, DrivingSide::Left, {TypeG}}, // Ireland
+    {CountryId{"IE"}, DrivingSide::Left, {TypeG}}, // Republic of Ireland
     {CountryId{"IL"}, DrivingSide::Right, {TypeC|TypeH|TypeM}}, // Israel
     {CountryId{"IN"}, DrivingSide::Left, {TypeC|TypeD|TypeM}}, // India
     {CountryId{"IQ"}, DrivingSide::Right, {TypeC|TypeD|TypeG}}, // Iraq
@@ -197,6 +198,7 @@ static const Country country_table[] = {
     {CountryId{"TM"}, DrivingSide::Right, {TypeB|TypeC|TypeF}}, // Turkmenistan
     {CountryId{"TN"}, DrivingSide::Right, {TypeC|TypeE}}, // Tunisia
     {CountryId{"TO"}, DrivingSide::Left, {TypeI}}, // Tonga
+    {CountryId{"TP"}, DrivingSide::Left, {TypeC|TypeE|TypeF|TypeI}}, // East Timor
     {CountryId{"TR"}, DrivingSide::Right, {TypeC|TypeF}}, // Turkey
     {CountryId{"TT"}, DrivingSide::Left, {TypeA|TypeB}}, // Trinidad and Tobago
     {CountryId{"TV"}, DrivingSide::Left, {TypeI}}, // Tuvalu

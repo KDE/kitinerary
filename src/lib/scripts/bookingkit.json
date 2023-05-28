@@ -1,0 +1,10 @@
+[{
+    "mimeType": "application/vnd.apple.pkpass",
+    "filter": [ {
+        "field": "passTypeIdentifier",
+        "match": "pass.net.bookingkit.tickets",
+        "mimeType": "application/vnd.apple.pkpass",
+        "scope": "Current"
+    } ],
+    "script": "bookingkit.js"
+}]
