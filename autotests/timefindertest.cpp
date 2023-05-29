@@ -40,6 +40,7 @@ private Q_SLOTS:
         QTest::newRow("Chinese full/pm") << s("下午7點45分") << QTime(19, 45);
         QTest::newRow("Greek pm") << s("10:40 μ.μ.") << QTime(22, 40);
         QTest::newRow("Arabic pm") << s("11:30م ") << QTime(23, 30);
+        QTest::newRow("Hrs") << s("1145 Hrs") << QTime(11, 45);
         // TODO tests for RLM/LRM control chars, and Arabic times with indic numbers
     }
 
