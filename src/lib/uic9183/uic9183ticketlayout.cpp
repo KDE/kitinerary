@@ -215,3 +215,21 @@ std::vector<Uic9183TicketLayoutField> Uic9183TicketLayout::fields(int row, int c
     }
     return result;
 }
+
+std::vector<Uic9183TicketLayoutField> Uic9183TicketLayout::containedFields(int row, int column, int width, int height) const
+{
+    std::vector<Uic9183TicketLayoutField> result;
+    for (auto f = firstField(); !f.isNull(); f = f.next()) {
+        // there's non-compliant samples out there with zero field sizes...
+        const auto effectiveHeight = std::max(f.height(), 1);
+        if (f.row() + effectiveHeight - 1 > row + height - 1 || f.row() < row ) {
+            continue;
+        }
+        const auto effectiveFieldWidth = f.width() > 0 ? f.width() : f.size();
+        if (f.column() + effectiveFieldWidth - 1 > column + width + 1 || f.column() < column) {
+            continue;
+        }
+        result.push_back(f);
+    }
+    return result;
+}
