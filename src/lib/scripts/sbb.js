@@ -110,6 +110,7 @@ function parseQrCode(content) {
     // convert unbound passes to a Ticket
     if (!res.reservationFor.departureStation.name) {
         res.reservedTicket.underName = res.underName;
+        res.reservedTicket.ticketNumber = res.reservationNumber;
         return res.reservedTicket;
     }
 
