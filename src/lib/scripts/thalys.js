@@ -64,15 +64,15 @@ function parsePdfTicket(pdf, node, triggerNode)
     const depDay = page.text.match(/\d\d\/\d{2}\/\d{4} +(\d{2})\/(\d{2})\/(\d{4})/);
     res.reservationFor.departureDay = depDay[3] + '-' + depDay[2] + '-' + depDay[1] + 'T00:00:00';
 
-    const dep = page.textInRect(0.0, 0.15, 0.35, 0.3).match(/([\s\S]+)\n(?:DÉPART À|ABFAHRT)\n(\d\d:\d\d)/);
+    const dep = page.textInRect(0.0, 0.15, 0.35, 0.3).match(/([\s\S]+)\n(?:DÉPART À|ABFAHRT|DEPARTURE AT)\n(\d\d:\d\d)/);
     res.reservationFor.departureStation.name = dep[1];
     res.reservationFor.departureTime = res.reservationFor.departureDay.substr(0, 11) + dep[2];
 
-    const arr = page.textInRect(0.35, 0.15, 0.65, 0.3).match(/([\s\S]+)\n(?:ARRIVÉE À|ANKUNFT)\n(\d\d:\d\d)/);
+    const arr = page.textInRect(0.35, 0.15, 0.65, 0.3).match(/([\s\S]+)\n(?:ARRIVÉE À|ANKUNFT|ARRIVAL AT)\n(\d\d:\d\d)/);
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalTime = res.reservationFor.departureDay.substr(0, 11) + arr[2];
 
-    const passenger = page.text.match(/(?:PASSAGER|FAHRGAST)\n(.*)\n/);
+    const passenger = page.text.match(/(?:PASSAGER|FAHRGAST|PASSENGER)\n(.*)\n/);
     res.underName.name = passenger[1];
 
     return res;
