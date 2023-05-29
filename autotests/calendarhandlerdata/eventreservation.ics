@@ -14,8 +14,9 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "20126"\,"streetAddress":"Piazza dell'Ateneo Nuovo\, 1"}\,"name":
  "University of Milano-Bicocca"}\,"name":"Akademy 2019"\,"startDate":
  {"@type":"QDateTime"\,"@value":"2019-09-07T09:30:00+02:00"\,"timezone":
- "Europe/Rome"}}\,"reservationNumber":"42"\,"reservationStatus":"http://schema.org/ReservationConfirmed","underName":{"@type":
- "Person"\,"name":"Dr Konqui"}}\,{"@context":"http://schema.org"\,"@type":
+ "Europe/Rome"}}\,"reservationNumber":"42"\,"reservationStatus":"http:
+ //schema.org/ReservationConfirmed"\,"underName":{"@type":"Person"\,"name":
+ "Katie Dragon"}}\,{"@context":"http://schema.org"\,"@type":
  "EventReservation"\,"reservationFor":{"@type":"Event"\,"endDate":{"@type":
  "QDateTime"\,"@value":"2019-07-13T16:30:00+02:00"\,"timezone":
  "Europe/Rome"}\,"location":{"@type":"Place"\,"address":{"@type":
@@ -24,12 +25,13 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "20126"\,"streetAddress":"Piazza dell'Ateneo Nuovo\, 1"}\,"name":
  "University of Milano-Bicocca"}\,"name":"Akademy 2019"\,"startDate":
  {"@type":"QDateTime"\,"@value":"2019-09-07T09:30:00+02:00"\,"timezone":
- "Europe/Rome"}}\,"reservationNumber":"42"\,"reservationStatus":"http://schema.org/ReservationConfirmed","underName":{"@type":
- "Person"\,"name":"Katie Dragon"}}]
+ "Europe/Rome"}}\,"reservationNumber":"42"\,"reservationStatus":"http:
+ //schema.org/ReservationConfirmed"\,"underName":{"@type":"Person"\,"name":
+ "Konqui"}}]
 CREATED:20171227T111649Z
 UID:KIT-1234567890-1b22236a-21ff-4885-8c99-b3b2bbca062c
 LAST-MODIFIED:20171227T111649Z
-DESCRIPTION:Piazza dell'Ateneo Nuovo\, 1\n20126 Milan Lombardy\nItaly\n\nDr Konqui\nBooking reference: 42\nKatie Dragon\nBooking reference: 42
+DESCRIPTION:Piazza dell'Ateneo Nuovo\, 1\n20126 Milan Lombardy\nItaly\n\nKatie Dragon\nBooking reference: 42\nKonqui\nBooking reference: 42
 SUMMARY:Akademy 2019
 LOCATION:University of Milano-Bicocca
 DTSTART;TZID=Europe/Rome:20190907T093000
