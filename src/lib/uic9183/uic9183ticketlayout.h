@@ -100,6 +100,8 @@ public:
 
     /** All fields covering the given area. */
     std::vector<Uic9183TicketLayoutField> fields(int row, int column, int width, int height) const;
+    /** All fields contained in the given area. */
+    std::vector<Uic9183TicketLayoutField> containedFields(int row, int column, int width, int height) const;
 
     static constexpr const char RecordId[] = "U_TLAY";
 private:
