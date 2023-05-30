@@ -59,7 +59,7 @@ static bool equalAndPresent(QStringView lhs, QStringView rhs, Qt::CaseSensitivit
     return !lhs.isEmpty() && (lhs.compare(rhs, caseSensitive) == 0);
 }
 template <typename T>
-static std::enable_if<!std::is_same_v<T, QString>, bool>::type equalAndPresent(const T &lhs, const T &rhs)
+static typename std::enable_if<!std::is_same_v<T, QString>, bool>::type equalAndPresent(const T &lhs, const T &rhs)
 {
     return lhs.isValid() && lhs == rhs;
 }
