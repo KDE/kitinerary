@@ -56,7 +56,10 @@ QDate Rct2TicketPrivate::firstDayOfValidity() const
 
 QDateTime Rct2TicketPrivate::parseTime(const QString &dateStr, const QString &timeStr) const
 {
-    const auto d = QDate::fromString(dateStr, QStringLiteral("dd.MM"));
+    auto d = QDate::fromString(dateStr, QStringLiteral("dd.MM"));
+    if (!d.isValid()) {
+        d = QDate::fromString(dateStr, QStringLiteral("dd/MM"));
+    }
     auto t = QTime::fromString(timeStr, QStringLiteral("hh:mm"));
     if (!t.isValid()) {
         t = QTime::fromString(timeStr, QStringLiteral("hh.mm"));
@@ -222,8 +225,16 @@ static QString rct2Clean(const QString &s)
 
 QString Rct2Ticket::outboundDepartureStation() const
 {
+    if (type() == RailPass) {
+        return {};
+    }
+
     // 6, 13, 17, 1 would be according to spec, but why stick to that...
-    return type() != RailPass ? rct2Clean(d->layout.text(6, 12, 18, 1).trimmed()) : QString();
+    const auto fields = d->layout.containedFields(6, 13, 17, 1);
+    if (fields.size() == 1) {
+        return rct2Clean(fields[0].text().trimmed());
+    }
+    return rct2Clean(d->layout.text(6, 12, 18, 1).trimmed());
 }
 
 QString Rct2Ticket::outboundArrivalStation() const

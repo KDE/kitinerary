@@ -30,6 +30,7 @@
 #include <QDebug>
 #include <QMetaObject>
 #include <QMetaProperty>
+#include <QRegularExpression>
 #include <QTimeZone>
 
 #include <cmath>
@@ -53,12 +54,12 @@ static std::vector<CompareFunc> s_mergeCompareFuncs;
 using namespace KItinerary;
 
 /* Checks that @p lhs and @p rhs are non-empty and equal. */
-static bool equalAndPresent(const QString &lhs, const QString &rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
+static bool equalAndPresent(QStringView lhs, QStringView rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
 {
     return !lhs.isEmpty() && (lhs.compare(rhs, caseSensitive) == 0);
 }
 template <typename T>
-static bool equalAndPresent(const T &lhs, const T &rhs)
+static typename std::enable_if<!std::is_same_v<T, QString>, bool>::type equalAndPresent(const T &lhs, const T &rhs)
 {
     return lhs.isValid() && lhs == rhs;
 }
@@ -415,8 +416,24 @@ static bool isSameLineName(const Iter &lBegin, const Iter &lEnd, const Iter &rBe
 
 static bool isSameLineName(const QString &lhs, const QString &rhs)
 {
-    return isSameLineName(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())
-        || isSameLineName(lhs.rbegin(), lhs.rend(), rhs.rbegin(), rhs.rend());
+    if (isSameLineName(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())
+        || isSameLineName(lhs.rbegin(), lhs.rend(), rhs.rbegin(), rhs.rend()))
+    {
+        return true;
+    }
+
+    // deal with both line and route numbers being specified
+    static QRegularExpression rx(QStringLiteral(R"(^(?<type>[A-Za-z]+) (?<line>\d+)(?: \((?<route>\d{4,})\))?$)"));
+    const auto lhsMatch = rx.match(lhs);
+    const auto rhsMatch = rx.match(rhs);
+    if (!lhsMatch.hasMatch() || !rhsMatch.hasMatch()) {
+        return false;
+    }
+    return equalAndPresent(lhsMatch.capturedView(u"type"), rhsMatch.capturedView(u"type")) && (
+           (equalAndPresent(lhsMatch.capturedView(u"line"), rhsMatch.capturedView(u"line")) && equalAndPresent(lhsMatch.capturedView(u"route"), rhsMatch.capturedView(u"route")))
+        || (equalAndPresent(lhsMatch.capturedView(u"line"), rhsMatch.capturedView(u"route")) && lhsMatch.capturedView(u"route").isEmpty())
+        || (equalAndPresent(lhsMatch.capturedView(u"route"), rhsMatch.capturedView(u"line")) && rhsMatch.capturedView(u"route").isEmpty())
+    );
 }
 
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)

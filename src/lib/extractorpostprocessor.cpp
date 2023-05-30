@@ -51,6 +51,7 @@
 #endif
 
 #include <algorithm>
+#include <cstring>
 
 using namespace KItinerary;
 
@@ -531,27 +532,43 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
     return res;
 }
 
+static constexpr const char* name_prefixes[] = {
+    "DR", "MR", "MRS", "MS"
+};
+
+static bool isSeparator(QChar c)
+{
+    return c == QLatin1Char(' ') || c == QLatin1Char('/');
+}
+
+static QString simplifyNamePart(QString n)
+{
+    n = n.simplified();
+
+    for (auto prefix : name_prefixes) {
+        const int prefixLen = std::strlen(prefix);
+        if (n.size() > prefixLen + 2 && n.startsWith(QLatin1String(prefix, prefixLen), Qt::CaseInsensitive) && isSeparator(n[prefixLen])) {
+            return n.mid(prefixLen + 1);
+        }
+        if (n.size() > prefixLen + 2 && n.endsWith(QLatin1String(prefix, prefixLen), Qt::CaseInsensitive) && isSeparator(n[n.size() - prefixLen - 1])) {
+            return n.left(n.size() - prefixLen - 1);
+        }
+    }
+
+    return n;
+}
 
 KItinerary::Person ExtractorPostprocessorPrivate::processPerson(KItinerary::Person person) const
 {
-    person.setName(person.name().simplified());
-    person.setFamilyName(person.familyName().simplified());
-    person.setGivenName(person.givenName().simplified());
+    person.setName(simplifyNamePart(person.name()));
+    person.setFamilyName(simplifyNamePart(person.familyName()));
+    person.setGivenName(simplifyNamePart(person.givenName()));
 
     // fill name with name parts, if it's empty
     if ((person.name().isEmpty() || person.name() == person.familyName() || person.name() == person.givenName())
         && !person.familyName().isEmpty() && !person.givenName().isEmpty())
     {
         person.setName(person.givenName() + QLatin1Char(' ') + person.familyName());
-    }
-
-    // strip prefixes, they break comparisons
-    static const char* const honorificPrefixes[] = { "MR ", "MS ", "MRS " };
-    for (auto prefix : honorificPrefixes) {
-        if (person.name().startsWith(QLatin1String(prefix), Qt::CaseInsensitive)) {
-            person.setName(person.name().mid(strlen(prefix)));
-            break;
-        }
     }
 
     return person;

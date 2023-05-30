@@ -52,6 +52,7 @@ void TimeFinder::findTimes(QStringView text)
         QRegularExpression(QStringLiteral("(?:(?<am>上午)|(?<pm>下午))(?<hour>\\d?\\d):(?<min>\\d?\\d)")),
         QRegularExpression(QStringLiteral("\\b(?<hour>\\d?\\d)[:h](?<min>\\d\\d)")),
         QRegularExpression(QStringLiteral("\\b(?<hour>\\d\\d)\\.(?<min>\\d\\d)(?=$|[^.])")),
+        QRegularExpression(QStringLiteral("\\b(?<hour>\\d\\d)(?<min>\\d\\d) Hrs")),
     };
     static const QRegularExpression rxApSuffixes[] = {
         QRegularExpression(QStringLiteral("(?<pm> ?(?:pm|PM|p\\.m\\.|م|μ\\.μ\\.))")),

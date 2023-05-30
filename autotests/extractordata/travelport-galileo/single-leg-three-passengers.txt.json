@@ -52,8 +52,8 @@
         "underName": {
             "@type": "Person",
             "familyName": "KONQUI",
-            "givenName": "DOCTOR MR",
-            "name": "DOCTOR MR KONQUI"
+            "givenName": "DOCTOR",
+            "name": "DOCTOR KONQUI"
         }
     },
     {
@@ -109,8 +109,8 @@
         "underName": {
             "@type": "Person",
             "familyName": "KONQUI",
-            "givenName": "KATIE MS",
-            "name": "KATIE MS KONQUI"
+            "givenName": "KATIE",
+            "name": "KATIE KONQUI"
         }
     },
     {
