@@ -240,6 +240,17 @@ private Q_SLOTS:
         QTest::newRow("number mismatch") << QString() << _("123") << QString() << _("234") << false;
         QTest::newRow("number prefix") << QString() << _("123") << QString() << _("12") << false;
         QTest::newRow("number prefix2") << QString() << _("123") << QString() << _("23") << false;
+
+        QTest::newRow("train-and-line-number-0") << QString() << _("RE 13 (20070)") << QString() << _("RE 13 (20072)") << false;
+        QTest::newRow("train-and-line-number-1") << QString() << _("RE 13 (20070)") << QString() << _("RE 20070") << true;
+        QTest::newRow("train-and-line-number-2") << QString() << _("RE 13 (20070)") << QString() << _("RE 13") << true;
+        //QTest::newRow("train-and-line-number-3") << QString() << _("RE 13 (20070)") << QString() << _("RE") <<  false;
+        QTest::newRow("train-and-line-number-4") << QString() << _("RB 33 (10323)") << QString() << _("RE 33") << false;
+        QTest::newRow("train-and-line-number-5") << QString() << _("RB 33 (10323)") << QString() << _("RE 10323") << false;
+        QTest::newRow("train-and-line-number-6") << QString() << _("RB 33 (10323)") << QString() << _("RB 10323") << true;
+        QTest::newRow("train-and-line-number-7") << QString() << _("RB 33 (10323)") << QString() << _("RB 33") << true;
+        QTest::newRow("train-and-line-number-8") << QString() << _("RB 33 (10323)") << QString() << _("RB 23") << false;
+        QTest::newRow("train-and-line-number-9") << QString() << _("RB 33 (10323)") << QString() << _("RB 23 (10323)") << false;
     }
 
     void testIsSameTrain()
