@@ -68,5 +68,5 @@ void VdvDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
     ticket.setValidFrom(vdv.beginDateTime());
     ticket.setValidUntil(vdv.endDateTime());
     ticket.setUnderName(vdv.person());
-    node.addResult(QVector<QVariant>({ticket}));
+    node.addResult(QList<QVariant>({ticket}));
 }

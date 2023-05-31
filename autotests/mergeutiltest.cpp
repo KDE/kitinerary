@@ -148,7 +148,7 @@ private Q_SLOTS:
             {_("BJAERN LASTNAME"), _("BJAERN"), _("LASTNAME")},
         };
 
-        QTest::newRow("partial") << QVector<QStringList> {
+        QTest::newRow("partial") << QList<QStringList> {
             {_("VOLKER KRAUSE"), _("Volker"), _("Krause")},
             {_("KRAUSE"),{}, {}}
         };

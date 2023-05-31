@@ -169,7 +169,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     if (validator.isValidElement(trip)) {
         trip.setProvider(p.issuer());
 
-        QVector<QVariant> results;
+        QList<QVariant> results;
         TrainReservation res;
         res.setReservationFor(trip);
         res.setReservationNumber(p.pnr());
@@ -192,6 +192,6 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     ticket.setUnderName(p.person());
     ticket.setValidFrom(p.validFrom());
     ticket.setValidUntil(p.validUntil());
-    node.addResult(QVector<QVariant>({ticket}));
+    node.addResult(QList<QVariant>({ticket}));
 }
 
