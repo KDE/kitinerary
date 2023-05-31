@@ -27,6 +27,7 @@ ecm_add_test(vdvtickettest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::
 ecm_add_test(rct2parsertest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)
 ecm_add_test(eraelbtickettest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)
 ecm_add_test(rsp6decodertest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary OpenSSL::Crypto)
+ecm_add_test(plistreadertest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)
 ecm_add_test(jsapitest.cpp ../src/lib/jsapi/jsonld.cpp TEST_NAME jsapitest LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary Qt${QT_MAJOR_VERSION}::Qml)
 ecm_add_test(bitarraytest.cpp ../src/lib/jsapi/bitarray.cpp ../src/lib/asn1/bitvectorview.cpp TEST_NAME bitarraytest LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)
 ecm_add_test(structureddataextractortest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)

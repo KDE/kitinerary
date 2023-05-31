@@ -1,0 +1,62 @@
+{
+    "SGEventMetadataKey": {
+        "SGEventMetadataBundleIdKey": "com.apple.mail",
+        "SGEventMetadataCategoryDescriptionKey": "Train",
+        "SGEventMetadataConfidenceKey": 1,
+        "SGEventMetadataEventActivitiesKey": [
+        ],
+        "SGEventMetadataParticipantsKey": [
+        ],
+        "SGEventMetadataSchemaOrgKey": [
+            {
+                "@context": "http://schema.org",
+                "@type": "http://schema.org/TrainReservation",
+                "reservationFor": {
+                    "@type": "http://schema.org/TrainTrip",
+                    "arrivalStation": {
+                        "@type": "http://schema.org/TrainStation",
+                        "name": "Station B"
+                    },
+                    "arrivalTime": "2020-03-01T13:17:00+00:00",
+                    "departureStation": {
+                        "@type": "http://schema.org/TrainStation",
+                        "name": "Station AAAAAAAAAA"
+                    },
+                    "departureTime": "2020-03-01T12:03:00+00:00",
+                    "underName": {
+                        "@type": "http://schema.org/Person"
+                    }
+                },
+                "reservationId": "XY012345 , 03/01/2020 13:03",
+                "reservationNumber": "XY012345",
+                "reservationStatus": "http://schema.org/ReservationConfirmed"
+            }
+        ],
+        "SGEventMetadataTypeKey": "StructuredEvent"
+    },
+    "SuggestionsSchemaOrg": [
+        {
+            "@context": "http://schema.org",
+            "@type": "http://schema.org/TrainReservation",
+            "reservationFor": {
+                "@type": "http://schema.org/TrainTrip",
+                "arrivalStation": {
+                    "@type": "http://schema.org/TrainStation",
+                    "name": "Station B"
+                },
+                "arrivalTime": "2020-03-01T13:17:00+00:00",
+                "departureStation": {
+                    "@type": "http://schema.org/TrainStation",
+                    "name": "Station AAAAAAAAAA"
+                },
+                "departureTime": "2020-03-01T12:03:00+00:00",
+                "underName": {
+                    "@type": "http://schema.org/Person"
+                }
+            },
+            "reservationId": "XY012345 , 03/01/2020 13:03",
+            "reservationNumber": "XY012345",
+            "reservationStatus": "http://schema.org/ReservationConfirmed"
+        }
+    ]
+}

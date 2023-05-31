@@ -88,6 +88,8 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     pdf/popplerglobalparams.cpp
     pdf/popplerutils.cpp
 
+    plist/plistreader.cpp
+
     processors/barcodedocumentprocessorhelper.cpp
     processors/binarydocumentprocessor.cpp
     processors/eradocumentprocessor.cpp

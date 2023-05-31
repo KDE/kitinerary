@@ -34,6 +34,13 @@ namespace Test {
         }
         return true;
     }
+
+    inline QByteArray readFile(const QString &fn)
+    {
+        QFile f(fn);
+        f.open(QFile::ReadOnly);
+        return f.readAll();
+    }
 }
 
 #endif

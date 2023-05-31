@@ -2,4 +2,5 @@
 # SPDX-FileCopyrightText: none
 
 *.rct2 -text
+*.plist -text
 src/lib/knowledgedb/trainstationdb_data.cpp binary
