@@ -290,14 +290,23 @@ static QVariant createInstance(const QJsonObject& obj, const QString &type)
     return {};
 }
 
+static QString jsonLdTypeName(const QJsonObject &obj)
+{
+    QString n = obj.value(QLatin1String("@type")).toString();
+    if (n.startsWith(QLatin1String("http://schema.org/"))) { // strip fully qualified names
+        n = n.mid(18);
+    }
+    return n;
+}
+
 static QVariant createInstance(const QJsonObject &obj)
 {
-    return createInstance(obj, obj.value(QLatin1String("@type")).toString());
+    return createInstance(obj, jsonLdTypeName(obj));
 }
 
 static QVariant createInstance(const QJsonObject &obj, const QMetaProperty &prop)
 {
-    const auto type = obj.value(QLatin1String("@type")).toString();
+    const auto type = jsonLdTypeName(obj);
     if (!type.isEmpty()) {
         return createInstance(obj, type);
     }
