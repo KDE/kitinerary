@@ -588,30 +588,18 @@ TrainStation Uic9183Parser::returnArrivalStation() const
     return station;
 }
 
-static QString fcbClassCodeToString(Fcb::TravelClassType classCode)
-{
-    switch (classCode) {
-        case Fcb::notApplicable: return {};
-        case Fcb::first: return QString::number(1);
-        case Fcb::second: return QString::number(2);
-        default:
-            qCWarning(Log) << "Unhandled FCB class code" << classCode;
-    }
-    return {};
-}
-
 QString Uic9183Parser::seatingType() const
 {
     if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && fcb.transportDocument.size() == 1) {
         const auto doc = fcb.transportDocument.at(0);
         if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            return fcbClassCodeToString(doc.ticket.value<Fcb::ReservationData>().classCode);
+            return FcbUtil::classCodeToString(doc.ticket.value<Fcb::ReservationData>().classCode);
         }
         if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            return fcbClassCodeToString(doc.ticket.value<Fcb::OpenTicketData>().classCode);
+            return FcbUtil::classCodeToString(doc.ticket.value<Fcb::OpenTicketData>().classCode);
         }
         if (doc.ticket.userType() == qMetaTypeId<Fcb::PassData>()) {
-            return fcbClassCodeToString(doc.ticket.value<Fcb::PassData>().classCode);
+            return FcbUtil::classCodeToString(doc.ticket.value<Fcb::PassData>().classCode);
         }
     }
 
