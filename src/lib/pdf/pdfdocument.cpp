@@ -201,6 +201,31 @@ QVariantList PdfPage::linksInRect(double left, double top, double right, double 
     return l;
 }
 
+static constexpr inline double pdfToMM(double points)
+{
+    return points * 25.4 / 72.0;
+}
+
+int PdfPage::width() const
+{
+    const auto page = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1);
+    const auto rot = page->getRotate();
+    if (rot == 90 || rot == 270) {
+        return pdfToMM(page->getCropHeight());
+    }
+    return pdfToMM(page->getCropWidth());
+}
+
+int PdfPage::height() const
+{
+    const auto page = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1);
+    const auto rot = page->getRotate();
+    if (rot == 90 || rot == 270) {
+        return pdfToMM(page->getCropWidth());
+    }
+    return pdfToMM(page->getCropHeight());
+}
+
 
 PdfDocument::PdfDocument(QObject *parent)
     : QObject(parent)
