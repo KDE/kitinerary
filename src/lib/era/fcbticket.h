@@ -506,7 +506,7 @@ class ReservationData {
     UPER_ELEMENT_OPTIONAL(QByteArray, toStationIA5)
     UPER_ELEMENT_OPTIONAL(QString, fromStationNameUTF8)
     UPER_ELEMENT_OPTIONAL(QString, toStationNameUTF8)
-    UPER_ELEMENT_OPTIONAL(int, departureTime)
+    UPER_ELEMENT(int, departureTime)
     UPER_ELEMENT_OPTIONAL(int, departureUTCOffset)
     UPER_ELEMENT_DEFAULT(int, arrivalDate, 0)
     UPER_ELEMENT_OPTIONAL(int, arrivalTime)

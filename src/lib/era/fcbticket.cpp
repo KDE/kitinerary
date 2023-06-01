@@ -392,7 +392,7 @@ void Fcb::ReservationData::decode(UPERDecoder &decoder)
     FCB_READ_INT_IA5_PAIR(toStation, 1, 9999999);
     FCB_READ_UTF8STRING(fromStationNameUTF8);
     FCB_READ_UTF8STRING(toStationNameUTF8);
-    FCB_READ_CONSTRAINED_INT(departureTime, 0, 1440);
+    departureTime = decoder.readConstrainedWholeNumber(0, 1440);
     FCB_READ_CONSTRAINED_INT(departureUTCOffset, -60, 60);
     FCB_READ_CONSTRAINED_INT(arrivalDate, 0, 20);
     FCB_READ_CONSTRAINED_INT(arrivalTime, 0, 1440);
