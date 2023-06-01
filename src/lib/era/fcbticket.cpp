@@ -186,6 +186,16 @@ void Fcb::TrainLinkType::decode(UPERDecoder &decoder)
     FCB_READ_UTF8STRING(toStationNameUTF8);
 }
 
+QDateTime Fcb::TrainLinkType::departureDateTime(const QDateTime &issueingDateTime) const
+{
+    QDate date = issueingDateTime.date().addDays(travelDate);
+    QTime time = QTime(0, 0).addSecs(departureTime * 60);
+    if (departureUTCOffsetIsSet()) {
+        return QDateTime(date, time, Qt::OffsetFromUTC, -departureUTCOffset * 15 * 60);
+    }
+    return QDateTime(date, time);
+}
+
 void Fcb::ViaStationType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);

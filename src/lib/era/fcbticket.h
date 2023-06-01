@@ -199,6 +199,9 @@ class TrainLinkType {
     UPER_ELEMENT_OPTIONAL(QString, fromStationNameUTF8)
     UPER_ELEMENT_OPTIONAL(QString, toStationNameUTF8)
     UPER_GADGET_FINALIZE
+
+public:
+    Q_INVOKABLE QDateTime departureDateTime(const QDateTime &issueingDateTime) const;
 };
 
 /** A set of via stations. */
