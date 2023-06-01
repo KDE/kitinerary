@@ -102,6 +102,7 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     processors/mimedocumentprocessor.cpp
     processors/pdfdocumentprocessor.cpp
     processors/pkpassdocumentprocessor.cpp
+    processors/plistdocumentprocessor.cpp
     processors/textdocumentprocessor.cpp
     processors/uic9183documentprocessor.cpp
     processors/vdvdocumentprocessor.cpp
