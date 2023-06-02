@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^\\d{6}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdfTicket",
+    "mimeType": "application/pdf",
+    "script": "pasazieru-vilciens.js"
+}
