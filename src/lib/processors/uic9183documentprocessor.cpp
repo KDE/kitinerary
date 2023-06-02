@@ -278,27 +278,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
         }
     }
 
-    ticket.setTicketedSeat(seat);
-
-    // we have enough for a full TrainReservation result
-    ExtractorValidator validator;
-    validator.setAcceptedTypes<TrainTrip>();
-    if (validator.isValidElement(trip)) {
-        trip.setProvider(p.issuer());
-
-        QList<QVariant> results;
-        TrainReservation res;
-        res.setReservationFor(trip);
-        res.setReservationNumber(p.pnr());
-        res.setReservedTicket(ticket);
-        res.setUnderName(p.person());
-        results.push_back(res);
-
-        if (validator.isValidElement(returnTrip)) {
-            res.setReservationFor(returnTrip);
-            results.push_back(res);
-        }
-
+    if (!results.isEmpty()) {
         node.addResult(results);
         return;
     }
