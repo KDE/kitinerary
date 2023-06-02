@@ -5,6 +5,7 @@
 */
 
 #include "jsonldfilterengine.h"
+#include "jsonld.h"
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -27,7 +28,7 @@ JsonLdFilterEngine::~JsonLdFilterEngine() = default;
 
 void JsonLdFilterEngine::filterRecursive(QJsonObject &obj)
 {
-    auto type = obj.value(QLatin1String("@type")).toString().toUtf8();
+    auto type = JsonLd::typeName(obj).toUtf8();
 
     // normalize type
     if (m_typeMappings)  {

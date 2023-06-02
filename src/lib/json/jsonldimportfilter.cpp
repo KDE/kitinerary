@@ -5,6 +5,7 @@
 */
 
 #include "jsonldimportfilter.h"
+#include "json/jsonld.h"
 #include "json/jsonldfilterengine.h"
 #include "logging.h"
 
@@ -87,7 +88,7 @@ static void migrateToAction(QJsonObject &obj, const char *propName, const char *
 
     auto actions = obj.value(QLatin1String("potentialAction")).toArray();
     for (const auto &act : actions) {
-        if (act.toObject().value(QLatin1String("@type")).toString() == QLatin1String(typeName)) {
+        if (JsonLd::typeName(act.toObject()) == QLatin1String(typeName)) {
             return;
         }
     }
@@ -349,7 +350,7 @@ QJsonArray JsonLdImportFilter::filterObject(const QJsonObject &obj)
         const auto image = res.value(QLatin1String("image"));
         if (image.isObject()) {
             const auto imageObject = image.toObject();
-            if (imageObject.value(QLatin1String("@type")).toString() == QLatin1String("ImageObject")) {
+            if (JsonLd::typeName(imageObject) == QLatin1String("ImageObject")) {
                 res.insert(QStringLiteral("image"), imageObject.value(QLatin1String("url")));
             }
         }

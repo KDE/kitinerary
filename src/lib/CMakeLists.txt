@@ -66,6 +66,7 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     jsapi/bytearray.cpp
     jsapi/jsonld.cpp
 
+    json/jsonld.cpp
     json/jsonldfilterengine.cpp
     json/jsonldimportfilter.cpp
 

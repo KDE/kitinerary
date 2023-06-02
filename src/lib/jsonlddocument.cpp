@@ -5,6 +5,7 @@
 */
 
 #include "jsonlddocument.h"
+#include "json/jsonld.h"
 #include "json/jsonldimportfilter.h"
 #include "logging.h"
 
@@ -290,23 +291,14 @@ static QVariant createInstance(const QJsonObject& obj, const QString &type)
     return {};
 }
 
-static QString jsonLdTypeName(const QJsonObject &obj)
-{
-    QString n = obj.value(QLatin1String("@type")).toString();
-    if (n.startsWith(QLatin1String("http://schema.org/"))) { // strip fully qualified names
-        n = n.mid(18);
-    }
-    return n;
-}
-
 static QVariant createInstance(const QJsonObject &obj)
 {
-    return createInstance(obj, jsonLdTypeName(obj));
+    return createInstance(obj, JsonLd::typeName(obj));
 }
 
 static QVariant createInstance(const QJsonObject &obj, const QMetaProperty &prop)
 {
-    const auto type = jsonLdTypeName(obj);
+    const auto type = JsonLd::typeName(obj);
     if (!type.isEmpty()) {
         return createInstance(obj, type);
     }
