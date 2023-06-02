@@ -44,6 +44,8 @@ private Q_SLOTS:
         QCOMPARE(page.text(), QLatin1String("This is the first page." LINEBREAK "It contains a PDF 417 barcode." LINEBREAK));
         QCOMPARE(page.imageCount(), 1);
         QCOMPARE(PdfPage::staticMetaObject.property(1).readOnGadget(&page).toList().size(), 1);
+        QCOMPARE(page.width(), 210);
+        QCOMPARE(page.height(), 296);
 
         QCOMPARE(page.textInRect(0, 0, 1, 0.5), QLatin1String("This is the first page." LINEBREAK "It contains a PDF 417 barcode." LINEBREAK));
         QCOMPARE(page.textInRect(0, 0.5, 1, 1), QString());

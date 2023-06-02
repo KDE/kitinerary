@@ -31,6 +31,8 @@ class KITINERARY_EXPORT PdfPage
     Q_PROPERTY(QString text READ text)
     Q_PROPERTY(QVariantList images READ imagesVariant)
     Q_PROPERTY(QVariantList links READ linksVariant)
+    Q_PROPERTY(int width READ width)
+    Q_PROPERTY(int height READ height)
 public:
     PdfPage();
     PdfPage(const PdfPage&);
@@ -67,6 +69,10 @@ public:
      *  Links are sorted top to bottom / left to right based on their top left corner.
      */
     Q_INVOKABLE QVariantList linksInRect(double left, double top, double right, double bottom) const;
+
+    /** Page size in millimeters. */
+    int width() const;
+    int height() const;
 
 private:
     QVariantList imagesVariant() const;

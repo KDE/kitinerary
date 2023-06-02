@@ -52,6 +52,9 @@ public:
     template <typename T>
     static QString toStationIdentifier(const T &doc) { return toStationIdentifier(doc.stationCodeTable, doc); }
 
+    /** Convert a class code enum value to a string for human representation. */
+    static QString classCodeToString(Fcb::TravelClassType classCode);
+
 private:
     static QString stringifyUicStationIdentifier(int num, const QByteArray &ia5);
     static QString stringifyStationIdentifier(bool numIsSet, int num, const QByteArray ia5);
