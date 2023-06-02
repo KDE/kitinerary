@@ -28,7 +28,6 @@ public:
     QDateTime arrivalTime;
     QDateTime boardingTime;
     QDate departureDay;
-    Organization provider;
 };
 
 KITINERARY_MAKE_CLASS(Flight)
@@ -42,7 +41,6 @@ KITINERARY_MAKE_PROPERTY(Flight, Airport, arrivalAirport, setArrivalAirport)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, arrivalTime, setArrivalTime)
 KITINERARY_MAKE_PROPERTY(Flight, QString, arrivalTerminal, setArrivalTerminal)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, boardingTime, setBoardingTime)
-KITINERARY_MAKE_PROPERTY(Flight, Organization, provider, setProvider)
 KITINERARY_MAKE_OPERATOR(Flight)
 
 QDate Flight::departureDay() const

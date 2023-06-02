@@ -271,6 +271,9 @@ static constexpr const JsonLdFilterEngine::PropertyMapping property_mappings[] =
     { "BusTrip", "busCompany", "provider" },
     { "BusTrip", "departureStation", "departureBusStop" },
 
+    // technically the wrong way around, but we still use the much more common old name
+    { "Flight", "provider", "airline" },
+
     // check[in|out]Date -> check[in|out]Time (legacy Google format)
     { "LodgingReservation", "checkinDate", "checkinTime" },
     { "LodgingReservation", "checkoutDate", "checkoutTime" },

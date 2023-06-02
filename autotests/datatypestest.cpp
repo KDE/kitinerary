@@ -87,13 +87,10 @@ private Q_SLOTS:
         QCOMPARE(org.url(), QUrl(QLatin1String("http://www.jreast.co.jp/e/")));
 
         tt.setProvider(org);
-        flight.setProvider(org);
         res.setProvider(org);
         bus.setProvider(org);
         QCOMPARE(tt.provider().name(), QLatin1String("JR East"));
         QCOMPARE(tt.provider().email(), QLatin1String("nowhere@nowhere.com"));
-        QCOMPARE(flight.provider().name(), QLatin1String("JR East"));
-        QCOMPARE(flight.provider().email(), QLatin1String("nowhere@nowhere.com"));
         QCOMPARE(res.provider().name(), QLatin1String("JR East"));
         QCOMPARE(res.provider().email(), QLatin1String("nowhere@nowhere.com"));
         QCOMPARE(bus.provider().name(), QLatin1String("JR East"));
