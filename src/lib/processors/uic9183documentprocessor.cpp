@@ -17,6 +17,7 @@
 #include <KItinerary/TrainTrip>
 
 #include <era/fcbticket.h>
+#include <era/fcbutil.h>
 #include <uic9183/uic9183head.h>
 #include <uic9183/vendor0080block.h>
 
@@ -70,7 +71,6 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 {
     const auto p = node.content<Uic9183Parser>();
 
-    TrainTrip trip, returnTrip;
     Ticket ticket;
     ticket.setName(p.name());
     ticket.setTicketToken(QLatin1String("aztecbin:") + QString::fromLatin1(p.rawData().toBase64()));
@@ -79,8 +79,20 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
         seat.setSeatingType(seatingType);
     }
 
+    TrainReservation res;
+    res.setReservationNumber(p.pnr());
+    res.setUnderName(p.person());
+
+    ExtractorValidator validator;
+    validator.setAcceptedTypes<TrainTrip>();
+
+    QVector<QVariant> results;
+
     const auto rct2 = p.rct2Ticket();
     if (rct2.isValid()) {
+        TrainTrip trip, returnTrip;
+        trip.setProvider(p.issuer());
+
         switch (rct2.type()) {
             case Rct2Ticket::Unknown:
             case Rct2Ticket::RailPass:
@@ -111,6 +123,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 }
 
                 if (rct2.type() == Rct2Ticket::Transport && !p.returnDepartureStation().name().isEmpty()) {
+                    returnTrip.setProvider(p.issuer());
                     returnTrip.setDepartureStation(p.returnDepartureStation());
                     returnTrip.setArrivalStation(p.returnArrivalStation());
 
@@ -141,23 +154,127 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
             default:
                 break;
         }
+
+        ticket.setTicketedSeat(seat);
+        if (validator.isValidElement(trip)) {
+            res.setReservationFor(trip);
+            res.setReservedTicket(ticket);
+            results.push_back(res);
+        }
+        if (validator.isValidElement(returnTrip)) {
+            res.setReservationFor(returnTrip);
+            res.setReservedTicket(ticket);
+            results.push_back(res);
+        }
     }
 
     const auto fcb = p.findBlock<Fcb::UicRailTicketData>();
-    if (fcb.isValid() && !fcb.transportDocument.isEmpty()) {
+    if (fcb.isValid()) {
         const auto issueDt = fcb.issuingDetail.issueingDateTime();
-        const auto doc = fcb.transportDocument.at(0);
-        if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            const auto irt = doc.ticket.value<Fcb::ReservationData>();
-            trip.setDepartureStation(p.outboundDepartureStation());
-            trip.setArrivalStation(p.outboundArrivalStation());
-            trip.setDepartureTime(irt.departureDateTime(issueDt));
-        } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
-            trip.setDepartureStation(p.outboundDepartureStation());
-            trip.setArrivalStation(p.outboundArrivalStation());
-            trip.setDepartureDay(nrt.validFrom(issueDt).date());
-            // TODO handle nrt.returnIncluded
+        for (const auto &doc : fcb.transportDocument) {
+            if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+                const auto irt = doc.ticket.value<Fcb::ReservationData>();
+                TrainTrip trip;
+                trip.setProvider(p.issuer());
+
+                TrainStation dep;
+                dep.setName(irt.fromStationNameUTF8);
+                dep.setIdentifier(FcbUtil::fromStationIdentifier(irt));
+                trip.setDepartureStation(dep);
+
+                TrainStation arr;
+                arr.setName(irt.toStationNameUTF8);
+                arr.setIdentifier(FcbUtil::toStationIdentifier(irt));
+                trip.setArrivalStation(arr);
+
+                trip.setDepartureTime(irt.departureDateTime(issueDt));
+                trip.setArrivalTime(irt.arrivalDateTime(issueDt));
+
+                if (irt.trainNumIsSet()) {
+                    trip.setTrainNumber(irt.serviceBrandAbrUTF8 + QLatin1Char(' ') + QString::number(irt.trainNum));
+                } else {
+                    trip.setTrainNumber(irt.serviceBrandAbrUTF8 + QLatin1Char(' ') + QString::fromUtf8(irt.trainIA5));
+                }
+
+                Seat s;
+                s.setSeatingType(FcbUtil::classCodeToString(irt.classCode));
+                if (irt.placesIsSet()) {
+                    s.setSeatSection(QString::fromUtf8(irt.places.coach));
+                    QStringList l;
+                    for (auto b : irt.places.placeIA5)
+                        l.push_back(QString::fromUtf8(b));
+                    for (auto i : irt.places.placeNum)
+                        l.push_back(QString::number(i));
+                    s.setSeatNumber(l.join(QLatin1String(", ")));
+                    // TODO other seat encoding variants
+                }
+
+                Ticket t(ticket);
+                t.setTicketedSeat(s);
+
+                if (validator.isValidElement(trip)) {
+                    res.setReservationFor(trip);
+                    res.setReservedTicket(t);
+                    results.push_back(res);
+                }
+
+            } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+                const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+
+                Seat s;
+                s.setSeatingType(FcbUtil::classCodeToString(nrt.classCode));
+                Ticket t(ticket);
+                t.setTicketedSeat(s);
+
+                // check for TrainLinkType regional validity constrains
+                bool trainLinkTypeFound = false;
+                for (const auto &regionalValidity : nrt.validRegion) {
+                    if (regionalValidity.value.userType() != qMetaTypeId<Fcb::TrainLinkType>()) {
+                        continue;
+                    }
+                    const auto trainLink = regionalValidity.value.value<Fcb::TrainLinkType>();
+                    TrainTrip trip;
+                    trip.setProvider(p.issuer());
+
+                    // TODO station identifier
+                    TrainStation dep;
+                    dep.setName(trainLink.fromStationNameUTF8);
+                    trip.setDepartureStation(dep);
+
+                    TrainStation arr;
+                    arr.setName(trainLink.toStationNameUTF8);
+                    trip.setArrivalStation(arr);
+
+                    trip.setDepartureTime(trainLink.departureDateTime(issueDt));
+
+                    if (trainLink.trainNumIsSet()) {
+                        trip.setTrainNumber(QString::number(trainLink.trainNum));
+                    } else {
+                        trip.setTrainNumber(QString::fromUtf8(trainLink.trainIA5));
+                    }
+
+                    if (validator.isValidElement(trip)) {
+                        res.setReservationFor(trip);
+                        res.setReservedTicket(t);
+                        results.push_back(res);
+                        trainLinkTypeFound = true;
+                    }
+                }
+
+                if (!trainLinkTypeFound) {
+                    TrainTrip trip;
+                    trip.setProvider(p.issuer());
+                    trip.setDepartureStation(p.outboundDepartureStation());
+                    trip.setArrivalStation(p.outboundArrivalStation());
+                    trip.setDepartureDay(nrt.validFrom(issueDt).date());
+                    if (validator.isValidElement(trip)) {
+                        res.setReservationFor(trip);
+                        res.setReservedTicket(t);
+                        results.push_back(res);
+                    }
+                    // TODO handle nrt.returnIncluded
+                }
+            }
         }
     }
 
@@ -187,6 +304,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     }
 
     // only Ticket
+    ticket.setTicketedSeat(seat);
     ticket.setIssuedBy(p.issuer());
     ticket.setTicketNumber(p.pnr());
     ticket.setUnderName(p.person());
