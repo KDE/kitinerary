@@ -18,7 +18,7 @@ class QVariant;
 namespace KItinerary {
 
 class PListReader;
-class PListTrailer;
+struct PListTrailer;
 enum class PListObjectType;
 
 /** Property list UID object type. */
