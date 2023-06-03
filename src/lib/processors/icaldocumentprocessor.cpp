@@ -6,6 +6,7 @@
 
 #include "icaldocumentprocessor.h"
 #include "logging.h"
+#include "stringutil.h"
 
 #include <KItinerary/Event>
 #include <KItinerary/ExtractorDocumentNodeFactory>
@@ -28,23 +29,9 @@
 
 using namespace KItinerary;
 
-static bool contentStartsWith(const QByteArray &data, const char *str)
-{
-    auto it = data.begin();
-    while (it != data.end() && std::isspace(static_cast<unsigned char>(*it))) {
-        ++it;
-    }
-
-    const auto len = std::strlen(str);
-    if ((int)len >= std::distance(it, data.end())) {
-        return false;
-    }
-    return std::strncmp(it, str, len) == 0;
-}
-
 bool IcalCalendarProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return contentStartsWith(encodedData, "BEGIN:VCALENDAR")
+    return StringUtil::startsWithIgnoreSpace(encodedData, "BEGIN:VCALENDAR")
         || fileName.endsWith(QLatin1String(".ics"), Qt::CaseInsensitive)
         || fileName.endsWith(QLatin1String(".ical"), Qt::CaseInsensitive);
 }

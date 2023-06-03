@@ -5,6 +5,7 @@
 */
 
 #include "jsonlddocumentprocessor.h"
+#include "stringutil.h"
 
 #include <KItinerary/ExtractorResult>
 
@@ -14,21 +15,10 @@
 
 using namespace KItinerary;
 
-static bool contentStartsWith(const QByteArray &data, char s)
-{
-    for (unsigned char c : data) {
-        if (std::isspace(c)) {
-            continue;
-        }
-        return c == s;
-    }
-    return false;
-}
-
 bool JsonLdDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return contentStartsWith(encodedData, '[')
-        || contentStartsWith(encodedData, '{')
+    return StringUtil::startsWithIgnoreSpace(encodedData, "[")
+        || StringUtil::startsWithIgnoreSpace(encodedData, "{")
         || fileName.endsWith(QLatin1String(".json"), Qt::CaseInsensitive)
         || fileName.endsWith(QLatin1String(".jsonld"), Qt::CaseInsensitive);
 }
