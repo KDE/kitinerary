@@ -64,6 +64,7 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     jsapi/barcode.cpp
     jsapi/bitarray.cpp
     jsapi/bytearray.cpp
+    jsapi/extractorengine.cpp
     jsapi/jsonld.cpp
 
     json/jsonld.cpp

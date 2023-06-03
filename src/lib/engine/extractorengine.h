@@ -199,6 +199,10 @@ public:
      *  Only exposed for tooling.
      */
     ExtractorDocumentNode rootDocumentNode() const;
+    /** Process a single node.
+     *  For use by the script engine, do not use manually.
+     */
+    void processNode(ExtractorDocumentNode &node) const;
     ///@endcond
 
 private:

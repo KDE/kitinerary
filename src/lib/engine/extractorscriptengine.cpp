@@ -7,12 +7,14 @@
 #include "extractorscriptengine_p.h"
 #include "extractordocumentnode.h"
 #include "extractordocumentprocessor.h"
+#include "extractorengine.h"
 #include "extractorresult.h"
 #include "scriptextractor.h"
 #include "logging.h"
 
 #include "jsapi/barcode.h"
 #include "jsapi/bytearray.h"
+#include "jsapi/extractorengine.h"
 #include "jsapi/jsonld.h"
 
 #include <QFile>
@@ -32,6 +34,7 @@ public:
 
     JsApi::Barcode *m_barcodeApi = nullptr;
     JsApi::JsonLd *m_jsonLdApi = nullptr;
+    JsApi::ExtractorEngine *m_engineApi = nullptr;
     QJSEngine m_engine;
 
     QThread m_watchdogThread;
@@ -62,6 +65,8 @@ void ExtractorScriptEngine::ensureInitialized()
     d->m_barcodeApi = new JsApi::Barcode;
     d->m_engine.globalObject().setProperty(QStringLiteral("Barcode"), d->m_engine.newQObject(d->m_barcodeApi));
     d->m_engine.globalObject().setProperty(QStringLiteral("ByteArray"), d->m_engine.newQObject(new JsApi::ByteArray));
+    d->m_engineApi = new JsApi::ExtractorEngine(&d->m_engine);
+    d->m_engine.globalObject().setProperty(QStringLiteral("ExtractorEngine"), d->m_engine.newQObject(d->m_engineApi));
 
     d->m_watchdogThread.start();
     d->m_watchdogTimer = new QTimer;
@@ -71,10 +76,11 @@ void ExtractorScriptEngine::ensureInitialized()
     QObject::connect(d->m_watchdogTimer, &QTimer::timeout, &d->m_engine, [this]() { d->m_engine.setInterrupted(true); }, Qt::DirectConnection);
 }
 
-void ExtractorScriptEngine::setBarcodeDecoder(BarcodeDecoder *barcodeDecoder)
+void ExtractorScriptEngine::setExtractorEngine(ExtractorEngine *engine)
 {
     ensureInitialized();
-    d->m_barcodeApi->setDecoder(barcodeDecoder);
+    d->m_engineApi->setEngine(engine);
+    d->m_barcodeApi->setDecoder(engine->barcodeDecoder());
 }
 
 // produce the same output as the JS engine error result fileName property would have
@@ -123,7 +129,7 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
 
     // watchdog setup
     QMetaObject::invokeMethod(d->m_watchdogTimer, qOverload<>(&QTimer::start));
-    const auto watchdogStop = qScopeGuard([this]() {
+    const auto scopeCleanup = qScopeGuard([this]() {
         QMetaObject::invokeMethod(d->m_watchdogTimer, qOverload<>(&QTimer::stop));
     });
     d->m_engine.setInterrupted(false);
@@ -141,12 +147,14 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
     qCDebug(Log) << "Running script extractor" << extractor->scriptFileName() << extractor->scriptFunction();
     node.setScriptEngine(&d->m_engine);
     triggerNode.setScriptEngine(&d->m_engine);
-    const auto engineReset = qScopeGuard([&node, &triggerNode]{
+    const auto engineReset = qScopeGuard([&node, &triggerNode, this]{
+        d->m_engineApi->clear();
         node.setScriptEngine(nullptr);
         triggerNode.setScriptEngine(nullptr);
     });
 
     d->m_jsonLdApi->setContextDate(node.contextDateTime());
+    d->m_engineApi->setCurrentNode(node);
 
     const auto nodeArg = d->m_engine.toScriptValue(node);
     const auto dataArg = nodeArg.property(QLatin1String("content"));

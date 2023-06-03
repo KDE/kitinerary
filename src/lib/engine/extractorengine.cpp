@@ -187,11 +187,16 @@ const ExtractorRepository* ExtractorEngine::extractorRepository() const
 
 const ExtractorScriptEngine* ExtractorEngine::scriptEngine() const
 {
-    d->m_scriptEngine.setBarcodeDecoder(&d->m_barcodeDecoder);
+    d->m_scriptEngine.setExtractorEngine(const_cast<ExtractorEngine*>(this));
     return &d->m_scriptEngine;
 }
 
 ExtractorDocumentNode ExtractorEngine::rootDocumentNode() const
 {
     return d->m_rootNode;
+}
+
+void ExtractorEngine::processNode(ExtractorDocumentNode &node) const
+{
+    d->processNode(node);
 }

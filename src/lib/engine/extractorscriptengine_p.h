@@ -9,8 +9,8 @@
 #include <memory>
 
 namespace KItinerary {
-class BarcodeDecoder;
 class ExtractorDocumentNode;
+class ExtractorEngine;
 class ExtractorResult;
 class ScriptExtractor;
 class ExtractorScriptEnginePrivate;
@@ -21,7 +21,7 @@ class ExtractorScriptEngine
 public:
     explicit ExtractorScriptEngine();
     ~ExtractorScriptEngine();
-    void setBarcodeDecoder(BarcodeDecoder *barcodeDecoder);
+    void setExtractorEngine(ExtractorEngine *engine);
 
     ExtractorResult execute(const ScriptExtractor *extractor, const ExtractorDocumentNode &node, const ExtractorDocumentNode &triggerNode) const;
 
