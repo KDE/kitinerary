@@ -21,17 +21,13 @@ function main(pdf, node, triggerNode) {
     if (!text.match(/BOARDING PASS/))
         return null;
 
-    var res = JsonLd.newFlightReservation();
-    res.reservedTicket = triggerNode.result[0].reservedTicket;
-
     var lines = text.split('\n');
 
     var state = 0;
-    var lastFlight = null;
     var flights = [];
     for(var i = 0 ; i < lines.length; i++) {
         var line = lines[i];
-        if (line.match(/FLIGHT\s+DATE\s+TIME\s+FROM\s+TO\s+CLASS\s+GATE\s+SEQ#\s+ZONE\s+SEAT\s+BOARDING/i))
+        if (line.match(/FLIGHT\s+DATE\s+TIME\s+FROM\s+TO\s+CLASS\s+GATE\s+SEQ#\s+(:?ZONE|GROUP)\s+SEAT\s+BOARDING/i))
         {
             if (state !== 0) console.log("ISSUE")
             lastFlight = {};
@@ -44,29 +40,15 @@ function main(pdf, node, triggerNode) {
         if (state === 1) {
             var times = line.match(/\w+\s+(\d{2} [a-zA-Z]{3})\.?\s+(\d{2}:\d{2})\s+.*(\d{2}:\d{2}).*/);
             if (!times) {
-                state = 0;
                 continue;
             }
-            lastFlight.daymonth = times[1];
-            lastFlight.departureTime = times[2];
-            lastFlight.boardingTime = times[3];
-            state = 2;
+            let flight = triggerNode.result[flights.length];
+            flight.reservationFor.departureTime = JsonLd.toDateTime(times[1] + ' ' + times[2],'dd MMM hh:mm', 'en');
+            flight.reservationFor.boardingTime = JsonLd.toDateTime(times[1] + ' ' + times[3],'dd MMM hh:mm', 'en');
+            flights.push(flight);
             continue;
         }
-        if (state === 2) {
-            var year = line.match(/\d{4}/);
-            lastFlight.year = year;
-            state = 0;
-            flights.push(lastFlight);
-            continue;
-        }
-    }
-    if (lastFlight) {
-        res.reservationFor.departureTime = JsonLd.toDateTime(lastFlight.daymonth + " " + lastFlight.year + " " + lastFlight.departureTime, "dd MMM yyyy hh:mm", "en");
-        res.reservationFor.boardingTime  = JsonLd.toDateTime(lastFlight.daymonth + " " + lastFlight.year + " " + lastFlight.boardingTime , "dd MMM yyyy hh:mm", "en");
-    } else {
-        return null;
     }
 
-    return res;
+    return flights;
 }
