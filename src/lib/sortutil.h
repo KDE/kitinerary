@@ -30,6 +30,16 @@ namespace SortUtil
 
     /** Sorting function for top-level reservation/visit/event elements. */
     KITINERARY_EXPORT bool isBefore(const QVariant &lhs, const QVariant &rhs);
+
+    /** Returns whether the given element has a start time.
+     *  This can be @c false even is SortUtil::startDateTime returns a valid
+     *  result, if there is only a start date available.
+     */
+    bool hasStartTime(const QVariant &elem);
+    /** Returns whether the given element has an end time.
+     *  @see hasStartTime
+     */
+    bool hasEndTime(const QVariant &elem);
 }
 
 }

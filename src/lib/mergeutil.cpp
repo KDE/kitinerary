@@ -834,11 +834,24 @@ bool MergeUtil::hasSameDeparture(const QVariant &lhs, const QVariant &rhs)
     }
     const auto lhsRes = JsonLd::convert<Reservation>(lhs);
     const auto rhsRes = JsonLd::convert<Reservation>(rhs);
-    if (!isSameReservation(lhsRes, rhsRes) || SortUtil::startDateTime(lhs) != SortUtil::startDateTime(rhs)) {
+    if (!isSameReservation(lhsRes, rhsRes)) {
         return false;
     }
 
-    return LocationUtil::isSameLocation(LocationUtil::departureLocation(lhs), LocationUtil::departureLocation(rhs), LocationUtil::Exact);
+    if (SortUtil::hasStartTime(lhs) && SortUtil::hasStartTime(rhs)) {
+        if (SortUtil::startDateTime(lhs) != SortUtil::startDateTime(rhs)) {
+            return false;
+        }
+        return LocationUtil::isSameLocation(LocationUtil::departureLocation(lhs), LocationUtil::departureLocation(rhs), LocationUtil::Exact);
+    }
+    if (SortUtil::hasStartTime(lhs) || SortUtil::hasStartTime(rhs)) {
+        if (SortUtil::startDateTime(lhs).date() != SortUtil::startDateTime(rhs).date()) {
+            return false;
+        }
+        return LocationUtil::isSameLocation(LocationUtil::departureLocation(lhs), LocationUtil::departureLocation(rhs), LocationUtil::CityLevel);
+    }
+
+    return false;
 }
 
 bool MergeUtil::hasSameArrival(const QVariant &lhs, const QVariant &rhs)
@@ -848,11 +861,25 @@ bool MergeUtil::hasSameArrival(const QVariant &lhs, const QVariant &rhs)
     }
     const auto lhsRes = JsonLd::convert<Reservation>(lhs);
     const auto rhsRes = JsonLd::convert<Reservation>(rhs);
-    if (!isSameReservation(lhsRes, rhsRes) || SortUtil::endDateTime(lhs) != SortUtil::endDateTime(rhs)) {
+    if (!isSameReservation(lhsRes, rhsRes)) {
         return false;
     }
 
-    return LocationUtil::isSameLocation(LocationUtil::arrivalLocation(lhs), LocationUtil::arrivalLocation(rhs), LocationUtil::Exact);
+    if (SortUtil::hasEndTime(lhs) && SortUtil::hasEndTime(rhs)) {
+        if (SortUtil::endDateTime(lhs) != SortUtil::endDateTime(rhs)) {
+            return false;
+        }
+        return LocationUtil::isSameLocation(LocationUtil::arrivalLocation(lhs), LocationUtil::arrivalLocation(rhs), LocationUtil::Exact);
+    }
+
+    if (SortUtil::hasEndTime(lhs) || SortUtil::hasEndTime(rhs)) {
+        if (SortUtil::endDateTime(lhs).date() != SortUtil::endDateTime(rhs).date()) {
+            return false;
+        }
+        return LocationUtil::isSameLocation(LocationUtil::arrivalLocation(lhs), LocationUtil::arrivalLocation(rhs), LocationUtil::CityLevel);
+    }
+
+    return false;
 }
 
 void MergeUtil::registerComparator(int metaTypeId, std::function<bool (const QVariant&, const QVariant&)> &&func)
