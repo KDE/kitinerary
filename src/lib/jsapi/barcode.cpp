@@ -20,7 +20,7 @@
 
 using namespace KItinerary;
 
-void JsApi::Barcode::setDecoder(BarcodeDecoder *decoder)
+void JsApi::Barcode::setDecoder(const BarcodeDecoder *decoder)
 {
     m_decoder = decoder;
 }

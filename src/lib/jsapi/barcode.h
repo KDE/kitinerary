@@ -60,13 +60,13 @@ public:
     Q_INVOKABLE QVariant decodeEraSsbTicket(const QByteArray &s, int versionOverride = 0) const;
 
     ///@cond internal
-    void setDecoder(BarcodeDecoder *decoder);
+    void setDecoder(const BarcodeDecoder *decoder);
     ///@endcond
 
 private:
     QString decodeBarcode(const QVariant &img, BarcodeDecoder::BarcodeTypes hints) const;
 
-    BarcodeDecoder *m_decoder = nullptr;
+    const BarcodeDecoder *m_decoder = nullptr;
 };
 
 }
