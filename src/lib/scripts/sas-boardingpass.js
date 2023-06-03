@@ -16,24 +16,13 @@ But we need more data.
 
  */
 
-function extractInformation(page) {
-    var text = page.textInRect(0, 0, 1, 1);
+function main(pdf, node, triggerNode) {
+    const text = pdf.pages[triggerNode.location].text;
     if (!text.match(/BOARDING PASS/))
         return null;
 
     var res = JsonLd.newFlightReservation();
-    var images = page.imagesInRect(0.5, 0, 1, 0.5);
-    for (var i = 0; i < images.length; ++i) {
-        if (images[i].height < 300 && images[i].width < images[i].height)
-        {
-            var barcode = Barcode.decodePdf417(images[i]);
-            if (barcode !== "")
-            {
-                res.reservedTicket.ticketToken = "aztecCode:" + Barcode.decodePdf417(images[i]);
-                break;
-            }
-        }
-    }
+    res.reservedTicket = triggerNode.result[0].reservedTicket;
 
     var lines = text.split('\n');
 
@@ -80,15 +69,4 @@ function extractInformation(page) {
     }
 
     return res;
-}
-
-function main(pdf) {
-    var result = new Array();
-
-    for (var i = 0; i < pdf.pageCount; ++i) {
-        var page = pdf.pages[i];
-        result.push(extractInformation(page));
-    }
-
-    return result;
 }
