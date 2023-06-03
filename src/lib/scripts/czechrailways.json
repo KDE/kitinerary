@@ -31,4 +31,17 @@
     "function": "parseEvent",
     "mimeType": "internal/event",
     "script": "czechrailways.js"
+},
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "info@cd.cz",
+            "mimeType": "message/rfc822",
+            "scope": "Parent"
+        }
+    ],
+    "function": "extractFullImage",
+    "mimeType": "internal/qimage",
+    "script": "generic.js"
 }]

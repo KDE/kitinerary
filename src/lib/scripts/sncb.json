@@ -29,5 +29,18 @@
         "function": "parseInternationalPdf",
         "mimeType": "application/pdf",
         "script": "sncb.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "@b-europe.com",
+                "mimeType": "message/rfc822",
+                "scope": "Parent"
+            }
+        ],
+        "function": "extractFullImage",
+        "mimeType": "internal/qimage",
+        "script": "generic.js"
     }
 ]

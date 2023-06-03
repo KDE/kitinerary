@@ -23,4 +23,17 @@
     "function": "parseHotelEvent",
     "mimeType": "internal/event",
     "script": "atpi.js"
+},
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@atpi.com",
+            "mimeType": "message/rfc822",
+            "scope": "Parent"
+        }
+    ],
+    "function": "extractFullImage",
+    "mimeType": "internal/qimage",
+    "script": "generic.js"
 }]
