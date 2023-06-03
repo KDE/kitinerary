@@ -175,16 +175,28 @@ function parsePdfTicket(content, node, triggerNode) {
         if (triggerNode.result[0]['@type'] == 'TrainReservation') {
             res = JsonLd.apply(triggerNode.result[0], res);
             res.reservationNumber = triggerNode.content.block('1154UT').findSubBlock('KK').content;
-            res.reservedTicket.ticketNumber = triggerNode.result[0].reservationNumber;
-        } else {
-            res.reservedTicket = triggerNode.result[0];
         }
+        res.reservedTicket = JsonLd.apply(triggerNode.result[0].reservedTicket, res.reservedTicket);
 
         reservations.push(res);
         idx += leg.index + leg[0].length;
     }
 
     return reservations;
+}
+
+function parseUicTicket(uic, node)
+{
+    if (node.result[0]['@type'] == 'TrainReservation') {
+        let res = node.result[0];
+        res.reservationNumber = uic.block('1154UT').findSubBlock('KK').content;
+        res.reservedTicket.ticketNumber = uic.pnr;
+        return res;
+    } else {
+        let ticket = node.result[0];
+        ticket.ticketNumber = uic.pnr;
+        return ticket;
+    }
 }
 
 function parseEvent(event) {

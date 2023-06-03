@@ -22,6 +22,19 @@
 {
     "filter": [
         {
+            "field": "carrierId",
+            "match": "^1154$",
+            "mimeType": "internal/uic9183",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseUicTicket",
+    "mimeType": "internal/uic9183",
+    "script": "czechrailways.js"
+},
+{
+    "filter": [
+        {
             "field": "uid",
             "match": "@www\\.cd\\.cz$",
             "mimeType": "internal/event",
