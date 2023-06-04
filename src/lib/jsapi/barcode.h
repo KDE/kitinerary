@@ -51,14 +51,6 @@ public:
      */
     Q_INVOKABLE QString decodeAnyBarcode(const QVariant &img) const;
 
-    /** Decode an ERA SSB ticket barcode.
-     *  @param s A QByteArray containing the raw ERA SSB barcode data.
-     *  @param versionOverride Override version auto-detection. Useful for tickets that are known to
-     *  fill their version field incorrectly.
-     *  @returns An instance of SSBTicket.
-     */
-    Q_INVOKABLE QVariant decodeEraSsbTicket(const QByteArray &s, int versionOverride = 0) const;
-
     ///@cond internal
     void setDecoder(const BarcodeDecoder *decoder);
     ///@endcond
