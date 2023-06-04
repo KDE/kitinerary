@@ -15,4 +15,4 @@ target_link_libraries(uper-strings KPim6Itinerary)
 
 add_executable(plist-dump plist-dump.cpp)
 target_include_directories(plist-dump PRIVATE ${CMAKE_BINARY_DIR})
-target_link_libraries(plist-dump KPim6Itinerary)
+target_link_libraries(plist-dump KPim6Itinerary Qt6::Core5Compat)

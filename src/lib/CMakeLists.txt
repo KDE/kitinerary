@@ -208,6 +208,7 @@ target_link_libraries(KPim6Itinerary
         Poppler::Core
         OpenSSL::Crypto
         ZLIB::ZLIB
+	Qt6::Core5Compat
 )
 if (TARGET ZXing::ZXing)
     target_link_libraries(KPim6Itinerary PRIVATE ZXing::ZXing)
