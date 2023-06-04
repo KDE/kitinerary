@@ -30,6 +30,7 @@ public:
 private:
     KItinerary::ExtractorEngine *m_engine = nullptr;
     KItinerary::ExtractorDocumentNode m_currentNode;
+    int m_recursionDepth = 0;
 };
 
 }

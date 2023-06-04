@@ -12,6 +12,8 @@
 
 using namespace KItinerary;
 
+static constexpr inline auto RecursionDepthLimit = 10;
+
 JsApi::ExtractorEngine::ExtractorEngine(QObject *parent)
     : QObject(parent)
 {
@@ -36,12 +38,19 @@ void JsApi::ExtractorEngine::clear()
 
 ExtractorDocumentNode JsApi::ExtractorEngine::extract(const QByteArray &data)
 {
+    if (m_recursionDepth > RecursionDepthLimit) {
+        qCWarning(Log) << "Recursion depth limit reached, aborting";
+        return {};
+    }
+
     const auto preHints = m_engine->hints();
     const auto prevNode = m_currentNode;
 
     m_engine->setHints(preHints | KItinerary::ExtractorEngine::ExtractFullPageRasterImages);
     auto node = m_engine->documentNodeFactory()->createNode(data);
+    ++m_recursionDepth;
     m_engine->processNode(node);
+    --m_recursionDepth;
 
     m_engine->setHints(preHints);
     m_currentNode = prevNode;
@@ -52,12 +61,19 @@ ExtractorDocumentNode JsApi::ExtractorEngine::extract(const QByteArray &data)
 
 ExtractorDocumentNode JsApi::ExtractorEngine::extract(const QVariant &content, const QString &mimeType)
 {
+    if (m_recursionDepth > RecursionDepthLimit) {
+        qCWarning(Log) << "Recursion depth limit reached, aborting";
+        return {};
+    }
+
     const auto preHints = m_engine->hints();
     const auto prevNode = m_currentNode;
 
     m_engine->setHints(preHints | KItinerary::ExtractorEngine::ExtractFullPageRasterImages);
     auto node = m_engine->documentNodeFactory()->createNode(content, mimeType);
+    ++m_recursionDepth;
     m_engine->processNode(node);
+    --m_recursionDepth;
 
     m_engine->setHints(preHints);
     m_currentNode = prevNode;
