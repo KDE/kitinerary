@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^[A-Z0-9]{7}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdfTicket",
+    "script": "yorck-kino-berlin.js",
+    "mimeType": "application/pdf"
+}
