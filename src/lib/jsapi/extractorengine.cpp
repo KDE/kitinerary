@@ -48,6 +48,8 @@ ExtractorDocumentNode JsApi::ExtractorEngine::extract(const QByteArray &data)
 
     m_engine->setHints(preHints | KItinerary::ExtractorEngine::ExtractFullPageRasterImages);
     auto node = m_engine->documentNodeFactory()->createNode(data);
+    m_currentNode.appendChild(node);
+
     ++m_recursionDepth;
     m_engine->processNode(node);
     --m_recursionDepth;
@@ -55,7 +57,6 @@ ExtractorDocumentNode JsApi::ExtractorEngine::extract(const QByteArray &data)
     m_engine->setHints(preHints);
     m_currentNode = prevNode;
 
-    m_currentNode.appendChild(node); // for debug tooling
     return node;
 }
 
@@ -71,6 +72,8 @@ ExtractorDocumentNode JsApi::ExtractorEngine::extract(const QVariant &content, c
 
     m_engine->setHints(preHints | KItinerary::ExtractorEngine::ExtractFullPageRasterImages);
     auto node = m_engine->documentNodeFactory()->createNode(content, mimeType);
+    m_currentNode.appendChild(node);
+
     ++m_recursionDepth;
     m_engine->processNode(node);
     --m_recursionDepth;
@@ -78,6 +81,5 @@ ExtractorDocumentNode JsApi::ExtractorEngine::extract(const QVariant &content, c
     m_engine->setHints(preHints);
     m_currentNode = prevNode;
 
-    m_currentNode.appendChild(node); // for debug tooling
     return node;
 }
