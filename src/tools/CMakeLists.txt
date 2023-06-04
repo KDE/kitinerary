@@ -12,3 +12,7 @@ target_link_libraries(extractor-document-dump KPim6Itinerary)
 add_executable(uper-strings uper-strings.cpp)
 target_include_directories(uper-strings PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(uper-strings KPim6Itinerary)
+
+add_executable(plist-dump plist-dump.cpp)
+target_include_directories(plist-dump PRIVATE ${CMAKE_BINARY_DIR})
+target_link_libraries(plist-dump KPim6Itinerary)

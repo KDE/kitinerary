@@ -3,7 +3,7 @@ Upstream-Name: KItinerary
 Upstream-Contact: Volker Krause <vkrause@kde.org>
 Source: https://invent.kde.org/pim/kitinerary
 
-Files: autotests/barcodes/* autotests/bcbpdata/* autotests/calendarhandlerdata/* autotests/extractordata/* autotests/jsonlddata/* autotests/mergedata/* autotests/misc/* autotests/pkpassdata/* autotests/postprocessordata/* autotests/rct2/* autotests/scriptenginedata/* autotests/structureddata/* autotests/uic918-3/* autotests/validationdata/*
+Files: autotests/barcodes/* autotests/bcbpdata/* autotests/calendarhandlerdata/* autotests/extractordata/* autotests/jsonlddata/* autotests/mergedata/* autotests/misc/* autotests/pkpassdata/* autotests/plist/*  autotests/postprocessordata/* autotests/rct2/* autotests/scriptenginedata/* autotests/structureddata/* autotests/uic918-3/* autotests/validationdata/*
 Copyright: none
 License: CC0-1.0
 

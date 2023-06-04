@@ -6,6 +6,7 @@
 
 #include "htmldocumentprocessor.h"
 #include "logging.h"
+#include "stringutil.h"
 
 #include <KItinerary/ExtractorDocumentNodeFactory>
 #include <KItinerary/ExtractorEngine>
@@ -24,20 +25,9 @@ using namespace KItinerary;
 
 Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KItinerary::HtmlDocument>)
 
-static bool contentStartsWith(const QByteArray &data, char s)
-{
-    for (unsigned char c : data) {
-        if (std::isspace(c)) {
-            continue;
-        }
-        return c == s;
-    }
-    return false;
-}
-
 bool HtmlDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return contentStartsWith(encodedData, '<')
+    return StringUtil::startsWithIgnoreSpace(encodedData, "<")
         || fileName.endsWith(QLatin1String(".html"), Qt::CaseInsensitive)
         || fileName.endsWith(QLatin1String(".htm"), Qt::CaseInsensitive);
 }

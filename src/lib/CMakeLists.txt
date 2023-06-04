@@ -66,6 +66,7 @@ target_sources(KPim6Itinerary PRIVATE
     jsapi/bytearray.cpp
     jsapi/jsonld.cpp
 
+    json/jsonld.cpp
     json/jsonldfilterengine.cpp
     json/jsonldimportfilter.cpp
 
@@ -88,6 +89,8 @@ target_sources(KPim6Itinerary PRIVATE
     pdf/popplerglobalparams.cpp
     pdf/popplerutils.cpp
 
+    plist/plistreader.cpp
+
     processors/barcodedocumentprocessorhelper.cpp
     processors/binarydocumentprocessor.cpp
     processors/eradocumentprocessor.cpp
@@ -100,6 +103,7 @@ target_sources(KPim6Itinerary PRIVATE
     processors/mimedocumentprocessor.cpp
     processors/pdfdocumentprocessor.cpp
     processors/pkpassdocumentprocessor.cpp
+    processors/plistdocumentprocessor.cpp
     processors/textdocumentprocessor.cpp
     processors/uic9183documentprocessor.cpp
     processors/vdvdocumentprocessor.cpp

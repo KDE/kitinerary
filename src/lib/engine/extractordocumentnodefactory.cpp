@@ -20,6 +20,7 @@
 #include "processors/mimedocumentprocessor.h"
 #include "processors/pdfdocumentprocessor.h"
 #include "processors/pkpassdocumentprocessor.h"
+#include "processors/plistdocumentprocessor.h"
 #include "processors/textdocumentprocessor.h"
 #include "processors/uic9183documentprocessor.h"
 #include "processors/vdvdocumentprocessor.h"
@@ -121,6 +122,7 @@ void ExtractorDocumentNodeFactoryStatic::registerBuiltIn()
     registerProcessor<Uic9183DocumentProcessor>(u"internal/uic9183");
     registerProcessor<VdvDocumentProcessor>(u"internal/vdv");
     registerProcessor<IcalCalendarProcessor>(u"text/calendar");
+    registerProcessor<PListDocumentProcessor>(u"application/x-plist");
 
     // fallback types that catch a very broad set of input types
     // order matters particularly here, the broadest ones need to go last

@@ -6,6 +6,7 @@
 
 #include "icaldocumentprocessor.h"
 #include "logging.h"
+#include "stringutil.h"
 
 #include <KItinerary/Event>
 #include <KItinerary/ExtractorDocumentNodeFactory>
@@ -28,23 +29,9 @@
 
 using namespace KItinerary;
 
-static bool contentStartsWith(const QByteArray &data, const char *str)
-{
-    auto it = data.begin();
-    while (it != data.end() && std::isspace(static_cast<unsigned char>(*it))) {
-        ++it;
-    }
-
-    const auto len = std::strlen(str);
-    if ((int)len >= std::distance(it, data.end())) {
-        return false;
-    }
-    return std::strncmp(it, str, len) == 0;
-}
-
 bool IcalCalendarProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return contentStartsWith(encodedData, "BEGIN:VCALENDAR")
+    return StringUtil::startsWithIgnoreSpace(encodedData, "BEGIN:VCALENDAR")
         || fileName.endsWith(QLatin1String(".ics"), Qt::CaseInsensitive)
         || fileName.endsWith(QLatin1String(".ical"), Qt::CaseInsensitive);
 }
@@ -78,6 +65,16 @@ bool IcalEventProcessor::matches(const ExtractorFilter &filter, const ExtractorD
 {
     const auto event = node.content<KCalendarCore::Event::Ptr>();
     return matchesGadget(filter, event.data());
+}
+
+void IcalEventProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
+{
+    const auto event = node.content<KCalendarCore::Event::Ptr>();
+    const auto appleStructuredData = event->nonKDECustomProperty("X-APPLE-STRUCTURED-DATA");
+    if (!appleStructuredData.isEmpty()) {
+        auto child = engine->documentNodeFactory()->createNode(QByteArray::fromBase64(appleStructuredData.toLatin1()));
+        node.appendChild(child);
+    }
 }
 
 void IcalEventProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const

@@ -5,6 +5,7 @@
 */
 
 #include "jsonlddocument.h"
+#include "json/jsonld.h"
 #include "json/jsonldimportfilter.h"
 #include "logging.h"
 
@@ -288,12 +289,12 @@ static QVariant createInstance(const QJsonObject& obj, const QString &type)
 
 static QVariant createInstance(const QJsonObject &obj)
 {
-    return createInstance(obj, obj.value(QLatin1String("@type")).toString());
+    return createInstance(obj, JsonLd::typeName(obj));
 }
 
 static QVariant createInstance(const QJsonObject &obj, const QMetaProperty &prop)
 {
-    const auto type = obj.value(QLatin1String("@type")).toString();
+    const auto type = JsonLd::typeName(obj);
     if (!type.isEmpty()) {
         return createInstance(obj, type);
     }

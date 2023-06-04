@@ -11,6 +11,9 @@
 #include <QDebug>
 #include <QString>
 
+#include <cstring>
+#include <cctype>
+
 using namespace KItinerary;
 
 QString StringUtil::normalize(QStringView str)
@@ -187,4 +190,18 @@ QString StringUtil::transliterate(QStringView s)
     }
 
     return res;
+}
+
+bool StringUtil::startsWithIgnoreSpace(const QByteArray &data, const char *pattern)
+{
+    auto it = data.begin();
+    while (it != data.end() && std::isspace(static_cast<unsigned char>(*it))) {
+        ++it;
+    }
+
+    const auto len = std::strlen(pattern);
+    if ((int)len >= std::distance(it, data.end())) {
+        return false;
+    }
+    return std::strncmp(it, pattern, len) == 0;
 }

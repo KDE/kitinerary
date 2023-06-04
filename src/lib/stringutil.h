@@ -6,6 +6,7 @@
 
 #pragma once
 
+class QByteArray;
 class QString;
 class QStringView;
 
@@ -32,6 +33,9 @@ namespace StringUtil
 
     /** Transliterate diacritics or other special characters. */
     QString transliterate(QStringView s);
+
+    /** Same as QByteArray::startsWith, but ignoring leading whitespaces. */
+    bool startsWithIgnoreSpace(const QByteArray &data, const char *pattern);
 }
 
 }
