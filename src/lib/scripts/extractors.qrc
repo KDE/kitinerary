@@ -193,6 +193,8 @@
         <file>stansted-express.js</file>
         <file>swiss.json</file>
         <file>swiss.js</file>
+        <file>tallink.json</file>
+        <file>tallink.js</file>
         <file>terminland-de.json</file>
         <file>terminland-de.js</file>
         <file>thalys.json</file>
