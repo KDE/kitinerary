@@ -13,6 +13,7 @@
 #include "processors/eradocumentprocessor.h"
 #include "processors/externalprocessor.h"
 #include "processors/htmldocumentprocessor.h"
+#include "processors/httpresponseprocessor.h"
 #include "processors/iatabcbpdocumentprocessor.h"
 #include "processors/icaldocumentprocessor.h"
 #include "processors/imagedocumentprocessor.h"
@@ -111,7 +112,6 @@ void ExtractorDocumentNodeFactoryStatic::registerProcessor(std::unique_ptr<Extra
 
 void ExtractorDocumentNodeFactoryStatic::registerBuiltIn()
 {
-    registerProcessor<JsonLdDocumentProcessor>(u"application/ld+json", {u"application/json"});
     registerProcessor<PdfDocumentProcessor>(u"application/pdf");
     registerProcessor<PkPassDocumentProcessor>(u"application/vnd.apple.pkpass");
     registerProcessor<IcalEventProcessor>(u"internal/event");
@@ -123,9 +123,12 @@ void ExtractorDocumentNodeFactoryStatic::registerBuiltIn()
     registerProcessor<VdvDocumentProcessor>(u"internal/vdv");
     registerProcessor<IcalCalendarProcessor>(u"text/calendar");
     registerProcessor<PListDocumentProcessor>(u"application/x-plist");
+    registerProcessor<HttpResponseProcessor>(u"internal/http-response");
+    registerProcessor<HarDocumentProcessor>(u"internal/har-archive");
 
     // fallback types that catch a very broad set of input types
     // order matters particularly here, the broadest ones need to go last
+    registerProcessor<JsonLdDocumentProcessor>({}, {u"application/json"}, u"application/ld+json");
     registerProcessor<MimeDocumentProcessor>({}, {u"application/mbox"}, u"message/rfc822");
     registerProcessor<HtmlDocumentProcessor>({}, {u"application/xhtml+xml"}, u"text/html");
     registerProcessor<TextDocumentProcessor>({}, {}, u"text/plain");

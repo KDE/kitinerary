@@ -57,6 +57,8 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
 
     extractors/genericboardingpassextractor.cpp
 
+    http/httpresponse.cpp
+
     iata/iatabcbp.cpp
     iata/iatabcbpparser.cpp
     iata/iatabcbpsections.cpp
@@ -97,6 +99,7 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     processors/eradocumentprocessor.cpp
     processors/externalprocessor.cpp
     processors/htmldocumentprocessor.cpp
+    processors/httpresponseprocessor.cpp
     processors/iatabcbpdocumentprocessor.cpp
     processors/icaldocumentprocessor.cpp
     processors/imagedocumentprocessor.cpp
@@ -306,6 +309,13 @@ ecm_generate_headers(KItinerary_Era_FORWARDING_HEADERS
     REQUIRED_HEADERS KItinerary_Era_HEADERS
     RELATIVE era
 )
+ecm_generate_headers(KItinerary_Http_FORWARDING_HEADERS
+    HEADER_NAMES
+        HttpResponse
+    PREFIX KItinerary
+    REQUIRED_HEADERS KItinerary_Http_HEADERS
+    RELATIVE http
+)
 ecm_generate_headers(KItinerary_Iata_FORWARDING_HEADERS
     HEADER_NAMES
         IataBcbp
@@ -363,6 +373,7 @@ install(FILES
     ${KItinerary_Datatypes_FORWARDING_HEADERS}
     ${KItinerary_Engine_FORWARDING_HEADERS}
     ${KItinerary_Era_FORWARDING_HEADERS}
+    ${KItinerary_Http_FORWARDING_HEADERS}
     ${KItinerary_Iata_FORWARDING_HEADERS}
     ${KItinerary_KnowledgeDb_FORWARDING_HEADERS}
     ${KItinerary_Pdf_FORWARDING_HEADERS}
@@ -378,6 +389,7 @@ install(FILES
     ${KItinerary_KnowledgeDb_HEADERS}
     ${KItinerary_Engine_HEADERS}
     ${KItinerary_Era_HEADERS}
+    ${KItinerary_Http_HEADERS}
     ${KItinerary_Iata_HEADERS}
     ${KItinerary_Pdf_HEADERS}
     ${KItinerary_Uic9183_HEADERS}
