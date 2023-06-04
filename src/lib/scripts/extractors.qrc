@@ -69,6 +69,8 @@
         <file>easyjet.js</file>
         <file>eki-net.json</file>
         <file>eki-net.js</file>
+        <file>elron.json</file>
+        <file>elron.js</file>
         <file>eos.json</file>
         <file>eos.js</file>
         <file>european-sleeper.json</file>
@@ -86,10 +88,13 @@
         <file>fcmtravel.js</file>
         <file>feratel-card.json</file>
         <file>feratel-card.js</file>
+        <file>finnlines.json</file>
+        <file>finnlines.js</file>
         <file>fjordline.json</file>
         <file>fjordline.js</file>
         <file>flixbus.json</file>
         <file>flixbus.js</file>
+        <file>generic.js</file>
         <file>gepard-express.json</file>
         <file>gepard-express.js</file>
         <file>gnv.it.json</file>
@@ -126,6 +131,8 @@
         <file>koleje-malopolskie.js</file>
         <file>korail.json</file>
         <file>korail.js</file>
+        <file>ltg-link.json</file>
+        <file>ltg-link.js</file>
         <file>lufthansa.json</file>
         <file>lufthansa-pkpass.js</file>
         <file>mav.json</file>
@@ -150,6 +157,8 @@
         <file>onepagebooking.js</file>
         <file>ouigo-es.json</file>
         <file>ouigo-es.js</file>
+        <file>pasazieru-vilciens.json</file>
+        <file>pasazieru-vilciens.js</file>
         <file>peach-aviation.json</file>
         <file>peach-aviation.js</file>
         <file>pkp.json</file>
@@ -191,6 +200,8 @@
         <file>sunnycars.js</file>
         <file>swiss.json</file>
         <file>swiss.js</file>
+        <file>tallink.json</file>
+        <file>tallink.js</file>
         <file>terminland-de.json</file>
         <file>terminland-de.js</file>
         <file>thalys.json</file>
@@ -219,6 +230,8 @@
         <file>vr.fi.js</file>
         <file>vueling.json</file>
         <file>vueling.js</file>
+        <file>yorck-kino-berlin.json</file>
+        <file>yorck-kino-berlin.js</file>
         <file>westbahn.json</file>
         <file>westbahn.js</file>
         <file>whyline.json</file>

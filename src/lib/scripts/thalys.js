@@ -21,13 +21,14 @@ function parseSsbTicket(ssb, node) {
     res.reservedTicket.ticketedSeat.seatNumber = ssb.type1SeatNumber;
     res.reservationNumber = ssb.tcn;
     res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(ssb.rawData);
+    res.reservedTicket.ticketNumber = ssb.tcn;
     return res;
 }
 
 function parseReservation(html, node) {
     var tokenElem = html.eval('//table[@class="qrcode"]//img')[0];
     var token = tokenElem.attribute("src").match(/barcode\/tAZTEC\/.*\/nBinary\/v(.*)\/barcode.gif/);
-    var res = parseSsbTicket(Barcode.decodeEraSsbTicket(ByteArray.fromBase64(token[1])), node);
+    var res = ExtractorEngine.extract(ByteArray.fromBase64(token[1])).result[0];
 
     var subtitle = html.eval('//table[@class="subtitle"]');
     var ref = subtitle[0].recursiveContent.match(/(\d{2}.\d{2}.\d{4})[\s\S]*([A-Z0-9]{6})/);

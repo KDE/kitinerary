@@ -8,7 +8,10 @@ function parseSsbBarcode(ssb, node)
 {
     // vending machine bought and/or newer tickets claim version 2, but they aren't...
     if (ssb.version == 2) {
-        ssb = Barcode.decodeEraSsbTicket(ssb.rawData, 1);
+        let data = ssb.rawData.slice(0);
+        let view = new Int8Array(data);
+        view[0] = (view[0] & 0x0F) | 0x10;
+        return ExtractorEngine.extract(data).result;
     }
     if (ssb.version != 1) {
         return;

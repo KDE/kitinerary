@@ -2,7 +2,6 @@
     {
         "mimeType": "application/pdf",
         "filter": [
-            { "field": "From", "match": "no-reply@flysas.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
             { "field": "operatingCarrierDesignator", "match": "SK", "mimeType": "internal/iata-bcbp", "scope": "Descendants" }
         ],
         "script": "sas-boardingpass.js"

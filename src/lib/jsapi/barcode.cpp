@@ -5,7 +5,6 @@
 */
 
 #include "barcode.h"
-#include <era/ssbticketreader.h>
 #include <pdf/pdfbarcodeutil_p.h>
 
 #include <KItinerary/PdfDocument>
@@ -15,7 +14,7 @@
 
 using namespace KItinerary;
 
-void JsApi::Barcode::setDecoder(BarcodeDecoder *decoder)
+void JsApi::Barcode::setDecoder(const BarcodeDecoder *decoder)
 {
     m_decoder = decoder;
 }
@@ -76,11 +75,6 @@ QString JsApi::Barcode::decodeBarcode(const QVariant &img, BarcodeDecoder::Barco
         return m_decoder->decodeString(pdfImg.image(), hints);
     }
     return {};
-}
-
-QVariant JsApi::Barcode::decodeEraSsbTicket(const QByteArray &s, int versionOverride) const
-{
-    return SSBTicketReader::read(s, versionOverride);
 }
 
 #include "moc_barcode.cpp"
