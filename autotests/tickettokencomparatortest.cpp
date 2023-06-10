@@ -67,7 +67,6 @@ private Q_SLOTS:
         QFETCH(QVariant, rhs);
 
         QEXPECT_FAIL("iata-prefix", "IATA BCBP token comparison not implemented yet", Abort);
-        QEXPECT_FAIL("uic-semantic-equal", "UIC 918 token comparison not implemented yet", Abort);
         QVERIFY(TicketTokenComparator::isSame(lhs, rhs));
         QVERIFY(TicketTokenComparator::isSame(rhs, lhs));
     }
