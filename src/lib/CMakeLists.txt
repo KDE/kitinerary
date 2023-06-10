@@ -159,6 +159,7 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     qimagepurebinarizer.cpp
     sortutil.cpp
     stringutil.cpp
+    tickettokencomparator.cpp
 )
 if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(KPim${KF_MAJOR_VERSION}Itinerary PROPERTIES UNITY_BUILD ON)
