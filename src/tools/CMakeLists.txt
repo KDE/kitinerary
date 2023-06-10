@@ -16,3 +16,7 @@ target_link_libraries(uper-strings KPim6Itinerary)
 add_executable(plist-dump plist-dump.cpp)
 target_include_directories(plist-dump PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(plist-dump KPim6Itinerary Qt6::Core5Compat)
+
+add_executable(online-ticket-dump online-ticket-dump.cpp)
+target_include_directories(online-ticket-dump PRIVATE ${CMAKE_BINARY_DIR})
+target_link_libraries(online-ticket-dump PRIVATE KPim6Itinerary Qt::Network)

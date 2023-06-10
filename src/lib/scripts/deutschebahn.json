@@ -107,5 +107,18 @@
         "function": "parseDBRegioBusUic",
         "mimeType": "internal/uic9183",
         "script": "deutschebahn.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "url",
+                "match": "^https://fahrkarten.bahn.de/mobile/dbc/xs.go",
+                "mimeType": "internal/http-response",
+                "scope": "Parent"
+            }
+        ],
+        "function": "parseOnlineTicket",
+        "mimeType": "text/html",
+        "script": "deutschebahn-online-ticket.js"
     }
 ]

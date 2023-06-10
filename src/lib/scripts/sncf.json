@@ -171,5 +171,18 @@
         "function": "parseEvent",
         "mimeType": "internal/event",
         "script": "sncf.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "url",
+                "match": "^https://www.sncf-connect.com/bff/api/v1/trips/trips-by-criteria",
+                "mimeType": "internal/http-response",
+                "scope": "Parent"
+            }
+        ],
+        "function": "parseOnlineTicket",
+        "mimeType": "application/ld+json",
+        "script": "sncf-online-ticket.js"
     }
 ]
