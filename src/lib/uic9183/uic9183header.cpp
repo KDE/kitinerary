@@ -8,6 +8,7 @@
 #include "logging.h"
 
 #include <cstdint>
+#include <cstring>
 
 using namespace KItinerary;
 
@@ -54,6 +55,11 @@ Uic9183Header::Uic9183Header(const QByteArray& data)
     }
 
     m_data = data;
+}
+
+bool Uic9183Header::operator==(const Uic9183Header &other) const
+{
+    return isValid() && other.isValid() && std::memcmp(m_data.constData(), other.m_data.constData(), PrefixSize) == 0;
 }
 
 bool Uic9183Header::isValid() const

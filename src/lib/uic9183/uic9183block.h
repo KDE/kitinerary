@@ -28,6 +28,8 @@ public:
     Uic9183Block& operator=(const Uic9183Block&);
     Uic9183Block& operator=(Uic9183Block&&);
 
+    bool operator==(const Uic9183Block &other) const;
+
     /** Returns the block name (6 characters).
      *  The name is either "U_" + 4 letter standard type or a 4 digit vendor id + 2 char vendor type
      */

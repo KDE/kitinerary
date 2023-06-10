@@ -41,6 +41,12 @@ Uic9183Block::Uic9183Block(const QByteArray &data, int offset)
     m_data = data;
 }
 
+bool Uic9183Block::operator==(const Uic9183Block &other) const
+{
+    return size() == other.size() && std::memcmp(m_data.constData() + m_offset, other.m_data.constData() + other.m_offset, size()) == 0;
+}
+
+
 // 6x header name
 // 2x block version
 // 4x block size as string, including the header
