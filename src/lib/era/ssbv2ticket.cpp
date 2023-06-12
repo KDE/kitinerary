@@ -22,7 +22,17 @@ SSBv2Ticket::SSBv2Ticket(const QByteArray &data)
 {
     if (maybeSSB(data)) {
         m_data = data;
-    } else {
+
+        // additional sanity checking to catch the maybeSSB heuristic not being good enough
+        // trainNumber() > 99999 would also be an effective check, wouldn't it be for the Trenitalia
+        // deviations from the SSBv2 spec...
+        if (numberOfAdultPassengers() > 99 || numberOfChildPassengers() > 99)
+        {
+            m_data.clear();
+        }
+    }
+
+    if (m_data.isEmpty()) {
         qWarning() << "Trying to construct an SSB ticket from invalid data!";
     }
 }
