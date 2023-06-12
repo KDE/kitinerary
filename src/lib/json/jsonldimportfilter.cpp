@@ -246,6 +246,17 @@ static void filterEvent(QJsonObject &obj)
     unpackArray(obj, QLatin1String("location"));
 }
 
+static void filterLocalBusiness(QJsonObject &obj)
+{
+    // convert text address to PostalAddress
+    if (obj[QLatin1String("address")].isString()) {
+        obj.insert(QLatin1String("address"), QJsonObject{
+            {QLatin1String("@type"), QLatin1String("PostalAddress")},
+            {QLatin1String("streetAddress"), obj[QLatin1String("address")].toString()},
+        });
+    }
+}
+
 static void filterPostalAddress(QJsonObject &obj)
 {
     // unpack country objects
@@ -260,6 +271,7 @@ static void filterPostalAddress(QJsonObject &obj)
 static constexpr const JsonLdFilterEngine::TypeFilter type_filters[] = {
     { "Event", filterEvent },
     { "Flight", filterFlight },
+    { "LocalBusiness", filterLocalBusiness },
     { "FoodEstablishment", filterFoodEstablishment },
     { "PostalAddress", filterPostalAddress },
 };
