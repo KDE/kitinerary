@@ -128,6 +128,26 @@ static void filterReservation(QJsonObject &res)
         }
     }
 
+    auto ticket = res.value(QLatin1String("reservedTicket"));
+
+    // Convert ticketedSeat from text to Seat
+    // Using text for Seat is invalid but some cinema do that
+    if (ticket.isObject() && ticket.toObject()[QLatin1String("ticketedSeat")].isString()) {
+        auto obj = ticket.toObject();
+        static const QRegularExpression regex(QStringLiteral("Row ([0-9]+), SeatNo. ([0-9]+)"));
+        const auto matches = regex.match(obj[QLatin1String("ticketedSeat")].toString());
+
+        if (matches.hasMatch()) {
+            obj.insert(QLatin1String("ticketedSeat"), QJsonObject{
+                {QLatin1String("@type"), QLatin1String("Seat")},
+                {QLatin1String("seatRow"), matches.captured(1)},
+                {QLatin1String("seatNumber"), matches.captured(2)},
+            });
+        }
+
+        res.insert(QStringLiteral("reservedTicket"), obj);
+    }
+
     // normalize reservationStatus enum
     auto resStat = res.value(QLatin1String("reservationStatus")).toString();
     if (!resStat.isEmpty() && !resStat.contains(QLatin1String("/Reservation"))) {
