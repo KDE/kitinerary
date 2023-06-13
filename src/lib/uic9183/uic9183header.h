@@ -29,6 +29,8 @@ public:
     Uic9183Header();
     Uic9183Header(const QByteArray &data);
 
+    bool operator==(const Uic9183Header &other) const;
+
     bool isValid() const;
     int signatureSize() const;
     int compressedMessageSize() const;

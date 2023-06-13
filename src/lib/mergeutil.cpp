@@ -10,6 +10,7 @@
 #include "locationutil.h"
 #include "stringutil.h"
 #include "sortutil.h"
+#include "tickettokencomparator_p.h"
 
 #include <KItinerary/BoatTrip>
 #include <KItinerary/BusTrip>
@@ -79,16 +80,6 @@ static bool conflictIfPresent(const Person &lhs, const Person &rhs)
     return !lhs.name().isEmpty() && !rhs.name().isEmpty() && !MergeUtil::isSamePerson(lhs, rhs);
 }
 
-/** Checks that @p lhs and @p rhs have a different prefix is they are both set. */
-static bool prefixConflictIfPresent(const QString &lhs, const QString &rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
-{
-    return !lhs.isEmpty() && !rhs.isEmpty() && !lhs.startsWith(rhs, caseSensitive) && !rhs.startsWith(lhs, caseSensitive);
-}
-static bool prefixConflictIfPresent(const QByteArray &lhs, const QByteArray &rhs)
-{
-    return !lhs.isEmpty() && !rhs.isEmpty() && !lhs.startsWith(rhs) && !rhs.startsWith(lhs);
-}
-
 static bool isSameFlight(const Flight &lhs, const Flight &rhs);
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs);
 static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs);
@@ -101,7 +92,6 @@ static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs);
 static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs);
 static bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes);
 static bool isMinimalCancelationFor(const Reservation &res, const Reservation &cancel);
-static bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs);
 
 bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes)
 {
@@ -157,7 +147,7 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         // so we can simply skip this here for flights
         // for other ticket tokens (e.g. Renfe), shorter and longer versions of the same token exist as well
         // so we look for matching prefixes here
-        if (!JsonLd::isA<FlightReservation>(lhs) && !isSameTicketToken(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())) {
+        if (!JsonLd::isA<FlightReservation>(lhs) && !TicketTokenComparator::isSame(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())) {
             return false;
         }
 
@@ -321,7 +311,7 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
          || conflictIfPresent(lhsTicket.ticketNumber(), rhsTicket.ticketNumber())
          || conflictIfPresent(lhsTicket.name(), rhsTicket.name())
          || conflictIfPresent(lhsTicket.validFrom(), rhsTicket.validFrom())
-         || !isSameTicketToken(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())
+         || !TicketTokenComparator::isSame(lhsTicket.ticketTokenData(), rhsTicket.ticketTokenData())
         ) {
             return false;
         }
@@ -337,7 +327,7 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
          || conflictIfPresent(lhsPM.membershipNumber(), rhsPM.membershipNumber())
          || conflictIfPresent(lhsPM.validFrom(), rhsPM.validFrom())
          || conflictIfPresent(lhsPM.validUntil(), rhsPM.validUntil())
-         || !isSameTicketToken(lhsPM.tokenData(), rhsPM.tokenData())
+         || !TicketTokenComparator::isSame(lhsPM.tokenData(), rhsPM.tokenData())
         ) {
             return false;
         }
@@ -798,26 +788,6 @@ bool isMinimalCancelationFor(const Reservation &res, const Reservation &cancel)
         return false;
     }
     return SortUtil::startDateTime(res) > cancel.modifiedTime();
-}
-
-bool isSameTicketToken(const QVariant &lhs, const QVariant &rhs)
-{
-    if (lhs.isNull() || rhs.isNull()) {
-        return true;
-    }
-    if (lhs.userType() != rhs.userType()) {
-        return false;
-    }
-
-    if (lhs.userType() == QMetaType::QString) {
-        return !prefixConflictIfPresent(lhs.toString(), rhs.toString(), Qt::CaseInsensitive);
-    }
-    if (lhs.userType() == QMetaType::QByteArray) {
-        return !prefixConflictIfPresent(lhs.toByteArray(), rhs.toByteArray());
-    }
-
-    qCWarning(CompareLog) << "unhandled ticket token type" << lhs << rhs;
-    return false;
 }
 
 static bool isCompatibleLocationChange(const QVariant &lhs, const QVariant &rhs)
