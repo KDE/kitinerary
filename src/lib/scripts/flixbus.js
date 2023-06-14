@@ -3,6 +3,16 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+// convert bus reservations to train reservations when needed
+function fixTransportMode(res) {
+    if (res.reservationFor.departureBusStop.name.endsWith(" (FlixTrain)") && res.reservationFor.arrivalBusStop.name.endsWith(" (FlixTrain)")) {
+        res = JsonLd.busToTrainReservation(res);
+        res.reservationFor.departureStation.name = res.reservationFor.departureStation.name.substr(0, res.reservationFor.departureStation.name.length - 11);
+        res.reservationFor.arrivalStation.name = res.reservationFor.arrivalStation.name.substr(0, res.reservationFor.arrivalStation.name.length - 11);
+    }
+    return res;
+}
+
 function main(content, node) {
     // convert QR download links into the actual QR codes
     var res = node.result;
@@ -11,11 +21,7 @@ function main(content, node) {
         res[i].reservedTicket.ticketToken = ticketToken.replace(/^https?:\/\/api\.(?:flixbus|meinfernbus)\..{2,3}\/qrcode\/(..)\//, "qrCode:https://shop.flixbus.$1/pdfqr/");
 
         // their schema.org annotations also claim train trips are bus trips, fix that
-        if (res[i].reservationFor.departureBusStop.name.endsWith(" (FlixTrain)") && res[i].reservationFor.arrivalBusStop.name.endsWith(" (FlixTrain)")) {
-            res[i] = JsonLd.busToTrainReservation(res[i]);
-            res[i].reservationFor.departureStation.name = res[i].reservationFor.departureStation.name.substr(0, res[i].reservationFor.departureStation.name.length - 11);
-            res[i].reservationFor.arrivalStation.name = res[i].reservationFor.arrivalStation.name.substr(0, res[i].reservationFor.arrivalStation.name.length - 11);
-        }
+        res[i] = fixTransportMode(res[i]);
     }
     return res;
 }
@@ -57,7 +63,7 @@ function parsePdfTicket(pdf, node, triggerNode)
     let reservations = [];
     while (true) {
         const times = timeColumn.substr(idxTime).match(/(\d\d:\d\d)\n([^:]*?\n)?([^:]*?\n)?(\d\d:\d\d)/);
-        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n).*(?:Bus|Autobus) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung) (.*)\n(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
+        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*\n(?:.*\n)*)?.*(?:Bus|Autobus|Zug) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung) (.*)\n(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
         if (!times || !stations) {
             break;
         }
@@ -79,7 +85,28 @@ function parsePdfTicket(pdf, node, triggerNode)
         res.reservationFor.arrivalBusStop.name = stations[6];
         parseLocation(res.reservationFor.arrivalBusStop, stations[7], stations[8], links);
 
-        reservations.push(res);
+        reservations.push(fixTransportMode(res));
     }
-    return reservations;
+
+    if (reservations.length > 1) // unclear how to match seats in that case
+        return reservations;
+
+    const rightSide = page.textInRect(0.47, 0.0, 1.0, 0.5);
+    let idx = 0;
+    let personalizedReservations = [];
+    while (true) {
+        const pas = rightSide.substr(idx).match(/(\S+.*\S)  +(?:(\d+) · )?(\d+[A-Z])\n/);
+        if (!pas) {
+            break;
+        }
+        idx += pas.index + pas[0].length;
+        for (res of reservations) {
+            let r = JsonLd.clone(res);
+            r.underName.name = pas[1];
+            r.reservedTicket.ticketedSeat.seatNumber = pas[3];
+            r.reservedTicket.ticketedSeat.seatSection = pas[2];
+            personalizedReservations.push(r);
+        }
+    }
+    return personalizedReservations.length ? personalizedReservations : reservations;
 }
