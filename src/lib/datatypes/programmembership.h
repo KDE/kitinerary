@@ -24,6 +24,7 @@ class KITINERARY_EXPORT ProgramMembership
     KITINERARY_PROPERTY(QString, programName, setProgramName)
     KITINERARY_PROPERTY(QString, membershipNumber, setMembershipNumber)
     KITINERARY_PROPERTY(KItinerary::Person, member, setMember)
+    KITINERARY_PROPERTY(QVariantList, subjectOf, setSubjectOf)
 
     /** KItinerary extension: barcode token for program membership cards
       * having a barcode representation (e.g. Deutsch Bahn BahnCards).

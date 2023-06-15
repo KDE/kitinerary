@@ -55,6 +55,7 @@ class KITINERARY_EXPORT Ticket
     Q_PROPERTY(QVariant ticketTokenData READ ticketTokenData STORED false)
 
     KITINERARY_PROPERTY(KItinerary::Person, underName, setUnderName)
+    KITINERARY_PROPERTY(QVariantList, subjectOf, setSubjectOf)
 
     /** Non-standard extension for ticket validity time ranges. */
     KITINERARY_PROPERTY(QDateTime, validFrom, setValidFrom)
