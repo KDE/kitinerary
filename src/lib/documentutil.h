@@ -12,27 +12,29 @@
 
 namespace KItinerary {
 
-/** Utilities for dealing with documents attached to reservations. */
+/** Utilities for dealing with documents attached to objects.
+ *  @see https://schema.org/subjectOf
+ */
 namespace DocumentUtil
 {
     /** Determine a document identifier for the given content. */
     KITINERARY_EXPORT QString idForContent(const QByteArray &data);
 
-    /** Add a document id to the reservation @p res.
-     *  @returns @c true if the document id wasn't present yet and the reservation changed, @p false otherwise.
+    /** Add a document id to the object @p obj.
+     *  @returns @c true if the document id wasn't present yet and the object changed, @p false otherwise.
      */
-    KITINERARY_EXPORT bool addDocumentId(QVariant &res, const QString &id);
+    KITINERARY_EXPORT bool addDocumentId(QVariant &obj, const QString &id);
 
-    /** Removes the document identifier @p id from reservation @p res.
-     *  @returns @c true if the document id was present and the reservation changed, @p false otherwise.
+    /** Removes the document identifier @p id from object @p res.
+     *  @returns @c true if the document id was present and the object changed, @p false otherwise.
      */
-    KITINERARY_EXPORT bool removeDocumentId(QVariant &res, const QString &id);
+    KITINERARY_EXPORT bool removeDocumentId(QVariant &obj, const QString &id);
 
-    /** Returns all document identifiers associcated with reservation @p res. */
-    KITINERARY_EXPORT QVariantList documentIds(const QVariant &res);
+    /** Returns all document identifiers associated with object @p obj. */
+    KITINERARY_EXPORT QVariantList documentIds(const QVariant &obj);
 
-    /** Sets the list of document identifiers for reservation @p res. */
-    KITINERARY_EXPORT void setDocumentIds(QVariant &res, const QVariantList &docIds);
+    /** Sets the list of document identifiers for object @p obj. */
+    KITINERARY_EXPORT void setDocumentIds(QVariant &obj, const QVariantList &docIds);
 }
 
 }
