@@ -20,7 +20,7 @@ using namespace KItinerary;
 static std::vector<QString> listCerts()
 {
     QProcess proc;
-    proc.setProgram(QStringLiteral("kioclient"));
+    proc.setProgram(QStringLiteral("kioclient5"));
     proc.setArguments({QStringLiteral("ls"), QStringLiteral("ldap://ldap-vdv-ion.telesec.de:389/ou=VDV%20KA,o=VDV%20Kernapplikations%20GmbH,c=de")});
     proc.setProcessChannelMode(QProcess::ForwardedErrorChannel);
     proc.start();
@@ -41,7 +41,7 @@ static std::vector<QString> listCerts()
 static void downloadCert(const QString &certName)
 {
     QProcess proc;
-    proc.setProgram(QStringLiteral("kioclient"));
+    proc.setProgram(QStringLiteral("kioclient5"));
     proc.setArguments({QStringLiteral("cat"), QStringLiteral("ldap://ldap-vdv-ion.telesec.de:389/cn=") + certName + QStringLiteral(",ou=VDV%20KA,o=VDV%20Kernapplikations%20GmbH,c=de")});
     proc.setProcessChannelMode(QProcess::ForwardedErrorChannel);
     proc.start();
