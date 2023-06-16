@@ -64,7 +64,7 @@ function parsePdf(pdf, node) {
 
         const train = rightHeaderText.match(/(?:Train|Treno|Zug)(?:\/Train)?:[ \n](.*)\n/);
         if (!train) {
-            break;
+            continue;
         }
         res.reservationFor.trainNumber = train[1];
 
