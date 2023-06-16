@@ -38,6 +38,7 @@ public:
     Seat ticketedSeat;
     QString ticketToken;
     Person underName;
+    QVariantList subjectOf;
     QDateTime validFrom;
     QDateTime validUntil;
 };
@@ -49,6 +50,7 @@ KITINERARY_MAKE_PROPERTY(Ticket, QString, ticketNumber, setTicketNumber)
 KITINERARY_MAKE_PROPERTY(Ticket, Seat, ticketedSeat, setTicketedSeat)
 KITINERARY_MAKE_PROPERTY(Ticket, QString, ticketToken, setTicketToken)
 KITINERARY_MAKE_PROPERTY(Ticket, Person, underName, setUnderName)
+KITINERARY_MAKE_PROPERTY(Ticket, QVariantList, subjectOf, setSubjectOf)
 KITINERARY_MAKE_PROPERTY(Ticket, QDateTime, validFrom, setValidFrom)
 KITINERARY_MAKE_PROPERTY(Ticket, QDateTime, validUntil, setValidUntil)
 KITINERARY_MAKE_OPERATOR(Ticket)

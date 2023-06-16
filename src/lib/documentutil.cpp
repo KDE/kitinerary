@@ -7,7 +7,6 @@
 #include "documentutil.h"
 
 #include <KItinerary/JsonLdDocument>
-#include <KItinerary/Reservation>
 
 #include <QCryptographicHash>
 #include <QDebug>
@@ -22,45 +21,34 @@ QString DocumentUtil::idForContent(const QByteArray &data)
     return QString::fromLatin1(hash.result().toHex());
 }
 
-bool DocumentUtil::addDocumentId(QVariant &res, const QString &id)
+bool DocumentUtil::addDocumentId(QVariant &obj, const QString &id)
 {
-    if (!JsonLd::canConvert<Reservation>(res)) {
-        return false;
-    }
-
-    auto l = documentIds(res);
+    auto l = documentIds(obj);
     if (!l.contains(id)) {
         l.push_back(id);
-        setDocumentIds(res, l);
+        setDocumentIds(obj, l);
         return true;
     }
     return false;
 }
 
-bool DocumentUtil::removeDocumentId(QVariant &res, const QString &id)
+bool DocumentUtil::removeDocumentId(QVariant &obj, const QString &id)
 {
-    if (!JsonLd::canConvert<Reservation>(res)) {
-        return false;
-    }
-
-    auto l = documentIds(res);
+    auto l = documentIds(obj);
     if (l.contains(id)) {
         l.removeAll(id);
-        setDocumentIds(res, l);
+        setDocumentIds(obj, l);
         return true;
     }
     return false;
 }
 
-QVariantList DocumentUtil::documentIds(const QVariant &res)
+QVariantList DocumentUtil::documentIds(const QVariant &obj)
 {
-    if (!JsonLd::canConvert<Reservation>(res)) {
-        return {};
-    }
-    return JsonLd::convert<Reservation>(res).subjectOf();
+    return JsonLdDocument::readProperty(obj, "subjectOf").toList();
 }
 
-void DocumentUtil::setDocumentIds(QVariant &res, const QVariantList &docIds)
+void DocumentUtil::setDocumentIds(QVariant &obj, const QVariantList &docIds)
 {
-    JsonLdDocument::writeProperty(res, "subjectOf", docIds);
+    JsonLdDocument::writeProperty(obj, "subjectOf", docIds);
 }
