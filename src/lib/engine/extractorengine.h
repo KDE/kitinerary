@@ -45,9 +45,10 @@ class ExtractorScriptEngine;
  * - An extractor JavaScript file, compatible with QJSEngine.
  *
  * The extractor script will have access to API defined in the JsApi namespace:
- * - JsApi::Context: information about the input data being processed.
  * - JsApi::JsonLd: functions for generating JSON-LD data.
  * - JsApi::Barcode: barcode decoding functions.
+ * - JsApi::BitArray, JsApi::ByteArray for working with binary data.
+ * - JsApi::ExtractorEngine for recursive invokation of the extractor process.
  *
  * The entry point to the script is specified in the meta-data, its argument depends
  * on the extractor type:
@@ -60,6 +61,8 @@ class ExtractorScriptEngine;
  *   image content.
  * - Apple Wallet pass extractors are passed a KPkPass::BoardingPass instance.
  * - iCalendar event extractors are passed KCalendarCore::Event instances.
+ * - UIC/ERA/VDV/IATA standardized ticket codes are passed as their respective types.
+ * - Binary data is passed as ArrayBuffer.
  *
  * These functions should return an object or an array of objects following the JSON-LD
  * format defined on schema.org. JsApi::JsonLd provides helper functions to build such
