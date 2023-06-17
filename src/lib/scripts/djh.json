@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^%\\d{3}-\\d{8} \\d{3};.*;\\d\\d/\\d{4};\\d\\d\\.\\d\\d\\.\\d{4}\\?$",
+            "mimeType": "text/plain",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseMembershipCard",
+    "mimeType": "text/plain",
+    "script": "djh.js"
+}
