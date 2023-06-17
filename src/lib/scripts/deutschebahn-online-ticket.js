@@ -42,6 +42,11 @@ function parseOnlineTicket(xml)
             res.reservationFor.arrivalPlatform = arrPtfMatch[0].content;
         }
         res.reservationFor.arrivalTime = arr.attribute('dt').substr(0, 11) + arr.attribute('t');
+
+        if (train.eval('gat')[0].content === "Bus") {
+            res = JsonLd.trainToBusReservation(res);
+        }
+
         result.push(res);
     }
 
