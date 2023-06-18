@@ -72,20 +72,44 @@ These capture everything not handled above.
 
 ### Data extraction
 
-The entry point for data extraction is KItinerary::ExtractorEngine. Depending on the provided
-input, this will look for:
+Data extraction is performed on the document tree starting at the leaf nodes, with results
+propagating upwards towards the root node. This means that results from child nodes are available
+to the extraction process, and can be extended/augmented there for example.
 
-* Structured data in JSON-LD or XML microdata format, from HTML emails,
-  implemented by KItinerary::StructuredDataExtractor.
-* Structured data from IATA bar coded boarding passes (BCBP), provided by
-  KItinerary::IataBcbpParser.
-* Structured data from UIC 918.3 train ticket passes, provided by
-  KItinerary::Uic9183Parser.
-* Unstructured data from plain text, HTML, iCal, PDF or email documents, using
-  vendor-specific scripts, provided by KItinerary::ExtractorEngine.
-* Unstructured data from Apple Wallet boarding passes, using
-  vendor-specific scripts.
-* Any of the above in email or PDF documents.
+The entry point for data extraction is KItinerary::ExtractorEngine.
+
+There's a number of built-in generic extractors for the following cases:
+* The various ticket barcode types (IATA, UIC 918.3/9, ERA FCB, ERA SSB).
+* Structured data in JSON-LD or XML microdata format included in HTML documents or iCal events.
+* PDF flight boarding passes.
+* Apple Wallet passes for flights, trains or events.
+* iCal calendar events (depends on KItinerary::ExtractorEngine::ExtractGenericIcalEvents).
+
+To cover anything not handled by this, there are vendor-specific extractor scripts. Those
+can produce complete results or merely fix or augment what the generic extraction has produced.
+
+Extractor scripts consist of two basic parts, the filter defining when it should be triggered
+and the script itself (see KItinerary::ScriptExtractor). This is necessary as running all extractor
+scripts against a given input data would be too expensive. Filters therefore don't need to be perfect
+(noticing in the script it triggered on the wrong document is fine), but rather fast.
+
+#### Extractor filters
+
+Extractor filters are evaluated against document nodes. This can be the node the extractor
+script wants to process, but also a descendant or ancestor node.
+
+An extractor script filter consists of the following four properties:
+* `m̀imeType`: the type of the node to match
+* `field`: the property of the node content to match. This is ignored for nodes containing
+  basic types such as plain text or binary data.
+* `match`: a regular expression
+* `scope`: this defines the relation to the node the script should be run on (Current, Parent,
+  Children, Ancestors or Descendants).
+
+#### Script development
+
+[KItineary Workbench](https://commits.kde.org/kitinerary-workbench) allows interactive development
+of extractor scripts.
 
 ### Data augmentation
 
