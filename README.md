@@ -1,15 +1,76 @@
-# KItinerary
+# Itinerary data extraction engine
 
-A library containing itinerary data model and itinerary extraction code.
+The itinerary data extraction engine extracts travel-related information from input in various forms,
+from PDF documents to ticket barcodes, from emails to calendar events, and provides that in a machine-readable way.
 
-## Data Model
+## Users
+
+* [KDE Itinerary](https://apps.kde.org/itinerary)
+* [KMail](https://kontact.kde.org/components/kmail/) (via the Itinerary plug-in)
+* [Nextcloud Mail](https://github.com/nextcloud/mail)
+
+## Architecture
+
+For linked class names read this in [the API docs](https://api.kde.org/kdepim/kitinerary/html/index.html).
+
+### Data model
 
 This follows the reservation ontology from https://schema.org and Google's extensions to it
 (https://developers.google.com/gmail/markup/reference/).
 
 De/serialization is provided via KItinerary::JsonLdDocument.
 
-## Data Extraction
+### Document model
+
+Input data is transformed into a tree of document nodes (KItinerary::ExtractorDocumentNode).
+This allows handling of arbitrarily nested data, such as an email with a PDF attached to it
+which contains an image that contains a barcode with an UIC 918.3 ticket container, without
+extractors having to consider all possible combinations.
+
+A document node consists of a MIME type and its corresponding data, and potentially a number
+of child nodes.
+
+Data extraction is then performed on that document tree starting at the leaf nodes, with results
+propagating upwards towards the root node.
+
+Supported types of data are listed below. Additional data formats can be added via
+KItinerary::ExtractorDocumentProcessor and KItinerary::ExtractorDocumentNodeFactory.
+
+#### Generic document formats
+
+* PDF documents, represented as KItinerary::PdfDocument.
+* Emails, represented as KMime::Message.
+* Apple Wallet passes, represented as KPkPass::Pass.
+* iCal calendars and iCal calendar event, represented as KCalendarCore::Calendar and KCalendarCore::Event.
+* HTML and XML documents, represented has KItinerary::HtmlDocument.
+
+#### Specialized ticket barcode formats
+
+* UIC 918.3/918.9 ticket barcodes, represented as KItinerary::Uic9183Parser.
+* European Railway Agency (ERA) FCB ticket barcodes, represented as KItinerary::Fcb::UicRailTicketData.
+* European Railway Agency (ERA) SSB ticket barcodes, represented as KItinerary::SSBv1Ticket,
+  KItinerary::SSBv2Ticket and KItinerary::SSBv3Ticket.
+* IATA boarding pass barcodes, represented as KItinerary::IataBcbp.
+* VDV eTicket barcodes, represented as KItinerary::VdvTicket.
+
+#### Technical data types
+
+These are primarily needed for internal use.
+
+* Images, represented as QImage.
+* Apple property lists (plist), represented as KItinerary::PListReader.
+* HTTP responses, represented as KItineary::HTTPResponse.
+
+#### Generic data types
+
+These capture everything not handled above.
+
+* JSON, represented as QJsonArray.
+* Plain textual data, represented as a QString.
+* Arbitrary binary data, represented as a QByteArray.
+
+
+### Data extraction
 
 The entry point for data extraction is KItinerary::ExtractorEngine. Depending on the provided
 input, this will look for:
@@ -26,7 +87,7 @@ input, this will look for:
   vendor-specific scripts.
 * Any of the above in email or PDF documents.
 
-## Data Augmentation
+### Data augmentation
 
 Extracted data can be augmented by static knowledge obtained from Wikidata:
 
@@ -36,3 +97,8 @@ Via KItinerary::KnowledgeDb:
 * Train station lookup by UIC, IBNR, SNCF, VR or Indian Railway station identifiers.
 * Country ISO codes, driving side and used power plugs.
 * Timezone and country lookup from a geo coordinate.
+
+
+## Contributing
+
+Join us in the [KDE Itinerary Matrix channel](https://matrix.to/#/#itinerary:kde.org)!
