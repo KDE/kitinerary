@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "qimagepurebinarizer.h"
+#include "qimagepurebinarizer_p.h"
 #if !ZXING_USE_READBARCODE
 
 #include <ZXing/BitArray.h>

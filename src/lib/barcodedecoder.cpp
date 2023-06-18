@@ -8,7 +8,7 @@
 
 #include "barcodedecoder.h"
 #include "logging.h"
-#include "qimagepurebinarizer.h"
+#include "qimagepurebinarizer_p.h"
 
 #include <QDebug>
 #include <QImage>
