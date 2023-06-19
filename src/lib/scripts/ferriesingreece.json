@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "title",
+            "match": "Ferry booking request",
+            "mimeType": "application/pdf",
+            "scope": "Current"
+        }
+    ],
+    "function": "parseTicket",
+    "mimeType": "application/pdf",
+    "script": "ferriesingreece.js"
+}
