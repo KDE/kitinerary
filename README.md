@@ -106,6 +106,36 @@ An extractor script filter consists of the following four properties:
 * `scope`: this defines the relation to the node the script should be run on (Current, Parent,
   Children, Ancestors or Descendants).
 
+#### Extractor scripts
+
+Extractor scripts are defined by the following properties:
+* `script`: The name of the script file.
+* `function`: The name of the JS function that is called as the entry point into the script.
+* `mimeType`: The MIME type the script can handle.
+* `filter`: A list of extractor filters as described above.
+
+Extractor scripts are run against a document node if all of the following conditions are met:
+* The `mimeType` of the script matches that of the node.
+* At lesat one of the extractor `filter` of the script match the node.
+
+The script entry point is called with three arguments (this being JS, some of those can be omitted
+by the script and are then silently ignored):
+* The first argument is the content of the node that is processed. The data type of that argument
+depends on the node type as described in the document model section above. This is usually
+what extractor script are most concerned with.
+* The second argument is the document node being processed (see KItinerary::ExtractorDocumentNode).
+This can be useful to access already extracted results on a node (e.g. coming from generic extraction)
+in order to augment those.
+* The third argument is the document node that matched the filter. This can be the same as the second
+argument (for filters with `scope` = Current), but it doesn't have to be. This is most useful when
+triggering on descendant nodes such as barcodes, the content of which will then be incorporated into
+the extraction result by the script.
+
+The script entry point function is expected to return one of the following:
+* A JS object following the schema.org ontology with a single extraction result.
+* A JS array containing one or more such objects.
+* Anything else (including empty arrays and script errors) are considered an empty result.
+
 #### Script development
 
 [KItineary Workbench](https://commits.kde.org/kitinerary-workbench) allows interactive development
