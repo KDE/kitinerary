@@ -87,8 +87,6 @@ class PdfDocumentPrivate;
 
 /** PDF document for extraction.
  *  This is used as input for ExtractorEngine and the JS extractor scripts.
- *  @note This class is only functional if Poppler is available as a dependency,
- *  otherwise all methods return empty values.
  */
 class KITINERARY_EXPORT PdfDocument : public QObject
 {
