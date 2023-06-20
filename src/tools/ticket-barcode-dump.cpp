@@ -55,7 +55,11 @@ static void dumpGadget(const void *gadget, const QMetaObject *mo, const char* in
             continue;
         }
         const auto value = prop.readOnGadget(gadget);
-        std::cout << indent << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
+        if (prop.isEnumType()) {
+            std::cout << indent << prop.name() << ": " << prop.enumerator().valueToKey(value.toInt()) << std::endl;
+        } else {
+            std::cout << indent << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
+        }
         if (const auto childMo = QMetaType(value.userType()).metaObject()) {
             QByteArray childIndent(indent);
             childIndent.push_back(' ');
