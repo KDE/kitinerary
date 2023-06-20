@@ -10,6 +10,8 @@
 #include <KItinerary/ExtractorEngine>
 
 namespace KItinerary {
+
+/** JavaScript API available to extractor scripts. */
 namespace JsApi {
 
 /** API to access the extractor engine for JS extractor scripts. */

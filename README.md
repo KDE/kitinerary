@@ -106,6 +106,95 @@ An extractor script filter consists of the following four properties:
 * `scope`: this defines the relation to the node the script should be run on (Current, Parent,
   Children, Ancestors or Descendants).
 
+##### Examples
+
+Anything attached to an email send by "booking@example-operator.com". The field we match against here
+is the `From` header of the MIME message.
+
+```json
+{
+    "mimeType": "message/rfc822",
+    "field": "From",
+    "match": "^booking@exampl-operator.com$",
+    "scope": "Ancestors"
+}
+```
+
+Documents containing a barcode of the format "FNNNNNNNN". Note that the scope here is `Descendants`
+ather than `Children` as the direct child nodes tend to be the images containing the barcode.
+
+```json
+{
+    "mimeType": "text/plain",
+    "match": "^F\d{8}$",
+    "scope": "Ancestors"
+}
+```
+
+PDF documents containing the string "My Ferry Booking" anywhere. This should be used as a last resort
+only, as matching against the full PDF document content can be expensive. An imprecise trigger on a
+barcode is preferable to this.
+
+```json
+{
+    "mimeType": "application/pdf",
+    "field": "text",
+    "match": "My Ferry Booking",
+    "scope": "Current"
+}
+```
+
+Apple Wallet passes issued by "org.kde.travelAgency".
+
+```json
+{
+    "mimeType": "application/vnd.apple.pkpass",
+    "field": "passTypeIdentifier",
+    "match": "org.kde.travelAgency",
+    "scope": "Current"
+}
+```
+
+iCal events with an organizer email address of the "kde.org" domain. Note that the field here accesses
+a property of a property. This works at arbitrary depth, as long as the corresponding types are
+introspectable by Qt.
+
+```json
+{
+    "mimeType": "internal/event",
+    "field": "organizer.email",
+    "match": "@kde.org$",
+    "scope": "Current"
+}
+```
+
+A (PDF) document containing an IATA boarding pass barcode of the airline "AB". Triggering
+vendor-specific UIC or ERA railway tickets can be done very similarly, matching on the corresponding
+carrier ids.
+
+```json
+{
+    "mimeType": "internal/iata-bcbp",
+    "field": "operatingCarrierDesignator",
+    "match": "AB",
+    "scope": "Descendants"
+}
+```
+
+A node that has already existing results containing a reservation from "My Transport Operator".
+This is useful for scripts that want to augment or fix schema.org annotation already provided by
+the source. Note that the mimeType "application/ld+json" is special here as it doesn't only trigger
+on the document node content itself, but also matches against the result of nodes of any type.
+
+```json
+{
+    "mimeType": "application/ld+json",
+    "field": "reservationFor.provider.name",
+    "match": "My Transport Operator",
+    "scope": "Current"
+}
+```
+
 #### Extractor scripts
 
 Extractor scripts are defined by the following properties:
@@ -135,6 +224,29 @@ The script entry point function is expected to return one of the following:
 * A JS object following the schema.org ontology with a single extraction result.
 * A JS array containing one or more such objects.
 * Anything else (including empty arrays and script errors) are considered an empty result.
+
+#### Extractor scripts runtime environment
+
+Extractor scripts are run inside a QJSEngine, ie. that's the JS subset to work with.
+There is some additional API available to extractor scripts (see the KItinerary::JsApi namespace).
+
+API for supporting schema.org output:
+- KItinerary::JsApi::JsonLd: factory functions for schema.org objects, date/time parsing, etc
+
+API for handling specific types of input data:
+- KItinerary::JsApi::ByteArray: functions for dealing with byte-aligned binary data,
+  including decompression, Base64 decoding, Protcol Buffer decoding, etc.
+- KItinerary::JsApi::BitArray: functions for dealing with non byte-aligned binary data,
+  such as reading numerical data at arbitrary bit offsets.
+- KItinerary::JsApi::Barcode: functions for manual barcode decoding. This should be rarely
+  needed nowadays, with the extractor engine doing this automatically and creating corresponding
+  document nodes.
+
+API for interacting with the extractor engine itself:
+- KItinerary::JsApi::ExtractorEngine: this allows to recursively perform extraction.
+  This can be useful for elements that need custom decoding in an extractor script first,
+  but that contain otherwise generally supported data formats. Standard barcodes encoded
+  in URL arguments are such an example.
 
 #### Script development
 
