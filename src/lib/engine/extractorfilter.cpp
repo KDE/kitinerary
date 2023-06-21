@@ -261,3 +261,5 @@ ExtractorFilter ExtractorFilter::fromJSValue(const QJSValue &js)
     f.setScope(readEnum<ExtractorFilter::Scope>(js.property(QLatin1String("scope")).toString(), ExtractorFilter::Current));
     return f;
 }
+
+#include "moc_extractorfilter.cpp"

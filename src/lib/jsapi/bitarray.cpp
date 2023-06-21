@@ -31,3 +31,5 @@ quint64 BitArray::readNumberMSB(int startBit, int size) const
 
     return view.valueAtMSB<quint64>(startBit, size);
 }
+
+#include "moc_bitarray.cpp"

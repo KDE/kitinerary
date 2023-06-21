@@ -113,3 +113,5 @@ void ProtobufStreamReader::skip()
             break;
     }
 }
+
+#include "moc_protobufstreamreader.cpp"

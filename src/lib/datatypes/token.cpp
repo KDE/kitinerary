@@ -59,3 +59,5 @@ QVariant Token::tokenData(const QString &token)
     // Qt 6 only does shallow isNull checks, so make sure empty strings produce empty variants
     return token.isEmpty() ? QVariant() : QVariant(token);
 }
+
+#include "moc_token.cpp"

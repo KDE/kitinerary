@@ -233,3 +233,5 @@ std::vector<Uic9183TicketLayoutField> Uic9183TicketLayout::containedFields(int r
     }
     return result;
 }
+
+#include "moc_uic9183ticketlayout.cpp"

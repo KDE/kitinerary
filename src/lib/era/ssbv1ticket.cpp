@@ -67,3 +67,5 @@ QByteArray SSBv1Ticket::rawData() const
 {
     return m_data;
 }
+
+#include "moc_ssbv1ticket.cpp"

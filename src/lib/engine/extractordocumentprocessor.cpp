@@ -109,3 +109,5 @@ QJSValue ExtractorDocumentProcessor::contentToScriptValue([[maybe_unused]] const
 void ExtractorDocumentProcessor::destroyNode([[maybe_unused]] ExtractorDocumentNode &node) const
 {
 }
+
+#include "moc_extractordocumentprocessor.cpp"

@@ -277,3 +277,5 @@ const Vendor0080VUTicketData* Vendor0080VUBlock::ticketData(int index) const
     }
     return ticket;
 }
+
+#include "moc_vendor0080block.cpp"

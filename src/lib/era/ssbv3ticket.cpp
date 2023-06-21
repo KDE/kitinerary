@@ -102,3 +102,5 @@ QByteArray SSBv3Ticket::rawData() const
 {
     return m_data;
 }
+
+#include "moc_ssbv3ticket.cpp"

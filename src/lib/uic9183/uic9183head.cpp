@@ -37,3 +37,5 @@ QDateTime Uic9183Head::issuingDateTime() const
 {
     return QDateTime::fromString(Uic9183Utils::readUtf8String(m_data, 24, 12), QStringLiteral("ddMMyyyyhhmm"));
 }
+
+#include "moc_uic9183head.cpp"

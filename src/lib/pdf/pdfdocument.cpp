@@ -394,3 +394,5 @@ bool PdfDocument::maybePdf(const QByteArray &data)
 {
     return data.startsWith("%PDF");
 }
+
+#include "moc_pdfdocument.cpp"

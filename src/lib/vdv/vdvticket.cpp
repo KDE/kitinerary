@@ -231,3 +231,5 @@ QByteArray VdvTicket::rawData() const
 {
     return d->m_rawData;
 }
+
+#include "moc_vdvticket.cpp"

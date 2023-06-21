@@ -59,3 +59,5 @@ void PdfLink::convertToPageRect(const PDFRectangle *pageRect)
     d->area.setTop(toRatio(pageRect->y1, pageRect->y2, d->area.top()));
     d->area.setBottom(toRatio(pageRect->y1, pageRect->y2, d->area.bottom()));
 }
+
+#include "moc_pdflink.cpp"

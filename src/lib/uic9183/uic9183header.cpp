@@ -95,3 +95,5 @@ int Uic9183Header::compressedMessageOffset() const
 {
     return PrefixSize + signatureSize() + SuffixSize;
 }
+
+#include "moc_uic9183header.cpp"

@@ -142,3 +142,5 @@ QVariant Vendor1154UTBlock::findSubBlock(const QString &str) const
     const auto b = findSubBlock(str.toUtf8().constData());
     return b.isNull() ? QVariant() : QVariant::fromValue(b);
 }
+
+#include "moc_vendor1154block.cpp"

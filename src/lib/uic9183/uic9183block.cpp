@@ -102,3 +102,5 @@ QString Uic9183Block::contentText() const
 {
     return Uic9183Utils::readUtf8String(m_data, m_offset + BlockHeaderSize, contentSize());
 }
+
+#include "moc_uic9183block.cpp"

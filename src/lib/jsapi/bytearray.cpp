@@ -89,3 +89,5 @@ QJSValue JsApi::ByteArray::toArrayBuffer(const QByteArray &input) const
     const auto engine = qjsEngine(this);
     return QJSValue(QJSManagedValue(QVariant(input), engine));
 }
+
+#include "moc_bytearray.cpp"

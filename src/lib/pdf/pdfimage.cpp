@@ -258,3 +258,5 @@ int PdfImage::pathElementsCount() const
 {
     return d->m_vectorPicture.pathElementsCount();
 }
+
+#include "moc_pdfimage.cpp"

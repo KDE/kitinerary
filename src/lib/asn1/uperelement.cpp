@@ -6,3 +6,5 @@
 #include "uperelement.h"
 
 using namespace KItinerary;
+
+#include "moc_uperelement.cpp"

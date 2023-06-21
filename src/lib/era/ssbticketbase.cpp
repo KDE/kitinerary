@@ -53,3 +53,5 @@ QString SSBTicketBase::readString(int start, int length) const
     }
     return res;
 }
+
+#include "moc_ssbticketbase.cpp"

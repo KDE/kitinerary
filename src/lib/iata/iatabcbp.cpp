@@ -151,3 +151,5 @@ bool IataBcbp::maybeIataBcbp(const QString &data)
 {
     return data.size() >= MinimumViableSize && data[0] == QLatin1Char('M') && data[1].isDigit();
 }
+
+#include "moc_iatabcbp.cpp"

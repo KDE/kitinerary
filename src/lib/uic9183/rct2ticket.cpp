@@ -335,3 +335,5 @@ QString Rct2Ticket::seatNumber() const
     }
     return {};
 }
+
+#include "moc_rct2ticket.cpp"

@@ -83,3 +83,5 @@ ExtractorDocumentNode JsApi::ExtractorEngine::extract(const QVariant &content, c
 
     return node;
 }
+
+#include "moc_extractorengine.cpp"

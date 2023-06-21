@@ -142,3 +142,5 @@ int ELBTicketSegment::readNumber(int start, int len) const
 {
     return m_ticket.readNumber(m_offset + start, len);
 }
+
+#include "moc_elbticket.cpp"

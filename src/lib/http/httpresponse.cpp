@@ -93,3 +93,5 @@ QVector<HttpResponse> HttpResponse::fromHarFile(const QByteArray &harFile)
     }
     return result;
 }
+
+#include "moc_httpresponse.cpp"
