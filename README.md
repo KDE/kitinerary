@@ -69,7 +69,6 @@ These capture everything not handled above.
 * Plain textual data, represented as a QString.
 * Arbitrary binary data, represented as a QByteArray.
 
-
 ### Data extraction
 
 Data extraction is performed on the document tree starting at the leaf nodes, with results
@@ -93,7 +92,21 @@ and the script itself (see KItinerary::ScriptExtractor). This is necessary as ru
 scripts against a given input data would be too expensive. Filters therefore don't need to be perfect
 (noticing in the script it triggered on the wrong document is fine), but rather fast.
 
-#### Extractor filters
+### Data augmentation
+
+Extracted data can be augmented by static knowledge obtained from Wikidata:
+
+Via KItinerary::KnowledgeDb:
+* Airport IATA codes, countries, timezones and geo coordinates.
+* Train station countries, timezones and geo coordinates.
+* Train station lookup by UIC, IBNR, SNCF, VR or Indian Railway station identifiers.
+* Country ISO codes, driving side and used power plugs.
+* Timezone and country lookup from a geo coordinate.
+
+
+## Creating extractor scripts
+
+### Extractor filters
 
 Extractor filters are evaluated against document nodes. This can be the node the extractor
 script wants to process, but also a descendant or ancestor node.
@@ -106,7 +119,7 @@ An extractor script filter consists of the following four properties:
 * `scope`: this defines the relation to the node the script should be run on (Current, Parent,
   Children, Ancestors or Descendants).
 
-##### Examples
+#### Examples
 
 Anything attached to an email send by "booking@example-operator.com". The field we match against here
 is the `From` header of the MIME message.
@@ -195,7 +208,7 @@ on the document node content itself, but also matches against the result of node
 }
 ```
 
-#### Extractor scripts
+### Extractor scripts
 
 Extractor scripts are defined by the following properties:
 * `script`: The name of the script file.
@@ -225,45 +238,84 @@ The script entry point function is expected to return one of the following:
 * A JS array containing one or more such objects.
 * Anything else (including empty arrays and script errors) are considered an empty result.
 
-#### Extractor scripts runtime environment
+### Extractor scripts runtime environment
 
 Extractor scripts are run inside a QJSEngine, ie. that's the JS subset to work with.
 There is some additional API available to extractor scripts (see the KItinerary::JsApi namespace).
 
 API for supporting schema.org output:
-- KItinerary::JsApi::JsonLd: factory functions for schema.org objects, date/time parsing, etc
+* KItinerary::JsApi::JsonLd: factory functions for schema.org objects, date/time parsing, etc
 
 API for handling specific types of input data:
-- KItinerary::JsApi::ByteArray: functions for dealing with byte-aligned binary data,
+* KItinerary::JsApi::ByteArray: functions for dealing with byte-aligned binary data,
   including decompression, Base64 decoding, Protcol Buffer decoding, etc.
-- KItinerary::JsApi::BitArray: functions for dealing with non byte-aligned binary data,
+* KItinerary::JsApi::BitArray: functions for dealing with non byte-aligned binary data,
   such as reading numerical data at arbitrary bit offsets.
-- KItinerary::JsApi::Barcode: functions for manual barcode decoding. This should be rarely
+* KItinerary::JsApi::Barcode: functions for manual barcode decoding. This should be rarely
   needed nowadays, with the extractor engine doing this automatically and creating corresponding
   document nodes.
 
 API for interacting with the extractor engine itself:
-- KItinerary::JsApi::ExtractorEngine: this allows to recursively perform extraction.
+* KItinerary::JsApi::ExtractorEngine: this allows to recursively perform extraction.
   This can be useful for elements that need custom decoding in an extractor script first,
   but that contain otherwise generally supported data formats. Standard barcodes encoded
   in URL arguments are such an example.
 
-#### Script development
+### Script development
 
 [KItineary Workbench](https://commits.kde.org/kitinerary-workbench) allows interactive development
 of extractor scripts.
 
-### Data augmentation
+### Examples
 
-Extracted data can be augmented by static knowledge obtained from Wikidata:
+Let's assume we want to create an extractor script for a railway ticket which comes with a simple
+tabular layout for a single leg per page, and contains a QR code with a 10 digit number for each leg.
 
-Via KItinerary::KnowledgeDb:
-* Airport IATA codes, countries, timezones and geo coordinates.
-* Train station countries, timezones and geo coordinates.
-* Train station lookup by UIC, IBNR, SNCF, VR or Indian Railway station identifiers.
-* Country ISO codes, driving side and used power plugs.
-* Timezone and country lookup from a geo coordinate.
+```
+City A -> City B (Central Station)
+Departure: 21 Jun 18:42
+Arrival: 21 Jun 23:12
+...
+```
 
+As a filter we'd use something similar as example 2 above, triggering on the barcode content.
+
+```js
+function extractTicket(pdf, node, barcode)
+{
+    // text for the PDF page containing the barcode that triggered this
+    const text = pdf.pages[barcode.location].text;
+
+    // empty http://schema.org/TrainReservation object for the result
+    let res = JsonLd.newTrainReservation();
+
+    // when using regular expressions, matching on things that don't change in different
+    // language variants is usually preferable, but might not always be possible
+    // when creating regular expressions consider that various special characters might occur in names
+    // of people or locations (in the above example spaces and parenthesis)
+    const leg = text.match(/(.*) -> (.*)/);
+
+    // this can throw an error if the regular expression didn't match
+    // that's fine though, the script is aborted here and considered not to have any result
+    // ie. handling this case explicitly is unnecessary here
+    res.reservationFor.departureStation.name = leg[1];
+    res.reservationFor.arrivalStation.name = leg[2];
+
+    // date/time parsing can recover missing year numbers from context, if available
+    // In our example it would consider the PDF creation time for that, and the resulting
+    // date would be the first occurrence of the given day and month following that.
+    res.reservationFor.departureTime = JsonLd.toDateTime(text.match(/Departure: (.*)/)[1], 'dd MMM hh:mm', 'en');
+    // for supporting different language formats, both the format string and the locale
+    // argument can be lists. All combinations are then tried until one yields a valid result.
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(text.match(/(?:Arrival|Arrivé|Ankunft): (.*)/)[1],
+        ['dd MMM hh:mm', 'dd MMM hh.mm'], ['en', 'fr', 'de']);
+
+    // the node that triggered this script (the barcode) can be accessed and integrated into the result
+    res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
+
+    return res;
+}
+```
 
 ## Contributing
 
