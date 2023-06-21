@@ -16,20 +16,37 @@ function parseOnlineTicket(xml)
         const dep = train.eval('dep')[0];
         res.reservationFor.departureStation.name = dep.eval('n')[0].content;
         res.reservationFor.departureStation.identifier = 'ibnr:' + dep.eval('nr')[0].content;
-        res.reservationFor.departureStation.address.postalCode = dep.eval('plz')[0].content;
+        const depPlzMatch = dep.eval('plz');
+        if (depPlzMatch.length > 0) {
+            res.reservationFor.departureStation.address.postalCode = depPlzMatch[0].content;
+        }
         res.reservationFor.departureStation.geo.longitude = dep.eval('x')[0].content / 1000000;
         res.reservationFor.departureStation.geo.latitude = dep.eval('y')[0].content / 1000000;
-        res.reservationFor.departurePlatform = dep.eval('ptf')[0].content;
+        const depPtfMatch = dep.eval('ptf');
+        if (depPtfMatch.length > 0) {
+            res.reservationFor.departurePlatform = depPtfMatch[0].content;
+        }
         res.reservationFor.departureTime = dep.attribute('dt').substr(0, 11) + dep.attribute('t');
 
         const arr = train.eval('arr')[0];
         res.reservationFor.arrivalStation.name = arr.eval('n')[0].content;
         res.reservationFor.arrivalStation.identifier = 'ibnr:' + arr.eval('nr')[0].content;
-        res.reservationFor.arrivalStation.address.postalCode = arr.eval('plz')[0].content;
+        const arrPlzMatch = arr.eval('plz');
+        if (arrPlzMatch.length > 0) {
+            res.reservationFor.arrivalStation.address.postalCode = arrPlzMatch[0].content;
+        }
         res.reservationFor.arrivalStation.geo.longitude = arr.eval('x')[0].content / 1000000;
         res.reservationFor.arrivalStation.geo.latitude = arr.eval('y')[0].content / 1000000;
-        res.reservationFor.arrivalPlatform = arr.eval('ptf')[0].content;
+        const arrPtfMatch = arr.eval('ptf');
+        if (arrPtfMatch.length > 0) {
+            res.reservationFor.arrivalPlatform = arrPtfMatch[0].content;
+        }
         res.reservationFor.arrivalTime = arr.attribute('dt').substr(0, 11) + arr.attribute('t');
+
+        if (train.eval('gat')[0].content === "Bus") {
+            res = JsonLd.trainToBusReservation(res);
+        }
+
         result.push(res);
     }
 

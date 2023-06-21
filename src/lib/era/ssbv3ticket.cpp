@@ -13,7 +13,8 @@
 using namespace KItinerary;
 
 enum {
-    SSBV3_DATA_SIZE = 114,
+    SSBV3_MIN_DATA_SIZE = 114,
+    SSBV3_MAX_DATA_SIZE = 122,
     SSBV3_CHAR_WIDTH = 6,
     SSBV3_VERSION = 3,
 };
@@ -48,7 +49,7 @@ QString SSBv3Ticket::readString(int start, int length) const
 
 bool SSBv3Ticket::maybeSSB(const QByteArray& data)
 {
-    if (data.size() != SSBV3_DATA_SIZE) {
+    if (data.size() < SSBV3_MIN_DATA_SIZE || data.size() > SSBV3_MAX_DATA_SIZE) {
         return false;
     }
     return (data.at(0) >> 4) == SSBV3_VERSION;

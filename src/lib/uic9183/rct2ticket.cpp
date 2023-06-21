@@ -217,7 +217,8 @@ QDateTime Rct2Ticket::outboundArrivalTime() const
 
 static QString rct2Clean(const QString &s)
 {
-    if (s == QLatin1Char('*')) { // * is used to mark unset fields
+    // * is used to mark unset fields
+    if (std::all_of(s.begin(), s.end(), [](QChar c) { return c == QLatin1Char('*'); })) {
         return {};
     }
     return s;
