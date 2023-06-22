@@ -317,6 +317,31 @@ function extractTicket(pdf, node, barcode)
 }
 ```
 
+The above example produces and entirely new result. Another common case are scripts that
+merely augment an existing result. Let's assume an Apple Wallet pass for a flight, the
+automatically extracted result is correct but misses the boarding group. The filter for
+this would be similar to example 4 above, triggering on the pass issuer.
+
+```js
+// unused arguments can be omitted
+function extractBoardingPass(pass, node)
+{
+    // use the existing result as a starting point
+    // generally this can be more than one, but specific types of documents
+    // might only produce a deterministic amount (like 1 in this case).
+    let res = node.result[0];
+
+    // modify the result as necessary
+    res.boardingGroup = pass.field["group"].label;
+
+    // returning a result here will replace the existing results for this node
+    return res;
+}
+```
+
+A large number of real-world examples can also be found in the `src/lib/scripts` folder of the source code
+or browsed [here](https://invent.kde.org/pim/kitinerary/-/tree/master/src/lib/scripts).
+
 ## Contributing
 
 Join us in the [KDE Itinerary Matrix channel](https://matrix.to/#/#itinerary:kde.org)!
