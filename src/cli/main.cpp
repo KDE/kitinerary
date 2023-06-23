@@ -12,6 +12,7 @@
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorPostprocessor>
 #include <KItinerary/ExtractorRepository>
+#include <KItinerary/ExtractorValidator>
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/MergeUtil>
 #include <KItinerary/Reservation>
@@ -156,7 +157,7 @@ int main(int argc, char** argv)
         contextDt = QDateTime::currentDateTime();
     }
     postproc.setContextDate(contextDt);
-    postproc.setValidationEnabled(!parser.isSet(noValidationOpt));
+    postproc.setValidationEnabled(false);
 
     const auto files = parser.positionalArguments().isEmpty() ? QStringList(QString()) : parser.positionalArguments();
     for (const auto &arg : files) {
@@ -193,9 +194,16 @@ int main(int argc, char** argv)
         postproc.process(result);
     }
 
+    auto result = postproc.result();
+    if (!parser.isSet(noValidationOpt)) {
+        ExtractorValidator validator;
+        result.erase(std::remove_if(result.begin(), result.end(), [&validator](const auto &elem) {
+            return !validator.isValidElement(elem);
+        }), result.end());
+    }
 
     if (parser.value(formatOpt).compare(QLatin1String("ical"), Qt::CaseInsensitive) == 0) {
-        const auto batches = batchReservations(postproc.result());
+        const auto batches = batchReservations(result);
         KCalendarCore::Calendar::Ptr cal(new KCalendarCore::MemoryCalendar(QTimeZone::systemTimeZone()));
         for (const auto &batch : batches) {
             KCalendarCore::Event::Ptr event(new KCalendarCore::Event);
@@ -205,7 +213,7 @@ int main(int argc, char** argv)
         KCalendarCore::ICalFormat format;
         std::cout << qPrintable(format.toString(cal));
     } else {
-        const auto postProcResult = JsonLdDocument::toJson(postproc.result());
+        const auto postProcResult = JsonLdDocument::toJson(result);
         std::cout << QJsonDocument(postProcResult).toJson().constData() << std::endl;
     }
 }
