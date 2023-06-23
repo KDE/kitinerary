@@ -92,16 +92,50 @@ and the script itself (see KItinerary::ScriptExtractor). This is necessary as ru
 scripts against a given input data would be too expensive. Filters therefore don't need to be perfect
 (noticing in the script it triggered on the wrong document is fine), but rather fast.
 
-### Data augmentation
+### Data post-processing and augmentation
 
-Extracted data can be augmented by static knowledge obtained from Wikidata:
+A number of additional processing steps are applied to extracted data
+(see KItineary::ExtractprPostProcessor).
 
-Via KItinerary::KnowledgeDb:
-* Airport IATA codes, countries, timezones and geo coordinates.
-* Train station countries, timezones and geo coordinates.
-* Train station lookup by UIC, IBNR, SNCF, VR or Indian Railway station identifiers.
-* Country ISO codes, driving side and used power plugs.
-* Timezone and country lookup from a geo coordinate.
+#### Normalization
+
+* Simplify whitespaces in human-readable strings.
+* Separate postal codes in addresses.
+* Remove name prefixes.
+* Convert humand-readable country names into ISO 3166-1 alpha 2 country codes.
+* Apply timezones to date/time values.
+* Identify IATA airport codes based on airport names.
+
+#### Augmentation
+
+* Geographic coodinates based on IATA airport codes as well as a number of
+  train station code.
+* Timezones based on geographic coordinates, or where sufficiently unique
+  country/region information.
+* Countries and regions based on geographic coordinates.
+* Countries based on international phone numbers (needs libphonenumbers).
+
+Most of this data is obtained from [OpenStreetMap](https://openstreetmap.org)
+and [Wikidata](https://wikidata.org) and provided as part of this library. No
+online operations are performed during extraction or post-processing.
+
+#### Merging
+
+If the result set contains multiple elements, merging elements referring
+to the same incidence is attempted. Two cases are considered:
+
+* Elements that are considered to refer to exactly the same incidence
+  are folded into one.
+* An element referring to a location change from A to B and two elements
+  referring to a location change from A to C and C to B are considered
+  to refer to the same trip, with the first one providing a lower level
+  of detail. The first element is folded into the other two in that case.
+
+#### Validation
+
+In the final step all results are checked for containing a bare minimum of information
+(e.g. time and name for an event), and for being self-consistent (e.g. start time before end time).
+Invalid results are discarded. See KItinerary::ExtractorValidator.
 
 
 ## Creating extractor scripts
