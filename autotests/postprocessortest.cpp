@@ -55,7 +55,6 @@ private Q_SLOTS:
         QCOMPARE(inArray.size(), preData.size());
 
         ExtractorPostprocessor postproc;
-        postproc.setValidationEnabled(false);
         postproc.setContextDate({QDate(2018, 4, 2), QTime()});
         postproc.process(preData);
         const auto outArray = JsonLdDocument::toJson(postproc.result());

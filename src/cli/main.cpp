@@ -157,7 +157,6 @@ int main(int argc, char** argv)
         contextDt = QDateTime::currentDateTime();
     }
     postproc.setContextDate(contextDt);
-    postproc.setValidationEnabled(false);
 
     const auto files = parser.positionalArguments().isEmpty() ? QStringList(QString()) : parser.positionalArguments();
     for (const auto &arg : files) {

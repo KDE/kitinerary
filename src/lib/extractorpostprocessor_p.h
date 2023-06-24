@@ -4,15 +4,14 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "extractorvalidator.h"
+#ifndef KITINERARY_EXTRACTORPOSTPROCESSOR_P_H
+#define KITINERARY_EXTRACTORPOSTPROCESSOR_P_H
+
 #include "stringutil.h"
 
 #include <QDateTime>
 #include <QVariant>
 #include <QVector>
-
-#ifndef KITINERARY_EXTRACTORPOSTPROCESSOR_P_H
-#define KITINERARY_EXTRACTORPOSTPROCESSOR_P_H
 
 namespace KItinerary {
 
@@ -81,9 +80,7 @@ public:
 
     QVector<QVariant> m_data;
     QDateTime m_contextDate;
-    ExtractorValidator m_validator;
     bool m_resultFinalized = false;
-    bool m_validationEnabled = true;
 };
 
 template<typename T> inline T ExtractorPostprocessorPrivate::processPlace(T place)
