@@ -92,19 +92,72 @@ and the script itself (see KItinerary::ScriptExtractor). This is necessary as ru
 scripts against a given input data would be too expensive. Filters therefore don't need to be perfect
 (noticing in the script it triggered on the wrong document is fine), but rather fast.
 
-### Data augmentation
+### Data post-processing and augmentation
 
-Extracted data can be augmented by static knowledge obtained from Wikidata:
+A number of additional processing steps are applied to extracted data
+(see KItineary::ExtractprPostProcessor).
 
-Via KItinerary::KnowledgeDb:
-* Airport IATA codes, countries, timezones and geo coordinates.
-* Train station countries, timezones and geo coordinates.
-* Train station lookup by UIC, IBNR, SNCF, VR or Indian Railway station identifiers.
-* Country ISO codes, driving side and used power plugs.
-* Timezone and country lookup from a geo coordinate.
+#### Normalization
+
+* Simplify whitespaces in human-readable strings.
+* Separate postal codes in addresses.
+* Remove name prefixes.
+* Convert humand-readable country names into ISO 3166-1 alpha 2 country codes.
+* Apply timezones to date/time values.
+* Identify IATA airport codes based on airport names.
+
+#### Augmentation
+
+* Geographic coodinates based on IATA airport codes as well as a number of
+  train station code.
+* Timezones based on geographic coordinates, or where sufficiently unique
+  country/region information.
+* Countries and regions based on geographic coordinates.
+* Countries based on international phone numbers (needs libphonenumbers).
+
+Most of this data is obtained from [OpenStreetMap](https://openstreetmap.org)
+and [Wikidata](https://wikidata.org) and provided as part of this library. No
+online operations are performed during extraction or post-processing.
+
+#### Merging
+
+If the result set contains multiple elements, merging elements referring
+to the same incidence is attempted. Two cases are considered:
+
+* Elements that are considered to refer to exactly the same incidence
+  are folded into one.
+* An element referring to a location change from A to B and two elements
+  referring to a location change from A to C and C to B are considered
+  to refer to the same trip, with the first one providing a lower level
+  of detail. The first element is folded into the other two in that case.
+
+#### Validation
+
+In the final step all results are checked for containing a bare minimum of information
+(e.g. time and name for an event), and for being self-consistent (e.g. start time before end time).
+Invalid results are discarded. See KItinerary::ExtractorValidator.
 
 
 ## Creating extractor scripts
+
+Extractor scripts are searched for in two locations:
+* In the file system at `$XDG_DATA_DIRS/kitinerary/extractors`.
+* Compiled into the binary at `:/org.kde.pim/kitinerary/extractors`.
+
+Those locations are searched for JSON files containing one or more extractor script
+declarations.
+
+```json
+{
+    "mimeType": "application/pdf",
+    "filter": [ { ... } ],
+    "script": "my-extractor-script.js",
+    "function": "extractTicket"
+}
+```
+
+The above example shows a single script decelartions, for declaring multiple scripts in one
+file this can also be a JSON array of such objects. The individual fields are documented below.
 
 ### Extractor filters
 
@@ -316,6 +369,31 @@ function extractTicket(pdf, node, barcode)
     return res;
 }
 ```
+
+The above example produces and entirely new result. Another common case are scripts that
+merely augment an existing result. Let's assume an Apple Wallet pass for a flight, the
+automatically extracted result is correct but misses the boarding group. The filter for
+this would be similar to example 4 above, triggering on the pass issuer.
+
+```js
+// unused arguments can be omitted
+function extractBoardingPass(pass, node)
+{
+    // use the existing result as a starting point
+    // generally this can be more than one, but specific types of documents
+    // might only produce a deterministic amount (like 1 in this case).
+    let res = node.result[0];
+
+    // modify the result as necessary
+    res.boardingGroup = pass.field["group"].label;
+
+    // returning a result here will replace the existing results for this node
+    return res;
+}
+```
+
+A large number of real-world examples can also be found in the `src/lib/scripts` folder of the source code
+or browsed [here](https://invent.kde.org/pim/kitinerary/-/tree/master/src/lib/scripts).
 
 ## Contributing
 

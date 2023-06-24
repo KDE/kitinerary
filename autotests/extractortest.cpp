@@ -120,7 +120,6 @@ private Q_SLOTS:
         const auto result = JsonLdDocument::fromJson(jsonResult);
         ExtractorPostprocessor postproc;
         postproc.setContextDate(contextMsg.date()->dateTime());
-        postproc.setValidationEnabled(false);
         postproc.process(result);
         auto postProcResult = postproc.result();
 

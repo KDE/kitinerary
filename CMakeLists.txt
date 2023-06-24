@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
-set(PIM_VERSION "5.240.41")
+set(PIM_VERSION "5.240.42")
 project(KItinerary VERSION ${PIM_VERSION})
 
 set(QT_REQUIRED_VERSION "6.4.0")

@@ -89,8 +89,10 @@ public:
      *  this here and pass the items through ExtractorValidator yourself
      *  (or even use an entirely different validation mechanism entirely).
      *  @see ExtractorValidator.
+     *  @deprecated Has no functionality anymore, remove and use ExtractorValidator
+     *  explicitly instead.
      */
-    void setValidationEnabled(bool validate);
+    [[deprecated("has no functionality anymore")]] void setValidationEnabled(bool validate);
 
 private:
     std::unique_ptr<ExtractorPostprocessorPrivate> d;

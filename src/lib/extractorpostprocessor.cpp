@@ -58,28 +58,6 @@ using namespace KItinerary;
 ExtractorPostprocessor::ExtractorPostprocessor()
     : d(new ExtractorPostprocessorPrivate)
 {
-    // configure the default set of accepted types, for backward compatibility
-    d->m_validator.setAcceptedTypes<
-        FlightReservation,
-        TrainReservation,
-        BusReservation,
-        RentalCarReservation,
-        TaxiReservation,
-        EventReservation,
-        FoodEstablishmentReservation,
-        LodgingReservation,
-        // reservationFor types
-        Flight,
-        TrainTrip,
-        BusTrip,
-        RentalCar,
-        Taxi,
-        Event,
-        TouristAttractionVisit,
-        FoodEstablishment,
-        // PBI types
-        LocalBusiness
-    >();
 }
 
 ExtractorPostprocessor::ExtractorPostprocessor(ExtractorPostprocessor &&) noexcept = default;
@@ -159,12 +137,6 @@ QList<QVariant> ExtractorPostprocessor::result() const {
             }
         }
 
-        if (d->m_validationEnabled) {
-            d->m_data.erase(std::remove_if(d->m_data.begin(), d->m_data.end(), [this](const auto &elem) {
-                return !d->m_validator.isValidElement(elem);
-            }), d->m_data.end());
-        }
-
         // search for "triangular" patterns, ie. a location change element that has a matching departure
         // and matching arrival to two different other location change elements (A->C vs A->B + B->C).
         // we remove those, as the fine-granular results are better
@@ -204,9 +176,8 @@ void ExtractorPostprocessor::setContextDate(const QDateTime& dt)
     d->m_contextDate = dt;
 }
 
-void ExtractorPostprocessor::setValidationEnabled(bool validate)
+void ExtractorPostprocessor::setValidationEnabled([[maybe_unused]] bool validate)
 {
-    d->m_validationEnabled = validate;
 }
 
 void ExtractorPostprocessorPrivate::mergeOrAppend(const QVariant &elem)
