@@ -140,6 +140,25 @@ Invalid results are discarded. See KItinerary::ExtractorValidator.
 
 ## Creating extractor scripts
 
+Extractor scripts are searched for in two locations:
+* In the file system at `$XDG_DATA_DIRS/kitinerary/extractors`.
+* Compiled into the binary at `:/org.kde.pim/kitinerary/extractors`.
+
+Those locations are searched for JSON files containing one or more extractor script
+declarations.
+
+```json
+{
+    "mimeType": "application/pdf",
+    "filter": [ { ... } ],
+    "script": "my-extractor-script.js",
+    "function": "extractTicket"
+}
+```
+
+The above example shows a single script decelartions, for declaring multiple scripts in one
+file this can also be a JSON array of such objects. The individual fields are documented below.
+
 ### Extractor filters
 
 Extractor filters are evaluated against document nodes. This can be the node the extractor
