@@ -13,6 +13,7 @@ function parseReservation(pass, node) {
     endDt.setMinutes(endTime[2]);
     res.reservationFor.endDate = endDt;
     res.reservationFor.url = pass.field['website'].value;
+    res.reservedTicket.name = pass.field['title'].value;
     res.underName = JsonLd.newObject("Person");
     res.underName.name = pass.field['customer_name'].value;
     return res;
