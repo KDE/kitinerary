@@ -1,7 +1,7 @@
 {
     "filter": [
         {
-            "match": "^\\d{7}$",
+            "match": "^\\d{7,8}$",
             "mimeType": "text/plain",
             "scope": "Descendants"
         }
