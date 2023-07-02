@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "text",
+            "match": "^Color Line GmbH\\n",
+            "mimeType": "application/pdf",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "colorline.js"
+}
