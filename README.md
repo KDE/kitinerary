@@ -465,4 +465,17 @@ is available directly from the Gitlab CI/CD pipeline on demand.
 
 ## Contributing
 
-Join us in the [KDE Itinerary Matrix channel](https://matrix.to/#/#itinerary:kde.org)!
+Contribution of new extractor scripts as well as improvements to the extractor engine are very welcome,
+preferably as merge request for this repository.
+
+Another way to contribute is by donating sample data. Unlike similar proprietary solutions our data
+extraction runs entirely on your device, so we never get to see user documents and thus rely on donated
+material to test and improve the extractor.
+
+Samples can be sent to vkrause@kde.org and will not be published. Anything vaguely looking like a
+train, bus, boat, flight, rental car, hotel, event or restaurant bookings/tickets/confirmations/cancellation/etc
+is relevant, even when they are seemingly already extracted correctly (in many cases there are non-obvious details
+we don't cover yet correctly). If possible, please provide material in its original unaltered form,
+for emails the easiest way is "Forward As Attachment", inline forwarding can destroy relevant details.
+
+Feel free to join us in the [KDE Itinerary Matrix channel](https://matrix.to/#/#itinerary:kde.org)!
