@@ -15,8 +15,17 @@ For linked class names read this in [the API docs](https://api.kde.org/kdepim/ki
 
 ### Data model
 
-This follows the reservation ontology from https://schema.org and Google's extensions to it
-(https://developers.google.com/gmail/markup/reference/).
+The data model used in here follows the [schema.org](https://schema.org) ontology, and for historicy
+reasons some of [Google's extensions](https://developers.google.com/gmail/markup/reference/) to it.
+
+Various QML-compatible value classes based on that can be found in the `src/lib/datatypes` sub-directory.
+Those do not implement the schema.org ontology one to one though, but focus on a subset relevant
+for the current consumers. Any avoidable complexity of the ontology is omitted, which mainly
+shows in a significantly flattend inheritance hierarchy, and stricter property types. This
+is done to make data processing and display easier.
+
+There is one notable extension to the schema.org model, all date/time values support
+explicit IANA timezone identifiers, something that JSON cannot model out of the box.
 
 De/serialization is provided via KItinerary::JsonLdDocument.
 
@@ -174,7 +183,7 @@ An extractor script filter consists of the following four properties:
 
 #### Examples
 
-Anything attached to an email send by "booking@example-operator.com". The field we match against here
+Anything attached to an email send by "booking@example-operator.com". The field matched against here
 is the `From` header of the MIME message.
 
 ```json
