@@ -1,0 +1,192 @@
+{
+  "timezone": "Europe/Berlin",
+  "isOnline": false,
+  "contacts": [],
+  "cc": [
+    "https://events.graz.social/@linuxtage/followers"
+  ],
+  "id": "https://events.graz.social/events/0e22f342-2cf0-4ff8-97ff-adeb3b4c988e",
+  "inLanguage": "de",
+  "endTime": "2024-04-06T18:00:00+02:00",
+  "repliesModerationOption": "allow_all",
+  "content": "<p>Die Grazer Linuxtage sind jedes Jahr ein Anlaufpunkt für alle Menschen, die sich dafür interessieren Sachen gemeinsam zu machen und sich darüber auszutauschen.</p><p></p><p>Sei es Freie Software wie Linux, sei es Open Data wie OpenStreetMap, Hardware-Projekte wie Raspherry Pi oder einfach auch gesellschaftliche Themen Datenschutz und digitale Medien</p>",
+  "category": "COMMUNITY",
+  "actor": "https://events.graz.social/@linuxtage",
+  "type": "Event",
+  "url": "https://events.graz.social/events/0e22f342-2cf0-4ff8-97ff-adeb3b4c988e",
+  "remainingAttendeeCapacity": null,
+  "anonymousParticipationEnabled": false,
+  "ical:status": "CONFIRMED",
+  "to": [
+    "https://www.w3.org/ns/activitystreams#Public"
+  ],
+  "joinMode": "free",
+  "location": {
+    "address": {
+      "addressCountry": "Österreich",
+      "addressLocality": "Graz",
+      "addressRegion": "Steiermark",
+      "postalCode": "8010",
+      "streetAddress": "25d Inffeldgasse",
+      "type": "PostalAddress"
+    },
+    "id": "https://events.graz.social/address/d5954d98-9bb1-46dd-98ac-ed7e496fddcd",
+    "latitude": 47.0580857,
+    "longitude": 15.46078826559155,
+    "name": "25d Inffeldgasse",
+    "type": "Place"
+  },
+  "startTime": "2024-04-05T13:00:00+02:00",
+  "published": "2023-04-19T09:33:52Z",
+  "draft": false,
+  "participantCount": 1,
+  "uuid": "0e22f342-2cf0-4ff8-97ff-adeb3b4c988e",
+  "maximumAttendeeCapacity": 0,
+  "tag": [],
+  "updated": "2023-04-26T09:35:43Z",
+  "attributedTo": "https://events.graz.social/@linuxtage",
+  "commentsEnabled": true,
+  "attachment": [
+    {
+      "name": "YouTube",
+      "propertyID": "mz:plain:0t97j",
+      "type": "PropertyValue",
+      "value": "https://www.youtube.com/@grazerlinuxtage"
+    },
+    {
+      "name": "Facebook",
+      "propertyID": "mz:plain:5fl3",
+      "type": "PropertyValue",
+      "value": "https://www.facebook.com/linuxtage/"
+    },
+    {
+      "name": "Fediverse-Konto",
+      "propertyID": "mz:plain:rj3ji",
+      "type": "PropertyValue",
+      "value": "https://graz.social/@linuxtage"
+    },
+    {
+      "mediaType": "image/png",
+      "name": "Banner",
+      "type": "Document",
+      "url": "https://events.graz.social/media/ffbcb3abdb500c162f586a95fb712f3b5e527f5f46834a304a5da792cd8389f2.png?name=glt_logo_mit_tux_500.png"
+    },
+    {
+      "href": "https://www.linuxtage.at",
+      "mediaType": "text/html",
+      "name": "Website",
+      "type": "Link"
+    }
+  ],
+  "name": "Grazer Linuxtage 2024",
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    "https://w3id.org/security/v1",
+    {
+      "addressRegion": "sc:addressRegion",
+      "timezone": {
+        "@id": "mz:timezone",
+        "@type": "sc:Text"
+      },
+      "isOnline": {
+        "@id": "mz:isOnline",
+        "@type": "sc:Boolean"
+      },
+      "pt": "https://joinpeertube.org/ns#",
+      "manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
+      "inLanguage": "sc:inLanguage",
+      "address": {
+        "@id": "sc:address",
+        "@type": "sc:PostalAddress"
+      },
+      "discoverable": "toot:discoverable",
+      "repliesModerationOption": {
+        "@id": "mz:repliesModerationOption",
+        "@type": "mz:repliesModerationOptionType"
+      },
+      "sc": "http://schema.org#",
+      "mz": "https://joinmobilizon.org/ns#",
+      "category": "sc:category",
+      "joinModeType": {
+        "@id": "mz:joinModeType",
+        "@type": "rdfs:Class"
+      },
+      "Hashtag": "as:Hashtag",
+      "propertyID": "sc:propertyID",
+      "PostalAddress": "sc:PostalAddress",
+      "discussions": {
+        "@id": "mz:discussions",
+        "@type": "@id"
+      },
+      "remainingAttendeeCapacity": "sc:remainingAttendeeCapacity",
+      "streetAddress": "sc:streetAddress",
+      "anonymousParticipationEnabled": {
+        "@id": "mz:anonymousParticipationEnabled",
+        "@type": "sc:Boolean"
+      },
+      "addressLocality": "sc:addressLocality",
+      "joinMode": {
+        "@id": "mz:joinMode",
+        "@type": "mz:joinModeType"
+      },
+      "location": {
+        "@id": "sc:location",
+        "@type": "sc:Place"
+      },
+      "toot": "http://joinmastodon.org/ns#",
+      "participantCount": {
+        "@id": "mz:participantCount",
+        "@type": "sc:Integer"
+      },
+      "uuid": "sc:identifier",
+      "maximumAttendeeCapacity": "sc:maximumAttendeeCapacity",
+      "participationMessage": {
+        "@id": "mz:participationMessage",
+        "@type": "sc:Text"
+      },
+      "openness": {
+        "@id": "mz:openness",
+        "@type": "@id"
+      },
+      "members": {
+        "@id": "mz:members",
+        "@type": "@id"
+      },
+      "events": {
+        "@id": "mz:events",
+        "@type": "@id"
+      },
+      "resources": {
+        "@id": "mz:resources",
+        "@type": "@id"
+      },
+      "addressCountry": "sc:addressCountry",
+      "posts": {
+        "@id": "mz:posts",
+        "@type": "@id"
+      },
+      "commentsEnabled": {
+        "@id": "pt:commentsEnabled",
+        "@type": "sc:Boolean"
+      },
+      "value": "sc:value",
+      "PropertyValue": "sc:PropertyValue",
+      "repliesModerationOptionType": {
+        "@id": "mz:repliesModerationOptionType",
+        "@type": "rdfs:Class"
+      },
+      "todos": {
+        "@id": "mz:todos",
+        "@type": "@id"
+      },
+      "ical": "http://www.w3.org/2002/12/cal/ical#",
+      "postalCode": "sc:postalCode",
+      "memberCount": {
+        "@id": "mz:memberCount",
+        "@type": "sc:Integer"
+      },
+      "@language": "und"
+    }
+  ],
+  "mediaType": "text/html"
+}

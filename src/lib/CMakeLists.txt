@@ -55,6 +55,7 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     era/ssbv2ticket.cpp
     era/ssbv3ticket.cpp
 
+    extractors/activitypubextractor.cpp
     extractors/genericboardingpassextractor.cpp
 
     http/httpresponse.cpp

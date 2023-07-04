@@ -1,0 +1,35 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "endDate": {
+            "@type": "QDateTime",
+            "@value": "2024-04-06T18:00:00+02:00",
+            "timezone": "Europe/Vienna"
+        },
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "AT",
+                "addressLocality": "Graz",
+                "addressRegion": "Steiermark",
+                "postalCode": "8010",
+                "streetAddress": "25d Inffeldgasse"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 47.05808639526367,
+                "longitude": 15.46078872680664
+            },
+            "name": "25d Inffeldgasse"
+        },
+        "name": "Grazer Linuxtage 2024",
+        "startDate": {
+            "@type": "QDateTime",
+            "@value": "2024-04-05T13:00:00+02:00",
+            "timezone": "Europe/Vienna"
+        },
+        "url": "https://events.graz.social/events/0e22f342-2cf0-4ff8-97ff-adeb3b4c988e"
+    }
+]
