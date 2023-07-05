@@ -92,6 +92,7 @@ There's a number of built-in generic extractors for the following cases:
 * PDF flight boarding passes.
 * Apple Wallet passes for flights, trains or events.
 * iCal calendar events (depends on KItinerary::ExtractorEngine::ExtractGenericIcalEvents).
+* ActivityPub events and places.
 
 To cover anything not handled by this, there are vendor-specific extractor scripts. Those
 can produce complete results or merely fix or augment what the generic extraction has produced.
@@ -470,7 +471,13 @@ line interface to this, `kitinerary-extractor`.
 This reads input data from stdin and outputs schema.org JSON with the results.
 
 For easier deployment, the command line extractor can also be built entirely statically. This
-is available directly from the Gitlab CI/CD pipeline on demand.
+is available directly from the Gitlab CI/CD pipeline on demand. Nightly Flatpak builds are
+also available from KDE's nightly Flatpak repository:
+
+```
+flatpak remote-add --if-not-exists kdeapps --from https://distribute.kde.org/kdeapps.flatpakrepo
+flatpak install org.kde.kitinerary-extractor
+```
 
 ## Contributing
 
