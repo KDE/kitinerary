@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QTextCodec>
+#include <QStringDecoder>
 
 #include <cassert>
 #include <cstring>
@@ -193,8 +193,8 @@ QVariant PListReader::object(uint64_t index) const
             if ((b & PListContainerTypeMask) == 0b0110'0000) {
                 const auto size = readContainerSize(offset, b) * 2;
                 const auto v = view(offset, size);
-                auto codec = QTextCodec::codecForName("UTF-16BE");
-                return codec->toUnicode(v.data(), v.size());
+                auto codec = QStringDecoder(QStringDecoder::Utf16BE);
+                return QString(codec.decode(QByteArrayView(v.data(), v.size())));
             }
 
             const auto size = readContainerSize(offset, b);
