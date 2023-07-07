@@ -54,7 +54,7 @@ public:
      */
     Q_DECL_HIDDEN static HttpResponse fromHarEntry(const QJsonObject &harEntry);
     /** Read a set of HTTP responses from an HAR file. */
-    Q_DECL_HIDDEN static QVector<HttpResponse> fromHarFile(const QByteArray &harFile);
+    Q_DECL_HIDDEN static QList<HttpResponse> fromHarFile(const QByteArray &harFile);
 
 private:
     QExplicitlySharedDataPointer<HttpResponsePrivate> d;

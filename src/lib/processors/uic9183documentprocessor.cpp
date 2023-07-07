@@ -86,7 +86,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     ExtractorValidator validator;
     validator.setAcceptedTypes<TrainTrip>();
 
-    QVector<QVariant> results;
+    QList<QVariant> results;
 
     const auto rct2 = p.rct2Ticket();
     if (rct2.isValid()) {

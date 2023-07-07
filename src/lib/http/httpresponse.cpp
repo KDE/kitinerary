@@ -76,7 +76,7 @@ HttpResponse HttpResponse::fromHarEntry(const QJsonObject &harEntry)
     return r;
 }
 
-QVector<HttpResponse> HttpResponse::fromHarFile(const QByteArray &harFile)
+QList<HttpResponse> HttpResponse::fromHarFile(const QByteArray &harFile)
 {
     QJsonParseError error;
     const auto doc = QJsonDocument::fromJson(harFile, &error);
@@ -86,7 +86,7 @@ QVector<HttpResponse> HttpResponse::fromHarFile(const QByteArray &harFile)
     }
 
     const auto entries = QJsonDocument::fromJson(harFile).object().value(QLatin1String("log")).toObject().value(QLatin1String("entries")).toArray();
-    QVector<HttpResponse> result;
+    QList<HttpResponse> result;
     result.reserve(entries.size());
     for (const auto &entry : entries) {
         result.push_back(HttpResponse::fromHarEntry(entry.toObject()));
