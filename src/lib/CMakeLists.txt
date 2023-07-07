@@ -55,6 +55,7 @@ target_sources(KPim6Itinerary PRIVATE
     era/ssbv2ticket.cpp
     era/ssbv3ticket.cpp
 
+    extractors/activitypubextractor.cpp
     extractors/genericboardingpassextractor.cpp
 
     http/httpresponse.cpp

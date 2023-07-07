@@ -15,8 +15,17 @@ For linked class names read this in [the API docs](https://api.kde.org/kdepim/ki
 
 ### Data model
 
-This follows the reservation ontology from https://schema.org and Google's extensions to it
-(https://developers.google.com/gmail/markup/reference/).
+The data model used in here follows the [schema.org](https://schema.org) ontology, and for historicy
+reasons some of [Google's extensions](https://developers.google.com/gmail/markup/reference/) to it.
+
+Various QML-compatible value classes based on that can be found in the `src/lib/datatypes` sub-directory.
+Those do not implement the schema.org ontology one to one though, but focus on a subset relevant
+for the current consumers. Any avoidable complexity of the ontology is omitted, which mainly
+shows in a significantly flattend inheritance hierarchy, and stricter property types. This
+is done to make data processing and display easier.
+
+There is one notable extension to the schema.org model, all date/time values support
+explicit IANA timezone identifiers, something that JSON cannot model out of the box.
 
 De/serialization is provided via KItinerary::JsonLdDocument.
 
@@ -83,6 +92,7 @@ There's a number of built-in generic extractors for the following cases:
 * PDF flight boarding passes.
 * Apple Wallet passes for flights, trains or events.
 * iCal calendar events (depends on KItinerary::ExtractorEngine::ExtractGenericIcalEvents).
+* ActivityPub events and places.
 
 To cover anything not handled by this, there are vendor-specific extractor scripts. Those
 can produce complete results or merely fix or augment what the generic extraction has produced.
@@ -174,7 +184,7 @@ An extractor script filter consists of the following four properties:
 
 #### Examples
 
-Anything attached to an email send by "booking@example-operator.com". The field we match against here
+Anything attached to an email send by "booking@example-operator.com". The field matched against here
 is the `From` header of the MIME message.
 
 ```json
@@ -461,7 +471,13 @@ line interface to this, `kitinerary-extractor`.
 This reads input data from stdin and outputs schema.org JSON with the results.
 
 For easier deployment, the command line extractor can also be built entirely statically. This
-is available directly from the Gitlab CI/CD pipeline on demand.
+is available directly from the Gitlab CI/CD pipeline on demand. Nightly Flatpak builds are
+also available from KDE's nightly Flatpak repository:
+
+```
+flatpak remote-add --if-not-exists kdeapps --from https://distribute.kde.org/kdeapps.flatpakrepo
+flatpak install org.kde.kitinerary-extractor
+```
 
 ## Contributing
 

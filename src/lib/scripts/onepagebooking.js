@@ -74,3 +74,25 @@ function parsePkPass(pass)
     res.underName.name = pass.field['guestname'].value;
     return res;
 }
+
+function parsePdf(pdf, node, triggerNode)
+{
+    const page = pdf.pages[triggerNode.location];
+    let res = JsonLd.newLodgingReservation();
+    res.reservationNumber = page.text.match(/.*: ([A-Z0-9-]+)/)[1];
+    const leftCol = page.textInRect(0.0, 0.2, 0.5, 1.0);
+    const dates = leftCol.match(/(\d\d\.\d\d.\d{4}).*(\d\d\.\d\d.\d{4})/);
+    const times = leftCol.match(/(\d\d\:\d\d).*(\d\d\:\d\d)/);
+    res.checkinTime = JsonLd.toDateTime(dates[1] + ' ' + times[1], 'dd.MM.yyyy hh:mm', 'de');
+    res.checkoutTime = JsonLd.toDateTime(dates[2] + ' ' + times[2], 'dd.MM.yyyy hh:mm', 'de');
+    const rightCol = page.textInRect(0.5, 0.2, 1.0, 1.0);
+    const addr = rightCol.match(/.*\n(.*)\n(.*)\n(.*)/);
+    res.reservationFor.name = addr[1];
+    res.reservationFor.address.streetAddress = addr[2];
+    res.reservationFor.address.addressLocality = addr[3];
+    res.reservationFor.telephone = page.links[0].url.substr(4);
+    res.reservationFor.email = page.links[1].url.substr(7);
+    res.reservationFor.geo = JsonLd.toGeoCoordinates(page.links[2].url);
+    res.modifyReservationUrl = page.links[3].url;
+    return res;
+}

@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^ktel-thesprotias.gr\/images\/com_imeticket\/receipt\/receipt_[0-9a-f]+.pdf$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdfTicket",
+    "mimeType": "application/pdf",
+    "script": "ktel-thesprotias.js"
+}

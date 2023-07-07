@@ -23,4 +23,16 @@
     "function": "parsePkPass",
     "mimeType": "application/vnd.apple.pkpass",
     "script": "onepagebooking.js"
+},
+{
+    "filter": [
+        {
+            "match": "^https://onepagebooking.com/",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdf",
+    "mimeType": "application/pdf",
+    "script": "onepagebooking.js"
 }]
