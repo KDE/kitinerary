@@ -20,6 +20,7 @@ function extractPass(pass, node) {
             longitude: pass.locations[0].longitude
         }
     }
+    res.reservationFor.departurePlatform = pass.field["platform"].value;
     res.reservationFor.arrivalTime =  JsonLd.toDateTime(pass.field["date"].value + ' ' + pass.field["destination"].value, "dd.MMM hh:mm", "en");
     res.reservationFor.arrivalBusStop = {
         '@type': 'BusStation',
