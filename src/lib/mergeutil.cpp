@@ -478,11 +478,14 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
 
 static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs)
 {
-    if (lhs.busNumber().isEmpty() || rhs.busNumber().isEmpty()) {
+    if (!equalAndPresent(lhs.departureTime(), rhs.departureTime())
+      || conflictIfPresent(lhs.busNumber(), rhs.busNumber())
+      || conflictIfPresent(lhs.arrivalTime(), rhs.arrivalTime())) {
         return false;
     }
 
-    return lhs.busName() == rhs.busName() && lhs.busNumber() == rhs.busNumber() && lhs.departureTime() == rhs.departureTime();
+    return equalAndPresent(lhs.busNumber(), rhs.busNumber()) ||
+        (LocationUtil::isSameLocation(lhs.departureBusStop(), rhs.departureBusStop()) && LocationUtil::isSameLocation(lhs.arrivalBusStop(), rhs.arrivalBusStop()));
 }
 
 static bool isSameBoatTrip(const BoatTrip& lhs, const BoatTrip& rhs)

@@ -1,0 +1,29 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "BusReservation",
+        "reservationFor": {
+            "@type": "BusTrip",
+            "arrivalBusStop": {
+                "@type": "BusStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Bratislava"
+                },
+                "name": "Autobusová stanica Nivy"
+            },
+            "arrivalTime": "2023-07-08T17:25:00",
+            "departureBusStop": {
+                "@type": "BusStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "AT",
+                    "addressLocality": "Vienna"
+                },
+                "name": "Airport"
+            },
+            "departurePlatform": "4",
+            "departureTime": "2023-07-08T16:30:00+02:00"
+        }
+    }
+]
