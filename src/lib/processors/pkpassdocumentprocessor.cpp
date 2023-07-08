@@ -275,6 +275,9 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
             case KPkPass::BoardingPass::Train:
                 result.insert(QStringLiteral("@type"), QLatin1String("TrainReservation"));
                 break;
+            case KPkPass::BoardingPass::Bus:
+                result.insert(QStringLiteral("@type"), QLatin1String("BusReservation"));
+                break;
             // TODO expand once we have test files for other types
             default:
                 break;
