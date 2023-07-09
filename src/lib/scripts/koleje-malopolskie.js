@@ -7,9 +7,6 @@
 function parsePdf(pdf, node, triggerNode)
 {
     var obj = JSON.parse(triggerNode.content);
-    if (!obj)
-        return null;
-
     var res = JsonLd.newTrainReservation();
     res.underName.givenName = obj.name;
     res.underName.familyName = obj.surname
@@ -20,6 +17,6 @@ function parsePdf(pdf, node, triggerNode)
     var depDate = new Date();
     depDate.setTime(obj.goDate);
     res.reservationFor.departureTime = depDate;
-
+    res.reservedTicket.ticketToken = triggerNode.content;
     return res;
 }
