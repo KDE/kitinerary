@@ -314,7 +314,9 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
 
     // fix two-digit years ending up in the wrong century
     else if (!hasFullYear && dt.date().year() / 100 == 19) {
-        dt = dt.addYears(100);
+        // be careful to only change the date, QDateTime::addYears can change
+        // the time as well if e.g. DST has been changed in the corresponding timezone
+        dt.setDate(dt.date().addYears(100));
     }
 
     return dt;
