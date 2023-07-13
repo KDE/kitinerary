@@ -129,6 +129,7 @@ static bool isPlausibeGate(const QString &s)
 static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
 {
     // search for missing information by field key
+    QString departureTerminal;
     TimeFinder timeFinder;
     const auto fields = pass->fields();
     for (const auto &field : fields) {
@@ -158,6 +159,18 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
                 continue;
             }
         }
+
+        if (field.key().contains(QLatin1String("terminal"), Qt::CaseInsensitive)) {
+            if (departureTerminal.isNull()) {
+                departureTerminal = field.value().toString();
+            } else {
+                departureTerminal = QStringLiteral(""); // empty but not null, marking multiple terminal candidates
+            }
+        }
+    }
+
+    if (flight.departureTerminal().isEmpty() && !departureTerminal.isEmpty()) {
+        flight.setDepartureTerminal(departureTerminal);
     }
 
     // "relevantDate" is the best guess for the boarding time if we didn't find an explicit field for it
