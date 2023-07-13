@@ -18,6 +18,12 @@ function main(pass, node)
         res.reservationFor.arrivalTime = arrivalTime;
     }
 
+    const modifyField = pass.field["modify_checkin"];
+    if (modifyField) {
+        res.potentialAction = JsonLd.newObject("UpdateAction");
+        res.potentialAction.url = modifyField.value;
+    }
+
     return res;
 }
 
