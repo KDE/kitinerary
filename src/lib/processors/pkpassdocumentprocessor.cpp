@@ -113,7 +113,7 @@ static bool isAirportName(const QString &name, KnowledgeDb::IataCode iataCode)
     return std::find(codes.begin(), codes.end(), iataCode) != codes.end();
 }
 
-static bool isPlausibeGate(const QString &s)
+static bool isPlausibleGate(const QString &s)
 {
     if (s.isEmpty() || s.size() > 10 || s.count(QLatin1Char('-')) > 1 || s.count(QLatin1Char(' ')) > 2) {
         return false;
@@ -145,7 +145,7 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
         // departure gate
         if (flight.departureGate().isEmpty() && field.key().contains(QLatin1String("gate"), Qt::CaseInsensitive)) {
             const auto gateStr = field.value().toString();
-            if (isPlausibeGate(gateStr)) {
+            if (isPlausibleGate(gateStr)) {
                 flight.setDepartureGate(gateStr);
                 continue;
             }
