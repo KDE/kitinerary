@@ -58,11 +58,11 @@ Airport FlightPostProcessor::processAirport(Airport airport, const std::vector<K
         airport.setIataCode(codes[0].toString());
     }
 
-    // complete missing geo coordinates
+    // complete missing geo coordinates, take whatever we have but don't trust that too much
     auto geo = airport.geo();
-    if (!geo.isValid() && codes.size() == 1) {
+    if (codes.size() == 1) {
         const auto coord = KnowledgeDb::coordinateForAirport(codes[0]);
-        if (coord.isValid()) {
+        if (coord.isValid() && (!geo.isValid() || LocationUtil::distance(geo.latitude(), geo.longitude(), coord.latitude, coord.longitude) > 5000)) {
             geo.setLatitude(coord.latitude);
             geo.setLongitude(coord.longitude);
             airport.setGeo(geo);
