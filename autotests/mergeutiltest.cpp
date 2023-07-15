@@ -152,6 +152,11 @@ private Q_SLOTS:
             {_("VOLKER KRAUSE"), _("Volker"), _("Krause")},
             {_("KRAUSE"),{}, {}}
         };
+
+        QTest::newRow("double given name") << QVector<QStringList> {
+            {_("Kai Uwe Broulik"), _("Kai Uwe"), _("Broulik")},
+            {_("Kai Broulik"), _("Kai"), _("Broulik")},
+        };
     }
 
     void testIsSamePerson()

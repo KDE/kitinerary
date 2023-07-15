@@ -569,10 +569,10 @@ static bool isNameEqualish(const QString &lhs, const QString &rhs)
 
 static bool isPartialName(const Person &fullName, const Person &partialName)
 {
-    if (fullName.familyName().isEmpty() || fullName.givenName().isEmpty() || !partialName.givenName().isEmpty()) {
+    if (fullName.familyName().isEmpty() || fullName.givenName().isEmpty() || !fullName.givenName().startsWith(partialName.givenName(), Qt::CaseInsensitive)) {
         return false;
     }
-    return isNameEqualish(fullName.familyName(), partialName.name());
+    return isNameEqualish(fullName.familyName(), partialName.name()) || isNameEqualish(fullName.familyName(), partialName.familyName());
 }
 
 bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)

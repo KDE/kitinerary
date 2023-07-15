@@ -112,7 +112,7 @@ static bool isAirportName(const QString &name, KnowledgeDb::IataCode iataCode)
     return std::find(codes.begin(), codes.end(), iataCode) != codes.end();
 }
 
-static bool isPlausibeGate(const QString &s)
+static bool isPlausibleGate(const QString &s)
 {
     if (s.isEmpty() || s.size() > 10 || s.count(QLatin1Char('-')) > 1 || s.count(QLatin1Char(' ')) > 2) {
         return false;
@@ -128,6 +128,7 @@ static bool isPlausibeGate(const QString &s)
 static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
 {
     // search for missing information by field key
+    QString departureTerminal;
     TimeFinder timeFinder;
     const auto fields = pass->fields();
     for (const auto &field : fields) {
@@ -143,7 +144,7 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
         // departure gate
         if (flight.departureGate().isEmpty() && field.key().contains(QLatin1String("gate"), Qt::CaseInsensitive)) {
             const auto gateStr = field.value().toString();
-            if (isPlausibeGate(gateStr)) {
+            if (isPlausibleGate(gateStr)) {
                 flight.setDepartureGate(gateStr);
                 continue;
             }
@@ -157,6 +158,18 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
                 continue;
             }
         }
+
+        if (field.key().contains(QLatin1String("terminal"), Qt::CaseInsensitive)) {
+            if (departureTerminal.isNull()) {
+                departureTerminal = field.value().toString();
+            } else {
+                departureTerminal = QStringLiteral(""); // empty but not null, marking multiple terminal candidates
+            }
+        }
+    }
+
+    if (flight.departureTerminal().isEmpty() && !departureTerminal.isEmpty()) {
+        flight.setDepartureTerminal(departureTerminal);
     }
 
     // "relevantDate" is the best guess for the boarding time if we didn't find an explicit field for it
