@@ -15,13 +15,13 @@ For linked class names read this in [the API docs](https://api.kde.org/kdepim/ki
 
 ### Data model
 
-The data model used in here follows the [schema.org](https://schema.org) ontology, and for historicy
+The data model used in here follows the [schema.org](https://schema.org) ontology, and for historic
 reasons some of [Google's extensions](https://developers.google.com/gmail/markup/reference/) to it.
 
 Various QML-compatible value classes based on that can be found in the `src/lib/datatypes` sub-directory.
 Those do not implement the schema.org ontology one to one though, but focus on a subset relevant
 for the current consumers. Any avoidable complexity of the ontology is omitted, which mainly
-shows in a significantly flattend inheritance hierarchy, and stricter property types. This
+shows in a significantly flattened inheritance hierarchy, and stricter property types. This
 is done to make data processing and display easier.
 
 There is one notable extension to the schema.org model, all date/time values support
@@ -105,20 +105,20 @@ scripts against a given input data would be too expensive. Filters therefore don
 ### Data post-processing and augmentation
 
 A number of additional processing steps are applied to extracted data
-(see KItineary::ExtractprPostProcessor).
+(see KItineary::ExtractorPostProcessor).
 
 #### Normalization
 
 * Simplify whitespaces in human-readable strings.
 * Separate postal codes in addresses.
 * Remove name prefixes.
-* Convert humand-readable country names into ISO 3166-1 alpha 2 country codes.
+* Convert human-readable country names into ISO 3166-1 alpha 2 country codes.
 * Apply timezones to date/time values.
 * Identify IATA airport codes based on airport names.
 
 #### Augmentation
 
-* Geographic coodinates based on IATA airport codes as well as a number of
+* Geographic coordinates based on IATA airport codes as well as a number of
   train station code.
 * Timezones based on geographic coordinates, or where sufficiently unique
   country/region information.
@@ -166,7 +166,7 @@ declarations.
 }
 ```
 
-The above example shows a single script decelartions, for declaring multiple scripts in one
+The above example shows a single script declarations, for declaring multiple scripts in one
 file this can also be a JSON array of such objects. The individual fields are documented below.
 
 ### Extractor filters
@@ -175,7 +175,7 @@ Extractor filters are evaluated against document nodes. This can be the node the
 script wants to process, but also a descendant or ancestor node.
 
 An extractor script filter consists of the following four properties:
-* `m̀imeType`: the type of the node to match
+* `mimeType`: the type of the node to match
 * `field`: the property of the node content to match. This is ignored for nodes containing
   basic types such as plain text or binary data.
 * `match`: a regular expression
@@ -184,7 +184,7 @@ An extractor script filter consists of the following four properties:
 
 #### Examples
 
-Anything attached to an email send by "booking@example-operator.com". The field matched against here
+Anything attached to an email sent by "booking@example-operator.com". The field matched against here
 is the `From` header of the MIME message.
 
 ```json
@@ -197,7 +197,7 @@ is the `From` header of the MIME message.
 ```
 
 Documents containing a barcode of the format "FNNNNNNNN". Note that the scope here is `Descendants`
-ather than `Children` as the direct child nodes tend to be the images containing the barcode.
+rather than `Children` as the direct child nodes tend to be the images containing the barcode.
 
 ```json
 {
@@ -281,7 +281,7 @@ Extractor scripts are defined by the following properties:
 
 Extractor scripts are run against a document node if all of the following conditions are met:
 * The `mimeType` of the script matches that of the node.
-* At lesat one of the extractor `filter` of the script match the node.
+* At least one of the extractor `filter` of the script match the node.
 
 The script entry point is called with three arguments (this being JS, some of those can be omitted
 by the script and are then silently ignored):
@@ -303,7 +303,7 @@ The script entry point function is expected to return one of the following:
 
 ### Extractor scripts runtime environment
 
-Extractor scripts are run inside a QJSEngine, ie. that's the JS subset to work with.
+Extractor scripts are run inside a QJSEngine, i.e. that's the JS subset to work with.
 There is some additional API available to extractor scripts (see the KItinerary::JsApi namespace).
 
 API for supporting schema.org output:
@@ -326,7 +326,7 @@ API for interacting with the extractor engine itself:
 
 ### Script development
 
-[KItineary Workbench](https://commits.kde.org/kitinerary-workbench) allows interactive development
+[KItinerary Workbench](https://commits.kde.org/kitinerary-workbench) allows interactive development
 of extractor scripts.
 
 ### Examples
