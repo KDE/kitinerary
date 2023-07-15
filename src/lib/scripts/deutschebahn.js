@@ -374,5 +374,10 @@ function parseDBRegioBusUic(uic, node)
             ticket.underName.name = name[1];
         }
     }
+    if (ticket.name.includes("Deutschland-Ticket") && !ticket.validUntil) {
+        ticket.validUntil = JsonLd.clone(ticket.validFrom)
+        ticket.validUntil.setMonth(ticket.validUntil.getMonth() + 1)
+        ticket.validUntil.setHours(3)
+    }
     return ticket;
 }
