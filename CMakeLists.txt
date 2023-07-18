@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
-set(PIM_VERSION "5.23.42")
+set(PIM_VERSION "5.23.80")
 project(KItinerary VERSION ${PIM_VERSION})
 
 set(KF_MIN_VERSION "5.91.0")
@@ -48,8 +48,8 @@ if (NOT ANDROID)
     find_package(SharedMimeInfo 1.3 REQUIRED)
 endif()
 
-set(KMIME_VERSION "5.23.40")
-set(PIM_PKPASS "5.23.40")
+set(KMIME_VERSION "5.23.80")
+set(PIM_PKPASS "5.23.80")
 
 find_package(KPim${KF_MAJOR_VERSION}Mime ${KMIME_VERSION} CONFIG REQUIRED)
 find_package(KPimPkPass ${PIM_PKPASS} CONFIG REQUIRED)
