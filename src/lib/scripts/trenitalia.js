@@ -76,6 +76,7 @@ function parsePdf(pdf, node, triggerNode) {
     const barcodes = node.findChildNodes({ scope: "Descendants", mimeType: "internal/era-ssb", field: "issuerCode", match: "83" }).concat(node.findChildNodes({ scope: "Descendants", mimeType: "internal/uic9183", field: "carrierId", match: "83" }));
     var offset = 0;
     const passengerColumn = page.textInRect(0.0, 0.3, 0.27, 1.0);
+    let seatOffset = 0;
     for (let j = 0; j < barcodes.length; ++j) {
         if (barcodes[j].location != triggerNode.location) {
             continue;
@@ -99,6 +100,16 @@ function parsePdf(pdf, node, triggerNode) {
         } else {
             personalRes.reservedTicket = JsonLd.apply(barcodes[j].result[0], personalRes.reservedTicket);
         }
+
+        // fallback seat parsing for unparsable ERA FCB tickets
+        const seat = page.text.substr(seatOffset).match(/(\d+) +(\d+[A-F]) +([A-Z0-9]{6})/);
+        if (seat) {
+            seatOffset += seat.index + seat[0].length;
+            if (personalRes.reservedTicket.ticketedSeat.seatSection == seat[1] && !personalRes.reservedTicket.ticketedSeat.seatNumber) {
+                personalRes.reservedTicket.ticketedSeat.seatNumber = seat[2];
+            }
+        }
+
         reservations.push(personalRes);
     }
 
