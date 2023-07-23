@@ -26,9 +26,9 @@ function parseSsb(ssb, node) {
     res.reservationFor.trainNumber = ssb.readNumber(22*8 + 2, 16);
 
     const seatNum = ssb.readNumber(31*8 + 2, 7);
-    if (seatNum > 0) {
+    const seatCol = ssb.readNumber(32*8 + 3, 4);
+    if (seatNum > 0 && (seatNum != 99 || seatCol != 9)) {
         res.reservedTicket.ticketedSeat.seatNumber = "" + seatNum;
-        const seatCol = ssb.readNumber(32*8 + 3, 4);
         if (seatCol > 0) {
             res.reservedTicket.ticketedSeat.seatNumber += seatCol.toString(16).toUpperCase();
         }
@@ -102,7 +102,7 @@ function parsePdf(pdf, node, triggerNode) {
         }
 
         // fallback seat parsing for unparsable ERA FCB tickets
-        const seat = page.text.substr(seatOffset).match(/(\d+) +(\d+[A-F]) +([A-Z0-9]{6})/);
+        const seat = page.text.substr(seatOffset).match(/(\d+) +(\d+[A-F]?) +([A-Z0-9]{6})/);
         if (seat) {
             seatOffset += seat.index + seat[0].length;
             if (personalRes.reservedTicket.ticketedSeat.seatSection == seat[1] && !personalRes.reservedTicket.ticketedSeat.seatNumber) {
