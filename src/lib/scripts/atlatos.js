@@ -23,3 +23,36 @@ function extractEvent(event) {
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[3], 'dd.MM.yyyy - hh:mm', 'de');
     return res;
 }
+
+function extractPdf(pdf)
+{
+    // assemble the body text without the extensive footers
+    let text = "";
+    for (const page of pdf.pages) {
+        text += page.textInRect(0.0, 0.0, 1.0, 0.9);
+    }
+
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        const flight = text.substr(idx).match(/: +(\S.*\S) +([A-Z0-9]{2})\/([A-Z0-9]{6})\n.*: +(\S.*?), (\S.*(?:\n +.*)*)\n.*(\d\d[\d\.: ]{14}).*\n.* ([A-Z0-9]{2}) (\d{1,4}) .*\n.*\n.*: +(\S.*?), (\S.*(?:\n +.*)*)\n.*(\d\d[\d\.: ]{14}).*\n/);
+        if (!flight) {
+            break;
+        }
+        idx += flight.index + flight[0].length;
+
+        let res = JsonLd.newFlightReservation();
+        res.reservationFor.airline.name = flight[1];
+        res.reservationFor.airline.iataCode = flight[2];
+        res.reservationNumber = flight[3];
+        res.reservationFor.departureAirport.address = { '@type': 'PostalAddress', addressLocality: flight[4] };
+        res.reservationFor.departureAirport.name = flight[5];
+        res.reservationFor.departureTime = JsonLd.toDateTime(flight[6], 'dd.MM.yyyy hh:mm', 'de');
+        res.reservationFor.flightNumber = flight[8];
+        res.reservationFor.arrivalAirport.address = { '@type': 'PostalAddress', addressLocality: flight[9] };
+        res.reservationFor.arrivalAirport.name = flight[10];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(flight[11], 'dd.MM.yyyy hh:mm', 'de');
+        reservations.push(res);
+    }
+    return reservations;
+}
