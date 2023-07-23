@@ -102,7 +102,7 @@ function parsePdf(pdf, node, triggerNode) {
         }
 
         // fallback seat parsing for unparsable ERA FCB tickets
-        const seat = page.text.substr(seatOffset).match(/(\d+) +(\d+[A-F]) +([A-Z0-9]{6})/);
+        const seat = page.text.substr(seatOffset).match(/(\d+) +(\d+[A-F]?) +([A-Z0-9]{6})/);
         if (seat) {
             seatOffset += seat.index + seat[0].length;
             if (personalRes.reservedTicket.ticketedSeat.seatSection == seat[1] && !personalRes.reservedTicket.ticketedSeat.seatNumber) {
