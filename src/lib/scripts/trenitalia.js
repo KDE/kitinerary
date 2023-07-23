@@ -26,9 +26,9 @@ function parseSsb(ssb, node) {
     res.reservationFor.trainNumber = ssb.readNumber(22*8 + 2, 16);
 
     const seatNum = ssb.readNumber(31*8 + 2, 7);
-    if (seatNum > 0) {
+    const seatCol = ssb.readNumber(32*8 + 3, 4);
+    if (seatNum > 0 && (seatNum != 99 || seatCol != 9)) {
         res.reservedTicket.ticketedSeat.seatNumber = "" + seatNum;
-        const seatCol = ssb.readNumber(32*8 + 3, 4);
         if (seatCol > 0) {
             res.reservedTicket.ticketedSeat.seatNumber += seatCol.toString(16).toUpperCase();
         }

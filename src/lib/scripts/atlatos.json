@@ -1,0 +1,34 @@
+[
+    {
+        "filter": [
+            {
+                "field": "summary",
+                "match": "^Ihr Flug nach",
+                "mimeType": "internal/event",
+                "scope": "Current"
+            },
+            {
+                "field": "productId",
+                "match": "//Atlatos-Traveller//",
+                "mimeType": "text/calendar",
+                "scope": "Parent"
+            }
+        ],
+        "function": "extractEvent",
+        "mimeType": "internal/event",
+        "script": "atlatos.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "text",
+                "match": "\\nAtlatos-Vorgang",
+                "mimeType": "application/pdf",
+                "scope": "Current"
+            }
+        ],
+        "function": "extractPdf",
+        "mimeType": "application/pdf",
+        "script": "atlatos.js"
+    }
+]
