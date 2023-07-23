@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "itinerary@booking.airasia.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "extractBookingConfirmation",
+    "mimeType": "text/html",
+    "script": "airasia.js"
+}
