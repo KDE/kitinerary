@@ -14,6 +14,8 @@
         <file>aerlingus.js</file>
         <file>agoda.json</file>
         <file>agoda.js</file>
+        <file>airasia.json</file>
+        <file>airasia.js</file>
         <file>aircoach-ie.json</file>
         <file>aircoach-ie.js</file>
         <file>airdo.json</file>
@@ -206,6 +208,8 @@
         <file>sncf-online-ticket.js</file>
         <file>sro-nl.json</file>
         <file>sro-nl.js</file>
+        <file>spiritec.json</file>
+        <file>spiritec.js</file>
         <file>springairlines.json</file>
         <file>springairlines.js</file>
         <file>stansted-express.json</file>
