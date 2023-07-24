@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "passTypeIdentifier",
+            "match": "pass.de.spiritec",
+            "mimeType": "application/vnd.apple.pkpass",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractPass",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "spiritec.js"
+}
