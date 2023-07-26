@@ -11,156 +11,156 @@ add_library(KPim${KF_MAJOR_VERSION}Itinerary ${kitinerary_lib_srcs})
 add_library(KPim${KF_MAJOR_VERSION}::Itinerary ALIAS KPim${KF_MAJOR_VERSION}Itinerary)
 
 target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
-    asn1/berelement.cpp
-    asn1/bitvectorview.cpp
-    asn1/uperdecoder.cpp
-    asn1/uperelement.cpp
+    asn1/berelement.cpp asn1/berelement.h
+    asn1/bitvectorview.cpp asn1/bitvectorview.h
+    asn1/uperdecoder.cpp asn1/uperdecoder.h
+    asn1/uperelement.cpp asn1/uperelement.h
 
-    datatypes/action.cpp
-    datatypes/boattrip.cpp
-    datatypes/brand.cpp
-    datatypes/bustrip.cpp
-    datatypes/creativework.cpp
-    datatypes/event.cpp
-    datatypes/flight.cpp
-    datatypes/organization.cpp
-    datatypes/person.cpp
-    datatypes/place.cpp
-    datatypes/programmembership.cpp
-    datatypes/reservation.cpp
-    datatypes/taxi.cpp
-    datatypes/ticket.cpp
-    datatypes/token.cpp
-    datatypes/traintrip.cpp
-    datatypes/rentalcar.cpp
-    datatypes/visit.cpp
+    datatypes/action.cpp datatypes/action.h
+    datatypes/boattrip.cpp datatypes/boattrip.h
+    datatypes/brand.cpp datatypes/brand.h
+    datatypes/bustrip.cpp datatypes/bustrip.h
+    datatypes/creativework.cpp datatypes/creativework.h
+    datatypes/event.cpp datatypes/event.h
+    datatypes/flight.cpp datatypes/flight.h
+    datatypes/organization.cpp datatypes/organization.h
+    datatypes/person.cpp datatypes/person.h
+    datatypes/place.cpp datatypes/place.h
+    datatypes/programmembership.cpp datatypes/programmembership.h
+    datatypes/reservation.cpp datatypes/reservation.h
+    datatypes/taxi.cpp datatypes/taxi.h
+    datatypes/ticket.cpp datatypes/ticket.h
+    datatypes/token.cpp datatypes/token.h
+    datatypes/traintrip.cpp datatypes/traintrip.h
+    datatypes/rentalcar.cpp datatypes/rentalcar.h
+    datatypes/visit.cpp datatypes/visit.h
 
-    engine/abstractextractor.cpp
-    engine/extractordocumentnode.cpp
-    engine/extractordocumentnodefactory.cpp
-    engine/extractordocumentprocessor.cpp
-    engine/extractorengine.cpp
-    engine/extractorfilter.cpp
-    engine/extractorrepository.cpp
-    engine/extractorresult.cpp
-    engine/extractorscriptengine.cpp
-    engine/scriptextractor.cpp
+    engine/abstractextractor.cpp engine/abstractextractor.h
+    engine/extractordocumentnode.cpp engine/extractordocumentnode.h
+    engine/extractordocumentnodefactory.cpp engine/extractordocumentnodefactory.h
+    engine/extractordocumentprocessor.cpp engine/extractordocumentprocessor.h
+    engine/extractorengine.cpp engine/extractorengine.h
+    engine/extractorfilter.cpp engine/extractorfilter.h
+    engine/extractorrepository.cpp engine/extractorrepository.h
+    engine/extractorresult.cpp engine/extractorresult.h
+    engine/extractorscriptengine.cpp engine/extractorscriptengine_p.h
+    engine/scriptextractor.cpp engine/scriptextractor.h
 
-    era/elbticket.cpp
-    era/fcbticket.cpp
-    era/fcbutil.cpp
-    era/ssbticketbase.cpp
-    era/ssbticketreader.cpp
-    era/ssbv1ticket.cpp
-    era/ssbv2ticket.cpp
-    era/ssbv3ticket.cpp
+    era/elbticket.cpp era/elbticket.h
+    era/fcbticket.cpp era/fcbticket.h
+    era/fcbutil.cpp era/fcbutil.h
+    era/ssbticketbase.cpp era/ssbticketbase.h
+    era/ssbticketreader.cpp era/ssbticketreader.h
+    era/ssbv1ticket.cpp era/ssbv1ticket.h
+    era/ssbv2ticket.cpp era/ssbv2ticket.h
+    era/ssbv3ticket.cpp era/ssbv3ticket.h
 
-    extractors/activitypubextractor.cpp
-    extractors/genericboardingpassextractor.cpp
+    extractors/activitypubextractor.cpp extractors/activitypubextractor.h
+    extractors/genericboardingpassextractor.cpp extractors/genericboardingpassextractor.h
 
-    http/httpresponse.cpp
+    http/httpresponse.cpp http/httpresponse.h
 
-    iata/iatabcbp.cpp
-    iata/iatabcbpparser.cpp
-    iata/iatabcbpsections.cpp
+    iata/iatabcbp.cpp iata/iatabcbp.h
+    iata/iatabcbpparser.cpp iata/iatabcbpparser.h
+    iata/iatabcbpsections.cpp iata/iatabcbpsections.h
 
-    jsapi/barcode.cpp
-    jsapi/bitarray.cpp
-    jsapi/bytearray.cpp
-    jsapi/extractorengine.cpp
-    jsapi/jsonld.cpp
+    jsapi/barcode.cpp jsapi/barcode.h
+    jsapi/bitarray.cpp jsapi/bitarray.h
+    jsapi/bytearray.cpp jsapi/bytearray.h
+    jsapi/extractorengine.cpp jsapi/extractorengine.h
+    jsapi/jsonld.cpp jsapi/jsonld.h
 
-    json/jsonld.cpp
-    json/jsonldfilterengine.cpp
-    json/jsonldimportfilter.cpp
+    json/jsonld.cpp json/jsonld.h
+    json/jsonldfilterengine.cpp json/jsonldfilterengine.h
+    json/jsonldimportfilter.cpp json/jsonldimportfilter.h
 
-    knowledgedb/alphaid.cpp
-    knowledgedb/airportdb.cpp
-    knowledgedb/airportnametokenizer.cpp
-    knowledgedb/countrydb.cpp
-    knowledgedb/iatacode.cpp
-    knowledgedb/knowledgedb.cpp
-    knowledgedb/stationidentifier.cpp
-    knowledgedb/timezonedb.cpp
-    knowledgedb/trainstationdb.cpp
+    knowledgedb/alphaid.cpp knowledgedb/alphaid.h
+    knowledgedb/airportdb.cpp knowledgedb/airportdb.h
+    knowledgedb/airportnametokenizer.cpp knowledgedb/airportnametokenizer_p.h
+    knowledgedb/countrydb.cpp knowledgedb/countrydb.h
+    knowledgedb/iatacode.cpp knowledgedb/iatacode.h
+    knowledgedb/knowledgedb.cpp knowledgedb/knowledgedb.h
+    knowledgedb/stationidentifier.cpp knowledgedb/stationidentifier.h
+    knowledgedb/timezonedb.cpp knowledgedb/timezonedb_p.h
+    knowledgedb/trainstationdb.cpp knowledgedb/trainstationdb.h
 
-    pdf/pdfbarcodeutil.cpp
-    pdf/pdfdocument.cpp
-    pdf/pdfextractoroutputdevice.cpp
-    pdf/pdfimage.cpp
-    pdf/pdflink.cpp
-    pdf/pdfvectorpicture.cpp
-    pdf/popplerglobalparams.cpp
-    pdf/popplerutils.cpp
+    pdf/pdfbarcodeutil.cpp pdf/pdfbarcodeutil_p.h
+    pdf/pdfdocument.cpp pdf/pdfdocument.h
+    pdf/pdfextractoroutputdevice.cpp pdf/pdfextractoroutputdevice_p.h
+    pdf/pdfimage.cpp pdf/pdfimage.h
+    pdf/pdflink.cpp  pdf/pdflink.h
+    pdf/pdfvectorpicture.cpp pdf/pdfvectorpicture_p.h
+    pdf/popplerglobalparams.cpp pdf/popplerglobalparams_p.h
+    pdf/popplerutils.cpp pdf/popplerutils_p.h
 
-    plist/plistreader.cpp
+    plist/plistreader.cpp plist/plistreader_p.h
 
-    processors/barcodedocumentprocessorhelper.cpp
-    processors/binarydocumentprocessor.cpp
-    processors/eradocumentprocessor.cpp
-    processors/externalprocessor.cpp
-    processors/htmldocumentprocessor.cpp
-    processors/httpresponseprocessor.cpp
-    processors/iatabcbpdocumentprocessor.cpp
-    processors/icaldocumentprocessor.cpp
-    processors/imagedocumentprocessor.cpp
-    processors/jsonlddocumentprocessor.cpp
-    processors/mimedocumentprocessor.cpp
-    processors/pdfdocumentprocessor.cpp
-    processors/pkpassdocumentprocessor.cpp
-    processors/plistdocumentprocessor.cpp
-    processors/textdocumentprocessor.cpp
-    processors/uic9183documentprocessor.cpp
-    processors/vdvdocumentprocessor.cpp
+    processors/barcodedocumentprocessorhelper.cpp processors/barcodedocumentprocessorhelper.h
+    processors/binarydocumentprocessor.cpp processors/binarydocumentprocessor.h
+    processors/eradocumentprocessor.cpp processors/eradocumentprocessor.h
+    processors/externalprocessor.cpp processors/externalprocessor.h
+    processors/htmldocumentprocessor.cpp processors/htmldocumentprocessor.h
+    processors/httpresponseprocessor.cpp processors/httpresponseprocessor.h
+    processors/iatabcbpdocumentprocessor.cpp processors/iatabcbpdocumentprocessor.h
+    processors/icaldocumentprocessor.cpp processors/icaldocumentprocessor.h
+    processors/imagedocumentprocessor.cpp processors/imagedocumentprocessor.h
+    processors/jsonlddocumentprocessor.cpp processors/jsonlddocumentprocessor.h
+    processors/mimedocumentprocessor.cpp processors/mimedocumentprocessor.h
+    processors/pdfdocumentprocessor.cpp processors/pdfdocumentprocessor.h
+    processors/pkpassdocumentprocessor.cpp processors/pkpassdocumentprocessor.h
+    processors/plistdocumentprocessor.cpp processors/plistdocumentprocessor.h
+    processors/textdocumentprocessor.cpp processors/textdocumentprocessor.h
+    processors/uic9183documentprocessor.cpp processors/uic9183documentprocessor.h
+    processors/vdvdocumentprocessor.cpp processors/vdvdocumentprocessor.h
 
-    protobuf/protobufstreamreader.cpp
+    protobuf/protobufstreamreader.cpp protobuf/protobufstreamreader.h
 
-    rsp/rsp6decoder.cpp
+    rsp/rsp6decoder.cpp rsp/rsp6decoder.h
     rsp/keys/rsp6-keys.qrc
 
     scripts/extractors.qrc
 
-    text/addressparser.cpp
-    text/nameoptimizer.cpp
-    text/terminalfinder.cpp
-    text/timefinder.cpp
+    text/addressparser.cpp text/addressparser_p.h
+    text/nameoptimizer.cpp text/nameoptimizer_p.h
+    text/terminalfinder.cpp text/terminalfinder_p.h
+    text/timefinder.cpp text/timefinder_p.h
 
-    uic9183/rct2ticket.cpp
-    uic9183/uic9183block.cpp
-    uic9183/uic9183head.cpp
-    uic9183/uic9183header.cpp
-    uic9183/uic9183parser.cpp
-    uic9183/uic9183ticketlayout.cpp
-    uic9183/uic9183utils.cpp
-    uic9183/vendor0080block.cpp
-    uic9183/vendor0080vublockdata.cpp
-    uic9183/vendor1154block.cpp
+    uic9183/rct2ticket.cpp uic9183/rct2ticket.h
+    uic9183/uic9183block.cpp uic9183/uic9183block.h
+    uic9183/uic9183head.cpp uic9183/uic9183head.h
+    uic9183/uic9183header.cpp uic9183/uic9183header.h
+    uic9183/uic9183parser.cpp uic9183/uic9183parser.h
+    uic9183/uic9183ticketlayout.cpp uic9183/uic9183ticketlayout.h
+    uic9183/uic9183utils.cpp uic9183/uic9183utils.h
+    uic9183/vendor0080block.cpp uic9183/vendor0080block.h
+    uic9183/vendor0080vublockdata.cpp uic9183/vendor0080vublockdata.h
+    uic9183/vendor1154block.cpp uic9183/vendor1154block.h
 
-    vdv/iso9796_2decoder.cpp
-    vdv/vdvcertificate.cpp
-    vdv/vdvticket.cpp
-    vdv/vdvticketcontent.cpp
-    vdv/vdvticketparser.cpp
+    vdv/iso9796_2decoder.cpp vdv/iso9796_2decoder_p.h
+    vdv/vdvcertificate.cpp vdv/vdvcertificate_p.h
+    vdv/vdvticket.cpp vdv/vdvticket.h
+    vdv/vdvticketcontent.cpp vdv/vdvticketcontent.h
+    vdv/vdvticketparser.cpp vdv/vdvticketparser.h
     vdv/certs/vdv-certs.qrc
 
-    barcodedecoder.cpp
-    calendarhandler.cpp
-    documentutil.cpp
-    extractorcapabilities.cpp
-    extractorpostprocessor.cpp
-    extractorutil.cpp
-    extractorvalidator.cpp
-    file.cpp
-    flightpostprocessor.cpp
-    flightutil.cpp
-    htmldocument.cpp
-    jsonlddocument.cpp
-    locationutil.cpp
-    mergeutil.cpp
-    qimagepurebinarizer.cpp
-    sortutil.cpp
-    stringutil.cpp
-    tickettokencomparator.cpp
+    barcodedecoder.cpp barcodedecoder.h
+    calendarhandler.cpp calendarhandler.h
+    documentutil.cpp documentutil.h
+    extractorcapabilities.cpp extractorcapabilities.h
+    extractorpostprocessor.cpp extractorpostprocessor.h
+    extractorutil.cpp extractorutil.h
+    extractorvalidator.cpp extractorvalidator.h
+    file.cpp file.h
+    flightpostprocessor.cpp flightpostprocessor_p.h
+    flightutil.cpp flightutil_p.h
+    htmldocument.cpp htmldocument.h
+    jsonlddocument.cpp jsonlddocument.h
+    locationutil.cpp locationutil.h
+    mergeutil.cpp mergeutil.h
+    qimagepurebinarizer.cpp qimagepurebinarizer_p.h
+    sortutil.cpp sortutil.h
+    stringutil.cpp stringutil.h
+    tickettokencomparator.cpp tickettokencomparator_p.h
 )
 if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(KPim${KF_MAJOR_VERSION}Itinerary PROPERTIES UNITY_BUILD ON)

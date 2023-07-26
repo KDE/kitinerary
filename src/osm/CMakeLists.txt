@@ -3,10 +3,10 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 add_library(KOSM STATIC
-    datatypes.cpp
-    element.cpp
-    geomath.cpp
-    xmlparser.cpp
+    datatypes.cpp datatypes.h
+    element.cpp element.h
+    geomath.cpp geomath.h
+    xmlparser.cpp xmlparser.h
 )
 
 target_include_directories(KOSM PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
