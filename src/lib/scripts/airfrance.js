@@ -5,7 +5,7 @@
 
 function parseTicket(content, node, triggerNode) {
     const text = content.text;
-    const ref = text.match(/RÉSERVATION +([A-Z0-9]{6})\n/)[1];
+    const ref = text.match(/(?:BOOKING REFERENCE|RÉSERVATION) +([A-Z0-9]{6})\n/)[1];
 
     // not really a valid IATA BCBP, but we can use parts of it at least
     const bcbp = triggerNode.content.substr(0, 22).match(/^M(\d)([^\/]+)\/(.*) */);
@@ -16,7 +16,7 @@ function parseTicket(content, node, triggerNode) {
     var reservations = [];
     var idx = 0;
     while (true) {
-        const leg = text.substr(idx).match(/(\d\d:\d\d) *(\d\d:\d\d)(?:.*)?\n *(\d\d[A-Z]{3}) +(.*?)  +(.*?)  +([A-Z0-9]{2}\d{4}).*\n *([A-Z]{3})  +([A-Z]{3}).*\n.*?(?:  +Siège\/Seat : ([0-9A-Z]+))?\n(?:.*\n)?.*Flight operated by (.*)\n/);
+        const leg = text.substr(idx).match(/(\d\d:\d\d) *(\d\d:\d\d)(?:.*)?\n *(\d\d[A-Z]{3}) +(.*?)  +(.*?)  +([A-Z0-9]{2}\d{4}).*\n *([A-Z]{3})  +([A-Z]{3}).*\n.*?(?:  +Siège\/Seat : ([0-9A-Z]+))?\n(?:.*\n)?.*(?:Flight operated by|Vol effectué par) (.*)\n/);
         if (!leg) {
             break;
         }
