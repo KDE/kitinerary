@@ -81,7 +81,11 @@ function parseQrCode(content) {
                             while (!trainData.atEnd()) {
                                 switch (trainData.fieldNumber()) {
                                     case 11:
-                                        res.reservationFor.trainNumber = trainData.readString();
+                                        if (res.reservationFor.trainNumber)
+                                            res.reservationFor.trainNumber += ', '
+                                        else
+                                            res.reservationFor.trainNumber = ''
+                                        res.reservationFor.trainNumber += trainData.readString();
                                         break;
                                     default:
                                         trainData.skip();
