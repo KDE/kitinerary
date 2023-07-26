@@ -93,6 +93,4 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::ProtobufStreamReader)
-
 #endif // KITINERARY_PROTOBUFSTREAMREADER_H

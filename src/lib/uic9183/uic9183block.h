@@ -68,6 +68,3 @@ private:
 };
 
 }
-
-Q_DECLARE_METATYPE(KItinerary::Uic9183Block)
-

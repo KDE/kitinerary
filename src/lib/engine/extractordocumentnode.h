@@ -191,5 +191,4 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::ExtractorDocumentNode)
 Q_DECLARE_SMART_POINTER_METATYPE(KItinerary::Internal::OwnedPtr)

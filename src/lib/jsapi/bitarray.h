@@ -30,5 +30,3 @@ private:
 
 }}
 
-Q_DECLARE_METATYPE(KItinerary::JsApi::BitArray)
-

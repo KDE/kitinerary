@@ -78,5 +78,3 @@ public:
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::SSBv1Ticket)
-

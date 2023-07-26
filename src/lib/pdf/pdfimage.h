@@ -139,8 +139,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(PdfImage::LoadingHints)
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::PdfImage)
-
 std::size_t std::hash<KItinerary::PdfImageRef>::operator()(const KItinerary::PdfImageRef &ref) const noexcept
 {
     // first part is how poppler hashes its Ref type

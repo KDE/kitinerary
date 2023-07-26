@@ -140,6 +140,3 @@ private:
 };
 
 }
-
-Q_DECLARE_METATYPE(KItinerary::PdfPage)
-

@@ -112,7 +112,4 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::ELBTicket)
-Q_DECLARE_METATYPE(KItinerary::ELBTicketSegment)
-
 #endif // KITINERARY_ELBTICKET_H

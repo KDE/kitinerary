@@ -144,8 +144,3 @@ public:
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::IataBcbpUniqueMandatorySection)
-Q_DECLARE_METATYPE(KItinerary::IataBcbpUniqueConditionalSection)
-Q_DECLARE_METATYPE(KItinerary::IataBcbpRepeatedMandatorySection)
-Q_DECLARE_METATYPE(KItinerary::IataBcbpRepeatedConditionalSection)
-

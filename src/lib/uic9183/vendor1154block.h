@@ -62,7 +62,4 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::Vendor1154UTBlock)
-Q_DECLARE_METATYPE(KItinerary::Vendor1154UTSubBlock)
-
 #endif // KITINERARY_VENDOR1154BLOCK_H

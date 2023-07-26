@@ -116,7 +116,3 @@ private:
 };
 
 }
-
-Q_DECLARE_METATYPE(KItinerary::Vendor0080BLBlock)
-Q_DECLARE_METATYPE(KItinerary::Vendor0080BLSubBlock)
-Q_DECLARE_METATYPE(KItinerary::Vendor0080VUBlock)

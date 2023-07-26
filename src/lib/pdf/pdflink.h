@@ -48,6 +48,4 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(KItinerary::PdfLink)
-
 #endif // KITINERARY_PDFLINK_H

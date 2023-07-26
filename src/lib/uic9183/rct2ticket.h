@@ -115,6 +115,3 @@ private:
 };
 
 }
-
-Q_DECLARE_METATYPE(KItinerary::Rct2Ticket)
-
