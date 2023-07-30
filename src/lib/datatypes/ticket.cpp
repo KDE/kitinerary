@@ -22,6 +22,7 @@ public:
     QString seatRow;
     QString seatSection;
     QString seatingType;
+    QString identifier;
 };
 
 KITINERARY_MAKE_CLASS(Seat)
@@ -29,6 +30,7 @@ KITINERARY_MAKE_PROPERTY(Seat, QString, seatNumber, setSeatNumber)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatRow, setSeatRow)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatSection, setSeatSection)
 KITINERARY_MAKE_PROPERTY(Seat, QString, seatingType, setSeatingType)
+KITINERARY_MAKE_PROPERTY(Seat, QString, identifier, setIdentifier)
 KITINERARY_MAKE_OPERATOR(Seat)
 
 class TicketPrivate : public QSharedData
@@ -45,6 +47,7 @@ public:
     QDateTime validUntil;
     double totalPrice = NAN;
     QString priceCurrency;
+    QString identifier;
 };
 
 KITINERARY_MAKE_CLASS(Ticket)
@@ -59,6 +62,7 @@ KITINERARY_MAKE_PROPERTY(Ticket, QDateTime, validFrom, setValidFrom)
 KITINERARY_MAKE_PROPERTY(Ticket, QDateTime, validUntil, setValidUntil)
 KITINERARY_MAKE_PROPERTY(Ticket, double, totalPrice, setTotalPrice)
 KITINERARY_MAKE_PROPERTY(Ticket, QString, priceCurrency, setPriceCurrency)
+KITINERARY_MAKE_PROPERTY(Ticket, QString, identifier, setIdentifier)
 KITINERARY_MAKE_OPERATOR(Ticket)
 
 Token::TokenType Ticket::ticketTokenType() const
