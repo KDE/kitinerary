@@ -12,6 +12,8 @@
 #include <QVariant>
 #include <QVector>
 
+#include <cmath>
+
 using namespace KItinerary;
 
 namespace KItinerary {
@@ -33,6 +35,8 @@ public:
     QVariantList subjectOf;
     Reservation::ReservationStatus reservationStatus = Reservation::ReservationConfirmed;
     ProgramMembership programMembershipUsed;
+    double totalPrice = NAN;
+    QString priceCurrency;
 };
 
 KITINERARY_MAKE_CLASS(Reservation)
@@ -49,6 +53,8 @@ KITINERARY_MAKE_PROPERTY(Reservation, QDateTime, modifiedTime, setModifiedTime)
 KITINERARY_MAKE_PROPERTY(Reservation, QVariantList, subjectOf, setSubjectOf)
 KITINERARY_MAKE_PROPERTY(Reservation, Reservation::ReservationStatus, reservationStatus, setReservationStatus)
 KITINERARY_MAKE_PROPERTY(Reservation, ProgramMembership, programMembershipUsed, setProgramMembershipUsed)
+KITINERARY_MAKE_PROPERTY(Reservation, double, totalPrice, setTotalPrice)
+KITINERARY_MAKE_PROPERTY(Reservation, QString, priceCurrency, setPriceCurrency)
 KITINERARY_MAKE_OPERATOR(Reservation)
 
 class LodgingReservationPrivate : public ReservationPrivate

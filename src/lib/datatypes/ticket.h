@@ -61,6 +61,9 @@ class KITINERARY_EXPORT Ticket
     KITINERARY_PROPERTY(QDateTime, validFrom, setValidFrom)
     KITINERARY_PROPERTY(QDateTime, validUntil, setValidUntil)
 
+    KITINERARY_PROPERTY(double, totalPrice, setTotalPrice)
+    KITINERARY_PROPERTY(QString, priceCurrency, setPriceCurrency)
+
 public:
     /** The type of content in the ticketToken property.
      *  @deprecated Use Token::TokenType instead.

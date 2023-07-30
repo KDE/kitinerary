@@ -57,6 +57,10 @@ public:
      *  @see KPkPass::Pass::serialNumber
      */
     KITINERARY_PROPERTY(QString, pkpassSerialNumber, setPkpassSerialNumber)
+
+    KITINERARY_PROPERTY(double, totalPrice, setTotalPrice)
+    KITINERARY_PROPERTY(QString, priceCurrency, setPriceCurrency)
+
 protected:
     ///@cond internal
     QExplicitlySharedDataPointer<ReservationPrivate> d;

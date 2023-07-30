@@ -3,6 +3,7 @@
         "@context": "http://schema.org",
         "@type": "TrainReservation",
         "modifiedTime": "2018-01-01T00:00:00",
+        "priceCurrency": "TWD",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {
@@ -29,6 +30,7 @@
                 "seatNumber": "1C",
                 "seatSection": "7"
             }
-        }
+        },
+        "totalPrice": 80
     }
 ]

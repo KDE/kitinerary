@@ -281,6 +281,9 @@ static constexpr const JsonLdFilterEngine::PropertyMapping property_mappings[] =
     { "ProgramMembership", "program", "programName" },
     { "ProgramMembership", "memberNumber", "membershipNumber" },
 
+    { "Reservation", "price", "totalPrice" },
+    { "Ticket", "price", "totalPrice" },
+
     // move TrainTrip::trainCompany to TrainTrip::provider (as defined by schema.org)
     { "TrainTrip", "trainCompany", "provider" },
 };

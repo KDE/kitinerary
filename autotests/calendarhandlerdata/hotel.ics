@@ -16,7 +16,7 @@ TRANSP:TRANSPARENT
 X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "LodgingReservation"\,"checkinTime":{"@type":"QDateTime"\,"@value":"2017-09-19T15:00:00+03:00"\,"timezone":"Europe/Helsinki"}\,"checkoutTime":{"@type":"QDateTime"\,"@value":"2017-09-20T12:00:00+03:00"\,"timezone":"Europe/Helsinki"}
  \,"potentialAction":
- [{"@type":"CancelAction"\,"target":"https://secure.booking.com/mybooking.en-gb.html?auth_key=magic&source=conf_metadata&pbsource=email_cancel"}\,{"@type":"ViewAction"\,"target":"https://secure.booking.com/mybooking.en-gb.html?aid=123456\;auth_key=magic&&source=conf_metadata&pbsource=conf_email_modify"}]\,"reservationFor":{"@type":"LodgingBusiness"\,"address":{"@type":
+ [{"@type":"CancelAction"\,"target":"https://secure.booking.com/mybooking.en-gb.html?auth_key=magic&source=conf_metadata&pbsource=email_cancel"}\,{"@type":"ViewAction"\,"target":"https://secure.booking.com/mybooking.en-gb.html?aid=123456\;auth_key=magic&&source=conf_metadata&pbsource=conf_email_modify"}]\,"priceCurrency":"EUR"\,"reservationFor":{"@type":"LodgingBusiness"\,"address":{"@type":
  "PostalAddress"\,"addressCountry":"FI"\,"addressLocality":
  "Espoo"\,"addressRegion":""\,"postalCode":"02600"\,"streetAddress":
  "Leppävaarankatu 1"}\,"name":"Glo Hotel Sello"\,"telephone":
