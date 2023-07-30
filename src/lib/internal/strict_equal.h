@@ -13,6 +13,8 @@
 #include <QTimeZone>
 #include <QVariant>
 
+#include <cmath>
+
 namespace KItinerary {
 namespace detail {
 
@@ -56,6 +58,18 @@ inline bool strict_equal<QString>(const QString &lhs, const QString &rhs)
         return lhs.isNull() == rhs.isNull();
     }
     return lhs == rhs;
+}
+
+// Floating point numbers: we treat two NAN values as equal
+template <>
+inline bool strict_equal<float>(float lhs, float rhs)
+{
+    return lhs == rhs || (std::isnan(lhs) && std::isnan(rhs));
+}
+template <>
+inline bool strict_equal<double>(double lhs, double rhs)
+{
+    return lhs == rhs || (std::isnan(lhs) && std::isnan(rhs));
 }
 
 }
