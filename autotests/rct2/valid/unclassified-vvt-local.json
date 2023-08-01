@@ -2,7 +2,9 @@
     {
         "@context": "http://schema.org",
         "@type": "Rct2Ticket",
+        "currency": "EUR",
         "passengerName": "Künqi Dr Dragn",
+        "price": "18.10",
         "title": "VVT: Einzel-Ticket",
         "type": "http://schema.org/Transport"
     }

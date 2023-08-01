@@ -43,6 +43,9 @@ class KITINERARY_EXPORT Rct2Ticket
     Q_PROPERTY(QString coachNumber READ coachNumber)
     Q_PROPERTY(QString seatNumber READ seatNumber)
 
+    Q_PROPERTY(QString currency READ currency)
+    Q_PROPERTY(QString price READ price)
+
 public:
     Rct2Ticket();
     /** Parse RCT2 ticket information from a U_TLAY layout block. */
@@ -109,6 +112,11 @@ public:
     QString coachNumber() const;
     /** Seat number (for reservation tickets). */
     QString seatNumber() const;
+
+    /** Currency used for the price value. */
+    QString currency() const;
+    /** Price of the ticket. */
+    QString price() const;
 
 private:
     QExplicitlySharedDataPointer<Rct2TicketPrivate> d;

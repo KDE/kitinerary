@@ -335,3 +335,17 @@ QString Rct2Ticket::seatNumber() const
     }
     return {};
 }
+
+static QRegularExpression priceRx(QStringLiteral(R"(([A-Z]{3})[ *]*(\d+[.,]\d\d))"));
+
+QString Rct2Ticket::currency() const
+{
+    const auto match = priceRx.match(d->layout.text(13, 52, 19, 1));
+    return match.hasMatch() ? match.captured(1) : QString();
+}
+
+QString Rct2Ticket::price() const
+{
+    const auto match = priceRx.match(d->layout.text(13, 52, 20, 1));
+    return match.hasMatch() ? match.captured(2).replace(QLatin1Char(','), QLatin1Char('.')) : QString();
+}

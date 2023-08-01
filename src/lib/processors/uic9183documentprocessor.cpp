@@ -167,6 +167,11 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
             }
         }
 
+        if (const auto price = rct2.price(); !price.isEmpty()) {
+            res.setPriceCurrency(rct2.currency());
+            res.setTotalPrice(price.toDouble());
+        }
+
         // provide names for typically "addon" tickets, so we can distinguish them in the UI
         switch (rct2.type()) {
             case Rct2Ticket::Reservation:
