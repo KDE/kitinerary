@@ -7,9 +7,7 @@
 function main(html) {
     var reservations = new Array();
 
-    var bookingRef = html.eval("//table//table//table//table/tr/td[4]")[0].recursiveContent;
-    if (!bookingRef)
-        return null;
+    const bookingRef = html.root.recursiveContent.match(/Booking Reference: ([A-Z0-9]{6})/)[1];
 
     var row = html.eval("//table//table//table//table[2]/tr")[0].nextSibling;
     var passengers = row.recursiveContent.split('\n');

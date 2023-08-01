@@ -472,8 +472,13 @@ Ticket ExtractorPostprocessorPrivate::processTicket(Ticket ticket) const
 
 ProgramMembership ExtractorPostprocessorPrivate::processProgramMembership(ProgramMembership program) const
 {
+    // remove empty dummy entries found eg. in ERA FCB data
+    if (const auto name = program.programName(); std::none_of(name.begin(), name.end(), [](QChar c) { return c.isLetter(); })) {
+        program.setProgramName(QString());
+    }
+
     program.setProgramName(program.programName().simplified());
-     // avoid emitting spurious empty ProgramMembership objects caused by empty elements in JSON-LD/Microdata input
+    // avoid emitting spurious empty ProgramMembership objects caused by empty elements in JSON-LD/Microdata input
     if (program.programName().isEmpty() && !program.programName().isNull()) {
         program.setProgramName(QString());
     }

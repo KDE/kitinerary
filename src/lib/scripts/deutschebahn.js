@@ -215,10 +215,13 @@ function parseReservation(pdf) {
     return reservations;
 }
 
-function applyUic9183ToReservation(res, uicCode)
+function applyUic9183ToReservation(res, uicNode)
 {
+    const uicCode = uicNode.content;
     res.reservationNumber = uicCode.pnr;
     res.reservationFor.provider = JsonLd.toJson(uicCode.issuer);
+    if (uicNode.result.length > 0 && uicNode.result[0].programMembershipUsed)
+        res.programMembershipUsed = uicNode.result[0].programMembershipUsed;
     const bl = uicCode.block('0080BL');
     if (bl) {
         const sb = bl.findSubBlock('009');
@@ -249,7 +252,7 @@ function parsePdf(pdf, node, triggerNode) {
     for (var i = 0; i < reservations.length; ++i) {
         reservations[i].reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content.rawData);
         if (triggerNode.mimeType == "internal/uic9183") {
-            applyUic9183ToReservation(reservations[i], triggerNode.content);
+            applyUic9183ToReservation(reservations[i], triggerNode);
         } else if (triggerNode.mimeType == "internal/vdv") {
             reservations[i].reservationFor.provider.identifier = "vdv:" + triggerNode.content.operatorId;
             if (reservations[i].reservedTicket.ticketedSeat) {
@@ -293,7 +296,7 @@ function parseUic9183(code, node) {
     if (bl && code.outboundDepartureStation.name && code.outboundArrivalStation.name) {
         let res = JsonLd.newTrainReservation();
         res.reservedTicket = node.result[0];
-        applyUic9183ToReservation(res, code);
+        applyUic9183ToReservation(res, node);
         res.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('031').content, 'dd.MM.yyyy', 'de');
         res.reservationFor.departureStation = JsonLd.toJson(code.outboundDepartureStation);
         res.reservationFor.arrivalStation = JsonLd.toJson(code.outboundArrivalStation);
@@ -304,7 +307,7 @@ function parseUic9183(code, node) {
 
         let ret = JsonLd.newTrainReservation();
         ret.reservedTicket = node.result[0];
-        applyUic9183ToReservation(ret, code);
+        applyUic9183ToReservation(ret, node);
         ret.reservationFor.departureDay = JsonLd.toDateTime(bl.findSubBlock('032').content, 'dd.MM.yyyy', 'de');
         ret.reservationFor.departureStation = JsonLd.toJson(code.returnDepartureStation);
         ret.reservationFor.arrivalStation = JsonLd.toJson(code.returnArrivalStation);

@@ -18,7 +18,8 @@ using namespace KItinerary;
 
 Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KMime::Content>)
 
-static bool contentMightBeEmail(const QByteArray &data)
+namespace {
+bool contentMightBeEmail(const QByteArray &data)
 {
     // raw email
     for (const auto c : data) {
@@ -27,13 +28,32 @@ static bool contentMightBeEmail(const QByteArray &data)
         }
         if (c == ':') {
             return true;
-        } else {
-            break;
         }
+        break;
     }
 
     // mbox format
     return data.startsWith("From ");
+}
+
+template <typename T>
+const T* findHeader(KMime::Content *content)
+{
+    auto header = content->header<T>();
+    if (header || !content->parent()) {
+        return header;
+    }
+    return findHeader<T>(content->parent());
+}
+
+const KMime::Headers::Base* findHeader(KMime::Content *content, const char *headerType)
+{
+    const auto header = content->headerByType(headerType);
+    if (header || !content->parent()) {
+        return header;
+    }
+    return findHeader(content->parent(), headerType);
+}
 }
 
 bool MimeDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
@@ -41,25 +61,6 @@ bool MimeDocumentProcessor::canHandleData(const QByteArray &encodedData, QString
     return contentMightBeEmail(encodedData) ||
         fileName.endsWith(QLatin1String(".eml"), Qt::CaseInsensitive) ||
         fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive);
-}
-
-template <typename T>
-static const T* findHeader(KMime::Content *content)
-{
-    auto h = content->header<T>();
-    if (h || !content->parent()) {
-        return h;
-    }
-    return findHeader<T>(content->parent());
-}
-
-static const KMime::Headers::Base* findHeader(KMime::Content *content, const char *headerType)
-{
-    auto h = content->headerByType(headerType);
-    if (h || !content->parent()) {
-        return h;
-    }
-    return findHeader(content->parent(), headerType);
 }
 
 ExtractorDocumentNode MimeDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
@@ -75,7 +76,7 @@ ExtractorDocumentNode MimeDocumentProcessor::createNodeFromData(const QByteArray
     ExtractorDocumentNode node;
     node.setContent<Internal::OwnedPtr<KMime::Content>>(msg);
 
-    auto dateHdr = findHeader<KMime::Headers::Date>(msg);
+    const auto dateHdr = findHeader<KMime::Headers::Date>(msg);
     if (dateHdr) {
         node.setContextDateTime(dateHdr->dateTime());
     }
@@ -85,7 +86,7 @@ ExtractorDocumentNode MimeDocumentProcessor::createNodeFromData(const QByteArray
 
 ExtractorDocumentNode MimeDocumentProcessor::createNodeFromContent(const QVariant &decodedData) const
 {
-    KMime::Content *content = decodedData.value<KMime::Content*>();
+    auto *content = decodedData.value<KMime::Content*>();
     if (!content) {
         content = decodedData.value<KMime::Message*>();
     }
@@ -107,19 +108,19 @@ ExtractorDocumentNode MimeDocumentProcessor::createNodeFromContent(const QVarian
 static ExtractorDocumentNode expandContentNode(ExtractorDocumentNode &node, KMime::Content *content, const ExtractorEngine *engine)
 {
     QString fileName;
-    const auto ct = content->contentType(false);
-    if (ct) {
-        fileName = ct->name();
+    const auto contentType = content->contentType(false);
+    if (contentType) {
+        fileName = contentType->name();
     }
-    const auto cd = content->contentDisposition(false);
-    if (fileName.isEmpty() && cd) {
-        fileName = cd->filename();
+    const auto contentDisposition = content->contentDisposition(false);
+    if (fileName.isEmpty() && contentDisposition) {
+        fileName = contentDisposition->filename();
     }
 
     ExtractorDocumentNode child;
-    if ((ct && ct->isPlainText() && fileName.isEmpty()) || (!ct && content->isTopLevel())) {
+    if ((contentType && contentType->isPlainText() && fileName.isEmpty()) || (!contentType && content->isTopLevel())) {
         child = engine->documentNodeFactory()->createNode(content->decodedText(), u"text/plain");
-    } else if (ct && ct->isHTMLText()) {
+    } else if (contentType && contentType->isHTMLText()) {
         child = engine->documentNodeFactory()->createNode(content->decodedText(), u"text/html");
     } else if (content->bodyIsMessage()) {
         child = engine->documentNodeFactory()->createNode(QVariant::fromValue(content->bodyAsMessage().get()), u"message/rfc822");
