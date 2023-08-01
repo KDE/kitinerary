@@ -67,6 +67,30 @@ void Uic9183DocumentProcessor::expandNode(ExtractorDocumentNode &node, [[maybe_u
     }
 }
 
+static ProgramMembership extractCustomerCard(const Fcb::CardReferenceType &card)
+{
+    ProgramMembership p;
+    p.setProgramName(card.cardName);
+    if (card.cardIdNumIsSet()) {
+        p.setMembershipNumber(QString::number(card.cardIdNum));
+    } else if (card.cardIdIA5IsSet()) {
+        p.setMembershipNumber(QString::fromUtf8(card.cardIdIA5));
+    }
+    return p;
+}
+
+static ProgramMembership extractCustomerCard(const QList <Fcb::TariffType> &tariffs)
+{
+    // TODO what do we do with the (so far theoretical) case of multiple discount cards in use?
+    for (const auto &tariff : tariffs) {
+        for (const auto &card : tariff.reductionCard) {
+            return extractCustomerCard(card);
+        }
+    }
+
+    return {};
+}
+
 void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     const auto p = node.content<Uic9183Parser>();
@@ -211,6 +235,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 
                 Ticket t(ticket);
                 t.setTicketedSeat(s);
+                res.setProgramMembershipUsed(extractCustomerCard(irt.tariffs));
 
                 if (validator.isValidElement(trip)) {
                     res.setReservationFor(trip);
@@ -225,6 +250,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 s.setSeatingType(FcbUtil::classCodeToString(nrt.classCode));
                 Ticket t(ticket);
                 t.setTicketedSeat(s);
+                res.setProgramMembershipUsed(extractCustomerCard(nrt.tariffs));
 
                 // check for TrainLinkType regional validity constrains
                 bool trainLinkTypeFound = false;
