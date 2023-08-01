@@ -46,6 +46,8 @@ function parseDomesticBarcode(data) {
         res.reservedTicket.ticketedSeat.seatNumber = seat[2];
     }
     res.reservedTicket.ticketToken = 'aztecbin:' + ByteArray.toBase64(data);
+    res.totalPrice = payload[3];
+    res.priceCurrency = 'EUR';
     return res;
 }
 

@@ -2,6 +2,7 @@
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "priceCurrency": "EUR",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalPlatform": "6",
@@ -28,6 +29,7 @@
                 "seatNumber": "71 73",
                 "seatSection": "256"
             }
-        }
+        },
+        "totalPrice": 99
     }
 ]

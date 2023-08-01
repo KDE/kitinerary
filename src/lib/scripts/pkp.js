@@ -26,5 +26,7 @@ function parseBarcode(content, node) {
     res.reservationFor.departureStation.identifier = 'pl:' + layout.text(12, 0, 72, 1);
     res.reservationFor.arrivalStation.name = layout.text(42, 0, 72, 1);
     res.reservationFor.arrivalStation.identifier = 'pl:' + layout.text(13, 0, 72, 1);
+    res.totalPrice = layout.text(26, 0, 72, 1) / 100;
+    res.priceCurrency = 'PLN';
     return res;
 }

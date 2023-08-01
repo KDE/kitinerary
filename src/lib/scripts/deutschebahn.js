@@ -163,7 +163,8 @@ function parseTicket(text, uic918ticket) {
 
     // international tickets have the booking reference somewhere on the side, so we don't really know
     // where it is relative to the itinerary
-    var bookingRef = text.match(/(?:Auftragsnummer|Auftrag \(NVS\)):\s*([A-Z0-9]{6,9})\n/);
+    const bookingRef = text.match(/(?:Auftragsnummer|Auftrag \(NVS\)):\s*([A-Z0-9]{6,9})\n/);
+    const price = text.match(/(?:Summe|Gesamtpreis) *(\d+,\d{2}) ?€/)[1].replace(',', '.');
     for (var i = 0; i < reservations.length; ++i) {
         if (bookingRef) {
             reservations[i].reservationNumber = bookingRef[1];
@@ -173,6 +174,8 @@ function parseTicket(text, uic918ticket) {
             reservations[i] = JsonLd.trainToBusReservation(reservations[i]);
             reservations[i].reservedTicket.ticketedSeat = undefined;
         }
+        reservations[i].totalPrice = price;
+        reservations[i].priceCurrency = 'EUR';
     }
     return reservations;
 }

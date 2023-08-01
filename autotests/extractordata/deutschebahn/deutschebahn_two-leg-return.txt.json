@@ -2,6 +2,7 @@
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "priceCurrency": "EUR",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalPlatform": "6 D-G",
@@ -28,11 +29,13 @@
                 "seatNumber": "61",
                 "seatSection": "34"
             }
-        }
+        },
+        "totalPrice": 999
     },
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "priceCurrency": "EUR",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalPlatform": "3",
@@ -51,11 +54,13 @@
             "trainNumber": "S0"
         },
         "reservationNumber": "XXX007",
-        "reservationStatus": "http://schema.org/ReservationConfirmed"
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "totalPrice": 999
     },
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "priceCurrency": "EUR",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalPlatform": "14",
@@ -74,11 +79,13 @@
             "trainNumber": "S0"
         },
         "reservationNumber": "XXX007",
-        "reservationStatus": "http://schema.org/ReservationConfirmed"
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "totalPrice": 999
     },
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "priceCurrency": "EUR",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalPlatform": "",
@@ -105,6 +112,7 @@
                 "seatNumber": "85",
                 "seatSection": "22"
             }
-        }
+        },
+        "totalPrice": 999
     }
 ]
