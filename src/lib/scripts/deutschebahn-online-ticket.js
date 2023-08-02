@@ -50,6 +50,7 @@ function parseOnlineTicket(xml)
         result.push(res);
     }
 
+    let resNr = undefined;
     const reslist = xml.root.eval('//reslist/res');
     for (const seat of reslist) {
         const tn = seat.attribute('tn');
@@ -60,6 +61,7 @@ function parseOnlineTicket(xml)
             // TODO maybe better to use plaetze/platz/platznr|wagennr, but needs a multi-seat example
             train.reservedTicket.ticketedSeat.seatSection = seat.eval('nvplist/nvp[@name="wagennummer"]')[0].content;
             train.reservedTicket.ticketedSeat.seatNumber = seat.eval('nvplist/nvp[@name="plaetze2"]')[0].content;
+            resNr = seat.eval('nvplist/nvp[@name="eparefnummer"]')[0].content;
             break;
         }
     }
@@ -73,6 +75,7 @@ function parseOnlineTicket(xml)
     const barcode = tickets[0].eval('//htdata/ht[@name="barcode"]')[0];
     const ticket = ExtractorEngine.extract(ByteArray.fromBase64(barcode.content.substr(22).trim())).result[0];
     ticket.reservedTicket.ticketNumber = tickets[0].eval('mtk/ot_nr_hin')[0].content;
+    ticket.reservedTicket.ticketedSeat.identifier = resNr;
     let mergedResult = [];
     for (let train of result) {
         mergedResult.push(JsonLd.apply(ticket, train));
