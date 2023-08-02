@@ -15,6 +15,11 @@ function parsePage(page) {
     res.reservedTicket.ticketedSeat.seatingType = page.text.match(/Classe?:\s+(.*)\n/)[1];
     res.reservedTicket.ticketToken = "barcode128:" + page.text.match(/\s+([A-Z\d-]{15})\n/)[1];
     res.reservedTicket.name = page.text.match(/(?:Type de billet|Ticket type):\s+(.*)\n/)[1];
+    const price = page.text.match(/(?:Prix|Price):\s+(\d+,\d\d)(?: €)?\n/);
+    if (price) {
+        res.totalPrice = price[1].replace(',', '.');
+    }
+    res.priceCurrency = 'EUR';
     return res;
 }
 

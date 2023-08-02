@@ -59,8 +59,9 @@ function parseRSP6(text) {
     let offset = 0;
     if (rsp6.readNumberMSB(384, 1)) {
         console.log("purchase time", readRSP6DateTime(rsp6, 390));
-        console.log("price", rsp6.readNumberMSB(415, 21) / 100.0);
         console.log("purchase ref", readRSP6String(rsp6, 449, 8));
+        res.totalPrice = rsp6.readNumberMSB(415, 21) / 100.0;
+        res.priceCurrency = 'GBP';
         const daysOfValidity = rsp6.readNumberMSB(497, 9);
         if (departureTimeFlag == 0) {
             let dt = new Date(departureTime);
