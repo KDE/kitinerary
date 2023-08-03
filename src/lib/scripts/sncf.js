@@ -449,6 +449,12 @@ function parseOuigoTicket(pdf, node) {
             break;
         }
     }
+
+    const price = text.match(/ (\d+\.\d\d)€/);
+    if (price) {
+        res.totalPrice = price[1];
+        res.priceCurrency = 'EUR';
+    }
     return res;
 }
 

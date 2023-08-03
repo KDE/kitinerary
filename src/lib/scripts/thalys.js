@@ -76,5 +76,11 @@ function parsePdfTicket(pdf, node, triggerNode)
     const passenger = page.text.match(/(?:PASSAGER|FAHRGAST|PASSENGER)\n(.*)\n/);
     res.underName.name = passenger[1];
 
+    const price = page.text.match(/(\d+) EUR/);
+    if (price) {
+        res.totalPrice = price[1];
+        res.priceCurrency = 'EUR';
+    }
+
     return res;
 }

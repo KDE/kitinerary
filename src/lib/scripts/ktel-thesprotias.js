@@ -36,6 +36,7 @@ function parsePdfTicket(pdf, node, triggerNode) {
 
     const price = text.match(/(?:Price:|Τιμή)[ ]+(\d+\.\d{2})€/);
     res.totalPrice = price[1];
+    res.priceCurrency = 'EUR';
 
     return res;
 }
