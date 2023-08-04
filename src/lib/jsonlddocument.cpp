@@ -348,6 +348,8 @@ bool JsonLd::valueIsNull(const QVariant &v)
             return !v.toUrl().isValid();
         case QMetaType::Float:
             return std::isnan(v.toFloat());
+        case QMetaType::Double:
+            return std::isnan(v.toDouble());
         case QMetaType::QVariantList:
             return v.toList().isEmpty();
         // starting with Qt6, QVariant::isNull is "shallow" and would miss the following as well

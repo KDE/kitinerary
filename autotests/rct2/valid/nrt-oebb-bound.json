@@ -2,6 +2,7 @@
     {
         "@context": "http://schema.org",
         "@type": "Rct2Ticket",
+        "currency": "EUR",
         "firstDayOfValidity": "2017-01-01",
         "outboundArrivalStation": "GRAZ HBF",
         "outboundArrivalTime": "2017-09-16T21:33:00",
@@ -9,6 +10,7 @@
         "outboundDepartureStation": "WIEN HBF",
         "outboundDepartureTime": "2017-09-16T18:58:00",
         "passengerName": "Lastname Name",
+        "price": "99.99",
         "title": "FAHRSCHEIN",
         "type": "http://schema.org/Transport"
     }

@@ -2,11 +2,13 @@
     {
         "@context": "http://schema.org",
         "@type": "Rct2Ticket",
+        "currency": "EUR",
         "firstDayOfValidity": "2017-09-10",
         "outboundArrivalStation": "WIEN",
         "outboundClass": "1",
         "outboundDepartureStation": "GRAZ",
         "passengerName": "Lastname Name",
+        "price": "99.99",
         "title": "FAHRSCHEIN",
         "type": "http://schema.org/Transport"
     }

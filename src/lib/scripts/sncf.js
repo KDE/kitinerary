@@ -23,7 +23,8 @@ const tariffs = {
 
 function parseSncfPdfText(text) {
     var reservations = new Array();
-    var bookingRef = text.match(/(?:DOSSIER VOYAGE|BOOKING FILE REFERENCE|REFERENCE NUMBER|REISEREFERENZ) ?: +([A-Z0-9]{6})/);
+    const bookingRef = text.match(/(?:DOSSIER VOYAGE|BOOKING FILE REFERENCE|REFERENCE NUMBER|REISEREFERENZ) ?: +([A-Z0-9]{6})/);
+    const price = text.match(/(\d+,\d\d) EUR/);
 
     var pos = 0;
     while (true) {
@@ -62,6 +63,11 @@ function parseSncfPdfText(text) {
             res.reservedTicket.ticketedSeat.seatNumber = seatRes[2];
         }
 
+        if (price) {
+            res.totalPrice = price[1].replace(',', '.');
+            res.priceCurrency = 'EUR';
+        }
+
         reservations.push(res);
         if (index == 0)
             break;
@@ -74,6 +80,7 @@ function parseSncfPdfText(text) {
 function parseInouiPdfText(page)
 {
     var reservations = new Array();
+    const price = page.text.match(/(\d+,\d\d) EUR/);
     var text = page.textInRect(0.0, 0.0, 0.5, 1.0);
 
     var date = text.match(/(\d+\.? [^ ]+ \d{4})\n/)
@@ -104,6 +111,11 @@ function parseInouiPdfText(page)
         if (seat) {
             res.reservedTicket.ticketedSeat.seatSection = seat[1];
             res.reservedTicket.ticketedSeat.seatNumber = seat[2];
+        }
+
+        if (price) {
+            res.totalPrice = price[1].replace(',', '.');
+            res.priceCurrency = 'EUR';
         }
 
         reservations.push(res);
@@ -267,6 +279,8 @@ function parseSecutixPdf(pdf, node, triggerNode)
     res.underName.familyName = code.substr(116, 19);
     res.underName.givenName = code.substr(135, 19);
     res.programMembershipUsed.programName = tariffs[code.substr(92, 4)];
+    res.reservedTicket.totalPrice = code.substr(226, 10) / 100;
+    res.reservedTicket.priceCurrency = 'EUR';
 
     var text = pdf.pages[triggerNode.location].text;
     var pnr = text.match(res.reservationNumber + '[^\n]* ([A-Z0-9]{6})\n');
@@ -434,6 +448,12 @@ function parseOuigoTicket(pdf, node) {
             res.reservedTicket.ticketToken = "azteccode:" + barcodes[0].content;
             break;
         }
+    }
+
+    const price = text.match(/ (\d+\.\d\d)€/);
+    if (price) {
+        res.totalPrice = price[1];
+        res.priceCurrency = 'EUR';
     }
     return res;
 }

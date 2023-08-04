@@ -9,6 +9,8 @@
 
 #include <QByteArray>
 
+#include <cmath>
+
 using namespace KItinerary;
 
 namespace KItinerary {
@@ -41,6 +43,8 @@ public:
     QVariantList subjectOf;
     QDateTime validFrom;
     QDateTime validUntil;
+    double totalPrice = NAN;
+    QString priceCurrency;
 };
 
 KITINERARY_MAKE_CLASS(Ticket)
@@ -53,6 +57,8 @@ KITINERARY_MAKE_PROPERTY(Ticket, Person, underName, setUnderName)
 KITINERARY_MAKE_PROPERTY(Ticket, QVariantList, subjectOf, setSubjectOf)
 KITINERARY_MAKE_PROPERTY(Ticket, QDateTime, validFrom, setValidFrom)
 KITINERARY_MAKE_PROPERTY(Ticket, QDateTime, validUntil, setValidUntil)
+KITINERARY_MAKE_PROPERTY(Ticket, double, totalPrice, setTotalPrice)
+KITINERARY_MAKE_PROPERTY(Ticket, QString, priceCurrency, setPriceCurrency)
 KITINERARY_MAKE_OPERATOR(Ticket)
 
 Token::TokenType Ticket::ticketTokenType() const

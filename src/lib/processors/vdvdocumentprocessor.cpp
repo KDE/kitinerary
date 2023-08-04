@@ -6,6 +6,8 @@
 
 #include "vdvdocumentprocessor.h"
 
+#include <asn1/berelement.h>
+
 #include <KItinerary/ExtractorResult>
 #include <KItinerary/Ticket>
 #include <KItinerary/VdvTicket>
@@ -68,5 +70,11 @@ void VdvDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
     ticket.setValidFrom(vdv.beginDateTime());
     ticket.setValidUntil(vdv.endDateTime());
     ticket.setUnderName(vdv.person());
+
+    if (const auto basicData = vdv.productData().find(VdvTicketBasicData::Tag).contentAt<VdvTicketBasicData>(); basicData && basicData->price) {
+        ticket.setTotalPrice(basicData->price / 100.0);
+        ticket.setPriceCurrency(QStringLiteral("EUR"));
+    }
+
     node.addResult(QList<QVariant>({ticket}));
 }

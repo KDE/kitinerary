@@ -76,6 +76,20 @@ function parseQrCode(content) {
                                 }
                             }
                             break;
+                        case 6:
+                            let paymentData = level1.readSubMessage();
+                            while (!paymentData.atEnd()) {
+                                switch (paymentData.fieldNumber()) {
+                                    case 2:
+                                        res.priceCurrency = paymentData.readString();
+                                        break;
+                                    case 3:
+                                        res.totalPrice = paymentData.readString();
+                                        break;
+                                    default:
+                                        paymentData.skip();
+                                }
+                            }
                         case 8:
                             let trainData = level1.readSubMessage();
                             while (!trainData.atEnd()) {
