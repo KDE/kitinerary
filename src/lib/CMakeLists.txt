@@ -122,6 +122,7 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
 
     text/addressparser.cpp text/addressparser_p.h
     text/nameoptimizer.cpp text/nameoptimizer_p.h
+    text/pricefinder.cpp text/pricefinder_p.h
     text/terminalfinder.cpp text/terminalfinder_p.h
     text/timefinder.cpp text/timefinder_p.h
 

@@ -41,6 +41,7 @@ ecm_add_test(extractorutiltest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSIO
 ecm_add_test(addressparsertest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary KF${KF_MAJOR_VERSION}::Contacts)
 ecm_add_test(timefindertest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)
 ecm_add_test(nameoptimizertest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary KF${KF_MAJOR_VERSION}::Codecs)
+ecm_add_test(pricefindertest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)
 ecm_add_test(postprocessortest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)
 ecm_add_test(extractorvalidatortest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)
 ecm_add_test(calendarhandlertest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary KF${KF_MAJOR_VERSION}::Contacts KF${KF_MAJOR_VERSION}::CalendarCore)
