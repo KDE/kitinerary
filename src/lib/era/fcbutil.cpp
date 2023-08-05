@@ -4,7 +4,6 @@
 */
 
 #include "fcbutil.h"
-#include "logging.h"
 
 using namespace KItinerary;
 
