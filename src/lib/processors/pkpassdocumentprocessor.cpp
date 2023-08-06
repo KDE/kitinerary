@@ -18,6 +18,7 @@
 
 #include <knowledgedb/airportdb.h>
 #include <text/nameoptimizer_p.h>
+#include <text/pricefinder_p.h>
 #include <text/timefinder_p.h>
 
 #include <KPkPass/Barcode>
@@ -234,8 +235,10 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
     return flight;
 }
 
-static Event extractEventTicketPass(KPkPass::Pass *pass, Event event)
+static void extractEventTicketPass(KPkPass::Pass *pass, EventReservation &eventRes)
 {
+    auto event = eventRes.reservationFor().value<Event>();
+
     if (event.name().isEmpty()) {
         event.setName(pass->description());
     }
@@ -264,7 +267,20 @@ static Event extractEventTicketPass(KPkPass::Pass *pass, Event event)
         }
         event.setLocation(venue);
     }
-    return event;
+
+    // search for prices
+    PriceFinder priceFinder;
+    std::vector<PriceFinder::Result> prices;
+    const auto fields = pass->fields();
+    for (const auto &field : fields) {
+        priceFinder.findAll(field.value().toString(), prices);
+    }
+    if (const auto price = priceFinder.highest(prices); price.hasResult()) {
+        eventRes.setTotalPrice(price.value);
+        eventRes.setPriceCurrency(price.currency);
+    }
+
+    eventRes.setReservationFor(event);
 }
 
 static Person extractPerson(const KPkPass::Pass *pass, Person person)
@@ -359,7 +375,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
         case KPkPass::Pass::EventTicket:
         {
             auto evRes = res.value<EventReservation>();
-            evRes.setReservationFor(extractEventTicketPass(pass, evRes.reservationFor().value<Event>()));
+            extractEventTicketPass(pass, evRes);
             res = evRes;
             break;
         }
