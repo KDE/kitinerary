@@ -18,7 +18,7 @@ enum {
     MaxTargetImageWidth2D = 252,
     MaxTargetImageWidth1D = 272,
     // vector path complexity limits
-    MinPathElementCount2D = 400,
+    MinPathElementCount2D = 200,
     MaxPathElementCount2D = 5400,
     MinPathElementCount1D = 150,
     MaxPathElementCount1D = 400,
