@@ -158,6 +158,7 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     jsonlddocument.cpp jsonlddocument.h
     locationutil.cpp locationutil.h
     mergeutil.cpp mergeutil.h
+    priceutil.cpp priceutil.h
     qimagepurebinarizer.cpp qimagepurebinarizer_p.h
     sortutil.cpp sortutil.h
     stringutil.cpp stringutil.h
@@ -248,6 +249,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         JsonLdDocument
         LocationUtil
         MergeUtil
+        PriceUtil
         SortUtil
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS
