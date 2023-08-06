@@ -350,6 +350,11 @@ QString PdfDocument::producer() const
     return gooStringToUnicode(d->m_popplerDoc->getDocInfoProducer());
 }
 
+QString PdfDocument::creator() const
+{
+    return gooStringToUnicode(d->m_popplerDoc->getDocInfoCreator());
+}
+
 QVariantList PdfDocument::pagesVariant() const
 {
     QVariantList l;
