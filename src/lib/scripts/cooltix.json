@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "creator",
+            "match": "Cooltix",
+            "mimeType": "application/pdf",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "cooltix.js"
+}
