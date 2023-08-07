@@ -42,6 +42,9 @@ void ExtractorDocumentProcessor::reduceNode(ExtractorDocumentNode &node) const
 {
     for (const auto &child : node.childNodes()) {
         node.addResult(child.result());
+        if (!child.usedExtractor().isEmpty()) {
+            node.setUsedExtractor(child.usedExtractor());
+        }
     }
 }
 

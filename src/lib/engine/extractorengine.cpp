@@ -46,7 +46,6 @@ public:
     ExtractorDocumentNodeFactory m_nodeFactory;
     ExtractorRepository m_repo;
     BarcodeDecoder m_barcodeDecoder;
-    QString m_usedExtractor;
     ExtractorScriptEngine m_scriptEngine;
     ExtractorEngine::Hints m_hints = ExtractorEngine::NoHint;
 };
@@ -70,15 +69,17 @@ void ExtractorEnginePrivate::processNode(ExtractorDocumentNode& node)
     m_repo.extractorsForNode(node, extractors);
 
     ExtractorResult nodeResult;
+    QString usedExtractor;
     for (const auto &extractor : extractors) {
         auto res = extractor->extract(node, q);
         if (!res.isEmpty()) {
-            m_usedExtractor = extractor->name();
+            usedExtractor = extractor->name();
             nodeResult.append(std::move(res));
         }
     }
     if (!nodeResult.isEmpty()) {
         node.setResult(std::move(nodeResult));
+        node.setUsedExtractor(usedExtractor);
     }
 
     node.processor()->postExtract(node, q);
@@ -167,7 +168,7 @@ void ExtractorEngine::setAdditionalExtractors(std::vector<const AbstractExtracto
 
 QString ExtractorEngine::usedCustomExtractor() const
 {
-    return d->m_usedExtractor;
+    return d->m_rootNode.usedExtractor();
 }
 
 const ExtractorDocumentNodeFactory* ExtractorEngine::documentNodeFactory() const
