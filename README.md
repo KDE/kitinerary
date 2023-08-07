@@ -51,7 +51,7 @@ KItinerary::ExtractorDocumentProcessor and KItinerary::ExtractorDocumentNodeFact
 * Emails, represented as KMime::Message.
 * Apple Wallet passes, represented as KPkPass::Pass.
 * iCal calendars and iCal calendar event, represented as KCalendarCore::Calendar and KCalendarCore::Event.
-* HTML and XML documents, represented has KItinerary::HtmlDocument.
+* HTML and XML documents, represented as KItinerary::HtmlDocument.
 
 #### Specialized ticket barcode formats
 
