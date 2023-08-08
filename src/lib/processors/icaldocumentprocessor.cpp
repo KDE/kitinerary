@@ -84,16 +84,8 @@ void IcalEventProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]
     if (!data.isEmpty()) {
         node.addResult(QJsonDocument::fromJson(data.toUtf8()).array());
     }
-}
 
-void IcalEventProcessor::postExtract(ExtractorDocumentNode &node, const ExtractorEngine* engine) const
-{
-    if (!node.result().isEmpty() || (engine->hints() & ExtractorEngine::ExtractGenericIcalEvents) == 0) {
-        return;
-    }
-
-    const auto event = node.content<KCalendarCore::Event::Ptr>();
-    if (event->recurs() || event->hasRecurrenceId()) {
+    if (!node.result().isEmpty() || event->recurs() || event->hasRecurrenceId()) {
         return;
     }
 
@@ -120,6 +112,18 @@ void IcalEventProcessor::postExtract(ExtractorDocumentNode &node, const Extracto
     // TODO attachments?
 
     node.addResult(QVector<QVariant>{QVariant::fromValue(e)});
+}
+
+void IcalEventProcessor::postExtract(ExtractorDocumentNode &node, const ExtractorEngine* engine) const
+{
+    if ((engine->hints() & ExtractorEngine::ExtractGenericIcalEvents) || node.result().size() != 1 || !node.usedExtractor().isEmpty()) {
+        return;
+    }
+
+    // remove the generic result again that we added above if no extractor script touched it
+    if (JsonLd::isA<Event>(node.result().result().at(0))) {
+        node.setResult({});
+    }
 }
 
 QJSValue IcalEventProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const

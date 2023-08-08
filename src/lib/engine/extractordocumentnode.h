@@ -178,6 +178,12 @@ public:
     /** Replace the existing results by @p result. */
     void setResult(ExtractorResult &&result);
 
+    /** Extractor used for the result of this node, if any.
+     *  @internal for development tooling only
+     */
+    QString usedExtractor() const;
+    void setUsedExtractor(const QString &usedExtractor);
+
 private:
     explicit ExtractorDocumentNode(const std::shared_ptr<ExtractorDocumentNodePrivate> &dd);
     QJsonArray jsonLdResult() const;
