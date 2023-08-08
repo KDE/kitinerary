@@ -29,6 +29,7 @@ public:
     ExtractorResult result;
     QVariant location;
     QJSEngine *m_jsEngine = nullptr;
+    QString usedExtractor;
 
     QJSEngine *jsEngine() const;
 };
@@ -230,6 +231,16 @@ QVariantList ExtractorDocumentNode::findChildNodes(const QJSValue &jsFilter) con
     l.reserve(matches.size());
     std::transform(matches.begin(), matches.end(), std::back_inserter(l), [](const auto &c) { return QVariant::fromValue(c); });
     return l;
+}
+
+QString ExtractorDocumentNode::usedExtractor() const
+{
+    return d->usedExtractor;
+}
+
+void ExtractorDocumentNode::setUsedExtractor(const QString &usedExtractor)
+{
+    d->usedExtractor = usedExtractor;
 }
 
 #include "moc_extractordocumentnode.cpp"

@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "uid",
+            "match": "@cinemaxx",
+            "mimeType": "internal/event",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractEvent",
+    "mimeType": "internal/event",
+    "script": "cinemaxx.js"
+}
