@@ -58,11 +58,9 @@ function parsePdf(pdf, node, triggerNode)
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2] + arr[3], "dd/MM/yyyyhh:mm", "es");
     res.reservationFor.trainName = arr[4];
 
-    const price = text.match(/TOTAL:? *(\d+,\d\d) *€/i);
-    if (price) {
-        res.totalPrice = price[1].replace(',', '.');
-        res.priceCurrency = 'EUR';
-    }
+    const price = text.match(/TOTAL:? *(\d+,\d\d *€)/i);
+    if (price)
+        ExtractorEngine.extractPrice(price[1], res);
 
     return res;
 }
@@ -87,12 +85,6 @@ function parsePkPass(content)
             res.programMembershipUsed.membershipNumber = program[2];
         }
     }
-
-    const price = content.field['precio'].value.match(/(\d+,\d\d) €/);
-    if (price) {
-        res.totalPrice = price[1].replace(',', '.');
-        res.priceCurrency = 'EUR';
-    }
-
+    ExtractorEngine.extractPrice(content.field['precio'].value, res);
     return res;
 }

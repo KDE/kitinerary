@@ -56,8 +56,6 @@ function parsePdf(pdf, node, triggerNode) {
         res.reservationNumber = pnr[1];
     }
 
-    const price = text.match(/(\d+\.\d\d) €/);
-
     const leftHeaderText = page.textInRect(0.0, 0.15, 0.33, 0.25);
     const midHeaderText = page.textInRect(0.33, 0.15, 0.65, 0.25);
     const rightHeaderText = page.textInRect(0.65, 0.15, 1.0, 0.25);
@@ -112,11 +110,7 @@ function parsePdf(pdf, node, triggerNode) {
             }
         }
 
-        if (price) {
-            personalRes.totalPrice = price[1];
-            personalRes.priceCurrency = 'EUR';
-        }
-
+        ExtractorEngine.extractPrice(text, personalRes);
         reservations.push(personalRes);
     }
 

@@ -24,7 +24,7 @@ const tariffs = {
 function parseSncfPdfText(text) {
     var reservations = new Array();
     const bookingRef = text.match(/(?:DOSSIER VOYAGE|BOOKING FILE REFERENCE|REFERENCE NUMBER|REISEREFERENZ) ?: +([A-Z0-9]{6})/);
-    const price = text.match(/(\d+,\d\d) EUR/);
+    const price = text.match(/(\d+,\d\d EUR)/);
 
     var pos = 0;
     while (true) {
@@ -63,10 +63,8 @@ function parseSncfPdfText(text) {
             res.reservedTicket.ticketedSeat.seatNumber = seatRes[2];
         }
 
-        if (price) {
-            res.totalPrice = price[1].replace(',', '.');
-            res.priceCurrency = 'EUR';
-        }
+        if (price)
+            ExtractorEngine.extractPrice(price[1], res);
 
         reservations.push(res);
         if (index == 0)
@@ -80,7 +78,7 @@ function parseSncfPdfText(text) {
 function parseInouiPdfText(page)
 {
     var reservations = new Array();
-    const price = page.text.match(/(\d+,\d\d) EUR/);
+    const price = page.text.match(/(\d+,\d\d EUR)/);
     var text = page.textInRect(0.0, 0.0, 0.5, 1.0);
 
     var date = text.match(/(\d+\.? [^ ]+ \d{4})\n/)
@@ -113,10 +111,8 @@ function parseInouiPdfText(page)
             res.reservedTicket.ticketedSeat.seatNumber = seat[2];
         }
 
-        if (price) {
-            res.totalPrice = price[1].replace(',', '.');
-            res.priceCurrency = 'EUR';
-        }
+        if (price)
+            ExtractorEngine.extractPrice(price[1], res);
 
         reservations.push(res);
         if (endPos == 0)
@@ -344,6 +340,10 @@ function parseOuiSummary(html)
         res.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
     }
 
+    const price = html.eval('//*[@class="transaction__total-amount-value"]');
+    if (price)
+        ExtractorEngine.extractPrice(price[0].recursiveContent, res);
+
     // check if this is a return ticket
     var retourTime = html.eval('//*[@data-select="travel-returnDate"]');
     if (retourTime.length == 0) {
@@ -357,6 +357,8 @@ function parseOuiSummary(html)
     if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
         retour.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
     }
+    if (price)
+        ExtractorEngine.extractPrice(price[0].recursiveContent, retour);
 
     return [res, retour];
 }
