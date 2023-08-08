@@ -51,6 +51,12 @@ public:
      */
     Q_INVOKABLE KItinerary::ExtractorDocumentNode extract(const QVariant &content, const QString &mimeType);
 
+    /** Run the generic price information extractor to @p text and apply the found
+     *  price value and currency to @p result, if any.
+     *  @param result Can be a single object or and array.
+     */
+    Q_INVOKABLE void extractPrice(const QString &text, QJSValue result) const;
+
 private:
     KItinerary::ExtractorEngine *m_engine = nullptr;
     KItinerary::ExtractorDocumentNode m_currentNode;

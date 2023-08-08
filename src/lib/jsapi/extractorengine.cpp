@@ -6,8 +6,12 @@
 #include "extractorengine.h"
 #include "logging.h"
 
+#include <text/pricefinder_p.h>
+
 #include <KItinerary/ExtractorDocumentNodeFactory>
 
+#include <QJSValue>
+#include <QJSValueIterator>
 #include <QScopeGuard>
 
 using namespace KItinerary;
@@ -82,4 +86,32 @@ ExtractorDocumentNode JsApi::ExtractorEngine::extract(const QVariant &content, c
     m_currentNode = prevNode;
 
     return node;
+}
+
+static void applyPrice(const PriceFinder::Result &price, QJSValue obj)
+{
+    if (!obj.isObject()) {
+        return;
+    }
+    obj.setProperty(QStringLiteral("totalPrice"), price.value);
+    obj.setProperty(QStringLiteral("priceCurrency"), price.currency);
+}
+
+void JsApi::ExtractorEngine::extractPrice(const QString &text, QJSValue result) const
+{
+    PriceFinder finder;
+    const auto price = finder.findHighest(text);
+    if (!price.hasResult()) {
+        return;
+    }
+
+    if (result.isArray()) {
+        QJSValueIterator it(result);
+        while (it.hasNext()) {
+            it.next();
+            applyPrice(price, it.value());
+        }
+    } else {
+        applyPrice(price, result);
+    }
 }
