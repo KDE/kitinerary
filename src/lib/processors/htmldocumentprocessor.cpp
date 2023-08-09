@@ -5,19 +5,16 @@
 */
 
 #include "htmldocumentprocessor.h"
-#include "logging.h"
-#include "priceutil.h"
-#include "stringutil.h"
 
-#include <text/pricefinder_p.h>
+#include "genericpriceextractorhelper_p.h"
+#include "logging.h"
+#include "stringutil.h"
 
 #include <KItinerary/ExtractorDocumentNodeFactory>
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorResult>
 #include <KItinerary/HtmlDocument>
 #include <KItinerary/JsonLdDocument>
-#include <KItinerary/Reservation>
-#include <KItinerary/Ticket>
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -255,27 +252,6 @@ void HtmlDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unus
     }
 }
 
-static bool isApplicableForPrice(const QVariant &res)
-{
-    if (!PriceUtil::canHavePrice(res) || PriceUtil::hasPrice(res)) {
-        return false;
-    }
-
-    if (const auto r = JsonLd::convert<Reservation>(res); r.reservationStatus() != Reservation::ReservationConfirmed) { // ignore cancellations
-        return false;
-    }
-
-    if (JsonLd::isA<FlightReservation>(res) && !res.value<FlightReservation>().reservedTicket().value<Ticket>().ticketToken().isEmpty()) { // ignore flight boarding passes
-        return false;
-    }
-
-    if (JsonLd::isA<RentalCarReservation>(res)) { // car rental reservations are full of expensive insurance scam
-        return false;
-    }
-
-    return true;
-}
-
 void HtmlDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     if (node.childNodes().empty() || node.result().isEmpty()) {
@@ -283,35 +259,7 @@ void HtmlDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unu
     }
 
     const QString text = node.childNodes().back().content<QString>();
-    PriceFinder priceFinder;
-    std::vector<PriceFinder::Result> prices;
-    priceFinder.findAll(text, prices);
-    if (prices.empty() || !priceFinder.isSingleCurrency(prices)) {
-        return;
-    }
-
-    auto results = node.result().result();
-    if (std::none_of(results.begin(), results.end(), isApplicableForPrice)) {
-        return;
-    }
-
-    // ambigious: could be one price for each reservation or the same total for all
-    if (results.size() > 1 && prices.size() > 1) {
-        return;
-    }
-
-    const auto price = priceFinder.highest(prices);
-    if (!price.hasResult()) {
-        return;
-    }
-
-    for (auto &r : results) {
-        if (!isApplicableForPrice(r)) {
-            continue;
-        }
-        PriceUtil::setPrice(r, price.value, price.currency);
-    }
-    node.setResult(std::move(results));
+    GenericPriceExtractorHelper::postExtract(text, node);
 }
 
 QJSValue HtmlDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const

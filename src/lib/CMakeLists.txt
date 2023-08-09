@@ -99,6 +99,7 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     processors/binarydocumentprocessor.cpp processors/binarydocumentprocessor.h
     processors/eradocumentprocessor.cpp processors/eradocumentprocessor.h
     processors/externalprocessor.cpp processors/externalprocessor.h
+    processors/genericpriceextractorhelper.cpp processors/genericpriceextractorhelper_p.h
     processors/htmldocumentprocessor.cpp processors/htmldocumentprocessor.h
     processors/httpresponseprocessor.cpp processors/httpresponseprocessor.h
     processors/iatabcbpdocumentprocessor.cpp processors/iatabcbpdocumentprocessor.h
