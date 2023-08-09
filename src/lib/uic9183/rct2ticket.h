@@ -44,7 +44,7 @@ class KITINERARY_EXPORT Rct2Ticket
     Q_PROPERTY(QString seatNumber READ seatNumber)
 
     Q_PROPERTY(QString currency READ currency)
-    Q_PROPERTY(QString price READ price)
+    Q_PROPERTY(double price READ price)
 
 public:
     Rct2Ticket();
@@ -116,7 +116,7 @@ public:
     /** Currency used for the price value. */
     QString currency() const;
     /** Price of the ticket. */
-    QString price() const;
+    double price() const;
 
 private:
     QExplicitlySharedDataPointer<Rct2TicketPrivate> d;

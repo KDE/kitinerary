@@ -8,10 +8,13 @@
 #include "logging.h"
 #include "uic9183ticketlayout.h"
 
+#include <text/pricefinder_p.h>
+
 #include <QDateTime>
 #include <QDebug>
 #include <QRegularExpression>
 
+#include <cmath>
 #include <cstring>
 
 using namespace KItinerary;
@@ -336,16 +339,18 @@ QString Rct2Ticket::seatNumber() const
     return {};
 }
 
-static QRegularExpression priceRx(QStringLiteral(R"(([A-Z]{3})[ *]*(\d+[.,]\d\d))"));
-
 QString Rct2Ticket::currency() const
 {
-    const auto match = priceRx.match(d->layout.text(13, 52, 19, 1));
-    return match.hasMatch() ? match.captured(1) : QString();
+    std::vector<PriceFinder::Result> result;
+    PriceFinder finder;
+    finder.findAll(d->layout.text(13, 52, 19, 1).remove(QLatin1Char('*')), result);
+    return result.size() == 1 ? result[0].currency : QString();
 }
 
-QString Rct2Ticket::price() const
+double Rct2Ticket::price() const
 {
-    const auto match = priceRx.match(d->layout.text(13, 52, 20, 1));
-    return match.hasMatch() ? match.captured(2).replace(QLatin1Char(','), QLatin1Char('.')) : QString();
+    std::vector<PriceFinder::Result> result;
+    PriceFinder finder;
+    finder.findAll(d->layout.text(13, 52, 19, 1).remove(QLatin1Char('*')), result);
+    return result.size() == 1 ? result[0].value : NAN;
 }

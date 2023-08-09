@@ -11,7 +11,7 @@
         "outboundDepartureStation": "SOMEWHERE HBF",
         "outboundDepartureTime": "2018-12-29T01:37:00",
         "passengerName": "Lastname Firs",
-        "price": "99.90",
+        "price": 99.9,
         "seatNumber": "FENSTER 046",
         "title": "FAHRSCHEIN + RESERVIERUNG",
         "trainNumber": "NJ 421",

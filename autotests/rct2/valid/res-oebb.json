@@ -10,7 +10,7 @@
         "outboundClass": "2",
         "outboundDepartureStation": "VERONA PN",
         "outboundDepartureTime": "2010-05-16T11:02:00",
-        "price": "3.00",
+        "price": 3,
         "seatNumber": "FENSTER 023",
         "title": "RESERVIERUNG",
         "trainNumber": "EC 42",

@@ -8,7 +8,7 @@
         "outboundClass": "1",
         "outboundDepartureStation": "GRAZ",
         "passengerName": "Lastname Name",
-        "price": "99.99",
+        "price": 99.99,
         "title": "FAHRSCHEIN",
         "type": "http://schema.org/Transport"
     }

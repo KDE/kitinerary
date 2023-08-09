@@ -167,9 +167,9 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
             }
         }
 
-        if (const auto price = rct2.price(); !price.isEmpty()) {
-            res.setPriceCurrency(rct2.currency());
-            res.setTotalPrice(price.toDouble());
+        if (const auto currency = rct2.currency(); !currency.isEmpty()) {
+            res.setPriceCurrency(currency);
+            res.setTotalPrice(rct2.price());
         }
 
         // provide names for typically "addon" tickets, so we can distinguish them in the UI
