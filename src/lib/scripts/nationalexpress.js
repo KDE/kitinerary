@@ -62,6 +62,7 @@ function parsePdf(pdf, node, triggerNode) {
         res.reservationFor.busNumber = leg[2];
         res.reservedTicket.ticketToken = 'qrCode:' + triggerNode.content;
         res.reservedTicket.ticketNumber = triggerNode.content.substr(0, 8);
+        res.priceCurrency = "";
         reservations.push(res);
     }
 

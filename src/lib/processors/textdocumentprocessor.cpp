@@ -5,6 +5,7 @@
 */
 
 #include "textdocumentprocessor.h"
+#include "genericpriceextractorhelper_p.h"
 
 #include <KItinerary/ExtractorFilter>
 
@@ -32,4 +33,9 @@ ExtractorDocumentNode TextDocumentProcessor::createNodeFromData(const QByteArray
 bool TextDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
 {
     return filter.matches(node.content<QString>());
+}
+
+void TextDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
+{
+    GenericPriceExtractorHelper::postExtract(node.content<QString>(), node);
 }

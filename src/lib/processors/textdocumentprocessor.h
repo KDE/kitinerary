@@ -17,6 +17,7 @@ public:
     bool canHandleData(const QByteArray &encodedData, QStringView fileName) const override;
     ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
     bool matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const override;
+    void postExtract(ExtractorDocumentNode &node, const ExtractorEngine *engine) const override;
 };
 
 }

@@ -2,6 +2,7 @@
     {
         "@context": "http://schema.org",
         "@type": "TrainReservation",
+        "priceCurrency": "CZK",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {
@@ -26,6 +27,7 @@
                 "seatNumber": "91",
                 "seatSection": "26"
             }
-        }
+        },
+        "totalPrice": 341
     }
 ]

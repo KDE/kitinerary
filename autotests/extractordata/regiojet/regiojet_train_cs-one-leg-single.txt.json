@@ -8,6 +8,7 @@
                 "target": "https://jizdenky.regiojet.cz/OnlineTicket?pam1=0987654321&pam2=0123456789"
             }
         ],
+        "priceCurrency": "CZK",
         "reservationFor": {
             "@type": "TrainTrip",
             "arrivalStation": {
@@ -33,6 +34,7 @@
                 "seatNumber": "48",
                 "seatSection": "1"
             }
-        }
+        },
+        "totalPrice": 239
     }
 ]

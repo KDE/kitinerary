@@ -12,6 +12,7 @@
             "@value": "2018-08-18T10:00:00+02:00",
             "timezone": "Europe/Vienna"
         },
+        "priceCurrency": "EUR",
         "reservationFor": {
             "@type": "LodgingBusiness",
             "address": {
@@ -32,6 +33,7 @@
         },
         "reservationNumber": "AOI-XX-1234567",
         "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "totalPrice": 999.99,
         "underName": {
             "@type": "Person",
             "name": "John Doe"
