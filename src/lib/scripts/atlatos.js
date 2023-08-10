@@ -54,5 +54,10 @@ function extractPdf(pdf)
         res.reservationFor.arrivalTime = JsonLd.toDateTime(flight[11], 'dd.MM.yyyy hh:mm', 'de');
         reservations.push(res);
     }
+
+    const price = text.match(/Gesamtpreis:(.*)/);
+    if (price)
+        ExtractorEngine.extractPrice(price[1], reservations);
+
     return reservations;
 }

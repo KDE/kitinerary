@@ -14,6 +14,7 @@ function parseOnePdfTicket(text) {
     res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[6] + ' ' + trip[4], 'dd.MM.yyyy hh:mm', 'lv');
     res.reservationFor.departureTime = JsonLd.toDateTime(trip[6] + ' ' + trip[2], 'dd.MM.yyyy hh:mm', 'lv');
     res.reservationFor.trainNumber = trip[5];
+    ExtractorEngine.extractPrice(text, res);
     return res;
 }
 

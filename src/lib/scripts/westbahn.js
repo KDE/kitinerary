@@ -28,5 +28,6 @@ function parseTicket(pdf, node, triggerNode) {
         res.reservationFor.departureTime = JsonLd.toDateTime(date + ' ' + train[1], 'dd.MM.yyyy hh:mm', 'de');
         res.reservationFor.arrivalTime = JsonLd.toDateTime(date + ' ' + train[2], 'dd.MM.yyyy hh:mm', 'de');
     }
+    ExtractorEngine.extractPrice(rightCol, res);
     return res;
 }
