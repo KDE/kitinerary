@@ -25,7 +25,7 @@ function parseConfirmation(content) {
 
         // TODO handle multiple passengers, once we have a sample for that
         const pas = text.substr(idx).match(/\s*(.*)\/(.*?)  +.* (\d{1,2}[A-K]).*\n/);
-        idx += leg.index + leg[0].length;
+        idx += pas.index + pas[0].length;
 
         flight.underName.familyName = pas[1];
         flight.underName.givenName = pas[2];
