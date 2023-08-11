@@ -5,6 +5,8 @@
 
 #include "pricefinder_p.h"
 
+#include <KItinerary/PriceUtil>
+
 #include <QDebug>
 #include <QLocale>
 #include <QRegularExpression>
@@ -286,36 +288,6 @@ QString PriceFinder::parseCurrency(QStringView s, CurrencyPosition pos) const
     return isoCode;
 }
 
-// ### keep sorted by ISO code, only needs to contain those != 2
-// @see https://en.wikipedia.org/wiki/List_of_circulating_currencies
-struct {
-    const char isoCode[4];
-    const uint8_t decimals;
-} static constexpr const currency_decimals_map[] = {
-    { "BHD", 3 },
-    { "CNY", 1 },
-    { "IQD", 3 },
-    { "IRR", 0 },
-    { "KWD", 3 },
-    { "LYD", 3 },
-    { "MGA", 1 },
-    { "MRU", 1 },
-    { "OMR", 3 },
-    { "TND", 3 },
-    { "VND", 1 },
-};
-
-static int decimalsForCurrency(const QString &isoCode)
-{
-    const auto it = std::lower_bound(std::begin(currency_decimals_map), std::end(currency_decimals_map), isoCode, [](const auto &m, const QString &isoCode) {
-        return QLatin1String(m.isoCode, 3) < isoCode;
-    });
-    if (it != std::end(currency_decimals_map) && QLatin1String((*it).isoCode, 3) == isoCode) {
-        return (*it).decimals;
-    }
-    return 2;
-}
-
 double PriceFinder::parseValue(QStringView s, const QString &isoCode) const
 {
     if (s.isEmpty() || !s[0].isDigit() || !s[s.size() - 1].isDigit()) {
@@ -370,7 +342,7 @@ double PriceFinder::parseValue(QStringView s, const QString &isoCode) const
     // see https://en.wikipedia.org/wiki/List_of_circulating_currencies
     if (!decimalSeparator.isNull()) {
         const auto decimalCount = s.size() - decimalSeparatorIndex - 1;
-        const auto expectedDecimalCount = decimalsForCurrency(isoCode);
+        const auto expectedDecimalCount = PriceUtil::decimalCount(isoCode);
 
         // subdivision x1000 is ambigious if we don't have a group separator
         if (decimalCount == expectedDecimalCount && decimalCount == 3 && groupSeparator.isNull()) {

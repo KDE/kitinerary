@@ -69,3 +69,33 @@ void PriceUtil::setPrice(QVariant &item, double price, const QString &currency)
     JsonLdDocument::writeProperty(item, "totalPrice", price);
     JsonLdDocument::writeProperty(item, "priceCurrency", currency);
 }
+
+// ### keep sorted by ISO code, only needs to contain those != 2
+// @see https://en.wikipedia.org/wiki/List_of_circulating_currencies
+struct {
+    const char isoCode[4];
+    const uint8_t decimals;
+} static constexpr const currency_decimals_map[] = {
+    { "BHD", 3 },
+    { "CNY", 1 },
+    { "IQD", 3 },
+    { "IRR", 0 },
+    { "KWD", 3 },
+    { "LYD", 3 },
+    { "MGA", 1 },
+    { "MRU", 1 },
+    { "OMR", 3 },
+    { "TND", 3 },
+    { "VND", 1 },
+};
+
+int PriceUtil::decimalCount(QStringView currency)
+{
+    const auto it = std::lower_bound(std::begin(currency_decimals_map), std::end(currency_decimals_map), currency, [](const auto &m, QStringView isoCode) {
+        return QLatin1String(m.isoCode, 3) < isoCode;
+    });
+    if (it != std::end(currency_decimals_map) && QLatin1String((*it).isoCode, 3) == currency) {
+        return (*it).decimals;
+    }
+    return 2;
+}

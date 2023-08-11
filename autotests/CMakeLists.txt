@@ -48,3 +48,4 @@ ecm_add_test(calendarhandlertest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERS
 ecm_add_test(extractortest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary KPim::PkPass)
 ecm_add_test(documentutiltest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)
 ecm_add_test(filetest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary KPim::PkPass)
+ecm_add_test(priceutiltest.cpp LINK_LIBRARIES Qt::Test KPim${KF_MAJOR_VERSION}::Itinerary)
