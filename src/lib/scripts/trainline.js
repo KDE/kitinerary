@@ -27,11 +27,13 @@ function fixBrokenSncfTicketTokens(mail, node)
         res = res.concat(pdfNode.result)
     }
     for (r of htmlNode.result) {
-        console.log(r.reservedTicket.ticketToken);
         if (r.reservedTicket.ticketToken.match(/^aztecCode:i0CV/i)) {
             r.reservedTicket.ticketToken = undefined;
             r.reservationFor.trainNumber = undefined;
         }
+        // clear price information from HTML schema.org, as that's the trip total
+        // while we get sub-prices from each PDF
+        r.totalPrice = undefined;
         res.push(r);
     }
     return res;

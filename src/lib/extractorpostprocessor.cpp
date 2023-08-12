@@ -461,12 +461,21 @@ KItinerary::Event ExtractorPostprocessorPrivate::processEvent(KItinerary::Event 
     return event;
 }
 
+static QString processCurrency(const QString &currency)
+{
+    if (currency.size() != 3 || !std::all_of(currency.begin(), currency.end(), [](QChar c) { return c.isUpper(); })) {
+        return {};
+    }
+    return currency;
+}
+
 Ticket ExtractorPostprocessorPrivate::processTicket(Ticket ticket) const
 {
     ticket.setName(StringUtil::clean(ticket.name()));
     ticket.setTicketNumber(ticket.ticketNumber().simplified());
     ticket.setUnderName(processPerson(ticket.underName()));
     ticket.setTicketedSeat(processSeat(ticket.ticketedSeat()));
+    ticket.setPriceCurrency(processCurrency(ticket.priceCurrency()));
     return ticket;
 }
 
@@ -501,6 +510,7 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
     res.setPotentialAction(processActions(res.potentialAction()));
     res.setReservationNumber(res.reservationNumber().trimmed());
     res.setProgramMembershipUsed(processProgramMembership(res.programMembershipUsed()));
+    res.setPriceCurrency(processCurrency(res.priceCurrency()));
 
     if (JsonLd::isA<Ticket>(res.reservedTicket())) {
         res.setReservedTicket(processTicket(res.reservedTicket().template value<Ticket>()));

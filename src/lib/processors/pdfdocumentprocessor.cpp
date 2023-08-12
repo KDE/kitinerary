@@ -5,7 +5,10 @@
 */
 
 #include "pdfdocumentprocessor.h"
+
 #include "barcodedocumentprocessorhelper.h"
+#include "genericpriceextractorhelper_p.h"
+
 #include "pdf/pdfbarcodeutil_p.h"
 #include "text/nameoptimizer_p.h"
 
@@ -151,7 +154,7 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
 void PdfDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     // find the text node we can run the optimizer on
-    if (node.childNodes().empty()) {
+    if (node.childNodes().empty() || node.result().isEmpty()) {
         return;
     }
     const QString text = node.childNodes().back().content<QString>();
@@ -164,6 +167,12 @@ void PdfDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unus
         result.push_back(NameOptimizer::optimizeNameRecursive(text, r));
     }
     node.setResult(std::move(result));
+
+    // look for price data, if we have chance of that being unambiguous
+    const auto doc = node.content<PdfDocument*>();
+    if (node.result().size() == 1 || doc->pageCount() == 1) {
+        GenericPriceExtractorHelper::postExtract(text, node);
+    }
 }
 
 QJSValue PdfDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const

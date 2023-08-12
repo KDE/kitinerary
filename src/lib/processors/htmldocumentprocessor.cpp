@@ -5,6 +5,8 @@
 */
 
 #include "htmldocumentprocessor.h"
+
+#include "genericpriceextractorhelper_p.h"
 #include "logging.h"
 #include "stringutil.h"
 
@@ -12,6 +14,7 @@
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorResult>
 #include <KItinerary/HtmlDocument>
+#include <KItinerary/JsonLdDocument>
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -20,6 +23,8 @@
 #include <QJSValue>
 #include <QString>
 #include <QUrl>
+
+#include <cmath>
 
 using namespace KItinerary;
 
@@ -245,6 +250,16 @@ void HtmlDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unus
         extractRecursive(doc->root(), result);
         node.addResult(result);
     }
+}
+
+void HtmlDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
+{
+    if (node.childNodes().empty() || node.result().isEmpty()) {
+        return;
+    }
+
+    const QString text = node.childNodes().back().content<QString>();
+    GenericPriceExtractorHelper::postExtract(text, node);
 }
 
 QJSValue HtmlDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const

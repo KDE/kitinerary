@@ -164,7 +164,7 @@ function parseTicket(text, uic918ticket) {
     // international tickets have the booking reference somewhere on the side, so we don't really know
     // where it is relative to the itinerary
     const bookingRef = text.match(/(?:Auftragsnummer|Auftrag \(NVS\)):\s*([A-Z0-9]{6,9})\n/);
-    const price = text.match(/(?:Summe|Gesamtpreis) *(\d+,\d{2}) ?€/)[1].replace(',', '.');
+    const price = text.match(/(?:Summe|Gesamtpreis) *(\d+,\d{2} ?€)/)[1];
     for (var i = 0; i < reservations.length; ++i) {
         if (bookingRef) {
             reservations[i].reservationNumber = bookingRef[1];
@@ -174,8 +174,7 @@ function parseTicket(text, uic918ticket) {
             reservations[i] = JsonLd.trainToBusReservation(reservations[i]);
             reservations[i].reservedTicket.ticketedSeat = undefined;
         }
-        reservations[i].totalPrice = price;
-        reservations[i].priceCurrency = 'EUR';
+        ExtractorEngine.extractPrice(price, reservations[i]);
     }
     return reservations;
 }
@@ -188,11 +187,11 @@ function parseReservation(pdf) {
     while (true) {
         var dep = text.substr(idx).match(/  (\S.*\S) +(\d\d.\d\d.\d\d) +ab (\d\d:\d\d)  +(.*?)  +([A-Z].*\S)  +(.*)\n/);
         if (!dep)
-            return reservations;
+            break;
         idx += dep.index + dep[0].length;
         var arr = text.substr(idx).match(/  (\S.*\S) +an (\d\d:\d\d)  +(.*?)  +(.*)\n/);
         if (!arr)
-            return reservations;
+            break;
 
         var res = JsonLd.newTrainReservation();
         res.reservationFor.departureStation.name = dep[1];
@@ -215,6 +214,7 @@ function parseReservation(pdf) {
         idx += arr.index + arr[0].length;
     }
 
+    ExtractorEngine.extractPrice(text, reservations);
     return reservations;
 }
 

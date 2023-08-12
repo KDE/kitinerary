@@ -19,8 +19,12 @@ function parseTicket(content, node, triggerNode) {
     res.reservationFor.arrivalBoatTerminal.name = arr[1];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2], 'hh:mm dd MMMM, yyyy', 'it');
 
-    const passenger = page.textInRect(0.5, 0.0, 1.0, 0.5);
-    res.underName.name = passenger.match(/(.*)\n/)[1];
+    const rightTop = page.textInRect(0.5, 0.0, 1.0, 0.5);
+    res.underName.name = rightTop.match(/(.*)\n/)[1];
+
+    const price = rightTop.match(/TOTAL[\s\n]+(€ \d+,\d\d)/);
+    if (price)
+        ExtractorEngine.extractPrice(price[1], res);
 
     return res;
 }

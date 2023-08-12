@@ -73,6 +73,7 @@ function parseTicket(pdf, node, triggerNode) {
             if (pas[3]) {
                 res.programMembershipUsed.membershipNumber = pas[3];
             }
+            res.priceCurrency = "";
             reservations.push(res);
         }
     }

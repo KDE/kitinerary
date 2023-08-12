@@ -46,5 +46,9 @@ function parseHtml(doc) {
     res.checkoutTime = JsonLd.toDateTime(checkout[2] + checkout[1], ["dddd, MMMM dd, yyyyhh:mm", "dddd, MMMM dd, yyyyhh:mm AP"], "en");
 
     res.modifyReservationUrl = doc.eval('//a[@target="_blank"]')[0].attribute('href');
+
+    const price = doc.eval('//*[@id="t-h--total-price"]')[0];
+    if (price)
+        ExtractorEngine.extractPrice(price.recursiveContent, res);
     return res;
 }

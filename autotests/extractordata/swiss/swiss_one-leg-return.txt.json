@@ -2,6 +2,7 @@
     {
         "@context": "http://schema.org",
         "@type": "FlightReservation",
+        "priceCurrency": "EUR",
         "reservationFor": {
             "@type": "Flight",
             "airline": {
@@ -50,11 +51,13 @@
             "flightNumber": "963"
         },
         "reservationNumber": "XXX007",
-        "reservationStatus": "http://schema.org/ReservationConfirmed"
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "totalPrice": 999.9
     },
     {
         "@context": "http://schema.org",
         "@type": "FlightReservation",
+        "priceCurrency": "EUR",
         "reservationFor": {
             "@type": "Flight",
             "airline": {
@@ -103,6 +106,7 @@
             "flightNumber": "962"
         },
         "reservationNumber": "XXX007",
-        "reservationStatus": "http://schema.org/ReservationConfirmed"
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "totalPrice": 999.9
     }
 ]

@@ -99,6 +99,7 @@ target_sources(KPim6Itinerary PRIVATE
     processors/binarydocumentprocessor.cpp processors/binarydocumentprocessor.h
     processors/eradocumentprocessor.cpp processors/eradocumentprocessor.h
     processors/externalprocessor.cpp processors/externalprocessor.h
+    processors/genericpriceextractorhelper.cpp processors/genericpriceextractorhelper_p.h
     processors/htmldocumentprocessor.cpp processors/htmldocumentprocessor.h
     processors/httpresponseprocessor.cpp processors/httpresponseprocessor.h
     processors/iatabcbpdocumentprocessor.cpp processors/iatabcbpdocumentprocessor.h
@@ -122,6 +123,7 @@ target_sources(KPim6Itinerary PRIVATE
 
     text/addressparser.cpp text/addressparser_p.h
     text/nameoptimizer.cpp text/nameoptimizer_p.h
+    text/pricefinder.cpp text/pricefinder_p.h
     text/terminalfinder.cpp text/terminalfinder_p.h
     text/timefinder.cpp text/timefinder_p.h
 
@@ -157,6 +159,7 @@ target_sources(KPim6Itinerary PRIVATE
     jsonlddocument.cpp jsonlddocument.h
     locationutil.cpp locationutil.h
     mergeutil.cpp mergeutil.h
+    priceutil.cpp priceutil.h
     qimagepurebinarizer.cpp qimagepurebinarizer_p.h
     sortutil.cpp sortutil.h
     stringutil.cpp stringutil.h
@@ -243,6 +246,7 @@ ecm_generate_headers(KItinerary_FORWARDING_HEADERS
         JsonLdDocument
         LocationUtil
         MergeUtil
+        PriceUtil
         SortUtil
     PREFIX KItinerary
     REQUIRED_HEADERS KItinerary_HEADERS

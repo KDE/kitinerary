@@ -10,7 +10,7 @@
         "outboundDepartureStation": "BUDAPEST-KELETI",
         "outboundDepartureTime": "2019-08-19T07:40:00",
         "passengerName": "Jőhn Á Doe",
-        "price": "12345.00",
+        "price": 12345,
         "seatNumber": "101, 102",
         "title": "MENETJEGY+HELYJEGY",
         "trainNumber": "RJX 42",
