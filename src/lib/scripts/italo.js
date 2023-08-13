@@ -6,7 +6,7 @@
 function parseTicket(content, node, triggerNode) {
     const text = content.pages[triggerNode.location].text;
     let res = JsonLd.newTrainReservation();
-    res.reservedTicket.ticketToken = 'aztec:' + triggerNode.content;
+    res.reservedTicket.ticketToken = 'azteccode:' + triggerNode.content;
     res.reservationNumber = text.match(/  ([A-Z0-9]{6})  /)[1];
     const dt = text.match(/ (\d\d\/\d\d) /)[1];
     const leg = text.match(/Treno: (\d+) (\d\d:\d\d) (.*?) → (\d\d:\d\d) (.*)\n/);

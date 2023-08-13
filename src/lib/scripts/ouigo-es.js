@@ -15,7 +15,7 @@
 // more stuff - signature?
 function parseBarcode(content) {
     let res = JsonLd.newTrainReservation();
-    res.reservedTicket.ticketToken = 'aztec:' + content;
+    res.reservedTicket.ticketToken = 'azteccode:' + content;
     res.reservedTicket.ticketNumber = content.substr(0, 13);
     res.reservationFor.trainNumber = content.substr(18, 5);
     res.reservationFor.departureTime = JsonLd.toDateTime(content.substr(23, 15), 'dd/MM/yyyyhh:mm', 'es');

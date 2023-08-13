@@ -92,7 +92,7 @@ function parseRSP6(text) {
         console.log("free text", readRSP6String(390 + offset, 51));
     }
 
-    res.reservedTicket.ticketToken = 'aztec:' + text;
+    res.reservedTicket.ticketToken = 'azteccode:' + text;
     return res;
 }
 
