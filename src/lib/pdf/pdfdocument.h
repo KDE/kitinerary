@@ -99,6 +99,7 @@ class KITINERARY_EXPORT PdfDocument : public QObject
     Q_PROPERTY(QString title READ title CONSTANT)
     Q_PROPERTY(QString producer READ producer CONSTANT)
     Q_PROPERTY(QString creator READ creator CONSTANT)
+    Q_PROPERTY(QString author READ author CONSTANT)
 
 public:
     explicit PdfDocument(QObject *parent = nullptr);
@@ -127,6 +128,8 @@ public:
     QString producer() const;
     /** The document creator. */
     QString creator() const;
+    /** The document author. */
+    QString author() const;
 
     /** Creates a PdfDocument from the given raw data.
      *  @returns @c nullptr if loading fails or Poppler was not found.

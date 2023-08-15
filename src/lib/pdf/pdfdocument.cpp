@@ -355,6 +355,11 @@ QString PdfDocument::creator() const
     return gooStringToUnicode(d->m_popplerDoc->getDocInfoCreator());
 }
 
+QString PdfDocument::author() const
+{
+    return gooStringToUnicode(d->m_popplerDoc->getDocInfoAuthor());
+}
+
 QVariantList PdfDocument::pagesVariant() const
 {
     QVariantList l;
