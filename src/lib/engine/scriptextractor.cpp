@@ -172,7 +172,7 @@ ExtractorResult ScriptExtractor::extract(const ExtractorDocumentNode &node, cons
 {
     std::vector<ExtractorDocumentNode> triggerNodes;
     for (const auto &filter : d->m_filters) {
-        if (filter.scope() == ExtractorFilter::Children || filter.scope() == ExtractorFilter::Descendants) {
+        if (filter.scope() != ExtractorFilter::Current) {
             filter.allMatches(node, triggerNodes);
         }
     }

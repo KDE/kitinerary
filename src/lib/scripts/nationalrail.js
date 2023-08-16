@@ -12,13 +12,13 @@ function readRSP6String(data, start, len) {
     return result.trim() ? result : null;
 }
 
-// TODO which timezone is this?
 function readRSP6DateTime(data, start) {
+    // this is in local time, ie. we need to convince JS to not mess with the timezone
     const days = data.readNumberMSB(start, 14);
-    const secs = data.readNumberMSB(start + 14, 11);
-    let dt = new Date(1997, 0, 1);
-    dt.setTime(dt.getTime() + days * 24 * 60 * 60 * 1000 + secs * 1000 * 60);
-    return dt;
+    const minutes = data.readNumberMSB(start + 14, 11);
+    let dt = new Date(Date.UTC(1997, 0, 1));
+    dt.setTime(dt.getTime() + days * 24 * 60 * 60 * 1000 + minutes * 1000 * 60);
+    return dt.toJSON().substr(0, 19);
 }
 
 // see https://git.eta.st/eta/rsp6-decoder/src/branch/master/spec.pdf
@@ -93,7 +93,7 @@ function parseRSP6(text) {
         console.log("free text", readRSP6String(390 + offset, 51));
     }
 
-    res.reservedTicket.ticketToken = 'aztec:' + text;
+    res.reservedTicket.ticketToken = 'azteccode:' + text;
     return res;
 }
 

@@ -24,5 +24,18 @@
         "function": "extractEvent",
         "mimeType": "internal/event",
         "script": "lufthansa.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "author",
+                "match": "Lufthansa",
+                "mimeType": "application/pdf",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "extractBoardingPass",
+        "mimeType": "internal/iata-bcbp",
+        "script": "lufthansa.js"
     }
 ]
