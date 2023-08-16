@@ -39,7 +39,8 @@ public:
      *  @param currency ISO 4217 currency code
      */
     // TODO this is rather material for KI18nLocaleData
-    Q_INVOKABLE static int decimalCount(QStringView currency);
+    static int decimalCount(QStringView currency);
+    Q_INVOKABLE static int decimalCount(const QString &currency); // QML doesn't support QStringView yet...
 
     // TODO add method for computing the total price of a set of items
 };

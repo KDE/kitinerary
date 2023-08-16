@@ -99,3 +99,8 @@ int PriceUtil::decimalCount(QStringView currency)
     }
     return 2;
 }
+
+int PriceUtil::decimalCount(const QString &currency)
+{
+    return PriceUtil::decimalCount(QStringView(currency));
+}

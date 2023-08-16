@@ -10,6 +10,8 @@
 #include <KItinerary/ExtractorPostprocessor>
 #include <KItinerary/ExtractorValidator>
 #include <KItinerary/JsonLdDocument>
+#include <KItinerary/Reservation>
+#include <KItinerary/Ticket>
 
 #include <KMime/Message>
 
@@ -154,6 +156,27 @@ private Q_SLOTS:
         QVERIFY(f.open(QFile::ReadOnly));
         const auto refDoc = QJsonDocument::fromJson(f.readAll());
         QVERIFY(Test::compareJson(refFile, encodedResult, refDoc.array()));
+
+        // verify ticket token prefixes are valid and properly stripped
+        for (const auto &res : postProcResult) {
+            Ticket ticket;
+            if (JsonLd::canConvert<Reservation>(res)) {
+                ticket = JsonLd::convert<Reservation>(res).reservedTicket().value<Ticket>();
+            } else if (JsonLd::isA<Ticket>(res)) {
+                ticket = res.value<Ticket>();
+            } else {
+                continue;
+            }
+
+            if (ticket.ticketTokenType() == Token::Unknown || ticket.ticketTokenType() == Token::Url || ticket.ticketToken().isEmpty()) {
+                continue;
+            }
+            const auto tokenData = ticket.ticketTokenData();
+            qDebug() << tokenData << ticket.ticketToken();
+            if (tokenData.userType() == QMetaType::QString) {
+                QVERIFY(tokenData.toString() != ticket.ticketToken());
+            }
+        }
     }
 
     void testNegative()

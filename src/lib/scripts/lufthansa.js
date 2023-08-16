@@ -26,3 +26,12 @@ function extractEvent(ev) {
     res.reservationNumber = ev.description.match(/Reservation code: (.*)/)[1];
     return res;
 }
+
+function extractBoardingPass(iata, node, pdfNode) {
+    let res = node.result[0];
+    const text = pdfNode.content.pages[node.location].text;
+    const boarding = text.match(/(\d\d:\d\d) (?:GROUP (\S+))?  +\d+[A-Z]/);
+    res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[1], 'hh:mm', 'en');
+    res.boardingGroup = boarding[2];
+    return res;
+}

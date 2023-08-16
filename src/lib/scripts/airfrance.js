@@ -46,7 +46,7 @@ function parseTicket(content, node, triggerNode) {
         res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[2] + ' ' + leg[3], "hh:mm ddMMM", "en");
         res.reservationNumber = ref;
         res.underName = person;
-        res.reservedTicket.ticketToken = "aztec:" + triggerNode.content;
+        res.reservedTicket.ticketToken = "azteccode:" + triggerNode.content;
         reservations.push(res);
     }
 
