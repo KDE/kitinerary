@@ -50,3 +50,18 @@ function main(text) {
     }
     return reservations;
 }
+
+function extractBoardingPass(pdf, node, barcode) {
+    const page = pdf.pages[barcode.location];
+    let results = [];
+    let offset = 0;
+    for (let res of barcode.result) {
+        const text = page.textInRect(0, 0 + offset, 0.5, 0.5 + offset);
+        offset += 0.5
+        res.reservationFor.departureTime = JsonLd.toDateTime(text.match(/(\d\d:\d\d) \/ \d\d \S{3}/)[1], 'hh:mm', 'en');
+        res.reservationFor.boardingTime = JsonLd.toDateTime(text.match(/Boarding +(\d\d:\d\d)/)[1], 'hh:mm', 'en');
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(text.match(/Arrival .* +(\d\d:\d\d)/)[1], 'hh:mm', 'en');
+        results.push(res);
+    }
+    return results;
+}
