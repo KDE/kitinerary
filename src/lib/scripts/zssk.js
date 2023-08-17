@@ -45,7 +45,16 @@ function parseDomesticBarcode(data) {
         res.reservedTicket.ticketedSeat.seatSection = seat[1];
         res.reservedTicket.ticketedSeat.seatNumber = seat[2];
     }
+    res.reservedTicket.validFrom = parseDateTime(payload[9]);
+    res.reservedTicket.validUntil = parseDateTime(payload[10]);
     res.reservedTicket.ticketToken = 'aztecbin:' + ByteArray.toBase64(data);
+
+    // network ticket
+    if (!res.reservationFor.departureStation.name || !res.reservationFor.arrivalStation.name) {
+        res.reservedTicket.ticketNumber = res.reservationNumber;
+        return res.reservedTicket;
+    }
+
     return res;
 }
 
