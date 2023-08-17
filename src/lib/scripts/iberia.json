@@ -1,7 +1,20 @@
-{
+[{
     "filter": [
         { "field": "From", "match": "@iberia.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
     ],
     "script": "iberia.js",
     "mimeType": "text/plain"
-}
+},
+{
+    "filter": [
+        {
+            "field": "airlineDesignatorOfBoardingPassIssuer",
+            "match": "IB",
+            "mimeType": "internal/iata-bcbp",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractBoardingPass",
+    "mimeType": "application/pdf",
+    "script": "iberia.js"
+}]

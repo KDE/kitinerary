@@ -2,7 +2,7 @@
     {
         "filter": [
             {
-                "match": "^\\x04\\x01",
+                "match": "^\\x04..\\x78\\x9c",
                 "mimeType": "application/octet-stream",
                 "scope": "Current"
             }
