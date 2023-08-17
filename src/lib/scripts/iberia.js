@@ -55,3 +55,16 @@ function main(text) {
 
     return reservations;
 }
+
+function extractBoardingPass(pdf, node, barcode)
+{
+    let res = barcode.result[0];
+    const text = pdf.pages[barcode.location].text;
+    const times = text.match(/\d\d \S+ (\d\d:\d\d) +\d\d \S+ (\d\d:\d\d)/);
+    res.reservationFor.departureTime = JsonLd.toDateTime(times[1], 'hh:mm', 'en');
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(times[2], 'hh:mm', 'en');
+    const boarding = text.match(/(\d\d:\d\d) GRUPO (\S*)/);
+    res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[1], 'hh:mm', 'en');
+    res.boardingGroup = boarding[2];
+    return res;
+}
