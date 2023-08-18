@@ -4,4 +4,10 @@
         { "field": "From", "match": "aerlingus.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
     ],
     "script": "aerlingus.js"
+},
+{
+    "mimeType": "application/pdf",
+    "filter": [  { "field": "operatingCarrierDesignator", "match": "EI", "mimeType": "internal/iata-bcbp", "scope": "Descendants" } ],
+    "script": "aerlingus.js",
+    "function": "extractPdfBoardingPass"
 }]
