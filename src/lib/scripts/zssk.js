@@ -48,6 +48,8 @@ function parseDomesticBarcode(data) {
     res.reservedTicket.validFrom = parseDateTime(payload[9]);
     res.reservedTicket.validUntil = parseDateTime(payload[10]);
     res.reservedTicket.ticketToken = 'aztecbin:' + ByteArray.toBase64(data);
+    res.totalPrice = payload[3];
+    res.priceCurrency = 'EUR';
 
     // network ticket
     if (!res.reservationFor.departureStation.name || !res.reservationFor.arrivalStation.name) {
