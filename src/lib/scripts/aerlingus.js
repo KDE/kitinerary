@@ -52,3 +52,12 @@ function main(html) {
     return reservations;
 }
 
+function extractPdfBoardingPass(pdf, node, barcode) {
+    let res = barcode.result[0];
+    const text = pdf.pages[barcode.location].text;
+    const times = text.match(/(\d\d:\d\d) +\d+[A-Z] +(\d\d:\d\d)/);
+    res.reservationFor.departureTime = JsonLd.toDateTime(times[1], 'hh:mm', 'en');
+    res.reservationFor.boardingTime = JsonLd.toDateTime(times[2], 'hh:mm', 'en');
+    return res;
+
+}
