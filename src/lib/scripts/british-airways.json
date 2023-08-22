@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "airlineDesignatorOfBoardingPassIssuer",
+            "match": "BA",
+            "mimeType": "internal/iata-bcbp",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractBoardingPass",
+    "mimeType": "application/pdf",
+    "script": "british-airways.js"
+}
