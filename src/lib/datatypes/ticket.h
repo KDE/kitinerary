@@ -26,6 +26,8 @@ class KITINERARY_EXPORT Seat
     KITINERARY_PROPERTY(QString, seatRow, setSeatRow)
     KITINERARY_PROPERTY(QString, seatSection, setSeatSection)
     KITINERARY_PROPERTY(QString, seatingType, setSeatingType)
+
+    KITINERARY_PROPERTY(QString, identifier, setIdentifier)
 private:
     QExplicitlySharedDataPointer<SeatPrivate> d;
 };
@@ -63,6 +65,8 @@ class KITINERARY_EXPORT Ticket
 
     KITINERARY_PROPERTY(double, totalPrice, setTotalPrice)
     KITINERARY_PROPERTY(QString, priceCurrency, setPriceCurrency)
+
+    KITINERARY_PROPERTY(QString, identifier, setIdentifier)
 
 public:
     /** The type of content in the ticketToken property.
