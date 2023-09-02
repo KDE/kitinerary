@@ -15,7 +15,7 @@ function parseTicket(pdf, node, triggerNode) {
         leg.reservedTicket.ticketToken = 'qrcode:' + triggerNode.content;
 
         // format variant 1
-        let train = text.substr(idx).match(/TRAIN  +\w.*?  +(.*?) +DEPARTS\s+ARRIVES \(\w{3} (.*)\)\n\s*(\d+)\s+(\w{3} \d{1,2}), (\d{4})\n\s*(.*)?\n?\s*\d+ (.*) Seats?\n?  +(\d{1,2}:\d{2} [AP]M) +(\d{1,2}:\d{2} [AP]M)/);
+        let train = text.substr(idx).match(/TRAIN  +\w.*?  +(.*?) +DEPARTS\s+ARRIVES \(\w{3} (.*)\)\n\s*(\d+)\s+(\w{3} \d{1,2}), (\d{4})\n?\s*(.*)?\n?\s*\d+ (?:Unreserved )?(.*) Seats?\n?  +(\d{1,2}:\d{2} [AP]M) +(\d{1,2}:\d{2} [AP]M)/);
         if (train) {
             leg.reservationFor.trainNumber = train[3];
             leg.reservationFor.departureTime = JsonLd.toDateTime(train[4] + ' ' + train[5] + ' ' + train[8], 'MMM d yyyy h:mm AP', 'en');
