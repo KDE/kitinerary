@@ -196,7 +196,8 @@ QString Rct2Ticket::title() const
 
     // somewhat standard compliant layout
     if (d->layout.text(0, 15, 3, 1).trimmed().isEmpty()) {
-        return d->layout.text(0, 18, 33, 1).trimmed();
+        const auto s = d->layout.text(0, 18, 33, 1).trimmed();
+        return s.isEmpty() ? d->layout.text(1, 18, 33, 1).trimmed() : s;
     }
 
     // "creative" layout
