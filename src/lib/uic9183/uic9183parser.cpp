@@ -354,7 +354,6 @@ QDateTime Uic9183Parser::validUntil() const
     // CD vender block
     if (const auto b = findBlock<Vendor1154UTBlock>(); b.isValid()) {
         const auto subBlock = b.findSubBlock("DO");
-        qDebug() << subBlock.toString();
         if (!subBlock.isNull()) {
             return QDateTime::fromString(subBlock.toString(), QStringLiteral("dd.MM.yyyy hh:mm"));
         }
@@ -362,12 +361,13 @@ QDateTime Uic9183Parser::validUntil() const
 
 
     // RCT2 RPT according to ERA TAP TSI Annex B.6
-    if (const auto rct2 = rct2Ticket(); rct2.isValid() && (rct2.type() == Rct2Ticket::RailPass || rct2.type() == Rct2Ticket::Unknown)) {
+    if (const auto rct2 = rct2Ticket(); rct2.isValid()) {
         const auto validityRange = ticketLayout().text(3, 1, 36, 1).trimmed();
         const auto idx = std::max(validityRange.lastIndexOf(QLatin1Char(' ')), validityRange.lastIndexOf(QLatin1Char('-')));
         if (idx > 0) {
             return QDateTime(QDate::fromString(validityRange.mid(idx + 1), QStringLiteral("dd.MM.yyyy")), {23, 59, 59});
         }
+        return rct2.outboundArrivalTime();
     }
 
     return {};
