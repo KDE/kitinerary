@@ -1,13 +1,27 @@
-{
-    "filter": [
-        {
-            "field": "passTypeIdentifier",
-            "match": "pass.sk.slovaklines",
-            "mimeType": "application/vnd.apple.pkpass",
-            "scope": "Current"
-        }
-    ],
-    "function": "extractPass",
-    "mimeType": "application/vnd.apple.pkpass",
-    "script": "slovak-lines.js"
-}
+[
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.sk.slovaklines",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "extractPass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "slovak-lines.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^\\d{12}$",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "extractTicket",
+        "mimeType": "application/pdf",
+        "script": "slovak-lines.js"
+    }
+]

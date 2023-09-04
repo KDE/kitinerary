@@ -36,3 +36,21 @@ function extractPass(pass, node) {
     };
     return res;
 }
+
+function extractTicket(pdf, node, barcode) {
+    const text = pdf.pages[barcode.location].text;
+    let res = JsonLd.newBusReservation();
+    res.underName.name = text.match(/^.*?: +(.*?)  /)[1];
+    res.reservationNumber = barcode.content;
+    const dep = text.match(/Departure: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/);
+    res.reservationFor.departureBusStop.name = dep[1];
+    res.reservationFor.departureTime = JsonLd.toDateTime(dep[2], 'dd.MM.yyyy hh:mm', 'en');
+    const arr = text.match(/Arrival: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/);
+    res.reservationFor.arrivalBusStop.name = arr[1];
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2], 'dd.MM.yyyy hh:mm', 'en');
+    res.reservationFor.departurePlatform = text.match(/Platform: +(\S.*)/)[1];
+    res.reservedTicket.ticketedSeat.seatNumber = text.match(/Seat: +(\S.*)/)[1];
+    res.reservationFor.busNumber = text.match(/Bus line no: +(.*)  /)[1];
+    res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
+    return res;
+}
