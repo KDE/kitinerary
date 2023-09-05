@@ -160,7 +160,6 @@ target_sources(KPim${KF_MAJOR_VERSION}Itinerary PRIVATE
     locationutil.cpp locationutil.h
     mergeutil.cpp mergeutil.h
     priceutil.cpp priceutil.h
-    qimagepurebinarizer.cpp qimagepurebinarizer_p.h
     sortutil.cpp sortutil.h
     stringutil.cpp stringutil.h
     tickettokencomparator.cpp tickettokencomparator_p.h

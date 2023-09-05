@@ -8,20 +8,13 @@
 
 #include "barcodedecoder.h"
 #include "logging.h"
-#include "qimagepurebinarizer_p.h"
 
 #include <QDebug>
 #include <QImage>
 #include <QString>
 
 #define ZX_USE_UTF8 1
-#if ZXING_USE_READBARCODE
 #include <ZXing/ReadBarcode.h>
-#else
-#include <ZXing/DecodeHints.h>
-#include <ZXing/MultiFormatReader.h>
-#include <ZXing/Result.h>
-#endif
 
 using namespace KItinerary;
 
@@ -154,19 +147,11 @@ struct {
 
 static auto typeToFormats(BarcodeDecoder::BarcodeTypes types)
 {
-#if ZXING_VERSION >= QT_VERSION_CHECK(1, 1, 0)
     ZXing::BarcodeFormats formats;
-#else
-    std::vector<ZXing::BarcodeFormat> formats;
-#endif
 
     for (auto i : zxing_format_map) {
         if (types & i.type) {
-#if ZXING_VERSION >= QT_VERSION_CHECK(1, 1, 0)
             formats |= i.zxingType;
-#else
-            formats.push_back(i.zxingType);
-#endif
         }
     }
     return formats;
@@ -182,7 +167,6 @@ BarcodeDecoder::BarcodeType formatToType(ZXing::BarcodeFormat format)
     return BarcodeDecoder::None;
 }
 
-#if ZXING_USE_READBARCODE
 static ZXing::ImageFormat zxingImageFormat(QImage::Format format)
 {
     switch (format) {
@@ -210,29 +194,18 @@ static ZXing::Result zxingReadBarcode(const QImage &img, const ZXing::DecodeHint
 {
     return ZXing::ReadBarcode({img.bits(), img.width(), img.height(), zxingImageFormat(img.format()), static_cast<int>(img.bytesPerLine())}, hints);
 }
-#endif
 
 void BarcodeDecoder::decodeZxing(const QImage &img, BarcodeDecoder::BarcodeTypes format, BarcodeDecoder::Result &result) const
 {
     ZXing::DecodeHints hints;
-#if ZXING_VERSION >= QT_VERSION_CHECK(1, 1, 0)
     hints.setFormats(typeToFormats(format));
-#else
-    hints.setPossibleFormats(typeToFormats(format));
-#endif
 
-#if ZXING_USE_READBARCODE
     hints.setBinarizer(ZXing::Binarizer::FixedThreshold);
     hints.setIsPure((format & BarcodeDecoder::IgnoreAspectRatio) == 0);
 
     // convert if img is in a format ZXing can't handle directly
     const auto res = zxingImageFormat(img.format()) == ZXing::ImageFormat::None ?
         zxingReadBarcode(img.convertToFormat(QImage::Format_Grayscale8), hints) : zxingReadBarcode(img, hints);
-#else
-    QImagePureBinarizer binarizer(img);
-    ZXing::MultiFormatReader reader(hints);
-    const auto res = reader.read(binarizer);
-#endif
 
     if (res.isValid()) {
 #if ZXING_VERSION >= QT_VERSION_CHECK(1, 4, 0)
