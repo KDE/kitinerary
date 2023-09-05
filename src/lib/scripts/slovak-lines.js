@@ -52,5 +52,6 @@ function extractTicket(pdf, node, barcode) {
     res.reservedTicket.ticketedSeat.seatNumber = text.match(/Seat: +(\S.*)/)[1];
     res.reservationFor.busNumber = text.match(/Bus line no: +(.*)  /)[1];
     res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
+    ExtractorEngine.extractPrice(text, res);
     return res;
 }
