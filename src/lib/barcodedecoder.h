@@ -50,17 +50,46 @@ public:
     };
     Q_DECLARE_FLAGS(BarcodeTypes, BarcodeType)
 
+    /** Barcode decoding result.
+     *  Can be a QByteArray, a QString or empty.
+     */
+    class KITINERARY_EXPORT Result {
+    public:
+        enum ContentType {
+            None = 0,
+            ByteArray = 1,
+            String = 2,
+            Any = 3
+        };
+        int contentType = None;
+        QVariant content;
+
+        QByteArray toByteArray() const;
+        QString toString() const;
+
+    private:
+        friend class BarcodeDecoder;
+        BarcodeTypes positive = BarcodeDecoder::None;
+        BarcodeTypes negative = BarcodeDecoder::None;
+    };
+
+    /** Decodes a barcode in @p img based on @p hint.
+     *  @param hint has to be validated by something of the likes of maybeBarcode()
+     *  before.
+     */
+    Result decode(const QImage &img, BarcodeTypes hint) const;
+
     /** Decodes a binary payload barcode in @p img of type @p hint.
      *  @param hint has to be validated by something of the likes of maybeBarcode()
      *  before.
      */
-    QByteArray decodeBinary(const QImage &img, BarcodeTypes hint) const;
+    [[deprecated("use decode()")]] QByteArray decodeBinary(const QImage &img, BarcodeTypes hint) const;
 
     /** Decodes a textual payload barcode in @p img of type @p hint.
      *  @param hint has to be validated by something of the likes of maybeBarcode()
      *  before.
      */
-    QString decodeString(const QImage &img, BarcodeTypes hint) const;
+    [[deprecated("use decode()")]] QString decodeString(const QImage &img, BarcodeTypes hint) const;
 
     /** Clears the internal cache. */
     void clearCache();
@@ -81,19 +110,6 @@ public:
     static BarcodeTypes maybeBarcode(int width, int height, BarcodeTypes hint);
 
 private:
-    struct Result {
-        BarcodeTypes positive = BarcodeDecoder::None;
-        BarcodeTypes negative = BarcodeDecoder::None;
-        enum ContentType {
-            None = 0,
-            ByteArray = 1,
-            String = 2,
-            Any = 3
-        };
-        int contentType = None;
-        QVariant content;
-    };
-
     void decodeIfNeeded(const QImage &img, BarcodeTypes hint, Result &result) const;
     void decodeZxing(const QImage &img, BarcodeDecoder::BarcodeTypes format, BarcodeDecoder::Result &result) const;
 

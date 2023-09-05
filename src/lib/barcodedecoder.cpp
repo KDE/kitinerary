@@ -34,10 +34,22 @@ static constexpr const auto PDF417_MAX_ASPECT = 6.5f;
 static constexpr const auto ANY1D_MIN_ASPECT = 1.95f;
 static constexpr const auto ANY1D_MAX_ASPECT = 8.0f;
 
+
+QByteArray BarcodeDecoder::Result::toByteArray() const
+{
+    return (contentType & Result::ByteArray) ? content.toByteArray() : QByteArray();
+}
+
+QString BarcodeDecoder::Result::toString() const
+{
+    return (contentType & Result::String) ? content.toString() : QString();
+}
+
+
 BarcodeDecoder::BarcodeDecoder() = default;
 BarcodeDecoder::~BarcodeDecoder() = default;
 
-QByteArray BarcodeDecoder::decodeBinary(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
+BarcodeDecoder::Result BarcodeDecoder::decode(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
 {
     if (hint == None || img.isNull()) {
         return {};
@@ -45,26 +57,17 @@ QByteArray BarcodeDecoder::decodeBinary(const QImage &img, BarcodeDecoder::Barco
 
     auto &result = m_cache[img.cacheKey()];
     decodeIfNeeded(img, hint, result);
-    if ((result.positive & hint) && (result.contentType & Result::ByteArray)) {
-        return result.content.toByteArray();
-    }
+    return (result.positive & hint) ? result : Result{};
+}
 
-    return {};
+QByteArray BarcodeDecoder::decodeBinary(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
+{
+    return decode(img, hint).toByteArray();
 }
 
 QString BarcodeDecoder::decodeString(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
 {
-    if (hint == None || img.isNull()) {
-        return {};
-    }
-
-    auto &result = m_cache[img.cacheKey()];
-    decodeIfNeeded(img, hint, result);
-    if ((result.positive & hint) && (result.contentType & Result::String)) {
-        return result.content.toString();
-    }
-
-    return {};
+    return decode(img, hint).toString();
 }
 
 void BarcodeDecoder::clearCache()
