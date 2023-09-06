@@ -51,13 +51,31 @@ BarcodeDecoder::~BarcodeDecoder() = default;
 
 BarcodeDecoder::Result BarcodeDecoder::decode(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
 {
-    if (hint == None || img.isNull()) {
+    if ((hint & Any) == None || img.isNull()) {
         return {};
     }
 
-    auto &result = m_cache[img.cacheKey()];
+    auto &results = m_cache[img.cacheKey()];
+    if (results.size() > 1) {
+        return Result{};
+    }
+    if (results.empty()) {
+        results.push_back(Result{});
+    }
+    auto &result = results.front();
     decodeIfNeeded(img, hint, result);
     return (result.positive & hint) ? result : Result{};
+}
+
+std::vector<BarcodeDecoder::Result> BarcodeDecoder::decodeMulti(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
+{
+    if ((hint & Any) == None || img.isNull()) {
+        return {};
+    }
+
+    auto &results = m_cache[img.cacheKey()];
+    decodeMultiIfNeeded(img, hint, results);
+    return (results.size() == 1 && (results[0].positive & hint) == 0) ? std::vector<Result>{} : results;
 }
 
 QByteArray BarcodeDecoder::decodeBinary(const QImage &img, BarcodeDecoder::BarcodeTypes hint) const
@@ -193,68 +211,58 @@ static ZXing::ImageFormat zxingImageFormat(QImage::Format format)
     Q_UNREACHABLE();
 }
 
-static ZXing::Result zxingReadBarcode(const QImage &img, const ZXing::DecodeHints &hints)
+static ZXing::ImageView zxingImageView(const QImage &img)
 {
-    return ZXing::ReadBarcode({img.bits(), img.width(), img.height(), zxingImageFormat(img.format()), static_cast<int>(img.bytesPerLine())}, hints);
+    return ZXing::ImageView{img.bits(), img.width(), img.height(), zxingImageFormat(img.format()), static_cast<int>(img.bytesPerLine())};
 }
 
-void BarcodeDecoder::decodeZxing(const QImage &img, BarcodeDecoder::BarcodeTypes format, BarcodeDecoder::Result &result) const
+static void applyZXingResult(BarcodeDecoder::Result &result, const ZXing::Result &zxingResult, BarcodeDecoder::BarcodeTypes format)
 {
-    ZXing::DecodeHints hints;
-    hints.setFormats(typeToFormats(format));
-
-    hints.setBinarizer(ZXing::Binarizer::FixedThreshold);
-    hints.setIsPure((format & BarcodeDecoder::IgnoreAspectRatio) == 0);
-
-    // convert if img is in a format ZXing can't handle directly
-    const auto res = zxingImageFormat(img.format()) == ZXing::ImageFormat::None ?
-        zxingReadBarcode(img.convertToFormat(QImage::Format_Grayscale8), hints) : zxingReadBarcode(img, hints);
-
-    if (res.isValid()) {
+    if (zxingResult.isValid()) {
 #if ZXING_VERSION >= QT_VERSION_CHECK(1, 4, 0)
         // detect content type
         std::string zxUtf8Text;
-        if (res.contentType() == ZXing::ContentType::Text) {
-            result.contentType = Result::Any;
-            zxUtf8Text = res.text();
+        if (zxingResult.contentType() == ZXing::ContentType::Text) {
+            result.contentType = BarcodeDecoder::Result::Any;
+            zxUtf8Text = zxingResult.text();
             // check if the text is ASCII-only (in which case we allow access as byte array as well)
             if (std::any_of(zxUtf8Text.begin(), zxUtf8Text.end(), [](unsigned char c) { return c > 0x7F; })) {
-                result.contentType &= ~Result::ByteArray;
+                result.contentType &= ~BarcodeDecoder::Result::ByteArray;
             }
         } else {
-            result.contentType = Result::ByteArray;
+            result.contentType = BarcodeDecoder::Result::ByteArray;
         }
 
         // decode content
-        if (result.contentType & Result::ByteArray) {
+        if (result.contentType & BarcodeDecoder::Result::ByteArray) {
             QByteArray b;
-            b.resize(res.bytes().size());
-            std::copy(res.bytes().begin(), res.bytes().end(), b.begin());
+            b.resize(zxingResult.bytes().size());
+            std::copy(zxingResult.bytes().begin(), zxingResult.bytes().end(), b.begin());
             result.content = b;
         } else {
             result.content = QString::fromStdString(zxUtf8Text);
         }
 #else
         // detect content type
-        result.contentType = Result::Any;
-        if (std::any_of(res.text().begin(), res.text().end(), [](const auto c) { return c > 255; })) {
-            result.contentType &= ~Result::ByteArray;
+        result.contentType = BarcodeDecoder::Result::Any;
+        if (std::any_of(zxingResult.text().begin(), zxingResult.text().end(), [](const auto c) { return c > 255; })) {
+            result.contentType &= ~BarcodeDecoder::Result::ByteArray;
         }
-        if (std::any_of(res.text().begin(), res.text().end(), [](const auto c) { return c < 0x20; })) {
-            result.contentType &= ~Result::String;
+        if (std::any_of(zxingResult.text().begin(), zxingResult.text().end(), [](const auto c) { return c < 0x20; })) {
+            result.contentType &= ~BarcodeDecoder::Result::String;
         }
 
         // decode content
-        if (result.contentType & Result::ByteArray) {
+        if (result.contentType & BarcodeDecoder::Result::ByteArray) {
             QByteArray b;
-            b.resize(res.text().size());
-            std::copy(res.text().begin(), res.text().end(), b.begin());
+            b.resize(zxingResult.text().size());
+            std::copy(zxingResult.text().begin(), zxingResult.text().end(), b.begin());
             result.content = b;
         } else {
-            result.content = QString::fromStdWString(res.text());
+            result.content = QString::fromStdWString(zxingResult.text());
         }
 #endif
-        result.positive |= formatToType(res.format());
+        result.positive |= formatToType(zxingResult.format());
     } else {
         result.negative |= format;
     }
@@ -266,5 +274,52 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
         return;
     }
 
-    decodeZxing(img, hint, result);
+    ZXing::DecodeHints hints;
+    hints.setFormats(typeToFormats(hint));
+    hints.setBinarizer(ZXing::Binarizer::FixedThreshold);
+    hints.setIsPure((hint & BarcodeDecoder::IgnoreAspectRatio) == 0);
+
+    // convert if img is in a format ZXing can't handle directly
+    ZXing::Result res;
+    if (zxingImageFormat(img.format()) == ZXing::ImageFormat::None) {
+        res = ZXing::ReadBarcode(zxingImageView(img.convertToFormat(QImage::Format_Grayscale8)), hints);
+    } else {
+        res = ZXing::ReadBarcode(zxingImageView(img), hints);
+    }
+
+    applyZXingResult(result, res, hint);
+}
+
+void BarcodeDecoder::decodeMultiIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTypes hint, std::vector<BarcodeDecoder::Result> &results) const
+{
+    if (std::any_of(results.begin(), results.end(), [hint](const auto &r) { return (r.positive & hint) || ((r.negative & hint) == hint); })) {
+        return;
+    }
+
+    ZXing::DecodeHints hints;
+    hints.setFormats(typeToFormats(hint));
+    hints.setBinarizer(ZXing::Binarizer::FixedThreshold);
+    hints.setIsPure(false);
+
+    // convert if img is in a format ZXing can't handle directly
+    std::vector<ZXing::Result> zxingResults;
+    if (zxingImageFormat(img.format()) == ZXing::ImageFormat::None) {
+        zxingResults = ZXing::ReadBarcodes(zxingImageView(img.convertToFormat(QImage::Format_Grayscale8)), hints);
+    } else {
+        zxingResults = ZXing::ReadBarcodes(zxingImageView(img), hints);
+    }
+
+    if (zxingResults.empty()) {
+        Result r;
+        r.negative |= hint;
+        results.push_back(std::move(r));
+    } else {
+        // ### in theory we need to handle the case that we already have results from a previous run with different hints here...
+        results.reserve(zxingResults.size());
+        for (const auto &zxingRes : zxingResults) {
+            Result r;
+            applyZXingResult(r, zxingRes, hint);
+            results.push_back(std::move(r));
+        }
+    }
 }

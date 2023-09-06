@@ -67,10 +67,10 @@ public:
         QByteArray toByteArray() const;
         QString toString() const;
 
-    private:
-        friend class BarcodeDecoder;
+        ///@cond internal
         BarcodeTypes positive = BarcodeDecoder::None;
         BarcodeTypes negative = BarcodeDecoder::None;
+        ///@endcond
     };
 
     /** Decodes a barcode in @p img based on @p hint.
@@ -78,6 +78,11 @@ public:
      *  before.
      */
     Result decode(const QImage &img, BarcodeTypes hint) const;
+
+    /** Decodes multiple barcodes in @p img based on @p hint.
+     *  @param hint IgnoreAspectRatio is implied here
+     */
+    std::vector<Result> decodeMulti(const QImage &img, BarcodeTypes hint) const;
 
     /** Decodes a binary payload barcode in @p img of type @p hint.
      *  @param hint has to be validated by something of the likes of maybeBarcode()
@@ -111,9 +116,9 @@ public:
 
 private:
     void decodeIfNeeded(const QImage &img, BarcodeTypes hint, Result &result) const;
-    void decodeZxing(const QImage &img, BarcodeDecoder::BarcodeTypes format, BarcodeDecoder::Result &result) const;
+    void decodeMultiIfNeeded(const QImage &img, BarcodeTypes hint, std::vector<Result> &results) const;
 
-    mutable std::unordered_map<qint64, Result> m_cache;
+    mutable std::unordered_map<qint64, std::vector<Result>> m_cache;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(BarcodeDecoder::BarcodeTypes)
