@@ -6,7 +6,6 @@
 function parseOnlineTicket(xml)
 {
     // TODO handle multi-ticket
-    // TODO how do buses look in here?
 
     const trains = xml.root.eval('//trainlist/train');
     let result = [];
@@ -78,7 +77,11 @@ function parseOnlineTicket(xml)
     ticket.reservedTicket.ticketedSeat.identifier = resNr;
     let mergedResult = [];
     for (let train of result) {
-        mergedResult.push(JsonLd.apply(ticket, train));
+        if (train['@type'] == 'BusReservation') {
+            mergedResult.push(JsonLd.apply(JsonLd.trainToBusReservation(ticket), train));
+        } else {
+            mergedResult.push(JsonLd.apply(ticket, train));
+        }
     }
     return mergedResult;
 }
