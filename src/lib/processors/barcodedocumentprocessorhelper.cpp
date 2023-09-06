@@ -11,35 +11,46 @@
 
 using namespace KItinerary;
 
-void BarcodeDocumentProcessorHelper::expandNode(const QImage &img, BarcodeDecoder::BarcodeTypes barcodeHints, ExtractorDocumentNode &parent, const ExtractorEngine* engine)
+static void appendBarcodeResult(const BarcodeDecoder::Result &result, ExtractorDocumentNode &parent, const ExtractorEngine *engine)
 {
+    if (result.contentType == BarcodeDecoder::Result::None) {
+        return;
+    }
+
+    ExtractorDocumentNode childNode;
+    if (result.contentType & BarcodeDecoder::Result::ByteArray) {
+        childNode = engine->documentNodeFactory()->createNode(result.toByteArray());
+    } else {
+        childNode = engine->documentNodeFactory()->createNode(result.toString().toUtf8());
+    }
+
     // in case the barcode raw data (string or bytearray) gets detected as a type we handle,
     // we nevertheless inject a raw data node in between. This is useful in cases where the
     // content is parsable but that is actually not desired (e.g. JSON content in ticket barcodes).
 
-    const auto b = engine->barcodeDecoder()->decodeBinary(img, barcodeHints);
-    if (!b.isEmpty()) {
-        auto c = engine->documentNodeFactory()->createNode(b);
-        if (c.isA<QByteArray>() || c.isA<QString>()) {
-            parent.appendChild(c);
-            return;
-        }
-        auto rawNode = engine->documentNodeFactory()->createNode(QVariant::fromValue(b), u"application/octet-stream");
-        rawNode.appendChild(c);
-        parent.appendChild(rawNode);
+    if (childNode.isA<QByteArray>() || childNode.isA<QString>()) {
+        parent.appendChild(childNode);
         return;
     }
 
-    const auto s = engine->barcodeDecoder()->decodeString(img, barcodeHints);
-    if (!s.isEmpty()) {
-        auto c = engine->documentNodeFactory()->createNode(s.toUtf8());
-        if (c.isA<QByteArray>() || c.isA<QString>()) {
-            parent.appendChild(c);
-            return;
+    ExtractorDocumentNode rawNode;
+    if (result.contentType & BarcodeDecoder::Result::ByteArray) {
+        rawNode = engine->documentNodeFactory()->createNode(result.content, u"application/octet-stream");
+    } else {
+        rawNode = engine->documentNodeFactory()->createNode(result.content, u"text/plain");
+    }
+    rawNode.appendChild(childNode);
+    parent.appendChild(rawNode);
+}
+
+void BarcodeDocumentProcessorHelper::expandNode(const QImage &img, BarcodeDecoder::BarcodeTypes barcodeHints, ExtractorDocumentNode &parent, const ExtractorEngine* engine)
+{
+    if (barcodeHints & BarcodeDecoder::IgnoreAspectRatio) {
+        const auto results = engine->barcodeDecoder()->decodeMulti(img, barcodeHints);
+        for (const auto &res : results) {
+            appendBarcodeResult(res, parent, engine);
         }
-        auto rawNode = engine->documentNodeFactory()->createNode(QVariant::fromValue(s), u"text/plain");
-        rawNode.appendChild(c);
-        parent.appendChild(rawNode);
-        return;
+    } else {
+        appendBarcodeResult(engine->barcodeDecoder()->decode(img, barcodeHints), parent, engine);
     }
 }
