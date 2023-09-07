@@ -26,8 +26,10 @@ function parseDomesticBarcode(data) {
     res.reservationFor.departureStation.name = payload[6];
     res.reservationFor.arrivalStation.name = payload[7];
     const trainNum = payload[8].match(/(\d+)\[(?:(\d)\.tr\.|\*)]/);
-    res.reservationFor.trainNumber = trainNum[1];
-    res.reservedTicket.ticketedSeat.seatingType = trainNum[2];
+    if (trainNum) {
+        res.reservationFor.trainNumber = trainNum[1];
+        res.reservedTicket.ticketedSeat.seatingType = trainNum[2];
+    }
     res.reservationFor.departureTime = parseDateTime(payload[9]);
     res.underName.name = payload[11];
     res.programMembershipUsed.membershipNumber = payload[20];
@@ -59,6 +61,10 @@ function parseDomesticBarcode(data) {
 }
 
 function parseDomesticPdf(pdf, node, triggerNode) {
+    if (triggerNode.result[0]['@type'] == 'Ticket') {
+        return triggerNode.result;
+    }
+
     const text = pdf.pages[triggerNode.location].text;
     // TODO multi-leg support?
     const leg = text.match(/\d{2}\.\d{2}.\d{2} +\d{2}:\d{2} +.*  -> .* +(\d{2}\.\d{2}\.\d{2} +\d{2}:\d{2})/);
