@@ -41,7 +41,7 @@ QJSValue JsApi::Barcode::decodeAztecBinary(const QVariant &img) const
         if (PdfBarcodeUtil::maybeBarcode(pdfImg, BarcodeDecoder::Aztec) == BarcodeDecoder::None) {
             return {};
         }
-        const auto content = m_decoder->decodeBinary(pdfImg.image(), BarcodeDecoder::Aztec);
+        const auto content = m_decoder->decode(pdfImg.image(), BarcodeDecoder::Aztec).toByteArray();
         if (content.isEmpty()) {
             return {};
         }
@@ -69,7 +69,7 @@ QString JsApi::Barcode::decodeAnyBarcode(const QVariant& img) const
 {
     if (img.userType() == qMetaTypeId<PdfImage>()) {
         const auto pdfImg = img.value<PdfImage>();
-        return m_decoder->decodeString(pdfImg.image(), BarcodeDecoder::Any | BarcodeDecoder::IgnoreAspectRatio);
+        return m_decoder->decode(pdfImg.image(), BarcodeDecoder::Any | BarcodeDecoder::IgnoreAspectRatio).toString();
     }
     return {};
 }
@@ -81,7 +81,7 @@ QString JsApi::Barcode::decodeBarcode(const QVariant &img, BarcodeDecoder::Barco
         if (PdfBarcodeUtil::maybeBarcode(pdfImg, hints) == BarcodeDecoder::None) {
             return {};
         }
-        return m_decoder->decodeString(pdfImg.image(), hints);
+        return m_decoder->decode(pdfImg.image(), hints).toString();
     }
     return {};
 }
