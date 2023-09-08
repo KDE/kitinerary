@@ -43,7 +43,7 @@ private Q_SLOTS:
 
         BarcodeDecoder decoder;
         QVERIFY(BarcodeDecoder::maybeBarcode(img.width(), img.height(), BarcodeDecoder::Any) & BarcodeDecoder::PDF417);
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::PDF417), QStringLiteral("PDF417 is a stacked linear barcode symbol format used in a variety of applications, primarily transport, identification cards, and inventory management."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::PDF417).toString(), QStringLiteral("PDF417 is a stacked linear barcode symbol format used in a variety of applications, primarily transport, identification cards, and inventory management."));
     }
 
     void testAztec()
@@ -52,16 +52,16 @@ private Q_SLOTS:
         QVERIFY(!img.isNull());
         BarcodeDecoder decoder;
         QVERIFY(BarcodeDecoder::maybeBarcode(img.width(), img.height(), BarcodeDecoder::Any) & BarcodeDecoder::Aztec);
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Aztec).toString(), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
         img.load(QStringLiteral(SOURCE_DIR "/barcodes/aztec-partial-quiet-zone.png"));
         QVERIFY(!img.isNull());
         QVERIFY(BarcodeDecoder::maybeBarcode(img.width(), img.height(), BarcodeDecoder::Any) & BarcodeDecoder::Aztec);
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("KF5::Prison - The KDE barcode generation framework."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Aztec).toString(), QStringLiteral("KF5::Prison - The KDE barcode generation framework."));
 
         img.load(QStringLiteral(SOURCE_DIR "/barcodes/uic918-3star.png"));
         QVERIFY(!img.isNull());
         QVERIFY(BarcodeDecoder::maybeBarcode(img.width(), img.height(), BarcodeDecoder::Any) & BarcodeDecoder::Aztec);
-        const auto b = decoder.decodeBinary(img, BarcodeDecoder::Aztec);
+        const auto b = decoder.decode(img, BarcodeDecoder::Aztec).toByteArray();
         QCOMPARE(b.size(), 351);
         QVERIFY(b.startsWith("OTI010080000020"));
     }
@@ -87,7 +87,7 @@ private Q_SLOTS:
 
         BarcodeDecoder decoder;
         QVERIFY(BarcodeDecoder::maybeBarcode(img.width(), img.height(), BarcodeDecoder::Any) & BarcodeDecoder::QRCode);
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::QRCode), result);
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::QRCode).toString(), result);
     }
 
     void testPlausibilityCheck()
@@ -105,49 +105,52 @@ private Q_SLOTS:
     void testNoCode()
     {
         BarcodeDecoder decoder;
-        QCOMPARE(decoder.decodeBinary({}, BarcodeDecoder::Any), QByteArray());
-        QCOMPARE(decoder.decodeString({}, BarcodeDecoder::Any), QString());
+        QCOMPARE(decoder.decode({}, BarcodeDecoder::Any).contentType, BarcodeDecoder::None);
+        QCOMPARE(decoder.decode({}, BarcodeDecoder::Any).toByteArray(), QByteArray());
+        QCOMPARE(decoder.decode({}, BarcodeDecoder::Any).toString(), QString());
 
         QImage img(10, 10, QImage::Format_ARGB32);
         img.fill(Qt::black);
-        QCOMPARE(decoder.decodeBinary(img, BarcodeDecoder::Any), QByteArray());
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QString());
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).contentType, BarcodeDecoder::None);
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toByteArray(), QByteArray());
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toString(), QString());
 
         img = QImage(200, 200, QImage::Format_ARGB32);
         img.fill(Qt::red);
         img.fill(Qt::black);
-        QCOMPARE(decoder.decodeBinary(img, BarcodeDecoder::Any), QByteArray());
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QString());
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).contentType, BarcodeDecoder::None);
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toByteArray(), QByteArray());
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toString(), QString());
     }
 
     void testDecoderHints()
     {
         BarcodeDecoder decoder;
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/aztec.png"));
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::PDF417), QString());
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::AnySquare), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::QRCode), QString());
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::PDF417).toString(), QString());
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::AnySquare).toString(), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toString(), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Aztec).toString(), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::QRCode).toString(), QString());
 
         decoder.clearCache();
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::PDF417), QString());
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::QRCode), QString());
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Aztec), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::AnySquare), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toString(), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::PDF417).toString(), QString());
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::QRCode).toString(), QString());
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Aztec).toString(), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::AnySquare).toString(), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
     }
 
     void testContentTypeDetection()
     {
         BarcodeDecoder decoder;
         QImage img(QStringLiteral(SOURCE_DIR "/barcodes/aztec.png"));
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
-        QCOMPARE(decoder.decodeBinary(img, BarcodeDecoder::Any), QByteArray("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toString(), QStringLiteral("This is an example Aztec symbol for Wikipedia."));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toByteArray(), QByteArray("This is an example Aztec symbol for Wikipedia."));
 
         img.load(QStringLiteral(SOURCE_DIR "/barcodes/uic918-3star.png"));
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QString());
-        const auto ba = decoder.decodeBinary(img, BarcodeDecoder::Any);
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toString(), QString());
+        const auto ba = decoder.decode(img, BarcodeDecoder::Any).toByteArray();
         QCOMPARE(ba.size(), 351);
         QVERIFY(ba.startsWith("OTI010080000020"));
     }
@@ -171,10 +174,10 @@ private Q_SLOTS:
         QVERIFY(!img.isNull());
 
         BarcodeDecoder decoder;
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any2D), QString());
-        QCOMPARE(decoder.decodeString(img, type), QLatin1String("123456789"));
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any1D), QLatin1String("123456789"));
-        QCOMPARE(decoder.decodeString(img, BarcodeDecoder::Any), QLatin1String("123456789"));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any2D).toString(), QString());
+        QCOMPARE(decoder.decode(img, type).toString(), QLatin1String("123456789"));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any1D).toString(), QLatin1String("123456789"));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toString(), QLatin1String("123456789"));
     }
 };
 
