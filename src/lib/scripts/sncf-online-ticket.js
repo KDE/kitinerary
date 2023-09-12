@@ -10,8 +10,11 @@ function parseOnlineTicket(json)
     // TODO mark cancelled trips as such
     for (const trips of [response.cancelledTrips, response.passedTrips, response.trips, response.preReservedTrips]) {
         for (const trip of trips) {
-            for (const jny of [trip.trip.tripDetails.inwardJourney, trip.trip.tripDetails.outwardJourney]) {
+            for (const jny of [trip.trip.tripDetails.inwardJourney, trip.trip.tripDetails.outwardJourney, trip.trip.tripDetails]) {
                 let jnyResult = [];
+                if (!jny || !jny.timeline) {
+                    continue;
+                }
                 for (const step of jny.timeline.steps) {
                     if (!step['train']) {
                         continue;
