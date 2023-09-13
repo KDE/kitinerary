@@ -109,7 +109,7 @@ function parseInternationalTicket(pdf, node, triggerNode)
         let leg = text.substr(idx).match(/(\d\d\.\d\d\.) (\d\d:\d\d) (.*) → (\d\d:\d\d) (.*?)  (.*)/);
         if (!leg)
             break;
-        idx = leg.index + leg[0].length;
+        idx += leg.index + leg[0].length;
 
         let res = JsonLd.newTrainReservation();
         res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + leg[2], 'dd.MM.hh:mm', 'hu');

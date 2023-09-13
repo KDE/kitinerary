@@ -47,6 +47,18 @@
             {
                 "match": "^2200",
                 "mimeType": "application/octet-stream",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseSecutix",
+        "mimeType": "application/octet-stream",
+        "script": "sncf.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^2200",
+                "mimeType": "application/octet-stream",
                 "scope": "Descendants"
             }
         ],
