@@ -280,7 +280,11 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
     hints.setIsPure((hint & BarcodeDecoder::IgnoreAspectRatio) == 0);
 
     // convert if img is in a format ZXing can't handle directly
+#if ZXING_VERSION > QT_VERSION_CHECK(1, 3, 0)
     ZXing::Result res;
+#else
+    ZXing::Result res(ZXing::DecodeStatus::NotFound);
+#endif
     if (zxingImageFormat(img.format()) == ZXing::ImageFormat::None) {
         res = ZXing::ReadBarcode(zxingImageView(img.convertToFormat(QImage::Format_Grayscale8)), hints);
     } else {
@@ -292,6 +296,7 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
 
 void BarcodeDecoder::decodeMultiIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTypes hint, std::vector<BarcodeDecoder::Result> &results) const
 {
+#if ZXING_VERSION > QT_VERSION_CHECK(1, 2, 0)
     if (std::any_of(results.begin(), results.end(), [hint](const auto &r) { return (r.positive & hint) || ((r.negative & hint) == hint); })) {
         return;
     }
@@ -322,4 +327,10 @@ void BarcodeDecoder::decodeMultiIfNeeded(const QImage &img, BarcodeDecoder::Barc
             results.push_back(std::move(r));
         }
     }
+#else
+    // ZXing 1.2 has no multi-decode support yet, so always treat this as no hit
+    Result r;
+    r.negative |= hint;
+    results.push_back(std::move(r));
+#endif
 }
