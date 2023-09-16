@@ -275,6 +275,8 @@ function parseSecutix(barcode)
     res.underName.familyName = code.substr(116, 19);
     res.underName.givenName = code.substr(135, 19);
     res.programMembershipUsed.programName = tariffs[code.substr(92, 4)];
+    res.reservedTicket.totalPrice = code.substr(226, 10) / 100;
+    res.reservedTicket.priceCurrency = 'EUR';
     return res;
 }
 

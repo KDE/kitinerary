@@ -30,6 +30,8 @@ function parseOnlineTicket(json)
                     res.reservationFor.trainName = train.transporter.description;
                     res.reservationFor.trainNumber = train.transporter.number.match(/\d+/)[0];
                     res.reservedTicket.ticketedSeat.seatingType = train.comfortClass.code;
+                    console.log(jny.priceLabel);
+                    ExtractorEngine.extractPrice(jny.priceLabel, res);
 
                     if (train.tripIv.composition) {
                         res.reservationFor.departurePlatform = train.tripIv.composition.positionInformation.title;

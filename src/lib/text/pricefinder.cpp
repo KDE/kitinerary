@@ -125,7 +125,7 @@ static bool isBoundaryChar(QChar c)
 
 void PriceFinder::findAll(QStringView text, std::vector<Result> &results) const
 {
-    static QRegularExpression rx(QStringLiteral(R"((?<=\s|[[:punct:]]|^)([^\d\s]{1,4})? *(\d(?:[\d,.  ]*\d)?) *([^\d\s]{1,4})?(?=\s|[[:punct:]]|$))"));
+    static QRegularExpression rx(QStringLiteral(R"((?<=\s|[[:punct:]]|^)([^\d\s]{1,4})?[  ]*(\d(?:[\d,.  ]*\d)?)[  ]*([^\d\s]{1,4})?(?=\s|[[:punct:]]|$))"));
 
     const auto prevResultSize = results.size();
     qsizetype offset = 0;
