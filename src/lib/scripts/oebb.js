@@ -19,15 +19,33 @@ function parseTicket(ticket, node) {
 }
 
 function parsePage(pdf, node, triggerNode) {
-    if (triggerNode.parent.result.length > 2) // not sure this can happen
-        return;
+    const details = pdf.pages[triggerNode.location].textInRect(0, 0.35, 0.65, 1);
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        const leg = details.substr(idx).match(/(\S.*\S)  +(\d\d\.\d\d\.\d{4}) +(\d\d:\d\d) +(.*)\n *(\S.*\S)  +(\d\d\.\d\d\.\d{4}) +(\d\d:\d\d)/);
+        if (!leg)
+            break;
+        idx += leg.index + leg[0].length;
+
+        let res = JsonLd.newTrainReservation();
+        res.reservationFor.departureStation.name = leg[1];
+        res.reservationFor.departureTime = JsonLd.toDateTime(leg[2] + ' ' + leg[3], 'dd.MM.yyyy hh:mm', 'de');
+        res.reservationFor.trainNumber = leg[4];
+        res.reservationFor.arrivalStation.name = leg[5];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[6] + ' ' + leg[7], 'dd.MM.yyyy hh:mm', 'de');
+        res = JsonLd.apply(triggerNode.result[0], res);
+        reservations.push(res);
+    }
+
+    if (reservations.length > 0)
+        return reservations;
 
     // look for non-elided station names
     const text = pdf.pages[triggerNode.location].text;
     const legs = text.match(/VON +-> NACH.*\n.*? ([A-Z].*) +-> (.*?)  .*\n.*? ([\w\*].*) +-> (.*?)  /);
     if (!legs) { return triggerNode.result; }
 
-    var reservations = [];
     var res = triggerNode.parent.result[0];
     res.reservationFor.departureStation.name = legs[1];
     res.reservationFor.arrivalStation.name = legs[2];
