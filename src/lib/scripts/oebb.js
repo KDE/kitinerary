@@ -3,14 +3,24 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function parseTicket(ticket, node) {
-    if (node.result.length > 1) // not sure this can happen
-        return;
-
-    var res = node.result[0];
+function parseTicket(code, node) {
+    // VorteilsCard
+    if (code.ticketLayout && code.ticketLayout.type == "RCT2" && code.ticketLayout.text(0, 0, 50, 1).match(/VORTEILSCARD/i)) {
+        let card = JsonLd.newObject("ProgramMembership");
+        card.programName = code.ticketLayout.text(0, 0, 50, 1);
+        card.membershipNumber = code.ticketLayout.text(1, 1, 16, 1);
+        card.member = JsonLd.newObject("Person");
+        card.member.givenName = code.ticketLayout.text(1, 52, 19 ,1);
+        card.member.familyName = code.ticketLayout.text(2, 52, 19 ,1);
+        card.token = 'aztecbin:' + ByteArray.toBase64(code.rawData);
+        card.validFrom = JsonLd.readQDateTime(code, 'validFrom');
+        card.validUntil = JsonLd.readQDateTime(code, 'validUntil');
+        return card.programName != undefined ? card : undefined;
+    }
 
     // decode 118199 vendor block
-    const block = ticket.block("118199");
+    let res = node.result[0];
+    const block = code.block("118199");
     const json = JSON.parse(block.contentText);
     if (!res.reservationFor.trainNumber)
         res.reservationFor.trainNumber = json["Z"];
@@ -58,20 +68,4 @@ function parsePage(pdf, node, triggerNode) {
     }
 
     return reservations;
-}
-
-function parseUic9183(code, node) {
-    // VorteilsCard
-    if (code.ticketLayout && code.ticketLayout.type == "RCT2" && code.ticketLayout.text(0, 0, 50, 1).match(/VORTEILSCARD/i)) {
-        var card = JsonLd.newObject("ProgramMembership");
-        card.programName = code.ticketLayout.text(0, 0, 50, 1);
-        card.membershipNumber = code.ticketLayout.text(1, 1, 16, 1);
-        card.member = JsonLd.newObject("Person");
-        card.member.givenName = code.ticketLayout.text(1, 52, 19 ,1);
-        card.member.familyName = code.ticketLayout.text(2, 52, 19 ,1);
-        card.token = 'aztecbin:' + ByteArray.toBase64(code.rawData);
-        card.validFrom = JsonLd.readQDateTime(code, 'validFrom');
-        card.validUntil = JsonLd.readQDateTime(code, 'validUntil');
-        return card.programName != undefined ? card : undefined;
-    }
 }
