@@ -66,12 +66,12 @@ static typename std::enable_if<!std::is_same_v<T, QString>, bool>::type equalAnd
 }
 
 /* Checks that @p lhs and @p rhs are not non-equal if both values are set. */
-static bool conflictIfPresent(const QString &lhs, const QString &rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
+static bool conflictIfPresent(QStringView lhs, QStringView rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
 {
     return !lhs.isEmpty() && !rhs.isEmpty() && lhs.compare(rhs, caseSensitive) != 0;
 }
 template <typename T>
-static bool conflictIfPresent(const T &lhs, const T &rhs)
+static typename std::enable_if<!std::is_same_v<T, QString>, bool>::type conflictIfPresent(const T &lhs, const T &rhs)
 {
     return lhs.isValid() && rhs.isValid() && lhs != rhs;
 }
@@ -404,6 +404,14 @@ static bool isSameLineName(const Iter &lBegin, const Iter &lEnd, const Iter &rBe
     return (lIt != lEnd && (*lIt).isSpace()) || (rIt != rEnd && (*rIt).isSpace());
 }
 
+static bool isSameTrainName(QStringView lhs, QStringView rhs)
+{
+    if (lhs.isEmpty() || rhs.isEmpty()) {
+        return false;
+    }
+    return lhs.startsWith(rhs) || rhs.startsWith(lhs);
+}
+
 static bool isSameLineName(const QString &lhs, const QString &rhs)
 {
     if (isSameLineName(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())
@@ -419,8 +427,8 @@ static bool isSameLineName(const QString &lhs, const QString &rhs)
     if (!lhsMatch.hasMatch() || !rhsMatch.hasMatch()) {
         return false;
     }
-    return equalAndPresent(lhsMatch.capturedView(u"type"), rhsMatch.capturedView(u"type")) && (
-           (equalAndPresent(lhsMatch.capturedView(u"line"), rhsMatch.capturedView(u"line")) && equalAndPresent(lhsMatch.capturedView(u"route"), rhsMatch.capturedView(u"route")))
+    return isSameTrainName(lhsMatch.capturedView(u"type"), rhsMatch.capturedView(u"type")) && (
+           (equalAndPresent(lhsMatch.capturedView(u"line"), rhsMatch.capturedView(u"line")) && !conflictIfPresent(lhsMatch.capturedView(u"route"), rhsMatch.capturedView(u"route")))
         || (equalAndPresent(lhsMatch.capturedView(u"line"), rhsMatch.capturedView(u"route")) && lhsMatch.capturedView(u"route").isEmpty())
         || (equalAndPresent(lhsMatch.capturedView(u"route"), rhsMatch.capturedView(u"line")) && rhsMatch.capturedView(u"route").isEmpty())
     );
