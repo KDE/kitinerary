@@ -5,7 +5,7 @@
 
 // barcode format
 // 13x ticket number
-// 5x ?
+// 5x UIC issuer/carrier code
 // 5x train number
 // 15x departure time (dd/MM/yyyyhh:mm)
 // 7x departure UIC station code
@@ -17,6 +17,7 @@ function parseBarcode(content) {
     let res = JsonLd.newTrainReservation();
     res.reservedTicket.ticketToken = 'azteccode:' + content;
     res.reservedTicket.ticketNumber = content.substr(0, 13);
+    res.reservationFor.provider.identifier = 'uic:' + content.substr(13, 5);
     res.reservationFor.trainNumber = content.substr(18, 5);
     res.reservationFor.departureTime = JsonLd.toDateTime(content.substr(23, 15), 'dd/MM/yyyyhh:mm', 'es');
     res.reservationFor.departureStation.identifier = 'uic:71' + content.substr(40, 5);
