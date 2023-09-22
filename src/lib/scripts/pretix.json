@@ -1,13 +1,27 @@
-{
-    "filter": [
-        {
-            "field": "passTypeIdentifier",
-            "match": "pass.eu.pretix.ticket",
-            "mimeType": "application/vnd.apple.pkpass",
-            "scope": "Current"
-        }
-    ],
-    "function": "parsePass",
-    "mimeType": "application/vnd.apple.pkpass",
-    "script": "pretix.js"
-}
+[
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.eu.pretix.ticket",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "parsePass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "pretix.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^[0-9a-z]{32}$",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parsePdf",
+        "mimeType": "application/pdf",
+        "script": "pretix.js"
+    }
+]
