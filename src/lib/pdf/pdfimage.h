@@ -106,7 +106,7 @@ public:
     /** Sets image loading hints. */
     void setLoadingHints(LoadingHints hints);
 
-    /** The source image with display transformations applied. */
+    /** The source image without display transformations applied. */
     QImage image() const;
 
     /** Returns whether this image has an object id.
@@ -127,6 +127,17 @@ public:
      *  of vector path elemets.
      */
     int pathElementsCount() const;
+
+    /** Returns @c true if this image has an aspect-ratio changing transform.
+     *  That might need to be applied before doing barcode decoding for example.
+     */
+    [[nodiscard]] bool hasAspectRatioTransform() const;
+
+    /** Applies the aspect ratio changing part of the transform
+     *  to the given image (which typically should be the one returned
+     *  by image()).
+     */
+    [[nodiscard]] QImage applyAspectRatioTransform(const QImage &image) const;
 
 private:
     friend class PdfExtractorOutputDevice;

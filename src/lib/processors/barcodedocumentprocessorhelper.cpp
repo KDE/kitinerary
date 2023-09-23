@@ -11,7 +11,7 @@
 
 using namespace KItinerary;
 
-void BarcodeDocumentProcessorHelper::expandNode(const QImage &img, BarcodeDecoder::BarcodeTypes barcodeHints, ExtractorDocumentNode &parent, const ExtractorEngine* engine)
+bool BarcodeDocumentProcessorHelper::expandNode(const QImage &img, BarcodeDecoder::BarcodeTypes barcodeHints, ExtractorDocumentNode &parent, const ExtractorEngine* engine)
 {
     // in case the barcode raw data (string or bytearray) gets detected as a type we handle,
     // we nevertheless inject a raw data node in between. This is useful in cases where the
@@ -22,12 +22,12 @@ void BarcodeDocumentProcessorHelper::expandNode(const QImage &img, BarcodeDecode
         auto c = engine->documentNodeFactory()->createNode(b);
         if (c.isA<QByteArray>() || c.isA<QString>()) {
             parent.appendChild(c);
-            return;
+            return true;
         }
         auto rawNode = engine->documentNodeFactory()->createNode(QVariant::fromValue(b), u"application/octet-stream");
         rawNode.appendChild(c);
         parent.appendChild(rawNode);
-        return;
+        return true;
     }
 
     const auto s = engine->barcodeDecoder()->decodeString(img, barcodeHints);
@@ -35,11 +35,13 @@ void BarcodeDocumentProcessorHelper::expandNode(const QImage &img, BarcodeDecode
         auto c = engine->documentNodeFactory()->createNode(s.toUtf8());
         if (c.isA<QByteArray>() || c.isA<QString>()) {
             parent.appendChild(c);
-            return;
+            return true;
         }
         auto rawNode = engine->documentNodeFactory()->createNode(QVariant::fromValue(s), u"text/plain");
         rawNode.appendChild(c);
         parent.appendChild(rawNode);
-        return;
+        return true;
     }
+
+    return false;
 }

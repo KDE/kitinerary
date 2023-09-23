@@ -117,7 +117,14 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
 
             // technically not our job to do this here rather than letting the image node processor handle this
             // but we have the output aspect ratio of the barcode only here, which gives better decoding hints
-            BarcodeDocumentProcessorHelper::expandNode(imgData, barcodeHints, childNode, engine);
+            if (BarcodeDocumentProcessorHelper::expandNode(imgData, barcodeHints, childNode, engine)) {
+                continue;
+            }
+
+            // if this failed, check if the image as a aspect-ratio distorting scale and try again with that
+            if (img.hasAspectRatioTransform()) {
+                BarcodeDocumentProcessorHelper::expandNode(img.applyAspectRatioTransform(imgData), barcodeHints, childNode, engine);
+            }
         }
 
         // handle full page raster images
