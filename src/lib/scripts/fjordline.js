@@ -7,7 +7,6 @@ function parseTicket(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
     if (!text.match(/Fjord Line/))
         return;
-    console.log(text);
     let res = JsonLd.newBoatReservation();
     const trip = text.match(/(\d{2}.\d{2}.\d{4}) +(.*?) +(\d{2}\.\d{2}) +(.*) +(\d{2}\.\d{2}) +(.*?)  +(.*)/);
     res.reservationFor.departureBoatTerminal.name = trip[2];
