@@ -60,6 +60,9 @@ QDateTime Rct2TicketPrivate::parseTime(const QString &dateStr, const QString &ti
     if (!d.isValid()) {
         d = QDate::fromString(dateStr, QStringLiteral("dd/MM"));
     }
+    if (!d.isValid()) {
+        d = QDate::fromString(dateStr, QStringLiteral("dd-MM"));
+    }
     auto t = QTime::fromString(timeStr, QStringLiteral("hh:mm"));
     if (!t.isValid()) {
         t = QTime::fromString(timeStr, QStringLiteral("hh.mm"));
