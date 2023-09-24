@@ -12,7 +12,7 @@ function parsePdf(pdf, node, triggerNode)
 
     var ptTicket = triggerNode.content
     var res = JsonLd.newEventReservation();
-    res.reservationFor.name = ptTicket.person.name;
+    res.reservationFor.name = ptTicket.ticketLayout.text(0, 52, 19, 1).trim();
     res.reservationFor.location.name = "Congress Center Leipzig";
     res.reservationFor.location.address.streetAddress = "Messeallee";
     res.reservationFor.location.address.postalCode = "04356";

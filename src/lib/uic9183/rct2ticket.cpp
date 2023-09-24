@@ -206,7 +206,9 @@ QString Rct2Ticket::title() const
 
 QString Rct2Ticket::passengerName() const
 {
-    return d->layout.text(0, 52, 19, 1).trimmed();
+    const auto name = d->layout.text(0, 52, 19, 1).trimmed();
+    // sanity-check if this is a plausible name, e.g. Renfe has random other stuff here
+    return std::any_of(name.begin(), name.end(), [](QChar c) { return c.isDigit(); }) ? QString() : name;
 }
 
 QDateTime Rct2Ticket::outboundDepartureTime() const
