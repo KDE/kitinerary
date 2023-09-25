@@ -16,6 +16,7 @@ function parseBarcode(barcode)
 
     var res = JsonLd.newTrainReservation();
     res.reservedTicket.ticketToken = "qrCode:" + barcode.trim();
+    res.reservedTicket.ticketNumber = barcode.substr(0, 13);
     res.reservationFor.trainNumber = barcode.substr(29, 5);
     res.reservedTicket.ticketedSeat.seatSection = barcode.substr(34, 3);
     res.reservedTicket.ticketedSeat.seatNumber = barcode.substr(37, 3);

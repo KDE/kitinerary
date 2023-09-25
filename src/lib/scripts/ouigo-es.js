@@ -17,6 +17,10 @@ function parseBarcode(content) {
     res.reservationFor.arrivalStation.name = content.substr(45, 7);
     res.reservedTicket.ticketedSeat.seatSection = content.substr(52, 3);
     res.reservedTicket.ticketedSeat.seatNumber = content.substr(55, 3);
+
+    if (content.substr(13, 5) == "01071") {
+        res.reservationNumber = content.substr(143, 6);
+    }
     return res;
 }
 
