@@ -4,22 +4,9 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+// see https://community.kde.org/KDE_PIM/KItinerary/Renfe_Barcodes#Renfe_Barcode
 function parseBarcode(barcode)
 {
-    // barcode content:
-    // 13x ticket number
-    // 5x Renfe departure station id
-    // 5x Renfe arrival station id
-    // 6x departure(?) date: ddMMyy
-    // 5x train number
-    // 3x coach number
-    // 3x seat number
-    // 2x unknown number
-    // 1x unknown number
-    // 6x "localizador" ~ PNR?
-    // ".." (optional)
-    // 5x "CombinadoCercanias" (optional)
-
     if (barcode.trim().length > 56)
         return null;
 
