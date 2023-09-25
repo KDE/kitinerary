@@ -97,3 +97,17 @@ function parsePkPass(content)
 
     return res;
 }
+
+function parseInternationalPdf(pdf, node, uicNode)
+{
+    const renfeNode = node.findChildNodes({ scope: "Descendants", mimeType: "text/plain", match: "^\\d{25}/\\d{2}/\\d{6}:\\d{16}" }).find(n => n.location === uicNode.location);
+
+    let res = JsonLd.apply(renfeNode.result[0], uicNode.result[0]);
+    res.reservationFor.departureStation.identifier = undefined;
+    res.reservationFor.arrivalStation.identifier = undefined;
+    res.reservationNumber = renfeNode.result[0].reservationNumber;
+    let renfeRes = JsonLd.clone(res);
+    renfeRes.reservedTicket.ticketToken = renfeNode.result[0].reservedTicket.ticketToken;
+    renfeRes.reservedTicket.name = renfeNode.result[0].reservedTicket.name;
+    return [renfeRes, res];
+}
