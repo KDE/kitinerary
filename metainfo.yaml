@@ -12,8 +12,7 @@ portingAid: false
 deprecated: false
 release: true
 libraries:
- - qmake: KItinerary
-   cmake: KItinerary
+ - cmake: KItinerary
 cmakename: KItinerary
 
 public_lib: true
