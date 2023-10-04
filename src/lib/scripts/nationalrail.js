@@ -82,7 +82,7 @@ function parseRSP6(text) {
         }
         const seatLetter = readRSP6String(rsp6, 422 + offset, 1);
         const seatNum = rsp6.readNumberMSB(428 + offset, 7);
-        if (seatLetter || seatNum) {
+        if ((seatLetter && seatLetter != '*') || seatNum) {
             res.reservedTicket.ticketedSeat.seatNumber = (seatLetter ? seatLetter : "") + (seatNum ? seatNum : "");
         }
         offset += 45;
