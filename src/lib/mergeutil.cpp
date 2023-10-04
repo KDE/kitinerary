@@ -54,6 +54,27 @@ static std::vector<CompareFunc> s_mergeCompareFuncs;
 
 using namespace KItinerary;
 
+/* Compare times without assuming times without a timezone are in the current time zone
+ * (they might be local to the destination instead).
+ */
+static bool dateTimeCompare(const QDateTime &lhs, const QDateTime &rhs)
+{
+    if (lhs == rhs) {
+        return true;
+    }
+    if (lhs.timeSpec() == Qt::LocalTime && rhs.timeSpec() != Qt::LocalTime) {
+        QDateTime dt(rhs);
+        dt.setTimeSpec(Qt::LocalTime);
+        return lhs == dt;
+    }
+    if (lhs.timeSpec() != Qt::LocalTime && rhs.timeSpec() == Qt::LocalTime) {
+        QDateTime dt(lhs);
+        dt.setTimeSpec(Qt::LocalTime);
+        return dt == rhs;
+    }
+    return false;
+}
+
 /* Checks that @p lhs and @p rhs are non-empty and equal. */
 static bool equalAndPresent(QStringView lhs, QStringView rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
 {
@@ -63,6 +84,10 @@ template <typename T>
 static typename std::enable_if<!std::is_same_v<T, QString>, bool>::type equalAndPresent(const T &lhs, const T &rhs)
 {
     return lhs.isValid() && lhs == rhs;
+}
+static bool equalAndPresent(const QDateTime &lhs, const QDateTime &rhs)
+{
+    return lhs.isValid() && dateTimeCompare(lhs, rhs);
 }
 
 /* Checks that @p lhs and @p rhs are not non-equal if both values are set. */
@@ -74,6 +99,10 @@ template <typename T>
 static typename std::enable_if<!std::is_same_v<T, QString>, bool>::type conflictIfPresent(const T &lhs, const T &rhs)
 {
     return lhs.isValid() && rhs.isValid() && lhs != rhs;
+}
+static bool conflictIfPresent(const QDateTime &lhs, const QDateTime &rhs)
+{
+    return lhs.isValid() && rhs.isValid() && !dateTimeCompare(lhs, rhs);
 }
 static bool conflictIfPresent(const Person &lhs, const Person &rhs)
 {
@@ -448,6 +477,7 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
             && LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::Exact);
     } else if (lhs.departureTime().isValid() && rhs.departureTime().isValid()) {
         // if we have both departure times, they have to match
+        qCDebug(CompareLog) << "departure time" << lhs.departureTime() << rhs.departureTime() <<equalAndPresent(lhs.departureTime(), rhs.departureTime());
         if (!equalAndPresent(lhs.departureTime(), rhs.departureTime())) {
             return false;
         }
@@ -462,6 +492,7 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
     // arrival times (when present) should either match exactly, or be almost the same at a matching arrival location
     // (tickets even for the same connection booked on the same day sometimes have slight variation in the arrival time...)
     if (conflictIfPresent(lhs.arrivalTime(), rhs.arrivalTime())) {
+        qCDebug(CompareLog) << "arrival time" << lhs.arrivalTime() << rhs.arrivalTime();
         if (std::abs(lhs.arrivalTime().secsTo(rhs.arrivalTime())) > 180) {
             return false;
         }
