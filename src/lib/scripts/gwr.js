@@ -6,7 +6,6 @@
 function parseEvent(event) {
     let reservations = [];
     let idx = 0;
-    const dtStart = JsonLd.readQDateTime(event, 'dtStart');
     while (true) {
         const trip = event.description.substr(idx).match(/Journey Details: (.*) \(([A-Z]{3})\) to (.*) \(([A-Z]{3})\), *dep *(\d\d):(\d\d), *arr *(\d\d):(\d\d)/);
         if (!trip) {
@@ -15,11 +14,11 @@ function parseEvent(event) {
         idx += trip.index + trip[0].length;
 
         let res = JsonLd.newTrainReservation();
-        let depDt = new Date(dtStart);
+        let depDt = new Date(event.dtStart);
         depDt.setHours(trip[5]);
         depDt.setMinutes(trip[6]);
         res.reservationFor.departureTime = depDt;
-        let arrDt = new Date(dtStart);
+        let arrDt = new Date(event.dtStart);
         arrDt.setHours(trip[7]);
         arrDt.setMinutes(trip[8]);
         res.reservationFor.arrivalTime = arrDt;
