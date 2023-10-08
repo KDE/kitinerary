@@ -39,7 +39,7 @@ bool PdfDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringV
 static void applyContextDateTime(PdfDocument *pdf, ExtractorDocumentNode &node)
 {
     // ignore broken PDF times for Amadeus documents
-    if (pdf->producer() == QLatin1String("Amadeus") && pdf->creationTime() == pdf->modificationTime() && pdf->creationTime().date() == QDate(2011, 5, 10)) {
+    if (pdf->producer() == QLatin1String("Amadeus") && pdf->creationTime() == pdf->modificationTime() && pdf->creationTime().date().year() <= 2013) {
         return;
     }
 
