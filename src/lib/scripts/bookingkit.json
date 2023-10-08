@@ -7,4 +7,14 @@
         "scope": "Current"
     } ],
     "script": "bookingkit.js"
+},
+{
+    "mimeType": "application/pdf",
+    "filter": [ {
+        "match": "^[A-Z0-9]{3}-[A-z0-9]{6}-[A-Z0-9]{3}$",
+        "mimeType": "text/plain",
+        "scope": "Descendants"
+    } ],
+    "script": "bookingkit.js",
+    "function": "parsePdf"
 }]

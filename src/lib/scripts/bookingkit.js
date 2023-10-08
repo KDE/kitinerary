@@ -27,3 +27,30 @@ function main(pass, node)
 
     return res;
 }
+
+function parsePdf(pdf, node, barcode) {
+    const page = pdf.pages[barcode.location];
+    const text = page.textInRect(0.0, 0.0, 0.9, 0.3);
+    console.log(text);
+    let res = JsonLd.newEventReservation();
+    res.reservationFor.name = text.match(/^ *(\S.*)\n/)[1];
+    res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
+    res.reservationNumber = barcode.content;
+
+    const dts = text.match(/(\d\d\.\d\d\.\d{4}).*\n *(\d\d\.\d\d\.\d{4})\n.*\n *(\d\d:\d\d).*(\d\d:\d\d)/);
+    if (dts) {
+        res.reservationFor.startDate = JsonLd.toDateTime(dts[1] + dts[3], 'dd.MM.yyyyhh:mm', 'en');
+        res.reservationFor.endDate = JsonLd.toDateTime(dts[2] + dts[4], 'dd.MM.yyyyhh:mm', 'en');
+    } else {
+        const dt = text.match(/(\d\d\.\d\d\.\d{4}).*\n *(\d\d:\d\d)/);
+        res.reservationFor.startDate = JsonLd.toDateTime(dt[1] + dt[2], 'dd.MM.yyyyhh:mm', 'en');
+    }
+
+    const loc = text.match(/(\S.*), (.*), (.*)\n *(.*)\n *(.*)\n.*##/);
+    res.reservationFor.location.address.streetAddress = loc[1];
+    res.reservationFor.location.address.addressLocality = loc[2];
+    res.reservationFor.location.address.addressCountry = loc[3];
+    res.reservedTicket.name = loc[4];
+    res.underName.name = loc[5];
+    return res;
+}
