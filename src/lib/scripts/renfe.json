@@ -33,4 +33,17 @@
     "function": "parseBarcode",
     "script": "renfe.js",
     "mimeType": "text/plain"
+},
+{
+    "filter": [
+        {
+            "field": "carrierId",
+            "match": "1071",
+            "mimeType": "internal/uic9183",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parseInternationalPdf",
+    "script": "renfe.js",
+    "mimeType": "application/pdf"
 }]

@@ -186,7 +186,7 @@ bool SortUtil::hasStartTime(const QVariant &elem)
         return elem.value<TrainTrip>().departureTime().isValid();
     }
     if (JsonLd::isA<Flight>(elem)) {
-        return elem.value<TrainTrip>().departureTime().isValid();
+        return elem.value<Flight>().departureTime().isValid();
     }
 
     return SortUtil::startDateTime(elem).isValid();
@@ -195,14 +195,14 @@ bool SortUtil::hasStartTime(const QVariant &elem)
 bool SortUtil::hasEndTime(const QVariant &elem)
 {
     if (JsonLd::canConvert<Reservation>(elem)) {
-        return hasStartTime(JsonLd::convert<Reservation>(elem).reservationFor());
+        return hasEndTime(JsonLd::convert<Reservation>(elem).reservationFor());
     }
     if (JsonLd::isA<TrainTrip>(elem)) {
         return elem.value<TrainTrip>().arrivalTime().isValid();
     }
     if (JsonLd::isA<Flight>(elem)) {
-        return elem.value<TrainTrip>().arrivalTime().isValid();
+        return elem.value<Flight>().arrivalTime().isValid();
     }
 
-    return SortUtil::startDateTime(elem).isValid();
+    return SortUtil::endDateTime(elem).isValid();
 }

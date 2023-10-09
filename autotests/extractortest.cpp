@@ -172,7 +172,6 @@ private Q_SLOTS:
                 continue;
             }
             const auto tokenData = ticket.ticketTokenData();
-            qDebug() << tokenData << ticket.ticketToken();
             if (tokenData.userType() == QMetaType::QString) {
                 QVERIFY(tokenData.toString() != ticket.ticketToken());
             }

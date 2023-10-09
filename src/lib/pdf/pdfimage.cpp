@@ -231,12 +231,7 @@ QImage PdfImage::image() const
     if (d->m_format == QImage::Format_Invalid) {
         return d->m_vectorPicture.renderToImage();
     }
-
-    const auto img = d->load();
-    if (!img.isNull() && (d->m_width != d->m_sourceWidth || d->m_height != d->m_sourceHeight)) {
-        return img.scaled(d->m_width, d->m_height);
-    }
-    return img;
+    return d->load();
 }
 
 bool PdfImage::hasObjectId() const
@@ -257,6 +252,16 @@ bool PdfImage::isVectorImage() const
 int PdfImage::pathElementsCount() const
 {
     return d->m_vectorPicture.pathElementsCount();
+}
+
+bool PdfImage::hasAspectRatioTransform() const
+{
+    return d->m_format != QImage::Format_Invalid && (d->m_width != d->m_sourceWidth || d->m_height != d->m_sourceHeight);
+}
+
+QImage PdfImage::applyAspectRatioTransform(const QImage &image) const
+{
+    return image.scaled(d->m_width, d->m_height);
 }
 
 #include "moc_pdfimage.cpp"

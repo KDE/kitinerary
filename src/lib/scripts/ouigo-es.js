@@ -3,20 +3,12 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-// barcode format
-// 13x ticket number
-// 5x ?
-// 5x train number
-// 15x departure time (dd/MM/yyyyhh:mm)
-// 7x departure UIC station code
-// 7x arrival UIC station code
-// 3x coach number
-// 3x seat number
-// more stuff - signature?
+// see https://community.kde.org/KDE_PIM/KItinerary/Renfe_Barcodes#Common_Spanish_Ticket_Barcode
 function parseBarcode(content) {
     let res = JsonLd.newTrainReservation();
     res.reservedTicket.ticketToken = 'azteccode:' + content;
     res.reservedTicket.ticketNumber = content.substr(0, 13);
+    res.reservationFor.provider.identifier = 'uic:' + content.substr(13, 5);
     res.reservationFor.trainNumber = content.substr(18, 5);
     res.reservationFor.departureTime = JsonLd.toDateTime(content.substr(23, 15), 'dd/MM/yyyyhh:mm', 'es');
     res.reservationFor.departureStation.identifier = 'uic:71' + content.substr(40, 5);
@@ -25,6 +17,10 @@ function parseBarcode(content) {
     res.reservationFor.arrivalStation.name = content.substr(45, 7);
     res.reservedTicket.ticketedSeat.seatSection = content.substr(52, 3);
     res.reservedTicket.ticketedSeat.seatNumber = content.substr(55, 3);
+
+    if (content.substr(13, 5) == "01071") {
+        res.reservationNumber = content.substr(143, 6);
+    }
     return res;
 }
 

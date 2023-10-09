@@ -89,6 +89,16 @@ static bool isPlausibleFlightTime(const QDateTime &fromTime, const QDateTime &to
     return fromDt < toDt && FlightUtil::isPlausibleDistanceForDuration(distance, flightDuration);
 }
 
+[[nodiscard]] static qint64 flightDuration(const QDateTime &fromTime, const QDateTime &toTime, KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
+{
+    // times are local, so convert them to the right timezone first
+    auto fromDt = fromTime;
+    fromDt.setTimeZone(KnowledgeDb::timezoneForAirport(from));
+    auto toDt = toTime;
+    toDt.setTimeZone(KnowledgeDb::timezoneForAirport(to));
+    return fromDt.secsTo(toDt) / 60;
+}
+
 static bool conflictIfSet(const QDateTime &lhs, const QDateTime &rhs)
 {
     return lhs.isValid() && rhs.isValid() && lhs != rhs;
@@ -244,8 +254,11 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
                 } else if (isPlausibleBoardingTime(times[1], times[2]) && isPlausibleFlightTime(times[2], times[0].addDays(1), from, to)) {
                     applyFlightTimes(result, times[1], times[2], times[0].addDays(1));
                 }
-
                 // TODO handle boarding before midnight
+                // departure/arrival/duration
+                else if (isPlausibleFlightTime(times[1], times[2], from, to) && flightDuration(times[1], times[2], from, to) == (times[0].time().hour() * 60 + times[0].time().minute())) {
+                    applyFlightTimes(result, {}, times[1], times[2]);
+                }
             }
         }
 

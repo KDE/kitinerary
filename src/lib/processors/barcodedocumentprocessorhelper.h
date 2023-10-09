@@ -16,7 +16,7 @@ class ExtractorEngine;
 /** Barcode-related document processor implementation details. */
 namespace BarcodeDocumentProcessorHelper
 {
-void expandNode(const QImage &img, BarcodeDecoder::BarcodeTypes barcodeHints, ExtractorDocumentNode &parent, const ExtractorEngine *engine);
+bool expandNode(const QImage &img, BarcodeDecoder::BarcodeTypes barcodeHints, ExtractorDocumentNode &parent, const ExtractorEngine *engine);
 }
 
 }

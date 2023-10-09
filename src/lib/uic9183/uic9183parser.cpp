@@ -126,6 +126,19 @@ void Uic9183Parser::parse(const QByteArray &data)
     inflateEnd(&stream);
     d->m_payload.truncate(d->m_payload.size() - stream.avail_out);
     //qCDebug(Log) << res <<  d->m_payload << stream.avail_out;
+
+    // workaround for Renfe (1071) having various errors...
+    if (d->m_payload.size() > 600 && d->m_payload.startsWith("U_HEAD0100531071") && d->m_payload[54] == 'U' && d->m_payload[36] == ' ') {
+        qCWarning(Log) << "Applying Renfe workaround for broken UIC 913.8 content...";
+        d->m_payload.remove(36, 1); // off by one in U_HEAD
+        const auto idx = d->m_payload.indexOf("U_TLAY00");
+        if (idx < d->m_payload.size() + 400 && std::strncmp(d->m_payload.constData() + idx + 12, "RCT2", 4) != 0) {
+            d->m_payload.insert(idx + 7, "1"); // wrong U_TLAY version
+            d->m_payload.replace(idx + 12, 4, "RCT2"); // wrong layout type
+            d->m_payload.remove(idx + 20, 1); // garbage trailing the layout type?
+            qCDebug(Log) << d->m_payload;
+        }
+    }
 }
 
 bool Uic9183Parser::isValid() const

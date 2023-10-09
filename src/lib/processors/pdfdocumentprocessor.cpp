@@ -42,7 +42,7 @@ bool PdfDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringV
 static void applyContextDateTime(PdfDocument *pdf, ExtractorDocumentNode &node)
 {
     // ignore broken PDF times for Amadeus documents
-    if (pdf->producer() == QLatin1String("Amadeus") && pdf->creationTime() == pdf->modificationTime() && pdf->creationTime().date() == QDate(2011, 5, 10)) {
+    if (pdf->producer() == QLatin1String("Amadeus") && pdf->creationTime() == pdf->modificationTime() && pdf->creationTime().date().year() <= 2013) {
         return;
     }
 
@@ -120,7 +120,14 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
 
             // technically not our job to do this here rather than letting the image node processor handle this
             // but we have the output aspect ratio of the barcode only here, which gives better decoding hints
-            BarcodeDocumentProcessorHelper::expandNode(imgData, barcodeHints, childNode, engine);
+            if (BarcodeDocumentProcessorHelper::expandNode(imgData, barcodeHints, childNode, engine)) {
+                continue;
+            }
+
+            // if this failed, check if the image as a aspect-ratio distorting scale and try again with that
+            if (img.hasAspectRatioTransform()) {
+                BarcodeDocumentProcessorHelper::expandNode(img.applyAspectRatioTransform(imgData), barcodeHints, childNode, engine);
+            }
         }
 
         // handle full page raster images

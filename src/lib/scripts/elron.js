@@ -5,7 +5,6 @@
 
 function parsePdfTicket(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
-    console.log(text);
     let res = JsonLd.newTrainReservation();
     const trip = text.match(/(\d\d:\d\d) (\S.*) - (\d\d:\d\d) (\S.*)  +(\d\d\.\d\d\.\d{4})\n *(\S.*?) /);
     res.reservationFor.departureTime = JsonLd.toDateTime(trip[5] + ' ' + trip[1], 'dd.MM.yyyy hh:mm', 'ee');

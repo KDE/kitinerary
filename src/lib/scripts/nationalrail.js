@@ -83,7 +83,7 @@ function parseRSP6(text) {
         }
         const seatLetter = readRSP6String(rsp6, 422 + offset, 1);
         const seatNum = rsp6.readNumberMSB(428 + offset, 7);
-        if (seatLetter || seatNum) {
+        if ((seatLetter && seatLetter != '*') || seatNum) {
             res.reservedTicket.ticketedSeat.seatNumber = (seatLetter ? seatLetter : "") + (seatNum ? seatNum : "");
         }
         offset += 45;
@@ -100,7 +100,7 @@ function parseRSP6(text) {
 function parseTicket(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
     var res = triggerNode.result[0];
-    const header = text.match(/= +(\d{2}[ -][A-Z][a-z]{2}[ -]\d{4}) +(?:Out: |Ret: )?([A-Z]{3}) ?- ?([A-Z]{3})\n(.*)  +(.*)/);
+    const header = text.match(/ +(\d{2}[ -][A-Z][a-z]{2}[ -]\d{4}) +(?:Out: |Ret: )?([A-Z]{3}) ?- ?([A-Z]{3})\n(.*)  +(.*)/);
     const date = header[1].replace(/-/g, ' ');
     const itinerary = text.match(/Itinerary.*\n +(.*)\n +(\d{2}:\d{2})\n +([\S\s]*?)\n +(\d{2}:\d{2})\n +(.*)/);
 

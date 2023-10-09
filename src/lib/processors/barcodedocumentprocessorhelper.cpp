@@ -11,10 +11,10 @@
 
 using namespace KItinerary;
 
-static void appendBarcodeResult(const BarcodeDecoder::Result &result, ExtractorDocumentNode &parent, const ExtractorEngine *engine)
+static bool appendBarcodeResult(const BarcodeDecoder::Result &result, ExtractorDocumentNode &parent, const ExtractorEngine *engine)
 {
     if (result.contentType == BarcodeDecoder::Result::None) {
-        return;
+        return false;
     }
 
     ExtractorDocumentNode childNode;
@@ -30,7 +30,7 @@ static void appendBarcodeResult(const BarcodeDecoder::Result &result, ExtractorD
 
     if (childNode.isA<QByteArray>() || childNode.isA<QString>()) {
         parent.appendChild(childNode);
-        return;
+        return true;
     }
 
     ExtractorDocumentNode rawNode;
@@ -41,16 +41,19 @@ static void appendBarcodeResult(const BarcodeDecoder::Result &result, ExtractorD
     }
     rawNode.appendChild(childNode);
     parent.appendChild(rawNode);
+    return true;
 }
 
-void BarcodeDocumentProcessorHelper::expandNode(const QImage &img, BarcodeDecoder::BarcodeTypes barcodeHints, ExtractorDocumentNode &parent, const ExtractorEngine* engine)
+bool BarcodeDocumentProcessorHelper::expandNode(const QImage &img, BarcodeDecoder::BarcodeTypes barcodeHints, ExtractorDocumentNode &parent, const ExtractorEngine* engine)
 {
     if (barcodeHints & BarcodeDecoder::IgnoreAspectRatio) {
         const auto results = engine->barcodeDecoder()->decodeMulti(img, barcodeHints);
+        bool found = false;
         for (const auto &res : results) {
-            appendBarcodeResult(res, parent, engine);
+            found = appendBarcodeResult(res, parent, engine) || found; // no short-circuit evaluation!
         }
+        return found;
     } else {
-        appendBarcodeResult(engine->barcodeDecoder()->decode(img, barcodeHints), parent, engine);
+        return appendBarcodeResult(engine->barcodeDecoder()->decode(img, barcodeHints), parent, engine);
     }
 }

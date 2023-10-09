@@ -9,7 +9,6 @@ function parseETicket(pdf) {
     let reservations = [];
     for(let idx = 0;;) {
         const leg = leftCol.substr(idx).match(/([A-Z0-9]{2})(\d{1,4})  +... \(([A-Z]{3})\), (.*)\n(.*?)  +\S*, (.*)\n.*\n *... \(([A-Z]{3})\), (.*)\n.*, (.*)\n/);
-        console.log(leg);
         if (!leg)
             break;
         idx += leg.index + leg[0].length;
