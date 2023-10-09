@@ -35,11 +35,11 @@ namespace SortUtil
      *  This can be @c false even is SortUtil::startDateTime returns a valid
      *  result, if there is only a start date available.
      */
-    bool hasStartTime(const QVariant &elem);
+    KITINERARY_EXPORT bool hasStartTime(const QVariant &elem);
     /** Returns whether the given element has an end time.
      *  @see hasStartTime
      */
-    bool hasEndTime(const QVariant &elem);
+    KITINERARY_EXPORT bool hasEndTime(const QVariant &elem);
 }
 
 }
