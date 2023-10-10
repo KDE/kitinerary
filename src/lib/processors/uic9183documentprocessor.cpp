@@ -127,7 +127,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 trip.setTrainNumber(rct2.trainNumber());
                 seat.setSeatSection(rct2.coachNumber());
                 seat.setSeatNumber(rct2.seatNumber());
-                Q_FALLTHROUGH();
+                [[fallthrough]];
             }
             case Rct2Ticket::Transport:
             case Rct2Ticket::Upgrade:
