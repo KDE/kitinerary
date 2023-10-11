@@ -210,7 +210,7 @@ bool TrainStationDbGenerator::fetchCountryInformation()
         SELECT DISTINCT ?station ?isoCode WHERE {
             ?station (wdt:P31/wdt:P279*) wd:Q55488.
             ?station wdt:P17 ?country.
-            ?country wdt:P297 ?isoCode.
+            ?country p:P297 [ ps:P297 ?isoCode ].
         } ORDER BY (?station))", "wikidata_trainstation_country.json");
     if (stationArray.isEmpty()) {
         qWarning() << "Empty query result!";
