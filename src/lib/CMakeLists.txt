@@ -5,7 +5,7 @@ if (BUILD_TOOLS)
     add_subdirectory(rsp)
     add_subdirectory(vdv/certs)
 endif()
-configure_file(config-kitinerary.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
+configure_file(config-kitinerary.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
 add_library(KPim6Itinerary ${kitinerary_lib_srcs})
 add_library(KPim6::Itinerary ALIAS KPim6Itinerary)
