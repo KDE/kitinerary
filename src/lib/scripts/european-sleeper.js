@@ -6,12 +6,13 @@
 function parseTicket(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
     let res = triggerNode.result[0];
-    res.reservationFor.trainNumber = text.match(/Train number (.*)\n/)[1];
+    res.reservationFor.trainNumber = text.match(/er ([A-Z]+ \d+)\n/)[1];
     res.reservedTicket.ticketNumber = res.reservationNumber;
-    res.reservationNumber = text.match(/Booking code (.*)\n/)[1];
+    res.reservationNumber = text.match(/code ([A-Z0-9]{4}-[A-Z0-9]{4})\n/)[1];
     const leg = text.match(/(\S.*\S)  +(\d\d:\d\d)  +(\S.*\S)  +(\d\d:\d\d)\n/);
-    res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + ' ' + leg[2], 'd MMM yyyy hh:mm', 'en');
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[3] + ' ' + leg[4], 'd MMM yyyy hh:mm', 'en');
+    res.reservationFor.departureDay = undefined; // off by one in their ERA FCB data...
+    res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + ' ' + leg[2], 'd MMM yyyy hh:mm', ['en', 'nl']);
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[3] + ' ' + leg[4], 'd MMM yyyy hh:mm', ['en', 'nl']);
     const seat = text.match(/Carriage (.*) Place (.*)\n/);
     if (seat) {
         res.reservedTicket.ticketedSeat.seatSection = seat[1];
