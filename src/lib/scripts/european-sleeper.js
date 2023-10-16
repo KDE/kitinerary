@@ -13,7 +13,7 @@ function parseTicket(pdf, node, triggerNode) {
     res.reservationFor.departureDay = undefined; // off by one in their ERA FCB data...
     res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + ' ' + leg[2], 'd MMM yyyy hh:mm', ['en', 'nl']);
     res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[3] + ' ' + leg[4], 'd MMM yyyy hh:mm', ['en', 'nl']);
-    const seat = text.match(/Carriage (.*) Place (.*)\n/);
+    const seat = text.match(/(?:Carriage|Rijtuig) (.*) (?:Place|Plaats) (.*)\n/);
     if (seat) {
         res.reservedTicket.ticketedSeat.seatSection = seat[1];
         res.reservedTicket.ticketedSeat.seatNumber = seat[2];
