@@ -3,14 +3,27 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+function readDateTime(pass, fieldName) {
+    const f = pass.field[fieldName];
+    if (!f)
+        return undefined;
+    const v = f.value;
+    if (typeof v === "string")
+        return JsonLd.toDateTime(v, ['dd.MM.yyyy hh:mm', 'dd.MM.yyyy'], 'de');
+    return v;
+}
+
 function parsePass(content, node) {
     var res = node.result[0];
     res.reservationFor.name = content.field['eventName'].value;
-    res.reservationFor.startDate = JsonLd.toDateTime(content.field['doorsOpen'].value, ['dd.MM.yyyy hh:mm', 'dd.MM.yyyy'], 'de');
-    res.reservationFor.endDate = JsonLd.toDateTime(content.field['doorsClose'].value, ['dd.MM.yyyy hh:mm', 'dd.MM.yyyy'], 'de');
+    res.reservationFor.startDate = readDateTime(content, 'doorsOpen');
+    res.reservationFor.endDate = readDateTime(content, 'doorsClose');
+    res.reservationFor.doorTime = readDateTime(content, 'doorsAdmission');
     res.reservationFor.url = content.field['website'].value;
-    res.underName = JsonLd.newObject('Person');
-    res.underName.name = content.field['name'].value;
+    if (content.field['name']) {
+        res.underName = JsonLd.newObject('Person');
+        res.underName.name = content.field['name'].value;
+    }
     res.reservationNumber = content.field['orderCode'].value;
     res.reservedTicket.name = content.field['ticket'].value;
     return res;
