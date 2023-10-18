@@ -195,7 +195,7 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
                     // look for a following terminal name at the position after s
                     const auto offset = s.size() + s.data() - pageText.data();
                     const auto res = terminalFinder.find(QStringView(pageText).mid(offset));
-                    if (res.hasResult()) {
+                    if (res.hasResult() && res.name != code.toString()) {
                         terminalNames[(*it2).first] = res.name;
                     }
                 }
