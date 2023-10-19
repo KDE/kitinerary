@@ -153,7 +153,7 @@ private Q_SLOTS:
             {_("KRAUSE"),{}, {}}
         };
 
-        QTest::newRow("double given name") << QVector<QStringList> {
+        QTest::newRow("double given name") << QList<QStringList> {
             {_("Kai Uwe Broulik"), _("Kai Uwe"), _("Broulik")},
             {_("Kai Broulik"), _("Kai"), _("Broulik")},
         };
