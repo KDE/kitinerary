@@ -5,7 +5,7 @@
 
 function cleanText(s)
 {
-    return s.replace(/<\d+>/, " ");
+    return s.replace(/<(\d+)>/g, (_,n)=>' ąćęłńóśźżĄĆĘŁŃÓŚŹŻ'[n]);
 }
 
 // see https://community.kde.org/KDE_PIM/KItinerary/PKP_Barcode
