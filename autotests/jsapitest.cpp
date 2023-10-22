@@ -40,6 +40,7 @@ private Q_SLOTS:
         QTest::newRow("short month name en") << s("2018 Mar 22 19:37") << s("yyyy MMM dd hh:mm") << s("en") << QDateTime({2018, 3, 22}, {19, 37});
         QTest::newRow("short month name sv") << s("2018 Mar 22 19:37") << s("yyyy MMM dd hh:mm") << s("sv_SE") << QDateTime({2018, 3, 22}, {19, 37});
         QTest::newRow("short month name de") << s("2018 Mai 22 19:37") << s("yyyy MMM dd hh:mm") << s("de") << QDateTime({2018, 5, 22}, {19, 37});
+        QTest::newRow("short month name nl") << s("30 okt 2023 22:34") << s("d MMM yyyy hh:mm") << s("nl") << QDateTime({2023, 10, 30}, {22, 34});
         QTest::newRow("missing year") << s("1 22 19:37") << s("M dd hh:mm") << s("en") << QDateTime({2019, 1, 22}, {19, 37});
         QTest::newRow("December short sv") << s("4 dec 2012 07:05") << s("d MMM yyyy hh:mm") << s("sv_SE") << QDateTime({2012, 12, 4}, {7, 5});
         QTest::newRow("time only") << s("19:08") << s("hh:mm") << s("en") << QDateTime({1970, 1, 1}, {19, 8});
