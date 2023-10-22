@@ -60,11 +60,20 @@ function extractBoardingPass(pdf, node, barcode)
 {
     let res = barcode.result[0];
     const text = pdf.pages[barcode.location].text;
-    const times = text.match(/\d\d \S+ (\d\d:\d\d) +\d\d \S+ (\d\d:\d\d)/);
+    const times = text.match(/\d\d \S+ (\d\d:\d\d) +(?:\d\d \S+)? (\d\d:\d\d)/);
     res.reservationFor.departureTime = JsonLd.toDateTime(times[1], 'hh:mm', 'en');
     res.reservationFor.arrivalTime = JsonLd.toDateTime(times[2], 'hh:mm', 'en');
-    const boarding = text.match(/(\d\d:\d\d) GRUPO (\S*)/);
+    const boarding = text.match(/(?:SEAT|ASIENTO)\n *(\d\d:\d\d) (?:GRUPO (\S*))?/);
     res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[1], 'hh:mm', 'en');
     res.boardingGroup = boarding[2];
+    return res;
+}
+
+function extractPkPass(pass, node)
+{
+    let res = node.result[0];
+    res.reservationFor.departureTime = JsonLd.toDateTime(pass.field['horaSalida'].value, 'hh:mm', 'es');
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(pass.field['horaLlegada'].value, 'hh:mm', 'es');
+    res.boardingGroup = pass.field['group'].value
     return res;
 }

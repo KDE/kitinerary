@@ -1,0 +1,28 @@
+[
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "@no-q.info",
+                "mimeType": "message/rfc822",
+                "scope": "Current"
+            }
+        ],
+        "function": "extractMail",
+        "mimeType": "message/rfc822",
+        "script": "no-q.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "@no-q.info",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "promoteIcalEvent",
+        "mimeType": "internal/event",
+        "script": "generic.js"
+    }
+]

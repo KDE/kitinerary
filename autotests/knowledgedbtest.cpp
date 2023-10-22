@@ -125,6 +125,11 @@ private Q_SLOTS:
         station = KnowledgeDb::stationForIbnr(IBNR{8000404});
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(station.country, CountryId{"DE"});
+
+        // Berlin Gesundbrunnen has complex closing/reopening times in Wikidata that can confuse the generator
+        station = KnowledgeDb::stationForIbnr(IBNR{8011102});
+        QVERIFY(station.coordinate.isValid());
+        QCOMPARE(station.country, CountryId{"DE"});
     }
 
     void testUICLookup()
@@ -138,6 +143,10 @@ private Q_SLOTS:
         station = KnowledgeDb::stationForUic(UICStation{1001332});
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(station.country, CountryId{"FI"});
+
+        // unassigned UIC code, but ambigiously used in DB tickets and SNCF API
+        station = KnowledgeDb::stationForUic(UICStation{8003137});
+        QVERIFY(!station.coordinate.isValid());
     }
 
     void testSncfStationIdLookup()

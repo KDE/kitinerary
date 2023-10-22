@@ -12,9 +12,8 @@ function build-static-qt-module() {
     mkdir -p $STAGING_ROOT
     pushd $BUILD_ROOT
 
-    git clone https://invent.kde.org/qt/qt/$module
+    git clone --branch kde/5.15 --depth 1 https://invent.kde.org/qt/qt/$module
     cd $module
-    git checkout kde/5.15
     mkdir build
     cd build
     if [ $module == "qtbase" ]; then

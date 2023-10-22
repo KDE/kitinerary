@@ -9,9 +9,8 @@ mkdir -p $STAGING_ROOT
 
 pushd $BUILD_ROOT
 
-git clone https://github.com/openssl/openssl.git
+git clone --branch OpenSSL_1_1_1-stable --depth 1 https://github.com/openssl/openssl.git
 cd openssl
-git checkout OpenSSL_1_1_1-stable
 
 ./config --prefix=$STAGING_ROOT --openssldir=$STAGING_ROOT
 make -j 4
