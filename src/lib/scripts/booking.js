@@ -157,7 +157,7 @@ function parseHtml(doc, node)
         res.reservationFor.address.streetAddress = addr[1];
         res.reservationFor.address.addressLocality = addr[2];
         res.reservationFor.address.postalCode = addr[3];
-        res.reservationFor.address.addressCountry = addr[4];
+        res.reservationFor.address.addressCountry = addr[4].split('\n')[0];
 
         if (fullAddr.match(/CANCELED$/)) {
             res.reservationStatus = "ReservationCancelled"
