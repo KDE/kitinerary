@@ -3,6 +3,21 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+function parseLocation(node, location)
+{
+    location.name = node.eval('n')[0].content;
+    location.identifier = 'ibnr:' + node.eval('nr')[0].content;
+    const plz = node.eval('plz');
+    if (plz.length > 0)
+        location.address.postalCode = plz[0].content;
+    const x = node.eval('x');
+    if (x.length > 0)
+        location.geo.longitude = x[0].content / 1000000;
+    const y = node.eval('y');
+    if (y.length > 0)
+        location.geo.latitude = y[0].content / 1000000;
+}
+
 function parseOnlineTicket(xml)
 {
     // TODO handle multi-ticket
@@ -13,14 +28,7 @@ function parseOnlineTicket(xml)
         let res = JsonLd.newTrainReservation();
         res.reservationFor.trainNumber = train.attribute('tn');
         const dep = train.eval('dep')[0];
-        res.reservationFor.departureStation.name = dep.eval('n')[0].content;
-        res.reservationFor.departureStation.identifier = 'ibnr:' + dep.eval('nr')[0].content;
-        const depPlzMatch = dep.eval('plz');
-        if (depPlzMatch.length > 0) {
-            res.reservationFor.departureStation.address.postalCode = depPlzMatch[0].content;
-        }
-        res.reservationFor.departureStation.geo.longitude = dep.eval('x')[0].content / 1000000;
-        res.reservationFor.departureStation.geo.latitude = dep.eval('y')[0].content / 1000000;
+        parseLocation(dep, res.reservationFor.departureStation);
         const depPtfMatch = dep.eval('ptf');
         if (depPtfMatch.length > 0) {
             res.reservationFor.departurePlatform = depPtfMatch[0].content;
@@ -28,14 +36,7 @@ function parseOnlineTicket(xml)
         res.reservationFor.departureTime = dep.attribute('dt').substr(0, 11) + dep.attribute('t');
 
         const arr = train.eval('arr')[0];
-        res.reservationFor.arrivalStation.name = arr.eval('n')[0].content;
-        res.reservationFor.arrivalStation.identifier = 'ibnr:' + arr.eval('nr')[0].content;
-        const arrPlzMatch = arr.eval('plz');
-        if (arrPlzMatch.length > 0) {
-            res.reservationFor.arrivalStation.address.postalCode = arrPlzMatch[0].content;
-        }
-        res.reservationFor.arrivalStation.geo.longitude = arr.eval('x')[0].content / 1000000;
-        res.reservationFor.arrivalStation.geo.latitude = arr.eval('y')[0].content / 1000000;
+        parseLocation(arr, res.reservationFor.arrivalStation);
         const arrPtfMatch = arr.eval('ptf');
         if (arrPtfMatch.length > 0) {
             res.reservationFor.arrivalPlatform = arrPtfMatch[0].content;
@@ -58,7 +59,12 @@ function parseOnlineTicket(xml)
             }
             // TODO maybe better to use plaetze/platz/platznr|wagennr, but needs a multi-seat example
             train.reservedTicket.ticketedSeat.seatSection = seat.eval('nvplist/nvp[@name="wagennummer"]')[0].content;
-            train.reservedTicket.ticketedSeat.seatNumber = seat.eval('nvplist/nvp[@name="plaetze2"]')[0].content;
+            const plaetze2 = seat.eval('nvplist/nvp[@name="plaetze2"]');
+            if (plaetze2.length > 0)
+                train.reservedTicket.ticketedSeat.seatNumber = plaetze2[0].content;
+            else {
+                train.reservedTicket.ticketedSeat.seatNumber = seat.eval('txt')[0].content.match(/Pl. (\d+)/)[1];
+            }
             break;
         }
     }
@@ -69,9 +75,15 @@ function parseOnlineTicket(xml)
         return result;
     }
 
-    const barcode = tickets[0].eval('//htdata/ht[@name="barcode"]')[0];
-    const ticket = ExtractorEngine.extract(ByteArray.fromBase64(barcode.content.substr(22).trim())).result[0];
-    ticket.reservedTicket.ticketNumber = tickets[0].eval('mtk/ot_nr_hin')[0].content;
+    const barcode = tickets[0].eval('//htdata/ht[@name="barcode"]');
+    let ticket = {};
+    if (barcode.length > 0) {
+        ticket = ExtractorEngine.extract(ByteArray.fromBase64(barcode[0].content.substr(22).trim())).result[0];
+        ticket.reservedTicket.ticketNumber = tickets[0].eval('mtk/ot_nr_hin')[0].content;
+    } else {
+        const barcode = tickets[0].eval('//htdata/ht')[0];
+        ticket = ExtractorEngine.extract(ByteArray.fromBase64(barcode.content.substr(0).trim())).result[0];
+    }
     let mergedResult = [];
     for (let train of result) {
         if (train['@type'] == 'BusReservation') {
