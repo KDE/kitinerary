@@ -69,6 +69,8 @@ int main(int argc, char **argv)
     parser.addOption(nameOpt);
     QCommandLineOption refOpt(QStringLiteral("ref"), QStringLiteral("Ticket reference number."), QStringLiteral("ref"));
     parser.addOption(refOpt);
+    QCommandLineOption kwidOpt(QStringLiteral("kwid"), QStringLiteral("DB kwid UUID."), QStringLiteral("ref"));
+    parser.addOption(kwidOpt);
     QCommandLineOption sourceOpt(QStringLiteral("source"), QStringLiteral("Ticket provider (db or sncf)."), QStringLiteral("provider"));
     parser.addOption(sourceOpt);
     QCommandLineOption harOpt(QStringLiteral("har"), QStringLiteral("File to write HTTP communication to."), QStringLiteral("file"));
@@ -87,7 +89,7 @@ int main(int argc, char **argv)
     if (parser.value(sourceOpt) == QLatin1String("db")) {
         QNetworkRequest req(QUrl(QStringLiteral("https://fahrkarten.bahn.de/mobile/dbc/xs.go?")));
         req.setHeader(QNetworkRequest::ContentTypeHeader, QByteArray("application/x-www-form-urlencoded"));
-        QByteArray postData("<rqorderdetails version=\"1.0\"><rqheader v=\"19120000\" os=\"KCI\" app=\"KCI-Webservice\"/><rqorder on=\"" + parser.value(refOpt).toUtf8() + "\"/><authname tln=\"" + parser.value(nameOpt).toUtf8() + "\"/></rqorderdetails>");
+        QByteArray postData("<rqorderdetails version=\"1.0\"><rqheader v=\"23080000\" os=\"KCI\" app=\"KCI-Webservice\"/><rqorder on=\"" + parser.value(refOpt).toUtf8() + (parser.isSet(kwidOpt) ? QByteArray("\" kwid=\"" + parser.value(kwidOpt).toUtf8()) : QByteArray()) + "\"/><authname tln=\"" + parser.value(nameOpt).toUtf8() + "\"/></rqorderdetails>");
         reply = nam.post(req, postData);
         harPostRequest(req, postData, harEntry);
     } else if (parser.value(sourceOpt) == QLatin1String("sncf")) {
