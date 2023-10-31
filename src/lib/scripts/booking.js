@@ -90,6 +90,15 @@ function main(text, node) {
     }
 }
 
+function parseDateTimeAttribute(attr) {
+    // valid ISO format (when time is present)
+    if (attr.match(/^\d{4}-\d\d-\d\dT\d\d:\d\d/)) {
+        // chop of UTC offset if present, that is based on time of booking, not time of travel
+        return attr.substr(0, 19);
+    }
+    return JsonLd.toDateTime(attr.substr(0, 10), "yyyy-MM-dd", "en");
+}
+
 function parseHtmlCommon(doc, node, res)
 {
     const aElems = doc.eval('//a');
@@ -109,9 +118,8 @@ function parseHtmlCommon(doc, node, res)
     }
 
     const times = doc.eval('//time');
-    // chop of UTC offset if present, that is based on time of booking, not time of travel
-    res.checkinTime = times[0].attribute("datetime").substr(0, 19);
-    res.checkoutTime = times[1].attribute("datetime").substr(0, 19);
+    res.checkinTime = parseDateTimeAttribute(times[0].attribute("datetime"));
+    res.checkoutTime = parseDateTimeAttribute(times[1].attribute("datetime"));
 
     const text = doc.root.recursiveContent;
     for (let locale in regExMap) {
