@@ -380,7 +380,7 @@ QVariant HtmlDocument::eval(const QString &xpath) const
 HtmlDocument* HtmlDocument::fromData(const QByteArray &data, QObject *parent)
 {
 #if HAVE_LIBXML2
-    auto tree = htmlReadMemory(data.constData(), data.size(), nullptr, nullptr, HTML_PARSE_RECOVER | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING | HTML_PARSE_NOBLANKS | HTML_PARSE_NONET | HTML_PARSE_COMPACT);
+    auto tree = htmlReadMemory(data.constData(), data.size(), nullptr, "utf-8", HTML_PARSE_RECOVER | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING | HTML_PARSE_NOBLANKS | HTML_PARSE_NONET | HTML_PARSE_COMPACT);
     if (!tree) {
         return nullptr;
     }
