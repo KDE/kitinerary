@@ -4,6 +4,8 @@
 -->
 <RCC>
     <qresource prefix="/org.kde.pim/kitinerary/extractors">
+        <file>12go.json</file>
+        <file>12go.js</file>
         <file>accor.json</file>
         <file>accor.js</file>
         <file>acprail.json</file>
