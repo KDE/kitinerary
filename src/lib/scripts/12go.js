@@ -21,5 +21,7 @@ function extractPdf(pdf) {
     res.reservationFor.departureBusStop.address.addressCountry = addr[addr.length - 1];
     res.reservationFor.departureBusStop.address.addressLocality = addr[addr.length - 2];
     res.reservationFor.departureBusStop.address.streetAddress = addr.slice(0, addr.length -2).join(',');
+    res.priceCurrency = text.match(/Passenger.*\s+([A-Z]{3})/)[1];
+    res.totalPrice = text.match(/Total\s+([\d,]+)\n/)[1].replace(',', '');
     return res;
 }
