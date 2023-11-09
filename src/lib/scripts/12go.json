@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "12Go Asia Pte\\.",
+            "mimeType": "text/plain",
+            "scope": "Children"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "12go.js"
+}
