@@ -33,7 +33,7 @@ using namespace KItinerary;
 
 enum {
     MinDocumentSize = 4,
-    MaxDocumentSize = 4000000,
+    MaxDocumentSize = 10000000,
 };
 
 namespace KItinerary {

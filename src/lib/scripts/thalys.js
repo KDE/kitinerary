@@ -65,20 +65,20 @@ function parsePdfTicket(pdf, node, triggerNode)
     const depDay = page.text.match(/\d\d\/\d{2}\/\d{4} +(\d{2})\/(\d{2})\/(\d{4})/);
     res.reservationFor.departureDay = depDay[3] + '-' + depDay[2] + '-' + depDay[1] + 'T00:00:00';
 
-    const dep = page.textInRect(0.0, 0.15, 0.35, 0.3).match(/([\s\S]+)\n(?:DÉPART À|ABFAHRT|DEPARTURE AT)\n(\d\d:\d\d)/);
+    const dep = page.textInRect(0.0, 0.15, 0.35, 0.3).match(/([\s\S]+)\n(?:DÉPART À|ABFAHRT|DEPARTURE AT|VERTREK OM)\n(\d\d:\d\d)/);
     res.reservationFor.departureStation.name = dep[1];
     res.reservationFor.departureTime = res.reservationFor.departureDay.substr(0, 11) + dep[2];
 
-    const arr = page.textInRect(0.35, 0.15, 0.65, 0.3).match(/([\s\S]+)\n(?:ARRIVÉE À|ANKUNFT|ARRIVAL AT)\n(\d\d:\d\d)/);
+    const arr = page.textInRect(0.35, 0.15, 0.65, 0.3).match(/([\s\S]+)\n(?:ARRIVÉE À|ANKUNFT|ARRIVAL AT|AANKOMST OM)\n(\d\d:\d\d)/);
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalTime = res.reservationFor.departureDay.substr(0, 11) + arr[2];
 
-    const passenger = page.textInRect(0.0, 0.0, 0.35, 0.1).match(/(?:PASSAGER|FAHRGAST|PASSENGER)\n(.*)\n/);
+    const passenger = page.textInRect(0.0, 0.0, 0.35, 0.1).match(/(?:PASSAGER|FAHRGAST|PASSENGER|REIZIGER)\n(.*)\n/);
     res.underName.name = passenger[1];
     res.reservationNumber = page.textInRect(0.8, 0.0, 1.0,  0.2).match(/PNR\n([A-Z0-9]+)/)[1];
 
     // there is always a 17 digit number in ssb.type1OpenText - but what is that if no membership program is used??
-    if (page.text.match("MEMBERSHIP "))
+    if (page.text.match(/(?:MEMBERSHIP |LOYALTYNUMMER)/))
         res.programMembershipUsed.membershipNumber = triggerNode.content.type1OpenText.match(/(\d{17})/)[1];
 
     const price = page.text.match(/(\d+ EUR)/);

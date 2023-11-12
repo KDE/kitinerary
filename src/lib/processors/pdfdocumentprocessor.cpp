@@ -28,7 +28,7 @@ Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KItinerary::PdfDocument>)
 
 enum {
     MaxPageCount = 10, // maximum in the current test set is 6
-    MaxFileSize = 4000000, // maximum in the current test set is 980kB
+    MaxFileSize = 10000000, // maximum in the current test set is ~9MB
 };
 
 PdfDocumentProcessor::PdfDocumentProcessor() = default;
