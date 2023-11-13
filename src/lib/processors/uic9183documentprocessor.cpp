@@ -91,6 +91,19 @@ static ProgramMembership extractCustomerCard(const QList <Fcb::TariffType> &tari
     return {};
 }
 
+static void fixFcbStationCode(TrainStation &station)
+{
+    // UIC codes in Germany are wildly unreliable, there seem to be different
+    // code tables in use by different operators, so we unfortunately have to ignore
+    // those entirely
+    if (station.identifier().startsWith(QLatin1String("uic:80"))) {
+        PostalAddress addr;
+        addr.setAddressCountry(QStringLiteral("DE"));
+        station.setAddress(addr);
+        station.setIdentifier(QString());
+    }
+}
+
 void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     const auto p = node.content<Uic9183Parser>();
@@ -204,11 +217,13 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 TrainStation dep;
                 dep.setName(irt.fromStationNameUTF8);
                 dep.setIdentifier(FcbUtil::fromStationIdentifier(irt));
+                fixFcbStationCode(dep);
                 trip.setDepartureStation(dep);
 
                 TrainStation arr;
                 arr.setName(irt.toStationNameUTF8);
                 arr.setIdentifier(FcbUtil::toStationIdentifier(irt));
+                fixFcbStationCode(arr);
                 trip.setArrivalStation(arr);
 
                 trip.setDepartureTime(irt.departureDateTime(issueDt));
@@ -225,7 +240,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 if (irt.placesIsSet()) {
                     s.setSeatSection(QString::fromUtf8(irt.places.coach));
                     QStringList l;
-                    for (auto b : irt.places.placeIA5)
+                    for (const auto &b : irt.places.placeIA5)
                         l.push_back(QString::fromUtf8(b));
                     for (auto i : irt.places.placeNum)
                         l.push_back(QString::number(i));
@@ -265,10 +280,12 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     // TODO station identifier
                     TrainStation dep;
                     dep.setName(trainLink.fromStationNameUTF8);
+                    fixFcbStationCode(dep);
                     trip.setDepartureStation(dep);
 
                     TrainStation arr;
                     arr.setName(trainLink.toStationNameUTF8);
+                    fixFcbStationCode(arr);
                     trip.setArrivalStation(arr);
 
                     trip.setDepartureTime(trainLink.departureDateTime(issueDt));
