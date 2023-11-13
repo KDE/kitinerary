@@ -141,8 +141,8 @@ function parseTicket(text, uic918ticket) {
 
         // for outward journeys we have station ids from the UIC 918-3 code
         if (uic918ticket && header[1] !== "Rück") {
-            reservations[0].reservationFor.departureStation.identifier = uic918ticket.outboundDepartureStation.identifier;
-            reservations[reservations.length - 1].reservationFor.arrivalStation.identifier = uic918ticket.outboundArrivalStation.identifier;
+            reservations[0].reservationFor.departureStation = JsonLd.apply(JsonLd.toJson(uic918ticket.outboundDepartureStation), reservations[0].reservationFor.departureStation);
+            reservations[reservations.length - 1].reservationFor.arrivalStation = JsonLd.apply(JsonLd.toJson(uic918ticket.outboundArrivalStation), reservations[reservations.length - 1].reservationFor.arrivalStation);
             returnResIndex = reservations.length;
         } else {
             // propagate station ids from outward to return journey
