@@ -440,7 +440,7 @@ QDateTime Fcb::ReservationData::departureDateTime(const QDateTime &issueingDateT
 
 QDateTime Fcb::ReservationData::arrivalDateTime(const QDateTime &issueingDateTime) const
 {
-    if (!arrivalDateIsSet()) {
+    if (!arrivalTimeIsSet()) {
         return {};
     }
     const auto departureDt = departureDateTime(issueingDateTime);
