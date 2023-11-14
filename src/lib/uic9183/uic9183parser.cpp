@@ -446,6 +446,19 @@ Person Uic9183Parser::person() const
     return {};
 }
 
+static void fixFcbStationCode(TrainStation &station)
+{
+    // UIC codes in Germany are wildly unreliable, there seem to be different
+    // code tables in use by different operators, so we unfortunately have to ignore
+    // those entirely
+    if (station.identifier().startsWith(QLatin1String("uic:80"))) {
+        PostalAddress addr;
+        addr.setAddressCountry(QStringLiteral("DE"));
+        station.setAddress(addr);
+        station.setIdentifier(QString());
+    }
+}
+
 TrainStation Uic9183Parser::outboundDepartureStation() const
 {
     TrainStation station;
@@ -480,6 +493,7 @@ TrainStation Uic9183Parser::outboundDepartureStation() const
             station.setName(nrt.fromStationNameUTF8);
             station.setIdentifier(FcbUtil::fromStationIdentifier(nrt));
         }
+        fixFcbStationCode(station);
     }
 
     return station;
@@ -518,6 +532,7 @@ TrainStation Uic9183Parser::outboundArrivalStation() const
             station.setName(nrt.toStationNameUTF8);
             station.setIdentifier(FcbUtil::toStationIdentifier(nrt));
         }
+        fixFcbStationCode(station);
     }
 
     return station;
@@ -557,6 +572,7 @@ TrainStation Uic9183Parser::returnDepartureStation() const
                 }
             }
         }
+        fixFcbStationCode(station);
     }
 
     return station;
@@ -596,6 +612,7 @@ TrainStation Uic9183Parser::returnArrivalStation() const
                 }
             }
         }
+        fixFcbStationCode(station);
     }
 
     return station;
