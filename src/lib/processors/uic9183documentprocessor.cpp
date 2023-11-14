@@ -212,6 +212,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 
     const auto fcb = p.findBlock<Fcb::UicRailTicketData>();
     if (fcb.isValid()) {
+        res.setPriceCurrency(QString::fromUtf8(fcb.issuingDetail.currency));
         const auto issueDt = fcb.issuingDetail.issueingDateTime();
         for (const auto &doc : fcb.transportDocument) {
             if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
@@ -257,6 +258,10 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 t.setTicketedSeat(s);
                 res.setProgramMembershipUsed(extractCustomerCard(irt.tariffs));
 
+                if (irt.priceIsSet()) {
+                    res.setTotalPrice(irt.price / std::pow(10, fcb.issuingDetail.currencyFract));
+                }
+
                 if (validator.isValidElement(trip)) {
                     res.setReservationFor(trip);
                     res.setReservedTicket(t);
@@ -271,6 +276,10 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 Ticket t(ticket);
                 t.setTicketedSeat(s);
                 res.setProgramMembershipUsed(extractCustomerCard(nrt.tariffs));
+
+                if (nrt.priceIsSet()) {
+                    res.setTotalPrice(nrt.price / std::pow(10, fcb.issuingDetail.currencyFract));
+                }
 
                 // check for TrainLinkType regional validity constrains
                 bool trainLinkTypeFound = false;
