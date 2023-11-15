@@ -91,7 +91,7 @@ endif()
 add_definitions(-DTRANSLATION_DOMAIN=\"kitinerary\")
 
 add_definitions(-DQT_NO_CONTEXTLESS_CONNECT)
-ecm_set_disabled_deprecation_versions(QT 6.6  KF 5.240.0)
+ecm_set_disabled_deprecation_versions(QT 6.6  KF 5.245.0)
 
 
 
