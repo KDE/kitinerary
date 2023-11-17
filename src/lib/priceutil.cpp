@@ -104,3 +104,5 @@ int PriceUtil::decimalCount(const QString &currency)
 {
     return PriceUtil::decimalCount(QStringView(currency));
 }
+
+#include "moc_priceutil.cpp"
