@@ -8,7 +8,10 @@
     },
     {
         "mimeType": "application/pdf",
-        "filter": [ { "field": "From", "match": "no-reply@flysas.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
+        "filter": [
+            { "field": "From", "match": "no-reply@flysas.com", "mimeType": "message/rfc822", "scope": "Ancestors" },
+            { "field": "title", "match": "^Report1$", "mimeType": "application/pdf", "scope": "Current" }
+        ],
         "script": "sas-receipt.js"
     }
 ]
