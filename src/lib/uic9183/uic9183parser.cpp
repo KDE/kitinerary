@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QTimeZone>
 
 #include <zlib.h>
 
@@ -301,7 +302,7 @@ QDateTime Uic9183Parser::validFrom() const
             if (dt.date().year() < 2000) {
                 dt = dt.addYears(100);
             }
-            dt.setTimeSpec(Qt::UTC);
+            dt.setTimeZone(QTimeZone::utc());
             return dt;
         }
     }
@@ -359,7 +360,7 @@ QDateTime Uic9183Parser::validUntil() const
             if (dt.date().year() < 2000) {
                 dt = dt.addYears(100);
             }
-            dt.setTimeSpec(Qt::UTC);
+            dt.setTimeZone(QTimeZone::utc());
             return dt;
         }
     }
