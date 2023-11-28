@@ -6,7 +6,7 @@
 function extractPkPass(pass) {
     let res = JsonLd.newLodgingReservation();
     res.reservationNumber = pass.field['booking-nr'].value;
-    res.checkinTime = pass.relevantDate;
+    res.checkinTime = pass.relevantDate.toJSON();
     const depDate = pass.field['booking-date'].value.match(/ - (\d\d\.\d\d\.\d\d)/);
     const depTime = pass.field['back_reservation'].value.match(/Check-out:.* (\d\d:\d\d)/);
     res.checkoutTime = JsonLd.toDateTime(depDate[1] + ' ' + depTime[1], 'dd.MM.yy hh:mm', 'en');
