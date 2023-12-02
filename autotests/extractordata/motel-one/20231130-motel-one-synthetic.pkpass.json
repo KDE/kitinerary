@@ -1,0 +1,40 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "LodgingReservation",
+        "checkinTime": {
+            "@type": "QDateTime",
+            "@value": "2023-11-30T15:00:00+01:00",
+            "timezone": "Europe/Berlin"
+        },
+        "checkoutTime": {
+            "@type": "QDateTime",
+            "@value": "2023-12-01T12:00:00+01:00",
+            "timezone": "Europe/Berlin"
+        },
+        "modifiedTime": "2018-01-01T00:00:00",
+        "pkpassPassTypeIdentifier": "pass.com.motel-one.booking",
+        "pkpassSerialNumber": "MO-${10 alnum}",
+        "potentialAction": [
+            {
+                "@type": "UpdateAction",
+                "target": "https://booking.motel-one.com/de/reservation/$serialNumber"
+            }
+        ],
+        "reservationFor": {
+            "@type": "LodgingBusiness",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "DE",
+                "addressLocality": "Berlin",
+                "postalCode": "10557",
+                "streetAddress": "Invalidenstraße 54"
+            },
+            "email": "berlin-hauptbahnhof@motel-one.com",
+            "name": "Berlin-Hauptbahnhof",
+            "telephone": "+49 30 3641005-0"
+        },
+        "reservationNumber": "$serialNumber",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]
