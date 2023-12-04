@@ -9,7 +9,9 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#ifdef QT_NETWORK_LIB
 #include <QNetworkReply>
+#endif
 
 using namespace KItinerary;
 
@@ -55,9 +57,11 @@ QDateTime HttpResponse::requestDateTime() const
 HttpResponse HttpResponse::fromNetworkReply(QNetworkReply *reply)
 {
     HttpResponse r;
+#ifdef QT_NETWORK_LIB
     r.d->url = reply->url();
     r.d->content = reply->readAll();
     r.d->requestDateTime = QDateTime::currentDateTime();
+#endif
     return r;
 }
 
