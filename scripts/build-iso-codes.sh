@@ -9,7 +9,7 @@ mkdir -p $STAGING_ROOT
 
 pushd $BUILD_ROOT
 
-git clone https://salsa.debian.org/iso-codes-team/iso-codes.git
+git clone --depth 1 https://salsa.debian.org/iso-codes-team/iso-codes.git
 cd iso-codes
 
 ./configure --prefix=$STAGING_ROOT

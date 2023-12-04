@@ -22,7 +22,7 @@ function build-static-qt-module() {
         $STAGING_ROOT/bin/qmake .. $@
     fi
     make -j 4
-    make install
+    make install/fast
 
     popd
 }

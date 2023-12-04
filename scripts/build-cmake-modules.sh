@@ -36,7 +36,7 @@ function build_cmake_module() {
         $@ -DCMAKE_BUILD_TYPE=Release ..
 
     make -j 4
-    make install
+    make install/fast
 
     popd
 }
