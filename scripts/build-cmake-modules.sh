@@ -50,7 +50,7 @@ function build_kde_module() {
 function build_kf_module() {
     local module=$1
     shift
-    build_cmake_module https://invent.kde.org/$module $module kf5 $@
+    build_cmake_module https://invent.kde.org/$module $module master $@
 }
 
 build_cmake_module https://gitlab.freedesktop.org/freetype/freetype.git freetype VER-2-12-1
@@ -75,10 +75,10 @@ build_cmake_module https://github.com/nu-book/zxing-cpp.git zxing-cpp v2.0.0 \
 
 # KDE Frameworks
 build_kf_module frameworks/extra-cmake-modules
-build_kf_module frameworks/karchive -DCMAKE_DISABLE_FIND_PACKAGE_LibLZMA=ON -DCMAKE_DISABLE_FIND_PACKAGE_BZip2=ON
+build_kf_module frameworks/karchive -DWITH_BZIP2=OFF -DWITH_LIBLZMA=OFF -DWITH_LIBZSTD=OFF
 build_kf_module frameworks/kcodecs
 build_kf_module frameworks/kconfig -DKCONFIG_USE_DBUS=OFF
-build_kf_module frameworks/kcoreaddons
+build_kf_module frameworks/kcoreaddons -DKCOREADDONS_USE_QML=OFF
 build_kf_module frameworks/ki18n -DBUILD_WITH_QML=OFF
 build_kf_module frameworks/kcalendarcore
 build_kf_module frameworks/kcontacts
