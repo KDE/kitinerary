@@ -6,16 +6,6 @@ set -x
 
 DEPLOY_ROOT=$BUILD_ROOT/$CI_PROJECT_PATH/build/
 
-function copy_file()
-{
-    local subpath=`dirname $1`
-    mkdir -p $DEPLOY_ROOT/$subpath
-    cp -v $STAGING_ROOT/$1 $DEPLOY_ROOT/$subpath
-}
-
-copy_file share/iso-codes/json/iso_3166-1.json
-copy_file share/iso-codes/json/iso_3166-2.json
-
 mkdir -p $DEPLOY_ROOT/share/
 cp -rv $STAGING_ROOT/share/locale $DEPLOY_ROOT/share/
 

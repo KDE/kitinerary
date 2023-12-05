@@ -79,7 +79,7 @@ build_kf_module frameworks/karchive -DWITH_BZIP2=OFF -DWITH_LIBLZMA=OFF -DWITH_L
 build_kf_module frameworks/kcodecs
 build_kf_module frameworks/kconfig -DKCONFIG_USE_DBUS=OFF
 build_kf_module frameworks/kcoreaddons -DKCOREADDONS_USE_QML=OFF
-build_kf_module frameworks/ki18n -DBUILD_WITH_QML=OFF
+build_kf_module frameworks/ki18n -DBUILD_WITH_QML=OFF -DKI18N_EMBEDDED_ISO_CODES_CACHE=ON
 build_kf_module frameworks/kcalendarcore
 build_kf_module frameworks/kcontacts
 
