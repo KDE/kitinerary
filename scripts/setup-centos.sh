@@ -19,7 +19,9 @@ yum install -y \
     which \
     zlib-devel \
     zlib-static \
-    python3
+    python3 \
+    perl-IPC-Cmd \
+    perl-Test-Simple
 
 # get latest CMake
 CMAKE_MINOR_VERSION=`echo $CMAKE_VERSION | sed -e 's/\.[^\.]*$//'`
