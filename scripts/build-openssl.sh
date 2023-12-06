@@ -11,7 +11,7 @@ mkdir -p $STAGING_ROOT
 
 pushd $BUILD_ROOT
 
-git clone --branch openssl-$OPENSSL_TAG --depth 1 https://github.com/openssl/openssl.git
+git clone --branch openssl-$OPENSSL_VERSION --depth 1 https://github.com/openssl/openssl.git
 cd openssl
 
 ./config --prefix=$STAGING_ROOT --openssldir=$STAGING_ROOT
