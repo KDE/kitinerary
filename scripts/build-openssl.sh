@@ -4,14 +4,14 @@
 set -e
 set -x
 
-OPENSSL_BRANCH=openssl-3.2
+OPENSSL_VERSION=3.2.0
 
 mkdir -p $BUILD_ROOT
 mkdir -p $STAGING_ROOT
 
 pushd $BUILD_ROOT
 
-git clone --branch $OPENSSL_BRANCH --depth 1 https://github.com/openssl/openssl.git
+git clone --branch openssl-$OPENSSL_TAG --depth 1 https://github.com/openssl/openssl.git
 cd openssl
 
 ./config --prefix=$STAGING_ROOT --openssldir=$STAGING_ROOT

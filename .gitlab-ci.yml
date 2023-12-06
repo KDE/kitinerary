@@ -12,13 +12,15 @@ include:
   # TODO reactivate once there is KF6 support in the Flatpak KDE runtime
   #     - /gitlab-templates/flatpak.yml
 
-# Manual job for building a fully static extractor binary for e.g. use by Nextcloud
+# Job for building a fully static extractor binary for e.g. use by Nextcloud
 static-extractor:
   stage: build
   image: centos:centos7
   tags:
     - Linux
-  when: manual
+  only:
+    changes:
+      - scripts/*.sh
   script:
     - export BUILD_ROOT=/builds
     - export STAGING_ROOT=/builds/staging

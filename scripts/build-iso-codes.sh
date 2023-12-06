@@ -4,12 +4,14 @@
 set -e
 set -x
 
+ISOCODES_VERSION=4.15.0
+
 mkdir -p $BUILD_ROOT
 mkdir -p $STAGING_ROOT
 
 pushd $BUILD_ROOT
 
-git clone --depth 1 https://salsa.debian.org/iso-codes-team/iso-codes.git
+git clone --branch v$ISOCODES_VERSION --depth 1 https://salsa.debian.org/iso-codes-team/iso-codes.git
 cd iso-codes
 
 ./configure --prefix=$STAGING_ROOT

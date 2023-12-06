@@ -4,7 +4,7 @@
 set -e
 set -x
 
-CMAKE_VERSION=3.25.1
+CMAKE_VERSION=3.27.9
 
 # install build dependencies
 yum install -y centos-release-scl

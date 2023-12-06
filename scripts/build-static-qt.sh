@@ -4,7 +4,7 @@
 set -e
 set -x
 
-QT_BRANCH=6.6
+QT_VERSION=6.6.1
 
 function build-static-qt-module() {
     local module=$1
@@ -14,7 +14,7 @@ function build-static-qt-module() {
     mkdir -p $STAGING_ROOT
     pushd $BUILD_ROOT
 
-    git clone --branch $QT_BRANCH --depth 1 https://invent.kde.org/qt/qt/$module
+    git clone --branch v$QT_VERSION --depth 1 https://invent.kde.org/qt/qt/$module
     cd $module
     mkdir build
     cd build
