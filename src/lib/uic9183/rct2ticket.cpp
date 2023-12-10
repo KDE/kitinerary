@@ -218,7 +218,11 @@ QDateTime Rct2Ticket::outboundDepartureTime() const
 
 QDateTime Rct2Ticket::outboundArrivalTime() const
 {
-    return d->parseTime(d->layout.text(6, 52, 5, 1).trimmed(), d->layout.text(6, 58, 5, 1).trimmed());
+    auto dt = d->parseTime(d->layout.text(6, 52, 5, 1).trimmed(), d->layout.text(6, 58, 5, 1).trimmed());
+    if (dt.isValid() && dt < outboundDepartureTime()) {
+        dt = dt.addYears(1);
+    }
+    return dt;
 }
 
 static QString rct2Clean(const QString &s)
@@ -261,7 +265,11 @@ QDateTime Rct2Ticket::returnDepartureTime() const
 
 QDateTime Rct2Ticket::returnArrivalTime() const
 {
-    return d->parseTime(d->layout.text(7, 52, 5, 1).trimmed(), d->layout.text(7, 58, 5, 1).trimmed());
+    auto dt = d->parseTime(d->layout.text(7, 52, 5, 1).trimmed(), d->layout.text(7, 58, 5, 1).trimmed());
+    if (dt.isValid() && dt < returnDepartureTime()) {
+        dt = dt.addYears(1);
+    }
+    return dt;
 }
 
 QString Rct2Ticket::returnDepartureStation() const
