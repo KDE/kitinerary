@@ -3,7 +3,7 @@
         "filter": [
             {
                 "field": "passTypeIdentifier",
-                "match": "pass.eu.pretix.ticket",
+                "match": "(pass\\.eu\\.pretix\\.ticket|pass\\.de\\.ccc\\.events\\.tickets)",
                 "mimeType": "application/vnd.apple.pkpass",
                 "scope": "Current"
             }
