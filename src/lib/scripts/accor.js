@@ -7,28 +7,22 @@
 function parseConfirmation(html) {
     var res = JsonLd.newLodgingReservation();
 
-    var elems = html.eval('//table//table//table//table//table//td[@align="right"]/..');
-    for (var i = 0; i < elems.length; ++i) {
-        var title = elems[i].firstChild.content;
-        if (title.match(/(Reservation number|Buchungsnummer)/i)) {
-            res.reservationNumber = elems[i].firstChild.nextSibling.recursiveContent;
-        }
-        if (title.match(/(Date of stay|Aufenthaltsdatum)/i)) {
-            const dtStr = elems[i].firstChild.nextSibling.recursiveContent;
-            var dt = dtStr.match(/(\d{2}[|/.]\d{2}[|/.]\d{4}).*(\d{2}[|/.]\d{2}[|/.]\d{4})/);
-            if (!dt) { // US format
-                dt = dtStr.match(/([A-Z][a-z]{2}\. \d{2}, \d{4}).*([A-Z][a-z]{2}\. \d{2}, \d{4})/);
-            }
-            if (dt) {
-                var separator = dt[2];
-                const formats = [ "dd.MM.yyyy", "dd/MM/yyyy", "MMM. dd, yyyy"];
-                res.checkinTime = JsonLd.toDateTime(dt[1], formats, "en");
-                res.checkoutTime = JsonLd.toDateTime(dt[2], formats, "en");
-            }
-        }
-    }
+    const content = html.root.recursiveContent;
+    res.reservationNumber = content.match(/(?:Reservation number|Buchungsnummer):?\s*([0-9A-Z]+)/)[1];
 
-    var hotelContent = html.eval('//table//table//table[@class="table-full"]')[0].recursiveContent;
+    let dt = content.match(/(\d{2}[|/.]\d{2}[|/.]\d{4}).*(\d{2}[|/.]\d{2}[|/.]\d{4})/);
+    if (!dt) // US format
+        dt = content.match(/([A-Z][a-z]{2}\. \d{2}, \d{4}).*([A-Z][a-z]{2}\. \d{2}, \d{4})/);
+    if (!dt)
+        dt = content.match(/(\d{2} [A-Z][a-z]{2} \d{4}).*(\d{2} [A-Z][a-z]{2} \d{4})/);
+    const formats = [ "dd.MM.yyyy", "dd/MM/yyyy", "MMM. dd, yyyy", "dd MMM yyyy"];
+    res.checkinTime = JsonLd.toDateTime(dt[1], formats, "en");
+    res.checkoutTime = JsonLd.toDateTime(dt[2], formats, "en");
+
+    let hotelNode = html.eval('//table//table//table[@class="table-full"]');
+    if (!hotelNode || hotelNode.length === 0)
+        hotelNode = html.eval('//table//table//table//table//tr/td/font/a/../../../..');
+    hotelContent = hotelNode[0].recursiveContent;
     hotelContent = hotelContent.replace(/\s+\n/, "\n");
 
     var hotel = hotelContent.match(/^(.*)\n+(.*\n.*)\n(?:.|\n)*Tel\s*:\s*([\d \/\+\(\)]+)\n(.+@.+?)[\s\n]/);

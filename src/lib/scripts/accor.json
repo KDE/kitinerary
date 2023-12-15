@@ -2,7 +2,7 @@
     "filter": [
         {
             "field": "From",
-            "match": "@reservation.accor-mail.com",
+            "match": "@(reservation\\.accor-mail\\.com|confirmation\\.all\\.com)",
             "mimeType": "message/rfc822",
             "scope": "Ancestors"
         }
