@@ -41,7 +41,7 @@
   <name xml:lang="uk">Командний засіб видобування KItinerary</name>
   <name xml:lang="x-test">xxKItinerary Command Line Extractorxx</name>
   <name xml:lang="zh-CN">KItinerary 命令行导出工具</name>
-  <summary>Command line reservation data extractor.</summary>
+  <summary>Command line reservation data extractor</summary>
   <summary xml:lang="ar">مستخرج بيانات الحجوزات بسطر الأوامر.</summary>
   <summary xml:lang="ca">Extractor de les dades de reserves mitjançant la línia d'ordres.</summary>
   <summary xml:lang="ca-valencia">Extractor de les dades de reserves mitjançant la línia d'ordres.</summary>
