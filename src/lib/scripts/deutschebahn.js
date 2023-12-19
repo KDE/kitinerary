@@ -163,7 +163,7 @@ function parseTicket(text, uic918ticket) {
 
     // international tickets have the booking reference somewhere on the side, so we don't really know
     // where it is relative to the itinerary
-    const bookingRef = text.match(/(?:Auftragsnummer|Auftrag \(NVS\)):\s*([A-Z0-9]{6,9})\n/);
+    const bookingRef = text.match(/(?:Auftragsnummer|Auftrag \(NVS\)):\s*([A-Z0-9]{6,9}|\d{12})\n/);
     const price = text.match(/(?:Summe|Gesamtpreis) *(\d+,\d{2} ?€)/)[1];
     for (var i = 0; i < reservations.length; ++i) {
         if (bookingRef) {
@@ -221,7 +221,10 @@ function parseReservation(pdf) {
 function applyUic9183ToReservation(res, uicNode)
 {
     const uicCode = uicNode.content;
-    res.reservationNumber = uicCode.pnr;
+    if (!res.reservationNumber || res.reservationNumber == uicCode.pnr)
+        res.reservationNumber = uicCode.pnr;
+    else
+        res.reservedTicket.ticketNumber = uicCode.pnr;
     res.reservationFor.provider = JsonLd.toJson(uicCode.issuer);
     if (uicNode.result.length > 0 && uicNode.result[0].programMembershipUsed)
         res.programMembershipUsed = uicNode.result[0].programMembershipUsed;
