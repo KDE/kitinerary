@@ -144,6 +144,21 @@ static bool isEmptyJsonLdObject(const QJsonObject &obj)
     return true;
 }
 
+// cache timezones by IANA id, with Qt6 QTimeZone(QByteArray) is unreasonably slow
+// on Android, so that loading Itinerary's cached public transport data takes up to 20secs...
+// can and should be removed once this has been fixed in Qt
+static QTimeZone timeZone(const QByteArray &tzId)
+{
+    static QHash<QByteArray, QTimeZone> s_tzCache;
+    const auto it = s_tzCache.constFind(tzId);
+    if (it != s_tzCache.constEnd()) {
+        return it.value();
+    }
+    auto tz = QTimeZone(tzId);
+    s_tzCache.insert(tzId, tz);
+    return tz;
+}
+
 static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
 {
     // enum handling must be done first, as prop.type() == Int
@@ -176,7 +191,7 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
             const auto dtObj = v.toObject();
             if (dtObj.value(QLatin1String("@type")).toString() == QLatin1String("QDateTime")) {
                 dt = QDateTime::fromString(dtObj.value(QLatin1String("@value")).toString(), Qt::ISODate);
-                dt.setTimeZone(QTimeZone(dtObj.value(QLatin1String("timezone")).toString().toUtf8()));
+                dt.setTimeZone(timeZone(dtObj.value(QLatin1String("timezone")).toString().toUtf8()));
             }
         } else {
             auto str = v.toString();
