@@ -20,7 +20,7 @@
   <name xml:lang="et">KItinerary käsurea hankija</name>
   <name xml:lang="eu">KItinerary komando-lerroko erauzlea</name>
   <name xml:lang="fi">KItineraryn komentorivijäsennin</name>
-  <name xml:lang="fr">Extracteur KItinerary en ligne de commande</name>
+  <name xml:lang="fr">Extracteur en ligne de commandes de KItinerary</name>
   <name xml:lang="gl">Extractor de liña de ordes de KItinerary</name>
   <name xml:lang="ia">KItinerary extractor de commando in linea</name>
   <name xml:lang="id">KItinerary Command Line Extractor</name>
@@ -47,7 +47,9 @@
   <summary xml:lang="eo">Komandlinia ekstraktilo por reservadaj datumoj.</summary>
   <summary xml:lang="es">Extractor de línea de órdenes de reserva de datos</summary>
   <summary xml:lang="eu">Komando-lerroko erreserbaren datu-erauzlea</summary>
+  <summary xml:lang="fr">Extracteur de données de réservation en ligne de commandes</summary>
   <summary xml:lang="ia">Extractor de datos de reservation de commando in linea</summary>
+  <summary xml:lang="it">Estrattore di dati di prenotazioni a riga di comando</summary>
   <summary xml:lang="ka">ბრძანების სტრიქონის რეზერვაციის მონაცემების ექსტრაქტორი</summary>
   <summary xml:lang="nl">Gegevensextractor van reservering op de opdrachtregel</summary>
   <summary xml:lang="sl">Ekstraktor podatkov o rezervaciji v ukazni vrstici</summary>
@@ -69,7 +71,7 @@
     <p xml:lang="et">Käsurea reisiandmete hankija, mida lõimida kolmanda poole rakendustega.</p>
     <p xml:lang="eu">Ibilbide-datuen komando-lerroko erauzlea, hirugarrenen aplikazioetan bateratzeko.</p>
     <p xml:lang="fi">Komentorivijäsennin varaustiedoille kolmannen osapuolen sovelluksia varten.</p>
-    <p xml:lang="fr">Extracteur en ligne de commande pour les données d'itinéraires, afin de les intégrer à des applications tierces.</p>
+    <p xml:lang="fr">Extracteur en ligne de commandes pour les données d'itinéraires, pour leur intégration dans des applications tierces.</p>
     <p xml:lang="gl">Extractor de liña de ordes de datos de itinerarios, para integrar con aplicacións de terceiros.</p>
     <p xml:lang="ia">Commando de linea extractor  per datos de itinerario, de integrar in applications de tertie partes.</p>
     <p xml:lang="id">Pengekstrak baris data untuk data rencana perjalanan, untuk pengintegrasian ke dalam aplikasi pihak ketiga.</p>
