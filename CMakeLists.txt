@@ -88,7 +88,7 @@ if (TARGET PhoneNumber::PhoneNumber)
     set(HAVE_PHONENUMBER ON)
 endif()
 
-add_definitions(-DTRANSLATION_DOMAIN=\"kitinerary\")
+add_definitions(-DTRANSLATION_DOMAIN=\"kitinerary6\")
 
 add_definitions(-DQT_NO_CONTEXTLESS_CONNECT)
 ecm_set_disabled_deprecation_versions(QT 6.6.0 KF 5.246.0)
