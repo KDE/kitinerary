@@ -37,9 +37,12 @@ Class::operator QVariant() const { return QVariant::fromValue(*this); } \
 const char* Class::typeName() { return #Class; } \
 static_assert(sizeof(Class) == sizeof(void*), "dptr must be the only member!"); \
 namespace detail { \
-    static constexpr int property_counter(num<0>, tag<Class>) { return 1; } \
-    static constexpr bool property_equals(num<0>, tag<Class ## Private>, const Class ## Private *, const Class ## Private *) { return true; } \
-    static constexpr bool property_less(num<0>, tag<Class ## Private>, const Class ## Private *, const Class ## Private *) { return true; } \
+    static constexpr int property_counter(KItinerary::detail::num<0>, KItinerary::detail::tag<Class>) \
+    { return 1; } \
+    static constexpr bool property_equals(KItinerary::detail::num<0>, KItinerary::detail::tag<Class ## Private>, const Class ## Private *, const Class ## Private *) \
+    { return true; } \
+    static constexpr bool property_less(KItinerary::detail::num<0>, KItinerary::detail::tag<Class ## Private>, const Class ## Private *, const Class ## Private *) \
+    { return true; } \
 }
 ///@endcond
 
@@ -63,16 +66,21 @@ Class::Class(Class ## Private *dd) : Base(dd) {}
  */
 #define KITINERARY_MAKE_PROPERTY_OPERATOR(Class, Type, Name) \
 namespace detail { \
-    static constexpr int property_counter(num<property_counter(num<>(), tag<Class>())> n, tag<Class>) { return decltype(n)::value + 1; } \
-    static inline bool property_equals(num<property_counter(num<>(), tag<Class>())> n, tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) \
+    static constexpr int property_counter(KItinerary::detail::num<property_counter(KItinerary::detail::num<>(), KItinerary::detail::tag<Class>())> n, KItinerary::detail::tag<Class>) \
+    { return decltype(n)::value + 1; } \
+    static inline bool property_equals(KItinerary::detail::num<property_counter(KItinerary::detail::num<>(), KItinerary::detail::tag<Class>())> n, KItinerary::detail::tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) \
     { \
-        if (strict_equal<Type>(lhs->Name, rhs->Name)) { return property_equals(n.prev(), tag<Class ## Private>(), lhs, rhs); } \
+        if (KItinerary::detail::strict_equal<Type>(lhs->Name, rhs->Name)) { \
+            return property_equals(n.prev(), KItinerary::detail::tag<Class ## Private>(), lhs, rhs); \
+        } \
         return false; \
     } \
-    static inline bool property_less(num<property_counter(num<>(), tag<Class>())> n, tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) \
+    static inline bool property_less(KItinerary::detail::num<property_counter(KItinerary::detail::num<>(), KItinerary::detail::tag<Class>())> n, KItinerary::detail::tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) \
     { \
-        if (strict_less<Type>(lhs->Name, rhs->Name)) { return true; } \
-        if (strict_equal<Type>(lhs->Name, rhs->Name)) { return property_less(n.prev(), tag<Class ## Private>(), lhs, rhs); } \
+        if (KItinerary::detail::strict_less<Type>(lhs->Name, rhs->Name)) { return true; } \
+        if (KItinerary::detail::strict_equal<Type>(lhs->Name, rhs->Name)) { \
+            return property_less(n.prev(), KItinerary::detail::tag<Class ## Private>(), lhs, rhs); \
+        } \
         return false; \
     } \
 }
@@ -85,8 +93,8 @@ namespace detail { \
  */
 #define KITINERARY_MAKE_PROPERTY(Class, Type, Name, SetName) \
 Type Class::Name() const { return static_cast<const Class ## Private*>(d.data())->Name; } \
-void Class::SetName(detail::parameter_type<Type>::type value) { \
-    if (detail::strict_equal<Type>(static_cast<Class ## Private*>(d.data())->Name, value)) { return; } \
+void Class::SetName(KItinerary::detail::parameter_type<Type>::type value) { \
+    if (KItinerary::detail::strict_equal<Type>(static_cast<Class ## Private*>(d.data())->Name, value)) { return; } \
     d.detach(); \
     static_cast<Class ## Private*>(d.data())->Name = value; \
 } \
@@ -100,51 +108,51 @@ KITINERARY_MAKE_PROPERTY_OPERATOR(Class, Type, Name)
  */
 #define KITINERARY_MAKE_OPERATOR(Class) \
 namespace detail { \
-static inline bool recursive_less(tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) { \
-    if constexpr (detail::base_type<Class ## Private>::is_valid) { \
-        if (detail::property_equals(detail::num<>(), detail::tag<Class ## Private>(), lhs, rhs)) { \
-            typedef typename detail::base_type<Class ## Private>::type super_type; \
-            if (detail::property_less(detail::num<>(), detail::tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs))) { return true; } \
-            return recursive_less(tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs)); \
+static inline bool recursive_less(KItinerary::detail::tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) { \
+    if constexpr (KItinerary::detail::base_type<Class ## Private>::is_valid) { \
+        if (detail::property_equals(KItinerary::detail::num<>(), KItinerary::detail::tag<Class ## Private>(), lhs, rhs)) { \
+            typedef typename KItinerary::detail::base_type<Class ## Private>::type super_type; \
+            if (detail::property_less(KItinerary::detail::num<>(), KItinerary::detail::tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs))) { return true; } \
+            return recursive_less(KItinerary::detail::tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs)); \
         } \
     } \
     return false; \
 } \
-static inline bool recursive_equal(tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) { \
-    if constexpr (detail::base_type<Class ## Private>::is_valid) { \
-        typedef typename detail::base_type<Class ## Private>::type super_type; \
-        if (!detail::property_equals(detail::num<>(), detail::tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs))) { return false; } \
-        return recursive_equal(tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs)); \
+static inline bool recursive_equal(KItinerary::detail::tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) { \
+    if constexpr (KItinerary::detail::base_type<Class ## Private>::is_valid) { \
+        typedef typename KItinerary::detail::base_type<Class ## Private>::type super_type; \
+        if (!detail::property_equals(KItinerary::detail::num<>(), KItinerary::detail::tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs))) { return false; } \
+        return recursive_equal(KItinerary::detail::tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs)); \
     } \
     return true; \
 } \
 } \
 bool Class::operator<(const Class &other) const { \
-    static_assert(detail::property_counter(detail::num<0>(), detail::tag<Class>()) == 1, "silence unused function warnings"); \
+    static_assert(detail::property_counter(KItinerary::detail::num<0>(), KItinerary::detail::tag<Class>()) == 1, "silence unused function warnings"); \
     typedef Class ## Private this_type; \
     const auto lhs = static_cast<const this_type *>(d.data()); \
     const auto rhs = static_cast<const this_type*>(other.d.data()); \
     if (lhs == rhs) { \
         return false; \
     } \
-    if (detail::property_less(detail::num<>(), detail::tag<this_type>(), lhs, rhs)) { \
+    if (detail::property_less(KItinerary::detail::num<>(), KItinerary::detail::tag<this_type>(), lhs, rhs)) { \
         return true; \
     } \
-    return detail::recursive_less(detail::tag<this_type>(), lhs, rhs); \
+    return detail::recursive_less(KItinerary::detail::tag<this_type>(), lhs, rhs); \
 } \
 bool Class::operator==(const Class &other) const \
 { \
-    static_assert(detail::property_counter(detail::num<0>(), detail::tag<Class>()) == 1, "silence unused function warnings"); \
+    static_assert(detail::property_counter(KItinerary::detail::num<0>(), KItinerary::detail::tag<Class>()) == 1, "silence unused function warnings"); \
     typedef Class ## Private this_type; \
     const auto lhs = static_cast<const this_type *>(d.data()); \
     const auto rhs = static_cast<const this_type*>(other.d.data()); \
     if (lhs == rhs) { \
         return true; \
     } \
-    if (!detail::property_equals(detail::num<>(), detail::tag<this_type>(), lhs, rhs)) { \
+    if (!detail::property_equals(KItinerary::detail::num<>(), KItinerary::detail::tag<this_type>(), lhs, rhs)) { \
         return false; \
     } \
-    return detail::recursive_equal(detail::tag<this_type>(), lhs, rhs); \
+    return detail::recursive_equal(KItinerary::detail::tag<this_type>(), lhs, rhs); \
 }
 
 }

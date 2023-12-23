@@ -396,11 +396,15 @@ install(FILES
     ${KItinerary_Pdf_HEADERS}
     ${KItinerary_Uic9183_HEADERS}
     ${KItinerary_Vdv_HEADERS}
+    datatypes/datatypes_impl.h
     ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_export.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/kitinerary
 )
 install(FILES
+    internal/instance_counter.h
     internal/parameter_type.h
+    internal/strict_equal.h
+    internal/strict_less.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_PIM}/kitinerary/internal
 )
 if (NOT ANDROID)
