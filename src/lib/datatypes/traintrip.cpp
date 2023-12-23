@@ -5,6 +5,7 @@
 */
 
 #include "traintrip.h"
+#include "datatypes_impl.h"
 #include "datatypes_p.h"
 
 #include <QDateTime>
@@ -36,6 +37,7 @@ KITINERARY_MAKE_PROPERTY(TrainTrip, QString, departurePlatform, setDeparturePlat
 KITINERARY_MAKE_PROPERTY(TrainTrip, TrainStation, departureStation, setDepartureStation)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QDateTime, departureTime, setDepartureTime)
 KITINERARY_MAKE_PROPERTY(TrainTrip, Organization, provider, setProvider)
+KITINERARY_MAKE_PROPERTY_OPERATOR(TrainTrip, QDate, departureDay)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QString, trainName, setTrainName)
 KITINERARY_MAKE_PROPERTY(TrainTrip, QString, trainNumber, setTrainNumber)
 KITINERARY_MAKE_OPERATOR(TrainTrip)

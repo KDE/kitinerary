@@ -65,6 +65,7 @@ public: \
     Class(const Class &other); \
     ~Class(); \
     Class& operator=(const Class &other); \
+    bool operator<(const Class &other) const; \
     bool operator==(const Class &other) const; \
     inline bool operator!=(const Class &other) const { return !(*this == other); } \
     operator QVariant () const; \

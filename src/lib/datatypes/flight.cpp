@@ -5,6 +5,7 @@
 */
 
 #include "flight.h"
+#include "datatypes_impl.h"
 #include "datatypes_p.h"
 
 #include <QDateTime>
@@ -41,6 +42,7 @@ KITINERARY_MAKE_PROPERTY(Flight, Airport, arrivalAirport, setArrivalAirport)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, arrivalTime, setArrivalTime)
 KITINERARY_MAKE_PROPERTY(Flight, QString, arrivalTerminal, setArrivalTerminal)
 KITINERARY_MAKE_PROPERTY(Flight, QDateTime, boardingTime, setBoardingTime)
+KITINERARY_MAKE_PROPERTY_OPERATOR(Flight, QDate, departureDay)
 KITINERARY_MAKE_OPERATOR(Flight)
 
 QDate Flight::departureDay() const

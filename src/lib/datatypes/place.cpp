@@ -5,6 +5,7 @@
 */
 
 #include "place.h"
+#include "datatypes_impl.h"
 #include "datatypes_p.h"
 #include "locationutil.h"
 
@@ -24,6 +25,7 @@ public:
 KITINERARY_MAKE_CLASS(GeoCoordinates)
 KITINERARY_MAKE_PROPERTY(GeoCoordinates, float, latitude, setLatitude)
 KITINERARY_MAKE_PROPERTY(GeoCoordinates, float, longitude, setLongitude)
+KITINERARY_MAKE_OPERATOR(GeoCoordinates)
 
 GeoCoordinates::GeoCoordinates(float latitude, float longitude) :
     d(*s_GeoCoordinates_shared_null())
@@ -36,15 +38,6 @@ GeoCoordinates::GeoCoordinates(float latitude, float longitude) :
 bool GeoCoordinates::isValid() const
 {
     return !std::isnan(d->latitude) && !std::isnan(d->longitude);
-}
-
-// implemented manually, as NAN != NAN
-bool GeoCoordinates::operator==(const GeoCoordinates &other) const
-{
-    if (!isValid() && !other.isValid()) {
-        return true;
-    }
-    return qFuzzyCompare(d->latitude, other.d->latitude) && qFuzzyCompare(d->longitude, other.d->longitude);
 }
 
 class PostalAddressPrivate : public QSharedData

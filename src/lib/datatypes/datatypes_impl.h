@@ -9,6 +9,7 @@
 #include "internal/instance_counter.h"
 #include "internal/parameter_type.h"
 #include "internal/strict_equal.h"
+#include "internal/strict_less.h"
 
 namespace KItinerary {
 
@@ -38,6 +39,7 @@ static_assert(sizeof(Class) == sizeof(void*), "dptr must be the only member!"); 
 namespace detail { \
     static constexpr int property_counter(num<0>, tag<Class>) { return 1; } \
     static constexpr bool property_equals(num<0>, tag<Class ## Private>, const Class ## Private *, const Class ## Private *) { return true; } \
+    static constexpr bool property_less(num<0>, tag<Class ## Private>, const Class ## Private *, const Class ## Private *) { return true; } \
 }
 ///@endcond
 
@@ -55,6 +57,26 @@ Class::Class(Class ## Private *dd) : d(dd) {}
 KITINERARY_MAKE_CLASS_IMPL(Class) \
 Class::Class(Class ## Private *dd) : Base(dd) {}
 
+/** Macros to generate operator implementation details for a property.
+ *  This is not needed when using KITINERARY_MAKE_PROPERTY, but only when
+ *  implementing getters/setters manually.
+ */
+#define KITINERARY_MAKE_PROPERTY_OPERATOR(Class, Type, Name) \
+namespace detail { \
+    static constexpr int property_counter(num<property_counter(num<>(), tag<Class>())> n, tag<Class>) { return decltype(n)::value + 1; } \
+    static inline bool property_equals(num<property_counter(num<>(), tag<Class>())> n, tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) \
+    { \
+        if (strict_equal<Type>(lhs->Name, rhs->Name)) { return property_equals(n.prev(), tag<Class ## Private>(), lhs, rhs); } \
+        return false; \
+    } \
+    static inline bool property_less(num<property_counter(num<>(), tag<Class>())> n, tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) \
+    { \
+        if (strict_less<Type>(lhs->Name, rhs->Name)) { return true; } \
+        if (strict_equal<Type>(lhs->Name, rhs->Name)) { return property_less(n.prev(), tag<Class ## Private>(), lhs, rhs); } \
+        return false; \
+    } \
+}
+
 /** Macro to generate the implementation of a vocabulary property type.
  *  This generates the definitions for the declaration the KITINERARY_PROPERTY macro
  *  produces, as well as implementation details needed for the automatic comparison
@@ -68,14 +90,7 @@ void Class::SetName(detail::parameter_type<Type>::type value) { \
     d.detach(); \
     static_cast<Class ## Private*>(d.data())->Name = value; \
 } \
-namespace detail { \
-    static constexpr int property_counter(num<property_counter(num<>(), tag<Class>())> n, tag<Class>) { return decltype(n)::value + 1; } \
-    static inline bool property_equals(num<property_counter(num<>(), tag<Class>())> n, tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) \
-    { \
-        if (strict_equal<Type>(lhs->Name, rhs->Name)) { return property_equals(n.prev(), tag<Class ## Private>(), lhs, rhs); } \
-        return false; \
-    } \
-}
+KITINERARY_MAKE_PROPERTY_OPERATOR(Class, Type, Name)
 
 /** Generates the implementation of the comparison operator for vocabulary type @p Class.
  *  The generated operator==() implementation will check all properties for strict equality,
@@ -84,6 +99,39 @@ namespace detail { \
  *  called after all properties have been generated.
  */
 #define KITINERARY_MAKE_OPERATOR(Class) \
+namespace detail { \
+static inline bool recursive_less(tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) { \
+    if constexpr (detail::base_type<Class ## Private>::is_valid) { \
+        if (detail::property_equals(detail::num<>(), detail::tag<Class ## Private>(), lhs, rhs)) { \
+            typedef typename detail::base_type<Class ## Private>::type super_type; \
+            if (detail::property_less(detail::num<>(), detail::tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs))) { return true; } \
+            return recursive_less(tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs)); \
+        } \
+    } \
+    return false; \
+} \
+static inline bool recursive_equal(tag<Class ## Private>, const Class ## Private *lhs, const Class ## Private *rhs) { \
+    if constexpr (detail::base_type<Class ## Private>::is_valid) { \
+        typedef typename detail::base_type<Class ## Private>::type super_type; \
+        if (!detail::property_equals(detail::num<>(), detail::tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs))) { return false; } \
+        return recursive_equal(tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs)); \
+    } \
+    return true; \
+} \
+} \
+bool Class::operator<(const Class &other) const { \
+    static_assert(detail::property_counter(detail::num<0>(), detail::tag<Class>()) == 1, "silence unused function warnings"); \
+    typedef Class ## Private this_type; \
+    const auto lhs = static_cast<const this_type *>(d.data()); \
+    const auto rhs = static_cast<const this_type*>(other.d.data()); \
+    if (lhs == rhs) { \
+        return false; \
+    } \
+    if (detail::property_less(detail::num<>(), detail::tag<this_type>(), lhs, rhs)) { \
+        return true; \
+    } \
+    return detail::recursive_less(detail::tag<this_type>(), lhs, rhs); \
+} \
 bool Class::operator==(const Class &other) const \
 { \
     static_assert(detail::property_counter(detail::num<0>(), detail::tag<Class>()) == 1, "silence unused function warnings"); \
@@ -96,11 +144,7 @@ bool Class::operator==(const Class &other) const \
     if (!detail::property_equals(detail::num<>(), detail::tag<this_type>(), lhs, rhs)) { \
         return false; \
     } \
-    if constexpr (detail::base_type<this_type>::is_valid) { \
-        typedef typename detail::base_type<this_type>::type super_type; \
-        return detail::property_equals(detail::num<>(), detail::tag<super_type>(), static_cast<const super_type*>(lhs), static_cast<const super_type*>(rhs)); \
-    } \
-    return true; \
+    return detail::recursive_equal(detail::tag<this_type>(), lhs, rhs); \
 }
 
 }

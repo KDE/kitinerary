@@ -61,9 +61,12 @@ private Q_SLOTS:
 
         flight2.setDepartureDay(QDate(2018, 4, 21));
         res2.setReservationFor(flight2);
+        QVERIFY(MergeUtil::isSame(flight2, res2.reservationFor()));
         QVERIFY(!MergeUtil::isSame(res1, res2));
 
         res2.setReservationNumber(QStringLiteral("XXX007"));
+        QVERIFY(MergeUtil::isSame(flight1, flight2));
+        QVERIFY(MergeUtil::isSame(res1.reservationFor(), res2.reservationFor()));
         QVERIFY(MergeUtil::isSame(res1, res2));
     }
 

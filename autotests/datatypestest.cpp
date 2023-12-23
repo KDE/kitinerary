@@ -181,6 +181,32 @@ private Q_SLOTS:
         a2.setName(QStringLiteral("Berlin Tegel"));
         QCOMPARE(a1, a2);
         QCOMPARE(a1, a1);
+
+        Flight f1;
+        f1.setDepartureAirport(a1);
+        Flight f2;
+        f2.setDepartureAirport(a2);
+        QCOMPARE(f1, f2);
+
+        FlightReservation r1;
+        r1.setReservationFor(f1);
+        FlightReservation r2;
+        r2.setReservationFor(f2);
+        QCOMPARE(r1, r2);
+    }
+
+    void testStrictDateTimeHandling()
+    {
+        LodgingReservation r;
+        r.setCheckinTime(QDateTime({2023, 12, 23}, {15, 1}, QTimeZone::UTC));
+        QCOMPARE(r.checkinTime(), QDateTime({2023, 12, 23}, {15, 1}, QTimeZone::UTC));
+        QCOMPARE(r.checkinTime().timeSpec(), Qt::UTC);
+        r.setCheckinTime(QDateTime({2023, 12, 23}, {16, 1}, QTimeZone::fromSecondsAheadOfUtc(3600)));
+        QCOMPARE(r.checkinTime(), QDateTime({2023, 12, 23}, {15, 1}, QTimeZone::UTC));
+        QCOMPARE(r.checkinTime().timeSpec(), Qt::OffsetFromUTC);
+        r.setCheckinTime(QDateTime({2023, 12, 23}, {16, 1}, QTimeZone("Europe/Brussels")));
+        QCOMPARE(r.checkinTime(), QDateTime({2023, 12, 23}, {15, 1}, QTimeZone::UTC));
+        QCOMPARE(r.checkinTime().timeSpec(), Qt::TimeZone);
     }
 };
 
