@@ -95,8 +95,8 @@ void IcalEventProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]
     e.setUrl(event->url());
 
     if (event->allDay()) {
-        e.setStartDate(QDateTime(event->dtStart().date(), {0, 0}, Qt::LocalTime));
-        e.setEndDate(QDateTime(event->dtEnd().date(), {23, 59, 59}, Qt::LocalTime));
+        e.setStartDate(QDateTime(event->dtStart().date(), {0, 0}, QTimeZone::LocalTime));
+        e.setEndDate(QDateTime(event->dtEnd().date(), {23, 59, 59}, QTimeZone::LocalTime));
     } else {
         e.setStartDate(event->dtStart());
         e.setEndDate(event->dtEnd());

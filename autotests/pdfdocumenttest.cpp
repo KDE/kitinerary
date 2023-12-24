@@ -72,7 +72,7 @@ private Q_SLOTS:
         QVERIFY(page.imagesInRect(0, 0, 0.5, 1).isEmpty());
         QCOMPARE(page.imagesInRect(0, 0.5, 1, 1).size(), 1);
 
-        QCOMPARE(doc->creationTime(), QDateTime({2018, 4, 29}, {11, 41, 28}, Qt::OffsetFromUTC, 7200));
+        QCOMPARE(doc->creationTime(), QDateTime({2018, 4, 29}, {11, 41, 28}, QTimeZone::fromSecondsAheadOfUtc(7200)));
         QCOMPARE(doc->modificationTime(), QDateTime());
     }
 

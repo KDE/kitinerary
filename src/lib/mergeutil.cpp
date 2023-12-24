@@ -64,12 +64,12 @@ static bool dateTimeCompare(const QDateTime &lhs, const QDateTime &rhs)
     }
     if (lhs.timeSpec() == Qt::LocalTime && rhs.timeSpec() != Qt::LocalTime) {
         QDateTime dt(rhs);
-        dt.setTimeSpec(Qt::LocalTime);
+        dt.setTimeZone(QTimeZone::LocalTime);
         return lhs == dt;
     }
     if (lhs.timeSpec() != Qt::LocalTime && rhs.timeSpec() == Qt::LocalTime) {
         QDateTime dt(lhs);
-        dt.setTimeSpec(Qt::LocalTime);
+        dt.setTimeZone(QTimeZone::LocalTime);
         return dt == rhs;
     }
     return false;

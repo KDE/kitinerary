@@ -204,7 +204,7 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
             }
             // HACK QDateTimeParser handles 't' in the format but then forces it back to LocalTime in the end...
             if (dt.isValid() && dt.timeSpec() == Qt::LocalTime && str.endsWith(QLatin1Char('Z'))) {
-                dt = dt.toTimeSpec(Qt::UTC);
+                dt = dt.toTimeZone(QTimeZone::utc());
             }
             if (dt.isNull()) {
                 qCDebug(Log) << "Datetime parsing failed for" << str;
@@ -408,7 +408,7 @@ QJsonValue JsonLdDocument::toJsonValue(const QVariant &v)
         case QMetaType::QDateTime:
         {
             const auto dt = v.toDateTime();
-            if (dt.timeSpec() == Qt::TimeZone) {
+            if (dt.timeSpec() == Qt::TimeZone && dt.timeZone() != QTimeZone::utc()) {
                 QJsonObject dtObj;
                 dtObj.insert(QStringLiteral("@type"), QStringLiteral("QDateTime"));
                 dtObj.insert(QStringLiteral("@value"), dt.toString(Qt::ISODate));

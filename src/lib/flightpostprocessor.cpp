@@ -113,7 +113,6 @@ QDateTime FlightPostProcessor::processFlightTime(QDateTime dt, const Flight &fli
     }
 
     if (dt.timeSpec() == Qt::OffsetFromUTC || dt.timeSpec() == Qt::LocalTime) {
-        dt.setTimeSpec(Qt::TimeZone);
         dt.setTimeZone(tz);
     } else if (dt.timeSpec() == Qt::UTC || (dt.timeSpec() == Qt::TimeZone && dt.timeZone() == QTimeZone::utc())) {
         dt = dt.toTimeZone(tz);

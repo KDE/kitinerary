@@ -16,6 +16,7 @@
 #include <QDebug>
 #include <QImage>
 #include <QScopedValueRollback>
+#include <QTimeZone>
 
 #include <DateInfo.h>
 #include <PDFDoc.h>
@@ -285,11 +286,11 @@ static QDateTime parsePdfDateTime(const char *str)
 
     int offset = tzHours * 3600 + tzMins * 60;
     if (tz == '+') {
-        return QDateTime(date, time, Qt::OffsetFromUTC, offset);
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(offset));
     } else if (tz == '-') {
-        return QDateTime(date, time, Qt::OffsetFromUTC, -offset);
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(-offset));
     }
-    return QDateTime(date, time, Qt::UTC);
+    return QDateTime(date, time, QTimeZone::UTC);
 }
 
 QDateTime PdfDocument::creationTime() const

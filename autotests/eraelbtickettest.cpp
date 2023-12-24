@@ -27,7 +27,7 @@ private Q_SLOTS:
         QVERIFY(!ticket->segment2().isValid());
         QCOMPARE(ticket->segment1().arrivalStation(), QLatin1String("BEBMI"));
 
-        QDateTime contextDt({2022, 2, 1}, { 8, 0 }, Qt::UTC);
+        QDateTime contextDt({2022, 2, 1}, { 8, 0 }, QTimeZone::UTC);
         QCOMPARE(ticket->emissionDate(contextDt), QDate(2013, 1, 6));
         QCOMPARE(ticket->validFromDate(contextDt), QDate(2013, 2, 3));
         QCOMPARE(ticket->validUntilDate(contextDt), QDate(2013, 8, 4));

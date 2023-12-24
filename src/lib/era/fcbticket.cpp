@@ -127,7 +127,7 @@ QDateTime Fcb::IssuingData::issueingDateTime() const
     QDate date(issuingYear, 1, 1);
     date = date.addDays(issuingDay - 1);
     if (issuingTimeIsSet()) {
-        return QDateTime(date, QTime(0,0).addSecs(issuingTime * 60), Qt::UTC);
+        return QDateTime(date, QTime(0,0).addSecs(issuingTime * 60), QTimeZone::UTC);
     }
     return QDateTime(date, {});
 }
@@ -191,7 +191,7 @@ QDateTime Fcb::TrainLinkType::departureDateTime(const QDateTime &issueingDateTim
     QDate date = issueingDateTime.date().addDays(travelDate);
     QTime time = QTime(0, 0).addSecs(departureTime * 60);
     if (departureUTCOffsetIsSet()) {
-        return QDateTime(date, time, Qt::OffsetFromUTC, -departureUTCOffset * 15 * 60);
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(-departureUTCOffset * 15 * 60));
     }
     return QDateTime(date, time);
 }
@@ -433,7 +433,7 @@ QDateTime Fcb::ReservationData::departureDateTime(const QDateTime &issueingDateT
     QDate date = issueingDateTime.date().addDays(departureDate);
     QTime time = QTime(0, 0).addSecs(departureTime * 60);
     if (departureUTCOffsetIsSet()) {
-        return QDateTime(date, time, Qt::OffsetFromUTC, -departureUTCOffset * 15 * 60);
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(-departureUTCOffset * 15 * 60));
     }
     return QDateTime(date, time);
 }
@@ -447,10 +447,10 @@ QDateTime Fcb::ReservationData::arrivalDateTime(const QDateTime &issueingDateTim
     QDate date = departureDt.date().addDays(arrivalDate);
     QTime time = QTime(0, 0).addSecs(arrivalTime * 60);
     if (arrivalUTCOffsetIsSet()) {
-        return QDateTime(date, time, Qt::OffsetFromUTC, -arrivalUTCOffset * 15 * 60);
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(-arrivalUTCOffset * 15 * 60));
     }
     if (departureDt.timeSpec() == Qt::OffsetFromUTC) {
-        return QDateTime(date, time, Qt::OffsetFromUTC, departureDt.offsetFromUtc());
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(departureDt.offsetFromUtc()));
     }
     return QDateTime(date, time);
 }
@@ -544,7 +544,7 @@ QDateTime Fcb::OpenTicketData::validFrom(const QDateTime &issueingDateTime) cons
     QDate date = issueingDateTime.date().addDays(validFromDay);
     QTime time = validFromTimeIsSet() ? QTime(0, 0).addSecs(validFromTime * 60) : QTime();
     if (validFromUTCOffsetIsSet()) {
-        return QDateTime(date, time, Qt::OffsetFromUTC, -validFromUTCOffset * 15 * 60);
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(-validFromUTCOffset * 15 * 60));
     }
     return QDateTime(date, time);
 }
@@ -555,10 +555,10 @@ QDateTime Fcb::OpenTicketData::validUntil(const QDateTime &issueingDateTime) con
     QDate date = validFromDt.date().addDays(validUntilDay);
     QTime time = validUntilDayIsSet() ? QTime(0, 0).addSecs(validUntilTime * 60) : QTime(23, 59, 59);
     if (validUntilUTCOffsetIsSet()) {
-        return QDateTime(date, time, Qt::OffsetFromUTC, -validUntilUTCOffset * 15 * 60);
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(-validUntilUTCOffset * 15 * 60));
     }
     if (validFromDt.timeSpec() == Qt::OffsetFromUTC) {
-        return QDateTime(date, time, Qt::OffsetFromUTC, validFromDt.offsetFromUtc());
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(validFromDt.offsetFromUtc()));
     }
     return QDateTime(date, time);
 }
@@ -628,7 +628,7 @@ QDateTime Fcb::PassData::validFrom(const QDateTime &issueingDateTime) const
     QDate date = issueingDateTime.date().addDays(validFromDay);
     QTime time = validFromTimeIsSet() ? QTime(0, 0).addSecs(validFromTime * 60) : QTime();
     if (validFromUTCOffsetIsSet()) {
-        return QDateTime(date, time, Qt::OffsetFromUTC, -validFromUTCOffset * 15 * 60);
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(-validFromUTCOffset * 15 * 60));
     }
     return QDateTime(date, time);
 }
@@ -639,10 +639,10 @@ QDateTime Fcb::PassData::validUntil(const QDateTime &issueingDateTime) const
     QDate date = validFromDt.date().addDays(validUntilDay);
     QTime time = validUntilDayIsSet() ? QTime(0, 0).addSecs(validUntilTime * 60) : QTime(23, 59, 59);
     if (validUntilUTCOffsetIsSet()) {
-        return QDateTime(date, time, Qt::OffsetFromUTC, -validUntilUTCOffset * 15 * 60);
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(-validUntilUTCOffset * 15 * 60));
     }
     if (validFromDt.timeSpec() == Qt::OffsetFromUTC) {
-        return QDateTime(date, time, Qt::OffsetFromUTC, validFromDt.offsetFromUtc());
+        return QDateTime(date, time, QTimeZone::fromSecondsAheadOfUtc(validFromDt.offsetFromUtc()));
     }
     return QDateTime(date, time);
 }

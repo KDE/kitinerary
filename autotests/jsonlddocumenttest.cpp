@@ -48,7 +48,7 @@ private Q_SLOTS:
         f.setFlightNumber(QStringLiteral("1234"));
         f.setDepartureTime(QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
         f.setDepartureDay(QDate(2018, 3, 18));
-        f.setArrivalTime(QDateTime(QDate(2018, 3, 18), QTime(19, 44, 0), Qt::UTC));
+        f.setArrivalTime(QDateTime(QDate(2018, 3, 18), QTime(19, 44, 0), QTimeZone::UTC));
         Airport ap;
         ap.setName(QStringLiteral("Berlin Tegel"));
         ap.setIataCode(QStringLiteral("TXL"));
@@ -385,8 +385,8 @@ private Q_SLOTS:
         QTest::addColumn<QByteArray>("dtStr");
         QTest::addColumn<QDateTime>("result");
 
-        QTest::newRow("iso") << QByteArray("2018-08-15T22:00:00+02:00") << QDateTime({2018, 8, 15}, {22 ,00}, Qt::OffsetFromUTC, 7200);
-        QTest::newRow("weird LH format") << QByteArray("20200826T200000Z") << QDateTime({2020, 8, 26}, {20 ,00}, Qt::UTC);
+        QTest::newRow("iso") << QByteArray("2018-08-15T22:00:00+02:00") << QDateTime({2018, 8, 15}, {22 ,00}, QTimeZone::fromSecondsAheadOfUtc(7200));
+        QTest::newRow("weird LH format") << QByteArray("20200826T200000Z") << QDateTime({2020, 8, 26}, {20 ,00}, QTimeZone::UTC);
     }
 
     void testDateTimeParsing()
