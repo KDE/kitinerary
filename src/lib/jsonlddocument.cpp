@@ -295,7 +295,7 @@ static QVariant createInstance(const QJsonObject& obj, const QString &type)
 
     if (type == QLatin1String("QDateTime")) {
         auto dt = QDateTime::fromString(obj.value(QLatin1String("@value")).toString(), Qt::ISODate);
-        dt.setTimeZone(QTimeZone(obj.value(QLatin1String("timezone")).toString().toUtf8()));
+        dt.setTimeZone(timeZone(obj.value(QLatin1String("timezone")).toString().toUtf8()));
         return dt;
     }
 
