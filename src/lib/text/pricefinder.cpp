@@ -130,7 +130,7 @@ void PriceFinder::findAll(QStringView text, std::vector<Result> &results) const
     const auto prevResultSize = results.size();
     qsizetype offset = 0;
     while (true) {
-        const auto match = rx.match(text, offset);
+        const auto match = rx.matchView(text, offset);
         if (!match.hasMatch()) {
             break;
         }

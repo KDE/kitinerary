@@ -37,7 +37,7 @@ TerminalFinder::~TerminalFinder() = default;
 TerminalFinder::Result TerminalFinder::find(QStringView s) const
 {
     for (const auto &re: m_patterns) {
-        const auto match = re.match(s);
+        const auto match = re.matchView(s);
         if (match.hasMatch()) {
             Result res;
             res.start = match.capturedStart(u"terminal");

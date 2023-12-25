@@ -67,14 +67,14 @@ void TimeFinder::findTimes(QStringView text)
         if (rxTimesPattern < 0) {
             rxTimesPattern = 0;
             for (const auto &rx : rxTimes) {
-                rxTimeMatch = rx.match(text, i);
+                rxTimeMatch = rx.matchView(text, i);
                 if (rxTimeMatch.hasMatch()) {
                     break;
                 }
                 ++rxTimesPattern;
             }
         } else {
-            rxTimeMatch = rxTimes[rxTimesPattern].match(text, i);
+            rxTimeMatch = rxTimes[rxTimesPattern].matchView(text, i);
         }
 
         if (!rxTimeMatch.hasMatch()) {
@@ -84,7 +84,7 @@ void TimeFinder::findTimes(QStringView text)
         i = rxTimeMatch.capturedEnd();
         QRegularExpressionMatch rxApMatch;
         for (const auto &rx : rxApSuffixes) {
-            rxApMatch = rx.match(text, i, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+            rxApMatch = rx.matchView(text, i, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
             if (rxApMatch.hasMatch()) {
                 break;
             }
@@ -147,7 +147,7 @@ void TimeFinder::findDates(QStringView text)
 
     for (const auto &rx : rxDates) {
         for (int idx = 0; idx < text.size(); ++idx) {
-            const auto rxDateMatch = rx.match(text, idx);
+            const auto rxDateMatch = rx.matchView(text, idx);
             if (!rxDateMatch.hasMatch()) {
                 break;
             }
