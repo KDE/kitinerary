@@ -31,7 +31,6 @@ function main(pass, node)
 function parsePdf(pdf, node, barcode) {
     const page = pdf.pages[barcode.location];
     const text = page.textInRect(0.0, 0.0, 0.9, 0.3);
-    console.log(text);
     let res = JsonLd.newEventReservation();
     res.reservationFor.name = text.match(/^ *(\S.*)\n/)[1];
     res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
