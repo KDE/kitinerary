@@ -9,8 +9,7 @@ include:
       - /gitlab-templates/android-qt6.yml
       - /gitlab-templates/freebsd-qt6.yml
       - /gitlab-templates/windows-qt6.yml
-  # TODO reactivate once there is KF6 support in the Flatpak KDE runtime
-  #     - /gitlab-templates/flatpak.yml
+      - /gitlab-templates/flatpak.yml
 
 # Job for building a fully static extractor binary for e.g. use by Nextcloud
 static-extractor:
