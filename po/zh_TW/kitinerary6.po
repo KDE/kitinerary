@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kitinerary\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:45+0000\n"
-"PO-Revision-Date: 2023-12-25 02:31+0900\n"
+"PO-Revision-Date: 2023-12-29 19:36+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.01.85\n"
 
 #: calendarhandler.cpp:166
 #, kde-format
@@ -94,7 +94,7 @@ msgstr "從 %2 到 %3 的公車 %1"
 #: calendarhandler.cpp:312
 #, kde-format
 msgid "Ferry from %1 to %2"
-msgstr "從 %1 到 %2 的船班"
+msgstr "從 %1 到 %2 的渡輪"
 
 #: calendarhandler.cpp:325
 #, kde-format
