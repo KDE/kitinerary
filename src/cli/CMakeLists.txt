@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2021-2022 Laurent Montel <montel@kde.org>
+# SPDX-FileCopyrightText: 2021-2024 Laurent Montel <montel@kde.org>
 # SPDX-FileCopyrightText: 2019 Volker Krause <vkrause@kde.org>
 # SPDX-License-Identifier: BSD-3-Clause
 
