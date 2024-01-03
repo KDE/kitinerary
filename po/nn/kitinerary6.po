@@ -1,4 +1,4 @@
-# Translation of kitinerary to Norwegian Nynorsk
+# Translation of kitinerary6 to Norwegian Nynorsk
 #
 # Karl Ove Hufthammer <karl@huftis.org>, 2020, 2022.
 msgid ""
