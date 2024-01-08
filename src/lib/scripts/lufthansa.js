@@ -30,7 +30,9 @@ function extractEvent(ev) {
 function extractBoardingPass(iata, node, pdfNode) {
     let res = node.result[0];
     const text = pdfNode.content.pages[node.location].text;
-    const boarding = text.match(/(\d\d:\d\d) (?:GROUP (\S+))?  +\d+[A-Z]/);
+    let boarding = text.match(/(\d\d:\d\d) (?:GROUP (\S+))?  +\d+[A-Z]/);
+    if (!boarding)
+        boarding = text.match(/(\d\d:\d\d) +\d\d:\d\d/);
     res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[1], 'hh:mm', 'en');
     res.boardingGroup = boarding[2];
     return res;
