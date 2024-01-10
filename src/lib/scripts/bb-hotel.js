@@ -24,7 +24,7 @@ function parseConfirmation(html) {
     let reservations = [];
     let idx = 0;
     while (true) {
-        const p = text.substr(idx).match(/(.*)\n.*\n.* x \d+\n.*€\n/);
+        const p = text.substr(idx).match(/(.*)\n[^€\n]*\n.* x \d+\n.*€\n/);
         if (!p)
             break;
         idx += p.index + p[0].length;
