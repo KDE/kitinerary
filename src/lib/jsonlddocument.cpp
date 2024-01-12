@@ -163,10 +163,7 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
 {
     // enum handling must be done first, as prop.type() == Int
     if (prop.isEnumType() && v.isString()) {
-        auto value = v.toString();
-        if (value.startsWith(QLatin1String("http://schema.org/"))) {
-            value = value.mid(18);
-        }
+        const auto value = JsonLd::normalizeTypeName(v.toString());
         const auto key = prop.enumerator().keyToValue(value.toUtf8().constData());
         return key;
     }
