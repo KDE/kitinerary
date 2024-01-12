@@ -9,6 +9,7 @@
 #include "genericpriceextractorhelper_p.h"
 #include "logging.h"
 #include "stringutil.h"
+#include "json/jsonld.h"
 
 #include <KItinerary/ExtractorDocumentNodeFactory>
 #include <KItinerary/ExtractorEngine>
@@ -95,7 +96,7 @@ static QByteArray fixupJson(const QByteArray &data)
     }
 
     // Eventbrite adds commas where there shouldn't be one...
-    for (int idx = output.indexOf("\",\n"); idx > 0 && idx + 3 < output.size(); idx = output.indexOf("\",\n", idx)) {
+    for (qsizetype idx = output.indexOf("\",\n"); idx > 0 && idx + 3 < output.size(); idx = output.indexOf("\",\n", idx)) {
         const auto comma = idx + 1;
         idx += 3;
         while (idx < output.size() && std::isspace(static_cast<unsigned char>(output[idx]))) {
@@ -176,7 +177,7 @@ static void parseMicroData(const HtmlElement &elem, QJsonObject &obj, QJsonArray
     while (!child.isNull()) {
         const auto prop = child.attribute(QStringLiteral("itemprop"));
         const auto type = child.attribute(QStringLiteral("itemtype"));
-        if (type.startsWith(QLatin1String("http://schema.org/"))) {
+        if (JsonLd::isSchemaOrgNamespace(type)) {
             QJsonObject subObj;
             parseMicroData(child, subObj, result);
             const QUrl typeUrl(type);
@@ -209,7 +210,7 @@ static void extractRecursive(const HtmlElement &elem, QJsonArray &result)
 
     // Microdata
     const auto itemType = elem.attribute(QStringLiteral("itemtype"));
-    if (itemType.startsWith(QLatin1String("http://schema.org/"))) {
+    if (JsonLd::isSchemaOrgNamespace(itemType)) {
         QJsonObject obj;
         parseMicroData(elem, obj, result);
         if (obj.isEmpty()) {
