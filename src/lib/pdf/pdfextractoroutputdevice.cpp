@@ -267,7 +267,7 @@ void PdfExtractorOutputDevice::addVectorImage(const PdfVectorPicture &pic)
 void PdfExtractorOutputDevice::processLink(AnnotLink *link)
 {
     TextOutputDev::processLink(link);
-    if (!link->isOk() || link->getAction()->getKind() != actionURI) {
+    if (!link->isOk() || !link->getAction() || link->getAction()->getKind() != actionURI) {
         return;
     }
 
