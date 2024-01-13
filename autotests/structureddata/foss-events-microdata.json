@@ -1,0 +1,38 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "description": "FOSDEM is a free event for software developers to meet, share ideas and collaborate.\nEvery year, thousands of developers of free and open source software from all over the world gather at the event in Brussels.",
+        "endDate": "2024-02-04",
+        "inLanguage": "en",
+        "keywords": [
+            "#fosdem #fosdem24",
+            "Development,Community"
+        ],
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "Belgium",
+                "addressLocality": "Brussels"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "50.81295",
+                "longitude": "4.38002"
+            },
+            "name": "Université Libre Bruxelles"
+        },
+        "name": "FOSDEM",
+        "offers": {
+            "@type": "Offer",
+            "price": "€"
+        },
+        "organizer": {
+            "@type": "Organization",
+            "name": "Fosdem Team"
+        },
+        "startDate": "2024-02-03",
+        "url": "https://fosdem.org/2024/"
+    }
+]
