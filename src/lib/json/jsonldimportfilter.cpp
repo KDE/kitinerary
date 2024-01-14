@@ -88,7 +88,14 @@ static void migrateToAction(QJsonObject &obj, const char *propName, const char *
         return;
     }
 
-    auto actions = obj.value(QLatin1String("potentialAction")).toArray();
+    const auto actionsVal = obj.value("potentialAction"_L1);
+    QJsonArray actions;
+    if (actionsVal.isArray()) {
+        actions = actionsVal.toArray();
+    } else if (actionsVal.isObject()) {
+        actions = { actionsVal };
+    }
+
     for (const auto &act : actions) {
         if (JsonLd::typeName(act.toObject()) == QLatin1String(typeName)) {
             return;
