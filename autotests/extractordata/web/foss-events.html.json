@@ -1,0 +1,33 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "description": "The 37th Chaos Communication Congress (37C3) takes place in Hamburg, 27.-30.12.2023, and is the 2023 edition of the annual four-day conference on technology, society and utopia organised by the Chaos Computer Club (CCC) and volunteers.\nCongress offers lectures and workshops and various events on a multitude of topics including (but not limited to) information technology and generally a critical-creative attitude towards technology and the discussion about the effects of technological advances on society.\nFor 37 years, Congress has been organized by the community and appreciates all kinds of participation. You are encouraged to contribute by volunteering, setting up and hosting hands-on and self-organized events with the other components of your assembly or presenting your own projects to fellow hackers.",
+        "endDate": {
+            "@type": "QDateTime",
+            "@value": "2023-12-30T23:59:59+01:00",
+            "timezone": "Europe/Berlin"
+        },
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "DE",
+                "addressLocality": "Hamburg"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 53.56222152709961,
+                "longitude": 9.985480308532715
+            },
+            "name": "Congress Center Hamburg"
+        },
+        "name": "37C3",
+        "startDate": {
+            "@type": "QDateTime",
+            "@value": "2023-12-27T00:00:00+01:00",
+            "timezone": "Europe/Berlin"
+        },
+        "url": "https://events.ccc.de/congress/2023/infos/index.html"
+    }
+]

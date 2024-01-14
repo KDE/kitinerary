@@ -167,7 +167,18 @@ static void insertProperties(QJsonObject &obj, const QString &prop, const QJsonV
     // multiple properties can be specified at once, as a space-separated list
     const auto props = prop.split(QLatin1Char(' '), Qt::SkipEmptyParts);
     for (const auto &p : props) {
-        obj.insert(p, val);
+        auto valRef = obj[p];
+        if (valRef.isUndefined() || valRef.isNull()) {
+            obj.insert(p, val);
+        // convert multiple repeated properties into an array
+        } else if (valRef.isArray()) {
+            auto array = valRef.toArray();
+            array.push_back(val);
+            valRef = array;
+        } else {
+            QJsonArray array({valRef, val});
+            valRef = array;
+        }
     }
 }
 

@@ -9,6 +9,7 @@
 #include "json/jsonldfilterengine.h"
 #include "logging.h"
 
+#include <QDate>
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -17,6 +18,7 @@
 
 #include <cstring>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 // type normalization from full schema.org type hierarchy to our simplified subset
@@ -86,7 +88,14 @@ static void migrateToAction(QJsonObject &obj, const char *propName, const char *
         return;
     }
 
-    auto actions = obj.value(QLatin1String("potentialAction")).toArray();
+    const auto actionsVal = obj.value("potentialAction"_L1);
+    QJsonArray actions;
+    if (actionsVal.isArray()) {
+        actions = actionsVal.toArray();
+    } else if (actionsVal.isObject()) {
+        actions = { actionsVal };
+    }
+
     for (const auto &act : actions) {
         if (JsonLd::typeName(act.toObject()) == QLatin1String(typeName)) {
             return;
@@ -243,7 +252,15 @@ static QJsonArray filterActions(const QJsonValue &v)
 
 static void filterEvent(QJsonObject &obj)
 {
-    unpackArray(obj, QLatin1String("location"));
+    unpackArray(obj, "location"_L1);
+
+    // date only end: set time to end of day
+    if (const auto endDate = obj.value("endDate"_L1).toString(); endDate.size() == 10) {
+        const auto date = QDate::fromString(endDate, Qt::ISODate);
+        if (date.isValid()) {
+            obj.insert("endDate"_L1, date.endOfDay().toString(Qt::ISODate));
+        }
+    }
 }
 
 static void filterPostalAddress(QJsonObject &obj)

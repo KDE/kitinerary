@@ -80,10 +80,15 @@ CalendarHandler::findEvents(KCalendarCore::Calendar *calendar,
 
     QList<KCalendarCore::Event::Ptr> events;
     QList<KCalendarCore::Event::Ptr> results;
-    const auto dt = SortUtil::startDateTime(reservation).toTimeZone(calendar->timeZone()).date();
-    if (dt.isValid()) {
+    const auto startDt = SortUtil::startDateTime(reservation);
+    const auto endDt = SortUtil::endDateTime(reservation);
+    if (startDt.isValid() && endDt.isValid() && startDt == startDt.date().startOfDay(startDt.timeZone())
+        && std::abs(endDt.secsTo(endDt.date().endOfDay(endDt.timeZone()))) <= 1) {
+        // looks like an all day event, don't adjust for timezones in that case
+        events = calendar->events(startDt.date());
+    } else if (startDt.isValid()) {
         // we know the exact day to search at
-        events = calendar->events(dt);
+        events = calendar->events(startDt.toTimeZone(calendar->timeZone()).date());
     } else if (JsonLd::canConvert<Reservation>(reservation)) {
         // for minimal cancellations, we need to search in a larger range
         const auto res = JsonLd::convert<Reservation>(reservation);
@@ -384,10 +389,17 @@ static void fillEvent(const KItinerary::Event &ev, const KCalendarCore::Event::P
     event->setDtStart(ev.startDate());
     if (ev.endDate().isValid()) {
         event->setDtEnd(ev.endDate());
+        // QDate::endOfDay adds 999ms, while endDate has that truncated
+        event->setAllDay(ev.startDate() == ev.startDate().date().startOfDay(ev.startDate().timeZone())
+                     && std::abs(ev.endDate().secsTo(ev.endDate().date().endOfDay(ev.endDate().timeZone()))) <= 1);
+        if (event->allDay()) {
+            event->setDtStart(QDateTime(event->dtStart().date(), QTime()));
+            event->setDtEnd(QDateTime(event->dtEnd().date(), QTime()));
+        }
     } else {
         event->setDtEnd(ev.startDate().addSecs(3600));
+        event->setAllDay(false);
     }
-    event->setAllDay(false);
 
     if (ev.doorTime().isValid()) {
         const auto startOffset = Duration(event->dtStart(), ev.doorTime());

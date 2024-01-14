@@ -1,0 +1,33 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "endDate": {
+            "@type": "QDateTime",
+            "@value": "2023-12-30T23:59:59+01:00",
+            "timezone": "Europe/Berlin"
+        },
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "DE",
+                "addressLocality": "Hamburg"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 53.56222152709961,
+                "longitude": 9.985480308532715
+            },
+            "name": "Congress Center Hamburg"
+        },
+        "name": "37C3",
+        "startDate": {
+            "@type": "QDateTime",
+            "@value": "2023-12-27T00:00:00+01:00",
+            "timezone": "Europe/Berlin"
+        },
+        "url": "https://events.ccc.de/congress/2023/infos/index.html"
+    }
+]
+
