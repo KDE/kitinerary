@@ -9,6 +9,7 @@
 #include "json/jsonldfilterengine.h"
 #include "logging.h"
 
+#include <QDate>
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -17,6 +18,7 @@
 
 #include <cstring>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 // type normalization from full schema.org type hierarchy to our simplified subset
@@ -243,7 +245,15 @@ static QJsonArray filterActions(const QJsonValue &v)
 
 static void filterEvent(QJsonObject &obj)
 {
-    unpackArray(obj, QLatin1String("location"));
+    unpackArray(obj, "location"_L1);
+
+    // date only end: set time to end of day
+    if (const auto endDate = obj.value("endDate"_L1).toString(); endDate.size() == 10) {
+        const auto date = QDate::fromString(endDate, Qt::ISODate);
+        if (date.isValid()) {
+            obj.insert("endDate"_L1, date.endOfDay().toString(Qt::ISODate));
+        }
+    }
 }
 
 static void filterPostalAddress(QJsonObject &obj)
