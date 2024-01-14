@@ -28,6 +28,7 @@ class KITINERARY_EXPORT Event
     KITINERARY_PROPERTY(QDateTime, endDate, setEndDate)
     KITINERARY_PROPERTY(QDateTime, doorTime, setDoorTime)
     KITINERARY_PROPERTY(QVariant, location, setLocation)
+    KITINERARY_PROPERTY(QVariantList, potentialAction, setPotentialAction)
 
 private:
     QExplicitlySharedDataPointer<EventPrivate> d;

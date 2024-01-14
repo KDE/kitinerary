@@ -59,6 +59,16 @@ class KITINERARY_EXPORT DownloadAction : public Action
     KITINERARY_GADGET(DownloadAction)
 };
 
+class JoinActionPrivate;
+
+/** Action to join an event.
+ *  @see https://schema.org/JoinAction
+ */
+class KITINERARY_EXPORT JoinAction : public Action
+{
+    KITINERARY_GADGET(JoinAction)
+};
+
 class ReserveActionPrivate;
 
 /** Reserve action.

@@ -47,6 +47,13 @@ class DownloadActionPrivate : public ActionPrivate
 KITINERARY_MAKE_DERIVED_CLASS(DownloadAction, Action)
 KITINERARY_MAKE_OPERATOR(DownloadAction)
 
+class JoinActionPrivate : public ActionPrivate
+{
+    KITINERARY_PRIVATE_GADGET(JoinAction)
+};
+KITINERARY_MAKE_DERIVED_CLASS(JoinAction, Action)
+KITINERARY_MAKE_OPERATOR(JoinAction)
+
 class ReserveActionPrivate : public ActionPrivate
 {
     KITINERARY_PRIVATE_GADGET(ReserveAction)

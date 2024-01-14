@@ -25,6 +25,7 @@ public:
     QDateTime endDate;
     QDateTime doorTime;
     QVariant location;
+    QVariantList potentialAction;
 };
 
 KITINERARY_MAKE_CLASS(Event)
@@ -36,6 +37,7 @@ KITINERARY_MAKE_PROPERTY(Event, QDateTime, startDate, setStartDate)
 KITINERARY_MAKE_PROPERTY(Event, QDateTime, endDate, setEndDate)
 KITINERARY_MAKE_PROPERTY(Event, QDateTime, doorTime, setDoorTime)
 KITINERARY_MAKE_PROPERTY(Event, QVariant, location, setLocation)
+KITINERARY_MAKE_PROPERTY(Event, QVariantList, potentialAction, setPotentialAction)
 KITINERARY_MAKE_OPERATOR(Event)
 
 }

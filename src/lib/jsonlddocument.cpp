@@ -88,6 +88,7 @@ static void registerBuiltInTypes(std::vector<TypeInfo> &r)
     add<FoodEstablishment>(r);
     add<FoodEstablishmentReservation>(r);
     add<GeoCoordinates>(r);
+    add<JoinAction>(r);
     add<LocalBusiness>(r);
     add<LodgingBusiness>(r);
     add<LodgingReservation>(r);

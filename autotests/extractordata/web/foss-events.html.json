@@ -23,6 +23,12 @@
             "name": "Congress Center Hamburg"
         },
         "name": "37C3",
+        "potentialAction": [
+            {
+                "@type": "JoinAction",
+                "target": "https://tickets.events.ccc.de/37c3/"
+            }
+        ],
         "startDate": {
             "@type": "QDateTime",
             "@value": "2023-12-27T00:00:00+01:00",
