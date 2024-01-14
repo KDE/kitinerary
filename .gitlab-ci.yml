@@ -17,9 +17,7 @@ static-extractor:
   image: centos:centos7
   tags:
     - Linux
-  only:
-    changes:
-      - scripts/*.sh
+  when: manual
   script:
     - export BUILD_ROOT=/builds
     - export STAGING_ROOT=/builds/staging
