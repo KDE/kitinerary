@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+PRODID:-//K Desktop Environment//NONSGML libkcal 4.3//EN
+VERSION:2.0
+X-KDE-ICAL-IMPLEMENTATION-VERSION:1.0
+BEGIN:VEVENT
+DTSTAMP:20240114T110843Z
+X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org","@type":
+ "Event","endDate":{"@type":"QDateTime","@value":"2023-12-30T23:59:59+01:
+ 00","timezone":"Europe/Berlin"},"location":{"@type":"Place","address":
+ {"@type":"PostalAddress","addressCountry":"DE","addressLocality":
+ "Hamburg"},"geo":{"@type":"GeoCoordinates","latitude":
+ 53.56222152709961,"longitude":9.985480308532715},"name":"Congress Center 
+ Hamburg"},"name":"37C3","startDate":{"@type":"QDateTime","@value":
+ "2023-12-27T00:00:00+01:00","timezone":"Europe/Berlin"},"url":"https:
+ //events.ccc.de/congress/2023/infos/index.html"}]
+CREATED:20240114T110843Z
+UID:KIT-2f870a11-5705-4551-a4ed-7034740b8d4d
+LAST-MODIFIED:20240114T110843Z
+DESCRIPTION:Hamburg\nGermany\n
+SUMMARY:37C3
+LOCATION:Congress Center Hamburg
+GEO:53.562222;9.985480
+DTSTART;VALUE=DATE:20231227
+DTEND;VALUE=DATE:20231231
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
