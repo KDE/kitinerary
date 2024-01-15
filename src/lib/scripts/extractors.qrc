@@ -128,6 +128,8 @@
         <file>gwr.js</file>
         <file>hertz.js</file>
         <file>hertz.json</file>
+        <file>hilton.json</file>
+        <file>hilton.js</file>
         <file>hotels.com.json</file>
         <file>hotels.com.js</file>
         <file>iberia.json</file>
