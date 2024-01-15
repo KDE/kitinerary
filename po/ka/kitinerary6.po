@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kitinerary\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:45+0000\n"
+"POT-Creation-Date: 2024-01-15 00:38+0000\n"
 "PO-Revision-Date: 2022-10-02 07:56+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -18,146 +18,146 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: calendarhandler.cpp:166
+#: calendarhandler.cpp:171
 #, kde-format
 msgctxt "canceled train/flight/loading reservation"
 msgid "Canceled: %1"
 msgstr "გაუქმებულია: %1"
 
-#: calendarhandler.cpp:192
+#: calendarhandler.cpp:197
 #, kde-format
 msgid "Flight %1 from %2 to %3"
 msgstr "ფრენა %1 %2-დან %3-მდე"
 
-#: calendarhandler.cpp:211
+#: calendarhandler.cpp:216
 #, kde-format
 msgid "Boarding for flight %1"
 msgstr "ჩაჯდომა ფრენისთვის %1"
 
-#: calendarhandler.cpp:213
+#: calendarhandler.cpp:218
 #, kde-format
 msgid "Boarding for flight %1 at gate %2"
 msgstr "ჩაჯდომა ფრენისთვის %1 გეითთან %2"
 
-#: calendarhandler.cpp:222
+#: calendarhandler.cpp:227
 #, kde-format
 msgid "Boarding time: %1"
 msgstr "ჩაჯდომის დრო: %1"
 
-#: calendarhandler.cpp:225
+#: calendarhandler.cpp:230
 #, kde-format
 msgctxt "flight departure gate"
 msgid "Departure gate: %1"
 msgstr "გაფრენის გეითი: %1"
 
-#: calendarhandler.cpp:235
+#: calendarhandler.cpp:240
 #, kde-format
 msgid "Boarding group: %1"
 msgstr "ჩაჯდომის ჯგუფი: %1"
 
-#: calendarhandler.cpp:238 calendarhandler.cpp:270 calendarhandler.cpp:298
+#: calendarhandler.cpp:243 calendarhandler.cpp:275 calendarhandler.cpp:303
 #, kde-format
 msgid "Seat: %1"
 msgstr "სავარძელი: %1"
 
-#: calendarhandler.cpp:241 calendarhandler.cpp:276 calendarhandler.cpp:301
-#: calendarhandler.cpp:322 calendarhandler.cpp:368 calendarhandler.cpp:424
-#: calendarhandler.cpp:465 calendarhandler.cpp:497
+#: calendarhandler.cpp:246 calendarhandler.cpp:281 calendarhandler.cpp:306
+#: calendarhandler.cpp:327 calendarhandler.cpp:373 calendarhandler.cpp:436
+#: calendarhandler.cpp:477 calendarhandler.cpp:509
 #, kde-format
 msgid "Booking reference: %1"
 msgstr "ჯავშანის ბმა: %1"
 
-#: calendarhandler.cpp:253
+#: calendarhandler.cpp:258
 #, kde-format
 msgid "Train %1 from %2 to %3"
 msgstr "მატარებელი %1 %2-დან %3-მდე"
 
-#: calendarhandler.cpp:262
+#: calendarhandler.cpp:267
 #, kde-format
 msgid "Departure platform: %1"
 msgstr "გასვლის პლატფორმა: %1"
 
-#: calendarhandler.cpp:267
+#: calendarhandler.cpp:272
 #, kde-format
 msgid "Coach: %1"
 msgstr "გამძღოლი: %1"
 
-#: calendarhandler.cpp:273
+#: calendarhandler.cpp:278
 #, kde-format
 msgid "Arrival platform: %1"
 msgstr "ჩამოსვლის პლატფორმა: %1"
 
-#: calendarhandler.cpp:287
+#: calendarhandler.cpp:292
 #, kde-format
 msgid "Bus %1 from %2 to %3"
 msgstr "ავტობუსი %1 %2-დან %3-მდე"
 
-#: calendarhandler.cpp:312
+#: calendarhandler.cpp:317
 #, kde-format
 msgid "Ferry from %1 to %2"
 msgstr "ბორანი %1-დან %2-მდე"
 
-#: calendarhandler.cpp:325
+#: calendarhandler.cpp:330
 #, kde-format
 msgid "Ticket number: %1"
 msgstr "ბილეთის ნომერი: %1"
 
-#: calendarhandler.cpp:335
+#: calendarhandler.cpp:340
 #, kde-format
 msgid "Hotel reservation: %1"
 msgstr "სასტუმროს რეზერვაცია: %1"
 
-#: calendarhandler.cpp:346
+#: calendarhandler.cpp:351
 #, kde-format
 msgid "Check-in: %1"
 msgstr "ჩეკინი: %1"
 
-#: calendarhandler.cpp:349
+#: calendarhandler.cpp:354
 #, kde-format
 msgid "Check-out: %1"
 msgstr "ჩეკაუტი: %1"
 
-#: calendarhandler.cpp:352
+#: calendarhandler.cpp:357
 #, kde-format
 msgid "Phone: %1"
 msgstr "ტელეფონი: %1"
 
-#: calendarhandler.cpp:355
+#: calendarhandler.cpp:360
 #, kde-format
 msgid "Email: %1"
 msgstr "ელფოსტა: %1"
 
-#: calendarhandler.cpp:358
+#: calendarhandler.cpp:363
 #, kde-format
 msgid "Website: %1"
 msgstr "ვებსაიტი: %1"
 
-#: calendarhandler.cpp:401
+#: calendarhandler.cpp:413
 #, kde-format
 msgid "Entrance for %1"
 msgstr "შესასვლელი: %1"
 
-#: calendarhandler.cpp:448
+#: calendarhandler.cpp:460
 #, kde-format
 msgid "Restaurant reservation: %1"
 msgstr "რესტორანის ჯავშანი: %1"
 
-#: calendarhandler.cpp:462
+#: calendarhandler.cpp:474
 #, kde-format
 msgid "Number of people: %1"
 msgstr "ხალხის რაოდენობა: %1"
 
-#: calendarhandler.cpp:469 calendarhandler.cpp:501
+#: calendarhandler.cpp:481 calendarhandler.cpp:513
 #, kde-format
 msgid "Under name: %1"
 msgstr "სახელით: %1"
 
-#: calendarhandler.cpp:479
+#: calendarhandler.cpp:491
 #, kde-format
 msgid "Rental car reservation: %1"
 msgstr "მანქანის ქირაობა: %1"
 
-#: calendarhandler.cpp:490
+#: calendarhandler.cpp:502
 #, kde-format
 msgid ""
 "Pickup location: %1\n"
@@ -166,7 +166,7 @@ msgstr ""
 "აყვანის მდებარეობა: %1\n"
 "%2\n"
 
-#: calendarhandler.cpp:494
+#: calendarhandler.cpp:506
 #, kde-format
 msgid ""
 "Dropoff location: %1\n"
@@ -175,7 +175,7 @@ msgstr ""
 "ჩამოსმის მდებარეობა: %1\n"
 "%2\n"
 
-#: calendarhandler.cpp:523
+#: calendarhandler.cpp:535
 #, kde-format
 msgid ""
 "Reservation reference: %1\n"
