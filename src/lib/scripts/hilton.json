@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "h\\d.hilton.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "extractHtml",
+    "mimeType": "text/html",
+    "script": "hilton.js"
+}

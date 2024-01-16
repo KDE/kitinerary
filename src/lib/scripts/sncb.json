@@ -34,7 +34,7 @@
         "filter": [
             {
                 "field": "From",
-                "match": "@b-europe.com",
+                "match": "@b-europe.com|b-rail.be",
                 "mimeType": "message/rfc822",
                 "scope": "Parent"
             }
