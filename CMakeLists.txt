@@ -66,6 +66,7 @@ set_package_properties("PhoneNumber" PROPERTIES PURPOSE "Parsing and geo-coding 
 find_package(OpenSSL 1.1 REQUIRED COMPONENTS Crypto)
 find_package(OsmTools)
 set_package_properties(OsmTools PROPERTIES TYPE OPTIONAL PURPOSE "Needed only for regenereating the airport database (ie. you most likely don't need this)")
+find_package(Threads) # workaround for static ZXing in Flatpak (not needed with Qt6 anymore)
 
 if (NOT ANDROID)
     set_package_properties(KF${KF_MAJOR_VERSION}CalendarCore PROPERTIES TYPE REQUIRED)
