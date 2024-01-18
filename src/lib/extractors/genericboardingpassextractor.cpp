@@ -179,12 +179,24 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
         AirportNameTokenizer tokenizer(pageText);
         while (tokenizer.hasNext()) {
             const auto s = tokenizer.next();
-            if (s.compare(QLatin1String("international"), Qt::CaseInsensitive) == 0 ||
-               (s.size() == 3 && airportNames.find(KnowledgeDb::IataCode{s}) != airportNames.end()))
-            {
+            if (s.compare(QLatin1String("international"), Qt::CaseInsensitive) == 0) {
                 qCDebug(Log) << "  ignoring" << s;
                 continue;
             }
+
+            // IATA code of one of the airports
+            if (const auto code = KnowledgeDb::IataCode(s); !s.isNull() && airportNames.find(KnowledgeDb::IataCode{s}) != airportNames.end()) {
+                // also look for terminal information after the IATA code itself
+                const auto offset = s.size() + s.data() - pageText.data();
+                const auto res = terminalFinder.find(QStringView(pageText).mid(offset));
+                if (res.hasResult() && res.name != s.toString()) {
+                    terminalNames[code] = res.name;
+                }
+
+                qCDebug(Log) << "  found own IATA code" << s;
+                continue;
+            }
+
             const auto iataCodes = KnowledgeDb::iataCodesFromName(s);
             for (const auto code : iataCodes) {
                 auto it2 = airportNames.find(code);
