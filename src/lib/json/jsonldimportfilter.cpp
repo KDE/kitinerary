@@ -113,6 +113,17 @@ static void migrateToAction(QJsonObject &obj, const char *propName, const char *
     }
 }
 
+static void filterPlace(QJsonObject &obj)
+{
+    // convert text address to PostalAddress
+    if (const auto addr = obj.value("address"_L1); addr.isString()) {
+        obj.insert("address"_L1, QJsonObject{
+            {"@type"_L1, "PostalAddress"_L1},
+            {"streetAddress"_L1, addr.toString()},
+        });
+    }
+}
+
 static void filterFlight(QJsonObject &res)
 {
     // move incomplete departureTime (ie. just ISO date, no time) to departureDay
@@ -177,6 +188,8 @@ static void filterFoodEstablishment(QJsonObject &restaurant)
             migrateToAction(restaurant, "acceptsReservations", "ReserveAction", true);
         }
     }
+
+    filterPlace(restaurant);
 }
 
 static void filterActionTarget(QJsonObject &action)
@@ -278,6 +291,9 @@ static constexpr const JsonLdFilterEngine::TypeFilter type_filters[] = {
     { "Event", filterEvent },
     { "Flight", filterFlight },
     { "FoodEstablishment", filterFoodEstablishment },
+    { "LocalBusiness", filterPlace },
+    { "Organization", filterPlace },
+    { "Place", filterPlace },
     { "PostalAddress", filterPostalAddress },
 };
 
