@@ -598,7 +598,7 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
         if (util->ParseAndKeepRawInput(phoneStr, "ZZ", &number) == i18n::phonenumbers::PhoneNumberUtil::NO_PARSING_ERROR) {
             std::string isoCode;
             util->GetRegionCodeForNumber(number, &isoCode);
-            if (!isoCode.empty()) {
+            if (!isoCode.empty() && isoCode != "ZZ") {
                 addr.setAddressCountry(QString::fromStdString(isoCode));
             }
         }
