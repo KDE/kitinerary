@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "organizer.email",
+            "match": "noreply@mail.egencia",
+            "mimeType": "internal/event",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractEvent",
+    "mimeType": "internal/event",
+    "script": "egencia.js"
+}
