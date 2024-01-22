@@ -1,0 +1,20 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "description": "Wir sehen uns um 16:00 vor dem Bundestag, um ein klares Statement gegen Rechts zu setzen!  Schon letzten Sonntag haben wir uns mit 25.000 Menschen für unsere Demokratie ausgesprochen, das wollen wir diesen Sonntag erneut tun!  Denn zusammen sind wir die Brandmauer!  Kommt vorbei &amp; seid laut!",
+        "endDate": "2024-01-21T23:59:59",
+        "image": "https://www.demokrateam.org/wp-content/uploads/2024/01/IMG_7412.jpeg",
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Platz d. Republik 1, 10557 Berlin"
+            },
+            "name": "Berlin, Bundestag"
+        },
+        "name": "Zusammen gegen Rechts!",
+        "startDate": "2024-01-21T00:00:00",
+        "url": "https://www.demokrateam.org/demos/zusammen-gegen-rechts-5/"
+    }
+]
