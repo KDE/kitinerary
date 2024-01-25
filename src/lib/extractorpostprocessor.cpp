@@ -500,6 +500,7 @@ Seat ExtractorPostprocessorPrivate::processSeat(Seat seat) const
     seat.setSeatSection(seat.seatSection().simplified());
     seat.setSeatRow(seat.seatRow().simplified());
     seat.setSeatNumber(seat.seatNumber().simplified());
+    seat.setSeatingType(seat.seatingType().simplified());
     return seat;
 }
 
