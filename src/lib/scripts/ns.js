@@ -3,6 +3,15 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+// Tickets can contain station names in multiple languages. Just use one of them, and let the DB API handle it
+function splitStationName(name) {
+    if (name.includes("/")) {
+        return name.split("/")[0]
+    }
+
+    return name
+}
+
 function extractPdf(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
     let reservations = [];
@@ -15,9 +24,9 @@ function extractPdf(pdf, node, triggerNode) {
 
         let res = JsonLd.clone(triggerNode.result[0]);
         res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + leg[2], "dd/MM/yyyyhh:mm", "en");
-        res.reservationFor.departureStation.name = leg[3] + (leg[9] ? leg[9] : "");
+        res.reservationFor.departureStation.name = splitStationName(leg[3] + (leg[9] ? leg[9] : ""));
         res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[1] + leg[4], "dd/MM/yyyyhh:mm", "en");
-        res.reservationFor.arrivalStation.name = leg[5] + (leg[10] ? leg[10] : "");
+        res.reservationFor.arrivalStation.name = splitStationName(leg[5] + (leg[10] ? leg[10] : ""));
         res.reservationFor.trainNumber = leg[6];
         res.reservedTicket.ticketedSeat.seatSection = leg[7] !== '*' ? leg[7] : undefined;
         res.reservedTicket.ticketedSeat.seatNumber = leg[8] !== '*' ? leg[8] : undefined;
