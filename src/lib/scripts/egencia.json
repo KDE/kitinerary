@@ -1,0 +1,26 @@
+[{
+    "filter": [
+        {
+            "field": "organizer.email",
+            "match": "noreply@mail.egencia",
+            "mimeType": "internal/event",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractEvent",
+    "mimeType": "internal/event",
+    "script": "egencia.js"
+},
+{
+    "filter": [
+        {
+            "field": "text",
+            "match": "Egencia, LLC",
+            "mimeType": "application/pdf",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "egencia.js"
+}]
