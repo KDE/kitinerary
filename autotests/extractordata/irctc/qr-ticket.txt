@@ -1,0 +1,21 @@
+PNR No.:9876543210,
+TXN ID:123456789012345,
+Passenger Name:Konqi Dragon,
+		Gender:Male,
+		Age:27,
+		Status:CNFB1/14UPPER
+Passenger Name:Katie Dragon,
+		Gender:Female,
+		Age:26,
+		Status:CNFB1/12
+Quota:GENERAL (GN) ,
+Train No.:12345,
+Train Name:KDE INDIA EXP,
+Scheduled Departure:08:15 02-Feb-2024,
+Date Of Journey:02-Feb-2024,
+Boarding Station:SHIVAJINAGAR - SVJR,
+Class:THIRD AC (3A) ,
+From:MUMBAI DADAR - DR,
+To:PUNE JUNCTION - PUNE,
+Ticket Fare: Rs1234.0,
+IRCTC C Fee: Rs23.4+PG Charges Extra

@@ -20,5 +20,15 @@
     "function": "extractQrTicket",
     "script": "irctc.js",
     "mimeType": "text/plain"
-}
-]
+},{
+    "filter": [
+        {
+            "match": "^PNR No.:\\d{10},\\nTXN ID:",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdfTicket",
+    "script": "irctc.js",
+    "mimeType": "application/pdf"
+}]

@@ -33,14 +33,18 @@ function extractQrTicket(text) {
     const arr = text.match(/To:(.*) - (.*),/);
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalStation.identifier = 'ir:' + arr[2];
-    res.reservationFor.departureDay = JsonLd.toDateTime(text.match(/Date Of Journey:(.*),/)[1], "dd-MMM-yyyy", "en");
+    const dt = text.match(/Scheduled Departure:(\d{2}:\d{2}.*),/);
+    if (dt) {
+        res.reservationFor.departureTime = JsonLd.toDateTime(dt[1], "hh:mm dd-MMM-yyyy", "en");
+    } else {
+        res.reservationFor.departureDay = JsonLd.toDateTime(text.match(/Date Of Journey:(.*),/)[1], "dd-MMM-yyyy", "en");
+    }
     res.reservedTicket.ticketedSeat.seatingType = text.match(/Class:(.*),/)[1];
 
     let idx = 0;
     let reservations = [];
     while (true) {
-        const pas = text.substr(idx).match(/Passenger Name:(.*),\n.*\n.*\n\s*(?:Status:CNF(.*)\/([^,\n]*))?/);
-        console.log(pas);
+        const pas = text.substr(idx).match(/Passenger Name:(.*),\n.*\n.*\n\s*(?:Status:(?:CNF|RAC)(.*)\/([^,\n]*))?/);
         if (!pas)
             break;
         idx += pas.index + pas[0].length;
@@ -51,4 +55,13 @@ function extractQrTicket(text) {
         reservations.push(r);
     }
     return reservations;
+}
+
+function extractPdfTicket(pdf, node, triggerNode) {
+    const text = pdf.pages[triggerNode.location].text;
+    const arr = JsonLd.toDateTime(text.match(/Arrival\* (.*)\n/)[1], "hh:mm dd-MMM-yyyy", "en");
+    let res = triggerNode.result;
+    for (let r of res)
+        r.reservationFor.arrivalTime = arr;
+    return res;
 }
