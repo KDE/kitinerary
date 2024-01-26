@@ -1,10 +1,9 @@
 /*
    SPDX-FileCopyrightText: 2019 Volker Krause <vkrause@kde.org>
-
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function main(content) {
+function extractSmsTicket(content) {
     var res = JsonLd.newTrainReservation();
 
     var m = content.match(/PNR:(\d+),TRAIN:(.+?),DOJ:(.+?),TIME:(.+?),(.+?),(.+?) TO (.+?),(.*?)(\+\d)?,(.*?),/);
@@ -20,4 +19,36 @@ function main(content) {
     res.reservedTicket.ticketedSeat.seatNumber = m[10];
 
     return res;
+}
+
+function extractQrTicket(text) {
+    let res = JsonLd.newTrainReservation();
+    res.reservedTicket.ticketToken = 'qrcode:' + text;
+    res.reservationNumber = text.match(/PNR No.:(\d+),/)[1];
+    res.reservationFor.trainNumber = text.match(/Train No.:(.*),/)[1];
+    res.reservationFor.trainName = text.match(/Train Name:(.*),/)[1];
+    const dep = text.match(/Boarding Station:(.*) - (.*),/);
+    res.reservationFor.departureStation.name = dep[1];
+    res.reservationFor.departureStation.identifier = 'ir:' + dep[2];
+    const arr = text.match(/To:(.*) - (.*),/);
+    res.reservationFor.arrivalStation.name = arr[1];
+    res.reservationFor.arrivalStation.identifier = 'ir:' + arr[2];
+    res.reservationFor.departureDay = JsonLd.toDateTime(text.match(/Date Of Journey:(.*),/)[1], "dd-MMM-yyyy", "en");
+    res.reservedTicket.ticketedSeat.seatingType = text.match(/Class:(.*),/)[1];
+
+    let idx = 0;
+    let reservations = [];
+    while (true) {
+        const pas = text.substr(idx).match(/Passenger Name:(.*),\n.*\n.*\n\s*(?:Status:CNF(.*)\/([^,\n]*))?/);
+        console.log(pas);
+        if (!pas)
+            break;
+        idx += pas.index + pas[0].length;
+        let r = JsonLd.clone(res);
+        r.underName.name = pas[1];
+        r.reservedTicket.ticketedSeat.seatSection = pas[2];
+        r.reservedTicket.ticketedSeat.seatNumber = pas[3];
+        reservations.push(r);
+    }
+    return reservations;
 }
