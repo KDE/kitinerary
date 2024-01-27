@@ -1,0 +1,122 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IN"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 18.529399871826172,
+                    "longitude": 73.87310028076172
+                },
+                "identifier": "ir:PUNE",
+                "name": "PUNE JUNCTION"
+            },
+            "departureDay": "2024-02-02",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IN"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 18.531700134277344,
+                    "longitude": 73.8511962890625
+                },
+                "identifier": "ir:SVJR",
+                "name": "SHIVAJINAGAR"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2024-02-02T08:15:00+05:30",
+                "timezone": "Asia/Kolkata"
+            },
+            "trainName": "KDE INDIA EXP",
+            "trainNumber": "12345"
+        },
+        "reservationNumber": "9876543210",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "qrcode:PNR No.:9876543210,\nTXN ID:123456789012345,\nPassenger Name:Konqi Dragon,\n\t\tGender:Male,\n\t\tAge:27,\n\t\tStatus:CNFB1/14UPPER\nPassenger Name:Katie Dragon,\n\t\tGender:Female,\n\t\tAge:26,\n\t\tStatus:CNFB1/12\nQuota:GENERAL (GN) ,\nTrain No.:12345,\nTrain Name:KDE INDIA EXP,\nScheduled Departure:08:15 02-Feb-2024,\nDate Of Journey:02-Feb-2024,\nBoarding Station:SHIVAJINAGAR - SVJR,\nClass:THIRD AC (3A) ,\nFrom:MUMBAI DADAR - DR,\nTo:PUNE JUNCTION - PUNE,\nTicket Fare: Rs1234.0,\nIRCTC C Fee: Rs23.4+PG Charges Extra\n",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "12",
+                "seatSection": "B1",
+                "seatingType": "THIRD AC (3A)"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Katie Dragon"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IN"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 18.529399871826172,
+                    "longitude": 73.87310028076172
+                },
+                "identifier": "ir:PUNE",
+                "name": "PUNE JUNCTION"
+            },
+            "departureDay": "2024-02-02",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IN"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 18.531700134277344,
+                    "longitude": 73.8511962890625
+                },
+                "identifier": "ir:SVJR",
+                "name": "SHIVAJINAGAR"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2024-02-02T08:15:00+05:30",
+                "timezone": "Asia/Kolkata"
+            },
+            "trainName": "KDE INDIA EXP",
+            "trainNumber": "12345"
+        },
+        "reservationNumber": "9876543210",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "qrcode:PNR No.:9876543210,\nTXN ID:123456789012345,\nPassenger Name:Konqi Dragon,\n\t\tGender:Male,\n\t\tAge:27,\n\t\tStatus:CNFB1/14UPPER\nPassenger Name:Katie Dragon,\n\t\tGender:Female,\n\t\tAge:26,\n\t\tStatus:CNFB1/12\nQuota:GENERAL (GN) ,\nTrain No.:12345,\nTrain Name:KDE INDIA EXP,\nScheduled Departure:08:15 02-Feb-2024,\nDate Of Journey:02-Feb-2024,\nBoarding Station:SHIVAJINAGAR - SVJR,\nClass:THIRD AC (3A) ,\nFrom:MUMBAI DADAR - DR,\nTo:PUNE JUNCTION - PUNE,\nTicket Fare: Rs1234.0,\nIRCTC C Fee: Rs23.4+PG Charges Extra\n",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "14UPPER",
+                "seatSection": "B1",
+                "seatingType": "THIRD AC (3A)"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Konqi Dragon"
+        }
+    }
+]
