@@ -40,25 +40,24 @@ BoundingBox Element::boundingBox() const
     return {};
 }
 
-QString Element::tagValue(const QLatin1String &key) const
-{
-    switch (type()) {
-        case Type::Null:
-            return {};
-        case Type::Node:
-            return OSM::tagValue(*node(), key);
-        case Type::Way:
-            return OSM::tagValue(*way(), key);
-        case Type::Relation:
-            return OSM::tagValue(*relation(), key);
-    }
-
+QString Element::tagValue(const QLatin1StringView &key) const {
+  switch (type()) {
+  case Type::Null:
     return {};
+  case Type::Node:
+    return OSM::tagValue(*node(), key);
+  case Type::Way:
+    return OSM::tagValue(*way(), key);
+  case Type::Relation:
+    return OSM::tagValue(*relation(), key);
+  }
+
+  return {};
 }
 
 QString OSM::Element::tagValue(const char *key) const
 {
-    return tagValue(QLatin1String(key));
+  return tagValue(QLatin1StringView(key));
 }
 
 QString Element::url() const
@@ -131,16 +130,16 @@ std::vector<const Node*> Element::outerPath(const DataSet &dataSet) const
         }
         case Type::Relation:
         {
-            if (tagValue("type") != QLatin1String("multipolygon")) {
-                return {};
-            }
+          if (tagValue("type") != QLatin1StringView("multipolygon")) {
+            return {};
+          }
 
             // collect the relevant ways
             std::vector<const Way*> ways;
             for (const auto &member : relation()->members) {
-                if (member.role != QLatin1String("outer")) {
-                    continue;
-                }
+              if (member.role != QLatin1StringView("outer")) {
+                continue;
+              }
                 const auto it = std::lower_bound(dataSet.ways.begin(), dataSet.ways.end(), member.id);
                 if (it != dataSet.ways.end() && (*it).id == member.id && !(*it).nodes.empty()) {
                     ways.push_back(&(*it));

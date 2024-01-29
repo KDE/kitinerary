@@ -53,7 +53,7 @@ private Q_SLOTS:
         Rct2Ticket rct2(layout);
         rct2.setContextDate({{2018, 12, 19}, {18, 35}});
         QVERIFY(layout.isValid());
-        QCOMPARE(layout.type(), QLatin1String("RCT2"));
+        QCOMPARE(layout.type(), QLatin1StringView("RCT2"));
         QVERIFY(rct2.isValid());
 
         QFile ref(refFile);
@@ -65,7 +65,7 @@ private Q_SLOTS:
             QList<QVariant>({QVariant::fromValue(rct2)}));
         if (refArray != resJson) {
             qWarning().noquote() << QJsonDocument(resJson).toJson();
-            QFile failFile(refFile + QLatin1String(".fail"));
+            QFile failFile(refFile + QLatin1StringView(".fail"));
             QVERIFY(failFile.open(QFile::WriteOnly));
             failFile.write(QJsonDocument(resJson).toJson());
             failFile.close();

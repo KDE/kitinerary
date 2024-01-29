@@ -58,9 +58,9 @@ const KMime::Headers::Base* findHeader(KMime::Content *content, const char *head
 
 bool MimeDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return contentMightBeEmail(encodedData) ||
-        fileName.endsWith(QLatin1String(".eml"), Qt::CaseInsensitive) ||
-        fileName.endsWith(QLatin1String(".mbox"), Qt::CaseInsensitive);
+  return contentMightBeEmail(encodedData) ||
+         fileName.endsWith(QLatin1StringView(".eml"), Qt::CaseInsensitive) ||
+         fileName.endsWith(QLatin1StringView(".mbox"), Qt::CaseInsensitive);
 }
 
 ExtractorDocumentNode MimeDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
@@ -141,19 +141,24 @@ static void expandContentNodeRecursive(ExtractorDocumentNode &node, KMime::Conte
     }
 
     // special handling of multipart/related to add images to the corresponding HTML document
-    if (ct && ct->isMultipart() && ct->isSubtype("related") && ct->parameter(QLatin1String("type")) == QLatin1String("text/html") && children.size() >= 2) {
-        const auto child = children.front();
-        if (child->contentType(false) && child->contentType(false)->isHTMLText()) {
-            auto htmlNode = expandContentNode(node, child, engine);
-            for (auto it = std::next(children.begin()); it != children.end(); ++it) {
-                auto imgNode = expandContentNode(htmlNode, (*it), engine);
-                const auto cid = (*it)->contentID(false);
-                if (cid) {
-                    imgNode.setLocation(cid->identifier());
-                }
-            }
-            return;
+    if (ct && ct->isMultipart() && ct->isSubtype("related") &&
+        ct->parameter(QLatin1StringView("type")) ==
+            QLatin1String("text/html") &&
+        children.size() >= 2) {
+      const auto child = children.front();
+      if (child->contentType(false) &&
+          child->contentType(false)->isHTMLText()) {
+        auto htmlNode = expandContentNode(node, child, engine);
+        for (auto it = std::next(children.begin()); it != children.end();
+             ++it) {
+          auto imgNode = expandContentNode(htmlNode, (*it), engine);
+          const auto cid = (*it)->contentID(false);
+          if (cid) {
+            imgNode.setLocation(cid->identifier());
+          }
         }
+        return;
+      }
     }
 
     for (const auto child : children) {

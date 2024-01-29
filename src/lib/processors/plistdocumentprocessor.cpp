@@ -30,9 +30,9 @@ static void searchSchemaOrgRecursive(const QJsonValue &val, QJsonArray &result)
 {
     if (val.isObject()) {
         const auto obj = val.toObject();
-        if (obj.contains(QLatin1String("@type"))) {
-            result.push_back(obj);
-            return;
+        if (obj.contains(QLatin1StringView("@type"))) {
+          result.push_back(obj);
+          return;
         }
 
         for (auto it = obj.begin(); it != obj.end(); ++it) {

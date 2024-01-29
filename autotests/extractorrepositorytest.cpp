@@ -43,14 +43,14 @@ private Q_SLOTS:
         QVERIFY(!root.isNull());
         engine.extractorRepository()->extractorsForNode(root, extractors);
         QCOMPARE(extractors.size(), 1);
-        QVERIFY(extractors[0]->name().startsWith(QLatin1String("irctc")));
+        QVERIFY(extractors[0]->name().startsWith(QLatin1StringView("irctc")));
         extractors.clear();
 
         root = engine.documentNodeFactory()->createNode(QStringLiteral("i0CVxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxX"), u"text/plain");
         QVERIFY(!root.isNull());
         engine.extractorRepository()->extractorsForNode(root, extractors);
         QCOMPARE(extractors.size(), 1);
-        QVERIFY(extractors[0]->name().startsWith(QLatin1String("sncf")));
+        QVERIFY(extractors[0]->name().startsWith(QLatin1StringView("sncf")));
         QVERIFY(dynamic_cast<const ScriptExtractor*>(extractors[0]));
         extractors.clear();
 

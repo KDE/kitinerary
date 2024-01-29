@@ -53,7 +53,7 @@ private Q_SLOTS:
         ap.setName(QStringLiteral("Berlin Tegel"));
         ap.setIataCode(QStringLiteral("TXL"));
         f.setDepartureAirport(ap);
-        f.setDepartureGate(QLatin1String(""));
+        f.setDepartureGate(QLatin1StringView(""));
         Airline airline;
         airline.setIataCode(QStringLiteral("LH"));
         f.setAirline(airline);
@@ -62,24 +62,34 @@ private Q_SLOTS:
             JsonLdDocument::toJson(QList<QVariant>({QVariant::fromValue(f)}));
         QCOMPARE(array.size(), 1);
         auto obj = array.at(0).toObject();
-        QCOMPARE(obj.value(QLatin1String("@context")).toString(), QLatin1String("http://schema.org"));
-        QCOMPARE(obj.value(QLatin1String("@type")).toString(), QLatin1String("Flight"));
-        QCOMPARE(obj.value(QLatin1String("flightNumber")).toString(), QLatin1String("1234"));
+        QCOMPARE(obj.value(QLatin1StringView("@context")).toString(),
+                 QLatin1String("http://schema.org"));
+        QCOMPARE(obj.value(QLatin1StringView("@type")).toString(),
+                 QLatin1String("Flight"));
+        QCOMPARE(obj.value(QLatin1StringView("flightNumber")).toString(),
+                 QLatin1String("1234"));
 
-        QCOMPARE(obj.value(QLatin1String("arrivalTime")).toString(), QLatin1String("2018-03-18T19:44:00Z"));
-        auto dtObj = obj.value(QLatin1String("departureTime")).toObject();
-        QCOMPARE(dtObj.value(QLatin1String("@value")).toString(), QLatin1String("2018-03-18T18:44:00+01:00"));
-        QCOMPARE(dtObj.value(QLatin1String("@type")).toString(), QLatin1String("QDateTime"));
-        QCOMPARE(dtObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
-        QCOMPARE(obj.value(QLatin1String("departureDay")).toString(), QLatin1String("2018-03-18"));
+        QCOMPARE(obj.value(QLatin1StringView("arrivalTime")).toString(),
+                 QLatin1String("2018-03-18T19:44:00Z"));
+        auto dtObj = obj.value(QLatin1StringView("departureTime")).toObject();
+        QCOMPARE(dtObj.value(QLatin1StringView("@value")).toString(),
+                 QLatin1String("2018-03-18T18:44:00+01:00"));
+        QCOMPARE(dtObj.value(QLatin1StringView("@type")).toString(),
+                 QLatin1String("QDateTime"));
+        QCOMPARE(dtObj.value(QLatin1StringView("timezone")).toString(),
+                 QLatin1String("Europe/Berlin"));
+        QCOMPARE(obj.value(QLatin1StringView("departureDay")).toString(),
+                 QLatin1String("2018-03-18"));
 
-        auto obj2 = obj.value(QLatin1String("departureAirport")).toObject();
-        QCOMPARE(obj2.value(QLatin1String("@type")).toString(), QLatin1String("Airport"));
+        auto obj2 = obj.value(QLatin1StringView("departureAirport")).toObject();
+        QCOMPARE(obj2.value(QLatin1StringView("@type")).toString(),
+                 QLatin1String("Airport"));
 
-        QVERIFY(obj.contains(QLatin1String("departureGate")));
-        QCOMPARE(obj.value(QLatin1String("departureGate")).toString(), QLatin1String(""));
+        QVERIFY(obj.contains(QLatin1StringView("departureGate")));
+        QCOMPARE(obj.value(QLatin1StringView("departureGate")).toString(),
+                 QLatin1String(""));
 
-        QVERIFY(obj.contains(QLatin1String("airline")));
+        QVERIFY(obj.contains(QLatin1StringView("airline")));
 
         qDebug().noquote() << QJsonDocument(obj).toJson();
 
@@ -98,15 +108,21 @@ private Q_SLOTS:
         array = JsonLdDocument::toJson(QList<QVariant>({res}));
         QCOMPARE(array.size(), 1);
         obj = array.at(0).toObject();
-        QCOMPARE(obj.value(QLatin1String("partySize")).toInt(), 2);
-        QCOMPARE(obj.value(QLatin1String("reservationNumber")).toString(), reservationNumber);
-        auto resDtObj = obj.value(QLatin1String("startTime")).toObject();
-        QCOMPARE(resDtObj.value(QLatin1String("@value")).toString(), QLatin1String("2018-03-18T18:44:00+01:00"));
-        QCOMPARE(resDtObj.value(QLatin1String("@type")).toString(), QLatin1String("QDateTime"));
-        QCOMPARE(resDtObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
+        QCOMPARE(obj.value(QLatin1StringView("partySize")).toInt(), 2);
+        QCOMPARE(obj.value(QLatin1StringView("reservationNumber")).toString(),
+                 reservationNumber);
+        auto resDtObj = obj.value(QLatin1StringView("startTime")).toObject();
+        QCOMPARE(resDtObj.value(QLatin1StringView("@value")).toString(),
+                 QLatin1String("2018-03-18T18:44:00+01:00"));
+        QCOMPARE(resDtObj.value(QLatin1StringView("@type")).toString(),
+                 QLatin1String("QDateTime"));
+        QCOMPARE(resDtObj.value(QLatin1StringView("timezone")).toString(),
+                 QLatin1String("Europe/Berlin"));
         qDebug().noquote() << QJsonDocument(obj).toJson();
-        auto undernameObj = obj.value(QLatin1String("underName")).toObject();
-        QCOMPARE(undernameObj.value(QLatin1String("name")).toString(), QLatin1String("John"));
+        auto undernameObj =
+            obj.value(QLatin1StringView("underName")).toObject();
+        QCOMPARE(undernameObj.value(QLatin1StringView("name")).toString(),
+                 QLatin1String("John"));
 
         //Rental Car
         RentalCarReservation rentalRes;
@@ -139,21 +155,31 @@ private Q_SLOTS:
         rentalRes.setPickupLocation(placePickupLocation);
 
         obj = JsonLdDocument::toJson(rentalRes);
-        QCOMPARE(obj.value(QLatin1String("reservationNumber")).toString(), reservationRentalNumber);
+        QCOMPARE(obj.value(QLatin1StringView("reservationNumber")).toString(),
+                 reservationRentalNumber);
 
         qDebug().noquote() << QJsonDocument(obj).toJson();
-        undernameObj = obj.value(QLatin1String("underName")).toObject();
-        QCOMPARE(undernameObj.value(QLatin1String("name")).toString(), fullNameRentalCar);
+        undernameObj = obj.value(QLatin1StringView("underName")).toObject();
+        QCOMPARE(undernameObj.value(QLatin1StringView("name")).toString(),
+                 fullNameRentalCar);
 
-        auto pickupTimeObj = obj.value(QLatin1String("dropoffTime")).toObject();
-        QCOMPARE(pickupTimeObj.value(QLatin1String("@value")).toString(), QLatin1String("2018-03-21T18:44:00+01:00"));
-        QCOMPARE(pickupTimeObj.value(QLatin1String("@type")).toString(), QLatin1String("QDateTime"));
-        QCOMPARE(pickupTimeObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
+        auto pickupTimeObj =
+            obj.value(QLatin1StringView("dropoffTime")).toObject();
+        QCOMPARE(pickupTimeObj.value(QLatin1StringView("@value")).toString(),
+                 QLatin1String("2018-03-21T18:44:00+01:00"));
+        QCOMPARE(pickupTimeObj.value(QLatin1StringView("@type")).toString(),
+                 QLatin1String("QDateTime"));
+        QCOMPARE(pickupTimeObj.value(QLatin1StringView("timezone")).toString(),
+                 QLatin1String("Europe/Berlin"));
 
-        auto droptimeObj = obj.value(QLatin1String("pickupTime")).toObject();
-        QCOMPARE(droptimeObj.value(QLatin1String("@value")).toString(), QLatin1String("2018-03-18T18:44:00+01:00"));
-        QCOMPARE(droptimeObj.value(QLatin1String("@type")).toString(), QLatin1String("QDateTime"));
-        QCOMPARE(droptimeObj.value(QLatin1String("timezone")).toString(), QLatin1String("Europe/Berlin"));
+        auto droptimeObj =
+            obj.value(QLatin1StringView("pickupTime")).toObject();
+        QCOMPARE(droptimeObj.value(QLatin1StringView("@value")).toString(),
+                 QLatin1String("2018-03-18T18:44:00+01:00"));
+        QCOMPARE(droptimeObj.value(QLatin1StringView("@type")).toString(),
+                 QLatin1String("QDateTime"));
+        QCOMPARE(droptimeObj.value(QLatin1StringView("timezone")).toString(),
+                 QLatin1String("Europe/Berlin"));
     }
 
     void testDeserialization()
@@ -180,9 +206,11 @@ private Q_SLOTS:
         auto data = datas.at(0);
         QVERIFY(data.canConvert<Flight>());
         auto flight = data.value<Flight>();
-        QCOMPARE(flight.flightNumber(), QLatin1String("1234"));
-        QCOMPARE(flight.departureAirport().iataCode(), QLatin1String("TXL"));
-        QCOMPARE(flight.departureAirport().name(), QLatin1String("Berlin Tegel"));
+        QCOMPARE(flight.flightNumber(), QLatin1StringView("1234"));
+        QCOMPARE(flight.departureAirport().iataCode(),
+                 QLatin1StringView("TXL"));
+        QCOMPARE(flight.departureAirport().name(),
+                 QLatin1StringView("Berlin Tegel"));
         QCOMPARE(flight.departureTime(), QDateTime(QDate(2018, 3, 18), QTime(18, 44, 0), QTimeZone("Europe/Berlin")));
         QCOMPARE(flight.departureDay(), QDate(2018, 3, 17));
         QCOMPARE(flight.arrivalTime(), QDateTime(QDate(2018, 3, 18), QTime(19, 44, 0), QTimeZone("Europe/Berlin")));
@@ -374,10 +402,10 @@ private Q_SLOTS:
         f2.setAirline(a2);
 
         f1 = JsonLdDocument::apply(f1, f2).value<Flight>();
-        QCOMPARE(f1.departureGate(), QLatin1String("38"));
-        QCOMPARE(f1.departureTerminal(), QLatin1String("A"));
-        QCOMPARE(f1.airline().iataCode(), QLatin1String("AB"));
-        QCOMPARE(f1.airline().name(), QLatin1String("Air Berlin"));
+        QCOMPARE(f1.departureGate(), QLatin1StringView("38"));
+        QCOMPARE(f1.departureTerminal(), QLatin1StringView("A"));
+        QCOMPARE(f1.airline().iataCode(), QLatin1StringView("AB"));
+        QCOMPARE(f1.airline().name(), QLatin1StringView("Air Berlin"));
     }
 
     void testDateTimeParsing_data()
@@ -438,15 +466,16 @@ private Q_SLOTS:
 
         qDebug() << normalizedJson;
         if (normalizedJson != refJson) {
-            QFile f(refFile + QLatin1String(".fail"));
-            QVERIFY(f.open(QFile::WriteOnly));
-            f.write(QJsonDocument(normalizedJson).toJson());
-            f.close();
+          QFile f(refFile + QLatin1StringView(".fail"));
+          QVERIFY(f.open(QFile::WriteOnly));
+          f.write(QJsonDocument(normalizedJson).toJson());
+          f.close();
 
-            QProcess proc;
-            proc.setProcessChannelMode(QProcess::ForwardedChannels);
-            proc.start(QStringLiteral("diff"), {QStringLiteral("-u"), refFile, f.fileName()});
-            QVERIFY(proc.waitForFinished());
+          QProcess proc;
+          proc.setProcessChannelMode(QProcess::ForwardedChannels);
+          proc.start(QStringLiteral("diff"),
+                     {QStringLiteral("-u"), refFile, f.fileName()});
+          QVERIFY(proc.waitForFinished());
         }
         QCOMPARE(normalizedJson, refJson);
     }

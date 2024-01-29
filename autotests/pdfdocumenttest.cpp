@@ -36,18 +36,26 @@ private Q_SLOTS:
         f.seek(0);
         std::unique_ptr<PdfDocument> doc(PdfDocument::fromData(f.readAll()));
         QVERIFY(doc);
-        QCOMPARE(doc->text(), QLatin1String("This is the first page." LINEBREAK "It contains a PDF 417 barcode." LINEBREAK "This is the second page." LINEBREAK "It contains an Aztec code." LINEBREAK));
+        QCOMPARE(doc->text(),
+                 QLatin1StringView("This is the first page." LINEBREAK
+                                   "It contains a PDF 417 barcode." LINEBREAK
+                                   "This is the second page." LINEBREAK
+                                   "It contains an Aztec code." LINEBREAK));
         QCOMPARE(doc->pageCount(), 2);
         QCOMPARE(doc->property("pages").toList().size(), 2);
 
         auto page = doc->page(0);
-        QCOMPARE(page.text(), QLatin1String("This is the first page." LINEBREAK "It contains a PDF 417 barcode." LINEBREAK));
+        QCOMPARE(page.text(),
+                 QLatin1StringView("This is the first page." LINEBREAK
+                                   "It contains a PDF 417 barcode." LINEBREAK));
         QCOMPARE(page.imageCount(), 1);
         QCOMPARE(PdfPage::staticMetaObject.property(1).readOnGadget(&page).toList().size(), 1);
         QCOMPARE(page.width(), 210);
         QCOMPARE(page.height(), 296);
 
-        QCOMPARE(page.textInRect(0, 0, 1, 0.5), QLatin1String("This is the first page." LINEBREAK "It contains a PDF 417 barcode." LINEBREAK));
+        QCOMPARE(page.textInRect(0, 0, 1, 0.5),
+                 QLatin1StringView("This is the first page." LINEBREAK
+                                   "It contains a PDF 417 barcode." LINEBREAK));
         QCOMPARE(page.textInRect(0, 0.5, 1, 1), QString());
 
         auto img = page.image(0);
@@ -59,7 +67,9 @@ private Q_SLOTS:
         QCOMPARE(img.image().height(), 152);
 
         page = doc->page(1);
-        QCOMPARE(page.text(), QLatin1String("This is the second page." LINEBREAK "It contains an Aztec code." LINEBREAK));
+        QCOMPARE(page.text(),
+                 QLatin1StringView("This is the second page." LINEBREAK
+                                   "It contains an Aztec code." LINEBREAK));
         QCOMPARE(page.imageCount(), 1);
         img = page.image(0);
         QCOMPARE(img.width(), 93);
@@ -89,14 +99,14 @@ private Q_SLOTS:
         const auto page = doc->page(0);
         QCOMPARE(page.linkCount(), 1);
         auto link = page.link(0);
-        QCOMPARE(link.url(), QLatin1String("https://kde.org"));
+        QCOMPARE(link.url(), QLatin1StringView("https://kde.org"));
         qDebug() << link.area();
         QVERIFY(link.area().isValid());
 
         QCOMPARE(page.linksInRect(0.0, 0.0, 1.0, 1.0).size(), 1);
         QCOMPARE(page.linksInRect(0.0, 0.0, 1.0, 0.5).size(), 1);
         link = page.linksInRect(0.0, 0.0, 0.5, 0.5).at(0).value<PdfLink>();
-        QCOMPARE(link.url(), QLatin1String("https://kde.org"));
+        QCOMPARE(link.url(), QLatin1StringView("https://kde.org"));
         QCOMPARE(page.linksInRect(0.0, 0.0, 0.2, 0.5).size(), 1);
         QCOMPARE(page.linksInRect(0.0, 0.5, 1.0, 1.0).size(), 0);
     }

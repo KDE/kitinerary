@@ -178,12 +178,15 @@ const VdvCertificateKey* VdvCertificate::certKey() const
 
 VdvCertificate VdvPkiRepository::caCertificate(const VdvCaReference *car)
 {
-    QFile f(QLatin1String(":/org.kde.pim/kitinerary/vdv/certs/")
-        + QString::fromLatin1(QByteArray(reinterpret_cast<const char*>(car), sizeof(VdvCaReference)).toHex())
-        + QLatin1String(".vdv-cert"));
-    if (!f.open(QFile::ReadOnly)) {
-        qWarning() << "Failed to open CA cert file" << f.fileName() << f.errorString();
-        return VdvCertificate();
+  QFile f(QLatin1StringView(":/org.kde.pim/kitinerary/vdv/certs/") +
+          QString::fromLatin1(QByteArray(reinterpret_cast<const char *>(car),
+                                         sizeof(VdvCaReference))
+                                  .toHex()) +
+          QLatin1StringView(".vdv-cert"));
+  if (!f.open(QFile::ReadOnly)) {
+    qWarning() << "Failed to open CA cert file" << f.fileName()
+               << f.errorString();
+    return VdvCertificate();
     }
 
     VdvCertificate cert(f.readAll());

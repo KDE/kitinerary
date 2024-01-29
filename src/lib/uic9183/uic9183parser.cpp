@@ -70,10 +70,10 @@ QVariant Uic9183Parser::block(const QString &name) const
         return {};
     }
 
-#define BLOCK_FROM_NAME(Type) \
-    if (name == QLatin1String(Type::RecordId)) { \
-        const auto block = findBlock<Type>(); \
-        return block.isValid() ? QVariant::fromValue(block) : QVariant(); \
+#define BLOCK_FROM_NAME(Type)                                                  \
+    if (name == QLatin1StringView(Type::RecordId)) {                           \
+      const auto block = findBlock<Type>();                                    \
+      return block.isValid() ? QVariant::fromValue(block) : QVariant();        \
     }
 
     BLOCK_FROM_NAME(Uic9183Head)
@@ -169,8 +169,9 @@ QString Uic9183Parser::pnr() const
         if (issuerId == 80 && (key.size() == 8 || key.size() == 9) && key.at(6) == QLatin1Char('-') && key.at(7).isDigit()) {
             return key.left(6); // DB domestic
         }
-        if (issuerId == 80 && key.size() == 13 && key.endsWith(QLatin1String("0101"))) {
-            return key.left(9); // DB domestic part of an international order
+        if (issuerId == 80 && key.size() == 13 &&
+            key.endsWith(QLatin1StringView("0101"))) {
+          return key.left(9); // DB domestic part of an international order
         }
         if ((issuerId == 1088 || issuerId == 1184) && key.size() == 9 && key.at(7) == QLatin1Char('_') && key.at(8).isDigit()) {
             return key.left(7); // SNCB and NS
@@ -265,7 +266,7 @@ QString Uic9183Parser::carrierId() const
 Organization Uic9183Parser::issuer() const
 {
     Organization issuer;
-    issuer.setIdentifier(QLatin1String("uic:") + carrierId());
+    issuer.setIdentifier(QLatin1StringView("uic:") + carrierId());
     if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && fcb.issuingDetail.issuerNameIsSet()) {
         issuer.setName(fcb.issuingDetail.issuerName);
     }
@@ -297,7 +298,9 @@ QDateTime Uic9183Parser::validFrom() const
     // ÖBB vender block
     if (const auto b = findBlock("118199"); !b.isNull()) {
         const auto obj = QJsonDocument::fromJson(QByteArray::fromRawData(b.content(), b.contentSize())).object();
-        auto dt = QDateTime::fromString(obj.value(QLatin1String("V")).toString(), QStringLiteral("yyMMddhhmm"));
+        auto dt =
+            QDateTime::fromString(obj.value(QLatin1StringView("V")).toString(),
+                                  QStringLiteral("yyMMddhhmm"));
         if (dt.isValid()) { // ÖBB VorteilsCard barcodes have an empty vendor block
             if (dt.date().year() < 2000) {
                 dt = dt.addYears(100);
@@ -355,7 +358,9 @@ QDateTime Uic9183Parser::validUntil() const
     // ÖBB vender block
     if (const auto b = findBlock("118199"); !b.isNull()) {
         const auto obj = QJsonDocument::fromJson(QByteArray::fromRawData(b.content(), b.contentSize())).object();
-        auto dt = QDateTime::fromString(obj.value(QLatin1String("B")).toString(), QStringLiteral("yyMMddhhmm"));
+        auto dt =
+            QDateTime::fromString(obj.value(QLatin1StringView("B")).toString(),
+                                  QStringLiteral("yyMMddhhmm"));
         if (dt.isValid()) { // ÖBB VorteilsCard barcodes have an empty vendor block
             if (dt.date().year() < 2000) {
                 dt = dt.addYears(100);
@@ -452,11 +457,11 @@ static void fixFcbStationCode(TrainStation &station)
     // UIC codes in Germany are wildly unreliable, there seem to be different
     // code tables in use by different operators, so we unfortunately have to ignore
     // those entirely
-    if (station.identifier().startsWith(QLatin1String("uic:80"))) {
-        PostalAddress addr;
-        addr.setAddressCountry(QStringLiteral("DE"));
-        station.setAddress(addr);
-        station.setIdentifier(QString());
+    if (station.identifier().startsWith(QLatin1StringView("uic:80"))) {
+      PostalAddress addr;
+      addr.setAddressCountry(QStringLiteral("DE"));
+      station.setAddress(addr);
+      station.setIdentifier(QString());
     }
 }
 

@@ -67,7 +67,9 @@ private Q_SLOTS:
         QFETCH(QString, refFile);
 
         QFile in(inputFile);
-        const auto openFlags = inputFile.endsWith(QLatin1String(".txt")) ? QFile::Text : QFile::ReadOnly;
+        const auto openFlags = inputFile.endsWith(QLatin1StringView(".txt"))
+                                   ? QFile::Text
+                                   : QFile::ReadOnly;
         QVERIFY(in.open(QFile::ReadOnly | openFlags));
 
         ExtractorEngine engine;

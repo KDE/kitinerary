@@ -253,47 +253,51 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
     // QLocale expects the exact string in QLocale::shortMonthName(), while we often encounter a three
     // letter month identifier. For en_US that's the same, for Swedish it isn't though for example. So
     // let's try to fix up the month identifiers to the full short name.
-    if (!dt.isValid() && format.contains(QLatin1String("MMM"))) {
-        auto dtStrFixed = dtStr;
-        for (int i = 1; i <= 12; ++i) {
-            const auto monthName = locale.monthName(i, QLocale::ShortFormat);
-            dtStrFixed.replace(monthName.left(3), monthName, Qt::CaseInsensitive);
-        }
-        dt = locale.toDateTime(dtStrFixed, format);
+    if (!dt.isValid() && format.contains(QLatin1StringView("MMM"))) {
+      auto dtStrFixed = dtStr;
+      for (int i = 1; i <= 12; ++i) {
+        const auto monthName = locale.monthName(i, QLocale::ShortFormat);
+        dtStrFixed.replace(monthName.left(3), monthName, Qt::CaseInsensitive);
+      }
+      dt = locale.toDateTime(dtStrFixed, format);
     }
 
     // try even harder for "MMM" month format
     // in the de_DE locale we encounter sometimes almost arbitrary abbreviations for month
     // names (eg. Mrz, Mär for März). So try to identify those and replace them with what QLocale
     // expects
-    if (!dt.isValid() && format.contains(QLatin1String("MMM"))) {
-        auto dtStrFixed = dtStr;
-        for (int i = 1; i <= 12; ++i) {
-            const auto monthName = locale.monthName(i, QLocale::LongFormat);
-            const auto beginIdx = dtStr.indexOf(monthName.at(0));
-            if (beginIdx < 0) {
-                continue;
-            }
-            auto endIdx = beginIdx;
-            for (auto nameIdx = 0; endIdx < dtStr.size() && nameIdx < monthName.size(); ++nameIdx) {
-                if (dtStr.at(endIdx).toCaseFolded() == monthName.at(nameIdx).toCaseFolded()) {
-                    ++endIdx;
-                }
-            }
-            if (endIdx - beginIdx >= 3) {
-                dtStrFixed.replace(beginIdx, endIdx - beginIdx, locale.monthName(i, QLocale::ShortFormat));
-                break;
-            }
+    if (!dt.isValid() && format.contains(QLatin1StringView("MMM"))) {
+      auto dtStrFixed = dtStr;
+      for (int i = 1; i <= 12; ++i) {
+        const auto monthName = locale.monthName(i, QLocale::LongFormat);
+        const auto beginIdx = dtStr.indexOf(monthName.at(0));
+        if (beginIdx < 0) {
+          continue;
         }
-        dt = locale.toDateTime(dtStrFixed, format);
+        auto endIdx = beginIdx;
+        for (auto nameIdx = 0;
+             endIdx < dtStr.size() && nameIdx < monthName.size(); ++nameIdx) {
+          if (dtStr.at(endIdx).toCaseFolded() ==
+              monthName.at(nameIdx).toCaseFolded()) {
+            ++endIdx;
+          }
+        }
+        if (endIdx - beginIdx >= 3) {
+          dtStrFixed.replace(beginIdx, endIdx - beginIdx,
+                             locale.monthName(i, QLocale::ShortFormat));
+          break;
+        }
+      }
+      dt = locale.toDateTime(dtStrFixed, format);
     }
 
     if (!dt.isValid()) {
         return dt;
     }
 
-    const bool hasFullYear = format.contains(QLatin1String("yyyy"));
-    const bool hasYear = hasFullYear || format.contains(QLatin1String("yy"));
+    const bool hasFullYear = format.contains(QLatin1StringView("yyyy"));
+    const bool hasYear =
+        hasFullYear || format.contains(QLatin1StringView("yy"));
     const bool hasMonth = format.contains(QLatin1Char('M'));
     const bool hasDay = format.contains(QLatin1Char('d'));
 
@@ -328,21 +332,23 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QJSValue &format
         return toDateTime(dtStr, format.toString(), localeName.toString());
     }
     if (format.isArray()) {
-        const auto count = format.property(QLatin1String("length")).toInt();
-        for (auto i = 0; i < count; ++i) {
-            const auto dt = toDateTime(dtStr, format.property(i), localeName);
-            if (dt.isValid()) {
-                return dt;
-            }
+      const auto count = format.property(QLatin1StringView("length")).toInt();
+      for (auto i = 0; i < count; ++i) {
+        const auto dt = toDateTime(dtStr, format.property(i), localeName);
+        if (dt.isValid()) {
+          return dt;
+        }
         }
     }
     if (format.isString() && localeName.isArray()) {
-        const auto count = localeName.property(QLatin1String("length")).toInt();
-        for (auto i = 0; i < count; ++i) {
-            const auto dt = toDateTime(dtStr, format.toString(), localeName.property(i).toString());
-            if (dt.isValid()) {
-                return dt;
-            }
+      const auto count =
+          localeName.property(QLatin1StringView("length")).toInt();
+      for (auto i = 0; i < count; ++i) {
+        const auto dt = toDateTime(dtStr, format.toString(),
+                                   localeName.property(i).toString());
+        if (dt.isValid()) {
+          return dt;
+        }
         }
     }
     return {};
@@ -367,20 +373,24 @@ QJSValue JsApi::JsonLd::clone(const QJSValue& v) const
 QJSValue JsApi::JsonLd::toGeoCoordinates(const QString &mapUrl)
 {
     QUrl url(mapUrl);
-    if (url.host().contains(QLatin1String("google"))) {
-        QRegularExpression regExp(QStringLiteral("[/=](-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"));
-        auto match = regExp.match(url.path());
-        if (!match.hasMatch()) {
-            match = regExp.match(url.query());
-        }
+    if (url.host().contains(QLatin1StringView("google"))) {
+      QRegularExpression regExp(
+          QStringLiteral("[/=](-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"));
+      auto match = regExp.match(url.path());
+      if (!match.hasMatch()) {
+        match = regExp.match(url.query());
+      }
 
-        if (match.hasMatch()) {
-            auto geo = m_engine->newObject();
-            geo.setProperty(QStringLiteral("@type"), QStringLiteral("GeoCoordinates"));
-            geo.setProperty(QStringLiteral("latitude"), match.capturedView(1).toDouble());
-            geo.setProperty(QStringLiteral("longitude"), match.capturedView(2).toDouble());
-            return geo;
-        }
+      if (match.hasMatch()) {
+        auto geo = m_engine->newObject();
+        geo.setProperty(QStringLiteral("@type"),
+                        QStringLiteral("GeoCoordinates"));
+        geo.setProperty(QStringLiteral("latitude"),
+                        match.capturedView(1).toDouble());
+        geo.setProperty(QStringLiteral("longitude"),
+                        match.capturedView(2).toDouble());
+        return geo;
+      }
     }
 
     return {};

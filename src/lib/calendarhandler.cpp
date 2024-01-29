@@ -100,9 +100,9 @@ CalendarHandler::findEvents(KCalendarCore::Calendar *calendar,
     }
 
     for (const auto &event : events) {
-        if (!event->uid().startsWith(QLatin1String("KIT-"))) {
-            continue;
-        }
+      if (!event->uid().startsWith(QLatin1StringView("KIT-"))) {
+        continue;
+      }
         const auto otherRes = CalendarHandler::reservationsForEvent(event);
         for (const auto &other : otherRes) {
             if (MergeUtil::isSame(other, reservation)) {
@@ -172,8 +172,8 @@ void CalendarHandler::fillEvent(
         event->clearAlarms();
     }
 
-    if (!event->uid().startsWith(QLatin1String("KIT-"))) {
-        event->setUid(QLatin1String("KIT-") + event->uid());
+    if (!event->uid().startsWith(QLatin1StringView("KIT-"))) {
+      event->setUid(QLatin1StringView("KIT-") + event->uid());
     }
 
     const auto payload = QJsonDocument(JsonLdDocument::toJson(reservations)).toJson(QJsonDocument::Compact);

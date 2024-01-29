@@ -84,13 +84,14 @@ private Q_SLOTS:
         newEvent->setLastModified(refEvent->lastModified());
         newEvent->setCreated(refEvent->created());
         // normalize the effect of CLDR 42
-        newEvent->setDescription(newEvent->description().replace(QStringLiteral("\u202F"), QLatin1String(" ")));
+        newEvent->setDescription(newEvent->description().replace(
+            QStringLiteral("\u202F"), QLatin1StringView(" ")));
 
         if (*newEvent != *refEvent) {
             qDebug().noquote() << "Actual: " << format.toICalString(newEvent).remove(QLatin1Char('\r'));
             qDebug().noquote() << "Expected: " << format.toICalString(refEvent).remove(QLatin1Char('\r'));
 
-            QFile failFile(icalFile + QLatin1String(".fail"));
+            QFile failFile(icalFile + QLatin1StringView(".fail"));
             QVERIFY(failFile.open(QFile::WriteOnly));
             failFile.write(format.toICalString(newEvent).remove(QLatin1Char('\r')).toUtf8());
             failFile.close();

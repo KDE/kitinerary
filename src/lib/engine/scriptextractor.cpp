@@ -45,9 +45,9 @@ bool ScriptExtractor::load(const QJsonObject &obj, const QString &fileName, int 
     d->m_fileName = fileName;
     d->m_index = index;
 
-    d->m_mimeType = obj.value(QLatin1String("mimeType")).toString();
+    d->m_mimeType = obj.value(QLatin1StringView("mimeType")).toString();
 
-    const auto filterArray = obj.value(QLatin1String("filter")).toArray();
+    const auto filterArray = obj.value(QLatin1StringView("filter")).toArray();
     for (const auto &filterValue : filterArray) {
         ExtractorFilter f;
         if (!f.load(filterValue.toObject())) {
@@ -57,7 +57,7 @@ bool ScriptExtractor::load(const QJsonObject &obj, const QString &fileName, int 
         d->m_filters.push_back(std::move(f));
     }
 
-    const auto scriptName = obj.value(QLatin1String("script")).toString();
+    const auto scriptName = obj.value(QLatin1StringView("script")).toString();
     if (!scriptName.isEmpty()) {
         QFileInfo fi(fileName);
         d->m_scriptName = fi.path() + QLatin1Char('/') + scriptName;
@@ -67,7 +67,8 @@ bool ScriptExtractor::load(const QJsonObject &obj, const QString &fileName, int 
         qCWarning(Log) << "Script file not found:" << d->m_scriptName;
         return false;
     }
-    d->m_scriptFunction = obj.value(QLatin1String("function")).toString(QStringLiteral("main"));
+    d->m_scriptFunction = obj.value(QLatin1StringView("function"))
+                              .toString(QStringLiteral("main"));
 
     return !d->m_filters.empty() && !d->m_mimeType.isEmpty();
 }

@@ -65,15 +65,16 @@ private Q_SLOTS:
         const auto refArray = QJsonDocument::fromJson(ref.readAll()).array();
 
         if (outArray != refArray) {
-            QFile failFile(postFile + QLatin1String(".fail"));
-            QVERIFY(failFile.open(QFile::WriteOnly));
-            failFile.write(QJsonDocument(outArray).toJson());
-            failFile.close();
+          QFile failFile(postFile + QLatin1StringView(".fail"));
+          QVERIFY(failFile.open(QFile::WriteOnly));
+          failFile.write(QJsonDocument(outArray).toJson());
+          failFile.close();
 
-            QProcess proc;
-            proc.setProcessChannelMode(QProcess::ForwardedChannels);
-            proc.start(QStringLiteral("diff"), {QStringLiteral("-u"), postFile, failFile.fileName()});
-            QVERIFY(proc.waitForFinished());
+          QProcess proc;
+          proc.setProcessChannelMode(QProcess::ForwardedChannels);
+          proc.start(QStringLiteral("diff"),
+                     {QStringLiteral("-u"), postFile, failFile.fileName()});
+          QVERIFY(proc.waitForFinished());
         }
         QCOMPARE(refArray.size(), postproc.result().size());
         QCOMPARE(outArray, refArray);

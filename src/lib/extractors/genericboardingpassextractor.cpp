@@ -179,9 +179,10 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
         AirportNameTokenizer tokenizer(pageText);
         while (tokenizer.hasNext()) {
             const auto s = tokenizer.next();
-            if (s.compare(QLatin1String("international"), Qt::CaseInsensitive) == 0) {
-                qCDebug(Log) << "  ignoring" << s;
-                continue;
+            if (s.compare(QLatin1StringView("international"),
+                          Qt::CaseInsensitive) == 0) {
+              qCDebug(Log) << "  ignoring" << s;
+              continue;
             }
 
             // IATA code of one of the airports

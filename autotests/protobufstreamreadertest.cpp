@@ -72,7 +72,7 @@ private Q_SLOTS:
     {
         const auto stringData = QByteArray::fromHex("120774657374696e67");
         ProtobufStreamReader r(std::string_view(stringData.constData(), stringData.size()));
-        QCOMPARE(r.readString(), QLatin1String("testing"));
+        QCOMPARE(r.readString(), QLatin1StringView("testing"));
 
         const auto subMessage = QByteArray::fromHex("1a03089601");
         r = ProtobufStreamReader(std::string_view(subMessage.constData(), subMessage.size()));

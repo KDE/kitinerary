@@ -28,7 +28,10 @@ TerminalFinder::TerminalFinder(QStringView frontAnchor, QStringView backAnchor)
 
     int i = 0;
     for (const auto &pattern : terminal_patterns) {
-        m_patterns[i++] = QRegularExpression(frontAnchor + QLatin1String("(?<terminal>") + QLatin1String(pattern.pattern) + QLatin1String(")") + backAnchor, pattern.options);
+      m_patterns[i++] = QRegularExpression(
+          frontAnchor + QLatin1StringView("(?<terminal>") +
+              QLatin1String(pattern.pattern) + QLatin1String(")") + backAnchor,
+          pattern.options);
     }
 }
 

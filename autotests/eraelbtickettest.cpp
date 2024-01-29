@@ -20,12 +20,13 @@ private Q_SLOTS:
         // standard ERA ELB single segment
         auto ticket = ELBTicket::parse("eRIVXXX007123456789121110019ELGAA  01003006034216GBSPXBEBMI09116 91160340130422    XX");
         QVERIFY(ticket);
-        QCOMPARE(ticket->pnr(), QLatin1String("XXX007"));
+        QCOMPARE(ticket->pnr(), QLatin1StringView("XXX007"));
         QCOMPARE(ticket->numberAdults(), 1);
         QCOMPARE(ticket->numberChildren(), 0);
         QVERIFY(ticket->segment1().isValid());
         QVERIFY(!ticket->segment2().isValid());
-        QCOMPARE(ticket->segment1().arrivalStation(), QLatin1String("BEBMI"));
+        QCOMPARE(ticket->segment1().arrivalStation(),
+                 QLatin1StringView("BEBMI"));
 
         QDateTime contextDt({2022, 2, 1}, { 8, 0 }, QTimeZone::UTC);
         QCOMPARE(ticket->emissionDate(contextDt), QDate(2013, 1, 6));

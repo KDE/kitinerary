@@ -51,8 +51,9 @@ TrainStation makeStation(int idType, const QString &alphaId, int numericId)
 {
     TrainStation station;
     if (idType == 0 && numericId > 10'00000 && numericId < 99'99999) {
-        station.setIdentifier(QLatin1String("uic:") + QString::number(numericId));
-        station.setName(QString::number(numericId));
+      station.setIdentifier(QLatin1StringView("uic:") +
+                            QString::number(numericId));
+      station.setName(QString::number(numericId));
     } else if (idType == 1 && alphaId.size() == 5 && std::all_of(alphaId.begin(), alphaId.end(), [](QChar c) { return c.isUpper(); })) {
         // TODO is the identifier type defined in that case??
         station.setName(alphaId);
@@ -68,10 +69,13 @@ void SsbDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
         Seat seat;
         seat.setSeatingType(QString::number(ssb.classOfTravel()));
         Ticket ticket;
-        ticket.setTicketToken(QLatin1String("aztecbin:") + QString::fromLatin1(ssb.rawData().toBase64()));
+        ticket.setTicketToken(QLatin1StringView("aztecbin:") +
+                              QString::fromLatin1(ssb.rawData().toBase64()));
 
         Organization issuer;
-        issuer.setIdentifier(QLatin1String("uic:") + QString::number(ssb.issuerCode())); // left pad with 0 to 4 digets?
+        issuer.setIdentifier(
+            QLatin1StringView("uic:") +
+            QString::number(ssb.issuerCode())); // left pad with 0 to 4 digets?
         TrainTrip trip;
         trip.setProvider(issuer);
 

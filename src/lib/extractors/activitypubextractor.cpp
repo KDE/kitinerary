@@ -25,7 +25,9 @@ QString ActivityPubExtractor::name() const
 
 static bool isActivityStreamsContext(const QJsonValue &context)
 {
-    return context.isString() && context.toString() == QLatin1String("https://www.w3.org/ns/activitystreams");
+  return context.isString() &&
+         context.toString() ==
+             QLatin1StringView("https://www.w3.org/ns/activitystreams");
 }
 
 bool ActivityPubExtractor::canHandle(const ExtractorDocumentNode &node) const
@@ -36,7 +38,7 @@ bool ActivityPubExtractor::canHandle(const ExtractorDocumentNode &node) const
             continue;
         }
         const auto obj = v.toObject();
-        const auto context = obj.value(QLatin1String("@context"));
+        const auto context = obj.value(QLatin1StringView("@context"));
         if (isActivityStreamsContext(context)) {
             return true;
         }
@@ -52,12 +54,12 @@ bool ActivityPubExtractor::canHandle(const ExtractorDocumentNode &node) const
 
 static void convertPlace(QJsonObject &obj)
 {
-    QJsonObject geo({
-        {QLatin1String("@type"), QLatin1String("GeoCoordinates")},
-        {QLatin1String("latitude"), obj.value(QLatin1String("latitude"))},
-        {QLatin1String("longitude"), obj.value(QLatin1String("longitude"))},
-    });
-    obj.insert(QLatin1String("geo"), geo);
+  QJsonObject geo({
+      {QLatin1StringView("@type"), QLatin1String("GeoCoordinates")},
+      {QLatin1StringView("latitude"), obj.value(QLatin1String("latitude"))},
+      {QLatin1StringView("longitude"), obj.value(QLatin1String("longitude"))},
+  });
+  obj.insert(QLatin1StringView("geo"), geo);
 }
 
 // filter functions applied to objects of the corresponding (already normalized) type
@@ -89,8 +91,9 @@ static QJsonValue convertActivityStreamObject(const QJsonValue &value)
         }
     }
 
-    if (const auto t = obj.value(QLatin1String("type")).toString(); !t.isEmpty()) {
-        obj.insert(QLatin1String("@type"), t);
+    if (const auto t = obj.value(QLatin1StringView("type")).toString();
+        !t.isEmpty()) {
+      obj.insert(QLatin1StringView("@type"), t);
     }
 
     JsonLdFilterEngine filterEngine;

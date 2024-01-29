@@ -89,8 +89,9 @@ void ExtractorEnginePrivate::processNode(ExtractorDocumentNode& node)
         auto result = node.result().jsonLdResult();
         for (int i = 0; i < result.size(); ++i) {
             auto res = result.at(i).toObject();
-            if (!res.contains(QLatin1String("modifiedTime"))) {
-                res.insert(QStringLiteral("modifiedTime"), node.contextDateTime().toString(Qt::ISODate));
+            if (!res.contains(QLatin1StringView("modifiedTime"))) {
+              res.insert(QStringLiteral("modifiedTime"),
+                         node.contextDateTime().toString(Qt::ISODate));
             }
             result[i] = res;
         }

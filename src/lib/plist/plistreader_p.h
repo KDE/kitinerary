@@ -60,10 +60,10 @@ public:
     uint64_t size() const;
     uint64_t key(uint64_t index) const;
     uint64_t value(uint64_t index) const;
-    std::optional<uint64_t> value(QLatin1String keyName) const;
-    QVariant object(QLatin1String keyName) const;
+    std::optional<uint64_t> value(QLatin1StringView keyName) const;
+    QVariant object(QLatin1StringView keyName) const;
 
-private:
+  private:
     friend class PListReader;
     explicit PListDict(std::string_view data, const PListReader *reader);
     std::string_view m_data;

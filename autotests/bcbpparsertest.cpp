@@ -68,7 +68,8 @@ private Q_SLOTS:
         IataBcbp bcbp(message);
         QVERIFY(bcbp.isValid());
 
-        QFile ref(QLatin1String(SOURCE_DIR "/bcbpdata/") + refFile + QLatin1String(".txt"));
+        QFile ref(QLatin1StringView(SOURCE_DIR "/bcbpdata/") + refFile +
+                  QLatin1String(".txt"));
         QVERIFY(ref.open(QFile::ReadOnly));
         const auto refOut = ref.readAll();
 
@@ -77,7 +78,8 @@ private Q_SLOTS:
         QProcess proc;
         proc.setProcessChannelMode(QProcess::ForwardedErrorChannel);
         proc.setProgram(exe);
-        proc.setArguments({ QLatin1String("--context-date"), QDate(2018, 4, 2).toString(Qt::ISODate) });
+        proc.setArguments({QLatin1StringView("--context-date"),
+                           QDate(2018, 4, 2).toString(Qt::ISODate)});
         proc.start();
         QVERIFY(proc.waitForStarted());
         proc.write(message.toUtf8());
@@ -88,13 +90,14 @@ private Q_SLOTS:
         QCOMPARE(proc.exitCode(), 0);
         if (ticketDump != refOut) {
             qDebug().noquote() << ticketDump;
-            QFile failFile(ref.fileName() + QLatin1String(".fail"));
+            QFile failFile(ref.fileName() + QLatin1StringView(".fail"));
             QVERIFY(failFile.open(QFile::WriteOnly));
             failFile.write(ticketDump);
         }
         QVERIFY(ticketDump == refOut);
 
-        QFile f(QLatin1String(SOURCE_DIR "/bcbpdata/") + refFile + QLatin1String(".json"));
+        QFile f(QLatin1StringView(SOURCE_DIR "/bcbpdata/") + refFile +
+                QLatin1String(".json"));
         QVERIFY(f.open(QFile::ReadOnly));
         const auto refArray = QJsonDocument::fromJson(f.readAll()).array();
         QVERIFY(!refArray.isEmpty());
@@ -104,7 +107,7 @@ private Q_SLOTS:
 
         if (refArray != resJson) {
             qWarning().noquote() << QJsonDocument(resJson).toJson();
-            QFile failFile(f.fileName() + QLatin1String(".fail"));
+            QFile failFile(f.fileName() + QLatin1StringView(".fail"));
             QVERIFY(failFile.open(QFile::WriteOnly));
             failFile.write(QJsonDocument(resJson).toJson());
         }

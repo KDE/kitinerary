@@ -592,9 +592,9 @@ static bool isNameEqualish(const QString &lhs, const QString &rhs)
     auto diff = diffString(lhs, rhs).toUpper();
 
     // remove honoric prefixes from the diff, in case the previous check didn't catch that
-    diff.remove(QLatin1String("MRS"));
-    diff.remove(QLatin1String("MR"));
-    diff.remove(QLatin1String("MS"));
+    diff.remove(QLatin1StringView("MRS"));
+    diff.remove(QLatin1StringView("MR"));
+    diff.remove(QLatin1StringView("MS"));
 
     // if there's letters in the diff, we assume this is different
     for (const auto c : diff) {

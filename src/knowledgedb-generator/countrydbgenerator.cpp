@@ -73,12 +73,16 @@ bool CountryDbGenerator::fetchCountryList()
 
     for (const auto &countryData : countryArray) {
         const auto countryObj = countryData.toObject();
-        if (countryObj.contains(QLatin1String("demolished"))) {
-            continue;
+        if (countryObj.contains(QLatin1StringView("demolished"))) {
+          continue;
         }
         const auto uri = insertOrMerge(countryObj);
 
-        const auto isoCode = countryObj.value(QLatin1String("isoCode")).toObject().value(QLatin1String("value")).toString().toUpper();
+        const auto isoCode = countryObj.value(QLatin1StringView("isoCode"))
+                                 .toObject()
+                                 .value(QLatin1String("value"))
+                                 .toString()
+                                 .toUpper();
         if (isoCode.size() != 2 || !Util::containsOnlyLetters(isoCode)) {
             qWarning() << "ISO 3166-1 alpha 2 format violation" << isoCode << uri;
             continue;
@@ -154,8 +158,15 @@ bool Generator::CountryDbGenerator::fetchUicCountryCodes()
 
     for (const auto &uicCodeData : uicArray) {
         const auto uicObj = uicCodeData.toObject();
-        const auto uicCode = uicObj.value(QLatin1String("uicCode")).toObject().value(QLatin1String("value")).toString().toUShort();
-        const auto uri = QUrl(uicObj.value(QLatin1String("country")).toObject().value(QLatin1String("value")).toString());
+        const auto uicCode = uicObj.value(QLatin1StringView("uicCode"))
+                                 .toObject()
+                                 .value(QLatin1String("value"))
+                                 .toString()
+                                 .toUShort();
+        const auto uri = QUrl(uicObj.value(QLatin1StringView("country"))
+                                  .toObject()
+                                  .value(QLatin1String("value"))
+                                  .toString());
         const auto it = std::find_if(m_countries.begin(), m_countries.end(), [uri](const auto &country) { return country.uri == uri; });
         if (it == m_countries.end()) {
             qWarning() << "UIC code" << uicCode << "refers to unknown country" << uri;
@@ -175,15 +186,32 @@ QUrl CountryDbGenerator::insertOrMerge(const QJsonObject& obj)
     }
 
     Country c;
-    c.uri = QUrl(obj.value(QLatin1String("country")).toObject().value(QLatin1String("value")).toString());
-    c.name = obj.value(QLatin1String("countryLabel")).toObject().value(QLatin1String("value")).toString();
-    if (!obj.contains(QLatin1String("drivingSideEndTime"))) {
-        c.drivingSide = obj.value(QLatin1String("drivingSide")).toObject().value(QLatin1String("value")).toString();
+    c.uri = QUrl(obj.value(QLatin1StringView("country"))
+                     .toObject()
+                     .value(QLatin1String("value"))
+                     .toString());
+    c.name = obj.value(QLatin1StringView("countryLabel"))
+                 .toObject()
+                 .value(QLatin1String("value"))
+                 .toString();
+    if (!obj.contains(QLatin1StringView("drivingSideEndTime"))) {
+      c.drivingSide = obj.value(QLatin1StringView("drivingSide"))
+                          .toObject()
+                          .value(QLatin1String("value"))
+                          .toString();
     }
-    if (!obj.contains(QLatin1String("plugTypeEndTime")) && obj.contains(QLatin1String("plugType"))) {
-        c.powerPlugTypes.insert(QUrl(obj.value(QLatin1String("plugType")).toObject().value(QLatin1String("value")).toString()).fileName());
+    if (!obj.contains(QLatin1StringView("plugTypeEndTime")) &&
+        obj.contains(QLatin1String("plugType"))) {
+      c.powerPlugTypes.insert(QUrl(obj.value(QLatin1StringView("plugType"))
+                                       .toObject()
+                                       .value(QLatin1String("value"))
+                                       .toString())
+                                  .fileName());
     }
-    c.isoCode = obj.value(QLatin1String("isoCode")).toObject().value(QLatin1String("value")).toString();
+    c.isoCode = obj.value(QLatin1StringView("isoCode"))
+                    .toObject()
+                    .value(QLatin1String("value"))
+                    .toString();
 
     const auto it = std::lower_bound(m_countries.begin(), m_countries.end(), c);
     if (it != m_countries.end() && (*it).uri == c.uri) {
@@ -234,23 +262,27 @@ void CountryDbGenerator::writeCountryTable(QIODevice *out)
         out->write(kv.first.toLatin1());
         out->write("\"}, ");
 
-        if ((*countryIt).drivingSide.endsWith(QLatin1String("/Q14565199"))) {
-            out->write("DrivingSide::Right");
-        } else if ((*countryIt).drivingSide.endsWith(QLatin1String("/Q13196750"))) {
-            out->write("DrivingSide::Left");
+        if ((*countryIt)
+                .drivingSide.endsWith(QLatin1StringView("/Q14565199"))) {
+          out->write("DrivingSide::Right");
+        } else if ((*countryIt)
+                       .drivingSide.endsWith(QLatin1StringView("/Q13196750"))) {
+          out->write("DrivingSide::Left");
         } else {
-            out->write("DrivingSide::Unknown");
+          out->write("DrivingSide::Unknown");
         }
 
         out->write(", {");
         QStringList plugTypes;
         plugTypes.reserve((*countryIt).powerPlugTypes.size());
         for (const auto &plugType : std::as_const((*countryIt).powerPlugTypes)) {
-            const auto it = std::find_if(plug_type_table, plug_type_table_end, [plugType](const plug_type_mapping &elem) {
-                return QLatin1String(elem.wikidataId) == plugType;
-            });
-            if (it != plug_type_table_end) {
-                plugTypes.push_back(QLatin1String((*it).enumName));
+          const auto it = std::find_if(
+              plug_type_table, plug_type_table_end,
+              [plugType](const plug_type_mapping &elem) {
+                return QLatin1StringView(elem.wikidataId) == plugType;
+              });
+          if (it != plug_type_table_end) {
+            plugTypes.push_back(QLatin1StringView((*it).enumName));
             } else {
                 qWarning() << "Unknown plug type" << plugType << (*countryIt).name;
             }

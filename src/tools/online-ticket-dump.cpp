@@ -27,30 +27,36 @@ static void harPostRequest(const QNetworkRequest &req, const QByteArray &postDat
     QJsonArray headers;
     const auto rawHeaders = req.rawHeaderList();
     for (const auto &h : rawHeaders) {
-        headers.push_back(QJsonObject({
-            {QLatin1String("name"), QString::fromUtf8(h)},
-            {QLatin1String("value"), QString::fromUtf8(req.rawHeader(h))},
-        }));
+      headers.push_back(QJsonObject({
+          {QLatin1StringView("name"), QString::fromUtf8(h)},
+          {QLatin1StringView("value"), QString::fromUtf8(req.rawHeader(h))},
+      }));
     }
 
-    harEntry.insert(QLatin1String("request"), QJsonObject({
-        {QLatin1String("method"), QLatin1String("POST")},
-        {QLatin1String("url"), req.url().toString()},
-        {QLatin1String("headers"), headers},
-        {QLatin1String("postData"), QJsonObject({
-            {QLatin1String("text"), QString::fromUtf8(postData)},
-        })},
-    }));
+    harEntry.insert(
+        QLatin1StringView("request"),
+        QJsonObject({
+            {QLatin1StringView("method"), QLatin1String("POST")},
+            {QLatin1StringView("url"), req.url().toString()},
+            {QLatin1StringView("headers"), headers},
+            {QLatin1StringView("postData"),
+             QJsonObject({
+                 {QLatin1StringView("text"), QString::fromUtf8(postData)},
+             })},
+        }));
 }
 
 static void harResponse(const HttpResponse &response, QJsonObject &harEntry)
 {
-    harEntry.insert(QLatin1String("response"), QJsonObject({
-        {QLatin1String("content"), QJsonObject({
-            {QLatin1String("text"), QString::fromUtf8(response.content().toBase64())},
-            {QLatin1String("encoding"), QLatin1String("base64")},
-        })}
-    }));
+  harEntry.insert(
+      QLatin1StringView("response"),
+      QJsonObject(
+          {{QLatin1StringView("content"),
+            QJsonObject({
+                {QLatin1StringView("text"),
+                 QString::fromUtf8(response.content().toBase64())},
+                {QLatin1StringView("encoding"), QLatin1String("base64")},
+            })}}));
 }
 
 int main(int argc, char **argv)
@@ -85,23 +91,42 @@ int main(int argc, char **argv)
     nam.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
     QNetworkReply *reply = nullptr;
 
-    QJsonObject harEntry{ {QLatin1String("startDateTime"), QDateTime::currentDateTime().toString(Qt::ISODateWithMs)} };
-    if (parser.value(sourceOpt) == QLatin1String("db")) {
-        QNetworkRequest req(QUrl(QStringLiteral("https://fahrkarten.bahn.de/mobile/dbc/xs.go?")));
-        req.setHeader(QNetworkRequest::ContentTypeHeader, QByteArray("application/x-www-form-urlencoded"));
-        QByteArray postData("<rqorderdetails version=\"1.0\"><rqheader v=\"23080000\" os=\"KCI\" app=\"KCI-Webservice\"/><rqorder on=\"" + parser.value(refOpt).toUtf8() + (parser.isSet(kwidOpt) ? QByteArray("\" kwid=\"" + parser.value(kwidOpt).toUtf8()) : QByteArray()) + "\"/><authname tln=\"" + parser.value(nameOpt).toUtf8() + "\"/></rqorderdetails>");
-        reply = nam.post(req, postData);
-        harPostRequest(req, postData, harEntry);
-    } else if (parser.value(sourceOpt) == QLatin1String("sncf")) {
-        // based on https://www.sncf-connect.com/app/trips/search and stripped to the bare minimum that works
-        QNetworkRequest req(QUrl(QStringLiteral("https://www.sncf-connect.com/bff/api/v1/trips/trips-by-criteria")));
-        req.setHeader(QNetworkRequest::ContentTypeHeader, QByteArray("application/json"));
-        req.setHeader(QNetworkRequest::UserAgentHeader, QByteArray("Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0"));
-        req.setRawHeader("Accept", "application/json, text/plain, */*");
-        req.setRawHeader("x-bff-key", "ah1MPO-izehIHD-QZZ9y88n-kku876");
-        QByteArray postData("{\"reference\":\"" + parser.value(refOpt).toUtf8() + "\",\"name\":\"" + parser.value(nameOpt).toUtf8() + "\"}");
-        reply = nam.post(req, postData);
-        harPostRequest(req, postData, harEntry);
+    QJsonObject harEntry{
+        {QLatin1StringView("startDateTime"),
+         QDateTime::currentDateTime().toString(Qt::ISODateWithMs)}};
+    if (parser.value(sourceOpt) == QLatin1StringView("db")) {
+      QNetworkRequest req(
+          QUrl(QStringLiteral("https://fahrkarten.bahn.de/mobile/dbc/xs.go?")));
+      req.setHeader(QNetworkRequest::ContentTypeHeader,
+                    QByteArray("application/x-www-form-urlencoded"));
+      QByteArray postData(
+          "<rqorderdetails version=\"1.0\"><rqheader v=\"23080000\" os=\"KCI\" "
+          "app=\"KCI-Webservice\"/><rqorder on=\"" +
+          parser.value(refOpt).toUtf8() +
+          (parser.isSet(kwidOpt)
+               ? QByteArray("\" kwid=\"" + parser.value(kwidOpt).toUtf8())
+               : QByteArray()) +
+          "\"/><authname tln=\"" + parser.value(nameOpt).toUtf8() +
+          "\"/></rqorderdetails>");
+      reply = nam.post(req, postData);
+      harPostRequest(req, postData, harEntry);
+    } else if (parser.value(sourceOpt) == QLatin1StringView("sncf")) {
+      // based on https://www.sncf-connect.com/app/trips/search and stripped to
+      // the bare minimum that works
+      QNetworkRequest req(QUrl(QStringLiteral(
+          "https://www.sncf-connect.com/bff/api/v1/trips/trips-by-criteria")));
+      req.setHeader(QNetworkRequest::ContentTypeHeader,
+                    QByteArray("application/json"));
+      req.setHeader(QNetworkRequest::UserAgentHeader,
+                    QByteArray("Mozilla/5.0 (X11; Linux x86_64; rv:109.0) "
+                               "Gecko/20100101 Firefox/111.0"));
+      req.setRawHeader("Accept", "application/json, text/plain, */*");
+      req.setRawHeader("x-bff-key", "ah1MPO-izehIHD-QZZ9y88n-kku876");
+      QByteArray postData("{\"reference\":\"" + parser.value(refOpt).toUtf8() +
+                          "\",\"name\":\"" + parser.value(nameOpt).toUtf8() +
+                          "\"}");
+      reply = nam.post(req, postData);
+      harPostRequest(req, postData, harEntry);
     }
 
     if (!reply) {
@@ -123,9 +148,9 @@ int main(int argc, char **argv)
 
             harResponse(response, harEntry);
             QJsonObject har({
-                {QLatin1String("log"), QJsonObject({
-                    {QLatin1String("entries"), QJsonArray({harEntry})}
-                })},
+                {QLatin1StringView("log"),
+                 QJsonObject(
+                     {{QLatin1StringView("entries"), QJsonArray({harEntry})}})},
             });
             f.write(QJsonDocument(har).toJson());
         }

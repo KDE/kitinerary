@@ -132,9 +132,9 @@ static const auto fallbackDateTimePatternCount = sizeof(fallbackDateTimePattern)
 static bool isEmptyJsonLdObject(const QJsonObject &obj)
 {
     for (auto it = obj.begin(); it != obj.end(); ++it) {
-        if (it.key() == QLatin1String("@type")) {
-            continue;
-        }
+      if (it.key() == QLatin1StringView("@type")) {
+        continue;
+      }
         if (it.value().type() != QJsonValue::Object) {
             return false;
         }
@@ -187,9 +187,14 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         QDateTime dt;
         if (v.isObject()) {
             const auto dtObj = v.toObject();
-            if (dtObj.value(QLatin1String("@type")).toString() == QLatin1String("QDateTime")) {
-                dt = QDateTime::fromString(dtObj.value(QLatin1String("@value")).toString(), Qt::ISODate);
-                dt.setTimeZone(timeZone(dtObj.value(QLatin1String("timezone")).toString().toUtf8()));
+            if (dtObj.value(QLatin1StringView("@type")).toString() ==
+                QLatin1String("QDateTime")) {
+              dt = QDateTime::fromString(
+                  dtObj.value(QLatin1StringView("@value")).toString(),
+                  Qt::ISODate);
+              dt.setTimeZone(timeZone(dtObj.value(QLatin1StringView("timezone"))
+                                          .toString()
+                                          .toUtf8()));
             }
         } else {
             auto str = v.toString();
@@ -282,19 +287,22 @@ static void createInstance(const QMetaObject *mo, void *v, const QJsonObject &ob
 static QVariant createInstance(const QJsonObject& obj, const QString &type)
 {
     const auto& registry = typeResgistry();
-    const auto it = std::lower_bound(registry.begin(), registry.end(), type, [](const auto &lhs, const auto &rhs) {
-        return QLatin1String(lhs.name) < rhs;
-    });
-    if (it != registry.end() && QLatin1String((*it).name) == type) {
-        QVariant value(QMetaType((*it).metaTypeId), nullptr);
-        createInstance((*it).mo, value.data(), obj);
-        return value;
+    const auto it = std::lower_bound(registry.begin(), registry.end(), type,
+                                     [](const auto &lhs, const auto &rhs) {
+                                       return QLatin1StringView(lhs.name) < rhs;
+                                     });
+    if (it != registry.end() && QLatin1StringView((*it).name) == type) {
+      QVariant value(QMetaType((*it).metaTypeId), nullptr);
+      createInstance((*it).mo, value.data(), obj);
+      return value;
     }
 
-    if (type == QLatin1String("QDateTime")) {
-        auto dt = QDateTime::fromString(obj.value(QLatin1String("@value")).toString(), Qt::ISODate);
-        dt.setTimeZone(timeZone(obj.value(QLatin1String("timezone")).toString().toUtf8()));
-        return dt;
+    if (type == QLatin1StringView("QDateTime")) {
+      auto dt = QDateTime::fromString(
+          obj.value(QLatin1StringView("@value")).toString(), Qt::ISODate);
+      dt.setTimeZone(timeZone(
+          obj.value(QLatin1StringView("timezone")).toString().toUtf8()));
+      return dt;
     }
 
     return {};
@@ -457,7 +465,7 @@ QJsonValue JsonLdDocument::toJsonValue(const QVariant &v)
             auto value = QString::fromUtf8(prop.enumerator().valueToKey(key));
             // this is (ab)used elsewhere, so let's not interfere with enum serialization there for now
             if (strncmp(mo->className(), "KItinerary::", 12) == 0) {
-                value = QLatin1String("http://schema.org/") + value;
+              value = QLatin1StringView("http://schema.org/") + value;
             }
             obj.insert(QString::fromUtf8(prop.name()), value);
             continue;

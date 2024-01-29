@@ -35,11 +35,14 @@ Person NameOptimizer::optimizeName(const QString &text, const Person &person)
     // IATA BCBP has a 20 character size limit, with one character used for separating name parts
     if (person.givenName() == p.givenName() && (person.familyName().size() + person.givenName().size()) == 19 && person.givenName().size() >= 3) {
         for (auto pattern : name_truncation_pattern) {
-            QRegularExpression rx(QLatin1String(pattern).arg(QRegularExpression::escape(p.givenName()), QRegularExpression::escape(p.familyName())), QRegularExpression::CaseInsensitiveOption);
-            const auto match = rx.match(text);
-            if (match.hasMatch()) {
-                p.setGivenName(match.captured(1));
-                break;
+          QRegularExpression rx(QLatin1StringView(pattern).arg(
+                                    QRegularExpression::escape(p.givenName()),
+                                    QRegularExpression::escape(p.familyName())),
+                                QRegularExpression::CaseInsensitiveOption);
+          const auto match = rx.match(text);
+          if (match.hasMatch()) {
+            p.setGivenName(match.captured(1));
+            break;
             }
         }
     }
@@ -54,15 +57,18 @@ static const char* name_prefixes[] = {
 static bool isNamePrefix(QStringView s)
 {
     s = s.trimmed();
-    return std::any_of(std::begin(name_prefixes), std::end(name_prefixes), [s](const char *prefix) { return s == QLatin1String(prefix); });
+    return std::any_of(
+        std::begin(name_prefixes), std::end(name_prefixes),
+        [s](const char *prefix) { return s == QLatin1StringView(prefix); });
 }
 
 static QStringView stripNamePrefix(QStringView s)
 {
     for (auto prefix : name_prefixes) {
-        QLatin1String p(prefix);
-        if (s.endsWith(p) && s.size() > p.size() && s[s.size() - p.size() - 1] == QLatin1Char(' ')) {
-            return s.left(s.size() - p.size() - 1);
+      QLatin1StringView p(prefix);
+      if (s.endsWith(p) && s.size() > p.size() &&
+          s[s.size() - p.size() - 1] == QLatin1Char(' ')) {
+        return s.left(s.size() - p.size() - 1);
         }
     }
 

@@ -277,46 +277,63 @@ TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation sta
     const auto id = station.identifier();
     if (id.isEmpty()) { // empty -> null cleanup, to have more compact json-ld output
         station.setIdentifier(QString());
-    } else if (id.startsWith(QLatin1String("sncf:")) && id.size() == 10) {
-        const auto record = KnowledgeDb::stationForSncfStationId(KnowledgeDb::SncfStationId{id.mid(5)});
-        applyStationData(record, station);
-        applyStationCountry(id.mid(5, 2).toUpper(), station);
-    } else if (id.startsWith(QLatin1String("ibnr:")) && id.size() == 12) {
-        const auto record = KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{id.mid(5).toUInt()});
-        applyStationData(record, station);
-        const auto country = KnowledgeDb::countryIdForUicCode(QStringView(id).mid(5, 2).toUShort()).toString();
-        applyStationCountry(country, station);
-    } else if (id.startsWith(QLatin1String("uic:")) && id.size() == 11) {
-        const auto record = KnowledgeDb::stationForUic(KnowledgeDb::UICStation{id.mid(4).toUInt()});
-        applyStationData(record, station);
-        const auto country = KnowledgeDb::countryIdForUicCode(QStringView(id).mid(4, 2).toUShort()).toString();
-        applyStationCountry(country, station);
-    } else if (id.startsWith(QLatin1String("ir:")) && id.size() > 4) {
-        const auto record = KnowledgeDb::stationForIndianRailwaysStationCode(id.mid(3));
-        applyStationData(record, station);
-    } else if (id.startsWith(QLatin1String("benerail:")) && id.size() == 14) {
-        const auto record = KnowledgeDb::stationForBenerailId(KnowledgeDb::BenerailStationId(id.mid(9)));
-        applyStationData(record, station);
-        applyStationCountry(id.mid(9, 2).toUpper(), station);
-    } else if (id.startsWith(QLatin1String("vrfi:")) && id.size() >= 7 && id.size() <= 9) {
-        const auto record = KnowledgeDb::stationForVRStationCode(KnowledgeDb::VRStationCode(id.mid(5)));
-        applyStationData(record, station);
-    } else if (id.startsWith(QLatin1String("iata:")) && id.size() == 8) {
-        const auto iataCode = KnowledgeDb::IataCode(QStringView(id).mid(5));
-        const auto record = KnowledgeDb::stationForIataCode(iataCode);
-        applyStationData(record, station);
-        // fall back to the airport with the matching IATA code for the country information
-        // we cannot use the coordinate though, as that points to the actual airport, not the station
-        applyStationCountry(KnowledgeDb::countryForAirport(iataCode).toString(), station);
-    } else if (id.startsWith(QLatin1String("amtrak:")) && id.size() == 10) {
-        const auto record = KnowledgeDb::stationForAmtrakStationCode(KnowledgeDb::AmtrakStationCode(QStringView(id).mid(7)));
-        applyStationData(record, station);
-    } else if (id.startsWith(QLatin1String("via:")) && id.size() == 8) {
-        const auto record = KnowledgeDb::stationForViaRailStationCode(KnowledgeDb::ViaRailStationCode(QStringView(id).mid(4)));
-        applyStationData(record, station);
-    } else if (id.startsWith(QLatin1String("uk:")) && id.size() == 6) {
-        const auto record = KnowledgeDb::stationForUkRailwayStationCode(KnowledgeDb::UKRailwayStationCode(QStringView(id).mid(3)));
-        applyStationData(record, station);
+    } else if (id.startsWith(QLatin1StringView("sncf:")) && id.size() == 10) {
+      const auto record = KnowledgeDb::stationForSncfStationId(
+          KnowledgeDb::SncfStationId{id.mid(5)});
+      applyStationData(record, station);
+      applyStationCountry(id.mid(5, 2).toUpper(), station);
+    } else if (id.startsWith(QLatin1StringView("ibnr:")) && id.size() == 12) {
+      const auto record =
+          KnowledgeDb::stationForIbnr(KnowledgeDb::IBNR{id.mid(5).toUInt()});
+      applyStationData(record, station);
+      const auto country =
+          KnowledgeDb::countryIdForUicCode(QStringView(id).mid(5, 2).toUShort())
+              .toString();
+      applyStationCountry(country, station);
+    } else if (id.startsWith(QLatin1StringView("uic:")) && id.size() == 11) {
+      const auto record = KnowledgeDb::stationForUic(
+          KnowledgeDb::UICStation{id.mid(4).toUInt()});
+      applyStationData(record, station);
+      const auto country =
+          KnowledgeDb::countryIdForUicCode(QStringView(id).mid(4, 2).toUShort())
+              .toString();
+      applyStationCountry(country, station);
+    } else if (id.startsWith(QLatin1StringView("ir:")) && id.size() > 4) {
+      const auto record =
+          KnowledgeDb::stationForIndianRailwaysStationCode(id.mid(3));
+      applyStationData(record, station);
+    } else if (id.startsWith(QLatin1StringView("benerail:")) &&
+               id.size() == 14) {
+      const auto record = KnowledgeDb::stationForBenerailId(
+          KnowledgeDb::BenerailStationId(id.mid(9)));
+      applyStationData(record, station);
+      applyStationCountry(id.mid(9, 2).toUpper(), station);
+    } else if (id.startsWith(QLatin1StringView("vrfi:")) && id.size() >= 7 &&
+               id.size() <= 9) {
+      const auto record = KnowledgeDb::stationForVRStationCode(
+          KnowledgeDb::VRStationCode(id.mid(5)));
+      applyStationData(record, station);
+    } else if (id.startsWith(QLatin1StringView("iata:")) && id.size() == 8) {
+      const auto iataCode = KnowledgeDb::IataCode(QStringView(id).mid(5));
+      const auto record = KnowledgeDb::stationForIataCode(iataCode);
+      applyStationData(record, station);
+      // fall back to the airport with the matching IATA code for the country
+      // information we cannot use the coordinate though, as that points to the
+      // actual airport, not the station
+      applyStationCountry(KnowledgeDb::countryForAirport(iataCode).toString(),
+                          station);
+    } else if (id.startsWith(QLatin1StringView("amtrak:")) && id.size() == 10) {
+      const auto record = KnowledgeDb::stationForAmtrakStationCode(
+          KnowledgeDb::AmtrakStationCode(QStringView(id).mid(7)));
+      applyStationData(record, station);
+    } else if (id.startsWith(QLatin1StringView("via:")) && id.size() == 8) {
+      const auto record = KnowledgeDb::stationForViaRailStationCode(
+          KnowledgeDb::ViaRailStationCode(QStringView(id).mid(4)));
+      applyStationData(record, station);
+    } else if (id.startsWith(QLatin1StringView("uk:")) && id.size() == 6) {
+      const auto record = KnowledgeDb::stationForUkRailwayStationCode(
+          KnowledgeDb::UKRailwayStationCode(QStringView(id).mid(3)));
+      applyStationData(record, station);
     }
 
     return processPlace(station);
@@ -534,11 +551,17 @@ static QString simplifyNamePart(QString n)
 
     for (auto prefix : name_prefixes) {
         const int prefixLen = std::strlen(prefix);
-        if (n.size() > prefixLen + 2 && n.startsWith(QLatin1String(prefix, prefixLen), Qt::CaseInsensitive) && isSeparator(n[prefixLen])) {
-            return n.mid(prefixLen + 1);
+        if (n.size() > prefixLen + 2 &&
+            n.startsWith(QLatin1StringView(prefix, prefixLen),
+                         Qt::CaseInsensitive) &&
+            isSeparator(n[prefixLen])) {
+          return n.mid(prefixLen + 1);
         }
-        if (n.size() > prefixLen + 2 && n.endsWith(QLatin1String(prefix, prefixLen), Qt::CaseInsensitive) && isSeparator(n[n.size() - prefixLen - 1])) {
-            return n.left(n.size() - prefixLen - 1);
+        if (n.size() > prefixLen + 2 &&
+            n.endsWith(QLatin1StringView(prefix, prefixLen),
+                       Qt::CaseInsensitive) &&
+            isSeparator(n[n.size() - prefixLen - 1])) {
+          return n.left(n.size() - prefixLen - 1);
         }
     }
 

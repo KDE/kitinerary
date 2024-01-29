@@ -34,15 +34,15 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    if (parser.value(dbOpt) == QLatin1String("airport")) {
-        AirportDbGenerator gen;
-        gen.osmDb.load(parser.value(osmOpt));
-        return gen.generate(&out) ? 0 : 1;
-    } else if (parser.value(dbOpt) == QLatin1String("country")) {
-        CountryDbGenerator gen;
-        return gen.generate(&out) ? 0 : 1;
-    } else if (parser.value(dbOpt) == QLatin1String("trainstation")) {
-        TrainStationDbGenerator gen;
-        return gen.generate(&out) ? 0 : 1;
+    if (parser.value(dbOpt) == QLatin1StringView("airport")) {
+      AirportDbGenerator gen;
+      gen.osmDb.load(parser.value(osmOpt));
+      return gen.generate(&out) ? 0 : 1;
+    } else if (parser.value(dbOpt) == QLatin1StringView("country")) {
+      CountryDbGenerator gen;
+      return gen.generate(&out) ? 0 : 1;
+    } else if (parser.value(dbOpt) == QLatin1StringView("trainstation")) {
+      TrainStationDbGenerator gen;
+      return gen.generate(&out) ? 0 : 1;
     }
 }

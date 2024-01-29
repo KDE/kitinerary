@@ -19,8 +19,11 @@ using namespace KItinerary;
 
 bool TextDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return std::none_of(encodedData.begin(), encodedData.end(), [](unsigned char c) { return std::iscntrl(c) && !std::isspace(c); })
-        || fileName.endsWith(QLatin1String(".txt"), Qt::CaseInsensitive);
+  return std::none_of(encodedData.begin(), encodedData.end(),
+                      [](unsigned char c) {
+                        return std::iscntrl(c) && !std::isspace(c);
+                      }) ||
+         fileName.endsWith(QLatin1StringView(".txt"), Qt::CaseInsensitive);
 }
 
 ExtractorDocumentNode TextDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const

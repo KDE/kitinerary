@@ -51,9 +51,11 @@ private Q_SLOTS:
     {
         QCOMPARE(StringUtil::clean(QString()), QString());
         QCOMPARE(StringUtil::clean(QStringLiteral("Lech Wa&#322;&#281;sa Airport")), QStringLiteral("Lech Wałęsa Airport"));
-        QCOMPARE(StringUtil::clean(QStringLiteral("On-demand services: MobilityData&#39;s GOFS project &amp;amp; going further")),
-                 QLatin1String("On-demand services: MobilityData's GOFS project &amp; going further"));
-
+        QCOMPARE(StringUtil::clean(
+                     QStringLiteral("On-demand services: MobilityData&#39;s "
+                                    "GOFS project &amp;amp; going further")),
+                 QLatin1StringView("On-demand services: MobilityData's GOFS "
+                                   "project &amp; going further"));
     }
 
     void testBetterString_data()

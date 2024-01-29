@@ -16,11 +16,11 @@ using namespace KItinerary;
 
 void KItinerary::JsonLd::renameProperty(QJsonObject &obj, const char *oldName, const char *newName)
 {
-    const auto value = obj.value(QLatin1String(oldName));
-    if (!value.isUndefined() && !obj.contains(QLatin1String(newName))) {
-        obj.insert(QLatin1String(newName), value);
-        obj.remove(QLatin1String(oldName));
-    }
+  const auto value = obj.value(QLatin1StringView(oldName));
+  if (!value.isUndefined() && !obj.contains(QLatin1StringView(newName))) {
+    obj.insert(QLatin1StringView(newName), value);
+    obj.remove(QLatin1StringView(oldName));
+  }
 }
 
 JsonLdFilterEngine::JsonLdFilterEngine() = default;
@@ -37,7 +37,7 @@ void JsonLdFilterEngine::filterRecursive(QJsonObject &obj)
         });
         if (it != (m_typeMappings + m_typeMappingsSize) && std::strcmp((*it).fromType, type.constData()) == 0) {
             type = it->toType;
-            obj.insert(QStringLiteral("@type"), QLatin1String(type));
+            obj.insert(QStringLiteral("@type"), QLatin1StringView(type));
         }
     }
 

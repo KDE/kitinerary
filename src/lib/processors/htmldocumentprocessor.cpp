@@ -33,9 +33,9 @@ Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KItinerary::HtmlDocument>)
 
 bool HtmlDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return StringUtil::startsWithIgnoreSpace(encodedData, "<")
-        || fileName.endsWith(QLatin1String(".html"), Qt::CaseInsensitive)
-        || fileName.endsWith(QLatin1String(".htm"), Qt::CaseInsensitive);
+  return StringUtil::startsWithIgnoreSpace(encodedData, "<") ||
+         fileName.endsWith(QLatin1StringView(".html"), Qt::CaseInsensitive) ||
+         fileName.endsWith(QLatin1StringView(".htm"), Qt::CaseInsensitive);
 }
 
 static ExtractorDocumentNode nodeFromHtml(HtmlDocument *html)
@@ -76,7 +76,9 @@ void HtmlDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extrac
 
 static bool isJsonLdTag(const HtmlElement &elem)
 {
-    return elem.name() == QLatin1String("script") && elem.attribute(QStringLiteral("type")) == QLatin1String("application/ld+json");
+  return elem.name() == QLatin1StringView("script") &&
+         elem.attribute(QStringLiteral("type")) ==
+             QLatin1String("application/ld+json");
 }
 
 static QByteArray fixupJson(const QByteArray &data)
@@ -141,22 +143,24 @@ static QString valueForItemProperty(const HtmlElement &elem)
     // TODO see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#Values
     const auto elemName = elem.name();
     QString v;
-    if (elemName == QLatin1String("meta")) {
+    if (elemName == QLatin1StringView("meta")) {
+      v = elem.attribute(QStringLiteral("content"));
+    } else if (elemName == QLatin1StringView("time")) {
+      v = elem.attribute(QStringLiteral("datetime"));
+    } else if (elemName == QLatin1StringView("link") ||
+               elemName == QLatin1Char('a') ||
+               elemName == QLatin1String("img")) {
+      if (elem.hasAttribute(QStringLiteral("href"))) {
+        v = elem.attribute(QStringLiteral("href"));
+      } else if (elem.hasAttribute(QStringLiteral("content"))) {
         v = elem.attribute(QStringLiteral("content"));
-    } else if (elemName == QLatin1String("time")) {
-        v = elem.attribute(QStringLiteral("datetime"));
-    } else if (elemName == QLatin1String("link") || elemName == QLatin1Char('a') || elemName == QLatin1String("img")) {
-        if (elem.hasAttribute(QStringLiteral("href"))) {
-            v = elem.attribute(QStringLiteral("href"));
-        } else if (elem.hasAttribute(QStringLiteral("content"))) {
-            v = elem.attribute(QStringLiteral("content"));
-        } else if (elem.hasAttribute(QStringLiteral("src"))) {
-            v = elem.attribute(QStringLiteral("src"));
-        } else {
-            v = elem.recursiveContent();
-        }
-    } else {
+      } else if (elem.hasAttribute(QStringLiteral("src"))) {
+        v = elem.attribute(QStringLiteral("src"));
+      } else {
         v = elem.recursiveContent();
+      }
+    } else {
+      v = elem.recursiveContent();
     }
 
     return v;
@@ -286,12 +290,12 @@ void HtmlDocumentProcessor::destroyNode(ExtractorDocumentNode &node) const
 
 void HtmlDocumentProcessor::expandElementRecursive(ExtractorDocumentNode &node, const HtmlElement &elem, const ExtractorEngine *engine) const
 {
-    if (elem.name() == QLatin1String("img")) {
-        const auto src = elem.attribute(QLatin1String("src"));
-        if (src.startsWith(QLatin1String("data:"))) {
-            expandDataUrl(node, src, engine);
-        }
+  if (elem.name() == QLatin1StringView("img")) {
+    const auto src = elem.attribute(QLatin1StringView("src"));
+    if (src.startsWith(QLatin1StringView("data:"))) {
+      expandDataUrl(node, src, engine);
     }
+  }
 
     auto child = elem.firstChild();
     while (!child.isNull()) {
@@ -312,13 +316,13 @@ void HtmlDocumentProcessor::expandDataUrl(ExtractorDocumentNode &node, QStringVi
         return;
     }
 
-    if (headerItems.front() != QLatin1String("image/png")) {
-        return;
+    if (headerItems.front() != QLatin1StringView("image/png")) {
+      return;
     }
 
     auto imgData = data.mid(idx).toUtf8();
-    if (headerItems.back() == QLatin1String("base64")) {
-        imgData = QByteArray::fromBase64(imgData.trimmed());
+    if (headerItems.back() == QLatin1StringView("base64")) {
+      imgData = QByteArray::fromBase64(imgData.trimmed());
     }
 
     auto child = engine->documentNodeFactory()->createNode(imgData, {}, headerItems.front());

@@ -23,7 +23,7 @@ void HttpResponseProcessor::expandNode(ExtractorDocumentNode &node, const Extrac
 
 bool HarDocumentProcessor::canHandleData([[maybe_unused]] const QByteArray &encodedData, QStringView fileName) const
 {
-    return fileName.endsWith(QLatin1String(".har"));
+  return fileName.endsWith(QLatin1StringView(".har"));
 }
 
 ExtractorDocumentNode HarDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const

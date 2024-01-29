@@ -62,26 +62,24 @@ uint64_t PListDict::value(uint64_t index) const
     return m_reader ? m_reader->readObjectRef(m_data, size() + index) : 0;
 }
 
-std::optional<uint64_t> PListDict::value(QLatin1String keyName) const
-{
-    if (keyName.isEmpty()) {
-        return {};
-    }
-
-    for (uint64_t i = 0; i < size(); ++i) {
-        const auto n = m_reader->object(key(i)).toString();
-        if (n == keyName) {
-            return value(i);
-        }
-    }
-
+std::optional<uint64_t> PListDict::value(QLatin1StringView keyName) const {
+  if (keyName.isEmpty()) {
     return {};
+  }
+
+  for (uint64_t i = 0; i < size(); ++i) {
+    const auto n = m_reader->object(key(i)).toString();
+    if (n == keyName) {
+      return value(i);
+    }
+  }
+
+  return {};
 }
 
-QVariant PListDict::object(QLatin1String keyName) const
-{
-    const auto v = value(keyName);
-    return v && m_reader ? m_reader->object(*v) : QVariant();
+QVariant PListDict::object(QLatin1StringView keyName) const {
+  const auto v = value(keyName);
+  return v && m_reader ? m_reader->object(*v) : QVariant();
 }
 
 PListReader::PListReader(const QByteArray &data)
@@ -307,14 +305,17 @@ QJsonValue PListReader::unpackKeyedArchive() const
 {
     // TODO cycle detection
     const auto root = object(rootObjectIndex()).value<PListDict>();
-    if (root.object(QLatin1String("$archiver")).toString() != QLatin1String("NSKeyedArchiver")) {
-        qDebug() << "not NSKeyedArchiver data" << root.object(QLatin1String("$archiver"));
-        return {};
+    if (root.object(QLatin1StringView("$archiver")).toString() !=
+        QLatin1String("NSKeyedArchiver")) {
+      qDebug() << "not NSKeyedArchiver data"
+               << root.object(QLatin1StringView("$archiver"));
+      return {};
     }
 
-    const auto top = root.object(QLatin1String("$top")).value<PListDict>();
-    const auto objects = root.object(QLatin1String("$objects")).value<PListArray>();
-    const auto uid = top.object(QLatin1String("root")).value<PListUid>();
+    const auto top = root.object(QLatin1StringView("$top")).value<PListDict>();
+    const auto objects =
+        root.object(QLatin1StringView("$objects")).value<PListArray>();
+    const auto uid = top.object(QLatin1StringView("root")).value<PListUid>();
     return unpackKeyedArchiveRecursive(uid, objects);
 }
 
@@ -326,29 +327,43 @@ QJsonValue PListReader::unpackKeyedArchiveRecursive(PListUid uid, const PListArr
         case PListObjectType::Dict:
         {
             const auto obj = v.value<PListDict>();
-            const auto classObj = objects.object(obj.object(QLatin1String("$class")).value<PListUid>()).value<PListDict>();
-            const auto classNames = classObj.object(QLatin1String("$classes")).value<PListArray>();
+            const auto classObj =
+                objects
+                    .object(obj.object(QLatin1StringView("$class"))
+                                .value<PListUid>())
+                    .value<PListDict>();
+            const auto classNames =
+                classObj.object(QLatin1StringView("$classes"))
+                    .value<PListArray>();
             for (uint64_t j = 0; j < classNames.size(); ++j) {
                 const auto className = classNames.object(j).toString();
-                if (className == QLatin1String("NSDictionary")) {
-                    QJsonObject result;
-                    const auto keys = obj.object(QLatin1String("NS.keys")).value<PListArray>();
-                    const auto vals = obj.object(QLatin1String("NS.objects")).value<PListArray>();
-                    for (uint64_t i = 0; i < std::min(keys.size(), vals.size()); ++i) {
-                        const auto key = objects.object(keys.object(i).value<PListUid>()).toString();
-                        const auto valUid = vals.object(i).value<PListUid>();
-                        result.insert(key, unpackKeyedArchiveRecursive(valUid, objects));
-                    }
-                    return result;
+                if (className == QLatin1StringView("NSDictionary")) {
+                  QJsonObject result;
+                  const auto keys = obj.object(QLatin1StringView("NS.keys"))
+                                        .value<PListArray>();
+                  const auto vals = obj.object(QLatin1StringView("NS.objects"))
+                                        .value<PListArray>();
+                  for (uint64_t i = 0; i < std::min(keys.size(), vals.size());
+                       ++i) {
+                    const auto key =
+                        objects.object(keys.object(i).value<PListUid>())
+                            .toString();
+                    const auto valUid = vals.object(i).value<PListUid>();
+                    result.insert(key,
+                                  unpackKeyedArchiveRecursive(valUid, objects));
+                  }
+                  return result;
                 }
-                if (className == QLatin1String("NSArray")) {
-                    QJsonArray result;
-                    const auto elems = obj.object(QLatin1String("NS.objects")).value<PListArray>();
-                    for (uint64_t i = 0; i < elems.size(); ++i) {
-                        const auto elemUid = elems.object(i).value<PListUid>();
-                        result.push_back(unpackKeyedArchiveRecursive(elemUid, objects));
-                    }
-                    return result;
+                if (className == QLatin1StringView("NSArray")) {
+                  QJsonArray result;
+                  const auto elems = obj.object(QLatin1StringView("NS.objects"))
+                                         .value<PListArray>();
+                  for (uint64_t i = 0; i < elems.size(); ++i) {
+                    const auto elemUid = elems.object(i).value<PListUid>();
+                    result.push_back(
+                        unpackKeyedArchiveRecursive(elemUid, objects));
+                  }
+                  return result;
                 }
             }
             qDebug() << "unhandled dict object" << uid.value;

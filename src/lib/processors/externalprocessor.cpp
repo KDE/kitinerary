@@ -25,7 +25,9 @@ using namespace KItinerary;
 ExternalProcessor::ExternalProcessor()
 {
     // find external extractor
-    const QString filepath = QLatin1String(CMAKE_INSTALL_FULL_LIBEXECDIR_KF6) + QLatin1String("/kitinerary-extractor");
+    const QString filepath =
+        QLatin1StringView(CMAKE_INSTALL_FULL_LIBEXECDIR_KF6) +
+        QLatin1String("/kitinerary-extractor");
     QFileInfo fi(filepath);
     if (!fi.exists() && !fi.isFile() && !fi.isExecutable()) {
         qCCritical(Log) << "filePath : " << filepath << "Cannot find external extractor:" << fi.fileName();
@@ -38,7 +40,8 @@ ExternalProcessor::~ExternalProcessor() = default;
 
 bool ExternalProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return PdfDocument::maybePdf(encodedData) || fileName.endsWith(QLatin1String(".pdf"), Qt::CaseInsensitive);
+  return PdfDocument::maybePdf(encodedData) ||
+         fileName.endsWith(QLatin1StringView(".pdf"), Qt::CaseInsensitive);
 }
 
 ExtractorDocumentNode ExternalProcessor::createNodeFromData(const QByteArray &encodedData) const
@@ -54,10 +57,10 @@ void ExternalProcessor::preExtract(ExtractorDocumentNode &node, const ExtractorE
     std::vector<const AbstractExtractor*> extractors;
     engine->extractorRepository()->extractorsForNode(node, extractors);
     // consider the implicit conversion to text/plain the PDF processor can do
-    if (node.mimeType() == QLatin1String("application/pdf")) {
-        node.setMimeType(QStringLiteral("text/plain"));
-        engine->extractorRepository()->extractorsForNode(node, extractors);
-        node.setMimeType(QStringLiteral("application/pdf"));
+    if (node.mimeType() == QLatin1StringView("application/pdf")) {
+      node.setMimeType(QStringLiteral("text/plain"));
+      engine->extractorRepository()->extractorsForNode(node, extractors);
+      node.setMimeType(QStringLiteral("application/pdf"));
     }
 
     QStringList extNames;
@@ -67,9 +70,11 @@ void ExternalProcessor::preExtract(ExtractorDocumentNode &node, const ExtractorE
     QProcess proc;
     proc.setProgram(m_externalExtractor);
 
-    QStringList args({QLatin1String("--context-date"), node.contextDateTime().toString(Qt::ISODate),
-                      QLatin1String("--extractors"), extNames.join(QLatin1Char(';')),
-                      QLatin1String("--no-validation")});
+    QStringList args({QLatin1StringView("--context-date"),
+                      node.contextDateTime().toString(Qt::ISODate),
+                      QLatin1StringView("--extractors"),
+                      extNames.join(QLatin1Char(';')),
+                      QLatin1StringView("--no-validation")});
     const auto extraPaths = engine->extractorRepository()->additionalSearchPaths();
     for (const auto &p : extraPaths) {
         args.push_back(QStringLiteral("--additional-search-path"));

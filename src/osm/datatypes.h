@@ -224,13 +224,14 @@ public:
 
 /** Returns the tag value for @p key of @p elem. */
 template <typename Elem>
-inline QString tagValue(const Elem& elem, const QLatin1String &key)
-{
-    const auto it = std::lower_bound(elem.tags.begin(), elem.tags.end(), key, [](const auto &lhs, const auto &rhs) { return lhs.key < rhs; });
-    if (it != elem.tags.end() && (*it).key == key) {
-        return (*it).value;
-    }
-    return {};
+inline QString tagValue(const Elem &elem, const QLatin1StringView &key) {
+  const auto it = std::lower_bound(
+      elem.tags.begin(), elem.tags.end(), key,
+      [](const auto &lhs, const auto &rhs) { return lhs.key < rhs; });
+  if (it != elem.tags.end() && (*it).key == key) {
+    return (*it).value;
+  }
+  return {};
 }
 
 /** Inserts a new tag, or replaces an existing one with the same key. */

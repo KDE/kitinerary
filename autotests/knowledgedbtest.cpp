@@ -79,8 +79,8 @@ private Q_SLOTS:
        QVERIFY(!(id1 == id2));
        QVERIFY(!(id1 != id1));
 
-       QCOMPARE(id1.toString(), QLatin1String("ABC"));
-       QCOMPARE(id2.toString(), QLatin1String("CBA"));
+       QCOMPARE(id1.toString(), QLatin1StringView("ABC"));
+       QCOMPARE(id2.toString(), QLatin1StringView("CBA"));
 
        constexpr ID3 id3;
        QVERIFY(!id3.isValid());
@@ -93,16 +93,16 @@ private Q_SLOTS:
     {
         auto sncf = KnowledgeDb::SncfStationId(QStringLiteral("FRPNO"));
         QVERIFY(sncf.isValid());
-        QCOMPARE(sncf.toString(), QLatin1String("FRPNO"));
+        QCOMPARE(sncf.toString(), QLatin1StringView("FRPNO"));
         sncf = KnowledgeDb::SncfStationId(QStringLiteral("Abc"));
         QVERIFY(!sncf.isValid());
         sncf =  KnowledgeDb::SncfStationId(QStringLiteral("CHZID"));
         QVERIFY(sncf.isValid());
-        QCOMPARE(sncf.toString(), QLatin1String("CHZID"));
+        QCOMPARE(sncf.toString(), QLatin1StringView("CHZID"));
 
         auto vrCode = KnowledgeDb::VRStationCode(QStringLiteral("HSL"));
         QVERIFY(vrCode.isValid());
-        QCOMPARE(vrCode.toString(), QLatin1String("HSL"));
+        QCOMPARE(vrCode.toString(), QLatin1StringView("HSL"));
     }
 
     void testIBNRLookup()

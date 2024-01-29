@@ -68,24 +68,23 @@ static constexpr const JsonLdFilterEngine::TypeMapping type_mapping[] = {
     { "Winery", "FoodEstablishment" },
 };
 
-static void unpackArray(QJsonObject &obj, QLatin1String key)
-{
-    const auto val = obj.value(key);
-    if (!val.isArray()) {
-        return;
-    }
-    const auto arr = val.toArray();
-    if (arr.isEmpty()) {
-        return;
-    }
-    obj.insert(key, arr.at(0));
+static void unpackArray(QJsonObject &obj, QLatin1StringView key) {
+  const auto val = obj.value(key);
+  if (!val.isArray()) {
+    return;
+  }
+  const auto arr = val.toArray();
+  if (arr.isEmpty()) {
+    return;
+  }
+  obj.insert(key, arr.at(0));
 }
 
 static void migrateToAction(QJsonObject &obj, const char *propName, const char *typeName, bool remove)
 {
-    const auto value = obj.value(QLatin1String(propName));
-    if (value.isNull() || value.isUndefined()) {
-        return;
+  const auto value = obj.value(QLatin1StringView(propName));
+  if (value.isNull() || value.isUndefined()) {
+    return;
     }
 
     const auto actionsVal = obj.value("potentialAction"_L1);
@@ -97,19 +96,19 @@ static void migrateToAction(QJsonObject &obj, const char *propName, const char *
     }
 
     for (const auto &act : actions) {
-        if (JsonLd::typeName(act.toObject()) == QLatin1String(typeName)) {
-            return;
-        }
+      if (JsonLd::typeName(act.toObject()) == QLatin1StringView(typeName)) {
+        return;
+      }
     }
 
     QJsonObject action;
-    action.insert(QStringLiteral("@type"), QLatin1String(typeName));
+    action.insert(QStringLiteral("@type"), QLatin1StringView(typeName));
     action.insert(QStringLiteral("target"), value);
     actions.push_back(action);
     obj.insert(QStringLiteral("potentialAction"), actions);
 
     if (remove) {
-        obj.remove(QLatin1String(propName));
+      obj.remove(QLatin1StringView(propName));
     }
 }
 
@@ -127,31 +126,35 @@ static void filterPlace(QJsonObject &obj)
 static void filterFlight(QJsonObject &res)
 {
     // move incomplete departureTime (ie. just ISO date, no time) to departureDay
-    if (res.value(QLatin1String("departureTime")).toString().size() == 10) {
-        JsonLd::renameProperty(res, "departureTime", "departureDay");
+    if (res.value(QLatin1StringView("departureTime")).toString().size() == 10) {
+      JsonLd::renameProperty(res, "departureTime", "departureDay");
     }
 }
 
 static void filterReservation(QJsonObject &res)
 {
     // move ticketToken to Ticket (Google vs. schema.org difference)
-    const auto token = res.value(QLatin1String("ticketToken")).toString();
+    const auto token = res.value(QLatin1StringView("ticketToken")).toString();
     if (!token.isEmpty()) {
-        auto ticket = res.value(QLatin1String("reservedTicket")).toObject();
-        if (ticket.isEmpty()) {
-            ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
+      auto ticket = res.value(QLatin1StringView("reservedTicket")).toObject();
+      if (ticket.isEmpty()) {
+        ticket.insert(QStringLiteral("@type"), QLatin1StringView("Ticket"));
         }
-        if (!ticket.contains(QLatin1String("ticketToken"))) {
-            ticket.insert(QStringLiteral("ticketToken"), token);
-            res.insert(QStringLiteral("reservedTicket"), ticket);
-            res.remove(QStringLiteral("ticketToken"));
+        if (!ticket.contains(QLatin1StringView("ticketToken"))) {
+          ticket.insert(QStringLiteral("ticketToken"), token);
+          res.insert(QStringLiteral("reservedTicket"), ticket);
+          res.remove(QStringLiteral("ticketToken"));
         }
     }
 
     // normalize reservationStatus enum
-    auto resStat = res.value(QLatin1String("reservationStatus")).toString();
-    if (!resStat.isEmpty() && !resStat.contains(QLatin1String("/Reservation"))) {
-        res.insert(QStringLiteral("reservationStatus"), resStat.replace(QLatin1String("http://schema.org/"), QLatin1String("http://schema.org/Reservation")));
+    auto resStat = res.value(QLatin1StringView("reservationStatus")).toString();
+    if (!resStat.isEmpty() &&
+        !resStat.contains(QLatin1StringView("/Reservation"))) {
+      res.insert(
+          QStringLiteral("reservationStatus"),
+          resStat.replace(QLatin1StringView("http://schema.org/"),
+                          QLatin1String("http://schema.org/Reservation")));
     }
 
     // legacy properties
@@ -177,15 +180,17 @@ static void filterReservation(QJsonObject &res)
 static void filterFoodEstablishment(QJsonObject &restaurant)
 {
     // This can be a bool, "Yes"/"No", or a URL.
-    auto reservationsValue = restaurant.value(QLatin1String("acceptsReservations"));
+    auto reservationsValue =
+        restaurant.value(QLatin1StringView("acceptsReservations"));
     if (reservationsValue.isString()) {
         const QString reservations = reservationsValue.toString();
-        if (reservations == QLatin1String("Yes")) {
-            restaurant.insert(QLatin1String("acceptsReservations"), true);
-        } else if (reservations == QLatin1String("No")) {
-            restaurant.insert(QLatin1String("acceptsReservations"), false);
+        if (reservations == QLatin1StringView("Yes")) {
+          restaurant.insert(QLatin1StringView("acceptsReservations"), true);
+        } else if (reservations == QLatin1StringView("No")) {
+          restaurant.insert(QLatin1StringView("acceptsReservations"), false);
         } else {
-            migrateToAction(restaurant, "acceptsReservations", "ReserveAction", true);
+          migrateToAction(restaurant, "acceptsReservations", "ReserveAction",
+                          true);
         }
     }
 
@@ -197,7 +202,7 @@ static void filterActionTarget(QJsonObject &action)
     QJsonArray targets;
     QString filteredTargetUrlString;
 
-    const QJsonValue oldTarget = action.value(QLatin1String("target"));
+    const QJsonValue oldTarget = action.value(QLatin1StringView("target"));
     if (oldTarget.isArray()) {
         targets = oldTarget.toArray();
     } else if (oldTarget.isObject()) {
@@ -209,7 +214,8 @@ static void filterActionTarget(QJsonObject &action)
 
         QJsonArray platforms;
 
-        const QJsonValue actionPlatform = target.value(QLatin1String("actionPlatform"));
+        const QJsonValue actionPlatform =
+            target.value(QLatin1StringView("actionPlatform"));
         if (actionPlatform.isArray()) {
             platforms = actionPlatform.toArray();
         } else {
@@ -221,7 +227,8 @@ static void filterActionTarget(QJsonObject &action)
             const bool hasPreferredPlatform = std::any_of(platforms.begin(), platforms.end(), [](const QJsonValue &platformValue) {
                 const QString platform = platformValue.toString();
                 // FIXME android
-                return platform == QLatin1String("http://schema.org/DesktopWebPlatform");
+                return platform == QLatin1StringView(
+                                       "http://schema.org/DesktopWebPlatform");
             });
 
             if (!hasPreferredPlatform) {
@@ -229,7 +236,8 @@ static void filterActionTarget(QJsonObject &action)
             }
         }
 
-        const QUrl url(target.value(QLatin1String("urlTemplate")).toString());
+        const QUrl url(
+            target.value(QLatin1StringView("urlTemplate")).toString());
         // It could also be a "URL template"
         if (!url.isValid()) {
             continue;
@@ -279,9 +287,10 @@ static void filterEvent(QJsonObject &obj)
 static void filterPostalAddress(QJsonObject &obj)
 {
     // unpack country objects
-    auto country = obj.value(QLatin1String("addressCountry"));
+    auto country = obj.value(QLatin1StringView("addressCountry"));
     if (country.isObject()) {
-        obj.insert(QLatin1String("addressCountry"), country.toObject().value(QLatin1String("name")));
+      obj.insert(QLatin1StringView("addressCountry"),
+                 country.toObject().value(QLatin1String("name")));
     }
 }
 
@@ -325,7 +334,7 @@ static QJsonArray graphExpand(const QJsonObject &obj)
 {
     QJsonArray result;
 
-    const auto graph = obj.value(QLatin1String("@graph")).toArray();
+    const auto graph = obj.value(QLatin1StringView("@graph")).toArray();
     for (const auto &o : graph) {
         const auto a = JsonLdImportFilter::filterObject(o.toObject());
         std::copy(a.begin(), a.end(), std::back_inserter(result));
@@ -337,7 +346,7 @@ static QJsonArray graphExpand(const QJsonObject &obj)
 QJsonArray JsonLdImportFilter::filterObject(const QJsonObject &obj)
 {
     QStringList types;
-    const auto typeVal = obj.value(QLatin1String("@type"));
+    const auto typeVal = obj.value(QLatin1StringView("@type"));
     if (typeVal.isString()) {
         types.push_back(typeVal.toString());
     } else if (typeVal.isArray()) {
@@ -366,40 +375,46 @@ QJsonArray JsonLdImportFilter::filterObject(const QJsonObject &obj)
         filterEngine.filterRecursive(res);
 
         // fold mainEntityOfPage into res
-        if (const auto mainEntityOfPage = res.value(QLatin1String("mainEntityOfPage")).toObject(); !mainEntityOfPage.isEmpty()) {
-            res.remove(QLatin1String("mainEntityOfPage"));
-            for (auto it = mainEntityOfPage.begin(); it != mainEntityOfPage.end(); ++it) {
-                if (it.key().startsWith(QLatin1Char('@')) || res.contains(it.key())) {
-                    continue;
-                }
-                res.insert(it.key(), it.value());
+        if (const auto mainEntityOfPage =
+                res.value(QLatin1StringView("mainEntityOfPage")).toObject();
+            !mainEntityOfPage.isEmpty()) {
+          res.remove(QLatin1StringView("mainEntityOfPage"));
+          for (auto it = mainEntityOfPage.begin(); it != mainEntityOfPage.end();
+               ++it) {
+            if (it.key().startsWith(QLatin1Char('@')) ||
+                res.contains(it.key())) {
+              continue;
             }
+            res.insert(it.key(), it.value());
+          }
         }
 
-        if (type.endsWith(QLatin1String("Reservation"))) {
-            filterReservation(res);
+        if (type.endsWith(QLatin1StringView("Reservation"))) {
+          filterReservation(res);
         }
 
-        auto actions = res.value(QLatin1String("potentialAction"));
+        auto actions = res.value(QLatin1StringView("potentialAction"));
         if (!actions.isUndefined()) {
             res.insert(QStringLiteral("potentialAction"), filterActions(actions));
         }
 
-        unpackArray(res, QLatin1String("image"));
-        const auto image = res.value(QLatin1String("image"));
+        unpackArray(res, QLatin1StringView("image"));
+        const auto image = res.value(QLatin1StringView("image"));
         if (image.isObject()) {
             const auto imageObject = image.toObject();
-            if (JsonLd::typeName(imageObject) == QLatin1String("ImageObject")) {
-                res.insert(QStringLiteral("image"), imageObject.value(QLatin1String("url")));
+            if (JsonLd::typeName(imageObject) ==
+                QLatin1StringView("ImageObject")) {
+              res.insert(QStringLiteral("image"),
+                         imageObject.value(QLatin1StringView("url")));
             }
         }
 
         // unpack reservationFor array - multiply the result for each entry in here
-        const auto resFor = res.value(QLatin1String("reservationFor"));
+        const auto resFor = res.value(QLatin1StringView("reservationFor"));
         if (const auto a = resFor.toArray(); !a.isEmpty()) {
             for (const auto &entry : a) {
-                res.insert(QLatin1String("reservationFor"), entry);
-                results.push_back(res);
+              res.insert(QLatin1StringView("reservationFor"), entry);
+              results.push_back(res);
             }
         } else {
             results.push_back(res);

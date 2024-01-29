@@ -87,7 +87,7 @@ void ExtractorScriptEngine::setExtractorEngine(ExtractorEngine *engine)
 static QString fileNameToUrl(const QString &fileName)
 {
     if (fileName.startsWith(QLatin1Char(':'))) {
-        return QLatin1String("qrc:/") + QStringView(fileName).mid(1);
+      return QLatin1StringView("qrc:/") + QStringView(fileName).mid(1);
     }
     return QUrl::fromLocalFile(fileName).toString();
 }
@@ -157,7 +157,7 @@ ExtractorResult ExtractorScriptEngine::execute(const ScriptExtractor *extractor,
     d->m_engineApi->setCurrentNode(node);
 
     const auto nodeArg = d->m_engine.toScriptValue(node);
-    const auto dataArg = nodeArg.property(QLatin1String("content"));
+    const auto dataArg = nodeArg.property(QLatin1StringView("content"));
     const auto triggerArg = d->m_engine.toScriptValue(triggerNode);
     QJSValueList args{ dataArg, nodeArg, triggerArg };
 

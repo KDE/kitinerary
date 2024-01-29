@@ -17,15 +17,16 @@ namespace Test {
     {
         if (output != ref) {
 #ifndef Q_OS_WIN
-            QFile failFile(refFile + QLatin1String(".fail"));
-            failFile.open(QFile::WriteOnly);
-            failFile.write(QJsonDocument(output).toJson());
-            failFile.close();
+          QFile failFile(refFile + QLatin1StringView(".fail"));
+          failFile.open(QFile::WriteOnly);
+          failFile.write(QJsonDocument(output).toJson());
+          failFile.close();
 
-            QProcess proc;
-            proc.setProcessChannelMode(QProcess::ForwardedChannels);
-            proc.start(QStringLiteral("diff"), {QStringLiteral("-u"), refFile, failFile.fileName()});
-            proc.waitForFinished();
+          QProcess proc;
+          proc.setProcessChannelMode(QProcess::ForwardedChannels);
+          proc.start(QStringLiteral("diff"),
+                     {QStringLiteral("-u"), refFile, failFile.fileName()});
+          proc.waitForFinished();
 #else
             qDebug().noquote() << "Got:" << QJsonDocument(output).toJson();
             qDebug().noquote() << "Expected:" << QJsonDocument(ref).toJson();

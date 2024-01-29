@@ -47,7 +47,7 @@ public:
 
     Coordinate center() const;
     BoundingBox boundingBox() const;
-    QString tagValue(const QLatin1String &key) const;
+    QString tagValue(const QLatin1StringView &key) const;
     QString tagValue(const char *key) const;
     QString url() const;
 

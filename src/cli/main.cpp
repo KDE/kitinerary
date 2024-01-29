@@ -106,7 +106,10 @@ int main(int argc, char** argv)
     if (!xdgDataDirs.isEmpty()) {
         xdgDataDirs += QDir::listSeparator().toLatin1();
     }
-    xdgDataDirs += QString(QCoreApplication::applicationDirPath() + QDir::separator() + QLatin1String("..") + QDir::separator() + QLatin1String("share")).toUtf8();
+    xdgDataDirs += QString(QCoreApplication::applicationDirPath() +
+                           QDir::separator() + QLatin1StringView("..") +
+                           QDir::separator() + QLatin1String("share"))
+                       .toUtf8();
     qputenv("XDG_DATA_DIRS", xdgDataDirs);
 #endif
 
@@ -203,18 +206,21 @@ int main(int argc, char** argv)
         }), result.end());
     }
 
-    if (parser.value(formatOpt).compare(QLatin1String("ical"), Qt::CaseInsensitive) == 0) {
-        const auto batches = batchReservations(result);
-        KCalendarCore::Calendar::Ptr cal(new KCalendarCore::MemoryCalendar(QTimeZone::systemTimeZone()));
-        for (const auto &batch : batches) {
-            KCalendarCore::Event::Ptr event(new KCalendarCore::Event);
-            CalendarHandler::fillEvent(batch, event);
-            cal->addEvent(event);
-        }
-        KCalendarCore::ICalFormat format;
-        std::cout << qPrintable(format.toString(cal));
+    if (parser.value(formatOpt).compare(QLatin1StringView("ical"),
+                                        Qt::CaseInsensitive) == 0) {
+      const auto batches = batchReservations(result);
+      KCalendarCore::Calendar::Ptr cal(
+          new KCalendarCore::MemoryCalendar(QTimeZone::systemTimeZone()));
+      for (const auto &batch : batches) {
+        KCalendarCore::Event::Ptr event(new KCalendarCore::Event);
+        CalendarHandler::fillEvent(batch, event);
+        cal->addEvent(event);
+      }
+      KCalendarCore::ICalFormat format;
+      std::cout << qPrintable(format.toString(cal));
     } else {
-        const auto postProcResult = JsonLdDocument::toJson(result);
-        std::cout << QJsonDocument(postProcResult).toJson().constData() << std::endl;
+      const auto postProcResult = JsonLdDocument::toJson(result);
+      std::cout << QJsonDocument(postProcResult).toJson().constData()
+                << std::endl;
     }
 }

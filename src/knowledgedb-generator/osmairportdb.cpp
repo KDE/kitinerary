@@ -71,14 +71,15 @@ void OSMAirportDb::load(const QString &path)
 void OSMAirportDb::loadAirport(OSM::Element elem)
 {
     const auto aeroway = elem.tagValue("aeroway");
-    if (aeroway != QLatin1String("aerodrome")) {
-        return;
+    if (aeroway != QLatin1StringView("aerodrome")) {
+      return;
     }
 
     // filter out airports we aren't interested in
     // not strictly needed here, but it reduces the diagnostic noise
     const auto disused = elem.tagValue("disused");
-    const auto militayLanduse = elem.tagValue("landuse") == QLatin1String("military");
+    const auto militayLanduse =
+        elem.tagValue("landuse") == QLatin1StringView("military");
     if (!disused.isEmpty() || militayLanduse) {
         return;
     }
@@ -159,8 +160,8 @@ void OSMAirportDb::loadAirport(OSM::Element elem, const QString &iataCode)
 void OSMAirportDb::loadTerminal(OSM::Element elem)
 {
     const auto aeroway = elem.tagValue("aeroway");
-    if (aeroway != QLatin1String("terminal")) {
-        return;
+    if (aeroway != QLatin1StringView("terminal")) {
+      return;
     }
 
     // filter out freight terminals
@@ -168,11 +169,10 @@ void OSMAirportDb::loadTerminal(OSM::Element elem)
     const auto traffic_mode = elem.tagValue("traffic_mode");
     const auto building = elem.tagValue("building");
     const auto industrial = elem.tagValue("industrial");
-    if (usage == QLatin1String("freight")
-        || traffic_mode == QLatin1String("freigt")
-        || building == QLatin1String("industrial")
-        || !industrial.isEmpty()) {
-        return;
+    if (usage == QLatin1StringView("freight") ||
+        traffic_mode == QLatin1StringView("freigt") ||
+        building == QLatin1StringView("industrial") || !industrial.isEmpty()) {
+      return;
     }
 
     // find matching airport
@@ -193,16 +193,23 @@ void OSMAirportDb::loadTerminal(OSM::Element elem)
         for (auto node : elem.outerPath(m_dataset)) {
 
             // filter out inaccessible entrances, or gates
-            const auto access = OSM::tagValue(*node, QLatin1String("access"));
-            const auto aeroway = OSM::tagValue(*node, QLatin1String("gate"));
-            if (access == QLatin1String("private") || access == QLatin1String("no") || aeroway == QLatin1String("gate")) {
-                continue;
+            const auto access =
+                OSM::tagValue(*node, QLatin1StringView("access"));
+            const auto aeroway =
+                OSM::tagValue(*node, QLatin1StringView("gate"));
+            if (access == QLatin1StringView("private") ||
+                access == QLatin1String("no") ||
+                aeroway == QLatin1String("gate")) {
+              continue;
             }
 
-            const auto entrance = OSM::tagValue(*node, QLatin1String("entrance"));
-            if (entrance == QLatin1String("yes") || entrance == QLatin1String("main")) {
-                //qDebug() << "  found entrance for terminal:" << (*nodeIt).url() << entrance << access;
-                (*it).second.terminalEntrances.push_back(node->coordinate);
+            const auto entrance =
+                OSM::tagValue(*node, QLatin1StringView("entrance"));
+            if (entrance == QLatin1StringView("yes") ||
+                entrance == QLatin1String("main")) {
+              // qDebug() << "  found entrance for terminal:" << (*nodeIt).url()
+              // << entrance << access;
+              (*it).second.terminalEntrances.push_back(node->coordinate);
             }
         }
     }
@@ -227,14 +234,16 @@ void OSMAirportDb::filterTerminals(OSMAirportData &airport)
 void OSMAirportDb::loadStation(OSM::Element elem)
 {
     const auto railway = elem.tagValue("railway");
-    if (railway != QLatin1String("station") && railway != QLatin1String("halt") && railway != QLatin1String("tram_stop")) {
-        return;
+    if (railway != QLatin1StringView("station") &&
+        railway != QLatin1String("halt") &&
+        railway != QLatin1String("tram_stop")) {
+      return;
     }
 
     // try to filter out airport-interal transport systems, those are typically airside and thus not what we want
     const auto station = elem.tagValue("station");
-    if (station == QLatin1String("monorail")) {
-        return;
+    if (station == QLatin1StringView("monorail")) {
+      return;
     }
 
     for (auto it = m_iataMap.begin(); it != m_iataMap.end(); ++it) {
@@ -274,17 +283,19 @@ void OSMAirportDb::loadStation(OSM::Element elem)
 void OSMAirportDb::filterStations(OSMAirportData &airport)
 {
     // if we have a full station, drop halts
-    auto it = std::partition(airport.stations.begin(), airport.stations.end(), [](auto station) {
-        return station.tagValue("railway") == QLatin1String("station");
-    });
+    auto it = std::partition(
+        airport.stations.begin(), airport.stations.end(), [](auto station) {
+          return station.tagValue("railway") == QLatin1StringView("station");
+        });
     if (it != airport.stations.begin() && it != airport.stations.end()) {
         airport.stations.erase(it, airport.stations.end());
     }
 
     // drop light_rail in favor of "real" rail, as that's often used for on-premises transport lines
-    it = std::partition(airport.stations.begin(), airport.stations.end(), [](auto station) {
-        return station.tagValue("station") != QLatin1String("light_rail");
-    });
+    it = std::partition(
+        airport.stations.begin(), airport.stations.end(), [](auto station) {
+          return station.tagValue("station") != QLatin1StringView("light_rail");
+        });
     if (it != airport.stations.begin() && it != airport.stations.end()) {
         airport.stations.erase(it, airport.stations.end());
     }

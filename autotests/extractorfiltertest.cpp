@@ -30,7 +30,7 @@ private Q_SLOTS:
         ExtractorEngine engine;
         auto root = engine.documentNodeFactory()->createNode(f.readAll());
         QVERIFY(!root.isNull());
-        QCOMPARE(root.mimeType(), QLatin1String("text/calendar"));
+        QCOMPARE(root.mimeType(), QLatin1StringView("text/calendar"));
         root.processor()->expandNode(root, &engine);
         QCOMPARE(root.childNodes().size(), 1);
 
@@ -60,13 +60,13 @@ private Q_SLOTS:
         matches.clear();
         filter.allMatches(root, matches);
         QCOMPARE(matches.size(), 1);
-        QCOMPARE(matches[0].mimeType(), QLatin1String("internal/event"));
+        QCOMPARE(matches[0].mimeType(), QLatin1StringView("internal/event"));
         filter.setScope(ExtractorFilter::Descendants);
         QVERIFY(filter.matches(root));
         matches.clear();
         filter.allMatches(root, matches);
         QCOMPARE(matches.size(), 1);
-        QCOMPARE(matches[0].mimeType(), QLatin1String("internal/event"));
+        QCOMPARE(matches[0].mimeType(), QLatin1StringView("internal/event"));
     }
 
     void testPkPassFilter()
@@ -77,11 +77,12 @@ private Q_SLOTS:
         ExtractorEngine engine;
         auto root = engine.documentNodeFactory()->createNode(f.readAll());
         QVERIFY(!root.isNull());
-        QCOMPARE(root.mimeType(), QLatin1String("application/vnd.apple.pkpass"));
+        QCOMPARE(root.mimeType(),
+                 QLatin1StringView("application/vnd.apple.pkpass"));
         root.processor()->expandNode(root, &engine);
         QCOMPARE(root.childNodes().size(), 1);
         auto bcbp = root.childNodes()[0];
-        QCOMPARE(bcbp.mimeType(), QLatin1String("internal/iata-bcbp"));
+        QCOMPARE(bcbp.mimeType(), QLatin1StringView("internal/iata-bcbp"));
 
         ExtractorFilter filter;
         filter.setMimeType(s("application/vnd.apple.pkpass"));
@@ -108,7 +109,7 @@ private Q_SLOTS:
         ExtractorEngine engine;
         auto root = engine.documentNodeFactory()->createNode(f.readAll());
         QVERIFY(!root.isNull());
-        QCOMPARE(root.mimeType(), QLatin1String("application/ld+json"));
+        QCOMPARE(root.mimeType(), QLatin1StringView("application/ld+json"));
         root.processor()->preExtract(root, &engine);
         QCOMPARE(root.result().size(), 1);
 

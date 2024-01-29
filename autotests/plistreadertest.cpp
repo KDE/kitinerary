@@ -30,11 +30,12 @@ private Q_SLOTS:
 
         QCOMPARE(reader.objectType(0), PListObjectType::Dict);
         QCOMPARE(reader.objectType(1), PListObjectType::String);
-        QCOMPARE(reader.object(1).toString(), QLatin1String("$version"));
+        QCOMPARE(reader.object(1).toString(), QLatin1StringView("$version"));
         QCOMPARE(reader.objectType(5), PListObjectType::Int);
         QCOMPARE(reader.object(5).toInt(), 100000);
         QCOMPARE(reader.objectType(6), PListObjectType::String);
-        QCOMPARE(reader.object(6).toString(), QLatin1String("NSKeyedArchiver"));
+        QCOMPARE(reader.object(6).toString(),
+                 QLatin1StringView("NSKeyedArchiver"));
     }
 
     void testUnpackKeyedArchive_data()

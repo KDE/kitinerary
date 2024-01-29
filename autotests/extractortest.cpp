@@ -65,11 +65,12 @@ private Q_SLOTS:
             while (it.hasNext()) {
                 it.next();
                 // ignore context files
-                if (it.fileName() == QLatin1String("context.eml")) {
-                    continue;
+                if (it.fileName() == QLatin1StringView("context.eml")) {
+                  continue;
                 }
 
-                QFileInfo contextFi(it.fileInfo().absolutePath() + QLatin1String("/context.eml"));
+                QFileInfo contextFi(it.fileInfo().absolutePath() +
+                                    QLatin1StringView("/context.eml"));
                 QTest::newRow((contextFi.dir().dirName() + QLatin1Char('-') + it.fileName()).toLatin1().constData())
                     << contextFi.absoluteFilePath()
                     << it.fileInfo().absoluteFilePath();
@@ -83,16 +84,20 @@ private Q_SLOTS:
         QFETCH(QString, inputFile);
 
         m_engine.clear();
-        if (inputFile.endsWith(QLatin1String(".png")) || inputFile.endsWith(QLatin1String(".pdf")) || inputFile.endsWith(QLatin1String(".jpg"))) {
-            m_engine.setHints(ExtractorEngine::ExtractFullPageRasterImages);
-        } else if (inputFile.endsWith(QLatin1String(".ics"))) {
-            m_engine.setHints(ExtractorEngine::ExtractGenericIcalEvents);
+        if (inputFile.endsWith(QLatin1StringView(".png")) ||
+            inputFile.endsWith(QLatin1String(".pdf")) ||
+            inputFile.endsWith(QLatin1String(".jpg"))) {
+          m_engine.setHints(ExtractorEngine::ExtractFullPageRasterImages);
+        } else if (inputFile.endsWith(QLatin1StringView(".ics"))) {
+          m_engine.setHints(ExtractorEngine::ExtractGenericIcalEvents);
         } else {
-            m_engine.setHints(ExtractorEngine::NoHint);
+          m_engine.setHints(ExtractorEngine::NoHint);
         }
 
         QFile inFile(inputFile);
-        const auto openFlags = inputFile.endsWith(QLatin1String(".txt")) ? QFile::Text : QFile::ReadOnly;
+        const auto openFlags = inputFile.endsWith(QLatin1StringView(".txt"))
+                                   ? QFile::Text
+                                   : QFile::ReadOnly;
         QVERIFY(inFile.open(QFile::ReadOnly | openFlags));
 
         QFile cf(contextFile);
@@ -101,19 +106,21 @@ private Q_SLOTS:
             contextMsg.setContent(cf.readAll());
             contextMsg.parse();
             m_engine.setContext(QVariant::fromValue(&contextMsg), u"message/rfc822");
-        } else if (inputFile.endsWith(QLatin1String(".eml"))) {
-            contextMsg.setContent(inFile.readAll());
-            inFile.seek(0);
-            contextMsg.parse();
-            m_engine.setContext(QVariant::fromValue(&contextMsg), u"message/rfc822");
+        } else if (inputFile.endsWith(QLatin1StringView(".eml"))) {
+          contextMsg.setContent(inFile.readAll());
+          inFile.seek(0);
+          contextMsg.parse();
+          m_engine.setContext(QVariant::fromValue(&contextMsg),
+                              u"message/rfc822");
         } else {
-            m_engine.setContextDate(QDateTime({2018, 1, 1}, {0, 0}));
+          m_engine.setContextDate(QDateTime({2018, 1, 1}, {0, 0}));
         }
 
         m_engine.setData(inFile.readAll(), inputFile);
         auto jsonResult = m_engine.extract();
 
-        const auto expectedSkip = QFile::exists(inputFile + QLatin1String(".skip"));
+        const auto expectedSkip =
+            QFile::exists(inputFile + QLatin1StringView(".skip"));
         if (jsonResult.isEmpty() && expectedSkip) {
             QSKIP("nothing extracted");
             return;
@@ -144,7 +151,7 @@ private Q_SLOTS:
         const auto encodedResult = JsonLdDocument::toJson(postProcResult);
         QCOMPARE(encodedResult.size(), postProcResult.size());
 
-        const QString refFile = inputFile + QLatin1String(".json");
+        const QString refFile = inputFile + QLatin1StringView(".json");
         if (!QFile::exists(refFile) && !expectedSkip) {
             QFile f(refFile);
             QVERIFY(f.open(QFile::WriteOnly));

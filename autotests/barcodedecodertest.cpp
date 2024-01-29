@@ -170,14 +170,17 @@ private Q_SLOTS:
         QFETCH(QString, filename);
         QFETCH(BarcodeDecoder::BarcodeType, type);
 
-        QImage img(QLatin1String(SOURCE_DIR "/barcodes/") + filename);
+        QImage img(QLatin1StringView(SOURCE_DIR "/barcodes/") + filename);
         QVERIFY(!img.isNull());
 
         BarcodeDecoder decoder;
         QCOMPARE(decoder.decode(img, BarcodeDecoder::Any2D).toString(), QString());
-        QCOMPARE(decoder.decode(img, type).toString(), QLatin1String("123456789"));
-        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any1D).toString(), QLatin1String("123456789"));
-        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toString(), QLatin1String("123456789"));
+        QCOMPARE(decoder.decode(img, type).toString(),
+                 QLatin1StringView("123456789"));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any1D).toString(),
+                 QLatin1StringView("123456789"));
+        QCOMPARE(decoder.decode(img, BarcodeDecoder::Any).toString(),
+                 QLatin1StringView("123456789"));
     }
 };
 

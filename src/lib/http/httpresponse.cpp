@@ -68,15 +68,24 @@ HttpResponse HttpResponse::fromNetworkReply(QNetworkReply *reply)
 HttpResponse HttpResponse::fromHarEntry(const QJsonObject &harEntry)
 {
     HttpResponse r;
-    r.d->url = QUrl(harEntry.value(QLatin1String("request")).toObject().value(QLatin1String("url")).toString());
-    const auto content = harEntry.value(QLatin1String("response")).toObject().value(QLatin1String("content")).toObject();
+    r.d->url = QUrl(harEntry.value(QLatin1StringView("request"))
+                        .toObject()
+                        .value(QLatin1String("url"))
+                        .toString());
+    const auto content = harEntry.value(QLatin1StringView("response"))
+                             .toObject()
+                             .value(QLatin1String("content"))
+                             .toObject();
 
-    r.d->content = content.value(QLatin1String("text")).toString().toUtf8();
-    if (content.value(QLatin1String("encoding")).toString() == QLatin1String("base64")) {
-        r.d->content = QByteArray::fromBase64(r.d->content);
+    r.d->content = content.value(QLatin1StringView("text")).toString().toUtf8();
+    if (content.value(QLatin1StringView("encoding")).toString() ==
+        QLatin1String("base64")) {
+      r.d->content = QByteArray::fromBase64(r.d->content);
     }
 
-    r.d->requestDateTime = QDateTime::fromString(harEntry.value(QLatin1String("startedDateTime")).toString(), Qt::ISODateWithMs);
+    r.d->requestDateTime = QDateTime::fromString(
+        harEntry.value(QLatin1StringView("startedDateTime")).toString(),
+        Qt::ISODateWithMs);
     return r;
 }
 
@@ -89,7 +98,12 @@ QList<HttpResponse> HttpResponse::fromHarFile(const QByteArray &harFile)
         return {};
     }
 
-    const auto entries = QJsonDocument::fromJson(harFile).object().value(QLatin1String("log")).toObject().value(QLatin1String("entries")).toArray();
+    const auto entries = QJsonDocument::fromJson(harFile)
+                             .object()
+                             .value(QLatin1StringView("log"))
+                             .toObject()
+                             .value(QLatin1String("entries"))
+                             .toArray();
     QList<HttpResponse> result;
     result.reserve(entries.size());
     for (const auto &entry : entries) {

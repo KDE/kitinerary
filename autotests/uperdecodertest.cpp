@@ -35,7 +35,7 @@ private Q_SLOTS:
         QCOMPARE(d.offset(), 52);
         QCOMPARE(d.readConstrainedWholeNumber(0, 1440), 559);
         QCOMPARE(d.offset(), 63);
-        QCOMPARE(d.readUtf8String(), QLatin1String("Eurail B.V."));
+        QCOMPARE(d.readUtf8String(), QLatin1StringView("Eurail B.V."));
         QCOMPARE(d.offset(), 159);
         QCOMPARE(d.readBoolean(), false);
         QCOMPARE(d.readBoolean(), false);

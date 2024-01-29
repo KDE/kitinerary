@@ -17,10 +17,10 @@ using namespace KItinerary;
 
 bool JsonLdDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return StringUtil::startsWithIgnoreSpace(encodedData, "[")
-        || StringUtil::startsWithIgnoreSpace(encodedData, "{")
-        || fileName.endsWith(QLatin1String(".json"), Qt::CaseInsensitive)
-        || fileName.endsWith(QLatin1String(".jsonld"), Qt::CaseInsensitive);
+  return StringUtil::startsWithIgnoreSpace(encodedData, "[") ||
+         StringUtil::startsWithIgnoreSpace(encodedData, "{") ||
+         fileName.endsWith(QLatin1StringView(".json"), Qt::CaseInsensitive) ||
+         fileName.endsWith(QLatin1StringView(".jsonld"), Qt::CaseInsensitive);
 }
 
 ExtractorDocumentNode JsonLdDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const

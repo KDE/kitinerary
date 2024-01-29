@@ -39,7 +39,8 @@ Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KPkPass::Pass>)
 
 bool PkPassDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return encodedData.startsWith("PK\x03\x04") || fileName.endsWith(QLatin1String(".pkpass"), Qt::CaseInsensitive);
+  return encodedData.startsWith("PK\x03\x04") ||
+         fileName.endsWith(QLatin1StringView(".pkpass"), Qt::CaseInsensitive);
 }
 
 ExtractorDocumentNode PkPassDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
@@ -134,38 +135,48 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
     const auto fields = pass->fields();
     for (const auto &field : fields) {
         // boarding time
-        if (!flight.boardingTime().isValid() && field.key().contains(QLatin1String("boarding"), Qt::CaseInsensitive)) {
-            const auto time = timeFinder.findSingularTime(field.value().toString());
-            if (time.isValid()) {
-                // this misses date, but the postprocessor will fill that in
-                flight.setBoardingTime(QDateTime(QDate(1, 1, 1), time));
-                continue;
-            }
+        if (!flight.boardingTime().isValid() &&
+            field.key().contains(QLatin1StringView("boarding"),
+                                 Qt::CaseInsensitive)) {
+          const auto time =
+              timeFinder.findSingularTime(field.value().toString());
+          if (time.isValid()) {
+            // this misses date, but the postprocessor will fill that in
+            flight.setBoardingTime(QDateTime(QDate(1, 1, 1), time));
+            continue;
+          }
         }
         // departure gate
-        if (flight.departureGate().isEmpty() && field.key().contains(QLatin1String("gate"), Qt::CaseInsensitive)) {
-            const auto gateStr = field.value().toString();
-            if (isPlausibleGate(gateStr)) {
-                flight.setDepartureGate(gateStr);
-                continue;
-            }
+        if (flight.departureGate().isEmpty() &&
+            field.key().contains(QLatin1StringView("gate"),
+                                 Qt::CaseInsensitive)) {
+          const auto gateStr = field.value().toString();
+          if (isPlausibleGate(gateStr)) {
+            flight.setDepartureGate(gateStr);
+            continue;
+          }
         }
         // departure time
-        if (!flight.departureTime().isValid() && field.key().contains(QLatin1String("departure"), Qt::CaseInsensitive)) {
-            const auto time = timeFinder.findSingularTime(field.value().toString());
-            if (time.isValid()) {
-                // this misses date, but the postprocessor will fill that in
-                flight.setDepartureTime(QDateTime(QDate(1, 1, 1), time));
-                continue;
-            }
+        if (!flight.departureTime().isValid() &&
+            field.key().contains(QLatin1StringView("departure"),
+                                 Qt::CaseInsensitive)) {
+          const auto time =
+              timeFinder.findSingularTime(field.value().toString());
+          if (time.isValid()) {
+            // this misses date, but the postprocessor will fill that in
+            flight.setDepartureTime(QDateTime(QDate(1, 1, 1), time));
+            continue;
+          }
         }
 
-        if (field.key().contains(QLatin1String("terminal"), Qt::CaseInsensitive)) {
-            if (departureTerminal.isNull()) {
-                departureTerminal = field.value().toString();
-            } else {
-                departureTerminal = QStringLiteral(""); // empty but not null, marking multiple terminal candidates
-            }
+        if (field.key().contains(QLatin1StringView("terminal"),
+                                 Qt::CaseInsensitive)) {
+          if (departureTerminal.isNull()) {
+            departureTerminal = field.value().toString();
+          } else {
+            departureTerminal = QStringLiteral(
+                ""); // empty but not null, marking multiple terminal candidates
+          }
         }
     }
 
@@ -298,14 +309,17 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
     if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass)) {
         switch (boardingPass->transitType()) {
             case KPkPass::BoardingPass::Air:
-                result.insert(QStringLiteral("@type"), QLatin1String("FlightReservation"));
-                break;
+              result.insert(QStringLiteral("@type"),
+                            QLatin1StringView("FlightReservation"));
+              break;
             case KPkPass::BoardingPass::Train:
-                result.insert(QStringLiteral("@type"), QLatin1String("TrainReservation"));
-                break;
+              result.insert(QStringLiteral("@type"),
+                            QLatin1StringView("TrainReservation"));
+              break;
             case KPkPass::BoardingPass::Bus:
-                result.insert(QStringLiteral("@type"), QLatin1String("BusReservation"));
-                break;
+              result.insert(QStringLiteral("@type"),
+                            QLatin1StringView("BusReservation"));
+              break;
             // TODO expand once we have test files for other types
             default:
                 break;
@@ -313,8 +327,9 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
     } else {
         switch (pass->type()) {
             case KPkPass::Pass::EventTicket:
-                result.insert(QStringLiteral("@type"), QLatin1String("EventReservation"));
-                break;
+              result.insert(QStringLiteral("@type"),
+                            QLatin1StringView("EventReservation"));
+              break;
             default:
                 return;
         }
@@ -326,17 +341,18 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
         QString token;
         switch (barcode.format()) {
             case KPkPass::Barcode::QR:
-                token += QLatin1String("qrCode:");
-                break;
+              token += QLatin1StringView("qrCode:");
+              break;
             case KPkPass::Barcode::Aztec:
-                token += QLatin1String("aztecCode:");
-                break;
+              token += QLatin1StringView("aztecCode:");
+              break;
             default:
                 break;
         }
         token += barcode.message();
-        QJsonObject ticket = result.value(QLatin1String("reservedTicket")).toObject();
-        ticket.insert(QStringLiteral("@type"), QLatin1String("Ticket"));
+        QJsonObject ticket =
+            result.value(QLatin1StringView("reservedTicket")).toObject();
+        ticket.insert(QStringLiteral("@type"), QLatin1StringView("Ticket"));
         ticket.insert(QStringLiteral("ticketToken"), token);
         result.insert(QStringLiteral("reservedTicket"), ticket);
     }
@@ -395,12 +411,15 @@ void PkPassDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_u
     auto result = node.result().jsonLdResult();
     for (auto resV : result) {
         auto res = resV.toObject();
-        res.insert(QLatin1String("pkpassPassTypeIdentifier"), pass->passTypeIdentifier());
-        res.insert(QLatin1String("pkpassSerialNumber"), pass->serialNumber());
+        res.insert(QLatin1StringView("pkpassPassTypeIdentifier"),
+                   pass->passTypeIdentifier());
+        res.insert(QLatin1StringView("pkpassSerialNumber"),
+                   pass->serialNumber());
         // pass->relevantDate() as modification time is inherently unreliable (it wont change most of the time)
         // so if we have something from an enclosing document, that's probably better
         if (node.parent().contextDateTime().isValid()) {
-            res.insert(QLatin1String("modifiedTime"),  node.parent().contextDateTime().toString(Qt::ISODate));
+          res.insert(QLatin1StringView("modifiedTime"),
+                     node.parent().contextDateTime().toString(Qt::ISODate));
         }
         resV = res;
     }

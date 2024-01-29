@@ -38,13 +38,17 @@ static QByteArray decodeBase45Backward(const char *begin, const char *end)
 
 static std::vector<openssl::rsa_ptr> loadKeys(std::string_view keyId)
 {
-    qDebug() << "looking for key:" << QLatin1String(keyId.data(), keyId.size());
+  qDebug() << "looking for key:"
+           << QLatin1StringView(keyId.data(), keyId.size());
 
-    const QString keyFileName = QLatin1String(":/org.kde.pim/kitinerary/rsp6/keys/") + QLatin1String(keyId.data(), keyId.size()) + QLatin1String(".json");
-    QFile keyFile(keyFileName);
-    if (!keyFile.open(QFile::ReadOnly)) {
-        qWarning() << "failed to open RSP-6 key file:" << keyFileName << keyFile.errorString();
-        return {};
+  const QString keyFileName =
+      QLatin1StringView(":/org.kde.pim/kitinerary/rsp6/keys/") +
+      QLatin1String(keyId.data(), keyId.size()) + QLatin1String(".json");
+  QFile keyFile(keyFileName);
+  if (!keyFile.open(QFile::ReadOnly)) {
+    qWarning() << "failed to open RSP-6 key file:" << keyFileName
+               << keyFile.errorString();
+    return {};
     }
 
     const auto keysArray = QJsonDocument::fromJson(keyFile.readAll()).array();
@@ -53,8 +57,10 @@ static std::vector<openssl::rsa_ptr> loadKeys(std::string_view keyId)
 
     for (const auto &keyVal : keysArray) {
         const auto keyObj = keyVal.toObject();
-        auto n = Bignum::fromByteArray(QByteArray::fromBase64(keyObj.value(QLatin1String("n")).toString().toLatin1()));
-        auto e = Bignum::fromByteArray(QByteArray::fromBase64(keyObj.value(QLatin1String("e")).toString().toLatin1()));
+        auto n = Bignum::fromByteArray(QByteArray::fromBase64(
+            keyObj.value(QLatin1StringView("n")).toString().toLatin1()));
+        auto e = Bignum::fromByteArray(QByteArray::fromBase64(
+            keyObj.value(QLatin1StringView("e")).toString().toLatin1()));
 
         openssl::rsa_ptr rsa(RSA_new());
         RSA_set0_key(rsa.get(), n.release(), e.release(), nullptr);

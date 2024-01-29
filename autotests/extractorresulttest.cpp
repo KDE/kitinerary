@@ -30,8 +30,8 @@ private Q_SLOTS:
         QCOMPARE(res.jsonLdResult().size(), 1);
 
         QJsonObject obj;
-        obj.insert(QLatin1String("@type"), QLatin1String("Place"));
-        obj.insert(QLatin1String("name"), QLatin1String("test2"));
+        obj.insert(QLatin1StringView("@type"), QLatin1String("Place"));
+        obj.insert(QLatin1StringView("name"), QLatin1String("test2"));
         res.append(QJsonArray({obj}));
 
         QCOMPARE(res.size(), 2);

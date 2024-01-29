@@ -55,7 +55,7 @@ static void downloadCert(const QString &certName)
     const auto match = regExp.match(certLdif);
     const auto certData = match.captured(1).remove(QLatin1Char('\n')).remove(QLatin1Char(' ')).toUtf8();
 
-    QFile f(certName + QLatin1String(".vdv-cert"));
+    QFile f(certName + QLatin1StringView(".vdv-cert"));
     f.open(QFile::WriteOnly);
     f.write(QByteArray::fromBase64(certData));
 }
@@ -83,9 +83,10 @@ static void writeQrc(const std::vector<QString> &certNames)
 
 static VdvCertificate loadCert(const QString &certName)
 {
-    QFile f(certName + QLatin1String(".vdv-cert"));
-    if (!f.open(QFile::ReadOnly)) {
-        qFatal("Failed to open file %s: %s", qPrintable(f.fileName()), qPrintable(f.errorString()));
+  QFile f(certName + QLatin1StringView(".vdv-cert"));
+  if (!f.open(QFile::ReadOnly)) {
+    qFatal("Failed to open file %s: %s", qPrintable(f.fileName()),
+           qPrintable(f.errorString()));
     }
     return VdvCertificate(f.readAll());
 }
@@ -98,9 +99,10 @@ static void decodeCert(const QString &certName)
         const auto rootCa = loadCert(QStringLiteral("4555564456100106"));
         cert.setCaCertificate(rootCa);
         if (cert.isValid()) {
-            QFile f(certName + QLatin1String(".vdv-cert"));
-            if (!f.open(QFile::WriteOnly)) {
-                qFatal("Failed to open file %s: %s", qPrintable(f.fileName()), qPrintable(f.errorString()));
+          QFile f(certName + QLatin1StringView(".vdv-cert"));
+          if (!f.open(QFile::WriteOnly)) {
+            qFatal("Failed to open file %s: %s", qPrintable(f.fileName()),
+                   qPrintable(f.errorString()));
             }
             cert.writeKey(&f);
         } else {
@@ -108,7 +110,7 @@ static void decodeCert(const QString &certName)
         }
     } else if (cert.isValid()) {
         // this removes the signature and other unknown elements, leaving just the key
-        QFile f(certName + QLatin1String(".vdv-cert"));
+        QFile f(certName + QLatin1StringView(".vdv-cert"));
         if (!f.open(QFile::WriteOnly)) {
             qFatal("Failed to open file %s: %s", qPrintable(f.fileName()), qPrintable(f.errorString()));
         }
@@ -127,14 +129,15 @@ int main(int argc, char **argv)
 
     // (2) load all certificates we don't have yet
     for (auto it = certNames.begin(); it != certNames.end();) {
-        if (QFile::exists(QLatin1Char('.') + (*it) + QLatin1String(".vdv-cert"))) {
-            // expired certificate, but cached from previous run
-            it = certNames.erase(it);
-            continue;
-        }
+      if (QFile::exists(QLatin1Char('.') + (*it) +
+                        QLatin1StringView(".vdv-cert"))) {
+        // expired certificate, but cached from previous run
+        it = certNames.erase(it);
+        continue;
+      }
         qDebug() << "checking certificate" << (*it);
-        if (!QFile::exists((*it) + QLatin1String(".vdv-cert"))) {
-            downloadCert(*it);
+        if (!QFile::exists((*it) + QLatin1StringView(".vdv-cert"))) {
+          downloadCert(*it);
         }
         ++it;
     }
@@ -154,7 +157,9 @@ int main(int argc, char **argv)
         }
         if (!cert.isSelfSigned() && cert.endOfValidity().year() < 2019) {
             qDebug() << "discarding" << (*it) << "due to being expired" << cert.endOfValidity();
-            QFile::rename((*it) + QLatin1String(".vdv-cert"), QLatin1Char('.') + (*it) + QLatin1String(".vdv-cert"));
+            QFile::rename((*it) + QLatin1StringView(".vdv-cert"),
+                          QLatin1Char('.') + (*it) +
+                              QLatin1String(".vdv-cert"));
             it = certNames.erase(it);
             continue;
         }

@@ -326,15 +326,27 @@ private Q_SLOTS:
     {
         QFETCH(QString, baseName);
 
-        const auto lhs = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(baseName + QLatin1String(".lhs.json"))).array()).first();
-        const auto rhs = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(baseName + QLatin1String(".rhs.json"))).array()).first();
-        const auto expected = QJsonDocument::fromJson(readFile(baseName + QLatin1String(".merged.json")));
+        const auto lhs =
+            JsonLdDocument::fromJson(
+                QJsonDocument::fromJson(
+                    readFile(baseName + QLatin1StringView(".lhs.json")))
+                    .array())
+                .first();
+        const auto rhs =
+            JsonLdDocument::fromJson(
+                QJsonDocument::fromJson(
+                    readFile(baseName + QLatin1StringView(".rhs.json")))
+                    .array())
+                .first();
+        const auto expected = QJsonDocument::fromJson(
+            readFile(baseName + QLatin1StringView(".merged.json")));
 
         const auto mergedL2R = MergeUtil::merge(lhs, rhs);
         auto mergedJson =
             QJsonDocument(JsonLdDocument::toJson(QList<QVariant>({mergedL2R})));
         if (mergedJson != expected) {
-            Test::compareJson(baseName + QLatin1String(".merged.json"), mergedJson, expected);
+          Test::compareJson(baseName + QLatin1StringView(".merged.json"),
+                            mergedJson, expected);
         }
         QCOMPARE(mergedJson, expected);
 
@@ -342,31 +354,46 @@ private Q_SLOTS:
         mergedJson =
             QJsonDocument(JsonLdDocument::toJson(QList<QVariant>({mergedR2L})));
         if (mergedJson != expected) {
-            Test::compareJson(baseName + QLatin1String(".merged.json"), mergedJson, expected);
+          Test::compareJson(baseName + QLatin1StringView(".merged.json"),
+                            mergedJson, expected);
         }
         QCOMPARE(mergedJson, expected);
     }
 
     void testIsSameIncidence()
     {
-        const auto lhsFlight = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(QLatin1String(SOURCE_DIR "/calendarhandlerdata/flight.json"))).array()).first().value<FlightReservation>();
-        auto rhsFlight = lhsFlight;
-        Person p = rhsFlight.underName().value<Person>();
-        p.setName(QLatin1String("Jane Doe"));
-        rhsFlight.setUnderName(p);
-        QVERIFY(!MergeUtil::isSame(lhsFlight, rhsFlight));
-        QVERIFY(MergeUtil::isSameIncidence(lhsFlight, rhsFlight));
+      const auto lhsFlight =
+          JsonLdDocument::fromJson(
+              QJsonDocument::fromJson(
+                  readFile(QLatin1StringView(
+                      SOURCE_DIR "/calendarhandlerdata/flight.json")))
+                  .array())
+              .first()
+              .value<FlightReservation>();
+      auto rhsFlight = lhsFlight;
+      Person p = rhsFlight.underName().value<Person>();
+      p.setName(QLatin1StringView("Jane Doe"));
+      rhsFlight.setUnderName(p);
+      QVERIFY(!MergeUtil::isSame(lhsFlight, rhsFlight));
+      QVERIFY(MergeUtil::isSameIncidence(lhsFlight, rhsFlight));
 
-        const auto lhsHotel = JsonLdDocument::fromJson(QJsonDocument::fromJson(readFile(QLatin1String(SOURCE_DIR "/calendarhandlerdata/hotel.json"))).array()).first().value<LodgingReservation>();
-        auto rhsHotel = lhsHotel;
-        p = rhsHotel.underName().value<Person>();
-        p.setName(QLatin1String("Jane Doe"));
-        rhsHotel.setUnderName(p);
-        QVERIFY(!MergeUtil::isSame(lhsHotel, rhsHotel));
-        QVERIFY(MergeUtil::isSameIncidence(lhsHotel, rhsHotel));
-        rhsHotel.setCheckinTime(rhsHotel.checkoutTime().addDays(2));
-        QVERIFY(!MergeUtil::isSame(lhsHotel, rhsHotel));
-        QVERIFY(!MergeUtil::isSameIncidence(lhsHotel, rhsHotel));
+      const auto lhsHotel =
+          JsonLdDocument::fromJson(
+              QJsonDocument::fromJson(
+                  readFile(QLatin1StringView(
+                      SOURCE_DIR "/calendarhandlerdata/hotel.json")))
+                  .array())
+              .first()
+              .value<LodgingReservation>();
+      auto rhsHotel = lhsHotel;
+      p = rhsHotel.underName().value<Person>();
+      p.setName(QLatin1StringView("Jane Doe"));
+      rhsHotel.setUnderName(p);
+      QVERIFY(!MergeUtil::isSame(lhsHotel, rhsHotel));
+      QVERIFY(MergeUtil::isSameIncidence(lhsHotel, rhsHotel));
+      rhsHotel.setCheckinTime(rhsHotel.checkoutTime().addDays(2));
+      QVERIFY(!MergeUtil::isSame(lhsHotel, rhsHotel));
+      QVERIFY(!MergeUtil::isSameIncidence(lhsHotel, rhsHotel));
     }
 };
 

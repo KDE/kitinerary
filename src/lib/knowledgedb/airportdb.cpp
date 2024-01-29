@@ -61,8 +61,8 @@ static QString normalizeFragment(const QString &s)
 {
     auto res = StringUtil::normalize(s);
     // resolve abbreviations
-    if (res == QLatin1String("intl")) {
-        return QStringLiteral("international");
+    if (res == QLatin1StringView("intl")) {
+      return QStringLiteral("international");
     }
 
     return res;
@@ -74,9 +74,9 @@ static void applyTransliterations(QStringList &fragments)
     // as StringUtil::normalize has already been applied to fragments
     // similarly, the input is already case-folded
     for (auto &fragment : fragments) {
-        fragment.replace(QLatin1String("ae"), QLatin1String("a"));
-        fragment.replace(QLatin1String("oe"), QLatin1String("o"));
-        fragment.replace(QLatin1String("ue"), QLatin1String("u"));
+      fragment.replace(QLatin1StringView("ae"), QLatin1String("a"));
+      fragment.replace(QLatin1StringView("oe"), QLatin1String("o"));
+      fragment.replace(QLatin1StringView("ue"), QLatin1String("u"));
     }
 }
 
@@ -147,8 +147,9 @@ static void iataCodeForNonUniqueFragments(const QStringList &fragments, std::vec
         }
 
         // ignore the imprecisely used "international" if it results in an empty set here
-        if (s == QLatin1String("international") && !iataIdxs.intersects(candidates)) {
-            continue;
+        if (s == QLatin1StringView("international") &&
+            !iataIdxs.intersects(candidates)) {
+          continue;
         }
 
         iataIdxs &= candidates;

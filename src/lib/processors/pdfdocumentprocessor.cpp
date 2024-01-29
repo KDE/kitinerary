@@ -36,14 +36,17 @@ PdfDocumentProcessor::~PdfDocumentProcessor() = default;
 
 bool PdfDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return PdfDocument::maybePdf(encodedData) || fileName.endsWith(QLatin1String(".pdf"), Qt::CaseInsensitive);
+  return PdfDocument::maybePdf(encodedData) ||
+         fileName.endsWith(QLatin1StringView(".pdf"), Qt::CaseInsensitive);
 }
 
 static void applyContextDateTime(PdfDocument *pdf, ExtractorDocumentNode &node)
 {
     // ignore broken PDF times for Amadeus documents
-    if (pdf->producer() == QLatin1String("Amadeus") && pdf->creationTime() == pdf->modificationTime() && pdf->creationTime().date().year() <= 2013) {
-        return;
+    if (pdf->producer() == QLatin1StringView("Amadeus") &&
+        pdf->creationTime() == pdf->modificationTime() &&
+        pdf->creationTime().date().year() <= 2013) {
+      return;
     }
 
     auto dt = pdf->modificationTime();

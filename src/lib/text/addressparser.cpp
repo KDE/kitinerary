@@ -60,7 +60,7 @@ static QString captureName(KContacts::AddressFormatField field)
 
 static QString captureExpression(KContacts::AddressFormatField field)
 {
-    return QLatin1String("?<") + captureName(field) + QLatin1Char('>');
+  return QLatin1StringView("?<") + captureName(field) + QLatin1Char('>');
 }
 
 void AddressParser::splitPostalCode()
@@ -112,9 +112,11 @@ void AddressParser::splitPostalCode()
     regex.push_back(QLatin1Char('^'));
     for (auto it = line.begin(); it != line.end(); ++it) {
         if ((*it).isField()) {
-            regex += QLatin1Char('(') + captureExpression((*it).field())
-                  + ((*it).field() == AddressFormatField::PostalCode ? format.postalCodeRegularExpression() : QLatin1String("\\S.*"))
-                  + QLatin1Char(')');
+          regex += QLatin1Char('(') + captureExpression((*it).field()) +
+                   ((*it).field() == AddressFormatField::PostalCode
+                        ? format.postalCodeRegularExpression()
+                        : QLatin1StringView("\\S.*")) +
+                   QLatin1Char(')');
         }
         if ((*it).isLiteral()) {
             regex += (*it).literal();

@@ -86,28 +86,37 @@ namespace KnowledgeDb {
 template<typename Id>
 bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map<Id, QUrl> &idMap)
 {
-    const auto stationArray = WikiData::query(QLatin1String(R"(
+  const auto stationArray =
+      WikiData::query(QLatin1StringView(R"(
         SELECT DISTINCT ?station ?stationLabel ?id ?coord ?replacedBy ?dateOfOfficialClosure WHERE {
             ?station (wdt:P31/wdt:P279*) wd:Q55488.
-            ?station wdt:)") + QString::fromUtf8(prop) + QLatin1String(R"( ?id.
+            ?station wdt:)") +
+                          QString::fromUtf8(prop) + QLatin1StringView(R"( ?id.
             OPTIONAL { ?station wdt:P625 ?coord. }
             OPTIONAL { ?station wdt:P1366 ?replacedBy. }
             OPTIONAL { ?station wdt:P3999 ?dateOfOfficialClosure. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-        } ORDER BY (?station))"), QLatin1String("wikidata_trainstation_") + QString::fromUtf8(name) + QLatin1String(".json"));
-    if (stationArray.isEmpty()) {
-        qWarning() << "Empty query result!";
-        return false;
+        } ORDER BY (?station))"),
+                      QLatin1StringView("wikidata_trainstation_") +
+                          QString::fromUtf8(name) + QLatin1String(".json"));
+  if (stationArray.isEmpty()) {
+    qWarning() << "Empty query result!";
+    return false;
     }
 
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
-        if (stationObj.contains(QLatin1String("replacedBy")) || stationObj.contains(QLatin1String("dateOfOfficialClosure"))) {
-            continue;
+        if (stationObj.contains(QLatin1StringView("replacedBy")) ||
+            stationObj.contains(QLatin1String("dateOfOfficialClosure"))) {
+          continue;
         }
 
         const auto uri = insertOrMerge(stationObj);
-        const auto idStr = stationObj.value(QLatin1String("id")).toObject().value(QLatin1String("value")).toString().toUpper();
+        const auto idStr = stationObj.value(QLatin1StringView("id"))
+                               .toObject()
+                               .value(QLatin1String("value"))
+                               .toString()
+                               .toUpper();
         const auto id = Id(idStr);
         if (!id.isValid()) {
             ++m_idFormatViolations;
@@ -145,7 +154,11 @@ bool TrainStationDbGenerator::fetchIndianRailwaysStationCode()
         const auto stationObj = stationData.toObject();
         const auto uri = insertOrMerge(stationObj);
 
-        const auto id = stationObj.value(QLatin1String("irId")).toObject().value(QLatin1String("value")).toString().toUpper();
+        const auto id = stationObj.value(QLatin1StringView("irId"))
+                            .toObject()
+                            .value(QLatin1String("value"))
+                            .toString()
+                            .toUpper();
         const auto it = m_indianRailwaysMap.find(id);
         if (it != m_indianRailwaysMap.end() && (*it).second != uri) {
             ++m_idConflicts;
@@ -177,14 +190,22 @@ bool TrainStationDbGenerator::fetchFinishStationCodes()
 
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
-        const auto ref = stationObj.value(QLatin1String("ref")).toObject().value(QLatin1String("value")).toString();
-        if (!ref.contains(QLatin1String("rata.digitraffic.fi"), Qt::CaseInsensitive)) {
-            continue;
+        const auto ref = stationObj.value(QLatin1StringView("ref"))
+                             .toObject()
+                             .value(QLatin1String("value"))
+                             .toString();
+        if (!ref.contains(QLatin1StringView("rata.digitraffic.fi"),
+                          Qt::CaseInsensitive)) {
+          continue;
         }
         const auto uri = insertOrMerge(stationObj);
 
         // TODO this filters 'Ä' and 'Ö' too, which seem to occur in a few cases?
-        const auto idStr = stationObj.value(QLatin1String("code")).toObject().value(QLatin1String("value")).toString().toUpper();
+        const auto idStr = stationObj.value(QLatin1StringView("code"))
+                               .toObject()
+                               .value(QLatin1String("value"))
+                               .toString()
+                               .toUpper();
         const auto id = KnowledgeDb::VRStationCode(idStr);
         if (!id.isValid()) {
             ++m_idFormatViolations;
@@ -232,10 +253,22 @@ QUrl TrainStationDbGenerator::insertOrMerge(const QJsonObject &obj, bool mergeOn
     }
 
     Station s;
-    s.uri = QUrl(obj.value(QLatin1String("station")).toObject().value(QLatin1String("value")).toString());
-    s.name = obj.value(QLatin1String("stationLabel")).toObject().value(QLatin1String("value")).toString();
-    s.coord = WikiData::parseCoordinate(obj.value(QLatin1String("coord")).toObject().value(QLatin1String("value")).toString());
-    s.isoCode = obj.value(QLatin1String("isoCode")).toObject().value(QLatin1String("value")).toString();
+    s.uri = QUrl(obj.value(QLatin1StringView("station"))
+                     .toObject()
+                     .value(QLatin1String("value"))
+                     .toString());
+    s.name = obj.value(QLatin1StringView("stationLabel"))
+                 .toObject()
+                 .value(QLatin1String("value"))
+                 .toString();
+    s.coord = WikiData::parseCoordinate(obj.value(QLatin1StringView("coord"))
+                                            .toObject()
+                                            .value(QLatin1String("value"))
+                                            .toString());
+    s.isoCode = obj.value(QLatin1StringView("isoCode"))
+                    .toObject()
+                    .value(QLatin1String("value"))
+                    .toString();
 
     const auto it = std::lower_bound(m_stations.begin(), m_stations.end(), s);
     if (it != m_stations.end() && (*it).uri == s.uri) {

@@ -89,11 +89,12 @@ QString Rct2TicketPrivate::reservationPatternCapture(QStringView name) const
 {
     const auto text = layout.text(8, 0, 72, 1);
     for (const auto *pattern : res_patterns) {
-        QRegularExpression re{QLatin1String(pattern), QRegularExpression::CaseInsensitiveOption};
-        Q_ASSERT(re.isValid());
-        const auto match = re.match(text);
-        if (match.hasMatch()) {
-            return match.captured(name);
+      QRegularExpression re{QLatin1StringView(pattern),
+                            QRegularExpression::CaseInsensitiveOption};
+      Q_ASSERT(re.isValid());
+      const auto match = re.match(text);
+      if (match.hasMatch()) {
+        return match.captured(name);
         }
     }
     return {};
@@ -123,7 +124,7 @@ Rct2Ticket& Rct2Ticket::operator=(const Rct2Ticket&) = default;
 
 bool Rct2Ticket::isValid() const
 {
-    return d->layout.isValid() && d->layout.type() == QLatin1String("RCT2");
+  return d->layout.isValid() && d->layout.type() == QLatin1StringView("RCT2");
 }
 
 void Rct2Ticket::setContextDate(const QDateTime &contextDt)
@@ -168,22 +169,24 @@ Rct2Ticket::Type Rct2Ticket::type() const
 
     // prefer exact matches
     for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
-        if (typeName1 == QLatin1String(it->name) || typeName2 == QLatin1String(it->name)) {
-            return it->type;
-        }
+      if (typeName1 == QLatin1StringView(it->name) ||
+          typeName2 == QLatin1String(it->name)) {
+        return it->type;
+      }
     }
     for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
-        if (typeName1.contains(QLatin1String(it->name)) || typeName2.contains(QLatin1String(it->name))) {
-            return it->type;
-        }
+      if (typeName1.contains(QLatin1StringView(it->name)) ||
+          typeName2.contains(QLatin1String(it->name))) {
+        return it->type;
+      }
     }
 
     // alternatively, check all fields covering the title area, for even more creative placements...
     for (const auto &f : d->layout.fields(0, 14, 38, 2)) {
         for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
-            if (f.text().toCaseFolded().contains(QLatin1String(it->name))) {
-                return it->type;
-            }
+          if (f.text().toCaseFolded().contains(QLatin1StringView(it->name))) {
+            return it->type;
+          }
         }
     }
 

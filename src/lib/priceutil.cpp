@@ -91,12 +91,15 @@ struct {
 
 int PriceUtil::decimalCount(QStringView currency)
 {
-    const auto it = std::lower_bound(std::begin(currency_decimals_map), std::end(currency_decimals_map), currency, [](const auto &m, QStringView isoCode) {
-        return QLatin1String(m.isoCode, 3) < isoCode;
-    });
-    if (it != std::end(currency_decimals_map) && QLatin1String((*it).isoCode, 3) == currency) {
-        return (*it).decimals;
-    }
+  const auto it = std::lower_bound(
+      std::begin(currency_decimals_map), std::end(currency_decimals_map),
+      currency, [](const auto &m, QStringView isoCode) {
+        return QLatin1StringView(m.isoCode, 3) < isoCode;
+      });
+  if (it != std::end(currency_decimals_map) &&
+      QLatin1StringView((*it).isoCode, 3) == currency) {
+    return (*it).decimals;
+  }
     return 2;
 }
 

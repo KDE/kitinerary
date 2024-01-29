@@ -10,10 +10,10 @@ using namespace KItinerary;
 QString FcbUtil::stringifyUicStationIdentifier(int num, const QByteArray &ia5)
 {
     if (num >= 10'00000 && num <= 99'99999) {
-        return QLatin1String("uic:") + QString::number(num);
+      return QLatin1StringView("uic:") + QString::number(num);
     }
     if (ia5.size() == 7) {
-        return QLatin1String("uic:") + QString::fromLatin1(ia5);
+      return QLatin1StringView("uic:") + QString::fromLatin1(ia5);
     }
 
     return {};

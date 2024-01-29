@@ -96,11 +96,11 @@ static void fixFcbStationCode(TrainStation &station)
     // UIC codes in Germany are wildly unreliable, there seem to be different
     // code tables in use by different operators, so we unfortunately have to ignore
     // those entirely
-    if (station.identifier().startsWith(QLatin1String("uic:80"))) {
-        PostalAddress addr;
-        addr.setAddressCountry(QStringLiteral("DE"));
-        station.setAddress(addr);
-        station.setIdentifier(QString());
+    if (station.identifier().startsWith(QLatin1StringView("uic:80"))) {
+      PostalAddress addr;
+      addr.setAddressCountry(QStringLiteral("DE"));
+      station.setAddress(addr);
+      station.setIdentifier(QString());
     }
 }
 
@@ -110,7 +110,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 
     Ticket ticket;
     ticket.setName(p.name());
-    ticket.setTicketToken(QLatin1String("aztecbin:") + QString::fromLatin1(p.rawData().toBase64()));
+    ticket.setTicketToken(QLatin1StringView("aztecbin:") +
+                          QString::fromLatin1(p.rawData().toBase64()));
     Seat seat;
     if (const auto seatingType = p.seatingType(); !seatingType.isEmpty()) {
         seat.setSeatingType(seatingType);
@@ -250,7 +251,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                         l.push_back(QString::fromUtf8(b));
                     for (auto i : irt.places.placeNum)
                         l.push_back(QString::number(i));
-                    s.setSeatNumber(l.join(QLatin1String(", ")));
+                    s.setSeatNumber(l.join(QLatin1StringView(", ")));
                     // TODO other seat encoding variants
                 }
 

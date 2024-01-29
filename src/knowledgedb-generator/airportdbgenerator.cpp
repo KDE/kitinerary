@@ -25,27 +25,29 @@ using namespace KItinerary::Generator;
 
 static bool soundsMilitaryish(const QString &s)
 {
-    return s.contains(QLatin1String("Airbase"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Air Base"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Air Force"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Air National Guard Base"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Air Reserve Base"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Air Station"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Army Airfield"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Army Airport"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Army Heliport"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Canadian Forces Base"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Joint Base"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Marine Corps"), Qt::CaseInsensitive)
-           || s.contains(QLatin1String("Military "))
-           || s.contains(QLatin1String("Naval "))
-           || s.contains(QLatin1String("RAF "))
-           || s.contains(QLatin1String("RAAF "))
-           || s.contains(QLatin1String("RNAS "))
-           || s.contains(QLatin1String("CFB "))
-           || s.contains(QLatin1String("PAF "))
-           || s.contains(QLatin1String("NAF "))
-    ;
+  return s.contains(QLatin1StringView("Airbase"), Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Air Base"), Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Air Force"), Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Air National Guard Base"),
+                    Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Air Reserve Base"),
+                    Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Air Station"), Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Army Airfield"), Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Army Airport"), Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Army Heliport"), Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Canadian Forces Base"),
+                    Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Joint Base"), Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Marine Corps"), Qt::CaseInsensitive) ||
+         s.contains(QLatin1StringView("Military ")) ||
+         s.contains(QLatin1StringView("Naval ")) ||
+         s.contains(QLatin1StringView("RAF ")) ||
+         s.contains(QLatin1StringView("RAAF ")) ||
+         s.contains(QLatin1StringView("RNAS ")) ||
+         s.contains(QLatin1StringView("CFB ")) ||
+         s.contains(QLatin1StringView("PAF ")) ||
+         s.contains(QLatin1StringView("NAF "));
 }
 
 static void stripAirportAllLanguages(QStringList &s)
@@ -67,7 +69,9 @@ static void stripAirportAllLanguages(QStringList &s)
 static void normalizeAbbreviations(QStringList &l)
 {
     for (auto &s : l) {
-        if (s == QLatin1String("intl")) { s = QStringLiteral("international"); }
+      if (s == QLatin1StringView("intl")) {
+        s = QStringLiteral("international");
+      }
     }
 }
 
@@ -129,34 +133,64 @@ bool AirportDbGenerator::fetchAirports()
             continue;
         }
 
-        if (obj.contains(QLatin1String("endDate")) || obj.contains(QLatin1String("demolished"))
-            || obj.contains(QLatin1String("officialClosure")) || obj.contains(QLatin1String("iataEndDate"))
-            || obj.value(QLatin1String("iataRank")).toObject().value(QLatin1String("value")).toString().endsWith(QLatin1String("DeprecatedRank"))) {
-            // skip closed airports or those with expired IATA codes
-            continue;
+        if (obj.contains(QLatin1StringView("endDate")) ||
+            obj.contains(QLatin1String("demolished")) ||
+            obj.contains(QLatin1StringView("officialClosure")) ||
+            obj.contains(QLatin1String("iataEndDate")) ||
+            obj.value(QLatin1StringView("iataRank"))
+                .toObject()
+                .value(QLatin1String("value"))
+                .toString()
+                .endsWith(QLatin1String("DeprecatedRank"))) {
+          // skip closed airports or those with expired IATA codes
+          continue;
         }
 
-        const auto openingdDt = QDateTime::fromString(obj.value(QLatin1String("openingDate")).toObject().value(QLatin1String("value")).toString(), Qt::ISODate);
+        const auto openingdDt =
+            QDateTime::fromString(obj.value(QLatin1StringView("openingDate"))
+                                      .toObject()
+                                      .value(QLatin1String("value"))
+                                      .toString(),
+                                  Qt::ISODate);
         if (openingdDt.isValid() && openingdDt > QDateTime::currentDateTime().addDays(120)) {
             // skip future airports
             continue;
         }
 
         Airport a;
-        a.uri = QUrl(obj.value(QLatin1String("airport")).toObject().value(QLatin1String("value")).toString());
-        a.iataCode = obj.value(QLatin1String("iataCode")).toObject().value(QLatin1String("value")).toString();
+        a.uri = QUrl(obj.value(QLatin1StringView("airport"))
+                         .toObject()
+                         .value(QLatin1String("value"))
+                         .toString());
+        a.iataCode = obj.value(QLatin1StringView("iataCode"))
+                         .toObject()
+                         .value(QLatin1String("value"))
+                         .toString();
         if (a.iataCode.size() != 3 || !a.iataCode.at(0).isUpper() || !a.iataCode.at(1).isUpper() || !a.iataCode.at(2).isUpper()) {
             // invalid IATA code
             continue;
         }
-        a.icaoCode = obj.value(QLatin1String("icaoCode")).toObject().value(QLatin1String("value")).toString();
-        a.label = obj.value(QLatin1String("airportLabel")).toObject().value(QLatin1String("value")).toString();
-        a.alias = obj.value(QLatin1String("airportAltLabel")).toObject().value(QLatin1String("value")).toString();
+        a.icaoCode = obj.value(QLatin1StringView("icaoCode"))
+                         .toObject()
+                         .value(QLatin1String("value"))
+                         .toString();
+        a.label = obj.value(QLatin1StringView("airportLabel"))
+                      .toObject()
+                      .value(QLatin1String("value"))
+                      .toString();
+        a.alias = obj.value(QLatin1StringView("airportAltLabel"))
+                      .toObject()
+                      .value(QLatin1String("value"))
+                      .toString();
         // primitive military airport filter, turns out to be more reliable than querying for the military airport types
         if (soundsMilitaryish(a.label) || soundsMilitaryish(a.alias)) {
             continue;
         }
-        a.coord = WikiData::parseCoordinate(obj.value(QLatin1String("coord")).toObject().value(QLatin1String("value")).toString());
+        a.coord =
+            WikiData::parseCoordinate(obj.value(QLatin1StringView("coord"))
+                                          .toObject()
+                                          .value(QLatin1String("value"))
+                                          .toString());
 
         // merge multiple records for the same airport
         auto it = m_airportMap.find(a.uri);
@@ -193,8 +227,14 @@ bool AirportDbGenerator::fetchCountries()
 
     for (const auto &airportData: array) {
         const auto obj = airportData.toObject();
-        const auto uri = QUrl(obj.value(QLatin1String("airport")).toObject().value(QLatin1String("value")).toString());
-        const auto isoCode = obj.value(QLatin1String("isoCode")).toObject().value(QLatin1String("value")).toString();
+        const auto uri = QUrl(obj.value(QLatin1StringView("airport"))
+                                  .toObject()
+                                  .value(QLatin1String("value"))
+                                  .toString());
+        const auto isoCode = obj.value(QLatin1StringView("isoCode"))
+                                 .toObject()
+                                 .value(QLatin1String("value"))
+                                 .toString();
         const auto it = m_airportMap.find(uri);
         if (it != m_airportMap.end()) {
             if ((*it).country != isoCode && !(*it).country.isEmpty()) {

@@ -37,28 +37,38 @@ private Q_SLOTS:
         QVERIFY(out.open(File::Write));
         QCOMPARE(out.errorString(), QString());
         {
-            QFile resFile(QLatin1String(SOURCE_DIR "/pkpassdata/swiss.json"));
-            QVERIFY(resFile.open(QFile::ReadOnly));
-            const auto r = JsonLdDocument::fromJson(QJsonDocument::fromJson(resFile.readAll()).array());
-            QCOMPARE(r.size(), 1);
-            out.addReservation(r.at(0));
+          QFile resFile(QLatin1StringView(SOURCE_DIR "/pkpassdata/swiss.json"));
+          QVERIFY(resFile.open(QFile::ReadOnly));
+          const auto r = JsonLdDocument::fromJson(
+              QJsonDocument::fromJson(resFile.readAll()).array());
+          QCOMPARE(r.size(), 1);
+          out.addReservation(r.at(0));
 
-            QFile passFile(QLatin1String(SOURCE_DIR "/pkpassdata/swiss.pkpass"));
-            QVERIFY(passFile.open(QFile::ReadOnly));
-            const auto passData = passFile.readAll();
-            std::unique_ptr<KPkPass::Pass> pass(KPkPass::Pass::fromData(passData));
-            QVERIFY(pass);
-            out.addPass(pass.get(), passData);
+          QFile passFile(
+              QLatin1StringView(SOURCE_DIR "/pkpassdata/swiss.pkpass"));
+          QVERIFY(passFile.open(QFile::ReadOnly));
+          const auto passData = passFile.readAll();
+          std::unique_ptr<KPkPass::Pass> pass(
+              KPkPass::Pass::fromData(passData));
+          QVERIFY(pass);
+          out.addPass(pass.get(), passData);
 
-            DigitalDocument doc;
-            doc.setDescription(QStringLiteral("Ticket"));
-            doc.setName(QStringLiteral("../?/../boarding *pass.pdf"));
-            doc.setEncodingFormat(QStringLiteral("application/pdf"));
-            out.addDocument(QStringLiteral("docid1"), doc, QByteArray("%PDF12345"));
+          DigitalDocument doc;
+          doc.setDescription(QStringLiteral("Ticket"));
+          doc.setName(QStringLiteral("../?/../boarding *pass.pdf"));
+          doc.setEncodingFormat(QStringLiteral("application/pdf"));
+          out.addDocument(QStringLiteral("docid1"), doc,
+                          QByteArray("%PDF12345"));
 
-            out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"), QStringLiteral("element1"), QByteArray("hello world"));
-            out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"), QStringLiteral("element 2"), QByteArray("hello again"));
-            out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest2"), QStringLiteral("element1"), QByteArray("something else"));
+          out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"),
+                            QStringLiteral("element1"),
+                            QByteArray("hello world"));
+          out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"),
+                            QStringLiteral("element 2"),
+                            QByteArray("hello again"));
+          out.addCustomData(QStringLiteral("org.kde.kitinerary/UnitTest2"),
+                            QStringLiteral("element1"),
+                            QByteArray("something else"));
         }
         out.close();
 
@@ -69,35 +79,37 @@ private Q_SLOTS:
         QCOMPARE(in.reservations().size(), 1);
         const auto resId = in.reservations().at(0);
         QVERIFY(!resId.isEmpty());
-        QVERIFY(!resId.endsWith(QLatin1String(".json")));
+        QVERIFY(!resId.endsWith(QLatin1StringView(".json")));
         QVERIFY(JsonLd::isA<FlightReservation>(in.reservation(resId)));
         const auto res = in.reservation(resId).value<FlightReservation>();
 
         QCOMPARE(in.passes().size(), 1);
         const auto passId =  in.passes().at(0);
-        QCOMPARE(passId, QLatin1String("pass.booking.swiss.com/MTIzNDU2Nzg5"));
+        QCOMPARE(passId,
+                 QLatin1StringView("pass.booking.swiss.com/MTIzNDU2Nzg5"));
         QVERIFY(!in.passData(passId).isEmpty());
         QCOMPARE(File::passId(res.pkpassPassTypeIdentifier(), res.pkpassSerialNumber()), passId);
 
         const auto docs = in.documents();
         QCOMPARE(docs.size(), 1);
-        QCOMPARE(docs.at(0), QLatin1String("docid1"));
+        QCOMPARE(docs.at(0), QLatin1StringView("docid1"));
         const auto docMeta = in.documentInfo(docs.at(0)).value<DigitalDocument>();
-        QCOMPARE(docMeta.name(), QLatin1String("boarding__pass.pdf"));
-        QCOMPARE(docMeta.description(), QLatin1String("Ticket"));
-        QCOMPARE(docMeta.encodingFormat(), QLatin1String("application/pdf"));
+        QCOMPARE(docMeta.name(), QLatin1StringView("boarding__pass.pdf"));
+        QCOMPARE(docMeta.description(), QLatin1StringView("Ticket"));
+        QCOMPARE(docMeta.encodingFormat(),
+                 QLatin1StringView("application/pdf"));
         QCOMPARE(in.documentData(docs.at(0)), QByteArray("%PDF12345"));
 
         auto customData = in.listCustomData(QStringLiteral("org.kde.kitinerary/UnitTest"));
         QCOMPARE(customData.size(), 2);
-        QVERIFY(customData.contains(QLatin1String("element1")));
-        QVERIFY(customData.contains(QLatin1String("element 2")));
+        QVERIFY(customData.contains(QLatin1StringView("element1")));
+        QVERIFY(customData.contains(QLatin1StringView("element 2")));
         QCOMPARE(in.customData(QStringLiteral("org.kde.kitinerary/UnitTest"), QStringLiteral("element1")), QByteArray("hello world"));
         QCOMPARE(in.customData(QStringLiteral("org.kde.kitinerary/UnitTest"), QStringLiteral("element 2")), QByteArray("hello again"));
 
         customData = in.listCustomData(QStringLiteral("org.kde.kitinerary/UnitTest2"));
         QCOMPARE(customData.size(), 1);
-        QVERIFY(customData.contains(QLatin1String("element1")));
+        QVERIFY(customData.contains(QLatin1StringView("element1")));
         QCOMPARE(in.customData(QStringLiteral("org.kde.kitinerary/UnitTest2"), QStringLiteral("element1")), QByteArray("something else"));
     }
 
@@ -107,7 +119,7 @@ private Q_SLOTS:
         f.close();
 
         QVERIFY(!f.open(File::Read));
-        f.setFileName(QLatin1String("foo.itinerary"));
+        f.setFileName(QLatin1StringView("foo.itinerary"));
         QVERIFY(!f.open(File::Read));
         QVERIFY(!f.errorString().isEmpty());
 

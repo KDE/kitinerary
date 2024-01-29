@@ -31,9 +31,9 @@ using namespace KItinerary;
 
 bool IcalCalendarProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-    return StringUtil::startsWithIgnoreSpace(encodedData, "BEGIN:VCALENDAR")
-        || fileName.endsWith(QLatin1String(".ics"), Qt::CaseInsensitive)
-        || fileName.endsWith(QLatin1String(".ical"), Qt::CaseInsensitive);
+  return StringUtil::startsWithIgnoreSpace(encodedData, "BEGIN:VCALENDAR") ||
+         fileName.endsWith(QLatin1StringView(".ics"), Qt::CaseInsensitive) ||
+         fileName.endsWith(QLatin1StringView(".ical"), Qt::CaseInsensitive);
 }
 
 ExtractorDocumentNode IcalCalendarProcessor::createNodeFromData(const QByteArray &encodedData) const

@@ -71,7 +71,8 @@ bool ExtractorFilter::matches(const QString &data) const
 
 static bool needsFieldName(const QString &mimeType)
 {
-    return mimeType != QLatin1String("text/plain") && mimeType != QLatin1String("application/octet-stream");
+  return mimeType != QLatin1StringView("text/plain") &&
+         mimeType != QLatin1String("application/octet-stream");
 }
 
 template <typename T>
@@ -90,25 +91,29 @@ static T readEnum(const QJsonValue &v, T defaultValue = {})
 bool ExtractorFilter::load(const QJsonObject &obj)
 {
     d.detach();
-    d->m_mimeType = obj.value(QLatin1String("mimeType")).toString();
+    d->m_mimeType = obj.value(QLatin1StringView("mimeType")).toString();
     if (d->m_mimeType.isEmpty()) {
         qCDebug(Log) << "unspecified filter MIME type";
     }
-    d->m_fieldName = obj.value(QLatin1String("field")).toString();
-    d->m_exp.setPattern(obj.value(QLatin1String("match")).toString());
-    d->m_scope = readEnum<ExtractorFilter::Scope>(obj.value(QLatin1String("scope")), ExtractorFilter::Current);
+    d->m_fieldName = obj.value(QLatin1StringView("field")).toString();
+    d->m_exp.setPattern(obj.value(QLatin1StringView("match")).toString());
+    d->m_scope = readEnum<ExtractorFilter::Scope>(
+        obj.value(QLatin1StringView("scope")), ExtractorFilter::Current);
     return !d->m_mimeType.isEmpty() && (!d->m_fieldName.isEmpty() || !needsFieldName(d->m_mimeType)) && d->m_exp.isValid();
 }
 
 QJsonObject ExtractorFilter::toJson() const
 {
     QJsonObject obj;
-    obj.insert(QLatin1String("mimeType"), d->m_mimeType);
+    obj.insert(QLatin1StringView("mimeType"), d->m_mimeType);
     if (needsFieldName(d->m_mimeType)) {
-        obj.insert(QLatin1String("field"), d->m_fieldName);
+      obj.insert(QLatin1StringView("field"), d->m_fieldName);
     }
-    obj.insert(QLatin1String("match"), pattern());
-    obj.insert(QLatin1String("scope"), QLatin1String(QMetaEnum::fromType<ExtractorFilter::Scope>().valueToKey(d->m_scope)));
+    obj.insert(QLatin1StringView("match"), pattern());
+    obj.insert(
+        QLatin1StringView("scope"),
+        QLatin1String(QMetaEnum::fromType<ExtractorFilter::Scope>().valueToKey(
+            d->m_scope)));
     return obj;
 }
 
@@ -164,29 +169,34 @@ static bool filterMachesNode(const ExtractorFilter &filter, ExtractorFilter::Sco
         return true;
     }
 
-    if (scope != ExtractorFilter::Ancestors && filter.mimeType() == QLatin1String("application/ld+json") && !node.result().isEmpty()) {
-        // when collecting all matches for results, we only want the "leaf-most" ones, not those along the path
-        if (matchMode == All && scope == ExtractorFilter::Descendants) {
-            bool descendantsMatched = false;
-            for (const auto &child : node.childNodes()) {
-                descendantsMatched |= filterMachesNode(filter, ExtractorFilter::Descendants, child, matches, matchMode);
-            }
-            if (descendantsMatched) {
-                return true;
-            }
+    if (scope != ExtractorFilter::Ancestors &&
+        filter.mimeType() == QLatin1StringView("application/ld+json") &&
+        !node.result().isEmpty()) {
+      // when collecting all matches for results, we only want the "leaf-most"
+      // ones, not those along the path
+      if (matchMode == All && scope == ExtractorFilter::Descendants) {
+        bool descendantsMatched = false;
+        for (const auto &child : node.childNodes()) {
+          descendantsMatched |= filterMachesNode(
+              filter, ExtractorFilter::Descendants, child, matches, matchMode);
         }
+        if (descendantsMatched) {
+          return true;
+        }
+      }
 
-        const auto res = node.result().jsonLdResult();
-        for (const auto &elem : res) {
-            const auto property = valueForJsonPath(elem.toObject(), filter.fieldName());
-            if (filter.matches(property)) {
-                if (matchMode == All) {
-                    matches.push_back(node);
-                } else {
-                    return true;
-                }
-            }
+      const auto res = node.result().jsonLdResult();
+      for (const auto &elem : res) {
+        const auto property =
+            valueForJsonPath(elem.toObject(), filter.fieldName());
+        if (filter.matches(property)) {
+          if (matchMode == All) {
+            matches.push_back(node);
+          } else {
+            return true;
+          }
         }
+      }
     }
 
     if (scope == ExtractorFilter::Ancestors) {
@@ -249,16 +259,18 @@ void ExtractorFilter::allMatches(const ExtractorDocumentNode &node, std::vector<
 ExtractorFilter ExtractorFilter::fromJSValue(const QJSValue &js)
 {
     ExtractorFilter f;
-    f.setMimeType(js.property(QLatin1String("mimeType")).toString());
-    const auto fieldName = js.property(QLatin1String("field"));
+    f.setMimeType(js.property(QLatin1StringView("mimeType")).toString());
+    const auto fieldName = js.property(QLatin1StringView("field"));
     if (fieldName.isString()) {
         f.setFieldName(fieldName.toString());
     }
-    const auto match = js.property(QLatin1String("match"));
+    const auto match = js.property(QLatin1StringView("match"));
     if (match.isString()) {
         f.setPattern(match.toString());
     }
-    f.setScope(readEnum<ExtractorFilter::Scope>(js.property(QLatin1String("scope")).toString(), ExtractorFilter::Current));
+    f.setScope(readEnum<ExtractorFilter::Scope>(
+        js.property(QLatin1StringView("scope")).toString(),
+        ExtractorFilter::Current));
     return f;
 }
 

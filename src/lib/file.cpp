@@ -98,7 +98,8 @@ void File::close()
 
 QList<QString> File::reservations() const {
     Q_ASSERT(d->zipFile);
-    const auto resDir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("reservations")));
+    const auto resDir = dynamic_cast<const KArchiveDirectory *>(
+        d->zipFile->directory()->entry(QLatin1StringView("reservations")));
     if (!resDir) {
         return {};
     }
@@ -107,9 +108,9 @@ QList<QString> File::reservations() const {
     QList<QString> res;
     res.reserve(entries.size());
     for (const auto &entry : entries) {
-        if (!entry.endsWith(QLatin1String(".json"))) {
-            continue;
-        }
+      if (!entry.endsWith(QLatin1StringView(".json"))) {
+        continue;
+      }
         res.push_back(entry.left(entry.size() - 5));
     }
 
@@ -119,12 +120,13 @@ QList<QString> File::reservations() const {
 QVariant File::reservation(const QString &resId) const
 {
     Q_ASSERT(d->zipFile);
-    const auto resDir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("reservations")));
+    const auto resDir = dynamic_cast<const KArchiveDirectory *>(
+        d->zipFile->directory()->entry(QLatin1StringView("reservations")));
     if (!resDir) {
         return {};
     }
 
-    const auto file = resDir->file(resId + QLatin1String(".json"));
+    const auto file = resDir->file(resId + QLatin1StringView(".json"));
     if (!file) {
         qCDebug(Log) << "reservation not found" << resId;
         return {};
@@ -152,7 +154,8 @@ void File::addReservation(const QVariant &res)
 void File::addReservation(const QString &id, const QVariant &res)
 {
     Q_ASSERT(d->zipFile);
-    d->zipFile->writeFile(QLatin1String("reservations/") + id + QLatin1String(".json"),
+    d->zipFile->writeFile(QLatin1StringView("reservations/") + id +
+                              QLatin1String(".json"),
                           QJsonDocument(JsonLdDocument::toJson(res)).toJson());
 }
 
@@ -172,7 +175,8 @@ QString File::passId(const QString &passTypeIdenfier, const QString &serialNumbe
 
 QList<QString> File::passes() const {
     Q_ASSERT(d->zipFile);
-    const auto passDir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("passes")));
+    const auto passDir = dynamic_cast<const KArchiveDirectory *>(
+        d->zipFile->directory()->entry(QLatin1StringView("passes")));
     if (!passDir) {
         return {};
     }
@@ -187,9 +191,9 @@ QList<QString> File::passes() const {
 
         const auto subEntries = subdir->entries();
         for (const auto &subEntry : subEntries) {
-            if (!subEntry.endsWith(QLatin1String(".pkpass"))) {
-                continue;
-            }
+          if (!subEntry.endsWith(QLatin1StringView(".pkpass"))) {
+            continue;
+          }
             passIds.push_back(entry + QLatin1Char('/') + QStringView(subEntry).left(subEntry.size() - 7));
         }
     }
@@ -199,12 +203,13 @@ QList<QString> File::passes() const {
 QByteArray File::passData(const QString& passId) const
 {
     Q_ASSERT(d->zipFile);
-    const auto passDir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("passes")));
+    const auto passDir = dynamic_cast<const KArchiveDirectory *>(
+        d->zipFile->directory()->entry(QLatin1StringView("passes")));
     if (!passDir) {
         return {};
     }
 
-    const auto file = passDir->file(passId + QLatin1String(".pkpass"));
+    const auto file = passDir->file(passId + QLatin1StringView(".pkpass"));
     if (!file) {
         qCDebug(Log) << "pass not found" << passId;
         return {};
@@ -220,13 +225,16 @@ void File::addPass(KPkPass::Pass* pass, const QByteArray& rawData)
 void File::addPass(const QString &passId, const QByteArray& rawData)
 {
     Q_ASSERT(d->zipFile);
-    d->zipFile->writeFile(QLatin1String("passes/") + passId + QLatin1String(".pkpass"), rawData);
+    d->zipFile->writeFile(QLatin1StringView("passes/") + passId +
+                              QLatin1String(".pkpass"),
+                          rawData);
 }
 
 QList<QString> File::documents() const {
-    const auto docDir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("documents")));
-    if (!docDir) {
-        return {};
+  const auto docDir = dynamic_cast<const KArchiveDirectory *>(
+      d->zipFile->directory()->entry(QLatin1StringView("documents")));
+  if (!docDir) {
+    return {};
     }
 
     const auto entries = docDir->entries();
@@ -244,7 +252,8 @@ QList<QString> File::documents() const {
 QVariant File::documentInfo(const QString &id) const
 {
     Q_ASSERT(d->zipFile);
-    const auto dir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("documents/") + id));
+    const auto dir = dynamic_cast<const KArchiveDirectory *>(
+        d->zipFile->directory()->entry(QLatin1StringView("documents/") + id));
     if (!dir) {
         return {};
     }
@@ -277,7 +286,8 @@ QByteArray File::documentData(const QString &id) const
     }
     const auto fileName = JsonLd::convert<CreativeWork>(meta).name();
 
-    const auto dir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("documents/") + id));
+    const auto dir = dynamic_cast<const KArchiveDirectory *>(
+        d->zipFile->directory()->entry(QLatin1StringView("documents/") + id));
     Q_ASSERT(dir); // checked by documentInfo already
     const auto file = dir->file(fileName);
     if (!file) {
@@ -299,8 +309,8 @@ QString File::normalizeDocumentFileName(const QString &name)
     fileName.replace(QLatin1Char('*'), QLatin1Char('_'));
     fileName.replace(QLatin1Char(' '), QLatin1Char('_'));
     fileName.replace(QLatin1Char('\\'), QLatin1Char('_'));
-    if (fileName.isEmpty() || fileName == QLatin1String("meta.json")) {
-        fileName = QStringLiteral("file");
+    if (fileName.isEmpty() || fileName == QLatin1StringView("meta.json")) {
+      fileName = QStringLiteral("file");
     }
     return fileName;
 }
@@ -321,14 +331,18 @@ void File::addDocument(const QString &id, const QVariant &docInfo, const QByteAr
     auto normalizedDocInfo = docInfo;
     JsonLdDocument::writeProperty(normalizedDocInfo, "name", fileName);
 
-    d->zipFile->writeFile(QLatin1String("documents/") + id + QLatin1String("/meta.json"),
-                          QJsonDocument(JsonLdDocument::toJson(normalizedDocInfo)).toJson());
-    d->zipFile->writeFile(QLatin1String("documents/") + id + QLatin1Char('/') + fileName, docData);
+    d->zipFile->writeFile(
+        QLatin1StringView("documents/") + id + QLatin1String("/meta.json"),
+        QJsonDocument(JsonLdDocument::toJson(normalizedDocInfo)).toJson());
+    d->zipFile->writeFile(QLatin1StringView("documents/") + id +
+                              QLatin1Char('/') + fileName,
+                          docData);
 }
 
 QList<QString> File::listCustomData(const QString &scope) const {
     Q_ASSERT(d->zipFile);
-    const auto dir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("custom/") + scope));
+    const auto dir = dynamic_cast<const KArchiveDirectory *>(
+        d->zipFile->directory()->entry(QLatin1StringView("custom/") + scope));
     if (!dir) {
         return {};
     }
@@ -343,7 +357,8 @@ QList<QString> File::listCustomData(const QString &scope) const {
 QByteArray File::customData(const QString& scope, const QString &id) const
 {
     Q_ASSERT(d->zipFile);
-    const auto dir = dynamic_cast<const KArchiveDirectory*>(d->zipFile->directory()->entry(QLatin1String("custom/") + scope));
+    const auto dir = dynamic_cast<const KArchiveDirectory *>(
+        d->zipFile->directory()->entry(QLatin1StringView("custom/") + scope));
     if (!dir) {
         return {};
     }
@@ -359,5 +374,6 @@ QByteArray File::customData(const QString& scope, const QString &id) const
 void File::addCustomData(const QString &scope, const QString &id, const QByteArray &data)
 {
     Q_ASSERT(d->zipFile);
-    d->zipFile->writeFile(QLatin1String("custom/") + scope + QLatin1Char('/') + id, data);
+    d->zipFile->writeFile(
+        QLatin1StringView("custom/") + scope + QLatin1Char('/') + id, data);
 }

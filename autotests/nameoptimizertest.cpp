@@ -99,7 +99,7 @@ private Q_SLOTS:
 
         p = NameOptimizer::optimizeName(text, p);
         QCOMPARE(p.givenName(), expected);
-        QCOMPARE(p.familyName(), QLatin1String("Dragon"));
+        QCOMPARE(p.familyName(), QLatin1StringView("Dragon"));
     }
 
     void testGivenNameCompletion_data()

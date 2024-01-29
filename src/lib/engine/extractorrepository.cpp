@@ -119,7 +119,7 @@ void ExtractorRepositoryPrivate::loadScriptExtractors()
     auto searchDirs = m_extraSearchPaths;
     const auto qsp = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
     for (const auto &p : qsp) {
-        searchDirs.push_back(p + QLatin1String("/kitinerary/extractors"));
+      searchDirs.push_back(p + QLatin1StringView("/kitinerary/extractors"));
     }
     searchDirs += QStringLiteral(":/org.kde.pim/kitinerary/extractors");
 
@@ -127,8 +127,8 @@ void ExtractorRepositoryPrivate::loadScriptExtractors()
         QDirIterator it(dir, QDir::Files);
         while (it.hasNext()) {
             const auto fileName = it.next();
-            if (!fileName.endsWith(QLatin1String(".json"))) {
-                continue;
+            if (!fileName.endsWith(QLatin1StringView(".json"))) {
+              continue;
             }
 
             QFile file(fileName);

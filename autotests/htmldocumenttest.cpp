@@ -25,36 +25,39 @@ private Q_SLOTS:
         QVERIFY(doc);
         auto elem = doc->root();
         QVERIFY(!elem.isNull());
-        QCOMPARE(elem.name(), QLatin1String("html"));
-        QCOMPARE(elem.attribute(QLatin1String("lang")), QLatin1String("de"));
+        QCOMPARE(elem.name(), QLatin1StringView("html"));
+        QCOMPARE(elem.attribute(QLatin1StringView("lang")),
+                 QLatin1String("de"));
         QVERIFY(elem.nextSibling().isNull());
         QVERIFY(elem.parent().isNull());
 
         elem = elem.firstChild();
         QVERIFY(!elem.isNull());
-        QCOMPARE(elem.name(), QLatin1String("head"));
+        QCOMPARE(elem.name(), QLatin1StringView("head"));
         elem = elem.nextSibling();
         QVERIFY(!elem.isNull());
-        QCOMPARE(elem.name(), QLatin1String("body"));
-        QCOMPARE(elem.parent().name(), QLatin1String("html"));
+        QCOMPARE(elem.name(), QLatin1StringView("body"));
+        QCOMPARE(elem.parent().name(), QLatin1StringView("html"));
 
         auto res = doc->eval(QStringLiteral("/html"));
         auto nodes = res.toList();
         QCOMPARE(nodes.size(), 1);
-        QCOMPARE(nodes.at(0).value<HtmlElement>().name(), QLatin1String("html"));
+        QCOMPARE(nodes.at(0).value<HtmlElement>().name(),
+                 QLatin1StringView("html"));
         nodes = doc->eval(QStringLiteral("//body")).toList();
         QCOMPARE(nodes.size(), 1);
         nodes = doc->eval(QStringLiteral("//link")).toList();
         QCOMPARE(nodes.size(), 6);
 
         nodes = doc->eval(QStringLiteral("/html/@lang")).toList();
-        QCOMPARE(nodes.at(0).value<HtmlElement>().content(), QLatin1String("de"));
+        QCOMPARE(nodes.at(0).value<HtmlElement>().content(),
+                 QLatin1StringView("de"));
         nodes = doc->eval(QStringLiteral("//div[@itemtype=\"http://schema.org/FlightReservation\"]")).toList();
         QCOMPARE(nodes.size(), 2);
         elem = nodes.at(0).value<HtmlElement>();
         QCOMPARE(elem.attributes().size(), 2);
-        QVERIFY(elem.attributes().contains(QLatin1String("itemscope")));
-        QVERIFY(elem.attributes().contains(QLatin1String("itemtype")));
+        QVERIFY(elem.attributes().contains(QLatin1StringView("itemscope")));
+        QVERIFY(elem.attributes().contains(QLatin1StringView("itemtype")));
         nodes = elem.eval(QStringLiteral("./link")).toList();
         QCOMPARE(nodes.size(), 3);
 #endif
@@ -72,16 +75,18 @@ private Q_SLOTS:
         QVERIFY(elem.content().isEmpty());
 
         elem = elem.firstChild().firstChild().nextSibling();
-        QCOMPARE(elem.name(), QLatin1String("script"));
-        QCOMPARE(elem.attribute(QLatin1String("type")), QLatin1String("application/ld+json"));
+        QCOMPARE(elem.name(), QLatin1StringView("script"));
+        QCOMPARE(elem.attribute(QLatin1StringView("type")),
+                 QLatin1String("application/ld+json"));
         QCOMPARE(elem.attributes().size(), 1);
-        QCOMPARE(elem.attributes().at(0), QLatin1String("type"));
+        QCOMPARE(elem.attributes().at(0), QLatin1StringView("type"));
         const auto s = elem.content();
-        QVERIFY(s.contains(QLatin1String("checkoutDate")));
+        QVERIFY(s.contains(QLatin1StringView("checkoutDate")));
 
         elem = doc->root().firstChild().nextSibling().firstChild();
-        QCOMPARE(elem.name(), QLatin1String("p"));
-        QCOMPARE(elem.content(), QLatin1String("random content\ncan be invalid"));
+        QCOMPARE(elem.name(), QLatin1StringView("p"));
+        QCOMPARE(elem.content(),
+                 QLatin1StringView("random content\ncan be invalid"));
 #endif
     }
 
@@ -95,21 +100,22 @@ private Q_SLOTS:
         auto elem = doc->root();
         QVERIFY(!elem.isNull());
         QVERIFY(elem.content().isEmpty());
-        QVERIFY(elem.recursiveContent().contains(QLatin1String("spaces")));
+        QVERIFY(elem.recursiveContent().contains(QLatin1StringView("spaces")));
 
         elem = elem.firstChild().firstChild();
-        QCOMPARE(elem.name(), QLatin1String("p"));
-        QCOMPARE(elem.content(), QLatin1String("word1\nword2"));
-        QCOMPARE(elem.recursiveContent(), QLatin1String("word1\nword2"));
+        QCOMPARE(elem.name(), QLatin1StringView("p"));
+        QCOMPARE(elem.content(), QLatin1StringView("word1\nword2"));
+        QCOMPARE(elem.recursiveContent(), QLatin1StringView("word1\nword2"));
 
         elem = elem.nextSibling();
-        QCOMPARE(elem.name(), QLatin1String("p"));
-        QCOMPARE(elem.content(), QLatin1String("lots of spaces"));
-        QCOMPARE(elem.recursiveContent(), QLatin1String("lots of spaces"));
+        QCOMPARE(elem.name(), QLatin1StringView("p"));
+        QCOMPARE(elem.content(), QLatin1StringView("lots of spaces"));
+        QCOMPARE(elem.recursiveContent(), QLatin1StringView("lots of spaces"));
 
         auto elems = doc->eval(QStringLiteral("//*[text()[normalize-space(.)='lots of spaces']]")).toList();
         QCOMPARE(elems.size(), 1);
-        QCOMPARE(elems.at(0).value<HtmlElement>().name(), QLatin1String("p"));
+        QCOMPARE(elems.at(0).value<HtmlElement>().name(),
+                 QLatin1StringView("p"));
         elems = doc->eval(QStringLiteral("//*[text()='lots of spaces']")).toList();
         QCOMPARE(elems.size(), 0);
 
@@ -118,22 +124,23 @@ private Q_SLOTS:
         QCOMPARE(elem.recursiveContent(), QString::fromUtf8("인천공항"));
 
         elem = elem.nextSibling();
-        QCOMPARE(elem.content(), QLatin1String("a b"));
-        QCOMPARE(elem.recursiveContent(), QLatin1String("a b"));
+        QCOMPARE(elem.content(), QLatin1StringView("a b"));
+        QCOMPARE(elem.recursiveContent(), QLatin1StringView("a b"));
 
         elem = elem.nextSibling();
-        QCOMPARE(elem.content(), QLatin1String("a&b"));
-        QCOMPARE(elem.recursiveContent(), QLatin1String("a&b"));
+        QCOMPARE(elem.content(), QLatin1StringView("a&b"));
+        QCOMPARE(elem.recursiveContent(), QLatin1StringView("a&b"));
         elem = elem.nextSibling();
-        QCOMPARE(elem.content(), QLatin1String("a&b"));
-        QCOMPARE(elem.recursiveContent(), QLatin1String("a&b"));
+        QCOMPARE(elem.content(), QLatin1StringView("a&b"));
+        QCOMPARE(elem.recursiveContent(), QLatin1StringView("a&b"));
 
         elem = elem.nextSibling();
-        QCOMPARE(elem.content(), QLatin1String("non breaking"));
-        QCOMPARE(elem.recursiveContent(), QLatin1String("non breaking"));
+        QCOMPARE(elem.content(), QLatin1StringView("non breaking"));
+        QCOMPARE(elem.recursiveContent(), QLatin1StringView("non breaking"));
         elem = elem.nextSibling();
-        QCOMPARE(elem.content(), QLatin1String("windows\nline\nbreaks"));
-        QCOMPARE(elem.recursiveContent(), QLatin1String("windows\nline\nbreaks"));
+        QCOMPARE(elem.content(), QLatin1StringView("windows\nline\nbreaks"));
+        QCOMPARE(elem.recursiveContent(),
+                 QLatin1StringView("windows\nline\nbreaks"));
 #endif
     }
 };

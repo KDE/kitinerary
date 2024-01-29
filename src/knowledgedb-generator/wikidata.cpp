@@ -44,7 +44,7 @@ QJsonArray WikiData::query(const char *sparqlQuery, const char *cacheFileName)
 QJsonArray WikiData::query(const QString &sparqlQuery, const QString &cacheFileName)
 {
     QDir().mkdir(QStringLiteral("data"));
-    QFile cacheFile(QLatin1String("data/") + cacheFileName);
+    QFile cacheFile(QLatin1StringView("data/") + cacheFileName);
     QByteArray data;
     if (cacheFile.exists() && qEnvironmentVariableIsSet("KITINERARY_USE_WIKIDATA_CACHE")) {
         cacheFile.open(QFile::ReadOnly);
@@ -74,6 +74,10 @@ QJsonArray WikiData::query(const QString &sparqlQuery, const QString &cacheFileN
     }
 
     const auto doc = QJsonDocument::fromJson(data);
-    const auto resultArray = doc.object().value(QLatin1String("results")).toObject().value(QLatin1String("bindings")).toArray();
+    const auto resultArray = doc.object()
+                                 .value(QLatin1StringView("results"))
+                                 .toObject()
+                                 .value(QLatin1String("bindings"))
+                                 .toArray();
     return resultArray;
 }
