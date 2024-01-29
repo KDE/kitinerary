@@ -3,7 +3,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <asn1/uperdecoder.h>
+#include "asn1/uperdecoder.h"
 #include <asn1/uperdecoder.cpp>
 #include <asn1/bitvectorview.cpp>
 

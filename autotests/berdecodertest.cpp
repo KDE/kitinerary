@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <asn1/berelement.h>
+#include "asn1/berelement.h"
 
 #include <QObject>
 #include <QTest>

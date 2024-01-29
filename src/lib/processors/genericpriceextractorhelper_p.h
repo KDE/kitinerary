@@ -6,7 +6,7 @@
 #ifndef KITINERARY_GENERICPRICEEXTRACTORHELPER_P_H
 #define KITINERARY_GENERICPRICEEXTRACTORHELPER_P_H
 
-#include <barcodedecoder.h>
+#include "barcodedecoder.h"
 
 namespace KItinerary {
 

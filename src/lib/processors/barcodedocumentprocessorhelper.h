@@ -6,7 +6,7 @@
 #ifndef KITINERARY_BARCODEDOCUMENTPROCESSORHELPER_H
 #define KITINERARY_BARCODEDOCUMENTPROCESSORHELPER_H
 
-#include <barcodedecoder.h>
+#include "barcodedecoder.h"
 
 namespace KItinerary {
 

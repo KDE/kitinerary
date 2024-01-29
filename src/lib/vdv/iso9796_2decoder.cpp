@@ -6,7 +6,7 @@
 
 #include "iso9796_2decoder_p.h"
 
-#include <openssl/bignum_p.h>
+#include "openssl/bignum_p.h"
 
 #include <QDebug>
 

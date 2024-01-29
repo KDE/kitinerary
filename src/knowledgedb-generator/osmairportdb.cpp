@@ -6,8 +6,8 @@
 
 #include "osmairportdb.h"
 
-#include <osm/geomath.h>
-#include <osm/xmlparser.h>
+#include "osm/geomath.h"
+#include "osm/xmlparser.h"
 
 #include <QDebug>
 #include <QFile>

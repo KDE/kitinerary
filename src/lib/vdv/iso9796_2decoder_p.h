@@ -8,7 +8,7 @@
 
 #include <QByteArray>
 
-#include <openssl/opensslpp_p.h>
+#include "openssl/opensslpp_p.h"
 
 #include <cstdint>
 #include <memory>

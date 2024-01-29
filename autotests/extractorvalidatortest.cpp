@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <extractorvalidator.h>
+#include "extractorvalidator.h"
 
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Reservation>

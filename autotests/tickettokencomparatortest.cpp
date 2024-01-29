@@ -5,7 +5,7 @@
 
 #include "testhelpers.h"
 
-#include <tickettokencomparator_p.h>
+#include "tickettokencomparator_p.h"
 
 #include <QTest>
 

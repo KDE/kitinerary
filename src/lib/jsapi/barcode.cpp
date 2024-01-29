@@ -5,7 +5,7 @@
 */
 
 #include "barcode.h"
-#include <pdf/pdfbarcodeutil_p.h>
+#include "pdf/pdfbarcodeutil_p.h"
 
 #include <KItinerary/PdfDocument>
 

@@ -16,10 +16,10 @@
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 
-#include <era/fcbticket.h>
-#include <era/fcbutil.h>
-#include <uic9183/uic9183head.h>
-#include <uic9183/vendor0080block.h>
+#include "era/fcbticket.h"
+#include "era/fcbutil.h"
+#include "uic9183/uic9183head.h"
+#include "uic9183/vendor0080block.h"
 
 #include <KLocalizedString>
 

@@ -4,7 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <knowledgedb/airportnametokenizer_p.h>
+#include "knowledgedb/airportnametokenizer_p.h"
 
 #include <QObject>
 #include <QTest>

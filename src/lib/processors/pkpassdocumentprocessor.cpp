@@ -16,10 +16,10 @@
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
 
-#include <knowledgedb/airportdb.h>
-#include <text/nameoptimizer_p.h>
-#include <text/pricefinder_p.h>
-#include <text/timefinder_p.h>
+#include "knowledgedb/airportdb.h"
+#include "text/nameoptimizer_p.h"
+#include "text/pricefinder_p.h"
+#include "text/timefinder_p.h"
 
 #include <KPkPass/Barcode>
 #include <KPkPass/BoardingPass>

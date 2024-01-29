@@ -6,8 +6,8 @@
 
 #include "iatabcbpdocumentprocessor.h"
 
-#include <iata/iatabcbp.h>
-#include <iata/iatabcbpparser.h>
+#include "iata/iatabcbp.h"
+#include "iata/iatabcbpparser.h"
 
 #include <KItinerary/ExtractorResult>
 

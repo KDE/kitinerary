@@ -5,7 +5,7 @@
 
 #include "genericpriceextractorhelper_p.h"
 
-#include <text/pricefinder_p.h>
+#include "text/pricefinder_p.h"
 
 #include <KItinerary/ExtractorDocumentNode>
 #include <KItinerary/ExtractorResult>

@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <extractorutil.h>
+#include "extractorutil.h"
 
 #include <KItinerary/Flight>
 #include <KItinerary/Place>

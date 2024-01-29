@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <vdvcertificate_p.h>
+#include "vdvcertificate_p.h"
 
 #include <QCoreApplication>
 #include <QDate>

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <osm/datatypes.h>
-#include <osm/element.h>
+#include "osm/datatypes.h"
+#include "osm/element.h"
 
 #include <QPolygonF>
 

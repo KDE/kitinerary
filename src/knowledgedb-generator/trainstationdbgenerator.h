@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <knowledgedb.h>
-#include <stationidentifier.h>
-#include <iatacode.h>
+#include "knowledgedb.h"
+#include "stationidentifier.h"
+#include "iatacode.h"
 
 #include <QByteArray>
 #include <QString>

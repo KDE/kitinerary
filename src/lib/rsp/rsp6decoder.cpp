@@ -5,8 +5,8 @@
 
 #include "rsp6decoder.h"
 
-#include <openssl/bignum_p.h>
-#include <openssl/opensslpp_p.h>
+#include "openssl/bignum_p.h"
+#include "openssl/opensslpp_p.h"
 
 #include <QByteArray>
 #include <QDebug>

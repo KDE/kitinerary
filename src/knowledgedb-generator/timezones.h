@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <knowledgedb.h>
+#include "knowledgedb.h"
 
 #include <QByteArray>
 #include <QString>

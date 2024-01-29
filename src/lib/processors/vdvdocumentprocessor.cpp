@@ -6,7 +6,7 @@
 
 #include "vdvdocumentprocessor.h"
 
-#include <asn1/berelement.h>
+#include "asn1/berelement.h"
 
 #include <KItinerary/ExtractorResult>
 #include <KItinerary/Ticket>

@@ -6,7 +6,7 @@
 #include <kitinerary_version.h>
 
 #include <../lib/plist/plistreader.cpp>
-#include <../lib/plist/plistdata_p.h>
+#include "../lib/plist/plistdata_p.h"
 
 #include <QCommandLineParser>
 #include <QCoreApplication>

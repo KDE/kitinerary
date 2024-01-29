@@ -8,7 +8,7 @@
 #include "logging.h"
 #include "uic9183ticketlayout.h"
 
-#include <text/pricefinder_p.h>
+#include "text/pricefinder_p.h"
 
 #include <QDateTime>
 #include <QDebug>

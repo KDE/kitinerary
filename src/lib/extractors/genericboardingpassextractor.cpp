@@ -10,11 +10,11 @@
 #include "logging.h"
 #include "stringutil.h"
 
-#include <knowledgedb/airportdb.h>
-#include <knowledgedb/airportnametokenizer_p.h>
-#include <pdf/pdfdocument.h>
-#include <text/terminalfinder_p.h>
-#include <text/timefinder_p.h>
+#include "knowledgedb/airportdb.h"
+#include "knowledgedb/airportnametokenizer_p.h"
+#include "pdf/pdfdocument.h"
+#include "text/terminalfinder_p.h"
+#include "text/timefinder_p.h"
 
 #include <KItinerary/ExtractorDocumentNode>
 #include <KItinerary/ExtractorResult>

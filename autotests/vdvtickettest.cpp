@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <vdv/vdvticketparser.h>
+#include "vdv/vdvticketparser.h"
 
 #include <QObject>
 #include <QTest>

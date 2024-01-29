@@ -10,7 +10,7 @@
 #include "../stringutil.h"
 #include "../knowledgedb/airportnametokenizer_p.h"
 
-#include <airportdb_p.h>
+#include "airportdb_p.h"
 
 #include <QDateTime>
 #include <QDebug>

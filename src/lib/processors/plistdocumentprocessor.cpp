@@ -5,7 +5,7 @@
 
 #include "plistdocumentprocessor.h"
 
-#include <plist/plistreader_p.h>
+#include "plist/plistreader_p.h"
 
 #include <KItinerary/ExtractorEngine>
 #include <KItinerary/ExtractorDocumentNodeFactory>

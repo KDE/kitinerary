@@ -6,7 +6,7 @@
 #include "extractorengine.h"
 #include "logging.h"
 
-#include <text/pricefinder_p.h>
+#include "text/pricefinder_p.h"
 
 #include <KItinerary/ExtractorDocumentNodeFactory>
 
