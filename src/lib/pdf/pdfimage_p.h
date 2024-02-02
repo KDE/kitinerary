@@ -36,6 +36,9 @@ public:
     constexpr inline int refNum() const { return m_ref.m_refNum; }
     constexpr inline int refGen() const { return m_ref.m_refGen; }
 
+    // inline raster images without a refNum
+    QImage m_inlineImageData;
+
     // vector data
     PdfVectorPicture m_vectorPicture;
 

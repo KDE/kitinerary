@@ -23,9 +23,9 @@ PdfExtractorOutputDevice::PdfExtractorOutputDevice()
 {
 }
 
-void PdfExtractorOutputDevice::addRasterImage(GfxState *state, Object *ref, int width, int height, GfxImageColorMap *colorMap, PdfImageType type)
+void PdfExtractorOutputDevice::addRasterImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, PdfImageType type)
 {
-    if ((!colorMap && type == PdfImageType::Image) || (colorMap && !colorMap->isOk()) || !ref || !ref->isRef()) {
+    if ((!colorMap && type == PdfImageType::Image) || (colorMap && !colorMap->isOk()) || (ref && !ref->isRef()) || (!ref && !str)) {
         return;
     }
 
@@ -43,7 +43,9 @@ void PdfExtractorOutputDevice::addRasterImage(GfxState *state, Object *ref, int 
     }
 
     PdfImage pdfImg;
-    pdfImg.d->m_ref = PdfImageRef(ref->getRef().num, ref->getRef().gen, type);
+    if (ref) {
+        pdfImg.d->m_ref = PdfImageRef(ref->getRef().num, ref->getRef().gen, type);
+    }
 
 #if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 69, 0)
     if (colorMap) {
@@ -66,33 +68,49 @@ void PdfExtractorOutputDevice::addRasterImage(GfxState *state, Object *ref, int 
     }
     pdfImg.d->m_transform = PopplerUtils::currentTransform(state);
     pdfImg.d->m_format = format;
+
+    if (!ref) {
+        pdfImg.d->load(str, colorMap);
+    }
+
     m_images.push_back(pdfImg);
+}
+
+void PdfExtractorOutputDevice::drawImageMask(GfxState *state, Object *ref, Stream *str, int width, int height, bool invert, bool interpolate, bool inlineImg)
+{
+    Q_UNUSED(invert);
+    Q_UNUSED(interpolate);
+
+    if (!str && !inlineImg) {
+        return;
+    }
+    addRasterImage(state, ref, str, width, height, nullptr, PdfImageType::Mask);
 }
 
 void PdfExtractorOutputDevice::drawImage(GfxState* state, Object* ref, Stream* str, int width, int height, GfxImageColorMap* colorMap, bool interpolate, PopplerMaskColors* maskColors, bool inlineImg)
 {
-    Q_UNUSED(str)
     Q_UNUSED(interpolate)
     Q_UNUSED(maskColors)
-    Q_UNUSED(inlineImg)
 
-    addRasterImage(state, ref, width, height, colorMap, PdfImageType::Image);
+    if (!str && !inlineImg) {
+        return;
+    }
+    addRasterImage(state, ref, str, width, height, colorMap, PdfImageType::Image);
 }
 
 void PdfExtractorOutputDevice::drawMaskedImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, Stream *maskStr, int maskWidth, int maskHeight, bool maskInvert, bool maskInterpolate)
 {
     Q_UNUSED(interpolate)
-    Q_UNUSED(maskStr)
     Q_UNUSED(maskInvert)
     Q_UNUSED(maskInterpolate)
 
-    addRasterImage(state, ref, width, height, colorMap, PdfImageType::Image);
+    addRasterImage(state, ref, str, width, height, colorMap, PdfImageType::Image);
 
     if (ref) {
         const auto dict = str->getDict();
         const auto maskObj = dict->lookup("Mask");
         if (maskObj.isStream()) {
-            addRasterImage(state, ref, maskWidth, maskHeight, nullptr, PdfImageType::Mask);
+            addRasterImage(state, ref, maskStr, maskWidth, maskHeight, nullptr, PdfImageType::Mask);
         }
     }
 }

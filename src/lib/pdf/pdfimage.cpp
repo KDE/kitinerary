@@ -92,7 +92,11 @@ QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
             }
         }
 
-        m_page->m_doc->m_imageData[m_ref] = img;
+        if (!m_ref.isNull()) {
+            m_page->m_doc->m_imageData[m_ref] = img;
+        } else {
+            m_inlineImageData = img;
+        }
         return img;
     }
 
@@ -138,7 +142,11 @@ QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
     }
     imgStream->close();
 
-    m_page->m_doc->m_imageData[m_ref] = img;
+    if (!m_ref.isNull()) {
+        m_page->m_doc->m_imageData[m_ref] = img;
+    } else {
+        m_inlineImageData = img;
+    }
     return img;
 }
 
@@ -228,6 +236,9 @@ void PdfImage::setLoadingHints(LoadingHints hints)
 
 QImage PdfImage::image() const
 {
+    if (!d->m_inlineImageData.isNull()) {
+        return d->m_inlineImageData;
+    }
     if (d->m_format == QImage::Format_Invalid) {
         return d->m_vectorPicture.renderToImage();
     }

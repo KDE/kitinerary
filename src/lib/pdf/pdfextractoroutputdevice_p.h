@@ -30,6 +30,7 @@ public:
 
     // raster image operations
     bool needNonText() override { return true; }
+    void drawImageMask(GfxState *state, Object *ref, Stream *str, int width, int height, bool invert, bool interpolate, bool inlineImg) override;
     void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, PopplerMaskColors *maskColors, bool inlineImg) override;
     void drawMaskedImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, Stream *maskStr, int maskWidth, int maskHeight, bool maskInvert, bool maskInterpolate) override;
 
@@ -43,7 +44,7 @@ public:
     // links
     void processLink(AnnotLink *link) override;
 
-    void addRasterImage(GfxState *state, Object *ref, int width, int height, GfxImageColorMap *colorMap, PdfImageType type);
+    void addRasterImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, PdfImageType type);
     void addVectorImage(const PdfVectorPicture &pic);
 
     // extracted images
