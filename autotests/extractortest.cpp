@@ -61,7 +61,7 @@ private Q_SLOTS:
                 continue;
             }
 
-            QDirIterator it(baseDir.path(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass"), QStringLiteral("*.ics"), QStringLiteral("*.eml"), QStringLiteral("*.mbox"), QStringLiteral("*.bin"), QStringLiteral("*.png"), QStringLiteral("*.jpg"), QStringLiteral("*.har"), QStringLiteral("*.in.json")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
+            QDirIterator it(baseDir.path(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass"), QStringLiteral("*.ics"), QStringLiteral("*.eml"), QStringLiteral("*.mbox"), QStringLiteral("*.bin"), QStringLiteral("*.png"), QStringLiteral("*.jpg"), QStringLiteral("*.har"), QStringLiteral("*.in.json"), QStringLiteral("*.gif")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
             while (it.hasNext()) {
                 it.next();
                 // ignore context files
@@ -86,7 +86,8 @@ private Q_SLOTS:
         m_engine.clear();
         if (inputFile.endsWith(QLatin1StringView(".png")) ||
             inputFile.endsWith(QLatin1String(".pdf")) ||
-            inputFile.endsWith(QLatin1String(".jpg"))) {
+            inputFile.endsWith(QLatin1String(".jpg")) ||
+            inputFile.endsWith(QLatin1String(".gif"))) {
           m_engine.setHints(ExtractorEngine::ExtractFullPageRasterImages);
         } else if (inputFile.endsWith(QLatin1StringView(".ics"))) {
           m_engine.setHints(ExtractorEngine::ExtractGenericIcalEvents);
