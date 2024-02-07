@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^IR \\d{13}/[A-Z0-9]{6}\\*$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdfEticket",
+    "mimeType": "application/pdf",
+    "script": "ana.js"
+}
