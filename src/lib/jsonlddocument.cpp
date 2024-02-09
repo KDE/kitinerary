@@ -165,8 +165,13 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
     // enum handling must be done first, as prop.type() == Int
     if (prop.isEnumType() && v.isString()) {
         const auto value = JsonLd::normalizeTypeName(v.toString());
-        const auto key = prop.enumerator().keyToValue(value.toUtf8().constData());
-        return key;
+        bool success = false;
+        const auto key = prop.enumerator().keyToValue(value.toUtf8().constData(), &success);
+        if (success) {
+            return key;
+        }
+        qCWarning(Log) << "Unknown enum value" << value << "for" << prop.typeName();
+        return {};
     }
 
     switch (prop.userType()) {
@@ -578,8 +583,13 @@ QVariant JsonLdDocument::apply(const QVariant& lhs, const QVariant& rhs)
         }
 
         if (prop.isEnumType() && rhs.userType() == QMetaType::QString) { // internal enums in this QMO
-            const auto key = prop.enumerator().keyToValue(rhs.toString().toUtf8().constData());
-            prop.writeOnGadget(res.data(), key);
+            bool success = false;
+            const auto key = prop.enumerator().keyToValue(rhs.toString().toUtf8().constData(), &success);
+            if (success) {
+                prop.writeOnGadget(res.data(), key);
+            } else {
+                qCWarning(Log) << "Got unknown enum value" << rhs.toString() << "for" << prop.typeName();
+            }
             continue;
         }
         if ((QMetaType(prop.userType()).flags() & QMetaType::IsEnumeration) && rhs.userType() == QMetaType::QString) { // external enums
