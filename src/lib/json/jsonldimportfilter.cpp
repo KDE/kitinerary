@@ -148,13 +148,14 @@ static void filterReservation(QJsonObject &res)
     }
 
     // normalize reservationStatus enum
-    auto resStat = res.value(QLatin1StringView("reservationStatus")).toString();
-    if (!resStat.isEmpty() &&
-        !resStat.contains(QLatin1StringView("/Reservation"))) {
-      res.insert(
-          QStringLiteral("reservationStatus"),
-          resStat.replace(QLatin1StringView("http://schema.org/"),
-                          QLatin1String("http://schema.org/Reservation")));
+    auto resStat = res.value("reservationStatus"_L1).toString();
+    if (!resStat.isEmpty()) {
+        if (resStat.startsWith("https:"_L1)) {
+            resStat.remove(4, 1);
+        }
+        if (!resStat.contains("/Reservation"_L1)) {
+            res.insert("reservationStatus"_L1, resStat.replace("http://schema.org/"_L1, "http://schema.org/Reservation"_L1));
+        }
     }
 
     // legacy properties
