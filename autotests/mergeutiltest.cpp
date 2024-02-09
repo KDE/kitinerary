@@ -91,10 +91,12 @@ private Q_SLOTS:
         QVERIFY(!MergeUtil::isSame(f1, f2));
         airline2.setIataCode(QStringLiteral("KL"));
         f2.setAirline(airline2);
-        QVERIFY(!MergeUtil::isSame(f1, f2));
+        QVERIFY(MergeUtil::isSame(f1, f2));
 
         f2.setDepartureDay(QDate(2018, 4, 2));
         QVERIFY(MergeUtil::isSame(f1, f2));
+        f2.setDepartureDay(QDate(2018, 4, 3));
+        QVERIFY(!MergeUtil::isSame(f1, f2));
     }
 
     void testCodeShareFlight()

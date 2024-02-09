@@ -380,13 +380,19 @@ static bool isSameFlight(const Flight& lhs, const Flight& rhs)
     // if there is a conflict on where this is going, or when, this is obviously not the same flight
     if (conflictIfPresent(lhs.departureAirport().iataCode(), rhs.departureAirport().iataCode()) ||
         conflictIfPresent(lhs.arrivalAirport().iataCode(), rhs.arrivalAirport().iataCode()) ||
-        !equalAndPresent(lhs.departureDay(), rhs.departureDay())) {
+        conflictIfPresent(lhs.departureDay(), rhs.departureDay())) {
         return false;
     }
 
     // same flight number and airline (on the same day) -> we assume same flight
-    if (equalAndPresent(lhs.flightNumber(), rhs.flightNumber()) && equalAndPresent(lhs.airline().iataCode(), rhs.airline().iataCode())) {
-        return true;
+    // different airlines however could be codeshare flights
+    if (equalAndPresent(lhs.airline().iataCode(), rhs.airline().iataCode())) {
+        return equalAndPresent(lhs.flightNumber(), rhs.flightNumber());
+    }
+
+    // enforce same date of travel if the flight number has been inconclusive
+    if (!equalAndPresent(lhs.departureDay(), rhs.departureDay())) {
+        return false;
     }
 
     // we get here if we have matching origin/destination on the same day, but mismatching flight numbers
