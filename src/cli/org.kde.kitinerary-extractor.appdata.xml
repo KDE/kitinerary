@@ -54,6 +54,7 @@
   <summary xml:lang="ia">Extractor de datos de reservation de commando in linea</summary>
   <summary xml:lang="it">Estrattore di dati di prenotazioni a riga di comando</summary>
   <summary xml:lang="ka">ბრძანების სტრიქონის რეზერვაციის მონაცემების ექსტრაქტორი</summary>
+  <summary xml:lang="ko">명령행 예약 데이터 추출기</summary>
   <summary xml:lang="nl">Gegevensextractor van reservering op de opdrachtregel</summary>
   <summary xml:lang="pl">Wydobywane danych o rezerwacji z wiersza poleceń</summary>
   <summary xml:lang="pt-BR">Extrator em linha de comando de dados de reservas</summary>
