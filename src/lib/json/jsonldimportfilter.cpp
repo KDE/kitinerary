@@ -133,17 +133,19 @@ static void filterFlight(QJsonObject &res)
 
 static void filterReservation(QJsonObject &res)
 {
-    // move ticketToken to Ticket (Google vs. schema.org difference)
-    const auto token = res.value(QLatin1StringView("ticketToken")).toString();
-    if (!token.isEmpty()) {
-      auto ticket = res.value(QLatin1StringView("reservedTicket")).toObject();
-      if (ticket.isEmpty()) {
-        ticket.insert(QStringLiteral("@type"), QLatin1StringView("Ticket"));
-        }
-        if (!ticket.contains(QLatin1StringView("ticketToken"))) {
-          ticket.insert(QStringLiteral("ticketToken"), token);
-          res.insert(QStringLiteral("reservedTicket"), ticket);
-          res.remove(QStringLiteral("ticketToken"));
+    // move ticketToken and ticketNumber to Ticket (Google vs. schema.org difference)
+    for (const auto key : {"ticketToken"_L1, "ticketNumber"_L1}) {
+        const auto v = res.value(key).toString();
+        if (!v.isEmpty()) {
+            auto ticket = res.value("reservedTicket"_L1).toObject();
+            if (ticket.isEmpty()) {
+                ticket.insert("@type"_L1, u"Ticket"_s);
+            }
+            if (!ticket.contains(key)) {
+                ticket.insert(key, v);
+                res.insert("reservedTicket"_L1, ticket);
+                res.remove(key);
+            }
         }
     }
 

@@ -38,7 +38,7 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "Europe/Helsinki"}\,"flightNumber":"8075"}\,"reservationNumber":
  "XXX007"\,"reservationStatus":"http:
  //schema.org/ReservationConfirmed"\,"reservedTicket":{"@type":
- "Ticket"\,"ticketToken":"https:
+ "Ticket"\,"ticketNumber":"1234567890123","ticketToken":"https:
  //checkin.airberlin.com/app/barcode.fly?pnr=XXX007&ln=DOE&cpid=12345678&fn
  =JOHN"}\,"underName":{"@type":"Person"\,"name":"JOHN DOE"}}]
 BEGIN:VALARM

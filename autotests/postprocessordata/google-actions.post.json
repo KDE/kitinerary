@@ -92,6 +92,7 @@
         "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketNumber": "123XYZ",
             "ticketToken": "qrCode:123456789"
         },
         "underName": {
