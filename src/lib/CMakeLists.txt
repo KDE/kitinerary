@@ -164,9 +164,8 @@ target_sources(KPim6Itinerary PRIVATE
     stringutil.cpp stringutil.h
     tickettokencomparator.cpp tickettokencomparator_p.h
 )
-if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
-    set_target_properties(KPim6Itinerary PROPERTIES UNITY_BUILD ON)
-endif()
+# doesn't build in unity mode
+set_target_properties(KPim6Itinerary PROPERTIES UNITY_BUILD OFF)
 
 kde_source_files_enable_exceptions(barcodedecoder.cpp qimagepurebinarizer.cpp)
 ecm_qt_declare_logging_category(KPim6Itinerary
