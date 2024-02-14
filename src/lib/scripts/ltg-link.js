@@ -7,7 +7,7 @@
 function parsePdfTicket(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
     let res = JsonLd.newTrainReservation();
-    const stations = text.match(/FROM \/ TO +(\S.*)  +(\S.*)/);
+    const stations = text.match(/FROM \/ TO\n? +(\S.*\S)  +(\S.*)/);
     res.reservationFor.departureStation.name = stations[1];
     res.reservationFor.arrivalStation.name = stations[2];
     const dt = text.match(/(\d{4}-\d\d-\d\d)(?:\n.*){1,2}(\d\d:\d\d) - (\d\d:\d\d)/);
