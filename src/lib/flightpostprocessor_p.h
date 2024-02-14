@@ -8,6 +8,7 @@
 
 #include "knowledgedb/iatacode.h"
 
+#include <chrono>
 #include <vector>
 
 class QDateTime;
@@ -30,7 +31,7 @@ private:
     QDateTime processFlightTime(QDateTime dt, const Flight &flight, const std::vector<KnowledgeDb::IataCode> &codes) const;
 
     void lookupAirportCodes(const Airport &airport, std::vector<KnowledgeDb::IataCode> &codes) const;
-    void pickAirportByDistance(int duration, const std::vector<KnowledgeDb::IataCode> &startCodes, std::vector<KnowledgeDb::IataCode> &codes) const;
+    void pickAirportByDistance(std::chrono::seconds duration, const std::vector<KnowledgeDb::IataCode> &startCodes, std::vector<KnowledgeDb::IataCode> &codes) const;
 
     std::vector<KnowledgeDb::IataCode> m_departureCodes;
     std::vector<KnowledgeDb::IataCode> m_arrivalCodes;

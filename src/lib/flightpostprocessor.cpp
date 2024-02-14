@@ -28,7 +28,7 @@ Flight FlightPostProcessor::processFlight(Flight flight)
     lookupAirportCodes(flight.arrivalAirport(), m_arrivalCodes);
 
     // if we have an ambiguous airport on one end, see if we can pick based on the travel time
-    const auto duration = flight.departureTime().secsTo(flight.arrivalTime());
+    const std::chrono::seconds duration(flight.departureTime().secsTo(flight.arrivalTime()));
     pickAirportByDistance(duration, m_departureCodes, m_arrivalCodes);
     pickAirportByDistance(duration, m_arrivalCodes, m_departureCodes);
 
@@ -44,7 +44,7 @@ Flight FlightPostProcessor::processFlight(Flight flight)
     flight.setFlightNumber(flight.flightNumber().simplified());
 
     // arrival less than a day before departure is an indication of the extractor failing to detect day rollover
-    if (duration < 0 && duration > -3600*24) {
+    if (duration < std::chrono::seconds(0) && duration > std::chrono::days(-1)) {
         flight.setArrivalTime(flight.arrivalTime().addDays(1));
     }
 
@@ -131,9 +131,9 @@ void FlightPostProcessor::lookupAirportCodes(const Airport &airport, std::vector
     codes = KnowledgeDb::iataCodesFromName(airport.name());
 }
 
-void FlightPostProcessor::pickAirportByDistance(int duration, const std::vector<KnowledgeDb::IataCode>& startCodes, std::vector<KnowledgeDb::IataCode>& codes) const
+void FlightPostProcessor::pickAirportByDistance(std::chrono::seconds duration, const std::vector<KnowledgeDb::IataCode>& startCodes, std::vector<KnowledgeDb::IataCode>& codes) const
 {
-    if (duration <= 0 || startCodes.empty() || codes.size() <= 1) {
+    if (duration <= std::chrono::seconds(0) || startCodes.empty() || codes.size() <= 1) {
         return;
     }
 

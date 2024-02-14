@@ -13,13 +13,13 @@ using namespace KItinerary;
 constexpr inline const auto AirplaneSpeedLowerBound = 250; // km/h, turboprop aircraft, and a bit lower than average cruise speed to account for takeoff/landing
 constexpr inline const auto AirplaneSpeedUpperBound = 2140; // km/h, Concorde, so a bit excessive
 
-bool FlightUtil::isPlausibleDistanceForDuration(int distance, int duration)
+bool FlightUtil::isPlausibleDistanceForDuration(int distance, std::chrono::seconds duration)
 {
-    int lowerBoundDistance = AirplaneSpeedLowerBound * (duration / 3.6);
-    if (duration < 3600) { // for ultra short flights the takeoff/landing overhead is so big that our expected speed range doesn't work reliable anymore
+    auto lowerBoundDistance = AirplaneSpeedLowerBound * ((double)duration.count() / 3.6);
+    if (duration < std::chrono::hours(1)) { // for ultra short flights the takeoff/landing overhead is so big that our expected speed range doesn't work reliable anymore
         lowerBoundDistance /= 2;
     }
-    const int upperBoundDistance = AirplaneSpeedUpperBound * (duration / 3.6);
+    const auto upperBoundDistance = AirplaneSpeedUpperBound * ((double)duration.count() / 3.6);
 
     return distance < upperBoundDistance && distance > lowerBoundDistance;
 }

@@ -24,9 +24,20 @@
 #include <QDebug>
 #include <QTimeZone>
 
+#include <chrono>
 #include <unordered_map>
 
 using namespace KItinerary;
+
+constexpr inline auto BOARDING_TO_DEPARTURE_MIN = std::chrono::minutes(20);
+constexpr inline auto BOARDING_TO_DEPARTURE_MAX = std::chrono::minutes(60);
+constexpr inline auto CHECKIN_TO_BOARDING_MIN = std::chrono::minutes(0);
+constexpr inline auto CHECKIN_TO_BOARDING_MAX = std::chrono::minutes(35);
+constexpr inline auto BOARDING_TO_GATE_CLOSE_MIN = std::chrono::minutes(15);
+constexpr inline auto BOARDING_TO_GATE_CLOSE_MAX = std::chrono::minutes(30);
+constexpr inline auto GATE_CLOSE_TO_DEPARTURE_MIN = std::chrono::minutes(10);
+constexpr inline auto GATE_CLOSE_TO_DEPARTURE_MAX = std::chrono::minutes(15);
+constexpr inline auto MINIMUM_FLIGHT_TIME = std::chrono::minutes(60);
 
 GenericBoardingPassExtractor::GenericBoardingPassExtractor()
 {
@@ -57,7 +68,7 @@ static void mergeOrAppend(QStringList &l, QStringView s)
     l.push_back(s.toString());
 }
 
-static int airportDistance(KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
+[[nodiscard]] static int airportDistance(KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
 {
     const auto fromCoord = KnowledgeDb::coordinateForAirport(from);
     const auto toCoord = KnowledgeDb::coordinateForAirport(to);
@@ -67,39 +78,49 @@ static int airportDistance(KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
     return LocationUtil::distance({fromCoord.latitude, fromCoord.longitude}, {toCoord.latitude, toCoord.longitude});
 }
 
-static bool isPlausibleBoardingTime(const QDateTime &boarding, const QDateTime &departure)
+[[nodiscard]] static bool isPlausibleBoardingTime(const QDateTime &boarding, const QDateTime &departure)
 {
-    return boarding < departure && boarding.secsTo(departure) <= 3600;
+    const std::chrono::seconds boardingToDep(boarding.secsTo(departure));
+    return boardingToDep >= BOARDING_TO_DEPARTURE_MIN && boardingToDep <= BOARDING_TO_DEPARTURE_MAX;
 }
 
-static bool isPlausibleFlightTime(const QDateTime &fromTime, const QDateTime &toTime, KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
+[[nodiscard]] static std::chrono::seconds flightDuration(const QDateTime &fromTime, const QDateTime &toTime, KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
 {
-    const auto distance = airportDistance(from, to);
-
     // times are local, so convert them to the right timezone first
     auto fromDt = fromTime;
     fromDt.setTimeZone(KnowledgeDb::timezoneForAirport(from));
     auto toDt = toTime;
     toDt.setTimeZone(KnowledgeDb::timezoneForAirport(to));
+    return std::chrono::seconds(fromDt.secsTo(toDt));
+}
 
-    const auto flightDuration = fromDt.secsTo(toDt);
-    if (flightDuration < 3600) {
+[[nodiscard]] static bool isPlausibleFlightTime(const QDateTime &fromTime, const QDateTime &toTime, KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
+{
+    const auto duration = flightDuration(fromTime, toTime, from, to);
+    if (duration < MINIMUM_FLIGHT_TIME) {
         return false;
     }
-    return fromDt < toDt && FlightUtil::isPlausibleDistanceForDuration(distance, flightDuration);
+
+    const auto distance = airportDistance(from, to);
+    return FlightUtil::isPlausibleDistanceForDuration(distance, duration);
 }
 
-[[nodiscard]] static qint64 flightDuration(const QDateTime &fromTime, const QDateTime &toTime, KnowledgeDb::IataCode from, KnowledgeDb::IataCode to)
+[[nodiscard]] static bool isPlausibleCheckinClose(const QDateTime &checkinClose, const QDateTime &boarding)
 {
-    // times are local, so convert them to the right timezone first
-    auto fromDt = fromTime;
-    fromDt.setTimeZone(KnowledgeDb::timezoneForAirport(from));
-    auto toDt = toTime;
-    toDt.setTimeZone(KnowledgeDb::timezoneForAirport(to));
-    return fromDt.secsTo(toDt) / 60;
+    const std::chrono::seconds d(checkinClose.secsTo(boarding));
+    return d >= CHECKIN_TO_BOARDING_MIN && d <= CHECKIN_TO_BOARDING_MAX;
 }
 
-static bool conflictIfSet(const QDateTime &lhs, const QDateTime &rhs)
+[[nodiscard]] static bool isPlausibleGateClose(const QDateTime &boarding, const QDateTime &gateClose, const QDateTime &departure)
+{
+    const std::chrono::seconds gateOpen(boarding.secsTo(gateClose));
+    const std::chrono::seconds gateCloseToDep(gateClose.secsTo(departure));
+
+    return gateOpen >= BOARDING_TO_GATE_CLOSE_MIN && gateOpen <= BOARDING_TO_GATE_CLOSE_MAX
+        && gateCloseToDep >= GATE_CLOSE_TO_DEPARTURE_MIN && gateCloseToDep <= GATE_CLOSE_TO_DEPARTURE_MAX;
+}
+
+[[nodiscard]] static bool conflictIfSet(const QDateTime &lhs, const QDateTime &rhs)
 {
     return lhs.isValid() && rhs.isValid() && lhs != rhs;
 }
@@ -253,6 +274,7 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
             }
             std::sort(times.begin(), times.end());
             times.erase(std::unique(times.begin(), times.end()), times.end());
+            qCDebug(Log) << times;
             if (times.size() == 2) {
                 // boarding/departure only, and on the same day
                 if (isPlausibleBoardingTime(times[0], times[1]) && !isPlausibleFlightTime(times[0], times[1], from, to)) {
@@ -268,9 +290,18 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
                 }
                 // TODO handle boarding before midnight
                 // departure/arrival/duration
-                else if (isPlausibleFlightTime(times[1], times[2], from, to) && flightDuration(times[1], times[2], from, to) == (times[0].time().hour() * 60 + times[0].time().minute())) {
+                else if (isPlausibleFlightTime(times[1], times[2], from, to) && flightDuration(times[1], times[2], from, to) == std::chrono::minutes(times[0].time().hour() * 60 + times[0].time().minute())) {
                     applyFlightTimes(result, {}, times[1], times[2]);
                 }
+            } else if (times.size() == 4) {
+                // baggage drop or checkin close/boarding/departure/arrival
+                if (isPlausibleCheckinClose(times[0], times[1]) && isPlausibleBoardingTime(times[1], times[2]) && isPlausibleFlightTime(times[2], times[3], from, to)) {
+                    applyFlightTimes(result, times[1], times[2], times[3]);
+                    // boarding/gate close/departure/arrival
+                } else if (isPlausibleBoardingTime(times[0], times[2]) && isPlausibleGateClose(times[0], times[1], times[2]) && isPlausibleFlightTime(times[2], times[3], from, to)) {
+                    applyFlightTimes(result, times[0], times[2], times[3]);
+                }
+                // TODO across midnight variants
             }
         }
 
