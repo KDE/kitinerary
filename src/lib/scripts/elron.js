@@ -13,5 +13,8 @@ function parsePdfTicket(pdf, node, triggerNode) {
     res.reservationFor.arrivalStation.name = trip[4];
     res.reservationFor.trainNumber = trip[6];
     res.reservedTicket.ticketToken = 'qrcode:' + triggerNode.content;
+    const seat = text.match(/Place: (\S.*)\n/);
+    if (seat)
+        res.reservedTicket.ticketedSeat.seatNumber = seat[1];
     return res;
 }
