@@ -30,7 +30,7 @@
 using namespace KItinerary;
 
 constexpr inline auto BOARDING_TO_DEPARTURE_MIN = std::chrono::minutes(20);
-constexpr inline auto BOARDING_TO_DEPARTURE_MAX = std::chrono::minutes(60);
+constexpr inline auto BOARDING_TO_DEPARTURE_MAX = std::chrono::minutes(75);
 constexpr inline auto CHECKIN_TO_BOARDING_MIN = std::chrono::minutes(0);
 constexpr inline auto CHECKIN_TO_BOARDING_MAX = std::chrono::minutes(35);
 constexpr inline auto BOARDING_TO_GATE_CLOSE_MIN = std::chrono::minutes(15);
