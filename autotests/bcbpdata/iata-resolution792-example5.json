@@ -35,6 +35,7 @@
         "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketNumber": "057 1234567890",
             "ticketToken": "aztecCode:M2GRANDMAIRE/MELANIE  EABC123 GVACDGAF 0123 339C002F0025 130>5002A0571234567890  AF AF 1234567890123456    YDEF456 CDGDTWNW 0049 339F001A0002 12C2A012098765432101                       2PC ^108ABCDEFGH"
         },
         "underName": {
@@ -69,6 +70,7 @@
         "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketNumber": "012 0987654321",
             "ticketToken": "aztecCode:M2GRANDMAIRE/MELANIE  EABC123 GVACDGAF 0123 339C002F0025 130>5002A0571234567890  AF AF 1234567890123456    YDEF456 CDGDTWNW 0049 339F001A0002 12C2A012098765432101                       2PC ^108ABCDEFGH"
         },
         "underName": {

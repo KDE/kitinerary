@@ -74,6 +74,7 @@
         "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketNumber": "082 2123456789",
             "ticketToken": "aztecCode:M1DOE/JOHNMR          EXXX007 BRUTLSSN 3667 110Y014D0014 35D>5181WM8109BSN              2A08221234567890 SN LH 123456789012345      *30600000K0902       "
         },
         "underName": {

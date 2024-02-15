@@ -35,6 +35,7 @@
         "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketNumber": "014 1234567890",
             "ticketToken": "aztecCode:M2DESMARAIS/LUC       EAB12C3 YULFRAAC 0834 326J003A0027 167>5321WW1325BAC 0014123456002001412346700100141234789012A0141234567890 1AC AC 1234567890123    4PCYLX58ZDEF456 FRAGVALH 3664 327C012C0002 12E2A0140987654321 1AC AC 1234567890123    3PCNWQ^108ABCDEFGH"
         },
         "underName": {
@@ -79,6 +80,7 @@
         "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketNumber": "014 0987654321",
             "ticketToken": "aztecCode:M2DESMARAIS/LUC       EAB12C3 YULFRAAC 0834 326J003A0027 167>5321WW1325BAC 0014123456002001412346700100141234789012A0141234567890 1AC AC 1234567890123    4PCYLX58ZDEF456 FRAGVALH 3664 327C012C0002 12E2A0140987654321 1AC AC 1234567890123    3PCNWQ^108ABCDEFGH"
         },
         "underName": {

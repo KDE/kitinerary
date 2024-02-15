@@ -25,6 +25,7 @@
         "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
+            "ticketNumber": "047 1234567890",
             "ticketToken": "aztecCode:M1DOE/JOHN            EXXX007 LISLCGTP 1080 204Y002D0003 35C>2180      B1A              2904712345678900                           *306      09     BRND"
         },
         "underName": {

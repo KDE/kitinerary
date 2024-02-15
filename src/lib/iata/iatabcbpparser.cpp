@@ -35,6 +35,24 @@ QList<QVariant> IataBcbpParser::parse(const QString &message,
     return parse(bcbp, externalIssueDate.isValid() ? externalIssueDate : QDateTime({1970, 1, 1}, {}));
 }
 
+[[nodiscard]] static QString ticketNumber(QStringView airlineNumericCode, QStringView documentNumber)
+{
+    if (airlineNumericCode.size() != 3 || documentNumber.size() != 10) {
+        return {};
+    }
+
+    if (std::any_of(airlineNumericCode.begin(), airlineNumericCode.end(), [](QChar c) { return !c.isDigit(); })
+     || std::any_of(documentNumber.begin(), documentNumber.end(), [](QChar c) { return !c.isDigit(); })) {
+        return {};
+    }
+
+    if (std::all_of(documentNumber.begin(), documentNumber.end(), [](QChar c) { return c == QLatin1Char('0'); })) {
+        return {};
+    }
+
+    return airlineNumericCode + QLatin1Char(' ') + documentNumber;
+}
+
 QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp,
                                       const QDateTime &contextDate) {
     const auto count = bcbp.uniqueMandatorySection().numberOfLegs();
@@ -55,8 +73,6 @@ QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp,
         }
     }
 
-    Ticket ticket;
-    ticket.setTicketToken(QStringLiteral("aztecCode:") + bcbp.rawData());
 
     for (auto i = 0; i < count; ++i) {
         Flight flight;
@@ -81,9 +97,13 @@ QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp,
         res.setAirplaneSeat(stripLeadingZeros(rms.seatNumber()));
         res.setReservationNumber(rms.operatingCarrierPNRCode());
         res.setUnderName(person);
+
+        Ticket ticket;
+        ticket.setTicketToken(QStringLiteral("aztecCode:") + bcbp.rawData());
+        const auto rcs = bcbp.repeatedConditionalSection(i);
+        ticket.setTicketNumber(ticketNumber(rcs.airlineNumericCode(), rcs.documentNumber()));
         res.setReservedTicket(ticket);
 
-        const auto rcs = bcbp.repeatedConditionalSection(i);
         if (!rcs.frequenFlyerNumber().isEmpty()) {
             ProgramMembership program;
             program.setMembershipNumber(rcs.frequenFlyerNumber());
