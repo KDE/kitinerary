@@ -123,7 +123,7 @@ function parseEvent(event)
         res.reservationNumber = code[1];
     }
 
-    const seat = event.description.match(/(?:Coach|Carrozza||Wagen|Voiture) (.*?), (?:Position|Posti) (.*?)[;\b]/);
+    const seat = event.description.match(/(?:Coach|Carrozza|Wagen|Voiture) (.*?), (?:Position|Posti) (.*?)[;\b]/);
     if (seat) {
         res.reservedTicket.ticketedSeat.seatSection = seat[1];
         res.reservedTicket.ticketedSeat.seatNumber = seat[2];
