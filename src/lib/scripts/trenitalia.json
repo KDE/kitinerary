@@ -10,8 +10,7 @@
     {
         "mimeType": "application/pdf",
         "filter": [
-            { "mimeType": "internal/era-ssb", "field": "issuerCode", "match": "83", "scope": "Descendants" },
-            { "mimeType": "internal/uic9183", "field": "carrierId", "match": "83", "scope": "Descendants" }
+            { "mimeType": "text/plain", "match": "www\.trenitalia\.com", "scope": "Descendants" }
         ],
         "script": "trenitalia.js",
         "function": "parsePdf"
@@ -23,5 +22,13 @@
         ],
         "script": "trenitalia.js",
         "function": "parseEvent"
+    },
+    {
+        "mimeType": "text/html",
+        "filter": [
+            { "mimeType": "message/rfc822", "field": "From", "match": "webmaster@trenitalia.it", "scope": "Ancestors" }
+        ],
+        "script": "trenitalia.js",
+        "function": "parseHtml"
     }
 ]
