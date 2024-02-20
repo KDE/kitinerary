@@ -10,7 +10,7 @@
     {
         "mimeType": "application/pdf",
         "filter": [
-            { "mimeType": "text/plain", "match": "www\.trenitalia\.com", "scope": "Descendants" }
+            { "mimeType": "text/plain", "match": "www.trenitalia.com", "scope": "Descendants" }
         ],
         "script": "trenitalia.js",
         "function": "parsePdf"
