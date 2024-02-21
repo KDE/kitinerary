@@ -1,0 +1,10 @@
+[
+    {
+        "mimeType": "application/pdf",
+        "filter": [
+            { "mimeType": "text/plain", "match": "info@flibco.com", "scope": "Descendants" }
+        ],
+        "script": "flibco.js",
+        "function": "parsePdf"
+    }
+]
