@@ -365,6 +365,7 @@ function parseEvent(event) {
     return res;
 }
 
+// various create DB Regio ERA TLB in PLAI format...
 function parseDBRegioBusUic(uic, node)
 {
     let ticket = node.result[0];
@@ -389,4 +390,25 @@ function parseDBRegioBusUic(uic, node)
         ticket.validUntil.setHours(3)
     }
     return ticket;
+}
+
+function parseDBRegioNVUic(uic, node)
+{
+    let ticket = node.result[0];
+    if (uic.ticketLayout.type != 'PLAI' || ticket.name)
+        return;
+
+    const text = uic.ticketLayout.text(1, 1, 33, 12);
+    const data = text.match(/(.*) (\d).Kl\nVon (\d{2}\.\d{2}\.\d{4} \d{2}:\d{2})\nBis (\d{2}\.\d{2}\.\d{4} \d{2}:\d{2})\nVon (.*) \(.*\)\nNach (.*) \(.*\)\n/);
+    ticket.name = data[1];
+    ticket.ticketedSeat = { "@type": "Seat", seatingType: data[2] };
+    ticket.validFrom = JsonLd.toDateTime(data[3], "dd.MM.yyyy hh:mm", "de");
+    ticket.validUntil = JsonLd.toDateTime(data[4], "dd.MM.yyyy hh:mm", "de");
+
+    let res = JsonLd.newTrainReservation();
+    res.reservedTicket = ticket;
+    res.reservationFor.departureStation.name = data[5];
+    res.reservationFor.departureTime = ticket.validFrom;
+    res.reservationFor.arrivalStation.name = data[6];
+    return res;
 }
