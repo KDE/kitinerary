@@ -47,63 +47,65 @@ function parseSsb(ssb, node) {
 
 function parsePdf(pdf, node, triggerNode) {
     let reservations = [];
-    const page = pdf.pages[0];
-    const text = page.text;
 
-    var res = JsonLd.newTrainReservation();
-    var pnr = text.match(/PNR: (\S+)/);
-    if (pnr) {
-        res.reservationNumber = pnr[1];
-    }
+    for (let page_index = 0; page_index < pdf.pages.length; page_index++) {
+        const page = pdf.pages[page_index];
+        const text = page.text;
 
-    const leftHeaderText = page.textInRect(0.0, 0.15, 0.33, 0.25);
-    const midHeaderText = page.textInRect(0.33, 0.15, 0.65, 0.25);
-    const rightHeaderText = page.textInRect(0.65, 0.15, 1.0, 0.25);
-
-    const train = rightHeaderText.match(/(?:Train|Treno|Zug)(?:\/Train)?:[ \n](.*)\n/);
-    res.reservationFor.trainNumber = train[1];
-
-    const departure_time = leftHeaderText.match(/(\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
-    const arrival_time = midHeaderText.match(/(\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
-    res.reservationFor.departureTime = JsonLd.toDateTime(departure_time[2] + departure_time[1], "dd/MM/yyyyhh:mm", "it");
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(arrival_time[2] + arrival_time[1], "dd/MM/yyyyhh:mm", "it");
-
-    const dep = leftHeaderText.match(/(?:Stazione di Partenza|Departure station|Abfahrtsbahnhof|Gare de départ)(?:\/From)?\n+(.*)\n/);
-    res.reservationFor.departureStation.name = dep[1];
-    const arr = midHeaderText.match(/(?:Stazione di Arrivo|Arrival station|Ankunft Bahnhof|Gare d'arrivée)(?:\/To)?\n+(.*)\n/);
-    res.reservationFor.arrivalStation.name = arr[1];
-
-    const passengerColumn = page.textInRect(0.0, 0.3, 0.27, 1.0);
-    const passengers = passengerColumn.match(/(?:Passenger Name|Nome Passeggero|Nom du Passager)/);
-    var offset = 0;
-    let seatOffset = 0;
-
-    for (let j = 0; j < passengers.length; j++) {
-        let personalRes = JsonLd.clone(res);
-        var name = passengerColumn.substr(offset).match(/(?:Passenger Name|Nome Passeggero|Nom du Passager)(?:\/Passenger\n *name)?.*\n(?:    .*\n)* *((?:\w+|\-\-).*?)(?:  |\n)/);
-        offset += name.index + name[0].length;
-        if (name[1] !== "--") {
-            personalRes.underName.name = name[1];
-        } else {
-            personalRes.underName.name = "Passenger " + (j + 1);
+        var res = JsonLd.newTrainReservation();
+        var pnr = text.match(/PNR: (\S+)/);
+        if (pnr) {
+            res.reservationNumber = pnr[1];
         }
 
-        var coach = text.match(/(?:Coaches|Carrozza|Wagen|Voiture)(?:\/Coach)?: +(\S+)/);
-        if (coach) {
-            personalRes.reservedTicket.ticketedSeat.seatSection = coach[1];
-        }
+        const leftHeaderText = page.textInRect(0.0, 0.15, 0.33, 0.25);
+        const midHeaderText = page.textInRect(0.33, 0.15, 0.65, 0.25);
+        const rightHeaderText = page.textInRect(0.65, 0.15, 1.0, 0.25);
 
-        // fallback seat parsing for unparsable ERA FCB tickets
-        const seat = page.text.substr(seatOffset).match(/(\d+) +(\d+[A-F]?) +([A-Z0-9]{6})/);
-        if (seat) {
-            seatOffset += seat.index + seat[0].length;
-            if (personalRes.reservedTicket.ticketedSeat.seatSection == seat[1] && !personalRes.reservedTicket.ticketedSeat.seatNumber) {
-                personalRes.reservedTicket.ticketedSeat.seatNumber = seat[2];
+        const train = rightHeaderText.match(/(?:Train|Treno|Zug)(?:\/Train)?:[ \n](.*)\n/);
+        res.reservationFor.trainNumber = train[1];
+
+        const departure_time = leftHeaderText.match(/(\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
+        const arrival_time = midHeaderText.match(/(\d{2}:\d{2}) - (\d{2}\/\d{2}\/\d{4})/)
+        res.reservationFor.departureTime = JsonLd.toDateTime(departure_time[2] + departure_time[1], "dd/MM/yyyyhh:mm", "it");
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(arrival_time[2] + arrival_time[1], "dd/MM/yyyyhh:mm", "it");
+
+        const dep = leftHeaderText.match(/(?:Stazione di Partenza|Departure station|Abfahrtsbahnhof|Gare de départ)(?:\/From)?\n+(.*)\n/);
+        res.reservationFor.departureStation.name = dep[1];
+        const arr = midHeaderText.match(/(?:Stazione di Arrivo|Arrival station|Ankunft Bahnhof|Gare d'arrivée)(?:\/To)?\n+(.*)\n/);
+        res.reservationFor.arrivalStation.name = arr[1];
+
+        const passengerColumn = page.textInRect(0.0, 0.3, 0.27, 1.0);
+        const passengers = passengerColumn.match(/(?:Passenger Name|Nome Passeggero|Nom du Passager)/);
+        var offset = 0;
+        let seatOffset = 0;
+
+        for (let j = 0; j < passengers.length; j++) {
+            let personalRes = JsonLd.clone(res);
+            var name = passengerColumn.substr(offset).match(/(?:Passenger Name|Nome Passeggero|Nom du Passager)(?:\/Passenger\n *name)?.*\n(?:    .*\n)* *((?:\w+|\-\-).*?)(?:  |\n)/);
+            offset += name.index + name[0].length;
+            if (name[1] !== "--") {
+                personalRes.underName.name = name[1];
+            } else {
+                personalRes.underName.name = "Passenger " + (j + 1);
             }
-        }
 
-        ExtractorEngine.extractPrice(text, personalRes);
-        reservations.push(personalRes);
+            var coach = text.match(/(?:Coaches|Carrozza|Wagen|Voiture)(?:\/Coach)?: +(\S+)/);
+            if (coach) {
+                personalRes.reservedTicket.ticketedSeat.seatSection = coach[1];
+            }
+
+            const seat = page.text.substr(seatOffset).match(/(\d+) +(\d+[A-F]?) +([A-Z0-9]{6})/);
+            if (seat) {
+                seatOffset += seat.index + seat[0].length;
+                if (personalRes.reservedTicket.ticketedSeat.seatSection == seat[1] && !personalRes.reservedTicket.ticketedSeat.seatNumber) {
+                    personalRes.reservedTicket.ticketedSeat.seatNumber = seat[2];
+                }
+            }
+
+            ExtractorEngine.extractPrice(text, personalRes);
+            reservations.push(personalRes);
+        }
     }
 
     return reservations;
