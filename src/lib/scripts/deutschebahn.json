@@ -80,6 +80,19 @@
         "filter": [
             {
                 "field": "uid",
+                "match": "^\\S{36}@bahn.de$",
+                "mimeType": "internal/event",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseReservationEvent",
+        "mimeType": "internal/event",
+        "script": "deutschebahn.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "uid",
                 "match": "^bahn\\d{14}$",
                 "mimeType": "internal/event",
                 "scope": "Current"

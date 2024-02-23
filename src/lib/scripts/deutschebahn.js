@@ -365,6 +365,24 @@ function parseEvent(event) {
     return res;
 }
 
+function parseReservationEvent(event) {
+    let res = JsonLd.newTrainReservation();
+    const names = event.summary.match(/(.*) ➞ (.*)/);
+    res.reservationFor.departureStation.name = names[1];
+    res.reservationFor.departureTime = JsonLd.readQDateTime(event, 'dtStart');
+    res.reservationFor.arrivalStation.name = names[2];
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(event, 'dtEnd');
+
+    const trip = event.description.match(/.* ➞ .*\n\[.*: \d .* (\S+), .* (\d+)\]\n(.*) \(.*\n.* ab .* ▷ \S+ (\S.*)\n.* an ?.* ▷ \S+ (\S.*)\n/);
+    res.reservationFor.departurePlatform = trip[4];
+    res.reservationFor.trainName = trip[3];
+    res.reservationFor.arrivalPlatform = trip[5];
+    res.reservedTicket.ticketedSeat.seatSection = trip[1];
+    res.reservedTicket.ticketedSeat.seatNumber = trip[2];
+
+    return res;
+}
+
 // various create DB Regio ERA TLB in PLAI format...
 function parseDBRegioBusUic(uic, node)
 {
