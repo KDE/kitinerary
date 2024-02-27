@@ -5,7 +5,6 @@
 
 function parsePkPass(pass, node) {
     let res = node.result[0];
-    console.log(pass);
     res.reservationFor.name = pass.logoText;
     if (!res.reservationFor.name) {
         const eventLine = pass.field["KEY_EVENTLINE"];
