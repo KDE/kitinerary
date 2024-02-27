@@ -1,13 +1,27 @@
-{
-    "filter": [
-        {
-            "field": "passTypeIdentifier",
-            "match": "pass.to.ti",
-            "mimeType": "application/vnd.apple.pkpass",
-            "scope": "Current"
-        }
-    ],
-    "function": "extractPass",
-    "mimeType": "application/vnd.apple.pkpass",
-    "script": "tito.js"
-}
+[
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.to.ti",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "extractPass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "tito.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^ti_[a-zA-Z0-9]{23}$",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "extractPdf",
+        "mimeType": "application/pdf",
+        "script": "tito.js"
+    }
+]
