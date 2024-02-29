@@ -1,0 +1,26 @@
+[{
+    "filter": [
+        {
+            "field": "organizer.name",
+            "match": "Leo Express",
+            "mimeType": "internal/event",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractEvent",
+    "mimeType": "internal/event",
+    "script": "leoexpress.js"
+},
+{
+    "filter": [
+        {
+            "field": "title",
+            "match": "^Leo Express",
+            "mimeType": "application/pdf",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "leoexpress.js"
+}]
