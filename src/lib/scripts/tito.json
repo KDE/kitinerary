@@ -23,5 +23,17 @@
         "function": "extractPdf",
         "mimeType": "application/pdf",
         "script": "tito.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "url",
+                "match": "^https://ti.to/",
+                "mimeType": "internal/event"
+            }
+        ],
+        "function": "promoteIcalEvent",
+        "mimeType": "internal/event",
+        "script": "generic.js"
     }
 ]
