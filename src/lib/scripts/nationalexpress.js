@@ -52,7 +52,7 @@ function parsePdf(pdf, node, triggerNode) {
         const leg = topRight.substr(idx).match(/Date of travel: (.*)\n.*: (.*)\n.*?(\d\d:\d\d).*\n(.*)\n(?:.*\n)*?.*?(\d\d:\d\d).*\n(.*)\n/);
         if (!leg)
             break;
-        idx = leg.index + leg[0].length;
+        idx += leg.index + leg[0].length;
 
         let res = JsonLd.newBusReservation();
         res.reservationFor.departureBusStop.name = leg[4];
