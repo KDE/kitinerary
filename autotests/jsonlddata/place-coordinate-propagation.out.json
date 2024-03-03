@@ -1,0 +1,21 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Event",
+        "endDate": "2024-03-11T21:30:00+08:00",
+        "location": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "MozSpace Taipei, 94, Section 1, Bade Road, Zhongzheng District, Huashan, Taipei, Taiwan"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 25.0440673828125,
+                "longitude": 25.0440673828125
+            }
+        },
+        "name": "OpenStreetMap x Wikidata Taipei #62",
+        "startDate": "2024-03-11T19:30:00+08:00"
+    }
+]

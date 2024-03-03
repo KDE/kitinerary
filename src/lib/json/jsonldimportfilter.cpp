@@ -121,6 +121,22 @@ static void filterPlace(QJsonObject &obj)
             {"streetAddress"_L1, addr.toString()},
         });
     }
+    // same for geo coordinates
+    const auto lat = obj.value("latitude"_L1);
+    const auto lon = obj.value("longitude"_L1);
+    if (lat.isDouble() && lon.isDouble()) {
+        auto geo = obj.value("geo"_L1).toObject();
+        if (!geo.contains("@type"_L1)) {
+            geo.insert("@type"_L1, "GeoCoordinates"_L1);
+        }
+        if (!geo.contains("latitude"_L1)) {
+            geo.insert("latitude"_L1, lat);
+        }
+        if (!geo.contains("longitude"_L1)) {
+            geo.insert("longitude"_L1, lat);
+        }
+        obj.insert("geo"_L1, geo);
+    }
 }
 
 static void filterFlight(QJsonObject &res)
