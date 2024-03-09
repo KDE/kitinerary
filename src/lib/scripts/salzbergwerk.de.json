@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "www.salzbergwerk.de",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "main",
+    "mimeType": "application/pdf",
+    "script": "salzbergwerk.de.js"
+}
