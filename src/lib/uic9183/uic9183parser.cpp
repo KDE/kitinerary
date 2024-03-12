@@ -398,7 +398,9 @@ Person Uic9183Parser::person() const
     if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && fcb.travelerDetailIsSet() && fcb.travelerDetail.traveler.size() == 1) {
         const auto traveler = fcb.travelerDetail.traveler.at(0);
         Person p;
-        p.setGivenName(QString(traveler.firstName + QLatin1Char(' ') + traveler.secondName).trimmed());
+        if (traveler.firstNameIsSet() || traveler.secondNameIsSet()) {
+            p.setGivenName(QString(traveler.firstName + QLatin1Char(' ') + traveler.secondName).trimmed());
+        }
         p.setFamilyName(traveler.lastName);
         if (traveler.firstNameIsSet() || traveler.lastNameIsSet()) {
             return p;
