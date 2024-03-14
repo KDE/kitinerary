@@ -475,8 +475,7 @@ is available directly from the Gitlab CI/CD pipeline on demand. Nightly Flatpak 
 also available from KDE's nightly Flatpak repository:
 
 ```
-flatpak remote-add --if-not-exists kdeapps --from https://distribute.kde.org/kdeapps.flatpakrepo
-flatpak install org.kde.kitinerary-extractor
+flatpak install https://cdn.kde.org/flatpak/kitinerary-extractor-nightly/org.kde.kitinerary-extractor.flatpakref
 ```
 
 ## Contributing
