@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "helpdesk.amsbus.cz/IDOS",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "main",
+    "mimeType": "application/pdf",
+    "script": "amsbus.js"
+}
