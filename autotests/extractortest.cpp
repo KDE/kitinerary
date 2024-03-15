@@ -159,6 +159,18 @@ private Q_SLOTS:
 
         // verify ticket token prefixes are valid and properly stripped
         for (const auto &res : postProcResult) {
+            if (JsonLd::isA<ProgramMembership>(res)) {
+                const auto program = res.value<ProgramMembership>();
+                if (program.tokenType() == Token::Unknown || program.tokenType() == Token::Url || program.token().isEmpty()) {
+                    continue;
+                }
+                const auto tokenData = program.tokenData();
+                if (tokenData.userType() == QMetaType::QString) {
+                    QVERIFY(tokenData.toString() != program.token());
+                }
+                continue;
+            }
+
             Ticket ticket;
             if (JsonLd::canConvert<Reservation>(res)) {
                 ticket = JsonLd::convert<Reservation>(res).reservedTicket().value<Ticket>();
