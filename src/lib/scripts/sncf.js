@@ -523,7 +523,7 @@ function parseSncfCarte(code) {
     var carte = JsonLd.newObject("ProgramMembership");
     carte.programName = tariffs[code.substr(111, 4)];
     carte.membershipNumber = code.substr(53, 17);
-    carte.token = 'aztec:' + code;
+    carte.token = 'azteccode:' + code;
     return carte.programName != undefined ? carte : undefined;
 }
 
