@@ -4,7 +4,7 @@
 */
 
 #ifndef KITINERARY_INTERNAL_STRICT_LESS_H
-#define KITINERARY_INTERNAL_STRICT_LESSL_H
+#define KITINERARY_INTERNAL_STRICT_LESS_H
 
 #include "parameter_type.h"
 
