@@ -1,95 +1,95 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kitinerary package.
+#
+# SPDX-FileCopyrightText: 2024 Kishore G <kishore96@gmail.com>
 msgid ""
 msgstr ""
-"Project-Id-Version: kdeorg\n"
+"Project-Id-Version: kitinerary\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-15 00:38+0000\n"
-"PO-Revision-Date: 2024-03-17 20:42\n"
-"Last-Translator: \n"
-"Language-Team: Chinese Simplified\n"
-"Language: zh_CN\n"
+"PO-Revision-Date: 2024-03-17 18:29+0530\n"
+"Last-Translator: Kishore G <kishore96@gmail.com>\n"
+"Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
+"Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: kdeorg\n"
-"X-Crowdin-Project-ID: 269464\n"
-"X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kitinerary/kitinerary6.pot\n"
-"X-Crowdin-File-ID: 49060\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 24.02.0\n"
 
 #: calendarhandler.cpp:171
 #, kde-format
 msgctxt "canceled train/flight/loading reservation"
 msgid "Canceled: %1"
-msgstr "已取消：%1"
+msgstr ""
 
 #: calendarhandler.cpp:197
 #, kde-format
 msgid "Flight %1 from %2 to %3"
-msgstr "航班 %1, 从 %2 到 %3"
+msgstr ""
 
 #: calendarhandler.cpp:216
 #, kde-format
 msgid "Boarding for flight %1"
-msgstr "航班 %1 登机"
+msgstr ""
 
 #: calendarhandler.cpp:218
 #, kde-format
 msgid "Boarding for flight %1 at gate %2"
-msgstr "航班 %1 在登机口 %2 登机"
+msgstr ""
 
 #: calendarhandler.cpp:227
 #, kde-format
 msgid "Boarding time: %1"
-msgstr "登机时间：%1"
+msgstr ""
 
 #: calendarhandler.cpp:230
 #, kde-format
 msgctxt "flight departure gate"
 msgid "Departure gate: %1"
-msgstr "出发登机口：%1"
+msgstr ""
 
 #: calendarhandler.cpp:240
 #, kde-format
 msgid "Boarding group: %1"
-msgstr "登机组：%1"
+msgstr ""
 
 #: calendarhandler.cpp:243 calendarhandler.cpp:275 calendarhandler.cpp:303
 #, kde-format
 msgid "Seat: %1"
-msgstr "座位：%1"
+msgstr "இருக்கை: %1"
 
 #: calendarhandler.cpp:246 calendarhandler.cpp:281 calendarhandler.cpp:306
 #: calendarhandler.cpp:327 calendarhandler.cpp:373 calendarhandler.cpp:436
 #: calendarhandler.cpp:477 calendarhandler.cpp:509
 #, kde-format
 msgid "Booking reference: %1"
-msgstr "预定参考：%1"
+msgstr ""
 
 #: calendarhandler.cpp:258
 #, kde-format
 msgid "Train %1 from %2 to %3"
-msgstr "列车 %1, 从 %2 到 %3"
+msgstr ""
 
 #: calendarhandler.cpp:267
 #, kde-format
 msgid "Departure platform: %1"
-msgstr "离开站台：%1"
+msgstr ""
 
 #: calendarhandler.cpp:272
 #, kde-format
 msgid "Coach: %1"
-msgstr "客车：%1"
+msgstr ""
 
 #: calendarhandler.cpp:278
 #, kde-format
 msgid "Arrival platform: %1"
-msgstr "抵达站台：%1"
+msgstr ""
 
 #: calendarhandler.cpp:292
 #, kde-format
 msgid "Bus %1 from %2 to %3"
-msgstr "汽车 %1, 从 %2 到 %3"
+msgstr ""
 
 #: calendarhandler.cpp:317
 #, kde-format
@@ -104,57 +104,57 @@ msgstr ""
 #: calendarhandler.cpp:340
 #, kde-format
 msgid "Hotel reservation: %1"
-msgstr "宾馆预定：%1"
+msgstr ""
 
 #: calendarhandler.cpp:351
 #, kde-format
 msgid "Check-in: %1"
-msgstr "检入：%1"
+msgstr ""
 
 #: calendarhandler.cpp:354
 #, kde-format
 msgid "Check-out: %1"
-msgstr "检出：%1"
+msgstr ""
 
 #: calendarhandler.cpp:357
 #, kde-format
 msgid "Phone: %1"
-msgstr "电话：%1"
+msgstr ""
 
 #: calendarhandler.cpp:360
 #, kde-format
 msgid "Email: %1"
-msgstr "电子邮件：%1"
+msgstr ""
 
 #: calendarhandler.cpp:363
 #, kde-format
 msgid "Website: %1"
-msgstr "网址：%1"
+msgstr ""
 
 #: calendarhandler.cpp:413
 #, kde-format
 msgid "Entrance for %1"
-msgstr "%1 的入口"
+msgstr ""
 
 #: calendarhandler.cpp:460
 #, kde-format
 msgid "Restaurant reservation: %1"
-msgstr "餐厅预订：%1"
+msgstr ""
 
 #: calendarhandler.cpp:474
 #, kde-format
 msgid "Number of people: %1"
-msgstr "人数：%1"
+msgstr ""
 
 #: calendarhandler.cpp:481 calendarhandler.cpp:513
 #, kde-format
 msgid "Under name: %1"
-msgstr "名下： %1"
+msgstr ""
 
 #: calendarhandler.cpp:491
 #, kde-format
 msgid "Rental car reservation: %1"
-msgstr "租车预订：%1"
+msgstr ""
 
 #: calendarhandler.cpp:502
 #, kde-format
@@ -162,8 +162,6 @@ msgid ""
 "Pickup location: %1\n"
 "%2\n"
 msgstr ""
-"行李托运点：%1\n"
-"%2\n"
 
 #: calendarhandler.cpp:506
 #, kde-format
@@ -171,8 +169,6 @@ msgid ""
 "Dropoff location: %1\n"
 "%2\n"
 msgstr ""
-"行李领取处：%1\n"
-"%2\n"
 
 #: calendarhandler.cpp:535
 #, kde-format
@@ -181,6 +177,3 @@ msgid ""
 "Under name: %2\n"
 "Pickup location: %3"
 msgstr ""
-"订座记录编号：%1\n"
-"乘客姓名：%2\n"
-"行李托运点：%3"
