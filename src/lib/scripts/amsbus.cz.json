@@ -1,12 +1,28 @@
-{
-    "filter": [
-        {
-            "match": "helpdesk.amsbus.cz/IDOS",
-            "mimeType": "text/plain",
-            "scope": "Descendants"
-        }
-    ],
-    "function": "main",
-    "mimeType": "application/pdf",
-    "script": "amsbus.js"
-}
+[
+
+    {
+        "filter": [
+            {
+                "match": "helpdesk.amsbus.cz/IDOS",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "idosTicket",
+        "mimeType": "application/pdf",
+        "script": "amsbus.cz.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "nebo vytištěnou e-jízdenku. Musí však znát tento její odbavovací kód:  ",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "amsEshopCode",
+        "mimeType": "application/pdf",
+        "script": "amsbus.cz.js"
+    }
+
+]
