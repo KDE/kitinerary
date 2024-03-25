@@ -1,16 +1,16 @@
 # Translation of kitinerary6.po to Catalan
-# Copyright (C) 2018-2022 This_file_is_part_of_KDE
+# Copyright (C) 2018-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2018, 2020, 2021.
-# Josep M. Ferrer <txemaq@gmail.com>, 2018, 2019, 2020, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2018, 2019, 2020, 2022, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kitinerary\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-15 02:25+0000\n"
-"PO-Revision-Date: 2022-07-20 11:20+0200\n"
+"PO-Revision-Date: 2024-03-24 09:39+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: calendarhandler.cpp:171
 #, kde-format
@@ -77,7 +77,7 @@ msgstr "Tren %1 des de %2 fins a %3"
 #: calendarhandler.cpp:267
 #, kde-format
 msgid "Departure platform: %1"
-msgstr "Plataforma de sortida: %1"
+msgstr "Andana de sortida: %1"
 
 #: calendarhandler.cpp:272
 #, kde-format
@@ -87,7 +87,7 @@ msgstr "Entrenar: %1"
 #: calendarhandler.cpp:278
 #, kde-format
 msgid "Arrival platform: %1"
-msgstr "Plataforma d'arribada: %1"
+msgstr "Andana d'arribada: %1"
 
 #: calendarhandler.cpp:292
 #, kde-format
