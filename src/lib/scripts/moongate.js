@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 David Pilarčík <meow@charliecat.space>
+// SPDX-License-Identifier: LGPL-2.0-or-later
+
 function main(content, node) {
 
     let text = content.root.recursiveContent;
