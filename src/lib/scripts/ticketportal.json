@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "IRSnet CZ, s.r.o., Politických vězňů 15,",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "hometicket",
+    "mimeType": "application/pdf",
+    "script": "ticketportal.js"
+}
