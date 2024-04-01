@@ -310,28 +310,30 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
     if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass)) {
         switch (boardingPass->transitType()) {
             case KPkPass::BoardingPass::Air:
-              result.insert(QStringLiteral("@type"),
-                            QLatin1StringView("FlightReservation"));
-              break;
-            case KPkPass::BoardingPass::Train:
-              result.insert(QStringLiteral("@type"),
-                            QLatin1StringView("TrainReservation"));
-              break;
-            case KPkPass::BoardingPass::Bus:
-              result.insert(QStringLiteral("@type"),
-                            QLatin1StringView("BusReservation"));
-              break;
-            // TODO expand once we have test files for other types
-            default:
+                result.insert("@type"_L1, "FlightReservation"_L1);
                 break;
+            case KPkPass::BoardingPass::Train:
+                result.insert("@type"_L1, "TrainReservation"_L1);
+                break;
+            case KPkPass::BoardingPass::Bus:
+                result.insert("@type"_L1, "BusReservation"_L1);
+                break;
+            case KPkPass::BoardingPass::Boat:
+                result.insert("@type"_L1, "BoatReservation"_L1);
+                break;
+            case KPkPass::BoardingPass::Generic:
+                return;
         }
     } else {
         switch (pass->type()) {
+            case KPkPass::Pass::BoardingPass:
+                Q_UNREACHABLE(); // handled above
             case KPkPass::Pass::EventTicket:
-              result.insert(QStringLiteral("@type"),
-                            QLatin1StringView("EventReservation"));
-              break;
-            default:
+                result.insert("@type"_L1, "EventReservation"_L1);
+                break;
+            case KPkPass::Pass::Coupon:
+            case KPkPass::Pass::StoreCard:
+            case KPkPass::Pass::Generic:
                 return;
         }
     }
