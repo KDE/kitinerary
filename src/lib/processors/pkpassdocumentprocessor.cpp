@@ -389,6 +389,9 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
                         break;
                     }
                     default:
+                        if (!node.result().isEmpty()) { // don't overwrite better results from child nodes
+                            return;
+                        }
                         break;
                 }
             }
