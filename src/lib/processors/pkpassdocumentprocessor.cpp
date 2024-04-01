@@ -33,6 +33,7 @@
 #include <QTimeZone>
 #include <QVariant>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KPkPass::Pass>)
@@ -340,21 +341,25 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
         const auto barcode = pass->barcodes().at(0);
         QString token;
         switch (barcode.format()) {
-            case KPkPass::Barcode::QR:
-              token += QLatin1StringView("qrCode:");
-              break;
-            case KPkPass::Barcode::Aztec:
-              token += QLatin1StringView("aztecCode:");
-              break;
-            default:
+            case KPkPass::Barcode::Invalid:
                 break;
+            case KPkPass::Barcode::QR:
+                token = "qrCode:"_L1;
+                break;
+            case KPkPass::Barcode::Aztec:
+                token = "aztecCode:"_L1;
+              break;
+            case KPkPass::Barcode::PDF417:
+                token = "pdf417:"_L1;
+                break;
+            case KPkPass::Barcode::Code128:
+                token = "barcode128:"_L1;
         }
         token += barcode.message();
-        QJsonObject ticket =
-            result.value(QLatin1StringView("reservedTicket")).toObject();
-        ticket.insert(QStringLiteral("@type"), QLatin1StringView("Ticket"));
-        ticket.insert(QStringLiteral("ticketToken"), token);
-        result.insert(QStringLiteral("reservedTicket"), ticket);
+        QJsonObject ticket = result.value("reservedTicket"_L1).toObject();
+        ticket.insert("@type"_L1, "Ticket"_L1);
+        ticket.insert("ticketToken"_L1, token);
+        result.insert("reservedTicket"_L1, ticket);
     }
 
     // explicitly merge with the decoded barcode data, as this would other wise not match
