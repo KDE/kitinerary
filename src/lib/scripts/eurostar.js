@@ -20,3 +20,16 @@ function parseBarcode(elb, node) {
     res.reservedTicket.ticketedSeat.seatingType = elb.segment1.classOfTransport;
     return res;
 }
+
+function parsePdf(pdf, node, elb)
+{
+    const text = pdf.pages[elb.location].text;
+    let res = elb.result[0];
+    const dep = text.match(/From.*\n(.*\S)  +(\d\d:\d\d)/);
+    res.reservationFor.departureStation.name = dep[1];
+    res.reservationFor.departureTime = JsonLd.toDateTime(res.reservationFor.departureDay.substr(0, 10) + dep[2], "yyyy-MM-ddhh:mm", "en");
+    const arr = text.match(/To.*\n(.*\S)  +(\d\d:\d\d)/);
+    res.reservationFor.arrivalStation.name = arr[1];
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(res.reservationFor.departureDay.substr(0, 10) + arr[2], "yyyy-MM-ddhh:mm", "en");
+    return res;
+}
