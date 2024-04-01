@@ -33,3 +33,14 @@ function parsePdf(pdf, node, elb)
     res.reservationFor.arrivalTime = JsonLd.toDateTime(res.reservationFor.departureDay.substr(0, 10) + arr[2], "yyyy-MM-ddhh:mm", "en");
     return res;
 }
+
+function parsePass(pass, node, elb)
+{
+    let res = elb.result[0];
+    res.reservationFor.departureStation.name = pass.field["BoardingTime"].label;
+    res.reservationFor.departureTime = JsonLd.toDateTime(res.reservationFor.departureDay.substr(0, 10) + pass.field["BoardingTime"].value, "yyyy-MM-ddhh:mm", "en");
+    res.reservationFor.arrivalStation.name = pass.field["Arrivaltime"].label;
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(res.reservationFor.departureDay.substr(0, 10) + pass.field["Arrivaltime"].value, "yyyy-MM-ddhh:mm", "en");
+    res.underName.name = pass.field["Passenger"].value;
+    return res;
+}
