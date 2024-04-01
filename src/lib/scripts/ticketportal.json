@@ -1,12 +1,27 @@
-{
-    "filter": [
-        {
-            "match": "IRSnet CZ, s.r.o., Politických vězňů 15,",
-            "mimeType": "text/plain",
-            "scope": "Descendants"
-        }
-    ],
-    "function": "hometicket",
-    "mimeType": "application/pdf",
-    "script": "ticketportal.js"
-}
+[
+    {
+        "filter": [
+            {
+                "match": "IRSnet CZ, s.r.o., Politických vězňů 15,",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "hometicket",
+        "mimeType": "application/pdf",
+        "script": "ticketportal.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.cz.mafra.test",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "pkpassTicket",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "ticketportal.js"
+    }
+]
