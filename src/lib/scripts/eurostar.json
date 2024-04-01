@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "field": "futureUse",
@@ -10,4 +10,17 @@
     "function": "parseBarcode",
     "mimeType": "internal/era-elb",
     "script": "eurostar.js"
-}
+},
+{
+    "filter": [
+        {
+            "field": "futureUse",
+            "match": "^.0019",
+            "mimeType": "internal/era-elb",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdf",
+    "mimeType": "application/pdf",
+    "script": "eurostar.js"
+}]
