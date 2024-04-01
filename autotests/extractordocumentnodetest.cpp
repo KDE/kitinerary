@@ -65,9 +65,9 @@ private Q_SLOTS:
         QVERIFY(root.location().isNull());
 
         root.processor()->expandNode(root, &engine);
-        QCOMPARE(root.childNodes().size(), 3);
+        QCOMPARE(root.childNodes().size(), 5);
 
-        auto c3 = root.childNodes()[2];
+        auto c3 = root.childNodes()[4];
         QVERIFY(!c3.isNull());
         QCOMPARE(c3.mimeType(), QLatin1StringView("text/plain"));
         QCOMPARE(c3.content<QString>(),
@@ -109,8 +109,8 @@ private Q_SLOTS:
         QCOMPARE(root.mimeType(), QLatin1StringView("application/pdf"));
 
         root.processor()->expandNode(root, &engine);
-        QCOMPARE(root.childNodes().size(), 3);
-        auto c2 = root.childNodes()[1];
+        QCOMPARE(root.childNodes().size(), 5);
+        auto c2 = root.childNodes()[2];
         QVERIFY(!c2.isNull());
         QCOMPARE(c2.mimeType(), QLatin1StringView("internal/qimage"));
         QCOMPARE(c2.location().toInt(), 1);

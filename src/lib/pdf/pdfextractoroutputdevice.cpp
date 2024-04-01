@@ -30,7 +30,7 @@ void PdfExtractorOutputDevice::addRasterImage(GfxState *state, Object *ref, Stre
     }
 
     QImage::Format format;
-    if (!colorMap && type != PdfImageType::Image) {
+    if (!colorMap && type == PdfImageType::Mask) {
         format = QImage::Format_Mono;
     } else if (colorMap->getColorSpace()->getMode() == csIndexed) {
         format = QImage::Format_RGB888;
@@ -111,6 +111,21 @@ void PdfExtractorOutputDevice::drawMaskedImage(GfxState *state, Object *ref, Str
         const auto maskObj = dict->lookup("Mask");
         if (maskObj.isStream()) {
             addRasterImage(state, ref, maskStr, maskWidth, maskHeight, nullptr, PdfImageType::Mask);
+        }
+    }
+}
+
+void PdfExtractorOutputDevice::drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, Stream *maskStr, int maskWidth, int maskHeight, GfxImageColorMap *maskColorMap, bool maskInterpolate)
+{
+    Q_UNUSED(interpolate);
+    Q_UNUSED(maskInterpolate);
+
+    addRasterImage(state, ref, str, width, height, colorMap, PdfImageType::Image);
+    if (ref) {
+        const auto dict = str->getDict();
+        const auto maskObj = dict->lookup("SMask");
+        if (maskObj.isStream()) {
+            addRasterImage(state, ref, maskStr, maskWidth, maskHeight, maskColorMap, PdfImageType::SMask);
         }
     }
 }

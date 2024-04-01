@@ -48,8 +48,8 @@ private Q_SLOTS:
         QCOMPARE(page.text(),
                  QLatin1StringView("This is the first page." LINEBREAK
                                    "It contains a PDF 417 barcode." LINEBREAK));
-        QCOMPARE(page.imageCount(), 1);
-        QCOMPARE(PdfPage::staticMetaObject.property(1).readOnGadget(&page).toList().size(), 1);
+        QCOMPARE(page.imageCount(), 2);
+        QCOMPARE(PdfPage::staticMetaObject.property(1).readOnGadget(&page).toList().size(), 2);
         QCOMPARE(page.width(), 210);
         QCOMPARE(page.height(), 296);
 
@@ -70,7 +70,7 @@ private Q_SLOTS:
         QCOMPARE(page.text(),
                  QLatin1StringView("This is the second page." LINEBREAK
                                    "It contains an Aztec code." LINEBREAK));
-        QCOMPARE(page.imageCount(), 1);
+        QCOMPARE(page.imageCount(), 2);
         img = page.image(0);
         QCOMPARE(img.width(), 93);
         QCOMPARE(img.height(), 93);
@@ -80,7 +80,7 @@ private Q_SLOTS:
         QCOMPARE(img.sourceWidth(), 276);
 
         QVERIFY(page.imagesInRect(0, 0, 0.5, 1).isEmpty());
-        QCOMPARE(page.imagesInRect(0, 0.5, 1, 1).size(), 1);
+        QCOMPARE(page.imagesInRect(0, 0.5, 1, 1).size(), 2);
 
         QCOMPARE(doc->creationTime(), QDateTime({2018, 4, 29}, {11, 41, 28}, QTimeZone::fromSecondsAheadOfUtc(7200)));
         QCOMPARE(doc->modificationTime(), QDateTime());

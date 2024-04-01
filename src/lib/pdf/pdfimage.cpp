@@ -133,7 +133,7 @@ QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
                 GfxGray gray;
                 for (int j = 0; j < m_sourceWidth; ++j) {
                     colorMap->getGray(row + j, &gray);
-                    *imgData++ = colToByte(gray);
+                    *imgData++ = m_ref.m_type == PdfImageType::SMask ? (colToByte(gray) ^ 0xff) : colToByte(gray);
                 }
             }
             break;
@@ -173,7 +173,11 @@ QImage PdfImagePrivate::load()
             return load(maskObj.getStream(), m_colorMap.get());
         }
         case PdfImageType::SMask:
-            return {}; // TODO
+        {
+            const auto dict = obj.getStream()->getDict();
+            const auto maskObj = dict->lookup("SMask");
+            return load(maskObj.getStream(), m_colorMap.get());
+        }
     }
 
     return {};
