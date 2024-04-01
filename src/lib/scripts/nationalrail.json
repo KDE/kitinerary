@@ -21,4 +21,17 @@
     "function": "parseTicket",
     "mimeType": "application/pdf",
     "script": "nationalrail.js"
+},
+{
+    "filter": [
+        {
+            "field": "passTypeIdentifier",
+            "match": "pass.uk.co.lner.cbe",
+            "mimeType": "application/vnd.apple.pkpass",
+            "scope": "Current"
+        }
+    ],
+    "function": "parsePass",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "nationalrail.js"
 }]

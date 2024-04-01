@@ -121,3 +121,12 @@ function parseTicket(pdf, node, triggerNode) {
 
     return res;
 }
+
+function parsePass(pass, node) {
+    let res = node.result[0];
+    res.reservationFor.departureStation.name = pass.field["depart"].label;
+    res.reservationFor.departureStation.identifier = "uk:" + pass.field["depart"].value;
+    res.reservationFor.arrivalStation.name = pass.field["arrive"].label;
+    res.reservationFor.arrivalStation.identifier = "uk:" + pass.field["arrive"].value;
+    return res;
+}
