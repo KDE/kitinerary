@@ -63,6 +63,7 @@ private:
     int m_refNum = -1;
     int m_refGen = -1;
     PdfImageType m_type = PdfImageType::Image;
+    friend class PdfImage;
     friend class PdfImagePrivate;
     friend std::size_t std::hash<PdfImageRef>::operator ()(const PdfImageRef&) const noexcept;
 };
@@ -138,6 +139,9 @@ public:
      *  by image()).
      */
     [[nodiscard]] QImage applyAspectRatioTransform(const QImage &image) const;
+
+    /** PDF image type. */
+    [[nodiscard]] PdfImageType type() const;
 
 private:
     friend class PdfExtractorOutputDevice;

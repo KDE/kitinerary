@@ -275,4 +275,9 @@ QImage PdfImage::applyAspectRatioTransform(const QImage &image) const
     return image.scaled(d->m_width, d->m_height);
 }
 
+PdfImageType PdfImage::type() const
+{
+    return d->m_ref.m_type;
+}
+
 #include "moc_pdfimage.cpp"

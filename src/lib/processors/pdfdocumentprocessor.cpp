@@ -133,8 +133,14 @@ void PdfDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extract
             }
         }
 
-        // handle full page raster images
-        if ((engine->hints() & ExtractorEngine::ExtractFullPageRasterImages) && page.imageCount() == 1 && page.text().isEmpty()) {
+        // handle full page raster images (ignoring masks)
+        int imageCount = 0;
+        for (auto i = 0; i < page.imageCount(); ++i) {
+            if (page.image(i).type() == PdfImageType::Image) {
+                ++imageCount;
+            }
+        }
+        if ((engine->hints() & ExtractorEngine::ExtractFullPageRasterImages) && imageCount == 1 && page.text().isEmpty()) {
             qDebug() << "full page raster image";
             auto img = page.image(0);
             if (img.hasObjectId() &&  m_imageIds.find(img.objectId()) != m_imageIds.end()) { // already handled
