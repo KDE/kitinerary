@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "operatingCarrierDesignator",
+            "match": "AY",
+            "mimeType": "internal/iata-bcbp",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractEticket",
+    "mimeType": "application/pdf",
+    "script": "finnair.js"
+}
