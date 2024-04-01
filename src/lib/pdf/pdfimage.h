@@ -49,12 +49,12 @@ public:
         , m_type(type)
     {}
 
-    constexpr inline bool isNull() const
+    [[nodiscard]] constexpr inline bool isNull() const
     {
         return m_refNum < 0;
     }
 
-    constexpr inline bool operator==(const PdfImageRef &other) const
+    [[nodiscard]] constexpr inline bool operator==(const PdfImageRef &other) const
     {
         return m_refNum == other.m_refNum && m_refGen == other.m_refGen && m_type == other.m_type;
     }
@@ -82,19 +82,19 @@ public:
     PdfImage& operator=(const PdfImage&);
 
     /** Width of the image in PDF 1/72 dpi coordinates. */
-    int width() const;
+    [[nodiscard]] int width() const;
     /** Height of the image in PDF 1/72 dpi coordinates. */
-    int height() const;
+    [[nodiscard]] int height() const;
 
     /** Height of the source image. */
-    int sourceHeight() const;
+    [[nodiscard]] int sourceHeight() const;
     /** Width of the source image. */
-    int sourceWidth() const;
+    [[nodiscard]] int sourceWidth() const;
 
     /** Transformation from source image to final size/position on the page.
      *  Values are 1/72 inch.
      */
-    QTransform transform() const;
+    [[nodiscard]] QTransform transform() const;
 
     /** Hints for loading image data. */
     enum LoadingHint {
@@ -108,26 +108,26 @@ public:
     void setLoadingHints(LoadingHints hints);
 
     /** The source image without display transformations applied. */
-    QImage image() const;
+    [[nodiscard]] QImage image() const;
 
     /** Returns whether this image has an object id.
      *  Vector graphic "images" don't have that.
      */
-    bool hasObjectId() const;
+    [[nodiscard]] bool hasObjectId() const;
 
     /** PDF-internal unique identifier of this image.
      *  Use this to detect multiple occurrences of the same image in different
      *  places, if that reduces e.g. computation cost.
      */
-    PdfImageRef objectId() const;
+    [[nodiscard]] PdfImageRef objectId() const;
 
     /** Returns whether this is a raster or vector image. */
-    bool isVectorImage() const;
+    [[nodiscard]] bool isVectorImage() const;
 
     /** If this is a vector image, this returns the number
      *  of vector path elemets.
      */
-    int pathElementsCount() const;
+    [[nodiscard]] int pathElementsCount() const;
 
     /** Returns @c true if this image has an aspect-ratio changing transform.
      *  That might need to be applied before doing barcode decoding for example.
