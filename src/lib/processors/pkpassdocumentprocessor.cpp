@@ -82,8 +82,18 @@ void PkPassDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extr
         return;
     }
 
-    auto child = engine->documentNodeFactory()->createNode(barcodes[0].message().toUtf8());
-    node.appendChild(child);
+    for (const auto &barcode : barcodes) {
+        // try to recover binary barcode content (which wont survive a JSON/QString roundtrip)
+        const auto msg = barcode.message();
+        auto data = msg.toUtf8();
+        if (std::any_of(msg.begin(), msg.end(), [](QChar c) { return c.isNonCharacter() || c.isNull() || !c.isPrint(); })) {
+            if (barcode.messageEncoding().compare("iso-8859-1"_L1, Qt::CaseInsensitive) == 0) {
+                data = msg.toLatin1();
+            }
+        }
+        auto child = engine->documentNodeFactory()->createNode(data);
+        node.appendChild(child);
+    }
 }
 
 void PkPassDocumentProcessor::destroyNode(ExtractorDocumentNode &node) const
