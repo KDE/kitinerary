@@ -18,6 +18,7 @@
 
 #include <QByteArray>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 bool VdvDocumentProcessor::canHandleData(const QByteArray &encodedData, [[maybe_unused]] QStringView fileName) const
@@ -57,14 +58,21 @@ void VdvDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
     }
 
     Ticket ticket;
-    ticket.setTicketToken(QLatin1StringView("aztecbin:") +
-                          QString::fromLatin1(vdv.rawData().toBase64()));
+    ticket.setTicketToken("aztecbin:"_L1 + QString::fromLatin1(vdv.rawData().toBase64()));
     ticket.setTicketedSeat(seat);
     if (vdv.serviceClass() == VdvTicket::FirstClassUpgrade) {
         ticket.setName(i18n("Upgrade"));
-    } else if (const auto hdr = vdv.header(); hdr && hdr->productId == 9999) {
-      ticket.setName(QLatin1StringView("Deutschlandticket"));
-    } else {
+    } else if (const auto hdr = vdv.header(); hdr) {
+        switch (hdr->productId) {
+            case 9996:
+                ticket.setName("Deutschlandsemesterticket"_L1);
+                break;
+            case 9999:
+                ticket.setName("Deutschlandticket"_L1);
+                break;
+        }
+    }
+    if (ticket.name().isEmpty()) {
         ticket.setName(i18n("Ticket"));
     }
     ticket.setTicketNumber(vdv.ticketNumber());
