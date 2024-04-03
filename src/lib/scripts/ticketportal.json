@@ -15,7 +15,7 @@
         "filter": [
             {
                 "field": "passTypeIdentifier",
-                "match": "pass.cz.mafra.test",
+                "match": "pass.cz.mafra.*",
                 "mimeType": "application/vnd.apple.pkpass",
                 "scope": "Current"
             }
