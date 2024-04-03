@@ -6,6 +6,7 @@
 
 #include "pkpassdocumentprocessor.h"
 
+#include <KItinerary/DocumentUtil>
 #include <KItinerary/Event>
 #include <KItinerary/ExtractorDocumentNodeFactory>
 #include <KItinerary/ExtractorEngine>
@@ -428,20 +429,17 @@ void PkPassDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_u
     }
 
     // associate the pass with the result, so we can find the pass again for display
-    auto result = node.result().jsonLdResult();
-    for (auto resV : result) {
-        auto res = resV.toObject();
-        res.insert(QLatin1StringView("pkpassPassTypeIdentifier"),
-                   pass->passTypeIdentifier());
-        res.insert(QLatin1StringView("pkpassSerialNumber"),
-                   pass->serialNumber());
+    auto result = node.result().result();
+    for (auto &res : result) {
+        DocumentUtil::addDocumentId(res, DocumentUtil::idForPkPass(pass->passTypeIdentifier(), pass->serialNumber()));
+        // TODO replace this eventually with the more generic and standard compliant way above
+        JsonLdDocument::writeProperty(res, "pkpassPassTypeIdentifier", pass->passTypeIdentifier());
+        JsonLdDocument::writeProperty(res, "pkpassSerialNumber", pass->serialNumber());
         // pass->relevantDate() as modification time is inherently unreliable (it wont change most of the time)
         // so if we have something from an enclosing document, that's probably better
         if (node.parent().contextDateTime().isValid()) {
-          res.insert(QLatin1StringView("modifiedTime"),
-                     node.parent().contextDateTime().toString(Qt::ISODate));
+            JsonLdDocument::writeProperty(res, "modifiedTime", node.parent().contextDateTime().toString(Qt::ISODate));
         }
-        resV = res;
     }
     node.setResult(result);
 }

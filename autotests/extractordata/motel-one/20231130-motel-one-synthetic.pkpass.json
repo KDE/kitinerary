@@ -35,6 +35,9 @@
             "telephone": "+49 30 3641005-0"
         },
         "reservationNumber": "$serialNumber",
-        "reservationStatus": "http://schema.org/ReservationConfirmed"
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "subjectOf": [
+            "pkpass://pass.com.motel-one.booking/MO-$%7B10 alnum%7D"
+        ]
     }
 ]

@@ -11,7 +11,9 @@
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QString>
+#include <QUrl>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 QString DocumentUtil::idForContent(const QByteArray &data)
@@ -21,10 +23,19 @@ QString DocumentUtil::idForContent(const QByteArray &data)
     return QString::fromLatin1(hash.result().toHex());
 }
 
+QString DocumentUtil::idForPkPass(const QString &passTypeIdentifier, const QString &serialNumber)
+{
+    QUrl url;
+    url.setScheme("pkpass"_L1);
+    url.setHost(passTypeIdentifier); // TODO can this contain problematic characters?
+    url.setPath('/'_L1 + serialNumber);
+    return url.toString();
+}
+
 bool DocumentUtil::addDocumentId(QVariant &obj, const QString &id)
 {
     auto l = documentIds(obj);
-    if (!l.contains(id)) {
+    if (!l.contains(id) && !id.isEmpty()) {
         l.push_back(id);
         setDocumentIds(obj, l);
         return true;
@@ -51,4 +62,19 @@ QVariantList DocumentUtil::documentIds(const QVariant &obj)
 void DocumentUtil::setDocumentIds(QVariant &obj, const QVariantList &docIds)
 {
     JsonLdDocument::writeProperty(obj, "subjectOf", docIds);
+}
+
+QUrl DocumentUtil::pkPassId(const QVariant &obj)
+{
+    const auto docIds = DocumentUtil::documentIds(obj);
+    for (const auto &docIdV : docIds) {
+        if (docIdV.typeId() != QMetaType::QString) {
+            continue;
+        }
+        auto docId = QUrl(docIdV.toString());
+        if (docId.scheme() == "pkpass"_L1) {
+            return docId;
+        }
+    }
+    return {};
 }
