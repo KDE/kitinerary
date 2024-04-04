@@ -43,13 +43,16 @@ QString SSBTicketBase::readString(int start, int length) const
     res.reserve(length);
     for (int i = 0; i < length; ++i) {
         auto n = readNumber(start + SSB_CHAR_WIDTH * i, SSB_CHAR_WIDTH);
-        if (n >= 36) {
+        if (n >= 36 && n != 63) {
             continue;
         }
         if (n <= 9) {
             res += QLatin1Char(n + '0');
-        } else {
+        } else if (n != 63) {
             res += QLatin1Char(n - 10 + 'A');
+        } else {
+            // outside of the specification, seems to be in use in Finland though
+            res += u"Ä";
         }
     }
     return res;
