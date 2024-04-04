@@ -30,11 +30,12 @@ function parseSsbBarcode(ssb, node)
     res.reservationFor.provider.identifier = "uic:" + ssb.issuerCode;
 
     res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(ssb.rawData);
-    res.reservedTicket.ticketedSeat.seatingType = ssb.classOfTransport;
+    if (ssb.classOfTransport > 0 && ssb.classOfTransport <= 4)
+        res.reservedTicket.ticketedSeat.seatingType = ssb.classOfTransport;
 
     if (ssb.coachNumber > 0) {
         res.reservedTicket.ticketedSeat.seatSection = ssb.coachNumber;
-        res.reservedTicket.ticketedSeat.seatNumber = ssb.seatNumber;
+        res.reservedTicket.ticketedSeat.seatNumber = ssb.berthNumber + ssb.seatNumber;
     }
 
     res.reservationNumber = ssb.reservationReference + "";
