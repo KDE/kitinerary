@@ -46,11 +46,10 @@ bool SSBv1Ticket::maybeSSB(const QByteArray& data)
 
 QDate SSBv1Ticket::firstDayOfValidity(const QDateTime &contextDate) const
 {
-    if (!isValid() || firstDayOfValidityDay() == 0 || firstDayOfValidityDay() > 366) {
+    if (!isValid()) {
         return {};
     }
-    QDate d(contextDate.date().year(), 1, 1);
-    return d.addDays(firstDayOfValidityDay() - 1);
+    return dayNumberToDate(firstDayOfValidityDay(), contextDate);
 }
 
 QDateTime SSBv1Ticket::departureTime(const QDateTime &contextDate) const
