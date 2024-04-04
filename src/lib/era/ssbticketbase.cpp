@@ -6,6 +6,7 @@
 
 #include "ssbticketbase.h"
 
+#include <QDateTime>
 #include <QDebug>
 #include <QString>
 
@@ -52,6 +53,21 @@ QString SSBTicketBase::readString(int start, int length) const
         }
     }
     return res;
+}
+
+QDate SSBTicketBase::dayNumberToDate(int days, const QDateTime &context)
+{
+    if (days <= 0 || days > 366) {
+        return {};
+    }
+
+    QDate dt(context.date().year(), 1, 1);
+    dt = dt.addDays(days - 1);
+    if (dt < context.date()) {
+        dt = QDate(context.date().year() + 1, 1, 1);
+        dt = dt.addDays(days - 1);
+    }
+    return dt;
 }
 
 #include "moc_ssbticketbase.cpp"

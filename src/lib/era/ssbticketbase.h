@@ -13,6 +13,9 @@
 
 #include <cstdint>
 
+class QDate;
+class QDateTime;
+
 namespace KItinerary {
 
 /** Internal base class for ERA SSB tickets. */
@@ -24,8 +27,11 @@ protected:
     ~SSBTicketBase();
 
     // start and length in bits
-    Q_INVOKABLE quint64 readNumber(int start, int length) const;
-    Q_INVOKABLE QString readString(int start, int length) const;
+    Q_INVOKABLE [[nodiscard]] quint64 readNumber(int start, int length) const;
+    Q_INVOKABLE [[nodiscard]] QString readString(int start, int length) const;
+
+    /** Convert a SSBv1 or v2 day number to a date based on @p context. */
+    [[nodiscard]] static QDate dayNumberToDate(int days, const QDateTime &context);
 
     QByteArray m_data;
 };
