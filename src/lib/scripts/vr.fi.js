@@ -49,11 +49,27 @@ function parseTicket(pdf, node, trigger) {
 
     var text = pdf.pages[trigger.location].text;
     var trip = text.match("(.*) - (.*)\n.*(\\d{4}).*?(\\d{2}:\\d{2}).*?(\\d{2}:\\d{2})\n(.*?" + trigger.content.trainNumber + ")");
-    res.reservationFor.trainNumber = trip[6];
+    if (!trip)
+        return parseMobilePdf(pdf, node, trigger);
 
+    res.reservationFor.trainNumber = trip[6];
     res.reservationFor.departureTime = JsonLd.toDateTime(trip[4], "hh:mm", "en");
     res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[5], "hh:mm", "en");
     res.reservationFor.departureStation.name = trip[1];
     res.reservationFor.arrivalStation.name = trip[2];
+    return res;
+}
+
+function parseMobilePdf(pdf, node, ssb) {
+    let res = ssb.result[0];
+    const text = pdf.pages[ssb.location].textInRect(0.0, 0.0, 0.5, 0.5);
+    const trip = text.match(/(\d{1,2}\.\d{1,2}\.\d{4})\n *(\S.*\S)  +(\S.*)\n *(\d\d:\d\d)  +(\d\d:\d\d)\n.*\n *([A-Z]+ \d+)  +(\d+).* (\d+)/);
+    res.reservationFor.trainNumber = trip[6];
+    res.reservationFor.departureTime = JsonLd.toDateTime(trip[4], "hh:mm", "en");
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[5], "hh:mm", "en");
+    res.reservationFor.departureStation.name = trip[2];
+    res.reservationFor.arrivalStation.name = trip[3];
+    res.reservedTicket.ticketedSeat.seatSection = trip[7];
+    res.reservedTicket.ticketedSeat.seatNumber = trip[8];
     return res;
 }
