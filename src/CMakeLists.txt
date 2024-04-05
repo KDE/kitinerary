@@ -4,7 +4,7 @@
 option(BUILD_TOOLS "Build development tools" ON)
 
 add_subdirectory(osm)
-if (TARGET Qt::Network AND NOT CMAKE_CROSSCOMPILING AND OSM_PLANET_DIR AND OsmTools_FOUND)
+if (TARGET Qt::Network AND NOT CMAKE_CROSSCOMPILING)
     add_subdirectory(knowledgedb-generator)
 endif()
 add_subdirectory(lib)

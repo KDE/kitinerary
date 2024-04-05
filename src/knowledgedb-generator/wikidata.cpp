@@ -27,8 +27,8 @@ KnowledgeDb::Coordinate WikiData::parseCoordinate(const QString& value)
     const auto idx = value.indexOf(QLatin1Char(' '));
     bool latOk = false, longOk = false;
     KnowledgeDb::Coordinate c;
-    c.longitude = value.midRef(6, idx - 6).toFloat(&latOk);
-    c.latitude = value.midRef(idx + 1, value.size() - idx - 2).toFloat(&longOk);
+    c.longitude = QStringView(value).mid(6, idx - 6).toFloat(&latOk);
+    c.latitude = QStringView(value).mid(idx + 1, value.size() - idx - 2).toFloat(&longOk);
     if (!latOk || !longOk) {
         c.longitude = NAN;
         c.latitude = NAN;
@@ -63,7 +63,7 @@ QJsonArray WikiData::query(const QString &sparqlQuery, const QString &cacheFileN
         auto reply = nam.get(QNetworkRequest(url));
         QObject::connect(reply, &QNetworkReply::finished, QCoreApplication::instance(), &QCoreApplication::quit);
         QCoreApplication::exec();
-    if (reply->error() != QNetworkReply::NoError) {
+        if (reply->error() != QNetworkReply::NoError) {
             qWarning() << reply->errorString();
             return {};
         }
