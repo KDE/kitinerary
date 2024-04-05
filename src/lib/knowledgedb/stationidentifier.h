@@ -108,7 +108,7 @@ public:
         return value() > 0;
     }
 
-    KITINERARY_EXPORT [[nodiscard]] QString toString() const;
+    [[nodiscard]] KITINERARY_EXPORT QString toString() const;
 
 private:
     [[nodiscard]] static inline constexpr uint32_t charVal(uint8_t c)
