@@ -366,6 +366,9 @@ private Q_SLOTS:
         auto station = KnowledgeDb::stationForVRStationCode(VRStationCode(QStringLiteral("HKI")));
         QVERIFY(station.coordinate.isValid());
 
+        station = KnowledgeDb::stationForVRStationCode(VRStationCode(u"KJÄ"_s));
+        QVERIFY(station.coordinate.isValid());
+
         station = KnowledgeDb::stationForVRStationCode(VRStationCode(QStringLiteral("BLÄ")));
         QVERIFY(!station.coordinate.isValid());
     }
