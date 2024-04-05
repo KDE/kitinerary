@@ -55,15 +55,20 @@ QString FiveAlphaId::toString() const
 }
 
 
+[[nodiscard]] static bool isValidVRCodeLetter(QChar c)
+{
+    return c.row() == 0 && ((c.cell() >= 'A' && c.cell() <= 'Z') || c.cell() == 0xC4 || c.cell() == 0xD6);
+}
+
 VRStationCode::VRStationCode(const QString &id)
 {
-    if (id.size() < 2 || id.size() > 4 || !containsOnlyLetters(id)) {
+    if (id.size() < 2 || id.size() > 4 || !std::all_of(id.begin(), id.end(), isValidVRCodeLetter)) {
         return;
     }
 
     char buffer[4];
     std::memset(buffer, 0, 4);
-    std::memcpy(buffer, id.toUpper().toUtf8().constData(), id.size());
+    std::memcpy(buffer, id.toLatin1().constData(), id.size());
     setValue(fromChars(buffer));
 }
 
@@ -77,10 +82,17 @@ QString VRStationCode::toString() const
     QString s;
     for (int i = 3; i >= 0; --i) {
         const auto v = ((id >> (i*6)) % 32);
-        if (v == 0) {
-            break;
+        switch (v) {
+            case 0: return s;
+            case 27:
+                s += QChar(0xC4);
+                break;
+            case 28:
+                s += QChar(0xD6);
+                break;
+            default:
+                s += QLatin1Char('@' + v);
         }
-        s += QLatin1Char('@' + v);
     }
 
     return s;

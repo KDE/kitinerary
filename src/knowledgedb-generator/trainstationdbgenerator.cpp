@@ -14,6 +14,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary::Generator;
 
 namespace KItinerary {
@@ -417,8 +418,9 @@ void TrainStationDbGenerator::writeVRMap(QIODevice *out)
             continue;
         }
         out->write("    { VRStationCode{\"");
-        out->write(it.first.toString().toUtf8());
-        for (int i = 0; i < 4 - it.first.toString().toUtf8().size(); ++i) {
+        const auto id = it.first.toString().replace(u"Ä"_s, "["_L1).replace(u"Ö"_s, "\\"_L1).toLatin1();
+        out->write(QByteArray(id).replace("\\", "\\\\"));
+        for (int i = 0; i < 4 - id.size(); ++i) {
             out->write("\\0");
         }
         out->write("\"}, TrainStationIndex{");

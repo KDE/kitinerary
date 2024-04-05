@@ -16,6 +16,7 @@
 #include <QTest>
 #include <QTimeZone>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 using namespace KItinerary::KnowledgeDb;
 
@@ -335,6 +336,29 @@ private Q_SLOTS:
 
         station = KnowledgeDb::stationForIndianRailwaysStationCode(QStringLiteral("ndls"));
         QVERIFY(!station.coordinate.isValid());
+    }
+
+    void testFinishStationCode()
+    {
+        constexpr const VRStationCode hki("HKI\0");
+        QVERIFY(hki.value() > 0);
+        auto code = VRStationCode(u"HKI"_s);
+        QVERIFY(hki == code);
+        QCOMPARE(hki.toString(), "HKI"_L1);
+        QCOMPARE(code.toString(), "HKI"_L1);
+
+        constexpr const VRStationCode ol("OL\0\0");
+        QVERIFY(ol.isValid());
+        QVERIFY(ol != hki);
+        QCOMPARE(ol.toString(), "OL"_L1);
+
+        constexpr const VRStationCode kja("KJ[\0");
+        QVERIFY(kja.isValid());
+        code = VRStationCode(u"KJÄ"_s);
+        QVERIFY(code.isValid());
+        QVERIFY(kja == code);
+        QCOMPARE(kja.toString(), u"KJÄ");
+        QCOMPARE(code.toString(), u"KJÄ");
     }
 
     void testFinishStationCodeLookup()

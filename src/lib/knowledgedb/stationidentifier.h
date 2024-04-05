@@ -103,20 +103,24 @@ public:
     {}
     KITINERARY_EXPORT explicit VRStationCode(const QString &id);
 
-    inline constexpr bool isValid() const
+    [[nodiscard]] inline constexpr bool isValid() const
     {
         return value() > 0;
     }
 
-    KITINERARY_EXPORT QString toString() const;
+    KITINERARY_EXPORT [[nodiscard]] QString toString() const;
 
 private:
-    static inline constexpr uint32_t charVal(const char c)
+    [[nodiscard]] static inline constexpr uint32_t charVal(uint8_t c)
     {
-        // TODO in theory there's apparently also 'Ä' amd 'Ö'?
-        return c == '\0' ? 0 : c - '@';
+        switch (c) {
+            case '\0': return 0;
+            case 0xC4: return 27; // Ä in Latin-1
+            case 0xD6: return 28; // Ö in Latin-1
+        }
+        return c - '@';
     }
-    static inline constexpr uint32_t fromChars(const char s[4])
+    [[nodiscard]] static inline constexpr uint32_t fromChars(const char s[4])
     {
         return (charVal(s[0]) << 18) + (charVal(s[1]) << 12) + (charVal(s[2]) << 6) + charVal(s[3]);
     }
