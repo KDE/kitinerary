@@ -30,3 +30,4 @@ compile_commands.json
 /cmake-build*
 .cache
 Testing/
+/.vscode/
