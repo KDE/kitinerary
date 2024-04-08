@@ -37,7 +37,7 @@ ExtractorDocumentNode ElbDocumentProcessor::createNodeFromData(const QByteArray 
 
 bool SsbDocumentProcessor::canHandleData(const QByteArray &encodedData, [[maybe_unused]] QStringView fileName) const
 {
-    return SSBv3Ticket::maybeSSB(encodedData) || SSBv2Ticket::maybeSSB(encodedData) || SSBv1Ticket::maybeSSB(encodedData);
+    return SSBTicketReader::maybeSSB(encodedData);
 }
 
 ExtractorDocumentNode SsbDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const

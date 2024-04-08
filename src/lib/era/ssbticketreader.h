@@ -14,10 +14,13 @@ namespace KItinerary {
 /** Factory function for the various ERA SSB variants. */
 namespace SSBTicketReader
 {
+/** Returns whether @p data could be an ERA SSB ticket. */
+[[nodiscard]] bool maybeSSB(const QByteArray &data);
+
 /** Attempt to read an SSB ticket.
  *  The variant is auto-detected, unless @p versionOverride is specified.
  */
-QVariant read(const QByteArray &data, int versionOverride = 0);
+[[nodiscard]] QVariant read(const QByteArray &data, int versionOverride = 0);
 }
 
 }

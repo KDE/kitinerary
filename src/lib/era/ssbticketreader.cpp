@@ -13,14 +13,34 @@
 
 using namespace KItinerary;
 
-QVariant SSBTicketReader::read(const QByteArray& data, int versionOverride)
+[[nodiscard]] static bool isBase64Char(char c)
 {
-    if (data.isEmpty()) {
-        return {};
+    return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '=' || c == '/' || c == '+';
+}
+
+[[nodiscard]] static bool maybeBase64(QByteArrayView data)
+{
+    return std::all_of(data.begin(), data.end(), isBase64Char);
+}
+
+bool SSBTicketReader::maybeSSB(const QByteArray &data)
+{
+    if (SSBv1Ticket::maybeSSB(data) || SSBv2Ticket::maybeSSB(data) || SSBv3Ticket::maybeSSB(data)) {
+        return true;
     }
 
-    auto ticketData = data;
-    auto version = data[0] >> 4;
+    // base64 encoded tickets are found in the wild, although that isn't specified anywhere AFAIK
+    if (data.size() > 168 || !maybeBase64(data)) { // 4/3 * largest SSB ticket size
+        return false;
+    }
+
+    const auto decoded = QByteArray::fromBase64(data);
+    return SSBv1Ticket::maybeSSB(decoded) || SSBv2Ticket::maybeSSB(decoded) || SSBv3Ticket::maybeSSB(decoded);
+}
+
+[[nodiscard]] static QVariant readInternal(QByteArray ticketData, int versionOverride)
+{
+    auto version = ticketData[0] >> 4;
     if (versionOverride > 0 && version != versionOverride) {
         ticketData[0] = (ticketData[0] & 0x0f) | (versionOverride << 4);
         version = versionOverride;
@@ -43,6 +63,20 @@ QVariant SSBTicketReader::read(const QByteArray& data, int versionOverride)
             return ticket.isValid() ? QVariant::fromValue(ticket) : QVariant();
         }
     }
-
     return {};
+}
+
+QVariant SSBTicketReader::read(const QByteArray& data, int versionOverride)
+{
+    if (data.isEmpty()) {
+        return {};
+    }
+
+    auto ticket = readInternal(data, versionOverride);
+    if (ticket.isValid() || data.size() > 168 || !maybeBase64(data)) {
+        return ticket;
+    }
+
+    // try base64, see above
+    return readInternal(QByteArray::fromBase64(data), versionOverride);
 }
