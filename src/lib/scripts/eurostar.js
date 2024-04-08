@@ -26,8 +26,7 @@ function parseBarcode(elb, node) {
     return res;
 }
 
-function parsePdf(pdf, node, elb)
-{
+function parsePdf(pdf, node, elb) {
     const text = pdf.pages[elb.location].text;
     let res = elb.result[0];
     const dep = text.match(/From.*\n(.*\S)  +(\d\d:\d\d)/);
@@ -39,8 +38,19 @@ function parsePdf(pdf, node, elb)
     return res;
 }
 
-function parsePass(pass, node, elb)
-{
+function parsePdfSSB(pdf, node, ssb) {
+    const page = pdf.pages[ssb.location];
+    const text = page.text;
+    let res = ssb.result[0];
+    const trip = text.match(/\d\d\/\d\d +(\d\d:\d\d) +(\d{4}).*\d\d\/\d\d +(\d\d:\d\d)/);
+    res.reservationFor.departureTime = JsonLd.toDateTime(trip[1], "hh:mm", "en");
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[3], "hh:mm", "en");
+    res.reservationFor.trainNumber = trip[2];
+    res.reservationNumber = text.match(/PNR: (\S{6})/)[1];
+    return res;
+}
+
+function parsePass(pass, node, elb) {
     let res = elb.result[0];
     res.reservationFor.departureStation.name = pass.field["BoardingTime"].label;
     res.reservationFor.departureTime = JsonLd.toDateTime(res.reservationFor.departureDay.substr(0, 10) + pass.field["BoardingTime"].value, "yyyy-MM-ddhh:mm", "en");

@@ -36,4 +36,17 @@
     "function": "parsePass",
     "mimeType": "application/vnd.apple.pkpass",
     "script": "eurostar.js"
+},
+{
+    "filter": [
+        {
+            "mimeType": "internal/era-ssb",
+            "field": "issuerCode",
+            "match": "3018",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdfSSB",
+    "script": "eurostar.js",
+    "mimeType": "application/pdf"
 }]
