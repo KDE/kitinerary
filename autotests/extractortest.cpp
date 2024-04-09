@@ -155,6 +155,9 @@ private Q_SLOTS:
         QFile f(refFile);
         QVERIFY(f.open(QFile::ReadOnly));
         const auto refDoc = QJsonDocument::fromJson(f.readAll());
+#ifdef Q_OS_FREEBSD
+        QEXPECT_FAIL("activitypub-glt2024.in.json", "broken country detection on KDE FreeBSD CI since 2024-03-30", Continue);
+#endif
         QVERIFY(Test::compareJson(refFile, encodedResult, refDoc.array()));
 
         // verify ticket token prefixes are valid and properly stripped
