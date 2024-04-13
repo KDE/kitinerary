@@ -346,7 +346,7 @@ function parseOuiSummary(html)
     }
 
     const price = html.eval('//*[@class="transaction__total-amount-value"]');
-    if (price)
+    if (price.length > 0)
         ExtractorEngine.extractPrice(price[0].recursiveContent, res);
 
     // check if this is a return ticket
@@ -362,7 +362,7 @@ function parseOuiSummary(html)
     if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
         retour.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
     }
-    if (price)
+    if (price.length > 0)
         ExtractorEngine.extractPrice(price[0].recursiveContent, retour);
 
     return [res, retour];
