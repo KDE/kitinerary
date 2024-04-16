@@ -14,8 +14,8 @@ function parseRegistration(html) {
     res.modifyReservationUrl = html.eval('//a')[0].attribute('href');
 
     var time = html.eval('//div/div/p/strong/..')[0].content.match(/\((.*)\s+-\s+(.*)\)/);
-    res.reservationFor.startDate = JsonLd.toDateTime(time[1], "d MMM yyyy, hh:mm", "en");
-    res.reservationFor.endDate = JsonLd.toDateTime(time[2], "d MMM yyyy, hh:mm", "en");
+    res.reservationFor.startDate = JsonLd.toDateTime(time[1], ["d MMM yyyy, hh:mm", "d MMM yyyy, hh:mm:ss"], "en");
+    res.reservationFor.endDate = JsonLd.toDateTime(time[2], ["d MMM yyyy, hh:mm", "d MMM yyyy, hh:mm:ss"], "en");
 
     let dd = html.eval('//dl')[0].firstChild;
     while (!dd.nextSibling.isNull) {
