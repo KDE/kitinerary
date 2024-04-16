@@ -22,9 +22,9 @@ function parseRegistration(html) {
         const label = dd.content;
         dd = dd.nextSibling;
         if (label.match(/First Name/)) {
-            res.underName.givenName = dd.content;
+            res.underName.givenName = dd.recursiveContent;
         } else if (label.match(/Last Name/)) {
-            res.underName.familyName = dd.content;
+            res.underName.familyName = dd.recursiveContent;
         }
         dd = dd.nextSibling;
     }
