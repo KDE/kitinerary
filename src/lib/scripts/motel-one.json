@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "field": "passTypeIdentifier",
@@ -10,4 +10,16 @@
     "function": "extractPkPass",
     "mimeType": "application/vnd.apple.pkpass",
     "script": "motel-one.js"
-}
+},{
+    "filter": [
+        {
+            "field": "From",
+            "match": "noreply@motel-one.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "extractConfirmation",
+    "mimeType": "text/plain",
+    "script": "motel-one.js"
+}]
