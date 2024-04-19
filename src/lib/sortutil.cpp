@@ -179,6 +179,9 @@ bool SortUtil::isBefore(const QVariant &lhs, const QVariant &rhs)
 
 bool SortUtil::hasStartTime(const QVariant &elem)
 {
+    if (JsonLd::isA<FoodEstablishmentReservation>(elem)) {
+        return elem.value<FoodEstablishmentReservation>().startTime().isValid();
+    }
     if (JsonLd::canConvert<Reservation>(elem)) {
         return hasStartTime(JsonLd::convert<Reservation>(elem).reservationFor());
     }
@@ -194,6 +197,9 @@ bool SortUtil::hasStartTime(const QVariant &elem)
 
 bool SortUtil::hasEndTime(const QVariant &elem)
 {
+    if (JsonLd::isA<FoodEstablishmentReservation>(elem)) {
+        return elem.value<FoodEstablishmentReservation>().endTime().isValid();
+    }
     if (JsonLd::canConvert<Reservation>(elem)) {
         return hasEndTime(JsonLd::convert<Reservation>(elem).reservationFor());
     }
