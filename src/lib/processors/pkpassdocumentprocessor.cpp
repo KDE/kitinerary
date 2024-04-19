@@ -147,48 +147,38 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
     const auto fields = pass->fields();
     for (const auto &field : fields) {
         // boarding time
-        if (!flight.boardingTime().isValid() &&
-            field.key().contains(QLatin1StringView("boarding"),
-                                 Qt::CaseInsensitive)) {
-          const auto time =
-              timeFinder.findSingularTime(field.value().toString());
-          if (time.isValid()) {
-            // this misses date, but the postprocessor will fill that in
-            flight.setBoardingTime(QDateTime(QDate(1, 1, 1), time));
-            continue;
-          }
+        if (!flight.boardingTime().isValid() && field.key().contains("boarding"_L1, Qt::CaseInsensitive)) {
+            const auto time = timeFinder.findSingularTime(field.value().toString());
+            if (time.isValid()) {
+                // this misses date, but the postprocessor will fill that in
+                flight.setBoardingTime(QDateTime(QDate(1, 1, 1), time));
+                continue;
+            }
         }
         // departure gate
-        if (flight.departureGate().isEmpty() &&
-            field.key().contains(QLatin1StringView("gate"),
-                                 Qt::CaseInsensitive)) {
-          const auto gateStr = field.value().toString();
-          if (isPlausibleGate(gateStr)) {
-            flight.setDepartureGate(gateStr);
-            continue;
-          }
+        if (flight.departureGate().isEmpty() && field.key().contains("gate"_L1, Qt::CaseInsensitive)) {
+            const auto gateStr = field.value().toString();
+            if (isPlausibleGate(gateStr)) {
+                flight.setDepartureGate(gateStr);
+                continue;
+            }
         }
         // departure time
-        if (!flight.departureTime().isValid() &&
-            field.key().contains(QLatin1StringView("departure"),
-                                 Qt::CaseInsensitive)) {
-          const auto time =
-              timeFinder.findSingularTime(field.value().toString());
-          if (time.isValid()) {
-            // this misses date, but the postprocessor will fill that in
-            flight.setDepartureTime(QDateTime(QDate(1, 1, 1), time));
-            continue;
-          }
+        if (!flight.departureTime().isValid() && field.key().contains("departure"_L1, Qt::CaseInsensitive)) {
+            const auto time = timeFinder.findSingularTime(field.value().toString());
+            if (time.isValid()) {
+                // this misses date, but the postprocessor will fill that in
+                flight.setDepartureTime(QDateTime(QDate(1, 1, 1), time));
+                continue;
+            }
         }
 
-        if (field.key().contains(QLatin1StringView("terminal"),
-                                 Qt::CaseInsensitive)) {
-          if (departureTerminal.isNull()) {
-            departureTerminal = field.value().toString();
-          } else {
-            departureTerminal = QStringLiteral(
-                ""); // empty but not null, marking multiple terminal candidates
-          }
+        if (field.key().contains("terminal"_L1, Qt::CaseInsensitive)) {
+            if (departureTerminal.isNull()) {
+                departureTerminal = field.value().toString();
+            } else {
+                departureTerminal = u""_s; // empty but not null, marking multiple terminal candidates
+            }
         }
     }
 
