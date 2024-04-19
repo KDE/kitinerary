@@ -16,7 +16,9 @@
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
+#include <KItinerary/TrainTrip>
 
+#include "reservationconverter.h"
 #include "knowledgedb/airportdb.h"
 #include "text/nameoptimizer_p.h"
 #include "text/pricefinder_p.h"
@@ -247,6 +249,73 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
     return flight;
 }
 
+[[nodiscard]] static TrainReservation extractTrainTicket(KPkPass::Pass *pass, TrainReservation res)
+{
+    auto trip = res.reservationFor().value<TrainTrip>();
+    auto ticket = res.reservedTicket().value<Ticket>();
+
+    TimeFinder timeFinder;
+    const auto fields = pass->fields();
+    for (const auto &field : fields) {
+        // departure platform
+        if (trip.departurePlatform().isEmpty() && field.key().contains("track"_L1, Qt::CaseInsensitive)) {
+            const auto platformStr = field.value().toString();
+            if (isPlausibleGate(platformStr)) {
+                trip.setDeparturePlatform(platformStr);
+                continue;
+            }
+        }
+        // departure time
+        if (!trip.departureTime().isValid() && field.key().contains("departure"_L1, Qt::CaseInsensitive)) {
+            const auto time = timeFinder.findSingularTime(field.value().toString());
+            if (time.isValid()) {
+                // this misses date, but the postprocessor will fill that in
+                trip.setDepartureTime(QDateTime(QDate(1, 1, 1), time));
+                continue;
+            }
+        }
+        // coach/seat
+        if (ticket.ticketedSeat().seatSection().isEmpty() && field.key().contains("coach"_L1, Qt::CaseInsensitive)) {
+            auto seat = ticket.ticketedSeat();
+            seat.setSeatSection(field.value().toString());
+            ticket.setTicketedSeat(seat);
+        }
+        if (ticket.ticketedSeat().seatNumber().isEmpty() && field.key().contains("seat"_L1, Qt::CaseInsensitive)) {
+            auto seat = ticket.ticketedSeat();
+            seat.setSeatNumber(field.value().toString());
+            ticket.setTicketedSeat(seat);
+        }
+    }
+
+    // "relevantDate" is the best guess for the departure time if we didn't find an explicit field for it
+    if (pass->relevantDate().isValid() && !trip.departureTime().isValid()) {
+        // TODO try to recover timezone?
+        trip.setDepartureTime(pass->relevantDate());
+    }
+
+    // location is the best guess for the departure station geo coordinates
+    auto depStation = trip.departureStation();
+    auto depGeo = depStation.geo();
+    if (pass->locations().size() == 1 && !depGeo.isValid()) {
+        const auto loc = pass->locations().at(0);
+        depGeo.setLatitude((float)loc.latitude());
+        depGeo.setLongitude((float)loc.longitude());
+        depStation.setGeo(depGeo);
+        trip.setDepartureStation(depStation);
+    }
+
+    // organizationName is the best guess for airline name
+    auto provider = trip.provider();
+    if (provider.name().isEmpty()) {
+        provider.setName(pass->organizationName());
+        trip.setProvider(provider);
+    }
+
+    res.setReservationFor(trip);
+    res.setReservedTicket(ticket);
+    return res;
+}
+
 static void extractEventTicketPass(KPkPass::Pass *pass, EventReservation &eventRes)
 {
     auto event = eventRes.reservationFor().value<Event>();
@@ -365,7 +434,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
         result.insert("reservedTicket"_L1, ticket);
     }
 
-    // explicitly merge with the decoded barcode data, as this would other wise not match
+    // explicitly merge with the decoded barcode data, as this would otherwise not match
     auto res = JsonLdDocument::fromJsonSingular(result);
     if (JsonLd::isA<FlightReservation>(res)) {
         // if this doesn't contain a single IATA BCBP we wont be able to get sufficient information out of this
@@ -373,6 +442,20 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
             return;
         }
         res = JsonLdDocument::apply(node.childNodes()[0].result().result().at(0), res).value<FlightReservation>();
+    }
+    if (JsonLd::isA<TrainReservation>(res)) {
+        // if this is a IATA BCBP the child node extractor will have classified this as a flight
+        if (!node.childNodes().empty() && node.childNodes()[0].result().size() > 1) {
+            return;
+        }
+        if (!node.result().isEmpty()) {
+            if (JsonLd::isA<FlightReservation>(node.childNodes()[0].result().result().at(0))) {
+                const auto flightRes = node.childNodes()[0].result().jsonLdResult().at(0).toObject();
+                res = JsonLdDocument::apply(JsonLdDocument::fromJsonSingular(ReservationConverter::flightToTrain(flightRes)), res).value<TrainReservation>();
+            } else {
+                res = JsonLdDocument::apply(node.childNodes()[0].result().result().at(0), res).value<TrainReservation>();
+            }
+        }
     }
 
     // extract structured data from a pkpass, if the extractor script hasn't done so already
@@ -387,6 +470,14 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
                         flightRes.setReservationFor(extractBoardingPass(pass, flightRes.reservationFor().value<Flight>()));
                         flightRes.setUnderName(extractPerson(pass, flightRes.underName().value<Person>()));
                         res = flightRes;
+                        break;
+                    }
+                    case KPkPass::BoardingPass::Train:
+                    {
+                        auto trainRes = res.value<TrainReservation>();
+                        trainRes = extractTrainTicket(pass, trainRes);
+                        trainRes.setUnderName(extractPerson(pass, trainRes.underName().value<Person>()));
+                        res = trainRes;
                         break;
                     }
                     default:
