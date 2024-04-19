@@ -160,6 +160,7 @@ target_sources(KPim6Itinerary PRIVATE
     locationutil.cpp locationutil.h
     mergeutil.cpp mergeutil.h
     priceutil.cpp priceutil.h
+    reservationconverter.cpp reservationconverter.h
     sortutil.cpp sortutil.h
     stringutil.cpp stringutil.h
     tickettokencomparator.cpp tickettokencomparator_p.h
