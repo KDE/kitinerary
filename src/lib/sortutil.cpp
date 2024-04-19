@@ -65,7 +65,9 @@ QDateTime SortUtil::startDateTime(const QVariant &elem)
             return flight.boardingTime();
         }
         QDateTime dt(flight.departureDay(), QTime(23, 59, 59));
-        dt.setTimeZone(KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{flight.departureAirport().iataCode()}));
+        if (const auto tz = KnowledgeDb::timezoneForAirport(KnowledgeDb::IataCode{flight.departureAirport().iataCode()}); tz.isValid()) {
+            dt.setTimeZone(tz);
+        }
         return dt;
     }
     if (JsonLd::isA<TrainTrip>(elem)) {
