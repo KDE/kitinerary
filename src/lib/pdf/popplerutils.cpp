@@ -73,11 +73,7 @@ QPainterPath PopplerUtils::convertPath(const GfxPath *path, Qt::FillRule fillRul
     qpp.setFillRule(fillRule);
 
     for (auto i = 0; i < path->getNumSubpaths(); ++i) {
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 83, 0)
         const auto subpath = path->getSubpath(i);
-#else
-        const auto subpath = const_cast<GfxPath*>(path)->getSubpath(i);
-#endif
         if (subpath->getNumPoints() > 0) {
             qpp.moveTo(subpath->getX(0), subpath->getY(0));
             for (auto j = 1;j < subpath->getNumPoints();) {

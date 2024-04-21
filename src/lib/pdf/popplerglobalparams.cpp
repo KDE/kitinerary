@@ -23,21 +23,12 @@ PopplerGlobalParams::PopplerGlobalParams()
         s_globalParams = std::make_unique<GlobalParams>();
     }
 
-#if KPOPPLER_VERSION <= QT_VERSION_CHECK(0, 82, 0)
-    m_prev.reset(globalParams);
-    globalParams = s_globalParams.get();
-#else
     std::swap(globalParams, m_prev);
     std::swap(s_globalParams, globalParams);
-#endif
 }
 
 PopplerGlobalParams::~PopplerGlobalParams()
 {
-#if KPOPPLER_VERSION <= QT_VERSION_CHECK(0, 82, 0)
-    globalParams = m_prev.release();
-#else
     std::swap(s_globalParams, globalParams);
     std::swap(globalParams, m_prev);
-#endif
 }

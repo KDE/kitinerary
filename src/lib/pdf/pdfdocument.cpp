@@ -22,6 +22,7 @@
 #include <PDFDoc.h>
 #include <PDFDocEncoding.h>
 #include <Stream.h>
+#include <UTF.h>
 
 #include <cmath>
 
@@ -41,11 +42,7 @@ void PdfPagePrivate::load()
     const auto pageRect = m_doc->m_popplerDoc->getPage(m_pageNum + 1)->getCropBox();
     std::unique_ptr<GooString> s(device.getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
 
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     m_text = QString::fromUtf8(s->c_str());
-#else
-    m_text = QString::fromUtf8(s->getCString());
-#endif
     m_images = std::move(device.m_images);
     for (auto it = m_images.begin(); it != m_images.end(); ++it) {
         (*it).d->m_page = this;
@@ -111,11 +108,7 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
     TextOutputDev device(nullptr, false, 0, false, false);
     d->m_doc->m_popplerDoc->displayPageSlice(&device, d->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
     std::unique_ptr<GooString> s(device.getText(l, t, r, b));
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
     return QString::fromUtf8(s->c_str());
-#else
-    return QString::fromUtf8(s->getCString());
-#endif
 }
 
 int PdfPage::imageCount() const
@@ -258,11 +251,7 @@ int PdfDocument::fileSize() const
     return d->m_pdfData.size();
 }
 
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(21, 8, 0)
 static QDateTime parsePdfDateTime(const GooString *str)
-#else
-static QDateTime parsePdfDateTime(const char *str)
-#endif
 {
     int year;
     int month;
@@ -299,13 +288,7 @@ QDateTime PdfDocument::creationTime() const
     if (!dt) {
         return {};
     }
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(21, 8, 0)
     return parsePdfDateTime(dt.get());
-#elif KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
-    return parsePdfDateTime(dt->c_str());
-#else
-    return parsePdfDateTime(dt->getCString());
-#endif
 }
 
 QDateTime PdfDocument::modificationTime() const
@@ -314,13 +297,7 @@ QDateTime PdfDocument::modificationTime() const
     if (!dt) {
         return {};
     }
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(21, 8, 0)
     return parsePdfDateTime(dt.get());
-#elif KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 72, 0)
-    return parsePdfDateTime(dt->c_str());
-#else
-    return parsePdfDateTime(dt->getCString());
-#endif
 }
 
 
@@ -330,7 +307,11 @@ QString gooStringToUnicode(const std::unique_ptr<GooString> &s)
         return {};
     }
 
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(24, 5, 0)
+    if (hasUnicodeByteOrderMark(s->toStr()) || hasUnicodeByteOrderMarkLE(s->toStr())) {
+#else
     if (s->hasUnicodeMarker() || s->hasUnicodeMarkerLE()) {
+#endif
         return QString::fromUtf16(reinterpret_cast<const char16_t*>(s->toStr().c_str()), s->toStr().size() / 2);
     } else {
         int len = 0;
@@ -376,13 +357,7 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
     std::unique_ptr<PdfDocument> doc(new PdfDocument(parent));
     doc->d->m_pdfData = data;
     // PDFDoc takes ownership of stream
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 58, 0)
     auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), Object());
-#else
-    Object obj;
-    obj.initNull();
-    auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), &obj);
-#endif
     std::unique_ptr<PDFDoc> popplerDoc(new PDFDoc(stream));
     if (!popplerDoc->isOk()) {
         qCWarning(Log) << "Got invalid PDF document!" << popplerDoc->getErrorCode();
