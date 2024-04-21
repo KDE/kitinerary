@@ -21,54 +21,6 @@
 
 using namespace KItinerary;
 
-// legacy image loading
-#if KPOPPLER_VERSION < QT_VERSION_CHECK(0, 69, 0)
-namespace KItinerary {
-class ImageLoaderOutputDevice : public OutputDev
-{
-public:
-    ImageLoaderOutputDevice(PdfImagePrivate *dd);
-
-    bool interpretType3Chars() override { return false; }
-    bool needNonText() override { return true; }
-    bool upsideDown() override { return false; }
-    bool useDrawChar() override { return false; }
-
-    void drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, int *maskColors, bool inlineImg) override;
-    QImage image() const { return m_image; }
-
-private:
-    PdfImagePrivate *d;
-    QImage m_image;
-};
-
-ImageLoaderOutputDevice::ImageLoaderOutputDevice(PdfImagePrivate* dd)
-    : d(dd)
-{
-}
-
-void ImageLoaderOutputDevice::drawImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, bool interpolate, int *maskColors, bool inlineImg)
-{
-    Q_UNUSED(state)
-    Q_UNUSED(height)
-    Q_UNUSED(width)
-    Q_UNUSED(interpolate)
-    Q_UNUSED(maskColors)
-    Q_UNUSED(inlineImg)
-
-    if (!colorMap || !colorMap->isOk() || !ref) {
-        return;
-    }
-
-    if (ref->isRef() && d->refNum() != ref->getRef().num) {
-        return;
-    }
-
-    m_image = d->load(str, colorMap);
-}
-}
-#endif
-
 static inline bool isColor(GfxRGB rgb)
 {
     enum { Threshold = 72 * 256 }; // GfxComp is stored as color value * 255
@@ -159,7 +111,6 @@ QImage PdfImagePrivate::load()
 
     PopplerGlobalParams gp;
 
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 69, 0)
     const auto xref = m_page->m_doc->m_popplerDoc->getXRef();
     const auto obj = xref->fetch(refNum(), refGen());
 
@@ -181,15 +132,6 @@ QImage PdfImagePrivate::load()
     }
 
     return {};
-#else
-    if (m_ref.m_type != PdfImageType::Image) {
-        return {};
-    }
-
-    std::unique_ptr<ImageLoaderOutputDevice> device(new ImageLoaderOutputDevice(this));
-    m_page->m_doc->m_popplerDoc->displayPageSlice(device.get(), m_page->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
-    return device->image();
-#endif
 }
 
 

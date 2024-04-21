@@ -47,11 +47,9 @@ void PdfExtractorOutputDevice::addRasterImage(GfxState *state, Object *ref, Stre
         pdfImg.d->m_ref = PdfImageRef(ref->getRef().num, ref->getRef().gen, type);
     }
 
-#if KPOPPLER_VERSION >= QT_VERSION_CHECK(0, 69, 0)
     if (colorMap) {
         pdfImg.d->m_colorMap.reset(colorMap->copy());
     }
-#endif
     pdfImg.d->m_sourceHeight = height;
     pdfImg.d->m_sourceWidth = width;
     pdfImg.d->m_width = width;
