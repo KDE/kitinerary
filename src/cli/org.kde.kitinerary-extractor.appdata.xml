@@ -22,13 +22,11 @@
   <name xml:lang="fi">KItineraryn komentorivijäsennin</name>
   <name xml:lang="fr">Extracteur en ligne de commandes de KItinerary</name>
   <name xml:lang="gl">Extractor de liña de ordes de KItinerary</name>
-  <name xml:lang="he">מחלץ KItinerary משורת הפקודה</name>
   <name xml:lang="ia">KItinerary extractor de commando in linea</name>
   <name xml:lang="id">KItinerary Command Line Extractor</name>
   <name xml:lang="it">Estrattore a riga di comando di KItinerary</name>
   <name xml:lang="ka">KItinerary ბრძანების სტრიქონის ექსტრაქტორი</name>
   <name xml:lang="ko">KItinerary 명령행 추출기</name>
-  <name xml:lang="lv">„KItinerary“ komandrindas izvilcējs</name>
   <name xml:lang="nl">Extractor van opdrachtregel van KItinerary</name>
   <name xml:lang="nn">Kommandolinje­basert uthentar for KItinerary</name>
   <name xml:lang="pl">Wydobywane danych z wiersza poleceń KItinerary</name>
@@ -45,7 +43,6 @@
   <name xml:lang="zh-CN">KItinerary 命令行导出工具</name>
   <name xml:lang="zh-TW">KItinerary 命令列取出工具</name>
   <summary>Command line reservation data extractor</summary>
-  <summary xml:lang="ar">مستخرج بيانات الحجوزات بسطر الأوامر</summary>
   <summary xml:lang="ca">Extractor de les dades de reserves mitjançant la línia d'ordres</summary>
   <summary xml:lang="ca-valencia">Extractor de les dades de reserves mitjançant la línia d'ordres</summary>
   <summary xml:lang="cs">Extraktor dat rezervací v příkazové řádce</summary>
@@ -55,12 +52,10 @@
   <summary xml:lang="eu">Komando-lerroko erreserbaren datu-erauzlea</summary>
   <summary xml:lang="fi">Komentorivin varaustietojäsennin</summary>
   <summary xml:lang="fr">Extracteur de données de réservation en ligne de commandes</summary>
-  <summary xml:lang="he">מחלץ נתוני הזמנות לשורת הפקודה</summary>
   <summary xml:lang="ia">Extractor de datos de reservation de commando in linea</summary>
   <summary xml:lang="it">Estrattore di dati di prenotazioni a riga di comando</summary>
   <summary xml:lang="ka">ბრძანების სტრიქონის რეზერვაციის მონაცემების ექსტრაქტორი</summary>
   <summary xml:lang="ko">명령행 예약 데이터 추출기</summary>
-  <summary xml:lang="lv">Komandrindas rezervācijas datu izvilcējs</summary>
   <summary xml:lang="nl">Gegevensextractor van reservering op de opdrachtregel</summary>
   <summary xml:lang="pl">Wydobywane danych o rezerwacji z wiersza poleceń</summary>
   <summary xml:lang="pt-BR">Extrator em linha de comando de dados de reservas</summary>
@@ -87,13 +82,11 @@
     <p xml:lang="fi">Komentorivijäsennin varaustiedoille kolmannen osapuolen sovelluksia varten.</p>
     <p xml:lang="fr">Extracteur en ligne de commandes pour les données d'itinéraires, pour leur intégration dans des applications tierces.</p>
     <p xml:lang="gl">Extractor de liña de ordes de datos de itinerarios, para integrar con aplicacións de terceiros.</p>
-    <p xml:lang="he">מחלץ משורת הפקודה לנתוני הזמנות, לשילוב ביישומי צד־שלישי.</p>
     <p xml:lang="ia">Commando de linea extractor  per datos de itinerario, de integrar in applications de tertie partes.</p>
     <p xml:lang="id">Pengekstrak baris data untuk data rencana perjalanan, untuk pengintegrasian ke dalam aplikasi pihak ketiga.</p>
     <p xml:lang="it">Estrattore a riga di comando per dati di itinerari, per l'integrazione con applicazioni di terze parti.</p>
     <p xml:lang="ka">მარშრუტის მონაცემების გამოტანის პროგრამა ბრძანების სტრიქონისთვის, მესამე პირების მიერ დაწერილ პროგრამებში ინტეგრაციისთვის.</p>
     <p xml:lang="ko">외부 앱에 통합할 수 있는 명령행 여행 정보 추출기입니다.</p>
-    <p xml:lang="lv">Komandrindas ceļojumu datu izvilcējs integrācijas trešo pušu programmās</p>
     <p xml:lang="nl">Extractor van reisgegevens op de opdrachtregel, voor integratie in toepassingen van derden.</p>
     <p xml:lang="nn">Kommandolinje­basert uthentar for reiserute­data, for integrasjon med tredjeparts­program.</p>
     <p xml:lang="pl">Wydobywane danych z wiersza poleceń dla planu podróży, do zszywania z aplikacjami osób trzecich.</p>
