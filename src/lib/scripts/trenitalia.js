@@ -45,7 +45,7 @@ function parseSsb(ssb, node) {
     return res;
 }
 
-function parsePdf(pdf, node, triggerNode) {
+function parsePdf(pdf, node) {
     let reservations = [];
 
     for (let page_index = 0; page_index < pdf.pages.length; page_index++) {
@@ -75,14 +75,17 @@ function parsePdf(pdf, node, triggerNode) {
         const arr = midHeaderText.match(/(?:Stazione di Arrivo|Arrival station|Ankunft Bahnhof|Gare d'arrivée)(?:\/To)?\n+(.*)\n/);
         res.reservationFor.arrivalStation.name = arr[1];
 
+        const barcodes = node.findChildNodes({ scope: "Descendants", mimeType: "internal/era-ssb", field: "issuerCode", match: "83" }).concat(node.findChildNodes({ scope: "Descendants", mimeType: "internal/uic9183", field: "carrierId", match: "83" })).filter((barcode) => barcode.location == page_index);
+
         const passengerColumn = page.textInRect(0.0, 0.3, 0.27, 1.0);
-        const passengers = passengerColumn.match(/(?:Passenger Name|Nome Passeggero|Nom du Passager)/);
         var offset = 0;
         let seatOffset = 0;
-
-        for (let j = 0; j < passengers.length; j++) {
+        let j = 0;
+        while(true) {
             let personalRes = JsonLd.clone(res);
             var name = passengerColumn.substr(offset).match(/(?:Passenger Name|Nome Passeggero|Nom du Passager)(?:\/Passenger\n *name)?.*\n(?:    .*\n)* *((?:\w+|\-\-).*?)(?:  |\n)/);
+            if (!name)
+                break;
             offset += name.index + name[0].length;
             if (name[1] !== "--") {
                 personalRes.underName.name = name[1];
@@ -101,6 +104,15 @@ function parsePdf(pdf, node, triggerNode) {
                 if (personalRes.reservedTicket.ticketedSeat.seatSection == seat[1] && !personalRes.reservedTicket.ticketedSeat.seatNumber) {
                     personalRes.reservedTicket.ticketedSeat.seatNumber = seat[2];
                 }
+            }
+
+            if (j < barcodes.length) {
+                if (barcodes[j].result[0]['@type'] == 'TrainReservation') {
+                    personalRes = JsonLd.apply(barcodes[j].result[0], personalRes);
+                } else {
+                    personalRes.reservedTicket = JsonLd.apply(barcodes[j].result[0], personalRes.reservedTicket);
+                }
+                ++j;
             }
 
             ExtractorEngine.extractPrice(text, personalRes);
