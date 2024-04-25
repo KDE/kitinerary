@@ -9,8 +9,8 @@ POPPLER_VERSION="poppler-24.02.0"
 LIBICAL_VERSION="v3.0.17"
 LIBXML_VERSION="v2.12.2"
 ZXING_VERSION="v2.1.0"
-KF_VERSION="v6.0.0"
-GEAR_VERSION="master"
+KF_VERSION="v6.1.0"
+GEAR_VERSION="release/24.05"
 
 function build_cmake_module() {
     local repo=$1

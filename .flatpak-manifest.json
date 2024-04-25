@@ -158,7 +158,7 @@
                 {
                     "type": "git",
                     "url": "https://invent.kde.org/pim/kpkpass",
-                    "branch": "master"
+                    "branch": "release/24.05"
                 }
             ],
             "cleanup": [
@@ -181,7 +181,7 @@
                 {
                     "type": "git",
                     "url": "https://invent.kde.org/pim/kmime",
-                    "branch": "master"
+                    "branch": "release/24.05"
                 }
             ],
             "cleanup": [
