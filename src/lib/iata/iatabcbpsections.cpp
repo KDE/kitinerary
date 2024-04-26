@@ -8,6 +8,7 @@
 #include "iatabcbpconstants_p.h"
 #include "logging.h"
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 using namespace KItinerary::IataBcbpConstants;
 
@@ -52,7 +53,7 @@ bool IataBcbpUniqueConditionalSection::isValid() const
 {
     if (m_data.size() >= 11) {
         // issue date
-        if (std::any_of(m_data.begin() + 8, m_data.begin() + 11, [](auto c) { return !c.isDigit() && c != QLatin1Char(' '); }) || dayOfIssue() > 366) {
+        if (std::any_of(m_data.begin() + 8, m_data.begin() + 11, [](auto c) { return !c.isDigit() && c != ' '_L1; }) || dayOfIssue() > 366) {
             return false;
         }
     }
@@ -93,7 +94,7 @@ bool IataBcbpRepeatedMandatorySection::isValid() const
 
     return isValidAirportCode(m_data.mid(7, 3))
         && isValidAirportCode(m_data.mid(10, 3))
-        && std::all_of(m_data.begin() + 21, m_data.begin() + 24, [](auto c) { return c.isDigit() || c == QLatin1Char(' '); })
+        && std::all_of(m_data.begin() + 21, m_data.begin() + 24, [](auto c) { return c.isDigit() || c == ' '_L1; })
         && dayOfFlight() <= 366;
 }
 

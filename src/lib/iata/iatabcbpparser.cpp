@@ -17,17 +17,17 @@
 
 #include <QVariant>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
-static QString stripLeadingZeros(const QString &s)
+[[nodiscard]] static QString stripLeadingZeros(const QString &s)
 {
-    const auto it = std::find_if(s.begin(), s.end(), [](const QChar &c) { return c != QLatin1Char('0'); });
+    const auto it = std::find_if(s.begin(), s.end(), [](const QChar &c) { return c != '0'_L1; });
     const auto d = std::distance(s.begin(), it);
     return s.mid(d);
 }
 
-QList<QVariant> IataBcbpParser::parse(const QString &message,
-                                      const QDateTime &externalIssueDate) {
+QList<QVariant> IataBcbpParser::parse(const QString &message, const QDateTime &externalIssueDate) {
     IataBcbp bcbp(message);
     if (!bcbp.isValid()) {
         return {};
@@ -46,15 +46,14 @@ QList<QVariant> IataBcbpParser::parse(const QString &message,
         return {};
     }
 
-    if (std::all_of(documentNumber.begin(), documentNumber.end(), [](QChar c) { return c == QLatin1Char('0'); })) {
+    if (std::all_of(documentNumber.begin(), documentNumber.end(), [](QChar c) { return c == '0'_L1; })) {
         return {};
     }
 
-    return airlineNumericCode + QLatin1Char(' ') + documentNumber;
+    return airlineNumericCode + ' '_L1 + documentNumber;
 }
 
-QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp,
-                                      const QDateTime &contextDate) {
+QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDateTime &contextDate) {
     const auto count = bcbp.uniqueMandatorySection().numberOfLegs();
     const auto issueDate = bcbp.uniqueConditionalSection().dateOfIssue(contextDate);
 
@@ -64,7 +63,7 @@ QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp,
     Person person;
     {
         const auto fullName = bcbp.uniqueMandatorySection().passengerName();
-        const auto idx = fullName.indexOf(QLatin1Char('/'));
+        const auto idx = fullName.indexOf('/'_L1);
         if (idx > 0 && idx < fullName.size() - 1) {
             person.setFamilyName(fullName.left(idx));
             person.setGivenName(fullName.mid(idx + 1));
@@ -99,7 +98,7 @@ QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp,
         res.setUnderName(person);
 
         Ticket ticket;
-        ticket.setTicketToken(QStringLiteral("aztecCode:") + bcbp.rawData());
+        ticket.setTicketToken("aztecCode:"_L1 + bcbp.rawData());
         const auto rcs = bcbp.repeatedConditionalSection(i);
         ticket.setTicketNumber(ticketNumber(rcs.airlineNumericCode(), rcs.documentNumber()));
         res.setReservedTicket(ticket);

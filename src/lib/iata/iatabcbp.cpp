@@ -12,6 +12,7 @@
 
 #include <cctype>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 using namespace KItinerary::IataBcbpConstants;
 
@@ -19,7 +20,7 @@ IataBcbp::IataBcbp() = default;
 
 IataBcbp::IataBcbp(const QString& data)
 {
-    if (data.size() < MinimumViableSize || data[0] != QLatin1Char('M') || !data[1].isDigit()) {
+    if (data.size() < MinimumViableSize || data[0] != 'M'_L1 || !data[1].isDigit()) {
         return;
     }
     const auto trimmed = QStringView(data).trimmed(); // tolerance against e.g. trailing newlines
@@ -67,7 +68,7 @@ IataBcbpUniqueMandatorySection IataBcbp::uniqueMandatorySection() const
 bool IataBcbp::hasUniqueConditionalSection() const
 {
     return (m_data.size() > (UniqueMandatorySize + RepeatedMandatorySize))
-        && (m_data.at(UniqueMandatorySize + RepeatedMandatorySize) == QLatin1Char('>'))
+        && (m_data.at(UniqueMandatorySize + RepeatedMandatorySize) == '>'_L1)
         && repeatedMandatorySection(0).variableFieldSize() > MinimumUniqueConditionalSize;
 }
 
@@ -125,7 +126,7 @@ bool IataBcbp::hasSecuritySection() const
     for (auto i = 0; i < uniqueMandatorySection().numberOfLegs(); ++i) {
         offset += RepeatedMandatorySize + IataBcbpRepeatedMandatorySection(QStringView(m_data).mid(offset)).variableFieldSize();
     }
-    return offset < m_data.size() && m_data[offset] == QLatin1Char('^');
+    return offset < m_data.size() && m_data[offset] == '^'_L1;
 }
 
 IataBcbpSecuritySection IataBcbp::securitySection() const
@@ -149,7 +150,7 @@ bool IataBcbp::maybeIataBcbp(const QByteArray &data)
 
 bool IataBcbp::maybeIataBcbp(const QString &data)
 {
-    return data.size() >= MinimumViableSize && data[0] == QLatin1Char('M') && data[1].isDigit();
+    return data.size() >= MinimumViableSize && data[0] == 'M'_L1 && data[1].isDigit();
 }
 
 #include "moc_iatabcbp.cpp"

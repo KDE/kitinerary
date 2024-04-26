@@ -30,28 +30,28 @@ public:
     explicit IataBcbp(const QString &data);
     ~IataBcbp();
 
-    bool isValid() const;
+    [[nodiscard]] bool isValid() const;
 
-    IataBcbpUniqueMandatorySection uniqueMandatorySection() const;
-    bool hasUniqueConditionalSection() const;
-    IataBcbpUniqueConditionalSection uniqueConditionalSection() const;
+    [[nodiscard]] IataBcbpUniqueMandatorySection uniqueMandatorySection() const;
+    [[nodiscard]] bool hasUniqueConditionalSection() const;
+    [[nodiscard]] IataBcbpUniqueConditionalSection uniqueConditionalSection() const;
 
     /** Mandatory section of @p leg. */
-    Q_INVOKABLE KItinerary::IataBcbpRepeatedMandatorySection repeatedMandatorySection(int leg) const;
+    Q_INVOKABLE [[nodiscard]] KItinerary::IataBcbpRepeatedMandatorySection repeatedMandatorySection(int leg) const;
     /** Conditional (optional) section of @p leg. */
-    Q_INVOKABLE KItinerary::IataBcbpRepeatedConditionalSection repeatedConditionalSection(int leg) const;
+    Q_INVOKABLE [[nodiscard]] KItinerary::IataBcbpRepeatedConditionalSection repeatedConditionalSection(int leg) const;
     /** Airline use (non-standard/vendor specific) section of @p leg. */
-    Q_INVOKABLE QString airlineUseSection(int leg) const;
+    Q_INVOKABLE [[nodiscard]] QString airlineUseSection(int leg) const;
 
-    bool hasSecuritySection() const;
-    IataBcbpSecuritySection securitySection() const;
+    [[nodiscard]] bool hasSecuritySection() const;
+    [[nodiscard]] IataBcbpSecuritySection securitySection() const;
 
     /** Raw data, for generating barcodes out of this again. */
-    QString rawData() const;
+    [[nodiscard]] QString rawData() const;
 
     /** Fast checks whether this might be an IATA BCBP. */
-    static bool maybeIataBcbp(const QByteArray &data);
-    static bool maybeIataBcbp(const QString &data);
+    [[nodiscard]] static bool maybeIataBcbp(const QByteArray &data);
+    [[nodiscard]] static bool maybeIataBcbp(const QString &data);
 
 private:
     QString m_data;

@@ -17,23 +17,23 @@ namespace KItinerary {
 class KITINERARY_EXPORT IataBcbpSectionBase
 {
 protected:
-    QString readString(int offset, int length) const;
-    int readNumericValue(int offset, int length, int base) const;
+    [[nodiscard]] QString readString(int offset, int length) const;
+    [[nodiscard]] int readNumericValue(int offset, int length, int base) const;
 
     QStringView m_data;
 };
 
 #define IATA_STR_PROPERTY(Name, Start, Length) \
 public: \
-    inline QString Name() const { return readString(Start, Length); } \
+    [[nodiscard]] inline QString Name() const { return readString(Start, Length); } \
     Q_PROPERTY(QString Name READ Name)
 #define IATA_NUM_PROPERTY(Name, Start, Length) \
 public: \
-    inline int Name() const { return readNumericValue(Start, Length, 10); } \
+    [[nodiscard]] inline int Name() const { return readNumericValue(Start, Length, 10); } \
     Q_PROPERTY(int Name READ Name)
 #define IATA_HEX_PROPERTY(Name, Start, Length) \
 public: \
-    inline int Name() const { return readNumericValue(Start, Length, 16); } \
+    [[nodiscard]] inline int Name() const { return readNumericValue(Start, Length, 16); } \
     Q_PROPERTY(int Name READ Name)
 
 
@@ -49,7 +49,7 @@ class KITINERARY_EXPORT IataBcbpUniqueMandatorySection : protected IataBcbpSecti
 public:
     IataBcbpUniqueMandatorySection() = default;
     explicit IataBcbpUniqueMandatorySection(QStringView data);
-    bool isValid() const;
+    [[nodiscard]] bool isValid() const;
 };
 
 /** Unique conditional (optional) section of an IATA BCBP. */
@@ -72,9 +72,9 @@ class KITINERARY_EXPORT IataBcbpUniqueConditionalSection : protected IataBcbpSec
 public:
     IataBcbpUniqueConditionalSection() = default;
     explicit IataBcbpUniqueConditionalSection(QStringView data);
-    bool isValid() const;
+    [[nodiscard]] bool isValid() const;
 
-    Q_INVOKABLE QDate dateOfIssue(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE [[nodiscard]] QDate dateOfIssue(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 };
 
 /** Repeated mandatory sections of an IATA BCBP, occurs once per leg. */
@@ -96,13 +96,13 @@ class KITINERARY_EXPORT IataBcbpRepeatedMandatorySection : protected IataBcbpSec
 public:
     IataBcbpRepeatedMandatorySection() = default;
     explicit IataBcbpRepeatedMandatorySection(QStringView data);
-    bool isValid() const;
+    [[nodiscard]] bool isValid() const;
 
     /** Date of the flight.
      *  @param contextDate A date before the flight to determine
      *  the full year which is not specified in the pass itself.
      */
-    Q_INVOKABLE QDate dateOfFlight(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE [[nodiscard]] QDate dateOfFlight(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 };
 
 /** Conditional (optional) sections of an IATA BCBP, occurs once per leg. */
