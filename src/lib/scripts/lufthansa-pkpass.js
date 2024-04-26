@@ -10,6 +10,8 @@ function main(pass, node)
     if (res["@type"] === "FlightReservation") {
         res.reservationFor.departureAirport.name = pass.field["origin"].label;
         res.reservationFor.arrivalAirport.name = pass.field["destination"].label;
+        if (pass.field["group"])
+            res.boardingGroup = pass.field["group"].value;
     } else {
         res.reservationFor.departureStation.name = pass.field["origin"].label;
         res.reservationFor.arrivalStation.name = pass.field["destination"].label;
@@ -18,10 +20,13 @@ function main(pass, node)
     const back = pass.backFields;
     const cancelLink = back.find(item => item.key === "cancel");
     if (cancelLink) {
-        const cancelUrl = cancelLink.value.match(/https:\/\/mobile.lufthansa.com\/service\/checkin\?[A-Z0-9=&]*[A-Z0-9=&]/i);
+        let cancelUrl = cancelLink.value.match(/https:\/\/mobile.lufthansa.com\/service\/checkin\?[A-Z0-9=&]*[A-Z0-9=&]/i);
+        if (!cancelUrl) {
+            cancelUrl = cancelLink.value.match(/https:\/\/once.lufthansa.com\/[^"]*/i);
+        }
         if (cancelUrl) {
             res.potentialAction = JsonLd.newObject("CancelAction");
-            res.potentialAction.url = cancelUrl[1];
+            res.potentialAction.url = cancelUrl[0];
         }
     }
 
