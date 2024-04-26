@@ -4,6 +4,8 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "testhelpers.h"
+
 #include "../lib/iata/iatabcbp.h"
 #include "../lib/iata/iatabcbpparser.h"
 
@@ -20,6 +22,7 @@
 #include <QStandardPaths>
 #include <QTest>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 class BcbpParserTest : public QObject
@@ -56,6 +59,9 @@ private Q_SLOTS:
 
         // Qatar claiming zero-length field sizes
         QTest::newRow("zero size conditional") << QStringLiteral("M1DOE/JANE            EXXX007 MXPDOHQR 0128 256Y042F0023 100>2180  0255BBR              2963456000789980                            0") << QStringLiteral("qatar-zero-size-conditional-section");
+
+        // LH rail ticket
+        QTest::newRow("rail") << u"M1DRAGON/KONQI DR     EXXX007 XHJFRALH 3489 129M092H0002 359>6180WM4128BLH              2A22012345678900 LH                        N*30600000K05     "_s << u"rail"_s;
     }
 
     void testParserValid()
@@ -105,13 +111,7 @@ private Q_SLOTS:
         const auto res = IataBcbpParser::parse(bcbp, QDateTime({2018, 4, 2}, {}));
         const auto resJson = JsonLdDocument::toJson(res);
 
-        if (refArray != resJson) {
-            qWarning().noquote() << QJsonDocument(resJson).toJson();
-            QFile failFile(f.fileName() + QLatin1StringView(".fail"));
-            QVERIFY(failFile.open(QFile::WriteOnly));
-            failFile.write(QJsonDocument(resJson).toJson());
-        }
-        QCOMPARE(resJson, refArray);
+        QVERIFY(Test::compareJson(f.fileName(), resJson, refArray));
     }
 
     void testParserInvalid_data()

@@ -1,0 +1,36 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "identifier": "iata:FRA",
+                "name": "FRA"
+            },
+            "departureDay": "2014-05-09",
+            "departureStation": {
+                "@type": "TrainStation",
+                "identifier": "iata:XHJ",
+                "name": "XHJ"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "iata:LH"
+            }
+        },
+        "reservationNumber": "XXX007",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketNumber": "220 1234567890",
+            "ticketToken": "aztecCode:M1DRAGON/KONQI DR     EXXX007 XHJFRALH 3489 129M092H0002 359>6180WM4128BLH              2A22012345678900 LH                        N*30600000K05     "
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DRAGON",
+            "givenName": "KONQI DR"
+        }
+    }
+]

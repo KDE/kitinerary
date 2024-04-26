@@ -1,0 +1,43 @@
+IATA Barcoded Boarding Pass
+formatCode: M
+numberOfLegs: 1
+passengerName: DRAGON/KONQI DR
+electronicTicketIndicator: E
+version: 6
+fieldSize: 24
+passengerDescription: 0
+sourceOfCheckin: W
+sourceOfBoardingPassIssuance: M
+yearOfIssue: 4
+dayOfIssue: 128
+documentType: B
+airlineDesignatorOfBoardingPassIssuer: LH
+baggageTagLicensePlateNumber1: 
+baggageTagLicensePlateNumber2: 
+baggageTagLicensePlateNumber3: 
+Date of issue: 2014-05-08
+Leg 1
+  operatingCarrierPNRCode: XXX007
+  fromCityAirportCode: XHJ
+  toCityAirportCode: FRA
+  operatingCarrierDesignator: LH
+  flightNumber: 3489
+  dayOfFlight: 129
+  compartmentCode: M
+  seatNumber: 092H
+  checkinSequenceNumber: 0002
+  passengerStatus: 3
+  variableFieldSize: 89
+  conditionalFieldSize: 42
+  airlineNumericCode: 220
+  documentNumber: 1234567890
+  selecteeIndicator: 0
+  internationalDocumentVerification: 
+  marketingCarrierDesignator: LH
+  frequentFlyerAirlineDesignator: 
+  frequenFlyerNumber: 
+  idAdIndicator: 
+  freeBaggageAllowance: 
+  fastTrack: N
+  Airline use section: *30600000K05     
+  Date of flight: 2014-05-09
