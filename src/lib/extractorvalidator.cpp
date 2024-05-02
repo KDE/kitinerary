@@ -52,7 +52,9 @@ ExtractorValidator::ExtractorValidator() :
     d(new ExtractorValidatorPrivate)
 {}
 
+ExtractorValidator::ExtractorValidator(ExtractorValidator&&) noexcept = default;
 ExtractorValidator::~ExtractorValidator() = default;
+ExtractorValidator& ExtractorValidator::operator=(ExtractorValidator&&) noexcept = default;
 
 void ExtractorValidator::setAcceptedTypes(std::vector<const QMetaObject*> &&accptedTypes)
 {

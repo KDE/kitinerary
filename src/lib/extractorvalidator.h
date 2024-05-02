@@ -28,13 +28,15 @@ public:
     ExtractorValidator();
     ~ExtractorValidator();
     ExtractorValidator(const ExtractorValidator&) = delete;
+    ExtractorValidator(ExtractorValidator&&) noexcept;
     ExtractorValidator& operator=(const ExtractorValidator&) = delete;
+    ExtractorValidator& operator=(ExtractorValidator&&) noexcept;
 
     /** Checks if the given element is valid.
      *  This will accept both Reservation object and things
      *  that can be reserved as top-level objects.
      */
-    bool isValidElement(const QVariant &elem) const;
+    [[nodiscard]] bool isValidElement(const QVariant &elem) const;
 
     /** Sets the list of supported top-level types that should be accepted.
      *  Providing an empty set of types will accept all top-level types.
