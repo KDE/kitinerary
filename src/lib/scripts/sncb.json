@@ -42,5 +42,18 @@
         "function": "extractFullImage",
         "mimeType": "internal/qimage",
         "script": "generic.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "carrierId",
+                "match": "1088",
+                "mimeType": "internal/uic9183",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseRct2",
+        "mimeType": "internal/uic9183",
+        "script": "sncb.js"
     }
 ]

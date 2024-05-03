@@ -55,3 +55,12 @@ function parseInternationalPdf(pdf, node, triggerNode) {
     }
     return reservations;
 }
+
+function parseRct2(uic, node) {
+    const text = uic.ticketLayout.text(9, 0, 72, 1);
+    const train = text.match(/(\d+) (\S.*\S) - (\S.*\S) (\d{2}\/\d{2}\/\d{4} \d\d:\d\d)/);
+    let res = node.result[0];
+    res.reservationFor.trainNumber = train[1];
+    res.reservationFor.departureTime = JsonLd.toDateTime(train[4], "dd/MM/yyyy hh:mm", "be");
+    return res;
+}
