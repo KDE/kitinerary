@@ -33,9 +33,12 @@ function extractQrTicket(text) {
     const arr = text.match(/To:(.*) - (.*),/);
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalStation.identifier = 'ir:' + arr[2];
-    const dt = text.match(/Scheduled Departure:(\d{2}:\d{2}.*),/);
+    let dt = text.match(/Scheduled Departure:(\d{2}:\d{2}.*),/);
+    if (!dt) {
+        dt = text.match(/Scheduled Departure:(\d{2}-.+?-\d{4} \d{2}:\d{2}) *,/);
+    }
     if (dt) {
-        res.reservationFor.departureTime = JsonLd.toDateTime(dt[1], "hh:mm dd-MMM-yyyy", "en");
+        res.reservationFor.departureTime = JsonLd.toDateTime(dt[1], ["hh:mm dd-MMM-yyyy", "dd-MMM-yyyy hh:mm"], "en");
     } else {
         res.reservationFor.departureDay = JsonLd.toDateTime(text.match(/Date Of Journey:(.*),/)[1], "dd-MMM-yyyy", "en");
     }
