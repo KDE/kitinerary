@@ -8,7 +8,7 @@ function extractInternationalPdf(pdf, node, barcode) {
     let reservations = [];
     let idx = 0;
     while (true) {
-        const leg = text.substr(idx).match(/(\d{2}\.\d{2} \d{2}:\d{2}) +(\S.*?\S)  +(\S.*?\S)  +(\d{2}\.\d{2} \d{2}:\d{2}) .*  (\d+) +(\d+)  +(\S.*)\n/);
+        const leg = text.substr(idx).match(/(\d{2}\.\d{2} \d{2}:\d{2}) +(\S.*?\S)  +(\S.*?\S) +(\d{2}\.\d{2} \d{2}:\d{2}) .*  (\d+) +(\d+)  +(\S.*)\n/);
         if (!leg)
             break;
         idx += leg.index + leg[0].length;
