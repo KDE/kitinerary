@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "carrierId",
+            "match": "1153",
+            "mimeType": "internal/uic9183",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractInternationalPdf",
+    "mimeType": "application/pdf",
+    "script": "cfr.js"
+}
