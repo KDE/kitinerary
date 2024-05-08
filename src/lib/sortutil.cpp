@@ -87,6 +87,14 @@ QDateTime SortUtil::startDateTime(const QVariant &elem)
         return elem.value<Event>().startDate();
     }
 
+    // tickets/passes
+    if (JsonLd::isA<Ticket>(elem)) {
+        return elem.value<Ticket>().validFrom();
+    }
+    if (JsonLd::isA<ProgramMembership>(elem)) {
+        return elem.value<ProgramMembership>().validFrom();
+    }
+
     return {};
 }
 
@@ -145,6 +153,14 @@ QDateTime SortUtil::endDateTime(const QVariant &elem)
     }
     if (JsonLd::isA<BoatTrip>(elem)) {
         return elem.value<BoatTrip>().arrivalTime();
+    }
+
+    // tickets/passes
+    if (JsonLd::isA<Ticket>(elem)) {
+        return elem.value<Ticket>().validUntil();
+    }
+    if (JsonLd::isA<ProgramMembership>(elem)) {
+        return elem.value<ProgramMembership>().validUntil();
     }
 
     return {};
