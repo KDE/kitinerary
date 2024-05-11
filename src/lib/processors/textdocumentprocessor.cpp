@@ -15,15 +15,13 @@
 #include <algorithm>
 #include <cctype>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 bool TextDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-  return std::none_of(encodedData.begin(), encodedData.end(),
-                      [](unsigned char c) {
-                        return std::iscntrl(c) && !std::isspace(c);
-                      }) ||
-         fileName.endsWith(QLatin1StringView(".txt"), Qt::CaseInsensitive);
+    return std::none_of(encodedData.begin(), encodedData.end(), [](unsigned char c) { return std::iscntrl(c) && !std::isspace(c); })
+        || fileName.endsWith(".txt"_L1, Qt::CaseInsensitive);
 }
 
 ExtractorDocumentNode TextDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
