@@ -21,7 +21,7 @@ namespace DocumentUtil
     KITINERARY_EXPORT QString idForContent(const QByteArray &data);
 
     /** Determine a document identifier for a Apple Wallet pass. */
-    QString idForPkPass(const QString &passTypeIdentifier, const QString &serialNumber);
+    KITINERARY_EXPORT QString idForPkPass(const QString &passTypeIdentifier, const QString &serialNumber);
 
     /** Add a document id to the object @p obj.
      *  @returns @c true if the document id wasn't present yet and the object changed, @p false otherwise.
