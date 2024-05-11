@@ -14,6 +14,7 @@ namespace KItinerary {
 class BinaryDocumentProcessor : public ExtractorDocumentProcessor
 {
 public:
+    [[nodiscard]] bool canHandleData(const QByteArray &encodedData, QStringView fileName) const override;
     ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
     bool matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const override;
     QJSValue contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const override;

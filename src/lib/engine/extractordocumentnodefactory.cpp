@@ -105,7 +105,9 @@ void ExtractorDocumentNodeFactoryStatic::registerProcessor(std::unique_ptr<Extra
     for (const auto mt : aliasMimeTypes) {
         m_aliasMap.insert(mt.toString(), canonicalMimeType.isEmpty() ? fallbackMimeType.toString() : canonicalMimeType.toString());
     }
-    insertProcessor(processor.get(), fallbackMimeType, m_fallbackProbeProcessors);
+    if (!fallbackMimeType.isEmpty()) { // priorioty order matters for fallbacks, don't sort them!
+        m_fallbackProbeProcessors.push_back({ fallbackMimeType.toString(), processor.get() });
+    }
     insertProcessor(processor.get(), fallbackMimeType, m_mimetypeProcessorMap);
     processorPool.push_back(std::move(processor));
 }
@@ -169,11 +171,19 @@ ExtractorDocumentNode ExtractorDocumentNodeFactory::createNode(const QByteArray 
         return node;
     }
 
-    QString autoDetectedMimeType;
     if (mimeType.isEmpty()) {
-        // let processors check themselves if they support this data
+        QMimeDatabase db;
+        QString autoDetectedMimeType;
+        if (fileName.isEmpty()) {
+            autoDetectedMimeType = db.mimeTypeForData(data).name();
+        } else {
+            autoDetectedMimeType = db.mimeTypeForFileNameAndData(fileName.toString(), data).name();
+        }
+        mimeType = d->s->resolveAlias(autoDetectedMimeType);
+
+        // let processors check themselves if they support this data, or whether the auto-detected mimetype matches
         for (const auto &p : d->s->m_probeProcessors) {
-            if (p.processor->canHandleData(data, fileName)) {
+            if (p.processor->canHandleData(data, fileName) || (!mimeType.isEmpty() && p.mimeType == mimeType)) {
                 auto node = p.processor->createNodeFromData(data);
                 if (node.content().isNull()) {
                     continue;
@@ -184,7 +194,8 @@ ExtractorDocumentNode ExtractorDocumentNodeFactory::createNode(const QByteArray 
                 return node;
             }
         }
-        // same again with the basic types that ultimately will accept anything
+
+        // try the basic types that ultimately will accept anything
         for (const auto &p : d->s->m_fallbackProbeProcessors) {
             if (p.processor->canHandleData(data, fileName)) {
                 auto node = p.processor->createNodeFromData(data);
@@ -198,14 +209,8 @@ ExtractorDocumentNode ExtractorDocumentNodeFactory::createNode(const QByteArray 
             }
         }
 
-        // if none felt responsible, try the generic mimetype detection
-        QMimeDatabase db;
-        if (fileName.isEmpty()) {
-            autoDetectedMimeType = db.mimeTypeForData(data).name();
-        } else {
-            autoDetectedMimeType = db.mimeTypeForFileNameAndData(fileName.toString(), data).name();
-        }
-        mimeType = autoDetectedMimeType;
+        // unreachable as application/octet-stream will always match
+        return {};
     }
 
     mimeType = d->s->resolveAlias(mimeType);

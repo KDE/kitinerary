@@ -12,6 +12,11 @@
 
 using namespace KItinerary;
 
+bool BinaryDocumentProcessor::canHandleData([[maybe_unused]] const QByteArray &data, [[maybe_unused]] QStringView fileName) const
+{
+    return true;
+}
+
 ExtractorDocumentNode BinaryDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const
 {
     ExtractorDocumentNode node;
