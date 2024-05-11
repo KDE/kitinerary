@@ -344,6 +344,17 @@ QList<QString> File::listCustomData(QStringView scope) const
     return res;
 }
 
+bool File::hasCustomData(QStringView scope, const QString &id) const
+{
+ Q_ASSERT(d->zipFile);
+    const auto dir = dynamic_cast<const KArchiveDirectory *>(d->zipFile->directory()->entry("custom/"_L1 + scope));
+    if (!dir) {
+        return false;
+    }
+
+    return dir->file(id);
+}
+
 QByteArray File::customData(QStringView scope, const QString &id) const
 {
     Q_ASSERT(d->zipFile);

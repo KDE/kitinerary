@@ -99,6 +99,8 @@ public:
 
     /** List custom data in the given namespace. */
     [[nodiscard]] QList<QString> listCustomData(QStringView scope) const;
+    /** Returns @c true if custom data with the given id exists in @p scope. */
+    [[nodiscard]] bool hasCustomData(QStringView scope, const QString &id) const;
     /** Returns the custom data in the given namespace and with the given id. */
     [[nodiscard]] QByteArray customData(QStringView scope, const QString &id) const;
     /** Adds a custom data element with identifier @p id in to namespace @p scope. */
