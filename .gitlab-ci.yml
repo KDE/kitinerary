@@ -36,3 +36,4 @@ static-extractor:
     paths:
      - build/bin/kitinerary-extractor
      - build/share
+      - /gitlab-templates/cppcheck.yml
