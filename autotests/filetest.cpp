@@ -20,6 +20,7 @@
 #include <QTemporaryFile>
 #include <QTest>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 class FileTest : public QObject
@@ -163,6 +164,14 @@ private Q_SLOTS:
         QFETCH(QString, in);
         QFETCH(QString, out);
         QCOMPARE(File::normalizeDocumentFileName(in), out);
+    }
+
+    void testPkPassId()
+    {
+        const auto passId = File::passId(u"org.kde.pass"_s, u"123456/7890"_s);
+        const auto [passTypeIdentifier, serialNum] = File::decodePassId(passId);
+        QCOMPARE(passTypeIdentifier, "org.kde.pass"_L1);
+        QCOMPARE(serialNum, "123456/7890"_L1);
     }
 };
 

@@ -73,6 +73,12 @@ public:
     /** Returns the pass identifier used in here for @p pass. */
     [[nodiscard]] static QString passId(const KPkPass::Pass *pass);
     [[nodiscard]] static QString passId(const QString &passTypeIdenfier, const QString &serialNumber);
+    /** Decodes an identifier returned by passId() again. */
+    struct PkPassIdentifier {
+        QString passTypeIdenfier;
+        QString serialNumber;
+    };
+    [[nodiscard]] static PkPassIdentifier decodePassId(QStringView);
 
     /** Lists all pkpass files in this file. */
     [[nodiscard]] QList<QString> passes() const;

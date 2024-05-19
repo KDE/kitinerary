@@ -171,6 +171,16 @@ QString File::passId(const QString &passTypeIdenfier, const QString &serialNumbe
     return passTypeIdenfier + '/'_L1 + QString::fromUtf8(serialNumber.toUtf8().toBase64(QByteArray::Base64UrlEncoding));
 }
 
+File::PkPassIdentifier File::decodePassId(QStringView passId)
+{
+    const auto idx = passId.lastIndexOf('/'_L1);
+    if (idx < 1 || idx >= passId.size() - 1) {
+        return {};
+    }
+
+    return { passId.left(idx).toString(), QString::fromUtf8(QByteArray::fromBase64(passId.mid(idx + 1).toUtf8(), QByteArray::Base64UrlEncoding)) };
+}
+
 QList<QString> File::passes() const {
     Q_ASSERT(d->zipFile);
     const auto passDir = dynamic_cast<const KArchiveDirectory *>(
