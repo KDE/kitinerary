@@ -29,12 +29,13 @@ function parseBarcode(elb, node) {
 function parsePdf(pdf, node, elb) {
     const text = pdf.pages[elb.location].text;
     let res = elb.result[0];
-    const dep = text.match(/From.*\n(.*\S)  +(\d\d:\d\d)/);
+    const times = text.match(/ (\d\d:\d\d) [\s\S]+ (\d\d:\d\d) /);
+    const dep = text.match(/From.*\n(?:  +.*\n)?([ \S]\S.*?\S)  /);
     res.reservationFor.departureStation.name = dep[1];
-    res.reservationFor.departureTime = JsonLd.toDateTime(res.reservationFor.departureDay.substr(0, 10) + dep[2], "yyyy-MM-ddhh:mm", "en");
-    const arr = text.match(/To.*\n(.*\S)  +(\d\d:\d\d)/);
+    res.reservationFor.departureTime = JsonLd.toDateTime(times[1], "hh:mm", "en");
+    const arr = text.match(/To.*\n(?:  +.*\n)?([ \S]\S.*?\S)  /);
     res.reservationFor.arrivalStation.name = arr[1];
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(res.reservationFor.departureDay.substr(0, 10) + arr[2], "yyyy-MM-ddhh:mm", "en");
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(times[2], "hh:mm", "en");
     return res;
 }
 
