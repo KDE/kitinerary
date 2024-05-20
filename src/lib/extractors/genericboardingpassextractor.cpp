@@ -161,9 +161,9 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
 
     std::vector<ExtractorDocumentNode> bcbpNodes;
     m_filter.allMatches(node, bcbpNodes);
-    std::remove_if(bcbpNodes.begin(), bcbpNodes.end(), [](const auto &node) {
+    bcbpNodes.erase(std::remove_if(bcbpNodes.begin(), bcbpNodes.end(), [](const auto &node) {
         return node.location().userType() != QMetaType::Int || node.result().isEmpty();
-    });
+    }), bcbpNodes.end());
     std::sort(bcbpNodes.begin(), bcbpNodes.end(), [](const auto &lhs, const auto &rhs) { return lhs.location().toInt() < rhs.location().toInt(); });
 
     for (auto it = bcbpNodes.begin(); it != bcbpNodes.end(); ++it) {
