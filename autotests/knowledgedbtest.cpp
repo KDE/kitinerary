@@ -372,6 +372,42 @@ private Q_SLOTS:
         station = KnowledgeDb::stationForVRStationCode(VRStationCode(QStringLiteral("BLÄ")));
         QVERIFY(!station.coordinate.isValid());
     }
+
+    void testIsPlausibleTimeZone_data()
+    {
+        QTest::addColumn<QString>("tzId");
+        QTest::addColumn<float>("lat");
+        QTest::addColumn<float>("lon");
+        QTest::addColumn<QString>("country");
+        QTest::addColumn<QString>("region");
+        QTest::addColumn<bool>("result");
+
+        QTest::newRow("no-location") << "Europe/Berlin" << NAN << NAN << QString() << QString() << true;
+        QTest::newRow("coord-match") << "Europe/Berlin" << 52.0f << 13.0f << QString() << QString() << true;
+        QTest::newRow("country-match") << "Europe/Berlin" << NAN << NAN << "DE" << QString() << true;
+        QTest::newRow("country-ambiguous") << "America/Los_Angeles" << NAN << NAN << "US" << QString() << true;
+        QTest::newRow("region-match") << "America/Los_Angeles" << NAN << NAN << "US" << "CA" << true;
+        QTest::newRow("region-mismatch") << "America/Los_Angeles" << NAN << NAN << "US" << "FL" << false;
+        QTest::newRow("coutry-mismatch") << "Europe/Berlin" << NAN << NAN << "PT" << QString() << false;
+        QTest::newRow("coord-mismatch") << "America/Los_Angeles" << 52.0f << 13.0f << QString() << QString() << false;
+        QTest::newRow("coord-equivalent") << "Europe/Paris" << 52.0f << 13.0f << QString() << QString() << true;
+        QTest::newRow("country-equivalent") << "Europe/Paris" << NAN << NAN << "FR" << QString() << true;
+        QTest::newRow("region-equivalent") << "America/Tijuana" << NAN << NAN << "US" << "CA" << true;
+    }
+
+    void testIsPlausibleTimeZone()
+    {
+        QFETCH(QString, tzId);
+        QTimeZone tz(tzId.toUtf8());
+        QVERIFY(tz.isValid());
+        QFETCH(float, lat);
+        QFETCH(float, lon);
+        QFETCH(QString, country);
+        QFETCH(QString, region);
+        QFETCH(bool, result);
+
+        QCOMPARE(KnowledgeDb::isPlausibleTimeZone(tz, lat, lon, country, region), result);
+    }
 };
 
 QTEST_APPLESS_MAIN(KnowledgeDbTest)
