@@ -18,7 +18,12 @@ namespace KnowledgeDb {
     /** Returns the timezone for the given location consisting of coordinates and/or country.
      *  Either argument can be omitted, if both are available better results can be provided.
      */
-    QTimeZone timezoneForLocation(float lat, float lon, QStringView alpha2CountryCode, QStringView regionCode);
+    [[nodiscard]] QTimeZone timezoneForLocation(float lat, float lon, QStringView alpha2CountryCode, QStringView regionCode);
+
+    /** Checks whether @p tz is a plausible timezone for the given location, considering
+     *  equivalent timezones.
+     */
+    [[nodiscard]] bool isPlausibleTimeZone(const QTimeZone &tz, float lat, float lon, QStringView alpha2CountryCode, QStringView regionCode);
 }
 }
 

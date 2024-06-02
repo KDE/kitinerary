@@ -17,7 +17,7 @@
 
 using namespace KItinerary;
 
-static QTimeZone toQTimeZone(const char *tzId)
+[[nodiscard]] static QTimeZone toQTimeZone(const char *tzId)
 {
     if (!tzId || std::strcmp(tzId, "") == 0) {
         return {};
@@ -25,7 +25,7 @@ static QTimeZone toQTimeZone(const char *tzId)
     return QTimeZone(tzId);
 }
 
-static QList<const char*> timezonesForCountry(const KCountry &country)
+[[nodiscard]] static QList<const char*> timezonesForCountry(const KCountry &country)
 {
     auto tzs = country.timeZoneIds();
     if (tzs.size() <= 1) {
@@ -38,7 +38,7 @@ static QList<const char*> timezonesForCountry(const KCountry &country)
     return tzs;
 }
 
-static bool compareOffsetData(const QTimeZone::OffsetData &lhs, const QTimeZone::OffsetData &rhs)
+[[nodiscard]] static bool compareOffsetData(const QTimeZone::OffsetData &lhs, const QTimeZone::OffsetData &rhs)
 {
     return lhs.offsetFromUtc == rhs.offsetFromUtc
         && lhs.standardTimeOffset == rhs.standardTimeOffset
@@ -47,7 +47,7 @@ static bool compareOffsetData(const QTimeZone::OffsetData &lhs, const QTimeZone:
         && lhs.abbreviation == rhs.abbreviation;
 }
 
-static bool isEquivalentTimezone(const QTimeZone &lhs, const QTimeZone &rhs)
+[[nodiscard]] static bool isEquivalentTimezone(const QTimeZone &lhs, const QTimeZone &rhs)
 {
     auto dt = QDateTime::currentDateTimeUtc();
     if (lhs.offsetFromUtc(dt) != rhs.offsetFromUtc(dt) || lhs.hasTransitions() != rhs.hasTransitions()) {
@@ -70,7 +70,7 @@ QTimeZone KnowledgeDb::timezoneForLocation(float lat, float lon, QStringView alp
 {
 
     const auto coordTz = KTimeZone::fromLocation(lat, lon);
-    const auto coordZone = toQTimeZone(coordTz);
+    auto coordZone = toQTimeZone(coordTz);
 
     const auto country = KCountry::fromAlpha2(alpha2CountryCode);
     auto countryTzs = KCountrySubdivision::fromCode(QString(alpha2CountryCode + QLatin1Char('-') + regionCode)).timeZoneIds();
@@ -123,4 +123,30 @@ QTimeZone KnowledgeDb::timezoneForLocation(float lat, float lon, QStringView alp
         return isEquivalentTimezone(coordZone, countryQtz) ? countryQtz : coordZone;
     }
     return coordZone;
+}
+
+bool KnowledgeDb::isPlausibleTimeZone(const QTimeZone &tz, float lat, float lon, QStringView alpha2CountryCode, QStringView regionCode)
+{
+    // coordinate-based timezone matches
+    const auto coordTzId = KTimeZone::fromLocation(lat, lon);
+    const QTimeZone coordTz(coordTzId);
+    if (coordTzId && std::strcmp(coordTzId, "") != 0 && coordTz.isValid() && isEquivalentTimezone(tz, coordTz)) {
+        return true;
+    }
+
+    // any of the country/region code timezones matches
+    auto countryTzs = KCountrySubdivision::fromCode(QString(alpha2CountryCode + QLatin1Char('-') + regionCode)).timeZoneIds();
+    if (countryTzs.isEmpty()) {
+        countryTzs = timezonesForCountry(KCountry::fromAlpha2(alpha2CountryCode));
+    }
+
+    for (const auto &tzId : countryTzs) {
+        QTimeZone countryTz(tzId);
+        if (isEquivalentTimezone(countryTz, tz)) {
+            return true;
+        }
+    }
+
+    // if we were able to determine any timezone and none of them matched, we consider @p tz implausible
+    return (!coordTzId || std::strcmp(coordTzId, "") == 0 || !coordTz.isValid()) && countryTzs.isEmpty();
 }

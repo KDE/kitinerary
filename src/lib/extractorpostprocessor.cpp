@@ -695,8 +695,15 @@ QVariantList ExtractorPostprocessorPrivate::processActions(QVariantList actions)
 template <typename T>
 QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, const T &place) const
 {
-    if (!dt.isValid() || (dt.timeSpec() == Qt::TimeZone && dt.timeZone() != QTimeZone::utc())) {
+    if (!dt.isValid() ) {
         return dt;
+    }
+    if ((dt.timeSpec() == Qt::TimeZone && dt.timeZone() != QTimeZone::utc())) {
+        if (KnowledgeDb::isPlausibleTimeZone(dt.timeZone(), place.geo().latitude(), place.geo().longitude(), place.address().addressCountry(), place.address().addressRegion())) {
+            return dt;
+        }
+        // drop timezones where we are sure they don't match the location
+        dt.setTimeSpec(Qt::LocalTime);
     }
 
     const auto tz = KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(), place.address().addressCountry(), place.address().addressRegion());

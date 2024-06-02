@@ -1,0 +1,23 @@
+[{
+    "@context": "http://schema.org",
+    "@type": "LodgingReservation",
+    "checkinTime": {
+        "@type": "QDateTime",
+        "@value": "2024-06-06T15:00:00+02:00",
+        "timezone": "Europe/Berlin"
+    },
+    "checkoutTime": {
+        "@type": "QDateTime",
+        "@value": "2024-06-07T11:00:00+02:00",
+        "timezone": "Europe/Berlin"
+    },
+    "reservationFor": {
+        "@type": "LodgingBusiness",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "PT"
+        },
+        "name": "Hotel in Portugal"
+    },
+    "reservationStatus": "http://schema.org/ReservationConfirmed"
+}]
