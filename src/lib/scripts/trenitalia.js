@@ -74,7 +74,7 @@ function parsePdf(pdf, node) {
 
         const dep = leftHeaderText.match(/(?:Stazione di Partenza|Departure station|Abfahrtsbahnhof|Gare de départ)(?:\/From)?\n+(.*)\n/);
         res.reservationFor.departureStation.name = dep[1];
-        const arr = midHeaderText.match(/(?:Stazione di Arrivo|Arrival station|Ankunft Bahnhof|Gare d'arrivée)(?:\/To)?\n+(.*)\n/);
+        const arr = midHeaderText.match(/(?:Stazione di Arrivo|Arrival station|Ankunft Bahnhof|Ankunftsbahnhof|Gare d'arrivée)(?:\/To)?\n+(.*)\n/);
         res.reservationFor.arrivalStation.name = arr[1];
 
         const barcodes = node.findChildNodes({ scope: "Descendants", mimeType: "internal/era-ssb", field: "issuerCode", match: "83" }).concat(node.findChildNodes({ scope: "Descendants", mimeType: "internal/uic9183", field: "carrierId", match: "83" })).filter((barcode) => barcode.location == page_index);
@@ -85,7 +85,8 @@ function parsePdf(pdf, node) {
         let j = 0;
         while(true) {
             let personalRes = JsonLd.clone(res);
-            var name = passengerColumn.substr(offset).match(/(?:Passenger Name|Nome Passeggero|Nom du Passager)(?:\/Passenger\n *name)?.*\n(?:    .*\n)* *((?:\w+|\-\-).*?)(?:  |\n)/);
+            var name = passengerColumn.substr(offset).match(/(?:Passenger Name|Nome Passeggero|Nom du Passager|Passagiername)(?:\/Passenger\n *name)?.*\n(?:    .*\n)* *((?:\w+|\-\-).*?)(?:  |\n)/);
+            console.log(name);
             if (!name)
                 break;
             offset += name.index + name[0].length;
