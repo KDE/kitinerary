@@ -15,5 +15,13 @@
         ],
         "script": "amadeus.js",
         "function": "parseEvent"
+    },
+    {
+        "mimeType": "internal/event",
+        "filter": [
+            { "field": "uid", "match": "@cytric.net", "mimeType": "internal/event" }
+        ],
+        "script": "amadeus.js",
+        "function": "parseCytricEvent"
     }
 ]
