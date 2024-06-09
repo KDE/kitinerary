@@ -19,7 +19,7 @@ QString FcbUtil::stringifyUicStationIdentifier(int num, const QByteArray &ia5)
     return {};
 }
 
-QString FcbUtil::stringifyStationIdentifier(bool numIsSet, int num, const QByteArray ia5)
+QString FcbUtil::stringifyStationIdentifier(bool numIsSet, int num, const QByteArray &ia5)
 {
     if (numIsSet) {
         return QString::number(num);

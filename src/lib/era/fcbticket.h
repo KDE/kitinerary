@@ -109,7 +109,7 @@ class IssuingData {
 
     Q_PROPERTY(QDateTime issueingDateTime READ issueingDateTime)
 public:
-    QDateTime issueingDateTime() const;
+    [[nodiscard]] QDateTime issueingDateTime() const;
 };
 
 enum GenderType {
@@ -201,7 +201,7 @@ class TrainLinkType {
     UPER_GADGET_FINALIZE
 
 public:
-    Q_INVOKABLE QDateTime departureDateTime(const QDateTime &issueingDateTime) const;
+    Q_INVOKABLE [[nodiscard]] QDateTime departureDateTime(const QDateTime &issueingDateTime) const;
 };
 
 /** A set of via stations. */
@@ -536,8 +536,8 @@ class ReservationData {
     UPER_GADGET_FINALIZE
 
 public:
-    Q_INVOKABLE QDateTime departureDateTime(const QDateTime &issueingDateTime) const;
-    Q_INVOKABLE QDateTime arrivalDateTime(const QDateTime &issueingDateTime) const;
+    Q_INVOKABLE [[nodiscard]] QDateTime departureDateTime(const QDateTime &issueingDateTime) const;
+    Q_INVOKABLE [[nodiscard]] QDateTime arrivalDateTime(const QDateTime &issueingDateTime) const;
 };
 
 enum RoofRackType {
@@ -656,8 +656,8 @@ class OpenTicketData {
     UPER_GADGET_FINALIZE
 
 public:
-    Q_INVOKABLE QDateTime validFrom(const QDateTime &issueingDateTime) const;
-    Q_INVOKABLE QDateTime validUntil(const QDateTime &issueingDateTime) const;
+    Q_INVOKABLE [[nodiscard]] QDateTime validFrom(const QDateTime &issueingDateTime) const;
+    Q_INVOKABLE [[nodiscard]] QDateTime validUntil(const QDateTime &issueingDateTime) const;
 };
 
 /** Time range. */
@@ -727,8 +727,8 @@ class PassData {
     UPER_GADGET_FINALIZE
 
 public:
-    Q_INVOKABLE QDateTime validFrom(const QDateTime &issueingDateTime) const;
-    Q_INVOKABLE QDateTime validUntil(const QDateTime &issueingDateTime) const;
+    Q_INVOKABLE [[nodiscard]] QDateTime validFrom(const QDateTime &issueingDateTime) const;
+    Q_INVOKABLE [[nodiscard]] QDateTime validUntil(const QDateTime &issueingDateTime) const;
 };
 
 /** Voucher document. */
@@ -1010,7 +1010,7 @@ public:
 
     static constexpr const char RecordId[] = "U_FLEX";
 
-    bool isValid() const;
+    [[nodiscard]] bool isValid() const;
 
 private:
     Uic9183Block m_block;

@@ -21,7 +21,7 @@ public:
     *  in the format needed for output with our JSON-LD format.
     */
     template <typename T>
-    static QString fromStationIdentifier(Fcb::CodeTableType stationCodeTable, const T &doc)
+    [[nodiscard]] static QString fromStationIdentifier(Fcb::CodeTableType stationCodeTable, const T &doc)
     {
         switch (stationCodeTable) {
             case Fcb::stationUIC:
@@ -33,12 +33,12 @@ public:
         return stringifyStationIdentifier(doc.fromStationNumIsSet(), doc.fromStationNum, doc.fromStationIA5);
     }
     template <typename T>
-    static QString fromStationIdentifier(const T &doc) { return fromStationIdentifier(doc.stationCodeTable, doc); }
+    [[nodiscard]] static QString fromStationIdentifier(const T &doc) { return fromStationIdentifier(doc.stationCodeTable, doc); }
     /** Arrival station identifier for a travel document,
     *  in the format needed for output with our JSON-LD format.
     */
     template <typename T>
-    static QString toStationIdentifier(Fcb::CodeTableType stationCodeTable, const T &doc)
+    [[nodiscard]] static QString toStationIdentifier(Fcb::CodeTableType stationCodeTable, const T &doc)
     {
         switch (stationCodeTable) {
             case Fcb::stationUIC:
@@ -50,14 +50,14 @@ public:
         return stringifyStationIdentifier(doc.toStationNumIsSet(), doc.toStationNum, doc.toStationIA5);
     }
     template <typename T>
-    static QString toStationIdentifier(const T &doc) { return toStationIdentifier(doc.stationCodeTable, doc); }
+    [[nodiscard]] static QString toStationIdentifier(const T &doc) { return toStationIdentifier(doc.stationCodeTable, doc); }
 
     /** Convert a class code enum value to a string for human representation. */
-    static QString classCodeToString(Fcb::TravelClassType classCode);
+    [[nodiscard]] static QString classCodeToString(Fcb::TravelClassType classCode);
 
 private:
-    static QString stringifyUicStationIdentifier(int num, const QByteArray &ia5);
-    static QString stringifyStationIdentifier(bool numIsSet, int num, const QByteArray ia5);
+    [[nodiscard]] static QString stringifyUicStationIdentifier(int num, const QByteArray &ia5);
+    [[nodiscard]] static QString stringifyStationIdentifier(bool numIsSet, int num, const QByteArray &ia5);
 };
 
 }
