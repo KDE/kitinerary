@@ -769,6 +769,12 @@ class CustomerCardData {
     UPER_ELEMENT_OPTIONAL(QList<int>, includedServices)
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::ExtensionData, extension)
     UPER_GADGET_FINALIZE
+
+    Q_PROPERTY(QDate validFrom READ validFrom)
+    Q_PROPERTY(QDate validUntil READ validUntil)
+public:
+    [[nodiscard]] QDate validFrom() const;
+    [[nodiscard]] QDate validUntil() const;
 };
 
 /** Countermark document. */

@@ -683,6 +683,25 @@ void Fcb::CustomerCardData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
+QDate Fcb::CustomerCardData::validFrom() const
+{
+    QDate d(validFromYear, 1, 1);
+    if (validFromDayIsSet()) {
+        d = d.addDays(validFromDay);
+    }
+    return d;
+}
+
+QDate Fcb::CustomerCardData::validUntil() const
+{
+    QDate d(validFrom().year(), 1, 1);
+    d = d.addYears(validUntilYear);
+    if (validUntilDayIsSet()) {
+        d = d.addDays(validUntilDay);
+    }
+    return d;
+}
+
 void Fcb::CountermarkData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
