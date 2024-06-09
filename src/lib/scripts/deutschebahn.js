@@ -286,7 +286,7 @@ function parseCancellation(html) {
 
 function parseUic9183(code, node) {
     // Bahncard code
-    if (code.ticketLayout && code.ticketLayout.type == "RCT2" && code.ticketLayout.text(0, 12, 40, 1).match(/BAHNCARD/i)) {
+    if (code.ticketLayout && code.ticketLayout.type == "RCT2" && code.ticketLayout.text(0, 12, 40, 1).match(/BAHNCARD/i) && !code.block("U_FLEX")) {
         var bc = JsonLd.newObject("ProgramMembership");
         bc.programName = code.ticketLayout.text(1, 12, 40, 1);
         bc.membershipNumber = code.ticketLayout.text(14, 11, 16, 1);

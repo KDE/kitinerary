@@ -332,6 +332,20 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     }
                     // TODO handle nrt.returnIncluded
                 }
+            } else if (doc.ticket.userType() == qMetaTypeId<Fcb::CustomerCardData>()) {
+                const auto ccd = doc.ticket.value<Fcb::CustomerCardData>();
+                ProgramMembership pm;
+                if (ccd.cardIdNumIsSet()) {
+                    pm.setMembershipNumber(QString::number(ccd.cardIdNum));
+                } else {
+                    pm.setMembershipNumber(QString::fromUtf8(ccd.cardIdIA5));
+                }
+                pm.setProgramName(ccd.cardTypeDescr);
+                pm.setMember(p.person());
+                pm.setValidFrom(ccd.validFrom().startOfDay());
+                pm.setValidUntil(ccd.validUntil().startOfDay());
+                pm.setToken(ticket.ticketToken());
+                results.push_back(pm);
             }
         }
     }
