@@ -96,7 +96,7 @@ function parsePdfTicket(pdf, node, triggerNode)
     let personalizedReservations = [];
     while (true) {
         const pas = rightSide.substr(idx).match(/(\S+.*\S)  +(?:(\d+) · )?(\d+[A-Z])\n/);
-        if (!pas) {
+        if (!pas || pas[0].match(/\d+[A-Z]\s.*\s\d+[A-Z]/)) { // multiple seats in the same row not supported yet
             break;
         }
         idx += pas.index + pas[0].length;
