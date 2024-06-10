@@ -56,14 +56,14 @@ function parsePdfTicket(pdf, node, triggerNode)
     const date = text.match(/^\S+,? (\d+\.? \S+) (\d{4})\n/);
 
     const timeColumn = page.textInRect(0.0, 0.1, 0.125, 0.5);
-    const stationColumn = page.textInRect(0.125, 0.1, 0.5, 0.5);
+    const stationColumn = page.textInRect(0.125, 0.1, 0.5, 0.55);
 
     let idxTime = 0;
     let idxStations = 0;
     let reservations = [];
     while (true) {
         const times = timeColumn.substr(idxTime).match(/(\d\d:\d\d)\n([^:]*?\n)?([^:]*?\n)?(\d\d:\d\d)/);
-        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*\n(?:.*\n)*)?.*(?:Bus|Autobus|Zug) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung) (.*)\n(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
+        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*(?:NOTE:|Wagennummerierung).(?:.*\n)+)?.*(?:Bus|Autobus|Zug|Strecke) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung) (.*)\n(?:.*(?:Operated|Betrieben).*\n)?(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
         if (!times || !stations) {
             break;
         }
