@@ -21,7 +21,7 @@ namespace TicketTokenComparator
     /** Compare QByteArray or QString ticket tokens.
      *  @internal exported for unit tests only
      */
-    KITINERARY_EXPORT bool isSame(const QVariant &lhs, const QVariant &rhs);
+    [[nodiscard]] KITINERARY_EXPORT bool isSame(const QVariant &lhs, const QVariant &rhs);
 }
 
 }

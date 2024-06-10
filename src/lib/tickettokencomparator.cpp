@@ -12,19 +12,20 @@
 
 #include <cstring>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 /** Checks that @p lhs and @p rhs have a different prefix is they are both set. */
-static bool prefixConflictIfPresent(const QString &lhs, const QString &rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
+[[nodiscard]] static bool prefixConflictIfPresent(const QString &lhs, const QString &rhs, Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
 {
     return !lhs.isEmpty() && !rhs.isEmpty() && !lhs.startsWith(rhs, caseSensitive) && !rhs.startsWith(lhs, caseSensitive);
 }
-static bool prefixConflictIfPresent(const QByteArray &lhs, const QByteArray &rhs)
+[[nodiscard]] static bool prefixConflictIfPresent(const QByteArray &lhs, const QByteArray &rhs)
 {
     return !lhs.isEmpty() && !rhs.isEmpty() && !lhs.startsWith(rhs) && !rhs.startsWith(lhs);
 }
 
-static bool isUicBlockSubset(const Uic9183Parser &lhs, const Uic9183Parser &rhs)
+[[nodiscard]] static bool isUicBlockSubset(const Uic9183Parser &lhs, const Uic9183Parser &rhs)
 {
     for (auto block = lhs.firstBlock(); !block.isNull(); block = block.nextBlock()) {
         // ignore 0080VU blocks, those change in DB online tickets on every retrieval
@@ -39,7 +40,7 @@ static bool isUicBlockSubset(const Uic9183Parser &lhs, const Uic9183Parser &rhs)
     return true;
 }
 
-static bool compareUic918Token(const QByteArray &lhs, const QByteArray &rhs)
+[[nodiscard]] static bool compareUic918Token(const QByteArray &lhs, const QByteArray &rhs)
 {
     if (!Uic9183Parser::maybeUic9183(lhs) || !Uic9183Parser::maybeUic9183(rhs)) {
         return false;
@@ -56,6 +57,14 @@ static bool compareUic918Token(const QByteArray &lhs, const QByteArray &rhs)
     return lhsUic.header() == rhsUic.header() && isUicBlockSubset(lhsUic, rhsUic) && isUicBlockSubset(rhsUic, lhsUic);
 }
 
+[[nodiscard]] static bool compareFlixbusToken(const QString &lhs, const QString &rhs)
+{
+    // Flixbus ticket tokens are URLs with varying host and query parts, while the path contains the actual token
+    QUrl lhsUrl(lhs);
+    QUrl rhsUrl(rhs);
+    return lhsUrl.path() == rhsUrl.path();
+}
+
 bool KItinerary::TicketTokenComparator::isSame(const QVariant &lhs, const QVariant &rhs)
 {
     if (lhs.isNull() || rhs.isNull()) {
@@ -66,7 +75,13 @@ bool KItinerary::TicketTokenComparator::isSame(const QVariant &lhs, const QVaria
     }
 
     if (lhs.userType() == QMetaType::QString) {
-        return !prefixConflictIfPresent(lhs.toString(), rhs.toString(), Qt::CaseInsensitive);
+        const auto lhsS = lhs.toString();
+        const auto rhsS = rhs.toString();
+        if (lhsS.contains("flixbus."_L1) && rhsS.contains("flixbus."_L1)) {
+            return compareFlixbusToken(lhsS, rhsS);
+        }
+
+        return !prefixConflictIfPresent(lhsS, rhsS, Qt::CaseInsensitive);
     }
     if (lhs.userType() == QMetaType::QByteArray) {
         const auto lhsBA = lhs.toByteArray();
