@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^[A-Z]{13}\\d{12}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "tobilet.js"
+}
