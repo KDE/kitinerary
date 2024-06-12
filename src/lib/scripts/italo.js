@@ -19,7 +19,7 @@ function parseTicket(content, node, triggerNode) {
     let idx = 0;
     let reservations = [];
     while (true) {
-        let pas = text.substr(idx).match(/ +\d\. (.*)  +Voiture (\d+) Place (\d+)\n/);
+        let pas = text.substr(idx).match(/ +\d\. (.*)  +(?:Voiture|Carriage) (\d+) (?:Place|Seat) (\d+)\n/);
         if (!pas) {
             break;
         }
