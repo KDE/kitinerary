@@ -106,6 +106,7 @@ QJSValue JsApi::JsonLd::newBusReservation() const
     auto resFor = newObject(QStringLiteral("BusTrip"));
     resFor.setProperty(QStringLiteral("departureBusStop"), dep);
     resFor.setProperty(QStringLiteral("arrivalBusStop"), arr);
+    resFor.setProperty(QStringLiteral("provider"), newObject(QStringLiteral("Organization")));
 
     auto res = newObject(QStringLiteral("BusReservation"));
     res.setProperty(QStringLiteral("reservationFor"), resFor);
