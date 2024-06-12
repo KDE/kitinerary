@@ -224,3 +224,22 @@ function parseEvent(event)
     res.reservationFor.departureStation.geo.longitude = 1.0 * loc[2];
     return res;
 }
+
+function parsePkPass(pass, node)
+{
+    let res = JsonLd.newBusReservation();
+    res.reservedTicket = node.result[0].reservedTicket;
+    res.reservationFor.departureBusStop.name = pass.field["from"].label;
+    res.reservationFor.departureTime = JsonLd.toDateTime(pass.field["departure_date"].value + pass.field["boarding_time"].value, "MMMddhh:mm", "en");
+    res.reservationFor.departurePlatform = pass.field["platform"].value;
+    res.reservationFor.arrivalBusStop.name = pass.field["to"].label;
+    res.reservationNumber = pass.field["booking_number"].value;
+    res.underName.name = pass.field["passenger"].value;
+    res.reservedTicket.ticketedSeat = {
+        "@type": "Seat",
+        seatNumber: pass.field["seat_number"].value
+    };
+    res.reservationFor.busName = pass.field["route"].value;
+    res.reservationFor.provider.name = pass.field["operated_by"].value;
+    return res;
+}
