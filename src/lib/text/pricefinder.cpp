@@ -193,14 +193,24 @@ bool PriceFinder::isSingleCurrency(const std::vector<Result> &results) const
     return std::all_of(results.begin(), results.end(), [&isoCode](const auto &r) { return r.currency == isoCode; });
 }
 
-PriceFinder::Result PriceFinder::highest(const std::vector<Result> &results) const
+PriceFinder::Result PriceFinder::highest(std::vector<Result> &results) const
 {
     if (!isSingleCurrency(results)) {
         return {};
     }
 
-    const auto it = std::max_element(results.begin(), results.end(), [](const auto &lhs, const auto &rhs) { return lhs.value < rhs.value; });
-    return (*it);
+    std::sort(results.begin(), results.end(), [](const auto &lhs, const auto &rhs) { return lhs.value > rhs.value; });
+    if (results.size() == 1) {
+        return results.front();
+    }
+
+    // check for extremely large differences between the max and max - 1
+    // this can be caused by the fine print containing company capital statements (common e.g. in France)
+    if (results[1].value > 0 && results[0].value / results[1].value > 1000) {
+        // TODO is this reliable enough to return results[1] here?
+        return {};
+    }
+    return results.front();
 }
 
 static bool equalIgnoreDiacritics(QStringView lhs, QStringView rhs)

@@ -26,25 +26,25 @@ public:
         QString currency; // as ISO code
         double value; // price value
 
-        constexpr inline bool hasResult() const { return start >= 0; }
+        [[nodiscard]] constexpr inline bool hasResult() const { return start >= 0; }
     };
 
     /// find all price occurences in @p text
     void findAll(QStringView text, std::vector<Result> &results) const;
 
     /// find the highest (assumed total) price in @p text
-    Result findHighest(QStringView text) const;
+    [[nodiscard]] Result findHighest(QStringView text) const;
 
     /// returns @c true if the given list of prices uses only a single currency
-    bool isSingleCurrency(const std::vector<Result> &results) const;
+    [[nodiscard]] bool isSingleCurrency(const std::vector<Result> &results) const;
 
     /// return the highest (assumed total) price in @p results
-    Result highest(const std::vector<Result> &results) const;
+    [[nodiscard]] Result highest(std::vector<Result> &results) const;
 
 private:
     enum CurrencyPosition { CurrencyPrefix, CurrencySuffix };
-    QString parseCurrency(QStringView s, CurrencyPosition pos) const;
-    double parseValue(QStringView s, const QString &isoCode) const;
+    [[nodiscard]] QString parseCurrency(QStringView s, CurrencyPosition pos) const;
+    [[nodiscard]] double parseValue(QStringView s, const QString &isoCode) const;
 
     struct CurrencyData {
         QString isoCode;

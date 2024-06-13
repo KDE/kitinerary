@@ -7,6 +7,7 @@
 
 #include <QTest>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 #define s(x) QStringLiteral(x)
@@ -150,6 +151,8 @@ private Q_SLOTS:
         QTest::newRow("yen-sign-2") << s("￥6460");
 
         QTest::newRow("distance") << s("KM0118");
+
+        QTest::newRow("french-capital-filter") << u"Total price: 125.00 EUR\nbla bla 300.000 EUR\n"_s;
     }
 
     void testFindHighestNegative()
