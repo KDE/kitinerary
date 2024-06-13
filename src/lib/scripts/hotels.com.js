@@ -32,3 +32,15 @@ function parseBookingConfirmation(html, node) {
 
     return res;
 }
+
+function extractEmail(text)
+{
+    const hotel = text.match(/(.*)\n(.*)\nCheck-in\nCheck-out\n\w{3}, (\d{1,2} \w{3})\n\w{3}, (\d{1,2} \w{3})\n/);
+    let res = JsonLd.newLodgingReservation();
+    res.reservationFor.name = hotel[1];
+    res.reservationFor.address.streetAddress = hotel[2];
+    res.checkinTime = JsonLd.toDateTime(hotel[3], "d MMM", "en");
+    res.checkoutTime = JsonLd.toDateTime(hotel[4], "d MMM", "en");
+    res.reservationNumber = text.match(/# (\d{12,})\n/)[1];
+    return res;
+}

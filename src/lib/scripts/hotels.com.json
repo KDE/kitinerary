@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "match": "http[s]://[a-z]{2,3}.hotels.com/",
@@ -9,4 +9,10 @@
     "function": "parseBookingConfirmation",
     "script": "hotels.com.js",
     "mimeType": "text/html"
-}
+},
+{
+    "mimeType": "text/plain",
+    "filter": [ { "field": "From", "match": "@eg.hotels.com", "mimeType": "message/rfc822", "scope": "Ancestors" } ],
+    "script": "hotels.com.js",
+    "function": "extractEmail"
+}]
