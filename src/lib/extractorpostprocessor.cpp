@@ -703,7 +703,7 @@ QDateTime ExtractorPostprocessorPrivate::processTimeForLocation(QDateTime dt, co
             return dt;
         }
         // drop timezones where we are sure they don't match the location
-        dt.setTimeSpec(Qt::LocalTime);
+        dt.setTimeZone(QTimeZone::LocalTime);
     }
 
     const auto tz = KnowledgeDb::timezoneForLocation(place.geo().latitude(), place.geo().longitude(), place.address().addressCountry(), place.address().addressRegion());
