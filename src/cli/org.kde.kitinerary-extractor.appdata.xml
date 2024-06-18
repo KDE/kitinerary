@@ -67,6 +67,7 @@
   <summary xml:lang="pt-BR">Extrator em linha de comando de dados de reservas</summary>
   <summary xml:lang="ru">Инструмент командной строки для извлечения данных маршрутов</summary>
   <summary xml:lang="sl">Ekstraktor podatkov o rezervaciji v ukazni vrstici</summary>
+  <summary xml:lang="sv">Extrahering av reservationsdata på kommandoraden</summary>
   <summary xml:lang="tr">Komut satırında çalışan rezervasyon verisi çıkarıcısı</summary>
   <summary xml:lang="uk">Програма для видобування даних бронювання, керування якою відбувається з командного рядка</summary>
   <summary xml:lang="x-test">xxCommand line reservation data extractorxx</summary>
