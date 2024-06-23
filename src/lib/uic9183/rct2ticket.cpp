@@ -17,6 +17,7 @@
 #include <cmath>
 #include <cstring>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 namespace KItinerary {
@@ -124,7 +125,8 @@ Rct2Ticket& Rct2Ticket::operator=(const Rct2Ticket&) = default;
 
 bool Rct2Ticket::isValid() const
 {
-  return d->layout.isValid() && d->layout.type() == QLatin1StringView("RCT2");
+    // RCT2 is the correct types, but Snälltâget has a typo in their tickets...
+    return d->layout.isValid() && (d->layout.type() == "RCT2"_L1 || d->layout.type() == "RTC2"_L1);
 }
 
 void Rct2Ticket::setContextDate(const QDateTime &contextDt)
