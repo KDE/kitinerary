@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kitinerary package.
+# SPDX-FileCopyrightText: 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 #
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2018, 2019, 2021, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kitinerary\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-15 00:38+0000\n"
-"PO-Revision-Date: 2022-07-30 19:20+0200\n"
+"PO-Revision-Date: 2024-06-22 08:29+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,6 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: calendarhandler.cpp:171
 #, kde-format
@@ -162,7 +163,7 @@ msgid ""
 "Pickup location: %1\n"
 "%2\n"
 msgstr ""
-"Miejsce odbioru: %1\n"
+"Miejsce wsiadania: %1\n"
 "%2\n"
 
 #: calendarhandler.cpp:506
@@ -171,7 +172,7 @@ msgid ""
 "Dropoff location: %1\n"
 "%2\n"
 msgstr ""
-"Miejsce oddania: %1\n"
+"Miejsce wysiadki: %1\n"
 "%2\n"
 
 #: calendarhandler.cpp:535
