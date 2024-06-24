@@ -49,8 +49,8 @@ QJSValue JsApi::JsonLd::newPlace(const QString &type) const
 
 QJSValue JsApi::JsonLd::newFlightReservation() const
 {
-    const auto dep = newObject(QStringLiteral("Airport"));
-    const auto arr = newObject(QStringLiteral("Airport"));
+    const auto dep = newPlace(QStringLiteral("Airport"));
+    const auto arr = newPlace(QStringLiteral("Airport"));
     const auto airline = newObject(QStringLiteral("Airline"));
     const auto person = newObject(QStringLiteral("Person"));
 
