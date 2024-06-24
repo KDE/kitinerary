@@ -77,3 +77,33 @@ function extractPkPass(pass, node)
     res.boardingGroup = pass.field['group'].value
     return res;
 }
+
+function extractReservation(pdf)
+{
+    const text = pdf.text;
+    const pnr = text.match(/code: ([A-Z0-9]{6,7})\n/)[1];
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        const flight = text.substr(idx).match(/ ([A-Z0-9]{2})(\d{1,4}) .* (\d{4}).*? ([A-Z, ]+), [0-9A-Z]{2}\n.*: (\S.*\S), ([A-Z]{3})\((.*)\) +(\d.*)\n.*: (\S.*\S), ([A-Z]{3})\((.*)\) +(\d.*)\n/);
+        if (!flight)
+            break;
+        idx += flight.index + flight[0].length;
+
+        let res = JsonLd.newFlightReservation();
+        res.reservationNumber = pnr;
+        res.reservationFor.airline.iataCode = flight[1];
+        res.reservationFor.airline.name = flight[4];
+        res.reservationFor.flightNumber = flight[2];
+        res.reservationFor.departureAirport.address.addressLocality = flight[5];
+        res.reservationFor.departureAirport.iataCode = flight[6];
+        res.reservationFor.departureAirport.name = flight[7];
+        res.reservationFor.departureTime = JsonLd.toDateTime(flight[3] + flight[8], "yyyydd MMM. hh:mm", "en");
+        res.reservationFor.arrivalAirport.address.addressLocality = flight[9];
+        res.reservationFor.arrivalAirport.iataCode = flight[10];
+        res.reservationFor.arrivalAirport.name = flight[11];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(flight[3] + flight[12], "yyyydd MMM. hh:mm", "en");
+        reservations.push(res);
+    }
+    return reservations;
+}

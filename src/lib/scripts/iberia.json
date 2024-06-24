@@ -22,4 +22,11 @@
     "filter": [ { "field": "passTypeIdentifier", "match": "pass.com.iberia.MobileBoardingPassType", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
     "script": "iberia.js",
     "function": "extractPkPass"
+},{
+    "filter": [
+        { "match": "^\\s*IBERIA LAE S.A.", "mimeType": "text/plain", "scope": "Children" }
+    ],
+    "script": "iberia.js",
+    "mimeType": "application/pdf",
+    "function": "extractReservation"
 }]
