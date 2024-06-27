@@ -18,9 +18,6 @@
 #include "jsonlddocument.h"
 #include "logging.h"
 
-#include <KMime/Content>
-#include <KMime/Message>
-
 #include <QDateTime>
 #include <QFile>
 #include <QFileInfo>

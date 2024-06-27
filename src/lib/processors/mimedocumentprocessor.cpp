@@ -14,6 +14,7 @@
 
 #include <QDebug>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
 Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KMime::Content>)
@@ -37,16 +38,16 @@ bool contentMightBeEmail(const QByteArray &data)
 }
 
 template <typename T>
-const T* findHeader(KMime::Content *content)
+const T* findHeader(const KMime::Content *content)
 {
-    auto header = content->header<T>();
+    const auto header = content->header<T>();
     if (header || !content->parent()) {
         return header;
     }
     return findHeader<T>(content->parent());
 }
 
-const KMime::Headers::Base* findHeader(KMime::Content *content, const char *headerType)
+const KMime::Headers::Base* findHeader(const KMime::Content *content, const char *headerType)
 {
     const auto header = content->headerByType(headerType);
     if (header || !content->parent()) {
@@ -105,14 +106,14 @@ ExtractorDocumentNode MimeDocumentProcessor::createNodeFromContent(const QVarian
     return node;
 }
 
-static ExtractorDocumentNode expandContentNode(ExtractorDocumentNode &node, KMime::Content *content, const ExtractorEngine *engine)
+static ExtractorDocumentNode expandContentNode(ExtractorDocumentNode &node, const KMime::Content *content, const ExtractorEngine *engine)
 {
     QString fileName;
-    const auto contentType = content->contentType(false);
+    const auto contentType = content->contentType();
     if (contentType) {
         fileName = contentType->name();
     }
-    const auto contentDisposition = content->contentDisposition(false);
+    const auto contentDisposition = content->contentDisposition();
     if (fileName.isEmpty() && contentDisposition) {
         fileName = contentDisposition->filename();
     }
@@ -131,9 +132,9 @@ static ExtractorDocumentNode expandContentNode(ExtractorDocumentNode &node, KMim
     return child;
 }
 
-static void expandContentNodeRecursive(ExtractorDocumentNode &node, KMime::Content *content, const ExtractorEngine *engine)
+static void expandContentNodeRecursive(ExtractorDocumentNode &node, const KMime::Content *content, const ExtractorEngine *engine)
 {
-    const auto ct = content->contentType(false);
+    const auto ct = content->contentType();
     const auto children = content->contents();
     if (!ct || children.empty()) {
         expandContentNode(node, content, engine);
@@ -141,24 +142,19 @@ static void expandContentNodeRecursive(ExtractorDocumentNode &node, KMime::Conte
     }
 
     // special handling of multipart/related to add images to the corresponding HTML document
-    if (ct && ct->isMultipart() && ct->isSubtype("related") &&
-        ct->parameter(QLatin1StringView("type")) ==
-            QLatin1String("text/html") &&
-        children.size() >= 2) {
-      const auto child = children.front();
-      if (child->contentType(false) &&
-          child->contentType(false)->isHTMLText()) {
-        auto htmlNode = expandContentNode(node, child, engine);
-        for (auto it = std::next(children.begin()); it != children.end();
-             ++it) {
-          auto imgNode = expandContentNode(htmlNode, (*it), engine);
-          const auto cid = (*it)->contentID(false);
-          if (cid) {
-            imgNode.setLocation(cid->identifier());
-          }
+    if (ct && ct->isMultipart() && ct->isSubtype("related") && ct->parameter("type"_L1) == "text/html"_L1 && children.size() >= 2) {
+        const auto child = children.front();
+        if (child->contentType(false) && child->contentType(false)->isHTMLText()) {
+            auto htmlNode = expandContentNode(node, child, engine);
+            for (auto it = std::next(children.begin()); it != children.end(); ++it) {
+                auto imgNode = expandContentNode(htmlNode, (*it), engine);
+                const auto cid = (*it)->contentID(false);
+                if (cid) {
+                    imgNode.setLocation(cid->identifier());
+                }
+            }
+            return;
         }
-        return;
-      }
     }
 
     for (const auto child : children) {
