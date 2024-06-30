@@ -616,8 +616,11 @@ PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, 
     }
 #endif
 
-    if (geo.isValid() && addr.addressCountry().isEmpty()) {
-        addr.setAddressCountry(KCountry::fromLocation(geo.latitude(), geo.longitude()).alpha2());
+    if (geo.isValid() && addr.addressCountry().size() != 2) {
+        const auto country = KCountry::fromLocation(geo.latitude(), geo.longitude());
+        if (country.isValid()) {
+            addr.setAddressCountry(country.alpha2());
+        }
     }
 
     AddressParser addrParser;
