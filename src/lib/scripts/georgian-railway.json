@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "mail@railway.ge",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "parseEmail",
+    "mimeType": "text/html",
+    "script": "georgian-railway.js"
+}

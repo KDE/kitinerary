@@ -130,6 +130,8 @@
         <file>flixbus.json</file>
         <file>flixbus.js</file>
         <file>generic.js</file>
+        <file>georgian-railway.json</file>
+        <file>georgian-railway.js</file>
         <file>gepard-express.json</file>
         <file>gepard-express.js</file>
         <file>gnv.it.json</file>
