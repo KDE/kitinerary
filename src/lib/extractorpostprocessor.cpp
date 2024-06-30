@@ -571,6 +571,8 @@ KItinerary::Person ExtractorPostprocessorPrivate::processPerson(KItinerary::Pers
 
 PostalAddress ExtractorPostprocessorPrivate::processAddress(PostalAddress addr, const QString &phoneNumber, const GeoCoordinates &geo)
 {
+    addr.setAddressCountry(addr.addressCountry().simplified());
+
     // convert to ISO 3166-1 alpha-2 country codes
     if (addr.addressCountry().size() > 2) {
         QString alpha2Code;
