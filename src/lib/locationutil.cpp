@@ -291,12 +291,12 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
     switch (accuracy) {
         case Exact:
         case WalkingDistance:
-            if (!lhsAddr.streetAddress().isEmpty() && !lhsAddr.addressLocality().isEmpty()) {
+            if (!lhsAddr.streetAddress().isEmpty() && !rhsAddr.addressLocality().isEmpty()) {
                 return  lhsAddr.streetAddress() == rhsAddr.streetAddress() && lhsAddr.addressLocality() == rhsAddr.addressLocality();
             }
             break;
         case CityLevel:
-            if (!lhsAddr.addressLocality().isEmpty()) {
+            if (!lhsAddr.addressLocality().isEmpty() && !rhsAddr.addressLocality().isEmpty()) {
                 return isSameLocationName(lhsAddr.addressLocality(), rhsAddr.addressLocality(), LocationUtil::Exact);
             }
             break;
