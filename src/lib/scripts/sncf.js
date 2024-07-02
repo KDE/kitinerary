@@ -14,6 +14,7 @@ const tariffs = {
     'CW25': 'Carte Advantage Adulte',
     'EF11': 'Carte Enfant+',
     'EF99': 'Carte Enfant+',
+    'FZ71': 'Max Actif',
     'IR00': 'Interrail',
     'IR01': 'Interrail',
     'JE00': 'Carte Jeune',
