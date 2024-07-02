@@ -178,6 +178,7 @@ static void filterReservation(QJsonObject &res)
 
     // legacy properties
     JsonLd::renameProperty(res, "programMembership", "programMembershipUsed");
+    JsonLd::renameProperty(res, "price", "totalPrice");
 
     // legacy potentialAction property
     JsonLd::renameProperty(res, "action", "potentialAction");
