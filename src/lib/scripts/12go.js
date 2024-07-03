@@ -28,3 +28,16 @@ function extractPdf(pdf) {
     }
     return res;
 }
+
+function fixSchemaOrg(html, node) {
+    let results = node.result;
+    for (res of results) {
+        // doesn't match what's in the PDF
+        res.reservationNumber = undefined;
+        if (res.reservationFor.departureTime == res.reservationFor.arrivalTime)
+            res.reservationFor.arrivalTime = undefined;
+        // contains server rather than location timezone
+        res.reservationFor.departureTime = res.reservationFor.departureTime.substr(0, 19);
+    }
+    return results;
+}
