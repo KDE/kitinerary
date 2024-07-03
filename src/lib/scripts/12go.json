@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "match": "12Go Asia Pte\\.",
@@ -9,4 +9,18 @@
     "function": "extractPdf",
     "mimeType": "application/pdf",
     "script": "12go.js"
+},
+{
+    "filter": [
+        {
+            "match": "12go.asia",
+            "field": "From",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "fixSchemaOrg",
+    "mimeType": "text/html",
+    "script": "12go.js"
 }
+]
