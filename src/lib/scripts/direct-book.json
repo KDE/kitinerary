@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "donotreply@direct-book.com",
+            "mimeType": "message/rfc822",
+            "scope": "Parent"
+        }
+    ],
+    "function": "extractMail",
+    "mimeType": "text/plain",
+    "script": "direct-book.js"
+}
