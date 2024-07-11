@@ -337,7 +337,7 @@ QJSValue JsApi::JsonLd::toGeoCoordinates(const QString &mapUrl)
     QUrl url(mapUrl);
     if (url.host().contains(QLatin1StringView("google"))) {
       QRegularExpression regExp(
-          QStringLiteral("[/=](-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"));
+          QStringLiteral("[/=@](-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"));
       auto match = regExp.match(url.path());
       if (!match.hasMatch()) {
         match = regExp.match(url.query());

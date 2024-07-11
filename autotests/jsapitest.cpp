@@ -13,6 +13,7 @@
 
 #include <cmath>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 #define s(x) QStringLiteral(x)
@@ -78,6 +79,7 @@ private Q_SLOTS:
         QTest::newRow("google maps 2") << s("http://maps.google.fr/?ll=-48.8471603393555,-2.37761735916138&z=19") << -48.8471603393555 << -2.37761735916138;
         QTest::newRow("google maps 3") << s("https://maps.google.com/maps?f=q&hl=en&q=52.434788,-13.544329") << 52.434788 << -13.544329;
         QTest::newRow("google maps api 1") << s("http://maps.googleapis.com/maps/api/staticmap?language=en-gb&size=280x120&center=69.54363918781344,31.028996706008911&sensor=false&markers=color:0x0896FF%7C69.54363918781344,31.028996706008911&zoom=14&client=gme-booking&signature=xxxxxxxxxxxxxxxxxxxxxx") << 69.54363918781344 << 31.028996706008911;
+        QTest::newRow("google maps 4") << u"https://www.google.de/maps/place/Hotel+Ambassador/@49.0079973,8.3891759,17z/data=!XXXXXXX!12345"_s << 49.0079973 << 8.3891759;
     }
 
     void testToGeoCoordinates()
