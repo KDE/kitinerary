@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^S\\d{10}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "scandlines.js"
+}
