@@ -37,6 +37,7 @@ function build_cmake_module() {
         -DCMAKE_INSTALL_PREFIX=$STAGING_ROOT \
         -DCMAKE_EXE_LINKER_FLAGS="-Wl,--as-needed" \
         -DZLIB_USE_STATIC_LIBS=ON \
+        -DKF_SKIP_PO_PROCESSING=ON \
         $@ -DCMAKE_BUILD_TYPE=Release ..
 
     make -j 4
