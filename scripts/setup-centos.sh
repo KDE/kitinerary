@@ -6,8 +6,20 @@ set -x
 
 CMAKE_VERSION=3.27.9
 
+# patch repository URLs to use vault.centos.org
+# WARNING: this is using EOL software, we should not do this!
+function patchYumRepositories() {
+    for f in /etc/yum.repos.d/*.repo; do
+        sed -i "s/^mirrorlist/#mirrorlist/" $f
+        sed -i "s,#baseurl=http://mirror.centos,baseurl=http://vault.centos," $f
+        sed -i "s,# baseurl=http://mirror.centos,baseurl=http://vault.centos," $f
+    done
+}
+
 # install build dependencies
+patchYumRepositories
 yum install -y centos-release-scl
+patchYumRepositories
 yum install -y \
     devtoolset-11-gcc-c++ \
     rh-git227 \
