@@ -83,7 +83,7 @@ build_cmake_module https://github.com/nu-book/zxing-cpp.git zxing-cpp $ZXING_VER
 build_kf_module frameworks/extra-cmake-modules
 build_kf_module frameworks/karchive -DWITH_BZIP2=OFF -DWITH_LIBLZMA=OFF -DWITH_LIBZSTD=OFF
 build_kf_module frameworks/kcodecs
-build_kf_module frameworks/kconfig
+build_kf_module frameworks/kconfig -DKCONFIG_USE_QML=OFF
 build_kf_module frameworks/kcoreaddons -DKCOREADDONS_USE_QML=OFF
 build_kf_module frameworks/ki18n -DBUILD_WITH_QML=OFF -DKI18N_EMBEDDED_ISO_CODES_CACHE=ON
 build_kf_module frameworks/kcalendarcore
