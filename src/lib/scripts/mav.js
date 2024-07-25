@@ -19,15 +19,18 @@ function parseUicStationCode(value)
 // data starts at offset 20 in the header block, at which point both formats are structurally identical
 function parseBarcodeCommon(res, data) {
     const view = new DataView(data);
-    const tripBlockOffset = view.getUInt8(8) == 0x81 ? 87 : 23;
-    res.reservationFor.departureStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset - 1, false));
-    res.reservationFor.departureStation.name = "" + (view.getUint32(tripBlockOffset - 1, false) & 0xffffff);
-    res.reservationFor.arrivalStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset + 2 , false));
-    res.reservationFor.arrivalStation.name = "" + (view.getUint32(tripBlockOffset + 2, false) & 0xffffff);
-    res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(tripBlockOffset + 96, tripBlockOffset + 97));
-    res.reservationFor.departureDay = parseDateTime(view.getUint32(tripBlockOffset + 98, false));
-    if (view.getUInt8(8) == 0x81) {
-        res.underName.name = ByteArray.decodeUtf8(data.slice(19, 19 + 45));
+    const ticketType = view.getUInt8(8);
+    const tripBlockOffset = ticketType == 0x81 ? 87 : 23;
+    if (ticketType & 0x01) {
+        res.reservationFor.departureStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset - 1, false));
+        res.reservationFor.departureStation.name = "" + (view.getUint32(tripBlockOffset - 1, false) & 0xffffff);
+        res.reservationFor.arrivalStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset + 2 , false));
+        res.reservationFor.arrivalStation.name = "" + (view.getUint32(tripBlockOffset + 2, false) & 0xffffff);
+        res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(tripBlockOffset + 96, tripBlockOffset + 97));
+        res.reservationFor.departureDay = parseDateTime(view.getUint32(tripBlockOffset + 98, false));
+        if (ticketType & 0x80) {
+            res.underName.name = ByteArray.decodeUtf8(data.slice(19, 19 + 45));
+        }
     }
     for (var i = 0; i < view.getUInt8(10); ++i) {
         const seatBlock = data.slice(data.byteLength - ((i+1) *57));
