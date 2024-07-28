@@ -12,6 +12,7 @@
 
 #define _(x) QStringLiteral(x)
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 class LocationUtilTest : public QObject
@@ -95,6 +96,39 @@ private Q_SLOTS:
         QVERIFY(!LocationUtil::isSameLocation(mnh, lwh, LocationUtil::CityLevel));
         lwh.setName(_("Mannheim (Rhein) West"));
         QVERIFY(LocationUtil::isSameLocation(mnh, lwh, LocationUtil::CityLevel));
+
+
+        {
+            GeoCoordinates hbfCoord({49.802162170410156, 9.935930252075195});
+            GeoCoordinates uniCoord({49.78118896484375, 9.973090171813965});
+            TrainStation hbf;
+            hbf.setGeo(hbfCoord);
+            Place uni;
+            uni.setGeo(uniCoord);
+            QCOMPARE(LocationUtil::isSameLocation(hbf, uni, LocationUtil::Exact), false);
+            QCOMPARE(LocationUtil::isSameLocation(hbf, uni, LocationUtil::WalkingDistance), false);
+            QCOMPARE(LocationUtil::isSameLocation(hbf, uni, LocationUtil::CityLevel), true);
+            QCOMPARE(LocationUtil::isSameLocation(uni, hbf, LocationUtil::CityLevel), true);
+
+            hbf.setName(u"Würzbug Hbf"_s);
+            QCOMPARE(LocationUtil::isSameLocation(hbf, uni, LocationUtil::CityLevel), true);
+            QCOMPARE(LocationUtil::isSameLocation(uni, hbf, LocationUtil::CityLevel), true);
+
+            PostalAddress uniAddr;
+            uniAddr.setAddressLocality(u"Würzburg"_s);
+            uni.setAddress(uniAddr);
+            QCOMPARE(LocationUtil::isSameLocation(hbf, uni, LocationUtil::CityLevel), true);
+            QCOMPARE(LocationUtil::isSameLocation(uni, hbf, LocationUtil::CityLevel), true);
+            uni.setName(u"Julius-Maximilians-Unversity of Würzburg"_s);
+            QCOMPARE(LocationUtil::isSameLocation(hbf, uni, LocationUtil::CityLevel), true);
+            QCOMPARE(LocationUtil::isSameLocation(uni, hbf, LocationUtil::CityLevel), true);
+
+            PostalAddress hbfAddr;
+            hbfAddr.setAddressLocality(u"Würzburg"_s);
+            hbf.setAddress(hbfAddr);
+            QCOMPARE(LocationUtil::isSameLocation(hbf, uni, LocationUtil::CityLevel), true);
+            QCOMPARE(LocationUtil::isSameLocation(uni, hbf, LocationUtil::CityLevel), true);
+        }
     }
 
     void testLocationNameCompare_data()
