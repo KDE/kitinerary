@@ -261,6 +261,13 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
 {
     const auto lhsGeo = geo(lhs);
     const auto rhsGeo = geo(rhs);
+    const auto lhsAddr = address(lhs);
+    const auto rhsAddr = address(rhs);
+
+    const auto lhsIsTransportStop = JsonLd::isA<Airport>(lhs) || JsonLd::isA<TrainStation>(lhs) || JsonLd::isA<BusStation>(lhs);
+    const auto rhsIsTransportStop = JsonLd::isA<Airport>(rhs) || JsonLd::isA<TrainStation>(rhs) || JsonLd::isA<BusStation>(rhs);
+    const auto isNameComparable = lhsIsTransportStop && rhsIsTransportStop;
+
     if (lhsGeo.isValid() && rhsGeo.isValid()) {
         const auto d = distance(lhsGeo, rhsGeo);
         switch (accuracy) {
@@ -279,15 +286,13 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
                 if (d < 2000) {
                     return true;
                 }
-                if (d < 50000 && address(lhs).addressLocality().isEmpty() && name(lhs).isEmpty()) {
+                if (d < 50000 && (lhsAddr.addressLocality().isEmpty() || rhsAddr.addressLocality().isEmpty()) && (!isNameComparable || name(lhs).isEmpty() || name(rhs).isEmpty())) {
                     return true;
                 }
                 break;
         }
     }
 
-    const auto lhsAddr = address(lhs);
-    const auto rhsAddr = address(rhs);
     switch (accuracy) {
         case Exact:
         case WalkingDistance:
