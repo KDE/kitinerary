@@ -144,6 +144,7 @@ static constexpr const struct {
     Rct2Ticket::Type type;
 } rct2_ticket_type_map[] = {
     { "ticket+reservation", Rct2Ticket::TransportReservation },
+    { "ticket+reservati", Rct2Ticket::TransportReservation },
     { "ticketwithreservation", Rct2Ticket::TransportReservation },
     { "fahrschein+reservierung", Rct2Ticket::TransportReservation },
     { "menetjegy+helyjegy", Rct2Ticket::TransportReservation },
