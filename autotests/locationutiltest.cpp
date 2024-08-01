@@ -154,6 +154,8 @@ private Q_SLOTS:
         QTest::newRow("random-suffix-and-diacritic") << QStringLiteral("München Hbf") << QStringLiteral("MUNCHEN") << true << false;
 
         QTest::newRow("space-insensitive") << QStringLiteral("Frankfurt(Main)Hbf") << QStringLiteral("Frankfurt (Main) Hbf") << true << true;
+
+        QTest::newRow("RCT2-prefix") << u"Verona Porta Nuova"_s << u"VERONA PORTA NUOV"_s << true << true;
     }
 
     void testLocationNameCompare()
