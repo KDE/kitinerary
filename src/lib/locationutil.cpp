@@ -228,6 +228,21 @@ static bool hasCommonPrefix(QStringView lhs, QStringView rhs)
     return lhs.startsWith(rhs, Qt::CaseInsensitive) || rhs.startsWith(lhs, Qt::CaseInsensitive);
 }
 
+[[nodiscard]] static bool isStrictLongPrefix(QStringView lhs, QStringView rhs)
+{
+    // 17 is the maximum field length in RCT2
+    if (lhs.size() < 17 || rhs.size() < 17) {
+        return false;
+    }
+    if (lhs.startsWith(rhs, Qt::CaseInsensitive)) {
+        return lhs.at(rhs.size()).isLetter();
+    }
+    if (rhs.startsWith(lhs, Qt::CaseInsensitive)) {
+        return rhs.at(lhs.size()).isLetter();
+    }
+    return false;
+}
+
 static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationUtil::Accuracy accuracy)
 {
     if (lhs.isEmpty() || rhs.isEmpty()) {
@@ -246,6 +261,11 @@ static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationU
     const auto rhsTransliterated = StringUtil::transliterate(rhs);
     if (compareSpaceCaseInsenstive(lhsNormalized, rhsNormalized) || compareSpaceCaseInsenstive(lhsNormalized, rhsTransliterated)
         || compareSpaceCaseInsenstive(lhsTransliterated, rhsNormalized) || compareSpaceCaseInsenstive(lhsTransliterated, rhsTransliterated)) {
+        return true;
+    }
+
+    // sufficiently long prefix that we can assume RCT2 field overflow
+    if (isStrictLongPrefix(lhs, rhs)) {
         return true;
     }
 
