@@ -310,7 +310,7 @@ function parseSecutixPdf(pdf, node, triggerNode)
 
 function parseOuiEmail(html)
 {
-    if (html.eval('//*[@data-select="travel-summary-reference"]').length > 0) {
+    if (html.eval('//*[@data-select="travel-summary"]').length > 0) {
         return parseOuiSummary(html);
     } else {
         return parseOuiConfirmation(html);
@@ -330,44 +330,57 @@ function parseOuiSummaryTime(htmlElem)
 
 function parseOuiSummary(html)
 {
-    // TODO extract passenger names
-    var res = JsonLd.newTrainReservation();
-    const origins = html.eval('//*[@data-select="travel-summary-origin"]');
-    res.reservationFor.departureStation.name = origins[0].content;
-    const destinations = html.eval('//*[@data-select="travel-summary-destination"]');
-    res.reservationFor.arrivalStation.name = destinations[0].content;
-    res.reservationNumber = html.eval('//*[@data-select="travel-summary-reference"]')[0].content;
+    var reservations = new Array();
 
-    res.reservationFor.departureTime = parseOuiSummaryTime(html.eval('//*[@data-select="travel-departureDate"]'));
+    var travelSummaries = html.eval('//*[@data-select="travel-summary"]');
+    var passengersDetails = html.eval('//*[@data-select="passengers-details"]');
+    for (travelSummaryIdx in travelSummaries) {
+        // TODO extract passenger names
+        var travelSummary = travelSummaries[travelSummaryIdx];
+        var passengersDetail = passengersDetails[travelSummaryIdx];
 
-    var trainNum = html.eval('//*[@data-select="passenger-detail-outwardFares"]//*[@class="passenger-detail__equipment"]');
-    if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
-        // can occur multiple times for multi-leg journeys or multiple passengers
-        // we don't have information about connections on multi-leg journeys, so omit the train number in that case
-        res.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
+        var res = JsonLd.newTrainReservation();
+        const origins = travelSummary.eval('.//*[@data-select="travel-summary-origin"]');
+        res.reservationFor.departureStation.name = origins[0].content;
+        const destinations = travelSummary.eval('.//*[@data-select="travel-summary-destination"]');
+        res.reservationFor.arrivalStation.name = destinations[0].content;
+        res.reservationNumber = travelSummary.eval('.//*[@data-select="travel-summary-reference"]')[0].content;
+
+        res.reservationFor.departureTime = parseOuiSummaryTime(travelSummary.eval('.//*[@data-select="travel-departureDate"]'));
+
+        var trainNum = passengersDetail.eval('.//*[@data-select="passenger-detail-outwardFares"]//*[@class="passenger-detail__equipment"]');
+        if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
+            // can occur multiple times for multi-leg journeys or multiple passengers
+            // we don't have information about connections on multi-leg journeys, so omit the train number in that case
+            res.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
+        }
+
+        const price = travelSummary.eval('.//*[@class="transaction__total-amount-value"]');
+        if (price.length > 0)
+            ExtractorEngine.extractPrice(price[0].recursiveContent, res);
+
+        reservations.push(res);
+
+        // check if this is a return ticket
+        var retourTime = travelSummary.eval('.//*[@data-select="travel-returnDate"]');
+        if (retourTime.length == 0) {
+            continue;
+        }
+        var retour = JsonLd.newTrainReservation();
+        retour.reservationFor.departureStation.name = origins[1] ? origins[1].content : res.reservationFor.arrivalStation.name;
+        retour.reservationFor.arrivalStation.name = destinations[1] ? destinations[1].content : res.reservationFor.departureStation.name;
+        retour.reservationFor.departureTime = parseOuiSummaryTime(retourTime);
+        trainNum = passengersDetail.eval('.//*[@data-select="passenger-detail-inwardFares"]//*[@class="passenger-detail__equipment"]');
+        if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
+            retour.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
+        }
+        if (price.length > 0)
+            ExtractorEngine.extractPrice(price[0].recursiveContent, retour);
+
+        reservations.push(retour);
     }
 
-    const price = html.eval('//*[@class="transaction__total-amount-value"]');
-    if (price.length > 0)
-        ExtractorEngine.extractPrice(price[0].recursiveContent, res);
-
-    // check if this is a return ticket
-    var retourTime = html.eval('//*[@data-select="travel-returnDate"]');
-    if (retourTime.length == 0) {
-        return res;
-    }
-    var retour = JsonLd.newTrainReservation();
-    retour.reservationFor.departureStation.name = origins[1] ? origins[1].content : res.reservationFor.arrivalStation.name;
-    retour.reservationFor.arrivalStation.name = destinations[1] ? destinations[1].content : res.reservationFor.departureStation.name;
-    retour.reservationFor.departureTime = parseOuiSummaryTime(retourTime);
-    trainNum = html.eval('//*[@data-select="passenger-detail-inwardFares"]//*[@class="passenger-detail__equipment"]');
-    if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
-        retour.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
-    }
-    if (price.length > 0)
-        ExtractorEngine.extractPrice(price[0].recursiveContent, retour);
-
-    return [res, retour];
+    return reservations;
 }
 
 function parseOuiConfirmation(html)
