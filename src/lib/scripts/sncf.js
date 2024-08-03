@@ -334,6 +334,7 @@ function parseOuiSummary(html)
 
     var travelSummaries = html.eval('//*[@data-select="travel-summary"]');
     var passengersDetails = html.eval('//*[@data-select="passengers-details"]');
+    var individualPricesFound = html.eval('//*[@data-select="travel-summary-price"]').length === travelSummaries.length;
     for (travelSummaryIdx in travelSummaries) {
         // TODO extract passenger names
         var travelSummary = travelSummaries[travelSummaryIdx];
@@ -355,8 +356,8 @@ function parseOuiSummary(html)
             res.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
         }
 
-        const price = travelSummary.eval('.//*[@class="transaction__total-amount-value"]');
-        if (price.length > 0)
+        const price = travelSummary.eval('.//*[@data-select="travel-summary-price"]')
+        if (individualPricesFound && price.length > 0)
             ExtractorEngine.extractPrice(price[0].recursiveContent, res);
 
         reservations.push(res);
@@ -374,10 +375,16 @@ function parseOuiSummary(html)
         if (trainNum.length == 2 || trainNum[1].content == trainNum[3].content) {
             retour.reservationFor.trainNumber = trainNum[0].content + " " + trainNum[1].content;
         }
-        if (price.length > 0)
+        if (individualPricesFound && price.length > 0)
             ExtractorEngine.extractPrice(price[0].recursiveContent, retour);
 
         reservations.push(retour);
+    }
+
+    if (!individualPricesFound) {
+        const price = html.eval('//*[@class="transaction__total-amount-value"]');
+        if (price.length > 0)
+            ExtractorEngine.extractPrice(price[0].recursiveContent, reservations);
     }
 
     return reservations;
