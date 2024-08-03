@@ -9,7 +9,7 @@ function extractPdf(pdf, node) {
     res.reservedTicket.name = text.match(/Ticket: *(\S.+)\n/)[1];
     res.reservedTicket.ticketToken = "qrCode:" + node.findChildNodes({ scope: "Descendants", mimeType: "text/plain", match: "^[A-Za-z0-9+/=]+$" })[0].content;
 
-    const dt = text.match(/Valid: *\S.*?\S (\w{3} \d{2}, \d{4})\n/);
+    const dt = text.match(/Valid: *\S.*?\S (\w{3} \d{2}, \d{4})/);
     const trip = text.match(/(\d\d:\d\d) +(\S.*?\S)  +Train - (.*)\n *(\d\d:\d\d) +(\S.*?\S)  /);
     console.log(trip);
     res.reservationFor.departureTime = JsonLd.toDateTime(dt[1] + trip[1], "MMM dd, yyyyhh:mm", "en");
@@ -18,7 +18,7 @@ function extractPdf(pdf, node) {
     res.reservationFor.arrivalTime = JsonLd.toDateTime(dt[1] + trip[4], "MMM dd, yyyyhh:mm", "en");
     res.reservationFor.arrivalStation.name = trip[5];
 
-    const seat = text.match(/Car (\S+) - space (\S+)/);
+    const seat = text.match(/Car (\S+) - space (\S.+)\n/);
     if (seat) {
         res.reservedTicket.ticketedSeat.seatSection = seat[1];
         res.reservedTicket.ticketedSeat.seatNumber = seat[2];
