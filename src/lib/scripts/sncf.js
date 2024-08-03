@@ -18,6 +18,7 @@ const tariffs = {
     'IR00': 'Interrail',
     'IR01': 'Interrail',
     'JE00': 'Carte Jeune',
+    'LB00': 'Carte Liberté',
     'SE11': 'Carte Advantage Senior',
     'SR50': 'Carte Senior'
 };
