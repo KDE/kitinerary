@@ -105,8 +105,8 @@ function parseHtmlCommon(doc, node, res)
             res.reservationFor.email = href.substr(7);
             // reservation id is the prefix in the mailto link, unlike other occurrences this seems most reliably present
             res.reservationNumber = href.match(/mailto:(\d+)-/)[1];
-        } else if (aElem.attribute('universal') == 'true') {
-            res.reservationFor.name = aElem.content;
+        } else if ((aElem.attribute('universal') == 'true' || href.match(/booking.com\/hotel\//)) && aElem.recursiveContent !== "" && !res.reservationFor.name) {
+            res.reservationFor.name = aElem.recursiveContent;
         } else if (!res.modifyReservationUrl && href.startsWith("https:") && (href.match(/pbsource=email_change;/) || href.match(/pbsource=conf_email_modify;/))) {
             res.modifyReservationUrl = href;
         }
