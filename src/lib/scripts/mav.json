@@ -14,7 +14,7 @@
     {
         "filter": [
             {
-                "match": "^\\x05\\01[\\dA-Z]{17}\\x001155",
+                "match": "^.\\01[\\dA-Z]{17}\\x001155",
                 "mimeType": "application/octet-stream",
                 "scope": "Current"
             }
@@ -31,7 +31,7 @@
                 "scope": "Descendants"
             },
             {
-                "match": "^\\x05\\01[\\dA-Z]{17}\\x001155",
+                "match": "^.\\01[\\dA-Z]{17}\\x001155",
                 "mimeType": "application/octet-stream",
                 "scope": "Descendants"
             }
