@@ -63,7 +63,7 @@ function parsePdfTicket(pdf, node, triggerNode)
     let reservations = [];
     while (true) {
         const times = timeColumn.substr(idxTime).match(/(\d\d:\d\d)\n([^:]*?\n)?([^:]*?\n)?(\d\d:\d\d)/);
-        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*(?:NOTE:|Wagennummerierung).(?:.*\n)+)?.*(?:Bus|Autobus|Zug|Strecke) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung) (.*)\n(?:.*(?:Operated|Betrieben).*\n)?(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
+        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*(?:NOTE:|Wagennummerierung).(?:.*\n)+)?.*(?:Bus|Autobus|Zug|Strecke|Route) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung) (.*)\n(?:.*(?:Operated|Betrieben|Uitgevoerd).*\n)?(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
         if (!times || !stations) {
             break;
         }
