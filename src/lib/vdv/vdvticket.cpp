@@ -12,6 +12,7 @@
 #include "../asn1/berelement.h"
 
 #include <QDebug>
+#include <QStringDecoder>
 
 using namespace KItinerary;
 
@@ -152,12 +153,17 @@ Person VdvTicket::person() const
         return {};
     }
 
-    const auto len = strnlen(tlv->name(), tlv->nameSize(elem.contentSize())); // name field can contain null bytes
+    const auto len = (qsizetype)strnlen(tlv->name(), tlv->nameSize(elem.contentSize())); // name field can contain null bytes
     if (len == 0) {
         return {};
     }
 
-    const auto name = QString::fromUtf8(tlv->name(), len);
+    QString name;
+    QStringDecoder utf8Decoder(QStringDecoder::Utf8);
+    name = utf8Decoder.decode(QByteArrayView(tlv->name(), len));
+    if (utf8Decoder.hasError()) {
+        name = QString::fromLatin1(tlv->name(), len);
+    }
 
     Person p;
     const auto idxHash = name.indexOf(QLatin1Char('#'));
