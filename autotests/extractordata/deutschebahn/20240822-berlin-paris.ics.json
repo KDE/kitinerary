@@ -1,0 +1,46 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "5",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Mannheim Hbf"
+            },
+            "arrivalTime": "2024-08-22T15:53:00",
+            "departureDay": "2024-08-22",
+            "departurePlatform": "14",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Berlin Hbf"
+            },
+            "departureTime": "2024-08-22T10:27:00",
+            "trainNumber": "ICE 577"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalPlatform": "",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "Paris Est"
+            },
+            "arrivalTime": "2024-08-22T20:52:00",
+            "departureDay": "2024-08-22",
+            "departurePlatform": "1a",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "Mannheim Hbf"
+            },
+            "departureTime": "2024-08-22T17:40:00",
+            "trainNumber": "ICE 9502"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

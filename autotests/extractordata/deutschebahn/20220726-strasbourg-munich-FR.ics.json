@@ -20,7 +20,7 @@
                 "@value": "2022-07-26T12:46:00+02:00",
                 "timezone": "Europe/Berlin"
             },
-            "trainName": "ICE 9573"
+            "trainNumber": "ICE 9573"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -46,7 +46,7 @@
                 "name": "Stuttgart Hbf"
             },
             "departureTime": "2022-07-26T14:14:00",
-            "trainName": "ICE 517"
+            "trainNumber": "ICE 517"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     }

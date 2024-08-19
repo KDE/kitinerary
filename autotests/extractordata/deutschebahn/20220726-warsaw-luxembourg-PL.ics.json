@@ -17,7 +17,7 @@
                 "name": "Nürnberg Hbf"
             },
             "departureTime": "2022-07-26T01:41:00",
-            "trainName": "NJ 40490"
+            "trainNumber": "NJ 40490"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -39,7 +39,7 @@
                 "name": "Koblenz Hbf"
             },
             "departureTime": "2022-07-26T06:03:00",
-            "trainName": "RE 4100"
+            "trainNumber": "RE 4100"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -57,7 +57,7 @@
                 "@value": "2022-07-27T08:31:00+02:00",
                 "timezone": "Europe/Berlin"
             },
-            "busName": "Bus51016",
+            "busNumber": "Bus51016",
             "departureBusStop": {
                 "@type": "BusStation",
                 "name": "Trier Hbf"
@@ -87,7 +87,7 @@
                 "@value": "2022-07-26T12:15:00+02:00",
                 "timezone": "Europe/Berlin"
             },
-            "trainName": "EC 44"
+            "trainNumber": "EC 44"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -109,7 +109,7 @@
                 "name": "Berlin Gesundbrunnen"
             },
             "departureTime": "2022-07-26T19:55:00",
-            "trainName": "ICE 1109"
+            "trainNumber": "ICE 1109"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
