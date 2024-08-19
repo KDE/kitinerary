@@ -21,7 +21,7 @@
                 "@value": "2022-07-26T10:26:00+02:00",
                 "timezone": "Europe/Berlin"
             },
-            "trainName": "ICE 16"
+            "trainNumber": "ICE 16"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -46,7 +46,7 @@
                 "name": "Köln Hbf"
             },
             "departureTime": "2022-07-26T12:42:00",
-            "trainName": "THA 9448"
+            "trainNumber": "THA 9448"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     }

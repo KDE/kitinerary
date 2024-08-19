@@ -323,7 +323,7 @@ function parseUic9183(code, node) {
 
 function parseEvent(event) {
     let res = JsonLd.newTrainReservation();
-    const names = event.summary.match(/(.*) -> (.*)/);
+    const names = event.summary.match(/(.*) (?:->|➞) (.*)/);
     res.reservationFor.departureStation.name = names[1];
     res.reservationFor.departureTime = JsonLd.readQDateTime(event, 'dtStart');
     res.reservationFor.arrivalStation.name = names[2];
@@ -333,23 +333,26 @@ function parseEvent(event) {
     let reservations = [];
     let idx = 0;
     while (true) {
-        const trip = event.description.substr(idx).match(/(\d{2}:\d{2}) (.*?)(?:- (?:Gleis|platform|voie|Vía|Spor|Kolej|binario|Peron) (.*?))?(?: \((.*\d+)\))?\n.* (\d{2}:\d{2}) (.*?)(?:\n| - (?:Gleis|platform|voie|Vía|Spor|Kolej|binario|Peron) (.*)\n)/);
+        const trip = event.description.substr(idx).match(/(?:\[.*: \d .* (\S+), .* (\d+)\])?\n(?:(\S.*\S) \(.*\n)?.*(\d{2}:\d{2}) (.*?)(?:[-▷] (?:Gleis|platform|voie|Vía|Spor|Kolej|binario|Peron) (.*?))?(?: \((.*\d+)\))?\n.* (\d{2}:\d{2}) (.*?)(?:\n| [-▷] (?:Gleis|platform|voie|Vía|Spor|Kolej|binario|Peron) (.*)\n)/);
         if (!trip) {
             break;
         }
         idx += trip.index + trip[0].length;
 
         let res = JsonLd.newTrainReservation();
-        const date = JsonLd.readQDateTime(event, 'dtStart')['@value'].substr(0, 10);
-        res.reservationFor.departureStation.name = trip[2];
-        res.reservationFor.departureTime = JsonLd.toDateTime(date + trip[1], 'yyyy-MM-ddhh:mm', 'de');
-        res.reservationFor.departurePlatform = trip[3];
-        res.reservationFor.trainName = trip[4];
-        res.reservationFor.arrivalStation.name = trip[6];
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(date + trip[5], 'yyyy-MM-ddhh:mm', 'de');
-        res.reservationFor.arrivalPlatform = trip[7];
+        const dtObj = JsonLd.readQDateTime(event, 'dtStart');
+        const date = typeof dtObj === "string" ? dtObj.substr(0, 10) : dtObj['@value'].substr(0, 10);
+        res.reservationFor.departureStation.name = trip[5];
+        res.reservationFor.departureTime = JsonLd.toDateTime(date + trip[4], 'yyyy-MM-ddhh:mm', 'de');
+        res.reservationFor.departurePlatform = trip[6];
+        res.reservationFor.trainNumber = trip[3] ? trip[3] : trip[7];
+        res.reservationFor.arrivalStation.name = trip[9];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(date + trip[8], 'yyyy-MM-ddhh:mm', 'de');
+        res.reservationFor.arrivalPlatform = trip[10];
+        res.reservedTicket.ticketedSeat.seatSection = trip[1];
+        res.reservedTicket.ticketedSeat.seatNumber = trip[2];
 
-        if (trip[4] && trip[4].match(/^Bus[ \d]/)) {
+        if (res.reservationFor.trainNumber.match(/^Bus[ \d]/)) {
             res = JsonLd.trainToBusReservation(res);
         }
 
@@ -375,7 +378,7 @@ function parseReservationEvent(event) {
 
     const trip = event.description.match(/.* ➞ .*\n\[.*: \d .* (\S+), .* (\d+)\]\n(.*) \(.*\n.* ab .* ▷ \S+ (\S.*)\n.* an ?.* ▷ \S+ (\S.*)\n/);
     res.reservationFor.departurePlatform = trip[4];
-    res.reservationFor.trainName = trip[3];
+    res.reservationFor.trainNumber = trip[3];
     res.reservationFor.arrivalPlatform = trip[5];
     res.reservedTicket.ticketedSeat.seatSection = trip[1];
     res.reservedTicket.ticketedSeat.seatNumber = trip[2];

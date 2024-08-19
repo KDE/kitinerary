@@ -19,7 +19,7 @@
                 "@value": "2022-07-26T13:57:00+02:00",
                 "timezone": "Europe/Berlin"
             },
-            "trainName": "FA 8519"
+            "trainNumber": "FA 8519"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -39,7 +39,7 @@
                 "name": "Verona Porta Nuova"
             },
             "departureTime": "2022-07-26T15:02:00",
-            "trainName": "FA 9736"
+            "trainNumber": "FA 9736"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -60,7 +60,7 @@
                 "name": "Milano Centrale"
             },
             "departureTime": "2022-07-26T17:20:00",
-            "trainName": "EC 36"
+            "trainNumber": "EC 36"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -85,7 +85,7 @@
                 "name": "Brig Bahnhofplatz"
             },
             "departureTime": "2022-07-26T19:52:00",
-            "trainName": "RE 265"
+            "trainNumber": "RE 265"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     }

@@ -21,7 +21,7 @@
                 "@value": "2022-07-26T13:17:00+02:00",
                 "timezone": "Europe/Berlin"
             },
-            "trainName": "IC 1197"
+            "trainNumber": "IC 1197"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -43,7 +43,7 @@
                 "name": "Hamburg Hbf"
             },
             "departureTime": "2022-07-26T18:46:00",
-            "trainName": "IC 2307"
+            "trainNumber": "IC 2307"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -65,7 +65,7 @@
                 "name": "Bremen Hbf"
             },
             "departureTime": "2022-07-26T19:53:00",
-            "trainName": "IC 2034"
+            "trainNumber": "IC 2034"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -79,7 +79,7 @@
                 "name": "Groningen CS Hoofdstation"
             },
             "arrivalTime": "2022-07-26T22:25:00",
-            "busName": "Bus 647",
+            "busNumber": "Bus 647",
             "departureBusStop": {
                 "@type": "BusStation",
                 "name": "Leer(Ostfriesl) ZOB/Bahnhof"
@@ -110,7 +110,7 @@
                 "name": "Groningen"
             },
             "departureTime": "2022-07-26T22:49:00",
-            "trainName": "IC 786"
+            "trainNumber": "IC 786"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     }

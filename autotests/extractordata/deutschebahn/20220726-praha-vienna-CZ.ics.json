@@ -24,7 +24,7 @@
                 "@value": "2022-07-26T11:56:00+02:00",
                 "timezone": "Europe/Berlin"
             },
-            "trainName": "RJ 79"
+            "trainNumber": "RJ 79"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     }

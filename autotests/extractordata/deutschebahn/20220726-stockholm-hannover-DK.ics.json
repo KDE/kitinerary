@@ -19,7 +19,7 @@
                 "@value": "2022-07-26T11:21:00+02:00",
                 "timezone": "Europe/Berlin"
             },
-            "trainName": "X2 531"
+            "trainNumber": "X2 531"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -40,7 +40,7 @@
                 "name": "Malmö Central"
             },
             "departureTime": "2022-07-26T16:13:00",
-            "trainName": "R 1077"
+            "trainNumber": "R 1077"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -62,7 +62,7 @@
                 "name": "Koebenhavn H"
             },
             "departureTime": "2022-07-26T17:17:00",
-            "trainName": "IC 1199"
+            "trainNumber": "IC 1199"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -88,7 +88,7 @@
                 "name": "Hamburg Hbf"
             },
             "departureTime": "2022-07-26T22:12:00",
-            "trainName": "ICE 1689"
+            "trainNumber": "ICE 1689"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     }

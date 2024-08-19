@@ -21,7 +21,7 @@
                 "@value": "2022-07-26T12:46:00+02:00",
                 "timezone": "Europe/Berlin"
             },
-            "trainName": "IC 2311"
+            "trainNumber": "IC 2311"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -43,7 +43,7 @@
                 "name": "Münster(Westf)Hbf"
             },
             "departureTime": "2022-07-26T15:10:00",
-            "trainName": "RB 90027"
+            "trainNumber": "RB 90027"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     },
@@ -69,7 +69,7 @@
                 "name": "Hamm(Westf)Hbf"
             },
             "departureTime": "2022-07-26T15:44:00",
-            "trainName": "RE 89726"
+            "trainNumber": "RE 89726"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"
     }
