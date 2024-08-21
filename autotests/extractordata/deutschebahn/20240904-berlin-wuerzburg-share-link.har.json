@@ -1,0 +1,98 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 49.90079879760742,
+                    "longitude": 10.899499893188477
+                },
+                "identifier": "ibnr:8000025",
+                "name": "Bamberg"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2024-09-04T15:15:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureDay": "2024-09-04",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.476600646972656,
+                    "longitude": 13.366000175476074
+                },
+                "identifier": "ibnr:8011113",
+                "name": "Berlin Südkreuz"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2024-09-04T12:36:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "trainNumber": "ICE 509"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 49.80270004272461,
+                    "longitude": 9.936070442199707
+                },
+                "identifier": "ibnr:8000260",
+                "name": "Würzburg Hbf"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2024-09-04T16:51:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureDay": "2024-09-04",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 49.90079879760742,
+                    "longitude": 10.899499893188477
+                },
+                "identifier": "ibnr:8000025",
+                "name": "Bamberg"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2024-09-04T15:41:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "trainNumber": "RB 58054"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

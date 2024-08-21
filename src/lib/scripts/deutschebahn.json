@@ -152,5 +152,18 @@
         "function": "parseDBRegioNVUic",
         "mimeType": "internal/uic9183",
         "script": "deutschebahn.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "url",
+                "match": "^https://int.bahn.de/web/api/angebote/verbindung",
+                "mimeType": "internal/http-response",
+                "scope": "Parent"
+            }
+        ],
+        "function": "parseConnectionShare",
+        "mimeType": "application/ld+json",
+        "script": "deutschebahn-online-ticket.js"
     }
 ]

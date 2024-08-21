@@ -97,3 +97,29 @@ function parseOnlineTicket(xml)
     }
     return mergedResult;
 }
+
+function parseReconLocation(obj, locStr)
+{
+    for (const loc of locStr.split('@')) {
+        if (loc.startsWith("O="))
+            obj.name = loc.substr(2);
+        if (loc.startsWith("L="))
+            obj.identifier = "ibnr:" + loc.substr(2);
+    }
+}
+
+function parseConnectionShare(json)
+{
+    let reservations = [];
+    for (const recon of json[0]['hinfahrtRecon'].substr(5).split('§')) {
+        const trip = recon.split('$');
+        let res = JsonLd.newTrainReservation();
+        parseReconLocation(res.reservationFor.departureStation, trip[1]);
+        parseReconLocation(res.reservationFor.arrivalStation, trip[2]);
+        res.reservationFor.departureTime = JsonLd.toDateTime(trip[3], "yyyyMMddhhmm", "de");
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[4], "yyyyMMddhhmm", "de");
+        res.reservationFor.trainNumber = trip[5];
+        reservations.push(res);
+    }
+    return reservations;
+}
