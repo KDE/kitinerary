@@ -5,6 +5,7 @@
 */
 
 #include "jsonlddocumentprocessor.h"
+#include "logging.h"
 #include "stringutil.h"
 
 #include <KItinerary/ExtractorResult>
@@ -28,6 +29,7 @@ ExtractorDocumentNode JsonLdDocumentProcessor::createNodeFromData(const QByteArr
     QJsonParseError error;
     const auto doc = QJsonDocument::fromJson(encodedData, &error);
     if (error.error != QJsonParseError::NoError) {
+        qCDebug(Log) << error.errorString() << error.offset;
         return {};
     }
 
