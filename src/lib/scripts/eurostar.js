@@ -33,7 +33,7 @@ function parsePdf(pdf, node, elb) {
     const dep = text.match(/From.*\n(?:  +.*\n)?([ \S]\S.*?\S)  /);
     res.reservationFor.departureStation.name = dep[1];
     res.reservationFor.departureTime = JsonLd.toDateTime(times[1], "hh:mm", "en");
-    const arr = text.match(/To.*\n(?:  +.*\n)?([ \S]\S.*?\S)  /);
+    const arr = text.match(/To.*\n(?:  +.*\n)?([ \S]\S.*?\S)(?:  |\n)/);
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(times[2], "hh:mm", "en");
     return res;
