@@ -5,6 +5,7 @@
 */
 
 function main(pdf) {
+    let reservations = [];
     for (var i = 0; i < pdf.pageCount; ++i) {
         var page = pdf.pages[i];
         var nextBarcode = null;
@@ -12,9 +13,10 @@ function main(pdf) {
         for (var j = 0; j < images.length && !nextBarcode; ++j) {
             nextBarcode = Barcode.decodeQR(images[j]);
             if (nextBarcode)
-                return decodeBarcode(pdf.text, nextBarcode);
+                reservations.push(decodeBarcode(page.text, nextBarcode));
         }
     }
+    return reservations
 }
 
 function decodeBarcode(text, barcode) {
