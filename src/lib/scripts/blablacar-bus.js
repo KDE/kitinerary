@@ -23,14 +23,14 @@ function decodeBarcode(text, barcode) {
     var res = JsonLd.newBusReservation();
 
     // Time and date is only in the PDF text
-    const times = text.match(/(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2})/g);
+    const times = text.match(/(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}|\d{2}-\d{2}-\d{4} à \d{2}:\d{2})/g);
     if (times.length !== 2) {
         console.log("Failed to extract departure/arrival time from text: " + times);
         return null;
     }
 
-    res.reservationFor.departureTime = JsonLd.toDateTime(times[0], "dd.MM.yyyy hh:mm", "en");
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(times[1], "dd.MM.yyyy hh:mm", "en");
+    res.reservationFor.departureTime = JsonLd.toDateTime(times[0], ["dd.MM.yyyy hh:mm", "dd-MM-yyyy à hh:mm"], "en");
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(times[1],  ["dd.MM.yyyy hh:mm", "dd-MM-yyyy à hh:mm"], "en");
 
     // The rest of the info can be found in the QR code, separated by |
     const parts = barcode.split("|");
