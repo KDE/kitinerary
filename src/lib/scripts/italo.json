@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "match": "^[A-Za-z0-9/\\+=]{89}",
@@ -9,4 +9,16 @@
     "function": "parseTicket",
     "mimeType": "application/pdf",
     "script": "italo.js"
-}
+},
+{
+    "filter": [
+        {
+            "match": "^[A-Za-z0-9/\\+=]{65}",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdfTicket",
+    "mimeType": "application/pdf",
+    "script": "italo.js"
+}]
