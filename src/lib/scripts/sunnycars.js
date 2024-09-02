@@ -37,9 +37,26 @@ function main(pass, node)
     res.pickupLocation.geo.latitude = location.latitude;
     res.pickupLocation.geo.longitude = location.longitude;
 
-    // TODO drop-off location. We currently do not have enough samples
-    // to tell whether the absence of a drop-off location indicates
-    // that it is identical to the pickup location.
+    // If dropoff-address is present, it's a one-way rental,
+    // otherwise assume the dropoff is identical with pickup.
+    // There is no geo coordinates for dropoff provided.
+    const dropoffAddress = pass.field["dropoff-address"];
+    if (dropoffAddress) {
+        const dropoffAddressParts = dropoffAddress.value.split("\n");
+
+        if (!res.dropoffLocation.name) {
+            res.dropoffLocation.name = dropoffAddressParts[0];
+        }
+
+        res.dropoffLocation.address.streetAddress = dropoffAddressParts[1];
+
+        const dropoffTelLine = dropoffAddressParts[3];
+        if (dropoffTelLine && dropoffTelLine.startsWith(telPrefix)) {
+            res.dropoffLocation.telephone = dropoffTelLine.substring(telPrefix.length);
+        }
+    } else {
+        res.dropoffLocation = res.pickupLocation;
+    }
 
     res.reservationFor.model = pass.field["vehicle-group-detail"].value;
 
