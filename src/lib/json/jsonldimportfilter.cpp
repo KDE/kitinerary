@@ -133,7 +133,7 @@ static void filterPlace(QJsonObject &obj)
             geo.insert("latitude"_L1, lat);
         }
         if (!geo.contains("longitude"_L1)) {
-            geo.insert("longitude"_L1, lat);
+            geo.insert("longitude"_L1, lon);
         }
         obj.insert("geo"_L1, geo);
     }
