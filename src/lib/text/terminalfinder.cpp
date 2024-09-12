@@ -30,7 +30,7 @@ TerminalFinder::TerminalFinder(QStringView frontAnchor, QStringView backAnchor)
     for (const auto &pattern : terminal_patterns) {
       m_patterns[i++] = QRegularExpression(
           frontAnchor + QLatin1StringView("(?<terminal>") +
-              QLatin1String(pattern.pattern) + QLatin1String(")") + backAnchor,
+              QLatin1StringView(pattern.pattern) + QLatin1StringView(")") + backAnchor,
           pattern.options);
     }
 }

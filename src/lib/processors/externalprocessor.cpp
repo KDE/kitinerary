@@ -27,7 +27,7 @@ ExternalProcessor::ExternalProcessor()
     // find external extractor
     const QString filepath =
         QLatin1StringView(CMAKE_INSTALL_FULL_LIBEXECDIR_KF6) +
-        QLatin1String("/kitinerary-extractor");
+        QLatin1StringView("/kitinerary-extractor");
     QFileInfo fi(filepath);
     if (!fi.exists() && !fi.isFile() && !fi.isExecutable()) {
         qCCritical(Log) << "filePath : " << filepath << "Cannot find external extractor:" << fi.fileName();

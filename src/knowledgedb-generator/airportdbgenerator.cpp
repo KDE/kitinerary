@@ -134,14 +134,14 @@ bool AirportDbGenerator::fetchAirports()
         }
 
         if (obj.contains(QLatin1StringView("endDate")) ||
-            obj.contains(QLatin1String("demolished")) ||
+            obj.contains(QLatin1StringView("demolished")) ||
             obj.contains(QLatin1StringView("officialClosure")) ||
-            obj.contains(QLatin1String("iataEndDate")) ||
+            obj.contains(QLatin1StringView("iataEndDate")) ||
             obj.value(QLatin1StringView("iataRank"))
                 .toObject()
-                .value(QLatin1String("value"))
+                .value(QLatin1StringView("value"))
                 .toString()
-                .endsWith(QLatin1String("DeprecatedRank"))) {
+                .endsWith(QLatin1StringView("DeprecatedRank"))) {
           // skip closed airports or those with expired IATA codes
           continue;
         }
@@ -149,7 +149,7 @@ bool AirportDbGenerator::fetchAirports()
         const auto openingdDt =
             QDateTime::fromString(obj.value(QLatin1StringView("openingDate"))
                                       .toObject()
-                                      .value(QLatin1String("value"))
+                                      .value(QLatin1StringView("value"))
                                       .toString(),
                                   Qt::ISODate);
         if (openingdDt.isValid() && openingdDt > QDateTime::currentDateTime().addDays(120)) {
@@ -160,11 +160,11 @@ bool AirportDbGenerator::fetchAirports()
         Airport a;
         a.uri = QUrl(obj.value(QLatin1StringView("airport"))
                          .toObject()
-                         .value(QLatin1String("value"))
+                         .value(QLatin1StringView("value"))
                          .toString());
         a.iataCode = obj.value(QLatin1StringView("iataCode"))
                          .toObject()
-                         .value(QLatin1String("value"))
+                         .value(QLatin1StringView("value"))
                          .toString();
         if (a.iataCode.size() != 3 || !a.iataCode.at(0).isUpper() || !a.iataCode.at(1).isUpper() || !a.iataCode.at(2).isUpper()) {
             // invalid IATA code
@@ -172,15 +172,15 @@ bool AirportDbGenerator::fetchAirports()
         }
         a.icaoCode = obj.value(QLatin1StringView("icaoCode"))
                          .toObject()
-                         .value(QLatin1String("value"))
+                         .value(QLatin1StringView("value"))
                          .toString();
         a.label = obj.value(QLatin1StringView("airportLabel"))
                       .toObject()
-                      .value(QLatin1String("value"))
+                      .value(QLatin1StringView("value"))
                       .toString();
         a.alias = obj.value(QLatin1StringView("airportAltLabel"))
                       .toObject()
-                      .value(QLatin1String("value"))
+                      .value(QLatin1StringView("value"))
                       .toString();
         // primitive military airport filter, turns out to be more reliable than querying for the military airport types
         if (soundsMilitaryish(a.label) || soundsMilitaryish(a.alias)) {
@@ -189,7 +189,7 @@ bool AirportDbGenerator::fetchAirports()
         a.coord =
             WikiData::parseCoordinate(obj.value(QLatin1StringView("coord"))
                                           .toObject()
-                                          .value(QLatin1String("value"))
+                                          .value(QLatin1StringView("value"))
                                           .toString());
 
         // merge multiple records for the same airport
@@ -229,11 +229,11 @@ bool AirportDbGenerator::fetchCountries()
         const auto obj = airportData.toObject();
         const auto uri = QUrl(obj.value(QLatin1StringView("airport"))
                                   .toObject()
-                                  .value(QLatin1String("value"))
+                                  .value(QLatin1StringView("value"))
                                   .toString());
         const auto isoCode = obj.value(QLatin1StringView("isoCode"))
                                  .toObject()
-                                 .value(QLatin1String("value"))
+                                 .value(QLatin1StringView("value"))
                                  .toString();
         const auto it = m_airportMap.find(uri);
         if (it != m_airportMap.end()) {

@@ -306,7 +306,7 @@ QJsonValue PListReader::unpackKeyedArchive() const
     // TODO cycle detection
     const auto root = object(rootObjectIndex()).value<PListDict>();
     if (root.object(QLatin1StringView("$archiver")).toString() !=
-        QLatin1String("NSKeyedArchiver")) {
+        QLatin1StringView("NSKeyedArchiver")) {
       qDebug() << "not NSKeyedArchiver data"
                << root.object(QLatin1StringView("$archiver"));
       return {};

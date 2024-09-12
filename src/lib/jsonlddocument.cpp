@@ -193,7 +193,7 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         if (v.isObject()) {
             const auto dtObj = v.toObject();
             if (dtObj.value(QLatin1StringView("@type")).toString() ==
-                QLatin1String("QDateTime")) {
+                QLatin1StringView("QDateTime")) {
               dt = QDateTime::fromString(
                   dtObj.value(QLatin1StringView("@value")).toString(),
                   Qt::ISODate);

@@ -74,9 +74,9 @@ static void applyTransliterations(QStringList &fragments)
     // as StringUtil::normalize has already been applied to fragments
     // similarly, the input is already case-folded
     for (auto &fragment : fragments) {
-      fragment.replace(QLatin1StringView("ae"), QLatin1String("a"));
-      fragment.replace(QLatin1StringView("oe"), QLatin1String("o"));
-      fragment.replace(QLatin1StringView("ue"), QLatin1String("u"));
+      fragment.replace(QLatin1StringView("ae"), QLatin1StringView("a"));
+      fragment.replace(QLatin1StringView("oe"), QLatin1StringView("o"));
+      fragment.replace(QLatin1StringView("ue"), QLatin1StringView("u"));
     }
 }
 

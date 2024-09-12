@@ -36,7 +36,7 @@ static void harPostRequest(const QNetworkRequest &req, const QByteArray &postDat
     harEntry.insert(
         QLatin1StringView("request"),
         QJsonObject({
-            {QLatin1StringView("method"), QLatin1String("POST")},
+            {QLatin1StringView("method"), QLatin1StringView("POST")},
             {QLatin1StringView("url"), req.url().toString()},
             {QLatin1StringView("headers"), headers},
             {QLatin1StringView("postData"),
@@ -55,7 +55,7 @@ static void harResponse(const HttpResponse &response, QJsonObject &harEntry)
             QJsonObject({
                 {QLatin1StringView("text"),
                  QString::fromUtf8(response.content().toBase64())},
-                {QLatin1StringView("encoding"), QLatin1String("base64")},
+                {QLatin1StringView("encoding"), QLatin1StringView("base64")},
             })}}));
 }
 

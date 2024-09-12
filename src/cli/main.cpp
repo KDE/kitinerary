@@ -108,7 +108,7 @@ int main(int argc, char** argv)
     }
     xdgDataDirs += QString(QCoreApplication::applicationDirPath() +
                            QDir::separator() + QLatin1StringView("..") +
-                           QDir::separator() + QLatin1String("share"))
+                           QDir::separator() + QLatin1StringView("share"))
                        .toUtf8();
     qputenv("XDG_DATA_DIRS", xdgDataDirs);
 #endif

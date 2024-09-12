@@ -99,7 +99,7 @@ bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
         } ORDER BY (?station))"),
                       QLatin1StringView("wikidata_trainstation_") +
-                          QString::fromUtf8(name) + QLatin1String(".json"));
+                          QString::fromUtf8(name) + QLatin1StringView(".json"));
   if (stationArray.isEmpty()) {
     qWarning() << "Empty query result!";
     return false;
@@ -108,14 +108,14 @@ bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
         if (stationObj.contains(QLatin1StringView("replacedBy")) ||
-            stationObj.contains(QLatin1String("dateOfOfficialClosure"))) {
+            stationObj.contains(QLatin1StringView("dateOfOfficialClosure"))) {
           continue;
         }
 
         const auto uri = insertOrMerge(stationObj);
         const auto idStr = stationObj.value(QLatin1StringView("id"))
                                .toObject()
-                               .value(QLatin1String("value"))
+                               .value(QLatin1StringView("value"))
                                .toString()
                                .toUpper();
         const auto id = Id(idStr);
@@ -157,7 +157,7 @@ bool TrainStationDbGenerator::fetchIndianRailwaysStationCode()
 
         const auto id = stationObj.value(QLatin1StringView("irId"))
                             .toObject()
-                            .value(QLatin1String("value"))
+                            .value(QLatin1StringView("value"))
                             .toString()
                             .toUpper();
         const auto it = m_indianRailwaysMap.find(id);
@@ -193,7 +193,7 @@ bool TrainStationDbGenerator::fetchFinishStationCodes()
         const auto stationObj = stationData.toObject();
         const auto ref = stationObj.value(QLatin1StringView("ref"))
                              .toObject()
-                             .value(QLatin1String("value"))
+                             .value(QLatin1StringView("value"))
                              .toString();
         if (!ref.contains(QLatin1StringView("rata.digitraffic.fi"),
                           Qt::CaseInsensitive)) {
@@ -204,7 +204,7 @@ bool TrainStationDbGenerator::fetchFinishStationCodes()
         // TODO this filters 'Ä' and 'Ö' too, which seem to occur in a few cases?
         const auto idStr = stationObj.value(QLatin1StringView("code"))
                                .toObject()
-                               .value(QLatin1String("value"))
+                               .value(QLatin1StringView("value"))
                                .toString()
                                .toUpper();
         const auto id = KnowledgeDb::VRStationCode(idStr);
@@ -256,19 +256,19 @@ QUrl TrainStationDbGenerator::insertOrMerge(const QJsonObject &obj, bool mergeOn
     Station s;
     s.uri = QUrl(obj.value(QLatin1StringView("station"))
                      .toObject()
-                     .value(QLatin1String("value"))
+                     .value(QLatin1StringView("value"))
                      .toString());
     s.name = obj.value(QLatin1StringView("stationLabel"))
                  .toObject()
-                 .value(QLatin1String("value"))
+                 .value(QLatin1StringView("value"))
                  .toString();
     s.coord = WikiData::parseCoordinate(obj.value(QLatin1StringView("coord"))
                                             .toObject()
-                                            .value(QLatin1String("value"))
+                                            .value(QLatin1StringView("value"))
                                             .toString());
     s.isoCode = obj.value(QLatin1StringView("isoCode"))
                     .toObject()
-                    .value(QLatin1String("value"))
+                    .value(QLatin1StringView("value"))
                     .toString();
 
     const auto it = std::lower_bound(m_stations.begin(), m_stations.end(), s);

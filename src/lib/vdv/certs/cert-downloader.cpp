@@ -159,7 +159,7 @@ int main(int argc, char **argv)
             qDebug() << "discarding" << (*it) << "due to being expired" << cert.endOfValidity();
             QFile::rename((*it) + QLatin1StringView(".vdv-cert"),
                           QLatin1Char('.') + (*it) +
-                              QLatin1String(".vdv-cert"));
+                              QLatin1StringView(".vdv-cert"));
             it = certNames.erase(it);
             continue;
         }

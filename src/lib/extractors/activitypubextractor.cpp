@@ -55,9 +55,9 @@ bool ActivityPubExtractor::canHandle(const ExtractorDocumentNode &node) const
 static void convertPlace(QJsonObject &obj)
 {
   QJsonObject geo({
-      {QLatin1StringView("@type"), QLatin1String("GeoCoordinates")},
-      {QLatin1StringView("latitude"), obj.value(QLatin1String("latitude"))},
-      {QLatin1StringView("longitude"), obj.value(QLatin1String("longitude"))},
+      {QLatin1StringView("@type"), QLatin1StringView("GeoCoordinates")},
+      {QLatin1StringView("latitude"), obj.value(QLatin1StringView("latitude"))},
+      {QLatin1StringView("longitude"), obj.value(QLatin1StringView("longitude"))},
   });
   obj.insert(QLatin1StringView("geo"), geo);
 }

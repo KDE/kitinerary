@@ -80,7 +80,7 @@ bool CountryDbGenerator::fetchCountryList()
 
         const auto isoCode = countryObj.value(QLatin1StringView("isoCode"))
                                  .toObject()
-                                 .value(QLatin1String("value"))
+                                 .value(QLatin1StringView("value"))
                                  .toString()
                                  .toUpper();
         if (isoCode.size() != 2 || !Util::containsOnlyLetters(isoCode)) {
@@ -160,12 +160,12 @@ bool Generator::CountryDbGenerator::fetchUicCountryCodes()
         const auto uicObj = uicCodeData.toObject();
         const auto uicCode = uicObj.value(QLatin1StringView("uicCode"))
                                  .toObject()
-                                 .value(QLatin1String("value"))
+                                 .value(QLatin1StringView("value"))
                                  .toString()
                                  .toUShort();
         const auto uri = QUrl(uicObj.value(QLatin1StringView("country"))
                                   .toObject()
-                                  .value(QLatin1String("value"))
+                                  .value(QLatin1StringView("value"))
                                   .toString());
         const auto it = std::find_if(m_countries.begin(), m_countries.end(), [uri](const auto &country) { return country.uri == uri; });
         if (it == m_countries.end()) {
@@ -188,29 +188,29 @@ QUrl CountryDbGenerator::insertOrMerge(const QJsonObject& obj)
     Country c;
     c.uri = QUrl(obj.value(QLatin1StringView("country"))
                      .toObject()
-                     .value(QLatin1String("value"))
+                     .value(QLatin1StringView("value"))
                      .toString());
     c.name = obj.value(QLatin1StringView("countryLabel"))
                  .toObject()
-                 .value(QLatin1String("value"))
+                 .value(QLatin1StringView("value"))
                  .toString();
     if (!obj.contains(QLatin1StringView("drivingSideEndTime"))) {
       c.drivingSide = obj.value(QLatin1StringView("drivingSide"))
                           .toObject()
-                          .value(QLatin1String("value"))
+                          .value(QLatin1StringView("value"))
                           .toString();
     }
     if (!obj.contains(QLatin1StringView("plugTypeEndTime")) &&
-        obj.contains(QLatin1String("plugType"))) {
+        obj.contains(QLatin1StringView("plugType"))) {
       c.powerPlugTypes.insert(QUrl(obj.value(QLatin1StringView("plugType"))
                                        .toObject()
-                                       .value(QLatin1String("value"))
+                                       .value(QLatin1StringView("value"))
                                        .toString())
                                   .fileName());
     }
     c.isoCode = obj.value(QLatin1StringView("isoCode"))
                     .toObject()
-                    .value(QLatin1String("value"))
+                    .value(QLatin1StringView("value"))
                     .toString();
 
     const auto it = std::lower_bound(m_countries.begin(), m_countries.end(), c);

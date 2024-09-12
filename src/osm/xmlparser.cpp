@@ -46,7 +46,7 @@ void XmlParser::parseNode(QXmlStreamReader &reader)
     node.id = reader.attributes().value(QLatin1StringView("id")).toLongLong();
     node.coordinate = Coordinate(
         reader.attributes().value(QLatin1StringView("lat")).toDouble(),
-        reader.attributes().value(QLatin1String("lon")).toDouble());
+        reader.attributes().value(QLatin1StringView("lon")).toDouble());
 
     while (!reader.atEnd() && reader.readNext() != QXmlStreamReader::EndElement) {
         if (reader.tokenType() != QXmlStreamReader::StartElement) {
@@ -130,14 +130,14 @@ void XmlParser::parseTag(QXmlStreamReader &reader, T &elem)
 {
   OSM::setTagValue(elem,
                    reader.attributes().value(QLatin1StringView("k")).toString(),
-                   reader.attributes().value(QLatin1String("v")).toString());
+                   reader.attributes().value(QLatin1StringView("v")).toString());
 }
 
 template <typename T>
 void XmlParser::parseTagOrBounds(QXmlStreamReader &reader, T &elem)
 {
   if (reader.attributes().value(QLatin1StringView("k")) ==
-      QLatin1String("bBox")) { // osmconvert style bounding box
+      QLatin1StringView("bBox")) { // osmconvert style bounding box
     const auto v = reader.attributes()
                        .value(QLatin1StringView("v"))
                        .split(QLatin1Char(','));
@@ -156,10 +156,10 @@ void XmlParser::parseBounds(QXmlStreamReader &reader, T &elem)
     // overpass style bounding box
     elem.bbox.min = Coordinate(
         reader.attributes().value(QLatin1StringView("minlat")).toDouble(),
-        reader.attributes().value(QLatin1String("minlon")).toDouble());
+        reader.attributes().value(QLatin1StringView("minlon")).toDouble());
     elem.bbox.max = Coordinate(
         reader.attributes().value(QLatin1StringView("maxlat")).toDouble(),
-        reader.attributes().value(QLatin1String("maxlon")).toDouble());
+        reader.attributes().value(QLatin1StringView("maxlon")).toDouble());
 }
 
 QString XmlParser::error() const

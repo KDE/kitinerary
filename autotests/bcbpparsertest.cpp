@@ -75,7 +75,7 @@ private Q_SLOTS:
         QVERIFY(bcbp.isValid());
 
         QFile ref(QLatin1StringView(SOURCE_DIR "/bcbpdata/") + refFile +
-                  QLatin1String(".txt"));
+                  QLatin1StringView(".txt"));
         QVERIFY(ref.open(QFile::ReadOnly));
         const auto refOut = ref.readAll();
 
@@ -103,7 +103,7 @@ private Q_SLOTS:
         QVERIFY(ticketDump == refOut);
 
         QFile f(QLatin1StringView(SOURCE_DIR "/bcbpdata/") + refFile +
-                QLatin1String(".json"));
+                QLatin1StringView(".json"));
         QVERIFY(f.open(QFile::ReadOnly));
         const auto refArray = QJsonDocument::fromJson(f.readAll()).array();
         QVERIFY(!refArray.isEmpty());

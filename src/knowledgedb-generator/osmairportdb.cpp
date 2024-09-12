@@ -198,15 +198,15 @@ void OSMAirportDb::loadTerminal(OSM::Element elem)
             const auto aeroway =
                 OSM::tagValue(*node, QLatin1StringView("gate"));
             if (access == QLatin1StringView("private") ||
-                access == QLatin1String("no") ||
-                aeroway == QLatin1String("gate")) {
+                access == QLatin1StringView("no") ||
+                aeroway == QLatin1StringView("gate")) {
               continue;
             }
 
             const auto entrance =
                 OSM::tagValue(*node, QLatin1StringView("entrance"));
             if (entrance == QLatin1StringView("yes") ||
-                entrance == QLatin1String("main")) {
+                entrance == QLatin1StringView("main")) {
               // qDebug() << "  found entrance for terminal:" << (*nodeIt).url()
               // << entrance << access;
               (*it).second.terminalEntrances.push_back(node->coordinate);
@@ -235,8 +235,8 @@ void OSMAirportDb::loadStation(OSM::Element elem)
 {
     const auto railway = elem.tagValue("railway");
     if (railway != QLatin1StringView("station") &&
-        railway != QLatin1String("halt") &&
-        railway != QLatin1String("tram_stop")) {
+        railway != QLatin1StringView("halt") &&
+        railway != QLatin1StringView("tram_stop")) {
       return;
     }
 

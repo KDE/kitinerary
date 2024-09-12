@@ -72,7 +72,7 @@ bool ExtractorFilter::matches(const QString &data) const
 static bool needsFieldName(const QString &mimeType)
 {
   return mimeType != QLatin1StringView("text/plain") &&
-         mimeType != QLatin1String("application/octet-stream");
+         mimeType != QLatin1StringView("application/octet-stream");
 }
 
 template <typename T>
@@ -112,7 +112,7 @@ QJsonObject ExtractorFilter::toJson() const
     obj.insert(QLatin1StringView("match"), pattern());
     obj.insert(
         QLatin1StringView("scope"),
-        QLatin1String(QMetaEnum::fromType<ExtractorFilter::Scope>().valueToKey(
+        QLatin1StringView(QMetaEnum::fromType<ExtractorFilter::Scope>().valueToKey(
             d->m_scope)));
     return obj;
 }

@@ -85,9 +85,9 @@ private Q_SLOTS:
 
         m_engine.clear();
         if (inputFile.endsWith(QLatin1StringView(".png")) ||
-            inputFile.endsWith(QLatin1String(".pdf")) ||
-            inputFile.endsWith(QLatin1String(".jpg")) ||
-            inputFile.endsWith(QLatin1String(".gif"))) {
+            inputFile.endsWith(QLatin1StringView(".pdf")) ||
+            inputFile.endsWith(QLatin1StringView(".jpg")) ||
+            inputFile.endsWith(QLatin1StringView(".gif"))) {
           m_engine.setHints(ExtractorEngine::ExtractFullPageRasterImages);
         } else if (inputFile.endsWith(QLatin1StringView(".ics"))) {
           m_engine.setHints(ExtractorEngine::ExtractGenericIcalEvents);

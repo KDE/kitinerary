@@ -70,16 +70,16 @@ HttpResponse HttpResponse::fromHarEntry(const QJsonObject &harEntry)
     HttpResponse r;
     r.d->url = QUrl(harEntry.value(QLatin1StringView("request"))
                         .toObject()
-                        .value(QLatin1String("url"))
+                        .value(QLatin1StringView("url"))
                         .toString());
     const auto content = harEntry.value(QLatin1StringView("response"))
                              .toObject()
-                             .value(QLatin1String("content"))
+                             .value(QLatin1StringView("content"))
                              .toObject();
 
     r.d->content = content.value(QLatin1StringView("text")).toString().toUtf8();
     if (content.value(QLatin1StringView("encoding")).toString() ==
-        QLatin1String("base64")) {
+        QLatin1StringView("base64")) {
       r.d->content = QByteArray::fromBase64(r.d->content);
     }
 
@@ -102,7 +102,7 @@ QList<HttpResponse> HttpResponse::fromHarFile(const QByteArray &harFile)
                              .object()
                              .value(QLatin1StringView("log"))
                              .toObject()
-                             .value(QLatin1String("entries"))
+                             .value(QLatin1StringView("entries"))
                              .toArray();
     QList<HttpResponse> result;
     result.reserve(entries.size());

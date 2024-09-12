@@ -27,7 +27,7 @@ private Q_SLOTS:
         QVERIFY(!elem.isNull());
         QCOMPARE(elem.name(), QLatin1StringView("html"));
         QCOMPARE(elem.attribute(QLatin1StringView("lang")),
-                 QLatin1String("de"));
+                 QLatin1StringView("de"));
         QVERIFY(elem.nextSibling().isNull());
         QVERIFY(elem.parent().isNull());
 
@@ -77,7 +77,7 @@ private Q_SLOTS:
         elem = elem.firstChild().firstChild().nextSibling();
         QCOMPARE(elem.name(), QLatin1StringView("script"));
         QCOMPARE(elem.attribute(QLatin1StringView("type")),
-                 QLatin1String("application/ld+json"));
+                 QLatin1StringView("application/ld+json"));
         QCOMPARE(elem.attributes().size(), 1);
         QCOMPARE(elem.attributes().at(0), QLatin1StringView("type"));
         const auto s = elem.content();

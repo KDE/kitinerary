@@ -77,7 +77,7 @@ QJsonArray WikiData::query(const QString &sparqlQuery, const QString &cacheFileN
     const auto resultArray = doc.object()
                                  .value(QLatin1StringView("results"))
                                  .toObject()
-                                 .value(QLatin1String("bindings"))
+                                 .value(QLatin1StringView("bindings"))
                                  .toArray();
     return resultArray;
 }

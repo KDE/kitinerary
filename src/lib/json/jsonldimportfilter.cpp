@@ -310,7 +310,7 @@ static void filterPostalAddress(QJsonObject &obj)
     auto country = obj.value(QLatin1StringView("addressCountry"));
     if (country.isObject()) {
       obj.insert(QLatin1StringView("addressCountry"),
-                 country.toObject().value(QLatin1String("name")));
+                 country.toObject().value(QLatin1StringView("name")));
     }
 }
 

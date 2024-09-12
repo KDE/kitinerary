@@ -78,7 +78,7 @@ static bool isJsonLdTag(const HtmlElement &elem)
 {
   return elem.name() == QLatin1StringView("script") &&
          elem.attribute(QStringLiteral("type")) ==
-             QLatin1String("application/ld+json");
+             QLatin1StringView("application/ld+json");
 }
 
 static QByteArray fixupJson(const QByteArray &data)
@@ -149,7 +149,7 @@ static QString valueForItemProperty(const HtmlElement &elem)
       v = elem.attribute(QStringLiteral("datetime"));
     } else if (elemName == QLatin1StringView("link") ||
                elemName == QLatin1Char('a') ||
-               elemName == QLatin1String("img")) {
+               elemName == QLatin1StringView("img")) {
       if (elem.hasAttribute(QStringLiteral("href"))) {
         v = elem.attribute(QStringLiteral("href"));
       } else if (elem.hasAttribute(QStringLiteral("content"))) {

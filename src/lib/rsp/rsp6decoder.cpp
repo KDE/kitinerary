@@ -43,7 +43,7 @@ static std::vector<openssl::rsa_ptr> loadKeys(std::string_view keyId)
 
   const QString keyFileName =
       QLatin1StringView(":/org.kde.pim/kitinerary/rsp6/keys/") +
-      QLatin1String(keyId.data(), keyId.size()) + QLatin1String(".json");
+      QLatin1StringView(keyId.data(), keyId.size()) + QLatin1StringView(".json");
   QFile keyFile(keyFileName);
   if (!keyFile.open(QFile::ReadOnly)) {
     qWarning() << "failed to open RSP-6 key file:" << keyFileName

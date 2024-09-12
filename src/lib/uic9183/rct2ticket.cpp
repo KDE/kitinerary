@@ -174,13 +174,13 @@ Rct2Ticket::Type Rct2Ticket::type() const
     // prefer exact matches
     for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
       if (typeName1 == QLatin1StringView(it->name) ||
-          typeName2 == QLatin1String(it->name)) {
+          typeName2 == QLatin1StringView(it->name)) {
         return it->type;
       }
     }
     for (auto it = std::begin(rct2_ticket_type_map); it != std::end(rct2_ticket_type_map); ++it) {
       if (typeName1.contains(QLatin1StringView(it->name)) ||
-          typeName2.contains(QLatin1String(it->name))) {
+          typeName2.contains(QLatin1StringView(it->name))) {
         return it->type;
       }
     }
