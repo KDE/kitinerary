@@ -1,0 +1,22 @@
+version = 1
+SPDX-PackageName = "KItinerary"
+SPDX-PackageSupplier = "Volker Krause <vkrause@kde.org>"
+SPDX-PackageDownloadLocation = "https://invent.kde.org/pim/kitinerary"
+
+[[annotations]]
+path = ["autotests/barcodes/**", "autotests/bcbpdata/**", "autotests/calendarhandlerdata/**", "autotests/extractordata/**", "autotests/jsonlddata/**", "autotests/mergedata/**", "autotests/misc/**", "autotests/pkpassdata/**", "autotests/plist/**", "autotests/postprocessordata/**", "autotests/rct2/**", "autotests/scriptenginedata/**", "autotests/structureddata/**", "autotests/uic918-3/**", "autotests/validationdata/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "src/lib/scripts/**.json"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ["src/lib/vdv/certs/**.vdv-cert", "src/lib/rsp/keys/**.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "CC0-1.0"
