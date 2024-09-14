@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: none
+# SPDX-License-Identifier: CC0-1.0
+
 version = 1
 SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
@@ -18,13 +21,7 @@ SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = "src/lib/scripts/**.json"
-precedence = "aggregate"
-SPDX-FileCopyrightText = "none"
-SPDX-License-Identifier = "CC0-1.0"
-
-[[annotations]]
-path = ["REUSE.toml"]
+path = ["src/lib/vdv/certs/**.vdv-cert", "src/lib/rsp/keys/**.json"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
