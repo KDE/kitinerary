@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^[0-9a-f]{542}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdfTicket",
+    "mimeType": "application/pdf",
+    "script": "koleo.js"
+}
