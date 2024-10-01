@@ -101,6 +101,12 @@ function parseQrCode(content) {
                                             res.reservationFor.trainNumber = ''
                                         res.reservationFor.trainNumber += trainData.readString();
                                         break;
+                                    case 12:
+                                        res.reservedTicket.ticketedSeat.seatSection = trainData.readString();
+                                        break;
+                                    case 13:
+                                        res.reservedTicket.ticketedSeat.seatNumber = trainData.readString();
+                                        break;
                                     default:
                                         trainData.skip();
                                 }
