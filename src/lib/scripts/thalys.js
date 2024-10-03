@@ -77,7 +77,7 @@ function parsePdfTicket(pdf, node, triggerNode)
     res.reservationNumber = page.textInRect(0.8, 0.0, 1.0,  0.2).match(/PNR\n([A-Z0-9]+)/)[1];
 
     // there is always a 17 digit number in ssb.type1OpenText - but what is that if no membership program is used??
-    if (page.text.match(/(?:MEMBERSHIP |LOYALTYNUMMER)/))
+    if (page.text.match(/(?:MITGLIEDSNUMMER|MEMBERSHIP |LOYALTYNUMMER)/))
         res.programMembershipUsed.membershipNumber = triggerNode.content.type1OpenText.match(/(\d{17})/)[1];
 
     const price = page.text.match(/(\d+ EUR)/);
