@@ -13,8 +13,10 @@ function lastChild(elem) {
 }
 
 function parseDateTime(text) {
-    var dt = text.match(/([\d/]+).*?([\d:]+)/);
-    return JsonLd.toDateTime(dt[1] + dt[2], "dd/MM/yyyyhh:mm", "en");
+    var dt = text.match(/(\d+\/\d+\/\d+).*?(\d+:\d+)/);
+    if (dt)
+        return JsonLd.toDateTime(dt[1] + dt[2], "dd/MM/yyyyhh:mm", "en");
+    return JsonLd.toDateTime(text.substr(3), "dd MMM yyyy hh:mm a", "en");
 }
 
 function parseHtml(doc) {
@@ -30,7 +32,9 @@ function parseHtml(doc) {
     } else {
         addrElem = nameElem.parent.nextSibling.nextSibling.nextSibling.firstChild;
     }
-    var addr = addrElem.content.match(/(.*), ?([^,]*)/);
+    let addr = addrElem.content.match(/(.*), ?([^,]*)/);
+    if (!addr)
+        addr = addrElem.recursiveContent.match(/(.*), ?([^,]*)/);
     res.reservationFor.address.streetAddress = addr[1];
     res.reservationFor.address.addressLocality = addr[2];
     res.reservationFor.url = lastChild(addrElem).attribute("href");
@@ -69,9 +73,9 @@ function parseHtml(doc) {
             res.checkoutTime = parseDateTime(dts[1].content);
         } else {
             const text = doc.root.recursiveContent;
-            res.reservationNumber = text.match(/Reservation number:[\n ](\d+)/)[1];
-            res.checkinTime = parseDateTime(text.match(/Check-in:[\n ](.*)/i)[1]);
-            res.checkoutTime = parseDateTime(text.match(/Check-out:[\n ](.*)/i)[1]);
+            res.reservationNumber = text.match(/(?:Reservation number|Reservierungsnummer):?[\n ](\d+)/)[1];
+            res.checkinTime = parseDateTime(text.match(/(?:Check-in|Anreise):[\n ](.*)/i)[1]);
+            res.checkoutTime = parseDateTime(text.match(/(?:Check-out|Abreise):[\n ](.*)/i)[1]);
         }
     }
     return res;
