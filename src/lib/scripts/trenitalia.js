@@ -23,7 +23,8 @@ function parseSsb(ssb, node) {
         res.reservationFor.departureDay = ssb.firstDayOfValidity(node.contextDateTime)
     }
 
-    res.reservationFor.trainNumber = ssb.readNumber(22*8 + 2, 16);
+    const trainNum = ssb.readNumber(22*8 + 2, 16);
+    res.reservationFor.trainNumber = trainNum > 0 ? trainNum : undefined;
 
     const seatNum = ssb.readNumber(31*8 + 2, 7);
     const seatCol = ssb.readNumber(32*8 + 3, 4);
