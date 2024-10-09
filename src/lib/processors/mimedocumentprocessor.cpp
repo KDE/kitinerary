@@ -142,13 +142,14 @@ static void expandContentNodeRecursive(ExtractorDocumentNode &node, const KMime:
     }
 
     // special handling of multipart/related to add images to the corresponding HTML document
-    if (ct && ct->isMultipart() && ct->isSubtype("related") && ct->parameter("type"_L1) == "text/html"_L1 && children.size() >= 2) {
-        const auto child = children.front();
-        if (child->contentType(false) && child->contentType(false)->isHTMLText()) {
+    if (ct && ct->isMultipart() && ct->isSubtype("related") && ct->parameter("type") == "text/html"_L1 && children.size() >= 2) {
+        const KMime::Content *child = children.front();
+        if (child->contentType() && child->contentType()->isHTMLText()) {
             auto htmlNode = expandContentNode(node, child, engine);
             for (auto it = std::next(children.begin()); it != children.end(); ++it) {
-                auto imgNode = expandContentNode(htmlNode, (*it), engine);
-                const auto cid = (*it)->contentID(false);
+                const KMime::Content *imgChild = *it;
+                auto imgNode = expandContentNode(htmlNode, imgChild, engine);
+                const auto cid = imgChild->contentID();
                 if (cid) {
                     imgNode.setLocation(cid->identifier());
                 }
