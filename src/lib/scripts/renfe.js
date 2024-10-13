@@ -11,8 +11,8 @@ function parseBarcode(barcode)
         return null;
 
     // trim not set combined commuter section, so merging with a document that has that set works properly
-    if (barcode.substr(49, 7) == '..00000')
-        barcode = barcode.substr(0, 49);
+    if (barcode.endsWith('..00000'))
+        barcode = barcode.slice(0, -7);
 
     var res = JsonLd.newTrainReservation();
     res.reservedTicket.ticketToken = "qrCode:" + barcode.trim();
@@ -20,7 +20,10 @@ function parseBarcode(barcode)
     res.reservationFor.trainNumber = barcode.substr(29, 5);
     res.reservedTicket.ticketedSeat.seatSection = barcode.substr(34, 3);
     res.reservedTicket.ticketedSeat.seatNumber = barcode.substr(37, 3);
-    res.reservationNumber = barcode.substr(43, 6);
+    if (barcode.match(/null/))
+        res.reservationNumber = barcode.slice(-6);
+    else
+        res.reservationNumber = barcode.substr(43, 6);
     res.reservationFor.departureStation.identifier = "uic:71" + barcode.substr(13, 5);
     res.reservationFor.arrivalStation.identifier = "uic:71" + barcode.substr(18, 5);
     res.reservationFor.departureDay = JsonLd.toDateTime(barcode.substr(23, 6), 'ddMMyy', 'es');
@@ -38,12 +41,12 @@ function parseLeg(text, baseRes)
     res.reservationFor.departureStation.name = dep[1];
     res.reservationFor.departureTime = JsonLd.toDateTime(dep[2] + dep[3], ["dd/MM/yyyyhh:mm", "dd/MM/yyyyhh.mm"], "es");
 
-    const arr = text.match(/(?:Llegada|Destino:)\s+(.*?) {2,}([\d\/]+) +(\d\d[:\.]\d\d)\n(?:.* )?([A-Z]+) +(\d+)/);
+    const arr = text.match(/(?:Llegada|Destino:)\s+(.*?) {2,}([\d\/]+) +(\d\d[:\.]\d\d)\n(?:.* )?([A-Z]+) *(\d+)/);
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2] + arr[3], ["dd/MM/yyyyhh:mm", "dd/MM/yyyyhh.mm"], "es");
     res.reservationFor.trainName = arr[4];
 
-    const train = text.match(/Coche:\s+(\S+)\s+Plaza:\s+(\S+)\s+(\S.*) +(\d{1,5})/);
+    const train = text.match(/Coche:\s+(\S+)\s+Plaza:\s+(\S+)\s+(\w.*?\w) *(\d{1,5})/);
     if (train) {
         res.reservedTicket.ticketedSeat.seatSection = train[1];
         res.reservedTicket.ticketedSeat.seatNumber = train[2];
@@ -54,6 +57,7 @@ function parseLeg(text, baseRes)
     res.reservationNumber = baseRes.reservationNumber;
     res.reservationFor.provider = baseRes.reservationFor.provider;
     res.reservedTicket.ticketToken = baseRes.reservedTicket.ticketToken;
+    res.reservedTicket.ticketNumber = baseRes.reservedTicket.ticketNumber;
     res.priceCurrency = baseRes.priceCurrency;
     res.totalPrice = baseRes.totalPrice;
     return res;
