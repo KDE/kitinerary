@@ -60,6 +60,7 @@ function parseLeg(text, baseRes)
     res.reservedTicket.ticketNumber = baseRes.reservedTicket.ticketNumber;
     res.priceCurrency = baseRes.priceCurrency;
     res.totalPrice = baseRes.totalPrice;
+    res.underName = baseRes.underName;
     return res;
 }
 
@@ -72,6 +73,9 @@ function parsePdf(pdf, node, triggerNode)
     const price = text.match(/TOTAL:? *(\d+,\d\d *€)/i);
     if (price)
         ExtractorEngine.extractPrice(price[1], res);
+    const pas = text.match(/Localizador: [A-Z0-9]{6}(?: +CombinadoCercanias: +[A-Z0-9]{5})?\n([^\d:]+)(?:\n|  )/);
+    if (pas)
+        res.underName.name = pas[1];
 
     if (!text.match(/TRAYECTO/)) {
         return JsonLd.apply(res, parseLeg(text, res));
