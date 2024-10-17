@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <vector>
 
+/** Low-level types and functions to work with raw OSM data as efficiently as possible. */
 namespace OSM {
 
 /** OSM element identifier. */
@@ -45,13 +46,17 @@ public:
         }
     }
 
-    constexpr inline bool isValid() const
+    [[nodiscard]] constexpr inline bool isValid() const
     {
         return latitude != std::numeric_limits<uint32_t>::max() && longitude != std::numeric_limits<uint32_t>::max();
     }
+    [[nodiscard]] constexpr inline bool operator==(Coordinate other) const
+    {
+        return latitude == other.latitude && longitude == other.longitude;
+    }
 
     /** Z-order curve value for this coordinate. */
-    constexpr inline uint64_t z() const
+    [[nodiscard]] constexpr inline uint64_t z() const
     {
         uint64_t z = 0;
         for (int i = 0; i < 32; ++i) {
@@ -61,11 +66,11 @@ public:
         return z;
     }
 
-    constexpr inline double latF() const
+    [[nodiscard]] constexpr inline double latF() const
     {
         return (latitude / 10'000'000.0) - 90.0;
     }
-    constexpr inline double lonF() const
+    [[nodiscard]] constexpr inline double lonF() const
     {
         return (longitude / 10'000'000.0) - 180.0;
     }
@@ -83,21 +88,34 @@ public:
         : min(c1)
         , max(c2)
     {}
-    constexpr inline bool isValid() const
+    [[nodiscard]] constexpr inline bool isValid() const
     {
         return min.isValid() && max.isValid();
     }
+    [[nodiscard]] constexpr inline bool operator==(BoundingBox other) const
+    {
+        return min == other.min && max == other.max;
+    }
 
-    constexpr inline uint32_t width() const
+    [[nodiscard]] constexpr inline uint32_t width() const
     {
         return max.longitude - min.longitude;
     }
-    constexpr inline uint32_t height() const
+    [[nodiscard]] constexpr inline uint32_t height() const
     {
         return max.latitude - min.latitude;
     }
 
-    constexpr inline Coordinate center() const
+    [[nodiscard]] constexpr inline double widthF() const
+    {
+        return width() / 10'000'000.0;
+    }
+    [[nodiscard]] constexpr inline double heightF() const
+    {
+        return height() / 10'000'000.0;
+    }
+
+    [[nodiscard]] constexpr inline Coordinate center() const
     {
         return Coordinate(min.latitude + height() / 2, min.longitude + width() / 2);
     }
@@ -106,7 +124,7 @@ public:
     Coordinate max;
 };
 
-constexpr inline BoundingBox unite(BoundingBox bbox1, BoundingBox bbox2)
+[[nodiscard]] constexpr inline BoundingBox unite(BoundingBox bbox1, BoundingBox bbox2)
 {
     if (!bbox1.isValid()) {
         return bbox2;
@@ -122,24 +140,24 @@ constexpr inline BoundingBox unite(BoundingBox bbox1, BoundingBox bbox2)
     return ret;
 }
 
-constexpr inline bool intersects(BoundingBox bbox1, BoundingBox bbox2)
+[[nodiscard]] constexpr inline bool intersects(BoundingBox bbox1, BoundingBox bbox2)
 {
     return !(bbox2.min.latitude > bbox1.max.latitude || bbox2.max.latitude < bbox1.min.latitude
         || bbox2.min.longitude > bbox1.max.longitude || bbox2.max.longitude < bbox1.min.longitude);
 }
 
-constexpr inline bool contains(BoundingBox bbox, Coordinate coord)
+[[nodiscard]] constexpr inline bool contains(BoundingBox bbox, Coordinate coord)
 {
     return bbox.min.latitude <= coord.latitude && bbox.max.latitude >= coord.latitude
         && bbox.min.longitude <= coord.longitude && bbox.max.longitude >= coord.longitude;
 }
 
-constexpr inline uint32_t latitudeDistance(BoundingBox bbox1, BoundingBox bbox2)
+[[nodiscard]] constexpr inline uint32_t latitudeDistance(BoundingBox bbox1, BoundingBox bbox2)
 {
     return bbox1.max.latitude < bbox2.min.latitude ? bbox2.min.latitude - bbox1.max.latitude : bbox1.min.latitude - bbox2.max.latitude;
 }
 
-constexpr inline uint32_t longitudeDifference(BoundingBox bbox1, BoundingBox bbox2)
+[[nodiscard]] constexpr inline uint32_t longitudeDifference(BoundingBox bbox1, BoundingBox bbox2)
 {
     return bbox1.max.longitude < bbox2.min.longitude ? bbox2.min.longitude - bbox1.max.longitude : bbox1.min.longitude - bbox2.max.longitude;
 }
@@ -156,9 +174,25 @@ public:
 /** An OSM node. */
 class Node {
 public:
-    constexpr inline bool operator<(const Node &other) const { return id < other.id; }
+    explicit Node() = default;
+    Node(const Node&) = default;
+    Node(Node &&other) noexcept
+    {
+        *this = std::move(other);
+    }
+    Node& operator=(const Node &other) = default;
+    Node& operator=(Node &&other) noexcept
+    {
+        id = other.id;
+        coordinate = other.coordinate;
+        std::swap(tags, other.tags);
+        return *this;
+    }
 
-    QString url() const;
+    [[nodiscard]] constexpr inline bool operator<(const Node &other) const { return id < other.id; }
+    [[nodiscard]] constexpr inline bool operator<(Id other) const { return id < other; };
+
+    [[nodiscard]] QString url() const;
 
     Id id;
     Coordinate coordinate;
@@ -168,11 +202,28 @@ public:
 /** An OSM way. */
 class Way {
 public:
-    constexpr inline bool operator<(const Way &other) const { return id < other.id; }
+    explicit Way() = default;
+    Way(const Way&) = default;
+    Way(Way &&other) noexcept
+    {
+        *this = std::move(other);
+    }
+    Way& operator=(const Way &other) = default;
+    Way& operator=(Way &&other) noexcept
+    {
+        id = other.id;
+        bbox = other.bbox;
+        std::swap(nodes, other.nodes);
+        std::swap(tags, other.tags);
+        return *this;
+    }
 
-    bool isClosed() const;
+    [[nodiscard]] constexpr inline bool operator<(const Way &other) const { return id < other.id; }
+    [[nodiscard]] constexpr inline bool operator<(Id other) const { return id < other; };
 
-    QString url() const;
+    [[nodiscard]] bool isClosed() const;
+
+    [[nodiscard]] QString url() const;
 
     Id id;
     mutable BoundingBox bbox;
@@ -200,9 +251,26 @@ public:
 /** An OSM relation. */
 class Relation {
 public:
-    constexpr inline bool operator<(const Relation &other) const { return id < other.id; }
+    explicit Relation() = default;
+    Relation(const Relation&) = default;
+    Relation(Relation &&other) noexcept
+    {
+        *this = std::move(other);
+    }
+    Relation& operator=(const Relation &other) = default;
+    Relation& operator=(Relation &&other) noexcept
+    {
+        id = other.id;
+        bbox = other.bbox;
+        std::swap(members, other.members);
+        std::swap(tags, other.tags);
+        return *this;
+    }
 
-    QString url() const;
+    [[nodiscard]] constexpr inline bool operator<(const Relation &other) const { return id < other.id; }
+    [[nodiscard]] constexpr inline bool operator<(Id other) const { return id < other; };
+
+    [[nodiscard]] QString url() const;
 
     Id id;
     mutable BoundingBox bbox;
@@ -252,12 +320,6 @@ inline void setTagValue(Elem &elem, const QString &key, const QString &value)
 {
     Tag tag{ key, value };
     setTag(elem, std::move(tag));
-}
-
-template <typename Elem>
-inline bool operator<(const Elem &elem, Id id)
-{
-    return elem.id < id;
 }
 
 }
