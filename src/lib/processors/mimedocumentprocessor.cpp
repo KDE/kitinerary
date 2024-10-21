@@ -17,7 +17,7 @@
 using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
 
-Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KMime::Content>)
+Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<const KMime::Content>)
 
 namespace {
 bool contentMightBeEmail(const QByteArray &data)
@@ -75,7 +75,7 @@ ExtractorDocumentNode MimeDocumentProcessor::createNodeFromData(const QByteArray
     msg->parse();
 
     ExtractorDocumentNode node;
-    node.setContent<Internal::OwnedPtr<KMime::Content>>(msg);
+    node.setContent<Internal::OwnedPtr<const KMime::Content>>(msg);
 
     const auto dateHdr = findHeader<KMime::Headers::Date>(msg);
     if (dateHdr) {
@@ -87,10 +87,18 @@ ExtractorDocumentNode MimeDocumentProcessor::createNodeFromData(const QByteArray
 
 ExtractorDocumentNode MimeDocumentProcessor::createNodeFromContent(const QVariant &decodedData) const
 {
-    auto *content = decodedData.value<KMime::Content*>();
+    auto *content = decodedData.value<const KMime::Content*>();
+    if (!content) {
+        content = decodedData.value<const KMime::Message*>();
+    }
+    // TODO eventually remove the non-const cases
+    if (!content) {
+        content = decodedData.value<KMime::Content*>();
+    }
     if (!content) {
         content = decodedData.value<KMime::Message*>();
     }
+
     if (!content) {
         return {};
     }
@@ -169,18 +177,18 @@ static void expandContentNodeRecursive(ExtractorDocumentNode &node, const KMime:
 
 void MimeDocumentProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
 {
-    const auto content = node.content<KMime::Content*>();
+    const auto content = node.content<const KMime::Content*>();
     expandContentNodeRecursive(node, content, engine);
 }
 
 bool MimeDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
 {
-    const auto content = node.content<KMime::Content*>();
+    const auto content = node.content<const KMime::Content*>();
     const auto header = findHeader(content, filter.fieldName().toUtf8().constData());
     return header ? filter.matches(header->asUnicodeString()) : false;
 }
 
 void MimeDocumentProcessor::destroyNode(ExtractorDocumentNode &node) const
 {
-    destroyIfOwned<KMime::Content>(node);
+    destroyIfOwned<const KMime::Content>(node);
 }
