@@ -33,6 +33,11 @@ regExMap['de_DE']['departureDate'] = /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-
 regExMap['de_DE']['person'] = /Name des Gastes[\n\s]+(.*?)(?:\n| Name des Gastes bearbeiten)/;
 
 regExMap['es_ES'] = [];
+regExMap['es_ES']['bookingRef'] = /Confirmación: ([0-9]*)\s+/;
+regExMap['es_ES']['hotelInformation'] = /(\S.+), (.+),[\n ]([^,]+),[\n ]([^,]+)\n\n\s+Teléfono (\+[0-9- ]*)\s+/;
+regExMap['es_ES']['hotelName'] = /El (\S.*\S) te espera/;
+regExMap['es_ES']['arrivalDate'] = /Entrada (\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2}).*\)/;
+regExMap['es_ES']['departureDate'] = /Salida (\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.* ([0-9]{1,2}:[0-9]{2})\)/;
 regExMap['es_ES']['person'] = /Nombre del huésped[\n\s]+(.*?)\n/;
 
 function main(text, node) {
@@ -62,19 +67,16 @@ function main(text, node) {
         res.reservationFor.address.addressCountry = hotel[4];
         res.reservationFor.telephone = hotel[5];
 
-        idx = hotel.index + hotel[0].length;
-
-        var arrivalDate = text.substr(idx).match(regExMap[locale]['arrivalDate']);
+        var arrivalDate = text.match(regExMap[locale]['arrivalDate']);
         if (!arrivalDate)
             return null;
 
-        res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], ["dddd d MMMM yyyy hh:mm", "dddd, d. MMMM yyyy hh:mm", "dddd, MMMM d, yyyy hh:mm"], locale);
-        idx += arrivalDate.index + arrivalDate[0].length;
+        res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], ["dddd d MMMM yyyy hh:mm", "dddd, d. MMMM yyyy hh:mm", "dddd, MMMM d, yyyy hh:mm", "dddd, dd 'de' MMMM 'de' yyyy hh:mm"], locale);
 
-        var departureDate = text.substr(idx).match(regExMap[locale]['departureDate']);
+        var departureDate = text.match(regExMap[locale]['departureDate']);
         if (!departureDate)
             return null;
-        res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], ["dddd d MMMM yyyy hh:mm", "dddd, d. MMMM yyyy hh:mm", "dddd, MMMM d, yyyy hh:mm"], locale);
+        res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], ["dddd d MMMM yyyy hh:mm", "dddd, d. MMMM yyyy hh:mm", "dddd, MMMM d, yyyy hh:mm",  "dddd, dd 'de' MMMM 'de' yyyy hh:mm"], locale);
 
         var name = text.match(regExMap[locale]['person']);
         if (!name)
