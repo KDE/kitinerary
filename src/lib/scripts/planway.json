@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@planway.com",
+            "mimeType": "message/rfc822",
+            "scope": "Parent"
+        }
+    ],
+    "function": "extractConfirmation",
+    "mimeType": "text/plain",
+    "script": "planway.js"
+}
