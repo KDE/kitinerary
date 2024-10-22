@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^I\\|[A-Z0-9]{6}\\|[A-Z/]+\\|VJ$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractItinerary",
+    "mimeType": "application/pdf",
+    "script": "vietjetair.js"
+}
