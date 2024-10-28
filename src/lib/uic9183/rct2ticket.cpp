@@ -42,20 +42,18 @@ QDate Rct2TicketPrivate::firstDayOfValidity() const
     if (it == f.end()) {
         return {};
     }
+
     const auto dtStr = QStringView(f).mid(std::distance(f.begin(), it));
-    auto dt = QDate::fromString(dtStr.left(10).toString(), QStringLiteral("dd.MM.yyyy"));
-    if (dt.isValid()) {
-        return dt;
-    }
-    dt = QDate::fromString(dtStr.left(8).toString(), QStringLiteral("dd.MM.yy"));
-    if (dt.isValid()) {
-        if (dt.year() < 2000) {
-            dt.setDate(dt.year() + 100, dt.month(), dt.day());
+    for (const auto format : { "dd.MM.yyyy"_L1, "dd/MM/yyyy"_L1, "dd.MM.yy"_L1, "yyyy"_L1 }) {
+        auto dt = QDate::fromString(dtStr.left(format.size()).toString(), format);
+        if (dt.isValid()) {
+            if (dt.year() < 2000) {
+                dt.setDate(dt.year() + 100, dt.month(), dt.day());
+            }
+            return dt;
         }
-        return dt;
     }
-    dt = QDate::fromString(dtStr.left(4).toString(), QStringLiteral("yyyy"));
-    return dt;
+    return {};
 }
 
 QDateTime Rct2TicketPrivate::parseTime(const QString &dateStr, const QString &timeStr) const
@@ -161,6 +159,7 @@ static constexpr const struct {
     { "reservierung", Rct2Ticket::Reservation },
     { "helyjegy", Rct2Ticket::Reservation },
     { "interrail", Rct2Ticket::RailPass },
+    { "enkele reis", Rct2Ticket::Transport },
 };
 
 Rct2Ticket::Type Rct2Ticket::type() const
