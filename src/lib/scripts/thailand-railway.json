@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^https://dticket.railway.co.th/DTicketPublicWeb/q/",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdfTicket",
+    "mimeType": "application/pdf",
+    "script": "thailand-railway.js"
+}
