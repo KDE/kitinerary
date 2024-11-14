@@ -24,6 +24,7 @@ namespace KItinerary {
 class ScriptExtractorPrivate
 {
 public:
+    QString m_name;
     QString m_mimeType;
     QString m_fileName;
     QString m_scriptName;
@@ -70,6 +71,12 @@ bool ScriptExtractor::load(const QJsonObject &obj, const QString &fileName, int 
     d->m_scriptFunction = obj.value(QLatin1StringView("function"))
                               .toString(QStringLiteral("main"));
 
+    if (QFileInfo fi(d->m_fileName); d->m_index < 0) {
+        d->m_name = fi.baseName();
+    } else {
+        d->m_name = fi.baseName() + QLatin1Char(':') + QString::number(d->m_index);
+    }
+
     return !d->m_filters.empty() && !d->m_mimeType.isEmpty();
 }
 
@@ -96,11 +103,7 @@ QJsonObject ScriptExtractor::toJson() const
 
 QString ScriptExtractor::name() const
 {
-    QFileInfo fi(d->m_fileName);
-    if (d->m_index < 0) {
-        return fi.baseName();
-    }
-    return fi.baseName() + QLatin1Char(':') + QString::number(d->m_index);
+    return d->m_name;
 }
 
 QString ScriptExtractor::mimeType() const
