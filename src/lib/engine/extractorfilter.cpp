@@ -15,6 +15,7 @@
 #include <QMetaEnum>
 #include <QRegularExpression>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 namespace KItinerary {
@@ -169,34 +170,30 @@ static bool filterMachesNode(const ExtractorFilter &filter, ExtractorFilter::Sco
         return true;
     }
 
-    if (scope != ExtractorFilter::Ancestors &&
-        filter.mimeType() == QLatin1StringView("application/ld+json") &&
-        !node.result().isEmpty()) {
-      // when collecting all matches for results, we only want the "leaf-most"
-      // ones, not those along the path
-      if (matchMode == All && scope == ExtractorFilter::Descendants) {
-        bool descendantsMatched = false;
-        for (const auto &child : node.childNodes()) {
-          descendantsMatched |= filterMachesNode(
-              filter, ExtractorFilter::Descendants, child, matches, matchMode);
+    if (scope != ExtractorFilter::Ancestors && filter.mimeType() == "application/ld+json"_L1 && !node.result().isEmpty()) {
+        // when collecting all matches for results, we only want the "leaf-most"
+        // ones, not those along the path
+        if (matchMode == All && scope == ExtractorFilter::Descendants) {
+            bool descendantsMatched = false;
+            for (const auto &child : node.childNodes()) {
+                descendantsMatched |= filterMachesNode(filter, ExtractorFilter::Descendants, child, matches, matchMode);
+            }
+            if (descendantsMatched) {
+                return true;
+            }
         }
-        if (descendantsMatched) {
-          return true;
-        }
-      }
 
-      const auto res = node.result().jsonLdResult();
-      for (const auto &elem : res) {
-        const auto property =
-            valueForJsonPath(elem.toObject(), filter.fieldName());
-        if (filter.matches(property)) {
-          if (matchMode == All) {
-            matches.push_back(node);
-          } else {
-            return true;
-          }
+        const auto res = node.result().jsonLdResult();
+        for (const auto &elem : res) {
+            const auto property = valueForJsonPath(elem.toObject(), filter.fieldName());
+            if (filter.matches(property)) {
+                if (matchMode == All) {
+                    matches.push_back(node);
+                } else {
+                    return true;
+                }
+            }
         }
-      }
     }
 
     if (scope == ExtractorFilter::Ancestors) {
