@@ -104,13 +104,23 @@ function parseInouiPdfText(page)
         res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + arr[1], ["d MMMM yyyyhh'h'mm", "dd MMMM yyyyhh:mm", "dd. MMMM yyyyhh:mm"], ["fr", "en", "de"]);
         res.reservationFor.arrivalStation.name = arr[2];
 
-        var detailsText = text.substr(pos, endPos - arr[0].length);
-        var train = detailsText.match(/^ *(.*?) *-/);
+        const detailsText = text.substr(pos, endPos - arr[0].length);
+        const train = detailsText.match(/^ *(.*?) *-/);
         res.reservationFor.trainNumber = train[1];
-        var seat = detailsText.match(/(?:Voiture|Coach|Wagen) *(\d+) *(?:Place|Seat|Platz) *(\d+)/);
+        const aboveStrings = ['Haut', 'Oben', 'Upper deck', 'Alto', 'Hoog'];
+        const belowStrings = ['Bas', 'Unten', 'Lower deck']; // TODO these are just guest
+        const coachStrings = ['Voiture', 'Wagen', 'Coach', 'Coche', 'Carrozza', 'Rijtuig'];
+        const seatStrings = ['Place', 'Platz', 'Seat', 'Plaza', 'Posto', 'Plaats'];
+        const regexSeat = new RegExp("(?:" + coachStrings.join('|') + ") *(\\d+) *(" + aboveStrings.join('|') + '|' + belowStrings.join('|') + ")? -? *(?:" + seatStrings.join('|') + ") *(\\d+)", 'i');
+        const seat = detailsText.match(regexSeat);
         if (seat) {
             res.reservedTicket.ticketedSeat.seatSection = seat[1];
-            res.reservedTicket.ticketedSeat.seatNumber = seat[2];
+            res.reservedTicket.ticketedSeat.seatNumber = seat[3];
+            if (aboveStrings.includes(seat[2])) {
+                res.reservedTicket.ticketedSeat.description = "Upper deck";
+            } else if (belowStrings.includes(seat[2])) {
+                res.reservedTicket.ticketedSeat.description = "Lower deck";
+            }
         }
 
         if (price)
