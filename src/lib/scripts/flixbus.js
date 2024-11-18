@@ -113,8 +113,6 @@ function parsePdfTicket(pdf, node, triggerNode)
 
 function parsePkPass(pass, node) {
 	let res = Object.assign(JsonLd.newBusReservation(), node.result[0]);
-	console.log(JSON.stringify(res, null, 4))
-	console.log(JSON.stringify(pass, null, 4))
 
 	res.reservationFor.departureBusStop.name = pass.field["departure_station"].value;
 	res.reservationFor.departureTime = pass.field["departure_time"].value
