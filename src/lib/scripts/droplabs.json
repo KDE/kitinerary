@@ -15,7 +15,7 @@
 	{
 		"filter": [
 			{
-				"match": "Droplabs - ",
+				"match": "DROP/TID/",
 				"mimeType": "text/plain",
 				"scope": "Descendants"
 			}
