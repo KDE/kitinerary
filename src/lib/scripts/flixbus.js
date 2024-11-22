@@ -18,7 +18,7 @@ function main(content, node) {
     var res = node.result;
     for (var i = 0; i < res.length; ++i) {
         res[i].reservedTicket.ticketToken = res[i].reservedTicket.ticketToken.replace(/^https?:\/\/api\.(?:flixbus|meinfernbus)\..{2,3}\/qrcode\/(..)\//, "qrCode:https://shop.flixbus.$1/pdfqr/");
-        res[i].reservedTicket.ticketToken = res[i].reservedTicket.ticketToken.replace(/^https?:\/\/.*$/, "qrCode:$1");
+        res[i].reservedTicket.ticketToken = res[i].reservedTicket.ticketToken.replace(/^(https?:\/\/.*)$/, "qrCode:$1");
 
         // their schema.org annotations also claim train trips are bus trips, fix that
         res[i] = fixTransportMode(res[i]);
@@ -112,22 +112,22 @@ function parsePdfTicket(pdf, node, triggerNode)
 }
 
 function parsePkPass(pass, node) {
-	let res = Object.assign(JsonLd.newBusReservation(), node.result[0]);
+    let res = Object.assign(JsonLd.newBusReservation(), node.result[0]);
 
-	res.reservationFor.departureBusStop.name = pass.field["departure_station"].value;
-	res.reservationFor.departureTime = pass.field["departure_time"].value
-	res.reservationFor.departureBusStop.geo.latitude = pass.locations[0].latitude
-	res.reservationFor.departureBusStop.geo.longitude = pass.locations[0].longitude
+    res.reservationFor.departureBusStop.name = pass.field["departure_station"].value;
+    res.reservationFor.departureTime = pass.field["departure_time"].value
+    res.reservationFor.departureBusStop.geo.latitude = pass.locations[0].latitude
+    res.reservationFor.departureBusStop.geo.longitude = pass.locations[0].longitude
 
-	res.reservationFor.arrivalBusStop.name = pass.field["arrival_station"].value;
-	res.reservationFor.arrivalTime = pass.field["arrival_time"].value
+    res.reservationFor.arrivalBusStop.name = pass.field["arrival_station"].value;
+    res.reservationFor.arrivalTime = pass.field["arrival_time"].value
 
-	res.reservationFor.busNumber = pass.field["line_data"].value.split(" ")[0]
-	res.reservationFor.busName = pass.field["line_data"].value
+    res.reservationFor.busNumber = pass.field["line_data"].value.split(" ")[0]
+    res.reservationFor.busName = pass.field["line_data"].value
 
-	res.reservationNumber = pass.field["booking_number"].value
+    res.reservationNumber = pass.field["booking_number"].value
 
-	//TODO: Passangier List, Seating
+    //TODO: Passangier List, Seating
 
-	return res
+    return res
 }

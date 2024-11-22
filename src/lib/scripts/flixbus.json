@@ -1,39 +1,39 @@
 [
-	{
-	    "filter": [
-	        {
-	            "match": "Flix",
-	            "field": "reservationFor.busCompany.name",
-	            "mimeType": "application/ld+json"
-	        }
-	    ],
-	    "function": "main",
-	    "script": "flixbus.js",
-	    "mimeType": "text/html"
-	},
-	{
-	    "filter": [
-	        {
-	            "match": "^https://shop\\.(?:global\\.)?flixbus\\.[a-z]{2,3}/pdfqr/",
-	            "mimeType": "text/plain",
-	            "scope": "Descendants"
-	        }
-	    ],
-	    "function": "parsePdfTicket",
-	    "mimeType": "application/pdf",
-	    "script": "flixbus.js"
-	},
-	{
-	    "mimeType": "application/vnd.apple.pkpass",
-	    "filter": [ 
-			{ 
-				"field": "passTypeIdentifier", 
-				"match": "pass.de.flixbus", 
-				"mimeType": "application/vnd.apple.pkpass", 
-				"scope": "Current" 
-			} 
-		],
-		"script": "flixbus.js",
-		"function": "parsePkPass"
-	}
+    {
+        "filter": [
+            {
+                "match": "Flix",
+                "field": "reservationFor.busCompany.name",
+                "mimeType": "application/ld+json"
+            }
+        ],
+        "function": "main",
+        "script": "flixbus.js",
+        "mimeType": "text/html"
+    },
+    {
+        "filter": [
+            {
+                "match": "^https://shop\\.(?:global\\.)?flixbus\\.[a-z]{2,3}/pdfqr/",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parsePdfTicket",
+        "mimeType": "application/pdf",
+        "script": "flixbus.js"
+    },
+    {
+        "mimeType": "application/vnd.apple.pkpass",
+        "filter": [ 
+            { 
+                "field": "passTypeIdentifier", 
+                "match": "pass.de.flixbus", 
+                "mimeType": "application/vnd.apple.pkpass", 
+                "scope": "Current" 
+            } 
+        ],
+        "script": "flixbus.js",
+        "function": "parsePkPass"
+    }
 ]
