@@ -1,0 +1,17 @@
+[
+    {
+        "mimeType": "internal/event",
+        "filter": [ 
+            { "field": "uid", "match": "@events.lu.ma", "mimeType": "internal/event", "scope": "Current" },
+            { "field": "organizer.email", "match": "calendar-invite@lu.ma", "mimeType": "internal/event", "scope": "Current" } 
+        ],
+        "script": "luma.js",
+        "function": "parseEvent"
+    },
+    {
+        "mimeType": "application/vnd.apple.pkpass",
+        "filter": [ { "field": "passTypeIdentifier", "match": "pass.luma.events", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
+        "script": "luma.js",
+        "function": "parsePkPass"
+    }
+]
