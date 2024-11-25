@@ -354,7 +354,7 @@ static void extractEventTicketPass(KPkPass::Pass *pass, EventReservation &eventR
     std::vector<PriceFinder::Result> prices;
     const auto fields = pass->fields();
     for (const auto &field : fields) {
-        priceFinder.findAll(field.value().toString(), prices);
+        priceFinder.findAll(field.valueDisplayString(), prices);
     }
     if (const auto price = priceFinder.highest(prices); price.hasResult()) {
         eventRes.setTotalPrice(price.value);
