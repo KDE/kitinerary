@@ -1,0 +1,20 @@
+[
+    {
+        "mimeType": "application/vnd.apple.pkpass",
+        "filter": [ { "field": "passTypeIdentifier", "match": "pass.ticket.ws.24.25", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
+        "script": "coloseumticket.js",
+        "function": "parsePkPass"
+    },
+	{
+        "filter": [
+            {
+                "match": "Tisk Colosseum",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parsePdf",
+        "mimeType": "application/pdf",
+        "script": "coloseumticket.js"
+    }
+]
