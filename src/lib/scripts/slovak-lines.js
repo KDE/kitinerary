@@ -48,10 +48,22 @@ function extractTicket(pdf, node, barcode) {
     const arr = text.match(/Arrival: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/);
     res.reservationFor.arrivalBusStop.name = arr[1];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2], 'dd.MM.yyyy hh:mm', 'en');
-    res.reservationFor.departurePlatform = text.match(/Platform: +(\S.*)/)[1];
+    res.reservationFor.departurePlatform = text.match(/Platform: +(\S.*)/)[1].replace("Platform", "").trim();
     res.reservedTicket.ticketedSeat.seatNumber = text.match(/Seat: +(\S.*)/)[1];
     res.reservationFor.busNumber = text.match(/Bus line no: +(.*)  /)[1];
     res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
-    ExtractorEngine.extractPrice(text, res);
+    let ticketCategory = text.match(/Category: +(.*)/)
+    res.reservedTicket.name = ticketCategory ? ticketCategory[1] : undefined;
+    res.reservationFor.provider = { "@type": "Organization", name: text.match(/Brand: \s+ +(.*)/) }
+
+    if (ExtractorEngine.extractPrice)
+        ExtractorEngine.extractPrice(text, res);
+    else {
+        let foundPrice = text.match(/Price: \s+ ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[Ee]([+-]?\d+))? [A-Za-z]+/) // Price: 4.05 EUR
+        console.log(foundPrice)
+        res.totalPrice = parseInt(foundPrice[1])
+        res.priceCurrency = foundPrice[3]
+    }
+
     return res;
 }
