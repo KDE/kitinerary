@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: 2024 Volker Krause <vkrause@kde.org>
+// SPDX-FileCopyrightText: 2024 David Pilarcik <meow@charliecat.space>
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 function extractEvent(ev, node) {
