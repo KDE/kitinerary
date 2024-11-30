@@ -23,4 +23,17 @@
     "function": "extractPdf",
     "mimeType": "application/pdf",
     "script": "leoexpress.js"
+},
+{
+    "filter": [
+        {
+            "field": "passTypeIdentifier",
+            "match": "pass.com.leoexpress.leoexpress",
+            "mimeType": "application/vnd.apple.pkpass",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractPkpass",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "leoexpress.js"
 }]
