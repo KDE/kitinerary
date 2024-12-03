@@ -4,7 +4,9 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "datatypes/place.h"
 #include "jsonldimportfilter.h"
+#include "locationutil.h"
 #include "json/jsonld.h"
 #include "json/jsonldfilterengine.h"
 #include "logging.h"
@@ -17,6 +19,7 @@
 #include <QUrl>
 
 #include <cstring>
+#include <optional>
 
 using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
@@ -122,18 +125,43 @@ static void filterPlace(QJsonObject &obj)
         });
     }
     // same for geo coordinates
-    const auto lat = obj.value("latitude"_L1);
-    const auto lon = obj.value("longitude"_L1);
-    if (lat.isDouble() && lon.isDouble()) {
+    std::optional<double> lat;
+    std::optional<double> lon;
+
+    const auto latValue = obj.value("latitude"_L1);
+    const auto lonValue = obj.value("longitude"_L1);
+    if (latValue.isDouble() && lonValue.isDouble()) {
+        lat = latValue.toDouble();
+        lon = lonValue.toDouble();
+    } else {
+        // Try to convert map links to geo coordinates.
+        for (const auto &key : {"hasMap"_L1, "maps"_L1, "map"_L1}) {
+            const QUrl url = QUrl(obj.value(key).toString());
+            if (!url.isValid()) {
+                continue;
+            }
+
+            const auto geo = LocationUtil::geoFromUrl(url);
+            if (!geo.isValid()) {
+                continue;
+            }
+
+            lat = geo.latitude();
+            lon = geo.longitude();
+            break;
+        }
+    }
+
+    if (lat.has_value() && lon.has_value()) {
         auto geo = obj.value("geo"_L1).toObject();
         if (!geo.contains("@type"_L1)) {
             geo.insert("@type"_L1, "GeoCoordinates"_L1);
         }
         if (!geo.contains("latitude"_L1)) {
-            geo.insert("latitude"_L1, lat);
+            geo.insert("latitude"_L1, *lat);
         }
         if (!geo.contains("longitude"_L1)) {
-            geo.insert("longitude"_L1, lon);
+            geo.insert("longitude"_L1, *lon);
         }
         obj.insert("geo"_L1, geo);
     }
