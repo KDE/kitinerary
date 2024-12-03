@@ -321,6 +321,7 @@ static constexpr const JsonLdFilterEngine::TypeFilter type_filters[] = {
     { "Flight", filterFlight },
     { "FoodEstablishment", filterFoodEstablishment },
     { "LocalBusiness", filterPlace },
+    { "LodgingBusiness", filterPlace },
     { "Organization", filterPlace },
     { "Place", filterPlace },
     { "PostalAddress", filterPostalAddress },
