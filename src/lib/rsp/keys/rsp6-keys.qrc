@@ -4,6 +4,8 @@
 -->
 <RCC>
   <qresource prefix="/org.kde.pim/kitinerary/rsp6/keys/">
+    <file>01.json</file>
+    <file>04.json</file>
     <file>AA.json</file>
     <file>AC.json</file>
     <file>AO.json</file>
@@ -14,9 +16,23 @@
     <file>CT.json</file>
     <file>DF.json</file>
     <file>EN.json</file>
+    <file>ER.json</file>
     <file>EV.json</file>
     <file>F7.json</file>
+    <file>FA.json</file>
+    <file>FB.json</file>
+    <file>FC.json</file>
+    <file>FE.json</file>
+    <file>FG.json</file>
     <file>FJ.json</file>
+    <file>FL.json</file>
+    <file>FN.json</file>
+    <file>FR.json</file>
+    <file>FS.json</file>
+    <file>FT.json</file>
+    <file>FW.json</file>
+    <file>FX.json</file>
+    <file>GD.json</file>
     <file>GR.json</file>
     <file>HX.json</file>
     <file>IB.json</file>
@@ -25,19 +41,35 @@
     <file>PC.json</file>
     <file>PI.json</file>
     <file>RC.json</file>
+    <file>RD.json</file>
     <file>RE.json</file>
+    <file>RF.json</file>
     <file>RP.json</file>
+    <file>RS.json</file>
+    <file>SA.json</file>
+    <file>SB.json</file>
     <file>SE.json</file>
+    <file>SG.json</file>
+    <file>SH.json</file>
+    <file>SJ.json</file>
+    <file>SK.json</file>
+    <file>SL.json</file>
+    <file>SM.json</file>
     <file>SR.json</file>
+    <file>SX.json</file>
     <file>T2.json</file>
     <file>TK.json</file>
     <file>TR.json</file>
+    <file>TS.json</file>
     <file>TT.json</file>
     <file>TV.json</file>
     <file>UC.json</file>
     <file>VE.json</file>
+    <file>VT.json</file>
     <file>YO.json</file>
     <file>ZE.json</file>
+    <file>ZF.json</file>
+    <file>ZH.json</file>
     <file>ZS.json</file>
     <file>ZT.json</file>
     <file>ZX.json</file>

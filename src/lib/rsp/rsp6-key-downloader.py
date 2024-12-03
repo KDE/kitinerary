@@ -19,7 +19,7 @@ arguments = parser.parse_args()
 
 os.makedirs(arguments.output, exist_ok = True)
 
-req = requests.get('https://git.eta.st/eta/rsp6-decoder/raw/branch/master/keys.json')
+req = requests.get('https://git.eta.st/eta/rsp6-decoder/-/raw/master/keys.json')
 keys = json.loads(req.content)
 issuers = []
 
