@@ -175,6 +175,34 @@ private Q_SLOTS:
         QCOMPARE(LocationUtil::isSameLocation(rhs, lhs, LocationUtil::Exact), exactEqual);
     }
 
+    void testGeoFromUrl_data()
+    {
+        QTest::addColumn<QUrl>("url");
+        QTest::addColumn<double>("latitude");
+        QTest::addColumn<double>("longitude");
+
+        QTest::newRow("empty") << QUrl() << (double)NAN << (double)NAN;
+        QTest::newRow("non-map") << QUrl(u"http://www.kde.org"_s) << (double)NAN << (double)NAN;
+        QTest::newRow("google maps 1") << QUrl(u"https://www.google.com/maps/place/48.182849,16.378636"_s) << 48.182849 << 16.378636;
+        QTest::newRow("google maps 1 no ssl") << QUrl(u"http://www.google.com/maps/place/48.182849,16.378636"_s) << 48.182849 << 16.378636;
+        QTest::newRow("google maps 2") << QUrl(u"http://maps.google.fr/?ll=-48.8471603393555,-2.37761735916138&z=19"_s) << -48.8471603393555 << -2.37761735916138;
+        QTest::newRow("google maps 3") << QUrl(u"https://maps.google.com/maps?f=q&hl=en&q=52.434788,-13.544329"_s) << 52.434788 << -13.544329;
+        QTest::newRow("google maps api 1") << QUrl(u"http://maps.googleapis.com/maps/api/staticmap?language=en-gb&size=280x120&center=69.54363918781344,31.028996706008911&sensor=false&markers=color:0x0896FF%7C69.54363918781344,31.028996706008911&zoom=14&client=gme-booking&signature=xxxxxxxxxxxxxxxxxxxxxx"_s) << 69.54363918781344 << 31.028996706008911;
+        QTest::newRow("google maps 4") << QUrl(u"https://www.google.de/maps/place/Hotel+Ambassador/@49.0079973,8.3891759,17z/data=!XXXXXXX!12345"_s) << 49.0079973 << 8.3891759;
+    }
+
+    void testGeoFromUrl()
+    {
+        QFETCH(QUrl, url);
+        QFETCH(double, latitude);
+        QFETCH(double, longitude);
+        QCOMPARE(std::isnan(latitude), std::isnan(longitude));
+
+        GeoCoordinates geo = LocationUtil::geoFromUrl(url);
+        QCOMPARE(geo.latitude(), latitude);
+        QCOMPARE(geo.longitude(), longitude);
+    }
+
     void testGeoUri()
     {
         Place p;

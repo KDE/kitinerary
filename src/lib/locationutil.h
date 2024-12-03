@@ -45,6 +45,9 @@ QVariant KITINERARY_EXPORT location(const QVariant &res);
 /** Returns the geo coordinates of a given location. */
 GeoCoordinates KITINERARY_EXPORT geo(const QVariant &location);
 
+/** Parses geo coordinates from a given mapping service URLs, such as Google Maps links. */
+GeoCoordinates KITINERARY_EXPORT geoFromUrl(const QUrl &url);
+
 /** Returns the address of the given location. */
 PostalAddress KITINERARY_EXPORT address(const QVariant &location);
 

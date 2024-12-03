@@ -20,6 +20,7 @@
 #include <KContacts/Address>
 
 #include <QDebug>
+#include <QRegularExpression>
 #include <QUrl>
 #include <QUrlQuery>
 
@@ -122,6 +123,27 @@ GeoCoordinates LocationUtil::geo(const QVariant &location)
     }
     if (JsonLd::canConvert<Organization>(location)) {
         return JsonLd::convert<Organization>(location).geo();
+    }
+
+    return {};
+}
+
+GeoCoordinates LocationUtil::geoFromUrl(const QUrl &url)
+{
+    if (url.host().contains(QLatin1StringView("google"))) {
+        QRegularExpression regExp(
+            QStringLiteral("[/=@](-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"));
+        auto match = regExp.match(url.path());
+        if (!match.hasMatch()) {
+            match = regExp.match(url.query());
+        }
+
+        if (match.hasMatch()) {
+            const auto latitude = match.capturedView(1).toDouble();
+            const auto longitude = match.capturedView(2).toDouble();
+
+            return GeoCoordinates{latitude, longitude};
+        }
     }
 
     return {};

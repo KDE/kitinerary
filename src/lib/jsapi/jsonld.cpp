@@ -4,7 +4,9 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "datatypes/place.h"
 #include "jsonld.h"
+#include "locationutil.h"
 #include "reservationconverter.h"
 
 #include <KItinerary/JsonLdDocument>
@@ -334,25 +336,10 @@ QJSValue JsApi::JsonLd::clone(const QJSValue& v) const
 
 QJSValue JsApi::JsonLd::toGeoCoordinates(const QString &mapUrl)
 {
-    QUrl url(mapUrl);
-    if (url.host().contains(QLatin1StringView("google"))) {
-      QRegularExpression regExp(
-          QStringLiteral("[/=@](-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"));
-      auto match = regExp.match(url.path());
-      if (!match.hasMatch()) {
-        match = regExp.match(url.query());
-      }
-
-      if (match.hasMatch()) {
-        auto geo = m_engine->newObject();
-        geo.setProperty(QStringLiteral("@type"),
-                        QStringLiteral("GeoCoordinates"));
-        geo.setProperty(QStringLiteral("latitude"),
-                        match.capturedView(1).toDouble());
-        geo.setProperty(QStringLiteral("longitude"),
-                        match.capturedView(2).toDouble());
-        return geo;
-      }
+    const QUrl url(mapUrl);
+    const auto geo = LocationUtil::geoFromUrl(url);
+    if (geo.isValid()) {
+        return toJson(geo);
     }
 
     return {};
