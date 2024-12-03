@@ -39,8 +39,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 45.47060012817383,
-                    "longitude": -73.74079895019531
+                    "latitude": 45.4706,
+                    "longitude": -73.7408
                 },
                 "iataCode": "YUL",
                 "name": "MONTREAL"

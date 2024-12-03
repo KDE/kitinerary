@@ -298,8 +298,8 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
     auto depGeo = depStation.geo();
     if (pass->locations().size() == 1 && !depGeo.isValid()) {
         const auto loc = pass->locations().at(0);
-        depGeo.setLatitude((float)loc.latitude());
-        depGeo.setLongitude((float)loc.longitude());
+        depGeo.setLatitude(loc.latitude());
+        depGeo.setLongitude(loc.longitude());
         depStation.setGeo(depGeo);
         trip.setDepartureStation(depStation);
     }

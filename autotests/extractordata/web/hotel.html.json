@@ -13,8 +13,8 @@
         "description": "A beautifully located business hotel right in the\nheart of the alps. Watch the sun rise over the scenic Inn valley while\nenjoying your morning coffee.",
         "geo": {
             "@type": "GeoCoordinates",
-            "latitude": 47.26499938964844,
-            "longitude": 11.34287166595459
+            "latitude": 47.2649990,
+            "longitude": 11.3428720
         },
         "name": "ACME Hotel Innsbruck",
         "telephone": "+43 512 8000-0"

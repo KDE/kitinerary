@@ -161,7 +161,7 @@ int LocationUtil::distance(const GeoCoordinates &coord1, const GeoCoordinates &c
 }
 
 // see https://en.wikipedia.org/wiki/Haversine_formula
-int LocationUtil::distance(float lat1, float lon1, float lat2, float lon2)
+int LocationUtil::distance(double lat1, double lon1, double lat2, double lon2)
 {
     const auto degToRad = M_PI / 180.0;
     const auto earthRadius = 6371000.0; // in meters

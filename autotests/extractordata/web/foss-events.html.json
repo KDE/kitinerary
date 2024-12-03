@@ -17,8 +17,8 @@
             },
             "geo": {
                 "@type": "GeoCoordinates",
-                "latitude": 53.56222152709961,
-                "longitude": 9.985480308532715
+                "latitude": 53.56222,
+                "longitude": 9.98548
             },
             "name": "Congress Center Hamburg"
         },

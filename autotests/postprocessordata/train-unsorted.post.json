@@ -19,8 +19,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 43.83229064941406,
-                    "longitude": 4.365845203399658
+                    "latitude": 43.832291,
+                    "longitude": 4.365845
                 },
                 "name": "Nîmes Gare"
             },
@@ -38,8 +38,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 45.76055908203125,
-                    "longitude": 4.8593549728393555
+                    "latitude": 45.760559,
+                    "longitude": 4.859355
                 },
                 "name": "Lyon Part-Dieu"
             },
@@ -97,8 +97,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 45.76055908203125,
-                    "longitude": 4.8593549728393555
+                    "latitude": 45.760559,
+                    "longitude": 4.859355
                 },
                 "name": "Lyon Part-Dieu"
             },
@@ -116,8 +116,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 43.83229064941406,
-                    "longitude": 4.365845203399658
+                    "latitude": 43.832291,
+                    "longitude": 4.365845
                 },
                 "name": "Nîmes Gare"
             },

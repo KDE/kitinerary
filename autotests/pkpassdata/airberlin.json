@@ -39,8 +39,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 52.559688568115234,
-                    "longitude": 13.287711143493652
+                    "latitude": 52.55968857,
+                    "longitude": 13.28771114
                 },
                 "iataCode": "TXL",
                 "name": "Berlin - Tegel"

@@ -14,26 +14,25 @@ GEO:43.832291;4.365845
 DTSTART;TZID=Europe/Paris:20170929T182600
 DTEND;TZID=Europe/Paris:20170929T195200
 TRANSP:OPAQUE
-X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
- "TrainReservation"\,"potentialAction":[{"@type":"ViewAction"\,"target":
- "https://www.trainline.fr/tickets"}]\,"reservationFor":{"@type":
- "TrainTrip"\,"arrivalStation":{"@type":"TrainStation"\,"address":{"@type":
- "PostalAddress"\,"addressCountry":"FR"}\,"geo":{"@type":
- "GeoCoordinates"\,"latitude":45.76055908203125\,"longitude":
- 4.8593549728393555}\,"name":"Lyon Part-Dieu"}\,"arrivalTime":{"@type":
- "QDateTime"\,"@value":"2017-09-29T19:52:00+02:00"\,"timezone":
- "Europe/Paris"}\,"departureDay":"2017-09-29"\,"departureStation":{"@type":
- "TrainStation"\,"address":{"@type":"PostalAddress"\,"addressCountry":
- "FR"}\,"geo":{"@type":"GeoCoordinates"\,"latitude":
- 43.83229064941406\,"longitude":4.365845203399658}\,"name":"Nîmes 
- Gare"}\,"departureTime":{"@type":"QDateTime"\,"@value":"2017-09-29T18:26:
- 00+02:00"\,"timezone":"Europe/Paris"}\,"provider":{"@type":
- "Organization"\,"name":"SNCF"}\,"trainName":"TGV"\,"trainNumber":
- "5186"}\,"reservationNumber":"XXX007"\,"reservationStatus":"http:
- //schema.org/ReservationConfirmed"\,"reservedTicket":{"@type":
- "Ticket"\,"ticketedSeat":{"@type":"Seat"\,"seatNumber":
- "62"\,"seatSection":"17"\,"seatingType":"Economy"}\,"underName":{"@type":
- "Person"\,"name":"John Doe"}}\,"underName":{"@type":"Person"\,"name":
- "John Doe"}\,"url":"https://www.trainline.fr/tickets"}]
+X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org","@type":
+ "TrainReservation","potentialAction":[{"@type":"ViewAction","target":
+ "https://www.trainline.fr/tickets"}],"reservationFor":{"@type":
+ "TrainTrip","arrivalStation":{"@type":"TrainStation","address":{"@type":
+ "PostalAddress","addressCountry":"FR"},"geo":{"@type":
+ "GeoCoordinates","latitude":45.760559,"longitude":4.859355},"name":"Lyon 
+ Part-Dieu"},"arrivalTime":{"@type":"QDateTime","@value":"2017-09-29T19:52:
+ 00+02:00","timezone":"Europe/Paris"},"departureDay":
+ "2017-09-29","departureStation":{"@type":"TrainStation","address":
+ {"@type":"PostalAddress","addressCountry":"FR"},"geo":{"@type":
+ "GeoCoordinates","latitude":43.832291,"longitude":4.365845},"name":
+ "Nîmes Gare"},"departureTime":{"@type":"QDateTime","@value":
+ "2017-09-29T18:26:00+02:00","timezone":"Europe/Paris"},"provider":
+ {"@type":"Organization","name":"SNCF"},"trainName":"TGV","trainNumber":
+ "5186"},"reservationNumber":"XXX007","reservationStatus":"http:
+ //schema.org/ReservationConfirmed","reservedTicket":{"@type":
+ "Ticket","ticketedSeat":{"@type":"Seat","seatNumber":"62","seatSection":
+ "17","seatingType":"Economy"},"underName":{"@type":"Person","name":"John 
+ Doe"}},"underName":{"@type":"Person","name":"John Doe"},"url":"https:
+ //www.trainline.fr/tickets"}]
 END:VEVENT
 END:VCALENDAR

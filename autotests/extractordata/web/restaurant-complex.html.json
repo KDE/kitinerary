@@ -12,8 +12,8 @@
         },
         "geo": {
             "@type": "GeoCoordinates",
-            "latitude": 52.49776077270508,
-            "longitude": 13.387200355529785
+            "latitude": 52.49776,
+            "longitude": 13.3872
         },
         "name": "Blue Nile",
         "potentialAction": [

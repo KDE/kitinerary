@@ -19,8 +19,8 @@
             },
             "geo": {
                 "@type": "GeoCoordinates",
-                "latitude": 47.05808639526367,
-                "longitude": 15.46078872680664
+                "latitude": 47.0580857,
+                "longitude": 15.46078826559155
             },
             "name": "25d Inffeldgasse"
         },

@@ -22,12 +22,12 @@ class GeoCoordinatesPrivate;
 class KITINERARY_EXPORT GeoCoordinates
 {
     KITINERARY_GADGET(GeoCoordinates)
-    KITINERARY_PROPERTY(float, latitude, setLatitude)
-    KITINERARY_PROPERTY(float, longitude, setLongitude)
+    KITINERARY_PROPERTY(double, latitude, setLatitude)
+    KITINERARY_PROPERTY(double, longitude, setLongitude)
 
     Q_PROPERTY(bool isValid READ isValid STORED false)
 public:
-    GeoCoordinates(float latitude, float longitude);
+    GeoCoordinates(double latitude, double longitude);
 
     /** Returns @c true if both latitude and longitude are set and within
      *  the valid range.

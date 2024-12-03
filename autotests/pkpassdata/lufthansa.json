@@ -39,8 +39,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 48.35390090942383,
-                    "longitude": 11.786100387573242
+                    "latitude": 48.3539,
+                    "longitude": 11.7861
                 },
                 "iataCode": "MUC",
                 "name": "MUNICH"

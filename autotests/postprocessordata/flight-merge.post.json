@@ -56,8 +56,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 50.88970184326172,
-                    "longitude": 4.478000164031982
+                    "latitude": 50.8897,
+                    "longitude": 4.478
                 },
                 "iataCode": "BRU",
                 "name": "Brussels Airport, BE"

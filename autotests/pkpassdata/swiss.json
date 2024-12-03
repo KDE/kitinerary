@@ -51,8 +51,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 47.452301025390625,
-                    "longitude": 8.560830116271973
+                    "latitude": 47.4523,
+                    "longitude": 8.56083
                 },
                 "iataCode": "ZRH"
             },

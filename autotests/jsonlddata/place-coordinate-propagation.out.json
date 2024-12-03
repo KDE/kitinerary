@@ -11,8 +11,8 @@
             },
             "geo": {
                 "@type": "GeoCoordinates",
-                "latitude": 25.0440673828125,
-                "longitude": 121.53218078613281
+                "latitude": 25.044068,
+                "longitude": 121.532182
             }
         },
         "name": "OpenStreetMap x Wikidata Taipei #62",

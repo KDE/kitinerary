@@ -18,16 +18,16 @@ namespace KItinerary {
 class GeoCoordinatesPrivate : public QSharedData
 {
 public:
-    float latitude = NAN;
-    float longitude = NAN;
+    double latitude = NAN;
+    double longitude = NAN;
 };
 
 KITINERARY_MAKE_CLASS(GeoCoordinates)
-KITINERARY_MAKE_PROPERTY(GeoCoordinates, float, latitude, setLatitude)
-KITINERARY_MAKE_PROPERTY(GeoCoordinates, float, longitude, setLongitude)
+KITINERARY_MAKE_PROPERTY(GeoCoordinates, double, latitude, setLatitude)
+KITINERARY_MAKE_PROPERTY(GeoCoordinates, double, longitude, setLongitude)
 KITINERARY_MAKE_OPERATOR(GeoCoordinates)
 
-GeoCoordinates::GeoCoordinates(float latitude, float longitude) :
+GeoCoordinates::GeoCoordinates(double latitude, double longitude) :
     d(*s_GeoCoordinates_shared_null())
 {
     d.detach();

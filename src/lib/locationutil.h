@@ -54,7 +54,7 @@ QString KITINERARY_EXPORT name(const QVariant &location);
 /** Computes the distance between to geo coordinates in meters. */
 int KITINERARY_EXPORT distance(const GeoCoordinates &coord1, const GeoCoordinates &coord2);
 /** Computes the distance between to geo coordinates in meters. */
-int KITINERARY_EXPORT distance(float lat1, float lon1, float lat2, float lon2);
+int KITINERARY_EXPORT distance(double lat1, double lon1, double lat2, double lon2);
 
 /** Location comparison accuracy. */
 enum Accuracy {
