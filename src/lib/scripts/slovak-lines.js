@@ -1,7 +1,27 @@
 /*
    SPDX-FileCopyrightText: 2023 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2023 David Pilarčík <meow@charliecat.space>
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
+
+const regExMap = {};
+regExMap['en_US'] = [];
+regExMap['en_US']['departure'] = /Departure: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/;
+regExMap['en_US']['arrival'] = /Arrival: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/;
+regExMap['en_US']['platform'] = /Platform: +(\S.*)/;
+regExMap['en_US']['seat'] = /Seat: +(\S.*)/
+regExMap['en_US']['busLine'] = /Bus line no: +(.*)/
+regExMap['en_US']['category'] = /Category: +(.*)/
+regExMap['en_US']['brand'] = /Brand: \s+ +(.*)/
+
+regExMap['sk_SK'] = [];
+regExMap['sk_SK']['departure'] = /Odchod: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/;
+regExMap['sk_SK']['arrival'] = /Príchod: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/;
+regExMap['sk_SK']['platform'] = /Nástupište: +(\S.*)/;
+regExMap['sk_SK']['seat'] = /Sedadlo: +(\S.*)/
+regExMap['sk_SK']['busLine'] = /Autobusová linka č.: +(.*)/
+regExMap['sk_SK']['category'] = /kategória: +(.*)/
+regExMap['sk_SK']['brand'] = /Značka: \s+ +(.*)/
 
 function extractPass(pass, node) {
     let res = node.result[0];
@@ -42,28 +62,29 @@ function extractTicket(pdf, node, barcode) {
     let res = JsonLd.newBusReservation();
     res.underName.name = text.match(/^.*?: +(.*?)  /)[1];
     res.reservationNumber = barcode.content;
-    const dep = text.match(/Departure: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/);
-    res.reservationFor.departureBusStop.name = dep[1];
-    res.reservationFor.departureTime = JsonLd.toDateTime(dep[2], 'dd.MM.yyyy hh:mm', 'en');
-    const arr = text.match(/Arrival: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/);
-    res.reservationFor.arrivalBusStop.name = arr[1];
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2], 'dd.MM.yyyy hh:mm', 'en');
-    res.reservationFor.departurePlatform = text.match(/Platform: +(\S.*)/)[1].replace("Platform", "").trim();
-    res.reservedTicket.ticketedSeat.seatNumber = text.match(/Seat: +(\S.*)/)[1];
-    res.reservationFor.busNumber = text.match(/Bus line no: +(.*)  /)[1];
-    res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
-    let ticketCategory = text.match(/Category: +(.*)/)
-    res.reservedTicket.name = ticketCategory ? ticketCategory[1] : undefined;
-    res.reservationFor.provider = { "@type": "Organization", name: text.match(/Brand: \s+ +(.*)/) }
+    
+	for (let locale in regExMap) {
+		if (!text.match(regExMap[locale]['departure']))
+			continue
 
-    if (ExtractorEngine.extractPrice)
-        ExtractorEngine.extractPrice(text, res);
-    else {
-        let foundPrice = text.match(/Price: \s+ ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[Ee]([+-]?\d+))? [A-Za-z]+/) // Price: 4.05 EUR
-        console.log(foundPrice)
-        res.totalPrice = parseInt(foundPrice[1])
-        res.priceCurrency = foundPrice[3]
-    }
+		const dep = text.match(regExMap[locale]['departure']);
+    	res.reservationFor.departureBusStop.name = dep[1];
+    	res.reservationFor.departureTime = JsonLd.toDateTime(dep[2], 'dd.MM.yyyy hh:mm', 'en');
+
+    	const arr = text.match(regExMap[locale]['arrival']);
+    	res.reservationFor.arrivalBusStop.name = arr[1];
+    	res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2], 'dd.MM.yyyy hh:mm', 'en');
+
+    	res.reservationFor.departurePlatform = text.match(regExMap[locale]['platform'])[1].replace("Platform", "").trim();
+    	res.reservedTicket.ticketedSeat.seatNumber = text.match(regExMap[locale]['seat'])[1];
+    	res.reservationFor.busNumber = text.match(regExMap[locale]['busLine'])[1];
+    	res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
+    	let ticketCategory = text.match(regExMap[locale]['category'])
+    	res.reservedTicket.name = ticketCategory ? ticketCategory[1] : undefined;
+    	res.reservationFor.provider = { "@type": "Organization", name: text.match(regExMap[locale]['brand']) }
+	}
+
+	ExtractorEngine.extractPrice(text, res);
 
     return res;
 }
