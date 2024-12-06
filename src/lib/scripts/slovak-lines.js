@@ -10,7 +10,7 @@ regExMap['en_US']['departure'] = /Departure: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:
 regExMap['en_US']['arrival'] = /Arrival: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/;
 regExMap['en_US']['platform'] = /Platform: +(\S.*)/;
 regExMap['en_US']['seat'] = /Seat: +(\S.*)/
-regExMap['en_US']['busLine'] = /Bus line no: +(.*)/
+regExMap['en_US']['busLine'] = /Bus line no: +(.*) /
 regExMap['en_US']['category'] = /Category: +(.*)/
 regExMap['en_US']['brand'] = /Brand: \s+ +(.*)/
 
@@ -19,7 +19,7 @@ regExMap['sk_SK']['departure'] = /Odchod: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\
 regExMap['sk_SK']['arrival'] = /Príchod: +(.*) \S+, (\d\d\.\d\d\.\d{4} \d\d:\d\d)/;
 regExMap['sk_SK']['platform'] = /Nástupište: +(\S.*)/;
 regExMap['sk_SK']['seat'] = /Sedadlo: +(\S.*)/
-regExMap['sk_SK']['busLine'] = /Autobusová linka č.: +(.*)/
+regExMap['sk_SK']['busLine'] = /Autobusová linka č.: +(.*) /
 regExMap['sk_SK']['category'] = /kategória: +(.*)/
 regExMap['sk_SK']['brand'] = /Značka: \s+ +(.*)/
 
@@ -77,11 +77,13 @@ function extractTicket(pdf, node, barcode) {
 
     	res.reservationFor.departurePlatform = text.match(regExMap[locale]['platform'])[1].replace("Platform", "").trim();
     	res.reservedTicket.ticketedSeat.seatNumber = text.match(regExMap[locale]['seat'])[1];
-    	res.reservationFor.busNumber = text.match(regExMap[locale]['busLine'])[1];
+    	res.reservationFor.busNumber = text.match(regExMap[locale]['busLine'])[1].trim();
     	res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
     	let ticketCategory = text.match(regExMap[locale]['category'])
     	res.reservedTicket.name = ticketCategory ? ticketCategory[1] : undefined;
-    	res.reservationFor.provider = { "@type": "Organization", name: text.match(regExMap[locale]['brand']) }
+    	res.reservationFor.provider = { "@type": "Organization", name: text.match(regExMap[locale]['brand'])[1] }
+
+		console.log(JSON.stringify(res, null, 4))
 	}
 
 	ExtractorEngine.extractPrice(text, res);
