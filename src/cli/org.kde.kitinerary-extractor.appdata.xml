@@ -36,6 +36,7 @@
   <name xml:lang="pt-BR">Extrator em linha de comando do KItinerary</name>
   <name xml:lang="ro">Extractor KItinerary în linie de comandă</name>
   <name xml:lang="ru">Инструмент командной строки для извлечения данных маршрутов</name>
+  <name xml:lang="sa">KItinerary आदेश रेखा निष्कर्षक</name>
   <name xml:lang="sk">Extraktor cez príkazový riadok pre KItinerary</name>
   <name xml:lang="sl">KItinerary ekstraktor ukazne vrstice</name>
   <name xml:lang="sv">Kitinerary extrahering på kommandoraden</name>
@@ -69,6 +70,7 @@
   <summary xml:lang="pl">Wydobywane danych o rezerwacji z wiersza poleceń</summary>
   <summary xml:lang="pt-BR">Extrator em linha de comando de dados de reservas</summary>
   <summary xml:lang="ru">Инструмент командной строки для извлечения данных маршрутов</summary>
+  <summary xml:lang="sa">आदेशपङ्क्ति आरक्षणदत्तांशनिष्कासकः</summary>
   <summary xml:lang="sl">Ekstraktor podatkov o rezervaciji v ukazni vrstici</summary>
   <summary xml:lang="sv">Extrahering av reservationsdata på kommandoraden</summary>
   <summary xml:lang="tr">Komut satırında çalışan rezervasyon verisi çıkarıcısı</summary>
@@ -106,6 +108,7 @@
     <p xml:lang="pt-BR">Extrator em linha de comando para dados de itinerários, para integração em aplicativos de terceiros.</p>
     <p xml:lang="ro">Extractor în linie de comandă pentru date despre itinerare, pentru integrare în aplicații de la terți.</p>
     <p xml:lang="ru">Инструмент командной стоки для извлечения данных маршрутов для использования со сторонними приложениями.</p>
+    <p xml:lang="sa">यात्रासूचनादत्तांशस्य कृते आदेशपङ्क्तिनिष्कासकः, तृतीयपक्षीय-अनुप्रयोगेषु एकीकरणाय ।</p>
     <p xml:lang="sk">Extraktor cez príkazový riadok pre dáta itinerára na integráciu do aplikácií tretích strán.</p>
     <p xml:lang="sl">Ekstraktor ukazne vrstice za potovalne podatke za integracijo aplikacije tretje osebe.</p>
     <p xml:lang="sv">Extrahering av reseinformation på kommandoraden, för att integrera med tredjepartsprogram.</p>
