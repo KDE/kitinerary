@@ -20,7 +20,7 @@ msgstr ""
 #, kde-format
 msgctxt "canceled train/flight/loading reservation"
 msgid "Canceled: %1"
-msgstr ""
+msgstr "रद्दम् : %1"
 
 #: calendarhandler.cpp:197
 #, kde-format
@@ -46,7 +46,7 @@ msgstr "बोर्डिंग् समयः %1"
 #, kde-format
 msgctxt "flight departure gate"
 msgid "Departure gate: %1"
-msgstr ""
+msgstr "प्रस्थानद्वारं : %1"
 
 #: calendarhandler.cpp:240
 #, kde-format
