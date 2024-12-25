@@ -82,8 +82,6 @@ function extractTicket(pdf, node, barcode) {
     	let ticketCategory = text.match(regExMap[locale]['category'])
     	res.reservedTicket.name = ticketCategory ? ticketCategory[1] : undefined;
     	res.reservationFor.provider = { "@type": "Organization", name: text.match(regExMap[locale]['brand'])[1] }
-
-		console.log(JSON.stringify(res, null, 4))
 	}
 
 	ExtractorEngine.extractPrice(text, res);
