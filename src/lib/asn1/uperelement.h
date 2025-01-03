@@ -34,7 +34,8 @@ namespace KItinerary {
 #define UPER_ELEMENT(Type, Name) \
 public: \
     Type Name = {}; /* NOLINT misc-non-private-member-variables-in-classes */ \
-    Q_PROPERTY(Type Name MEMBER Name CONSTANT)
+    Q_PROPERTY(Type Name MEMBER Name CONSTANT) \
+    [[nodiscard]] constexpr inline bool Name ## IsSet() const { return true; }
 
 #define UPER_ELEMENT_OPTIONAL(Type, Name) \
 public: \
