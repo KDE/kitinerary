@@ -74,8 +74,11 @@
     FCB_READ_IA5STRING(Name ## IA5)
 
 constexpr inline auto FCB_TIME_MAX = 1440;
+constexpr inline auto FCB_DATE_MAX = 370;
 #define FCB_READ_TIME(Name) \
     FCB_READ_CONSTRAINED_INT(Name, 0, FCB_TIME_MAX)
+
+constexpr inline auto FCB_PRODUCT_ID_NUM_MAX = 32000;
 
 using namespace KItinerary;
 
@@ -181,8 +184,8 @@ void Fcb::TrainLinkType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(train);
-    travelDate = decoder.readConstrainedWholeNumber(-1, 370);
-    departureTime = decoder.readConstrainedWholeNumber(0, FCB_TIME_MAX);
+    travelDate = decoder.readConstrainedWholeNumber(-1, FCB_DATE_MAX);
+    FCB_READ_TIME(departureTime);
     FCB_READ_CONSTRAINED_INT(departureUTCOffset, -60, 60);
     FCB_READ_INT_IA5_PAIR(fromStation, 1, 9999999);
     FCB_READ_INT_IA5_PAIR(toStation, 1, 9999999);
@@ -350,7 +353,7 @@ void Fcb::IncludedOpenTicketType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
-    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, FCB_PRODUCT_ID_NUM_MAX);
     FCB_READ_UNCONSTRAINED_INT(externalIssuerId);
     FCB_READ_UNCONSTRAINED_INT(issuerAutorizationId);
     FCB_READ_ENUM(stationCodeTable);
@@ -358,7 +361,7 @@ void Fcb::IncludedOpenTicketType::decode(UPERDecoder &decoder)
     FCB_READ_CONSTRAINED_INT(validFromDay, -1, 700);
     FCB_READ_TIME(validFromTime);
     FCB_READ_CONSTRAINED_INT(validFromUTCOffset, -60, 60);
-    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, FCB_DATE_MAX);
     FCB_READ_TIME(validUntilTime);
     FCB_READ_CONSTRAINED_INT(validUntilUTCOffset, -60, 60);
     FCB_READ_ENUM(classCode);
@@ -392,11 +395,11 @@ void Fcb::ReservationData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(train);
-    FCB_READ_CONSTRAINED_INT(departureDate, -1, 370);
+    FCB_READ_CONSTRAINED_INT(departureDate, -1, FCB_DATE_MAX);
     FCB_READ_IA5STRING(referenceIA5);
     FCB_READ_UNCONSTRAINED_INT(referenceNum);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
-    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, FCB_PRODUCT_ID_NUM_MAX);
     FCB_READ_CONSTRAINED_INT(serviceBrand, 0, 32000);
     FCB_READ_UTF8STRING(serviceBrandAbrUTF8);
     FCB_READ_UTF8STRING(serviceBrandNameUTF8);
@@ -406,7 +409,7 @@ void Fcb::ReservationData::decode(UPERDecoder &decoder)
     FCB_READ_INT_IA5_PAIR(toStation, 1, 9999999);
     FCB_READ_UTF8STRING(fromStationNameUTF8);
     FCB_READ_UTF8STRING(toStationNameUTF8);
-    departureTime = decoder.readConstrainedWholeNumber(0, FCB_TIME_MAX);
+    FCB_READ_TIME(departureTime);
     FCB_READ_CONSTRAINED_INT(departureUTCOffset, -60, 60);
     FCB_READ_CONSTRAINED_INT(arrivalDate, 0, 20);
     FCB_READ_TIME(arrivalTime);
@@ -463,14 +466,14 @@ void Fcb::CarCarriageReservationData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(train);
-    FCB_READ_CONSTRAINED_INT(beginLoadingDate, -1, 370);
+    FCB_READ_CONSTRAINED_INT(beginLoadingDate, -1, FCB_DATE_MAX);
     FCB_READ_TIME(beginLoadingTime);
     FCB_READ_TIME(endLoadingTime);
     FCB_READ_CONSTRAINED_INT(loadingUTCOffset, -60, 60);
     FCB_READ_IA5STRING(referenceIA5);
     FCB_READ_UNCONSTRAINED_INT(referenceNum);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
-    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, FCB_PRODUCT_ID_NUM_MAX);
     FCB_READ_CONSTRAINED_INT(serviceBrand, 0, 32000);
     FCB_READ_UTF8STRING(serviceBrandAbrUTF8);
     FCB_READ_UTF8STRING(serviceBrandNameUTF8);
@@ -509,7 +512,7 @@ void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(reference);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
-    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, FCB_PRODUCT_ID_NUM_MAX);
     FCB_READ_UNCONSTRAINED_INT(extIssuerId);
     FCB_READ_UNCONSTRAINED_INT(issuerAutorizationId);
     returnIncluded = decoder.readBoolean();
@@ -524,10 +527,10 @@ void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
     FCB_READ_CONSTRAINED_INT(validFromDay, -1, 700);
     FCB_READ_TIME(validFromTime);
     FCB_READ_CONSTRAINED_INT(validFromUTCOffset, -60, 60);
-    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, FCB_DATE_MAX);
     FCB_READ_TIME(validUntilTime);
     FCB_READ_CONSTRAINED_INT(validUntilUTCOffset, -60, 60);
-    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(activatedDay, 0, 370);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(activatedDay, 0, FCB_DATE_MAX);
     FCB_READ_ENUM(classCode);
     FCB_READ_IA5STRING_CONSTRAINED(serviceLevel, 1, 2);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
@@ -570,8 +573,8 @@ QDateTime Fcb::OpenTicketData::validUntil(const QDateTime &issueingDateTime) con
 void Fcb::TimeRangeType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
-    fromTime = decoder.readConstrainedWholeNumber(0, FCB_TIME_MAX);
-    untilTime = decoder.readConstrainedWholeNumber(0, FCB_TIME_MAX);
+    FCB_READ_TIME(fromTime);
+    FCB_READ_TIME(untilTime);
 }
 
 void Fcb::ValidityPeriodType::decode(UPERDecoder &decoder)
@@ -580,7 +583,7 @@ void Fcb::ValidityPeriodType::decode(UPERDecoder &decoder)
     FCB_READ_CONSTRAINED_INT(validFromDay, -1, 700);
     FCB_READ_TIME(validFromTime);
     FCB_READ_CONSTRAINED_INT(validFromUTCOffset, -60, 60);
-    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, FCB_DATE_MAX);
     FCB_READ_TIME(validUntilTime);
     FCB_READ_CONSTRAINED_INT(validUntilUTCOffset, -60, 60);
 }
@@ -597,21 +600,21 @@ void Fcb::PassData::decode(UPERDecoder &decoder)
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(reference);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
-    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, FCB_PRODUCT_ID_NUM_MAX);
     FCB_READ_CONSTRAINED_INT(passType, 1, 250);
     FCB_READ_UTF8STRING(passDescription);
     FCB_READ_ENUM(classCode);
     FCB_READ_CONSTRAINED_INT(validFromDay, -1, 700);
     FCB_READ_TIME(validFromTime);
     FCB_READ_CONSTRAINED_INT(validFromUTCOffset, -60, 60);
-    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, FCB_DATE_MAX);
     FCB_READ_TIME(validUntilTime);
     FCB_READ_CONSTRAINED_INT(validUntilUTCOffset, -60, 60);
     FCB_READ_CUSTOM(validityPeriodDetails);
-    FCB_READ_CONSTRAINED_INT(numberOfValidityDays, 0, 370);
+    FCB_READ_CONSTRAINED_INT(numberOfValidityDays, 0, FCB_DATE_MAX);
     FCB_READ_CONSTRAINED_INT(numberOfPossibleTrips, 1, 250);
     FCB_READ_CONSTRAINED_INT(numberOfDaysOfTravel, 1, 250);
-    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(activatedDay, 0, 370);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(activatedDay, 0, FCB_DATE_MAX);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(countries, 1, 250);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(includedCarrierNum, 1, 32000);
     FCB_READ_SEQUENCE_OF_IA5STRING(includedCarrierIA5);
@@ -657,11 +660,11 @@ void Fcb::VoucherData::decode(UPERDecoder &decoder)
     FCB_READ_IA5STRING(referenceIA5);
     FCB_READ_UNCONSTRAINED_INT(referenceNum);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
-    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, FCB_PRODUCT_ID_NUM_MAX);
     validFromYear = decoder.readConstrainedWholeNumber(2016, 2269);
-    validFromDay = decoder.readConstrainedWholeNumber(0, 370);
+    validFromDay = decoder.readConstrainedWholeNumber(0, FCB_DATE_MAX);
     validUntilYear = decoder.readConstrainedWholeNumber(2016, 2269);
-    validUntilDay = decoder.readConstrainedWholeNumber(0, 370);
+    validUntilDay = decoder.readConstrainedWholeNumber(0, FCB_DATE_MAX);
     FCB_READ_UNCONSTRAINED_INT(value);
     FCB_READ_CONSTRAINED_INT(type, 1, 32000);
     FCB_READ_UTF8STRING(infoText);
@@ -675,9 +678,9 @@ void Fcb::CustomerCardData::decode(UPERDecoder &decoder)
     FCB_READ_IA5STRING(cardIdIA5);
     FCB_READ_UNCONSTRAINED_INT(cardIdNum);
     validFromYear = decoder.readConstrainedWholeNumber(2016, 2269);
-    FCB_READ_CONSTRAINED_INT(validFromDay, 0, 370);
+    FCB_READ_CONSTRAINED_INT(validFromDay, 0, FCB_DATE_MAX);
     FCB_READ_CONSTRAINED_INT(validUntilYear, 0, 250);
-    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, FCB_DATE_MAX);
     FCB_READ_ENUM(classCode);
     FCB_READ_CONSTRAINED_INT(cardType, 1, 1000);
     FCB_READ_UTF8STRING(cardTypeDescr);
@@ -712,7 +715,7 @@ void Fcb::CountermarkData::decode(UPERDecoder &decoder)
     FCB_READ_IA5STRING(referenceIA5);
     FCB_READ_UNCONSTRAINED_INT(referenceNum);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
-    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, FCB_PRODUCT_ID_NUM_MAX);
     FCB_READ_IA5STRING(ticketReferenceIA5);
     FCB_READ_UNCONSTRAINED_INT(ticketReferenceNum);
     numberOfCountermark = decoder.readConstrainedWholeNumber(1, 200);
@@ -730,7 +733,7 @@ void Fcb::CountermarkData::decode(UPERDecoder &decoder)
     FCB_READ_CONSTRAINED_INT(validFromDay, -1, 700);
     FCB_READ_TIME(validFromTime);
     FCB_READ_CONSTRAINED_INT(validFromUTCOffset, -60, 60);
-    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, FCB_DATE_MAX);
     FCB_READ_TIME(validUntilTime);
     FCB_READ_CONSTRAINED_INT(validUntilUTCOffset, -60, 60);
     FCB_READ_ENUM(classCode);
@@ -749,9 +752,9 @@ void Fcb::ParkingGroundData::decode(UPERDecoder &decoder)
     FCB_READ_UNCONSTRAINED_INT(referenceNum);
     parkingGroundId = decoder.readIA5String();
     fromParkingDate = decoder.readConstrainedWholeNumber(-1, 370);
-    FCB_READ_CONSTRAINED_INT(untilParkingDate, 0, 370);
+    FCB_READ_CONSTRAINED_INT(untilParkingDate, 0, FCB_DATE_MAX);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
-    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, FCB_PRODUCT_ID_NUM_MAX);
     FCB_READ_IA5STRING(accessCode);
     location = decoder.readUtf8String();
     FCB_READ_ENUM(stationCodeTable);
@@ -771,10 +774,10 @@ void Fcb::FIPTicketData::decode(UPERDecoder &decoder)
     FCB_READ_IA5STRING(referenceIA5);
     FCB_READ_UNCONSTRAINED_INT(referenceNum);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
-    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, FCB_PRODUCT_ID_NUM_MAX);
     FCB_READ_CONSTRAINED_INT(validFromDay, -1, 700);
-    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
-    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(activatedDay, 0, 370);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, FCB_DATE_MAX);
+    FCB_READ_SEQUENCE_OF_CONTRAINED_INT(activatedDay, 0, FCB_DATE_MAX);
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(carrierNum, 1, 32000);
     FCB_READ_SEQUENCE_OF_IA5STRING(carrierIA5);
     numberOfTravelDays = decoder.readConstrainedWholeNumber(1, 200);
@@ -789,7 +792,7 @@ void Fcb::StationPassageData::decode(UPERDecoder &decoder)
     FCB_READ_IA5STRING(referenceIA5);
     FCB_READ_UNCONSTRAINED_INT(referenceNum);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
-    FCB_READ_INT_IA5_PAIR(productId, 0, 32000);
+    FCB_READ_INT_IA5_PAIR(productId, 0, FCB_PRODUCT_ID_NUM_MAX);
     FCB_READ_UTF8STRING(productName);
     FCB_READ_ENUM(stationCodeTable);
     FCB_READ_SEQUENCE_OF_UNCONTRAINED_INT(stationNum);
@@ -801,8 +804,8 @@ void Fcb::StationPassageData::decode(UPERDecoder &decoder)
     validFromDay = decoder.readConstrainedWholeNumber(-1, 700);
     FCB_READ_TIME(validFromTime);
     FCB_READ_CONSTRAINED_INT(validFromUTCOffset, -60, 60);
-    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, 370);
-    FCB_READ_CONSTRAINED_INT(validUntilTime, 0, 1400);
+    FCB_READ_CONSTRAINED_INT(validUntilDay, 0, FCB_DATE_MAX);
+    FCB_READ_TIME(validUntilTime);
     FCB_READ_CONSTRAINED_INT(validUntilUTCOffset, -60, 60);
     FCB_READ_UNCONSTRAINED_INT(numberOfDaysValid);
     FCB_READ_CUSTOM(extension);
