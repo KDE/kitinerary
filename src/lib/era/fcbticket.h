@@ -22,6 +22,7 @@ class UPERDecoder;
 
 /** ERA Flexible Content Barcode (FCB)
  *  @see ERA TAP TSI TD B.12 §11 and the corresponding ASN.1 definition
+ *  @see https://github.com/UnionInternationalCheminsdeFer/UIC-barcode
  */
 namespace Fcb {
 
