@@ -39,10 +39,28 @@ QString FcbUtil::classCodeToString(Fcb::TravelClassType classCode)
     return {};
 }
 
+QDate FcbUtil::decodeDate(int year, std::optional<int> day)
+{
+    QDate d(year, 1, 1);
+    if (day) {
+        d = d.addDays((*day) - 1);
+    }
+    return d;
+}
+
+QDate FcbUtil::decodeDifferentialDate(const QDate &base, int year, std::optional<int> day)
+{
+    QDate d(base.year(), 1, 1);
+    d = d.addYears(year);
+    if (day) {
+        d = d.addDays(*day);
+    }
+    return d;
+}
+
 QDateTime FcbUtil::issuingDateTime(int year, int day, std::optional<int> time)
 {
-    QDate date(year, 1, 1);
-    date = date.addDays(day - 1);
+    QDate date = decodeDate(year, day);
     if (time) {
         return QDateTime(date, QTime(0,0).addSecs(*time * 60), QTimeZone::UTC);
     }

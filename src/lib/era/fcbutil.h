@@ -55,6 +55,10 @@ public:
     /** Convert a class code enum value to a string for human representation. */
     [[nodiscard]] static QString classCodeToString(Fcb::TravelClassType classCode);
 
+    /** Decode FCB date. */
+    [[nodiscard]] static QDate decodeDate(int year, std::optional<int> day);
+    [[nodiscard]] static QDate decodeDifferentialDate(const QDate &base, int year, std::optional<int> day);
+
     /** Decode FCB issuing time. */
     [[nodiscard]] static QDateTime issuingDateTime(int year, int day, std::optional<int> time);
     /** Decode differential time, relative to @p baseDt. */

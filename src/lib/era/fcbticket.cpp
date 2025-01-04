@@ -574,21 +574,12 @@ void Fcb::CustomerCardData::decode(UPERDecoder &decoder)
 
 QDate Fcb::CustomerCardData::validFrom() const
 {
-    QDate d(validFromYear, 1, 1);
-    if (validFromDayIsSet()) {
-        d = d.addDays(validFromDay);
-    }
-    return d;
+    return FcbUtil::decodeDate(validFromYear, validFromDayValue());
 }
 
 QDate Fcb::CustomerCardData::validUntil() const
 {
-    QDate d(validFrom().year(), 1, 1);
-    d = d.addYears(validUntilYear);
-    if (validUntilDayIsSet()) {
-        d = d.addDays(validUntilDay);
-    }
-    return d;
+    return FcbUtil::decodeDifferentialDate(validFrom(), validUntilYear, validFromDayValue());
 }
 
 void Fcb::CountermarkData::decode(UPERDecoder &decoder)
