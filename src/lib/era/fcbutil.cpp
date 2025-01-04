@@ -38,3 +38,47 @@ QString FcbUtil::classCodeToString(Fcb::TravelClassType classCode)
     }
     return {};
 }
+
+QDateTime FcbUtil::issuingDateTime(int year, int day, std::optional<int> time)
+{
+    QDate date(year, 1, 1);
+    date = date.addDays(day - 1);
+    if (time) {
+        return QDateTime(date, QTime(0,0).addSecs(*time * 60), QTimeZone::UTC);
+    }
+    return QDateTime(date, {});
+}
+
+QDateTime FcbUtil::decodeDifferentialTime(const QDateTime &baseDt, int day, std::optional<int> time, std::optional<int> utcOffset)
+{
+    if (!time) {
+        return {};
+    }
+
+    QDate d = baseDt.date().addDays(day);
+    QTime t = QTime(0, 0).addSecs((*time) * 60);
+    if (utcOffset) {
+        return QDateTime(d, t, QTimeZone::fromSecondsAheadOfUtc(- (*utcOffset) * 15 * 60));
+    }
+    return QDateTime(d, t);
+}
+
+QDateTime FcbUtil::decodeDifferentialStartTime(const QDateTime &baseDt, int day, std::optional<int> time, std::optional<int> utcOffset)
+{
+    QDate d = baseDt.date().addDays(day);
+    QTime t = time ? QTime(0, 0).addSecs((*time) * 60) : QTime();
+    if (utcOffset) {
+        return QDateTime(d, t, QTimeZone::fromSecondsAheadOfUtc(- (*utcOffset) * 15 * 60));
+    }
+    return QDateTime(d, t);
+}
+
+QDateTime FcbUtil::decodeDifferentialEndTime(const QDateTime &baseDt, int day, std::optional<int> time, std::optional<int> utcOffset)
+{
+    QDate d = baseDt.date().addDays(day);
+    QTime t = time ? QTime(0, 0).addSecs((*time) * 60) : QTime(23, 59, 59);
+    if (utcOffset) {
+        return QDateTime(d, t, QTimeZone::fromSecondsAheadOfUtc(- (*utcOffset) * 15 * 60));
+    }
+    return QDateTime(d, t);
+}

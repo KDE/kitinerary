@@ -9,6 +9,8 @@
 #include "uperdecoder.h"
 #include "internal/instance_counter.h"
 
+#include <optional>
+
 namespace KItinerary {
 
 // start of an ASN.1 SEQUENCE definition
@@ -35,7 +37,8 @@ namespace KItinerary {
 public: \
     Type Name = {}; /* NOLINT misc-non-private-member-variables-in-classes */ \
     Q_PROPERTY(Type Name MEMBER Name CONSTANT) \
-    [[nodiscard]] constexpr inline bool Name ## IsSet() const { return true; }
+    [[nodiscard]] constexpr inline bool Name ## IsSet() const { return true; } \
+    [[nodiscard]] std::optional<Type> Name ## Value() const { return Name; }
 
 #define UPER_ELEMENT_OPTIONAL(Type, Name) \
 public: \
@@ -47,7 +50,8 @@ private: \
     static constexpr auto _uper_optional_counter(detail::num<decltype(_uper_optional_counter(detail::num<>()))::value + 1> n) \
         -> decltype(n) { return {}; } \
 public: \
-    [[nodiscard]] inline bool Name ## IsSet() const { return m_optionals[m_optionals.size() - _uper_ ## Name ## OptionalIndex - 1]; }
+    [[nodiscard]] inline bool Name ## IsSet() const { return m_optionals[m_optionals.size() - _uper_ ## Name ## OptionalIndex - 1]; } \
+    [[nodiscard]] std::optional<Type> Name ## Value() const { return Name ## IsSet() ? std::optional<Type>(Name) : std::optional<Type>(); }
 
 #define UPER_ELEMENT_DEFAULT(Type, Name, DefaultValue) \
 public: \
@@ -57,7 +61,9 @@ private: \
     static constexpr int _uper_ ## Name ## OptionalIndex = decltype(_uper_optional_counter(detail::num<>()))::value; \
     static constexpr auto _uper_optional_counter(detail::num<decltype(_uper_optional_counter(detail::num<>()))::value + 1> n) \
         -> decltype(n) { return {}; } \
-    [[nodiscard]] inline bool Name ## IsSet() const { return m_optionals[m_optionals.size() - _uper_ ## Name ## OptionalIndex - 1]; }
+    [[nodiscard]] inline bool Name ## IsSet() const { return m_optionals[m_optionals.size() - _uper_ ## Name ## OptionalIndex - 1]; } \
+    [[nodiscard]] std::optional<Type> Name ## Value() const { return Name; }
+
 }
 
 #define UPER_GADGET_FINALIZE \
