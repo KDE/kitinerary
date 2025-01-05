@@ -75,7 +75,7 @@ void Uic9183Flex::readDepartureStation(const QVariant &doc, TrainStation &statio
     VariantVisitor([&station](auto &&data) {
         station.setName(data.fromStationNameUTF8);
         station.setIdentifier(FcbUtil::fromStationIdentifier(data));
-    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData>(doc);
+    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData>(doc);
     fixStationCode(station);
 }
 
@@ -84,7 +84,7 @@ void Uic9183Flex::readArrivalStation(const QVariant &doc, TrainStation &station)
     VariantVisitor([&station](auto &&data) {
         station.setName(data.toStationNameUTF8);
         station.setIdentifier(FcbUtil::toStationIdentifier(data));
-    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData>(doc);
+    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData>(doc);
     fixStationCode(station);
 }
 

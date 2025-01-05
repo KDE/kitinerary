@@ -7,6 +7,7 @@
 #define KITINERARY_FCBUTIL_H
 
 #include "fcbticket.h"
+#include "fcbticket3.h"
 #include "logging.h"
 
 #include <QString>
@@ -16,20 +17,26 @@ namespace KItinerary {
 /** Higher-level decoding utilities for ERA FCB ticket data. */
 class FcbUtil
 {
+private:
+    constexpr inline static bool isUicCode(Fcb::v13::CodeTableType stationCodeTable)
+    {
+        return stationCodeTable == Fcb::v13::stationUIC || stationCodeTable == Fcb::v13::stationUICReservation;
+    }
+    constexpr inline static bool isUicCode(Fcb::v3::CodeTableType stationCodeTable)
+    {
+        return stationCodeTable == Fcb::v3::stationUIC || stationCodeTable == Fcb::v3::stationUICReservation;
+    }
 public:
     /** Departure station identifier for a travel document,
     *  in the format needed for output with our JSON-LD format.
     */
-    template <typename T>
-    [[nodiscard]] static QString fromStationIdentifier(Fcb::v13::CodeTableType stationCodeTable, const T &doc)
+    template <typename CodeTableTypeT, typename T>
+    [[nodiscard]] static QString fromStationIdentifier(CodeTableTypeT stationCodeTable, const T &doc)
     {
-        switch (stationCodeTable) {
-            case Fcb::v13::stationUIC:
-            case Fcb::v13::stationUICReservation:
-                return stringifyUicStationIdentifier(doc.fromStationNum, doc.fromStationIA5);
-            default:
-                qCWarning(Log) << "Unhandled station code table:" << stationCodeTable;
+        if (isUicCode(stationCodeTable)) {
+            return stringifyUicStationIdentifier(doc.fromStationNum, doc.fromStationIA5);
         }
+        qCWarning(Log) << "Unhandled station code table:" << stationCodeTable;
         return stringifyStationIdentifier(doc.fromStationNumIsSet(), doc.fromStationNum, doc.fromStationIA5);
     }
     template <typename T>
@@ -37,16 +44,13 @@ public:
     /** Arrival station identifier for a travel document,
     *  in the format needed for output with our JSON-LD format.
     */
-    template <typename T>
-    [[nodiscard]] static QString toStationIdentifier(Fcb::v13::CodeTableType stationCodeTable, const T &doc)
+    template <typename CodeTableTypeT, typename T>
+    [[nodiscard]] static QString toStationIdentifier(CodeTableTypeT stationCodeTable, const T &doc)
     {
-        switch (stationCodeTable) {
-            case Fcb::v13::stationUIC:
-            case Fcb::v13::stationUICReservation:
-                return stringifyUicStationIdentifier(doc.toStationNum, doc.toStationIA5);
-            default:
-                qCWarning(Log) << "Unhandled station code table:" << stationCodeTable;
+        if (isUicCode(stationCodeTable)) {
+            return stringifyUicStationIdentifier(doc.toStationNum, doc.toStationIA5);
         }
+        qCWarning(Log) << "Unhandled station code table:" << stationCodeTable;
         return stringifyStationIdentifier(doc.toStationNumIsSet(), doc.toStationNum, doc.toStationIA5);
     }
     template <typename T>
@@ -54,6 +58,7 @@ public:
 
     /** Convert a class code enum value to a string for human representation. */
     [[nodiscard]] static QString classCodeToString(Fcb::v13::TravelClassType classCode);
+    [[nodiscard]] static QString classCodeToString(Fcb::v3::TravelClassType classCode);
 
     /** Decode FCB date. */
     [[nodiscard]] static QDate decodeDate(int year, std::optional<int> day);

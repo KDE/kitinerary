@@ -39,6 +39,22 @@ QString FcbUtil::classCodeToString(Fcb::v13::TravelClassType classCode)
     return {};
 }
 
+QString FcbUtil::classCodeToString(Fcb::v3::TravelClassType classCode)
+{
+    switch (classCode) {
+        case Fcb::v3::notApplicable: return {};
+        case Fcb::v3::first:
+        case Fcb::v3::standardFirst:
+            return QString::number(1);
+        case Fcb::v3::second:
+        case Fcb::v3::standardSecond:
+            return QString::number(2);
+        default:
+            qCWarning(Log) << "Unhandled FCB class code" << classCode;
+    }
+    return {};
+}
+
 QDate FcbUtil::decodeDate(int year, std::optional<int> day)
 {
     QDate d(year, 1, 1);
