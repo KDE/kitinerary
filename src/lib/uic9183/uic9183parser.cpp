@@ -443,19 +443,6 @@ Person Uic9183Parser::person() const
     return {};
 }
 
-static void fixFcbStationCode(TrainStation &station)
-{
-    // UIC codes in Germany are wildly unreliable, there seem to be different
-    // code tables in use by different operators, so we unfortunately have to ignore
-    // those entirely
-    if (station.identifier().startsWith(QLatin1StringView("uic:80"))) {
-      PostalAddress addr;
-      addr.setAddressCountry(QStringLiteral("DE"));
-      station.setAddress(addr);
-      station.setIdentifier(QString());
-    }
-}
-
 TrainStation Uic9183Parser::outboundDepartureStation() const
 {
     TrainStation station;
@@ -480,12 +467,7 @@ TrainStation Uic9183Parser::outboundDepartureStation() const
 
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
-        const auto doc = flex.transportDocuments().at(0);
-        VariantVisitor([&station](auto &&data) {
-            station.setName(data.fromStationNameUTF8);
-            station.setIdentifier(FcbUtil::fromStationIdentifier(data));
-        }).visit<Fcb::ReservationData, Fcb::OpenTicketData>(doc);
-        fixFcbStationCode(station);
+        Uic9183Flex::readDepartureStation(flex.transportDocuments().at(0), station);
     }
 
     return station;
@@ -514,12 +496,7 @@ TrainStation Uic9183Parser::outboundArrivalStation() const
 
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
-        const auto doc = flex.transportDocuments().at(0);
-        VariantVisitor([&station](auto &&data) {
-            station.setName(data.toStationNameUTF8);
-            station.setIdentifier(FcbUtil::toStationIdentifier(data));
-        }).visit<Fcb::ReservationData, Fcb::OpenTicketData>(doc);
-        fixFcbStationCode(station);
+        Uic9183Flex::readArrivalStation(flex.transportDocuments().at(0), station);
     }
 
     return station;
@@ -558,7 +535,7 @@ TrainStation Uic9183Parser::returnDepartureStation() const
                 }
             }
         }).visit<Fcb::OpenTicketData>(doc);
-        fixFcbStationCode(station);
+        Uic9183Flex::fixStationCode(station);
     }
 
     return station;
@@ -597,7 +574,7 @@ TrainStation Uic9183Parser::returnArrivalStation() const
                 }
             }
         }).visit<Fcb::OpenTicketData>(doc);
-        fixFcbStationCode(station);
+        Uic9183Flex::fixStationCode(station);
     }
 
     return station;

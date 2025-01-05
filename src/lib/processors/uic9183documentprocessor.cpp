@@ -93,19 +93,6 @@ static ProgramMembership extractCustomerCard(const QList <Fcb::TariffType> &tari
     return {};
 }
 
-static void fixFcbStationCode(TrainStation &station)
-{
-    // UIC codes in Germany are wildly unreliable, there seem to be different
-    // code tables in use by different operators, so we unfortunately have to ignore
-    // those entirely
-    if (station.identifier().startsWith(QLatin1StringView("uic:80"))) {
-      PostalAddress addr;
-      addr.setAddressCountry(QStringLiteral("DE"));
-      station.setAddress(addr);
-      station.setIdentifier(QString());
-    }
-}
-
 void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     const auto p = node.content<Uic9183Parser>();
@@ -213,26 +200,22 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
         }
     }
 
-    const auto fcb = p.findBlock<Uic9183Flex>().fcb();
-    if (fcb.isValid()) {
+    if (const auto flex = p.findBlock<Uic9183Flex>(); flex.isValid()) {
+        const auto fcb = flex.fcb();
         res.setPriceCurrency(QString::fromUtf8(fcb.issuingDetail.currency));
-        const auto issueDt = fcb.issuingDetail.issueingDateTime();
-        for (const auto &doc : fcb.transportDocument) {
-            if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-                const auto irt = doc.ticket.value<Fcb::ReservationData>();
+        const auto issueDt = flex.issuingDateTime();
+        for (const auto &doc : flex.transportDocuments()) {
+            if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+                const auto irt = doc.value<Fcb::ReservationData>();
                 TrainTrip trip;
                 trip.setProvider(p.issuer());
 
                 TrainStation dep;
-                dep.setName(irt.fromStationNameUTF8);
-                dep.setIdentifier(FcbUtil::fromStationIdentifier(irt));
-                fixFcbStationCode(dep);
+                Uic9183Flex::readDepartureStation(doc, dep);
                 trip.setDepartureStation(dep);
 
                 TrainStation arr;
-                arr.setName(irt.toStationNameUTF8);
-                arr.setIdentifier(FcbUtil::toStationIdentifier(irt));
-                fixFcbStationCode(arr);
+                Uic9183Flex::readArrivalStation(doc, arr);
                 trip.setArrivalStation(arr);
 
                 trip.setDepartureTime(irt.departureDateTime(issueDt));
@@ -271,8 +254,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     results.push_back(res);
                 }
 
-            } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-                const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+            } else if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+                const auto nrt = doc.value<Fcb::OpenTicketData>();
 
                 Seat s;
                 s.setSeatingType(FcbUtil::classCodeToString(nrt.classCode));
@@ -294,15 +277,15 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     TrainTrip trip;
                     trip.setProvider(p.issuer());
 
-                    // TODO station identifier
+                    // TODO station identifier, use Uic9183Flex::read[Arrival|Departure]Station
                     TrainStation dep;
                     dep.setName(trainLink.fromStationNameUTF8);
-                    fixFcbStationCode(dep);
+                    Uic9183Flex::fixStationCode(dep);
                     trip.setDepartureStation(dep);
 
                     TrainStation arr;
                     arr.setName(trainLink.toStationNameUTF8);
-                    fixFcbStationCode(arr);
+                    Uic9183Flex::fixStationCode(arr);
                     trip.setArrivalStation(arr);
 
                     trip.setDepartureTime(trainLink.departureDateTime(issueDt));
@@ -334,8 +317,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     }
                     // TODO handle nrt.returnIncluded
                 }
-            } else if (doc.ticket.userType() == qMetaTypeId<Fcb::CustomerCardData>()) {
-                const auto ccd = doc.ticket.value<Fcb::CustomerCardData>();
+            } else if (doc.userType() == qMetaTypeId<Fcb::CustomerCardData>()) {
+                const auto ccd = doc.value<Fcb::CustomerCardData>();
                 ProgramMembership pm;
                 if (ccd.cardIdNumIsSet()) {
                     pm.setMembershipNumber(QString::number(ccd.cardIdNum));

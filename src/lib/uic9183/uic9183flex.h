@@ -13,6 +13,8 @@
 
 namespace KItinerary {
 
+class TrainStation;
+
 /** Represents a U_FLEX block holding different versions of an FCB payload.
  *  @see ERA TAP TSI TD B.12 Digital Security Elements For Rail Passenger Ticketing - §11 FCB - Flexible Content Barcode
  */
@@ -48,6 +50,13 @@ public:
      *  Varies depending on the version of this block.
      */
     [[nodiscard]] Fcb::UicRailTicketData fcb() const;
+
+    /** Read departure station info from the given FCB travel document, if applicable. */
+    static void readDepartureStation(const QVariant &doc, TrainStation &station);
+    /** Read arrival station info from the given FCB travel document, if applicable. */
+    static void readArrivalStation(const QVariant &doc, TrainStation &station);
+    /** Fix known issues with station identifiers. */
+    static void fixStationCode(TrainStation &station);
 
     static constexpr const char RecordId[] = "U_FLEX";
 

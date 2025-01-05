@@ -5,6 +5,13 @@
 
 #include "uic9183flex.h"
 
+#include "era/fcbutil.h"
+
+#include "variantvisitor_p.h"
+
+#include <KItinerary/Place>
+
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 Uic9183Flex::Uic9183Flex() = default;
@@ -53,6 +60,37 @@ Fcb::UicRailTicketData Uic9183Flex::fcb() const
 QVariant Uic9183Flex::fcbVariant() const
 {
     return QVariant::fromValue(m_data);
+}
+
+void Uic9183Flex::readDepartureStation(const QVariant &doc, TrainStation &station)
+{
+    VariantVisitor([&station](auto &&data) {
+        station.setName(data.fromStationNameUTF8);
+        station.setIdentifier(FcbUtil::fromStationIdentifier(data));
+    }).visit<Fcb::ReservationData, Fcb::OpenTicketData>(doc);
+    fixStationCode(station);
+}
+
+void Uic9183Flex::readArrivalStation(const QVariant &doc, TrainStation &station)
+{
+    VariantVisitor([&station](auto &&data) {
+        station.setName(data.toStationNameUTF8);
+        station.setIdentifier(FcbUtil::toStationIdentifier(data));
+    }).visit<Fcb::ReservationData, Fcb::OpenTicketData>(doc);
+    fixStationCode(station);
+}
+
+void Uic9183Flex::fixStationCode(TrainStation &station)
+{
+    // UIC codes in Germany are wildly unreliable, there seem to be different
+    // code tables in use by different operators, so we unfortunately have to ignore
+    // those entirely
+    if (station.identifier().startsWith("uic:80"_L1)) {
+      PostalAddress addr;
+      addr.setAddressCountry(u"DE"_s);
+      station.setAddress(addr);
+      station.setIdentifier(QString());
+    }
 }
 
 #include "moc_uic9183flex.cpp"
