@@ -49,7 +49,7 @@ public:
     /** Returns the FCB payload.
      *  Varies depending on the version of this block.
      */
-    [[nodiscard]] Fcb::UicRailTicketData fcb() const;
+    [[nodiscard]] Fcb::v13::UicRailTicketData fcb() const;
 
     /** Read departure station info from the given FCB travel document, if applicable. */
     static void readDepartureStation(const QVariant &doc, TrainStation &station);
@@ -64,7 +64,7 @@ private:
     [[nodiscard]] QVariant fcbVariant() const;
 
     Uic9183Block m_block;
-    Fcb::UicRailTicketData m_data;
+    Fcb::v13::UicRailTicketData m_data;
 };
 
 }

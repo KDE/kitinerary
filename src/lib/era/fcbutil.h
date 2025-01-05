@@ -21,11 +21,11 @@ public:
     *  in the format needed for output with our JSON-LD format.
     */
     template <typename T>
-    [[nodiscard]] static QString fromStationIdentifier(Fcb::CodeTableType stationCodeTable, const T &doc)
+    [[nodiscard]] static QString fromStationIdentifier(Fcb::v13::CodeTableType stationCodeTable, const T &doc)
     {
         switch (stationCodeTable) {
-            case Fcb::stationUIC:
-            case Fcb::stationUICReservation:
+            case Fcb::v13::stationUIC:
+            case Fcb::v13::stationUICReservation:
                 return stringifyUicStationIdentifier(doc.fromStationNum, doc.fromStationIA5);
             default:
                 qCWarning(Log) << "Unhandled station code table:" << stationCodeTable;
@@ -38,11 +38,11 @@ public:
     *  in the format needed for output with our JSON-LD format.
     */
     template <typename T>
-    [[nodiscard]] static QString toStationIdentifier(Fcb::CodeTableType stationCodeTable, const T &doc)
+    [[nodiscard]] static QString toStationIdentifier(Fcb::v13::CodeTableType stationCodeTable, const T &doc)
     {
         switch (stationCodeTable) {
-            case Fcb::stationUIC:
-            case Fcb::stationUICReservation:
+            case Fcb::v13::stationUIC:
+            case Fcb::v13::stationUICReservation:
                 return stringifyUicStationIdentifier(doc.toStationNum, doc.toStationIA5);
             default:
                 qCWarning(Log) << "Unhandled station code table:" << stationCodeTable;
@@ -53,7 +53,7 @@ public:
     [[nodiscard]] static QString toStationIdentifier(const T &doc) { return toStationIdentifier(doc.stationCodeTable, doc); }
 
     /** Convert a class code enum value to a string for human representation. */
-    [[nodiscard]] static QString classCodeToString(Fcb::TravelClassType classCode);
+    [[nodiscard]] static QString classCodeToString(Fcb::v13::TravelClassType classCode);
 
     /** Decode FCB date. */
     [[nodiscard]] static QDate decodeDate(int year, std::optional<int> day);

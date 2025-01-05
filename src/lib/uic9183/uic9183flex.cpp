@@ -18,7 +18,7 @@ Uic9183Flex::Uic9183Flex() = default;
 
 Uic9183Flex::Uic9183Flex(const Uic9183Block &block)
 {
-    auto fcb = Fcb::UicRailTicketData(block);
+    auto fcb = Fcb::v13::UicRailTicketData(block);
     if (fcb.isValid()) {
         m_data = std::move(fcb);
         m_block = block;
@@ -52,7 +52,7 @@ QList<QVariant>Uic9183Flex::transportDocuments() const
     return l;
 }
 
-Fcb::UicRailTicketData Uic9183Flex::fcb() const
+Fcb::v13::UicRailTicketData Uic9183Flex::fcb() const
 {
     return m_data;
 }
@@ -67,7 +67,7 @@ void Uic9183Flex::readDepartureStation(const QVariant &doc, TrainStation &statio
     VariantVisitor([&station](auto &&data) {
         station.setName(data.fromStationNameUTF8);
         station.setIdentifier(FcbUtil::fromStationIdentifier(data));
-    }).visit<Fcb::ReservationData, Fcb::OpenTicketData>(doc);
+    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData>(doc);
     fixStationCode(station);
 }
 
@@ -76,7 +76,7 @@ void Uic9183Flex::readArrivalStation(const QVariant &doc, TrainStation &station)
     VariantVisitor([&station](auto &&data) {
         station.setName(data.toStationNameUTF8);
         station.setIdentifier(FcbUtil::toStationIdentifier(data));
-    }).visit<Fcb::ReservationData, Fcb::OpenTicketData>(doc);
+    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData>(doc);
     fixStationCode(station);
 }
 

@@ -27,12 +27,12 @@ QString FcbUtil::stringifyStationIdentifier(bool numIsSet, int num, const QByteA
     return QString::fromLatin1(ia5);
 }
 
-QString FcbUtil::classCodeToString(Fcb::TravelClassType classCode)
+QString FcbUtil::classCodeToString(Fcb::v13::TravelClassType classCode)
 {
     switch (classCode) {
-        case Fcb::notApplicable: return {};
-        case Fcb::first: return QString::number(1);
-        case Fcb::second: return QString::number(2);
+        case Fcb::v13::notApplicable: return {};
+        case Fcb::v13::first: return QString::number(1);
+        case Fcb::v13::second: return QString::number(2);
         default:
             qCWarning(Log) << "Unhandled FCB class code" << classCode;
     }

@@ -190,7 +190,7 @@ QString Uic9183Parser::pnr() const
             const auto doc = flex.transportDocuments().at(0);
             QString pnr = VariantVisitor([](auto &&data) {
                 return fcbReference(data);
-            }).visit<Fcb::ReservationData, Fcb::OpenTicketData, Fcb::PassData>(doc);
+            }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData>(doc);
             if (!pnr.isEmpty()) {
                 return pnr;
             }
@@ -207,7 +207,7 @@ QString Uic9183Parser::name() const
         const auto doc = flex.transportDocuments().at(0);
         QString name = VariantVisitor([](auto &&data) {
             return data.tariffs.isEmpty() ? QString() : data.tariffs.at(0).tariffDesc;
-        }).visit<Fcb::ReservationData, Fcb::OpenTicketData, Fcb::PassData>(doc);
+        }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData>(doc);
         if (!name.isEmpty()) {
             return name;
         }
@@ -264,13 +264,13 @@ QDateTime Uic9183Parser::validFrom() const
         const auto doc = flex.transportDocuments().at(0);
         auto dt = VariantVisitor([issue](auto &&data) {
             return data.departureDateTime(issue);
-        }).visit<Fcb::ReservationData>(doc);
+        }).visit<Fcb::v13::ReservationData>(doc);
         if (dt.isValid()) {
             return dt;
         }
         dt = VariantVisitor([issue](auto &&data) {
             return data.validFrom(issue);
-        }).visit<Fcb::OpenTicketData, Fcb::PassData>(doc);
+        }).visit<Fcb::v13::OpenTicketData, Fcb::v13::PassData>(doc);
         if (dt.isValid()) {
             return dt;
         }
@@ -327,13 +327,13 @@ QDateTime Uic9183Parser::validUntil() const
         const auto doc = flex.transportDocuments().at(0);
         auto dt = VariantVisitor([issue](auto &&data) {
             return data.arrivalDateTime(issue);
-        }).visit<Fcb::ReservationData>(doc);
+        }).visit<Fcb::v13::ReservationData>(doc);
         if (dt.isValid()) {
             return dt;
         }
         dt = VariantVisitor([issue](auto &&data) {
             return data.validUntil(issue);
-        }).visit<Fcb::OpenTicketData, Fcb::PassData>(doc);
+        }).visit<Fcb::v13::OpenTicketData, Fcb::v13::PassData>(doc);
         if (dt.isValid()) {
             return dt;
         }
@@ -534,7 +534,7 @@ TrainStation Uic9183Parser::returnDepartureStation() const
                     station.setIdentifier(outboundArrival.identifier());
                 }
             }
-        }).visit<Fcb::OpenTicketData>(doc);
+        }).visit<Fcb::v13::OpenTicketData>(doc);
         Uic9183Flex::fixStationCode(station);
     }
 
@@ -573,7 +573,7 @@ TrainStation Uic9183Parser::returnArrivalStation() const
                     station.setIdentifier(outboundDeparture.identifier());
                 }
             }
-        }).visit<Fcb::OpenTicketData>(doc);
+        }).visit<Fcb::v13::OpenTicketData>(doc);
         Uic9183Flex::fixStationCode(station);
     }
 
@@ -586,7 +586,7 @@ QString Uic9183Parser::seatingType() const
         const auto doc = flex.transportDocuments().at(0);
         auto c = VariantVisitor([](auto &&data) {
             return FcbUtil::classCodeToString(data.classCode);
-        }).visit<Fcb::ReservationData, Fcb::OpenTicketData, Fcb::PassData>(doc);
+        }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData>(doc);
         if (!c.isEmpty()) {
             return c;
         }

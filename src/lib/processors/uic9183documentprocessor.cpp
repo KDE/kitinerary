@@ -69,7 +69,7 @@ void Uic9183DocumentProcessor::expandNode(ExtractorDocumentNode &node, [[maybe_u
     }
 }
 
-static ProgramMembership extractCustomerCard(const Fcb::CardReferenceType &card)
+static ProgramMembership extractCustomerCard(const Fcb::v13::CardReferenceType &card)
 {
     ProgramMembership p;
     p.setProgramName(card.cardName);
@@ -81,7 +81,7 @@ static ProgramMembership extractCustomerCard(const Fcb::CardReferenceType &card)
     return p;
 }
 
-static ProgramMembership extractCustomerCard(const QList <Fcb::TariffType> &tariffs)
+static ProgramMembership extractCustomerCard(const QList <Fcb::v13::TariffType> &tariffs)
 {
     // TODO what do we do with the (so far theoretical) case of multiple discount cards in use?
     for (const auto &tariff : tariffs) {
@@ -205,8 +205,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
         res.setPriceCurrency(QString::fromUtf8(fcb.issuingDetail.currency));
         const auto issueDt = flex.issuingDateTime();
         for (const auto &doc : flex.transportDocuments()) {
-            if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-                const auto irt = doc.value<Fcb::ReservationData>();
+            if (doc.userType() == qMetaTypeId<Fcb::v13::ReservationData>()) {
+                const auto irt = doc.value<Fcb::v13::ReservationData>();
                 TrainTrip trip;
                 trip.setProvider(p.issuer());
 
@@ -254,8 +254,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     results.push_back(res);
                 }
 
-            } else if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-                const auto nrt = doc.value<Fcb::OpenTicketData>();
+            } else if (doc.userType() == qMetaTypeId<Fcb::v13::OpenTicketData>()) {
+                const auto nrt = doc.value<Fcb::v13::OpenTicketData>();
 
                 Seat s;
                 s.setSeatingType(FcbUtil::classCodeToString(nrt.classCode));
@@ -270,10 +270,10 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 // check for TrainLinkType regional validity constrains
                 bool trainLinkTypeFound = false;
                 for (const auto &regionalValidity : nrt.validRegion) {
-                    if (regionalValidity.value.userType() != qMetaTypeId<Fcb::TrainLinkType>()) {
+                    if (regionalValidity.value.userType() != qMetaTypeId<Fcb::v13::TrainLinkType>()) {
                         continue;
                     }
-                    const auto trainLink = regionalValidity.value.value<Fcb::TrainLinkType>();
+                    const auto trainLink = regionalValidity.value.value<Fcb::v13::TrainLinkType>();
                     TrainTrip trip;
                     trip.setProvider(p.issuer());
 
@@ -317,8 +317,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     }
                     // TODO handle nrt.returnIncluded
                 }
-            } else if (doc.userType() == qMetaTypeId<Fcb::CustomerCardData>()) {
-                const auto ccd = doc.value<Fcb::CustomerCardData>();
+            } else if (doc.userType() == qMetaTypeId<Fcb::v13::CustomerCardData>()) {
+                const auto ccd = doc.value<Fcb::v13::CustomerCardData>();
                 ProgramMembership pm;
                 if (ccd.cardIdNumIsSet()) {
                     pm.setMembershipNumber(QString::number(ccd.cardIdNum));

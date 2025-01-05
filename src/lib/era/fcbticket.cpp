@@ -19,14 +19,14 @@ constexpr inline auto FCB_PRODUCT_ID_NUM_MAX = 32000;
 
 using namespace KItinerary;
 
-void Fcb::ExtensionData::decode(KItinerary::UPERDecoder &decoder)
+void Fcb::v13::ExtensionData::decode(KItinerary::UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     extensionId = decoder.readIA5String();
     extensionData = decoder.readOctetString();
 }
 
-void Fcb::GeoCoordinateType::decode(UPERDecoder &decoder)
+void Fcb::v13::GeoCoordinateType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_ENUM(geoUnit);
@@ -38,14 +38,14 @@ void Fcb::GeoCoordinateType::decode(UPERDecoder &decoder)
     FCB_READ_ENUM(accuracy);
 }
 
-void Fcb::DeltaCoordinate::decode(UPERDecoder &decoder)
+void Fcb::v13::DeltaCoordinate::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     longitude = decoder.readUnconstrainedWholeNumber();
     latitude = decoder.readUnconstrainedWholeNumber();
 }
 
-void Fcb::IssuingData::decode(UPERDecoder &decoder)
+void Fcb::v13::IssuingData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR(securityProvider, 1, 32000);
@@ -66,12 +66,12 @@ void Fcb::IssuingData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(pointOfSale);
 }
 
-QDateTime Fcb::IssuingData::issueingDateTime() const
+QDateTime Fcb::v13::IssuingData::issueingDateTime() const
 {
     return FcbUtil::issuingDateTime(issuingYear, issuingDay, issuingTimeValue());
 }
 
-void Fcb::CustomerStatusType::decode(UPERDecoder &decoder)
+void Fcb::v13::CustomerStatusType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(statusProvider);
@@ -79,7 +79,7 @@ void Fcb::CustomerStatusType::decode(UPERDecoder &decoder)
     FCB_READ_IA5STRING(customerStatusDescr);
 }
 
-void Fcb::TravelerType::decode(UPERDecoder &decoder)
+void Fcb::v13::TravelerType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_UTF8STRING(firstName);
@@ -104,7 +104,7 @@ void Fcb::TravelerType::decode(UPERDecoder &decoder)
     FCB_READ_SEQUENCE_OF_CUSTOM(status);
 }
 
-void Fcb::TravelerData::decode(UPERDecoder &decoder)
+void Fcb::v13::TravelerData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_SEQUENCE_OF_CUSTOM(traveler);
@@ -112,7 +112,7 @@ void Fcb::TravelerData::decode(UPERDecoder &decoder)
     FCB_READ_UTF8STRING(groupName);
 }
 
-void Fcb::TrainLinkType::decode(UPERDecoder &decoder)
+void Fcb::v13::TrainLinkType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(train);
@@ -125,12 +125,12 @@ void Fcb::TrainLinkType::decode(UPERDecoder &decoder)
     FCB_READ_UTF8STRING(toStationNameUTF8);
 }
 
-QDateTime Fcb::TrainLinkType::departureDateTime(const QDateTime &issueingDateTime) const
+QDateTime Fcb::v13::TrainLinkType::departureDateTime(const QDateTime &issueingDateTime) const
 {
     return FcbUtil::decodeDifferentialTime(issueingDateTime, travelDate, departureTime, departureUTCOffsetValue());
 }
 
-void Fcb::ViaStationType::decode(UPERDecoder &decoder)
+void Fcb::v13::ViaStationType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_ENUM(stationCodeTable);
@@ -144,7 +144,7 @@ void Fcb::ViaStationType::decode(UPERDecoder &decoder)
     FCB_READ_UNCONSTRAINED_INT(routeId);
 }
 
-void Fcb::ZoneType::decode(UPERDecoder &decoder)
+void Fcb::v13::ZoneType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR(carrier, 1, 32000);
@@ -157,7 +157,7 @@ void Fcb::ZoneType::decode(UPERDecoder &decoder)
     FCB_READ_IA5STRING(nutsCode);
 }
 
-void Fcb::LineType::decode(UPERDecoder &decoder)
+void Fcb::v13::LineType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR(carrier, 1, 32000);
@@ -169,19 +169,19 @@ void Fcb::LineType::decode(UPERDecoder &decoder)
     FCB_READ_OCTETSTRING(binaryZoneId);
 }
 
-void Fcb::PolygoneType::decode(UPERDecoder &decoder)
+void Fcb::v13::PolygoneType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     firstEdge.decode(decoder);
     edges = decoder.readSequenceOf<DeltaCoordinate>();
 }
 
-void Fcb::RegionalValidityType::decode(UPERDecoder &decoder)
+void Fcb::v13::RegionalValidityType::decode(UPERDecoder &decoder)
 {
     value = decoder.readChoiceWithExtensionMarker<TrainLinkType, ViaStationType, ZoneType, LineType, PolygoneType>();
 }
 
-void Fcb::ReturnRouteDescriptionType::decode(UPERDecoder &decoder)
+void Fcb::v13::ReturnRouteDescriptionType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR(fromStation, 1, 9999999);
@@ -192,7 +192,7 @@ void Fcb::ReturnRouteDescriptionType::decode(UPERDecoder &decoder)
     FCB_READ_SEQUENCE_OF_CUSTOM(validReturnRegion);
 }
 
-void Fcb::RouteSectionType::decode(UPERDecoder &decoder)
+void Fcb::v13::RouteSectionType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_ENUM(stationCodeTable);
@@ -202,7 +202,7 @@ void Fcb::RouteSectionType::decode(UPERDecoder &decoder)
     FCB_READ_UTF8STRING(toStationNameUTF8);
 }
 
-void Fcb::SeriesDetailType::decode(UPERDecoder &decoder)
+void Fcb::v13::SeriesDetailType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_CONSTRAINED_INT(supplyingCarrier, 1, 32000);
@@ -210,7 +210,7 @@ void Fcb::SeriesDetailType::decode(UPERDecoder &decoder)
     FCB_READ_UNCONSTRAINED_INT(series);
 }
 
-void Fcb::CardReferenceType::decode(UPERDecoder &decoder)
+void Fcb::v13::CardReferenceType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR(cardIssuer, 1, 32000);
@@ -221,7 +221,7 @@ void Fcb::CardReferenceType::decode(UPERDecoder &decoder)
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(trailingCardId);
 }
 
-void Fcb::PlacesType::decode(KItinerary::UPERDecoder &decoder)
+void Fcb::v13::PlacesType::decode(KItinerary::UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_IA5STRING(coach);
@@ -231,7 +231,7 @@ void Fcb::PlacesType::decode(KItinerary::UPERDecoder &decoder)
     FCB_READ_SEQUENCE_OF_CONTRAINED_INT(placeNum, 1, 254);
 }
 
-void Fcb::CompartmentDetailsType::decode(UPERDecoder &decoder)
+void Fcb::v13::CompartmentDetailsType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_CONSTRAINED_INT(coachType, 1, 99);
@@ -243,7 +243,7 @@ void Fcb::CompartmentDetailsType::decode(UPERDecoder &decoder)
     FCB_READ_ENUM(position);
 }
 
-void Fcb::BerthDetailData::decode(UPERDecoder &decoder)
+void Fcb::v13::BerthDetailData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     berthType = decoder.readEnumerated<BerthTypeType>();
@@ -251,7 +251,7 @@ void Fcb::BerthDetailData::decode(UPERDecoder &decoder)
     FCB_READ_ENUM(gender);
 }
 
-void Fcb::TariffType::decode(UPERDecoder &decoder)
+void Fcb::v13::TariffType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_CONSTRAINED_INT(numberOfPassengers, 1, 200);
@@ -267,7 +267,7 @@ void Fcb::TariffType::decode(UPERDecoder &decoder)
     FCB_READ_SEQUENCE_OF_CUSTOM(reductionCard);
 }
 
-void Fcb::VatDetailType::decode(UPERDecoder &decoder)
+void Fcb::v13::VatDetailType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     country = decoder.readConstrainedWholeNumber(1, 999);
@@ -276,7 +276,7 @@ void Fcb::VatDetailType::decode(UPERDecoder &decoder)
     FCB_READ_IA5STRING(vatId);
 }
 
-void Fcb::IncludedOpenTicketType::decode(UPERDecoder &decoder)
+void Fcb::v13::IncludedOpenTicketType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR(productOwner, 1, 32000);
@@ -302,7 +302,7 @@ void Fcb::IncludedOpenTicketType::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-void Fcb::RegisteredLuggageType::decode(UPERDecoder &decoder)
+void Fcb::v13::RegisteredLuggageType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_IA5STRING(registrationId);
@@ -310,7 +310,7 @@ void Fcb::RegisteredLuggageType::decode(UPERDecoder &decoder)
     FCB_READ_CONSTRAINED_INT(maxSize, 1, 300);
 }
 
-void Fcb::LuggageRestrictionType::decode(UPERDecoder &decoder)
+void Fcb::v13::LuggageRestrictionType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_CONSTRAINED_INT(maxHandLuggagePieces, 0, 99);
@@ -318,7 +318,7 @@ void Fcb::LuggageRestrictionType::decode(UPERDecoder &decoder)
     FCB_READ_SEQUENCE_OF_CUSTOM(registeredLuggage);
 }
 
-void Fcb::ReservationData::decode(UPERDecoder &decoder)
+void Fcb::v13::ReservationData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(train);
@@ -362,17 +362,17 @@ void Fcb::ReservationData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-QDateTime Fcb::ReservationData::departureDateTime(const QDateTime &issueingDateTime) const
+QDateTime Fcb::v13::ReservationData::departureDateTime(const QDateTime &issueingDateTime) const
 {
     return FcbUtil::decodeDifferentialTime(issueingDateTime, departureDate, departureTimeValue(), departureUTCOffsetValue());
 }
 
-QDateTime Fcb::ReservationData::arrivalDateTime(const QDateTime &issueingDateTime) const
+QDateTime Fcb::v13::ReservationData::arrivalDateTime(const QDateTime &issueingDateTime) const
 {
     return FcbUtil::decodeDifferentialTime(departureDateTime(issueingDateTime), arrivalDate, arrivalTimeValue(), arrivalUTCOffsetValue());
 }
 
-void Fcb::CarCarriageReservationData::decode(UPERDecoder &decoder)
+void Fcb::v13::CarCarriageReservationData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(train);
@@ -417,7 +417,7 @@ void Fcb::CarCarriageReservationData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
+void Fcb::v13::OpenTicketData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(reference);
@@ -456,24 +456,24 @@ void Fcb::OpenTicketData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-QDateTime Fcb::OpenTicketData::validFrom(const QDateTime &issueingDateTime) const
+QDateTime Fcb::v13::OpenTicketData::validFrom(const QDateTime &issueingDateTime) const
 {
     return FcbUtil::decodeDifferentialStartTime(issueingDateTime, validFromDay, validFromTimeValue(), validFromUTCOffsetValue());
 }
 
-QDateTime Fcb::OpenTicketData::validUntil(const QDateTime &issueingDateTime) const
+QDateTime Fcb::v13::OpenTicketData::validUntil(const QDateTime &issueingDateTime) const
 {
     return FcbUtil::decodeDifferentialEndTime(validFrom(issueingDateTime), validUntilDay, validUntilTimeValue(), validFromUTCOffsetValue());
 }
 
-void Fcb::TimeRangeType::decode(UPERDecoder &decoder)
+void Fcb::v13::TimeRangeType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_TIME(fromTime);
     FCB_READ_TIME(untilTime);
 }
 
-void Fcb::ValidityPeriodType::decode(UPERDecoder &decoder)
+void Fcb::v13::ValidityPeriodType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_CONSTRAINED_INT(validFromDay, FCB_BEGIN_DATE_MIN, 700);
@@ -484,14 +484,14 @@ void Fcb::ValidityPeriodType::decode(UPERDecoder &decoder)
     FCB_READ_CONSTRAINED_INT(validUntilUTCOffset, -60, 60);
 }
 
-void Fcb::ValidityPeriodDetailType::decode(UPERDecoder &decoder)
+void Fcb::v13::ValidityPeriodDetailType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_SEQUENCE_OF_CUSTOM(validityPeriod);
     FCB_READ_SEQUENCE_OF_CUSTOM(excludedTimeRange);
 }
 
-void Fcb::PassData::decode(UPERDecoder &decoder)
+void Fcb::v13::PassData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(reference);
@@ -526,17 +526,17 @@ void Fcb::PassData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-QDateTime Fcb::PassData::validFrom(const QDateTime &issueingDateTime) const
+QDateTime Fcb::v13::PassData::validFrom(const QDateTime &issueingDateTime) const
 {
     return FcbUtil::decodeDifferentialStartTime(issueingDateTime, validFromDay, validFromTimeValue(), validFromUTCOffsetValue());
 }
 
-QDateTime Fcb::PassData::validUntil(const QDateTime &issueingDateTime) const
+QDateTime Fcb::v13::PassData::validUntil(const QDateTime &issueingDateTime) const
 {
     return FcbUtil::decodeDifferentialEndTime(validFrom(issueingDateTime), validUntilDay, validUntilTimeValue(), validUntilUTCOffsetValue());
 }
 
-void Fcb::VoucherData::decode(UPERDecoder &decoder)
+void Fcb::v13::VoucherData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_IA5STRING(referenceIA5);
@@ -553,7 +553,7 @@ void Fcb::VoucherData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-void Fcb::CustomerCardData::decode(UPERDecoder &decoder)
+void Fcb::v13::CustomerCardData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_CUSTOM(customer);
@@ -572,17 +572,17 @@ void Fcb::CustomerCardData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-QDate Fcb::CustomerCardData::validFrom() const
+QDate Fcb::v13::CustomerCardData::validFrom() const
 {
     return FcbUtil::decodeDate(validFromYear, validFromDayValue());
 }
 
-QDate Fcb::CustomerCardData::validUntil() const
+QDate Fcb::v13::CustomerCardData::validUntil() const
 {
     return FcbUtil::decodeDifferentialDate(validFrom(), validUntilYear, validFromDayValue());
 }
 
-void Fcb::CountermarkData::decode(UPERDecoder &decoder)
+void Fcb::v13::CountermarkData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_IA5STRING(referenceIA5);
@@ -618,7 +618,7 @@ void Fcb::CountermarkData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-void Fcb::ParkingGroundData::decode(UPERDecoder &decoder)
+void Fcb::v13::ParkingGroundData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_IA5STRING(referenceIA5);
@@ -641,7 +641,7 @@ void Fcb::ParkingGroundData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-void Fcb::FIPTicketData::decode(UPERDecoder &decoder)
+void Fcb::v13::FIPTicketData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_IA5STRING(referenceIA5);
@@ -659,7 +659,7 @@ void Fcb::FIPTicketData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-void Fcb::StationPassageData::decode(UPERDecoder &decoder)
+void Fcb::v13::StationPassageData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_IA5STRING(referenceIA5);
@@ -684,7 +684,7 @@ void Fcb::StationPassageData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-void Fcb::DelayConfirmation::decode(UPERDecoder &decoder)
+void Fcb::v13::DelayConfirmation::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_IA5STRING(referenceIA5);
@@ -704,7 +704,7 @@ void Fcb::DelayConfirmation::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-void Fcb::TokenType::decode(UPERDecoder &decoder)
+void Fcb::v13::TokenType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_INT_IA5_PAIR_UNCONSTRAINED(tokenProvider);
@@ -712,7 +712,7 @@ void Fcb::TokenType::decode(UPERDecoder &decoder)
     token = decoder.readOctetString();
 }
 
-void Fcb::DocumentData::decode(UPERDecoder &decoder)
+void Fcb::v13::DocumentData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_CUSTOM(token);
@@ -732,7 +732,7 @@ void Fcb::DocumentData::decode(UPERDecoder &decoder)
     >();
 }
 
-void Fcb::TicketLinkType::decode(UPERDecoder &decoder)
+void Fcb::v13::TicketLinkType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_IA5STRING(referenceIA5);
@@ -744,7 +744,7 @@ void Fcb::TicketLinkType::decode(UPERDecoder &decoder)
     FCB_READ_ENUM(linkMode);
 }
 
-void Fcb::ControlData::decode(UPERDecoder &decoder)
+void Fcb::v13::ControlData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_SEQUENCE_OF_CUSTOM(identificationByCardReference);
@@ -761,9 +761,9 @@ void Fcb::ControlData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(extension);
 }
 
-Fcb::UicRailTicketData::UicRailTicketData() = default;
+Fcb::v13::UicRailTicketData::UicRailTicketData() = default;
 
-Fcb::UicRailTicketData::UicRailTicketData(const Uic9183Block &block)
+Fcb::v13::UicRailTicketData::UicRailTicketData(const Uic9183Block &block)
     : m_block(block)
 {
     if (block.isNull()) {
@@ -777,7 +777,7 @@ Fcb::UicRailTicketData::UicRailTicketData(const Uic9183Block &block)
     }
 }
 
-void Fcb::UicRailTicketData::decode(UPERDecoder &decoder)
+void Fcb::v13::UicRailTicketData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     issuingDetail.decode(decoder);
@@ -786,7 +786,7 @@ void Fcb::UicRailTicketData::decode(UPERDecoder &decoder)
     FCB_READ_CUSTOM(controlDetail)
 }
 
-bool Fcb::UicRailTicketData::isValid() const
+bool Fcb::v13::UicRailTicketData::isValid() const
 {
     return !m_block.isNull();
 }
