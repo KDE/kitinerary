@@ -12,6 +12,7 @@
 #include "uic9183head.h"
 #include "uic9183header.h"
 #include "uic9183ticketlayout.h"
+#include "variantvisitor_p.h"
 #include "vendor0080block.h"
 #include "vendor1154block.h"
 
@@ -187,14 +188,9 @@ QString Uic9183Parser::pnr() const
         }
         if (flex.hasTransportDocument()) {
             const auto doc = flex.transportDocuments().at(0);
-            QString pnr;
-            if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-                pnr = fcbReference(doc.value<Fcb::ReservationData>());
-            } else if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-                pnr = fcbReference(doc.value<Fcb::OpenTicketData>());
-            } else if (doc.userType() == qMetaTypeId<Fcb::PassData>()) {
-                pnr = fcbReference(doc.value<Fcb::PassData>());
-            }
+            QString pnr = VariantVisitor([](auto &&data) {
+                return fcbReference(data);
+            }).visit<Fcb::ReservationData, Fcb::OpenTicketData, Fcb::PassData>(doc);
             if (!pnr.isEmpty()) {
                 return pnr;
             }
@@ -204,28 +200,14 @@ QString Uic9183Parser::pnr() const
     return {};
 }
 
-template <typename T>
-static QString fcbTariffName(const T &data)
-{
-    if (data.tariffs.isEmpty()) {
-        return {};
-    }
-    return data.tariffs.at(0).tariffDesc;
-}
-
 QString Uic9183Parser::name() const
 {
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
         const auto doc = flex.transportDocuments().at(0);
-        QString name;
-        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            name = fcbTariffName(doc.value<Fcb::ReservationData>());
-        } else if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            name = fcbTariffName(doc.value<Fcb::OpenTicketData>());
-        } else if (doc.userType() == qMetaTypeId<Fcb::PassData>()) {
-            name = fcbTariffName(doc.value<Fcb::PassData>());
-        }
+        QString name = VariantVisitor([](auto &&data) {
+            return data.tariffs.isEmpty() ? QString() : data.tariffs.at(0).tariffDesc;
+        }).visit<Fcb::ReservationData, Fcb::OpenTicketData, Fcb::PassData>(doc);
         if (!name.isEmpty()) {
             return name;
         }
@@ -631,14 +613,11 @@ QString Uic9183Parser::seatingType() const
 {
     if (const auto flex = findBlock<Uic9183Flex>(); flex.transportDocuments().size() == 1) {
         const auto doc = flex.transportDocuments().at(0);
-        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            return FcbUtil::classCodeToString(doc.value<Fcb::ReservationData>().classCode);
-        }
-        if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            return FcbUtil::classCodeToString(doc.value<Fcb::OpenTicketData>().classCode);
-        }
-        if (doc.userType() == qMetaTypeId<Fcb::PassData>()) {
-            return FcbUtil::classCodeToString(doc.value<Fcb::PassData>().classCode);
+        auto c = VariantVisitor([](auto &&data) {
+            return FcbUtil::classCodeToString(data.classCode);
+        }).visit<Fcb::ReservationData, Fcb::OpenTicketData, Fcb::PassData>(doc);
+        if (!c.isEmpty()) {
+            return c;
         }
     }
 
