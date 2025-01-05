@@ -18,6 +18,8 @@
 
 #include "era/fcbticket.h"
 #include "era/fcbutil.h"
+
+#include "uic9183/uic9183flex.h"
 #include "uic9183/uic9183head.h"
 #include "uic9183/vendor0080block.h"
 
@@ -59,8 +61,8 @@ void Uic9183DocumentProcessor::expandNode(ExtractorDocumentNode &node, [[maybe_u
     // while that is usually correct it cannot contain a time zone, unlike the (often) enclosing PDF document´
     if (!node.contextDateTime().isValid()) {
         const auto p = node.content<Uic9183Parser>();
-        if (const auto u_flex = p.findBlock<Fcb::UicRailTicketData>(); u_flex.isValid()) {
-            node.setContextDateTime(u_flex.issuingDetail.issueingDateTime());
+        if (const auto u_flex = p.findBlock<Uic9183Flex>(); u_flex.isValid()) {
+            node.setContextDateTime(u_flex.fcb().issuingDetail.issueingDateTime());
         } else if (const auto u_head = p.findBlock<Uic9183Head>(); u_head.isValid()) {
             node.setContextDateTime(u_head.issuingDateTime());
         }
@@ -211,7 +213,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
         }
     }
 
-    const auto fcb = p.findBlock<Fcb::UicRailTicketData>();
+    const auto fcb = p.findBlock<Uic9183Flex>().fcb();
     if (fcb.isValid()) {
         res.setPriceCurrency(QString::fromUtf8(fcb.issuingDetail.currency));
         const auto issueDt = fcb.issuingDetail.issueingDateTime();

@@ -129,6 +129,7 @@ target_sources(KPim6Itinerary PRIVATE
 
     uic9183/rct2ticket.cpp uic9183/rct2ticket.h
     uic9183/uic9183block.cpp uic9183/uic9183block.h
+    uic9183/uic9183flex.cpp
     uic9183/uic9183head.cpp uic9183/uic9183head.h
     uic9183/uic9183header.cpp uic9183/uic9183header.h
     uic9183/uic9183parser.cpp uic9183/uic9183parser.h

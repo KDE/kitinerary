@@ -11,6 +11,7 @@
 #include "../lib/era/ssbv2ticket.h"
 #include "../lib/era/ssbv3ticket.h"
 #include "../lib/iata/iatabcbp.h"
+#include "../lib/uic9183/uic9183flex.h"
 #include "../lib/uic9183/uic9183head.h"
 #include "../lib/uic9183/uic9183header.h"
 #include "../lib/uic9183/vendor0080vublockdata.h"
@@ -197,9 +198,11 @@ static void dumpUic9183(const QByteArray &data)
                           << " format: " << field.format() << "]: " << qPrintable(field.text())
                           << std::endl;
             }
-        } else if (block.isA<Fcb::UicRailTicketData>()) {
-            Fcb::UicRailTicketData fcb(block);
-            dumpGadget(&fcb, "  ");
+        } else if (block.isA<Uic9183Flex>()) {
+            Uic9183Flex flex(block);
+            const auto fcbProp = Uic9183Flex::staticMetaObject.property(Uic9183Flex::staticMetaObject.indexOfProperty("fcb"));
+            QVariant fcbData = fcbProp.readOnGadget(&flex);
+            dumpGadget(fcbData.constData(), QMetaType(fcbData.typeId()).metaObject(), "  ");
         } else if (block.isA<Vendor0080BLBlock>()) {
             Vendor0080BLBlock vendor(block);
             dumpGadget(&vendor, "  ");

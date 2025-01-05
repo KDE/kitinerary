@@ -8,6 +8,7 @@
 #include "logging.h"
 #include "rct2ticket.h"
 #include "uic9183block.h"
+#include "uic9183flex.h"
 #include "uic9183head.h"
 #include "uic9183header.h"
 #include "uic9183ticketlayout.h"
@@ -78,7 +79,7 @@ QVariant Uic9183Parser::block(const QString &name) const
 
     BLOCK_FROM_NAME(Uic9183Head)
     BLOCK_FROM_NAME(Uic9183TicketLayout)
-    BLOCK_FROM_NAME(Fcb::UicRailTicketData)
+    BLOCK_FROM_NAME(Uic9183Flex)
     BLOCK_FROM_NAME(Vendor0080BLBlock)
     BLOCK_FROM_NAME(Vendor0080VUBlock)
     BLOCK_FROM_NAME(Vendor1154UTBlock)
@@ -180,19 +181,19 @@ QString Uic9183Parser::pnr() const
         return key;
     }
 
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid()) {
-        if (!fcb.issuingDetail.issuerPNR.isEmpty()) {
-            return QString::fromLatin1(fcb.issuingDetail.issuerPNR);
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
+        if (!flex.fcb().issuingDetail.issuerPNR.isEmpty()) {
+            return QString::fromLatin1(flex.fcb().issuingDetail.issuerPNR);
         }
-        if (!fcb.transportDocument.isEmpty()) {
-            const auto doc = fcb.transportDocument.at(0);
+        if (flex.hasTransportDocument()) {
+            const auto doc = flex.transportDocuments().at(0);
             QString pnr;
-            if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-                pnr = fcbReference(doc.ticket.value<Fcb::ReservationData>());
-            } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-                pnr = fcbReference(doc.ticket.value<Fcb::OpenTicketData>());
-            } else if (doc.ticket.userType() == qMetaTypeId<Fcb::PassData>()) {
-                pnr = fcbReference(doc.ticket.value<Fcb::PassData>());
+            if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+                pnr = fcbReference(doc.value<Fcb::ReservationData>());
+            } else if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+                pnr = fcbReference(doc.value<Fcb::OpenTicketData>());
+            } else if (doc.userType() == qMetaTypeId<Fcb::PassData>()) {
+                pnr = fcbReference(doc.value<Fcb::PassData>());
             }
             if (!pnr.isEmpty()) {
                 return pnr;
@@ -215,15 +216,15 @@ static QString fcbTariffName(const T &data)
 QString Uic9183Parser::name() const
 {
     // ERA FCB
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
-        const auto doc = fcb.transportDocument.at(0);
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
+        const auto doc = flex.transportDocuments().at(0);
         QString name;
-        if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            name = fcbTariffName(doc.ticket.value<Fcb::ReservationData>());
-        } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            name = fcbTariffName(doc.ticket.value<Fcb::OpenTicketData>());
-        } else if (doc.ticket.userType() == qMetaTypeId<Fcb::PassData>()) {
-            name = fcbTariffName(doc.ticket.value<Fcb::PassData>());
+        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            name = fcbTariffName(doc.value<Fcb::ReservationData>());
+        } else if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            name = fcbTariffName(doc.value<Fcb::OpenTicketData>());
+        } else if (doc.userType() == qMetaTypeId<Fcb::PassData>()) {
+            name = fcbTariffName(doc.value<Fcb::PassData>());
         }
         if (!name.isEmpty()) {
             return name;
@@ -251,8 +252,8 @@ QString Uic9183Parser::carrierId() const
     if (const auto head = findBlock<Uic9183Head>(); head.isValid()) {
         return head.issuerCompanyCodeString();
     }
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid()) {
-        const auto issue = fcb.issuingDetail;
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
+        const auto issue = flex.fcb().issuingDetail;
         if (issue.issuerNumIsSet()) {
             return QString::number(issue.issuerNum);
         }
@@ -267,8 +268,8 @@ Organization Uic9183Parser::issuer() const
 {
     Organization issuer;
     issuer.setIdentifier(QLatin1StringView("uic:") + carrierId());
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && fcb.issuingDetail.issuerNameIsSet()) {
-        issuer.setName(fcb.issuingDetail.issuerName);
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid() && flex.fcb().issuingDetail.issuerNameIsSet()) {
+        issuer.setName(flex.fcb().issuingDetail.issuerName);
     }
     return issuer;
 }
@@ -276,9 +277,9 @@ Organization Uic9183Parser::issuer() const
 QDateTime Uic9183Parser::validFrom() const
 {
     // ERA FCB
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
-        const auto issue = fcb.issuingDetail.issueingDateTime();
-        const auto doc = fcb.transportDocument.at(0).ticket;
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
+        const auto issue = flex.fcb().issuingDetail.issueingDateTime();
+        const auto doc = flex.transportDocuments().at(0);
         if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
             return doc.value<Fcb::ReservationData>().departureDateTime(issue);
         }
@@ -336,9 +337,9 @@ QDateTime Uic9183Parser::validFrom() const
 QDateTime Uic9183Parser::validUntil() const
 {
     // ERA FCB
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
-        const auto issue = fcb.issuingDetail.issueingDateTime();
-        const auto doc = fcb.transportDocument.at(0).ticket;
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
+        const auto issue = flex.fcb().issuingDetail.issueingDateTime();
+        const auto doc = flex.fcb().transportDocument.at(0).ticket;
         if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
             return doc.value<Fcb::ReservationData>().arrivalDateTime(issue);
         }
@@ -395,8 +396,8 @@ QDateTime Uic9183Parser::validUntil() const
 Person Uic9183Parser::person() const
 {
     // ERA FCB
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && fcb.travelerDetailIsSet() && fcb.travelerDetail.traveler.size() == 1) {
-        const auto traveler = fcb.travelerDetail.traveler.at(0);
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid() && flex.fcb().travelerDetailIsSet() && flex.fcb().travelerDetail.traveler.size() == 1) {
+        const auto traveler = flex.fcb().travelerDetail.traveler.at(0);
         Person p;
         if (traveler.firstNameIsSet() || traveler.secondNameIsSet()) {
             p.setGivenName(QString(traveler.firstName + QLatin1Char(' ') + traveler.secondName).trimmed());
@@ -490,14 +491,14 @@ TrainStation Uic9183Parser::outboundDepartureStation() const
     }
 
     // ERA FCB
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
-        const auto doc = fcb.transportDocument.at(0);
-        if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            const auto irt = doc.ticket.value<Fcb::ReservationData>();
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
+        const auto doc = flex.transportDocuments().at(0);
+        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            const auto irt = doc.value<Fcb::ReservationData>();
             station.setName(irt.fromStationNameUTF8);
             station.setIdentifier(FcbUtil::fromStationIdentifier(irt));
-        } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+        } else if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            const auto nrt = doc.value<Fcb::OpenTicketData>();
             station.setName(nrt.fromStationNameUTF8);
             station.setIdentifier(FcbUtil::fromStationIdentifier(nrt));
         }
@@ -529,14 +530,14 @@ TrainStation Uic9183Parser::outboundArrivalStation() const
     }
 
     // ERA FCB
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
-        const auto doc = fcb.transportDocument.at(0);
-        if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            const auto irt = doc.ticket.value<Fcb::ReservationData>();
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
+        const auto doc = flex.transportDocuments().at(0);
+        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            const auto irt = doc.value<Fcb::ReservationData>();
             station.setName(irt.toStationNameUTF8);
             station.setIdentifier(FcbUtil::toStationIdentifier(irt));
-        } else if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+        } else if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            const auto nrt = doc.value<Fcb::OpenTicketData>();
             station.setName(nrt.toStationNameUTF8);
             station.setIdentifier(FcbUtil::toStationIdentifier(nrt));
         }
@@ -567,10 +568,10 @@ TrainStation Uic9183Parser::returnDepartureStation() const
     }
 
     // ERA FCB
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
-        const auto doc = fcb.transportDocument.at(0);
-        if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
+        const auto doc = flex.transportDocuments().at(0);
+        if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            const auto nrt = doc.value<Fcb::OpenTicketData>();
             if (nrt.returnIncluded && nrt.returnDescriptionIsSet()) {
                 station.setName(nrt.returnDescription.fromStationNameUTF8);
                 station.setIdentifier(FcbUtil::fromStationIdentifier(nrt.stationCodeTable, nrt.returnDescription));
@@ -607,10 +608,10 @@ TrainStation Uic9183Parser::returnArrivalStation() const
     }
 
     // ERA FCB
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && !fcb.transportDocument.isEmpty()) {
-        const auto doc = fcb.transportDocument.at(0);
-        if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            const auto nrt = doc.ticket.value<Fcb::OpenTicketData>();
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
+        const auto doc = flex.transportDocuments().at(0);
+        if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            const auto nrt = doc.value<Fcb::OpenTicketData>();
             if (nrt.returnIncluded && nrt.returnDescriptionIsSet()) {
                 station.setName(nrt.returnDescription.toStationNameUTF8);
                 station.setIdentifier(FcbUtil::toStationIdentifier(nrt.stationCodeTable, nrt.returnDescription));
@@ -628,16 +629,16 @@ TrainStation Uic9183Parser::returnArrivalStation() const
 
 QString Uic9183Parser::seatingType() const
 {
-    if (const auto fcb = findBlock<Fcb::UicRailTicketData>(); fcb.isValid() && fcb.transportDocument.size() == 1) {
-        const auto doc = fcb.transportDocument.at(0);
-        if (doc.ticket.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            return FcbUtil::classCodeToString(doc.ticket.value<Fcb::ReservationData>().classCode);
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.transportDocuments().size() == 1) {
+        const auto doc = flex.transportDocuments().at(0);
+        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
+            return FcbUtil::classCodeToString(doc.value<Fcb::ReservationData>().classCode);
         }
-        if (doc.ticket.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            return FcbUtil::classCodeToString(doc.ticket.value<Fcb::OpenTicketData>().classCode);
+        if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
+            return FcbUtil::classCodeToString(doc.value<Fcb::OpenTicketData>().classCode);
         }
-        if (doc.ticket.userType() == qMetaTypeId<Fcb::PassData>()) {
-            return FcbUtil::classCodeToString(doc.ticket.value<Fcb::PassData>().classCode);
+        if (doc.userType() == qMetaTypeId<Fcb::PassData>()) {
+            return FcbUtil::classCodeToString(doc.value<Fcb::PassData>().classCode);
         }
     }
 

@@ -1015,8 +1015,6 @@ public:
     UicRailTicketData();
     UicRailTicketData(const Uic9183Block &block);
 
-    static constexpr const char RecordId[] = "U_FLEX";
-
     [[nodiscard]] bool isValid() const;
 
 private:
