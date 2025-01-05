@@ -48,6 +48,7 @@ target_sources(KPim6Itinerary PRIVATE
 
     era/elbticket.cpp era/elbticket.h
     era/fcbticket.cpp era/fcbticket.h
+    era/fcbticket3.cpp
     era/fcbutil.cpp era/fcbutil.h
     era/ssbticketbase.cpp era/ssbticketbase.h
     era/ssbticketreader.cpp era/ssbticketreader.h
