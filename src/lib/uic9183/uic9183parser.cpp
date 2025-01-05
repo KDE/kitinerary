@@ -260,16 +260,19 @@ QDateTime Uic9183Parser::validFrom() const
 {
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
-        const auto issue = flex.fcb().issuingDetail.issueingDateTime();
+        const auto issue = flex.issuingDateTime();
         const auto doc = flex.transportDocuments().at(0);
-        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            return doc.value<Fcb::ReservationData>().departureDateTime(issue);
+        auto dt = VariantVisitor([issue](auto &&data) {
+            return data.departureDateTime(issue);
+        }).visit<Fcb::ReservationData>(doc);
+        if (dt.isValid()) {
+            return dt;
         }
-        if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            return doc.value<Fcb::OpenTicketData>().validFrom(issue);
-        }
-        if (doc.userType() == qMetaTypeId<Fcb::PassData>()) {
-            return doc.value<Fcb::PassData>().validFrom(issue);
+        dt = VariantVisitor([issue](auto &&data) {
+            return data.validFrom(issue);
+        }).visit<Fcb::OpenTicketData, Fcb::PassData>(doc);
+        if (dt.isValid()) {
+            return dt;
         }
     }
 
@@ -320,16 +323,19 @@ QDateTime Uic9183Parser::validUntil() const
 {
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
-        const auto issue = flex.fcb().issuingDetail.issueingDateTime();
-        const auto doc = flex.fcb().transportDocument.at(0).ticket;
-        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            return doc.value<Fcb::ReservationData>().arrivalDateTime(issue);
+        const auto issue = flex.issuingDateTime();
+        const auto doc = flex.transportDocuments().at(0);
+        auto dt = VariantVisitor([issue](auto &&data) {
+            return data.arrivalDateTime(issue);
+        }).visit<Fcb::ReservationData>(doc);
+        if (dt.isValid()) {
+            return dt;
         }
-        if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            return doc.value<Fcb::OpenTicketData>().validUntil(issue);
-        }
-        if (doc.userType() == qMetaTypeId<Fcb::PassData>()) {
-            return doc.value<Fcb::PassData>().validUntil(issue);
+        dt = VariantVisitor([issue](auto &&data) {
+            return data.validUntil(issue);
+        }).visit<Fcb::OpenTicketData, Fcb::PassData>(doc);
+        if (dt.isValid()) {
+            return dt;
         }
     }
 
@@ -475,15 +481,10 @@ TrainStation Uic9183Parser::outboundDepartureStation() const
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
         const auto doc = flex.transportDocuments().at(0);
-        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            const auto irt = doc.value<Fcb::ReservationData>();
-            station.setName(irt.fromStationNameUTF8);
-            station.setIdentifier(FcbUtil::fromStationIdentifier(irt));
-        } else if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            const auto nrt = doc.value<Fcb::OpenTicketData>();
-            station.setName(nrt.fromStationNameUTF8);
-            station.setIdentifier(FcbUtil::fromStationIdentifier(nrt));
-        }
+        VariantVisitor([&station](auto &&data) {
+            station.setName(data.fromStationNameUTF8);
+            station.setIdentifier(FcbUtil::fromStationIdentifier(data));
+        }).visit<Fcb::ReservationData, Fcb::OpenTicketData>(doc);
         fixFcbStationCode(station);
     }
 
@@ -514,15 +515,10 @@ TrainStation Uic9183Parser::outboundArrivalStation() const
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
         const auto doc = flex.transportDocuments().at(0);
-        if (doc.userType() == qMetaTypeId<Fcb::ReservationData>()) {
-            const auto irt = doc.value<Fcb::ReservationData>();
-            station.setName(irt.toStationNameUTF8);
-            station.setIdentifier(FcbUtil::toStationIdentifier(irt));
-        } else if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            const auto nrt = doc.value<Fcb::OpenTicketData>();
-            station.setName(nrt.toStationNameUTF8);
-            station.setIdentifier(FcbUtil::toStationIdentifier(nrt));
-        }
+        VariantVisitor([&station](auto &&data) {
+            station.setName(data.toStationNameUTF8);
+            station.setIdentifier(FcbUtil::toStationIdentifier(data));
+        }).visit<Fcb::ReservationData, Fcb::OpenTicketData>(doc);
         fixFcbStationCode(station);
     }
 
@@ -552,8 +548,7 @@ TrainStation Uic9183Parser::returnDepartureStation() const
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
         const auto doc = flex.transportDocuments().at(0);
-        if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            const auto nrt = doc.value<Fcb::OpenTicketData>();
+        VariantVisitor([&station, outboundArrival](auto &&nrt) {
             if (nrt.returnIncluded && nrt.returnDescriptionIsSet()) {
                 station.setName(nrt.returnDescription.fromStationNameUTF8);
                 station.setIdentifier(FcbUtil::fromStationIdentifier(nrt.stationCodeTable, nrt.returnDescription));
@@ -562,7 +557,7 @@ TrainStation Uic9183Parser::returnDepartureStation() const
                     station.setIdentifier(outboundArrival.identifier());
                 }
             }
-        }
+        }).visit<Fcb::OpenTicketData>(doc);
         fixFcbStationCode(station);
     }
 
@@ -592,8 +587,7 @@ TrainStation Uic9183Parser::returnArrivalStation() const
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
         const auto doc = flex.transportDocuments().at(0);
-        if (doc.userType() == qMetaTypeId<Fcb::OpenTicketData>()) {
-            const auto nrt = doc.value<Fcb::OpenTicketData>();
+        VariantVisitor([&station, outboundDeparture](auto &&nrt) {
             if (nrt.returnIncluded && nrt.returnDescriptionIsSet()) {
                 station.setName(nrt.returnDescription.toStationNameUTF8);
                 station.setIdentifier(FcbUtil::toStationIdentifier(nrt.stationCodeTable, nrt.returnDescription));
@@ -602,7 +596,7 @@ TrainStation Uic9183Parser::returnArrivalStation() const
                     station.setIdentifier(outboundDeparture.identifier());
                 }
             }
-        }
+        }).visit<Fcb::OpenTicketData>(doc);
         fixFcbStationCode(station);
     }
 

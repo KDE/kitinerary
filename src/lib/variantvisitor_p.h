@@ -8,6 +8,8 @@
 
 #include <QVariant>
 
+#include <type_traits>
+
 namespace KItinerary {
 
 /** Like std::visit, but for a fixed set of types inside a QVariant. */
@@ -29,7 +31,13 @@ public:
 
 private:
     template <typename RetT>
-    inline RetT visitImpl(const QVariant&) { return {}; }
+    inline RetT visitImpl(const QVariant&) {
+        if constexpr (std::is_same_v<RetT, void>) {
+            return;
+        } else {
+            return {};
+        }
+    }
     template <typename RetT, typename T, typename ...Ts>
     inline RetT visitImpl(const QVariant &v) {
         if (v.typeId() == qMetaTypeId<T>()) {

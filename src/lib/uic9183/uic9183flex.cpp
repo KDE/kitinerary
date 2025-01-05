@@ -27,6 +27,11 @@ bool Uic9183Flex::isValid() const
     return !m_block.isNull();
 }
 
+QDateTime Uic9183Flex::issuingDateTime() const
+{
+    return isValid() ? m_data.issuingDetail.issueingDateTime() : QDateTime();
+}
+
 bool Uic9183Flex::hasTransportDocument() const
 {
     return isValid() && !m_data.transportDocument.empty();

@@ -35,6 +35,10 @@ public:
 
     /** Returns whether this is a valid U_FLEX layout block. */
     [[nodiscard]] bool isValid() const;
+
+    /** Issuing date/time. */
+    [[nodiscard]] QDateTime issuingDateTime() const;
+
     /** @c true when this is a valid FCB with at least one transport document. */
     [[nodiscard]] bool hasTransportDocument() const;
     /** Transport documents of the contained FCB. */
