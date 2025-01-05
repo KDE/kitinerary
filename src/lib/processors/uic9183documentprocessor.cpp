@@ -62,7 +62,7 @@ void Uic9183DocumentProcessor::expandNode(ExtractorDocumentNode &node, [[maybe_u
     if (!node.contextDateTime().isValid()) {
         const auto p = node.content<Uic9183Parser>();
         if (const auto u_flex = p.findBlock<Uic9183Flex>(); u_flex.isValid()) {
-            node.setContextDateTime(u_flex.fcb().issuingDetail.issueingDateTime());
+            node.setContextDateTime(std::visit([](auto &&fcb) { return fcb.issuingDetail.issueingDateTime(); }, u_flex.fcb()));
         } else if (const auto u_head = p.findBlock<Uic9183Head>(); u_head.isValid()) {
             node.setContextDateTime(u_head.issuingDateTime());
         }
@@ -201,8 +201,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     }
 
     if (const auto flex = p.findBlock<Uic9183Flex>(); flex.isValid()) {
-        const auto fcb = flex.fcb();
-        res.setPriceCurrency(QString::fromUtf8(fcb.issuingDetail.currency));
+        res.setPriceCurrency(QString::fromUtf8(std::visit([](auto &&fcb) { return fcb.issuingDetail.currency; }, flex.fcb())));
         const auto issueDt = flex.issuingDateTime();
         for (const auto &doc : flex.transportDocuments()) {
             if (doc.userType() == qMetaTypeId<Fcb::v13::ReservationData>()) {
@@ -245,7 +244,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 res.setProgramMembershipUsed(extractCustomerCard(irt.tariffs));
 
                 if (irt.priceIsSet()) {
-                    res.setTotalPrice(irt.price / std::pow(10, fcb.issuingDetail.currencyFract));
+                    res.setTotalPrice(irt.price / std::pow(10, std::visit([](auto &&fcb) { return fcb.issuingDetail.currencyFract; }, flex.fcb())));
                 }
 
                 if (validator.isValidElement(trip)) {
@@ -264,7 +263,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 res.setProgramMembershipUsed(extractCustomerCard(nrt.tariffs));
 
                 if (nrt.priceIsSet()) {
-                    res.setTotalPrice(nrt.price / std::pow(10, fcb.issuingDetail.currencyFract));
+                    res.setTotalPrice(nrt.price / std::pow(10, std::visit([](auto &&fcb) { return fcb.issuingDetail.currencyFract; }, flex.fcb())));
                 }
 
                 // check for TrainLinkType regional validity constrains

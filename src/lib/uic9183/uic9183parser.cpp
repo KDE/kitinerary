@@ -183,8 +183,9 @@ QString Uic9183Parser::pnr() const
     }
 
     if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
-        if (!flex.fcb().issuingDetail.issuerPNR.isEmpty()) {
-            return QString::fromLatin1(flex.fcb().issuingDetail.issuerPNR);
+        QString pnr = std::visit([](auto &&fcb) { return QString::fromLatin1(fcb.issuingDetail.issuerPNR); }, flex.fcb());
+        if (!pnr.isEmpty()) {
+            return pnr;
         }
         if (flex.hasTransportDocument()) {
             const auto doc = flex.transportDocuments().at(0);
@@ -235,12 +236,17 @@ QString Uic9183Parser::carrierId() const
         return head.issuerCompanyCodeString();
     }
     if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
-        const auto issue = flex.fcb().issuingDetail;
-        if (issue.issuerNumIsSet()) {
-            return QString::number(issue.issuerNum);
-        }
-        if (issue.issuerIA5IsSet()) {
-            return QString::fromLatin1(issue.issuerIA5);
+        QString id = std::visit([](auto &&fcb) {
+            if (fcb.issuingDetail.issuerNumIsSet()) {
+                return QString::number(fcb.issuingDetail.issuerNum);
+            }
+            if (fcb.issuingDetail.issuerIA5IsSet()) {
+                return QString::fromLatin1(fcb.issuingDetail.issuerIA5);
+            }
+            return QString();
+        }, flex.fcb());
+        if (!id.isEmpty()) {
+            return id;
         }
     }
     return header().signerCompanyCode();
@@ -250,8 +256,12 @@ Organization Uic9183Parser::issuer() const
 {
     Organization issuer;
     issuer.setIdentifier(QLatin1StringView("uic:") + carrierId());
-    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid() && flex.fcb().issuingDetail.issuerNameIsSet()) {
-        issuer.setName(flex.fcb().issuingDetail.issuerName);
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
+        std::visit([&issuer](auto &&fcb) {
+            if (fcb.issuingDetail.issuerNameIsSet()) {
+                issuer.setName(fcb.issuingDetail.issuerName);
+            }
+        }, flex.fcb());
     }
     return issuer;
 }
@@ -384,14 +394,23 @@ QDateTime Uic9183Parser::validUntil() const
 Person Uic9183Parser::person() const
 {
     // ERA FCB
-    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid() && flex.fcb().travelerDetailIsSet() && flex.fcb().travelerDetail.traveler.size() == 1) {
-        const auto traveler = flex.fcb().travelerDetail.traveler.at(0);
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
+        bool travelerFound = false;
         Person p;
-        if (traveler.firstNameIsSet() || traveler.secondNameIsSet()) {
-            p.setGivenName(QString(traveler.firstName + QLatin1Char(' ') + traveler.secondName).trimmed());
-        }
-        p.setFamilyName(traveler.lastName);
-        if (traveler.firstNameIsSet() || traveler.lastNameIsSet()) {
+        std::visit([&p, &travelerFound](auto &&fcb) {
+            if (!fcb.travelerDetailIsSet() || fcb.travelerDetail.traveler.size() != 1) {
+                return;
+            }
+            const auto traveler = fcb.travelerDetail.traveler.at(0);
+            if (traveler.firstNameIsSet() || traveler.secondNameIsSet()) {
+                p.setGivenName(QString(traveler.firstName + QLatin1Char(' ') + traveler.secondName).trimmed());
+            }
+            p.setFamilyName(traveler.lastName);
+            if (traveler.firstNameIsSet() || traveler.lastNameIsSet()) {
+                travelerFound = true;
+            }
+        }, flex.fcb());
+        if (travelerFound) {
             return p;
         }
     }
