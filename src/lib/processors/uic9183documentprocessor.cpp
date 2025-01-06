@@ -23,6 +23,8 @@
 #include "uic9183/uic9183head.h"
 #include "uic9183/vendor0080block.h"
 
+#include "variantvisitor_p.h"
+
 #include <KLocalizedString>
 
 #include <QDateTime>
@@ -69,7 +71,8 @@ void Uic9183DocumentProcessor::expandNode(ExtractorDocumentNode &node, [[maybe_u
     }
 }
 
-static ProgramMembership extractCustomerCard(const Fcb::v13::CardReferenceType &card)
+template <typename CardReferenceTypeT>
+static ProgramMembership extractCustomerCard(const CardReferenceTypeT &card)
 {
     ProgramMembership p;
     p.setProgramName(card.cardName);
@@ -81,7 +84,8 @@ static ProgramMembership extractCustomerCard(const Fcb::v13::CardReferenceType &
     return p;
 }
 
-static ProgramMembership extractCustomerCard(const QList <Fcb::v13::TariffType> &tariffs)
+template <typename TariffTypeT>
+static ProgramMembership extractCustomerCard(const QList <TariffTypeT> &tariffs)
 {
     // TODO what do we do with the (so far theoretical) case of multiple discount cards in use?
     for (const auto &tariff : tariffs) {
@@ -202,10 +206,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 
     if (const auto flex = p.findBlock<Uic9183Flex>(); flex.isValid()) {
         res.setPriceCurrency(QString::fromUtf8(std::visit([](auto &&fcb) { return fcb.issuingDetail.currency; }, flex.fcb())));
-        const auto issueDt = flex.issuingDateTime();
         for (const auto &doc : flex.transportDocuments()) {
-            if (doc.userType() == qMetaTypeId<Fcb::v13::ReservationData>()) {
-                const auto irt = doc.value<Fcb::v13::ReservationData>();
+            VariantVisitor([&p, doc, ticket, &res, flex, &validator, &results](auto &&irt) {
                 TrainTrip trip;
                 trip.setProvider(p.issuer());
 
@@ -217,8 +219,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 Uic9183Flex::readArrivalStation(doc, arr);
                 trip.setArrivalStation(arr);
 
-                trip.setDepartureTime(irt.departureDateTime(issueDt));
-                trip.setArrivalTime(irt.arrivalDateTime(issueDt));
+                trip.setDepartureTime(irt.departureDateTime(flex.issuingDateTime()));
+                trip.setArrivalTime(irt.arrivalDateTime(flex.issuingDateTime()));
 
                 if (irt.trainNumIsSet()) {
                     trip.setTrainNumber(irt.serviceBrandAbrUTF8 + QLatin1Char(' ') + QString::number(irt.trainNum));
@@ -252,10 +254,9 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     res.setReservedTicket(t);
                     results.push_back(res);
                 }
+            }).visit<Fcb::v13::ReservationData, Fcb::v3::ReservationData>(doc);
 
-            } else if (doc.userType() == qMetaTypeId<Fcb::v13::OpenTicketData>()) {
-                const auto nrt = doc.value<Fcb::v13::OpenTicketData>();
-
+            VariantVisitor([&p, ticket, flex, &res, &results, &validator](auto &&nrt) {
                 Seat s;
                 s.setSeatingType(FcbUtil::classCodeToString(nrt.classCode));
                 Ticket t(ticket);
@@ -272,7 +273,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     if (regionalValidity.value.userType() != qMetaTypeId<Fcb::v13::TrainLinkType>()) {
                         continue;
                     }
-                    const auto trainLink = regionalValidity.value.value<Fcb::v13::TrainLinkType>();
+                    const auto trainLink = regionalValidity.value.template value<Fcb::v13::TrainLinkType>();
                     TrainTrip trip;
                     trip.setProvider(p.issuer());
 
@@ -287,7 +288,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     Uic9183Flex::fixStationCode(arr);
                     trip.setArrivalStation(arr);
 
-                    trip.setDepartureTime(trainLink.departureDateTime(issueDt));
+                    trip.setDepartureTime(trainLink.departureDateTime(flex.issuingDateTime()));
 
                     if (trainLink.trainNumIsSet()) {
                         trip.setTrainNumber(QString::number(trainLink.trainNum));
@@ -308,7 +309,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     trip.setProvider(p.issuer());
                     trip.setDepartureStation(p.outboundDepartureStation());
                     trip.setArrivalStation(p.outboundArrivalStation());
-                    trip.setDepartureDay(nrt.validFrom(issueDt).date());
+                    trip.setDepartureDay(nrt.validFrom(flex.issuingDateTime()).date());
                     if (validator.isValidElement(trip)) {
                         res.setReservationFor(trip);
                         res.setReservedTicket(t);
@@ -316,8 +317,9 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     }
                     // TODO handle nrt.returnIncluded
                 }
-            } else if (doc.userType() == qMetaTypeId<Fcb::v13::CustomerCardData>()) {
-                const auto ccd = doc.value<Fcb::v13::CustomerCardData>();
+            }).visit<Fcb::v13::OpenTicketData, Fcb::v3::OpenTicketData>(doc);
+
+            VariantVisitor([&p, ticket, &results](auto &&ccd) {
                 ProgramMembership pm;
                 if (ccd.cardIdNumIsSet()) {
                     pm.setMembershipNumber(QString::number(ccd.cardIdNum));
@@ -330,7 +332,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 pm.setValidUntil(ccd.validUntil().startOfDay());
                 pm.setToken(ticket.ticketToken());
                 results.push_back(pm);
-            }
+            }).visit<Fcb::v13::CustomerCardData, Fcb::v3::CustomerCardData>(doc);
         }
     }
 
