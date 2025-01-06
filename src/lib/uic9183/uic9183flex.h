@@ -15,6 +15,7 @@
 namespace KItinerary {
 
 class TrainStation;
+class Uic9183FlexPrivate;
 
 /** Represents a U_FLEX block holding different versions of an FCB payload.
  *  @see ERA TAP TSI TD B.12 Digital Security Elements For Rail Passenger Ticketing - §11 FCB - Flexible Content Barcode
@@ -64,8 +65,7 @@ public:
 private:
     [[nodiscard]] QVariant fcbVariant() const;
 
-    Uic9183Block m_block;
-    std::variant<Fcb::v13::UicRailTicketData, Fcb::v3::UicRailTicketData> m_data;
+    QExplicitlySharedDataPointer<Uic9183FlexPrivate> d;
 };
 
 }
