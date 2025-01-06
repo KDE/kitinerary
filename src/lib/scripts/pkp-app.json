@@ -1,0 +1,17 @@
+{
+    "filter": [
+        {
+            "match": "Bilet ważny wyłącznie w pociągach Spółki PKP Intercity",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        },
+        {
+            "match": "The ticket is valid only on PKP Intercity trains",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "main",
+    "mimeType": "application/pdf",
+    "script": "pkp-app.js"
+}
