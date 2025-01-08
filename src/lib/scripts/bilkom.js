@@ -124,7 +124,7 @@ function main(content, node) {
             reservation.reservedTicket.ticketToken = 'qrcode:' +  thisCode;
             console.log("Probably Koleje Mazowieckie")
         } else if ( node.childNodes[i].childNodes[0]?.childNodes[0]?.mimeType == "internal/uic9183" ) { // idk how bad are the "?" but... maybe fixme?
-            reservation.reservedTicket.ticketToken = 'qrcode:' + ByteArray.toBase64(node.childNodes[i].childNodes[0].childNodes[0].content);
+            reservation.reservedTicket.ticketToken = 'atzecbin:' + ByteArray.toBase64(node.childNodes[i].childNodes[0].childNodes[0].content);
             console.log("Probably Koleje Dolnośląskie")
         } else {
             console.log("I got no idea who make this ticket... try reporting issue :) ")
