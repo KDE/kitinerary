@@ -376,7 +376,7 @@ function parseReservationEvent(event) {
     res.reservationFor.arrivalStation.name = names[2];
     res.reservationFor.arrivalTime = JsonLd.readQDateTime(event, 'dtEnd');
 
-    const trip = event.description.match(/.* ➞ .*\n\[.*: \d .* (\S+), .* (\d+)\]\n(.*) \(.*\n.* ab .* ▷ \S+ (\S.*)\n.* an ?.* ▷ \S+ (\S.*)\n/);
+    const trip = event.description.match(/.* ➞ .*\n\[.*: \d .* (\S+), .* (\d+)\]\n(.*) \(.*\n.* ab [^\d].* ▷ \S+ (\S.*)\n.* an ?.* ▷ \S+ (\S.*)\n/);
     res.reservationFor.departurePlatform = trip[4];
     res.reservationFor.trainNumber = trip[3];
     res.reservationFor.arrivalPlatform = trip[5];
