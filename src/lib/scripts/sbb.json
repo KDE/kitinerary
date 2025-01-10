@@ -7,7 +7,7 @@
             "scope": "Ancestors"
         },
         {
-            "match": "\\x043342\\x12\\x0500001",
+            "match": "\\x043342\\x12\\x05..001",
             "mimeType": "application/octet-stream",
             "scope": "Current"
         }
