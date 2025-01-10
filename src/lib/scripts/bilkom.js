@@ -106,7 +106,7 @@ function main(content, node) {
 
         // PKP IC and Koleje śląskie are tested, rest no :c
         if ( hexToText(thisCode).substring(0, 2)=="32"){
-            reservation.reservedTicket.ticketToken = 'aztecBin:' +  ByteArray.toBase64(thisCode);
+            reservation.reservedTicket.ticketToken = 'azteccode:' +  thisCode;
             console.log("Probably PKP IC")
         } else if ( thisCode.substring(0, 2) == "ED" || thisCode.substring(0, 2) == "EH"  ) {
             // ED and EH is taken from 2 tickets I have, maybe its not good way to find it?
