@@ -5,40 +5,53 @@
 */
 
 var regExMap = [];
-regExMap['en_US'] = [];
-regExMap['en_US']['bookingRef'] = /(?:Booking number|Confirmation:) +([0-9]*)\s+/;
-// 1: adress, 2: city, 3:postal code, 4: country, 5: phone
-regExMap['en_US']['hotelInformation'] = / *(.+), (.+), (.+), (.+)(?: -|\n)\s+Phone: (\+[0-9 ]*)\s+/;
-regExMap['en_US']['hotelName'] = /(?:\[checkmark\.png\] |\d\n)(.*?)(?: is expecting you on|\n *\[)/;
-regExMap['en_US']['arrivalDate'] = /Check-in *([A-z]+ [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2})[^\)]*\)/;
-regExMap['en_US']['departureDate'] = /Check-out *([A-z]+ [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(.*?([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['en_US']['person'] = /Guest name[\n\s]+(.*?)(?:\n| Edit guest name)/;
+regExMap['en'] = {
+    bookingRef: /(?:Booking number|Confirmation:) +([0-9]*)\s+/,
+    // 1: adress, 2: city, 3:postal code, 4: country, 5: phone
+    hotelInformation: / *(.+), (.+), (.+), (.+)(?: -|\n)\s+Phone: (\+[0-9 ]*)\s+/,
+    hotelName: /(?:\[checkmark\.png\] |\d\n)(.*?)(?: is expecting you on|\n *\[)/,
+    arrivalDate: /Check-in *([A-z]+ [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2})[^\)]*\)/,
+    departureDate: /Check-out *([A-z]+ [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(.*?([0-9]{1,2}:[0-9]{2})\)/,
+    person: /Guest name[\n\s]+(.*?)(?:\n| Edit guest name)/
+}
 
-regExMap['fr_FR'] = [];
-regExMap['fr_FR']['bookingRef'] = /Numéro de réservation : ([0-9]*)\s+/;
-// 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
-regExMap['fr_FR']['hotelInformation'] = /(.+), (.+), (.+), (.+) -\s+Téléphone : (\+[0-9]*)\s+/;
-regExMap['fr_FR']['hotelName'] = /L'établissement (.*) vous attend le/;
-regExMap['fr_FR']['arrivalDate'] = /Arrivée  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['fr_FR']['departureDate'] = /Départ  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \([0-9]{1,2}:[0-9]{2} - ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['fr_FR']['person'] = /Clients[\n\s]+(.*?)(?:\n| Modifier le nom du client)/;
+regExMap['fr'] = {
+    bookingRef: /Numéro de réservation : ([0-9]*)\s+/,
+    // 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
+    hotelInformation: /(.+), (.+), (.+), (.+) -\s+Téléphone : (\+[0-9]*)\s+/,
+    hotelName: /L'établissement (.*) vous attend le/,
+    arrivalDate: /Arrivée  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/,
+    departureDate: /Départ  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \([0-9]{1,2}:[0-9]{2} - ([0-9]{1,2}:[0-9]{2})\)/,
+    person: /Clients[\n\s]+(.*?)(?:\n| Modifier le nom du client)/
+}
 
-regExMap['de_DE'] = [];
-regExMap['de_DE']['bookingRef'] = /Buchungsnummer: ([0-9]*)\s+/;
-// 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
-regExMap['de_DE']['hotelInformation'] = /(.+), (.+), (.+), (.+) -\s+Telefon: (\+[0-9 \-]+)\n/;
-regExMap['de_DE']['hotelName'] = /\[checkmark.png\] Die Unterkunft (.*)\s+erwartet Sie/;
-regExMap['de_DE']['arrivalDate'] = /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(ab ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['de_DE']['departureDate'] = /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(bis ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['de_DE']['person'] = /Name des Gastes[\n\s]+(.*?)(?:\n| Name des Gastes bearbeiten)/;
+regExMap['de'] = {
+    bookingRef: /Buchungsnummer: ([0-9]*)\s+/,
+    // 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
+    hotelInformation: /(.+), (.+), (.+), (.+) -\s+Telefon: (\+[0-9 \-]+)\n/,
+    hotelName: /\[checkmark.png\] Die Unterkunft (.*)\s+erwartet Sie/,
+    arrivalDate: /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(ab ([0-9]{1,2}:[0-9]{2})\)/,
+    departureDate: /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(bis ([0-9]{1,2}:[0-9]{2})\)/,
+    person: /Name des Gastes[\n\s]+(.*?)(?:\n| Name des Gastes bearbeiten)/,
+}
 
-regExMap['es_ES'] = [];
-regExMap['es_ES']['bookingRef'] = /Confirmación: ([0-9]*)\s+/;
-regExMap['es_ES']['hotelInformation'] = /(\S.+), (.+),[\n ]([^,]+),[\n ]([^,]+)\n\n\s+Teléfono (\+[0-9- ]*)\s+/;
-regExMap['es_ES']['hotelName'] = /El (\S.*\S) te espera/;
-regExMap['es_ES']['arrivalDate'] = /Entrada (\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2}).*\)/;
-regExMap['es_ES']['departureDate'] = /Salida (\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.* ([0-9]{1,2}:[0-9]{2})\)/;
-regExMap['es_ES']['person'] = /Nombre del huésped[\n\s]+(.*?)\n/;
+regExMap['da'] = {
+    bookingRef: /Bekræftelsesnummer: ([0-9]*)\s+/,
+    hotelInformation: /Beliggenhed[\s\n]+(.+), (.+)(.*), (.+)[\s\n]+Telefon (\+[0-9 \-]+)\n/,
+    hotelName: /(.*) forventer at se/,
+    arrivalDate: /Indtjekning .* (\d{1,2}. \S+ \d{4}) \(.*(\d\d\.\d\d)\)/,
+    departureDate: /Udtjekning .* (\d{1,2}. \S+ \d{4}) \(.*(\d\d\.\d\d)\)/,
+    person: /Gæster[\s\n]+(.*)\n/
+}
+
+regExMap['es'] = {
+    bookingRef: /Confirmación: ([0-9]*)\s+/,
+    hotelInformation: /(\S.+), (.+),[\n ]([^,]+),[\n ]([^,]+)\n\n\s+Teléfono (\+[0-9- ]*)\s+/,
+    hotelName: /El (\S.*\S) te espera/,
+    arrivalDate: /Entrada (\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2}).*\)/,
+    departureDate: /Salida (\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.* ([0-9]{1,2}:[0-9]{2})\)/,
+    person: /Nombre del huésped[\n\s]+(.*?)\n/
+}
 
 function main(text, node) {
     if (node.result.length > 0)
@@ -71,12 +84,12 @@ function main(text, node) {
         if (!arrivalDate)
             return null;
 
-        res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], ["dddd d MMMM yyyy hh:mm", "dddd, d. MMMM yyyy hh:mm", "dddd, MMMM d, yyyy hh:mm", "dddd, dd 'de' MMMM 'de' yyyy hh:mm"], locale);
+        res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], ["dddd d MMMM yyyy hh:mm", "dddd, d. MMMM yyyy hh:mm", "dddd, MMMM d, yyyy hh:mm", "dddd, dd 'de' MMMM 'de' yyyy hh:mm", "d. MMMM yyyy hh.mm"], locale);
 
         var departureDate = text.match(regExMap[locale]['departureDate']);
         if (!departureDate)
             return null;
-        res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], ["dddd d MMMM yyyy hh:mm", "dddd, d. MMMM yyyy hh:mm", "dddd, MMMM d, yyyy hh:mm",  "dddd, dd 'de' MMMM 'de' yyyy hh:mm"], locale);
+        res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], ["dddd d MMMM yyyy hh:mm", "dddd, d. MMMM yyyy hh:mm", "dddd, MMMM d, yyyy hh:mm",  "dddd, dd 'de' MMMM 'de' yyyy hh:mm", "d. MMMM yyyy hh.mm"], locale);
 
         var name = text.match(regExMap[locale]['person']);
         if (!name)
