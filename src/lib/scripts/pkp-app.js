@@ -97,7 +97,7 @@ function main(content, node) {
         reservation.reservationProvider = "PKP Intercity"; // It is generated only by PKP IC app (nothing else could be there)
 
         // Generate ticket token
-        reservation.reservedTicket.ticketToken = 'aztecBin:' + ByteArray.toBase64(node.childNodes[1].childNodes[0].content);
+        reservation.reservedTicket.ticketToken = 'azteccode:' + node.childNodes[1].childNodes[0].content;
 
         // Add the reservation to the list
         reservations.push(reservation);
