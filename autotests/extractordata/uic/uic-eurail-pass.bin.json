@@ -1,0 +1,23 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:5217"
+        },
+        "name": "Fahrkarte",
+        "ticketNumber": "DfYyVC",
+        "ticketToken": "aztecbin:I1VUMDE1MjE3MDAwMDEwLQIVAKeVjrshByyTAYvvkipT9Zeq47XpAhRiUVfgpHfIlVv8LyiLRQ9auFAVkgAAADAyMzZ42lVPXUvDMBT9K3lUcOXc3CRtH2db9UFBRqvsaVRWXVmXQTcF/5tv/jFvUujwQrg5h/ORNJuHalmCAMtWU1q+r79fCvVvkCLV0Exgg7JSqtnUj8u1mFjrVVFrMiICZcLkkMnv2t24b8dzJ7EaRIEkPLXeq9d+GHqhREwm0KasF5Xf7j/9tlvcFqDgwGSRbe3sf+7G09Ffdf4aHCXBDxOeBufc7NKY7jYgsSfyASdnZpDIcrHnosmEyS4MJzFJcqRAWvj+92c49x/q63hQMTMJxeqtP0WYTXDycczmkMRVsxLs5mST3wB/PIFUwA==",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Mann Willi"
+        },
+        "validFrom": "2023-07-01T00:00:00",
+        "validUntil": "2023-08-01T03:00:00"
+    }
+]

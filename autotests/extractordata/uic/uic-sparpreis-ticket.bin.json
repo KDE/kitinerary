@@ -1,0 +1,44 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "identifier": "8000314",
+                "name": "Reutlingen"
+            },
+            "departureDay": "2020-11-05",
+            "departureStation": {
+                "@type": "TrainStation",
+                "identifier": "8000244",
+                "name": "Mannheim"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            }
+        },
+        "reservationNumber": "D260V48G",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Super Sparpreis",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDJ4Li/hhKHYXonpM4spjsYa66JIznIgVsqUCpZ8ih05Em4sYoxPzqkbo1IWoKNQ+JTeXr17iQmSD96Uf+7eDiDEMDE5OXicAbwAQ/9VX0ZMRVgxMzAxODhisgCG4Q3BJeooFREIgQUchERk2YVmjiOgCoAADpbC5OboytwIrtLY2QEERNe+AQAiHOYQ6lWbZDZMOKgjYdHLXh5dMqPQl5vQmchCawtzc0MrS2hSkyuro2NLczsrcVqzSwnRAeGJgcGB8UJCIVISkVISkqF6OpIKEVJaCVKCMUlSsgpJUplSgmJ4CDABpMOK5bswOs5wA4AHABSwAkBAD1N1cGVyIFNwYXJwcmVpc8QeSgM=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Will",
+            "givenName": "Karsten",
+            "name": "Karsten Will"
+        }
+    }
+]

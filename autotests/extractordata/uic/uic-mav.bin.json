@@ -1,0 +1,41 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "priceCurrency": "CZK",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "name": "BUDAPEST"
+            },
+            "departureDay": "2016-09-02",
+            "departureStation": {
+                "@type": "TrainStation",
+                "name": "PRAHA"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1154"
+            }
+        },
+        "reservationNumber": "YASXS0",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "JIZDENKA",
+            "ticketNumber": "*0057-023",
+            "ticketToken": "aztecbin:I1VUMDExMTU0VFQwMDEwLAIUBQHWUqHx9wuzBl0UgB7KxrHbe30CFJGKUisbH6zFZ7tOMFL3sRFrnS7GAAAAADA0MDV4nFVRwW6cMBDtma/wMUHKMraxWaJqJQPOQkwB2YaWvUSbZLVCXVGpyq6Uf8hn5cNqI22rzun5zcx7M+P+qZSiAAzAKMYsDh1I7oDQL/8CM1gTwBwD4Sw3heyfbC1G1xQD17klAJACAbYwLmKvBIAJxDR1b8Yfq10hGyWCB1Fqk5eyaoKgO+3fpmh7Pr1Nx3sEZAXpyvvcAb1C1+tEsBfBPACMitZ0sh4jqb+vgDsHvCSBdVqUAjiNr8w66wvRSWOBc+4mY550DWuHabJU4KES6KsfdnNTiiHTbRHlK6tldhtmumlD1dvxZqtvfQ3fZFrYytRiEOFW1KHZtZlPBj7LNqEPPxDQxSqJh1yYRqDr7kgOuu1E9FBpY9G3qumtRLJ3nHS3+HWZ5vkdXU77n9HufHye5tfzfESyQXGSYOrOQJa9SJwf5j1ijCD1EnS/p5cDIuB1/B69df4YUvUImA2jUe3nR1Wjbn85nFTh9scqB0wxchCl6RrFPFEKgI/C/DDQFv7mfz/CVd0DFK0n6f/kH8LPhjgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "totalPrice": 552,
+        "underName": {
+            "@type": "Person",
+            "name": "VYSKOČIL Pavel"
+        }
+    }
+]

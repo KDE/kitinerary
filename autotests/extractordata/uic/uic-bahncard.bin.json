@@ -1,0 +1,17 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "ProgramMembership",
+        "member": {
+            "@type": "Person",
+            "familyName": "Knopf",
+            "givenName": "Sebastian",
+            "name": "Sebastian Knopf"
+        },
+        "membershipNumber": "7081411135225445",
+        "programName": "My BahnCard 50 (2. Klasse)",
+        "token": "aztecbin:I1VUMDExMDgwMDAwMDEwLQIVAJjnYq+20Lt6f2Kdy/qwvQS08MU7AhRhEaP12Stf34Og+v0gnNOlbDfOKgAAADA1MDZ4nGVRTYjTQBjtQUuNrLAsqMdZEGnVlplJJqm9pUnWlsaytGlxsVAn7tgOJlNJ2oo3URFlPfiDCyteVJQ9CCIsnjwoKgjioeDFm3tw8e7Bq5Oiu6DvMjNv3vfzvq/VrTimDRGEREWwCFEeQ6fpYtNLbUP+IgyxChPYju20up5rLklaLeKG5WFJGzDRqOpxeS9qZbNSt8yGDf6Bt7QIKgAbyslLoEz7wqLRMiAQZHEB1AIaxyyXLVsE5hQuzgejmI8ZaJhVd9FtNWWHsgBKCuhafRSB3rvXwZD3gM84aA+ifEcEtMcA44LFgIbDgJ/tM9ERrjyHPg+W6Si+yHjM4o6AamKKQA1CjZz4k2g8CAEuFqBeSNyCv7TP4yltTGmo67qMJckspGM5MagZyUNFiqJURZ/6LMpykSs1mU/jIafiGKiJwYVzSEtqTqeI9bKVr4/CkEXAgEWkIYRUgjHRNCK7SmQokcEajYZM5Ks22FlMq7vgOqdkIkQM/3bq+ubM2zep9Rt2Jvs9Jbd2X28fPmAsrO7/5r3a+pXuZ9obX/5nr473HdzwP6zoz9dIf7Je+vzYqr44lHHzMx+Dgnst/WzX7rTzfk94qyCCp3Jz85PAWyk9XPu5+vLM5uVPX+dO77335GhUm5+dzN7kd64ceUDvKo/mfvwGg0awxg==",
+        "validFrom": "2023-06-28T00:00:00",
+        "validUntil": "2023-06-29T00:00:00"
+    }
+]
