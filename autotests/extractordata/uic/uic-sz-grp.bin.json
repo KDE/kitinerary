@@ -1,0 +1,60 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "SI"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 46.05889892578125,
+                    "longitude": 14.513099670410156
+                },
+                "identifier": "uic:7942300",
+                "name": "7942300"
+            },
+            "departureDay": "2024-04-21",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "HR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 45.80440139770508,
+                    "longitude": 15.978699684143066
+                },
+                "identifier": "uic:7872480",
+                "name": "7872480"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1179"
+            }
+        },
+        "reservationNumber": "5030020964",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketNumber": "5030020964",
+            "ticketToken": "aztecbin:MSbEYoECVQTQQSQZWUAAAAQwAgHgg8D/ADyYTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACG89Pn+WUG8sh9neiBKh3hV4flrKftbcscFpVI14W2aKoStC7Bvvy6hR6u89MB80iOxBxmTlddk",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            },
+            "validFrom": "2024-04-21T00:00:00",
+            "validUntil": "2024-05-05T23:59:59"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": ""
+        }
+    }
+]

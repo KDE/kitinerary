@@ -100,6 +100,17 @@ void SsbDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
                 trip.setDepartureDay(ssb.type2ValidFrom(node.contextDateTime()));
                 break;
             case SSBv3Ticket::GRT:
+            {
+                trip.setDepartureStation(makeStation(ssb.type3StationCodeNumericOrAlpha(), ssb.type3DepartureStationAlpha(), ssb.type3DepartureStationNum()));
+                trip.setArrivalStation(makeStation(ssb.type3StationCodeNumericOrAlpha(), ssb.type3ArrivalStationAlpha(), ssb.type3ArrivalStationNum()));
+                ticket.setValidFrom(ssb.type3ValidFrom(node.contextDateTime()).startOfDay());
+                ticket.setValidUntil({ssb.type3ValidUntil(node.contextDateTime()), {23, 59, 59}});
+                trip.setDepartureDay(ssb.type3ValidFrom(node.contextDateTime()));
+                Person p;
+                p.setName(ssb.type3NameOfGroupLeader());
+                res.setUnderName(p);
+                break;
+            }
             case SSBv3Ticket::RPT:
                 qCWarning(Log) << "Unsupported SSB v3 ticket type:" << ssb.ticketTypeCode();
                 return;

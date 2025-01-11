@@ -109,25 +109,29 @@ public:
     ~SSBv3Ticket();
 
     /** Returns @c true if this is a valid SSB ticket. */
-    bool isValid() const;
+    [[nodiscard]] bool isValid() const;
 
     /** Date of issue. */
-    Q_INVOKABLE QDate issueDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE [[nodiscard]] QDate issueDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
     /** Departure day for type 1 (IRT/RES/BOA) tickets. */
-    Q_INVOKABLE QDate type1DepartureDay(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE [[nodiscard]] QDate type1DepartureDay(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
     /** First day of validity for type 2 (NRT) tickets. */
-    Q_INVOKABLE QDate type2ValidFrom(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE [[nodiscard]] QDate type2ValidFrom(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
     /** Last day of validity for type 2 (NRT) tickets. */
-    Q_INVOKABLE QDate type2ValidUntil(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE [[nodiscard]] QDate type2ValidUntil(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    /** First day of validity for type 3 (GRP) tickets. */
+    Q_INVOKABLE [[nodiscard]] QDate type3ValidFrom(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    /** Last day of validity for type 3 (GRP) tickets. */
+    Q_INVOKABLE [[nodiscard]] QDate type3ValidUntil(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 
     /** Raw barcode data. */
-    QByteArray rawData() const;
+    [[nodiscard]] QByteArray rawData() const;
 
     /** Returns @c true if @p data might be an ERA SSB ticket. */
-    static bool maybeSSB(const QByteArray &data);
+    [[nodiscard]] static bool maybeSSB(const QByteArray &data);
 
 private:
-    QString readString(int start, int length) const;
+    [[nodiscard]] QString readString(int start, int length) const;
 };
 
 }

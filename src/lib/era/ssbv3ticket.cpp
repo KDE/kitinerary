@@ -98,6 +98,24 @@ QDate SSBv3Ticket::type2ValidUntil(const QDateTime& contextDate) const
     return issueDate(contextDate).addDays(type2LastDayOfValidity());
 }
 
+QDate SSBv3Ticket::type3ValidFrom(const QDateTime &contextDate) const
+{
+    if (ticketTypeCode() != SSBv3Ticket::GRT) {
+        return {};
+    }
+
+    return issueDate(contextDate).addDays(type3FirstDayOfValidity());
+}
+
+QDate SSBv3Ticket::type3ValidUntil(const QDateTime& contextDate) const
+{
+    if (ticketTypeCode() != SSBv3Ticket::GRT) {
+        return {};
+    }
+
+    return issueDate(contextDate).addDays(type3LastDayOfValidity());
+}
+
 QByteArray SSBv3Ticket::rawData() const
 {
     return m_data;
