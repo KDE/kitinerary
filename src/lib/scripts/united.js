@@ -24,7 +24,6 @@ function parseAirport(airport, name) {
 
 function main(html) {
     var reservations = new Array();
-    console.log(html);
 
     var confirmationNumberElement = html.eval("//tr[td[text()='Confirmation Number:']]/following-sibling::tr[1]")[0]
     if (!confirmationNumberElement)
