@@ -1,0 +1,13 @@
+{
+  "filter": [
+    {
+      "field": "From",
+      "match": "@info.email.aa.com",
+      "mimeType": "message/rfc822",
+      "scope": "Ancestors"
+    }
+  ],
+  "function": "main",
+  "mimeType": "text/html",
+  "script": "americanairlines.js"
+}
