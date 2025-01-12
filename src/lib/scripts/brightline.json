@@ -1,0 +1,27 @@
+[
+  {
+    "filter": [
+      {
+        "field": "From",
+        "match": "@mail.gobrightline.com",
+        "mimeType": "message/rfc822",
+        "scope": "Ancestors"
+      }
+    ],
+    "function": "main",
+    "mimeType": "text/html",
+    "script": "brightline.js"
+  },
+  {
+    "filter": [
+          {
+              "match": "Brightline",
+              "mimeType": "text/plain",
+              "scope": "Children"
+          }
+      ],
+      "function": "parsePdfBoardingPass",
+      "mimeType": "application/pdf",
+      "script": "brightline.js"
+  }
+]
