@@ -36,6 +36,11 @@ namespace StringUtil
 
     /** Same as QByteArray::startsWith, but ignoring leading whitespaces. */
     bool startsWithIgnoreSpace(const QByteArray &data, const char *pattern);
+
+    /** Same as QString::simplified() and dropping everything that just contains
+     *  punctuation or dash characerts used to indicate and empty field.
+     */
+    [[nodiscard]] QString simplifiedNoPlaceholder(const QString &s);
 }
 
 }
