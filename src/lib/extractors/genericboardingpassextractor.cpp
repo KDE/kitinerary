@@ -242,13 +242,21 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
             auto flightRes = res.value<FlightReservation>();
             auto flight = flightRes.reservationFor().value<Flight>();
             auto airport = flight.departureAirport();
-            airport.setName(airportNames[KnowledgeDb::IataCode{airport.iataCode()}].join(QLatin1Char(' ')));
+            if (airport.name().isEmpty()) {
+                airport.setName(airportNames[KnowledgeDb::IataCode{airport.iataCode()}].join(QLatin1Char(' ')));
+            }
             flight.setDepartureAirport(airport);
-            flight.setDepartureTerminal(terminalNames[KnowledgeDb::IataCode{airport.iataCode()}]);
+            if (flight.departureTerminal().isEmpty()) {
+                flight.setDepartureTerminal(terminalNames[KnowledgeDb::IataCode{airport.iataCode()}]);
+            }
             airport = flight.arrivalAirport();
-            airport.setName(airportNames[KnowledgeDb::IataCode{airport.iataCode()}].join(QLatin1Char(' ')));
+            if (airport.name().isEmpty()) {
+                airport.setName(airportNames[KnowledgeDb::IataCode{airport.iataCode()}].join(QLatin1Char(' ')));
+            }
             flight.setArrivalAirport(airport);
-            flight.setArrivalTerminal(terminalNames[KnowledgeDb::IataCode{airport.iataCode()}]);
+            if (flight.arrivalTerminal().isEmpty()) {
+                flight.setArrivalTerminal(terminalNames[KnowledgeDb::IataCode{airport.iataCode()}]);
+            }
             flightRes.setReservationFor(flight);
             result.push_back(std::move(flightRes));
         }
