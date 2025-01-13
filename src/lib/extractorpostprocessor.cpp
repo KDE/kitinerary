@@ -214,6 +214,7 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
         }
     }
 
+    res.setBoardingGroup(StringUtil::simplifiedNoPlaceholder(res.boardingGroup()));
     if (res.reservationFor().isValid()) {
         FlightPostProcessor p;
         res.setReservationFor(p.processFlight(res.reservationFor().value<Flight>()));

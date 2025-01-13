@@ -205,3 +205,11 @@ bool StringUtil::startsWithIgnoreSpace(const QByteArray &data, const char *patte
     }
     return std::strncmp(it, pattern, len) == 0;
 }
+
+QString StringUtil::simplifiedNoPlaceholder(const QString &s)
+{
+    if (std::all_of(s.begin(), s.end(), [](QChar c) { return c.category() == QChar::Punctuation_Dash || c.category() == QChar::Punctuation_Other; })) {
+        return {};
+    }
+    return s.simplified();
+}
