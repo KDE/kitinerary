@@ -32,7 +32,7 @@ function parseDate(year, baseDate, overrideDate, time)
     if (overrideDate)
         overrideDate = overrideDate.replace('.', '');
     const s = (overrideDate ? overrideDate.trim() : baseDate) + ' ' + year + ' ' + time;
-    return JsonLd.toDateTime(s, 'd MMM yyyy hh:mm', ['en', 'fr', 'pl', 'nl', 'de']);
+    return JsonLd.toDateTime(s, 'd MMM yyyy hh:mm', ['en', 'fr', 'pl', 'nl', 'de', 'it']);
 }
 
 function parseLocation(place, addr1, addr2, links)
@@ -63,7 +63,7 @@ function parsePdfTicket(pdf, node, triggerNode)
     let reservations = [];
     while (true) {
         const times = timeColumn.substr(idxTime).match(/(\d\d:\d\d)\n([^:]*?\n)?([^:]*?\n)?(\d\d:\d\d)/);
-        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*(?:NOTE:|Wagennummerierung).(?:.*\n)+)?.*(?:Bus|Autobus|Zug|Strecke|Route) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung) (.*)\n(?:.*(?:Operated|Betrieben|Uitgevoerd).*\n)?(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
+        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*(?:NOTE:|Wagennummerierung|platform).(?:.*\n)+)?.*(?:Bus|Autobus|Zug|Strecke|Route|Tratta) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung|Direzione) (.*)\n(?:.*(?:Operated|Betrieben|Uitgevoerd|Effettuata).*\n)?(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
         if (!times || !stations) {
             break;
         }
