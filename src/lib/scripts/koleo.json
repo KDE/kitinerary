@@ -1,7 +1,7 @@
 {
     "filter": [
         {
-            "match": "^[0-9a-f]{542}$",
+            "match": "Sprzedawca:*.*NIP:*.*\nWystawiono:*.*\nData wydruku:*.*",
             "mimeType": "text/plain",
             "scope": "Descendants"
         }
