@@ -1,0 +1,13 @@
+{
+    "mimeType": "message/rfc822",
+    "filter": [
+        {
+            "mimeType": "message/rfc822",
+            "field": "From",
+            "match": "tickets@universe.com",
+            "scope": "Current"
+        }
+    ],
+    "script": "universe.js",
+    "function": "extractTicket"
+}
