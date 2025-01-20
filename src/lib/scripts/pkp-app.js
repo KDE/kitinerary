@@ -41,7 +41,7 @@ function main(content, node) {
     const reservations = [];
 
     // Clean and split lines
-    const lines = content.text.replace(/ +/g, ' ').trim().split('\n');
+    const lines = content.text.split('\n');
 
     // Determine the amount routes and phrases to find its array index
     const regex = new RegExp(`\\b(${config.wordToIdentifyRoutes})(\\w*)?\\b`, 'gi');
@@ -70,15 +70,14 @@ function main(content, node) {
         reservation.reservedTicket.ticketedSeat.seatingType = trainInfo[1];
 
         // Set Departure time, Train number, and Seat section
-        const routeDetails = removeEmptyElements(lines[baseIndex + 2].split(' '));
-        console.log (routeDetails)
+        const routeDetails = removeEmptyElements(lines[baseIndex + 2].split(/\s{2,}/));
         reservation.reservationFor.departureTime = JsonLd.toDateTime(
             routeDetails[0] + routeDetails[1],
             config.dateTimeFormat,
             language
         );
-        reservation.reservationFor.trainNumber = routeDetails[4];
-        reservation.reservedTicket.ticketedSeat.seatSection = routeDetails[5];
+        reservation.reservationFor.trainNumber = routeDetails[3];
+        reservation.reservedTicket.ticketedSeat.seatSection = routeDetails[4];
 
         // Set arrival time and seat number
         const arrivalDetails = removeEmptyElements(lines[baseIndex + 5].split(' '));
