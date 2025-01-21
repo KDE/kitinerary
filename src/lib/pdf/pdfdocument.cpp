@@ -324,9 +324,14 @@ QString gooStringToUnicode(const std::unique_ptr<GooString> &s)
 #endif
         return QString::fromUtf16(reinterpret_cast<const char16_t*>(s->toStr().c_str()), s->toStr().size() / 2);
     } else {
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(25, 2, 0)
+        const auto utf16Data = pdfDocEncodingToUTF16(s->toStr());
+        return QString::fromUtf16(reinterpret_cast<const char16_t *>(utf16Data.c_str()), utf16Data.size() / 2);
+#else
         int len = 0;
         std::unique_ptr<const char[]> utf16Data(pdfDocEncodingToUTF16(s->toStr(), &len));
         return QString::fromUtf16(reinterpret_cast<const char16_t*>(utf16Data.get()), len / 2);
+#endif
     }
 
     return QString::fromUtf8(s->c_str());
