@@ -35,6 +35,7 @@ enum {
 // KS: routing, as a | separated list of UIC station codes?
 // KM: distance in kilometers
 // RT: seat reservations as '#' separated "<train num>|<coach num>|<seat num>" triples
+// RZ: seat reservations for the return trip as '#' separated "<train num>|<coach num>|<seat num>" triples
 
 Vendor1154UTSubBlock::Vendor1154UTSubBlock() = default;
 
