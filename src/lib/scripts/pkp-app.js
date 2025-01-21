@@ -1,5 +1,5 @@
 /*
- *   SPDX-FileCopyrightText: 2025 Grzegorz (grzesjam) M
+ *   SPDX-FileCopyrightText: 2025 Grzegorz M
  *   SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -7,100 +7,104 @@ function removeEmptyElements(arr) {
     return arr.filter(element => element !== undefined && element !== null && element !== '').filter(Boolean);
 }
 
-function getLanguageConfig(language) {
-    const configs = {
-        pl: {
-            wordToIdentifyRoutes: "odcinek",
-            dateTimeFormat: 'hh:mmdd.MM.yyyy',
-            parseDirection: (line, routeCount) => routeCount === 1 ? line : line.split(': ')[1],
-            parteTrainInfoAndClass: (line) => line.split(' klasa '),
-            ticketTitle: /BILET NR/,
-        },
-        en: {
-            wordToIdentifyRoutes: "route",
-            dateTimeFormat: 'hh:mmdd.MM.yyyy',
-            parseDirection: (line, routeCount) => routeCount === 1 ? line : line.split('route')[1],
-            parteTrainInfoAndClass: (line) => removeEmptyElements(line.split(' class')[0].split(' ')),
-            ticketTitle: /TICKET NO/,
-        },
-    };
-
-    return configs[language] || configs['pl'];
-}
-
 function main(content, node) {
-    let language = "?"
-    if (content.text.includes("Bilet ważny wyłącznie w pociągach Spółki PKP Intercity")){
-        language = "pl"
-    } else if (content.text.includes("The ticket is valid only on PKP Intercity trains")){
-        language = "en"
-    }
+    /**
+     * Two main types of tickets:
+     * - "wide": Single QR for multiple trains or one train.
+     * - "narrow": Separate QR code for each train.
+     * Names are made up.
+     */
 
-
-    const config = getLanguageConfig(language);
     const reservations = [];
+    const contentLines = removeEmptyElements(content.text.split('\n'));
 
-    // Clean and split lines
-    const lines = content.text.split('\n');
+    const startRegex = /(?:odcinek|route)/g;
+    const wideDataRegex = /\s*(ODJAZD|DEPARTURE)\s*(DATA|DATE)\s*(CZAS|TIME)\s*(POCIĄG|TRAIN)\s*(WAGON|CARRIAGE)/g;
+    const narrowData1 = /^\s*(ODJAZD|DEPARTURE)\s*(DATA|DATE)/g;
+    const arrivalDateAndMore = /\s*(PRZYJAZD|ARRIVAL)\s*(DATA|DATE)/g;
+    const narrowData3 = /^\s*(CZAS|TIME)\s*(POCIĄG|TRAIN)\s*(WAGON|CARRIAGE)/g;
+    const narrowData4 = /^\s*(MIEJSCA|SEATS)\s*$/g;
+    const ticketNo = /^.*(TICKET NO|BILET NR)/g;
 
-    // Determine the amount routes and phrases to find its array index
-    const regex = new RegExp(`\\b(${config.wordToIdentifyRoutes})(\\w*)?\\b`, 'gi');
-    const matches = lines.filter(str => regex.test(str)) || []
+    const routeCutter = /^.*(odcinek:|route)/g;
+    const classCutter = /(klasa|class)/g;
 
-    // If no matches, it means there is only one route
-    const routeCount = matches.length || 1;
+    const matches = [];
+    let routeNo = 0;
 
-    console.log(`Number of routes: ${routeCount}`);
+    // Parse content lines
+    contentLines.forEach((line, index) => {
+        if (startRegex.test(line) || (routeNo === 0 && index === 7)) { // edge case for single route ticket
+            routeNo++;
+            matches[routeNo] = {
+                routeNo,
+                stations: contentLines[index].replace(routeCutter, '').trim(),
+                reservationNumber: contentLines[6].replace(ticketNo, "").trim()
+            };
+        } else if (ticketNo.test(line) && routeNo > 0) { // its only valid for narrow tickets
+            matches[routeNo].reservationNumber = line.replace(ticketNo, "").trim();
+        } else if (wideDataRegex.test(line)) {
+            matches[routeNo].wideData = removeEmptyElements(contentLines[index + 1].split(/\s{2,}/));
+            matches[routeNo].wideData2 = removeEmptyElements(contentLines[index + 2].split(/\s{2,}/));
+        } else if (narrowData1.test(line)) {
+            matches[routeNo].stations = contentLines[index + 1];
+            matches[routeNo].departureDate = removeEmptyElements(contentLines[index + 2].split(/\s{2,}/));
+        } else if (arrivalDateAndMore.test(line)) {
+            matches[routeNo].arrivalDateAndMore = removeEmptyElements(contentLines[index + 1].split(/\s{2,}/));
+        } else if (narrowData3.test(line)) {
+            matches[routeNo].timeAndTrain = removeEmptyElements(contentLines[index + 1].split(/\s{2,}/));
+            matches[routeNo].timeAndTrain2 = removeEmptyElements(contentLines[index + 2].split(/\s{2,}/));
+        } else if (narrowData4.test(line)) {
+            matches[routeNo].seats = contentLines[index + 1].replace(/ +/g, ' ');
+        }
+    });
 
-    for (let i = 1; i <= routeCount; i++) {
+    console.log(`Number of routes: ${matches.length}`);
+
+    matches.forEach((ticket, index) => {
         const reservation = JsonLd.newTrainReservation();
 
-        const index = lines.indexOf(matches[i-1]);
-        const baseIndex = index !== -1 ? index : 7; // If there is only one route its always on 7th index
-        console.log(`Processing route ${i}, baseIndex: ${baseIndex}`);
+        reservation.reservationFor.departureStation.name = ticket.stations;
+        reservation.reservationFor.arrivalStation.name = ticket.stations;
 
-        // Set departure and arrival station names
-        const direction = config.parseDirection(lines[baseIndex], routeCount);
-        reservation.reservationFor.departureStation.name = direction;
-        reservation.reservationFor.arrivalStation.name = direction;
+        if ('wideData' in ticket) {
+            reservation.reservedTicket.ticketedSeat.seatSection = ticket.wideData[4];
+            reservation.reservedTicket.ticketedSeat.seatingType = ticket.wideData2[1].replace(classCutter, '');
+            reservation.reservationFor.trainName = ticket.wideData2[0];
+            reservation.reservationFor.trainNumber = ticket.wideData[3];
+            reservation.reservationFor.departureTime = JsonLd.toDateTime(
+                ticket.wideData[0] + ticket.wideData[1], "hh:mmdd.MM.yyyy", "pl"
+            );
+            reservation.reservationFor.arrivalTime = JsonLd.toDateTime(
+                ticket.arrivalDateAndMore[0] + ticket.arrivalDateAndMore[1], "hh:mmdd.MM.yyyy", "pl"
+            );
+            reservation.reservedTicket.ticketedSeat.seatNumber = ticket.arrivalDateAndMore.slice(2).join(" ");
+            reservation.reservedTicket.ticketToken = 'azteccode:' + node.childNodes[1].childNodes[0].content;
 
-        // Set train name and seating type
-        const trainInfo = config.parteTrainInfoAndClass(lines[baseIndex + 3])
-        reservation.reservationFor.trainName = trainInfo[0];
-        reservation.reservedTicket.ticketedSeat.seatingType = trainInfo[1];
+            ExtractorEngine.extractPrice(contentLines[5], reservation);
+        } else {
+            // Narrow ticket
+            reservation.reservedTicket.ticketedSeat.seatSection = ticket.timeAndTrain[2];
+            reservation.reservedTicket.ticketedSeat.seatingType = ticket.timeAndTrain2[1].replace(classCutter, '');
+            reservation.reservationFor.trainName = ticket.timeAndTrain2[0];
+            reservation.reservationFor.trainNumber = ticket.timeAndTrain[1];
+            reservation.reservationFor.departureTime = JsonLd.toDateTime(
+                ticket.departureDate[0] + ticket.departureDate[1], "hh:mmdd.MM.yyyy", "pl"
+            );
+            reservation.reservationFor.arrivalTime = JsonLd.toDateTime(
+                ticket.arrivalDateAndMore[0] + ticket.arrivalDateAndMore[1], "hh:mmdd.MM.yyyy", "pl"
+            );
+            reservation.reservedTicket.ticketedSeat.seatNumber = ticket.seats;
+            reservation.reservedTicket.ticketToken = 'azteccode:' + node.childNodes[ticket.routeNo].childNodes[0].content;
 
-        // Set Departure time, Train number, and Seat section
-        const routeDetails = removeEmptyElements(lines[baseIndex + 2].split(/\s{2,}/));
-        reservation.reservationFor.departureTime = JsonLd.toDateTime(
-            routeDetails[0] + routeDetails[1],
-            config.dateTimeFormat,
-            language
-        );
-        reservation.reservationFor.trainNumber = routeDetails[3];
-        reservation.reservedTicket.ticketedSeat.seatSection = routeDetails[4];
+            ExtractorEngine.extractPrice(contentLines[1].split(/\s{2,}/)[2], reservation);
+        }
 
-        // Set arrival time and seat number
-        const arrivalDetails = removeEmptyElements(lines[baseIndex + 5].split(' '));
-        reservation.reservationFor.arrivalTime = JsonLd.toDateTime(
-            arrivalDetails[0] + arrivalDetails[1],
-            config.dateTimeFormat,
-            language
-        );
-        reservation.reservedTicket.ticketedSeat.seatNumber = arrivalDetails.slice(2).join(' ');
+        reservation.reservationNumber = ticket.reservationNumber;
+        reservation.reservationProvider = "PKP Intercity";
 
-        // Set static information
-        reservation.reservedTicket.underName = lines[1];
-        reservation.reservationNumber = lines[6].split(config.ticketTitle)[1];
-        reservation.reservedTicket.price = lines[5];
-        reservation.reservedTicket.totalPrice = lines[5];
-        reservation.reservationProvider = "PKP Intercity"; // It is generated only by PKP IC app (nothing else could be there)
-
-        // Generate ticket token
-        reservation.reservedTicket.ticketToken = 'azteccode:' + node.childNodes[1].childNodes[0].content;
-
-        // Add the reservation to the list
         reservations.push(reservation);
-    }
+    });
 
     return reservations;
 }
