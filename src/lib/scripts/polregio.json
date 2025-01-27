@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "mPOLREGIO",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdfTicket",
+    "mimeType": "application/pdf",
+    "script": "polregio.js"
+}
