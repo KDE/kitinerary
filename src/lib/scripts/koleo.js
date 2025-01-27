@@ -15,17 +15,6 @@ function removeEmptyElements(arr) {
     return arr.filter(element => element !== undefined && element !== null && element !== '').filter(Boolean);
 }
 
-function convertTripPlanToData(data) {
-    // On the ticket there is no arrival date :shrug:
-    return {
-        departureDate: data[0],
-        departureTime: data[1],
-        arrivalDate: data[0],
-        arrivalTime: data[data.length - 2],
-        train: data[data.length - 1 ]
-    };
-}
-
 function convertUICTableToData(data) {
     // Regex from previous version (C) 2024 Volker Krause <vkrause@kde.org> LGPL-2.0-or-later
     const regex = /(\d\d\.\d\d \d\d:\d\d) +(\S.*\S) +-> +(\S.*\S) +(\d\d\.\d\d \d\d:\d\d) +(\d)\n.*\n *(\S.*?\S)  +(\d+)  +(\s.*)\n/;
@@ -40,97 +29,54 @@ function convertUICTableToData(data) {
         departureStation: match[2],
         arrivalStation: match[3],
         arrivalTime: match[4],
-        SeatType: match[5],
+        seatType: match[5],
         trainNumber: match[6],
-        SeatSection: match[7],
-        SeatNumber: match[8]
+        seatSection: match[7],
+        seatNumber: match[8]
     };
 }
 
-function extractPdfTicket(content, node) {
-    const reservations = [];
+function extractPdfTicket(pdf, node) {
+    const partialUICTableRegex = /\s*\*\s*\*\s* +(\S.*\S) +-> +(.*?)\s{2,}\*\s*\*\s+(\d)\n/;
+    const tripPlanRegex = /(\d\d\.\d\d) \s* (\d\d:\d\d) .* (\d\d:\d\d) \s* (\S* \d*)\n/;
 
-    const contentLines = removeEmptyElements(content.text.split('\n'));
+    let reservations = [];
 
-    // Find the number of routes and data I need
-    const startRegex = new RegExp(`\\bBILET\\b`, 'g');
-    const validity = new RegExp(`\\bWażny od \\b`, 'g');
-    const tripPlan = new RegExp(`\\bPODRÓŻ TAM\\b`, 'g');
-    const priceRegex = new RegExp(`\\bCena\\b`, 'g');
-    const endRegex = new RegExp(`\\bInformacja o cenie\\b`, 'g');
-
-    const matches = [];
-    let startIndex = -1;
-    let validityIndex = -1
-    let tripPlanIndex = -1
-    let priceIndex = -1
-
-    contentLines.forEach((line, index) => {
-        if (startRegex.test(line)) {
-            startIndex = index;
-        } else if (startIndex !== -1 && validity.test(line)) {
-            validityIndex = index;
-        } else if (startIndex !== -1 && tripPlan.test(line)) {
-            tripPlanIndex = index+1;
-        } else if (startIndex !== -1 && priceRegex.test(line)) {
-            priceIndex = index;
-        } else if (startIndex !== -1 && endRegex.test(line)) {
-            matches.push({ start: startIndex, validity: validityIndex, tripPlan: tripPlanIndex, price: priceIndex, end: index });
-            startIndex, tripPlanIndex, priceIndex = -1;
-        }
-    });
-
-    console.log(`Number of routes: ${matches.length}`);
-
-    matches.forEach((thisTicket, index) => {
+    pdf.pages.forEach((thisPage, index) => {
         const reservation = JsonLd.newTrainReservation();
+        const thisTicket = thisPage.text;
 
-        const UICTable = convertUICTableToData(contentLines.slice(thisTicket.start, thisTicket.end).join('\n'))
-        // If the table has all the date, it won't be null, so i can just assign things... Probably its going to be PKP
-        if (UICTable) {
+        // Attempt to parse using the UIC table format
+        const UICData = convertUICTableToData(thisTicket);
+        if (UICData) { // If UIC table is fully populated - use it
             // There is no way to get to know for what year is this ticket for...
-            reservation.reservationFor.departureTime = JsonLd.toDateTime(UICTable.departureTime, "dd.MM hh:mm", "pl");
-            reservation.reservationFor.departureStation.name = UICTable.departureStation;
-            reservation.reservationFor.arrivalStation.name = UICTable.arrivalStation;
-            reservation.reservationFor.arrivalTime = JsonLd.toDateTime(UICTable.arrivalTime, "dd.MM hh:mm", "pl");
-            reservation.reservedTicket.ticketedSeat.seatingType = UICTable.SeatType;
-            reservation.reservationFor.trainNumber = UICTable.trainNumber;
-            reservation.reservedTicket.ticketedSeat.seatSection = UICTable.SeatSection;
-            reservation.reservedTicket.ticketedSeat.seatNumber = UICTable.SeatNumber;
+            reservation.reservationFor.departureTime = JsonLd.toDateTime(UICData.departureTime, "dd.MM hh:mm", "pl");
+            reservation.reservationFor.departureStation.name = UICData.departureStation;
+            reservation.reservationFor.arrivalStation.name = UICData.arrivalStation;
+            reservation.reservationFor.arrivalTime = JsonLd.toDateTime(UICData.arrivalTime, "dd.MM hh:mm", "pl");
+            reservation.reservedTicket.ticketedSeat.seatingType = UICData.seatType;
+            reservation.reservationFor.trainNumber = UICData.trainNumber;
+            reservation.reservedTicket.ticketedSeat.seatSection = UICData.seatSection;
+            reservation.reservedTicket.ticketedSeat.seatNumber = UICData.seatNumber;
         } else {
+            // if UIC table is not fully populated we need to use Trip Plan
+            const partialUICMatch = thisTicket.match(partialUICTableRegex);
+            const tripPlanMatch = thisTicket.match(tripPlanRegex);
 
-            // Year is only accessible when it says how long ticket is valid (but is not necessary travel time)
-            const dateRegex = /\b\d{2}\.\d{2}\.\d{4}\b/g;
-            const year = contentLines[thisTicket.validity].match(dateRegex)[0].split(".")[2];
+            reservation.reservationFor.departureStation.name = partialUICMatch[1];
+            reservation.reservationFor.arrivalStation.name = partialUICMatch[2];
+            reservation.reservedTicket.ticketedSeat.seatingType = partialUICMatch[3];
 
-            // if a train station has more than 1 word, it splits it to 3 lines, so i just look where is the `->` cuz it has train number
-            let realTimeAndTrainNo= contentLines[thisTicket.tripPlan].split(/\s{2,}/)
-            if (!realTimeAndTrainNo.includes("->")){
-                realTimeAndTrainNo= contentLines[thisTicket.tripPlan+1].split(/\s{2,}/)
-            }
-            const routeData = convertTripPlanToData(realTimeAndTrainNo);
+            reservation.reservationFor.trainNumber = tripPlanMatch[4];
+            reservation.reservationFor.departureTime = JsonLd.toDateTime(tripPlanMatch[1] + tripPlanMatch[2],"dd.MMhh:mm","pl");
+            reservation.reservationFor.arrivalTime = JsonLd.toDateTime(tripPlanMatch[1] + tripPlanMatch[3],"dd.MMhh:mm","pl");
 
-            reservation.reservationFor.trainNumber = routeData.train;
-            reservation.reservationFor.departureTime = JsonLd.toDateTime(routeData.departureTime + routeData.departureDate + "." + year, 'hh:mmdd.MM.yyyy', "pl")
-            reservation.reservationFor.arrivalTime = JsonLd.toDateTime(routeData.arrivalTime + routeData.arrivalDate + "." + year, 'hh:mmdd.MM.yyyy', "pl")
-
-            // Takes departure and arrival station from the UIC table
-            const stations = removeEmptyElements(contentLines[thisTicket.start+2].replace("->", "").split(/\s{2,}/));
-            reservation.reservationFor.departureStation.name = stations[2];
-            reservation.reservationFor.arrivalStation.name = stations[3];
-
-
-            // Splits the line with price and the currency
-            const lineWithPrice= contentLines[thisTicket.price].split(/\s{2,}/)
-            const price = lineWithPrice[lineWithPrice.length-1].split(" ")
-
-            reservation.reservedTicket.totalPrice= price[0].replace(",", ".")
-            reservation.reservedTicket.priceCurrency = price[1]
-
-
+            reservation.reservedTicket.ticketedSeat.seatSection = "";
+            reservation.reservedTicket.ticketedSeat.seatNumber = "";
         }
-        // text is always last, before its ONLY codes
-        const thisCode = node.childNodes[index].childNodes[0].content
+
+        reservation.underName.name = thisPage.textInRect(0.7, 0, 1, 0.05);
+        const thisCode = node.childNodes[index].childNodes[0]?.content;
 
         // PKP IC and Koleje śląskie are tested, rest no :c
         if ( hexToText(thisCode).substring(0, 2)=="32"){ // PKP has IC and EIC and TLK and some more...
