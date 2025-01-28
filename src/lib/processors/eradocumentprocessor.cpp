@@ -13,6 +13,8 @@
 #include "era/ssbv2ticket.h"
 #include "era/ssbv3ticket.h"
 
+#include "text/pricefinder_p.h"
+
 #include <KItinerary/ExtractorResult>
 
 #include <KItinerary/Reservation>
@@ -97,6 +99,9 @@ void SsbDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
                 trip.setArrivalStation(makeStation(ssb.type2StationCodeNumericOrAlpha(), ssb.type2ArrivalStationAlpha(), ssb.type2ArrivalStationNum()));
                 ticket.setValidFrom(ssb.type2ValidFrom(node.contextDateTime()).startOfDay());
                 ticket.setValidUntil({ssb.type2ValidUntil(node.contextDateTime()), {23, 59, 59}});
+                if (const auto &t = ssb.type2OpenText().trimmed(); !t.isEmpty()) {
+                    ticket.setName(t);
+                }
                 trip.setDepartureDay(ssb.type2ValidFrom(node.contextDateTime()));
                 break;
             case SSBv3Ticket::GRT:
@@ -114,6 +119,21 @@ void SsbDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
             case SSBv3Ticket::RPT:
                 qCWarning(Log) << "Unsupported SSB v3 ticket type:" << ssb.ticketTypeCode();
                 return;
+        }
+
+        // e.g. MAV has the price in openText
+        PriceFinder finder;
+        if (const auto &price = finder.findHighest(ticket.name()); price.hasResult()) {
+            ticket.setName(QString());
+            res.setPriceCurrency(price.currency);
+            res.setTotalPrice(price.value);
+        }
+
+        // turn incomplete things into generic tickets (e.g. platform keybards)
+        if (trip.departureStation().name().isEmpty() || trip.arrivalStation().name().isEmpty()) {
+            ticket.setIssuedBy(issuer);
+            node.addResult(QList<QVariant>{QVariant::fromValue(ticket)});
+            return;
         }
 
         res.setReservationFor(trip);

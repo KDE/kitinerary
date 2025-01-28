@@ -1,0 +1,15 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080"
+        },
+        "name": "GATING_ONLY",
+        "ticketNumber": "B8809254C57A32",
+        "ticketToken": "aztecbin:MQ4EQEBAiYYQZSVUjVXhTSUMAoFYD0Jgo4dSagABPDpTdP/fdZyAAAAAAAAAAAAAAAAAAAAAAAAAADAsAhRxB9To6VjwgnNKOkEWQRAXKfSKvQIUUdlkboGfTNk5vWDfJ6cZo/9OlzkAAAAAAAAAAAAA",
+        "validFrom": "2025-02-13T00:00:00",
+        "validUntil": "2025-02-14T23:59:59"
+    }
+]
