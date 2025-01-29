@@ -17,11 +17,13 @@
                 "identifier": "8000244",
                 "name": "Mannheim"
             },
+            "departureTime": "2020-11-05T11:58:00+01:00",
             "provider": {
                 "@type": "Organization",
                 "identifier": "uic:1080",
                 "name": "DB AG"
-            }
+            },
+            "trainNumber": "ICE973"
         },
         "reservationNumber": "D260V48G",
         "reservationStatus": "http://schema.org/ReservationConfirmed",

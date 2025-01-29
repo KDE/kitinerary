@@ -267,6 +267,12 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     res.setTotalPrice(nrt.price / std::pow(10, std::visit([](auto &&fcb) { return fcb.issuingDetail.currencyFract; }, flex.fcb())));
                 }
 
+                TrainTrip baseTrip;
+                baseTrip.setProvider(p.issuer());
+                baseTrip.setDepartureStation(p.outboundDepartureStation());
+                baseTrip.setArrivalStation(p.outboundArrivalStation());
+                baseTrip.setDepartureDay(nrt.validFrom(flex.issuingDateTime()).date());
+
                 // check for TrainLinkType regional validity constrains
                 bool trainLinkTypeFound = false;
                 for (const auto &regionalValidity : nrt.validRegion) {
@@ -274,20 +280,24 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                         continue;
                     }
                     const auto trainLink = regionalValidity.value.template value<Fcb::v13::TrainLinkType>();
-                    TrainTrip trip;
-                    trip.setProvider(p.issuer());
+                    TrainTrip trip(baseTrip);
 
                     // TODO station identifier, use Uic9183Flex::read[Arrival|Departure]Station
-                    TrainStation dep;
-                    dep.setName(trainLink.fromStationNameUTF8);
-                    Uic9183Flex::fixStationCode(dep);
-                    trip.setDepartureStation(dep);
+                    if (trainLink.fromStationNameUTF8IsSet()) {
+                        TrainStation dep;
+                        dep.setName(trainLink.fromStationNameUTF8);
+                        Uic9183Flex::fixStationCode(dep);
+                        trip.setDepartureStation(dep);
+                    }
 
-                    TrainStation arr;
-                    arr.setName(trainLink.toStationNameUTF8);
-                    Uic9183Flex::fixStationCode(arr);
-                    trip.setArrivalStation(arr);
+                    if (trainLink.toStationNameUTF8IsSet()) {
+                        TrainStation arr;
+                        arr.setName(trainLink.toStationNameUTF8);
+                        Uic9183Flex::fixStationCode(arr);
+                        trip.setArrivalStation(arr);
+                    }
 
+                    trip.setDepartureDay({}); // reset explicit value in case of departure after midnight
                     trip.setDepartureTime(trainLink.departureDateTime(flex.issuingDateTime()));
 
                     if (trainLink.trainNumIsSet()) {
@@ -305,13 +315,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 }
 
                 if (!trainLinkTypeFound) {
-                    TrainTrip trip;
-                    trip.setProvider(p.issuer());
-                    trip.setDepartureStation(p.outboundDepartureStation());
-                    trip.setArrivalStation(p.outboundArrivalStation());
-                    trip.setDepartureDay(nrt.validFrom(flex.issuingDateTime()).date());
-                    if (validator.isValidElement(trip)) {
-                        res.setReservationFor(trip);
+                    if (validator.isValidElement(baseTrip)) {
+                        res.setReservationFor(baseTrip);
                         res.setReservedTicket(t);
                         results.push_back(res);
                     }
