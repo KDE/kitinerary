@@ -579,7 +579,7 @@ QDate Fcb::v13::CustomerCardData::validFrom() const
 
 QDate Fcb::v13::CustomerCardData::validUntil() const
 {
-    return FcbUtil::decodeDifferentialDate(validFrom(), validUntilYear, validFromDayValue());
+    return FcbUtil::decodeDifferentialDate(validFrom(), validUntilYear, validUntilDay);
 }
 
 void Fcb::v13::CountermarkData::decode(UPERDecoder &decoder)
