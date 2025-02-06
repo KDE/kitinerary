@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^[a-f0-9-]{43}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractTicket",
+    "mimeType": "application/pdf",
+    "script": "eventyay.js"
+}
