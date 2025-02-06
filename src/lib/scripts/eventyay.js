@@ -1,3 +1,7 @@
+/*
+   SPDX-FileCopyrightText: 2025 Volker Krause <vkrause@kde.org>
+   SPDX-License-Identifier: LGPL-2.0-or-later
+*/
 
 function extractTicket(pdf, node, barcode) {
     let res = JsonLd.newEventReservation();
