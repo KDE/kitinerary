@@ -162,7 +162,7 @@
     {
         "filter": [
             {
-                "match": "^\\x01UcP",
+                "match": "^\\x01U.P",
                 "mimeType": "application/octet-stream",
                 "scope": "Descendants"
             }
