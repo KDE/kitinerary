@@ -1,0 +1,56 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IT"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 45.93280029296875,
+                    "longitude": 13.607500076293945
+                },
+                "identifier": "uic:8303304",
+                "name": "8303304"
+            },
+            "departureDay": "2025-02-08",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "SI"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 45.95500183105469,
+                    "longitude": 13.635299682617188
+                },
+                "identifier": "uic:7944700",
+                "name": "7944700"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1179"
+            }
+        },
+        "reservationNumber": "7120002138",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketNumber": "7120002138",
+            "ticketToken": "aztecbin:MSbEQEACXRSQQQSRTYAAAAUTgAAwg8nP4D9ZZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADiF6/45c+2uaaCpNu6f75i0CKsFksCPvp265lJxz7+E0qWm0wb/SX/wHG1mCSrFKhKfwORLQAOu",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            },
+            "validFrom": "2025-02-08T00:00:00",
+            "validUntil": "2025-02-11T23:59:59"
+        }
+    }
+]
