@@ -94,12 +94,12 @@ msgstr "汽车 %1, 从 %2 到 %3"
 #: calendarhandler.cpp:317
 #, kde-format
 msgid "Ferry from %1 to %2"
-msgstr ""
+msgstr "从 %1 飞往 %2 的渡轮"
 
 #: calendarhandler.cpp:330
 #, kde-format
 msgid "Ticket number: %1"
-msgstr ""
+msgstr "票号：%1"
 
 #: calendarhandler.cpp:340
 #, kde-format
