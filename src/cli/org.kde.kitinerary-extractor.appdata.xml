@@ -78,6 +78,7 @@
   <summary xml:lang="tr">Komut satırında çalışan rezervasyon verisi çıkarıcısı</summary>
   <summary xml:lang="uk">Програма для видобування даних бронювання, керування якою відбувається з командного рядка</summary>
   <summary xml:lang="x-test">xxCommand line reservation data extractorxx</summary>
+  <summary xml:lang="zh-CN">命令行行程预订数据导出工具</summary>
   <summary xml:lang="zh-TW">命令列預約資料取出工具</summary>
   <description>
     <p>
