@@ -1,18 +1,32 @@
-{
-    "filter": [
-        {
-            "field": "From",
-            "match": "sbbclient@sbb.ch",
-            "mimeType": "message/rfc822",
-            "scope": "Ancestors"
-        },
-        {
-            "match": "\\x043342\\x12\\x05..001",
-            "mimeType": "application/octet-stream",
-            "scope": "Current"
-        }
-    ],
-    "function": "parseQrCode",
-    "mimeType": "application/octet-stream",
-    "script": "sbb.js"
-}
+[
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "sbbclient@sbb.ch",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            },
+            {
+                "match": "\\x043342\\x12\\x05..001",
+                "mimeType": "application/octet-stream",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseQrCode",
+        "mimeType": "application/octet-stream",
+        "script": "sbb.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "ĠġĢģ\\nIhre Reiseübersicht:",
+                "mimeType": "text/plain",
+                "scope": "Children"
+            }
+        ],
+        "function": "parsePdfItinerary",
+        "mimeType": "application/pdf",
+        "script": "sbb.js"
+    }
+]

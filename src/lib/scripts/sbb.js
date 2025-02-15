@@ -140,3 +140,29 @@ function parseQrCode(content) {
 
     return res;
 }
+
+function parsePdfItinerary(pdf, node)
+{
+    const text = pdf.text;
+
+    let idx = 0;
+    let reservations = node.result;
+    while (true) {
+        const leg = text.substr(idx).match(/\((.*)\)\n(\S.*\S)  +\S\S., (\d{2}\.\d{2}.\d{4})  +ab (\d\d:\d\d) Uhr(?:  +Gleis (\S.*))?\n(\S.*\S)  +\S\S., (\d{2}\.\d{2}.\d{4})  +an (\d\d:\d\d) Uhr(?:  +Gleis (\S.*))?\n/);
+        if (!leg)
+            break
+        idx += leg.index + leg[0].length;
+
+        let res = JsonLd.newTrainReservation();
+        res.reservationFor.trainNumber = leg[1];
+        res.reservationFor.departureStation.name = leg[2];
+        res.reservationFor.departureTime = JsonLd.toDateTime(leg[3] + leg[4], 'dd.MM.yyyyhh:mm', 'de');
+        res.reservationFor.departurePlatform = leg[5];
+        res.reservationFor.arrivalStation.name = leg[6];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[7] + leg[8], 'dd.MM.yyyyhh:mm', 'de');
+        res.reservationFor.arrivalPlatform = leg[9];
+        reservations.push(res);
+    }
+
+    return reservations;
+}
