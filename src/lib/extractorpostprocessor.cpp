@@ -113,6 +113,14 @@ void ExtractorPostprocessor::process(const QList<QVariant> &data) {
     }
 }
 
+[[nodiscard]] static QVariant mergeTicket(QVariant lhs, const QVariant &rhs)
+{
+    const auto rhsTicket = JsonLdDocument::readProperty(rhs, "reservedTicket");
+    const auto lhsTicket = JsonLdDocument::readProperty(lhs, "reservedTicket");
+    JsonLdDocument::writeProperty(lhs, "reservedTicket", MergeUtil::merge(lhsTicket, rhsTicket));
+    return lhs;
+}
+
 QList<QVariant> ExtractorPostprocessor::result() const {
     if (!d->m_resultFinalized) {
         // fold elements we have reservations for into those reservations
@@ -158,6 +166,8 @@ QList<QVariant> ExtractorPostprocessor::result() const {
                 }
 
                 if (depIt != it && arrIt != it && depIt != arrIt) {
+                    (*depIt) = mergeTicket(*depIt, *it);
+                    (*arrIt) = mergeTicket(*arrIt, *it);
                     it = d->m_data.erase(it);
                 } else {
                     ++it;
