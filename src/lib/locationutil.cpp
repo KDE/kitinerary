@@ -217,10 +217,10 @@ static bool compareSpaceCaseInsenstive(const QString &lhs, const QString &rhs)
     auto lit = lhs.begin();
     auto rit = rhs.begin();
     while (true) {
-        while ((*lit).isSpace() && lit != lhs.end()) {
+        while (((*lit).isSpace() || (*lit).isPunct()) && lit != lhs.end()) {
             ++lit;
         }
-        while ((*rit).isSpace() && rit != rhs.end()) {
+        while (((*rit).isSpace() || (*rit).isPunct()) && rit != rhs.end()) {
             ++rit;
         }
         if (lit == lhs.end() || rit == rhs.end()) {

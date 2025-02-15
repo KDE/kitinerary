@@ -156,6 +156,8 @@ private Q_SLOTS:
         QTest::newRow("space-insensitive") << QStringLiteral("Frankfurt(Main)Hbf") << QStringLiteral("Frankfurt (Main) Hbf") << true << true;
 
         QTest::newRow("RCT2-prefix") << u"Verona Porta Nuova"_s << u"VERONA PORTA NUOV"_s << true << true;
+
+        QTest::newRow("comma") << u"Cham, Alpenblick"_s << u"Cham Alpenblick"_s << true << true;
     }
 
     void testLocationNameCompare()
