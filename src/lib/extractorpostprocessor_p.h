@@ -48,7 +48,9 @@ public:
 
     TrainReservation processTrainReservation(TrainReservation res) const;
     TrainTrip processTrainTrip(TrainTrip trip) const;
-    TrainStation processTrainStation(TrainStation station) const;
+    /** Process train station or bus stop. */
+    template <typename T>
+    [[nodiscard]] static T processStation(T station);
     QDateTime processTrainTripTime(QDateTime dt, QDate departureDay, const TrainStation &station) const;
 
     BusReservation processBusReservation(BusReservation res) const;

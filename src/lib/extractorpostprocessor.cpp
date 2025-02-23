@@ -244,8 +244,8 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
 {
     trip.setArrivalPlatform(trip.arrivalPlatform().trimmed());
     trip.setDeparturePlatform(trip.departurePlatform().trimmed());
-    trip.setDepartureStation(processTrainStation(trip.departureStation()));
-    trip.setArrivalStation(processTrainStation(trip.arrivalStation()));
+    trip.setDepartureStation(processStation(trip.departureStation()));
+    trip.setArrivalStation(processStation(trip.arrivalStation()));
     trip.setDepartureTime(processTrainTripTime(trip.departureTime(), trip.departureDay(), trip.departureStation()));
     trip.setArrivalTime(processTrainTripTime(trip.arrivalTime(), trip.departureDay(), trip.arrivalStation()));
     trip.setTrainNumber(trip.trainNumber().simplified());
@@ -260,7 +260,8 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
     return trip;
 }
 
-static void applyStationData(const KnowledgeDb::TrainStation &record, TrainStation &station)
+template <typename T>
+static void applyStationData(const KnowledgeDb::TrainStation &record, T &station)
 {
     if (!station.geo().isValid() && record.coordinate.isValid()) {
         GeoCoordinates geo;
@@ -275,7 +276,8 @@ static void applyStationData(const KnowledgeDb::TrainStation &record, TrainStati
     }
 }
 
-static void applyStationCountry(const QString &isoCode, TrainStation &station)
+template <typename T>
+static void applyStationCountry(const QString &isoCode, T &station)
 {
     auto addr = station.address();
     if (addr.addressCountry().isEmpty()) {
@@ -284,7 +286,8 @@ static void applyStationCountry(const QString &isoCode, TrainStation &station)
     }
 }
 
-TrainStation ExtractorPostprocessorPrivate::processTrainStation(TrainStation station) const
+template<typename T>
+T ExtractorPostprocessorPrivate::processStation(T station)
 {
     const auto id = station.identifier();
     if (id.isEmpty()) { // empty -> null cleanup, to have more compact json-ld output
@@ -357,8 +360,8 @@ BusReservation ExtractorPostprocessorPrivate::processBusReservation(BusReservati
 
 BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
 {
-    trip.setDepartureBusStop(processPlace(trip.departureBusStop()));
-    trip.setArrivalBusStop(processPlace(trip.arrivalBusStop()));
+    trip.setDepartureBusStop(processStation(trip.departureBusStop()));
+    trip.setArrivalBusStop(processStation(trip.arrivalBusStop()));
     trip.setDepartureTime(processTimeForLocation(trip.departureTime(), trip.departureBusStop()));
     trip.setArrivalTime(processTimeForLocation(trip.arrivalTime(), trip.arrivalBusStop()));
     trip.setBusNumber(trip.busNumber().simplified());
