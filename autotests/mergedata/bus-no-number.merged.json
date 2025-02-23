@@ -22,6 +22,7 @@
                 },
                 "name": "Airport"
             },
+            "departureDay": "2023-07-08",
             "departurePlatform": "4",
             "departureTime": "2023-07-08T16:30:00+02:00"
         },

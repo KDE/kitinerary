@@ -62,6 +62,7 @@
                 "@type": "BusStation",
                 "name": "Trier Hbf"
             },
+            "departureDay": "2022-07-26",
             "departureTime": "2022-07-26T07:41:00"
         },
         "reservationStatus": "http://schema.org/ReservationConfirmed"

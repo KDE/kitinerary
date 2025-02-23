@@ -22,6 +22,7 @@ public:
     QString departurePlatform;
     BusStation departureBusStop;
     QDateTime departureTime;
+    QDate departureDay;
     QString busName;
     QString busNumber;
     Organization provider;
@@ -38,6 +39,26 @@ KITINERARY_MAKE_PROPERTY(BusTrip, QString, busName, setBusName)
 KITINERARY_MAKE_PROPERTY(BusTrip, QString, busNumber, setBusNumber)
 KITINERARY_MAKE_PROPERTY(BusTrip, Organization, provider, setProvider)
 KITINERARY_MAKE_OPERATOR(BusTrip)
+
+QDate BusTrip::departureDay() const
+{
+    if (d->departureDay.isValid()) {
+        return d->departureDay;
+    }
+    // pre-1970 dates are used as transient state when we only know the time
+    if (d->departureTime.isValid() && d->departureTime.date().year() > 1970) {
+        return d->departureTime.date();
+    }
+    return {};
+}
+
+void BusTrip::setDepartureDay(const QDate &value)
+{
+    if (departureDay() != value) {
+        d.detach();
+        d->departureDay = value;
+    }
+}
 
 }
 

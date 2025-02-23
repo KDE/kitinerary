@@ -246,8 +246,8 @@ TrainTrip ExtractorPostprocessorPrivate::processTrainTrip(TrainTrip trip) const
     trip.setDeparturePlatform(trip.departurePlatform().trimmed());
     trip.setDepartureStation(processStation(trip.departureStation()));
     trip.setArrivalStation(processStation(trip.arrivalStation()));
-    trip.setDepartureTime(processTrainTripTime(trip.departureTime(), trip.departureDay(), trip.departureStation()));
-    trip.setArrivalTime(processTrainTripTime(trip.arrivalTime(), trip.departureDay(), trip.arrivalStation()));
+    trip.setDepartureTime(processTripTime(trip.departureTime(), trip.departureDay(), trip.departureStation()));
+    trip.setArrivalTime(processTripTime(trip.arrivalTime(), trip.departureDay(), trip.arrivalStation()));
     trip.setTrainNumber(trip.trainNumber().simplified());
     trip.setTrainName(trip.trainName().simplified());
 
@@ -338,7 +338,8 @@ T ExtractorPostprocessorPrivate::processStation(T station)
     return processPlace(station);
 }
 
-QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, QDate departureDay, const TrainStation& station) const
+template <typename T>
+QDateTime ExtractorPostprocessorPrivate::processTripTime(QDateTime dt, QDate departureDay, const T& place) const
 {
     if (!dt.isValid()) {
         return dt;
@@ -347,7 +348,7 @@ QDateTime ExtractorPostprocessorPrivate::processTrainTripTime(QDateTime dt, QDat
     if (dt.date().year() <= 1970 && departureDay.isValid()) { // we just have the time, but not the day
         dt.setDate(departureDay);
     }
-    return processTimeForLocation(dt, station);
+    return processTimeForLocation(dt, place);
 }
 
 BusReservation ExtractorPostprocessorPrivate::processBusReservation(BusReservation res) const
@@ -362,8 +363,8 @@ BusTrip ExtractorPostprocessorPrivate::processBusTrip(BusTrip trip) const
 {
     trip.setDepartureBusStop(processStation(trip.departureBusStop()));
     trip.setArrivalBusStop(processStation(trip.arrivalBusStop()));
-    trip.setDepartureTime(processTimeForLocation(trip.departureTime(), trip.departureBusStop()));
-    trip.setArrivalTime(processTimeForLocation(trip.arrivalTime(), trip.arrivalBusStop()));
+    trip.setDepartureTime(processTripTime(trip.departureTime(), trip.departureDay(), trip.departureBusStop()));
+    trip.setArrivalTime(processTripTime(trip.arrivalTime(), trip.departureDay(), trip.arrivalBusStop()));
     trip.setBusNumber(trip.busNumber().simplified());
     trip.setBusName(trip.busName().simplified());
     return trip;

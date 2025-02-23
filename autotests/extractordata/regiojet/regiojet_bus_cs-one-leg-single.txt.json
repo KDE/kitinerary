@@ -21,6 +21,7 @@
                 "@type": "BusStation",
                 "name": "Brno, AN u hotelu Grand"
             },
+            "departureDay": "2012-06-29",
             "departureTime": "2012-06-29T03:20:00"
         },
         "reservationNumber": "0123456789",

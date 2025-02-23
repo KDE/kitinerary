@@ -21,6 +21,7 @@
                 "@type": "BusStation",
                 "name": "Wien, Schwechat Airport Bbf."
             },
+            "departureDay": "2015-07-31",
             "departurePlatform": "2",
             "departureTime": "2015-07-31T22:10:00"
         },
