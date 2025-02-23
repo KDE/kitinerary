@@ -314,6 +314,10 @@ function parseSecutixPdf(pdf, node, triggerNode)
     for (r of reservations) {
         r.reservationFor.provider = res.reservationFor.provider;
     }
+    for (i in reservations) {
+        if (reservations[i].reservationFor.trainNumber.startsWith("CAR"))
+            reservations[i] = JsonLd.trainToBusReservation(reservations[i]);
+    }
 
     return reservations;
 }
