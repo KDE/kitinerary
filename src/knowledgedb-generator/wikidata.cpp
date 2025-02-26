@@ -19,6 +19,7 @@
 #include <QUrl>
 #include <QUrlQuery>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 using namespace KItinerary::Generator;
 
@@ -60,7 +61,9 @@ QJsonArray WikiData::query(const QString &sparqlQuery, const QString &cacheFileN
         url.setQuery(query);
 
         QNetworkAccessManager nam;
-        auto reply = nam.get(QNetworkRequest(url));
+        QNetworkRequest req(url);
+        req.setHeader(QNetworkRequest::UserAgentHeader, u"org.kde.kitinerary/KnowledgeDbGenerator (kde-pim@kde.org)"_s);
+        auto reply = nam.get(req);
         QObject::connect(reply, &QNetworkReply::finished, QCoreApplication::instance(), &QCoreApplication::quit);
         QCoreApplication::exec();
         if (reply->error() != QNetworkReply::NoError) {
