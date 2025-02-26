@@ -63,6 +63,7 @@ QJsonArray WikiData::query(const QString &sparqlQuery, const QString &cacheFileN
         QNetworkAccessManager nam;
         QNetworkRequest req(url);
         req.setHeader(QNetworkRequest::UserAgentHeader, u"org.kde.kitinerary/KnowledgeDbGenerator (kde-pim@kde.org)"_s);
+        req.setDecompressedSafetyCheckThreshold(100ll * 1024 * 1024);
         auto reply = nam.get(req);
         QObject::connect(reply, &QNetworkReply::finished, QCoreApplication::instance(), &QCoreApplication::quit);
         QCoreApplication::exec();
