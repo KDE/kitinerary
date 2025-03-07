@@ -5,11 +5,11 @@ set -e
 set -x
 
 FREETYPE_VERSION="VER-2-13-2"
-POPPLER_VERSION="poppler-24.11.0"
+POPPLER_VERSION="poppler-25.02.0"
 LIBICAL_VERSION="v3.0.17"
 LIBXML_VERSION="v2.12.2"
 ZXING_VERSION="v2.1.0"
-KF_VERSION="v6.8.0"
+KF_VERSION="v6.11.0"
 GEAR_VERSION="master"
 
 function build_cmake_module() {
