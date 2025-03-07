@@ -245,7 +245,7 @@ function parseSecutixPdfItineraryV2(text, res)
     var reservations = new Array();
     var pos = 0;
     while (true) {
-        var data = text.substr(pos).match(/ *(\d+h\d+)\n *(.*)\n *(.*)\n(?: *Voiture (\d+) - Place (\d+)\n.*\n.*\n)? *(\d+h\d+)\n(.*)\n/);
+        var data = text.substr(pos).match(/ *(\d+h\d+)\n *(.*)\n *(.*)\n(?: *Voiture (\d+) - Place (\d+)\n.*\n.*\n)?(?: *Opéré par .*\n)? *(\d+h\d+)\n(.*)\n/);
         if (!data)
             break;
         pos += data.index + data[0].length;
