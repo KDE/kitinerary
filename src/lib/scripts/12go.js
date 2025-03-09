@@ -5,7 +5,7 @@
 
 function extractPdf(pdf) {
     let res = JsonLd.newBusReservation();
-    const text = pdf.pages[0].text;
+    const text = pdf.text;
     const bookingId = text.match(/ID # ([^\d]*)(\d+)/);
     res.reservationNumber = bookingId[1] + bookingId[2];
     res.reservedTicket.ticketToken = 'qrCode:' + bookingId[2];
@@ -22,9 +22,10 @@ function extractPdf(pdf) {
     res.reservationFor.departureBusStop.address.addressLocality = addr[addr.length - 2];
     res.reservationFor.departureBusStop.address.streetAddress = addr.slice(0, addr.length -2).join(',');
     const currency = text.match(/Passenger.*\s+([A-Z]{3})/);
-    if (currency) {
+    const price = text.match(/Total\s+([\d,]+)\n/);
+    if (currency && price) {
         res.priceCurrency = currency[1];
-        res.totalPrice = text.match(/Total\s+([\d,]+)\n/)[1].replace(',', '');
+        res.totalPrice = price[1].replace(',', '');
     }
     return res;
 }
