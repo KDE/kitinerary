@@ -2,7 +2,7 @@
     "filter": [
         {
             "field": "text",
-            "match": "^Color Line GmbH\\n",
+            "match": "^Color Line(?: GmbH)?\\n",
             "mimeType": "application/pdf",
             "scope": "Current"
         }
