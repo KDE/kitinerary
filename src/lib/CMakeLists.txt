@@ -46,6 +46,9 @@ target_sources(KPim6Itinerary PRIVATE
     engine/extractorscriptengine.cpp engine/extractorscriptengine_p.h
     engine/scriptextractor.cpp engine/scriptextractor.h
 
+    era/dosipas1.cpp
+    era/dosipas2.cpp
+    era/dosipasfactory.cpp
     era/elbticket.cpp era/elbticket.h
     era/fcbticket.cpp era/fcbticket.h
     era/fcbticket3.cpp

@@ -5,6 +5,8 @@
 */
 
 #include "../lib/asn1/berelement.h"
+#include "../lib/era/dosipas1.h"
+#include "../lib/era/dosipas2.h"
 #include "../lib/era/elbticket.h"
 #include "../lib/era/fcbticket.h"
 #include "../lib/era/ssbv1ticket.h"
@@ -242,6 +244,12 @@ static void dumpUic9183(const QByteArray &data)
     }
 }
 
+template <typename T>
+static void dumpDosipas(const T &ticket)
+{
+    dumpGadget(&ticket, "  ");
+}
+
 static void dumpVdv(const QByteArray &data)
 {
     VdvTicketParser parser;
@@ -399,6 +407,12 @@ int main(int argc, char **argv)
     } else if (auto ticket = ELBTicket::parse(data); ticket) {
         std::cout << "ERA ELB Ticket" << std::endl;
         dumpElbTicket(*ticket);
+    } else if (auto ticket = Dosipas::v2::UicBarcodeHeader(data); ticket.isValid()) {
+        std::cout << "DOSIPAS v2 Container" << std::endl;
+        dumpDosipas(ticket);
+    } else if (auto ticket = Dosipas::v1::UicBarcodeHeader(data); ticket.isValid()) {
+        std::cout << "DOSIPAS v1 Container" << std::endl;
+        dumpDosipas(ticket);
     } else {
         std::cout << "Unknown content" << std::endl;
         return 1;
