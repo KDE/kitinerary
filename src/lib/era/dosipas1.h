@@ -64,6 +64,7 @@ class KITINERARY_EXPORT UicBarcodeHeader {
     UPER_ELEMENT_OPTIONAL(QByteArray, level2Signature)
     UPER_GADGET_FINALIZE
 
+    Q_PROPERTY(QByteArray rawData MEMBER m_data)
 public:
     explicit UicBarcodeHeader(const QByteArray &data);
     [[nodiscard]] bool isValid() const;
