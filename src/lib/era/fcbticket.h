@@ -1014,12 +1014,13 @@ class KITINERARY_EXPORT UicRailTicketData {
     UPER_GADGET_FINALIZE
 public:
     UicRailTicketData();
-    UicRailTicketData(const Uic9183Block &block);
+    explicit UicRailTicketData(const Uic9183Block &block);
+    explicit UicRailTicketData(const QByteArray &data);
 
     [[nodiscard]] bool isValid() const;
 
 private:
-    Uic9183Block m_block;
+    QVariant m_data;
 };
 
 }

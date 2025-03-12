@@ -764,7 +764,7 @@ void Fcb::v13::ControlData::decode(UPERDecoder &decoder)
 Fcb::v13::UicRailTicketData::UicRailTicketData() = default;
 
 Fcb::v13::UicRailTicketData::UicRailTicketData(const Uic9183Block &block)
-    : m_block(block)
+    : m_data(QVariant::fromValue(block))
 {
     if (block.isNull()) {
         return;
@@ -773,7 +773,18 @@ Fcb::v13::UicRailTicketData::UicRailTicketData(const Uic9183Block &block)
     decode(decoder);
     if (decoder.hasError()) {
         qCWarning(Log) << decoder.errorMessage();
-        m_block = {};
+        m_data = {};
+    }
+}
+
+Fcb::v13::UicRailTicketData::UicRailTicketData(const QByteArray &data)
+    : m_data(data)
+{
+    UPERDecoder decoder(BitVectorView(std::string_view(data.constData(), data.size())));
+    decode(decoder);
+    if (decoder.hasError()) {
+        qCWarning(Log) << decoder.errorMessage();
+        m_data = {};
     }
 }
 
@@ -788,7 +799,7 @@ void Fcb::v13::UicRailTicketData::decode(UPERDecoder &decoder)
 
 bool Fcb::v13::UicRailTicketData::isValid() const
 {
-    return !m_block.isNull();
+    return !m_data.isNull();
 }
 
 #include "moc_fcbticket.cpp"
