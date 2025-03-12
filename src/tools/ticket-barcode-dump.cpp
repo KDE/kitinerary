@@ -39,6 +39,20 @@
 
 using namespace KItinerary;
 
+static void dumpRawData(const char *data, std::size_t size)
+{
+    bool isText = true;
+    for (std::size_t i = 0; i < size && isText; ++i) {
+        isText = (uint8_t)*(data + i) >= 20;
+    }
+
+    if (isText) {
+        std::cout.write(data, size);
+    } else {
+        std::cout << "(hex) " << QByteArray(data, size).toHex().constData();
+    }
+}
+
 template <typename T>
 static void dumpGadget(const T *gadget, const char* indent = "")
 {
@@ -58,6 +72,11 @@ static void dumpGadget(const void *gadget, const QMetaObject *mo, const char* in
         const auto value = prop.readOnGadget(gadget);
         if (prop.isEnumType()) {
             std::cout << indent << prop.name() << ": " << prop.enumerator().valueToKey(value.toInt()) << std::endl;
+        } else if (prop.typeId() == QMetaType::QByteArray) {
+            std::cout << indent << prop.name() << ": ";
+            const auto data = value.toByteArray();
+            dumpRawData(data.constData(), data.size());
+            std::cout << std::endl;
         } else {
             std::cout << indent << prop.name() << ": " << qPrintable(value.toString()) << std::endl;
         }
@@ -156,20 +175,6 @@ static void dumpElbTicket(const ELBTicket &ticket)
     if (ticket.segment2().isValid()) {
         std::cout << std::endl << "Segment 2:" << std::endl;
         dumpElbTicketSegment(ticket.segment2());
-    }
-}
-
-static void dumpRawData(const char *data, std::size_t size)
-{
-    bool isText = true;
-    for (std::size_t i = 0; i < size && isText; ++i) {
-        isText = (uint8_t)*(data + i) >= 20;
-    }
-
-    if (isText) {
-        std::cout.write(data, size);
-    } else {
-        std::cout << "(hex) " << QByteArray(data, size).toHex().constData();
     }
 }
 
