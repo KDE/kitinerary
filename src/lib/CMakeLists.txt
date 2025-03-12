@@ -101,6 +101,7 @@ target_sources(KPim6Itinerary PRIVATE
 
     processors/barcodedocumentprocessorhelper.cpp processors/barcodedocumentprocessorhelper.h
     processors/binarydocumentprocessor.cpp processors/binarydocumentprocessor.h
+    processors/dosipasdocumentprocessor.cpp
     processors/eradocumentprocessor.cpp processors/eradocumentprocessor.h
     processors/externalprocessor.cpp processors/externalprocessor.h
     processors/genericpriceextractorhelper.cpp processors/genericpriceextractorhelper_p.h
