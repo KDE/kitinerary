@@ -10,6 +10,7 @@
 #include "logging.h"
 
 #include "processors/binarydocumentprocessor.h"
+#include "processors/dosipasdocumentprocessor.h"
 #include "processors/eradocumentprocessor.h"
 #include "processors/externalprocessor.h"
 #include "processors/htmldocumentprocessor.h"
@@ -122,6 +123,7 @@ void ExtractorDocumentNodeFactoryStatic::registerBuiltIn()
     registerProcessor<SsbDocumentProcessor>(u"internal/era-ssb");
     registerProcessor<IataBcbpDocumentProcessor>(u"internal/iata-bcbp");
     registerProcessor<Uic9183DocumentProcessor>(u"internal/uic9183");
+    registerProcessor<DosipasDocumentProcessor>(u"internal/uic-dosipas");
     registerProcessor<VdvDocumentProcessor>(u"internal/vdv");
     registerProcessor<IcalCalendarProcessor>(u"text/calendar");
     registerProcessor<PListDocumentProcessor>(u"application/x-plist");
