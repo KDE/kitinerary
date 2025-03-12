@@ -71,7 +71,7 @@ int main(int argc, char **argv)
                 continue;
             }
 
-            results.push_back({j, candidiate.size() * 7, candidiate});
+            results.push_back({j - candidiate.size() * 7, candidiate.size() * 7, candidiate});
             candidiate.clear();
         }
     }
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
                 continue;
             }
 
-            results.push_back({j, candidiate.size() * 8, candidiate});
+            results.push_back({j - candidiate.size() * 8, candidiate.size() * 8, candidiate});
             candidiate.clear();
         }
     }
