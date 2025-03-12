@@ -162,8 +162,9 @@
     {
         "filter": [
             {
-                "match": "^\\x01U.P",
-                "mimeType": "application/octet-stream",
+                "field": "level2SignedData.level1Data.securityProviderNum",
+                "match": "1187",
+                "mimeType": "internal/uic-dosipas",
                 "scope": "Descendants"
             }
         ],

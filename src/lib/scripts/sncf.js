@@ -579,7 +579,7 @@ function parseSncfCartePdf(pdf, node, barcode) {
 // PDF layout matches that of the "secutix" v2
 function parseSncfNormandie(pdf, node, triggerNode) {
     let res = JsonLd.newTrainReservation();
-    res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content);
+    res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content.rawData);
 
     const page = pdf.pages[triggerNode.location];
     const textRight = page.textInRect(0.5, 0.0, 1.0, 1.0);
