@@ -90,6 +90,11 @@ public:
     QList<QByteArray> readSequenceOfIA5String();
     QList<QString> readSequenceOfUtf8String();
 
+    /** Read an Object Identifier value.
+     *  @see X.691 §24
+     */
+    QByteArray readObjectIdentifier();
+
     /** Read enumerated value.
      *  @see X.691 §14
      */
@@ -141,6 +146,7 @@ public:
 
 private:
     QByteArray readIA5StringData(size_type len);
+    [[nodiscard]] uint64_t readObjectIdentifierComponent(size_type &numBytes);
 
     template <typename T, typename T1, typename... Ts>
     inline QVariant readChoiceElement(int choiceIdx)

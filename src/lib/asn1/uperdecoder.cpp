@@ -163,6 +163,40 @@ QList<QString> UPERDecoder::readSequenceOfUtf8String()
     return result;
 }
 
+QByteArray UPERDecoder::readObjectIdentifier()
+{
+    auto size = readLengthDeterminant();
+    if (size == 0 || m_idx + size * 8 > m_data.size()) {
+        return {};
+    }
+
+    const auto value = readObjectIdentifierComponent(size);
+    QByteArray oid = QByteArray::number(value / 40) + '.' + QByteArray::number(value % 40);
+
+    while (size) {
+        oid += '.' + QByteArray::number((quint64)readObjectIdentifierComponent(size));
+    }
+
+    return oid;
+}
+
+uint64_t UPERDecoder::readObjectIdentifierComponent(size_type &numBytes)
+{
+    uint64_t comp = 0;
+    while (numBytes) {
+        auto b = m_data.valueAtMSB<size_type>(m_idx, 8);
+        m_idx += 8;
+        --numBytes;
+        comp <<= 7;
+        comp += b & 0x7f;
+        if ((b & 0x80) == 0) {
+            break;
+        }
+    }
+
+    return comp;
+}
+
 bool UPERDecoder::hasError() const
 {
     return !m_error.isEmpty();

@@ -65,6 +65,10 @@
     if (Name ## IsSet()) \
         Name = decoder.readSequenceOf<decltype(Name)::value_type>();
 
+#define FCB_READ_OBJECT_IDENTIFIER(Name) \
+    if (Name ## IsSet()) \
+        Name = decoder.readObjectIdentifier();
+
 #define FCB_READ_INT_IA5_PAIR(Name, Min, Max) \
     FCB_READ_CONSTRAINED_INT(Name ## Num, Min, Max); \
     FCB_READ_IA5STRING(Name ## IA5)
