@@ -6,7 +6,7 @@
 #ifndef KITINERARY_FCBUTIL_H
 #define KITINERARY_FCBUTIL_H
 
-#include "fcbticket.h"
+#include "fcbticket1.h"
 #include "fcbticket3.h"
 #include "logging.h"
 

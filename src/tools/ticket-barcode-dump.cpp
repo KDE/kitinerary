@@ -8,7 +8,6 @@
 #include "../lib/era/dosipas1.h"
 #include "../lib/era/dosipas2.h"
 #include "../lib/era/elbticket.h"
-#include "../lib/era/fcbticket.h"
 #include "../lib/era/ssbv1ticket.h"
 #include "../lib/era/ssbv2ticket.h"
 #include "../lib/era/ssbv3ticket.h"
