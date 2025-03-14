@@ -50,6 +50,7 @@ target_sources(KPim6Itinerary PRIVATE
     era/dosipas2.cpp
     era/dosipasfactory.cpp
     era/elbticket.cpp era/elbticket.h
+    era/fcbextractor.cpp
     era/fcbticket1.cpp era/fcbticket1.h
     era/fcbticket3.cpp
     era/fcbutil.cpp era/fcbutil.h
