@@ -31,7 +31,7 @@ function parseTicket(pdf, node, triggerNode) {
         }
 
         // format variant 2
-        train = text.substr(idx).match(/TRAIN .* DEPARTS +ARRIVES\n *(\d+)  +([A-Z][a-z]{2} \d{1,2}, \d{4})  +(\d{1,2}:\d{2} [AP]M)  +(\d{1,2}:\d{2} [AP]M)\n  +(.*?)  +(.*)\n *\d+ (.*) Seat/);
+        train = text.substr(idx).match(/TRAIN .* DEPARTS +ARRIVES\n *(\d+)  +([A-Z][a-z]{2} \d{1,2}, \d{4})  +(\d{1,2}:\d{2} [AP]M)  +(\d{1,2}:\d{2} [AP]M)\n  +(.*?)  +(.*)\n(?: +\w.*\n)? *\d+ (.*) Seat/);
         if (train) {
             leg.reservationFor.trainNumber = train[1];
             leg.reservationFor.departureTime = JsonLd.toDateTime(train[2] + ' ' + train[3], 'MMM d, yyyy h:mm AP', 'en');
