@@ -16,7 +16,7 @@
 #include "vendor0080block.h"
 #include "vendor1154block.h"
 
-#include "era/fcbticket.h"
+#include "era/fcbticket1.h"
 #include "era/fcbticket3.h"
 #include "era/fcbutil.h"
 

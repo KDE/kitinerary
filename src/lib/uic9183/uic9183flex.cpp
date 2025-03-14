@@ -71,7 +71,7 @@ QList<QVariant>Uic9183Flex::transportDocuments() const
     }, *d->m_data) : QList<QVariant>();
 }
 
-const std::variant<Fcb::v13::UicRailTicketData, Fcb::v3::UicRailTicketData>& Uic9183Flex::fcb() const
+const Fcb::UicRailTicketData& Uic9183Flex::fcb() const
 {
     return *d->m_data;
 }

@@ -10,7 +10,6 @@
 #include "uic9183block.h"
 
 #include "era/fcbticket.h"
-#include "era/fcbticket3.h"
 
 namespace KItinerary {
 
@@ -51,7 +50,7 @@ public:
     /** Returns the FCB payload.
      *  Varies depending on the version of this block.
      */
-    [[nodiscard]] const std::variant<Fcb::v13::UicRailTicketData, Fcb::v3::UicRailTicketData>& fcb() const;
+    [[nodiscard]] const Fcb::UicRailTicketData& fcb() const;
 
     /** Read departure station info from the given FCB travel document, if applicable. */
     static void readDepartureStation(const QVariant &doc, TrainStation &station);
