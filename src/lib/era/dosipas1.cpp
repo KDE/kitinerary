@@ -24,6 +24,11 @@ QVariant Dosipas::v1::DataType::content() const
     return DosipasFactory::decodeDataType(*this);
 }
 
+std::optional<Fcb::UicRailTicketData> Dosipas::v1::DataType::fcb() const
+{
+    return DosipasFactory::decodeFcb(*this);
+}
+
 void Dosipas::v1::Level1DataType::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
@@ -53,6 +58,8 @@ void Dosipas::v1::UicBarcodeHeader::decode(UPERDecoder &decoder)
     FCB_READ_OCTETSTRING(level2Signature);
 }
 
+Dosipas::v1::UicBarcodeHeader::UicBarcodeHeader() = default;
+
 Dosipas::v1::UicBarcodeHeader::UicBarcodeHeader(const QByteArray &data)
     : m_data(data)
 {
@@ -70,6 +77,11 @@ Dosipas::v1::UicBarcodeHeader::UicBarcodeHeader(const QByteArray &data)
 bool Dosipas::v1::UicBarcodeHeader::isValid() const
 {
     return !m_data.isEmpty();
+}
+
+QByteArray Dosipas::v1::UicBarcodeHeader::rawData() const
+{
+    return m_data;
 }
 
 #include "moc_dosipas1.cpp"

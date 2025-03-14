@@ -6,6 +6,8 @@
 #ifndef KITINERARY_DOSIPASFACTORY_H
 #define KITINERARY_DOSIPASFACTORY_H
 
+#include "fcbticket.h"
+
 #include <QVariant>
 
 namespace KItinerary {
@@ -20,8 +22,15 @@ public:
         return decodeDataType(dataType.dataFormat, dataType.data);
     }
 
+    template <typename T>
+    [[nodiscard]] static inline std::optional<Fcb::UicRailTicketData> decodeFcb(const T &dataType)
+    {
+        return decodeFcb(dataType.dataFormat, dataType.data);
+    }
+
 private:
     [[nodiscard]] static QVariant decodeDataType(QByteArrayView format, const QByteArray &data);
+    [[nodiscard]] static std::optional<Fcb::UicRailTicketData> decodeFcb(QByteArrayView format, const QByteArray &data);
 
 };
 

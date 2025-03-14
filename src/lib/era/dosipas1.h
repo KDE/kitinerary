@@ -9,6 +9,7 @@
 #include <kitinerary_export.h>
 
 #include "asn1/uperelement.h"
+#include "era/fcbticket.h"
 
 #include <QDateTime>
 #include <QList>
@@ -33,6 +34,8 @@ class DataType {
 public:
     /** Decoded form of data, if in a supported format. */
     [[nodiscard]] QVariant content() const;
+    /** Same as content(), but type-safe for FCB content. */
+    [[nodiscard]] std::optional<Fcb::UicRailTicketData> fcb() const;
 };
 
 class Level1DataType {
@@ -64,11 +67,13 @@ class KITINERARY_EXPORT UicBarcodeHeader {
     UPER_ELEMENT_OPTIONAL(QByteArray, level2Signature)
     UPER_GADGET_FINALIZE
 
-    Q_PROPERTY(QByteArray rawData MEMBER m_data)
+    Q_PROPERTY(QByteArray rawData READ rawData)
 public:
+    UicBarcodeHeader();
     explicit UicBarcodeHeader(const QByteArray &data);
     [[nodiscard]] bool isValid() const;
 
+    [[nodiscard]] QByteArray rawData() const;
 private:
     QByteArray m_data;
 };
