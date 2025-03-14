@@ -16,6 +16,7 @@
 #include "vendor0080block.h"
 #include "vendor1154block.h"
 
+#include "era/fcbextractor_p.h"
 #include "era/fcbticket1.h"
 #include "era/fcbticket3.h"
 #include "era/fcbutil.h"
@@ -150,22 +151,10 @@ bool Uic9183Parser::isValid() const
     return !d->m_payload.isEmpty();
 }
 
-template <typename T>
-static QString fcbReference(const T &data)
-{
-    if (!data.referenceIA5.isEmpty()) {
-        return QString::fromLatin1(data.referenceIA5);
-    }
-    if (data.referenceNumIsSet()) {
-        return QString::number(data.referenceNum);
-    }
-    return {};
-}
-
 QString Uic9183Parser::pnr() const
 {
     if (const auto head = findBlock<Uic9183Head>(); head.isValid()) {
-        const auto key = head.ticketKey().trimmed();
+        auto key = head.ticketKey().trimmed();
         const auto issuerId = head.issuerCompanyCodeNumeric();
 
         // try to make this match what's printed on the matching tickets...
@@ -184,18 +173,8 @@ QString Uic9183Parser::pnr() const
     }
 
     if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
-        QString pnr = std::visit([](auto &&fcb) { return QString::fromLatin1(fcb.issuingDetail.issuerPNR); }, flex.fcb());
-        if (!pnr.isEmpty()) {
+        if (auto pnr = FcbExtractor::pnr(flex.fcb()); !pnr.isEmpty()) {
             return pnr;
-        }
-        if (flex.hasTransportDocument()) {
-            const auto doc = flex.transportDocuments().at(0);
-            QString pnr = VariantVisitor([](auto &&data) {
-                return fcbReference(data);
-            }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData, Fcb::v3::PassData>(doc);
-            if (!pnr.isEmpty()) {
-                return pnr;
-            }
         }
     }
 
@@ -205,11 +184,8 @@ QString Uic9183Parser::pnr() const
 QString Uic9183Parser::name() const
 {
     // ERA FCB
-    if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
-        const auto doc = flex.transportDocuments().at(0);
-        QString name = VariantVisitor([](auto &&data) {
-            return data.tariffs.isEmpty() ? QString() : data.tariffs.at(0).tariffDesc;
-        }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData, Fcb::v3::PassData>(doc);
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
+        auto name = FcbExtractor::ticketName(flex.fcb());
         if (!name.isEmpty()) {
             return name;
         }
@@ -237,16 +213,7 @@ QString Uic9183Parser::carrierId() const
         return head.issuerCompanyCodeString();
     }
     if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
-        QString id = std::visit([](auto &&fcb) {
-            if (fcb.issuingDetail.issuerNumIsSet()) {
-                return QString::number(fcb.issuingDetail.issuerNum);
-            }
-            if (fcb.issuingDetail.issuerIA5IsSet()) {
-                return QString::fromLatin1(fcb.issuingDetail.issuerIA5);
-            }
-            return QString();
-        }, flex.fcb());
-        if (!id.isEmpty()) {
+        if (const auto id = FcbExtractor::issuerId(flex.fcb()); !id.isEmpty()) {
             return id;
         }
     }
@@ -256,32 +223,18 @@ QString Uic9183Parser::carrierId() const
 Organization Uic9183Parser::issuer() const
 {
     Organization issuer;
-    issuer.setIdentifier(QLatin1StringView("uic:") + carrierId());
     if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
-        std::visit([&issuer](auto &&fcb) {
-            if (fcb.issuingDetail.issuerNameIsSet()) {
-                issuer.setName(fcb.issuingDetail.issuerName);
-            }
-        }, flex.fcb());
+        issuer = FcbExtractor::issuer(flex.fcb());
     }
+    issuer.setIdentifier(QLatin1StringView("uic:") + carrierId());
     return issuer;
 }
 
 QDateTime Uic9183Parser::validFrom() const
 {
     // ERA FCB
-    if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
-        const auto issue = flex.issuingDateTime();
-        const auto doc = flex.transportDocuments().at(0);
-        auto dt = VariantVisitor([issue](auto &&data) {
-            return data.departureDateTime(issue);
-        }).visit<Fcb::v13::ReservationData, Fcb::v3::ReservationData>(doc);
-        if (dt.isValid()) {
-            return dt;
-        }
-        dt = VariantVisitor([issue](auto &&data) {
-            return data.validFrom(issue);
-        }).visit<Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::OpenTicketData, Fcb::v3::PassData>(doc);
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
+        const auto dt = FcbExtractor::validFrom(flex.fcb());
         if (dt.isValid()) {
             return dt;
         }
@@ -333,18 +286,8 @@ QDateTime Uic9183Parser::validFrom() const
 QDateTime Uic9183Parser::validUntil() const
 {
     // ERA FCB
-    if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
-        const auto issue = flex.issuingDateTime();
-        const auto doc = flex.transportDocuments().at(0);
-        auto dt = VariantVisitor([issue](auto &&data) {
-            return data.arrivalDateTime(issue);
-        }).visit<Fcb::v13::ReservationData, Fcb::v3::ReservationData>(doc);
-        if (dt.isValid()) {
-            return dt;
-        }
-        dt = VariantVisitor([issue](auto &&data) {
-            return data.validUntil(issue);
-        }).visit<Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::OpenTicketData, Fcb::v3::PassData>(doc);
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
+        const auto dt = FcbExtractor::validUntil(flex.fcb());
         if (dt.isValid()) {
             return dt;
         }
@@ -396,22 +339,8 @@ Person Uic9183Parser::person() const
 {
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
-        bool travelerFound = false;
-        Person p;
-        std::visit([&p, &travelerFound](auto &&fcb) {
-            if (!fcb.travelerDetailIsSet() || fcb.travelerDetail.traveler.size() != 1) {
-                return;
-            }
-            const auto traveler = fcb.travelerDetail.traveler.at(0);
-            if (traveler.firstNameIsSet() || traveler.secondNameIsSet()) {
-                p.setGivenName(QString(traveler.firstName + QLatin1Char(' ') + traveler.secondName).trimmed());
-            }
-            p.setFamilyName(traveler.lastName);
-            if (traveler.firstNameIsSet() || traveler.lastNameIsSet()) {
-                travelerFound = true;
-            }
-        }, flex.fcb());
-        if (travelerFound) {
+        Person p = FcbExtractor::person(flex.fcb());
+        if (!p.familyName().isEmpty() || !p.givenName().isEmpty()) {
             return p;
         }
     }
@@ -602,12 +531,8 @@ TrainStation Uic9183Parser::returnArrivalStation() const
 
 QString Uic9183Parser::seatingType() const
 {
-    if (const auto flex = findBlock<Uic9183Flex>(); flex.transportDocuments().size() == 1) {
-        const auto doc = flex.transportDocuments().at(0);
-        auto c = VariantVisitor([](auto &&data) {
-            return FcbUtil::classCodeToString(data.classCode);
-        }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData, Fcb::v3::PassData>(doc);
-        if (!c.isEmpty()) {
+    if (const auto flex = findBlock<Uic9183Flex>(); flex.isValid()) {
+        if (auto c = FcbExtractor::seatingType(flex.fcb()); !c.isEmpty()) {
             return c;
         }
     }

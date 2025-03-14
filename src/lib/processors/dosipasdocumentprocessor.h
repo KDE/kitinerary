@@ -16,6 +16,7 @@ class DosipasDocumentProcessor : public ExtractorDocumentProcessor
 public:
     [[nodiscard]] bool canHandleData(const QByteArray &encodedData, QStringView fileName) const override;
     [[nodiscard]] ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
+    void preExtract(ExtractorDocumentNode &node, const ExtractorEngine *engine) const override;
 };
 
 }

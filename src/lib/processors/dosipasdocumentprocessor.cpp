@@ -5,9 +5,16 @@
 
 #include "dosipasdocumentprocessor.h"
 
+#include "variantvisitor_p.h"
+
 #include "era/dosipas1.h"
 #include "era/dosipas2.h"
+#include "era/fcbextractor_p.h"
 
+#include <KItinerary/ExtractorResult>
+#include <KItinerary/Ticket>
+
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 bool DosipasDocumentProcessor::canHandleData(const QByteArray &encodedData, [[maybe_unused]] QStringView fileName) const
@@ -25,4 +32,39 @@ ExtractorDocumentNode DosipasDocumentProcessor::createNodeFromData(const QByteAr
         node.setContent(container);
     }
     return node;
+}
+
+void DosipasDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
+{
+    Ticket ticket;
+    const auto rawData = VariantVisitor([](auto &&dosipas) {
+        return dosipas.rawData();
+    }).visit<Dosipas::v1::UicBarcodeHeader, Dosipas::v2::UicBarcodeHeader>(node.content());
+    ticket.setTicketToken("aztecbin:"_L1 + QString::fromLatin1(rawData.toBase64()));
+
+    const auto fcb = VariantVisitor([](auto &&dosipas) -> std::optional<Fcb::UicRailTicketData> {
+        for (const auto &payload : dosipas.level2SignedData.level1Data.dataSequence) {
+            if (auto fcb = payload.fcb(); fcb) {
+                return fcb;
+            }
+        }
+        return std::nullopt;
+    }).visit<Dosipas::v1::UicBarcodeHeader, Dosipas::v2::UicBarcodeHeader>(node.content());
+
+    if (!fcb) {
+        node.addResult(QList<QVariant>({ticket}));
+        return;
+    }
+
+    ticket.setName(FcbExtractor::ticketName(*fcb));
+    Seat seat;
+    seat.setSeatingType(FcbExtractor::seatingType(*fcb));
+    ticket.setTicketedSeat(seat);
+    ticket.setIssuedBy(FcbExtractor::issuer(*fcb));
+    ticket.setTicketNumber(FcbExtractor::pnr(*fcb));
+    ticket.setUnderName(FcbExtractor::person(*fcb));
+    ticket.setValidFrom(FcbExtractor::validFrom(*fcb));
+    ticket.setValidUntil(FcbExtractor::validUntil(*fcb));
+
+    node.addResult(QList<QVariant>({ticket}));
 }
