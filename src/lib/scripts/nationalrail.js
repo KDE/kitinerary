@@ -112,6 +112,26 @@ function parseTicket(pdf, node, triggerNode) {
         res.reservationFor.arrivalStation.name = itinerary[5];
         res.reservationFor.arrivalTime = JsonLd.toDateTime(date + ' ' + itinerary[4], 'dd MMM yyyy hh:mm', 'en');
         res.reservationFor.trainName = itinerary[3].replace(/(.*?)(?:  .*)?(?:\n +|$)/g, '$1 ');
+
+        let reservations = [res];
+        let idx = itinerary.index + itinerary[0].length - itinerary[5].length;
+        while (true) {
+            const leg = text.substr(idx).match(/(.*)\n +(\d{2}:\d{2})\n +([\S\s]*?)\n +(\d{2}:\d{2})\n +(.*)/);
+            if (!leg)
+                break;
+            idx += leg.index + leg[0].length
+            res.reservationFor.arrivalStation.identifier = undefined;
+            let r = JsonLd.clone(res);
+            r.reservationFor.departureStation.identifier = undefined;
+            r.reservationFor.departureStation.name = leg[1];
+            r.reservationFor.departureTime = JsonLd.toDateTime(date + ' ' + leg[2], 'dd MMM yyyy hh:mm', 'en');
+            r.reservationFor.arrivalStation.name = leg[5];
+            r.reservationFor.arrivalTime = JsonLd.toDateTime(date + ' ' + leg[4], 'dd MMM yyyy hh:mm', 'en');
+            r.reservationFor.trainName = leg[3].replace(/(.*?)(?:  .*)?(?:\n +|$)/g, '$1 ');
+            reservations.push(r);
+        }
+        reservations[reservations.length - 1].reservationFor.arrivalStation.identifier = 'uk:' + header[3];
+        return reservations;
     } else {
         // unbound ticket
         res.reservationFor.departureStation.name = header[4];
