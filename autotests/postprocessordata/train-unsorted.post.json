@@ -65,10 +65,6 @@
                 "seatNumber": "71",
                 "seatSection": "13",
                 "seatingType": "First"
-            },
-            "underName": {
-                "@type": "Person",
-                "name": "John Doe"
             }
         },
         "underName": {
@@ -143,10 +139,6 @@
                 "seatNumber": "62",
                 "seatSection": "17",
                 "seatingType": "Economy"
-            },
-            "underName": {
-                "@type": "Person",
-                "name": "John Doe"
             }
         },
         "underName": {

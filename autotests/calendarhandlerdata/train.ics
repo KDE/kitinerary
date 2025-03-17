@@ -31,8 +31,7 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org","@type":
  "5186"},"reservationNumber":"XXX007","reservationStatus":"http:
  //schema.org/ReservationConfirmed","reservedTicket":{"@type":
  "Ticket","ticketedSeat":{"@type":"Seat","seatNumber":"62","seatSection":
- "17","seatingType":"Economy"},"underName":{"@type":"Person","name":"John 
- Doe"}},"underName":{"@type":"Person","name":"John Doe"},"url":"https:
+ "17","seatingType":"Economy"}},"underName":{"@type":"Person","name":"John Doe"},"url":"https:
  //www.trainline.fr/tickets"}]
 END:VEVENT
 END:VCALENDAR

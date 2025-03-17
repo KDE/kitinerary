@@ -51,6 +51,7 @@
 #endif
 
 #include <algorithm>
+#include <cmath>
 #include <cstring>
 
 using namespace Qt::Literals::StringLiterals;
@@ -531,7 +532,22 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
     res.setPriceCurrency(processCurrency(res.priceCurrency()));
 
     if (JsonLd::isA<Ticket>(res.reservedTicket())) {
-        res.setReservedTicket(processTicket(res.reservedTicket().template value<Ticket>()));
+        // move information that can exist in Ticket and Reservation up to the latter
+        auto ticket = processTicket(res.reservedTicket().template value<Ticket>());
+        if (res.underName().isNull() && !ticket.name().isEmpty()) {
+            res.setUnderName(ticket.underName());
+            ticket.setUnderName({});
+        } else if (ticket.underName() == res.underName().template value<Person>()) {
+            ticket.setUnderName({});
+        }
+
+        if ((!res.priceCurrency().isEmpty() && res.priceCurrency() == ticket.priceCurrency())
+            && (!std::isnan(res.totalPrice()) && res.totalPrice() == ticket.totalPrice())) {
+            ticket.setPriceCurrency({});
+            ticket.setTotalPrice(NAN);
+        }
+
+        res.setReservedTicket(processTicket(ticket));
     }
     return res;
 }
