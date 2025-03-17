@@ -325,20 +325,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 }
             }).visit<Fcb::v13::OpenTicketData, Fcb::v3::OpenTicketData>(doc);
 
-            VariantVisitor([&p, ticket, &results](auto &&ccd) {
-                ProgramMembership pm;
-                if (ccd.cardIdNumIsSet()) {
-                    pm.setMembershipNumber(QString::number(ccd.cardIdNum));
-                } else {
-                    pm.setMembershipNumber(QString::fromUtf8(ccd.cardIdIA5));
-                }
-                pm.setProgramName(ccd.cardTypeDescr);
-                pm.setMember(p.person());
-                pm.setValidFrom(ccd.validFrom().startOfDay());
-                pm.setValidUntil(ccd.validUntil().startOfDay());
-                pm.setToken(ticket.ticketToken());
-                results.push_back(pm);
-            }).visit<Fcb::v13::CustomerCardData, Fcb::v3::CustomerCardData>(doc);
+            FcbExtractor::extractCustomerCard(doc, flex.fcb(), ticket, results);
         }
 
         FcbExtractor::applyPrice(ticket, flex.fcb());

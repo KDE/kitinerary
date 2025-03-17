@@ -10,6 +10,8 @@
 
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
+#include <KItinerary/ProgramMembership>
+#include <KItinerary/Ticket>
 
 #include <type_traits>
 
@@ -208,4 +210,22 @@ FcbExtractor::PriceData FcbExtractor::price(const Fcb::UicRailTicketData &fcb)
         }
         return p;
     }, fcb);
+}
+
+void FcbExtractor::extractCustomerCard(const QVariant &ccd, const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result)
+{
+    VariantVisitor([&fcb, &result, ticket](auto &&ccd) {
+        ProgramMembership pm;
+        if (ccd.cardIdNumIsSet()) {
+            pm.setMembershipNumber(QString::number(ccd.cardIdNum));
+        } else {
+            pm.setMembershipNumber(QString::fromUtf8(ccd.cardIdIA5));
+        }
+        pm.setProgramName(ccd.cardTypeDescr);
+        pm.setMember(FcbExtractor::person(fcb));
+        pm.setValidFrom(ccd.validFrom().startOfDay());
+        pm.setValidUntil(ccd.validUntil().startOfDay());
+        pm.setToken(ticket.ticketToken());
+        result.push_back(pm);
+    }).visit<Fcb::v13::CustomerCardData, Fcb::v3::CustomerCardData>(ccd);
 }
