@@ -16,6 +16,7 @@ namespace KItinerary {
 
 class Organization;
 class Person;
+class Ticket;
 
 /** Generic extractor functions for FCB tickets. */
 class FcbExtractor
@@ -50,6 +51,9 @@ public:
             obj.setTotalPrice(p.price);
         }
     }
+
+    /** Extract from transport documents. */
+    static void extractCustomerCard(const QVariant &ccd, const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result);
 
 private:
     struct PriceData {

@@ -56,6 +56,19 @@ void DosipasDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
         return;
     }
 
+    QList<QVariant> results;
+    std::visit([&results, &fcb, ticket](auto &&fcbV) {
+        // TODO IRT/RES/NRT documents
+        for (const auto &doc : fcbV.transportDocument) {
+            FcbExtractor::extractCustomerCard(doc.ticket, *fcb, ticket, results);
+        }
+    }, *fcb);
+
+    if (!results.isEmpty()) {
+        node.addResult(results);
+        return;
+    }
+
     ticket.setName(FcbExtractor::ticketName(*fcb));
     Seat seat;
     seat.setSeatingType(FcbExtractor::seatingType(*fcb));
