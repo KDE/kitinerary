@@ -451,4 +451,10 @@ void FcbExtractor::fixStationCode(TrainStation &station)
       station.setAddress(addr);
       station.setIdentifier(QString());
     }
+
+    // hack to get through validation initially
+    // FIXME solve this nicer, in the validator
+    if (station.name().isEmpty() && !station.identifier().isEmpty()) {
+        station.setName(u" "_s);
+    }
 }
