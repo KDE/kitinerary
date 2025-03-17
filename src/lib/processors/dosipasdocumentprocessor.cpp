@@ -65,6 +65,7 @@ void DosipasDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     ticket.setUnderName(FcbExtractor::person(*fcb));
     ticket.setValidFrom(FcbExtractor::validFrom(*fcb));
     ticket.setValidUntil(FcbExtractor::validUntil(*fcb));
+    FcbExtractor::applyPrice(ticket, *fcb);
 
     node.addResult(QList<QVariant>({ticket}));
 }

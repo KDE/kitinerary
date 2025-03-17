@@ -8,12 +8,14 @@
             "name": "DB AG"
         },
         "name": "Deutschlandticket",
+        "priceCurrency": "EUR",
         "ticketNumber": "J7EJ5KNN",
         "ticketToken": "aztecbin:I1VUMDExMDgwVFQwMDUwLAIUVhuRhpHjgkMGCpfK1dUqgGCqBNQCFE+Wjm/DOV5pQuW2XCnZ1gmaC1GQAAAAADAxNjN4nAGYAGf/VV9GTEVYMTMwMTUyYrIAhuENwctHgBURCIEFHoRKbxZTWXOnIAqBgAiYytLCDJ7kzsLcwpiRgIImAF8AyBEivQhUa1lqnDwmNh0cteHl0ygEgAQKJFB8ADQPi0ASAgCKIyuro5sbQ2MLcyOjSxtbK6AQmSAJtAAARWiVmblgzYpw8DAJh0BAtvsqgBIgQHrRKzVgwYAICAiTHjco",
         "ticketedSeat": {
             "@type": "Seat",
             "seatingType": "2"
         },
+        "totalPrice": 49,
         "underName": {
             "@type": "Person",
             "familyName": "Organa",

@@ -39,6 +39,24 @@ public:
     /** Ticket validity range. */
     [[nodiscard]] static QDateTime validFrom(const Fcb::UicRailTicketData &fcb);
     [[nodiscard]] static QDateTime validUntil(const Fcb::UicRailTicketData &fcb);
+
+    /** Price/currency. */
+    template <typename T>
+    static inline void applyPrice(T &obj, const Fcb::UicRailTicketData &fcb)
+    {
+        const auto p = FcbExtractor::price(fcb);
+        if (!std::isnan(p.price)) {
+            obj.setPriceCurrency(p.currency);
+            obj.setTotalPrice(p.price);
+        }
+    }
+
+private:
+    struct PriceData {
+        double price = NAN;
+        QString currency;
+    };
+    [[nodiscard]] static PriceData price(const Fcb::UicRailTicketData &fcb);
 };
 
 }

@@ -16,6 +16,7 @@
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 
+#include "era/fcbextractor_p.h"
 #include "era/fcbticket.h"
 #include "era/fcbutil.h"
 
@@ -339,6 +340,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 results.push_back(pm);
             }).visit<Fcb::v13::CustomerCardData, Fcb::v3::CustomerCardData>(doc);
         }
+
+        FcbExtractor::applyPrice(ticket, flex.fcb());
     }
 
     if (!results.isEmpty()) {

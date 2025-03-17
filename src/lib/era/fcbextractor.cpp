@@ -191,3 +191,21 @@ QDateTime FcbExtractor::validUntil(const Fcb::UicRailTicketData &fcb)
         return QDateTime();
     }, fcb);
 }
+
+FcbExtractor::PriceData FcbExtractor::price(const Fcb::UicRailTicketData &fcb)
+{
+    return std::visit([](auto &&fcb) {
+        PriceData p;
+        p.currency = QString::fromUtf8(fcb.issuingDetail.currency);
+        const auto fract = std::pow(10, fcb.issuingDetail.currencyFract);
+        for (const auto &doc : fcb.transportDocument) {
+            p.price = VariantVisitor([fract](auto &&doc) {
+                return doc.priceIsSet() ? doc.price / fract : NAN;
+            }).template visit<Fcb::v13::ReservationData, Fcb::v3::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::OpenTicketData, Fcb::v13::PassData, Fcb::v3::PassData>(doc.ticket);
+            if (!std::isnan(p.price)) {
+                continue;
+            }
+        }
+        return p;
+    }, fcb);
+}
