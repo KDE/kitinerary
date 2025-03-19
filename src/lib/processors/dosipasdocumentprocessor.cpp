@@ -58,8 +58,9 @@ void DosipasDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
 
     QList<QVariant> results;
     std::visit([&results, &fcb, ticket](auto &&fcbV) {
-        // TODO IRT/RES/NRT documents
         for (const auto &doc : fcbV.transportDocument) {
+            FcbExtractor::extractReservation(doc.ticket, *fcb, ticket, results);
+            FcbExtractor::extractOpenTicket(doc.ticket, *fcb, ticket, results);
             FcbExtractor::extractCustomerCard(doc.ticket, *fcb, ticket, results);
         }
     }, *fcb);
