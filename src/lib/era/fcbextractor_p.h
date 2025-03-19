@@ -41,6 +41,8 @@ public:
     /** Traveller who this ticket is for. */
     [[nodiscard]] static Person person(const Fcb::UicRailTicketData &fcb);
 
+    /** Issuing date/time. */
+    [[nodiscard]] static QDateTime issuingDateTime(const Fcb::UicRailTicketData &fcb);
     /** Ticket validity range. */
     [[nodiscard]] static QDateTime validFrom(const Fcb::UicRailTicketData &fcb);
     [[nodiscard]] static QDateTime validUntil(const Fcb::UicRailTicketData &fcb);
@@ -58,6 +60,7 @@ public:
 
     /** Extract reservation documents. */
     static void extractReservation(const QVariant &res,  const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result);
+    static void extractOpenTicket(const QVariant &res,  const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result);
     /** Extract from transport documents. */
     static void extractCustomerCard(const QVariant &ccd, const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result);
 
