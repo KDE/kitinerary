@@ -416,7 +416,7 @@ TrainStation Uic9183Parser::outboundDepartureStation() const
 
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
-        Uic9183Flex::readDepartureStation(flex.transportDocuments().at(0), station);
+        FcbExtractor::readDepartureStation(flex.transportDocuments().at(0), station);
     }
 
     return station;
@@ -445,7 +445,7 @@ TrainStation Uic9183Parser::outboundArrivalStation() const
 
     // ERA FCB
     if (const auto flex = findBlock<Uic9183Flex>(); flex.hasTransportDocument()) {
-        Uic9183Flex::readArrivalStation(flex.transportDocuments().at(0), station);
+        FcbExtractor::readArrivalStation(flex.transportDocuments().at(0), station);
     }
 
     return station;
@@ -484,7 +484,7 @@ TrainStation Uic9183Parser::returnDepartureStation() const
                 }
             }
         }).visit<Fcb::v13::OpenTicketData, Fcb::v3::OpenTicketData>(doc);
-        Uic9183Flex::fixStationCode(station);
+        FcbExtractor::fixStationCode(station);
     }
 
     return station;
@@ -523,7 +523,7 @@ TrainStation Uic9183Parser::returnArrivalStation() const
                 }
             }
         }).visit<Fcb::v13::OpenTicketData, Fcb::v3::OpenTicketData>(doc);
-        Uic9183Flex::fixStationCode(station);
+        FcbExtractor::fixStationCode(station);
     }
 
     return station;

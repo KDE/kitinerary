@@ -4,7 +4,6 @@
 */
 
 #include "fcbextractor_p.h"
-#include "fcbutil.h"
 
 #include "variantvisitor_p.h"
 
@@ -228,4 +227,31 @@ void FcbExtractor::extractCustomerCard(const QVariant &ccd, const Fcb::UicRailTi
         pm.setToken(ticket.ticketToken());
         result.push_back(pm);
     }).visit<Fcb::v13::CustomerCardData, Fcb::v3::CustomerCardData>(ccd);
+}
+
+void FcbExtractor::readDepartureStation(const QVariant &doc, TrainStation &station)
+{
+    VariantVisitor([&station](auto &&data) {
+        FcbExtractor::readDepartureStation(data, station);
+    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData>(doc);
+}
+
+void FcbExtractor::readArrivalStation(const QVariant &doc, TrainStation &station)
+{
+    VariantVisitor([&station](auto &&data) {
+        FcbExtractor::readArrivalStation(data, station);
+    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData>(doc);
+}
+
+void FcbExtractor::fixStationCode(TrainStation &station)
+{
+    // UIC codes in Germany are wildly unreliable, there seem to be different
+    // code tables in use by different operators, so we unfortunately have to ignore
+    // those entirely
+    if (station.identifier().startsWith("uic:80"_L1)) {
+      PostalAddress addr;
+      addr.setAddressCountry(u"DE"_s);
+      station.setAddress(addr);
+      station.setIdentifier(QString());
+    }
 }
