@@ -7,6 +7,9 @@
 #define KITINERARY_FCBEXTRACTOR_H
 
 #include "era/fcbticket.h"
+#include "era/fcbutil.h"
+
+#include <KItinerary/Place>
 
 #include <QVariant>
 
@@ -17,6 +20,7 @@ namespace KItinerary {
 class Organization;
 class Person;
 class Ticket;
+class TrainStation;
 
 /** Generic extractor functions for FCB tickets. */
 class FcbExtractor
@@ -52,8 +56,31 @@ public:
         }
     }
 
+    /** Extract reservation documents. */
+    static void extractReservation(const QVariant &res,  const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result);
     /** Extract from transport documents. */
     static void extractCustomerCard(const QVariant &ccd, const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result);
+
+    /** Read departure station info from the given FCB travel document, if applicable. */
+    static void readDepartureStation(const QVariant &doc, TrainStation &station);
+    template <typename T>
+    static inline void readDepartureStation(const T &data, TrainStation &station)
+    {
+        station.setName(data.fromStationNameUTF8);
+        station.setIdentifier(FcbUtil::fromStationIdentifier(data));
+        fixStationCode(station);
+    }
+    /** Read arrival station info from the given FCB travel document, if applicable. */
+    static void readArrivalStation(const QVariant &doc, TrainStation &station);
+    template <typename T>
+    static inline void readArrivalStation(const T &data, TrainStation &station)
+    {
+        station.setName(data.toStationNameUTF8);
+        station.setIdentifier(FcbUtil::toStationIdentifier(data));
+        fixStationCode(station);
+    }
+    /** Fix known issues with station identifiers. */
+    static void fixStationCode(TrainStation &station);
 
 private:
     struct PriceData {

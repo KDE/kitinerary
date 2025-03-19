@@ -213,11 +213,11 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                 trip.setProvider(p.issuer());
 
                 TrainStation dep;
-                Uic9183Flex::readDepartureStation(doc, dep);
+                FcbExtractor::readDepartureStation(doc, dep);
                 trip.setDepartureStation(dep);
 
                 TrainStation arr;
-                Uic9183Flex::readArrivalStation(doc, arr);
+                FcbExtractor::readArrivalStation(doc, arr);
                 trip.setArrivalStation(arr);
 
                 trip.setDepartureTime(irt.departureDateTime(flex.issuingDateTime()));
@@ -283,18 +283,18 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     const auto trainLink = regionalValidity.value.template value<Fcb::v13::TrainLinkType>();
                     TrainTrip trip(baseTrip);
 
-                    // TODO station identifier, use Uic9183Flex::read[Arrival|Departure]Station
+                    // TODO station identifier, use FcbExtractor::read[Arrival|Departure]Station
                     if (trainLink.fromStationNameUTF8IsSet()) {
                         TrainStation dep;
                         dep.setName(trainLink.fromStationNameUTF8);
-                        Uic9183Flex::fixStationCode(dep);
+                        FcbExtractor::fixStationCode(dep);
                         trip.setDepartureStation(dep);
                     }
 
                     if (trainLink.toStationNameUTF8IsSet()) {
                         TrainStation arr;
                         arr.setName(trainLink.toStationNameUTF8);
-                        Uic9183Flex::fixStationCode(arr);
+                        FcbExtractor::fixStationCode(arr);
                         trip.setArrivalStation(arr);
                     }
 

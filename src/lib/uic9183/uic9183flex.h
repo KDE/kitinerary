@@ -13,7 +13,6 @@
 
 namespace KItinerary {
 
-class TrainStation;
 class Uic9183FlexPrivate;
 
 /** Represents a U_FLEX block holding different versions of an FCB payload.
@@ -51,13 +50,6 @@ public:
      *  Varies depending on the version of this block.
      */
     [[nodiscard]] const Fcb::UicRailTicketData& fcb() const;
-
-    /** Read departure station info from the given FCB travel document, if applicable. */
-    static void readDepartureStation(const QVariant &doc, TrainStation &station);
-    /** Read arrival station info from the given FCB travel document, if applicable. */
-    static void readArrivalStation(const QVariant &doc, TrainStation &station);
-    /** Fix known issues with station identifiers. */
-    static void fixStationCode(TrainStation &station);
 
     static constexpr const char RecordId[] = "U_FLEX";
 
