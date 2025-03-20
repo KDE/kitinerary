@@ -24,6 +24,10 @@ std::optional<Fcb::UicRailTicketData> DosipasFactory::decodeFcb(QByteArrayView f
         auto fcb = Fcb::v3::UicRailTicketData(data);
         return fcb.isValid() ? std::optional<Fcb::UicRailTicketData>(fcb) : std::nullopt;
     }
+    if (format == "FCB2") {
+        auto fcb = Fcb::v2::UicRailTicketData(data);
+        return fcb.isValid() ? std::optional<Fcb::UicRailTicketData>(fcb) : std::nullopt;
+    }
     if (format == "FCB1") {
         auto fcb = Fcb::v13::UicRailTicketData(data);
         return fcb.isValid() ? std::optional<Fcb::UicRailTicketData>(fcb) : std::nullopt;

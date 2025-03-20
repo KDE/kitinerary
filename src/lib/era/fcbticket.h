@@ -7,6 +7,7 @@
 #define KITINERARY_FCBTICKET_H
 
 #include "fcbticket1.h"
+#include "fcbticket2.h"
 #include "fcbticket3.h"
 
 #include <variant>
@@ -17,7 +18,7 @@ class UPERDecoder;
 
 namespace Fcb {
 
-using UicRailTicketData = std::variant<Fcb::v13::UicRailTicketData, Fcb::v3::UicRailTicketData>;
+using UicRailTicketData = std::variant<Fcb::v13::UicRailTicketData, Fcb::v2::UicRailTicketData, Fcb::v3::UicRailTicketData>;
 
 }
 }
