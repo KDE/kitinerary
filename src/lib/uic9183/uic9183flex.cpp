@@ -14,7 +14,7 @@ namespace KItinerary {
 class Uic9183FlexPrivate : public QSharedData
 {
 public:
-    std::optional<std::variant<Fcb::v13::UicRailTicketData, Fcb::v3::UicRailTicketData>> m_data;
+    std::optional<Fcb::UicRailTicketData> m_data;
     Uic9183Block m_block;
 };
 }
@@ -25,6 +25,13 @@ Uic9183Flex::Uic9183Flex(const Uic9183Block &block)
 {
     if (block.version() == 3) {
         if (auto fcb = Fcb::v3::UicRailTicketData(block); fcb.isValid()) {
+            d->m_data = std::move(fcb);
+            d->m_block = block;
+            return;
+        }
+    }
+    if (block.version() == 2) {
+        if (auto fcb = Fcb::v2::UicRailTicketData(block); fcb.isValid()) {
             d->m_data = std::move(fcb);
             d->m_block = block;
             return;
