@@ -33,7 +33,7 @@ De/serialization is provided via KItinerary::JsonLdDocument.
 
 Input data is transformed into a tree of document nodes (KItinerary::ExtractorDocumentNode).
 This allows handling of arbitrarily nested data, such as an email with a PDF attached to it
-which contains an image that contains a barcode with an UIC 918.3 ticket container, without
+which contains an image that contains a barcode with an UIC ticket barcode container, without
 extractors having to consider all possible combinations.
 
 A document node consists of a MIME type and its corresponding data, and potentially a number
@@ -55,7 +55,8 @@ KItinerary::ExtractorDocumentProcessor and KItinerary::ExtractorDocumentNodeFact
 
 #### Specialized ticket barcode formats
 
-* UIC 918.3/918.9 ticket barcodes, represented as KItinerary::Uic9183Parser.
+* UIC 918.3/918.9 ticket barcode containers, represented as KItinerary::Uic9183Parser.
+* UIC DOSIPAS ticket barcode containers, represented by KItineary::Dosipas.
 * European Railway Agency (ERA) FCB ticket barcodes, represented as KItinerary::Fcb::UicRailTicketData.
 * European Railway Agency (ERA) SSB ticket barcodes, represented as KItinerary::SSBv1Ticket,
   KItinerary::SSBv2Ticket and KItinerary::SSBv3Ticket.
@@ -87,7 +88,7 @@ to the extraction process, and can be extended/augmented there for example.
 The entry point for data extraction is KItinerary::ExtractorEngine.
 
 There's a number of built-in generic extractors for the following cases:
-* The various ticket barcode types (IATA, UIC 918.3/9, ERA FCB, ERA SSB).
+* The various ticket barcode types (IATA, UIC 918.3/9, DOSIPAS, ERA FCB, ERA SSB).
 * Structured data in JSON-LD or XML microdata format included in HTML documents or iCal events.
 * PDF flight boarding passes.
 * Apple Wallet passes for flights, trains or events.
