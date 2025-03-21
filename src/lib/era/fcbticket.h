@@ -12,13 +12,17 @@
 
 #include <variant>
 
+#define FCB_VERSIONED(T) \
+    Fcb::v13::T, Fcb::v2::T, Fcb::v3::T
+
 namespace KItinerary {
 
 class UPERDecoder;
 
 namespace Fcb {
 
-using UicRailTicketData = std::variant<Fcb::v13::UicRailTicketData, Fcb::v2::UicRailTicketData, Fcb::v3::UicRailTicketData>;
+using UicRailTicketData = std::variant<FCB_VERSIONED(UicRailTicketData)>;
+
 
 }
 }

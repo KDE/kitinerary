@@ -27,14 +27,14 @@ using namespace KItinerary;
         if (!n.isEmpty()) {
             return n;
         }
-        if constexpr (std::is_same_v<std::decay_t<decltype(doc)>, Fcb::v13::PassData> || std::is_same_v<std::decay_t<decltype(doc)>, Fcb::v3::PassData>) {
+        if constexpr (std::is_same_v<std::decay_t<decltype(doc)>, Fcb::v13::PassData> || std::is_same_v<std::decay_t<decltype(doc)>, Fcb::v2::PassData> || std::is_same_v<std::decay_t<decltype(doc)>, Fcb::v3::PassData>) {
             if (!doc.passDescription.isEmpty()) {
                 return doc.passDescription;
             }
         }
 
         return doc.infoText;
-    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData, Fcb::v3::PassData>(doc);
+    }).visit<FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(doc);
 }
 
 QString FcbExtractor::ticketName(const Fcb::UicRailTicketData &fcb)
@@ -71,7 +71,7 @@ QString FcbExtractor::pnr(const Fcb::UicRailTicketData &fcb)
         for (const auto &doc : fcb.transportDocument) {
             auto pnr = VariantVisitor([](auto &&doc) {
                 return fcbReference(doc);
-            }).template visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData, Fcb::v3::PassData>(doc.ticket);
+            }).template visit<FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(doc.ticket);
             if (!pnr.isEmpty()) {
                 return pnr;
             }
@@ -87,7 +87,7 @@ QString FcbExtractor::seatingType(const Fcb::UicRailTicketData &fcb)
         for (const auto &doc : fcb.transportDocument) {
             auto s = VariantVisitor([](auto &&doc) {
                 return FcbUtil::classCodeToString(doc.classCode);
-            }).template visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData, Fcb::v3::PassData>(doc.ticket);
+            }).template visit<FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(doc.ticket);
             if (!s.isEmpty()) {
                 return s;
             }
@@ -165,13 +165,13 @@ QDateTime FcbExtractor::validFrom(const Fcb::UicRailTicketData &fcb)
         for (const auto &doc : fcb.transportDocument) {
             auto dt = VariantVisitor([&fcb](auto &&doc) {
                 return doc.departureDateTime(fcb.issuingDetail.issueingDateTime());
-            }).template visit<Fcb::v13::ReservationData, Fcb::v3::ReservationData>(doc.ticket);
+            }).template visit<FCB_VERSIONED(ReservationData)>(doc.ticket);
             if (dt.isValid()) {
                 return dt;
             }
             dt = VariantVisitor([&fcb](auto &&doc) {
                 return doc.validFrom(fcb.issuingDetail.issueingDateTime());
-            }).template visit<Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::OpenTicketData, Fcb::v3::PassData>(doc.ticket);
+            }).template visit<FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(doc.ticket);
             if (dt.isValid()) {
                 return dt;
             }
@@ -186,13 +186,13 @@ QDateTime FcbExtractor::validUntil(const Fcb::UicRailTicketData &fcb)
         for (const auto &doc : fcb.transportDocument) {
             auto dt = VariantVisitor([&fcb](auto &&doc) {
                 return doc.arrivalDateTime(fcb.issuingDetail.issueingDateTime());
-            }).template visit<Fcb::v13::ReservationData, Fcb::v3::ReservationData>(doc.ticket);
+            }).template visit<FCB_VERSIONED(ReservationData)>(doc.ticket);
             if (dt.isValid()) {
                 return dt;
             }
             dt = VariantVisitor([&fcb](auto &&doc) {
                 return doc.validUntil(fcb.issuingDetail.issueingDateTime());
-            }).template visit<Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::OpenTicketData, Fcb::v3::PassData>(doc.ticket);
+            }).template visit<FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(doc.ticket);
             if (dt.isValid()) {
                 return dt;
             }
@@ -210,7 +210,7 @@ FcbExtractor::PriceData FcbExtractor::price(const Fcb::UicRailTicketData &fcb)
         for (const auto &doc : fcb.transportDocument) {
             p.price = VariantVisitor([fract](auto &&doc) {
                 return doc.priceIsSet() ? doc.price / fract : NAN;
-            }).template visit<Fcb::v13::ReservationData, Fcb::v3::ReservationData, Fcb::v13::OpenTicketData, Fcb::v13::PassData, Fcb::v3::OpenTicketData, Fcb::v13::PassData, Fcb::v3::PassData>(doc.ticket);
+            }).template visit<FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(doc.ticket);
             if (!std::isnan(p.price)) {
                 continue;
             }
@@ -312,7 +312,7 @@ void FcbExtractor::extractReservation(const QVariant &res, const Fcb::UicRailTic
             res.setReservedTicket(t);
             result.push_back(res);
         }
-    }).visit<Fcb::v13::ReservationData, Fcb::v3::ReservationData>(res);
+    }).visit<FCB_VERSIONED(ReservationData)>(res);
 }
 
 void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result)
@@ -405,7 +405,7 @@ void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTick
             }
             // TODO handle nrt.returnIncluded
         }
-    }).visit<Fcb::v13::OpenTicketData, Fcb::v3::OpenTicketData>(res);
+    }).visit<FCB_VERSIONED(OpenTicketData)>(res);
 }
 
 void FcbExtractor::extractCustomerCard(const QVariant &ccd, const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result)
@@ -423,21 +423,21 @@ void FcbExtractor::extractCustomerCard(const QVariant &ccd, const Fcb::UicRailTi
         pm.setValidUntil(ccd.validUntil().startOfDay());
         pm.setToken(ticket.ticketToken());
         result.push_back(pm);
-    }).visit<Fcb::v13::CustomerCardData, Fcb::v3::CustomerCardData>(ccd);
+    }).visit<FCB_VERSIONED(CustomerCardData)>(ccd);
 }
 
 void FcbExtractor::readDepartureStation(const QVariant &doc, TrainStation &station)
 {
     VariantVisitor([&station](auto &&data) {
         FcbExtractor::readDepartureStation(data, station);
-    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData>(doc);
+    }).visit<FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData)>(doc);
 }
 
 void FcbExtractor::readArrivalStation(const QVariant &doc, TrainStation &station)
 {
     VariantVisitor([&station](auto &&data) {
         FcbExtractor::readArrivalStation(data, station);
-    }).visit<Fcb::v13::ReservationData, Fcb::v13::OpenTicketData, Fcb::v3::ReservationData, Fcb::v3::OpenTicketData>(doc);
+    }).visit<FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData)>(doc);
 }
 
 void FcbExtractor::fixStationCode(TrainStation &station)
