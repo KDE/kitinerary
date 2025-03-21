@@ -483,7 +483,7 @@ TrainStation Uic9183Parser::returnDepartureStation() const
                     station.setIdentifier(outboundArrival.identifier());
                 }
             }
-        }).visit<Fcb::v13::OpenTicketData, Fcb::v3::OpenTicketData>(doc);
+        }).visit<FCB_VERSIONED(OpenTicketData)>(doc);
         FcbExtractor::fixStationCode(station);
     }
 
@@ -522,7 +522,7 @@ TrainStation Uic9183Parser::returnArrivalStation() const
                     station.setIdentifier(outboundDeparture.identifier());
                 }
             }
-        }).visit<Fcb::v13::OpenTicketData, Fcb::v3::OpenTicketData>(doc);
+        }).visit<FCB_VERSIONED(OpenTicketData)>(doc);
         FcbExtractor::fixStationCode(station);
     }
 

@@ -39,6 +39,22 @@ QString FcbUtil::classCodeToString(Fcb::v13::TravelClassType classCode)
     return {};
 }
 
+QString FcbUtil::classCodeToString(Fcb::v2::TravelClassType classCode)
+{
+    switch (classCode) {
+        case Fcb::v2::notApplicable: return {};
+        case Fcb::v2::first:
+        case Fcb::v2::standardFirst:
+            return QString::number(1);
+        case Fcb::v2::second:
+        case Fcb::v2::standardSecond:
+            return QString::number(2);
+        default:
+            qCWarning(Log) << "Unhandled FCB class code" << classCode;
+    }
+    return {};
+}
+
 QString FcbUtil::classCodeToString(Fcb::v3::TravelClassType classCode)
 {
     switch (classCode) {

@@ -7,6 +7,7 @@
 #define KITINERARY_FCBUTIL_H
 
 #include "fcbticket1.h"
+#include "fcbticket2.h"
 #include "fcbticket3.h"
 #include "logging.h"
 
@@ -21,6 +22,10 @@ private:
     constexpr inline static bool isUicCode(Fcb::v13::CodeTableType stationCodeTable)
     {
         return stationCodeTable == Fcb::v13::stationUIC || stationCodeTable == Fcb::v13::stationUICReservation;
+    }
+    constexpr inline static bool isUicCode(Fcb::v2::CodeTableType stationCodeTable)
+    {
+        return stationCodeTable == Fcb::v2::stationUIC || stationCodeTable == Fcb::v2::stationUICReservation;
     }
     constexpr inline static bool isUicCode(Fcb::v3::CodeTableType stationCodeTable)
     {
@@ -58,6 +63,7 @@ public:
 
     /** Convert a class code enum value to a string for human representation. */
     [[nodiscard]] static QString classCodeToString(Fcb::v13::TravelClassType classCode);
+    [[nodiscard]] static QString classCodeToString(Fcb::v2::TravelClassType classCode);
     [[nodiscard]] static QString classCodeToString(Fcb::v3::TravelClassType classCode);
 
     /** Decode FCB date. */
