@@ -547,6 +547,10 @@ T ExtractorPostprocessorPrivate::processReservation(T res) const
             ticket.setTotalPrice(NAN);
         }
 
+        if (ticket.ticketNumber() == res.reservationNumber()) {
+            ticket.setTicketNumber({});
+        }
+
         res.setReservedTicket(processTicket(ticket));
     }
     return res;

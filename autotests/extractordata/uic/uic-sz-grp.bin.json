@@ -43,7 +43,6 @@
         "reservationStatus": "http://schema.org/ReservationConfirmed",
         "reservedTicket": {
             "@type": "Ticket",
-            "ticketNumber": "5030020964",
             "ticketToken": "aztecbin:MSbEYoECVQTQQSQZWUAAAAQwAgHgg8D/ADyYTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACG89Pn+WUG8sh9neiBKh3hV4flrKftbcscFpVI14W2aKoStC7Bvvy6hR6u89MB80iOxBxmTlddk",
             "ticketedSeat": {
                 "@type": "Seat",
