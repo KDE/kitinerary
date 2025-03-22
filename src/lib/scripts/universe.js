@@ -17,16 +17,16 @@ function extractTicket(mail, node) {
     res.reservedTicket.ticketToken = "qrCode:" + ticketNumber;
     res.reservedTicket.ticketNumber = ticketNumber;
 
-    let price = text.match(/Gesamt\W+([0-9]+.[0-9]+) ([A-Z]+)/)
-    res.reservedTicket.totalPrice = parseFloat(price[1]);
-    res.reservedTicket.priceCurrency = price[2];
+    let price = text.match(/(Gesamt|Total)\W+([0-9]+.[0-9]+) ([A-Z]+)/)
+    res.reservedTicket.totalPrice = parseFloat(price[2]);
+    res.reservedTicket.priceCurrency = price[3];
 
     const googleUrl = node.childNodes[0].content.match(/http:\/\/www\.google\.com\/calendar.*/)[0];
     const dates = googleUrl.match(/dates=([0-9]{8}T[0-9]{6})%2F([0-9]{8}T[0-9]{6})/);
     res.reservationFor.startDate = JsonLd.toDateTime(dates[1], "yyyyMMddThhmmss", "de")
     res.reservationFor.endDate = JsonLd.toDateTime(dates[2], "yyyyMMddThhmmss", "de")
 
-    const location = text.match(/Ort\W+(.*)/)[1];
+    const location = text.match(/(Ort|Location)\W+(.*)/)[2];
     res.reservationFor.location.address = location;
 
     res.underName.name = text.match(/Name.*\n\W+(.*?)  /)[1]
