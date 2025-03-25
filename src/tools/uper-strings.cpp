@@ -57,23 +57,28 @@ int main(int argc, char **argv)
 
     // search for IA5Strings
     std::vector<Result> results;
-    QByteArray candidiate;
+    QByteArray candidate;
     for (int i = 0; i < 7; ++i) {
-        for (BitVectorView::size_type j = i; j < view.size() - 7; j += 7) {
+        BitVectorView::size_type j = i;
+        for (; j < view.size() - 7; j += 7) {
             auto c = view.valueAtMSB<uint8_t>(j, 7);
             if (isPlausibleChar(c)) {
-                candidiate.push_back(c);
+                candidate.push_back((char)c);
                 continue;
             }
 
-            if (candidiate.size() <= 2) {
-                candidiate.clear();
+            if (candidate.size() <= 2) {
+                candidate.clear();
                 continue;
             }
 
-            results.push_back({j - candidiate.size() * 7, candidiate.size() * 7, candidiate});
-            candidiate.clear();
+            results.push_back({j - candidate.size() * 7, candidate.size() * 7, candidate});
+            candidate.clear();
         }
+        if (candidate.size() > 2) {
+            results.push_back({j - candidate.size() * 7, candidate.size() * 7, candidate});
+        }
+        candidate.clear();
     }
 
     std::sort(results.begin(), results.end(), [](const auto &lhs, const auto &rhs) { return lhs.offset < rhs.offset; });
@@ -85,21 +90,26 @@ int main(int argc, char **argv)
     // search for UTF8String
     results.clear();
     for (int i = 0; i < 8; ++i) {
-        for (BitVectorView::size_type j = i; j < view.size() - 8; j += 8) {
+        BitVectorView::size_type j = i;
+        for (; j < view.size() - 8; j += 8) {
             auto c = view.valueAtMSB<uint8_t>(j, 8);
             if (isPlausibleChar(c)) {
-                candidiate.push_back(c);
+                candidate.push_back((char)c);
                 continue;
             }
 
-            if (candidiate.size() <= 2) {
-                candidiate.clear();
+            if (candidate.size() <= 2) {
+                candidate.clear();
                 continue;
             }
 
-            results.push_back({j - candidiate.size() * 8, candidiate.size() * 8, candidiate});
-            candidiate.clear();
+            results.push_back({j - candidate.size() * 8, candidate.size() * 8, candidate});
+            candidate.clear();
         }
+        if (candidate.size() > 2) {
+            results.push_back({j - candidate.size() * 8, candidate.size() * 8, candidate});
+        }
+        candidate.clear();
     }
 
     std::sort(results.begin(), results.end(), [](const auto &lhs, const auto &rhs) { return lhs.offset < rhs.offset; });
