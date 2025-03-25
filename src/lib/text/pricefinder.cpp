@@ -193,6 +193,14 @@ bool PriceFinder::isSingleCurrency(const std::vector<Result> &results) const
     return std::all_of(results.begin(), results.end(), [&isoCode](const auto &r) { return r.currency == isoCode; });
 }
 
+// sanity threshold for prices that aren't plausible and might instead be company capital statements in the fineprint
+struct {
+    const char currency[4];
+    int threshold;
+} static constexpr const price_upper_limit[] = {
+    { "EUR", 15000 }
+};
+
 PriceFinder::Result PriceFinder::highest(std::vector<Result> &results) const
 {
     if (!isSingleCurrency(results)) {
@@ -210,6 +218,13 @@ PriceFinder::Result PriceFinder::highest(std::vector<Result> &results) const
         // TODO is this reliable enough to return results[1] here?
         return {};
     }
+    const auto it = std::ranges::find_if(price_upper_limit, [&results](auto t) {
+        return QLatin1StringView(t.currency, 3) == results[0].currency;
+    });
+    if (it != std::end(price_upper_limit) && (*it).threshold < results[0].value) {
+        return {};
+    }
+
     return results.front();
 }
 
