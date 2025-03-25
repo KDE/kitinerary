@@ -1,13 +1,28 @@
-{
-    "filter": [
-        {
-            "field": "airlineDesignatorOfBoardingPassIssuer",
-            "match": "BA",
-            "mimeType": "internal/iata-bcbp",
-            "scope": "Descendants"
-        }
-    ],
-    "function": "extractBoardingPass",
-    "mimeType": "application/pdf",
-    "script": "british-airways.js"
-}
+[
+    {
+        "filter": [
+            {
+                "field": "airlineDesignatorOfBoardingPassIssuer",
+                "match": "BA",
+                "mimeType": "internal/iata-bcbp",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "extractBoardingPass",
+        "mimeType": "application/pdf",
+        "script": "british-airways.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "@email.ba.com",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "extractConfirmationMail",
+        "script": "british-airways.js",
+        "mimeType": "text/plain"
+    }
+]
