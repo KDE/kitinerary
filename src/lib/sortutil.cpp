@@ -218,6 +218,9 @@ bool SortUtil::hasEndTime(const QVariant &elem)
     if (JsonLd::isA<FoodEstablishmentReservation>(elem)) {
         return elem.value<FoodEstablishmentReservation>().endTime().isValid();
     }
+    if (JsonLd::isA<LodgingReservation>(elem)) {
+        return elem.value<LodgingReservation>().checkoutTime().isValid();
+    }
     if (JsonLd::canConvert<Reservation>(elem)) {
         return hasEndTime(JsonLd::convert<Reservation>(elem).reservationFor());
     }
