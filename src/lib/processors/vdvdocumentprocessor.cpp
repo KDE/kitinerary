@@ -80,9 +80,11 @@ void VdvDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
     ticket.setValidUntil(vdv.endDateTime());
     ticket.setUnderName(vdv.person());
 
-    if (const auto basicData = vdv.productData().find(VdvTicketBasicData::Tag).contentAt<VdvTicketBasicData>(); basicData && basicData->price) {
-        ticket.setTotalPrice(basicData->price / 100.0);
-        ticket.setPriceCurrency(QStringLiteral("EUR"));
+    if (const auto basicDataElement = vdv.productData().find(VdvTicketBasicData::Tag); basicDataElement.isValid()) {
+        if (const auto basicData = basicDataElement.contentAt<VdvTicketBasicData>(); basicData && basicData->price) {
+            ticket.setTotalPrice(basicData->price / 100.0);
+            ticket.setPriceCurrency(QStringLiteral("EUR"));
+        }
     }
 
     node.addResult(QList<QVariant>({ticket}));
