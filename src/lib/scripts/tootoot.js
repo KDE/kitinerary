@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 David Pilarčík <meow@charliecat.space>
+// SPDX-License-Identifier: LGPL-2.0-or-later
+
 function extractPdf(pdf, node, barcode) {
 	const res = JsonLd.newEventReservation();
 	const page = pdf.pages[barcode.location];
