@@ -8,10 +8,10 @@ var regExMap = [];
 regExMap['en'] = {
     bookingRef: /(?:Booking number|Confirmation:) +([0-9]*)\s+/,
     // 1: adress, 2: city, 3:postal code, 4: country, 5: phone
-    hotelInformation: / *(.+), (.+), (.+), (.+)(?: -|\n)\s+Phone: (\+[0-9 ]*)\s+/,
-    hotelName: /(?:\[checkmark\.png\] |\d\n)(.*?)(?: is expecting you on|\n *\[)/,
-    arrivalDate: /Check-in *([A-z]+ [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2})[^\)]*\)/,
-    departureDate: /Check-out *([A-z]+ [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(.*?([0-9]{1,2}:[0-9]{2})\)/,
+    hotelInformation: / *(.+), (.+), (.+), (.+)(?: -|\n)\s+Phone:? (\+[0-9 ]*)\s+/,
+    hotelName: [/(?:\[checkmark\.png\] |\.\d\n)(.*?)(?: is expecting you on|\n *\[)/, /\n\n\s*(\S.*\S)\n\n\s*Reservation details\n/],
+    arrivalDate: /Check-in *([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2})[^\)]*\)/,
+    departureDate: /Check-out *([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(.*?([0-9]{1,2}:[0-9]{2})\)/,
     person: /Guest name[\n\s]+(.*?)(?:\n| Edit guest name)/
 }
 
@@ -19,18 +19,18 @@ regExMap['fr'] = {
     bookingRef: /Numéro de réservation : ([0-9]*)\s+/,
     // 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
     hotelInformation: /(.+), (.+), (.+), (.+) -\s+Téléphone : (\+[0-9]*)\s+/,
-    hotelName: /L'établissement (.*) vous attend le/,
+    hotelName: [/L'établissement (.*) vous attend le/],
     arrivalDate: /Arrivée  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/,
     departureDate: /Départ  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \([0-9]{1,2}:[0-9]{2} - ([0-9]{1,2}:[0-9]{2})\)/,
     person: /Clients[\n\s]+(.*?)(?:\n| Modifier le nom du client)/
 }
 
 regExMap['de'] = {
-    bookingRef: /Buchungsnummer: ([0-9]*)\s+/,
+    bookingRef: /(?:Buchungsnummer|Bestätigungsnummer): ([0-9]*)\s+/,
     // 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
-    hotelInformation: /(.+), (.+), (.+), (.+) -\s+Telefon: (\+[0-9 \-]+)\n/,
-    hotelName: /\[checkmark.png\] Die Unterkunft (.*)\s+erwartet Sie/,
-    arrivalDate: /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(ab ([0-9]{1,2}:[0-9]{2})\)/,
+    hotelInformation: /(?:Lage )?(.+), (.+), (.+), (.+) ?-?\s+Telefon:? (\+[0-9 \-]+)\n/,
+    hotelName: [/\[checkmark.png\] Die Unterkunft (.*)\s+erwartet Sie/, /\n\n\s*(\S.*\S)\n\n\s*\[\S/],
+    arrivalDate: /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \((?:ab )?([0-9]{1,2}:[0-9]{2}).*\)/,
     departureDate: /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(bis ([0-9]{1,2}:[0-9]{2})\)/,
     person: /Name des Gastes[\n\s]+(.*?)(?:\n| Name des Gastes bearbeiten)/,
 }
@@ -38,7 +38,7 @@ regExMap['de'] = {
 regExMap['da'] = {
     bookingRef: /Bekræftelsesnummer: ([0-9]*)\s+/,
     hotelInformation: /Beliggenhed[\s\n]+(.+), (.+)(.*), (.+)[\s\n]+Telefon (\+[0-9 \-]+)\n/,
-    hotelName: /(.*) forventer at se/,
+    hotelName: [/(.*) forventer at se/],
     arrivalDate: /Indtjekning .* (\d{1,2}. \S+ \d{4}) \(.*(\d\d\.\d\d)\)/,
     departureDate: /Udtjekning .* (\d{1,2}. \S+ \d{4}) \(.*(\d\d\.\d\d)\)/,
     person: /Gæster[\s\n]+(.*)\n/
@@ -47,11 +47,21 @@ regExMap['da'] = {
 regExMap['es'] = {
     bookingRef: /Confirmación: ([0-9]*)\s+/,
     hotelInformation: /(\S.+), (.+),[\n ]([^,]+),[\n ]([^,]+)\n\n\s+Teléfono (\+[0-9- ]*)\s+/,
-    hotelName: /El (\S.*\S) te espera/,
+    hotelName: [/El (\S.*\S) te espera/],
     arrivalDate: /Entrada (\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2}).*\)/,
     departureDate: /Salida (\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.* ([0-9]{1,2}:[0-9]{2})\)/,
     person: /Nombre del huésped[\n\s]+(.*?)\n/
 }
+
+const timeFormats = [
+    "dddd d MMMM yyyy hh:mm",
+    "dddd, d MMMM yyyy hh:mm",
+    "dddd, d. MMMM yyyy hh:mm",
+    "dddd, MMMM d, yyyy hh:mm",
+    "dddd, dd 'de' MMMM 'de' yyyy hh:mm",
+    "d. MMMM yyyy hh.mm"
+];
+
 
 function main(text, node) {
     if (node.result.length > 0)
@@ -59,41 +69,34 @@ function main(text, node) {
     var res = JsonLd.newLodgingReservation();
 
     for (var locale in regExMap) {
-        var bookingRef = text.match(regExMap[locale]['bookingRef']);
+        const bookingRef = text.match(regExMap[locale]['bookingRef']);
         // If no booking reference go to the next locale
         if (!bookingRef || !regExMap[locale]['bookingRef'])
             continue;
         res.reservationNumber = bookingRef[1];
 
-        var hotelName = text.match(regExMap[locale]['hotelName']);
-        if (!hotelName)
-            return null;
+        let hotelName = undefined;
+        for (const nameRx of regExMap[locale]['hotelName']) {
+            hotelName = text.match(nameRx);
+            if (hotelName)
+                break;
+        }
         res.reservationFor.name = hotelName[1];
 
-        var hotel = text.match(regExMap[locale]['hotelInformation']);
-        if (!hotel)
-            return null;
-
+        const hotel = text.match(regExMap[locale]['hotelInformation']);
         res.reservationFor.address.streetAddress = hotel[1];
         res.reservationFor.address.postalCode = hotel[3];
         res.reservationFor.address.addressLocality = hotel[2];
         res.reservationFor.address.addressCountry = hotel[4];
         res.reservationFor.telephone = hotel[5];
 
-        var arrivalDate = text.match(regExMap[locale]['arrivalDate']);
-        if (!arrivalDate)
-            return null;
+        const arrivalDate = text.match(regExMap[locale]['arrivalDate']);
+        res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], timeFormats, locale);
 
-        res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], ["dddd d MMMM yyyy hh:mm", "dddd, d. MMMM yyyy hh:mm", "dddd, MMMM d, yyyy hh:mm", "dddd, dd 'de' MMMM 'de' yyyy hh:mm", "d. MMMM yyyy hh.mm"], locale);
+        const departureDate = text.match(regExMap[locale]['departureDate']);
+        res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], timeFormats, locale);
 
-        var departureDate = text.match(regExMap[locale]['departureDate']);
-        if (!departureDate)
-            return null;
-        res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], ["dddd d MMMM yyyy hh:mm", "dddd, d. MMMM yyyy hh:mm", "dddd, MMMM d, yyyy hh:mm",  "dddd, dd 'de' MMMM 'de' yyyy hh:mm", "d. MMMM yyyy hh.mm"], locale);
-
-        var name = text.match(regExMap[locale]['person']);
-        if (!name)
-            return null;
+        const name = text.match(regExMap[locale]['person']);
         res.underName.name = name[1];
 
         return res;
