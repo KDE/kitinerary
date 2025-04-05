@@ -296,7 +296,7 @@ void FcbExtractor::extractReservation(const QVariant &res, const Fcb::UicRailTic
         if (res.reservationNumber().isEmpty()) {
             res.setReservationNumber(ticket.ticketNumber());
         }
-        t.setTicketNumber({});
+        t.setTicketNumber(fcbReference(irt));
         res.setUnderName(FcbExtractor::person(fcb));
         res.setProgramMembershipUsed(::extractCustomerCard(irt.tariffs));
 
@@ -329,7 +329,7 @@ void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTick
         if (res.reservationNumber().isEmpty()) {
             res.setReservationNumber(ticket.ticketNumber());
         }
-        t.setTicketNumber({});
+        t.setTicketNumber(fcbReference(nrt));
 
         res.setUnderName(FcbExtractor::person(fcb));
         res.setProgramMembershipUsed(::extractCustomerCard(nrt.tariffs));
