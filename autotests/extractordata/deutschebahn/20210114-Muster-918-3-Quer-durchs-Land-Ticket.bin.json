@@ -1,0 +1,25 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:0080"
+        },
+        "name": "Quer-Durchs-Land-Ticket",
+        "ticketNumber": "EZBG7S",
+        "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDcwLAIUCD/cWGl7UklNTbPKSBmWZTyu+ugCFBbOL8Tfkw9bTv2cT7kly0atyizjAAAAADAzNDZ4nF1RwUrDQBRMQRE8CV56FDx42vjeS9Jueii0TWylQbRJBL2U0EYTWjwkqf6CfyPevfkbfozvpbFIs4ednZmdnezG84k/8AABHAtAg/84HHdDRca/jzQC8UC0XfB8zxfjMAALiDQIDcj6bnZsrV3XRTLQCkGyybrbpIXyNsUiK1WQvCxVlC9WacUygVgYWAJGDFwGDipQzOKfzOHsDSnkMGYoXGRF/lSdBUnJKdQRFUWVRiTseWMJwULJQNsENKUgM7TPSDz/CgOsQTyPgsGDmFx7Noqkht5WFAjQna6Tskx79Ubacp3btCjNXo1RQ33qVZIVq6So0mPA3W6k8ffXusqfV2le9fg0R4S9llzbbWiZbF5Rs8LtrenmbmN/prx4NpqEKhjceCq6Hk39SArfx/XTkrHkd2y1Lj5e43Z18Nl+65sTo3/ZNoyTTMijn8OT03ej9QsH33pJ",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        },
+        "validFrom": "2021-01-14T00:00:00",
+        "validUntil": "2021-01-14T23:59:59"
+    }
+]

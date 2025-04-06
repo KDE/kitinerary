@@ -1,0 +1,25 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:0080"
+        },
+        "name": "Schleswig-Holstein-Ticket",
+        "ticketNumber": "DPHH1D",
+        "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDcwLAIURMbd7413phxuptgAnhja02iCCqsCFBpCyY+lyc5yy6aWIGpcuAsbx8MvAAAAADAzNTF4nF1Ry0rDUBCNigjiouCmCxeCC1cJM5OHSRcFTWJTGrSYVHFVQo1taFBILvQX/Br9AXf+hl/iypm0Bmnu4p57zsyZc3Mn0yi8DAABbBPAhWAcRRjopP37yEUgXoiWA0EYhFJ4FYMJxD1Mm4Cst7ttua7nWZ6poZmAeJOdzBZlXq+KuR69lrXKixc9LWbLXHEBiQkwaNx8Bh4Dm3TQmcU/GS0GlFDSjEViy6p4VqdxVrMLOaKiqK6owp5tShIwUTzQNAANicgMbTNiL7ZgYXOryTSNLx+lyHPu/FRiuOuIAgEuRmVW13mvaaQ154zzqjZ6DUYXmqnX2aJaZpXKDwHbbqTB12epivkyL1SPp9kibKXk2N6Gls3iE7Unakfw3/WjOEwehgM9uo2TNBze6OnQH4WpRL6fNM9L2hO/5e7O+Yd676q9n+6qr0da3+hq2tGJkAff+53jN63zCxbXfNw=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        },
+        "validFrom": "2021-01-13T00:00:00",
+        "validUntil": "2021-01-13T23:59:59"
+    }
+]

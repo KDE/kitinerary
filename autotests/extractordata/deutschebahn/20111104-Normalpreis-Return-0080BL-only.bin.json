@@ -1,0 +1,21 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:0080"
+        },
+        "name": "Normalpreis",
+        "ticketNumber": "19W184",
+        "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDQwLQIUdGJBOxXCEN8d6oxh1+Ry+5///1wCFQCjK6c7n9BxakaJ2EjuV8KlbUatbQAAADAyNTh4nG1QwU7DMAzlU3aESBW24zTpbp2ataUbRZRtRzSkHiaNFnUIIb4eWxPSQERR8vzybL9481zFvAAEcBYgAGY7DJxkVxcLGJEAEZkQilhEFdYFEAAGYM6EFmaxEsYyABMBVztuvIt3F3XQIp3rnG/rfQDhifhxGTEtNw//qeXQrWpU3nWgfhHvx+l1f3yb+sNJKHEjKgFWQS6Af0AmwFECCXRaS9MF6DN1koFOkG/Gl2M/fEmYShiq/TCMH/0ksf8Th19y/Txl2zqfz64bU5h2Ydadabvb1dqUtSnbeCMiq+aW/eFz9jROp/d+EE77kFom6YCph6CTscGnpDP9BksXWX0=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Feix Torsten"
+        }
+    }
+]

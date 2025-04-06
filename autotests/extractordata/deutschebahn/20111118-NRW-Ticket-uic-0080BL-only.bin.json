@@ -1,0 +1,23 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:0080"
+        },
+        "name": "Schöner-Tag-Ticket NRW",
+        "ticketNumber": "XEUZOW",
+        "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDQwLAIUQ88UtfMmyvwmW0INmx/UxpQB/YYCFC6YGuGS4WzP5IwMMk0qk6ChaYkWAAAAADAxODV4nFVPQQrCMBD0Kf1AYHeT1vSotqIoCqYl4kWkFC1ChdqDL/MDfsyJqOhedpiZzE7K/SwfZcREsSaytM3L3dorM/gZtsxCzJyIUJZneTDOMxIitnhq4mFgxkswnFqwQtaT9wtrxv858sp5b42twVPqKDQQ7arT497WnSoOR1U01bnuo9XGQ8YtWAB0ABOAFCCOFSmw/JHZAIgTh7DQY1o3t6i4dNe+bsElQeWgojEnwfwd/OIJyTw5vg==",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Feix Torsten"
+        },
+        "validFrom": "2011-12-18T00:00:00",
+        "validUntil": "2011-12-18T23:59:59"
+    }
+]

@@ -1,0 +1,21 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:0080"
+        },
+        "name": "Normalpreis",
+        "ticketNumber": "ECTR1M",
+        "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDQwLQIVAI5lx/TVKgumjP/gOfqQH0Kt0+sKAhQrWAXAUjMdsspMvR+Zbtv+bFVCwQAAADAyNjR4nG2Qz06DQBDGeZQea03jzP7f3pAFbRQOhbbEiyEGI1GpoZjou3nzxZzRaDywe/nym29mv9nt7WUaB0AALQEcpEm1wXxpo38HPWhBFkSpIKQhZeM6gABAB14qpZicXxOR2oMSAvb15ior3E2YmEN9P/OkRa2jSIiLqtZJqN2Um54wf25DXJfAeRGLw/DcPL0MbXckRFMBBQnJIiahfoUnYXBJ15fkYQwkuC5KakFNRGdD0z/evw7jPG+6/oSwISzzz4/+7qHtT5NufCdop6CbHCA4pt2t49Vsvt+mi+IsjxclFyRnzdrubVYdhuPY9sQMx+ENhOVtKKZDb2lpcLT/9zd/AYL/Yvo=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Feix Torsten"
+        }
+    }
+]

@@ -1,0 +1,23 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:0080"
+        },
+        "name": "NRW-Ticket",
+        "ticketNumber": "KL76KU",
+        "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDQwLQIVAJR0hvJRB8EtEmhCXcs20RLFjJR/AhRc7yXdaNnzMKh8Bo4RNkROhvBukQAAADAyMzF4nF2QS2vDMBCE+1NyFhhmV5Zk9xZXrhvygDqPHktJBTFpXUh1aP99dxMCob5o9Hk1M9L29amdRhDgLFBhvgh+vi3Ku5uPAhGDiDxqxDa2OjiLYIAqhBI2KGkWQjg4MLHv7HMTXcP9rY8nvvhcVlsRNIh4DW1AWPUvxWbYH1MWIvaCRFgVDyJqEY4KFELp+ptKEbwWD3KiqmXK+fNtHGXvZcJ2afhI43E47Q9JIEtQybvZ9H5ynTTRrFqz7Ex/SL/v2fw/IfnEj2n4mWy+Tt/5zLyGanGWu1MtZRyc5mvv85P8AUGTUJs=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Feix Torsten"
+        },
+        "validFrom": "2011-12-16T00:00:00",
+        "validUntil": "2011-12-16T23:59:59"
+    }
+]

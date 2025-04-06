@@ -1,0 +1,21 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:0080"
+        },
+        "name": "Normalpreis",
+        "ticketNumber": "YOH9DK",
+        "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDQwLQIVAKx81JzY45Qxd7hh7y8eZi7bPsgQAhQYHvEg1/pSwVoFkLo9Q/O++SGs2AAAADAyNzZ4nG2QW0vDQBCF/Sl9TCKhM7O3xLfYXNW2YIylTxIhStCmkqag/94Zi9CH7ssevj1z9uw2L2WWpIAARgFEsF2XcXofuquzBRqRABE1GEizNBNjlQIBYARoKDZCbh+YKBuDJoLINNtlFFl9loOE9JejTrtyzlnmRMWdhQ26RXnJjSC3k7ilFpoapC/iaj/u2s+vsesPjLgNu1goEQkL/S9iFpZCDHVcS5gMs5BzqnkEuT+afGyHj7fjOHnLth98xlYSy3b3ehzfrxf99MPMXWDRxXHikko/V8nNzCuqeZ4GWb3xg2KdBWXgrap5k/lBmTyyU0lo3vXfs6f9eJi6gZmVdvIgkiuN0vwwZWJDTj78FzOhYto=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Feix Torsten"
+        }
+    }
+]

@@ -1,0 +1,23 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:0080"
+        },
+        "name": "Normalpreis",
+        "ticketNumber": "RMSESE",
+        "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDQwLAIUDbtYipO+z7T/u8NVQWelF+BaLXsCFAUNGQyVpb3TU4tDGS6d2yxoDCaWAAAAADAyMzB4nE1PwUrDQBT0U3psC8F5b3eTjbeEbLDQiGarohfJIUKwprKt4Of7XkXonoaZ2Zl5j2+3oWpAgDOAR9/FEENWXF08KuFYLGQ4RxOaoMZNAwbIozTWWmXqrTDsLJgY/cNzbun+5fUih+1fDrv/vIKcl3yO0AVEd4f0Oey/0jgdhZJ8nDWjoBJQCnCUIUMURVkF0g6OYiQnjGvTMH+8f6fTshumeSV0Loa8HtN+mqOsE1P5tKluFqFdL7vQX29X63rXimS0sB2nn8XukI6nUe36mXUGFzpJWj2VhSyHlyPO1/8C+BtISA==",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Feix Torsten"
+        },
+        "validFrom": "2010-05-24T00:00:00",
+        "validUntil": "2010-05-25T23:59:59"
+    }
+]

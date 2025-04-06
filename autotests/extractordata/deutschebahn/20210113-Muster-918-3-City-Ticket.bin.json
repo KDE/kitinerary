@@ -1,0 +1,66 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2020-10-27T13:45:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.1072998046875,
+                    "longitude": 8.662619590759277
+                },
+                "identifier": "ibnr:8000105",
+                "name": "Frankfurt(Main)+City"
+            },
+            "departureDay": "2021-01-13",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 51.312198638916016,
+                    "longitude": 9.447219848632812
+                },
+                "identifier": "ibnr:8003200",
+                "name": "Kassel+City"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:0080"
+            }
+        },
+        "reservationNumber": "F4X6XA",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "issuedBy": {
+                "@type": "Organization",
+                "identifier": "uic:0080"
+            },
+            "name": "Flexpreis",
+            "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDcwLAIUa2RvgGwsvB8Wl3Fm5ibDolHDC1YCFEkX9OYG36gVDrL6TBdDeJcmI+R0AAAAADAzMjN4nG2QzU7CQBDHiwf14sVTT4bEg1BTnNmPUjyQFLoFYoXECuFmGgVsJIS0lagnX8h38QF8GGeQAwd3D/vf3/7nY2f80DdBCAigJYAPkZp608CV1t4STQRBG6XSEJrQsLETgwSJGgSiBBR8qr9TK7+pPKW1hV4CnBta0XL2ts5nWUFAEEBBQrIISLRIaHTBhYRTcAwJRUIkZKQqgHiTFsVsednNyndCHueJ8nT1Mn/Ny9ptmq3quzdBFRVOBsF1tTce3ju1juk4fXOXOFHo9Ew8vOqOTOzEozh2eoM6BchtQ4/PeTYvq3FalMQ8rs5tCp9fmZ7vLAl9nHtE2QBs8JeJiC1Re4S6BsWcNGejIM2jm4x5Jn7TeqLhVg4uvmpzuzz6tjdt16q0GzbPnOHxz+GJvfk4+6TL4j/HYuc4zX4BueBqQw==",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            },
+            "validFrom": "2021-01-13T00:00:00",
+            "validUntil": "2021-01-14T23:59:59"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    }
+]

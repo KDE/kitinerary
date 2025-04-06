@@ -1,0 +1,70 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2020-10-27T13:18:00",
+        "programMembershipUsed": {
+            "@type": "ProgramMembership",
+            "programName": "BahnCard 25"
+        },
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 51.312198638916016,
+                    "longitude": 9.447219848632812
+                },
+                "identifier": "ibnr:8003200",
+                "name": "Kassel"
+            },
+            "departureDay": "2021-01-11",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.00130081176758,
+                    "longitude": 8.258649826049805
+                },
+                "identifier": "ibnr:8000240",
+                "name": "Mainz"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:0080"
+            }
+        },
+        "reservationNumber": "RPEX4F",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "issuedBy": {
+                "@type": "Organization",
+                "identifier": "uic:0080"
+            },
+            "name": "Super Sparpreis",
+            "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDcwLAIUByFJlJWbR4o51eJ2p0HQfFkmzB8CFEnOvCKKnSGol+bWLmqJoHuiEgyeAAAAADAyODV4nGWQzUrDQBDHNwrixaOQkwQ8CGrKzO5sPjwUqklQrCIuLb1J0GgDRUKSUujJF/KNfAHvPoAzKiK4e9jf/ve/8zW5O89HGSCANQAJ3N7kMypCUn+WjhE0bzSYQJZnuRhPx2BAJxYMIgLy++9pKYkJYySFkQOJjdYtm6oNXFO2TVvVHcsaWNcMRmDEkDJEGGJIqZNI8pWBGLRjJ1ome1XWz2u+ROK+LLuuWjhOyh66nh4WYbFYPs0DpBNIg4uzHDHlIrT5SnY/b+vHPhiXXc+aRNBomBJ5FXX/x+K4LUmPOAAcSFOs6H+KFGQ0cZVGgpFYZDjTyfdE1QOPz/MOXnc//H7z3V8Nj5Q3PPaV2piJuP22teOv1nsvnxMlWpE=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            },
+            "validFrom": "2021-01-11T00:00:00",
+            "validUntil": "2021-01-11T23:59:59"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    }
+]

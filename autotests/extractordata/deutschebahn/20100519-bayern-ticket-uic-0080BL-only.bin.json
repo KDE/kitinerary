@@ -1,0 +1,23 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:0080"
+        },
+        "name": "Bayern-Ticket",
+        "ticketNumber": "XO1BWV",
+        "ticketToken": "aztecbin:I1VUMDEwMDgwMDAwMDQwLgIVALY29PAnFz3C712GEqJ17HnLaC7CAhUAm41Mtd9YF2rpfIIrEzM55Lt7qNkAADAxNzl4nE2OwQrCMBBE+yn+QGB2k5jmaG1FreKh1XoTkR6KUKH2oH/vLlJoIGR4s5nZ821brHIQ4C2Q4nqirLkYl8wORXiWEWJ2yIu80MFdDgYoRbTOOSXZQQhFpXKbWJbYH+tZDvM/Z3rJBvIhSRAr6AZks/u3HXpTd49nOwqUHDFEWBVrEVGE9wZGKE02ST+44gpstX3Tdp9F/RreY9sLW6pL6gaNlF8pxSDdSHVh3f8HvHc25Q==",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "Feix Torsten"
+        },
+        "validFrom": "2010-05-22T00:00:00",
+        "validUntil": "2010-05-22T23:59:59"
+    }
+]
