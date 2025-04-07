@@ -1,0 +1,28 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080",
+            "name": "DB AG"
+        },
+        "name": "Deutschland-Ticket",
+        "priceCurrency": "EUR",
+        "ticketNumber": "QWXY3BTA",
+        "ticketToken": "aztecbin:I1VUMDExMDgwMDAwMDcwLgIVAKXiBQAMEm72hsKhWLeQy3dPNCztAhUAkwQ9Hnv7amig3ce0ptzytJbOkqcAADAzOTV4nAuN93B1dDEwNDAwNTY0sDAIDI+INHYKcWRAAkbmBkZGBkamhgaGJgYuri6uofEhPo6RQE3GBoZBziFGBgaGxkBsAaSMgRwDS7fEjKLsxKKSVKCxRkB1lgYgUd/S4pLUotzEPAMDM7iosW9ihYEhRK8hyBCX1NKS4uSMnMS8FN2QzOTs1BIDQ6AhIAgEhkBHmJoCKTMQxyAgtag4P08jNU8T5BYgNAEpMgG51sAMLGAKEgBq0APqNzMwR4gYWAEpM7DzEGqMgSIWCBFjsBozM5iIoZEhSD3QcKBjjM3dD+/JKclMVyjLz1UA26AHslghKbMYzDUGc0Pj3XxcI0DOMzVOWsLIe0i6pS8wQEtJkInLkmNx3NFpBascHUSZG9hmHfogMuvVsxenntw6dOfOCYaGJjUGfoYTLOa5rmdOCi0Tbm85dnjxtD02u1LV0hkMM5gcHIQww4pJbAWj2R4Gxtcua25OTkt5+MCZr6HFZ42Ig4pDw9dFYVkHmxkEBETOPGDTZQAAbKqOAA==",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "totalPrice": 58,
+        "underName": {
+            "@type": "Person",
+            "familyName": "Mustermann",
+            "givenName": "Max",
+            "name": "Max Mustermann"
+        },
+        "validFrom": "2025-02-27T10:14:00+01:00",
+        "validUntil": "2025-03-01T03:00:00+01:00"
+    }
+]

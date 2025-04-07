@@ -1,0 +1,28 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080",
+            "name": "DB AG"
+        },
+        "name": "Deutschland-Ticket Jobticket",
+        "priceCurrency": "EUR",
+        "ticketNumber": "M8T403EA",
+        "ticketToken": "aztecbin:I1VUMDExMDgwMDAwMDcwLAIUI5zlnNZayjP8xZwhQcUbqCXvG0ACFDUuljHIQF4mYiB4aMYxlZ9F0hzfAAAAADA0MDV4nAuN93B1dDEwNDAwNTY0sDDwtQgxMTB2dWRAAkbmBkZGBkamhgaGhgYuri6uofEhPo6RQE3GhoZBziFGBgaGxkBsAaSMgRwDS7fEjKLsxKKSVKCxRkB1lgYgUd/S4pLUotzEPAMDM7iosW9iBdBcsF6gK4wsXFJLS4qTM3IS81J0QzKTs1NLFLzyk0rALANDoHEgCARAtxiamgIpMxDHICC1qDg/TyM1T9PAGMg1NDABKTIBudvADCxgChIAatAD6jczMEeIGFgBKTOwQxFqjIEiFggRY7AaMzOYiKGRIUg90HCgY4zN3Q/vySnJTFcoy89VANugB7JYISmzGMw1BnND4918XCNAzjMzTlrCyHtIuqUv0EJLSZCJy5Jj1qPFbjyPDjqIMjewzTr0QWTWq2cvTj25dejOnRMMDU1qDPwMJ1j8Ftxz5Q7NFW5vOXZ48bQ9NrtS1cwZDDOYHBxk8IUak2gbo9keBsbXLmtuTk5LefjAma+hZ8VfrwUqDg1fF4VlHWxmEBAQOfaATZcBAAf2lfo=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "totalPrice": 55.1,
+        "underName": {
+            "@type": "Person",
+            "familyName": "Mustermann",
+            "givenName": "Max",
+            "name": "Max Mustermann"
+        },
+        "validFrom": "2025-02-27T10:11:00+01:00",
+        "validUntil": "2025-03-01T03:00:00+01:00"
+    }
+]

@@ -1,0 +1,17 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "ProgramMembership",
+        "member": {
+            "@type": "Person",
+            "familyName": "Mustermann",
+            "givenName": "Maxime",
+            "name": "Maxime Mustermann"
+        },
+        "membershipNumber": "7081411245312661",
+        "programName": "Probe BahnCard 25 (2. Klasse)",
+        "token": "aztecbin:I1VUMDExMDgwMDAwMDEwLQIVAJCTCoTdr4BewUV1X5XBBpAfpSr7AhQ1ARWV8w80j6a+N0ay23jUHJvIPgAAADA1MTZ4nG1RTWsTQRgOgiVGWigF9Ti9SIJmmZn9bE9udhMTsgkhTfqBgXTWDMng7gT2I3oUlFLRg1IoFLwZQYqXSk/ixaogeCpItMcelB68+QecFT9AfC8z78Pzfjzv0+6Wi6YNEYSqjKABUR7rjrGqLmmpP4EEjCFWYBJ20S62uy3HXBNFsmE0rRYWsA4TjiwviL9hFMxy3TKbNvgnWmsNUK4CZSHTCIYuBQUy4BYJegCrIIslUPVIGNJctmBhNZdh/IYXh2xEQdOsOA2nvSS2FENQMkRT6nEA+m9eeRHrA5cysDwM8h3ukT4FlHEaAuJHHrs+oLzDHfFGLvN6JA5vUhbSsMOhLBQgFQpdinr1V6PR0AfIkCCSEsXgN+yyECBdgvgnDDVNE7Vqcg+hWpwHKnqSyHImk6nwAXFpkGU8t1gjt5hPL4NaHEY08AnnSEmmygkbawUrX499nwZAhwZSEMKKsAFrGhJ7JTSU0GCVBBHl+YoN/trT7pac4qpohDTFfZjaOJ4+OAWebdrp7JdUK5XqTc5vbE8a408remnl4uTc15P08v7H/+F3RjMX9t13W6Xnn194R5tXyuvW7kztmzNOO/np957k3J0qjU9PFd+e8R9I3HsqbJw/9Fr3Fx/vfN/eWz++/eFo7trZrSeXgur87OHsPfboJTl4vbuzN3fyA5iUuwA=",
+        "validFrom": "2024-01-18T00:00:00",
+        "validUntil": "2024-02-18T00:00:00"
+    }
+]
