@@ -40,7 +40,7 @@
     {
         "filter": [
             {
-                "match": "^\\d{23}$",
+                "match": "^\\d{23,25}$",
                 "mimeType": "text/plain",
                 "scope": "Descendants"
             }
