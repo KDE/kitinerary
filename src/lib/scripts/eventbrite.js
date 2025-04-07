@@ -66,10 +66,24 @@ function parsePdf(pdf, node, triggerNode) {
     res.reservationNumber = triggerNode.content.substr(0, 10);
     res.reservedTicket.ticketToken = 'qrCode:' + triggerNode.content;
     res.reservationFor.name = page.textInRect(0.0, 0.12, 1.0, 0.18);
-    const multiDay = page.textInRect(0.0, 0.27, 1.0, 0.3).match(/(\d\d\.? \S+ \d{4}).*? (\d\d:\d\d).*?(\d\d\.? \S+ \d{4}).*(\d\d:\d\d)/);
-    const oneDay = page.textInRect(0.0, 0.27, 1.0, 0.3).match(/(\d\d\.? \S+ \d{4}).*? (\d\d:\d\d).*?(\d\d:\d\d)/);
-    res.reservationFor.startDate = JsonLd.toDateTime(oneDay[1] + ' ' + oneDay[2], ['dd MMMM yyyy hh:mm', 'dd. MMMM yyyy hh:mm'], ['en', 'de', 'fr']);
-    res.reservationFor.endDate = JsonLd.toDateTime((multiDay ? multiDay[3] : oneDay[1]) + ' ' + oneDay[3], ['dd MMMM yyyy hh:mm', 'dd. MMMM yyyy hh:mm'], ['en', 'de', 'fr']);
+    const dtText = page.textInRect(0.0, 0.27, 1.0, 0.3);
+    for (const rx of [/(\d\d\.? \S+ \d{4})/, /(\S+ \d{1,2}, \d{4})/]) {
+        startDate = dtText.match(rx);
+        if (startDate) {
+            endDate = dtText.substr(startDate.index + startDate[0].length).match(rx);
+            break;
+        }
+    }
+    for (const rx of [/ (\d\d:\d\d)/, / (\d\d?:\d\d [AP]M)/]) {
+        startTime = dtText.match(rx);
+        if (startTime) {
+            endTime = dtText.substr(startTime.index + startTime[0].length).match(rx);
+            break;
+        }
+    }
+    const timeFormats = ['dd MMMM yyyy hh:mm', 'dd. MMMM yyyy hh:mm', 'MMMM d, yyyy h:mm AP'];
+    res.reservationFor.startDate = JsonLd.toDateTime(startDate[1] + ' ' + startTime[1], timeFormats , ['en', 'de', 'fr']);
+    res.reservationFor.endDate = JsonLd.toDateTime((endDate ? endDate[1] : startDate[1]) + ' ' + endTime[1], timeFormats, ['en', 'de', 'fr']);
     const addr = page.textInRect(0.0, 0.2, 1.0, 0.27).split(',');
     res.reservationFor.location.name = addr[0];
     res.reservationFor.location.address.addressCountry = addr[addr.length - 1];
