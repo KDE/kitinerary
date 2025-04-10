@@ -1,0 +1,112 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-10-06T13:03:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Rosenheim"
+            },
+            "departureDay": "2022-10-30",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Flensburg"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-10-30T17:35:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            },
+            "trainNumber": "ICE803"
+        },
+        "reservationNumber": "R4YNMU9E",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Super Sparpreis Senior",
+            "ticketNumber": "ACH6CGZU",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDJ3wv5HLsdvUgj5Pp2IQbjXJ7iH6VN5hnhAxGRD8HdnHKRuUp/3UHXUmXruIREhbszKtZFP9osfqEJZYwJaz2BCMDI4NnicARMB7P5VX0ZMRVgxMzAyNzVisgCG4Q3Bosw8FREIgQUchFJpZnTarmKgCoGACJjC5ugOpsbQ5NLM6MwBgIIiK/+AgBEGHIbQ49qqGyYcVBGw6OWvDy6Zb0LyT0wZoSjNjK3ObE6uTOEqTe5src0MrS2kis0sJ0QHhiYHBgfJCQVISmoFRQmF6WnoqoUlSKjFSGnlScVJoEDABpMOK4YMwzB9wDAB5MOKxYsHIZlq4V70wZr0LyQSpN7mytzQytLaEozYytzmxOrkzj6s0sJ0QHhiYHBgfJpUUKZUloJUjF6cVIyIUlSQVJCQAgwAaTDit3DYNsvcAyABoA0sOAEgIQspurgyuRApuDC5ODkytLmQKbK3NLe5AKBTfOc=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-10-06T13:03:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Rosenheim"
+            },
+            "departureDay": "2022-10-30",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Flensburg"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-10-30T20:05:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            },
+            "trainNumber": "ICE1109"
+        },
+        "reservationNumber": "R4YNMU9E",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Super Sparpreis Senior",
+            "ticketNumber": "ACH6CGZU",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDJ3wv5HLsdvUgj5Pp2IQbjXJ7iH6VN5hnhAxGRD8HdnHKRuUp/3UHXUmXruIREhbszKtZFP9osfqEJZYwJaz2BCMDI4NnicARMB7P5VX0ZMRVgxMzAyNzVisgCG4Q3Bosw8FREIgQUchFJpZnTarmKgCoGACJjC5ugOpsbQ5NLM6MwBgIIiK/+AgBEGHIbQ49qqGyYcVBGw6OWvDy6Zb0LyT0wZoSjNjK3ObE6uTOEqTe5src0MrS2kis0sJ0QHhiYHBgfJCQVISmoFRQmF6WnoqoUlSKjFSGnlScVJoEDABpMOK4YMwzB9wDAB5MOKxYsHIZlq4V70wZr0LyQSpN7mytzQytLaEozYytzmxOrkzj6s0sJ0QHhiYHBgfJpUUKZUloJUjF6cVIyIUlSQVJCQAgwAaTDit3DYNsvcAyABoA0sOAEgIQspurgyuRApuDC5ODkytLmQKbK3NLe5AKBTfOc=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    }
+]

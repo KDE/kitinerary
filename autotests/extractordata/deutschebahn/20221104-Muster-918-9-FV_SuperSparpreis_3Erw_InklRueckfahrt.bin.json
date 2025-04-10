@@ -1,0 +1,167 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-10-06T14:15:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Rosenheim"
+            },
+            "departureDay": "2022-11-04",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Hamburg"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-11-04T03:20:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            },
+            "trainNumber": "ICE591"
+        },
+        "reservationNumber": "0ZH2EWKX",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Super Sparpreis",
+            "ticketNumber": "3KP3DXK7",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDJZ51mHlJUE0sdtwPwo/2njuxZtvJom4GCI+0C9nXGP8SbEYqTdQcsv5JB6D/pqZRRK6omf9TNAJnhR77Tl6SUQMDMwMXicASIB3f5VX0ZMRVgxMzAyOTBisgCG4Q3Bos1cFREIgQUchDC1IZRa8uwgCoGACJjC5ugOpsbQ5NLM6HYBgIIiK/8AgBDOXQZxLEtuGyYcVBGw6OWvDy6Zb0LIL0wZoOkMLaxOrkzhKk3ubK3NDK0tpGrNLCdEB4YmBwYHyQgqRUUKqKXpySUlSQVIyIVFCcXoJSVJoGDABpMOK1csQ8MhwDABpMOK3cMQ8aBwDAB5MOKxYsmIeRa4V70wZr0LIISpN7mytzQytLaDpDC2sTq5M5GrNLCdEB4YmBwYHyaVFCCXpxSVIyIVJBUUJySXqqKUlSQgqQEDAB5MOKxYsmAeg+4BgA0mHFbuGQeja4B4ADgApYAWAgIAepurgyuRApuDC5ODkytLmLw+cbw=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-10-06T14:15:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Rosenheim"
+            },
+            "departureDay": "2022-11-04",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Hamburg"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-11-04T06:56:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            },
+            "trainNumber": "ICE781"
+        },
+        "reservationNumber": "0ZH2EWKX",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Super Sparpreis",
+            "ticketNumber": "3KP3DXK7",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDJZ51mHlJUE0sdtwPwo/2njuxZtvJom4GCI+0C9nXGP8SbEYqTdQcsv5JB6D/pqZRRK6omf9TNAJnhR77Tl6SUQMDMwMXicASIB3f5VX0ZMRVgxMzAyOTBisgCG4Q3Bos1cFREIgQUchDC1IZRa8uwgCoGACJjC5ugOpsbQ5NLM6HYBgIIiK/8AgBDOXQZxLEtuGyYcVBGw6OWvDy6Zb0LIL0wZoOkMLaxOrkzhKk3ubK3NDK0tpGrNLCdEB4YmBwYHyQgqRUUKqKXpySUlSQVIyIVFCcXoJSVJoGDABpMOK1csQ8MhwDABpMOK3cMQ8aBwDAB5MOKxYsmIeRa4V70wZr0LIISpN7mytzQytLaDpDC2sTq5M5GrNLCdEB4YmBwYHyaVFCCXpxSVIyIVJBUUJySXqqKUlSQgqQEDAB5MOKxYsmAeg+4BgA0mHFbuGQeja4B4ADgApYAWAgIAepurgyuRApuDC5ODkytLmLw+cbw=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-10-06T14:15:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Rosenheim"
+            },
+            "departureDay": "2022-11-04",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Hamburg"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-11-04T09:17:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            },
+            "trainNumber": "ICE1121"
+        },
+        "reservationNumber": "0ZH2EWKX",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Super Sparpreis",
+            "ticketNumber": "3KP3DXK7",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDJZ51mHlJUE0sdtwPwo/2njuxZtvJom4GCI+0C9nXGP8SbEYqTdQcsv5JB6D/pqZRRK6omf9TNAJnhR77Tl6SUQMDMwMXicASIB3f5VX0ZMRVgxMzAyOTBisgCG4Q3Bos1cFREIgQUchDC1IZRa8uwgCoGACJjC5ugOpsbQ5NLM6HYBgIIiK/8AgBDOXQZxLEtuGyYcVBGw6OWvDy6Zb0LIL0wZoOkMLaxOrkzhKk3ubK3NDK0tpGrNLCdEB4YmBwYHyQgqRUUKqKXpySUlSQVIyIVFCcXoJSVJoGDABpMOK1csQ8MhwDABpMOK3cMQ8aBwDAB5MOKxYsmIeRa4V70wZr0LIISpN7mytzQytLaDpDC2sTq5M5GrNLCdEB4YmBwYHyaVFCCXpxSVIyIVJBUUJySXqqKUlSQgqQEDAB5MOKxYsmAeg+4BgA0mHFbuGQeja4B4ADgApYAWAgIAepurgyuRApuDC5ODkytLmLw+cbw=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    }
+]

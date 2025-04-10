@@ -1,0 +1,57 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-10-06T12:49:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Essen"
+            },
+            "departureDay": "2022-10-20",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Köln"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-10-20T14:36:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            },
+            "trainNumber": "ICE1059"
+        },
+        "reservationNumber": "P2F8YCNE",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Super Sparpreis",
+            "ticketNumber": "L5C8XWNA",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDIXthbO+SMtPjh+C6TJiVep6orc0r29DAoBobvSGKlAXwmwLsHKNJ1Qfmqaq+5YPuQ8yh1e3Ie3E4FEFEH+XNFeMDE4MnicAasAVP9VX0ZMRVgxMzAxNzFisgCG4Q3BoswEFREIgQUchFBlGcWYc6KgCoGACJjC5ugOpsbQ5NLM6HYBgIIiK98AgBExrDcWK86CGyYcVBGw6OWvDy6ZT0nML0c44Kl4ds2NwKiubmytw8rNLCdEB4YmBwYHxQiFSIqlSakF6mjlSOpKqSVK5SAgwAeTDisWDVyD22NAPAA0AKWAFgIBAHqbq4MrkQKbgwuTg5MrS5iFyEUY",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    }
+]

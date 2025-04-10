@@ -1,0 +1,57 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-04-19T11:16:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Reutlingen"
+            },
+            "departureDay": "2022-04-22",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Mannheim"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-04-22T11:59:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            },
+            "trainNumber": "ICE573"
+        },
+        "reservationNumber": "NA5AMJY2",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Super Sparpreis",
+            "ticketNumber": "KGUK98AV",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDJvjeer7k8DwYTgZn16n5aM1qV0FOTXmv32dXK9xBmmrB/VUrBTasH0X075hF5sN73rWM8Jt1gxST1GmM2JkHSWMDE5NnicAbkARv9VX0ZMRVgxMzAxODVisgCG4Q3BjYqQFREIgQUchE6C1gzZVlkgCoAACKjQysIIqMrm6QEERFe+AQAiXHqy3LiDWDZMOKgjYdHLXh5dMp6SLd6hHwITWFubmhlaW0KUmV1dGxpbmdlbitWaWE6IDwxMDgwPihIRCpCUipCUlQvR1JBQipLQSpQRikqVkFJKlMqUExPAQYANJhxWrdmBFntAEAA0AKWAEgIAepurgyuRApuDC5ODkytLmLyYRy0=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Test",
+            "givenName": "Thea",
+            "name": "Thea Test"
+        }
+    }
+]

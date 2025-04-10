@@ -1,0 +1,112 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-10-06T12:59:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Stuttgart"
+            },
+            "departureDay": "2022-10-30",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Essen"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-10-30T17:53:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            },
+            "trainNumber": "ICE929"
+        },
+        "reservationNumber": "M38UAHEC",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Super Sparpreis Young",
+            "ticketNumber": "FKR6G0FR",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDK5JiXRjIDGNRT3I980KgRLe6JsyEWPCUlQwE6h8j01s8Xghg9ZrDsDKnOSbFvOOBcHjTXaQV3TOxu4OZ5iUz7PMDIwOHicAcUAOv9VX0ZMRVgxMzAxOTdisgCG4Q3BoswsFREIgQUchE1m4qwZEWGgCoGACJjC5ugOpsbQ5NLM6MwBgIIiK9+AgBEaXSbR2EakGyYcVBGw6OWvDy6ZT0c471BtIKiubmytwSpujq6OjOwuToSKzSwnRAeGJgcGB8UK5eiKpSVJZUlp5UUIxUmoJemrRSVKyCkgQMAGkw4rlk5DMMXAMAGkw2Lly5DM1XAMgAaAFLDgBICMKqbq4MrkQKbgwuTg5MrS5kCy3urczk5hW0U=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-10-06T12:59:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Stuttgart"
+            },
+            "departureDay": "2022-10-30",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Essen"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2022-10-30T20:37:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            },
+            "trainNumber": "IC1999"
+        },
+        "reservationNumber": "M38UAHEC",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Super Sparpreis Young",
+            "ticketNumber": "FKR6G0FR",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDK5JiXRjIDGNRT3I980KgRLe6JsyEWPCUlQwE6h8j01s8Xghg9ZrDsDKnOSbFvOOBcHjTXaQV3TOxu4OZ5iUz7PMDIwOHicAcUAOv9VX0ZMRVgxMzAxOTdisgCG4Q3BoswsFREIgQUchE1m4qwZEWGgCoGACJjC5ugOpsbQ5NLM6MwBgIIiK9+AgBEaXSbR2EakGyYcVBGw6OWvDy6ZT0c471BtIKiubmytwSpujq6OjOwuToSKzSwnRAeGJgcGB8UK5eiKpSVJZUlp5UUIxUmoJemrRSVKyCkgQMAGkw4rlk5DMMXAMAGkw2Lly5DM1XAMgAaAFLDgBICMKqbq4MrkQKbgwuTg5MrS5kCy3urczk5hW0U=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    }
+]
