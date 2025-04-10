@@ -66,21 +66,31 @@ public:
 
     /** Read departure station info from the given FCB travel document, if applicable. */
     static void readDepartureStation(const QVariant &doc, TrainStation &station);
+    template <typename T, typename StationCodeTable>
+    static inline void readDepartureStation(const T &data, StationCodeTable codeTab, TrainStation &station)
+    {
+        station.setName(data.fromStationNameUTF8);
+        station.setIdentifier(FcbUtil::fromStationIdentifier(codeTab, data));
+        fixStationCode(station);
+    }
     template <typename T>
     static inline void readDepartureStation(const T &data, TrainStation &station)
     {
-        station.setName(data.fromStationNameUTF8);
-        station.setIdentifier(FcbUtil::fromStationIdentifier(data));
-        fixStationCode(station);
+        readDepartureStation(data, data.stationCodeTable, station);
     }
     /** Read arrival station info from the given FCB travel document, if applicable. */
     static void readArrivalStation(const QVariant &doc, TrainStation &station);
+    template <typename T, typename StationCodeTable>
+    static inline void readArrivalStation(const T &data, StationCodeTable codeTab, TrainStation &station)
+    {
+        station.setName(data.toStationNameUTF8);
+        station.setIdentifier(FcbUtil::toStationIdentifier(codeTab, data));
+        fixStationCode(station);
+    }
     template <typename T>
     static inline void readArrivalStation(const T &data, TrainStation &station)
     {
-        station.setName(data.toStationNameUTF8);
-        station.setIdentifier(FcbUtil::toStationIdentifier(data));
-        fixStationCode(station);
+        readArrivalStation(data, data.stationCodeTable, station);
     }
     /** Fix known issues with station identifiers. */
     static void fixStationCode(TrainStation &station);

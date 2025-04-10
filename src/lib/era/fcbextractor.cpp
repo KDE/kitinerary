@@ -315,6 +315,48 @@ void FcbExtractor::extractReservation(const QVariant &res, const Fcb::UicRailTic
     }).visit<FCB_VERSIONED(ReservationData)>(res);
 }
 
+[[nodiscard]] static bool extractValidRegion(const QVariant &regionalValidity, const QDateTime &issuingDateTime, const TrainReservation &baseRes, const TrainTrip &baseTrip, QList<QVariant> &result)
+{
+    return VariantVisitor([&baseTrip, issuingDateTime, &baseRes, &result](auto &&trainLink) {
+        TrainTrip trip(baseTrip);
+
+        // TODO station identifier, use FcbExtractor::read[Arrival|Departure]Station
+        if (trainLink.fromStationNameUTF8IsSet()) {
+            TrainStation dep;
+            dep.setName(trainLink.fromStationNameUTF8);
+            FcbExtractor::fixStationCode(dep);
+            trip.setDepartureStation(dep);
+        }
+
+        if (trainLink.toStationNameUTF8IsSet()) {
+            TrainStation arr;
+            arr.setName(trainLink.toStationNameUTF8);
+            FcbExtractor::fixStationCode(arr);
+            trip.setArrivalStation(arr);
+        }
+
+        trip.setDepartureDay({}); // reset explicit value in case of departure after midnight
+        trip.setDepartureTime(trainLink.departureDateTime(issuingDateTime));
+
+        if (trainLink.trainNumIsSet()) {
+            trip.setTrainNumber(QString::number(trainLink.trainNum));
+        } else {
+            trip.setTrainNumber(QString::fromUtf8(trainLink.trainIA5));
+        }
+
+        ExtractorValidator validator;
+        validator.setAcceptedTypes<TrainTrip>();
+        if (validator.isValidElement(trip)) {
+            TrainReservation res(baseRes);
+            res.setReservationFor(trip);
+            result.push_back(res);
+            return true;
+        }
+
+        return false;
+    }).visit<FCB_VERSIONED(TrainLinkType)>(regionalValidity);
+}
+
 void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result)
 {
     const auto issuingDateTime = FcbExtractor::issuingDateTime(fcb);
@@ -330,6 +372,8 @@ void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTick
             res.setReservationNumber(ticket.ticketNumber());
         }
         t.setTicketNumber(fcbReference(nrt));
+        t.setIssuedBy({});
+        res.setReservedTicket(t);
 
         res.setUnderName(FcbExtractor::person(fcb));
         res.setProgramMembershipUsed(::extractCustomerCard(nrt.tariffs));
@@ -344,7 +388,6 @@ void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTick
         if (baseTrip.provider().name().isEmpty() && baseTrip.provider().identifier().isEmpty()) {
             baseTrip.setProvider(ticket.issuedBy());
         }
-        t.setIssuedBy({});
         TrainStation dep;
         FcbExtractor::readDepartureStation(nrt, dep);
         baseTrip.setDepartureStation(dep);
@@ -359,51 +402,37 @@ void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTick
         // check for TrainLinkType regional validity constrains
         bool trainLinkTypeFound = false;
         for (const auto &regionalValidity : nrt.validRegion) {
-            if (regionalValidity.value.userType() != qMetaTypeId<Fcb::v13::TrainLinkType>()) {
-                continue;
-            }
-            const auto trainLink = regionalValidity.value.template value<Fcb::v13::TrainLinkType>();
-            TrainTrip trip(baseTrip);
-
-            // TODO station identifier, use FcbExtractor::read[Arrival|Departure]Station
-            if (trainLink.fromStationNameUTF8IsSet()) {
-                TrainStation dep;
-                dep.setName(trainLink.fromStationNameUTF8);
-                FcbExtractor::fixStationCode(dep);
-                trip.setDepartureStation(dep);
-            }
-
-            if (trainLink.toStationNameUTF8IsSet()) {
-                TrainStation arr;
-                arr.setName(trainLink.toStationNameUTF8);
-                FcbExtractor::fixStationCode(arr);
-                trip.setArrivalStation(arr);
-            }
-
-            trip.setDepartureDay({}); // reset explicit value in case of departure after midnight
-            trip.setDepartureTime(trainLink.departureDateTime(issuingDateTime));
-
-            if (trainLink.trainNumIsSet()) {
-                trip.setTrainNumber(QString::number(trainLink.trainNum));
-            } else {
-                trip.setTrainNumber(QString::fromUtf8(trainLink.trainIA5));
-            }
-
-            if (validator.isValidElement(trip)) {
-                res.setReservationFor(trip);
-                res.setReservedTicket(t);
-                result.push_back(res);
-                trainLinkTypeFound = true;
-            }
+            trainLinkTypeFound |= extractValidRegion(regionalValidity.value, issuingDateTime, res, baseTrip, result);
         }
 
         if (!trainLinkTypeFound) {
             if (validator.isValidElement(baseTrip)) {
                 res.setReservationFor(baseTrip);
-                res.setReservedTicket(t);
                 result.push_back(res);
             }
-            // TODO handle nrt.returnIncluded
+        }
+
+        // same for return trips
+        if (nrt.returnIncluded) {
+            TrainStation retDep;
+            FcbExtractor::readDepartureStation(nrt.returnDescription, nrt.stationCodeTable, retDep);
+            TrainStation retArr;
+            FcbExtractor::readArrivalStation(nrt.returnDescription, nrt.stationCodeTable, retArr);
+
+            TrainTrip retBaseTrip;
+            retBaseTrip.setProvider(baseTrip.provider());
+            retBaseTrip.setDepartureStation(retDep);
+            retBaseTrip.setArrivalStation(retArr);
+
+            bool retTrainLinkTypeFound = false;
+            for (const auto &regionalValidity : nrt.returnDescription.validReturnRegion) {
+                retTrainLinkTypeFound |= extractValidRegion(regionalValidity.value, issuingDateTime, res, retBaseTrip, result);
+            }
+
+            if (!retTrainLinkTypeFound && validator.isValidElement(retBaseTrip)) {
+                res.setReservationFor(retBaseTrip);
+                result.push_back(retBaseTrip);
+            }
         }
     }).visit<FCB_VERSIONED(OpenTicketData)>(res);
 }
