@@ -10,9 +10,7 @@ All extractor scripts are written in JavaScript and [stored in
 # How to make your own extractor script
 
 It's highly recommended to use the [KItinerary Workbench](https://invent.kde.org/pim/kitinerary-workbench) to develop
-and test your extractor scripts.
-
-It can be installed via Flatpak. For more information, see
+and test your extractor scripts. How to install and more information, see
 the [KItinerary Workbench README](https://invent.kde.org/pim/kitinerary-workbench/-/blob/master/README.md).
 
 ## Creating a new extractor script
@@ -25,11 +23,12 @@ To create a new extractor script, you need to create a new files in the `$XDG_DA
 
 ## Script declaration
 
-Kitinerary uses a JSON file to declare the extractor scripts. This file sets filtering rules by which it knows which
+Kitinerary uses a JSON file to declare the extractor scripts. This file sets filtering rules by which it knows, which
 extractor to run and defines the script itself.
 
 > **Note:**: Multiple extractors can run on a single document, if more than one extractor outputs valid data it will be
 > merged into single output.
+> 
 > **Note:**: Multiple script declarations can exist for one js extractor file. Usefull if there many types of documents
 > but same script can be used to extract data from them.
 
@@ -72,13 +71,13 @@ An extractor script filter consists of the following four properties:
   "[...]": "[...]",
   "filter": [
     {
-      "mimeType": "...",
+      "mimeType": "text/plain",
       // Specifies the type of document you're looking for (e.g., QR code in document, plain text). 
-      "field": "...",
+      "field": "",
       // If it is a complex document (like email with fields), it sets which filed of the document run "match" on. This is ignored for nodes containing basic types such as plain text or binary data.
-      "match": "...",
+      "match": "KDE.org/airlines",
       //a regular expression or exact string we look for.
-      "scope": "..."
+      "scope": "Descendants"
       //this defines the relation to the node the script should be run on (Current, Parent, Children, Ancestors or Descendants).
     }
     // [...]
@@ -201,7 +200,7 @@ PDF documents containing the string "My Ferry Booking" anywhere.
 
 ## Extractor script
 
-Extractor scripts are run inside a QJSEngine, it is not a full JS environment, and not everything is supported.
+Extractor scripts are run inside a QJSEngine, it isn't a full JS environment, and not everything is supported.
 There are some additional APIs available to extractor scripts (technical docs can be found
 here [KItinerary::JsApi](https://api.kde.org/kdepim/kitinerary/html/namespaceKItinerary_1_1JsApi.html).
 
@@ -269,7 +268,6 @@ console.log(outputString) // Konqi
 // Usually not needed, as the extractor engine will create barcode nodes automatically
 const QRCode = ImageOfAztecQRCodeNotDecodedByExtractorEngine;
 const DecodedAztec = Barcode.decodeAztec(ImageOfAztecQRCodeNotDecodedByExtractorEngine)
-z
 console.log(DecodedAztec); // ["KDE airlines", "KDE Konqi Airport (KDQ)", "KDE Katie City Airport (KDA)", "20.02.2025", "08:36", "20.02.2025", "09:56", "KD 1096", "magicalstringsoweknowthisticketwasnottamperedwithbyevilwizards"]
 ```
 
@@ -317,14 +315,14 @@ It's a object that represents a node in the document tree:
 └── application/pdf // Ticket in PDF format
     ├── internal/qimage // Image of the QR code
     │   └── text/plain // Decoded text from the QR code
-    └── text/plain // Usually text inside of PDF
+    └── text/plain // Usually text inside the PDF
 ```
 
 ```js
 function main(pdf, node, barcode) {
     cnsole.log(pdf.content) // Automagically extracted PDF content, no need to point at it.
-    imageOfQR = node.childNodes[0];
-    textFromQR = imageOfQR.childNodes[0].content;
+    let imageOfQR = node.childNodes[0];
+    let textFromQR = imageOfQR.childNodes[0].content;
 }
 
 ```
@@ -351,10 +349,10 @@ PdfDocument is a object that represents a PDF document; it has the following pro
 
   ```js
   // If ticket is in PDF the fist argument is the `PdfPage` object
-function main(pdf, node) {
-    const allText = content.text; // Extracts all text from the PDF page
-    const firstPage = pdf.pages[0].text; // Extracts text from  the first page of the PDF
-    const textInRect = pdf.pages[0].textInRect(0, 0, 0.3, 0.25); // "Passanger: Kandalf"
+  function main(contentPDF, node) {
+    const allText = contentPDF.text; // Extracts all text from the PDF page
+    const firstPage = contentPDF.pages[0].text; // Extracts text from only from first page
+    const textInRect = contentPDF.pages[0].textInRect(0, 0, 0.3, 0.25); // "Passanger: Kandalf" 
 }
 
 ```
