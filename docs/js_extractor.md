@@ -361,12 +361,120 @@ PdfDocument is a object that represents a PDF document; it has the following pro
 </details>
 <details id="Html - HTML document">
 <summary>Html - HTML document</summary>
+HtmlDocument is an object that represents an HTML document consisting HtmlElements; it has the following properties and methods:
 
-TODO: Actually write this
+* `rawData()`: Returns the raw textual HTML data.
+* `root()`: Returns the root element of the document.
+* `eval(xpath)`: Evaluates an XPath expression relative to the document root and returns matching elements.
+
+HtmlElement represents an element within an HTML document; it has the following properties and methods:
+
+* `name`: Returns the element name (tag).
+* `isNull`: Checks if the element is null/invalid.
+* `attribute`: Returns the value of the specified attribute.
+* `hasAttribute`: Checks whether an attribute with the given name exists.
+* `attributes`: Returns a list of all attributes of this element.
+* `content`: Returns the immediate text content of this element (trimmed of whitespace).
+* `recursiveContent`: Returns the text content of this element and all its children.
+* `parent`: Returns the parent element of this node.
+* `firstChild`: Returns the first child element of this node.
+* `nextSibling(: Returns the next sibling element of this node.
+* `eval`: Evaluates an XPath expression relative to this element.
 
 > More:
 > [HtmlDocument](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1HtmlDocument.html)
 > [HtmlElement](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1HtmlElement.html)
+
+<details>
+  <summary>Examples</summary>
+
+  ```js
+    // Create a simple HTML document
+    const simpleHtml = `
+    <html><head>
+    <title>Flight Details</title>
+    </head><body>
+
+    <div class="flight-info">
+    <h1>Flight KDE1996</h1>
+    <div class="departure">
+    <span class="code">KDQ</span>
+    <span class="time">2025-02-20 08:30</span>
+    </div>
+
+    <div class="arrival">
+    <span class="code">KDA</span>
+    <span class="time">2025-02-22 16:45</span>
+    </div>
+
+    <div class="passenger" id="traveler">
+    <span class="name">Kandalf the wizard</span>
+    <span class="seat">12A</span>
+
+    </div>
+    </div>
+    </body>
+    </html>
+    `;
+
+    const html = ExtractorEngine.extract(simpleHtml, "text/html").content;
+    
+    const res = JsonLd.newFlightReservation();
+
+    // Get flight number from h1
+    const flightHeader = html.eval("//h1")[0];
+    console.log (flightHeader.content)
+    if (typeof flightHeader.content == "string") {
+        const flightNumber = flightHeader.content.match(/Flight ([A-Z]{2})(\d+)/);
+        if (flightNumber) {
+            res.reservationFor.airline.iataCode = flightNumber[1];
+            res.reservationFor.flightNumber = flightNumber[2];
+        }
+    }
+
+    // Get departure info
+    const departureElement = html.eval("//div[@class='departure']")[0];
+    if (typeof flightHeader.content == "string") {
+        const codeElement = departureElement.eval("span[@class='code']")[0];
+        const timeElement = departureElement.eval("span[@class='time']")[0];
+
+        res.reservationFor.departureAirport.iataCode = codeElement.content;
+        res.reservationFor.departureTime = JsonLd.toDateTime(timeElement.content, "yyyy-MM-dd HH:mm", "en");
+    }
+
+    // Get arrival info
+    const arrivalElement = html.eval("//div[@class='arrival']")[0];
+    if (typeof flightHeader.content == "string") {
+        const codeElement = arrivalElement.eval("span[@class='code']")[0];
+        const timeElement = arrivalElement.eval("span[@class='time']")[0];
+
+        res.reservationFor.arrivalAirport.iataCode = codeElement.content;
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(timeElement.content, "yyyy-MM-dd HH:mm", "en");
+    }
+
+    // Get passenger info using element navigation
+    const passengerDiv = html.eval("//div[@id='traveler']")[0];
+    const nameSpan = passengerDiv.firstChild;
+    const seatSpan = nameSpan.nextSibling;
+
+    res.underName = {
+        "@type": "Person",
+        "name": nameSpan.content
+    };
+
+    res.reservedTicket = {
+        "@type": "Ticket",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatNumber": seatSpan.content
+        }
+    };
+
+    return res;
+```
+
+  </details>
+
 
 </details>
 <details id="Ical/pkpass - Calendar">
