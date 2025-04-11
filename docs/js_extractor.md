@@ -239,7 +239,7 @@ API for handling specific types of input data:
 * `ByteArray`: functions for dealing with byte-aligned binary data, including decompression, Base64 decoding, Protcol
   Buffer decoding, etc.
 * `BitArray`: functions for dealing with non byte-aligned binary data, such as reading numerical data at arbitrary bit
-  offsets.
+  offsets. Often used if binary data is with nonstandard encoding (eg. 6bit per character).
 * `Barcode`: functions for manual barcode decoding. This should be rarely needed nowadays, with the extractor engine
   doing this automatically and creating corresponding document nodes.
 
@@ -255,7 +255,16 @@ API for handling specific types of input data:
 const KonqiPersonality = ByteArray.toBase64("Cheerful"); // "Q2hlZXJmdWwK"
 const KatieMessage = ByteArray.fromBase64("UmVtZW1iZXIgdG8gdGFrZSBicmVha3MK"); // "Remember to take breaks"
 
-// FIXME: How to use ByteArray?
+
+const theQR = node.childNodes[1].childNodes[0].content; // Base64 encoded data
+const decodedQR = ByteArray.fromBase64(theQR); // binary blob
+const bitsOfQR = ByteArray.toBitArray(theQR); // Conver this to bitArray so it can be manipulated bit-by-bit
+let outputString = "";
+for (let i = 0; i < 6; ++i) {
+    let magicalNumber = bitsOfQR.readNumberMSB(0, 6); // Reads 6 **bits**, eg. '43'  
+    outputString += String.fromCharCode(magicalNumber + 32); // '43' + 32 = K
+}
+console.log(outputString) // Konqi
 
 // Usually not needed, as the extractor engine will create barcode nodes automatically
 const QRCode = ImageOfAztecQRCodeNotDecodedByExtractorEngine;
