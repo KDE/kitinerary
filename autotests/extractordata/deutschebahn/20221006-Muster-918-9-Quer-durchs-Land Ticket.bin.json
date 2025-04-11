@@ -1,0 +1,26 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080",
+            "name": "DB AG"
+        },
+        "name": "Quer-durchs-Land-Ticket",
+        "ticketNumber": "D2TY7WDN",
+        "ticketToken": "aztecbin:I1VUMDExMDgwMDAwMDEwLAIUD7wA7XDN2uwJkw4g9Lpl+BxsnB4CFAIV2M6g0RPlDil2bXrvq7lXTCU7AAAAADAzNzl4nAuN93B1dDEwNDAwNTY0sDBwMQqJNA938WNAAgZmhgZGBkZGhiZGpgYuri6uofEhPo6RQE1GRiYBPo6eBgZAnSZA0tDIAATMvXMSi4tTrQxMgRwjiJhZQGpRsZ4VmG1oAbLQwNItMaMoO7GoJBXMhWg2NHI/vCenJDM9OzWzxMrA0NAUZAJQ3sQwLD9PwcBMz9BAD+QaBQNLoGlcTpnFCgbmCEFjkBUmhpYg46CmmgJ5RlCeqYEx3AFGxoGlqUW6KaVFyRnFuj6JeSm6IZnJ2aklofFuPq4RhsZA242SNjG0PeQ9uOj0ElFBjkZWmRaX1KDTVR/VFbgaGzhmHHr2gm/ZsQtPLp15UcbY0KTEwM/QIHBqyrLLK32ShKX5+qI+fHo5pV2KwXUBNyMTQ6zr1akntk68erJ34Zmthq07J2wNXNq7duoFUPCFhYIjwYghBRjirIwJwo+kJEpYNkqUO7p5MDi6SzAwSEeABNnvsAoIdzAwAgCkPn9P",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        },
+        "validFrom": "2022-10-06T09:00:00+02:00",
+        "validUntil": "2022-10-07T03:00:00+02:00"
+    }
+]

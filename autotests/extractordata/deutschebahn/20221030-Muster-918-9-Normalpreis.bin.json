@@ -1,0 +1,51 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-10-06T13:08:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Koblenz"
+            },
+            "departureDay": "2022-10-30",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Mainz"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            }
+        },
+        "reservationNumber": "32BGEJEY",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Normalpreis",
+            "ticketNumber": "CF4YLT7G",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDJxi7vOzsKa/w/GqKY3d0W41tjAzq2aHB1ra4RW4d91LTe3fAWqPn3OuoQCkaM1owLsQRBIG6iinT5RIrlG/RTjMDE0N3icAYgAd/9VX0ZMRVgxMzAxMzZisgCG4Q3BosxQFREIgQUchDNlCjxZUWygCoGACJjC5ugOpsbQ5NLM6MwBgIIiK5+AgBEOM0szKjeOExsOjlrw8umU9LjU9LicCprC0tz0DpbexNjK3PQcrNLCdEB4YmBwYHyEkpwMgAaAEWjgBICAFpze5NrC2ODkytLmrxlCWg==",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    }
+]

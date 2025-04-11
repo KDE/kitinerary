@@ -1,0 +1,26 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080",
+            "name": "DB AG"
+        },
+        "name": "Schleswig-Holstein-Ticket",
+        "ticketNumber": "8TX6GD0Q",
+        "ticketToken": "aztecbin:I1VUMDExMDgwMDAwMDEwLQIUNDW6hIQDALJXkeinsN8LGG6JJ9kCFQCbqcKtFige6dO0zRFzeaDKaTWlgwAAADAzNTh4nAuN93B1dDEwNDAwNTY0sDCwCIkwc3cxCGRAAgZmhgZGBkZGhibGFgYuri6uofEhPo6RQE1GRmYBPo6eBgZAnSZA0tDIAATMvXMSi4tTrQxMgRwjiJhZQGpRsZ4VmG1oAbLQwNItMaMoO7GoJBXMhWg2NHI/vCenJDM9OzWzxMrA0NAUZAJQ3sQwLD9PwchAz9BAD+QaBQNLoGlcTpnFCkaGCEFjkBUmhpYg46CmmgJ5RlCeqYEx3AFGpsHJGTmpxeWZ6boe+TnFJamZebohmcnZqSWh8W4+rhGGxiD7kzYxtD3kPbjo9A1RQY5GVpkWi5WJWyp6NBZwNTZwzDj07AXfsmMXnlw686KMsaFJiUGeoUGQr5STL+lMk7A0X1/Uh08vp7AvPNYgmMF0wKFBEqeVoDAMCwXHhBFDCjDYWRn1+pp0JUqYf0mUO4Z4MDiGSjAwCBqABNnvsAoIdzAIAAAFHHyh",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        },
+        "validFrom": "2022-10-20T09:00:00+02:00",
+        "validUntil": "2022-10-21T03:00:00+02:00"
+    }
+]

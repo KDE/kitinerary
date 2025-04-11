@@ -1,0 +1,57 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-10-06T13:12:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "CH"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 46.85309982299805,
+                    "longitude": 9.52892017364502
+                },
+                "identifier": "uic:8509000",
+                "name": "Chur"
+            },
+            "departureDay": "2022-10-30",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Mainz+City"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            }
+        },
+        "reservationNumber": "AHHJFED3",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Flexpreis Europa",
+            "ticketNumber": "C8GAHDZT",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDIZFE8uTv50imFAX4ChiLDqsyZdOtUbXBAA8O/KxZnloDS9YbzQLJIp1KTQqjolRXe3cUF1e2wjUM/x9vvS3LUvMDI1NnicAfUACv9VX0ZMRVgxMzAxOTJisgCG4Q3BosxgFREIgQUchEGRIlRosRmgCoGACJjC5ugOpsbQ5NLM6MwBgIIiK5+IgBENxHgyIlqoGyYcVBGw6OWvDy6ZT0uNUDrI4UmsLS3PRWhtLo8giG0OrkbqzSwnRAeGJgcGB8UIiCVISKnKZUmoJUhKRerp5SVJaCVJ6OVIykVISCpnhiYnBqfLTqyuTSxtAMgAaAIWjgBCUACcEFqsIIzYyvDg5MrS5kCK6uTe4MIwMDgwVlUwMTAwNTMAZAAAAAEBLo6CNBh0B9AYdkFeAABBXxgAAAAALo6CNAjcBg0YdnoS8Ei8Xgg=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        }
+    }
+]

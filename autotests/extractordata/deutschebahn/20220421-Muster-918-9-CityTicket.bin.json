@@ -1,0 +1,51 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2022-04-19T11:08:00Z",
+        "priceCurrency": "EUR",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Frankfurt(Main)+City"
+            },
+            "departureDay": "2022-04-21",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "name": "Kassel+City"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:1080",
+                "name": "DB AG"
+            }
+        },
+        "reservationNumber": "CMJTUN93",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "Flexpreis",
+            "ticketNumber": "F4YLUQKT",
+            "ticketToken": "aztecbin:I1VUMDIxMDgwMDAwMDJZJ6GtyHGNmxTvSpr6ww/VZpSsFomWxwfcT7oFa3hKfop8akEg+54dB+k3j6IBZDHEYxJ4GmkpvT4NPyEAPubaMDI1OHicC41383GNMDQ2MLQwS9rE0PaQ92BvV4GoIEcjq0yL82ytpZHnIhdwNTBwrLhw6hDHilPPXjKyuITbMTIoGXsba12cHmDmY7FCOfHi6Ti5WKN5nXvl+v2YLt2IuXMzmuvCrVg5V8E5M6Jn3ZwbM5dLOCIqussLJOgTOivCr4Ofx4ePh3/i1eCpXF0CEwO6JgmGTDk1cSLXxIvBwt0XLl8M5posfFmYa+IlL6+JDQYMF1h0GTw4GDXO9qzn4/NZq5dgYGBhEBZqYAikzRlSGBgYGJkyfr75JVHCfkGizGEqA4PDNAmgKANIkOMOG69EWZVcA5DzG5uK31AVQpkAUNlk1A==",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            }
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Test",
+            "givenName": "Thea",
+            "name": "Thea Test"
+        }
+    }
+]
