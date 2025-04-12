@@ -477,10 +477,35 @@ HtmlElement represents an element within an HTML document; it has the following 
 
 
 </details>
-<details id="Ical/pkpass - Calendar">
-<summary>Ical/pkpass - Calendar</summary>
+<details id="PKPASS">
+<summary>PKPASS</summary>
+It's a object of fields inside of PKPASS:
 
-TODO: Actually write this, i can't find any information about this...
+* `field[X]`: Object with labes and values
+
+  <details>
+  <summary>Example - pkpass</summary>
+
+```js
+  function main(pkpass, node) {
+    // pass.json has "boardingPass" with keys "depar" "arrir" "arrirTime" "deparTime" "code"
+    var res = node.result[0];
+
+    var f = JsonLd.newFlightReservation(); // https://schema.org/FlightReservation
+    f.reservationFor.departureAirport.name = pass.field["depar"].label
+    f.reservationFor.arrivalAirport.name = pass.field["arrir"].label
+    f.reservationFor.departureTime = JsonLd.toDateTime(pass.field["deparTime"].value, "hh:mm dd.MM.yyyy", "en");
+    f.reservationFor.arrivalTime = JsonLd.toDateTime(pass.field["arrirTime"].value, "hh:mm dd.MM.yyyy", "en");
+    f.reservationFor.airline.iataCode = "KD";
+    f.reservationFor.flightNumber = pass.field["code"].label;
+    return f; // Returns the flight reservation object later used by other apps 
+
+}
+
+```
+
+  </details>
+
 </details>
 
 ### Extractor scripts
