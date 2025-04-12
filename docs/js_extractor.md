@@ -210,110 +210,6 @@ Extractor scripts are run inside a QJSEngine, it isn't a full JS environment, an
 There are some additional APIs available to extractor scripts (technical docs can be found
 here [KItinerary::JsApi](https://api.kde.org/kdepim/kitinerary/html/namespaceKItinerary_1_1JsApi.html).
 
-### Additional API available to extractor scripts
-
-#### JSON-LD API
-
-API for supporting schema.org output:
-
-- `JsonLd`: factory functions for schema.org objects, date/time parsing, etc
-
-> More: [JsonLd](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1JsApi_1_1JsonLd.html)
-
-<details>
-<summary>Examples</summary>
-
-```js
-var f = JsonLd.newFlightReservation(); // https://schema.org/FlightReservation
-f.reservationFor.departureAirport.name = "KDE Konqi Airport (KDQ)"; // https://schema.org/FlightReservation -> https://schema.org/Flight -> https://schema.org/Place -> https://schema.org/Airport
-f.reservationFor.arrivalAirport.name = "KDE Katie City Airport (KDA)";
-f.reservationFor.departureTime = JsonLd.toDateTime(
-  "08:36 20.02.2025",
-  "hh:mm dd.MM.yyyy",
-  "en",
-);
-f.reservationFor.arrivalTime = JsonLd.toDateTime(
-  "09:56 20.02.2025",
-  "hh:mm dd.MM.yyyy",
-  "en",
-);
-f.reservationFor.airline.iataCode = "KD";
-f.reservationFor.flightNumber = "KD 1096";
-return f; // Returns the flight reservation object later used by other apps
-```
-
-</details>
-
-#### ByteArray, BitArray, Barcode
-
-API for handling specific types of input data:
-
-- `ByteArray`: functions for dealing with byte-aligned binary data, including decompression, Base64 decoding, Protcol
-  Buffer decoding, etc.
-- `BitArray`: functions for dealing with non byte-aligned binary data, such as reading numerical data at arbitrary bit
-  offsets. Often used if binary data is with nonstandard encoding (eg. 6bit per character).
-- `Barcode`: functions for manual barcode decoding. This should be rarely needed nowadays, with the extractor engine
-  doing this automatically and creating corresponding document nodes.
-
-> More:
-> [ByteArray](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1JsApi_1_1ByteArray.html),
-> [BitArray](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1JsApi_1_1BitArray.html) 
-> [Barcode](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1JsApi_1_1Barcode.html)
-
-<details>
-<summary>Examples</summary>
-
-```js
-const KonqiPersonality = ByteArray.toBase64("Cheerful"); // "Q2hlZXJmdWwK"
-const KatieMessage = ByteArray.fromBase64("UmVtZW1iZXIgdG8gdGFrZSBicmVha3MK"); // "Remember to take breaks"
-
-const theQR = node.childNodes[1].childNodes[0].content; // Base64 encoded data
-const decodedQR = ByteArray.fromBase64(theQR); // binary blob
-const bitsOfQR = ByteArray.toBitArray(theQR); // Conver this to bitArray so it can be manipulated bit-by-bit
-let outputString = "";
-for (let i = 0; i < 6; ++i) {
-  let magicalNumber = bitsOfQR.readNumberMSB(0, 6); // Reads 6 **bits**, eg. '43'
-  outputString += String.fromCharCode(magicalNumber + 32); // '43' + 32 = K
-}
-console.log(outputString); // Konqi
-
-// Usually not needed, as the extractor engine will create barcode nodes automatically
-const QRCode = ImageOfAztecQRCodeNotDecodedByExtractorEngine;
-const DecodedAztec = Barcode.decodeAztec(
-  ImageOfAztecQRCodeNotDecodedByExtractorEngine,
-);
-console.log(DecodedAztec); // ["KDE airlines", "KDE Konqi Airport (KDQ)", "KDE Katie City Airport (KDA)", "20.02.2025", "08:36", "20.02.2025", "09:56", "KD 1096", "magicalstringsoweknowthisticketwasnottamperedwithbyevilwizards"]
-```
-
-</details>
-
-#### Extractor API
-
-API for interacting with the extractor engine itself:
-
-- `ExtractorEngine`: this allows to recursively perform extraction.
-  This can be useful for elements that need custom decoding in an extractor script first,
-  but that contain otherwise generally supported data formats. Standard barcodes encoded
-  in URL arguments are such an example.
-
-> More: [ExtractorEngine](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1ExtractorEngine.html)
-
-<details>
-<summary>Examples</summary>
-
-```js
-const XMLdataIncorreclyInterpretedAsText = "<xml><data>42</data></xml>";
-const CorrectlyInterpretedXML = ExtractorEngine.extract(
-  XMLdataIncorreclyInterpretedAsText,
-  "application/xml",
-);
-
-var f = JsonLd.newFlightReservation();
-ExtractorEngine.extractPrice("13 EUR", f); // Adds to ticket price
-```
-
-</details>
-
 ### Objects of a document
 
 #### ExtractorDocumentNode (node)
@@ -374,6 +270,7 @@ function main(contentPDF, node) {
 
   </details>
 </details>
+
 <details id="Html - HTML document">
 <summary>Html - HTML document</summary>
 HtmlDocument is an object that represents an HTML document consisting HtmlElements; it has the following properties and methods:
@@ -397,107 +294,109 @@ HtmlElement represents an element within an HTML document; it has the following 
 - `eval`: Evaluates an XPath expression relative to this element.
 
 > More:
-> [HtmlDocument](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1HtmlDocument.html) > [HtmlElement](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1HtmlElement.html)
+> [HtmlDocument](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1HtmlDocument.html),
+> [HtmlElement](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1HtmlElement.html)
 
-<details>
+  <details>
   <summary>Examples</summary>
 
-```js
-// Create a simple HTML document
-const simpleHtml = `
-  <html><head>
-  <title>Flight Details</title>
-  </head><body>
-
-  <div class="flight-info">
-  <h1>Flight KDE1996</h1>
-  <div class="departure">
-  <span class="code">KDQ</span>
-  <span class="time">2025-02-20 08:30</span>
-  </div>
-
-  <div class="arrival">
-  <span class="code">KDA</span>
-  <span class="time">2025-02-22 16:45</span>
-  </div>
-
-  <div class="passenger" id="traveler">
-  <span class="name">Kandalf the wizard</span>
-  <span class="seat">12A</span>
-
-  </div>
-  </div>
-  </body>
-  </html>
-  `;
-
-const html = ExtractorEngine.extract(simpleHtml, "text/html").content;
-
-const res = JsonLd.newFlightReservation();
-
-// Get flight number from h1
-const flightHeader = html.eval("//h1")[0];
-console.log(flightHeader.content);
-if (typeof flightHeader.content == "string") {
-  const flightNumber = flightHeader.content.match(/Flight ([A-Z]{2})(\d+)/);
-  if (flightNumber) {
-    res.reservationFor.airline.iataCode = flightNumber[1];
-    res.reservationFor.flightNumber = flightNumber[2];
+  ```js
+  // Create a simple HTML document
+  const simpleHtml = `
+    <html><head>
+    <title>Flight Details</title>
+    </head><body>
+  
+    <div class="flight-info">
+    <h1>Flight KDE1996</h1>
+    <div class="departure">
+    <span class="code">KDQ</span>
+    <span class="time">2025-02-20 08:30</span>
+    </div>
+  
+    <div class="arrival">
+    <span class="code">KDA</span>
+    <span class="time">2025-02-22 16:45</span>
+    </div>
+  
+    <div class="passenger" id="traveler">
+    <span class="name">Kandalf the wizard</span>
+    <span class="seat">12A</span>
+  
+    </div>
+    </div>
+    </body>
+    </html>
+    `;
+  
+  const html = ExtractorEngine.extract(simpleHtml, "text/html").content;
+  
+  const res = JsonLd.newFlightReservation();
+  
+  // Get flight number from h1
+  const flightHeader = html.eval("//h1")[0];
+  console.log(flightHeader.content);
+  if (typeof flightHeader.content == "string") {
+    const flightNumber = flightHeader.content.match(/Flight ([A-Z]{2})(\d+)/);
+    if (flightNumber) {
+      res.reservationFor.airline.iataCode = flightNumber[1];
+      res.reservationFor.flightNumber = flightNumber[2];
+    }
   }
-}
-
-// Get departure info
-const departureElement = html.eval("//div[@class='departure']")[0];
-if (typeof flightHeader.content == "string") {
-  const codeElement = departureElement.eval("span[@class='code']")[0];
-  const timeElement = departureElement.eval("span[@class='time']")[0];
-
-  res.reservationFor.departureAirport.iataCode = codeElement.content;
-  res.reservationFor.departureTime = JsonLd.toDateTime(
-    timeElement.content,
-    "yyyy-MM-dd HH:mm",
-    "en",
-  );
-}
-
-// Get arrival info
-const arrivalElement = html.eval("//div[@class='arrival']")[0];
-if (typeof flightHeader.content == "string") {
-  const codeElement = arrivalElement.eval("span[@class='code']")[0];
-  const timeElement = arrivalElement.eval("span[@class='time']")[0];
-
-  res.reservationFor.arrivalAirport.iataCode = codeElement.content;
-  res.reservationFor.arrivalTime = JsonLd.toDateTime(
-    timeElement.content,
-    "yyyy-MM-dd HH:mm",
-    "en",
-  );
-}
-
-// Get passenger info using element navigation
-const passengerDiv = html.eval("//div[@id='traveler']")[0];
-const nameSpan = passengerDiv.firstChild;
-const seatSpan = nameSpan.nextSibling;
-
-res.underName = {
-  "@type": "Person",
-  name: nameSpan.content,
-};
-
-res.reservedTicket = {
-  "@type": "Ticket",
-  ticketedSeat: {
-    "@type": "Seat",
-    seatNumber: seatSpan.content,
-  },
-};
-
-return res;
-```
+  
+  // Get departure info
+  const departureElement = html.eval("//div[@class='departure']")[0];
+  if (typeof flightHeader.content == "string") {
+    const codeElement = departureElement.eval("span[@class='code']")[0];
+    const timeElement = departureElement.eval("span[@class='time']")[0];
+  
+    res.reservationFor.departureAirport.iataCode = codeElement.content;
+    res.reservationFor.departureTime = JsonLd.toDateTime(
+      timeElement.content,
+      "yyyy-MM-dd HH:mm",
+      "en",
+    );
+  }
+  
+  // Get arrival info
+  const arrivalElement = html.eval("//div[@class='arrival']")[0];
+  if (typeof flightHeader.content == "string") {
+    const codeElement = arrivalElement.eval("span[@class='code']")[0];
+    const timeElement = arrivalElement.eval("span[@class='time']")[0];
+  
+    res.reservationFor.arrivalAirport.iataCode = codeElement.content;
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(
+      timeElement.content,
+      "yyyy-MM-dd HH:mm",
+      "en",
+    );
+  }
+  
+  // Get passenger info using element navigation
+  const passengerDiv = html.eval("//div[@id='traveler']")[0];
+  const nameSpan = passengerDiv.firstChild;
+  const seatSpan = nameSpan.nextSibling;
+  
+  res.underName = {
+    "@type": "Person",
+    name: nameSpan.content,
+  };
+  
+  res.reservedTicket = {
+    "@type": "Ticket",
+    ticketedSeat: {
+      "@type": "Seat",
+      seatNumber: seatSpan.content,
+    },
+  };
+  
+  return res;
+  ```
 
   </details>
 
 </details>
+
 <details id="PKPASS">
 <summary>PKPASS</summary>
 It's a object of fields inside of PKPASS:
@@ -507,33 +406,139 @@ It's a object of fields inside of PKPASS:
   <details>
   <summary>Example - pkpass</summary>
 
-```js
-function main(pkpass, node) {
-  // pass.json has "boardingPass" with keys "depar" "arrir" "arrirTime" "deparTime" "code"
-  var res = node.result[0];
-
-  var f = JsonLd.newFlightReservation(); // https://schema.org/FlightReservation
-  f.reservationFor.departureAirport.name = pass.field["depar"].label;
-  f.reservationFor.arrivalAirport.name = pass.field["arrir"].label;
-  f.reservationFor.departureTime = JsonLd.toDateTime(
-    pass.field["deparTime"].value,
-    "hh:mm dd.MM.yyyy",
-    "en",
-  );
-  f.reservationFor.arrivalTime = JsonLd.toDateTime(
-    pass.field["arrirTime"].value,
-    "hh:mm dd.MM.yyyy",
-    "en",
-  );
-  f.reservationFor.airline.iataCode = "KD";
-  f.reservationFor.flightNumber = pass.field["code"].label;
-  return f; // Returns the flight reservation object later used by other apps
-}
-```
+  ```js
+  function main(pkpass, node) {
+    // pass.json has "boardingPass" with keys "depar" "arrir" "arrirTime" "deparTime" "code"
+    var res = node.result[0];
+  
+    var f = JsonLd.newFlightReservation(); // https://schema.org/FlightReservation
+    f.reservationFor.departureAirport.name = pass.field["depar"].label;
+    f.reservationFor.arrivalAirport.name = pass.field["arrir"].label;
+    f.reservationFor.departureTime = JsonLd.toDateTime(
+      pass.field["deparTime"].value,
+      "hh:mm dd.MM.yyyy",
+      "en",
+    );
+    f.reservationFor.arrivalTime = JsonLd.toDateTime(
+      pass.field["arrirTime"].value,
+      "hh:mm dd.MM.yyyy",
+      "en",
+    );
+    f.reservationFor.airline.iataCode = "KD";
+    f.reservationFor.flightNumber = pass.field["code"].label;
+    return f; // Returns the flight reservation object later used by other apps
+  }
+  ```
 
   </details>
 
 </details>
+
+### Additional API available to extractor scripts
+
+#### JSON-LD API
+
+API for supporting schema.org output:
+
+- `JsonLd`: factory functions for schema.org objects, date/time parsing, etc
+
+> More: [JsonLd](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1JsApi_1_1JsonLd.html)
+
+<details>
+<summary>Examples</summary>
+
+```js
+var f = JsonLd.newFlightReservation(); // https://schema.org/FlightReservation
+f.reservationFor.departureAirport.name = "KDE Konqi Airport (KDQ)"; // https://schema.org/FlightReservation -> https://schema.org/Flight -> https://schema.org/Place -> https://schema.org/Airport
+f.reservationFor.arrivalAirport.name = "KDE Katie City Airport (KDA)";
+f.reservationFor.departureTime = JsonLd.toDateTime(
+  "08:36 20.02.2025",
+  "hh:mm dd.MM.yyyy",
+  "en",
+);
+f.reservationFor.arrivalTime = JsonLd.toDateTime(
+  "09:56 20.02.2025",
+  "hh:mm dd.MM.yyyy",
+  "en",
+);
+f.reservationFor.airline.iataCode = "KD";
+f.reservationFor.flightNumber = "KD 1096";
+return f; // Returns the flight reservation object later used by other apps
+```
+
+</details>
+
+#### ByteArray, BitArray, Barcode
+
+API for handling specific types of input data:
+
+- `ByteArray`: functions for dealing with byte-aligned binary data, including decompression, Base64 decoding, Protcol
+  Buffer decoding, etc.
+- `BitArray`: functions for dealing with non byte-aligned binary data, such as reading numerical data at arbitrary bit
+  offsets. Often used if binary data is with nonstandard encoding (eg. 6bit per character).
+- `Barcode`: functions for manual barcode decoding. This should be rarely needed nowadays, with the extractor engine
+  doing this automatically and creating corresponding document nodes.
+
+> More:
+> [ByteArray](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1JsApi_1_1ByteArray.html),
+> [BitArray](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1JsApi_1_1BitArray.html),
+> [Barcode](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1JsApi_1_1Barcode.html)
+
+<details>
+<summary>Examples</summary>
+
+```js
+const KonqiPersonality = ByteArray.toBase64("Cheerful"); // "Q2hlZXJmdWwK"
+const KatieMessage = ByteArray.fromBase64("UmVtZW1iZXIgdG8gdGFrZSBicmVha3MK"); // "Remember to take breaks"
+
+const theQR = node.childNodes[1].childNodes[0].content; // Base64 encoded data
+const decodedQR = ByteArray.fromBase64(theQR); // binary blob
+const bitsOfQR = ByteArray.toBitArray(theQR); // Conver this to bitArray so it can be manipulated bit-by-bit
+let outputString = "";
+for (let i = 0; i < 6; ++i) {
+  let magicalNumber = bitsOfQR.readNumberMSB(0, 6); // Reads 6 **bits**, eg. '43'
+  outputString += String.fromCharCode(magicalNumber + 32); // '43' + 32 = K
+}
+console.log(outputString); // Konqi
+
+// Usually not needed, as the extractor engine will create barcode nodes automatically
+const QRCode = ImageOfAztecQRCodeNotDecodedByExtractorEngine;
+const DecodedAztec = Barcode.decodeAztec(
+  ImageOfAztecQRCodeNotDecodedByExtractorEngine,
+);
+console.log(DecodedAztec); // ["KDE airlines", "KDE Konqi Airport (KDQ)", "KDE Katie City Airport (KDA)", "20.02.2025", "08:36", "20.02.2025", "09:56", "KD 1096", "magicalstringsoweknowthisticketwasnottamperedwithbyevilwizards"]
+```
+
+</details>
+
+#### Extractor API
+
+API for interacting with the extractor engine itself:
+
+- `ExtractorEngine`: this allows to recursively perform extraction.
+  This can be useful for elements that need custom decoding in an extractor script first,
+  but that contain otherwise generally supported data formats. Standard barcodes encoded
+  in URL arguments are such an example.
+
+> More: [ExtractorEngine](https://api.kde.org/kdepim/kitinerary/html/classKItinerary_1_1ExtractorEngine.html)
+
+<details>
+<summary>Examples</summary>
+
+```js
+const XMLdataIncorreclyInterpretedAsText = "<xml><data>42</data></xml>";
+const CorrectlyInterpretedXML = ExtractorEngine.extract(
+  XMLdataIncorreclyInterpretedAsText,
+  "application/xml",
+);
+
+var f = JsonLd.newFlightReservation();
+ExtractorEngine.extractPrice("13 EUR", f); // Adds to ticket price
+```
+
+</details>
+
+
 
 ### Extractor scripts
 
