@@ -1,0 +1,27 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1187"
+        },
+        "name": "Billet Carte Avantage ADULTE TER",
+        "priceCurrency": "EUR",
+        "ticketNumber": "448716",
+        "ticketToken": "aztecbin:gVVl1fhKKvyACCRocJnAl7kBAJRA7IYFQZXGpSZLEgSSUFAowBAUGCb/ylwEREoeXd05YdmVBPq0oKDsyXNABAFQOAHprSxtDK2FuHEsje6sLkyAyIqqSCnIipKoCCRAByKNCBg2xmRxlCCAihdFFAQEQQAMgCF0UUQBCogGIAhZnBAgAGAdJgEUOiCABkAQvTRiAIXaoRAELtbwEAAw2FYgingQQAMgCF0K8QBCjb6IAhem+AgAGAdHOEVvkEFC9N8AgIBAwgAGAdHMEkphAAJFJwkuQIABgHSehJwhfwEEBATwGwAAgYAAiEAIAlXwIEJpbGxldCBDYXJ0ZSBBdmFudGFnZSBBRFVMVEUgVEVSCL7Fi4b06jEGMNUcAAIICBDith1Lk0szSyuRAZkDK3MzC3OjmQHhAYmRAwtzmAQVQyRnHoGAg4QVQyRnHoIBgRCBCJdo9OiKXyrRjnUKDeXPjl9GnUM19GQ0MHlCy1SrDPADuYWgO5eYFoEKGqUAhsxsrJlHue7kiu1MIS/iI3kBCoBPN46WcbnOwCKfdo9E95rOX0X3roJGiQ2IIQ2aR1pBgjARCAe4pJyP8DMxR5JkkPdwvgesD7az/AdAy0rxrzLgTgZjuBEIB0XFgaNEUXcCm1CA6n1b3j6p6mOtuVwsv88bSTZV6FAI",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "1"
+        },
+        "totalPrice": 220,
+        "underName": {
+            "@type": "Person",
+            "familyName": "DURAND",
+            "givenName": "Michel-Édouard",
+            "name": "Michel-Édouard DURAND"
+        },
+        "validFrom": "2023-08-05T00:00:00",
+        "validUntil": "2023-08-06T23:59:59"
+    }
+]

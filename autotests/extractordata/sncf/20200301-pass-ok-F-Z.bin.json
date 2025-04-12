@@ -1,0 +1,27 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1187"
+        },
+        "name": "Pass'OK",
+        "priceCurrency": "EUR",
+        "ticketNumber": "0",
+        "ticketToken": "aztecbin:gVVl1fhKKvyACCRocJnAQTkBAJRAhAN7QZXGpSZLEYSSUJIowBAUGCtcPpwEJCYU+wtcrnC5uAQBUDgAqU34dW2AiQiqCghDCAg0SkAQcgIAvzAOoMLm5k6ellrD4CAAQEgAgMgCBABIAABCWAEX2LFw3p1GIMYao1AAQQEgE1bDqXJpZmllciBpZGVudGl0w6kEFUMkZx6BgIOEFUMkZx6CAYEQgQiXaPToil8q0Y51Cg3lz45fRp1DNfRkNDB5QstUqwzwAh4mIDuXmBaBCgQ8fHhgWtqYiHSX4zQWFdftHMpbgQqARwfkpM+AWvDNDKGxtWRl9FBXwROCRokNiCEFNP/KMYIgEQCOMo48j/lC7tOB8IrpQkjkeKMwprUc5XhQL2bYvpm8kBEAkSrg+my0QhXac0J37qU0sjAr+E4DH9fG11NoqOdJueg=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "totalPrice": 48,
+        "underName": {
+            "@type": "Person",
+            "familyName": "HEPP",
+            "givenName": "Joël",
+            "name": "Joël HEPP"
+        },
+        "validFrom": "2020-03-01T00:00:00",
+        "validUntil": "2020-03-31T23:59:59"
+    }
+]

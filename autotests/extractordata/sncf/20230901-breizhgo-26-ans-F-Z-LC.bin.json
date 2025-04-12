@@ -1,0 +1,27 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1187"
+        },
+        "name": "BreizhGo -26 ans",
+        "priceCurrency": "EUR",
+        "ticketNumber": "123456",
+        "ticketToken": "aztecbin:AVVlUABKKvyACCRocJnAUjkBAJRA7sdvQZXGpSZLEdSSUJCIwBAUGCV4nYAEODoU+wtYrmC5gtqRadQABAFQOADpzSxt7YwuYSj4cSnYcSpIKY0kaAg0SkAQMgYDxIDaECCE5MrS9NCO3kBaZGxAwtzmXa3AIABASACAYBHVoRfYsXDenUYgxhKjUABBAQMkVsOpcmlmaWVyIC0yNiBhbnMgZXQgY2FydGUgw6l0dWRpYW50FxgWAQox6VGuG+Uc764FlAh+BFqP3WMsYwEKLtXonO1RiCNpF7bEgBhZUPpjf3AA",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "totalPrice": 365.25,
+        "underName": {
+            "@type": "Person",
+            "familyName": "GÉNÉRAL",
+            "givenName": "Nicolas",
+            "name": "Nicolas GÉNÉRAL"
+        },
+        "validFrom": "2023-09-01T00:00:00",
+        "validUntil": "2024-08-31T23:59:59"
+    }
+]

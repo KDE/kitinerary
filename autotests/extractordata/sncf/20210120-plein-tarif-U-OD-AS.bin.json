@@ -1,0 +1,21 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1187"
+        },
+        "name": "Plein tarif",
+        "priceCurrency": "EUR",
+        "ticketNumber": "152",
+        "ticketToken": "aztecbin:AVVlUABKKvyACCRocJm3GQEAlEChGX3BlcalJksR1JoAACjACBQYJzAYoAQ4OhT7C1iuYLmC2pFp1AAAEEiACgEaECAJhFgACIIAEQBCz7WIAhZYLC4gIABASAAAQcIBag2MrS3EDowuTSzBF9ixcN6dRiDGBqMQAEEBAAAXGBYBChRYdBB0Dabfoi67lC44xE5dQwcuAQovCRMU6mXSaFUqEPU7oone/xCQpgA=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "totalPrice": 36,
+        "validFrom": "2021-01-20T00:00:00",
+        "validUntil": "2021-01-20T23:59:59"
+    }
+]

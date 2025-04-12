@@ -1,0 +1,27 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1187"
+        },
+        "name": "Pass Jeunes Été",
+        "priceCurrency": "EUR",
+        "ticketNumber": "987654321",
+        "ticketToken": "aztecbin:gVVl1fhKKvyACCRocJnAY7kBAJRBBwpjQZXGpSZLEQSSUJkYwBAUGCJ6IowEBAAEAVA4AMlN7QwtzcDoaQiqSanqjW0oCDRIQBByCHW80WM3mCKgwubmQJTK6tzK5kGHEumHUgcBACQIQEUKjkYCBiCABkAQqORiAIVHQhAEKjq4IIAEQBCo6uIAhUdJCCChUdJAQEBIAABCOuEX2LFw3p1GIMYao0AAQQEhK1bDqXJpZmllciBpZGVudGl0w6kgZXQgY2FydGUgQXZhbnRhZ2UgSmV1bmUEFUMkZx6BgIOEFUMkZx6CAYEQgQiXaPToil8q0Y51Cg3lz45fRp1DNfRkNDB5QstUqwzwBByWeDuXmBaBCoBMJGyP3nOlXYsYHg9i4+r9jD2ZuQEKCReTiQ54h5C1+YCvOd7J41CmjdiCRokNiCEHCcciOYIoEQN+opMVNOvwqtVT4lEfionilYEXASmYyUglHQcEuyrEuBEIBOCpT44RD4pV8hv5A2KI6i9wDnh+yDMRY+8Glpj6hW2Q",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "totalPrice": 45.67,
+        "underName": {
+            "@type": "Person",
+            "familyName": "CHERMOT",
+            "givenName": "Johann",
+            "name": "Johann CHERMOT"
+        },
+        "validFrom": "2024-04-22T00:00:00",
+        "validUntil": "2024-04-28T23:59:59"
+    }
+]

@@ -1,0 +1,27 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1187"
+        },
+        "name": "Trans’80 1 trajet",
+        "priceCurrency": "EUR",
+        "ticketNumber": "999999999",
+        "ticketToken": "aztecbin:AVVlUABKKvyACCRocJnASTkBAJRBA7sFwZXGpSZLEdSSUAAIwAgUGCEPeOwEODoU+wtYrmC5gtqRadQABAFQOADpry2YdQ3MoeiIpApoKSnKiKWpqCpJKKmvuAgkQAUCjQgh3NZP+7CoBIAICBgAuAQEAAgRAAGAAEgCACao5MLc58UBMnBgQGJA6OTC1MroEX2LFw3p1GIMYCoyAAQQEAAAFxgWAQoZGxNCNGH3Rd4+0NYL+pj+Y4LQVgEKASRbGsMBS/kQJtk0QNxtjUhP6UKA",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "1"
+        },
+        "totalPrice": 0,
+        "underName": {
+            "@type": "Person",
+            "familyName": "DE SAINTE-MARIE",
+            "givenName": "Mylène",
+            "name": "Mylène DE SAINTE-MARIE"
+        },
+        "validFrom": "2024-03-01T00:00:00",
+        "validUntil": "2024-03-01T23:59:59"
+    }
+]
