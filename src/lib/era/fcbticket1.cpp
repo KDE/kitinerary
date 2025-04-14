@@ -802,6 +802,4 @@ bool Fcb::v13::UicRailTicketData::isValid() const
     return !m_data.isNull();
 }
 
-#include "moc_fcbticket.cpp"
-
 #include "moc_fcbticket1.cpp"
