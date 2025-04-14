@@ -1,0 +1,26 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080",
+            "name": "DB AG"
+        },
+        "name": "Thüringen-Ticket",
+        "ticketNumber": "NB45C9ZU",
+        "ticketToken": "aztecbin:I1VUMDExMDgwMDAwMDEwLAIUPplJUnb2go97weJu4yFf70HBrugCFFgRRYdIDKRjuQaWLEQESmNV9IC5AAAAADAzNDl4nAuN93B1dDEwNDAwNTY0sDDwczIxdbaMCmVAAgZmhgZGBkZGhiYmRgYuri6uofEhPo6RQE1GhhYBPo6eBgZAnSZA0tDIAATMvXMSi4tTrQxMgRwjiJhZQGpRsZ4VmG1oAbLQwNItMaMoO7GoJBXMhWg2NHI/vCenJDM9OzWzxMrA0NAUZAJQ3sQwLD9PwchAz9BAD+QaBQNLoGlcTpnFCkaGCEFjkBUmhpYg46CmmgJ5RnCeMdwBhuYhGYf3FGXmpafm6YZkJmenloTGu/m4RhgaA6XNkzYxtD3kPbjo9AtRQY5GVpkWv5aLa8zNVi3gamzgmHHo2Qu+ZccuPLl05kUZY0OTEoM8Q4OgbE/Uu8SbU4Sl+fqiPnx6OYV94bEGwQymAw4KghhWgcIsLBQc8kYMKcBgZmJMEH4kL1HC/Fui3DHEg8ExVIKBgecJSJD9DquAcAeDIAAvh3n/",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Schrift",
+            "givenName": "Last",
+            "name": "Last Schrift"
+        },
+        "validFrom": "2022-10-20T09:00:00+02:00",
+        "validUntil": "2022-10-21T03:00:00+02:00"
+    }
+]

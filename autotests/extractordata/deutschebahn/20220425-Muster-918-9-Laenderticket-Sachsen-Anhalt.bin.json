@@ -1,0 +1,26 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080",
+            "name": "DB AG"
+        },
+        "name": "Sachsen-Anhalt-Ticket",
+        "ticketNumber": "EGTCL8CV",
+        "ticketToken": "aztecbin:I1VUMDExMDgwMDAwMDEwLAIUVbuYPQAyM3rIDGmHA1qQgtwHBb8CFEprlgnCTdMgzVA91WFfaCHR3LlfAAAAADAzNDl4nAuN93B1dDEwNDAwNTY0sDBwdQ9x9rFwDmNAAoaWBiZGBkZGhsamJgYuri6uofEhPo6RQE2GloYBPo6eBgZAncZA0tDIAATMvXMSi4tTrQxMgBwjiJhZQGpRsZ4VmG1oAbLQwNItMaMoO7GoJBXMhWg2NHI/vCenJDM9OzWzxMrA0NAUJAGUNzQwMtUzMNEDucTAGOgmiDCIMgHyjKA8YwMjuA1GhsGJyRnFqXm6jnkZiTkluiGZydmpJaHxbj6uEUCVhgZmSZsY2h7yHuzt1hAV5GhklWlx7Q+SOS7wWoGrgYFjxYVThzhWnHr2kpHFhcGOkUHJJXNK5IZOHjUzWZmtD59e1mB37mVQusDa0NCgtezQsQvPTt2Jarpz4dCNF1ErLh27duoFKFzCQsGha8SQAgxKZsaMn29ZJUqYf0iUO8z0YHCYJcHAIMACEmS/wyog3MHADwDUqXWT",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Test",
+            "givenName": "Thea",
+            "name": "Thea Test"
+        },
+        "validFrom": "2022-04-25T09:00:00+02:00",
+        "validUntil": "2022-04-26T03:00:00+02:00"
+    }
+]

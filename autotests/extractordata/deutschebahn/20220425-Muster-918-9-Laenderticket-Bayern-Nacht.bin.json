@@ -1,0 +1,26 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080",
+            "name": "DB AG"
+        },
+        "name": "Bayern-Ticket Nacht",
+        "ticketNumber": "474TZECH",
+        "ticketToken": "aztecbin:I1VUMDExMDgwMDAwMDEwLAIUQhoNFZXZtBbWn8CJz/SaAB2fMrcCFAsciB9h0ZglstOvGFDpfg/f9ea9AAAAADAzNDV4nAuN93B1dDEwNDAwNTY0sDAwMTcJiXJ19mBAAoaWBiZGBkZGhsZGJgYuri6uofEhPo6RQE2GFpYBPo6eBgZAncZA0tDIAATMvXMSi4tTrQxMgBwjiJhZQGpRsZ4VmG1oAbLQwNItMaMoO7GoJBXMhWg2NHI/vCenJDM9OzWzxMrA0NAUJAGUNzQwMtUzMNEDucTAGOgmiDCIMgHyjKA8YwMjuA2Glk6JlalFebohmcnZqSUKfonJGSWh8W4+rhFAdYYGJkmbGNoe8h7s7dogKsjRyCrTYpJ3aemKDU8UuBoYOFZcOHWIY8WpZy8ZWVwY7BgZFHtnXXrkVCyjZiYrs/Xh08sa7O28DGoTWBsaGtRaDn069eRO1IpLx66deuEw59CxCy9AYRIWCg5ZI4YUYDAyM2b8fPNXooT5vUS5w8wJDA6zLBgYeD1Agux3WAWEOxiYAcdXd5I=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Test",
+            "givenName": "Thea",
+            "name": "Thea Test"
+        },
+        "validFrom": "2022-04-25T18:00:00+02:00",
+        "validUntil": "2022-04-26T07:00:00+02:00"
+    }
+]

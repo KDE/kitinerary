@@ -1,0 +1,26 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080",
+            "name": "DB AG"
+        },
+        "name": "Rheinland-Pfalz-Ticket",
+        "ticketNumber": "ARAVGQB5",
+        "ticketToken": "aztecbin:I1VUMDExMDgwMDAwMDEwLAIUTIxjSSXGiizhH/QbFGySJpttIdsCFF3DsXXQp+o4KlrXWnvtetLqb6lQAAAAADAzNTJ4nAuN93B1dDEwNDAwNTY0sDBwDHIMcw90MmVAAoaWBiZGBkZGhsbGFgYuri6uofEhPo6RQE2GlkYBPo6eBgZAncZA0tDIAATMvXMSi4tTrQxMgBwjiJhZQGpRsZ4VmG1oAbLQwNItMaMoO7GoJBXMhWg2NHI/vCenJDM9OzWzxMrA0NAUJAGUNzQwMtUzMNEDucTAGOgmiDCIMgHyjKA8YwMjuA1GRkEZqZl5OYl5KboBaYk5VbohmcnZqSWh8W4+rhFApYYG5kmbGNoe8h7s7XohKsjRyCrT4riUbUuVwawFXA0MHCsunDrEseLUs5eMLC4MdowMir1VF9NO5Z1RM5OV2frw6WUNdudeBqULrA0NDTpLLpy6dOfGoTsnohacOXTjS9SKS8eunXoBCpmwUHD4GjGkAAOTmTHj51tGiRLmLxLlDjM9GBxmSTAw8JWABNnvsAoIdzDwAAAR9HnS",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Test",
+            "givenName": "Thea",
+            "name": "Thea Test"
+        },
+        "validFrom": "2022-04-25T09:00:00+02:00",
+        "validUntil": "2022-04-26T03:00:00+02:00"
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:1080",
+            "name": "DB AG"
+        },
+        "name": "Saarland-Ticket",
+        "ticketNumber": "KYC4RWV5",
+        "ticketToken": "aztecbin:I1VUMDExMDgwMDAwMDEwLAIUBxdJdgbPlFaPQOFNchFc75MrD/8CFF/Fy+RH51Y23NJ9Il2S7atSqB7xAAAAADAzMzZ4nAuN93B1dDEwNDAwNTY0sDDwjnQ2CQoPM2VAAoaWBiZGBkZGhsamRgYuri6uofEhPo6RQE2GFqYBPo6eBgZAncZA0tDIAATMvXMSi4tTrQxMgBwjiJhZQGpRsZ4VmG1oAbLQwNItMaMoO7GoJBXMhWg2NHI/vCenJDM9OzWzxMrA0NAUJAGUNzQwMtUzMNEDucTAGOgmiDCIMgHyjKA8YwMjuA2GpsGJiUU5iXkpuiGZydmpJaHxbj6uEUA1QMmkTQxtD3kP9nYriApyNLLKtHhv5l2q9XXWAq4GBo4VF04d4lhx6tlLRhYXBjtGBsU1xwIeWcw4omYmK7P14dPLGuzOvQxKF1gbGhrklh069OTGoTsnolZcOnbt1AtQWISFgkPUiCEFGHzMjBk/3zJLlDB/kyh3mOnB4DBLgoGBrwQkyH6HVUC4g4EXAO2qccM=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "Test",
+            "givenName": "Thea",
+            "name": "Thea Test"
+        },
+        "validFrom": "2022-04-25T09:00:00+02:00",
+        "validUntil": "2022-04-26T03:00:00+02:00"
+    }
+]
