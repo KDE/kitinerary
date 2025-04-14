@@ -1,0 +1,19 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:3703"
+        },
+        "name": "Ticket AEROPORT aller simple",
+        "ticketNumber": "217912",
+        "ticketToken": "aztecbin:gVVl3/jnYAAgCCRocJnAXLkBAc7BAlcNQZXGpSZLE0SSUJFfxASBAABAgEnK6zFc2XMr7fG1bt27FutctsbFa0Ztmi3FmyZlrDJlaY2GFnlcN2QAAUEhyzGLMbG5oaFpsYm7MWmjGxGpaxGjIYlpibHBgzG5mbmRiZmolQoSQiSAYGpnBCQhpxCihXCiZiAkgQADAMlAJF4UHAMApAAEAGAKAAKHlRpY2tldCAgQUVST1BPUlQgYWxsZXIgc2ltcGxlIAUIhkKAABBVDJGcegYCDhBVDJGcegYCDhBVDJGceggGBBBVDJGceggGBEIETUt5VMH6lPBW9RT1xcG/rweEd2V1bAl/aIX84DeG9K4QJXwCVoxgiARAYc3QZYX+WOwPTuccl3Ywm7ByXEDg5go6i/n0f3q6o+AEQD6PWosRLaSGqTPOnk7on/9nUH2NYoB3tKjjAKGkM47OCRokNiMMCubkux9Oa7n05YeeLf15Z13XPvErTngI5gigRCAX0YnlhOOcxgTzjJNjsYY2ZrRbLtUmyGVhGAHMMF35dkBEAd4upa3OMEnm9Wk2B0jv4uktbIj6PHpqMH6Cx/Bl1+8A=",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "validFrom": "2024-02-07T16:02:00",
+        "validUntil": "2024-02-07T17:32:00"
+    }
+]

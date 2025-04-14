@@ -1,0 +1,19 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:3703"
+        },
+        "name": "ALSA PLUS 24H EMS",
+        "ticketNumber": "217910",
+        "ticketToken": "aztecbin:gVVl3/jnYAAgCCRocJnAU7kBAc7BAlcHQZXGpSZLE0SSUJFfxASBAABAgEnK6zFc2XMr+RrmYOWubItZ5XLla0Z4mK1w5bOVuPLhcNWTXJlYOMQAAUEhyzGLMbG5oaFpsYm7MWmjGxGpaxGjIYlpibHBgzG5mbmRiZmolQASwiSAYGpmxkUfgMAkAQBkoBIu/ATvwQA1AAEAGACABQAAQigpimgkCgmKqmQGRokECKmqYIERCgAABBVDJGcegYCDhBVDJGcegYCDhBVDJGceggGBBBVDJGceggGBEIETUt5VMH6lPBW9RT1xcG/rweEd2V1bAl/aIX84DeG9K4QJnBiVo5gigRCAbuM5CsgWOX+G2zuWQsDOC6RVdsstk36MX0y6O4bzNDqBEC0q/nHDAfGqM4P6csy4ohxL02KV9trr4SVFuIHJEnMNgkaJDYjDArm5LsfTmu59OWHni39eWdd1z7xK0u0COYIoEQgGNrtCUF9F1QWg67HO9EXZUEn0GIdX8hJyaUk9gEluoggRApgOHKqQAMm2F7bIuhPqmCt2nswrWoxrIYYUqo+VuduI",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "validFrom": "2024-02-07T15:59:00",
+        "validUntil": "2024-02-08T15:59:00"
+    }
+]

@@ -1,0 +1,19 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "Ticket",
+        "issuedBy": {
+            "@type": "Organization",
+            "identifier": "uic:3703"
+        },
+        "name": "ALLER SIMPLE",
+        "ticketNumber": "217909",
+        "ticketToken": "aztecbin:gVVl3/jnYAAgCCRocJnATjkBAc7BAlcBQZXGpSZLEySSUJFfxASBAABAgElKazBc0v48uPG5aNmq3DibM1rRtiZLcORm5WuW2RgwxZGzDNmyAAFBIcsxizGxuaGhabGJuzFpoxsRqWsRoyGJaYmxwYMxuZm5kYmZqJUAEkIkgGBqZqQkAFkAJAEAZKASLvH8AYC5ABgAgAQAAagpiYiqRAppKaoJiKQAYREAAAQVQyRnHoGAg4QVQyRnHoGAg4QVQyRnHoIBgQQVQyRnHoIBgRCBE1LeVTB+pTwVvUU9cXBv68HhHdldWwJf2iF/OA3hvSuECV3glaQYIwEQgH1d1lgcVpcbXF7PuVSAVXlKQ4CUQ82+uZ0/ePJfYJkUgRCATC4dA3/5oaUwdYYif2lWYFflyARsVY8wkAEc/Qkpw4qCRokNiMMCubkux9Oa7n05YeeLf15Z13XPvErSfAIxgiARAneckj+zuxaqgqBaAYIVm9h4JIWKROAOkaDDVPyojwgoEQE5TQOHXeG9efTXWuYKeKBsUYRwaz02hdBD50gjasCsmA==",
+        "ticketedSeat": {
+            "@type": "Seat",
+            "seatingType": "2"
+        },
+        "validFrom": "2024-02-07T15:56:00",
+        "validUntil": "2024-02-07T16:56:00"
+    }
+]
