@@ -8,6 +8,12 @@
                 "scope": "Descendants"
             },
             {
+                "field": "carrierId",
+                "match": "1080",
+                "mimeType": "internal/uic9183",
+                "scope": "Descendants"
+            },
+            {
                 "field": "issuerId",
                 "match": "6260",
                 "mimeType": "internal/vdv",

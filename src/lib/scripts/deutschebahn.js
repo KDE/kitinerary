@@ -120,11 +120,11 @@ function parseTicket(text, uic918ticket) {
     var returnResIndex = 0;
     while (true) {
         // find itinerary headers
-        var header = text.substr(pos).match(/Ihre Reiseverbindung[\S ]+(Hin|Rück|Einfache )[fF]ahrt am [0-9]{2}.[0-9]{2}.([0-9]{4}).*\n/);
+        const header = text.substr(pos).match(/Ihre Reiseverbindung(?:[\S ]+(Hin|Rück|Einfache )[fF]ahrt am [0-9]{2}.[0-9]{2}.([0-9]{4}).*| und Reservierung)\n/);
         if (!header)
             break;
         var idx = header.index + header[0].length;
-        var year = header[2];
+        const year = header[2] ? header[2] : uic918ticket.validFrom.getFullYear();
 
         // determine ticket type
         var domesticHeader = text.substr(pos + idx).match(/  Reservierung(?: \/ Hinweise)?\n/);
