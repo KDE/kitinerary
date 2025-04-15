@@ -588,17 +588,20 @@ function parseSncfDosipas(dosipas, node) {
 
 // see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes#SNCF_Normandie_Tickets
 // PDF layout matches that of the "secutix" v2
-function parseSncfNormandie(pdf, node, triggerNode) {
-    let res = JsonLd.newTrainReservation();
-    res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(triggerNode.content.rawData);
+function parseSncfDosipasPdf(pdf, node, triggerNode) {
+    let res = {};
+    if (triggerNode.result[0]['@type'] == 'TrainReservation') {
+        res = triggerNode.result[0];
+    } else {
+        res = JsonLd.newTrainReservation();
+        res.reservedTicket = triggerNode.result[0];
+    }
 
     const page = pdf.pages[triggerNode.location];
     const textRight = page.textInRect(0.5, 0.0, 1.0, 1.0);
     const pnr = textRight.match(/(.*)\n(.*)\n\d{2}\/\d{2}\/\d{4} +(?:PAO|REF)\s*:\s*([A-Z0-9]{6,8})\n/);
     res.reservationNumber = pnr[3];
-    res.underName.givenName = pnr[2];
-    res.underName.familyName = pnr[1];
-    res.reservedTicket.ticketedSeat.seatingType = textRight.match(/Classe (.*)\n/)[1];
+    res.underName = { '@type': 'Person', givenName: pnr[2], familyName: pnr[1] };
 
     const textLeft = pdf.pages[triggerNode.location].textInRect(0.0, 0.0, 0.5, 1.0);
     const date = textLeft.match(/(\d{1,2} \S+ \d{4})/)[1];

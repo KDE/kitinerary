@@ -181,7 +181,7 @@
                 "scope": "Descendants"
             }
         ],
-        "function": "parseSncfNormandie",
+        "function": "parseSncfDosipasPdf",
         "mimeType": "application/pdf",
         "script": "sncf.js"
     },
