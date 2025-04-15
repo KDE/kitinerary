@@ -165,6 +165,19 @@
                 "field": "level2SignedData.level1Data.securityProviderNum",
                 "match": "1187",
                 "mimeType": "internal/uic-dosipas",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseSncfDosipas",
+        "mimeType": "internal/uic-dosipas",
+        "script": "sncf.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "level2SignedData.level1Data.securityProviderNum",
+                "match": "1187",
+                "mimeType": "internal/uic-dosipas",
                 "scope": "Descendants"
             }
         ],

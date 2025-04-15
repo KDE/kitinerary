@@ -575,6 +575,17 @@ function parseSncfCartePdf(pdf, node, barcode) {
     return carte;
 }
 
+function parseSncfDosipas(dosipas, node) {
+    let results = [];
+    for (let r of node.result) {
+        // fix broken ticket names like "null null nulll null"...
+        if (r['@type'] === 'Ticket' && r.name.match(/\bnull\b/))
+            r.name = undefined;
+        results.push(r)
+    }
+    return results;
+}
+
 // see https://community.kde.org/KDE_PIM/KItinerary/SNCF_Barcodes#SNCF_Normandie_Tickets
 // PDF layout matches that of the "secutix" v2
 function parseSncfNormandie(pdf, node, triggerNode) {
