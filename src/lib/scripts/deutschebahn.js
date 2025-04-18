@@ -247,6 +247,8 @@ function applyUic9183ToReservation(res, uicNode)
     res.reservedTicket.name = uicCode.name
     if (res.reservedTicket.ticketedSeat)
         res.reservedTicket.ticketedSeat.seatingType = uicCode.seatingType;
+    res.reservedTicket.validFrom = uicCode.validFrom;
+    res.reservedTicket.validUntil = uicCode.validUntil;
     res.underName = JsonLd.toJson(uicCode.person);
 }
 
