@@ -15,8 +15,10 @@ function parseMail(html) {
 	let lang = i18n["sk-SK"]
 
 	for (let langMutation in i18n) {
-		if (text.includes(i18n[langMutation].__lookingFor))
+		if (text.includes(i18n[langMutation].__lookingFor)) {
 			lang = i18n[langMutation]
+			break
+		}
 	}
 
 	res.reservationFor.name = lang["New reservation created for"].exec(text)[1];
@@ -57,5 +59,35 @@ function parseMail(html) {
 		{ "@type": "DownloadAction", "target": `https:${reenioDomain}/DownloadReservationCodePdf${webAccessToken}` },
 	]
 	
+	return res
+}
+
+function extractPass(pass, node) {
+	let res = node.result[0];
+
+	res.reservationNumber = res.reservedTicket.ticketToken.split(":")[1]
+	res.reservationFor.startDate = pass.field["startDate"].value
+
+	// in first sample the name is "Stará tržnica, Bratislava"
+	// in the second is "Uvedenie knihy Rozumne rastúce mesto, Stará tržnica, Bratislava"
+	// this tries to split the name and the location
+	let splitName = pass.field["TermName"].value.split(", ")
+	res.reservationFor.location = JsonLd.newObject("Place")
+	res.reservationFor.location.address = JsonLd.newObject("PostalAddress")
+	if (splitName.length == 2) {
+		res.reservationFor.location.name = splitName[0]
+		res.reservationFor.location.address.addressLocality = splitName[1]
+	} else if (splitName.length >= 3) {
+		res.reservationFor.name = splitName.slice(0, -2).join(", ")
+		res.reservationFor.location.name = splitName.slice(-2)[0]
+		res.reservationFor.location.address.addressLocality = splitName.slice(-2)[1]
+	}
+
+	res.potentialAction = [
+		{ "@type": "UpdateAction", "target": pass.field["detailUrl"].value },
+		{ "@type": "CancelAction", "target": pass.field["detailUrl"].value.replace("ReservationDetail", "CancelReservation") },
+		{ "@type": "DownloadAction", "target": pass.field["detailUrl"].value.replace("ReservationDetail", "DownloadReservationCodePdf") },
+	]
+
 	return res
 }
