@@ -1,0 +1,13 @@
+{
+	"filter": [
+		{
+			"field": "From",
+			"match": "@reenio.info",
+			"mimeType": "message/rfc822",
+			"scope": "Ancestors"
+		}
+	],
+	"function": "parseMail",
+	"mimeType": "text/html",
+	"script": "reenio.js"
+}
