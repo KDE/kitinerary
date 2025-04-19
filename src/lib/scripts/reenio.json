@@ -1,13 +1,28 @@
-{
-	"filter": [
-		{
-			"field": "From",
-			"match": "@reenio.info",
-			"mimeType": "message/rfc822",
-			"scope": "Ancestors"
-		}
-	],
-	"function": "parseMail",
-	"mimeType": "text/html",
-	"script": "reenio.js"
-}
+[
+	{
+		"filter": [
+			{
+				"field": "From",
+				"match": "@reenio.info",
+				"mimeType": "message/rfc822",
+				"scope": "Ancestors"
+			}
+		],
+		"function": "parseMail",
+		"mimeType": "text/html",
+		"script": "reenio.js"
+	},
+	{
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.cz.reenio.ticket",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "extractPass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "reenio.js"
+    }
+]
