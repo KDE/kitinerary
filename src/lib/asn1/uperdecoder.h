@@ -10,6 +10,8 @@
 
 #include <QMetaEnum>
 
+#include <variant>
+
 namespace KItinerary {
 
 /** Decoder for data encoded according to X.691 ASN.1 Unaligned Packed Encoding Rules (UPER). */
@@ -116,22 +118,23 @@ public:
     }
 
     /** Read a choice value.
+     *  @tparam T a std::variant with the alternatives covered by the choice value.
      *  @see X.691 §23
      */
-    template <typename... Ts>
-    inline QVariant readChoiceWithExtensionMarker()
+    template <typename T>
+    T readChoiceWithExtensionMarker()
     {
         if (readBoolean()) {
             setError("CHOICE with extension marker set not implemented.");
             return {};
         }
-        constexpr auto count = sizeof...(Ts);
+        constexpr auto count = std::variant_size_v<T>;
         const auto choiceIdx = readConstrainedWholeNumber(0, count - 1);
         if (choiceIdx > (int)count) {
             setError("Invalid CHOICE index.");
             return {};
         }
-        return readChoiceElement<Ts...>(choiceIdx);
+        return readChoiceElement<T>(choiceIdx);
     }
 
     /** Reading at any point encountered an error.
@@ -148,21 +151,18 @@ private:
     QByteArray readIA5StringData(size_type len);
     [[nodiscard]] uint64_t readObjectIdentifierComponent(size_type &numBytes);
 
-    template <typename T, typename T1, typename... Ts>
-    inline QVariant readChoiceElement(int choiceIdx)
+    template <typename T, std::size_t Index = 0>
+    T readChoiceElement(int choiceIdx)
     {
-        if (choiceIdx == 0) {
-            return readChoiceElement<T>(choiceIdx);
+        if (choiceIdx == Index) {
+            std::variant_alternative_t<Index, T> value;
+            value.decode(*this);
+            return value;
         }
-        return readChoiceElement<T1, Ts...>(choiceIdx - 1);
-    }
-    template <typename T>
-    inline QVariant readChoiceElement([[maybe_unused]] int choiceIdx)
-    {
-        assert(choiceIdx == 0);
-        T value;
-        value.decode(*this);
-        return QVariant::fromValue(value);
+        if constexpr (Index + 1 < std::variant_size_v<T>) {
+            return readChoiceElement<T, Index + 1>(choiceIdx);
+        }
+        Q_UNREACHABLE();
     }
 
     BitVectorView m_data;

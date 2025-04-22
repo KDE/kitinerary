@@ -178,7 +178,7 @@ void Fcb::v2::PolygoneType::decode(UPERDecoder &decoder)
 
 void Fcb::v2::RegionalValidityType::decode(UPERDecoder &decoder)
 {
-    value = decoder.readChoiceWithExtensionMarker<TrainLinkType, ViaStationType, ZoneType, LineType, PolygoneType>();
+    value = QVariant::fromStdVariant(decoder.readChoiceWithExtensionMarker<std::variant<TrainLinkType, ViaStationType, ZoneType, LineType, PolygoneType>>());
 }
 
 void Fcb::v2::ReturnRouteDescriptionType::decode(UPERDecoder &decoder)
@@ -720,7 +720,7 @@ void Fcb::v2::DocumentData::decode(UPERDecoder &decoder)
 {
     decodeSequence(decoder);
     FCB_READ_CUSTOM(token);
-    ticket = decoder.readChoiceWithExtensionMarker<
+    ticket = QVariant::fromStdVariant(decoder.readChoiceWithExtensionMarker<std::variant<
         ReservationData,
         CarCarriageReservationData,
         OpenTicketData,
@@ -733,7 +733,7 @@ void Fcb::v2::DocumentData::decode(UPERDecoder &decoder)
         StationPassageData,
         ExtensionData,
         DelayConfirmation
-    >();
+    >>());
 }
 
 void Fcb::v2::TicketLinkType::decode(UPERDecoder &decoder)
