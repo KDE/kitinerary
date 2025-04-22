@@ -27,6 +27,7 @@
 
 #include <cmath>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KItinerary::HtmlDocument>)
@@ -290,12 +291,12 @@ void HtmlDocumentProcessor::destroyNode(ExtractorDocumentNode &node) const
 
 void HtmlDocumentProcessor::expandElementRecursive(ExtractorDocumentNode &node, const HtmlElement &elem, const ExtractorEngine *engine) const
 {
-  if (elem.name() == QLatin1StringView("img")) {
-    const auto src = elem.attribute(QLatin1StringView("src"));
-    if (src.startsWith(QLatin1StringView("data:"))) {
-      expandDataUrl(node, src, engine);
+    if (elem.name() == "img"_L1) {
+        const auto src = elem.attribute("src"_L1);
+        if (src.startsWith("data:"_L1)) {
+            expandDataUrl(node, src, engine);
+        }
     }
-  }
 
     auto child = elem.firstChild();
     while (!child.isNull()) {
