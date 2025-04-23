@@ -354,7 +354,7 @@ QString Rct2Ticket::seatNumber() const
             return row8;
         }
         // rows 9/10 can contain seating details, let's use those as fallback if we don't find a number in the right field
-        return d->layout.text(9, 32, 19, 2).simplified();
+        return d->layout.text(9, 32, 39, 2).simplified();
     }
     return {};
 }
