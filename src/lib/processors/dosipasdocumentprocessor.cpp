@@ -59,9 +59,9 @@ void DosipasDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     QList<QVariant> results;
     std::visit([&results, &fcb, ticket](auto &&fcbV) {
         for (const auto &doc : fcbV.transportDocument) {
-            FcbExtractor::extractReservation(doc.ticket, *fcb, ticket, results);
-            FcbExtractor::extractOpenTicket(doc.ticket, *fcb, ticket, results);
-            FcbExtractor::extractCustomerCard(doc.ticket, *fcb, ticket, results);
+            FcbExtractor::extractReservation(QVariant::fromStdVariant(doc.ticket), *fcb, ticket, results);
+            FcbExtractor::extractOpenTicket(QVariant::fromStdVariant(doc.ticket), *fcb, ticket, results);
+            FcbExtractor::extractCustomerCard(QVariant::fromStdVariant(doc.ticket), *fcb, ticket, results);
         }
     }, *fcb);
 

@@ -64,6 +64,15 @@ private: \
     [[nodiscard]] inline bool Name ## IsSet() const { return m_optionals[m_optionals.size() - _uper_ ## Name ## OptionalIndex - 1]; } \
     [[nodiscard]] std::optional<Type> Name ## Value() const { return Name; }
 
+#define UPER_ELEMENT_CHOICE(Name, ...) \
+public: \
+    std::variant<__VA_ARGS__> Name; /* NOLINT misc-non-private-member-variables-in-classes */ \
+    Q_PROPERTY(QVariant Name READ Name ## Variant CONSTANT) \
+    [[nodiscard]] constexpr inline bool Name ## IsSet() const { return true; } \
+    [[nodiscard]] std::optional<std::variant<__VA_ARGS__>> Name ## Value() const { return Name; } \
+private: \
+    [[nodiscard]] inline QVariant Name ## Variant() const { return QVariant::fromStdVariant(Name); }
+
 }
 
 #define UPER_GADGET_FINALIZE \

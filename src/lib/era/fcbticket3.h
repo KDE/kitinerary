@@ -14,6 +14,8 @@
 #include <QList>
 #include <QVariant>
 
+#include <variant>
+
 namespace KItinerary {
 
 class UPERDecoder;
@@ -273,7 +275,7 @@ class PolygoneType {
  */
 class RegionalValidityType {
     UPER_EXTENDABLE_GADGET
-    UPER_ELEMENT(QVariant, value)
+    UPER_ELEMENT_CHOICE(value, TrainLinkType, ViaStationType, ZoneType, LineType, PolygoneType)
     UPER_GADGET_FINALIZE
 };
 
@@ -1015,7 +1017,19 @@ class TokenType {
 class DocumentData {
     UPER_EXTENDABLE_GADGET
     UPER_ELEMENT_OPTIONAL(KItinerary::Fcb::v3::TokenType, token)
-    UPER_ELEMENT(QVariant, ticket)
+    UPER_ELEMENT_CHOICE(ticket,
+        ReservationData,
+        CarCarriageReservationData,
+        OpenTicketData,
+        PassData,
+        VoucherData,
+        CustomerCardData,
+        CountermarkData,
+        ParkingGroundData,
+        FIPTicketData,
+        StationPassageData,
+        ExtensionData,
+        DelayConfirmation)
     UPER_GADGET_FINALIZE
 };
 

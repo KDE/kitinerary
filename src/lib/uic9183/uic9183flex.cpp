@@ -67,7 +67,9 @@ QList<QVariant>Uic9183Flex::transportDocuments() const
     return isValid() ? std::visit([](auto &&data) {
         QList<QVariant> l;
         l.reserve(data.transportDocument.size());
-        std::transform(data.transportDocument.begin(), data.transportDocument.end(), std::back_inserter(l), [](const auto &doc) { return doc.ticket; });
+        std::transform(data.transportDocument.begin(), data.transportDocument.end(), std::back_inserter(l), [](const auto &doc) {
+            return QVariant::fromStdVariant(doc.ticket);
+        });
         return l;
     }, *d->m_data) : QList<QVariant>();
 }
