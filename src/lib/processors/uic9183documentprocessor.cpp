@@ -353,6 +353,10 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     ticket.setUnderName(p.person());
     ticket.setValidFrom(p.validFrom());
     ticket.setValidUntil(p.validUntil());
+    if (const auto currency = rct2.currency(); !currency.isEmpty()) {
+        ticket.setPriceCurrency(currency);
+        ticket.setTotalPrice(rct2.price());
+    }
     node.addResult(QList<QVariant>({ticket}));
 }
 
