@@ -338,25 +338,23 @@ void FcbExtractor::extractReservation(const QVariant &res, const Fcb::UicRailTic
     }).visit<FCB_VERSIONED(ReservationData)>(res);
 }
 
-template <typename T>
-[[nodiscard]] static bool extractValidRegion(const T &regionalValidity, const QDateTime &issuingDateTime, const TrainReservation &baseRes, const TrainTrip &baseTrip, QList<QVariant> &result)
+template <typename T, typename CodeTableType>
+[[nodiscard]] static bool extractValidRegion(const T &regionalValidity, CodeTableType stationCodeTable, const QDateTime &issuingDateTime, const TrainReservation &baseRes, const TrainTrip &baseTrip, QList<QVariant> &result)
 {
-    return std::visit([&baseTrip, issuingDateTime, &baseRes, &result](auto &&trainLink) {
+    return std::visit([&baseTrip, stationCodeTable, issuingDateTime, &baseRes, &result](auto &&trainLink) {
         if constexpr (is_any_of_v<decltype(trainLink), FCB_VERSIONED(TrainLinkType)>) {
             TrainTrip trip(baseTrip);
 
             // TODO station identifier, use FcbExtractor::read[Arrival|Departure]Station
             if (trainLink.fromStationNameUTF8IsSet()) {
                 TrainStation dep;
-                dep.setName(trainLink.fromStationNameUTF8);
-                FcbExtractor::fixStationCode(dep);
+                FcbExtractor::readDepartureStation(trainLink, stationCodeTable, dep);
                 trip.setDepartureStation(dep);
             }
 
             if (trainLink.toStationNameUTF8IsSet()) {
                 TrainStation arr;
-                arr.setName(trainLink.toStationNameUTF8);
-                FcbExtractor::fixStationCode(arr);
+                FcbExtractor::readArrivalStation(trainLink, stationCodeTable, arr);
                 trip.setArrivalStation(arr);
             }
 
@@ -428,7 +426,7 @@ void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTick
         // check for TrainLinkType regional validity constrains
         bool trainLinkTypeFound = false;
         for (const auto &regionalValidity : nrt.validRegion) {
-            trainLinkTypeFound |= extractValidRegion(regionalValidity.value, issuingDateTime, res, baseTrip, result);
+            trainLinkTypeFound |= extractValidRegion(regionalValidity.value, nrt.stationCodeTable, issuingDateTime, res, baseTrip, result);
         }
 
         if (!trainLinkTypeFound) {
@@ -452,7 +450,7 @@ void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTick
 
             bool retTrainLinkTypeFound = false;
             for (const auto &regionalValidity : nrt.returnDescription.validReturnRegion) {
-                retTrainLinkTypeFound |= extractValidRegion(regionalValidity.value, issuingDateTime, res, retBaseTrip, result);
+                retTrainLinkTypeFound |= extractValidRegion(regionalValidity.value, nrt.stationCodeTable, issuingDateTime, res, retBaseTrip, result);
             }
 
             if (!retTrainLinkTypeFound && validator.isValidElement(retBaseTrip)) {
