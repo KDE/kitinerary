@@ -45,8 +45,16 @@ private:
         }
         return visitImpl<RetT, Ts...>(v);
     }
-
 };
+
+template <typename T, typename U, typename ...Us>
+struct is_any_of : std::conditional_t<std::is_same_v<std::decay_t<T>, U>, std::true_type, is_any_of<T, Us...>>{};
+
+template <typename T, typename U>
+struct is_any_of<T, U> : std::is_same<std::decay_t<T>, U>{};
+
+template <typename T, typename U, typename ...Us>
+inline constexpr bool is_any_of_v = is_any_of<T, U, Us...>::value;
 
 }
 

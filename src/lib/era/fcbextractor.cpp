@@ -23,19 +23,21 @@ using namespace KItinerary;
 template <typename T>
 [[nodiscard]] static QString ticketNameForDocument(const T &doc)
 {
-    return VariantVisitor([](auto &&doc) {
-        auto n = doc.tariffs.isEmpty() ? QString() : doc.tariffs.at(0).tariffDesc;
-        if (!n.isEmpty()) {
-            return n;
-        }
-        if constexpr (std::is_same_v<std::decay_t<decltype(doc)>, Fcb::v13::PassData> || std::is_same_v<std::decay_t<decltype(doc)>, Fcb::v2::PassData> || std::is_same_v<std::decay_t<decltype(doc)>, Fcb::v3::PassData>) {
-            if (!doc.passDescription.isEmpty()) {
-                return doc.passDescription;
+    return std::visit([](auto &&doc) {
+        if constexpr (is_any_of_v<decltype(doc), FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>) {
+            auto n = doc.tariffs.isEmpty() ? QString() : doc.tariffs.at(0).tariffDesc;
+            if (!n.isEmpty()) {
+                return n;
             }
+            if constexpr (is_any_of_v<decltype(doc), FCB_VERSIONED(PassData)>) {
+                if (!doc.passDescription.isEmpty()) {
+                    return doc.passDescription;
+                }
+            }
+            return doc.infoText;
         }
-
-        return doc.infoText;
-    }).template visit<FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(QVariant::fromStdVariant(doc));
+        return QString();
+    }, doc);
 }
 
 QString FcbExtractor::ticketName(const Fcb::UicRailTicketData &fcb)
@@ -53,11 +55,13 @@ QString FcbExtractor::ticketName(const Fcb::UicRailTicketData &fcb)
 template <typename T>
 [[nodiscard]] static QString fcbReference(const T &data)
 {
-    if (!data.referenceIA5.isEmpty()) {
-        return QString::fromLatin1(data.referenceIA5);
-    }
-    if (data.referenceNumIsSet()) {
-        return QString::number(data.referenceNum);
+    if constexpr (is_any_of_v<decltype(data), FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>) {
+        if (!data.referenceIA5.isEmpty()) {
+            return QString::fromLatin1(data.referenceIA5);
+        }
+        if (data.referenceNumIsSet()) {
+            return QString::number(data.referenceNum);
+        }
     }
     return {};
 }
@@ -70,9 +74,9 @@ QString FcbExtractor::pnr(const Fcb::UicRailTicketData &fcb)
         }
 
         for (const auto &doc : fcb.transportDocument) {
-            auto pnr = VariantVisitor([](auto &&doc) {
+            auto pnr = std::visit([](auto &&doc) {
                 return fcbReference(doc);
-            }).template visit<FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(QVariant::fromStdVariant(doc.ticket));
+            }, doc.ticket);
             if (!pnr.isEmpty()) {
                 return pnr;
             }
@@ -86,9 +90,12 @@ QString FcbExtractor::seatingType(const Fcb::UicRailTicketData &fcb)
 {
     return std::visit([](auto &&fcb) {
         for (const auto &doc : fcb.transportDocument) {
-            auto s = VariantVisitor([](auto &&doc) {
-                return FcbUtil::classCodeToString(doc.classCode);
-            }).template visit<FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(QVariant::fromStdVariant(doc.ticket));
+            auto s = std::visit([](auto &&doc) {
+                if constexpr (is_any_of_v<decltype(doc), FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>) {
+                    return FcbUtil::classCodeToString(doc.classCode);
+                }
+                return QString{};
+            }, doc.ticket);
             if (!s.isEmpty()) {
                 return s;
             }
@@ -164,15 +171,21 @@ QDateTime FcbExtractor::validFrom(const Fcb::UicRailTicketData &fcb)
 {
     return std::visit([](auto &&fcb) {
         for (const auto &doc : fcb.transportDocument) {
-            auto dt = VariantVisitor([&fcb](auto &&doc) {
-                return doc.departureDateTime(fcb.issuingDetail.issueingDateTime());
-            }).template visit<FCB_VERSIONED(ReservationData)>(QVariant::fromStdVariant(doc.ticket));
+            auto dt = std::visit([&fcb](auto &&doc) {
+                if constexpr (is_any_of_v<decltype(doc), FCB_VERSIONED(ReservationData)>) {
+                    return doc.departureDateTime(fcb.issuingDetail.issueingDateTime());
+                }
+                return QDateTime();
+            }, doc.ticket);
             if (dt.isValid()) {
                 return dt;
             }
-            dt = VariantVisitor([&fcb](auto &&doc) {
-                return doc.validFrom(fcb.issuingDetail.issueingDateTime());
-            }).template visit<FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(QVariant::fromStdVariant(doc.ticket));
+            dt = std::visit([&fcb](auto &&doc) {
+                if constexpr (is_any_of_v<decltype(doc), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>) {
+                    return doc.validFrom(fcb.issuingDetail.issueingDateTime());
+                }
+                return QDateTime();
+            }, doc.ticket);
             if (dt.isValid()) {
                 return dt;
             }
@@ -185,15 +198,21 @@ QDateTime FcbExtractor::validUntil(const Fcb::UicRailTicketData &fcb)
 {
     return std::visit([](auto &&fcb) {
         for (const auto &doc : fcb.transportDocument) {
-            auto dt = VariantVisitor([&fcb](auto &&doc) {
-                return doc.arrivalDateTime(fcb.issuingDetail.issueingDateTime());
-            }).template visit<FCB_VERSIONED(ReservationData)>(QVariant::fromStdVariant(doc.ticket));
+            auto dt = std::visit([&fcb](auto &&doc) {
+                if constexpr (is_any_of_v<decltype(doc), FCB_VERSIONED(ReservationData)>) {
+                    return doc.arrivalDateTime(fcb.issuingDetail.issueingDateTime());
+                }
+                return QDateTime();
+            }, doc.ticket);
             if (dt.isValid()) {
                 return dt;
             }
-            dt = VariantVisitor([&fcb](auto &&doc) {
-                return doc.validUntil(fcb.issuingDetail.issueingDateTime());
-            }).template visit<FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(QVariant::fromStdVariant(doc.ticket));
+            dt = std::visit([&fcb](auto &&doc) {
+                if constexpr (is_any_of_v<decltype(doc), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>) {
+                    return doc.validUntil(fcb.issuingDetail.issueingDateTime());
+                }
+                return QDateTime();
+            }, doc.ticket);
             if (dt.isValid()) {
                 return dt;
             }
@@ -209,9 +228,12 @@ FcbExtractor::PriceData FcbExtractor::price(const Fcb::UicRailTicketData &fcb)
         p.currency = QString::fromUtf8(fcb.issuingDetail.currency);
         const auto fract = std::pow(10, fcb.issuingDetail.currencyFract);
         for (const auto &doc : fcb.transportDocument) {
-            p.price = VariantVisitor([fract](auto &&doc) {
-                return doc.priceIsSet() ? doc.price / fract : NAN;
-            }).template visit<FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>(QVariant::fromStdVariant(doc.ticket));
+            p.price = std::visit([fract](auto &&doc) -> double {
+                if constexpr (is_any_of_v<decltype(doc), FCB_VERSIONED(ReservationData), FCB_VERSIONED(OpenTicketData), FCB_VERSIONED(PassData)>) {
+                    return doc.priceIsSet() ? doc.price / fract : NAN;
+                }
+                return NAN;
+            }, doc.ticket);
             if (!std::isnan(p.price)) {
                 continue;
             }
@@ -319,44 +341,46 @@ void FcbExtractor::extractReservation(const QVariant &res, const Fcb::UicRailTic
 template <typename T>
 [[nodiscard]] static bool extractValidRegion(const T &regionalValidity, const QDateTime &issuingDateTime, const TrainReservation &baseRes, const TrainTrip &baseTrip, QList<QVariant> &result)
 {
-    return VariantVisitor([&baseTrip, issuingDateTime, &baseRes, &result](auto &&trainLink) {
-        TrainTrip trip(baseTrip);
+    return std::visit([&baseTrip, issuingDateTime, &baseRes, &result](auto &&trainLink) {
+        if constexpr (is_any_of_v<decltype(trainLink), FCB_VERSIONED(TrainLinkType)>) {
+            TrainTrip trip(baseTrip);
 
-        // TODO station identifier, use FcbExtractor::read[Arrival|Departure]Station
-        if (trainLink.fromStationNameUTF8IsSet()) {
-            TrainStation dep;
-            dep.setName(trainLink.fromStationNameUTF8);
-            FcbExtractor::fixStationCode(dep);
-            trip.setDepartureStation(dep);
-        }
+            // TODO station identifier, use FcbExtractor::read[Arrival|Departure]Station
+            if (trainLink.fromStationNameUTF8IsSet()) {
+                TrainStation dep;
+                dep.setName(trainLink.fromStationNameUTF8);
+                FcbExtractor::fixStationCode(dep);
+                trip.setDepartureStation(dep);
+            }
 
-        if (trainLink.toStationNameUTF8IsSet()) {
-            TrainStation arr;
-            arr.setName(trainLink.toStationNameUTF8);
-            FcbExtractor::fixStationCode(arr);
-            trip.setArrivalStation(arr);
-        }
+            if (trainLink.toStationNameUTF8IsSet()) {
+                TrainStation arr;
+                arr.setName(trainLink.toStationNameUTF8);
+                FcbExtractor::fixStationCode(arr);
+                trip.setArrivalStation(arr);
+            }
 
-        trip.setDepartureDay({}); // reset explicit value in case of departure after midnight
-        trip.setDepartureTime(trainLink.departureDateTime(issuingDateTime));
+            trip.setDepartureDay({}); // reset explicit value in case of departure after midnight
+            trip.setDepartureTime(trainLink.departureDateTime(issuingDateTime));
 
-        if (trainLink.trainNumIsSet()) {
-            trip.setTrainNumber(QString::number(trainLink.trainNum));
-        } else {
-            trip.setTrainNumber(QString::fromUtf8(trainLink.trainIA5));
-        }
+            if (trainLink.trainNumIsSet()) {
+                trip.setTrainNumber(QString::number(trainLink.trainNum));
+            } else {
+                trip.setTrainNumber(QString::fromUtf8(trainLink.trainIA5));
+            }
 
-        ExtractorValidator validator;
-        validator.setAcceptedTypes<TrainTrip>();
-        if (validator.isValidElement(trip)) {
-            TrainReservation res(baseRes);
-            res.setReservationFor(trip);
-            result.push_back(res);
-            return true;
+            ExtractorValidator validator;
+            validator.setAcceptedTypes<TrainTrip>();
+            if (validator.isValidElement(trip)) {
+                TrainReservation res(baseRes);
+                res.setReservationFor(trip);
+                result.push_back(res);
+                return true;
+            }
         }
 
         return false;
-    }).template visit<FCB_VERSIONED(TrainLinkType)>(QVariant::fromStdVariant(regionalValidity));
+    }, regionalValidity);
 }
 
 void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTicketData &fcb, const Ticket &ticket, QList<QVariant> &result)
