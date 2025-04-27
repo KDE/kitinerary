@@ -85,7 +85,59 @@ An extractor script filter consists of the following four properties:
 }
 ```
 
-TODO: Add more information about the `scope` property. what it actually means?
+Scope defines where to match the filter in relation to mimeType. The following values are supported:
+
+- `Current`: The filter is applied to the node itself (mimeType).
+- `Parent`: The filter is applied to the direct parent node of the current node (only one back).
+- `Children`: The filter is applied to the direct child nodes of the current node (only one forward).
+- `Ancestors`: The filter is applied to all parent nodes of the current node (all the way back).
+- `Descendants`: The filter is applied to all child nodes of the current node (all the way forward).
+
+<details>
+<summary>Scope examples</summary>
+
+---
+
+We have an email with PDF, and ticket details inside the PDF.
+The PDF is a child of the email, and the ticket details are a child of the PDF.
+
+```tree
+└── message/rfc822 // Email send by booking operator
+    ├── text/html // HTML content of the email
+    │   └── text/plain // extracted only text from the HTML
+    ├── application/pdf // PDF attached to the email
+    │   ├── internal/qimage // Image of the QR code
+    │   │   └── text/plain // Decoded text from the QR code
+    │   └── text/plain // Usually text inside the PDF
+    └── internal/qimage // Image of booking company logo - we dont care 
+```
+
+```json
+{
+  "mimeType": "application/pdf",
+  // we are looking for PDF
+  "field": "From",
+  // Email (message/rfc822) has "From" field, with sender
+  "match": "^booking@exampl-operator\.com$",
+  "scope": "Parent"
+  // we look at the parent of the PDF, which is the email
+}
+```
+
+```js
+function parser(pdfTicket, node, matched) {
+    [...]
+}
+```
+
+Node[0]  is the PDF, but we match ticket based on it's parrent which is Email, and we see if it was send from "
+booking@exampl-operator.com".
+Which results in the first argument of the parser function becoming the PDF, second argument is the node (PDF) and third
+argument is the matched the document (message/rfc822).
+
+
+</details>
+
 
 <details>
 <summary>Examples</summary>
