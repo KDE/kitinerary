@@ -18,7 +18,7 @@ the [KItinerary Workbench README](https://invent.kde.org/pim/kitinerary-workbenc
 To create a new extractor script, you need to create a new files in the `$XDG_DATA_DIRS/kitinerary/extractors` (~/
 .local/share/kitinerary/extractors`) directory.
 
-> **Note:**: For easier management and later collaboration in Git we recommend linking extractor scripts from the
+> **Note:** For easier management and later collaboration in Git we recommend linking extractor scripts from the
 > directory to a Git repository (`ln -s $(pwd)/src/lib/scripts ~/.local/share/kitinerary/extractors`).
 
 ## Script declaration
@@ -26,21 +26,21 @@ To create a new extractor script, you need to create a new files in the `$XDG_DA
 Kitinerary uses a JSON file to declare the extractor scripts. This file sets filtering rules by which it knows, which
 extractor to run and defines the script itself.
 
-> **Note:**: Multiple extractors can run on a single document, if more than one extractor outputs valid data it will be
+> **Note:** Multiple extractors can run on a single document, if more than one extractor outputs valid data it will be
 > merged into single output.
 >
-> **Note:**: Multiple script declarations can exist for one js extractor file. Usefull if there many types of documents
+> **Note:** Multiple script declarations can exist for one js extractor file. Usefull if there many types of documents
 > but same script can be used to extract data from them.
 
-### Document type
-
-Declare the document type in the JSON file. This is the MIME type of the document, which is used to match the document,
-each object representing a single script.
+### Extractor declaration
+ 
+It contains the MIME type of the document that is going to be ingested, filter defining when this extractor script should run, and
+declaration script and the function that will be called for it.
 
 ```json
 {
   "mimeType": "application/pdf",
-  // MIME type of the document (aka. what that document is)
+  // MIME type of the document that is going to be ingested (email or pdf, or other)
   "filter": [
     {
       ...
@@ -61,10 +61,9 @@ Extractor scripts are run against a document node if all of the following condit
 
 ### Extractor filters
 
-Extractor filters are evaluated against document nodes. This can be the node the extractor
-script wants to process, but also a descendant or ancestor node.
+Extractor filters are evaluated against document nodes (content of the document). 
 
-An extractor script filter consists of the following four properties:
+Extractor script filter consists of the following four properties:
 
 ```json
 {
@@ -77,7 +76,7 @@ An extractor script filter consists of the following four properties:
       // If it is a complex document (like email with fields), it sets which filed of the document run "match" on. This is ignored for nodes containing basic types such as plain text or binary data.
       "match": "KDE.org/airlines",
       //a regular expression or exact string we look for.
-      "scope": "Descendants"
+      "scope": "Current"
       //this defines the relation to the node the script should be run on (Current, Parent, Children, Ancestors or Descendants).
     }
     // [...]
@@ -87,7 +86,7 @@ An extractor script filter consists of the following four properties:
 
 Scope defines where to match the filter in relation to mimeType. The following values are supported:
 
-- `Current`: The filter is applied to the node itself (mimeType).
+- `Current`: The filter is applied to the node itself (mimeType in filter).
 - `Parent`: The filter is applied to the direct parent node of the current node (only one back).
 - `Children`: The filter is applied to the direct child nodes of the current node (only one forward).
 - `Ancestors`: The filter is applied to all parent nodes of the current node (all the way back).
@@ -99,7 +98,7 @@ Scope defines where to match the filter in relation to mimeType. The following v
 ---
 
 We have an email with PDF, and ticket details inside the PDF.
-The PDF is a child of the email, and the ticket details are a child of the PDF.
+The PDF is a child of the email, and the ticket details are inside the PDF.
 
 ```tree
 └── message/rfc822 // Email send by booking operator
@@ -130,11 +129,10 @@ function parser(pdfTicket, node, matched) {
 }
 ```
 
-Node[0]  is the PDF, but we match ticket based on it's parrent which is Email, and we see if it was send from "
+Node[0] is the PDF, but we match ticket based on it's parrent which is Email, and we see if it was send from "
 booking@exampl-operator.com".
 Which results in the first argument of the parser function becoming the PDF, second argument is the node (PDF) and third
 argument is the matched the document (message/rfc822).
-
 
 </details>
 
@@ -156,7 +154,6 @@ is the `From` header of the MIME message.
   "match": "^booking@exampl-operator\.com$",
   // We look at exactly "booking@exampl-operator.com"
   "scope": "Ancestors"
-  // TODO: What is this?
 }
 ```
 
@@ -170,7 +167,6 @@ rather than `Children` as the direct child nodes tend to be the images containin
   "mimeType": "text/plain",
   // we look at plain text
   "scope": "Ancestors",
-  // TODO: What is this? i dont understand...
   "match": "^F\d{8}$"
   // We look for exactly "F" followed by 8 digits
 }
@@ -258,7 +254,7 @@ PDF documents containing the string "My Ferry Booking" anywhere.
 
 ## Extractor script
 
-Extractor scripts are run inside a QJSEngine, it isn't a full JS environment, and not everything is supported.
+Extractor scripts are run inside a QJSEngine, **it isn't a full JS environment**, and not everything is supported.
 There are some additional APIs available to extractor scripts (technical docs can be found
 here [KItinerary::JsApi](https://api.kde.org/kdepim/kitinerary/html/namespaceKItinerary_1_1JsApi.html).
 
@@ -283,10 +279,10 @@ It's a object that represents a node in the document tree:
 ```
 
 ```js
-function main(pdf, node, barcode) {
-  cnsole.log(pdf.content); // Automagically extracted PDF content, no need to point at it.
-  let imageOfQR = node.childNodes[0];
-  let textFromQR = imageOfQR.childNodes[0].content;
+function main(pdf, node) {
+    cnsole.log(pdf.content); // Automagically extracted PDF content, no need to point at it.
+    let imageOfQR = node.childNodes[0];
+    let textFromQR = imageOfQR.childNodes[0].content;
 }
 ```
 
@@ -314,9 +310,9 @@ PdfDocument is a object that represents a PDF document; it has the following pro
 ```js
 // If ticket is in PDF the fist argument is the `PdfPage` object
 function main(contentPDF, node) {
-  const allText = contentPDF.text; // Extracts all text from the PDF page
-  const firstPage = contentPDF.pages[0].text; // Extracts text from only from first page
-  const textInRect = contentPDF.pages[0].textInRect(0, 0, 0.3, 0.25); // "Passanger: Kandalf"
+    const allText = contentPDF.text; // Extracts all text from the PDF page
+    const firstPage = contentPDF.pages[0].text; // Extracts text from only from first page
+    const textInRect = contentPDF.pages[0].textInRect(0, 0, 0.3, 0.25); // "Passanger: Kandalf"
 }
 ```
 
@@ -354,7 +350,7 @@ HtmlElement represents an element within an HTML document; it has the following 
 
   ```js
   // Create a simple HTML document
-  const simpleHtml = `
+const simpleHtml = `
     <html><head>
     <title>Flight Details</title>
     </head><body>
@@ -380,69 +376,69 @@ HtmlElement represents an element within an HTML document; it has the following 
     </body>
     </html>
     `;
-  
-  const html = ExtractorEngine.extract(simpleHtml, "text/html").content;
-  
-  const res = JsonLd.newFlightReservation();
-  
-  // Get flight number from h1
-  const flightHeader = html.eval("//h1")[0];
-  console.log(flightHeader.content);
-  if (typeof flightHeader.content == "string") {
+
+const html = ExtractorEngine.extract(simpleHtml, "text/html").content;
+
+const res = JsonLd.newFlightReservation();
+
+// Get flight number from h1
+const flightHeader = html.eval("//h1")[0];
+console.log(flightHeader.content);
+if (typeof flightHeader.content == "string") {
     const flightNumber = flightHeader.content.match(/Flight ([A-Z]{2})(\d+)/);
     if (flightNumber) {
-      res.reservationFor.airline.iataCode = flightNumber[1];
-      res.reservationFor.flightNumber = flightNumber[2];
+        res.reservationFor.airline.iataCode = flightNumber[1];
+        res.reservationFor.flightNumber = flightNumber[2];
     }
-  }
-  
-  // Get departure info
-  const departureElement = html.eval("//div[@class='departure']")[0];
-  if (typeof flightHeader.content == "string") {
+}
+
+// Get departure info
+const departureElement = html.eval("//div[@class='departure']")[0];
+if (typeof flightHeader.content == "string") {
     const codeElement = departureElement.eval("span[@class='code']")[0];
     const timeElement = departureElement.eval("span[@class='time']")[0];
-  
+
     res.reservationFor.departureAirport.iataCode = codeElement.content;
     res.reservationFor.departureTime = JsonLd.toDateTime(
-      timeElement.content,
-      "yyyy-MM-dd HH:mm",
-      "en",
+        timeElement.content,
+        "yyyy-MM-dd HH:mm",
+        "en",
     );
-  }
-  
-  // Get arrival info
-  const arrivalElement = html.eval("//div[@class='arrival']")[0];
-  if (typeof flightHeader.content == "string") {
+}
+
+// Get arrival info
+const arrivalElement = html.eval("//div[@class='arrival']")[0];
+if (typeof flightHeader.content == "string") {
     const codeElement = arrivalElement.eval("span[@class='code']")[0];
     const timeElement = arrivalElement.eval("span[@class='time']")[0];
-  
+
     res.reservationFor.arrivalAirport.iataCode = codeElement.content;
     res.reservationFor.arrivalTime = JsonLd.toDateTime(
-      timeElement.content,
-      "yyyy-MM-dd HH:mm",
-      "en",
+        timeElement.content,
+        "yyyy-MM-dd HH:mm",
+        "en",
     );
-  }
-  
-  // Get passenger info using element navigation
-  const passengerDiv = html.eval("//div[@id='traveler']")[0];
-  const nameSpan = passengerDiv.firstChild;
-  const seatSpan = nameSpan.nextSibling;
-  
-  res.underName = {
+}
+
+// Get passenger info using element navigation
+const passengerDiv = html.eval("//div[@id='traveler']")[0];
+const nameSpan = passengerDiv.firstChild;
+const seatSpan = nameSpan.nextSibling;
+
+res.underName = {
     "@type": "Person",
     name: nameSpan.content,
-  };
-  
-  res.reservedTicket = {
+};
+
+res.reservedTicket = {
     "@type": "Ticket",
     ticketedSeat: {
-      "@type": "Seat",
-      seatNumber: seatSpan.content,
+        "@type": "Seat",
+        seatNumber: seatSpan.content,
     },
-  };
-  
-  return res;
+};
+
+return res;
   ```
 
   </details>
@@ -451,9 +447,9 @@ HtmlElement represents an element within an HTML document; it has the following 
 
 <details id="PKPASS">
 <summary>PKPASS</summary>
-It's a object of fields inside of PKPASS:
+It's a object of fields inside PKPASS:
 
-- `field[X]`: Object with labes and values
+- `field[X]`: Object with labels and values
 
   <details>
   <summary>Example - pkpass</summary>
@@ -504,14 +500,14 @@ var f = JsonLd.newFlightReservation(); // https://schema.org/FlightReservation
 f.reservationFor.departureAirport.name = "KDE Konqi Airport (KDQ)"; // https://schema.org/FlightReservation -> https://schema.org/Flight -> https://schema.org/Place -> https://schema.org/Airport
 f.reservationFor.arrivalAirport.name = "KDE Katie City Airport (KDA)";
 f.reservationFor.departureTime = JsonLd.toDateTime(
-  "08:36 20.02.2025",
-  "hh:mm dd.MM.yyyy",
-  "en",
+    "08:36 20.02.2025",
+    "hh:mm dd.MM.yyyy",
+    "en",
 );
 f.reservationFor.arrivalTime = JsonLd.toDateTime(
-  "09:56 20.02.2025",
-  "hh:mm dd.MM.yyyy",
-  "en",
+    "09:56 20.02.2025",
+    "hh:mm dd.MM.yyyy",
+    "en",
 );
 f.reservationFor.airline.iataCode = "KD";
 f.reservationFor.flightNumber = "KD 1096";
@@ -548,15 +544,15 @@ const decodedQR = ByteArray.fromBase64(theQR); // binary blob
 const bitsOfQR = ByteArray.toBitArray(theQR); // Conver this to bitArray so it can be manipulated bit-by-bit
 let outputString = "";
 for (let i = 0; i < 6; ++i) {
-  let magicalNumber = bitsOfQR.readNumberMSB(0, 6); // Reads 6 **bits**, eg. '43'
-  outputString += String.fromCharCode(magicalNumber + 32); // '43' + 32 = K
+    let magicalNumber = bitsOfQR.readNumberMSB(0, 6); // Reads 6 **bits**, eg. '43'
+    outputString += String.fromCharCode(magicalNumber + 32); // '43' + 32 = K
 }
 console.log(outputString); // Konqi
 
 // Usually not needed, as the extractor engine will create barcode nodes automatically
 const QRCode = ImageOfAztecQRCodeNotDecodedByExtractorEngine;
 const DecodedAztec = Barcode.decodeAztec(
-  ImageOfAztecQRCodeNotDecodedByExtractorEngine,
+    ImageOfAztecQRCodeNotDecodedByExtractorEngine,
 );
 console.log(DecodedAztec); // ["KDE airlines", "KDE Konqi Airport (KDQ)", "KDE Katie City Airport (KDA)", "20.02.2025", "08:36", "20.02.2025", "09:56", "KD 1096", "magicalstringsoweknowthisticketwasnottamperedwithbyevilwizards"]
 ```
@@ -580,8 +576,8 @@ API for interacting with the extractor engine itself:
 ```js
 const XMLdataIncorreclyInterpretedAsText = "<xml><data>42</data></xml>";
 const CorrectlyInterpretedXML = ExtractorEngine.extract(
-  XMLdataIncorreclyInterpretedAsText,
-  "application/xml",
+    XMLdataIncorreclyInterpretedAsText,
+    "application/xml",
 );
 
 var f = JsonLd.newFlightReservation();
@@ -589,8 +585,6 @@ ExtractorEngine.extractPrice("13 EUR", f); // Adds to ticket price
 ```
 
 </details>
-
-
 
 ### Extractor scripts
 
@@ -612,7 +606,7 @@ Output of your JS function should be:
 - A JS object following the schema.org ontology (JsonLd) with a single extraction result.
 - A JS array containing one or more schema.org/JsonLd objects. Useful if a ticket document has multiple tickets.
 
-> Script errors and empty array is considered as "nothing".
+> Script errors and empty array is considered as "[]" (aka. nothing was returned).
 
 <details>
 <summary>Examples</summary>
@@ -631,46 +625,46 @@ As a filter we'd use something similar as example 2 above, triggering on the bar
 
 ```js
 function extractTicket(pdf, node, barcode) {
-  // text for the PDF page containing the barcode that triggered this
-  const text = pdf.pages[barcode.location].text;
+    // text for the PDF page containing the barcode that triggered this
+    const text = pdf.pages[barcode.location].text;
 
-  // empty http://schema.org/TrainReservation object for the result
-  let res = JsonLd.newTrainReservation();
+    // empty http://schema.org/TrainReservation object for the result
+    let res = JsonLd.newTrainReservation();
 
-  // when using regular expressions, matching on things that don't change in different
-  // language variants is usually preferable, but might not always be possible
-  // when creating regular expressions consider that various special characters might occur in names
-  // of people or locations (in the above example spaces and parenthesis)
-  const leg = text.match(/(.*) -> (.*)/); // ["Konqi", "Katie West"]
+    // when using regular expressions, matching on things that don't change in different
+    // language variants is usually preferable, but might not always be possible
+    // when creating regular expressions consider that various special characters might occur in names
+    // of people or locations (in the above example spaces and parenthesis)
+    const leg = text.match(/(.*) -> (.*)/); // ["Konqi", "Katie West"]
 
-  // this can throw an error if the regular expression didn't match
-  // that's fine though, the script is aborted here and considered not to have any result
-  // ie. handling this case explicitly is unnecessary here
-  res.reservationFor.departureStation.name = leg[1]; // Konqi
-  res.reservationFor.arrivalStation.name = leg[2]; // Katie West
+    // this can throw an error if the regular expression didn't match
+    // that's fine though, the script is aborted here and considered not to have any result
+    // ie. handling this case explicitly is unnecessary here
+    res.reservationFor.departureStation.name = leg[1]; // Konqi
+    res.reservationFor.arrivalStation.name = leg[2]; // Katie West
 
-  // date/time parsing can recover missing year numbers from context, if available
-  // In our example it would consider the PDF creation time for that, and the resulting
-  // date would be the first occurrence of the given day and month following that.
-  // https://doc.qt.io/qt-6/qdate.html#fromString-1
-  res.reservationFor.departureTime = JsonLd.toDateTime(
-    text.match(/Departure: (.*)/)[1],
-    "dd MMM hh:mm",
-    "en",
-  );
+    // date/time parsing can recover missing year numbers from context, if available
+    // In our example it would consider the PDF creation time for that, and the resulting
+    // date would be the first occurrence of the given day and month following that.
+    // https://doc.qt.io/qt-6/qdate.html#fromString-1
+    res.reservationFor.departureTime = JsonLd.toDateTime(
+        text.match(/Departure: (.*)/)[1],
+        "dd MMM hh:mm",
+        "en",
+    );
 
-  // for supporting different language formats, both the format string and the locale
-  // argument can be lists. All combinations are then tried until one yields a valid result.
-  res.reservationFor.arrivalTime = JsonLd.toDateTime(
-    text.match(/(?:Arrival|Arrivé|Ankunft): (.*)/)[1],
-    ["dd MMM hh:mm", "dd MMM hh.mm"],
-    ["en", "fr", "de"],
-  );
+    // for supporting different language formats, both the format string and the locale
+    // argument can be lists. All combinations are then tried until one yields a valid result.
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(
+        text.match(/(?:Arrival|Arrivé|Ankunft): (.*)/)[1],
+        ["dd MMM hh:mm", "dd MMM hh.mm"],
+        ["en", "fr", "de"],
+    );
 
-  // the node that triggered this script (the barcode) can be accessed and integrated into the result
-  res.reservedTicket.ticketToken = "qrCode:" + barcode.content;
+    // the node that triggered this script (the barcode) can be accessed and integrated into the result
+    res.reservedTicket.ticketToken = "qrCode:" + barcode.content;
 
-  return res;
+    return res;
 }
 ```
 
@@ -682,16 +676,16 @@ this would be similar to example 4 above, triggering on the pass issuer.
 ```js
 // unused arguments can be omitted
 function extractBoardingPass(pass, node) {
-  // use the existing result as a starting point
-  // generally this can be more than one, but specific types of documents
-  // might only produce a deterministic amount (like 1 in this case).
-  let res = node.result[0];
+    // use the existing result as a starting point
+    // generally this can be more than one, but specific types of documents
+    // might only produce a deterministic amount (like 1 in this case).
+    let res = node.result[0];
 
-  // modify the result as necessary
-  res.boardingGroup = pass.field["group"].label;
+    // modify the result as necessary
+    res.boardingGroup = pass.field["group"].label;
 
-  // returning a result here will replace the existing results for this node
-  return res;
+    // returning a result here will replace the existing results for this node
+    return res;
 }
 ```
 
