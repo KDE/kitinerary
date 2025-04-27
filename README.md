@@ -158,7 +158,6 @@ Documentation and examples for creating new extractor scripts can be found in th
 
 Documentation and examples for creating new extractor scripts can be found in the [/docs/cpp_extractor.md](docs/cpp_extractor.md) file.
 
-
 ### Command line extractor
 
 In cases where integrating with the C++ API isn't possible or desirable, there's also a command
