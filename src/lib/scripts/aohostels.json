@@ -1,7 +1,20 @@
-{
+[{
     "filter": [
         { "field": "From", "match": "@aohostels.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
     ],
     "script": "aohostels.js",
     "mimeType": "text/plain"
-}
+},
+{
+    "filter": [
+        {
+            "field": "passTypeIdentifier",
+            "match": "pass.com.aohostels.officeaccess",
+            "mimeType": "application/vnd.apple.pkpass",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractPass",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "aohostels.js"
+}]

@@ -59,3 +59,18 @@ function main(text) {
 
     return res;
 }
+
+function extractPass(pass, node) {
+    let res = JsonLd.newLodgingReservation();
+    res.reservedTicket = node.result[0].reservedTicket;
+    res.reservationNumber = pass.field['bookingref'].value;
+    res.underName.name = pass.field['passenger'].value;
+    res.reservationFor.name = pass.field['destination'].value;
+    res.checkinTime = pass.field['arrival'].value;
+    res.checkoutTime = pass.field['departure'].value;
+    res.reservationFor.address.addressLocality = pass.field['hotel-city'].value;
+    res.reservationFor.address.streetAddress = pass.field['address-of-hotel'].value;
+    res.reservationFor.telephone = pass.field['phone-of-hotel'].value;
+    res.reservationFor.email = pass.field['email-of-hotel'].value;
+    return res;
+}
