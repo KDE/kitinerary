@@ -75,9 +75,9 @@ Extractor script filter consists of the following four properties:
       "field": "",
       // If it is a complex document (like email with fields), it sets which filed of the document run "match" on. This is ignored for nodes containing basic types such as plain text or binary data.
       "match": "KDE.org/airlines",
-      //a regular expression or exact string we look for.
+      // A regular expression or exact string we look for.
       "scope": "Current"
-      //this defines the relation to the node the script should be run on (Current, Parent, Children, Ancestors or Descendants).
+      // Defines the relation to the node the script should be run on (Current, Parent, Children, Ancestors or Descendants).
     }
     // [...]
   ]
@@ -114,12 +114,12 @@ The PDF is a child of the email, and the ticket details are inside the PDF.
 ```json
 {
   "mimeType": "application/pdf",
-  // we are looking for PDF
+  // We are looking for PDF
   "field": "From",
   // Email (message/rfc822) has "From" field, with sender
   "match": "^booking@exampl-operator\.com$",
   "scope": "Parent"
-  // we look at the parent of the PDF, which is the email
+  // We look at the parent of the PDF, which is the email
 }
 ```
 
@@ -165,7 +165,7 @@ rather than `Children` as the direct child nodes tend to be the images containin
 ```json
 {
   "mimeType": "text/plain",
-  // we look at plain text
+  // We look at plain text
   "scope": "Ancestors",
   "match": "^F\d{8}$"
   // We look for exactly "F" followed by 8 digits
@@ -563,8 +563,8 @@ console.log(DecodedAztec); // ["KDE airlines", "KDE Konqi Airport (KDQ)", "KDE K
 
 API for interacting with the extractor engine itself:
 
-- `ExtractorEngine`: this allows to recursively perform extraction.
-  This can be useful for elements that need custom decoding in an extractor script first,
+- `ExtractorEngine`: Allows to recursively perform extraction.
+  It can be useful for elements that need custom decoding in an extractor script first,
   but that contain otherwise generally supported data formats. Standard barcodes encoded
   in URL arguments are such an example.
 
@@ -594,10 +594,10 @@ The script entry point is called with three arguments:
   depends on the node type as described in the document model section above. This is usually
   what extractor script are most concerned with.
 - The second argument is the document node being processed (KItinerary::ExtractorDocumentNode, see example under).
-  This can be useful to access already extracted results on a node (e.g. coming from generic extraction)
+  It can be useful to access already extracted results on a node (e.g. coming from generic extraction)
   in order to augment those.
 - The third argument is the document node that matched the filter. This can be the same as the second
-  argument (for filters with `scope` = Current), but it doesn't have to be. This is most useful when
+  argument (for filters with `scope` = Current), but it doesn't have to be. It is most useful when
   triggering on descendant nodes such as barcodes, the content of which will then be incorporated into
   the extraction result by the script.
 
