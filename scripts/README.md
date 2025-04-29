@@ -32,6 +32,7 @@ docker run -it --rm centos:centos7
 export CI_PROJECT_PATH=pim/kitinerary
 export BUILD_ROOT=/builds
 export STAGING_ROOT=/builds/staging
+export CI_PROJECT_DIR=$BUILD_ROOT/$CI_PROJECT_PATH
 ```
 
 Optionally, map a local folder into `/builds` in the Docker image to retain the checkouts and build results. This
