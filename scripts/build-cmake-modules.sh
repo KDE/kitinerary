@@ -31,8 +31,8 @@ function build_cmake_module() {
 
     mkdir build
     cd build
-    cmake -DBUILD_SHARED=ON \
-        -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF \
+    cmake -DBUILD_TESTING=OFF \
+        -DBUILD_SHARED_LIBS=OFF \
         -DCMAKE_PREFIX_PATH=$STAGING_ROOT \
         -DCMAKE_INSTALL_PREFIX=$STAGING_ROOT \
         -DCMAKE_EXE_LINKER_FLAGS="-Wl,--as-needed" \
