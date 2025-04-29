@@ -32,10 +32,31 @@ static-extractor:
     - scripts/build-cmake-modules.sh
     - scripts/collect-data-files.sh
     - strip build/bin/kitinerary-extractor
+    # Prepare output for publishing
+    - mkdir $CI_PROJECT_DIR/kde-ci-packages/
+    - tar cvz -C $CI_PROJECT_DIR/build/ -f $CI_PROJECT_DIR/kde-ci-packages/kitinerary-extractor-x86_64-$CI_COMMIT_REF_SLUG.tgz bin/kitinerary-extractor share
   artifacts:
     expire_in: 1 week
     when: on_success
     paths:
      - build/bin/kitinerary-extractor
      - build/share
-      - /gitlab-templates/cppcheck.yml
+     - "kde-ci-packages/"
+
+# Publishing job for static extractor binaries
+# This is separate as we need a newer Python than is easily available on the ancient
+# CentOS image building this.
+static-extractor-publish:
+  stage: deploy
+  image: invent-registry.kde.org/sysadmin/ci-images/sles15-craft:latest
+  tags:
+    - Linux
+  needs:
+    - static-extractor
+  interruptible: true
+  before_script:
+    - export LANG=en_US.UTF-8
+    - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1
+    - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
+  script:
+    - python3 -u ci-notary-service/publishbuild.py --config ci-utilities/signing/publishbuild.ini --platform linux "$CI_PROJECT_DIR/kde-ci-packages/"
