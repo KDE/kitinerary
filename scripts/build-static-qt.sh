@@ -37,6 +37,7 @@ build-static-qt-module qtbase \
     -no-dbus \
     -no-glib \
     -no-xcb -no-opengl -no-feature-vulkan \
+    -no-feature-network \
     -no-feature-sql \
     -no-widgets \
     -no-feature-sha3-fast \
