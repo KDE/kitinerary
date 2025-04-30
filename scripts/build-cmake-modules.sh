@@ -37,7 +37,6 @@ function build_cmake_module() {
         -DCMAKE_INSTALL_PREFIX=$STAGING_ROOT \
         -DCMAKE_EXE_LINKER_FLAGS="-Wl,--as-needed" \
         -DZLIB_USE_STATIC_LIBS=ON \
-        -DKF_SKIP_PO_PROCESSING=ON \
         -DUSE_DBUS=OFF \
         $@ -DCMAKE_BUILD_TYPE=Release ..
 
@@ -81,17 +80,17 @@ build_cmake_module https://github.com/nu-book/zxing-cpp.git zxing-cpp $ZXING_VER
 
 # KDE Frameworks
 build_kf_module frameworks/extra-cmake-modules
-build_kf_module frameworks/karchive -DWITH_BZIP2=OFF -DWITH_LIBLZMA=OFF -DWITH_LIBZSTD=OFF
-build_kf_module frameworks/kcodecs
-build_kf_module frameworks/kconfig -DKCONFIG_USE_QML=OFF
-build_kf_module frameworks/kcoreaddons -DKCOREADDONS_USE_QML=OFF
-build_kf_module frameworks/ki18n -DBUILD_WITH_QML=OFF -DKI18N_EMBEDDED_ISO_CODES_CACHE=ON
-build_kf_module frameworks/kcalendarcore
-build_kf_module frameworks/kcontacts
+build_kf_module frameworks/karchive -DWITH_BZIP2=OFF -DWITH_LIBLZMA=OFF -DWITH_LIBZSTD=OFF -DKF_SKIP_PO_PROCESSING=ON
+build_kf_module frameworks/kcodecs -DKF_SKIP_PO_PROCESSING=ON
+build_kf_module frameworks/kconfig -DKCONFIG_USE_QML=OFF -DKF_SKIP_PO_PROCESSING=ON
+build_kf_module frameworks/kcoreaddons -DKCOREADDONS_USE_QML=OFF -DKF_SKIP_PO_PROCESSING=ON
+build_kf_module frameworks/ki18n -DBUILD_WITH_QML=OFF -DKI18N_EMBEDDED_ISO_CODES_CACHE=ON -DKF_SKIP_PO_PROCESSING=ON
+build_kf_module frameworks/kcalendarcore -DKF_SKIP_PO_PROCESSING=ON
+build_kf_module frameworks/kcontacts -DKF_SKIP_PO_PROCESSING=ON
 
 # PIM
-build_kde_module pim/kmime
-build_kde_module pim/kpkpass
+build_kde_module pim/kmime -DKF_SKIP_PO_PROCESSING=ON
+build_kde_module pim/kpkpass -DKF_SKIP_PO_PROCESSING=ON
 
 export CXXFLAGS="-static-libstdc++ -static-libgcc"
 build_kde_module $CI_PROJECT_PATH -DKITINERARY_STANDALONE_CLI_EXTRACTOR=ON -DBUILD_TOOLS=OFF
