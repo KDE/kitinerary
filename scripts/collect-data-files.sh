@@ -16,7 +16,7 @@ done
 
 # remove languages we have no own translation for
 for i in `ls $DEPLOY_ROOT/share/locale`; do
-    if ! [ -f $DEPLOY_ROOT/share/locale/$i/LC_MESSAGES/kitinerary.mo ]; then
+    if ! [ -f $DEPLOY_ROOT/share/locale/$i/LC_MESSAGES/kitinerary6.mo ]; then
         echo "Dropping language $i"
         rm -rf $DEPLOY_ROOT/share/locale/$i
     fi
