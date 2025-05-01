@@ -35,12 +35,11 @@ static-extractor:
     # Prepare output for publishing
     - mkdir $CI_PROJECT_DIR/kde-ci-packages/
     - tar cvz -C $CI_PROJECT_DIR/build/ -f $CI_PROJECT_DIR/kde-ci-packages/kitinerary-extractor-x86_64-$CI_COMMIT_REF_SLUG.tgz bin/kitinerary-extractor share
+    - sha256sum $CI_PROJECT_DIR/kde-ci-packages/kitinerary-extractor-x86_64-$CI_COMMIT_REF_SLUG.tgz | head -c 66 > $CI_PROJECT_DIR/kde-ci-packages/kitinerary-extractor-x86_64-$CI_COMMIT_REF_SLUG.tgz.sha256
   artifacts:
     expire_in: 1 week
     when: on_success
     paths:
-     - build/bin/kitinerary-extractor
-     - build/share
      - "kde-ci-packages/"
 
 # Publishing job for static extractor binaries
@@ -59,4 +58,9 @@ static-extractor-publish:
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
   script:
+    # basic smoke test
+    - mkdir $CI_PROJECT_DIR/tmp
+    - tar xv -C $CI_PROJECT_DIR/tmp -f $CI_PROJECT_DIR/kde-ci-packages/*.tgz
+    - $CI_PROJECT_DIR/tmp/bin/kitinerary-extractor $CI_PROJECT_DIR/autotests/extractordata/synthetic/iata-bcbp-demo.pdf | grep "FlightReservation"
+    # Publish
     - python3 -u ci-notary-service/publishbuild.py --config ci-utilities/signing/publishbuild.ini --platform linux "$CI_PROJECT_DIR/kde-ci-packages/"
