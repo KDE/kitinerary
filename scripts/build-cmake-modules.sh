@@ -10,7 +10,7 @@ LIBICAL_VERSION="v3.0.17"
 LIBXML_VERSION="v2.12.7"
 ZXING_VERSION="v2.3.0"
 KF_VERSION="v6.13.0"
-GEAR_VERSION="master"
+GEAR_VERSION="release/25.04"
 
 function build_cmake_module() {
     local repo=$1
