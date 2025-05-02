@@ -30,12 +30,7 @@ static-extractor:
     - scripts/build-iso-codes.sh
     - scripts/build-static-qt.sh
     - scripts/build-cmake-modules.sh
-    - scripts/collect-data-files.sh
-    - strip build/bin/kitinerary-extractor
-    # Prepare output for publishing
-    - mkdir $CI_PROJECT_DIR/kde-ci-packages/
-    - tar cvz -C $CI_PROJECT_DIR/build/ -f $CI_PROJECT_DIR/kde-ci-packages/kitinerary-extractor-x86_64-$CI_COMMIT_REF_SLUG.tgz bin/kitinerary-extractor share
-    - sha256sum $CI_PROJECT_DIR/kde-ci-packages/kitinerary-extractor-x86_64-$CI_COMMIT_REF_SLUG.tgz | head -c 66 > $CI_PROJECT_DIR/kde-ci-packages/kitinerary-extractor-x86_64-$CI_COMMIT_REF_SLUG.tgz.sha256
+    - scripts/package.sh
   artifacts:
     expire_in: 1 week
     when: on_success

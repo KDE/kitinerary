@@ -1,5 +1,5 @@
 #!/bin/bash
-# SPDX-FileCopyrightText: 2019-2022 Volker Krause <vkrause@kde.org>
+# SPDX-FileCopyrightText: Volker Krause <vkrause@kde.org>
 # SPDX-License-Identifier: BSD-2-Clause
 set -e
 set -x
@@ -21,3 +21,18 @@ for i in `ls $DEPLOY_ROOT/share/locale`; do
         rm -rf $DEPLOY_ROOT/share/locale/$i
     fi
 done
+
+# strip binary
+strip $DEPLOY_ROOT/bin/kitinerary-extractor
+
+# determing version
+# VERSION=$CI_COMMIT_REF_SLUG
+VERSION=`cat $BUILD_ROOT/$CI_PROJECT_PATH/CMakeLists.txt | grep "set(PIM_VERSION" | sed -e 's/")//' | sed -e 's/.*"//'`
+
+# prepare output for publishing
+PACKAGE_ROOT=$CI_PROJECT_DIR/kde-ci-packages/
+mkdir -p $PACKAGE_ROOT
+
+OUTPUT_FILE=$PACKAGE_ROOT/kitinerary-extractor-x86_64-$VERSION.tgz
+tar cvz -C $DEPLOY_ROOT -f $OUTPUT_FILE bin/kitinerary-extractor share
+sha256sum $OUTPUT_FILE | head -c 66 > $OUTPUT_FILE.sha256
