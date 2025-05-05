@@ -3,6 +3,13 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+
+# KDE Application Version, managed by release script
+set (RELEASE_SERVICE_VERSION_MAJOR "25")
+set (RELEASE_SERVICE_VERSION_MINOR "04")
+set (RELEASE_SERVICE_VERSION_MICRO "1")
+set (RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${RELEASE_SERVICE_VERSION_MICRO}")
+
 set(PIM_VERSION "6.4.1")
 project(KItinerary VERSION ${PIM_VERSION})
 
@@ -143,3 +150,5 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kitinerary_version.h
 
 ki18n_install(po)
 
+# for static extractor build packaging
+file(WRITE ${CMAKE_BINARY_DIR}/version.txt ${RELEASE_SERVICE_VERSION})
