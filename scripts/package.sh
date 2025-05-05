@@ -27,7 +27,7 @@ strip $DEPLOY_ROOT/bin/kitinerary-extractor
 
 # determing version
 # VERSION=$CI_COMMIT_REF_SLUG
-VERSION=`cat $BUILD_ROOT/$CI_PROJECT_PATH/CMakeLists.txt | grep "set(PIM_VERSION" | sed -e 's/")//' | sed -e 's/.*"//'`
+VERSION=`cat $BUILD_ROOT/$CI_PROJECT_PATH/build/version.txt`
 
 # prepare output for publishing
 PACKAGE_ROOT=$CI_PROJECT_DIR/kde-ci-packages/
