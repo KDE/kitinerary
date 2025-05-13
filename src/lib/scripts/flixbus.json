@@ -35,5 +35,18 @@
         ],
         "script": "flixbus.js",
         "function": "parsePkPass"
+    },
+    {
+        "mimeType": "application/vnd.apple.pkpass",
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.de.flixbus",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "script": "flixbus.js",
+        "function": "parsePkPass2"
     }
 ]

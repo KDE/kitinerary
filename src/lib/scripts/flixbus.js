@@ -131,3 +131,26 @@ function parsePkPass(pass, node) {
 
     return res
 }
+
+function parsePkPass2(pass, node) {
+    let res = Object.assign(JsonLd.newBusReservation(), node.result[0]);
+
+    res.reservationFor.departureBusStop.name = pass.primaryFields[0].label;
+    res.reservationFor.departureTime = pass.primaryFields[0].value
+    res.reservationFor.arrivalBusStop = {
+        '@type': 'BusStation',
+        name: pass.primaryFields[1].label
+    };
+    res.reservationFor.arrivalTime = pass.primaryFields[1].value
+
+    res.reservationFor.busNumber = pass.field["transport-type"].value.split(" ")[0]
+    res.reservationFor.busName = pass.field["transport-type"].value
+
+    res.reservationNumber = pass.field["booking-number"].value
+    res.underName.name = pass.field["passenger"].value;
+    res.reservedTicket.ticketedSeat = {
+        '@type': 'Seat',
+        seatNumber: pass.field["seat"].value
+    };
+    return res
+}
