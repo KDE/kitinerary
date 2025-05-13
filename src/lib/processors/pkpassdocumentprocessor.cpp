@@ -6,6 +6,7 @@
 
 #include "pkpassdocumentprocessor.h"
 
+#include <KItinerary/BusTrip>
 #include <KItinerary/DocumentUtil>
 #include <KItinerary/Event>
 #include <KItinerary/ExtractorDocumentNodeFactory>
@@ -316,6 +317,38 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
     return res;
 }
 
+[[nodiscard]] static BusReservation extractBusTicket(KPkPass::Pass *pass, BusReservation res)
+{
+    auto trip = res.reservationFor().value<BusTrip>();
+
+    // "relevantDate" is the best guess for the departure time if we didn't find an explicit field for it
+    if (pass->relevantDate().isValid() && !trip.departureTime().isValid()) {
+        // TODO try to recover timezone?
+        trip.setDepartureTime(pass->relevantDate());
+    }
+
+    // location is the best guess for the departure station geo coordinates
+    auto depStation = trip.departureBusStop();
+    auto depGeo = depStation.geo();
+    if (pass->locations().size() == 1 && !depGeo.isValid()) {
+        const auto loc = pass->locations().at(0);
+        depGeo.setLatitude(loc.latitude());
+        depGeo.setLongitude(loc.longitude());
+        depStation.setGeo(depGeo);
+        trip.setDepartureBusStop(depStation);
+    }
+
+    // organizationName is the best guess for the provider
+    auto provider = trip.provider();
+    if (provider.name().isEmpty()) {
+        provider.setName(pass->organizationName());
+        trip.setProvider(provider);
+    }
+
+    res.setReservationFor(trip);
+    return res;
+}
+
 static void extractEventTicketPass(KPkPass::Pass *pass, EventReservation &eventRes)
 {
     auto event = eventRes.reservationFor().value<Event>();
@@ -478,6 +511,14 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
                         trainRes = extractTrainTicket(pass, trainRes);
                         trainRes.setUnderName(extractPerson(pass, trainRes.underName().value<Person>()));
                         res = trainRes;
+                        break;
+                    }
+                    case KPkPass::BoardingPass::Bus:
+                    {
+                        auto busRes = res.value<BusReservation>();
+                        busRes = extractBusTicket(pass, busRes);
+                        busRes.setUnderName(extractPerson(pass, busRes.underName().value<Person>()));
+                        res = busRes;
                         break;
                     }
                     default:
