@@ -44,7 +44,7 @@ function parseLocation(place, addr1, addr2, links)
     const idx = addr1.lastIndexOf(',');
     place.address.streetAddress = addr1.substring(0, idx);
     place.address.addressLocality = addr1.substr(idx + 1);
-    place.geo = JsonLd.toGeoCoordinates(links.shift().url);
+    place.geo = JsonLd.toGeoCoordinates(links.shift()?.url);
 }
 
 function parsePdfTicket(pdf, node, triggerNode)
@@ -63,7 +63,7 @@ function parsePdfTicket(pdf, node, triggerNode)
     let reservations = [];
     while (true) {
         const times = timeColumn.substr(idxTime).match(/(\d\d:\d\d)\n([^:]*?\n)?([^:]*?\n)?(\d\d:\d\d)/);
-        const stations = stationColumn.substr(idxStations).match(/(.*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*(?:NOTE:|Wagennummerierung|platform|The regional part).(?:.*\n)+)?.*(?:Bus|Autobus|Zug|Strecke|Route|Tratta) +(.*)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung|Direzione) (.*)\n(?:.*(?:Operated|Betrieben|Uitgevoerd|Effettuata).*\n)?(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
+        const stations = stationColumn.substr(idxStations).match(/\b([^].*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*(?:NOTE:|Wagennummerierung|platform|The regional part|Die Bussteignummer).(?:.*\n)+?)?.*(?:Bus|Autobus|Zug|Strecke|Route|Tratta)\s+(\S.+)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung|Direzione) (.*)\n(?:.*(?:Operated|Betrieben|Uitgevoerd|Effettuata).*\n)?(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
         if (!times || !stations) {
             break;
         }
