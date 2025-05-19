@@ -30,6 +30,7 @@ function main(html) {
     const children = collectChildren(itinerary);
 
     var confirmationNumberElement
+    var dateElement;
 
     for (const i in children) {
         const tableIndex = Number(i);
@@ -44,10 +45,11 @@ function main(html) {
             // Then each subsequent child represents a flight, except for the last which is the "Manage reservation link"
             const subChildren = collectChildren(child);
 
-            // The first child is the date
-            const dateElement = subChildren[0].eval("td/table/tbody/tr/td/span")[0];
-            if (!dateElement) {
-                return {};
+            // The first child is the date, if we come across a new one then overwrite
+            // These are always in order of the trip, so we don't have to be fancy here.
+            const newDateElement = subChildren[0].eval("td/table/tbody/tr/td/span")[0];
+            if (newDateElement) {
+                dateElement = newDateElement;
             }
 
             var res = JsonLd.newFlightReservation();
@@ -67,6 +69,7 @@ function main(html) {
                         const airportInfo = flightPaths[column].eval("table/tbody/tr/td");
 
                         const airportCode = airportInfo[0].content;
+
                         const time = airportInfo[2].content;
 
                         const parsedDateTime = JsonLd.toDateTime(dateElement.content + ' ' + time, americanDateFormat, "en");
@@ -87,27 +90,48 @@ function main(html) {
                                 continue;
                             }
 
-                            // TODO: what to do about other IATA's? I need to find a previous reservation with an "operated by" tag probably.
+                            // TODO: we need to handle subcontractors
+                            res.reservationFor.airline.iataCode = airline[1];
                             if (airline[1] == "AA") {
                                 res.reservationFor.airline.name = "American Airlines";
                             }
 
                             res.reservationFor.flightNumber = airline[2];
 
-                            // TODO: Extract which company operates this airplane, by which also exists in this row
+                            // NOTE: The company (if not AA) that owns/operates this plane is on this row, but there's nowhere to put that in Itinerary.
                         } else if (arrival) {
                             // The arrival row contains seat information
-                            // TODO: extract seat information, which needs traveler information parsing first
+                            const seatNumberElement = flightPaths[column].eval("table/tbody/tr/td/table/tbody/tr/td")[1];
+                            res.reservationFor.airplaneSeat = seatNumberElement.recursiveContent;
                         }
                     }
                 }
             }
 
+
             reservations.push(res);
         }
     }
 
-    // TODO: parse traveler information from the "Your purchase" section of the email
+    // Isn't HTML amazing?
+    const purchase = html.eval("//table[tr[td[table[tbody[tr[td[contains(., 'Your purchase')]]]]]]]")[0];
 
-    return reservations;
+    const travelerName = purchase.eval("tr/td/table/tbody/tr/td/table/tbody/tr/td")[0];
+
+    // merge traveler and reservation data
+    let result = new Array();
+    for (let i = 0; i < reservations.length; ++i) {
+        let r = JsonLd.clone(reservations[i]);
+        r.underName.name = travelerName.recursiveContent; // the name is in two separate spans
+        result.push(r);
+    }
+
+    const price = purchase.eval("tr/td/table/tbody/tr/td/table/tbody/tr/td[contains(.,'Total paid')]/following-sibling::td")[0];
+
+    // Safe to assume it's USD since it's *american* airlines
+    ExtractorEngine.extractPrice(price.recursiveContent + " USD", result);
+
+    // TODO: what does multiple travelers look like?
+
+    return result;
 }
