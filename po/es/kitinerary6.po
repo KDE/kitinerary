@@ -1,14 +1,15 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for kitinerary6.po package.
+# Copyright (C) 2018-2025 This file is copyright:
+# This file is distributed under the same license as the kitinerary package.
 #
-# Javier Vinal <fjvinal@gmail.com>, 2018, 2019.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2018, 2019 Javier Vinal <fjvinal@gmail.com>
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kitinerary6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-15 00:38+0000\n"
-"PO-Revision-Date: 2022-07-21 18:21+0200\n"
+"PO-Revision-Date: 2025-05-18 12:55+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -185,53 +186,3 @@ msgstr ""
 "Referencia de la reserva: %1\n"
 "Bajo el nombre: %2\n"
 "Lugar de recogida: %3"
-
-#~ msgid "Reservation reference: %1"
-#~ msgstr "Referencia de la reserva: %1"
-
-#~| msgid ""
-#~| "Reservation reference: %1\n"
-#~| "Under name: %2\n"
-#~| "\n"
-#~| "PickUp location: %3\n"
-#~| "\n"
-#~| "Dropoff Location: %4"
-#~ msgid ""
-#~ "Reservation reference: %1\n"
-#~ "Under name: %2\n"
-#~ "\n"
-#~ "Pickup location: %3\n"
-#~ "\n"
-#~ "Dropoff location: %4"
-#~ msgstr ""
-#~ "Referencia de la reserva: %1\n"
-#~ "Bajo el nombre: %2\n"
-#~ "\n"
-#~ "Lugar de recogida: %3\n"
-#~ "\n"
-#~ "Lugar de entrega: %4"
-
-#~ msgid "Rent car reservation: %1"
-#~ msgstr "Reserva de coche de alquiler: %1"
-
-#~ msgid ""
-#~ "Check-in: %1\n"
-#~ "Check-out: %2\n"
-#~ "Booking reference: %3"
-#~ msgstr ""
-#~ "Entrada: %1\n"
-#~ "Salida: %2\n"
-#~ "Referencia de la reserva: %3"
-
-#~ msgid ""
-#~ "Number Of People: %1\n"
-#~ "Reservation reference: %2\n"
-#~ "Under name: %3"
-#~ msgstr ""
-#~ "Número de personas: %1\n"
-#~ "Referencia de la reserva: %2\n"
-#~ "A nombre de: %3"
-
-#~ msgctxt "<street>, <postal code> <city>, <country>"
-#~ msgid "%1, %2 %3, %4"
-#~ msgstr "%1, %2 %3, %4"
