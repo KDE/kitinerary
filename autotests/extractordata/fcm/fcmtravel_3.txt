@@ -1,0 +1,81 @@
+Tack för att du bokat din resa hos Travellink!
+
+
+
+Din bokningsreferens:         ABC123
+
+Bokad av:                     Booking Agent
+Företag:                      The Company AB
+Adress:                       Street 30
+                              12345 City
+
+Resenär:                      Katie Dragon
+
+
+
+
+=====================================================================================
+FLYG                                    Flygbolagets bokningsreferens: ABCD0 - Iberia
+=====================================================================================
+
+                                                           Bokningsstatus: Bekräftad
+UTRESA                        Berlin - Las Palmas
+Flyg:                         IB3549, Iberia
+Datum:                        fre 3 jul 2009
+Avgång:                       07:35 Tegel(TXL), Berlin, Tyskland
+Ankomst:                      10:35 Barajas(MAD), Madrid, Spanien
+                              Terminal 4
+Klass:                        Ekonomiklass
+
+                                                           Bokningsstatus: Bekräftad
+Flyg:                         IB804, Iberia
+Datum:                        fre 3 jul 2009
+Avgång:                       12:15 Barajas(MAD), Madrid, Spanien
+                              Terminal 4
+Ankomst:                      14:00 Las Palmas(LPA), Las Palmas, Spanien
+Klass:                        Ekonomiklass
+Restid:
+
+                                                           Bokningsstatus: Bekräftad
+HEMRESA                       Las Palmas - Berlin
+Flyg:                         IB807, Iberia
+Datum:                        lör 11 jul 2009
+Avgång:                       11:10 Las Palmas(LPA), Las Palmas, Spanien
+Ankomst:                      14:45 Barajas(MAD), Madrid, Spanien
+                              Terminal 4S
+Klass:                        Ekonomiklass
+
+                                                           Bokningsstatus: Bekräftad
+Flyg:                         IB3548, Iberia
+Datum:                        lör 11 jul 2009
+Avgång:                       15:50 Barajas(MAD), Madrid, Spanien
+                              Terminal 4
+Ankomst:                      18:40 Tegel(TXL), Berlin, Tyskland
+Klass:                        Ekonomiklass
+Restid:
+                              Avgångs- och ankomsttider anges i lokal tid
+
+-------------------------------------------------------------------------------------
+Biljett(er)
+-------------------------------------------------------------------------------------
+Elektronisk biljett
+Bokningsreferens - som e-ticket. OBS! Ta alltid med bokningsbekräftelse och giltigt foto ID till flygplatsen.
+Avbokning utan avgift, kan göras via travellink.se senast kl. 10.00 fredag den 24 apr 2009.
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------
+Betalning
+-------------------------------------------------------------------------------------
+Kreditkort:                   American Express 3757 xxxx xxxx 013
+Pris*:                         4 321 SEK
+Biljettleverans:                   0 SEK
+Administrativ avgift:              0 SEK
+Totalpris:                     4 321 SEK
