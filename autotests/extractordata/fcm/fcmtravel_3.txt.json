@@ -1,0 +1,242 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "priceCurrency": "SEK",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "Iberia"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 40.467899322509766,
+                    "longitude": -3.5717599391937256
+                },
+                "iataCode": "MAD",
+                "name": "Barajas"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2009-07-03T10:35:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55379867553711,
+                    "longitude": 13.29319953918457
+                },
+                "iataCode": "TXL",
+                "name": "Tegel"
+            },
+            "departureDay": "2009-07-03",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2009-07-03T07:35:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "3549"
+        },
+        "reservationNumber": "ABC123",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "totalPrice": 4321,
+        "underName": {
+            "@type": "Person",
+            "name": "Katie Dragon"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "priceCurrency": "SEK",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "Iberia"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 27.938400268554688,
+                    "longitude": -15.388999938964844
+                },
+                "iataCode": "LPA",
+                "name": "Las Palmas"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2009-07-03T14:00:00+01:00",
+                "timezone": "Atlantic/Canary"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 40.467899322509766,
+                    "longitude": -3.5717599391937256
+                },
+                "iataCode": "MAD",
+                "name": "Barajas"
+            },
+            "departureDay": "2009-07-03",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2009-07-03T12:15:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "flightNumber": "804"
+        },
+        "reservationNumber": "ABC123",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "totalPrice": 4321,
+        "underName": {
+            "@type": "Person",
+            "name": "Katie Dragon"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "priceCurrency": "SEK",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "Iberia"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 40.467899322509766,
+                    "longitude": -3.5717599391937256
+                },
+                "iataCode": "MAD",
+                "name": "Barajas"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2009-07-11T14:45:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 27.938400268554688,
+                    "longitude": -15.388999938964844
+                },
+                "iataCode": "LPA",
+                "name": "Las Palmas"
+            },
+            "departureDay": "2009-07-11",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2009-07-11T11:10:00+01:00",
+                "timezone": "Atlantic/Canary"
+            },
+            "flightNumber": "807"
+        },
+        "reservationNumber": "ABC123",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "totalPrice": 4321,
+        "underName": {
+            "@type": "Person",
+            "name": "Katie Dragon"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "priceCurrency": "SEK",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "IB",
+                "name": "Iberia"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 52.55379867553711,
+                    "longitude": 13.29319953918457
+                },
+                "iataCode": "TXL",
+                "name": "Tegel"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2009-07-11T18:40:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "ES"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 40.467899322509766,
+                    "longitude": -3.5717599391937256
+                },
+                "iataCode": "MAD",
+                "name": "Barajas"
+            },
+            "departureDay": "2009-07-11",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2009-07-11T15:50:00+02:00",
+                "timezone": "Europe/Madrid"
+            },
+            "flightNumber": "3548"
+        },
+        "reservationNumber": "ABC123",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "totalPrice": 4321,
+        "underName": {
+            "@type": "Person",
+            "name": "Katie Dragon"
+        }
+    }
+]
