@@ -1,0 +1,8 @@
+{
+    "filter": [
+        { "mimeType": "text/plain", "match": "sales.vikingline.com", "scope": "Descendants" }
+    ],
+    "function": "parsePdf",
+    "mimeType": "application/pdf",
+    "script": "vikingline.js"
+}
