@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@tx.ihg.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "parseConfirmation",
+    "mimeType": "text/html",
+    "script": "ihg.js"
+}
