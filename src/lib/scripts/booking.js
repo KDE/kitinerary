@@ -201,3 +201,44 @@ function parseHtmlAlternative(doc, node)
     res.reservationFor.address.addressCountry = addrElems[addrElems.length - 1];
     return parseHtmlCommon(doc, node, res);
 }
+
+function parsePdf(pdf, node)
+{
+    var pdfText = pdf.text;
+
+    var res = JsonLd.newLodgingReservation();
+
+    var num = pdfText.match(/CONFIRMATION NUMBER: (.+)/)[1];
+    res.reservationNumber = num.split(".").join("");
+
+    var info = pdfText.match(/CHECK-OUT\s+ROOMS\s+NIGHTS\n\s+(.+)\n(.+)\n\s+(\d+)\s+(\d+)\s+\d+\s*\/\d+\n\s+Address:\s+(.+)\s+([A-Z]+)\s+([A-Z]+)\n\s+(\d+)\s+(.+)\n\s+.*\n\s+Phone: (.+)\n\s+from (\d\d:\d\d)\s+until (\d\d:\d\d)\n\s+GPS coordinates: (.+)/);
+
+    res.reservationFor.name = info[1] + info[2];
+    res.reservationFor.address.streetAddress = info[5];
+    res.reservationFor.address.postalCode = info[8];
+    res.reservationFor.address.addressLocality = info[9];
+    res.reservationFor.telephone = info[10];
+
+    var coords = parseCoordinates(info[13]);
+    res.reservationFor.geo.latitude = coords[0];
+    res.reservationFor.geo.longitude = coords[1];
+
+    var checkin = info[3] + " " + info[6] + " " + info[11];
+    var checkout = info[4] + " " + info[7] + " " + info[12];
+    res.checkinTime = JsonLd.toDateTime(checkin, "d MMMM hh:mm", 'en');
+    res.checkoutTime = JsonLd.toDateTime(checkout, "d MMMM hh:mm", 'en');
+
+    return res;
+}
+
+function parseCoordinates(input) {
+    const regex = /([NS])\s*(\d{1,3})[°º]?\s*(\d+(?:\.\d+)?)[,\s]+([EW])\s*(\d{1,3})[°º]?\s*(\d+(?:\.\d+)?)/i;
+    const match = input.match(regex);
+
+    const [, latHem, latDeg, latMin, lonHem, lonDeg, lonMin] = match;
+
+    const latitude = (parseInt(latDeg, 10) + parseFloat(latMin) / 60) * (latHem.toUpperCase() === 'S' ? -1 : 1);
+    const longitude = (parseInt(lonDeg, 10) + parseFloat(lonMin) / 60) * (lonHem.toUpperCase() === 'W' ? -1 : 1);
+
+    return [latitude, longitude];
+}
