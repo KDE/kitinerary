@@ -1,3 +1,7 @@
+/*
+    SPDX-FileCopyrightText: 2025 Johannes Krattenmacher <git.noreply@krateng.ch>
+    SPDX-License-Identifier: LGPL-2.0-or-later
+*/
 
 function parsePdf(pdf, node) {
     var res = JsonLd.newBoatReservation();
