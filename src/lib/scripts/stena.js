@@ -11,9 +11,7 @@ function parseConfirmation(html) {
 
     var routeinfo = content.match(/Route Information\n(.+)-(.+)/);
     var departPort = routeinfo[1];
-    var arrivePort = routeinfo[2]
-    //res.reservationFor.departureBoatTerminal.address.addressLocality = routeinfo[1];
-    //res.reservationFor.arrivalBoatTerminal.address.addressLocality = routeinfo[2];
+    var arrivePort = routeinfo[2];
 
     // hardcode ports that Stena Line uses?
     // all but liepaja and travemunde are NOT confirmed to use this exact string on the ticket

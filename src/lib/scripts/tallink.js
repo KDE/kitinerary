@@ -19,5 +19,7 @@ function parsePdfTicket(pdf, node, triggerNode) {
     res.reservationFor.arrivalBoatTerminal.address.streetAddress = arr[5];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2] + ' ' + arr[4], 'dd.MM.yyyy hh:mm', 'de');
 
+    // TODO security code? is there any field for that?
+
     return res;
 }
