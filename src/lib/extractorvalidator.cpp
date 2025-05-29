@@ -110,8 +110,7 @@ bool ExtractorValidatorPrivate::filterBoatTrip(const BoatTrip &trip) const
 {
     return filterPlace(trip.departureBoatTerminal())
         && filterPlace(trip.arrivalBoatTerminal())
-        && trip.departureTime().isValid()
-        && trip.arrivalTime().isValid();
+        && trip.departureTime().isValid();
 }
 
 bool ExtractorValidatorPrivate::filterEvent(const Event &event) const
