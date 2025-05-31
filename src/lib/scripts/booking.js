@@ -28,10 +28,10 @@ regExMap['fr'] = {
 regExMap['de'] = {
     bookingRef: /(?:Buchungsnummer|Bestätigungsnummer): ([0-9]*)\s+/,
     // 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
-    hotelInformation: /(?:Lage )?(.+), (.+), (.+), (.+) ?-?\s+Telefon:? (\+[0-9 \-]+)\n/,
-    hotelName: [/\[checkmark.png\] Die Unterkunft (.*)\s+erwartet Sie/, /\n\n\s*(\S.*\S)\n\n\s*\[\S/],
+    hotelInformation: /(?:Lage )?(.+?), ([^\n,]+)(?:, ([^\n,]+))?, ([^\n,]+?) ?-?\s+Telefon:? (\+[0-9 \-]+)\n/,
+    hotelName: [/Die Unterkunft (.*)\s+erwartet Sie/, /\n\n\s*(\S.*\S)\n\n\s*\[\S/],
     arrivalDate: /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \((?:ab )?([0-9]{1,2}:[0-9]{2}).*\)/,
-    departureDate: /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(bis ([0-9]{1,2}:[0-9]{2})\)/,
+    departureDate: /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2})\)/,
     person: /Name des Gastes[\n\s]+(.*?)(?:\n| Name des Gastes bearbeiten)/,
 }
 
@@ -85,9 +85,9 @@ function main(text, node) {
 
         const hotel = text.match(regExMap[locale]['hotelInformation']);
         res.reservationFor.address.streetAddress = hotel[1];
-        res.reservationFor.address.postalCode = hotel[3];
+        res.reservationFor.address.postalCode = hotel[4] ? hotel[3] : "";
         res.reservationFor.address.addressLocality = hotel[2];
-        res.reservationFor.address.addressCountry = hotel[4];
+        res.reservationFor.address.addressCountry = hotel[4] ? hotel[4] : hotel[3];
         res.reservationFor.telephone = hotel[5];
 
         const arrivalDate = text.match(regExMap[locale]['arrivalDate']);
