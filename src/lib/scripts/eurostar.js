@@ -51,9 +51,9 @@ function parsePdfSSB(pdf, node, ssb) {
         res.reservationNumber = text.match(/PNR: (\S{6})/)[1];
     } else {
         // alternative layout observed in NS-booked Eurostar-branded Thalys tickets since 2025
-        trip = text.match(/\S+, (\S+ \d{1,2}, \d{4})  .*\n *FROM  +TO\n *(\S.*\S)  +(\S.*\S)\n.*\n *(\d\d:\d\d) +(\d\d:\d\d)/);
-        res.reservationFor.departureTime = JsonLd.toDateTime(trip[1] + ' ' + trip[4], "MMM d, yyyy hh:mm", "en");
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[1] + ' ' + trip[5], "MMM d, yyyy hh:mm", "en");
+        trip = text.match(/\S+,? (\S+ \d{1,2}, \d{4}|\d{1,2} \S+ \d{4})  .*\n *(?:FROM|DE)  +(?:TO|À)\n *(\S.*\S)  +(\S.*\S)\n.*\n *(\d\d:\d\d) +(\d\d:\d\d)/);
+        res.reservationFor.departureTime = JsonLd.toDateTime(trip[1] + ' ' + trip[4], ["MMM d, yyyy hh:mm", "d MMMM yyyy hh:mm"], ["en", "fr"]);
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[1] + ' ' + trip[5], ["MMM d, yyyy hh:mm", "d MMMM yyyy hh:mm"], ["en", "fr"]);
         res.reservationFor.departureStation.name = trip[2];
         res.reservationFor.arrivalStation.name = trip[3];
         const pas = text.match(/PNR\n *(\S.*\S)  +([A-Z0-9]{6})\n/);
