@@ -128,5 +128,35 @@ function parseCytricEvent(ev)
         res.reservationNumber = rental[11];
         return res;
     }
+    else if (category.match(/Bahn/)) {
+        const resNum = ev.description.match(/Buchungscode: (.*)\n/)[1];
+        const pasName = ev.description.match(/für: (.*)\n/)[1];
+        let reservations = [];
+        let idx = 0;
+        while (true) {
+            let res = JsonLd.newTrainReservation();
+            const leg = ev.description.substr(idx).match(/\n\S.*\S, (\d{1,2} \S+ \d{4})\n(.*) - (.*) (\S+ Klasse)\nAbreise von (.*) um (\d\d:\d\d)\nAnkunft in (.*) um (\d\d:\d\d)\n(?:.*Wagen. (.*), Sitz. (.*)\n)?/);
+            if (!leg)
+                break;
+            idx += leg.index + leg[0].length - 1;
+            res.reservationFor.provider.name = leg[2];
+            res.reservationFor.trainNumber = leg[3];
+
+            res.reservationFor.departureStation.name = leg[5];
+            res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + leg[6], "dd MMMM yyyyhh:mm", "de");
+
+            res.reservationFor.arrivalStation.name = leg[7];
+            res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[1] + leg[8], "dd MMMM yyyyhh:mm", "de");
+
+            res.reservedTicket.ticketedSeat.seatingType = leg[4];
+            res.reservedTicket.ticketedSeat.seatSection = leg[9];
+            res.reservedTicket.ticketedSeat.seatNumber = leg[10];
+
+            res.reservationNumber = resNum;
+            res.underName.name = pasName;
+            reservations.push(res);
+        }
+        return reservations;
+    }
     console.log("unhandled category", category);
 }
