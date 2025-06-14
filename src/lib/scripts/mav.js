@@ -70,16 +70,15 @@ function parseBarcodeAlternative(data)
 }
 
 function parseTicket(pdf, node, triggerNode) {
-    var reservations = new Array();
+    let reservations = [];
     const text = pdf.pages[triggerNode.location].text;
-    var idx = 0;
+    let idx = 0;
     while (true) {
-        var trip = text.substr(idx).match(/(\d{2,4}\.\d{2}\.\d{2,4})\. *(\d{2}:\d{2}) *(.*) *-> *(.*) *(\d{2}:\d{2}) *(.*) *(\d)\./);
-        if (!trip) {
+        const trip = text.substr(idx).match(/(\d{2,4}\.\d{2}\.\d{2,4})\. *(\d{2}:\d{2}) *(.*) *-> *(.*) *(\d{2}:\d{2}) *(.*) *(\d)\./);
+        if (!trip)
             break;
-        }
-        idx += trip.index + trip[0].length
-        var res = JsonLd.clone(triggerNode.result[0]);
+        idx += trip.index + trip[0].length;
+        let res = JsonLd.clone(triggerNode.result[0]);
         res.reservationFor.departureStation.name = trip[3];
         res.reservationFor.arrivalStation.name = trip[4];
         res.reservationFor.departureTime = JsonLd.toDateTime(trip[1] + trip[2], ["yyyy.MM.ddhh:mm", "dd.MM.yyyyhh:mm"], "hu");
@@ -87,6 +86,26 @@ function parseTicket(pdf, node, triggerNode) {
         res.reservationFor.trainNumber = trip[6];
         reservations.push(res);
     }
+    if (reservations.length > 0)
+        return reservations;
+
+    // new/alternative layout
+    idx = 0;
+    while (true) {
+        const trip = text.substr(idx).match(/  +(\S.*\S)  +(\d\d:\d\d)  +(\S+)\n(\d{2,4}\.\d{2}\.\d{2,4})\.  +(\d)\.\n  +(\S.*\S)  +(\d\d:\d\d)/);
+        if (!trip)
+            break;
+        idx += trip.index + trip[0].length;
+        let res = JsonLd.clone(triggerNode.result[0]);
+        res.reservationFor.departureStation.name = trip[1];
+        res.reservationFor.departureTime = JsonLd.toDateTime(trip[4] + trip[2], ["yyyy.MM.ddhh:mm", "dd.MM.yyyyhh:mm"], "hu");
+        res.reservationFor.trainNumber = trip[3];
+        res.reservedTicket.ticketedSeat.seatingType = trip[5];
+        res.reservationFor.arrivalStation.name = trip[6];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[4] + trip[7], ["yyyy.MM.ddhh:mm", "dd.MM.yyyyhh:mm"], "hu");
+        reservations.push(res);
+    }
+
     return reservations;
 }
 
