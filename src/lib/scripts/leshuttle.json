@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@email.leshuttle.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "extractConfirmation",
+    "mimeType": "text/plain",
+    "script": "leshuttle.js"
+}
