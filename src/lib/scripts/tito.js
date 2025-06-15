@@ -6,8 +6,8 @@ function parseDate(res, date) {
         res.reservationFor.startDate = JsonLd.toDateTime(dt[1] + dt[2], "MMMM ddyyyy", "en");
     } else if (dt = date.match(/(\S+) (\d{1,2})\S{2}\S(\d{1,2})\S{2}, (\d{4})/)) {
         console.log(dt);
-        res.reservationFor.startDate = JsonLd.toDateTime(dt[1] + ' ' + dt[2] + dt[4], "MMMM ddyyyy", "en");
-        res.reservationFor.endDate = JsonLd.toDateTime(dt[1] + ' ' + dt[3] + dt[4], "MMMM ddyyyy", "en");
+        res.reservationFor.startDate = JsonLd.toDateTime(dt[1] + ' ' + dt[2] + ' ' + dt[4], "MMMM d yyyy", "en");
+        res.reservationFor.endDate = JsonLd.toDateTime(dt[1] + ' ' + dt[3] + ' ' + dt[4], "MMMM d yyyy", "en");
     }
 }
 
