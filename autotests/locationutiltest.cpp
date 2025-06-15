@@ -193,6 +193,40 @@ private Q_SLOTS:
         QTest::newRow("google maps 4") << QUrl(u"https://www.google.de/maps/place/Hotel+Ambassador/@49.0079973,8.3891759,17z/data=!XXXXXXX!12345"_s) << 49.0079973 << 8.3891759;
     }
 
+    void testAddressCompare()
+    {
+        PostalAddress a1;
+        a1.setAddressCountry(u"DE"_s);
+        a1.setAddressLocality(u"Berlin"_s);
+        a1.setPostalCode(u"10117"_s);
+        a1.setStreetAddress(u"Foostr. 1c"_s);
+        Place p1;
+        p1.setAddress(a1);
+
+        PostalAddress a2;
+        a2.setAddressCountry(u"DE"_s);
+        a2.setAddressLocality(u"Berlin"_s);
+        Place p2;
+        p2.setAddress(a2);
+
+        QCOMPARE(LocationUtil::isSameLocation(p1, p2), false);
+        QCOMPARE(LocationUtil::isSameLocation(p1, p2, LocationUtil::CityLevel), true);
+
+        a2.setPostalCode(u"10117"_s);
+        a2.setStreetAddress(u"Foostr. 1c"_s);
+        p2.setAddress(a2);
+        QCOMPARE(LocationUtil::isSameLocation(p1, p2), true);
+
+        a2.setStreetAddress(u"Foostr. 1c, Mitte"_s);
+        p2.setAddress(a2);
+        QCOMPARE(LocationUtil::isSameLocation(p1, p2), true);
+
+        a2.setPostalCode(u"14117"_s);
+        a2.setStreetAddress(u"Foostr. 1c"_s);
+        p2.setAddress(a2);
+        QCOMPARE(LocationUtil::isSameLocation(p1, p2), false);
+    }
+
     void testGeoFromUrl()
     {
         QFETCH(QUrl, url);

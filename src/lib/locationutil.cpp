@@ -338,8 +338,11 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
     switch (accuracy) {
         case Exact:
         case WalkingDistance:
-            if (!lhsAddr.streetAddress().isEmpty() && !rhsAddr.addressLocality().isEmpty()) {
-                return  lhsAddr.streetAddress() == rhsAddr.streetAddress() && lhsAddr.addressLocality() == rhsAddr.addressLocality();
+            if (!lhsAddr.streetAddress().isEmpty() && !rhsAddr.streetAddress().isEmpty() && !rhsAddr.addressLocality().isEmpty()) {
+                if (!lhsAddr.postalCode().isEmpty() && !rhsAddr.postalCode().isEmpty() && lhsAddr.postalCode() != rhsAddr.postalCode()) {
+                    return false;
+                }
+                return  (lhsAddr.streetAddress().startsWith(rhsAddr.streetAddress(), Qt::CaseInsensitive) || rhsAddr.streetAddress().startsWith(lhsAddr.streetAddress(), Qt::CaseInsensitive)) && lhsAddr.addressLocality() == rhsAddr.addressLocality();
             }
             break;
         case CityLevel:
