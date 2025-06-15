@@ -9,6 +9,12 @@
             },
             {
                 "field": "issuerId",
+                "match": "6061",
+                "mimeType": "internal/vdv",
+                "scope": "Descendants"
+            },
+            {
+                "field": "issuerId",
                 "match": "6260",
                 "mimeType": "internal/vdv",
                 "scope": "Descendants"
