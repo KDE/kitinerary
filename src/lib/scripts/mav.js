@@ -92,17 +92,17 @@ function parseTicket(pdf, node, triggerNode) {
     // new/alternative layout
     idx = 0;
     while (true) {
-        const trip = text.substr(idx).match(/  +(\S.*\S)  +(\d\d:\d\d)  +(\S+)\n(\d{2,4}\.\d{2}\.\d{2,4})\.  +(\d)\.\n  +(\S.*\S)  +(\d\d:\d\d)/);
+        const trip = text.substr(idx).match(/  +(\S.*\S)  +(\d\d:\d\d)(?:  +(\S+))?\n(\d{2,4}\.\d{2}\.\d{2,4})\.  +(?:(\S+)  +)?(\d)\.\n  +(\S.*\S)  +(\d\d:\d\d)/);
         if (!trip)
             break;
         idx += trip.index + trip[0].length;
         let res = JsonLd.clone(triggerNode.result[0]);
         res.reservationFor.departureStation.name = trip[1];
         res.reservationFor.departureTime = JsonLd.toDateTime(trip[4] + trip[2], ["yyyy.MM.ddhh:mm", "dd.MM.yyyyhh:mm"], "hu");
-        res.reservationFor.trainNumber = trip[3];
-        res.reservedTicket.ticketedSeat.seatingType = trip[5];
-        res.reservationFor.arrivalStation.name = trip[6];
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[4] + trip[7], ["yyyy.MM.ddhh:mm", "dd.MM.yyyyhh:mm"], "hu");
+        res.reservationFor.trainNumber = trip[3] ?? trip[5];
+        res.reservedTicket.ticketedSeat.seatingType = trip[6];
+        res.reservationFor.arrivalStation.name = trip[7];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[4] + trip[8], ["yyyy.MM.ddhh:mm", "dd.MM.yyyyhh:mm"], "hu");
         reservations.push(res);
     }
 
