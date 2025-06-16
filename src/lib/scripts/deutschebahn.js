@@ -268,6 +268,8 @@ function parsePdf(pdf, node, triggerNode) {
                 reservations[i].reservedTicket.ticketedSeat.seatingType = (c == 1 || c == 3) ? '1' : '2';
             }
             reservations[i].underName = JsonLd.toJson(triggerNode.content.person);
+            reservations[i].reservedTicket.validFrom = triggerNode.content.beginDateTime;
+            reservations[i].reservedTicket.validUntil = triggerNode.content.endDateTime;
         }
     }
 
