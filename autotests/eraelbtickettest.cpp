@@ -30,8 +30,8 @@ private Q_SLOTS:
 
         QDateTime contextDt({2022, 2, 1}, { 8, 0 }, QTimeZone::UTC);
         QCOMPARE(ticket->emissionDate(contextDt), QDate(2013, 1, 6));
-        QCOMPARE(ticket->validFromDate(contextDt), QDate(2013, 2, 3));
-        QCOMPARE(ticket->validUntilDate(contextDt), QDate(2013, 8, 4));
+        QCOMPARE(ticket->validFromDate(contextDt), QDateTime({2013, 2, 3}, {}));
+        QCOMPARE(ticket->validUntilDate(contextDt), QDateTime({2013, 8, 4}, {}));
         QCOMPARE(ticket->segment1().departureDate(contextDt), QDate(2013, 2, 3));
 
         // single segment with Eurostar signature (?) trailer

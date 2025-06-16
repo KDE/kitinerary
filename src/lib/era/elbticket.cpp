@@ -27,36 +27,35 @@ ELBTicketSegment ELBTicket::segment2() const
     return segment.isValid() ? segment : ELBTicketSegment{};
 }
 
-static QDate dateFromDayCount(int year, int day, const QDateTime &contextDate)
+QDate ELBTicket::emissionDate(const QDateTime &contextDate) const
 {
-    const auto y = contextDate.date().year() - contextDate.date().year() % 10 + year;
-    const auto d = QDate(y, 1, 1).addDays(day - 1);
+    const auto y = contextDate.date().year() - contextDate.date().year() % 10 + year();
+    const auto d = QDate(y, 1, 1).addDays(emissionDay() - 1);
     if (y > contextDate.date().year()) {
-        return QDate(y - 10, 1, 1).addDays(day - 1);
+        return QDate(y - 10, 1, 1).addDays(emissionDay() - 1);
     }
     return d;
 }
 
-QDate ELBTicket::emissionDate(const QDateTime &contextDate) const
+QDateTime ELBTicket::validFromDate(const QDateTime &contextDate) const
 {
-    return dateFromDayCount(year(), emissionDay(), contextDate);
-}
-
-QDate ELBTicket::validFromDate(const QDateTime &contextDate) const
-{
-    return dateFromDayCount(beginValidityDay() < emissionDay() ? year() + 1 : year(), beginValidityDay(), contextDate);
-}
-
-QDate ELBTicket::validUntilDate(const QDateTime &contextDate) const
-{
-    auto y = year();
+    QDate d(emissionDate(contextDate).year(), 1, 1);
     if (beginValidityDay() < emissionDay()) {
-        ++y;
+        d = d.addYears(1);
+    }
+    return d.addDays(beginValidityDay() - 1).startOfDay();
+}
+
+QDateTime ELBTicket::validUntilDate(const QDateTime &contextDate) const
+{
+    QDate d(emissionDate(contextDate).year(), 1, 1);
+    if (beginValidityDay() < emissionDay()) {
+        d = d.addYears(1);
     }
     if (endValidityDay() < beginValidityDay()) {
-        ++y;
+        d = d.addYears(1);
     }
-    return dateFromDayCount(y, endValidityDay(), contextDate);
+    return d.addDays(endValidityDay() -1).startOfDay();
 }
 
 QString ELBTicket::rawData() const
@@ -130,7 +129,11 @@ bool ELBTicketSegment::isValid() const
 
 QDate ELBTicketSegment::departureDate(const QDateTime &contextDate) const
 {
-    return dateFromDayCount(departureDay() < m_ticket.emissionDay() ? m_ticket.year() + 1 : m_ticket.year(), departureDay(), contextDate);
+    QDate d(m_ticket.emissionDate(contextDate).year(), 1, 1);
+    if (departureDay() < m_ticket.emissionDay()) {
+        d = d.addYears(1);
+    }
+    return d.addDays(departureDay() - 1);
 }
 
 QString ELBTicketSegment::readString(int start, int len) const

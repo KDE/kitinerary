@@ -67,8 +67,8 @@ public:
     static std::optional<ELBTicket> parse(const QByteArray &data);
 
     Q_INVOKABLE QDate emissionDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
-    Q_INVOKABLE QDate validFromDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
-    Q_INVOKABLE QDate validUntilDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE [[nodiscard]] QDateTime validFromDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
+    Q_INVOKABLE [[nodiscard]] QDateTime validUntilDate(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 
     QString rawData() const;
 private:
