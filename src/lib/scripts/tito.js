@@ -38,12 +38,12 @@ function extractPass(pass, node) {
 function extractPdf(pdf, node, barcode) {
     const page = pdf.pages[barcode.location];
     const topRight = page.textInRect(0.5, 0.0, 1.0, 0.5);
-    const ev = topRight.match(/([\S\s]+)\n(.*, \d{4})\n([\S\s]+)/);
+    const ev = topRight.match(/([\S\s]+)\n(.*, \d{4})\n(?:\s*\d{1,2}:\d{2}[ap]m.*\n)?([\S\s]+)/);
 
     let res = JsonLd.newEventReservation();
     res.reservationFor.name = ev[1];
     parseDate(res, ev[2]);
-    res.reservationFor.location.name = ev[3];
+    res.reservationFor.location.name = ev[3].match(/(.*)(?:By the power of)?/)[1];
     res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
 
     const left = page.textInRect(0.0, 0.0, 0.5, 1.0);
