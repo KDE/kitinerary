@@ -44,6 +44,12 @@
             "field": "issuerCode",
             "match": "3018",
             "scope": "Descendants"
+        },
+        {
+            "field": "futureUse",
+            "match": "^.0019",
+            "mimeType": "internal/era-elb",
+            "scope": "Descendants"
         }
     ],
     "function": "parsePdfSSB",
