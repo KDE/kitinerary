@@ -53,11 +53,15 @@ function parsePdfSSB(pdf, node, ssb) {
         res.reservationNumber = text.match(/PNR: (\S{6})/)[1];
     } else {
         // alternative layout observed in NS-booked Eurostar-branded Thalys tickets since 2025
-        trip = text.match(/\S+,? (\S+ \d{1,2}, \d{4}|\d{1,2} \S+ \d{4})  .*\n *(?:FROM|DE)  +(?:TO|À)\n *(\S.*\S)  +(\S.*\S)\n.*\n *(\d\d:\d\d) +(\d\d:\d\d)/);
-        res.reservationFor.departureTime = JsonLd.toDateTime(trip[1] + ' ' + trip[4], ["MMM d, yyyy hh:mm", "d MMMM yyyy hh:mm"], ["en", "fr"]);
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[1] + ' ' + trip[5], ["MMM d, yyyy hh:mm", "d MMMM yyyy hh:mm"], ["en", "fr"]);
-        res.reservationFor.departureStation.name = trip[2];
-        res.reservationFor.arrivalStation.name = trip[3];
+        const date = text.match(/\S+,? (\S+ \d{1,2}, \d{4}|\d{1,2} \S+ \d{4})  .*\n/);
+        const leg = text.match(/(?:FROM|DE)  +(?:TO|À)\n *(\S.*\S)  +(\S.*\S)\n/);
+        const time = text.match(/D[EÉ]PART.*\n *(\d\d:\d\d) .*  +(\d\d:\d\d)/);
+        res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + ' ' + time[1], ["MMM d, yyyy hh:mm", "d MMMM yyyy hh:mm"], ["en", "fr"]);
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + ' ' + time[2], ["MMM d, yyyy hh:mm", "d MMMM yyyy hh:mm"], ["en", "fr"]);
+        if (leg) {
+            res.reservationFor.departureStation.name = leg[1];
+            res.reservationFor.arrivalStation.name = leg[2];
+        }
         const pas = text.match(/PNR\n *(\S.*\S)  +([A-Z0-9]{6})\n/);
         res.reservationNumber = pas[2];
         res.underName.name = pas[1];
