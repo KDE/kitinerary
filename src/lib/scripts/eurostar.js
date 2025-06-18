@@ -54,17 +54,18 @@ function parsePdfSSB(pdf, node, ssb) {
     } else {
         // alternative layout observed in NS-booked Eurostar-branded Thalys tickets since 2025
         const date = text.match(/\S+,? (\S+ \d{1,2}, \d{4}|\d{1,2} \S+ \d{4})  .*\n/);
-        const leg = text.match(/(?:FROM|DE)  +(?:TO|À)\n *(\S.*\S)  +(\S.*\S)\n/);
+        const dep = page.textInRect(0, 0, 0.35, 1).match(/(?:FROM|DE)\n([\s\S]+)\n *D[EÉ]PART/)[1];
+        const arr = page.textInRect(0.35, 0, 1, 1).match(/(?:TO|À)\n([\s\S]+)\n *ARRIV/)[1];
         const time = text.match(/D[EÉ]PART.*\n *(\d\d:\d\d) .*  +(\d\d:\d\d)/);
         res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + ' ' + time[1], ["MMM d, yyyy hh:mm", "d MMMM yyyy hh:mm"], ["en", "fr"]);
         res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + ' ' + time[2], ["MMM d, yyyy hh:mm", "d MMMM yyyy hh:mm"], ["en", "fr"]);
-        if (leg) {
-            res.reservationFor.departureStation.name = leg[1];
-            res.reservationFor.arrivalStation.name = leg[2];
-        }
+        res.reservationFor.departureStation.name = dep;
+        res.reservationFor.arrivalStation.name = arr;
         const pas = text.match(/PNR\n *(\S.*\S)  +([A-Z0-9]{6})\n/);
         res.reservationNumber = pas[2];
         res.underName.name = pas[1];
+        // pdf417 works just as well, but the vastly different format surprises people...
+        res.reservedTicket.ticketToken = res.reservedTicket.ticketToken.replace(/^pdf417:/, "azteccode:");
     }
     return res;
 }
