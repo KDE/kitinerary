@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": ".*alpenverein.*",
+            "mimeType": "text/plain",
+            "scope": "Children"
+        }
+    ],
+    "function": "parseMembershipCard",
+    "mimeType": "application/pdf",
+    "script": "dav.js"
+}
