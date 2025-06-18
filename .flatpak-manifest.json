@@ -182,6 +182,10 @@
                     "type": "git",
                     "url": "https://invent.kde.org/pim/kmime",
                     "branch": "master"
+                },
+                {
+                    "type": "patch",
+                    "path": "flatpak-kmime-version.patch"
                 }
             ],
             "cleanup": [
