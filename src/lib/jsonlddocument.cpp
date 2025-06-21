@@ -125,7 +125,8 @@ static const char* const fallbackDateTimePattern[] = {
     "yyyy-MM-dd HH:mm:ss",
     "yyyy-MM-dd HH:mm",
     "MM-dd-yyyy HH:mm", // yes, seriously ;(
-    "yyyyMMddTHHmmsst"
+    "yyyyMMddTHHmmsst",
+    "HH:mm"
 };
 static const auto fallbackDateTimePatternCount = sizeof(fallbackDateTimePattern) / sizeof(const char *);
 
