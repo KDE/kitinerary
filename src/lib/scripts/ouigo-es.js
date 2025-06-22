@@ -35,14 +35,24 @@ function parsePdf(pdf, node, triggerNode) {
         res.reservationFor.arrivalStation.name = stations[2];
         res.reservationFor.arrivalTime = JsonLd.toDateTime(stations[3], "hh:mm", "es");
     } else {
-        const stationsV2 = topLeft.match(/\n\d\d:\d\d\n(.*)\n(\d\d:\d\d)\n(.*)/);
+        const stationsV2 = topLeft.match(/\n* \d\d:\d\d\n(.*)\n *(\d\d:\d\d)\n(.*)/);
         res.reservationFor.departureStation.name = stationsV2[1];
         res.reservationFor.arrivalStation.name = stationsV2[3];
         res.reservationFor.arrivalTime = JsonLd.toDateTime(stationsV2[2], "hh:mm", "es");
     }
 
     const topRight = page.textInRect(0.5, 0.0, 1.0, 0.5);
-    res.underName.name = topRight.match(/^(.*)\n/)[1];
-    res.reservationNumber = topRight.match(/  +([A-Z0-9]{6})\n/)[1];
+    const name = page.text.match(/^ *Localizador: .*\n(.*)\n/);
+    if (name)
+        res.underName.name = name[1];
+    else
+        res.underName.name = topRight.match(/^(.*)\n/)[1];
+    res.reservationNumber = topRight.match(/[: ] +([A-Z0-9]{6})\n/)[1];
+
+    const price = page.text.match(/Precio.*/);
+    if (price)
+        ExtractorEngine.extractPrice(price[0], res);
+    else
+        ExtractorEngine.extractPrice(page.text, res);
     return res;
 }
