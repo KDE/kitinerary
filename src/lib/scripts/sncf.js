@@ -242,27 +242,31 @@ function parseSecutixPdfItineraryV1(text, res)
 
 function parseSecutixPdfItineraryV2(text, res)
 {
-    var reservations = new Array();
-    var pos = 0;
+    let reservations = [];
+    let pos = 0;
     while (true) {
-        var data = text.substr(pos).match(/ *(\d+h\d+)\n *(.*)\n *(.*)\n(?: *Voiture (\d+) - Place (\d+)\n.*\n.*\n)?(?: *Opéré par .*\n)? *(\d+h\d+)\n(.*)\n/);
-        if (!data)
+        const trip = text.substr(pos).match(/ *(\d\dh\d\d)\n(.*)\n(.*)\n([\S\s]*?) *(\d\dh\d\d)\n(.*)\n/);
+        if (!trip)
             break;
-        pos += data.index + data[0].length;
+        pos += trip.index + trip[0].length;
 
-        var leg = JsonLd.newTrainReservation();
-        leg.reservationFor.departureStation.name = data[2];
+        let leg = JsonLd.newTrainReservation();
+        leg.reservationFor.departureStation.name = trip[2];
         leg.reservationFor.departureDay = res.reservationFor.departureDay;
-        leg.reservationFor.departureTime = JsonLd.toDateTime(data[1], "hh'h'mm", "fr");
-        leg.reservationFor.arrivalStation.name = data[7];
-        leg.reservationFor.arrivalTime = JsonLd.toDateTime(data[6], "hh'h'mm", "fr");
-        leg.reservationFor.trainNumber = data[3];
+        leg.reservationFor.departureTime = JsonLd.toDateTime(trip[1], "hh'h'mm", "fr");
+        leg.reservationFor.arrivalStation.name = trip[6];
+        leg.reservationFor.arrivalTime = JsonLd.toDateTime(trip[5], "hh'h'mm", "fr");
+        leg.reservationFor.trainNumber = trip[3];
         leg.underName = res.underName;
         leg.reservationNumber = res.reservationNumber;
         leg.reservedTicket = res.reservedTicket;
-        leg.reservedTicket.ticketedSeat.seatSection = data[4];
-        leg.reservedTicket.ticketedSeat.seatNumber = data[5];
         leg.programMembershipUsed = res.programMembershipUsed;
+
+        const seat = trip[4].match(/Voiture (\d+) - Place (\d+)\n/);
+        if (seat) {
+            leg.reservedTicket.ticketedSeat.seatSection = seat[1];
+            leg.reservedTicket.ticketedSeat.seatNumber = seat[2];
+        }
 
         reservations.push(leg);
     }
