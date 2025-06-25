@@ -8,7 +8,7 @@ var regExMap = [];
 regExMap['en'] = {
     bookingRef: /(?:Booking number|Confirmation:) +([0-9]*)\s+/,
     // 1: adress, 2: city, 3:postal code, 4: country, 5: phone
-    hotelInformation: / *(.+), (.+), (.+), ([\s\S]+?)(?: -|\n)\s+Phone:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/,
+    hotelInformation: / (.+?), ([^\n,]+)(?:, ([^\n,]+))?, ([^\n,]+?)(?: -|\n)\s+Phone:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/,
     hotelName: [/(?:\[checkmark\.png\] |\.\d\n)(.*?)(?: is expecting you on|\n *\[)/, /\n\n\s*(?:You'll pay when you stay at )?(\S.*\S)\n\n\s*Reservation details\n/],
     arrivalDate: /Check-in *?\s+? *?([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2}(?: [AP]M)?)[^\)]*\)/,
     departureDate: /Check-out *?\s+? *?([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(.*?(?:- )?([0-9]{1,2}:[0-9]{2}(?: [AP]M)?)\)/,
