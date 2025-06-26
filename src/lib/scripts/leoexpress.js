@@ -17,12 +17,9 @@ function extractEvent(ev, node) {
 }
 
 function extractPdf(pdf) {
-    const text = pdf.pages[0].text;
+    const text = pdf.text;
 	const parts = text.split(/(?=\n([A-Ž]+\s)+ +\d{5}-\d{5}-\d{5})/g)
 	const result = [];
-
-	console.log(parts);
-	console.log(parts.length);
 
 	for (let part of parts) {
 		if (!part.includes("->")) continue;
@@ -31,10 +28,18 @@ function extractPdf(pdf) {
 		const leg = part.match(/ +([^\s\d\[\]].*\S) -> (\S.*\S) \((\d{1,2}\.\d{1,2}\.\d{2} \d\d:\d\d)/);
 
 		let res = (part.includes("(train connection)")) ? JsonLd.newTrainReservation() : JsonLd.newBusReservation();
+
+		if (part.includes("(train connection)")) {
+			res.reservationFor.trainNumber = dep[2];
+			res.reservationFor.departureStation.name = leg[1];
+			res.reservationFor.arrivalStation.name = leg[2];
+		} else {
+			res.reservationFor.departureBusStop.name = leg[1];
+			res.reservationFor.arrivalBusStop.name = leg[2];
+			res.reservationFor.busNumber = dep[2];
+		}
+
 		res.reservationFor.departureTime = JsonLd.toDateTime(dep[1], "hh:mm d.M.yy", "sk");
-		res.reservationFor.trainNumber = dep[2];
-		res.reservationFor.departureStation.name = leg[1];
-		res.reservationFor.arrivalStation.name = leg[2];
 		res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[3], "d.M.yy hh:mm", "sk");
 		const hdr = part.match(/((?:[A-Ž]+\s){2,}) +(\d{5}-\d{5}-\d{5})/);
 		res.underName.name = hdr[1];
