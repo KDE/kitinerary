@@ -1,5 +1,5 @@
 // SPDX-FileCopyrightText: 2024 Volker Krause <vkrause@kde.org>
-// SPDX-FileCopyrightText: 2024 David Pilarcik <meow@charliecat.space>
+// SPDX-FileCopyrightText: 2024-2025 David Pilarcik <meow@charliecat.space>
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 function extractEvent(ev, node) {
@@ -18,20 +18,34 @@ function extractEvent(ev, node) {
 
 function extractPdf(pdf) {
     const text = pdf.pages[0].text;
-    const dep = text.match(/(\d\d:\d\d \d{1,2}\.\d{1,2}\.\d{2}) \[(.*?)\] +/);
-    const leg = text.match(/ +([^\s\d\[\]].*\S) -> (\S.*\S) \((\d{1,2}\.\d{1,2}\.\d{2} \d\d:\d\d)/);
-    let res = JsonLd.newTrainReservation();
-    res.reservationFor.departureTime = JsonLd.toDateTime(dep[1], "hh:mm d.M.yy", "sk");
-    res.reservationFor.trainNumber = dep[2];
-    res.reservationFor.departureStation.name = leg[1];
-    res.reservationFor.arrivalStation.name = leg[2];
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[3], "d.M.yy hh:mm", "sk");
+	const parts = text.split(/(?=\n([A-Ž]+\s)+ +\d{5}-\d{5}-\d{5})/g)
+	const result = [];
 
-    const hdr = text.match(/^(\S.*\S)  +(\d{5}-\d{5}-\d{5})/);
-    res.underName.name = hdr[1];
-    res.reservationNumber = hdr[2].replace(/-/g, '');
-    res.reservedTicket.ticketToken = 'qrcode:' + res.reservationNumber;
-    return res;
+	console.log(parts);
+	console.log(parts.length);
+
+	for (let part of parts) {
+		if (!part.includes("->")) continue;
+
+		const dep = part.match(/(\d\d:\d\d \d{1,2}\.\d{1,2}\.\d{2}) \[(.*?)\] +/);
+		const leg = part.match(/ +([^\s\d\[\]].*\S) -> (\S.*\S) \((\d{1,2}\.\d{1,2}\.\d{2} \d\d:\d\d)/);
+
+		let res = (part.includes("(train connection)")) ? JsonLd.newTrainReservation() : JsonLd.newBusReservation();
+		res.reservationFor.departureTime = JsonLd.toDateTime(dep[1], "hh:mm d.M.yy", "sk");
+		res.reservationFor.trainNumber = dep[2];
+		res.reservationFor.departureStation.name = leg[1];
+		res.reservationFor.arrivalStation.name = leg[2];
+		res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[3], "d.M.yy hh:mm", "sk");
+		const hdr = part.match(/((?:[A-Ž]+\s){2,}) +(\d{5}-\d{5}-\d{5})/);
+		res.underName.name = hdr[1];
+		res.underName.email = /^(.*@.* ) +/gm.exec(part)?.[1].trim() || undefined;
+		res.reservationNumber = hdr[2].replace(/-/g, '');
+		res.reservedTicket.ticketToken = 'qrcode:' + res.reservationNumber;
+		res.reservedTicket.name = /(.*) +TICKET\/TAX RECEIPT/.exec(part)[1];
+		ExtractorEngine.extractPrice(part, res);
+		result.push(res);
+	}
+    return result;
 }
 
 function extractPkpass(pass, node) {
