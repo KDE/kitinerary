@@ -48,9 +48,10 @@ function parseMail(html) {
 	res.reservationFor.location.name = venueName
 	let [ streetAddress, municipalityAndPostal, Country ] = venueAddress.split(", ")
 	res.reservationFor.location.address.streetAddress = streetAddress
-	res.reservationFor.location.address.postalCode = municipalityAndPostal.match(/\d+ \d+/)[0]
+	res.reservationFor.location.address.postalCode = municipalityAndPostal.match(/\d+ \d+/)[0] // Asuming numaric postal code
 	res.reservationFor.location.address.addressLocality = municipalityAndPostal.replace(/\d+ \d+/, "").trim()
-	res.reservationFor.location.geo = JsonLd.toGeoCoordinates("https://maps.google.com?q=48.14484247668123,17.111600664436402")
+	// res.reservationFor.location.address.addressCountry = Country.trim() || undefined // Address receved is in the language of the user, hard to parse
+	res.reservationFor.location.geo = JsonLd.toGeoCoordinates(/href="(https:\/\/maps.google.com.*)"/.exec(html.rawData)[1]);
 
 	res.provider = { '@type': 'Organization', name: text.split("\n").slice(-3, -2)[0] };
 
