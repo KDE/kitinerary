@@ -263,6 +263,8 @@
         <file>pretix.js</file>
         <file>qatar-airways.json</file>
         <file>qatar-airways.js</file>
+		<file>reenio.json</file>
+        <file>reenio.js</file>
         <file>regiojet.json</file>
         <file>regiojet.js</file>
         <file>regiondo.json</file>
