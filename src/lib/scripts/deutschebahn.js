@@ -30,7 +30,7 @@ function parseDeparture(res, line, year, compact) {
         idx += platform.index + platform[0].length;
         res.reservationFor.departurePlatform = platform[1];
     }
-    var trainId = line.substr(idx).match(compact ? / +([^,]*?)(?=(,|$))/ : / +(.*?)(?=(  |$))/);
+    var trainId = line.substr(idx).match(compact ? / +([^,]*?)(?=(,|$))/ : / +(.*?)(?=(  |Die |$))/);
     if (trainId) {
         idx += trainId.index + trainId[0].length
         res.reservationFor.trainNumber = trainId[1];
