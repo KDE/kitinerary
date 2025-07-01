@@ -19,17 +19,6 @@ function parseHtmlBooking(doc) {
     if (!bookingRef)
         return null;
 
-    // determine locale
-    var introElem = doc.eval("//table[@class=\"email-wrapper\"]/tr[2]/td");
-    var locale = "";
-    for (var l in localeMap) {
-        var m = introElem[0].content.match(localeMap[l]['localeMatch']);
-        if (m) {
-            locale = l;
-            break;
-        }
-    }
-
     var elems = doc.eval("//table[@class=\"ej-flight\"]");
     for (var i = 0; i < elems.length; ++i) {
         var elem = elems[i];
@@ -37,7 +26,7 @@ function parseHtmlBooking(doc) {
         var res = JsonLd.newFlightReservation();
         res.reservationNumber = bookingRef[1];
 
-        var airports = row.recursiveContent.match(localeMap[locale]['airportRegExp']);
+        var airports = row.recursiveContent.match(/(.*) (?:to|nach) (.*)/);
         res.reservationFor.departureAirport.name = airports[1];
 
         res.reservationFor.arrivalAirport.name = airports[2];
@@ -48,9 +37,9 @@ function parseHtmlBooking(doc) {
         res.reservationFor.airline.iataCode = flightNum[1];
         row = row.nextSibling;
 
-        var timeCell = row.eval(".//table/tr/td");
-        res.reservationFor.departureTime = JsonLd.toDateTime(timeCell[1].content.match(/\W* (.*)/)[1], "dd MMM HH:mm", locale);
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(timeCell[3].content.match(/\W* (.*)/)[1], "dd MMM HH:mm", locale);
+        const timeCell = row.eval(".//table/tr/td");
+        res.reservationFor.departureTime = JsonLd.toDateTime(timeCell[1].content.match(/\W* (.*)/)[1], ["dd MMM HH:mm", "dd MMM yyyy HH:mm"], ["en", "de"]);
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(timeCell[3].content.match(/\W* (.*)/)[1], ["dd MMM HH:mm", "dd MMM yyyy HH:mm"], ["en", "de"]);
 
         elem = elem.nextSibling;
         if (elem.attribute("class") == "ej-pax") {
