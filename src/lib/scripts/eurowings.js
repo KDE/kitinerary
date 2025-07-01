@@ -49,3 +49,22 @@ function main(text) {
 
     return reservations;
 }
+
+function extractEvent(ev)
+{
+    let res = JsonLd.newFlightReservation();
+    res.reservationFor.departureTime = ev.dtStart.toISOString();
+    res.reservationFor.arrivalTime = ev.dtEnd.toISOString();
+    const uid = ev.uid.match(/([A-Z0-9]{6})_([A-Z]{3})([A-Z]{3})/);
+    res.reservationNumber = uid[1];
+    res.reservationFor.departureAirport.iataCode = uid[2];
+    res.reservationFor.arrivalAirport.iataCode = uid[3];
+    const loc = ev.location.match(/(.*) \(([A-Z0-9]{2})(\d{1,4})\)/);
+    res.reservationFor.departureAirport.name = loc[1];
+    res.reservationFor.airline.iataCode = loc[2];
+    res.reservationFor.flightNumber = loc[3];
+    const arrName = ev.description.match(/(?:To|Nach): (.*)/);
+    if (arrName)
+        res.reservationFor.arrivalAirport.name = arrName[1];
+    return res;
+}

@@ -8,4 +8,9 @@
     "mimeType": "application/vnd.apple.pkpass",
     "filter": [ { "field": "passTypeIdentifier", "match": "pass.wings.boardingpass", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
     "script": "eurowings-pkpass.js"
+}, {
+    "mimeType": "internal/event",
+    "filter": [ { "field": "uid", "match": "^[0-9A-Z]{6}_[A-Z]{6}$", "mimeType": "internal/event", "scope": "Current" } ],
+    "script": "eurowings.js",
+    "function": "extractEvent"
 }]
