@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@mailer.opodo.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "extractConfirmation",
+    "mimeType": "text/html",
+    "script": "opodo.js"
+}
