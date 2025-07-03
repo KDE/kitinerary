@@ -64,3 +64,53 @@ function parseRct2(uic, node) {
     res.reservationFor.departureTime = JsonLd.toDateTime(train[4], "dd/MM/yyyy hh:mm", "be");
     return res;
 }
+
+function extractEmailBody(text) {
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        const date = text.substr(idx).match(/(?:\s+|.*: )\S+ (\d\d \S+ \d{4})\n/);
+        if (!date)
+            break;
+        idx += date.index + date[0].length;
+        while (true) {
+            const leg = text.substr(idx).match(/^(\d\d:\d\d)[ \n](.*)\n(\d\d:\d\d)[ \n](.*)\n(\S+)\n/);
+            if (!leg)
+                break;
+            idx += leg.index + leg[0].length;
+            let res = JsonLd.newTrainReservation();
+            res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + ' ' + leg[1], 'dd MMM yyyy HH:mm', 'en');
+            res.reservationFor.departureStation.name = leg[2];
+            res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + ' ' + leg[3], 'dd MMM yyyy HH:mm', 'en');
+            res.reservationFor.arrivalStation.name = leg[4];
+            res.reservationFor.trainNumber = leg[5];
+            reservations.push(res);
+        }
+    }
+    return reservations;
+}
+
+function mergeEmail(mail, node)
+{
+    console.log("XXX");
+    const htmlResult = node.findChildNodes({ mimeType: "text/html", scope: "Children" })[0].result;
+    let tickets = [];
+    for (const ticket of node.findChildNodes({ mimeType: "internal/uic9183", scope: "Descendants"})) {
+        tickets = tickets.concat(ticket.result);
+    }
+    if (htmlResult.length === 0 || tickets.length === 0)
+        return;
+
+    let result = [];
+    for (const res of htmlResult) {
+        for (const ticket of tickets) {
+            if (!res.reservationFor.departureTime.startsWith(ticket.reservationFor.departureDay))
+                continue;
+            let r = JsonLd.clone(ticket);
+            r.reservationFor = res.reservationFor;
+            result.push(r);
+        }
+    }
+
+    return result;
+}

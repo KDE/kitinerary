@@ -46,6 +46,32 @@
     {
         "filter": [
             {
+                "field": "From",
+                "match": "@b-europe.com|b-rail.be|belgiantrain.be",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "extractEmailBody",
+        "mimeType": "text/plain",
+        "script": "sncb.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "@b-europe.com|b-rail.be|belgiantrain.be",
+                "mimeType": "message/rfc822",
+                "scope": "Current"
+            }
+        ],
+        "function": "mergeEmail",
+        "mimeType": "message/rfc822",
+        "script": "sncb.js"
+    },
+    {
+        "filter": [
+            {
                 "field": "carrierId",
                 "match": "1088",
                 "mimeType": "internal/uic9183",
