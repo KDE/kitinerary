@@ -2,11 +2,20 @@
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 function extractEticket(pdf, node, barcode) {
+    // boarding pass
     if (barcode.content.repeatedMandatorySection(0).checkinSequenceNumber!= 0 ||
         barcode.content.repeatedMandatorySection(0).seatNumber != 0) {
-        return;
+        const page = pdf.pages[barcode.location].text;
+        const depDt = page.match(/Departure.*\n(\d\d:\d\d)[, ]+(\d{2} \S{3} \d{4})/);
+        let res = node.result[0];
+        res.reservationFor.departureTime = JsonLd.toDateTime(depDt[2] + ' ' + depDt[1], 'dd MMM yyyy HH:mm', 'en');
+        const boarding = page.match(/Gate opens.*\n(\d\d:\d\d).*\nBoarding group.*\n(.*?)  /);
+        res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[1], 'HH:mm', 'en');
+        res.boardingGroup = boarding[2];
+        return res;
     }
 
+    // eticket
     const text = pdf.text;
     let reservations = [];
     let idx = 0;
