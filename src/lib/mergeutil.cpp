@@ -769,7 +769,7 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
     if (lhs.isNull()) {
         return rhs;
     }
-    if (!isSubType(lhs, rhs) && !isSubType(rhs, lhs)) {
+    if (lhs.typeId() != rhs.typeId() && !isSubType(lhs, rhs) && !isSubType(rhs, lhs)) {
         qCWarning(Log) << "type mismatch during merging:" << lhs << rhs;
         return {};
     }
@@ -783,41 +783,54 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
         }
     }
 
+    // handle simple value types
+    if (lhs.typeId() == rhs.typeId()) {
+        const auto mt = lhs.typeId();
+        if (mt == qMetaTypeId<Airline>()) {
+            return mergeValue(lhs.value<Airline>(), rhs.value<Airline>());
+        }
+        if (mt == qMetaTypeId<Person>()) {
+            return mergeValue(lhs.value<Person>(), rhs.value<Person>());
+        }
+        if (mt == QMetaType::QDateTime) {
+            return mergeValue(lhs.toDateTime(), rhs.toDateTime());
+        }
+        if (mt == qMetaTypeId<Ticket>()) {
+            return mergeValue(lhs.value<Ticket>(), rhs.value<Ticket>());
+        }
+        if (mt == QMetaType::QString) {
+            return StringUtil::betterString(lhs.toString(), rhs.toString()).toString();
+        }
+        if ((QMetaType(mt).flags() & QMetaType::IsGadget) == 0 && !JsonLd::valueIsNull(rhs)) {
+            return rhs;
+        }
+    }
+
     auto res = lhs;
     if (lhs.userType() != rhs.userType() && isSubType(rhs, lhs)) {
         res = rhs;
     }
 
-    const auto mo = QMetaType(res.userType()).metaObject();
-    for (int i = 0; i < mo->propertyCount(); ++i) {
-        const auto prop = mo->property(i);
-        if (!prop.isStored()) {
-            continue;
-        }
+    const auto mt = QMetaType(res.typeId());
+    const auto mo = QMetaType(res.typeId()).metaObject();
+    if (mo && (mt.flags() & QMetaType::IsGadget)) {
+        for (int i = 0; i < mo->propertyCount(); ++i) {
+            const auto prop = mo->property(i);
+            if (!prop.isStored()) {
+                continue;
+            }
 
-        auto lv = prop.readOnGadget(lhs.constData());
-        auto rv = prop.readOnGadget(rhs.constData());
-        auto mt = rv.userType();
-        const auto metaType = QMetaType(mt);
+            const auto lv = prop.readOnGadget(lhs.constData());
+            auto rv = prop.readOnGadget(rhs.constData());
+            if (rv.typeId() == QMetaType::QVariantList && std::strcmp(prop.name(), "subjectOf") == 0) {
+                rv = mergeSubjectOf(lv.toList(), rv.toList());
+            } else {
+                rv = MergeUtil::merge(lv, rv);
+            }
 
-        if (mt == qMetaTypeId<Airline>()) {
-            rv = mergeValue(lv.value<Airline>(), rv.value<Airline>());
-        } else if (mt == qMetaTypeId<Person>()) {
-            rv = mergeValue(lv.value<Person>(), rv.value<Person>());
-        } else if (mt == QMetaType::QDateTime) {
-            rv = mergeValue(lv.toDateTime(), rv.toDateTime());
-        } else if (mt == qMetaTypeId<Ticket>()) {
-            rv = mergeValue(lv.value<Ticket>(), rv.value<Ticket>());
-        } else if ((metaType.flags() & QMetaType::IsGadget) && metaType.metaObject()) {
-            rv = merge(prop.readOnGadget(lhs.constData()), rv);
-        } else if (mt == QMetaType::QVariantList && std::strcmp(prop.name(), "subjectOf") == 0) {
-            rv = mergeSubjectOf(lv.toList(), rv.toList());
-        } else if (mt == QMetaType::QString) {
-            rv = StringUtil::betterString(lv.toString(), rv.toString()).toString();
-        }
-
-        if (!JsonLd::valueIsNull(rv)) {
-            prop.writeOnGadget(res.data(), rv);
+            if (!JsonLd::valueIsNull(rv)) {
+                prop.writeOnGadget(res.data(), rv);
+            }
         }
     }
 

@@ -43,6 +43,7 @@
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QMetaProperty>
 #include <QTimeZone>
 #include <QUrl>
 
@@ -114,11 +115,19 @@ void ExtractorPostprocessor::process(const QList<QVariant> &data) {
     }
 }
 
-[[nodiscard]] static QVariant mergeTicket(QVariant lhs, const QVariant &rhs)
+[[nodiscard]] static QVariant mergeBaseReservation(QVariant lhs, const QVariant &rhs)
 {
-    const auto rhsTicket = JsonLdDocument::readProperty(rhs, "reservedTicket");
-    const auto lhsTicket = JsonLdDocument::readProperty(lhs, "reservedTicket");
-    JsonLdDocument::writeProperty(lhs, "reservedTicket", MergeUtil::merge(lhsTicket, rhsTicket));
+    for (auto i = 0; i < Reservation::staticMetaObject.propertyCount(); ++i) {
+        const auto prop = Reservation::staticMetaObject.property(i);
+        if (!prop.isWritable() || !prop.isStored() || std::strcmp(prop.name(), "reservationFor") == 0) {
+            continue;
+        }
+        const auto lhsVal = JsonLdDocument::readProperty(lhs, prop.name());
+        const auto rhsVal = JsonLdDocument::readProperty(rhs, prop.name());
+        if (!JsonLd::valueIsNull(rhsVal)) {
+            JsonLdDocument::writeProperty(lhs, prop.name(), JsonLd::valueIsNull(lhsVal) ? rhsVal : MergeUtil::merge(rhsVal, lhsVal));
+        }
+    }
     return lhs;
 }
 
@@ -167,8 +176,8 @@ QList<QVariant> ExtractorPostprocessor::result() const {
                 }
 
                 if (depIt != it && arrIt != it && depIt != arrIt) {
-                    (*depIt) = mergeTicket(*depIt, *it);
-                    (*arrIt) = mergeTicket(*arrIt, *it);
+                    (*depIt) = mergeBaseReservation(*depIt, *it);
+                    (*arrIt) = mergeBaseReservation(*arrIt, *it);
                     it = d->m_data.erase(it);
                 } else {
                     ++it;
