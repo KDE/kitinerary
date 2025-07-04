@@ -2,7 +2,7 @@
     "id": "org.kde.kitinerary-extractor",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "6.8",
+    "runtime-version": "6.9",
     "sdk": "org.kde.Sdk",
     "command": "kitinerary-extractor",
     "tags": ["nightly"],
@@ -32,38 +32,6 @@
                     "type": "git",
                     "url": "https://invent.kde.org/mirrors/poppler.git",
                     "branch": "master"
-                }
-            ],
-            "modules": [
-                {
-                    "name": "openjpeg",
-                    "buildsystem": "cmake-ninja",
-                    "builddir": true,
-                    "config-opts": [
-                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-                        "-DBUILD_STATIC_LIBS=OFF",
-                        "-DBUILD_CODEC=OFF"
-                    ],
-                    "cleanup": [
-                        "/bin",
-                        "/include",
-                        "/lib/*.a",
-                        "/lib/openjpeg-*",
-                        "/lib/pkgconfig"
-                    ],
-                    "sources": [
-                        {
-                            "type": "archive",
-                            "url": "https://github.com/uclouvain/openjpeg/archive/v2.5.2.tar.gz",
-                            "sha256": "90e3896fed910c376aaf79cdd98bdfdaf98c6472efd8e1debf0a854938cbda6a",
-                            "x-checker-data": {
-                                "type": "anitya",
-                                "project-id": 2550,
-                                "stable-only": true,
-                                "url-template": "https://github.com/uclouvain/openjpeg/archive/v$version.tar.gz"
-                            }
-                        }
-                    ]
                 }
             ],
             "cleanup": [
