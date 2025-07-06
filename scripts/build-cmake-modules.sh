@@ -9,7 +9,7 @@ POPPLER_VERSION="poppler-25.07.0"
 LIBICAL_VERSION="v3.0.17"
 LIBXML_VERSION="v2.12.7"
 ZXING_VERSION="v2.3.0"
-KF_VERSION="v6.15.0"
+KF_VERSION="v6.16.0-rc1"
 GEAR_VERSION="master"
 
 function build_cmake_module() {
