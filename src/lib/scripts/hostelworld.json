@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@hostelworld.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "parseReservationMail",
+    "mimeType": "text/plain",
+    "script": "hostelworld.js"
+}
