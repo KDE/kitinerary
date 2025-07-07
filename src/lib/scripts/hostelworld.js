@@ -3,17 +3,17 @@
 
 function parseReservationMail(content) {
     let res = JsonLd.newLodgingReservation();
-    res.reservationNumber = content.match(/(?:Reference Number) ?: +([-A-Z0-9]{15})/)[1];
+    res.reservationNumber = content.match(/(?:Reference Number|Reservierungsnummer) ?: +([-A-Z0-9]{15})/)[1];
 
-    res.checkinTime = JsonLd.toDateTime(content.match(/(?:Check In) ?: +(.*)/)[1], ["ddd d'th' MMM yyyy", "ddd d'rd' MMM yyyy", "ddd d'st' MMM yyyy"], "en");
-    res.checkoutTime = JsonLd.toDateTime(content.match(/(?:Check Out) ?: +(.*)/)[1], ["ddd d'th' MMM yyyy", "ddd d'rd' MMM yyyy", "ddd d'st' MMM yyyy"], "en");
+    res.checkinTime = JsonLd.toDateTime(content.match(/(?:Check In|Einchecken) ?: +[^ ]+ +(.*)/)[1], ["d'th' MMM yyyy", "d'rd' MMM yyyy", "d'st' MMM yyyy", "d MMM yyyy"], ["en","de"]);
+    res.checkoutTime = JsonLd.toDateTime(content.match(/(?:Check Out|Auschecken) ?: +[^ ]+ +(.*)/)[1], ["d'th' MMM yyyy", "d'rd' MMM yyyy", "d'st' MMM yyyy", "d MMM yyyy"], ["en","de"]);
 
-    res.totalPrice = content.match(/(?:Total Cost) ?: +(.*)/)[1]
+    res.totalPrice = content.match(/(?:Total Cost|Gesamtkosten) ?: +(.*)/)[1]
 
     const lines = content.split('\n');
     for (let i = 0, count = lines.length; i < count; i++) {
         const line = lines[i];
-        if (line.startsWith('Booking Information')) {
+        if (line.startsWith('Booking Information') || line.startsWith('Buchungsinformationen')) {
             res.reservationFor.name = lines[i + 1];
             const address = lines[i + 2].split(',');
             res.reservationFor.address.streetAddress = address[0];
