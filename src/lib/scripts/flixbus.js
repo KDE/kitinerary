@@ -63,7 +63,8 @@ function parsePdfTicket(pdf, node, triggerNode)
     let reservations = [];
     while (true) {
         const times = timeColumn.substr(idxTime).match(/(\d\d:\d\d)\n([^:]*?\n)?([^:]*?\n)?(\d\d:\d\d)/);
-        const stations = stationColumn.substr(idxStations).match(/\b([^].*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*(?:NOTE:|Wagennummerierung|platform|The regional part|Die Bussteignummer).(?:.*\n)+?)?.*(?:Bus|Autobus|Zug|Strecke|Route|Tratta)\s+(\S.+)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung|Direzione) (.*)\n(?:.*(?:Operated|Betrieben|Uitgevoerd|Effettuata).*\n)?(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
+        console.log(stationColumn);
+        const stations = stationColumn.substr(idxStations).match(/\b([^].*)\n[ ]+(.*)(?:\n|,\n  +(.*)\n)(?:.*(?:NOTE:|Wagennummerierung|platform|The regional part|Die Bussteignummer|Operated).(?:.*\n)+?)?.*(?:Bus|Autobus|Zug|Strecke|Route|Tratta)\s+(\S.+)\n.*(?:Direction|à destination de|Kierunek|richting|Richtung|Direzione) (.*)\n(?:.*(?:Operated|Betrieben|Uitgevoerd|Effettuata).*\n)?(.*)\n(?:[ ]+(.*?)(?:\n|,\n +(.*)\n))?/);
         if (!times || !stations) {
             break;
         }
