@@ -24,6 +24,9 @@ function extractPdf(pdf, node, barcode) {
         res.reservationFor.arrivalTime =
         JsonLd.toDateTime(baseRes.reservationFor.departureDay + leg[4], 'yyyy-MM-ddhh:mm', 'dk');
         res.reservationFor.trainNumber = leg[5];
+        if (leg[5].match(/togbus/i)) {
+            res = JsonLd.trainToBusReservation(res);
+        }
         reservations.push(res);
     }
 
