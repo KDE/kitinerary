@@ -52,6 +52,7 @@ static bool operator<(const CompareFunc &lhs, int rhs)
 static std::vector<CompareFunc> s_mergeCompareFuncs;
 }
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 /* Compare times without assuming times without a timezone are in the current time zone
@@ -120,6 +121,7 @@ static bool isSameEvent(const Event &lhs, const Event &rhs);
 static bool isSameRentalCar(const RentalCar &lhs, const RentalCar &rhs);
 static bool isSameTaxiTrip(const Taxi &lhs, const Taxi &rhs);
 static bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes);
+static bool isSameSeat(const Seat &lhsSeat, const Seat &rhsSeat);
 static bool isMinimalCancelationFor(const Reservation &res, const Reservation &cancel);
 
 bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes)
@@ -132,8 +134,36 @@ bool isSameReservation(const Reservation &lhsRes, const Reservation &rhsRes)
 
     const auto lhsTicket = lhsRes.reservedTicket().value<Ticket>();
     const auto rhsTicket = rhsRes.reservedTicket().value<Ticket>();
-    if (conflictIfPresent(lhsTicket.ticketedSeat().seatNumber(), rhsTicket.ticketedSeat().seatNumber(), Qt::CaseInsensitive)) {
+    if (!isSameSeat(lhsTicket.ticketedSeat(), rhsTicket.ticketedSeat())) {
         return false;
+    }
+
+    return true;
+}
+
+bool isSameSeat(const Seat &lhsSeat, const Seat &rhsSeat)
+{
+    // check for coach number conflicts
+    if (!lhsSeat.seatSection().isEmpty() && !rhsSeat.seatSection().isEmpty()) {
+        bool lhsOk = false, rhsOk = false;
+        const auto lhsNum = lhsSeat.seatSection().toInt(&lhsOk);
+        const auto rhsNum = rhsSeat.seatSection().toInt(&rhsOk);
+        if (lhsOk && rhsOk && lhsNum > 0 && rhsNum > 0 && lhsNum != rhsNum) {
+            return false;
+        }
+        if ((!lhsOk || !rhsOk) && lhsSeat.seatSection().compare(rhsSeat.seatSection(), Qt::CaseInsensitive) != 0) {
+            return false;
+        }
+    }
+
+    // check for seat number conflicts
+    if (conflictIfPresent(lhsSeat.seatNumber(), rhsSeat.seatNumber(), Qt::CaseInsensitive)) {
+        const QRegularExpression rx(uR"([[:space:][:punct:]])"_s);
+        auto lhsSet = lhsSeat.seatNumber().toCaseFolded().split(rx, Qt::SkipEmptyParts);
+        auto rhsSet = rhsSeat.seatNumber().toCaseFolded().split(rx, Qt::SkipEmptyParts);
+        std::ranges::sort(lhsSet);
+        std::ranges::sort(rhsSet);
+        return lhsSet == rhsSet;
     }
 
     return true;

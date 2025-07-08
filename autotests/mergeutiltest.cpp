@@ -12,6 +12,7 @@
 #include <KItinerary/Organization>
 #include <KItinerary/Person>
 #include <KItinerary/Reservation>
+#include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 
 #include <QDateTime>
@@ -25,6 +26,7 @@
 
 #define _(x) QStringLiteral(x)
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 class MergeUtilTest : public QObject
@@ -280,6 +282,66 @@ private Q_SLOTS:
 
         QCOMPARE(MergeUtil::isSame(lhs, rhs), shouldBeSame);
         QCOMPARE(MergeUtil::isSame(rhs, lhs), shouldBeSame);
+    }
+
+    void testIsSameSeat_data()
+    {
+        QTest::addColumn<QString>("lhsSection");
+        QTest::addColumn<QString>("lhsNumber");
+        QTest::addColumn<QString>("rhsSection");
+        QTest::addColumn<QString>("rhsNumber");
+        QTest::addColumn<bool>("isSame");
+
+        QTest::newRow("empty") << QString() << QString() << QString() << QString() << true;
+        QTest::newRow("partial") << u"13"_s << u"42"_s << QString() << QString() << true;
+        QTest::newRow("simple-equal") << u"13"_s << u"42"_s << u"13"_s << u"42"_s << true;
+        QTest::newRow("simple-seat-conflict") << u"13"_s << u"42"_s << u"13"_s << u"43"_s << false;
+        QTest::newRow("simple-coach-conflict") << u"13"_s << u"42"_s << u"12"_s << u"42"_s << false;
+        QTest::newRow("coach-prefix") << u"13"_s << u"42"_s << u"013"_s << u"42"_s << true;
+        QTest::newRow("seat-set") << u"13"_s << u"41 42 43 44"_s << u"13"_s << u"41, 42, 43, 44"_s << true;
+        QTest::newRow("seat-set-conflict") << u"13"_s << u"41 42 43 44"_s << u"13"_s << u"41 42 43 45"_s << false;
+        QTest::newRow("seat-set-unordered") << u"13"_s << u"41 42 43 44"_s << u"13"_s << u"41, 42, 44, 43"_s << true;
+    }
+
+    void testIsSameSeat()
+    {
+        QFETCH(QString, lhsSection);
+        QFETCH(QString, lhsNumber);
+        QFETCH(QString, rhsSection);
+        QFETCH(QString, rhsNumber);
+        QFETCH(bool, isSame);
+
+        TrainTrip trip;
+        TrainStation s;
+        s.setName(u"København H"_s);
+        trip.setDepartureStation(s);
+        trip.setDepartureTime({{2025, 7, 8}, {12, 0}});
+        s.setName(u"Odense"_s);
+        trip.setArrivalStation(s);
+        trip.setArrivalTime({{2025, 7, 8}, {16, 0}});
+        trip.setTrainName(u"Tog 12345"_s);
+
+
+        TrainReservation lhsRes;
+        lhsRes.setReservationFor(trip);
+        Seat lhsSeat;
+        lhsSeat.setSeatSection(lhsSection);
+        lhsSeat.setSeatNumber(lhsNumber);
+        Ticket lhsTicket;
+        lhsTicket.setTicketedSeat(lhsSeat);
+        lhsRes.setReservedTicket(lhsTicket);
+
+        TrainReservation rhsRes;
+        rhsRes.setReservationFor(trip);
+        Seat rhsSeat;
+        rhsSeat.setSeatSection(rhsSection);
+        rhsSeat.setSeatNumber(rhsNumber);
+        Ticket rhsTicket;
+        rhsTicket.setTicketedSeat(rhsSeat);
+        rhsRes.setReservedTicket(rhsTicket);
+
+        QCOMPARE(MergeUtil::isSame(lhsRes, rhsRes), isSame);
+        QCOMPARE(MergeUtil::isSame(rhsRes, lhsRes), isSame);
     }
 
     void testIsSameLodingReservation()
