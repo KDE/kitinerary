@@ -260,6 +260,11 @@ private Q_SLOTS:
         QTest::newRow("train-and-line-number-7") << QString() << _("RB 33 (10323)") << QString() << _("RB 33") << true;
         QTest::newRow("train-and-line-number-8") << QString() << _("RB 33 (10323)") << QString() << _("RB 23") << false;
         QTest::newRow("train-and-line-number-9") << QString() << _("RB 33 (10323)") << QString() << _("RB 23 (10323)") << false;
+
+        QTest::newRow("denmark-1") << QString() << u"InterCity-tog 12345"_s << QString() << u"InterCity 12345"_s << true;
+        QTest::newRow("denmark-2") << QString() << u"InterCityLyn 12345"_s << QString() << u"IC-Lyntog 12345"_s << true;
+        QTest::newRow("denmark-3") << QString() << u"InterCity-tog 12345"_s << QString() << u"InterCity 54321"_s << false;
+        QTest::newRow("denmark-4") << QString() << u"InterCityLyn 12345"_s << QString() << u"IC-Lyntog 54321"_s << false;
     }
 
     void testIsSameTrain()

@@ -469,12 +469,40 @@ static bool isSameLineName(const Iter &lBegin, const Iter &lEnd, const Iter &rBe
     return (lIt != lEnd && (*lIt).isSpace()) || (rIt != rEnd && (*rIt).isSpace());
 }
 
+struct {
+    const char *match;
+    const char *replace;
+} static constexpr const train_normalization_patterns[] = {
+    { "intercityexpress", "ice" },
+    { "intercity", "ic" },
+};
+
+static QString normalizeTrainName(QStringView name)
+{
+    QString normalized;
+    normalized.reserve(name.size());
+    for (const auto c : name) {
+        if (!c.isDigit() && !c.isLetter()) {
+            continue;
+        }
+        normalized.push_back(c.toCaseFolded());
+    }
+
+    for (const auto &pattern : train_normalization_patterns) {
+        normalized.replace(QLatin1StringView(pattern.match), QLatin1StringView(pattern.replace));
+    }
+
+    return normalized;
+}
+
 static bool isSameTrainName(QStringView lhs, QStringView rhs)
 {
     if (lhs.isEmpty() || rhs.isEmpty()) {
         return false;
     }
-    return lhs.startsWith(rhs) || rhs.startsWith(lhs);
+    const auto normalizedLhs = normalizeTrainName(lhs);
+    const auto normalizedRhs = normalizeTrainName(rhs);
+    return normalizedLhs.startsWith(normalizedRhs) || normalizedRhs.startsWith(normalizedLhs);
 }
 
 static bool isSameLineName(const QString &lhs, const QString &rhs)
@@ -486,7 +514,7 @@ static bool isSameLineName(const QString &lhs, const QString &rhs)
     }
 
     // deal with both line and route numbers being specified
-    static QRegularExpression rx(QStringLiteral(R"(^(?<type>[A-Za-z]+) (?<line>\d+)(?: \((?<route>\d{4,})\))?$)"));
+    static QRegularExpression rx(QStringLiteral(R"(^(?<type>[A-Za-z-]+) (?<line>\d+)(?: \((?<route>\d{4,})\))?$)"));
     const auto lhsMatch = rx.match(lhs);
     const auto rhsMatch = rx.match(rhs);
     if (!lhsMatch.hasMatch() || !rhsMatch.hasMatch()) {
