@@ -1,7 +1,34 @@
 // SPDX-FileCopyrightText: 2023 Volker Krause <vkrause@kde.org>
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
-function extractPdf(pdf, node, barcode) {
+function extractReservation(pdf, node, barcode) {
+    let reservations = [];
+    for (let i = barcode.location; i < barcode.location + 2; ++i) {
+        const page = pdf.pages[i].text;
+        let idx = 0;
+        while (true) {
+            const leg = page.substr(idx).match(/(\d\d\.\S{3}\.) +(\d\d:\d\d) +(\S.*\S)  +(\S.*\S)  +(\d\d\.\S{3}\.)  +(\d\d:\d\d)\n.*\n(\S.*?\S)  +(\d+)  +(\S.*?\S)  +\d  +(\S.*?\S)  +(\S.*\S)\n(\d+)?/)
+            if (!leg)
+                break;
+            idx += leg.index + leg[0].length;
+
+            let res = JsonLd.newTrainReservation();
+            res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + leg[2], "dd.MMM.HH:mm", "da");
+            res.reservationFor.departureStation.name = leg[3];
+            res.reservationFor.arrivalStation.name = leg[4];
+            res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[5] + leg[6], "dd.MMM.HH:mm", "da");
+            res.reservationFor.trainNumber = leg[7] + " " + (leg[12] ? leg[12] : "");
+            res.reservedTicket.ticketedSeat.seatSection = leg[8];
+            res.reservedTicket.ticketedSeat.seatNumber = leg[9];
+            res.reservedTicket.name = leg[10];
+            reservations.push(res);
+        }
+
+    }
+    return reservations;
+}
+
+function extractItinerary(pdf, node, barcode) {
     let page = pdf.pages[barcode.location + 1].text;
     if (!page.match(/^\s*Din Rejseplan/))
         page = pdf.pages[barcode.location + 2].text;
