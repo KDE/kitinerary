@@ -158,6 +158,9 @@ private Q_SLOTS:
         QTest::newRow("RCT2-prefix") << u"Verona Porta Nuova"_s << u"VERONA PORTA NUOV"_s << true << true;
 
         QTest::newRow("comma") << u"Cham, Alpenblick"_s << u"Cham Alpenblick"_s << true << true;
+
+        QTest::newRow("truncated-1") << u"Frankfurt(M) Flugh"_s << u"Frankfurt(M) Flughafen Fernbf"_s << true << true;
+        QTest::newRow("truncated-2") << u"Frankfurt(M)Flugh"_s << u"Frankfurt(M) Flughafen Fernbf"_s << true << true;
     }
 
     void testLocationNameCompare()

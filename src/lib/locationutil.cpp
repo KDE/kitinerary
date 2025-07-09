@@ -212,17 +212,21 @@ static QString stripDiacritics(const QString &s)
     return res;
 }
 
+template <typename It>
+static void advanceToNextRelevantChar(It &it, const It &end)
+{
+    while (((*it).isSpace() || (*it).isPunct()) && it != end) {
+        ++it;
+    }
+}
+
 static bool compareSpaceCaseInsenstive(const QString &lhs, const QString &rhs)
 {
     auto lit = lhs.begin();
     auto rit = rhs.begin();
     while (true) {
-        while (((*lit).isSpace() || (*lit).isPunct()) && lit != lhs.end()) {
-            ++lit;
-        }
-        while (((*rit).isSpace() || (*rit).isPunct()) && rit != rhs.end()) {
-            ++rit;
-        }
+        advanceToNextRelevantChar(lit, lhs.end());
+        advanceToNextRelevantChar(rit, rhs.end());
         if (lit == lhs.end() || rit == rhs.end()) {
             break;
         }
@@ -234,6 +238,31 @@ static bool compareSpaceCaseInsenstive(const QString &lhs, const QString &rhs)
     }
 
     return lit == lhs.end() && rit == rhs.end();
+}
+
+static bool startsWithSpaceCaseInsenstive(QStringView string, QStringView prefix)
+{
+    if (prefix.size() > string.size()) {
+        return false;
+    }
+
+    auto sit = string.begin();
+    auto pit = prefix.begin();
+    while (true) {
+        advanceToNextRelevantChar(sit, string.end());
+        advanceToNextRelevantChar(pit, prefix.end());
+        if (sit == string.end() || pit == prefix.end()) {
+            break;
+        }
+        if ((*sit).toCaseFolded() != (*pit).toCaseFolded()) {
+            return false;
+        }
+        ++sit;
+        ++pit;
+    }
+
+    return pit == prefix.end();
+
 }
 
 static bool hasCommonPrefix(QStringView lhs, QStringView rhs)
@@ -256,10 +285,10 @@ static bool hasCommonPrefix(QStringView lhs, QStringView rhs)
     if (lhs.size() < 17 || rhs.size() < 17) {
         return false;
     }
-    if (lhs.startsWith(rhs, Qt::CaseInsensitive)) {
+    if (startsWithSpaceCaseInsenstive(lhs, rhs)) {
         return lhs.at(rhs.size()).isLetter();
     }
-    if (rhs.startsWith(lhs, Qt::CaseInsensitive)) {
+    if (startsWithSpaceCaseInsenstive(rhs, lhs)) {
         return rhs.at(lhs.size()).isLetter();
     }
     return false;
