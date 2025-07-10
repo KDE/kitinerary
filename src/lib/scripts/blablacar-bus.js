@@ -21,16 +21,20 @@ function main(pdf) {
 
 function decodeBarcode(text, barcode) {
     var res = JsonLd.newBusReservation();
-
     // Time and date is only in the PDF text
-    const times = text.match(/(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}|\d{2}-\d{2}-\d{4} à \d{2}:\d{2})/g);
-    if (times.length !== 2) {
+    // There might be an optional preposition before the time (\S*\s?)
+    const times = text.match(/(\d{2}\.\d{2}\.\d{4}|\d{2}-\d{2}-\d{4}) \S*\s?(\d{2}:\d{2})/g);
+    if (times == null || times.length !== 2) {
         console.log("Failed to extract departure/arrival time from text: " + times);
         return null;
     }
 
-    res.reservationFor.departureTime = JsonLd.toDateTime(times[0], ["dd.MM.yyyy hh:mm", "dd-MM-yyyy à hh:mm"], "en");
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(times[1],  ["dd.MM.yyyy hh:mm", "dd-MM-yyyy à hh:mm"], "en");
+    // Either two or three words: [date, preposition?, time]
+    const departureWords = times[0].split(" ");
+    const arrivalWords = times[1].split(" ");
+
+    res.reservationFor.departureTime = JsonLd.toDateTime(departureWords[0] + " " + departureWords[departureWords.length - 1], ["dd-MM-yyyy hh:mm", "dd.MM.yyyy hh:mm"], "en");
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(arrivalWords[0] + " " + arrivalWords[arrivalWords.length - 1],  ["dd-MM-yyyy hh:mm", "dd.MM.yyyy hh:mm"], "en");
 
     // The rest of the info can be found in the QR code, separated by |
     const parts = barcode.split("|");
