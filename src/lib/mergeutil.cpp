@@ -533,13 +533,7 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
         return false;
     }
 
-    // for unbound tickets, comparing the line number below won't help
-    // so we have to use the slightly less robust location comparison
-    if (!lhs.departureTime().isValid() && !rhs.departureTime().isValid()) {
-        qCDebug(CompareLog) << "unbound trip" << lhs.departureStation().name() << rhs.departureStation().name() << lhs.arrivalStation().name() << rhs.arrivalStation().name();
-        return LocationUtil::isSameLocation(lhs.departureStation(), rhs.departureStation(), LocationUtil::Exact)
-            && LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::Exact);
-    } else if (lhs.departureTime().isValid() && rhs.departureTime().isValid()) {
+    if (lhs.departureTime().isValid() && rhs.departureTime().isValid()) {
         // if we have both departure times, they have to match
         qCDebug(CompareLog) << "departure time" << lhs.departureTime() << rhs.departureTime() <<equalAndPresent(lhs.departureTime(), rhs.departureTime());
         if (!equalAndPresent(lhs.departureTime(), rhs.departureTime())) {
