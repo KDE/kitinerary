@@ -559,11 +559,21 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
         }
     }
 
-    // if we don't have train numbers, also fall back to the less robust location comparison
+    // if we don't have train numbers, fall back to the less robust location comparison
+    // we want at least one side to be an exact match to be reaonsbaly sure
     if (lhs.trainNumber().isEmpty() || rhs.trainNumber().isEmpty()) {
         qCDebug(CompareLog) << "missing train number" << lhs.trainNumber() << rhs.trainNumber();
-        return LocationUtil::isSameLocation(lhs.departureStation(), rhs.departureStation(), LocationUtil::Exact)
-            && LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::Exact);
+        const auto depExact = LocationUtil::isSameLocation(lhs.departureStation(), rhs.departureStation(), LocationUtil::Exact);
+        const auto arrExact = LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::Exact);
+        if (depExact && arrExact) {
+            return true;
+        }
+        if (!depExact && !arrExact) {
+            return false;
+        }
+         return LocationUtil::isSameLocation(lhs.departureStation(), rhs.departureStation(), LocationUtil::CityLevel)
+             || LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::CityLevel);
+
     }
 
     const auto isSameLine = isSameLineName(lhs.trainNumber(), rhs.trainNumber());
