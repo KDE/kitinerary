@@ -94,14 +94,14 @@ function parseInouiPdfText(page)
         pos += dep.index + dep[0].length;
 
         var res = JsonLd.newTrainReservation();
-        res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + dep[1], ["d MMMM yyyyhh'h'mm", "dd MMMM yyyyhh:mm", "dd. MMMM yyyyhh:mm"], ["fr", "en", "de"]);
+        res.reservationFor.departureTime = JsonLd.toDateTime(date[1] + dep[1], ["d MMMM yyyyhh'h'mm", "dd MMMM yyyyhh:mm", "dd. MMMM yyyyhh:mm"], ["fr", "en", "de", "nl", "it"]);
         res.reservationFor.departureStation.name = dep[2];
 
         var arr = text.substr(pos).match(/(\d{2}[h:]\d{2}) +(.*)\n/);
         if (!arr)
             break;
         var endPos = arr.index + arr[0].length;
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + arr[1], ["d MMMM yyyyhh'h'mm", "dd MMMM yyyyhh:mm", "dd. MMMM yyyyhh:mm"], ["fr", "en", "de"]);
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + arr[1], ["d MMMM yyyyhh'h'mm", "dd MMMM yyyyhh:mm", "dd. MMMM yyyyhh:mm"], ["fr", "en", "de", "nl", "it"]);
         res.reservationFor.arrivalStation.name = arr[2];
 
         const detailsText = text.substr(pos, endPos - arr[0].length);
