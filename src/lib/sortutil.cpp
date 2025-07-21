@@ -78,7 +78,11 @@ QDateTime SortUtil::startDateTime(const QVariant &elem)
         return QDateTime(trip.departureDay(), QTime(23, 59, 59));
     }
     if (JsonLd::isA<BusTrip>(elem)) {
-        return elem.value<BusTrip>().departureTime();
+        const auto trip = elem.value<BusTrip>();
+        if (trip.departureTime().isValid()) {
+            return trip.departureTime();
+        }
+        return QDateTime(trip.departureDay(), QTime(23, 59, 59));
     }
     if (JsonLd::isA<BoatTrip>(elem)) {
         return elem.value<BoatTrip>().departureTime();
@@ -205,6 +209,9 @@ bool SortUtil::hasStartTime(const QVariant &elem)
     }
     if (JsonLd::isA<TrainTrip>(elem)) {
         return elem.value<TrainTrip>().departureTime().isValid();
+    }
+    if (JsonLd::isA<BusTrip>(elem)) {
+        return elem.value<BusTrip>().departureTime().isValid();
     }
     if (JsonLd::isA<Flight>(elem)) {
         return elem.value<Flight>().departureTime().isValid();
