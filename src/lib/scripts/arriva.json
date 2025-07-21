@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "\\d{11}-\\d;\\d{4};\\d{4};\\d{6};\\d\\d:\\d\\d;\\d$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractTicket",
+    "mimeType": "application/pdf",
+    "script": "arriva.js"
+}
