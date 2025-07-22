@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^[a-f0-9]{40}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractTicket",
+    "mimeType": "application/pdf",
+    "script": "globtour.js"
+}
