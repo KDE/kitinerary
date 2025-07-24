@@ -73,6 +73,9 @@ function parsePdfSSB(pdf, node, ssb) {
 function parsePass(pass, node, elb) {
     let res = elb.result[0];
     res.reservationFor.departureStation.name = pass.field["BoardingTime"].label;
+    // Thalys has the wrong deprature day in their SSB code
+    const dt = pass.field["Date"].value.match(/(\d+)\/(\d+)/);
+    res.reservationFor.departureDay = res.reservationFor.departureDay.substr(0, 5) + dt[2] + '-' + dt[1];
     res.reservationFor.departureTime = JsonLd.toDateTime(res.reservationFor.departureDay.substr(0, 10) + pass.field["BoardingTime"].value, "yyyy-MM-ddhh:mm", "en");
     res.reservationFor.arrivalStation.name = pass.field["Arrivaltime"].label;
     res.reservationFor.arrivalTime = JsonLd.toDateTime(res.reservationFor.departureDay.substr(0, 10) + pass.field["Arrivaltime"].value, "yyyy-MM-ddhh:mm", "en");
