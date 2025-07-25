@@ -62,8 +62,10 @@ QDate Flight::departureDay() const
 
 void Flight::setDepartureDay(const QDate &value)
 {
-    d.detach();
-    d->departureDay = value;
+    if (departureDay() != value) {
+        d.detach();
+        d->departureDay = value;
+    }
 }
 
 }
