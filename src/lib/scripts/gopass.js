@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 David Pilarcik <meow@charliecat.space>
+// SPDX-License-Identifier: LGPL-2.0-or-later
+
 const i18n = {
 	'sk': {
 		__lookingFor: 'Číslo karty',
