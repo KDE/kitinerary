@@ -1,10 +1,29 @@
+const i18n = {
+	'sk': {
+		__lookingFor: 'Číslo karty',
+		'Confirmation of purchase': 'Potvrdenie o nákupe',
+		'Card number': 'Číslo karty',
+		'Ticket Number': 'Číslo lístku',
+		'QR Code': 'QR kód',
+		'You can pass through the turnstile by scanning the QR code.': 'Turniketom prejdete načítaním QR kódu.'
+	}
+}
+
 function parsePdfConfirmation(pdf, node, triggerNode) {
 	const page = pdf.pages[triggerNode.location];
 	const text = page.text;
 	let res = JsonLd.newEventReservation();
 
+	let lang = i18n['sk'];
+	for (let l in i18n) {
+		if (text.includes(i18n[l].__lookingFor)) {
+			lang = i18n[l];
+			break;
+		}
+	}
+
 	// the "Potvrdenie o nákupe" string shows up in the header of the first page
-	let headerOffset = page.text.includes("Potvrdenie o nákupe") ? 0.06 : 0;
+	let headerOffset = page.text.includes(lang['Confirmation of purchase']) ? 0.06 : 0;
 	// Example: "Jan Novák\nŠtudent"
 	let [holderName, holderAgeGroup] = page.textInRect(0, headerOffset+0.11, 0.3, 0.25).split('\n');
 	res.underName.name = holderName.trim();
@@ -17,7 +36,7 @@ function parsePdfConfirmation(pdf, node, triggerNode) {
 	// Ticket number is diffrent pattern is diffrent for venue types.
 	// Tatralandia uses UUID-like ticker numbers
 	// Others use tickers like: "1-1760-66-205420"
-	res.reservationNumber = text.match(/Číslo lístku\s+(.*)\s+/)[1];
+	res.reservationNumber = text.match(new RegExp(lang['Ticket Number'] + '\\s+(.*)\\s+'))[1];
 
 	let date = page.textInRect(0.6, headerOffset, 1, 0.2).split('\n')[0].trim();
 	// Example: "23. 7. 2025" or "24. 3. 2023 - 27. 3. 2023"
@@ -38,7 +57,7 @@ function parsePdfConfirmation(pdf, node, triggerNode) {
 		res.reservedTicket.ticketNumber = res.description;
 	}
 
-	if (page.text.includes("QR kód ")) {
+	if (page.text.includes(lang['QR Code'])) {
 		// Looking through the page for a QR code
 		// QR code never is the ticket number nor the GoPass Card Code
 		let qrCodeApplicable = node.childNodes
@@ -46,7 +65,7 @@ function parsePdfConfirmation(pdf, node, triggerNode) {
 			.map(c => c.childNodes[0]?.content)
 			.filter(c => c != undefined && c.length >= 24 && c !== res.reservationNumber);
 		if (qrCodeApplicable.length != 0) res.reservedTicket.ticketToken = 'qrcode:' + qrCodeApplicable[triggerNode.location];
-	} else if (page.text.includes("Turniketom prejdete načítaním QR kódu.")) {
+	} else if (page.text.includes(lang['You can pass through the turnstile by scanning the QR code.'])) {
 		// If the ticket says to scan the QR code at the turnstile,
 		// and the ticket doesn't have a QR code,
 		// we can assume the QR code is the ticket number in a barcode format.
