@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 David Pilarčík <meow@charliecat.space>
+// SPDX-FileCopyrightText: 2024-2025 David Pilarčík <meow@charliecat.space>
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 function parseEvent(event, node) {
@@ -6,10 +6,16 @@ function parseEvent(event, node) {
 
     // https://lu.ma/check-in/evt-***************?pk=g-*************** // Ticket Token
     // https://lu.ma/       e/evt-***************?pk=g-*************** // Link in Description
-	let eventUrl = event.description.match(/(https:\/\/lu.ma\/e\/evt-\S*\?pk=g-\S*)/gm)[0]
-    res.reservedTicket.ticketToken = 'qrCode:' + eventUrl.replace('/e/', '/check-in/')
-	res.reservationNumber = new URL(eventUrl).searchParams.get('pk').replace('g-', '') || undefined; // Extracting defacto reservation code from the URL
-	res.reservationFor.url = eventUrl;
+	if (event.description.match(/https:\/\/lu.ma\/e\/evt-\S*\?pk=g-\S*/gm)) {
+		let eventUrl = event.description.match(/(https:\/\/lu.ma\/e\/evt-\S*\?pk=g-\S*)/gm)[0]
+		res.reservationFor.url = eventUrl;
+    	res.reservedTicket.ticketToken = 'qrCode:' + eventUrl.replace('/e/', '/check-in/')
+		res.reservationNumber = new URL(eventUrl).searchParams.get('pk').replace('g-', '') || undefined; // Extracting defacto reservation code from the URL
+	} else {
+		let foundUrl = event.description.match(/https:\/\/lu.ma\/.*?pk=g-\S*/gm)[0];
+		res.reservationFor.url = foundUrl;
+		res.reservationNumber = new URL(foundUrl).searchParams.get('pk').replace('g-', '') || undefined;
+	}
 
     res.reservationFor.name = event.summary;
     res.reservationFor.startDate = JsonLd.readQDateTime(event, 'dtStart');
@@ -21,6 +27,8 @@ function parseEvent(event, node) {
 	
     res.underName.name = event.attendees[0].name;
     res.underName.email = event.attendees[0].email;
+
+	console.log(JSON.stringify(res, null, 4));
 
     return res;
 }
