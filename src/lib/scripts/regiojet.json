@@ -18,6 +18,12 @@
         "mimeType": "application/vnd.apple.pkpass",
         "filter": [ { "field": "passTypeIdentifier", "match": "pass\\.distribusion", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
         "script": "regiojet.js",
+        "function": "parseDistribusionPkPass"
+    },
+	{
+        "mimeType": "application/vnd.apple.pkpass",
+        "filter": [ { "field": "passTypeIdentifier", "match": "pass.cz.sa.ybus", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
+        "script": "regiojet.js",
         "function": "parsePkPass"
     }
 ]

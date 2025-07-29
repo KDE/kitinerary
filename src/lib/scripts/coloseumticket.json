@@ -16,5 +16,17 @@
         "function": "parsePdf",
         "mimeType": "application/pdf",
         "script": "coloseumticket.js"
-    }
+    },
+	{
+		"filter": [
+			{
+				"match": "^\\S{16}#\\d*#",
+				"mimeType": "text/plain",
+				"scope": "Current"
+			}
+		],
+		"function": "parseSNDQRCode",
+		"script": "coloseumticket.js",
+		"mimeType": "text/plain"
+	}
 ]

@@ -1,11 +1,12 @@
 /*
    SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
    SPDX-FileCopyrightText: 2018 Daniel Vrátil <dvratil@kde.org>
+   SPDX-FileCopyrightText: 2025 David Pilarčík <meow@charliecat.space>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-var regExMap = new Array();
+const regExMap = new Array();
 regExMap["cs_CZ"] = new Array();
 regExMap["cs_CZ"]["ticketId"] = /Elektronická jízdenka č\.\s+([0-9]+)/;
 regExMap["cs_CZ"]["singleTripHeader"] = /Cesta/;
@@ -225,8 +226,7 @@ function parseEvent(event)
     return res;
 }
 
-function parsePkPass(pass, node)
-{
+function parseDistribusionPkPass(pass, node) {
     let res = JsonLd.newBusReservation();
     res.reservedTicket = node.result[0].reservedTicket;
     res.reservationFor.departureBusStop.name = pass.field["from"].label;
@@ -242,4 +242,51 @@ function parsePkPass(pass, node)
     res.reservationFor.busName = pass.field["route"].value;
     res.reservationFor.provider.name = pass.field["operated_by"].value;
     return res;
+}
+
+function parsePkPass(pass, node) {
+	let res = node.result[0]
+
+	res.reservationNumber = pass.field["ticket-number"].value;
+	res.reservedTicket.name = pass.field["tariff"].value;
+	res.totalPrice = pass.field["price"].value;
+	res.priceCurrency = pass.field["price"].currencyCode;
+
+	if (pass.field["seat"].label == "Car/Seat") {
+		let [car, seat] = pass.field["seat"].value.split("/");
+		res.reservedTicket.ticketedSeat = {
+			"@type": "Seat",
+			seatNumber: seat,
+			seatSection: car,
+			seatingType: pass.field["tariff"].value,
+		}
+	} else {
+		res.reservedTicket.ticketedSeat = {
+			"@type": "Seat",
+			seatNumber: pass.field["seat"].value,
+			seatingType: pass.field["tariff"].value,
+		}
+	}
+
+	if (res["@type"] == "TrainReservation") {
+		res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
+		res.reservationFor.departureStation.name = `${pass.field["departure-destination"].value}, ${pass.field["departure-destination"].label}`;
+		res.reservationFor.departureTime = pass.field["departure-time"].value
+		res.reservationFor.departurePlatform = pass.field["platform"].value;
+
+		res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
+		res.reservationFor.arrivalStation.name = `${pass.field["arrival-destination"].value}, ${pass.field["arrival-destination"].label}`;
+		res.reservationFor.arrivalTime = pass.field["arrival-time"].value
+	} else if (res["@type"] == "BusReservation") {
+		res.reservationFor.departureBusStop = JsonLd.newObject("BusStation");
+		res.reservationFor.departureBusStop.name = `${pass.field["departure-destination"].value}, ${pass.field["departure-destination"].label}`;
+		res.reservationFor.departureTime = pass.field["departure-time"].value
+		res.reservationFor.departurePlatform = pass.field["platform"].value;
+
+		res.reservationFor.arrivalBusStop = JsonLd.newObject("BusStation");
+		res.reservationFor.arrivalBusStop.name = `${pass.field["arrival-destination"].value}, ${pass.field["arrival-destination"].label}`;
+		res.reservationFor.arrivalTime = pass.field["arrival-time"].value
+	}
+
+	return res;
 }

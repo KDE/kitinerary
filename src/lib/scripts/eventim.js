@@ -1,5 +1,6 @@
 /*
    SPDX-FileCopyrightText: 2022 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2025 David Pilarčík <meow@charliecat.space>
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
@@ -37,6 +38,8 @@ function parsePkPass(pass, node) {
     if (!res.reservedTicket.ticketedSeat.seatNumber) {
         res.reservedTicket.ticketedSeat.seatNumber = pass.field['KEY_BACK_SEATLINE'].value;
     }
+
+	res.reservedTicket.name = pass.field["KEY_SECONDARY_TICKETTYPENAME"]?.value;
     return res;
 }
 
