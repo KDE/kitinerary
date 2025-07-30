@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "@northlinkferries.co.uk",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "main",
+    "mimeType": "text/html",
+    "script": "northlinkferries.js"
+}
