@@ -247,6 +247,8 @@
         <file>ns.js</file>
         <file>octorate.json</file>
         <file>octorate.js</file>
+        <file>odoo.json</file>
+        <file>odoo.js</file>
         <file>oebb.json</file>
         <file>oebb.js</file>
         <file>onepagebooking.json</file>
