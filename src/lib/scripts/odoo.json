@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^\\d{20}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdf",
+    "mimeType": "application/pdf",
+    "script": "odoo.js"
+}
