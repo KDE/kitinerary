@@ -48,5 +48,18 @@
         "function": "parsePdf",
         "mimeType": "application/pdf",
         "script": "eventbrite.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.eventbrite.ticket",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "parsePkPass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "eventbrite.js"
     }
 ]
