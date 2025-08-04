@@ -14,10 +14,36 @@ function parseDateTime(s)
     return dt;
 }
 
+function parseDomesticBarcodeLeg(payload, baseRes, i)
+{
+    if (payload.length <= i || payload[i] === "")
+        return null;
+
+    let res = JsonLd.clone(baseRes);
+    while (payload[i] !== "") {
+        if (dep = payload[i].match(/Z: (.*)/)) {
+            res.reservationFor.departureStation.name = dep[1];
+        } else if (arr = payload[i].match(/Do: (.*)/)) {
+            res.reservationFor.arrivalStation.name = arr[1];
+        } else if (seat = payload[i].match(/Vlak: (\d+)(?: Vozeň: (\d+) Miesto: (\d+))?/)) {
+            res.reservationFor.trainNumber = seat[1];
+            res.reservedTicket.ticketedSeat.seatSection = seat[2];
+            res.reservedTicket.ticketedSeat.seatNumber = seat[3];
+        } else if (km = payload[i].match(/Km: \d+(?: NO| ŽTO)?-(.*)-(?:(\d)\.tr\.|\*)/)) {
+            res.reservationFor.trainName = km[1];
+            res.reservedTicket.ticketedSeat.seatingType = km[2];
+        }
+
+        ++i;
+    }
+    ++i;
+    return {res: res, i: i}
+}
+
 // see https://community.kde.org/KDE_PIM/KItinerary/ZSSK_Barcode
 function parseDomesticBarcode(data) {
     const payload = ByteArray.decodeUtf8(ByteArray.inflate(data.slice(3))).split('\n');
-    if (payload.length > 34 || payload.length < 32) {
+    if (payload.length < 32) {
         return;
     }
 
@@ -38,28 +64,32 @@ function parseDomesticBarcode(data) {
     if (tariff && payload[20]) {
         res.programMembershipUsed.name = tariff[1];
     }
-    if (payload.length == 34) {
-        const km = payload[30].match(/Km: \d+ (?:NO|ŽTO)-(.*)-(?:\d\.tr\.|\*)/);
-        res.reservationFor.trainName = km[1];
-    }
-    const seat = payload[payload.length == 34 ? 31 : 30].match(/Vlak: \d+ Vozeň: (\d+) Miesto: (\d+)/);
-    if (seat) {
-        res.reservedTicket.ticketedSeat.seatSection = seat[1];
-        res.reservedTicket.ticketedSeat.seatNumber = seat[2];
-    }
     res.reservedTicket.validFrom = parseDateTime(payload[9]);
     res.reservedTicket.validUntil = parseDateTime(payload[10]);
     res.reservedTicket.ticketToken = 'aztecbin:' + ByteArray.toBase64(data);
     res.totalPrice = payload[3];
     res.priceCurrency = 'EUR';
 
-    // network ticket
-    if (!res.reservationFor.departureStation.name || !res.reservationFor.arrivalStation.name) {
-        res.reservedTicket.ticketNumber = res.reservationNumber;
-        return res.reservedTicket;
+    let i = 28;
+    let reservations = [];
+    while (true) {
+        const r = parseDomesticBarcodeLeg(payload, res, i);
+        if (!r)
+            break;
+        reservations.push(r.res);
+        i = r.i;
     }
 
-    return res;
+    // network ticket
+    if (reservations.length === 1) {
+        res = reservations[0];
+        if (!res.reservationFor.departureStation.name || !res.reservationFor.arrivalStation.name) {
+            res.reservedTicket.ticketNumber = res.reservationNumber;
+            return res.reservedTicket;
+        }
+    }
+
+    return reservations;
 }
 
 function parseDomesticPdf(pdf, node, triggerNode) {
@@ -67,10 +97,21 @@ function parseDomesticPdf(pdf, node, triggerNode) {
         return triggerNode.result;
     }
 
+    let reservations = [];
     const text = pdf.pages[triggerNode.location].text;
-    // TODO multi-leg support?
-    const leg = text.match(/\d{2}\.\d{2}.\d{2} +\d{2}:\d{2} +.*  -> .* +(\d{2}\.\d{2}\.\d{2} +\d{2}:\d{2})/);
-    let res = triggerNode.result[0];
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[1], 'dd.MM.yy hh:mm', 'sk');
-    return res;
+    let idx = 0;
+    while (true) {
+        const leg = text.substr(idx).match(/(\d{2}\.\d{2}.\d{2} +\d{2}:\d{2}) +.* (\S+)? -> .*? +(\S+ )?(\d{2}\.\d{2}\.\d{2} +\d{2}:\d{2})/);
+        if (!leg)
+            break;
+        idx += leg.index + leg[0].length;
+        let res = triggerNode.result[reservations.length];
+        res.reservationFor.departureTime = JsonLd.toDateTime(leg[1], 'dd.MM.yy hh:mm', 'sk');
+        res.reservationFor.departurePlatform = leg[2];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[4], 'dd.MM.yy hh:mm', 'sk');
+        res.reservationFor.arrivalPlatform = leg[3];
+        reservations.push(res);
+    }
+
+    return reservations;
 }
