@@ -22,6 +22,7 @@
 #include "processors/mimedocumentprocessor.h"
 #include "processors/pdfdocumentprocessor.h"
 #include "processors/pkpassdocumentprocessor.h"
+#include "processors/pkpassesdocumentprocessor.h"
 #include "processors/plistdocumentprocessor.h"
 #include "processors/textdocumentprocessor.h"
 #include "processors/uic9183documentprocessor.h"
@@ -117,6 +118,7 @@ void ExtractorDocumentNodeFactoryStatic::registerBuiltIn()
 {
     registerProcessor<PdfDocumentProcessor>(u"application/pdf");
     registerProcessor<PkPassDocumentProcessor>(u"application/vnd.apple.pkpass");
+    registerProcessor<PkPassesDocumentProcessor>(u"application/vnd.apple.pkpasses");
     registerProcessor<IcalEventProcessor>(u"internal/event");
     registerProcessor<ImageDocumentProcessor>(u"internal/qimage", {u"image/png", u"image/jpeg", u"image/gif"});
     registerProcessor<ElbDocumentProcessor>(u"internal/era-elb");

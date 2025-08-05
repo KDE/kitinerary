@@ -116,6 +116,7 @@ target_sources(KPim6Itinerary PRIVATE
     processors/mimedocumentprocessor.cpp processors/mimedocumentprocessor.h
     processors/pdfdocumentprocessor.cpp processors/pdfdocumentprocessor.h
     processors/pkpassdocumentprocessor.cpp processors/pkpassdocumentprocessor.h
+    processors/pkpassesdocumentprocessor.cpp
     processors/plistdocumentprocessor.cpp processors/plistdocumentprocessor.h
     processors/textdocumentprocessor.cpp processors/textdocumentprocessor.h
     processors/uic9183documentprocessor.cpp processors/uic9183documentprocessor.h

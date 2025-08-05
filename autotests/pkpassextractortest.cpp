@@ -21,6 +21,7 @@
 #include <QObject>
 #include <QTest>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 class PkPassExtractorTest : public QObject
@@ -91,6 +92,32 @@ private Q_SLOTS:
         }
 
         QCOMPARE(resJson, doc.array());
+    }
+
+    void testPkpasses()
+    {
+        QFile f(SOURCE_DIR "/pkpassdata/lufthansa.pkpasses"_L1);
+        QVERIFY(f.open(QFile::ReadOnly));
+        {
+            ExtractorEngine engine;
+            engine.setData(f.readAll(), f.fileName(), u"application/vnd.apple.pkpasses");
+            auto result = JsonLdDocument::fromJson(engine.extract());
+            QCOMPARE(result.size(), 2);
+        }
+        f.seek(0);
+        {
+            ExtractorEngine engine;
+            engine.setData(f.readAll(), f.fileName());
+            auto result = JsonLdDocument::fromJson(engine.extract());
+            QCOMPARE(result.size(), 2);
+        }
+        f.seek(0);
+        {
+            ExtractorEngine engine;
+            engine.setData(f.readAll());
+            auto result = JsonLdDocument::fromJson(engine.extract());
+            QCOMPARE(result.size(), 2);
+        }
     }
 };
 

@@ -44,8 +44,8 @@ Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KPkPass::Pass>)
 
 bool PkPassDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
-  return encodedData.startsWith("PK\x03\x04") ||
-         fileName.endsWith(QLatin1StringView(".pkpass"), Qt::CaseInsensitive);
+    return (encodedData.startsWith("PK\x03\x04") && !QByteArrayView(encodedData).left(256).contains(".pkpass")) ||
+            fileName.endsWith(QLatin1StringView(".pkpass"), Qt::CaseInsensitive);
 }
 
 ExtractorDocumentNode PkPassDocumentProcessor::createNodeFromData(const QByteArray &encodedData) const

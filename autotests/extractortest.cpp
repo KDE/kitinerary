@@ -32,6 +32,7 @@ void initLocale()
 
 Q_CONSTRUCTOR_FUNCTION(initLocale)
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 /** Note: this test requires external test data that is not publicly available,
@@ -61,7 +62,7 @@ private Q_SLOTS:
                 continue;
             }
 
-            QDirIterator it(baseDir.path(), {QStringLiteral("*.txt"), QStringLiteral("*.html"), QStringLiteral("*.pdf"), QStringLiteral("*.pkpass"), QStringLiteral("*.ics"), QStringLiteral("*.eml"), QStringLiteral("*.mbox"), QStringLiteral("*.bin"), QStringLiteral("*.png"), QStringLiteral("*.jpg"), QStringLiteral("*.har"), QStringLiteral("*.in.json"), QStringLiteral("*.gif")}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
+            QDirIterator it(baseDir.path(), {u"*.txt"_s, u"*.html"_s, u"*.pdf"_s, u"*.pkpass"_s, u"*.pkpasses"_s, u"*.ics"_s, u"*.eml"_s, u"*.mbox"_s, u"*.bin"_s, u"*.png"_s, u"jpg"_s, u"*.har"_s, u"*.in.json"_s, u"gif"_s}, QDir::Files | QDir::Readable | QDir::NoSymLinks, QDirIterator::Subdirectories);
             while (it.hasNext()) {
                 it.next();
                 // ignore context files
