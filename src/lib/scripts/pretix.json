@@ -20,6 +20,18 @@
                 "scope": "Descendants"
             }
         ],
+        "function": "parsePdfWithBarcode",
+        "mimeType": "application/pdf",
+        "script": "pretix.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "^pretix$",
+                "mimeType": "application/pdf",
+                "field": "creator"
+            }
+        ],
         "function": "parsePdf",
         "mimeType": "application/pdf",
         "script": "pretix.js"
