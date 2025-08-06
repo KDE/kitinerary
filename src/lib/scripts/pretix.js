@@ -30,9 +30,9 @@ function parsePass(content, node) {
 }
 
 // only works for unstyled PDFs common for smaller events
-function parsePdf(pdf, node, barcode) {
+function parsePdfPage(pdf, page, barcode) {
     let res = JsonLd.newEventReservation();
-    const text = pdf.pages[barcode.location].textInRect(0.0, 0.0, 1.0, 0.4);
+    const text = pdf.pages[page].textInRect(0.0, 0.0, 1.0, 0.4);
     const dt = text.match(/(\d{4}.\d\d.\d\d \d\d:\d\d|\d\d.\d\d.\d{4} \d\d:\d\d)\n/);
     res.reservationFor.startDate = JsonLd.toDateTime(dt[1], ['dd.MM.yyyy hh:mm', 'yyyy-MM-dd hh:mm'], 'en');
 
@@ -43,6 +43,18 @@ function parsePdf(pdf, node, barcode) {
     res.reservationFor.location.name = data2.slice(0, data2.length - 1).join(' ');
     res.reservationNumber = data2[data2.length - 1].match(/(\S+) /)[1];
 
-    res.reservedTicket.ticketToken = 'qrcode:' + barcode.content;
+    res.reservedTicket.ticketToken = 'qrcode:' + barcode;
     return res;
+}
+
+function parsePdf(pdf, node) {
+    let reservations = [];
+    for (const ticket of node.findChildNodes({ mimeType: "application/octet-stream", scope: "Descendants"})) {
+        reservations.push(parsePdfPage(pdf, ticket.location, ticket.content));
+    }
+    return reservations;
+}
+
+function parsePdfWithBarcode(pdf, node, barcode) {
+    return parsePdfPage(pdf, barcode.location, barcode.content);
 }
