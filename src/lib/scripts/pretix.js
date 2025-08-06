@@ -8,31 +8,42 @@ function readDateTime(pass, fieldName) {
     if (!f)
         return undefined;
     const v = f.value;
+	let valueAsDateObject = new Date(v)
+	if (!isNaN(valueAsDateObject.getTime())) 
+		return f.value;
     if (typeof v === "string")
-        return JsonLd.toDateTime(v, ['dd.MM.yyyy hh:mm', 'dd.MM.yyyy'], 'de');
+        return JsonLd.toDateTime(v, ['dd.MM.yyyy hh:mm', 'dd.MM.yyyy' ], 'de');
     return v;
 }
 
 function parsePass(content, node) {
     let res = node.result[0];
+
     res.reservationFor.name = content.field['eventName'].value;
-    res.reservationFor.startDate = content.field['doorsOpen'].value;
-    res.reservationFor.endDate = content.field['doorsClose'].value;
-	res.bookingTime = content.field['purchaseDate'].value;
-    res.reservationFor.url = content.field['website'].value;
-    if (content.field['name']) {
+
+    res.reservationFor.startDate = readDateTime(content, 'doorsOpen');
+    res.reservationFor.endDate = readDateTime(content, 'doorsClose');
+    res.reservationFor.doorTime = readDateTime(content, 'doorsAdmission');
+	res.bookingTime = readDateTime(content, 'purchaseDate');
+    
+	res.reservationFor.url = content.field['website'].value;
+    
+	if (content.field['name']) {
         res.underName = JsonLd.newObject('Person');
         res.underName.name = content.field['name'].value;
 		res.underName.email = content.field['email']?.value;
-    }
+    
+	}
     res.reservationNumber = content.field['orderCode'].value;
     res.reservedTicket.name = content.field['ticket'].value;
+	
 	res.provider = {
 		"@type": "Organization",
 		name: content.field['organizer'].value,
 		email: content.field['organizerContact']?.value,
 	}
-    return res;
+    
+	return res;
 }
 
 // only works for unstyled PDFs common for smaller events
