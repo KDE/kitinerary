@@ -14,7 +14,7 @@ function parseSsbTicket(ssb, node) {
     res.reservationFor.arrivalStation.name = ssb.type1ArrivalStationAlpha;
     res.reservationFor.arrivalStation.identifier = "benerail:" + ssb.type1ArrivalStationAlpha;
     res.reservationFor.departureDay = ssb.type1DepartureDay(node.contextDateTime)
-    res.reservationFor.trainNumber = "THA " + ssb.type1TrainNumber.trim();
+    res.reservationFor.trainNumber = ssb.type1TrainNumber.trim();
     res.reservationFor.provider.identifier = "uic:" + ssb.issuerCode;
     res.reservedTicket.ticketedSeat.seatingType = ssb.classOfTravel;
     res.reservedTicket.ticketedSeat.seatSection = ssb.type1CoachNumber;
@@ -44,7 +44,7 @@ function parseReservation(html, node) {
 
     var detailsElem = html.eval('//table[@class="detailtrain"]')[0];
     var details = detailsElem.recursiveContent.match(/(\d{4})[\n\s][\s\S]*?(\d{1})[\n\s][\s\S]*?(\d{1,2})[\n\s][\s\S]*?(\d{1,3})/);
-    res.reservationFor.trainNumber = "THA " + details[1];
+    res.reservationFor.trainNumber = details[1];
     res.reservedTicket.ticketedSeat.seatingType = details[2];
     res.reservedTicket.ticketedSeat.seatSection = details[3];
     res.reservedTicket.ticketedSeat.seatNumber = details[4];
