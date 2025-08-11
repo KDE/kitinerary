@@ -21,3 +21,29 @@ function parsePdfTicket(pdf, node, triggerNode) {
     res.reservedTicket.ticketToken = 'qrcode:' + triggerNode.content;
     return res;
 }
+
+function extractPass(pass, node) {
+    let res = node.result[0];
+    res.reservationFor.departureStation = {
+        '@type': 'TrainStation',
+        name: pass.field['departure'].value
+    };
+    res.reservationFor.departureTime = JsonLd.readQDateTime(pass.field['departure_time'], 'value');
+    res.reservationFor.arrivalStation = {
+        '@type': 'TrainStation',
+        name: pass.field['destination'].value
+    };
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(pass.field['arrival_time'], 'value');
+    res.reservationFor.trainNumber = pass.field['line'].value;
+    res.reservedTicket.ticketedSeat.seatSection = pass.field['vehicle'].value;
+    res.reservedTicket.ticketedSeat.seatNumber = pass.field['seat'].value;
+    const program = pass.field['campaign_ticket_code'];
+    if (program) {
+        res.programMembershipUsed = {
+            '@type': 'ProgramMembership',
+            programName: program.label,
+            membershipNumber: program.value
+        };
+    }
+    return res;
+}
