@@ -5,7 +5,7 @@
 
 // ticket code seems to start with the issue date as "yyMMdd", in case we ever need a more strict pattern for that
 function parsePdfTicket(pdf, node, triggerNode) {
-    const text = pdf.pages[triggerNode.location].text;
+    const text = pdf.pages[triggerNode.location].textInRect(0, 0, 0.8, 1);
     let res = JsonLd.newTrainReservation();
     const stations = text.match(/FROM \/ TO\n? +(\S.*\S)  +(\S.*)/);
     res.reservationFor.departureStation.name = stations[1];
