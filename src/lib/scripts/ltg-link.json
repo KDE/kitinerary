@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "match": "^\\d{12}$",
@@ -9,4 +9,17 @@
     "function": "parsePdfTicket",
     "mimeType": "application/pdf",
     "script": "ltg-link.js"
-}
+},
+{
+    "filter": [
+        {
+            "field": "passTypeIdentifier",
+            "match": "^pass.com.turnit.ride.ticket$",
+            "mimeType": "application/vnd.apple.pkpass",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractPass",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "ltg-link.js"
+}]
