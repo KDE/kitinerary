@@ -57,8 +57,10 @@ function parsePdfPage(pdf, page, barcode) {
     res.reservationFor.name = data1.slice(0, Math.max(data1.length - 2, 1)).join(' ');
 
     const data2 = text.substr(dt.index + dt[0].length).trim().split(/\n/);
-    res.reservationFor.location.name = data2.slice(0, data2.length - 1).join(' ');
-    res.reservationNumber = data2[data2.length - 1].match(/(\S+) /)[1];
+    if (data2 && data2.length > 0 && data2[0]) {
+        res.reservationFor.location.name = data2.slice(0, data2.length - 1).join(' ');
+        res.reservationNumber = data2[data2.length - 1].match(/(\S+) /)[1];
+    }
 
     res.reservedTicket.ticketToken = 'qrcode:' + barcode;
     return res;
