@@ -150,7 +150,7 @@ function parseHtmlCommon(doc, node, res)
 
 function parseHtml(doc, node)
 {
-    if (node.result.length > 0)
+    if (node.result.length > 0 && node.result[0].url != undefined)
         return null; // this is just backup if we have no structured data
     var res = JsonLd.newLodgingReservation();
     var elem = doc.eval("//table[@class=\"mg_conf_hotel_preview\"]")[0];
