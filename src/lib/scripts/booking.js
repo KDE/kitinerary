@@ -28,7 +28,7 @@ regExMap['fr'] = {
 regExMap['de'] = {
     bookingRef: /(?:Buchungsnummer|Bestätigungsnummer): ([0-9]*)\s+/,
     // 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
-    hotelInformation: /(?:Lage )?(.+?), ([^\n,]+)(?:, ([^\n,]+))?, ([^\n,]+?) ?-?\s+Telefon:? (\+[0-9 \-]+)\n/,
+    hotelInformation: /(?:Lage )?(.+?), ([^\n,]+)(?:, ([^\n,]+))?, ([^\n,]+?)\s?-?\s+(?:Reiseroute.*\n)?(?:Telefon:? (\+[0-9 \-]+)|Kontakt.*|E-Mail.*)\n/,
     hotelName: [/Die Unterkunft (.*)\s+erwartet Sie/, /\n\n\s*(\S.*\S)\n\n\s*\[\S/],
     arrivalDate: /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \((?:ab )?([0-9]{1,2}:[0-9]{2}).*\)/,
     departureDate: /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2})\)/,
