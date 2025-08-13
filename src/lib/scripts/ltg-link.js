@@ -10,6 +10,7 @@ function parsePdfTicket(pdf, node, triggerNode) {
     const stations = text.match(/FROM \/ TO\n? +(\S.*\S)  +(\S.*)/);
     res.reservationFor.departureStation.name = stations[1];
     res.reservationFor.arrivalStation.name = stations[2];
+    res.reservationFor.provider.identifier = "uic:1124";
     const dt = text.match(/(\d{4}-\d\d-\d\d)(?:\n.*){1,2}(\d\d:\d\d) - (\d\d:\d\d)/);
     res.reservationFor.departureTime = JsonLd.toDateTime(dt[1] + ' ' + dt[2], 'yyyy-MM-dd hh:mm', 'lt');
     res.reservationFor.arrivalTime = JsonLd.toDateTime(dt[1] + ' ' + dt[3], 'yyyy-MM-dd hh:mm', 'lt');
@@ -35,6 +36,7 @@ function extractPass(pass, node) {
     };
     res.reservationFor.arrivalTime = JsonLd.readQDateTime(pass.field['arrival_time'], 'value');
     res.reservationFor.trainNumber = pass.field['line'].value;
+    res.reservationFor.provider.identifier = "uic:1124";
     res.reservedTicket.ticketedSeat.seatSection = pass.field['vehicle'].value;
     res.reservedTicket.ticketedSeat.seatNumber = pass.field['seat'].value;
     const program = pass.field['campaign_ticket_code'];
