@@ -27,6 +27,7 @@
 #include <chrono>
 #include <unordered_map>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 constexpr inline auto BOARDING_TO_DEPARTURE_MIN = std::chrono::minutes(20);
@@ -200,8 +201,7 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
         AirportNameTokenizer tokenizer(pageText);
         while (tokenizer.hasNext()) {
             const auto s = tokenizer.next();
-            if (s.compare(QLatin1StringView("international"),
-                          Qt::CaseInsensitive) == 0) {
+            if (s.compare("international"_L1, Qt::CaseInsensitive) == 0 || s.compare("intl"_L1, Qt::CaseInsensitive) == 0) {
               qCDebug(Log) << "  ignoring" << s;
               continue;
             }
