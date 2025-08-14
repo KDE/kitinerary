@@ -35,5 +35,17 @@
         "function": "parsePdf",
         "mimeType": "application/pdf",
         "script": "pretix.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "\"ticket\":\\s*\"[0-9a-z]{32}\"",
+                "mimeType": "application/octet-stream",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parsePdfWithBarcode",
+        "mimeType": "application/pdf",
+        "script": "pretix.js"
     }
 ]
