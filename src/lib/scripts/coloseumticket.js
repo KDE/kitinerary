@@ -17,14 +17,16 @@ function parsePkPass(pass, node) {
 
     res.reservationFor.name = pass.field["eventname"].value
     res.reservedTicket.name = pass.field["section"].value
-	res.reservedTicket.ticketedSeat = {
-		'@type': 'Seat',
-		seatNumber: pass.field["seat"].value,
-		seatRow: pass.field["row"].value,
-		seatSection: pass.field["section"].value
-	}
+    if (pass.field["seat"]) {
+        res.reservedTicket.ticketedSeat = {
+            '@type': 'Seat',
+            seatNumber: pass.field["seat"].value,
+            seatRow: pass.field["row"].value,
+            seatSection: pass.field["section"].value
+        }
+    }
 
-	res.reservationNumber = pass.barcodes[0].alternativeText;
+    res.reservationNumber = pass.barcodes[0].alternativeText;
 
     return res
 }
