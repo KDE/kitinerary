@@ -1,5 +1,5 @@
 /*
-    SPDX-FileCopyrightText: 2024 David Pilarćík <meow@charliecat.space>
+    SPDX-FileCopyrightText: 2024 David Pilarčík <meow@charliecat.space>
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
