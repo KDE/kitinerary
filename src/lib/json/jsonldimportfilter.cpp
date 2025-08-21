@@ -117,6 +117,9 @@ static void migrateToAction(QJsonObject &obj, const char *propName, const char *
 
 static void filterPlace(QJsonObject &obj)
 {
+    unpackArray(obj, "name"_L1);
+    unpackArray(obj, "address"_L1);
+
     // convert text address to PostalAddress
     if (const auto addr = obj.value("address"_L1); addr.isString()) {
         obj.insert("address"_L1, QJsonObject{

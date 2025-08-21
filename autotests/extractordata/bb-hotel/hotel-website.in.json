@@ -1,0 +1,25 @@
+ {
+        "@context": "http://schema.org",
+        "@type": "Hotel",
+        "address": [
+            {
+                "@type": "PostalAddress",
+                "addressCountry": "Deutschland",
+                "addressLocality": "Berlin",
+                "postalCode": "10179",
+                "streetAddress": "Voltairestraße 3a"
+            },
+            {
+                "@type": "PostalAddress",
+                "addressCountry": "Deutschland",
+                "addressLocality": "Berlin",
+                "postalCode": "10179",
+                "streetAddress": "Voltairestraße 3a"
+            }
+        ],
+        "modifiedTime": "2025-08-21T00:00:00",
+        "name": [
+            "B&B HOTEL Berlin-Alexanderplatz",
+            "B&B HOTEL Berlin-Alexanderplatz"
+        ]
+    }
