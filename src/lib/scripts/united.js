@@ -30,7 +30,7 @@ function main(html) {
         return {};
 
     // Each flight is in it's own table
-    var rows = html.eval("//tr/td/table[tr[td[contains(., 'Flight')]]]")
+    var rows = html.eval("//tr/td[not(contains(., 'MileagePlus'))]/table[tr[td[contains(., 'Flight')]]]")
     for (var i in rows) {
         // Deficiency in the XPath, the first table is not relevant
         if (i == 0)
@@ -93,7 +93,17 @@ function main(html) {
     while (!travelerRow.isNull) {
         if (i == 1) {
             // Traveler name, the name is usually garbage but it's useful to keep anyway
-            res.underName = travelerRow.recursiveContent;
+            // It follows the format FAMILY/GIVEN and all in uppercase, so just deal with that
+            const name = travelerRow.recursiveContent.split("/");
+            if (name.length == 2) {
+                const familyName = name[0];
+                const givenName = name[1];
+
+                for (var z in reservations) {
+                    reservations[z].underName.familyName = familyName;
+                    reservations[z].underName.givenName = givenName;
+                }
+            }
         } else if (i > 1) {
             // Possibly contains seating information
             // Example: JFK-IAD 29C
