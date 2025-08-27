@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^\\d{7}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "centerparc.js"
+}
