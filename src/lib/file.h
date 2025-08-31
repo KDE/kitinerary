@@ -8,6 +8,7 @@
 
 #include "kitinerary_export.h"
 
+#include <QDateTime>
 #include <QList>
 
 #include <memory>
@@ -109,8 +110,14 @@ public:
     [[nodiscard]] bool hasCustomData(QStringView scope, const QString &id) const;
     /** Returns the custom data in the given namespace and with the given id. */
     [[nodiscard]] QByteArray customData(QStringView scope, const QString &id) const;
-    /** Adds a custom data element with identifier @p id in to namespace @p scope. */
-    void addCustomData(QStringView scope, const QString &id, const QByteArray &data);
+    /** Returns the file time for the specified custom data.
+     *  @since 25.12
+     */
+    [[nodiscard]] QDateTime customDataFileTime(QStringView scope, const QString &id) const;
+    /** Adds a custom data element with identifier @p id in to namespace @p scope.
+     *  @param mtime Optional file time (since 25.12).
+     */
+    void addCustomData(QStringView scope, const QString &id, const QByteArray &data, const QDateTime &mtime = {});
 
 private:
     std::unique_ptr<FilePrivate> d;

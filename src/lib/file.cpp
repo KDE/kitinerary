@@ -381,8 +381,24 @@ QByteArray File::customData(QStringView scope, const QString &id) const
     return file->data();
 }
 
-void File::addCustomData(QStringView scope, const QString &id, const QByteArray &data)
+QDateTime File::customDataFileTime(QStringView scope, const QString &id) const
 {
     Q_ASSERT(d->zipFile);
-    d->zipFile->writeFile("custom/"_L1 + scope + '/'_L1 + id, data);
+    const auto dir = dynamic_cast<const KArchiveDirectory *>(d->zipFile->directory()->entry("custom/"_L1 + scope));
+    if (!dir) {
+        return {};
+    }
+
+    const auto file = dir->file(id);
+    if (!file) {
+        qCDebug(Log) << "custom data not found" << scope << id;
+        return {};
+    }
+    return file->date();
+}
+
+void File::addCustomData(QStringView scope, const QString &id, const QByteArray &data, const QDateTime &mtime)
+{
+    Q_ASSERT(d->zipFile);
+    d->zipFile->writeFile("custom/"_L1 + scope + '/'_L1 + id, data, 0100644, {}, {}, {}, mtime);
 }
