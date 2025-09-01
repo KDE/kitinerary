@@ -290,3 +290,20 @@ function parsePkPass(pass, node) {
 
 	return res;
 }
+
+function parseSeatReservationPdf(pdf, node, barcode) {
+    const text = pdf.pages[barcode.location].text;
+    let res = JsonLd.newTrainReservation();
+    res.reservedTicket.ticketToken = 'qrcode:' + barcode.content;
+    res.reservationNumber = text.match(/reservation nr. (\d+)\n/)[1];
+    const trip = text.match(/(\d{1,2}\/\d{1,2}\/\d{2})\n(\d{1,2}:\d{2}[AP]M)\s+(\S.*)\n(\d{1,2}:\d{2}[AP]M)\s+(\S.*)\nCoach\/Seats:\s+(\S+)\/(\S+)\n.*\nClass:\s+(\S.*)\nConnection:\s+.*\(.*,(.*)\)\n/);
+    res.reservationFor.departureTime = JsonLd.toDateTime(trip[1] + ' ' + trip[2], ["M/d/yy h:mmAP"], ["en"]);
+    res.reservationFor.departureStation.name = trip[3];
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[1] + ' ' + trip[4], ["M/d/yy h:mmAP"], ["en"]);
+    res.reservationFor.arrivalStation.name = trip[5];
+    res.reservedTicket.ticketedSeat.seatSection = trip[6];
+    res.reservedTicket.ticketedSeat.seatNumber = trip[7];
+    res.reservedTicket.ticketedSeat.seatingType = trip[8];
+    res.reservationFor.trainNumber = trip[9];
+    return res;
+}

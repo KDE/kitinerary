@@ -20,10 +20,16 @@
         "script": "regiojet.js",
         "function": "parseDistribusionPkPass"
     },
-	{
+    {
         "mimeType": "application/vnd.apple.pkpass",
         "filter": [ { "field": "passTypeIdentifier", "match": "pass.cz.sa.ybus", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
         "script": "regiojet.js",
         "function": "parsePkPass"
+    },
+    {
+        "mimeType": "application/pdf",
+        "filter": [ { "match": "^\\d;.*;\\d{10}$", "mimeType": "text/plain", "scope": "Descendants" } ],
+        "script": "regiojet.js",
+        "function": "parseSeatReservationPdf"
     }
 ]
