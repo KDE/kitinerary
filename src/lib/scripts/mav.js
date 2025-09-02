@@ -65,7 +65,11 @@ function parseBarcodeAlternative(data)
 
     const inner = ByteArray.inflate(data.slice(24));
     parseBarcodeCommon(res, inner);
-    res.reservedTicket.ticketToken = "pdf417bin:" + ByteArray.toBase64(data);
+    // HACK technically this is PDF 417 but those seem to render unreliably
+    // and result in failed scanning
+    // We use Aztec instead now which MAV scanners also support, and which is
+    // generally more robust on mobile screens
+    res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(data);
     return res;
 }
 
