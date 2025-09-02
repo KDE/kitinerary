@@ -45,7 +45,9 @@
             "ticketedSeat": {
                 "@type": "Seat",
                 "seatingType": "2"
-            }
+            },
+            "validFrom": "2022-10-30T00:00:00+02:00",
+            "validUntil": "2022-11-01T03:00:00+02:00"
         },
         "underName": {
             "@type": "Person",
