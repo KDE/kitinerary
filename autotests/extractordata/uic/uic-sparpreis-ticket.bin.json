@@ -35,7 +35,9 @@
             "ticketedSeat": {
                 "@type": "Seat",
                 "seatingType": "2"
-            }
+            },
+            "validFrom": "2020-11-05T00:00:00+01:00",
+            "validUntil": "2020-11-06T10:00:00+01:00"
         },
         "underName": {
             "@type": "Person",

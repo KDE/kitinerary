@@ -205,6 +205,8 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
         }
     }
 
+    ticket.setValidFrom(p.validFrom());
+    ticket.setValidUntil(p.validUntil());
     if (const auto flex = p.findBlock<Uic9183Flex>(); flex.isValid()) {
         res.setPriceCurrency(QString::fromUtf8(std::visit([](auto &&fcb) { return fcb.issuingDetail.currency; }, flex.fcb())));
         for (const auto &doc : flex.transportDocuments()) {
@@ -228,8 +230,6 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
     ticket.setIssuedBy(p.issuer());
     ticket.setTicketNumber(p.pnr());
     ticket.setUnderName(p.person());
-    ticket.setValidFrom(p.validFrom());
-    ticket.setValidUntil(p.validUntil());
     if (const auto currency = rct2.currency(); !currency.isEmpty()) {
         ticket.setPriceCurrency(currency);
         ticket.setTotalPrice(rct2.price());
