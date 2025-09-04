@@ -1,6 +1,15 @@
 // SPDX-FileCopyrightText: 2024 Volker Krause <vkrause@kde.org>
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
+// this contains city name/airport name for domestic (?) airports
+// which in some cases results in pointless duplicates ("Oulu Oulu") for short names
+function cleanupAirportName(name) {
+    if (name.length % 2 === 1 && name.substr(0, name.length / 2) === name.substr(name.length / 2 + 1)) {
+        return name.substr(0, name.length / 2);
+    }
+    return name;
+}
+
 function extractEticket(pdf, node, barcode) {
     // boarding pass
     if (barcode.content.repeatedMandatorySection(0).checkinSequenceNumber != 0) {
@@ -27,8 +36,8 @@ function extractEticket(pdf, node, barcode) {
         res.reservationNumber = barcode.result[0].reservationNumber;
         res.underName = barcode.result[0].underName;
         res.reservedTicket.ticketNumber = barcode.result[0].reservedTicket.ticketNumber;
-        res.reservationFor.departureAirport.name = leg[1] ? leg[1] : leg[3];
-        res.reservationFor.arrivalAirport.name = leg[2] ? leg[2] : leg[4];
+        res.reservationFor.departureAirport.name = cleanupAirportName(leg[1] ? leg[1] : leg[3]);
+        res.reservationFor.arrivalAirport.name = cleanupAirportName(leg[2] ? leg[2] : leg[4]);
         res.reservationFor.airline.iataCode = leg[5];
         res.reservationFor.flightNumber = leg[6];
         res.reservationFor.departureTime = JsonLd.toDateTime(leg[7] + leg[8], "dMMMhh:mm", "en");
