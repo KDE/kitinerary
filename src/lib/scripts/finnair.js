@@ -3,8 +3,7 @@
 
 function extractEticket(pdf, node, barcode) {
     // boarding pass
-    if (barcode.content.repeatedMandatorySection(0).checkinSequenceNumber!= 0 ||
-        barcode.content.repeatedMandatorySection(0).seatNumber != 0) {
+    if (barcode.content.repeatedMandatorySection(0).checkinSequenceNumber != 0) {
         const page = pdf.pages[barcode.location].text;
         const depDt = page.match(/Departure.*\n(\d\d:\d\d)[, ]+(\d{2} \S{3} \d{4})/);
         let res = node.result[0];
