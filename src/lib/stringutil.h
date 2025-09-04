@@ -41,6 +41,9 @@ namespace StringUtil
      *  punctuation or dash characerts used to indicate and empty field.
      */
     [[nodiscard]] QString simplifiedNoPlaceholder(const QString &s);
+
+    /** Strip leading zeros from a textual numeric value. */
+    [[nodiscard]] QString stripLeadingZeros(const QString &s);
 }
 
 }

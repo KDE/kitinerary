@@ -7,6 +7,7 @@
 #include "iatabcbpparser.h"
 #include "logging.h"
 #include "reservationconverter.h"
+#include "stringutil.h"
 
 #include "iata/iatabcbp.h"
 
@@ -27,13 +28,6 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
-
-[[nodiscard]] static QString stripLeadingZeros(const QString &s)
-{
-    const auto it = std::find_if(s.begin(), s.end(), [](const QChar &c) { return c != '0'_L1; });
-    const auto d = std::distance(s.begin(), it);
-    return s.mid(d);
-}
 
 QList<QVariant> IataBcbpParser::parse(const QString &message, const QDateTime &externalIssueDate) {
     IataBcbp bcbp(message);
@@ -125,12 +119,12 @@ QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDateTime &con
         Airline airline;
         airline.setIataCode(rms.operatingCarrierDesignator());
         flight.setAirline(airline);
-        flight.setFlightNumber(stripLeadingZeros(rms.flightNumber()));
+        flight.setFlightNumber(StringUtil::stripLeadingZeros(rms.flightNumber()));
 
         FlightReservation res;
         res.setReservationFor(flight);
-        res.setPassengerSequenceNumber(stripLeadingZeros(rms.checkinSequenceNumber()));
-        res.setAirplaneSeat(stripLeadingZeros(rms.seatNumber()));
+        res.setPassengerSequenceNumber(StringUtil::stripLeadingZeros(rms.checkinSequenceNumber()));
+        res.setAirplaneSeat(StringUtil::stripLeadingZeros(rms.seatNumber()));
         res.setReservationNumber(rms.operatingCarrierPNRCode());
         res.setUnderName(person);
 

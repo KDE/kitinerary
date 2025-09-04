@@ -14,6 +14,7 @@
 #include <cstring>
 #include <cctype>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 QString StringUtil::normalize(QStringView str)
@@ -212,4 +213,11 @@ QString StringUtil::simplifiedNoPlaceholder(const QString &s)
         return {};
     }
     return s.simplified();
+}
+
+QString StringUtil::stripLeadingZeros(const QString &s)
+{
+    const auto it = std::ranges::find_if(s, [](const QChar &c) { return c != '0'_L1; });
+    const auto d = std::distance(s.begin(), it);
+    return s.mid(d);
 }
