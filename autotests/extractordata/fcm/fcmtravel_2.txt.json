@@ -280,7 +280,7 @@
                 "@value": "2016-10-22T08:00:00-07:00",
                 "timezone": "America/Los_Angeles"
             },
-            "flightNumber": "086"
+            "flightNumber": "86"
         },
         "reservationNumber": "XXX007",
         "reservationStatus": "http://schema.org/ReservationConfirmed",
@@ -338,7 +338,7 @@
                 "@value": "2016-10-22T08:00:00-07:00",
                 "timezone": "America/Los_Angeles"
             },
-            "flightNumber": "086"
+            "flightNumber": "86"
         },
         "reservationNumber": "XXX007",
         "reservationStatus": "http://schema.org/ReservationConfirmed",

@@ -42,7 +42,7 @@ Flight FlightPostProcessor::processFlight(Flight flight)
     flight.setDepartureTerminal(StringUtil::simplifiedNoPlaceholder(flight.departureTerminal()));
     flight.setArrivalTerminal(StringUtil::simplifiedNoPlaceholder(flight.arrivalTerminal()));
     flight.setDepartureGate(StringUtil::simplifiedNoPlaceholder(flight.departureGate()));
-    flight.setFlightNumber(flight.flightNumber().simplified());
+    flight.setFlightNumber(StringUtil::stripLeadingZeros(flight.flightNumber().simplified()));
 
     // arrival less than a day before departure is an indication of the extractor failing to detect day rollover
     if (duration < std::chrono::seconds(0) && duration > std::chrono::days(-1)) {
