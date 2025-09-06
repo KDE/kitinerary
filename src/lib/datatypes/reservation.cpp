@@ -63,10 +63,12 @@ class LodgingReservationPrivate : public ReservationPrivate
 public:
     QDateTime checkinTime;
     QDateTime checkoutTime;
+    QString lodgingUnitDescription;
 };
 KITINERARY_MAKE_DERIVED_CLASS(LodgingReservation, Reservation)
 KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkinTime, setCheckinTime)
 KITINERARY_MAKE_PROPERTY(LodgingReservation, QDateTime, checkoutTime, setCheckoutTime)
+KITINERARY_MAKE_PROPERTY(LodgingReservation, QString, lodgingUnitDescription, setLodgingUnitDescription)
 KITINERARY_MAKE_OPERATOR(LodgingReservation)
 
 

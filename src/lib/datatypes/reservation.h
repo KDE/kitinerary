@@ -78,6 +78,7 @@ class KITINERARY_EXPORT LodgingReservation : public Reservation
     KITINERARY_GADGET(LodgingReservation)
     KITINERARY_PROPERTY(QDateTime, checkinTime, setCheckinTime)
     KITINERARY_PROPERTY(QDateTime, checkoutTime, setCheckoutTime)
+    KITINERARY_PROPERTY(QString, lodgingUnitDescription, setLodgingUnitDescription)
 };
 
 class FlightReservationPrivate;
