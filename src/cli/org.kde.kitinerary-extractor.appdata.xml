@@ -43,7 +43,6 @@
   <name xml:lang="sv">Kitinerary extrahering på kommandoraden</name>
   <name xml:lang="tr">K Yol Kılavuzu Komut Satırı Çıkarıcısı</name>
   <name xml:lang="uk">Командний засіб видобування KItinerary</name>
-  <name xml:lang="x-test">xxKItinerary Command Line Extractorxx</name>
   <name xml:lang="zh-CN">KItinerary 命令行导出工具</name>
   <name xml:lang="zh-TW">KItinerary 命令列取出工具</name>
   <summary>Command line reservation data extractor</summary>
@@ -77,7 +76,6 @@
   <summary xml:lang="sv">Extrahering av reservationsdata på kommandoraden</summary>
   <summary xml:lang="tr">Komut satırında çalışan rezervasyon verisi çıkarıcısı</summary>
   <summary xml:lang="uk">Програма для видобування даних бронювання, керування якою відбувається з командного рядка</summary>
-  <summary xml:lang="x-test">xxCommand line reservation data extractorxx</summary>
   <summary xml:lang="zh-CN">命令行行程预订数据导出工具</summary>
   <summary xml:lang="zh-TW">命令列預約資料取出工具</summary>
   <description>
@@ -118,7 +116,6 @@
     <p xml:lang="sv">Extrahering av reseinformation på kommandoraden, för att integrera med tredjepartsprogram.</p>
     <p xml:lang="tr">Üçüncü parti uygulamalarla tümleştirmek için komut satırında çalışan yolcu belgesi verisi çıkarıcısı.</p>
     <p xml:lang="uk">Програма, керування якою відбувається з командного рядка, для видобування даних бронювання. Призначено для інтеграції зі сторонніми програмами.</p>
-    <p xml:lang="x-test">xxCommand line extractor for itinerary data, for integrating into 3rd party applications.xx</p>
     <p xml:lang="zh-CN">命令行行程数据导出工具，用于与第三方应用程序进行整合。</p>
     <p xml:lang="zh-TW">旅行計劃資料的命令列取出工具，用來與第三方應用程式進行整合。</p>
   </description>
