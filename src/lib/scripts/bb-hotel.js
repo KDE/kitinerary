@@ -20,6 +20,7 @@ function parseConfirmation(html) {
     res.reservationFor.telephone = html.root.eval('//a[starts-with(@href, "tel:")]')[0].content;
     res.reservationFor.email = html.root.eval('//a[starts-with(@href, "mailto:")]')[0].content;
     res.modifyReservationUrl = html.root.eval('//a[contains(@href, "my-booking")]')[0].attribute('href');
+    res.reservationFor.url = "https://hotel-bb.com";
 
     let reservations = [];
     let idx = 0;
