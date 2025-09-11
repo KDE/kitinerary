@@ -50,8 +50,8 @@ function parsePass(content, node) {
 function parsePdfPage(pdf, page, barcode) {
     let res = JsonLd.newEventReservation();
     const text = pdf.pages[page].textInRect(0.0, 0.0, 1.0, 0.4);
-    const dt = text.match(/(\d{4}.\d\d.\d\d \d\d:\d\d|\d\d.\d\d.\d{4} \d\d:\d\d)\n/);
-    res.reservationFor.startDate = JsonLd.toDateTime(dt[1], ['dd.MM.yyyy hh:mm', 'yyyy-MM-dd hh:mm'], 'en');
+    const dt = text.match(/(\d{4}.\d\d.\d\d \d\d:\d\d|\d\d.\d\d.\d{4} \d\d:\d\d|\d{1,2}\. \S+ \d{4})\n/);
+    res.reservationFor.startDate = JsonLd.toDateTime(dt[1], ['dd.MM.yyyy hh:mm', 'yyyy-MM-dd hh:mm', 'dd. MMMM yyyy'], ['en', 'de']);
 
     const data1 = text.substr(0, dt.index).trim().split(/\n/);
     res.reservationFor.name = data1.slice(0, Math.max(data1.length - 2, 1)).join(' ');
