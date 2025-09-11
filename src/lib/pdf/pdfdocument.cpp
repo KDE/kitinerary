@@ -81,7 +81,7 @@ static double ratio(double begin, double end, double ratio)
     return begin + (end - begin) * ratio;
 }
 
-QString PdfPage::textInRect(double left, double top, double right, double bottom) const
+QString PdfPage::textInRect(double left, double top, double right, double bottom, int rotate) const
 {
     PopplerGlobalParams gp;
 
@@ -111,7 +111,7 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
     }
 
     TextOutputDev device(nullptr, false, 0, false, false);
-    d->m_doc->m_popplerDoc->displayPageSlice(&device, d->m_pageNum + 1, 72, 72, 0, false, true, false, -1, -1, -1, -1);
+    d->m_doc->m_popplerDoc->displayPageSlice(&device, d->m_pageNum + 1, 72, 72, rotate, false, true, false, -1, -1, -1, -1);
 #if KPOPPLER_VERSION <QT_VERSION_CHECK(25, 1, 0)
     std::unique_ptr<GooString> s(device.getText(l, t, r, b));
     return QString::fromUtf8(s->c_str());
