@@ -150,10 +150,6 @@
                     "type": "git",
                     "url": "https://invent.kde.org/pim/kmime",
                     "branch": "release/25.08"
-                },
-                {
-                    "type": "patch",
-                    "path": "flatpak-kmime-version.patch"
                 }
             ],
             "cleanup": [
