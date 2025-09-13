@@ -66,7 +66,7 @@ set_package_properties("ZLIB" PROPERTIES PURPOSE "Support for decoding UIC 918-3
 find_package(LibXml2 MODULE)
 set_package_properties("LibXml2" PROPERTIES PURPOSE "Support for extraction from HTML booking confirmations." URL "http://libxml.org")
 find_package(libphonenumber 9.0 CONFIG)
-if (NOT TARGET libphonenumber::phonenumber-shared)
+if (NOT TARGET libphonenumber::phonenumber-shared AND NOT TARGET libphonenumber::phonenumber)
     find_package(PhoneNumber OPTIONAL_COMPONENTS PhoneNumber)
     set_package_properties("PhoneNumber" PROPERTIES PURPOSE "Parsing and geo-coding of phone numbers.")
 else()
