@@ -406,6 +406,13 @@ static Person extractPerson(const KPkPass::Pass *pass, Person person)
     return person;
 }
 
+[[nodiscard]] static KPkPass::Barcode pickBestBarcode(const QList<KPkPass::Barcode> &barcodes)
+{
+    // prefer 2D barcodes that are more robust to scan
+    const auto it = std::ranges::find_if(barcodes, [](const auto &bc) { return bc.format() == KPkPass::Barcode::Aztec || bc.format() == KPkPass::Barcode::QR; });
+    return it != std::end(barcodes) ? *it : barcodes.at(0);
+}
+
 void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     const auto pass = node.content<KPkPass::Pass*>();
@@ -442,8 +449,8 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
     }
 
     // barcode contains the ticket token
-    if (!pass->barcodes().isEmpty()) {
-        const auto barcode = pass->barcodes().at(0);
+    if (const auto bcs = pass->barcodes(); !bcs.isEmpty()) {
+        const auto barcode = pickBestBarcode(bcs);
         QString token;
         switch (barcode.format()) {
             case KPkPass::Barcode::Invalid:
