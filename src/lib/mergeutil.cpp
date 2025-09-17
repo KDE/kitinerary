@@ -530,7 +530,7 @@ static bool isSameLineName(const QString &lhs, const QString &rhs)
 [[nodiscard]] static bool isSameTrainType(QStringView lhs, QStringView rhs)
 {
     qsizetype i = 0;
-    for (; i < lhs.size() && rhs.size(); ++i) {
+    for (; i < lhs.size() && i < rhs.size(); ++i) {
         if (lhs[i] != rhs[i]) {
             break;
         }
