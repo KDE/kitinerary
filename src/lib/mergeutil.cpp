@@ -527,6 +527,23 @@ static bool isSameLineName(const QString &lhs, const QString &rhs)
     );
 }
 
+[[nodiscard]] static bool isSameTrainType(QStringView lhs, QStringView rhs)
+{
+    qsizetype i = 0;
+    for (; i < lhs.size() && rhs.size(); ++i) {
+        if (lhs[i] != rhs[i]) {
+            break;
+        }
+    }
+
+    if (i == 0 || i == lhs.size() || i == rhs.size()) {
+        return false;
+    }
+
+    return std::ranges::all_of(lhs.mid(i), [](QChar c) { return c.isNumber(); })
+        && std::ranges::all_of(rhs.mid(i), [](QChar c) { return c.isNumber(); });
+}
+
 static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
 {
     if (lhs.departureDay() != rhs.departureDay()) {
@@ -580,7 +597,19 @@ static bool isSameTrainTrip(const TrainTrip &lhs, const TrainTrip &rhs)
     qCDebug(CompareLog) << "left:" << lhs.trainName() << lhs.trainNumber() << lhs.departureTime();
     qCDebug(CompareLog) << "right:" << rhs.trainName() << rhs.trainNumber() << rhs.departureTime();
     qCDebug(CompareLog) << "same line:" << isSameLine;
-    return !conflictIfPresent(lhs.trainName(),rhs.trainName()) && isSameLine;
+    if (!conflictIfPresent(lhs.trainName(),rhs.trainName()) && isSameLine) {
+        return true;
+    }
+
+    // handle dividing trains, ie. train number might differ
+    if (isSameTrainType(lhs.trainNumber(), rhs.trainNumber()) && lhs.departureTime().isValid() && lhs.arrivalTime().isValid()) {
+        const auto depExact = LocationUtil::isSameLocation(lhs.departureStation(), rhs.departureStation(), LocationUtil::Exact);
+        const auto arrExact = LocationUtil::isSameLocation(lhs.arrivalStation(), rhs.arrivalStation(), LocationUtil::Exact);
+        qCDebug(CompareLog) << "possible dividing train" << depExact << arrExact;
+        return depExact && arrExact;
+    }
+
+    return false;
 }
 
 static bool isSameBusTrip(const BusTrip &lhs, const BusTrip &rhs)
