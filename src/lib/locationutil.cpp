@@ -294,6 +294,37 @@ static bool hasCommonPrefix(QStringView lhs, QStringView rhs)
     return false;
 }
 
+struct {
+    const char *suffix;
+} constexpr static const suffix_table[] = {
+    {"bahnhof"},
+    {"hauptbahnhof"},
+    {"hbf"},
+};
+
+[[nodiscard]] static bool isPrefixWithIgnoredSuffix(QStringView lhs, QStringView rhs)
+{
+    if (lhs.size() == rhs.size()) {
+        return false; // the equality check should have caught this
+    }
+    if (lhs.size() > rhs.size()) {
+        return isPrefixWithIgnoredSuffix(rhs, lhs);
+    }
+
+    if (!startsWithSpaceCaseInsenstive(rhs, lhs)) {
+        return false;
+    }
+
+    const auto suffix = rhs.mid(lhs.size()).trimmed();
+    for (const auto &s :suffix_table) {
+        if (suffix.compare(QLatin1StringView(s.suffix), Qt::CaseInsensitive) == 0) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationUtil::Accuracy accuracy)
 {
     if (lhs.isEmpty() || rhs.isEmpty()) {
@@ -315,8 +346,8 @@ static bool isSameLocationName(const QString &lhs, const QString &rhs, LocationU
         return true;
     }
 
-    // sufficiently long prefix that we can assume RCT2 field overflow
-    if (isStrictLongPrefix(lhs, rhs)) {
+    // sufficiently long prefix that we can assume RCT2 field overflow, or ignored suffix
+    if (isStrictLongPrefix(lhs, rhs) || isPrefixWithIgnoredSuffix(lhs, rhs)) {
         return true;
     }
 

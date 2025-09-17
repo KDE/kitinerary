@@ -161,6 +161,8 @@ private Q_SLOTS:
 
         QTest::newRow("truncated-1") << u"Frankfurt(M) Flugh"_s << u"Frankfurt(M) Flughafen Fernbf"_s << true << true;
         QTest::newRow("truncated-2") << u"Frankfurt(M)Flugh"_s << u"Frankfurt(M) Flughafen Fernbf"_s << true << true;
+
+        QTest::newRow("ignored-suffix-1") << u"KUFSTEIN"_s << u"Kufstein Bahnhof"_s << true << true;
     }
 
     void testLocationNameCompare()
