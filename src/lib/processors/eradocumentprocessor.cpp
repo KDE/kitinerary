@@ -15,12 +15,15 @@
 
 #include "text/pricefinder_p.h"
 
+#include "uic9183/uicstationcode_p.h"
+
 #include <KItinerary/ExtractorResult>
 
 #include <KItinerary/Reservation>
 #include <KItinerary/Ticket>
 #include <KItinerary/TrainTrip>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 bool ElbDocumentProcessor::canHandleData(const QByteArray &encodedData, [[maybe_unused]] QStringView fileName) const
@@ -49,14 +52,16 @@ ExtractorDocumentNode SsbDocumentProcessor::createNodeFromData(const QByteArray 
     return node;
 }
 
-TrainStation makeStation(int idType, const QString &alphaId, int numericId)
+[[nodiscard]] static TrainStation makeStation(int idType, const QString &alphaId, int numericId)
 {
     TrainStation station;
     if (idType == 0 && numericId > 10'00000 && numericId < 99'99999) {
-      station.setIdentifier(QLatin1StringView("uic:") +
-                            QString::number(numericId));
-      station.setName(QString::number(numericId));
-    } else if (idType == 1 && alphaId.size() == 5 && std::all_of(alphaId.begin(), alphaId.end(), [](QChar c) { return c.isUpper(); })) {
+        station.setIdentifier("uic:"_L1 + QString::number(numericId));
+        station.setName(QString::number(numericId));
+    } else if (idType == 0 && numericId > 10'00000'0 && numericId < 99'99999'9 && UicStationCode::checksumDigit(numericId / 10) == numericId % 10) {
+        station.setIdentifier("uic:"_L1 + QString::number(numericId / 10));
+        station.setName(QString::number(numericId / 10));
+    } else if (idType == 1 && alphaId.size() == 5 && std::ranges::all_of(alphaId, [](QChar c) { return c.isUpper(); })) {
         // TODO is the identifier type defined in that case??
         station.setName(alphaId);
     }
@@ -71,13 +76,10 @@ void SsbDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unuse
         Seat seat;
         seat.setSeatingType(QString::number(ssb.classOfTravel()));
         Ticket ticket;
-        ticket.setTicketToken(QLatin1StringView("aztecbin:") +
-                              QString::fromLatin1(ssb.rawData().toBase64()));
+        ticket.setTicketToken("aztecbin:"_L1 + QString::fromLatin1(ssb.rawData().toBase64()));
 
         Organization issuer;
-        issuer.setIdentifier(
-            QLatin1StringView("uic:") +
-            QString::number(ssb.issuerCode())); // left pad with 0 to 4 digets?
+        issuer.setIdentifier("uic:"_L1 + QString::number(ssb.issuerCode())); // left pad with 0 to 4 digets?
         TrainTrip trip;
         trip.setProvider(issuer);
 
