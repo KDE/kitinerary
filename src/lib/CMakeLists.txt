@@ -143,6 +143,7 @@ target_sources(KPim6Itinerary PRIVATE
     uic9183/uic9183parser.cpp uic9183/uic9183parser.h
     uic9183/uic9183ticketlayout.cpp uic9183/uic9183ticketlayout.h
     uic9183/uic9183utils.cpp uic9183/uic9183utils.h
+    uic9183/uicstationcode.cpp
     uic9183/vendor0080block.cpp uic9183/vendor0080block.h
     uic9183/vendor0080vublockdata.cpp uic9183/vendor0080vublockdata.h
     uic9183/vendor1154block.cpp uic9183/vendor1154block.h

@@ -49,3 +49,4 @@ ecm_add_test(extractortest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary KPim6::P
 ecm_add_test(documentutiltest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary)
 ecm_add_test(filetest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary KPim6::PkPass)
 ecm_add_test(priceutiltest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary)
+ecm_add_test(uicstationcodetest.cpp LINK_LIBRARIES Qt::Test)
