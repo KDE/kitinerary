@@ -614,6 +614,14 @@ function parseSncfDosipasPdf(pdf, node, triggerNode) {
     return reservations;
 }
 
+function parseSSB(ssb, node)
+{
+    let res = node.result[0];
+    res.reservedTicket.ticketedSeat.seatingType = res.reservedTicket.ticketedSeat.seatingType == 4 ? "1" : "2";
+    res.reservedTicket.name = undefined;
+    return res;
+}
+
 function parseEvent(ev)
 {
     let res = JsonLd.newTrainReservation();

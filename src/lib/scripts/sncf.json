@@ -201,6 +201,19 @@
     {
         "filter": [
             {
+                "mimeType": "internal/era-ssb",
+                "field": "issuerCode",
+                "match": "1187",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseSSB",
+        "script": "sncf.js",
+        "mimeType": "internal/era-ssb"
+    },
+    {
+        "filter": [
+            {
                 "field": "url",
                 "match": "^https://www.sncf-connect.com/bff/api/v1/trips/trips-by-criteria",
                 "mimeType": "internal/http-response",
