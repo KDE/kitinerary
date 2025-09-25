@@ -10,9 +10,8 @@ function parseEvent(event)
     if (event.summary.match(/(?:Flight|Flug)/i)) {
         res = JsonLd.newFlightReservation();
 
-        // force UTC, otherwise we lose the timezone due to JS converting to the local TZ
-        res.reservationFor.departureTime = event.dtStart.toJSON();
-        res.reservationFor.arrivalTime = event.dtEnd.toJSON();
+        res.reservationFor.departureTime = JsonLd.readQDateTime(event, 'dtStart');
+        res.reservationFor.arrivalTime = JsonLd.readQDateTime(event, 'dtEnd');
 
         var flight = event.description.match(/(?:Flight no|Flugnr.):\s*(\w{2}) (\d{1,4})\n?.*(?:by|von): (.+)\n/);
         res.reservationFor.airline.name = flight[3];
@@ -34,9 +33,8 @@ function parseEvent(event)
         var dropoff = event.description.match(/Annahmeort:\s*(.*)\n/);
         res.dropoffLocation.name = dropoff[1]; // TODO dito
 
-        // force UTC, otherwise we lose the timezone due to JS converting to the local TZ
-        res.pickupTime = event.dtStart.toJSON();
-        res.dropoffTime = event.dtEnd.toJSON();
+        res.pickupTime = JsonLd.readQDateTime(event, 'dtStart');
+        res.dropoffTime = JsonLd.readQDateTime(event, 'dtEnd');
 
         var provider = event.description.match(/Mietwagenfirma:\s*(.*)\n/);
         res.reservationFor.rentalCompany.name = provider[1];

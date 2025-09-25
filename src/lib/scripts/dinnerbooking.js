@@ -9,8 +9,8 @@ function parseEvent(event)
     var res;
     res = JsonLd.newFoodEstablishmentReservation();
     res.reservationFor.name = event.organizer.name;
-    res.startTime = event.dtStart.toJSON();
-    res.endTime = event.dtEnd.toJSON();
+    res.startTime = JsonLd.readQDateTime(event, 'dtStart');
+    res.endTime = JsonLd.readQDateTime(event, 'dtEnd');
     var addr = event.location.split(', ');
     res.reservationFor.address.streetAddress = addr[1];
     res.reservationFor.address.addressLocality = addr[2];

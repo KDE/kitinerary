@@ -6,9 +6,8 @@
 function extractEvent(ev) {
     let res = JsonLd.newFlightReservation();
 
-    // force UTC, otherwise we lose the timezone due to JS converting to the local TZ
-    res.reservationFor.departureTime = ev.dtStart.toJSON();
-    res.reservationFor.arrivalTime = ev.dtEnd.toJSON();
+    res.reservationFor.departureTime = JsonLd.readQDateTime(ev, 'dtStart');
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(ev, 'dtEnd');
 
     const flight = ev.description.match(/Flight no: (\S{2}) (\d+)/);
     res.reservationFor.airline.iataCode = flight[1];

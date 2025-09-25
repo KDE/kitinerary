@@ -53,8 +53,8 @@ function main(text) {
 function extractEvent(ev)
 {
     let res = JsonLd.newFlightReservation();
-    res.reservationFor.departureTime = ev.dtStart.toISOString();
-    res.reservationFor.arrivalTime = ev.dtEnd.toISOString();
+    res.reservationFor.departureTime = JsonLd.readQDateTime(ev, 'dtStart');
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(ev, 'dtEnd');
     const uid = ev.uid.match(/([A-Z0-9]{6})_([A-Z]{3})([A-Z]{3})/);
     res.reservationNumber = uid[1];
     res.reservationFor.departureAirport.iataCode = uid[2];
