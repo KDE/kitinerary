@@ -1,0 +1,58 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LH",
+                "name": "LUFTHANSA"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 43.63130187988281,
+                    "longitude": 1.3743799924850464
+                },
+                "iataCode": "TLS",
+                "name": "TOULOUSE FR BLAGNAC"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2017-04-07T13:00:00+02:00",
+                "timezone": "Europe/Paris"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 48.35390090942383,
+                    "longitude": 11.786100387573242
+                },
+                "iataCode": "MUC",
+                "name": "MUNICH DE MUNICH INTERNATIONAL"
+            },
+            "departureDay": "2017-04-07",
+            "departureTerminal": "2",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2017-04-07T11:10:00+02:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "2218"
+        },
+        "reservationNumber": "XYZ123",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

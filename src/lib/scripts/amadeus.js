@@ -49,9 +49,8 @@ function parseEvent(event)
 {
     var res = JsonLd.newFlightReservation();
 
-    // force UTC, otherwise we lose the timezone due to JS converting to the local TZ
-    res.reservationFor.departureTime = event.dtStart.toJSON();
-    res.reservationFor.arrivalTime = event.dtEnd.toJSON();
+    res.reservationFor.departureTime = JsonLd.readQDateTime(event, 'dtStart');
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(event, 'dtEnd');
     res.reservationNumber = event.uid.substr(0, 6);
 
     var flight = event.description.match(/Flight: ?(.*) - (\S{2}) (\S{1,4})\n/);
