@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "field": "From",
@@ -10,4 +10,17 @@
     "function": "extractBookingConfirmation",
     "mimeType": "text/html",
     "script": "airasia.js"
-}
+},
+{
+    "filter": [
+        {
+            "field": "title",
+            "match": "^PDF Itinerary$",
+            "mimeType": "application/pdf",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractItinerary",
+    "mimeType": "application/pdf",
+    "script": "airasia.js"
+}]

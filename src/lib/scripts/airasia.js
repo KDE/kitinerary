@@ -33,3 +33,27 @@ function extractBookingConfirmation(html) {
 
     return reservations;
 }
+
+function extractItinerary(pdf) {
+    const text = pdf.text;
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        const leg = text.substr(idx).match(/(\d\d:\d\d) +(\S.*)\n *(\d\d \S{3}) +(\S.*)\n +(\S.*\S) *, *([A-Z0-9]{2}) (\d{1,4})\n.*\n.*\n *(\d\d:\d\d) +(\S.*)\n *(\d\d \S{3}) +(\S.*)\n/);
+        if (!leg)
+            break;
+        idx += leg.index + leg[0].length;
+        let res = JsonLd.newFlightReservation();
+        res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + ' ' + leg[3], 'HH:mm dd MMM', 'en');
+        res.reservationFor.departureAirport.address.addressLocality = leg[2];
+        res.reservationFor.departureAirport.name = leg[4].replace(/ ,(?=\S)/, ", ");
+        res.reservationFor.airline.name = leg[5];
+        res.reservationFor.airline.iataCode = leg[6];
+        res.reservationFor.flightNumber = leg[7];
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[8] + ' ' + leg[10], 'HH:mm dd MMM', 'en');
+        res.reservationFor.arrivalAirport.address.addressLocality = leg[9];
+        res.reservationFor.arrivalAirport.name = leg[11].replace(/ ,(?=\S)/, ", ");
+        reservations.push(res);
+    }
+    return reservations;
+}
