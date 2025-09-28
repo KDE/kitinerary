@@ -128,6 +128,8 @@
         <file>entur.js</file>
         <file>eos.json</file>
         <file>eos.js</file>
+        <file>ethiad.json</file>
+        <file>ethiad.js</file>
         <file>european-sleeper.json</file>
         <file>european-sleeper.js</file>
         <file>eurostar.json</file>
