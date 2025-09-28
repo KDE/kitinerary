@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "operatingCarrierDesignator",
+            "match": "EY",
+            "mimeType": "internal/iata-bcbp",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractTicket",
+    "mimeType": "application/pdf",
+    "script": "ethiad.js"
+}
