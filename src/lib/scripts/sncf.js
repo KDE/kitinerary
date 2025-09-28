@@ -614,11 +614,25 @@ function parseSncfDosipasPdf(pdf, node, triggerNode) {
     return reservations;
 }
 
+function readSSBFreeTextAscii6(ssb, offset, length)
+{
+    s = "";
+    for (let i = 0; i < length; ++i) {
+        s += String.fromCharCode(ssb.readNumber(offset + i * 6, 6) + 32);
+    }
+    return s;
+}
+
 function parseSSB(ssb, node)
 {
     let res = node.result[0];
     res.reservedTicket.ticketedSeat.seatingType = res.reservedTicket.ticketedSeat.seatingType == 4 ? "1" : "2";
     res.reservedTicket.name = undefined;
+    if (ssb.ticketTypeCode === 2) {
+        res.reservedTicket.name = tariffs[readSSBFreeTextAscii6(ssb, 239 + 32, 4)];
+        res.totalPrice = ssb.readNumber(239 + 148, 16) / 100;
+        res.priceCurrency = "EUR";
+    }
     return res;
 }
 
