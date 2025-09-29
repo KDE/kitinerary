@@ -45,11 +45,11 @@ regExMap['da'] = {
 }
 
 regExMap['es'] = {
-    bookingRef: /Confirmación: ([0-9]*)\s+/,
+    bookingRef: /(?:Confirmación: ([0-9]*)\s+|está confirmada)/,
     hotelInformation: /(\S.+), (.+),[\n ]([^,]+),[\n ]([^,]+)\n\n\s+Teléfono (\+[0-9- ]*)\s+/,
-    hotelName: [/El (\S.*\S) te espera/],
-    arrivalDate: /Entrada (\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2}).*\)/,
-    departureDate: /Salida (\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.* ([0-9]{1,2}:[0-9]{2})\)/,
+    hotelName: [/El (\S.*\S) te espera/, /reserva en (\S.*\S) está confirmada/],
+    arrivalDate: /Entrada +(\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2}).*\)/,
+    departureDate: /Salida +(\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.* ([0-9]{1,2}:[0-9]{2})\)/,
     person: /Nombre del huésped[\n\s]+(.*?)\n/
 }
 
@@ -61,6 +61,7 @@ const timeFormats = [
     "dddd, MMMM d, yyyy hh:mm A",
     "dddd, MMMM d, yyyy h:mm A",
     "dddd, dd 'de' MMMM 'de' yyyy hh:mm",
+    "dddd, d 'de' MMMM 'de' yyyy HH:mm",
     "d. MMMM yyyy hh.mm"
 ];
 
