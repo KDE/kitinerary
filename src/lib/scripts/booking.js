@@ -7,8 +7,7 @@
 var regExMap = [];
 regExMap['en'] = {
     bookingRef: /(?:Booking number|Confirmation:) +([0-9]*)\s+/,
-    // 1: adress, 2: city, 3:postal code, 4: country, 5: phone
-    hotelInformation: / (.+?), ([^\n,]+)(?:, ([^\n,]+))?, ([^\n,]+?)(?: -|\n)\s+Phone:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/,
+    hotelInformation: /(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){2,3})(?: -|\n)\s+Phone:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/,
     hotelName: [/(?:\[checkmark\.png\] |\.\d\n)(.*?)(?: is\s+expecting you on|\n *\[)/, /\n\n\s*(?:You'll pay when you stay at )?(\S.*\S)\n\n\s*Reservation details\n/],
     arrivalDate: /Check-in *?\s+? *?([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2}(?: [AP]M)?)[^\)]*\)/,
     departureDate: /Check-out *?\s+? *?([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(.*?(?:- )?([0-9]{1,2}:[0-9]{2}(?: [AP]M)?)\)/,
@@ -17,8 +16,7 @@ regExMap['en'] = {
 
 regExMap['fr'] = {
     bookingRef: /Numéro de réservation : ([0-9]*)\s+/,
-    // 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
-    hotelInformation: /(.+), (.+), (.+), (.+) -\s+Téléphone : (\+[0-9]*)\s+/,
+    hotelInformation: /(\S[^,\n]*(?:,[^\n,]*\n?[^\n,]*){2,3}) -\s+Téléphone : (\+[0-9]*)\s+/,
     hotelName: [/L'établissement (.*) vous attend le/],
     arrivalDate: /Arrivée  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/,
     departureDate: /Départ  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \([0-9]{1,2}:[0-9]{2} - ([0-9]{1,2}:[0-9]{2})\)/,
@@ -27,17 +25,16 @@ regExMap['fr'] = {
 
 regExMap['de'] = {
     bookingRef: /(?:Buchungsnummer|Bestätigungsnummer): ([0-9]*)\s+/,
-    // 1: hotel name, 2: adress, 3: city, 4:postal code, 5: country, 6: phone
-    hotelInformation: /(?:Lage )?(.+?), ([^\n,]+)(?:, ([^\n,]+))?, ([^\n,]+?)\s?-?\s+(?:Reiseroute.*\n)?(?:Telefon:? (\+[0-9 \-]+)|Kontakt.*|E-Mail.*)\n/,
-    hotelName: [/Die Unterkunft (.*)\s+erwartet Sie/, /\n\n\s*(\S.*\S)\n\n\s*\[\S/],
-    arrivalDate: /Anreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \((?:ab )?([0-9]{1,2}:[0-9]{2}).*\)/,
-    departureDate: /Abreise ([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2})\)/,
+    hotelInformation: /(?:Lage )?(\S[^\n]*(?:,[^\n,]*?\n?[^\n,]*?){2,3})[\n\s]?-?\s+(?:Reiseroute.*\n)?\s*(?:Telefon:? (\+[0-9 \-]+)|Kontakt.*|E-Mail an.*)\n/,
+    hotelName: [/Die Unterkunft (.*)\s+erwartet Sie/, /\n\n\s*([^\s\[].*\S)\n\n\s*\[\S/],
+    arrivalDate: /Anreise +([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \((?:ab )?([0-9]{1,2}:[0-9]{2}).*\)/,
+    departureDate: /Abreise +([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2})\)/,
     person: /Name des Gastes[\n\s]+(.*?)(?:\n| Name des Gastes bearbeiten)/,
 }
 
 regExMap['da'] = {
     bookingRef: /Bekræftelsesnummer: ([0-9]*)\s+/,
-    hotelInformation: /Beliggenhed[\s\n]+(.+), (.+)(.*), (.+)[\s\n]+Telefon (\+[0-9 \-]+)\n/,
+    hotelInformation: /Beliggenhed[\s\n]+(\S[^,\n]*(?:,[^\n,]*\n?[^\n,]*){2,3})[\s\n]+Telefon (\+[0-9 \-]+)\n/,
     hotelName: [/(.*) forventer at se/],
     arrivalDate: /Indtjekning .* (\d{1,2}. \S+ \d{4}) \(.*(\d\d\.\d\d)\)/,
     departureDate: /Udtjekning .* (\d{1,2}. \S+ \d{4}) \(.*(\d\d\.\d\d)\)/,
@@ -46,11 +43,11 @@ regExMap['da'] = {
 
 regExMap['es'] = {
     bookingRef: /(?:Confirmación: ([0-9]*)\s+|está confirmada)/,
-    hotelInformation: /(\S.+), (.+),[\n ]([^,]+),[\n ]([^,]+)\n\n\s+Teléfono (\+[0-9- ]*)\s+/,
+    hotelInformation: /(?:Ubicación |Modificar tu reserva\n.*\n)?(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){2,})[\n\s]+Teléfono:? (\+[0-9- ]*)\s+/,
     hotelName: [/El (\S.*\S) te espera/, /reserva en (\S.*\S) está confirmada/],
     arrivalDate: /Entrada +(\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2}).*\)/,
     departureDate: /Salida +(\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.* ([0-9]{1,2}:[0-9]{2})\)/,
-    person: /Nombre del huésped[\n\s]+(.*?)\n/
+    person: /Nombre del huésped[\n\s]+(.*?)(?: Editar .*)?\n/
 }
 
 const timeFormats = [
@@ -87,11 +84,12 @@ function main(text, node) {
         res.reservationFor.name = hotelName[1];
 
         const hotel = text.match(regExMap[locale]['hotelInformation']);
-        res.reservationFor.address.streetAddress = hotel[1];
-        res.reservationFor.address.postalCode = hotel[4] ? hotel[3] : "";
-        res.reservationFor.address.addressLocality = hotel[2];
-        res.reservationFor.address.addressCountry = hotel[4] ? hotel[4] : hotel[3];
-        res.reservationFor.telephone = hotel[5];
+        const addr = hotel[1].split(/, */);
+        res.reservationFor.address.streetAddress = addr.slice(0, addr.length >= 4 ? addr.length - 3 : addr.length - 2).join(", ");
+        res.reservationFor.address.postalCode = addr.length >= 4 ? addr[addr.length - 2] : ""
+        res.reservationFor.address.addressLocality = addr.length >= 4 ? addr[addr.length - 3] : addr[addr.length - 2];
+        res.reservationFor.address.addressCountry = addr[addr.length - 1]
+        res.reservationFor.telephone = hotel[2];
 
         const arrivalDate = text.match(regExMap[locale]['arrivalDate']);
         res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], timeFormats, locale);
