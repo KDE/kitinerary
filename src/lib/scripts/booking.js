@@ -7,8 +7,8 @@
 var regExMap = [];
 regExMap['en'] = {
     bookingRef: /(?:Booking number|Confirmation:) +([0-9]*)\s+/,
-    hotelInformation: /(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){2,3})(?: -|\n)\s+Phone:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/,
-    hotelName: [/(?:\[checkmark\.png\] |\.\d\n)(.*?)(?: is\s+expecting you on|\n *\[)/, /\n\n\s*(?:You'll pay when you stay at )?(\S.*\S)\n\n\s*Reservation details\n/],
+    hotelInformation: /(?:Location )?(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){1,3})(?: -|\n)\s*Phone:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/,
+    hotelName: [/(?:\[checkmark\.png\] |\.\d\n)(.*?)(?: is\s+expecting you on|\n *\[)/, /\n\n\s*(?:You'll pay when you stay at )?(\S.*\S)\n\n\s*Reservation details\n/, /Please inform (.*) of your expected/],
     arrivalDate: /Check-in *?\s+? *?([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2}(?: [AP]M)?)[^\)]*\)/,
     departureDate: /Check-out *?\s+? *?([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(.*?(?:- )?([0-9]{1,2}:[0-9]{2}(?: [AP]M)?)\)/,
     person: /Guest name[\n\s]+(.*?)(?:\n| Edit guest name)/
