@@ -1,0 +1,12 @@
+{
+	"mimeType": "application/pdf",
+	"filter": [
+		{
+			"mimeType": "text/plain",
+			"match": "^PRIO\\d{16}$",
+			"scope": "Descendants"
+		}
+	],
+	"script": "prioticket.js",
+	"function": "parsePdf"
+}

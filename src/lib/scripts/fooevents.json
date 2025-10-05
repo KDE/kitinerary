@@ -1,0 +1,8 @@
+{
+    "mimeType": "application/pdf",
+    "filter": [
+        { "mimeType": "text/plain", "match": "^\\d{10,}$", "scope": "Descendants" }
+    ],
+    "script": "fooevents.js",
+    "function": "parsePdf"
+}

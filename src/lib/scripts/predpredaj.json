@@ -1,0 +1,17 @@
+{
+	"mimeType": "application/pdf",
+	"filter": [
+		{
+			"mimeType": "text/plain",
+			"match": "^[A-F0-9]{32}$",
+			"scope": "Descendants"
+		},
+		{
+			"mimeType": "text/plain",
+			"match": "^\\d{14}$",
+			"scope": "Descendants"
+		}
+	],
+	"script": "predpredaj.js",
+	"function": "parsePdf"
+}

@@ -1,0 +1,27 @@
+[
+	{
+		"mimeType": "application/vnd.apple.pkpass",
+		"filter": [
+			{
+				"field": "passTypeIdentifier",
+				"match": "pass.com.globalticket",
+				"mimeType": "application/vnd.apple.pkpass",
+				"scope": "Current"
+			}
+		],
+		"script": "globalticket.js",
+		"function": "parsePkPass"
+	},
+	{
+		"filter": [
+			{
+				"match": "^\\d{18}$",
+				"mimeType": "text/plain",
+				"scope": "Descendants"
+			}
+		],
+		"function": "extractPdf",
+		"mimeType": "application/pdf",
+		"script": "globalticket.js"
+	}
+]

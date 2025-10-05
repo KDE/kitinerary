@@ -1,0 +1,27 @@
+[
+	{
+		"mimeType": "application/vnd.apple.pkpass",
+		"filter": [
+			{
+				"field": "passTypeIdentifier",
+				"match": "pass.com.ventrata.dashboard",
+				"mimeType": "application/vnd.apple.pkpass",
+				"scope": "Current"
+			}
+		],
+		"script": "ventrata.js",
+		"function": "parsePkPass"
+	},
+	{
+		"filter": [
+			{
+				"match": "^[A-Z0-9]{8}$",
+				"mimeType": "text/plain",
+				"scope": "Descendants"
+			}
+		],
+		"function": "extractPdf",
+		"mimeType": "application/pdf",
+		"script": "ventrata.js"
+	}
+]

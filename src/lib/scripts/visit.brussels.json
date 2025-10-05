@@ -1,0 +1,12 @@
+{
+	"mimeType": "application/pdf",
+	"filter": [
+		{
+			"mimeType": "text/plain",
+			"match": "^\\d{8}-\\d{8}$",
+			"scope": "Descendants"
+		}
+	],
+	"script": "visit.brussels.js",
+	"function": "parsePdf"
+}

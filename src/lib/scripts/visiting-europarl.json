@@ -1,0 +1,12 @@
+{
+	"mimeType": "application/pdf",
+	"filter": [
+		{
+			"mimeType": "text/plain",
+			"match": "^[A-z0-9]{10}$",
+			"scope": "Descendants"
+		}
+	],
+	"script": "visiting-europarl.js",
+	"function": "parsePdf"
+}

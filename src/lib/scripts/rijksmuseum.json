@@ -1,0 +1,12 @@
+{
+	"mimeType": "application/pdf",
+	"filter": [
+		{
+			"mimeType": "text/plain",
+			"match": "^\\d{13}$",
+			"scope": "Descendants"
+		}
+	],
+	"script": "rijksmuseum.js",
+	"function": "parsePdf"
+}

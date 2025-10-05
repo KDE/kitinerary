@@ -1,0 +1,27 @@
+[
+    {
+        "mimeType": "application/pdf",
+        "filter": [
+            {
+                "mimeType": "text/plain",
+                "match": "^\\d{14}$",
+                "scope": "Descendants"
+            }
+        ],
+        "script": "ticketcounter.js",
+        "function": "parsePdf"
+    },
+    {
+        "mimeType": "application/vnd.apple.pkpass",
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.eu.ticketcounter\\d+",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "script": "ticketcounter.js",
+        "function": "parsePkPass"
+    }
+]

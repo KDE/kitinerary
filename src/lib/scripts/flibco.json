@@ -2,9 +2,22 @@
     {
         "mimeType": "application/pdf",
         "filter": [
-            { "mimeType": "text/plain", "match": "info@flibco.com", "scope": "Descendants" }
+            { "mimeType": "text/plain", "match": "^\\d{8}$", "scope": "Descendants" }
         ],
         "script": "flibco.js",
         "function": "parsePdf"
-    }
+    },
+	{
+		"mimeType": "application/vnd.apple.pkpass",
+		"filter": [
+			{
+				"field": "passTypeIdentifier",
+				"match": "pass.com.flibco.customerapp",
+				"mimeType": "application/vnd.apple.pkpass",
+				"scope": "Current"
+			}
+		],
+		"script": "flibco.js",
+		"function": "parsePkPass"
+	}
 ]

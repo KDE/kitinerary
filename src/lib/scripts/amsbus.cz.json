@@ -15,7 +15,7 @@
     {
         "filter": [
             {
-                "match": "nebo vytištěnou e-jízdenku. Musí však znát tento její odbavovací kód:  ",
+                "match": "code [A-Z0-9]{6}",
                 "mimeType": "text/plain",
                 "scope": "Descendants"
             }
