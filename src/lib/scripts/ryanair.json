@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "field": "operatingCarrierDesignator",
@@ -10,4 +10,17 @@
     "function": "parseBoardingPass",
     "mimeType": "application/pdf",
     "script": "ryanair.js"
-}
+},
+{
+    "filter": [
+        {
+            "field": "reservationFor.airline.iataCode",
+            "match": "FR",
+            "mimeType": "application/ld+json",
+            "scope": "Current"
+        }
+    ],
+    "function": "fixHtmlBooking",
+    "mimeType": "text/html",
+    "script": "ryanair.js"
+}]
