@@ -16,3 +16,18 @@ function parseBoardingPass(pdf, node, triggerNode) {
     res.reservationFor.arrivalTime = JsonLd.toDateTime(times[3], "hh:mm", "en");
     return res;
 }
+
+function fixHtmlBooking(html, node) {
+    let reservations = node.result;
+    let iataCodeMap = {};
+    // fix missing IATA codes in arrival airports on return trips
+    for (r of reservations)
+        iataCodeMap[r.reservationFor.departureAirport.name] = r.reservationFor.departureAirport.iataCode;
+    for (r of reservations) {
+        if (r.reservationFor.arrivalAirport.iataCode === "") {
+            r.reservationFor.arrivalAirport.iataCode = iataCodeMap[r.reservationFor.arrivalAirport.name];
+        }
+    }
+
+    return reservations;
+}
