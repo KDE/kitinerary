@@ -89,7 +89,7 @@
         <file>coloseumticket.js</file>
         <file>cooltix.json</file>
         <file>cooltix.js</file>
-		<file>cvent.json</file>
+        <file>cvent.json</file>
         <file>cvent.js</file>
         <file>czechrailways.json</file>
         <file>czechrailways.js</file>
@@ -141,7 +141,7 @@
         <file>eventbrite.js</file>
         <file>eventim.json</file>
         <file>eventim.js</file>
-		<file>eventlook.cz.json</file>
+        <file>eventlook.cz.json</file>
         <file>eventlook.cz.js</file>
         <file>eventyay.json</file>
         <file>eventyay.js</file>
@@ -155,6 +155,8 @@
         <file>finnair.js</file>
         <file>finnlines.json</file>
         <file>finnlines.js</file>
+        <file>fooevents.json</file>
+        <file>fooevents.js</file>
         <file>fjordline.json</file>
         <file>fjordline.js</file>
         <file>flibco.json</file>
@@ -170,6 +172,8 @@
         <file>gepard-express.js</file>
         <file>ghotel.json</file>
         <file>ghotel.js</file>
+        <file>globalticket.json</file>
+        <file>globalticket.js</file>
         <file>globtour.json</file>
         <file>globtour.js</file>
         <file>gnv.it.json</file>
@@ -208,6 +212,8 @@
         <file>italo.js</file>
         <file>kinoheld.json</file>
         <file>kinoheld.js</file>
+        <file>kinderdijk.json</file>
+        <file>kinderdijk.js</file>
         <file>kintetsu.json</file>
         <file>kintetsu.js</file>
         <file>klm.json</file>
@@ -269,7 +275,7 @@
         <file>ouigo-es.js</file>
         <file>pasazieru-vilciens.json</file>
         <file>pasazieru-vilciens.js</file>
-		<file>pathe-fr.json</file>
+        <file>pathe-fr.json</file>
         <file>pathe-fr.js</file>
         <file>peach-aviation.json</file>
         <file>peach-aviation.js</file>
@@ -279,15 +285,19 @@
         <file>pkp-app.js</file>
         <file>planway.json</file>
         <file>planway.js</file>
+        <file>predpredaj.json</file>
+        <file>predpredaj.js</file>
         <file>premier-inn.json</file>
         <file>premier-inn.js</file>
         <file>premiumkino.json</file>
         <file>premiumkino.js</file>
         <file>pretix.json</file>
         <file>pretix.js</file>
+        <file>prioticket.json</file>
+        <file>prioticket.js</file>
         <file>qatar-airways.json</file>
         <file>qatar-airways.js</file>
-		<file>reenio.json</file>
+        <file>reenio.json</file>
         <file>reenio.js</file>
         <file>regiojet.json</file>
         <file>regiojet.js</file>
@@ -299,6 +309,8 @@
         <file>renfe.js</file>
         <file>reservix.json</file>
         <file>reservix.js</file>
+        <file>rijksmuseum.js</file>
+        <file>rijksmuseum.json</file>
         <file>ryanair.json</file>
         <file>ryanair.js</file>
         <file>salzbergwerk.de.json</file>
@@ -347,6 +359,8 @@
         <file>taiwan-high-speed-rail.js</file>
         <file>tcdd.json</file>
         <file>tcdd.js</file>
+        <file>ticketcounter.json</file>
+        <file>ticketcounter.js</file>
         <file>ticketio.json</file>
         <file>ticketio.js</file>
         <file>ticketmaster.json</file>
@@ -373,12 +387,18 @@
         <file>united.js</file>
         <file>universe.json</file>
         <file>universe.js</file>
+        <file>ventrata.json</file>
+        <file>ventrata.js</file>
         <file>viarail.json</file>
         <file>viarail.js</file>
         <file>vietjetair.json</file>
         <file>vietjetair.js</file>
         <file>vistara.json</file>
         <file>vistara.js</file>
+        <file>visit.brussels.json</file>
+        <file>visit.brussels.js</file>
+        <file>visiting-europarl.json</file>
+        <file>visiting-europarl.js</file>
         <file>vitolus.json</file>
         <file>vitolus.js</file>
         <file>vr.fi.json</file>
