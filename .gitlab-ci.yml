@@ -17,6 +17,7 @@ include:
 static-extractor:
   stage: build
   image: centos:centos7
+  timeout: 2h
   tags:
     - Linux
   when: manual
