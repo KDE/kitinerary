@@ -10,10 +10,10 @@ function parsePkPass(pass, node) {
     res.totalPrice = Number(_price[0])
     res.priceCurrency = _price[1]
 
-	res.reservationFor.location = Object.assign(
-		JsonLd.newObject("Place"), 
-		{ name: pass.field["hall"]?.value ?? pass.field["location"]?.value ?? pass.organizationName }
-	);
+    res.reservationFor.location = Object.assign(
+        JsonLd.newObject("Place"), 
+        { name: pass.field["hall"]?.value ?? pass.field["location"]?.value ?? pass.organizationName }
+    );
 
     res.reservationFor.name = pass.field["eventname"].value
     res.reservedTicket.name = pass.field["section"].value
@@ -57,33 +57,33 @@ function parsePdf(pdf, node, triggerNode) {
 }
 
 function parseSNDQRCode(qrCode) {
-	// found example: "160c2706f65982ce#00#892149743623#LA FILLE MAL GARDÉE/ ZLE STRÁŽENÉ DIEVČA#202506081800#7#22##1#BALKÓN\u0000"
-	// Probably the meaning of the fields:
-	// 0: checksum probably
-	// 1: unknown
-	// 2: reservation number
-	// 3: event name
-	// 4: date and time
-	// 5: seat row
-	// 6: seat number
-	// 7: unknown
-	// 8: unknown
-	// 9: seat section
-	const parts = qrCode.replace(/\\u0000/g, '').split("#")
-	let res = JsonLd.newEventReservation()
+    // found example: "160c2706f65982ce#00#892149743623#LA FILLE MAL GARDÉE/ ZLE STRÁŽENÉ DIEVČA#202506081800#7#22##1#BALKÓN\u0000"
+    // Probably the meaning of the fields:
+    // 0: checksum probably
+    // 1: unknown
+    // 2: reservation number
+    // 3: event name
+    // 4: date and time
+    // 5: seat row
+    // 6: seat number
+    // 7: unknown
+    // 8: unknown
+    // 9: seat section
+    const parts = qrCode.replace(/\\u0000/g, '').split("#")
+    let res = JsonLd.newEventReservation()
 
-	res.reservationNumber = parts[2]
-	res.reservationFor.name = parts[3]
-	res.reservationFor.startDate = JsonLd.toDateTime(parts[4], "yyyyMMddHHmm", "sk")
-	res.reservedTicket.seatRow = parts[5]
-	res.reservedTicket.seatNumber = parts[6]
-	res.reservedTicket.ticketedSeat = {
-		'@type': 'Seat',
-		seatNumber: parts[6],
-		seatRow: parts[5],
-		seatSection: parts[9]
-	}
-	res.reservedTicket.ticketToken = 'qrCode:' + qrCode
+    res.reservationNumber = parts[2]
+    res.reservationFor.name = parts[3]
+    res.reservationFor.startDate = JsonLd.toDateTime(parts[4], "yyyyMMddHHmm", "sk")
+    res.reservedTicket.seatRow = parts[5]
+    res.reservedTicket.seatNumber = parts[6]
+    res.reservedTicket.ticketedSeat = {
+        '@type': 'Seat',
+        seatNumber: parts[6],
+        seatRow: parts[5],
+        seatSection: parts[9]
+    }
+    res.reservedTicket.ticketToken = 'qrCode:' + qrCode
 
-	return res
+    return res
 }

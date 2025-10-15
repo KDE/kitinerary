@@ -1,12 +1,12 @@
 {
-	"filter": [
-		{
-			"match": "^\\d{14}$",
-			"mimeType": "text/plain",
-			"scope": "Descendants"
-		}
-	],
-	"function": "parsePdfConfirmation",
-	"mimeType": "application/pdf",
-	"script": "gopass.js"
+    "filter": [
+        {
+            "match": "^\\d{14}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "parsePdfConfirmation",
+    "mimeType": "application/pdf",
+    "script": "gopass.js"
 }

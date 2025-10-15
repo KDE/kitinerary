@@ -7,17 +7,17 @@
         "script": "flibco.js",
         "function": "parsePdf"
     },
-	{
-		"mimeType": "application/vnd.apple.pkpass",
-		"filter": [
-			{
-				"field": "passTypeIdentifier",
-				"match": "pass.com.flibco.customerapp",
-				"mimeType": "application/vnd.apple.pkpass",
-				"scope": "Current"
-			}
-		],
-		"script": "flibco.js",
-		"function": "parsePkPass"
-	}
+    {
+        "mimeType": "application/vnd.apple.pkpass",
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.com.flibco.customerapp",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "script": "flibco.js",
+        "function": "parsePkPass"
+    }
 ]

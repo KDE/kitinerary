@@ -11,7 +11,7 @@ function parsePdf(pdf, node, triggerNode) {
 
     let res = JsonLd.newBusReservation();
     res.reservationNumber = text.match(/Ticket number: ([0-9]*)/)[1];
-	res.reservedTicket.ticketToken = 'qrCode:' + triggerNode.content;
+    res.reservedTicket.ticketToken = 'qrCode:' + triggerNode.content;
 
     let stations = text.match(/^From *To\n(.*?) {5,}(.*?)\n/m);
     res.reservationFor.departureBusStop.name = stations[1];
@@ -31,10 +31,10 @@ function parsePdf(pdf, node, triggerNode) {
     res.reservationFor.departureBusStop.geo = JsonLd.toGeoCoordinates(links[1].url);
     res.reservationFor.arrivalBusStop.geo = JsonLd.toGeoCoordinates(links[2].url);
 
-	let servicePackage = page.textInRect(0.27, 0.8, 1, 1).match(/Service Package\s+(.*)\s+/m)[1];
-	res.reservedTicket.name = servicePackage;
+    let servicePackage = page.textInRect(0.27, 0.8, 1, 1).match(/Service Package\s+(.*)\s+/m)[1];
+    res.reservedTicket.name = servicePackage;
 
-	ExtractorEngine.extractPrice(text, res);
+    ExtractorEngine.extractPrice(text, res);
 
     return res;
 }
@@ -42,15 +42,15 @@ function parsePdf(pdf, node, triggerNode) {
 function parsePkPass(pass, node) {
     const res = Object.assign(JsonLd.newBusReservation(), node.result[0]);
 
-	res.reservationNumber = pass.field['boarding_code'].value;
-	res.reservationFor.departureBusStop = { name: pass.field['from'].value };
+    res.reservationNumber = pass.field['boarding_code'].value;
+    res.reservationFor.departureBusStop = { name: pass.field['from'].value };
     res.reservationFor.arrivalBusStop = { name: pass.field['to'].value };
 
-	// From the PDF ticket itself:
+    // From the PDF ticket itself:
     // Many departures every day. Your ticket is valid for the selected day until 04:00 the next day.
-	res.reservationFor.departureTime = pass.field['date'].value
+    res.reservationFor.departureTime = pass.field['date'].value
 
-	res.underName.name = pass.field['passenger'].value;
+    res.underName.name = pass.field['passenger'].value;
 
-	return res
+    return res
 }

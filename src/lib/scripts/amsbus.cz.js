@@ -23,7 +23,7 @@ function amsEshopCode(content, node) {
     res.reservedTicket.ticketedSeat.seatNumber = seat
     // res.reservedTicket.ticketToken = ticketCode
 
-	ExtractorEngine.extractPrice(content.text, res);
+    ExtractorEngine.extractPrice(content.text, res);
 
     return res
 }
@@ -51,7 +51,7 @@ function idosTicket(content, node, barcode) {
     res.reservedTicket.ticketedSeat.seatNumber = seat
     res.reservedTicket.ticketToken = 'qrCode:' + node.childNodes[0].childNodes[0].content;
 
-	ExtractorEngine.extractPrice(content.text, res);
+    ExtractorEngine.extractPrice(content.text, res);
 
     return res
 

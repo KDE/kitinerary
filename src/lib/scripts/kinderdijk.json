@@ -1,17 +1,17 @@
 {
-	"mimeType": "application/pdf",
-	"filter": [
-		{
-			"mimeType": "text/plain",
-			"match": "^\\d{18}$",
-			"scope": "Descendants"
-		},
-		{
-			"mimeType": "text/plain",
-			"match": "^pa_\\S{10}$",
-			"scope": "Descendants"
-		}
-	],
-	"script": "kinderdijk.js",
-	"function": "parsePdf"
+    "mimeType": "application/pdf",
+    "filter": [
+        {
+            "mimeType": "text/plain",
+            "match": "^\\d{18}$",
+            "scope": "Descendants"
+        },
+        {
+            "mimeType": "text/plain",
+            "match": "^pa_\\S{10}$",
+            "scope": "Descendants"
+        }
+    ],
+    "script": "kinderdijk.js",
+    "function": "parsePdf"
 }

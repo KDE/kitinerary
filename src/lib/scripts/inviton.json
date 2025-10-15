@@ -1,33 +1,33 @@
 [
-	{
-		"mimeType": "application/pdf",
-		"filter": [
-			{
-				"mimeType": "text/plain",
-				"match": "^[0-9A-Z]{18}$",
-				"scope": "Descendants"
-			}
-		],
-		"script": "inviton.js",
-		"function": "parsePdf"
-	},
-	{
-		"mimeType": "application/vnd.apple.pkpass",
-		"filter": [
-			{
-				"field": "passTypeIdentifier",
-				"match": "pass.com.inviton.applewallet",
-				"mimeType": "application/vnd.apple.pkpass",
-				"scope": "Current"
-			},
-			{
-				"field": "passTypeIdentifier",
-				"match": "pass.inviton.ticket",
-				"mimeType": "application/vnd.apple.pkpass",
-				"scope": "Current"
-			}
-		],
-		"script": "inviton.js",
-		"function": "parsePkPass"
-	}
+    {
+        "mimeType": "application/pdf",
+        "filter": [
+            {
+                "mimeType": "text/plain",
+                "match": "^[0-9A-Z]{18}$",
+                "scope": "Descendants"
+            }
+        ],
+        "script": "inviton.js",
+        "function": "parsePdf"
+    },
+    {
+        "mimeType": "application/vnd.apple.pkpass",
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.com.inviton.applewallet",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            },
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.inviton.ticket",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "script": "inviton.js",
+        "function": "parsePkPass"
+    }
 ]

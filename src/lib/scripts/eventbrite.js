@@ -98,43 +98,43 @@ function parsePdf(pdf, node, triggerNode) {
 }
 
 function parsePkPass(pass, node) {
-	let res = node.result[0];
-	console.log(JSON.stringify(pass, null, 4));
-	console.log(JSON.stringify(res, null, 4))
+    let res = node.result[0];
+    console.log(JSON.stringify(pass, null, 4));
+    console.log(JSON.stringify(res, null, 4))
 
-	res.reservationFor.name = pass.field["event-name"].value
-	res.reservationNumber = pass.field["order-id"]?.value.replace("#", "")
-	res.provider = Object.assign(
-		JsonLd.newObject('Organization'), 
-		{
-			name: pass.field["organizer-name"].value,
-		}
-	)
-	res.reservationFor.startDate = pass.field["start-time"].value
-	res.reservedTicket.underName = Object.assign(
-		JsonLd.newObject('Person'),
-		{
-			name: pass.field["attendee-name"]?.value ?? pass.field["ticket-buyer-name"]?.value,
-		}
-	)
-	res.reservedTicket.name = pass.field["ticket-type"].value
+    res.reservationFor.name = pass.field["event-name"].value
+    res.reservationNumber = pass.field["order-id"]?.value.replace("#", "")
+    res.provider = Object.assign(
+        JsonLd.newObject('Organization'), 
+        {
+            name: pass.field["organizer-name"].value,
+        }
+    )
+    res.reservationFor.startDate = pass.field["start-time"].value
+    res.reservedTicket.underName = Object.assign(
+        JsonLd.newObject('Person'),
+        {
+            name: pass.field["attendee-name"]?.value ?? pass.field["ticket-buyer-name"]?.value,
+        }
+    )
+    res.reservedTicket.name = pass.field["ticket-type"].value
 
-	// Example: "The Spot, Sky Park Bratislava - Bottova 2/A - 811 09 Bratislava - Slovakia"
-	let location = pass.field["venue-name"].value.split(" - ")
-	res.reservationFor.location = Object.assign(
-		JsonLd.newObject('Place'),
-		{
-			name: location.length >= 4 ? location[0] : undefined,
-			address: Object.assign(
-				JsonLd.newObject('PostalAddress'),
-				{
-					streetAddress: location.length >= 4 ? location[1] : location[0],
-					addressLocality: location.length >= 4 ? location[2] : location[1],
-					addressCountry: location.length >= 4 ? location[3] : location[2],
-				}
-			)
-		}
-	)
+    // Example: "The Spot, Sky Park Bratislava - Bottova 2/A - 811 09 Bratislava - Slovakia"
+    let location = pass.field["venue-name"].value.split(" - ")
+    res.reservationFor.location = Object.assign(
+        JsonLd.newObject('Place'),
+        {
+            name: location.length >= 4 ? location[0] : undefined,
+            address: Object.assign(
+                JsonLd.newObject('PostalAddress'),
+                {
+                    streetAddress: location.length >= 4 ? location[1] : location[0],
+                    addressLocality: location.length >= 4 ? location[2] : location[1],
+                    addressCountry: location.length >= 4 ? location[3] : location[2],
+                }
+            )
+        }
+    )
 
-	return res
+    return res
 }

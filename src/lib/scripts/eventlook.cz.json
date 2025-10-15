@@ -1,27 +1,27 @@
 [
-	{
-		"filter": [
-			{
-				"match": "Zákaznická podpora Eventlook.cz",
-				"mimeType": "text/plain",
-				"scope": "Descendants"
-			}
-		],
-		"function": "extractPDF",
-		"mimeType": "application/pdf",
-		"script": "eventlook.cz.js"
-	},
-	{
-		"filter": [
-			{
-				"field": "passTypeIdentifier",
-				"match": "pass.cz.eventlook",
-				"mimeType": "application/vnd.apple.pkpass",
-				"scope": "Current"
-			}
-		],
-		"function": "extractPass",
-		"mimeType": "application/vnd.apple.pkpass",
-		"script": "eventlook.cz.js"
-	}
+    {
+        "filter": [
+            {
+                "match": "Zákaznická podpora Eventlook.cz",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "extractPDF",
+        "mimeType": "application/pdf",
+        "script": "eventlook.cz.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.cz.eventlook",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "extractPass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "eventlook.cz.js"
+    }
 ]

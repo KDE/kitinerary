@@ -6,7 +6,7 @@
             "mimeType": "application/vnd.apple.pkpass",
             "scope": "Current"
         },
-		{
+        {
             "field": "passTypeIdentifier",
             "match": "pass.ticket.eventim.prod",
             "mimeType": "application/vnd.apple.pkpass",

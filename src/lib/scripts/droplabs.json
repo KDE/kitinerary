@@ -1,27 +1,27 @@
 [
-	{
-		"filter": [
-			{
-				"field": "passTypeIdentifier",
-				"match": "pass.com.droplabs.tickets",
-				"mimeType": "application/vnd.apple.pkpass",
-				"scope": "Current"
-			}
-		],
-		"function": "parsePass",
-		"mimeType": "application/vnd.apple.pkpass",
-		"script": "droplabs.js"
-	},
-	{
-		"filter": [
-			{
-				"match": "DROP/TID/",
-				"mimeType": "text/plain",
-				"scope": "Descendants"
-			}
-		],
-		"function": "parsePDF",
-		"mimeType": "application/pdf",
-		"script": "droplabs.js"
-	}
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.com.droplabs.tickets",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "parsePass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "droplabs.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "DROP/TID/",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parsePDF",
+        "mimeType": "application/pdf",
+        "script": "droplabs.js"
+    }
 ]

@@ -39,7 +39,7 @@ function parsePkPass(pass, node) {
         res.reservedTicket.ticketedSeat.seatNumber = pass.field['KEY_BACK_SEATLINE'].value;
     }
 
-	res.reservedTicket.name = pass.field["KEY_SECONDARY_TICKETTYPENAME"]?.value;
+    res.reservedTicket.name = pass.field["KEY_SECONDARY_TICKETTYPENAME"]?.value;
     return res;
 }
 
