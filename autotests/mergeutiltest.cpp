@@ -164,6 +164,15 @@ private Q_SLOTS:
             {_("Kai Uwe Broulik"), _("Kai Uwe"), _("Broulik")},
             {_("Kai Broulik"), _("Kai"), _("Broulik")},
         };
+
+        QTest::newRow("swapped-order") << QList<QStringList> {
+            {u"Katie Dragon"_s, {}, {}},
+            {u"DRAGON Katie"_s, {}, {}}
+        };
+        QTest::newRow("swapped-order-2") << QList<QStringList> {
+            {u"Katie The Dragon"_s, {}, {}},
+            {u"DRAGON THE Katie"_s, {}, {}}
+        };
     }
 
     void testIsSamePerson()
