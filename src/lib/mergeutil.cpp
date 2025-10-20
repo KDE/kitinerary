@@ -700,8 +700,27 @@ bool MergeUtil::isSamePerson(const Person& lhs, const Person& rhs)
     const auto rhsGivenNameT = StringUtil::transliterate(rhs.givenName());
     const auto rhsFamilyNameT = StringUtil::transliterate(rhs.familyName());
 
-    return isNameEqualish(lhsNameT, rhsNameT) ||
-        (isNameEqualish(lhsGivenNameT, rhsGivenNameT) && isNameEqualish(lhsFamilyNameT, rhsFamilyNameT));
+    if (isNameEqualish(lhsNameT, rhsNameT) || (isNameEqualish(lhsGivenNameT, rhsGivenNameT) && isNameEqualish(lhsFamilyNameT, rhsFamilyNameT))) {
+            return true;
+    }
+
+    // swapped order of first/last name but no individual fields given
+    if (lhs.givenName().isEmpty() && lhs.familyName().isEmpty() && !lhs.name().isEmpty()
+     && rhs.givenName().isEmpty() && rhs.familyName().isEmpty() && !rhs.name().isEmpty()) {
+        auto lhsSplit = lhs.name().split(' '_L1);
+        auto rhsSplit = rhs.name().split(' '_L1);
+        for (auto &s : lhsSplit) {
+            s = s.toCaseFolded();
+        }
+        for (auto &s :rhsSplit) {
+            s = s.toCaseFolded();
+        }
+        std::ranges::sort(lhsSplit);
+        std::ranges::sort(rhsSplit);
+        return lhsSplit == rhsSplit;
+    }
+
+    return false;
 }
 
 static bool isSameEvent(const Event &lhs, const Event &rhs)
