@@ -63,6 +63,9 @@ function parsePdf(pdf, node, barcode) {
             lang.dateFormats,
             ["sk", "en"]
         )
+        if (res.reservationFor.startDate.toISOString() === res.reservationFor.endDate.toISOString()) {
+            return;
+        }
 
         res.underName.name = page.text.match(lang["Ticket Holder"])?.[1]
         res.reservationFor.location.name = page.text.match(lang["Venue name"])?.[1]
@@ -70,7 +73,7 @@ function parsePdf(pdf, node, barcode) {
 
         // Sometimes the price appears
         ExtractorEngine.extractPrice(page.text, res);
+        return res
     }
 
-    return res
 }
