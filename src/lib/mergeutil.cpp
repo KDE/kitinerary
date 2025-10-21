@@ -161,6 +161,15 @@ bool isSameSeat(const Seat &lhsSeat, const Seat &rhsSeat)
         const QRegularExpression rx(uR"([[:space:][:punct:]])"_s);
         auto lhsSet = lhsSeat.seatNumber().toCaseFolded().split(rx, Qt::SkipEmptyParts);
         auto rhsSet = rhsSeat.seatNumber().toCaseFolded().split(rx, Qt::SkipEmptyParts);
+
+        // remove full words, which are qualifiers like "window" or "aisle", which are meaningless for this
+        lhsSet.erase(std::remove_if(lhsSet.begin(), lhsSet.end(), [](const auto &s) {
+            return std::ranges::all_of(s, [](QChar c) { return c.isLetter(); });
+        }), lhsSet.end());
+        rhsSet.erase(std::remove_if(rhsSet.begin(), rhsSet.end(), [](const auto &s) {
+            return std::ranges::all_of(s, [](QChar c) { return c.isLetter(); });
+        }), rhsSet.end());
+
         std::ranges::sort(lhsSet);
         std::ranges::sort(rhsSet);
         return lhsSet == rhsSet;

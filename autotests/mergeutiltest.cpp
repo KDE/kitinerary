@@ -315,6 +315,7 @@ private Q_SLOTS:
         QTest::newRow("seat-set") << u"13"_s << u"41 42 43 44"_s << u"13"_s << u"41, 42, 43, 44"_s << true;
         QTest::newRow("seat-set-conflict") << u"13"_s << u"41 42 43 44"_s << u"13"_s << u"41 42 43 45"_s << false;
         QTest::newRow("seat-set-unordered") << u"13"_s << u"41 42 43 44"_s << u"13"_s << u"41, 42, 44, 43"_s << true;
+        QTest::newRow("seat-qualifiers") << u"7"_s << u"10D"_s << u"7"_s << u"FENSTER 10D"_s << true;
     }
 
     void testIsSameSeat()
