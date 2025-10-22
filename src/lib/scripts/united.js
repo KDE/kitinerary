@@ -19,23 +19,25 @@ function collectChildren(element) {
 
 function parseAirport(airport, name) {
     airport.name = name;
+    // Some airports don't parse correctly (e.g. LAS) so we should provide the IATA code if available.
+    // Example: "Chicago, IL, US (ORD)" should turn into "ORD"
+    const iata = name.match(/.*\((.*)\)/);
+    if (iata) {
+        airport.iataCode = iata[1];
+    }
     return airport;
 }
 
 function main(html) {
-    var reservations = new Array();
+    var baseReservations = new Array();
 
     var confirmationNumberElement = html.eval("//tr[td[text()='Confirmation Number:']]/following-sibling::tr[1]")[0]
     if (!confirmationNumberElement)
         return {};
 
     // Each flight is in it's own table
-    var rows = html.eval("//tr/td[not(contains(., 'MileagePlus'))]/table[tr[td[contains(., 'Flight')]]]")
+    var rows = html.eval("//tr/td[not(contains(., 'MileagePlus')) and not(contains(., 'Purchase Summary'))]/table[tr[td[contains(., 'Flight')]]]")
     for (var i in rows) {
-        // Deficiency in the XPath, the first table is not relevant
-        if (i == 0)
-            continue;
-
         var res = JsonLd.newFlightReservation();
         res.reservationNumber = confirmationNumberElement.recursiveContent;
 
@@ -46,6 +48,7 @@ function main(html) {
             var arrivalDate;
 
             const children = collectChildren(tableRow);
+
             if (j == 0) {
                 // Flight index, flight number and class
                 const flightNumber = children[0].content;
@@ -82,41 +85,71 @@ function main(html) {
             tableRow = tableRow.nextSibling;
         }
 
-        reservations.push(res);
+        baseReservations.push(res);
     }
+
+    // We need to duplicate the baseReservations as needed for each passenger.
+    var finalReservations = new Array();
 
     // Parse the seats, they are in a completely separate thing in the end
+    // The first element is the header: "Traveler Details" and then it lists each seat until we hit another name.
     var travelerInformation = html.eval("//tr/td/table[tr[td[contains(., 'Traveler Details')]]]")[1]
     var travelerRow = travelerInformation.firstChild;
-    var i = 0;
     var j = 0;
+    var newPassengerReservations;
     while (!travelerRow.isNull) {
-        if (i == 1) {
-            // Traveler name, the name is usually garbage but it's useful to keep anyway
-            // It follows the format FAMILY/GIVEN and all in uppercase, so just deal with that
-            const name = travelerRow.recursiveContent.split("/");
-            if (name.length == 2) {
-                const familyName = name[0];
-                const givenName = name[1];
+        const travelerRowContent = travelerRow.recursiveContent;
 
-                for (var z in reservations) {
-                    reservations[z].underName.familyName = familyName;
-                    reservations[z].underName.givenName = givenName;
+        // Names are the only thing that uses slashes here, so its a good indicator.
+        if (!travelerRowContent.includes("Traveler Details")) {
+            if (travelerRowContent.includes("/")) {
+                // Traveler name, the name is usually garbage but it's useful to keep anyway
+                // It follows the format FAMILY/GIVEN and all in uppercase, so just deal with that
+                const name = travelerRow.recursiveContent.split("/");
+                if (name.length == 2) {
+                    const familyName = name[0];
+                    const givenName = name[1];
+
+                    // Commit the previous passenger, if any.
+                    if (newPassengerReservations) {
+                        finalReservations = finalReservations.concat(newPassengerReservations);
+                        j = 0;
+                    }
+
+                    newPassengerReservations = JsonLd.clone(baseReservations);
+                    for (var z in newPassengerReservations) {
+                        newPassengerReservations[z].underName.familyName = familyName;
+                        newPassengerReservations[z].underName.givenName = givenName;
+                    }
+                }
+            } else {
+                // The remaining lines are always seat assignments.
+                // The first one usually contains the eTicket number.
+                // Example: "JFK-IAD 29C" or "eTicket number: 0123456789012 Seats:  AAA-BBB 25E"
+                // But a bad example is "Economy Seat Assignment (0123456789012) AAA-BBB" which we need to ignore
+                if (!travelerRowContent.includes("Seat Assignment")) {
+                    if (travelerRowContent.includes("eTicket number")) {
+                        const seats = travelerRowContent.match(/eTicket number: (?:\d*) Seats:  ([A-Z]{3})-([A-Z]{3})\s([0-9]{2}[A-Z])/);
+                        newPassengerReservations[j].airplaneSeat = seats[3];
+                        j++;
+                    } else {
+                        const seats = travelerRowContent.match(/([A-Z]{3})-([A-Z]{3})\s([0-9]{2}[A-Z])/);
+                        if (seats) {
+                            newPassengerReservations[j].airplaneSeat = seats[3];
+                            j++;
+                        }
+                    }
                 }
             }
-        } else if (i > 1) {
-            // Possibly contains seating information
-            // Example: JFK-IAD 29C
-            const seats = travelerRow.recursiveContent.match(/([A-Z]{3})-([A-Z]{3})\s([0-9]{2}[A-Z])/);
-            if (seats) {
-                // TODO: This is almost certainly always in order, but we should find the specific flight connection from the two given to us via the regex.
-                reservations[j].airplaneSeat = seats[3];
-                j++;
-            }
         }
+
         travelerRow = travelerRow.nextSibling;
-        i++;
     }
 
-    return reservations;
+    // Commit the last passenger, if any.
+    if (newPassengerReservations) {
+        finalReservations = finalReservations.concat(newPassengerReservations);
+    }
+
+    return finalReservations;
 }
