@@ -1,8 +1,19 @@
 {
-    "mimeType": "text/html",
     "filter": [
-        { "field": "From", "match": "@nh-hotels.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
+        {
+            "field": "From",
+            "match": "@nh-hotels.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        },
+        {
+            "field": "From",
+            "match": "@minor-hotels.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
     ],
-    "script": "nh-hotels.js",
-    "function": "parseHtml"
+    "function": "parseHtml",
+    "mimeType": "text/html",
+    "script": "nh-hotels.js"
 }
