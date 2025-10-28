@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "carrierId",
+            "match": "3153",
+            "mimeType": "internal/uic9183",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractBarcode",
+    "mimeType": "internal/uic9183",
+    "script": "wiener-linien.js"
+}
