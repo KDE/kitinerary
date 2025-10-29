@@ -149,7 +149,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                     trip.setDepartureDay(rct2.firstDayOfValidity());
                 }
 
-                if (rct2.outboundDepartureTime() != rct2.outboundArrivalTime()) {
+                if (rct2.outboundDepartureTime() != rct2.outboundArrivalTime() && (rct2.outboundArrivalTime().isValid() || rct2.outboundDepartureTime().time() != QTime(0, 0))) {
                     trip.setDepartureTime(rct2.outboundDepartureTime());
                     trip.setArrivalTime(rct2.outboundArrivalTime());
                 }
@@ -165,7 +165,7 @@ void Uic9183DocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_u
                         returnTrip.setDepartureDay(rct2.firstDayOfValidity());
                     }
 
-                    if (rct2.returnDepartureTime() != rct2.returnArrivalTime()) {
+                    if (rct2.returnDepartureTime() != rct2.returnArrivalTime() && (rct2.returnArrivalTime().isValid() || rct2.returnDepartureTime().time() != QTime(0, 0))) {
                         returnTrip.setDepartureTime(rct2.returnDepartureTime());
                         returnTrip.setArrivalTime(rct2.returnArrivalTime());
                     }
