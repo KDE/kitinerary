@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^A:\\d{9}\\*B:\\d{9}\\*",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdfTicket",
+    "mimeType": "application/pdf",
+    "script": "comboios-de-portugal.js"
+}
