@@ -227,7 +227,11 @@ QDateTime Rct2Ticket::outboundDepartureTime() const
 
 QDateTime Rct2Ticket::outboundArrivalTime() const
 {
-    auto dt = d->parseTime(d->layout.text(6, 52, 5, 1).trimmed(), d->layout.text(6, 58, 5, 1).trimmed());
+    const auto timeStr = d->layout.text(6, 58, 5, 1).trimmed();
+    if (timeStr.startsWith("24"_L1)) { // dummy placeholder indicating end of validity rather than arrival
+        return {};
+    }
+    auto dt = d->parseTime(d->layout.text(6, 52, 5, 1).trimmed(), timeStr);
     if (dt.isValid() && dt < outboundDepartureTime()) {
         dt = dt.addYears(1);
     }
@@ -274,7 +278,11 @@ QDateTime Rct2Ticket::returnDepartureTime() const
 
 QDateTime Rct2Ticket::returnArrivalTime() const
 {
-    auto dt = d->parseTime(d->layout.text(7, 52, 5, 1).trimmed(), d->layout.text(7, 58, 5, 1).trimmed());
+    const auto timeStr = d->layout.text(7, 58, 5, 1).trimmed();
+    if (timeStr.startsWith("24"_L1)) { // dummy placeholder indicating end of validity rather than arrival
+        return {};
+    }
+    auto dt = d->parseTime(d->layout.text(7, 52, 5, 1).trimmed(), timeStr);
     if (dt.isValid() && dt < returnDepartureTime()) {
         dt = dt.addYears(1);
     }
