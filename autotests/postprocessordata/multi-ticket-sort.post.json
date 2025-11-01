@@ -6,7 +6,7 @@
             "@type": "TrainTrip",
             "arrivalStation": {
                 "@type": "TrainStation",
-                "name": "MUENCHEN"
+                "name": "MUENCHEN HBF"
             },
             "arrivalTime": "2019-11-09T16:25:00",
             "departureDay": "2019-11-09",
@@ -15,7 +15,7 @@
                 "name": "VERONA P. N."
             },
             "departureTime": "2019-11-09T11:02:00",
-            "trainNumber": "119"
+            "trainNumber": "EC 119"
         },
         "reservationNumber": "YYY008",
         "reservationStatus": "http://schema.org/ReservationConfirmed",
@@ -41,7 +41,7 @@
             "departureDay": "2019-11-09",
             "departureStation": {
                 "@type": "TrainStation",
-                "name": "VERONA PN"
+                "name": "VERONA P. N."
             },
             "departureTime": "2019-11-09T11:02:00",
             "trainNumber": "EC 119"

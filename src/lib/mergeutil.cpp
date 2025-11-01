@@ -17,10 +17,10 @@
 #include <KItinerary/Event>
 #include <KItinerary/Flight>
 #include <KItinerary/JsonLdDocument>
-#include <KItinerary/RentalCar>
 #include <KItinerary/Organization>
 #include <KItinerary/Place>
 #include <KItinerary/Person>
+#include <KItinerary/RentalCar>
 #include <KItinerary/Reservation>
 #include <KItinerary/Taxi>
 #include <KItinerary/Ticket>
@@ -954,6 +954,34 @@ QVariant MergeUtil::merge(const QVariant &lhs, const QVariant &rhs)
     }
 
     return res;
+}
+
+QVariant MergeUtil::mergeIncidence(const QVariant &res, const QVariant &other)
+{
+    // special case for LodgingReservation, their time range is in the Reservation object
+    if (JsonLd::isA<LodgingReservation>(res)) {
+        const auto hotel = res.value<LodgingReservation>();
+        const auto otherHotel = other.value<LodgingReservation>();
+        auto out = hotel;
+        out.setCheckinTime(mergeValue(hotel.checkinTime(), otherHotel.checkinTime()));
+        out.setCheckoutTime(mergeValue(hotel.checkoutTime(), otherHotel.checkoutTime()));
+        out.setReservationFor(MergeUtil::merge(hotel.reservationFor(), otherHotel.reservationFor()));
+        return out;
+    }
+
+    if (JsonLd::isA<TrainReservation>(res) || JsonLd::isA<BusReservation>(res) || JsonLd::isA<BoatReservation>(res) || JsonLd::isA<FlightReservation>(res)) {
+        const auto trip = JsonLd::convert<Reservation>(res).reservationFor();
+        const auto otherTrip = JsonLd::convert<Reservation>(other).reservationFor();
+        auto out = res;
+        JsonLdDocument::writeProperty(out, "reservationFor", MergeUtil::merge(trip, otherTrip));
+        return out;
+    }
+
+    if (JsonLd::canConvert<Reservation>(res)) {
+        return res;
+    }
+
+    return merge(res, other);
 }
 
 bool isMinimalCancelationFor(const Reservation &res, const Reservation &cancel)

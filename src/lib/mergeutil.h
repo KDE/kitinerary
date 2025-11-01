@@ -70,6 +70,13 @@ public:
      */
     KITINERARY_EXPORT static QVariant merge(const QVariant &lhs, const QVariant &rhs);
 
+    /** Merge the common parts of @p other into reservations @p res, both representating the same incidence.
+     *  Behavior is undefined if isSameIncidence(lhs, rhs) would be @c false.
+     *  @see MergeUtil::isSameIncidence
+     *  @since 25.12
+     */
+    static QVariant mergeIncidence(const QVariant &res, const QVariant &other);
+
     /** Register a comparator function for a custom type that will be used by isSame. */
     template <typename T>
     inline static void registerComparator(bool(*func)(const T&, const T&))

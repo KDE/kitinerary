@@ -185,6 +185,17 @@ QList<QVariant> ExtractorPostprocessor::result() const {
             }
         }
 
+        // merge common parts of reservations for the same incidences
+        for (auto it1 = d->m_data.begin(); it1 != d->m_data.end(); ++it1) {
+            for (auto it2 = std::next(it1); it2 != d->m_data.end(); ++it2) {
+                if (!MergeUtil::isSameIncidence(*it1, *it2)) {
+                    continue;
+                }
+                *it1 = MergeUtil::mergeIncidence(*it1, *it2);
+                *it2 = MergeUtil::mergeIncidence(*it2, *it1);
+            }
+        }
+
         d->m_resultFinalized = true;
     }
 
