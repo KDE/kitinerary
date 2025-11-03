@@ -65,7 +65,10 @@ ExtractorDocumentNode PkPassDocumentProcessor::createNodeFromData(const QByteArr
 
 ExtractorDocumentNode PkPassDocumentProcessor::createNodeFromContent(const QVariant &decodedData) const
 {
-    auto pass = decodedData.value<KPkPass::Pass*>();
+    auto pass = decodedData.value<const KPkPass::Pass*>();
+    if (!pass) {
+        pass = decodedData.value<KPkPass::Pass*>();
+    }
     if (!pass) {
         return {};
     }
@@ -80,7 +83,7 @@ ExtractorDocumentNode PkPassDocumentProcessor::createNodeFromContent(const QVari
 
 void PkPassDocumentProcessor::expandNode(ExtractorDocumentNode &node, const ExtractorEngine *engine) const
 {
-    const auto pass = node.content<KPkPass::Pass*>();
+    const auto pass = node.content<const KPkPass::Pass*>();
     const auto barcodes = pass->barcodes();
     if (barcodes.empty()) {
         return;
@@ -107,10 +110,10 @@ void PkPassDocumentProcessor::destroyNode(ExtractorDocumentNode &node) const
 
 QJSValue PkPassDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const
 {
-    return engine->toScriptValue(node.content<KPkPass::Pass*>());
+    return engine->toScriptValue(node.content<const KPkPass::Pass*>());
 }
 
-static QList<KPkPass::Field> frontFieldsForPass(KPkPass::Pass *pass) {
+static QList<KPkPass::Field> frontFieldsForPass(const KPkPass::Pass *pass) {
     QList<KPkPass::Field> fields;
     fields += pass->headerFields();
     fields += pass->primaryFields();
@@ -142,7 +145,7 @@ static bool isPlausibleGate(const QString &s)
     return true;
 }
 
-static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
+static Flight extractBoardingPass(const KPkPass::Pass *pass, Flight flight)
 {
     // search for missing information by field key
     QString departureTerminal;
@@ -250,7 +253,7 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
     return flight;
 }
 
-[[nodiscard]] static TrainReservation extractTrainTicket(KPkPass::Pass *pass, TrainReservation res)
+[[nodiscard]] static TrainReservation extractTrainTicket(const KPkPass::Pass *pass, TrainReservation res)
 {
     auto trip = res.reservationFor().value<TrainTrip>();
     auto ticket = res.reservedTicket().value<Ticket>();
@@ -317,7 +320,7 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
     return res;
 }
 
-[[nodiscard]] static BusReservation extractBusTicket(KPkPass::Pass *pass, BusReservation res)
+[[nodiscard]] static BusReservation extractBusTicket(const KPkPass::Pass *pass, BusReservation res)
 {
     auto trip = res.reservationFor().value<BusTrip>();
 
@@ -349,7 +352,7 @@ static Flight extractBoardingPass(KPkPass::Pass *pass, Flight flight)
     return res;
 }
 
-static void extractEventTicketPass(KPkPass::Pass *pass, EventReservation &eventRes)
+static void extractEventTicketPass(const KPkPass::Pass *pass, EventReservation &eventRes)
 {
     auto event = eventRes.reservationFor().value<Event>();
 
@@ -415,9 +418,9 @@ static Person extractPerson(const KPkPass::Pass *pass, Person person)
 
 void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
-    const auto pass = node.content<KPkPass::Pass*>();
+    const auto pass = node.content<const KPkPass::Pass*>();
     QJsonObject result;
-    if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass)) {
+    if (auto boardingPass = qobject_cast<const KPkPass::BoardingPass*>(pass)) {
         switch (boardingPass->transitType()) {
             case KPkPass::BoardingPass::Air:
                 result.insert("@type"_L1, "FlightReservation"_L1);
@@ -502,7 +505,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
     switch (pass->type()) {
         case KPkPass::Pass::BoardingPass:
         {
-            if (auto boardingPass = qobject_cast<KPkPass::BoardingPass*>(pass)) {
+            if (auto boardingPass = qobject_cast<const KPkPass::BoardingPass*>(pass)) {
                 switch (boardingPass->transitType()) {
                     case KPkPass::BoardingPass::Air:
                     {
@@ -552,7 +555,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
 
 void PkPassDocumentProcessor::postExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
-    const auto pass = node.content<KPkPass::Pass*>();
+    const auto pass = node.content<const KPkPass::Pass*>();
     if (pass->passTypeIdentifier().isEmpty() || pass->serialNumber().isEmpty()) {
         return;
     }
