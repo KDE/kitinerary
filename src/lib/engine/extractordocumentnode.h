@@ -89,15 +89,15 @@ public:
     bool operator==(const ExtractorDocumentNode &other) const;
 
     /** Returns @c true if this is a null instance. */
-    bool isNull() const;
+    [[nodiscard]] bool isNull() const;
 
-    ExtractorDocumentNode parent() const;
+    [[nodiscard]] ExtractorDocumentNode parent() const;
     ///@cond internal
     void setParent(const ExtractorDocumentNode &parent);
     ///@endcond
 
     /** The MIME type of this node. */
-    QString mimeType() const;
+    [[nodiscard]] QString mimeType() const;
     ///@cond internal
     void setMimeType(const QString &mimeType);
     ///@endcond
@@ -105,7 +105,7 @@ public:
     /** Returns the decoded content of this node.
      *  The content of the QVariant depends on the MIME type.
      */
-    QVariant content() const;
+    [[nodiscard]] QVariant content() const;
     /** Set decoded content.
      *  Only to be used from KItinerary::ExtractorDocumentProcessor::createNodeFromData.
      */
@@ -113,7 +113,7 @@ public:
 
     /** Checks if the content of this node is of type @p T. */
     template <typename T>
-    inline bool isA() const
+    [[nodiscard]] bool isA() const
     {
         return content().userType() == qMetaTypeId<T>();
     }
@@ -142,7 +142,7 @@ public:
     }
 
     /** The best known context date/time at this point in the document tree. */
-    QDateTime contextDateTime() const;
+    [[nodiscard]] QDateTime contextDateTime() const;
     /** Set the context date/time.
      *  Only use this from KItinerary::ExtractorDocumentProcessor.
      */
@@ -150,29 +150,29 @@ public:
 
 
     /* Information about the location of this node in relation to one of its ancestors. */
-    QVariant location() const;
+    [[nodiscard]] QVariant location() const;
     /** Set the location information.
      *  Only use this from KItinerary::ExtractorDocumentProcessor.
      */
     void setLocation(const QVariant &location);
 
     ///@cond internal
-    const ExtractorDocumentProcessor* processor() const;
+    [[nodiscard]] const ExtractorDocumentProcessor* processor() const;
     void setProcessor(const ExtractorDocumentProcessor *processor);
     ///@endcond
 
     /** The child nodes of this node. */
-    const std::vector<ExtractorDocumentNode>& childNodes() const;
+    [[nodiscard]] const std::vector<ExtractorDocumentNode>& childNodes() const;
     /** Add another child node.
      *  Do not use this outside of KItinerary::ExtractorDocumentProcessor::expandNode().
      */
     void appendChild(ExtractorDocumentNode &child);
 
     /** JS API for finding child nodes given an KItinerary::ExtractorFilter. */
-    Q_INVOKABLE QVariantList findChildNodes(const QJSValue &jsFilter) const;
+    Q_INVOKABLE [[nodiscard]] QVariantList findChildNodes(const QJSValue &jsFilter) const;
 
     /** Returns the results that have accumulated so far from this node or its children. */
-    ExtractorResult result() const;
+    [[nodiscard]] ExtractorResult result() const;
     /** Add additional results from an extraction step. */
     void addResult(ExtractorResult &&result);
     /** Replace the existing results by @p result. */
@@ -181,14 +181,14 @@ public:
     /** Extractor used for the result of this node, if any.
      *  @internal for development tooling only
      */
-    QString usedExtractor() const;
+    [[nodiscard]] QString usedExtractor() const;
     void setUsedExtractor(const QString &usedExtractor);
 
 private:
     explicit ExtractorDocumentNode(const std::shared_ptr<ExtractorDocumentNodePrivate> &dd);
-    QJsonArray jsonLdResult() const;
-    QVariantList childNodesVariant() const;
-    QJSValue contentJsValue() const;
+    [[nodiscard]] QJsonArray jsonLdResult() const;
+    [[nodiscard]] QVariantList childNodesVariant() const;
+    [[nodiscard]] QJSValue contentJsValue() const;
     std::shared_ptr<ExtractorDocumentNodePrivate> d;
 
     friend class ExtractorScriptEngine;
