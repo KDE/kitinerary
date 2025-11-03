@@ -115,24 +115,34 @@ public:
     template <typename T>
     [[nodiscard]] bool isA() const
     {
-        return content().userType() == qMetaTypeId<T>();
+        return content().userType() == qMetaTypeId<T>()
+            || (std::is_const_v<std::remove_pointer_t<T>> && content().userType() == qMetaTypeId<std::remove_pointer_t<std::remove_cv_t<T>>*>());
     }
 
     /** Returns the content of this node converted to type @p T. */
     template <typename T>
-    inline typename std::enable_if<!std::is_pointer<T>::value || !QMetaTypeId2<Internal::OwnedPtr<typename std::remove_pointer<T>::type>>::Defined, T>::type
+    [[nodiscard]] std::enable_if_t<!std::is_pointer_v<T> || !QMetaTypeId2<Internal::OwnedPtr<std::remove_pointer_t<T>>>::Defined, T>
     content() const
     {
         return content().value<T>();
     }
     template <typename T>
-    inline typename std::enable_if<std::is_pointer<T>::value && QMetaTypeId2<Internal::OwnedPtr<typename std::remove_pointer<T>::type>>::Defined, T>::type
+    [[nodiscard]] std::enable_if_t<std::is_pointer_v<T> && (QMetaTypeId2<Internal::OwnedPtr<std::remove_pointer_t<T>>>::Defined || QMetaTypeId2<Internal::OwnedPtr<std::remove_cv_t<std::remove_pointer_t<T>>>>::Defined), T>
     content() const
     {
-        if (isA<T>()) {
+        if (content().userType() == qMetaTypeId<T>()) {
             return content().value<T>();
         }
-        return content().value<Internal::OwnedPtr<typename std::remove_pointer<T>::type>>();
+        // const pointer requested, but content is non-const
+        if constexpr (std::is_const_v<std::remove_pointer_t<T>>) {
+            if (content().userType() == qMetaTypeId<std::remove_pointer_t<std::remove_cv_t<T>>*>()) {
+                return content().value<std::remove_cv_t<T>>();
+            }
+            if (content().userType() == qMetaTypeId<Internal::OwnedPtr<std::remove_cv_t<std::remove_pointer_t<T>>>>()) {
+                return content().value<Internal::OwnedPtr<std::remove_cv_t<std::remove_pointer_t<T>>>>();
+            }
+        }
+        return content().value<Internal::OwnedPtr<std::remove_pointer_t<T>>>();
     }
 
     template <typename T>
