@@ -99,7 +99,7 @@ set(POPPLER_VERSION_PATCH ${CMAKE_MATCH_3})
 if (LIBXML2_FOUND)
     set(HAVE_LIBXML2 ON)
 endif()
-if (TARGET libphonenumber::phonenumber-shared OR TARGET PhoneNumber::PhoneNumber)
+if (TARGET libphonenumber::phonenumber-shared OR TARGET libphonenumber::phonenumber OR TARGET PhoneNumber::PhoneNumber)
     set(HAVE_PHONENUMBER ON)
 endif()
 
