@@ -46,15 +46,6 @@ const T* findHeader(const KMime::Content *content)
     }
     return findHeader<T>(content->parent());
 }
-
-const KMime::Headers::Base* findHeader(const KMime::Content *content, const char *headerType)
-{
-    const auto header = content->headerByType(headerType);
-    if (header || !content->parent()) {
-        return header;
-    }
-    return findHeader(content->parent(), headerType);
-}
 }
 
 bool MimeDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
@@ -134,7 +125,7 @@ static ExtractorDocumentNode expandContentNode(ExtractorDocumentNode &node, cons
     } else if (content->bodyIsMessage()) {
         child = engine->documentNodeFactory()->createNode(QVariant::fromValue(content->bodyAsMessage().get()), u"message/rfc822");
     } else {
-        child = engine->documentNodeFactory()->createNode(content->decodedContent(), fileName);
+        child = engine->documentNodeFactory()->createNode(content->decodedBody(), fileName);
     }
     node.appendChild(child);
     return child;
@@ -181,11 +172,28 @@ void MimeDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extrac
     expandContentNodeRecursive(node, content, engine);
 }
 
+namespace {
+[[nodiscard]] bool matchHeader(const KMime::Content *content, QByteArrayView headerType, const ExtractorFilter &filter)
+{
+    if (!content) {
+        return false;
+    }
+    for (const auto &hdr : content->headers()) {
+        if (!hdr->is(headerType)) {
+            continue;
+        }
+        if (filter.matches(hdr->asUnicodeString())) {
+            return true;
+        }
+    }
+    return matchHeader(content->parent(), headerType, filter);
+}
+}
+
 bool MimeDocumentProcessor::matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const
 {
     const auto content = node.content<const KMime::Content*>();
-    const auto header = findHeader(content, filter.fieldName().toUtf8().constData());
-    return header ? filter.matches(header->asUnicodeString()) : false;
+    return matchHeader(content, filter.fieldName().toUtf8(), filter);
 }
 
 void MimeDocumentProcessor::destroyNode(ExtractorDocumentNode &node) const
