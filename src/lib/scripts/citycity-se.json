@@ -1,13 +1,28 @@
-{
-    "filter": [
-        {
-            "field": "uid",
-            "match": "citycity.se$",
-            "mimeType": "internal/event",
-            "scope": "Current"
-        }
-    ],
-    "function": "extractEvent",
-    "mimeType": "internal/event",
-    "script": "citycity-se.js"
-}
+[
+    {
+        "filter": [
+            {
+                "field": "uid",
+                "match": "citycity.se$",
+                "mimeType": "internal/event",
+                "scope": "Current"
+            }
+        ],
+        "function": "extractEvent",
+        "mimeType": "internal/event",
+        "script": "citycity-se.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "Received",
+                "match": "mail.citycity.se",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "extractHtml",
+        "mimeType": "text/html",
+        "script": "citycity-se.js"
+    }
+]
