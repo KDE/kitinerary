@@ -226,6 +226,13 @@ void OSMAirportDb::filterTerminals(OSMAirportData &airport)
     airport.terminals.erase(std::partition(airport.terminals.begin(), airport.terminals.end(), [sizeThreshold](auto t) {
         return OSM::distance(t.boundingBox().min, t.boundingBox().max) > sizeThreshold;
     }), airport.terminals.end());
+
+    // drop building=service, if that's not the only thing we have
+    if (!std::ranges::all_of(airport.terminals, [](const auto &term) { return term.tagValue("building") == "service"_L1; })) {
+        airport.terminals.erase(std::remove_if(airport.terminals.begin(), airport.terminals.end(), [](const auto &term) {
+            return term.tagValue("building") == "service"_L1;
+        }), airport.terminals.end());
+    }
 }
 
 void OSMAirportDb::loadStation(OSM::Element elem)
