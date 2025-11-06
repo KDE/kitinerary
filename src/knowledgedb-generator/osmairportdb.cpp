@@ -12,6 +12,8 @@
 #include <QDebug>
 #include <QFile>
 
+using namespace Qt::Literals;
+
 enum {
     StationClusterDistance = 100, // in meter
     StationToTerminalDistance = 75, // in meter
@@ -71,15 +73,14 @@ void OSMAirportDb::load(const QString &path)
 void OSMAirportDb::loadAirport(OSM::Element elem)
 {
     const auto aeroway = elem.tagValue("aeroway");
-    if (aeroway != QLatin1StringView("aerodrome")) {
-      return;
+    if (aeroway != "aerodrome"_L1) {
+        return;
     }
 
     // filter out airports we aren't interested in
     // not strictly needed here, but it reduces the diagnostic noise
     const auto disused = elem.tagValue("disused");
-    const auto militayLanduse =
-        elem.tagValue("landuse") == QLatin1StringView("military");
+    const auto militayLanduse = elem.tagValue("landuse") == "military"_L1;
     if (!disused.isEmpty() || militayLanduse) {
         return;
     }
@@ -93,8 +94,8 @@ void OSMAirportDb::loadAirport(OSM::Element elem)
     elem.recomputeBoundingBox(m_dataset);
 
     // semicolon list split
-    if (iata.contains(QLatin1Char(';'))) {
-        const auto iatas = iata.split(QLatin1Char(';'), Qt::SkipEmptyParts);
+    if (iata.contains(';'_L1)) {
+        const auto iatas = iata.split(';'_L1, Qt::SkipEmptyParts);
         for (const auto &iata : iatas) {
             loadAirport(elem, iata);
         }
@@ -160,8 +161,8 @@ void OSMAirportDb::loadAirport(OSM::Element elem, const QString &iataCode)
 void OSMAirportDb::loadTerminal(OSM::Element elem)
 {
     const auto aeroway = elem.tagValue("aeroway");
-    if (aeroway != QLatin1StringView("terminal")) {
-      return;
+    if (aeroway != "terminal"_L1) {
+        return;
     }
 
     // filter out freight terminals
@@ -169,10 +170,12 @@ void OSMAirportDb::loadTerminal(OSM::Element elem)
     const auto traffic_mode = elem.tagValue("traffic_mode");
     const auto building = elem.tagValue("building");
     const auto industrial = elem.tagValue("industrial");
-    if (usage == QLatin1StringView("freight") ||
-        traffic_mode == QLatin1StringView("freigt") ||
-        building == QLatin1StringView("industrial") || !industrial.isEmpty()) {
-      return;
+    if (usage == "freight"_L1 || traffic_mode == "freigth"_L1 || building == "industrial"_L1 || building == "warehouse"_L1 || !industrial.isEmpty()) {
+        return;
+    }
+    const auto name = elem.tagValue("name");
+    if (name.contains("freight"_L1, Qt::CaseInsensitive) || name.contains("cargo"_L1, Qt::CaseInsensitive)) {
+        return;
     }
 
     // find matching airport
@@ -193,20 +196,14 @@ void OSMAirportDb::loadTerminal(OSM::Element elem)
         for (auto node : elem.outerPath(m_dataset)) {
 
             // filter out inaccessible entrances, or gates
-            const auto access =
-                OSM::tagValue(*node, QLatin1StringView("access"));
-            const auto aeroway =
-                OSM::tagValue(*node, QLatin1StringView("gate"));
-            if (access == QLatin1StringView("private") ||
-                access == QLatin1StringView("no") ||
-                aeroway == QLatin1StringView("gate")) {
+            const auto access = OSM::tagValue(*node, "access"_L1);
+            const auto aeroway = OSM::tagValue(*node, "gate"_L1);
+            if (access == "private"_L1 || access == "no"_L1 || aeroway == "gate"_L1) {
               continue;
             }
 
-            const auto entrance =
-                OSM::tagValue(*node, QLatin1StringView("entrance"));
-            if (entrance == QLatin1StringView("yes") ||
-                entrance == QLatin1StringView("main")) {
+            const auto entrance = OSM::tagValue(*node, "entrance"_L1);
+            if (entrance == "yes"_L1 || entrance == "main"_L1) {
               // qDebug() << "  found entrance for terminal:" << (*nodeIt).url()
               // << entrance << access;
               (*it).second.terminalEntrances.push_back(node->coordinate);
