@@ -86,7 +86,7 @@ static const char* name1_string_table(uint32_t offset)
     if (offset < sizeof(name1_string_table_0)) {
         return name1_string_table_0 + offset;
     }
-    return name1_string_table_1 + (offset - sizeof(name1_string_table_0));
+    return name1_string_table_1 + (offset - sizeof(name1_string_table_0)) + 1; // +1 to compensate for the trailing null byte in name1_string_table_0
 }
 
 static IataCode iataCodeForUniqueFragment(const QString &s)
