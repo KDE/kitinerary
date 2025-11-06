@@ -64,6 +64,7 @@ static void stripAirportAllLanguages(QStringList &s)
     s.removeAll(QStringLiteral("flughafen"));
     s.removeAll(QStringLiteral("lufthavn"));
     s.removeAll(QStringLiteral("terminal"));
+    s.removeAll(QStringLiteral("cargo"));
 }
 
 static void normalizeAbbreviations(QStringList &l)
