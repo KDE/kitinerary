@@ -238,16 +238,15 @@ void OSMAirportDb::filterTerminals(OSMAirportData &airport)
 void OSMAirportDb::loadStation(OSM::Element elem)
 {
     const auto railway = elem.tagValue("railway");
-    if (railway != QLatin1StringView("station") &&
-        railway != QLatin1StringView("halt") &&
-        railway != QLatin1StringView("tram_stop")) {
-      return;
+    const auto public_transport = elem.tagValue("public_transport");
+    if (railway != "station"_L1 && railway != "halt"_L1 && railway != "tram_stop"_L1 && public_transport != "station"_L1) {
+        return;
     }
 
     // try to filter out airport-interal transport systems, those are typically airside and thus not what we want
     const auto station = elem.tagValue("station");
-    if (station == QLatin1StringView("monorail")) {
-      return;
+    if (station == "monorail"_L1) {
+        return;
     }
 
     for (auto it = m_iataMap.begin(); it != m_iataMap.end(); ++it) {
