@@ -75,7 +75,7 @@ public:
      *  @see MergeUtil::isSameIncidence
      *  @since 25.12
      */
-    static QVariant mergeIncidence(const QVariant &res, const QVariant &other);
+    KITINERARY_EXPORT static QVariant mergeIncidence(const QVariant &res, const QVariant &other);
 
     /** Register a comparator function for a custom type that will be used by isSame. */
     template <typename T>
