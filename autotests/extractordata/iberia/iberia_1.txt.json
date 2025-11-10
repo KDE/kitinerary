@@ -73,8 +73,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 36.8474006652832,
-                    "longitude": -2.372109889984131
+                    "latitude": 36.847198486328125,
+                    "longitude": -2.3742098808288574
                 },
                 "iataCode": "LEI",
                 "name": "Almeria"
@@ -147,8 +147,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 36.8474006652832,
-                    "longitude": -2.372109889984131
+                    "latitude": 36.847198486328125,
+                    "longitude": -2.3742098808288574
                 },
                 "iataCode": "LEI",
                 "name": "Almeria"

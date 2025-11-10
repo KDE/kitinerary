@@ -18,7 +18,7 @@
                 "geo": {
                     "@type": "GeoCoordinates",
                     "latitude": 56.92319869995117,
-                    "longitude": 23.97800064086914
+                    "longitude": 23.978099822998047
                 },
                 "iataCode": "RIX",
                 "name": "Riga"
@@ -95,7 +95,7 @@
                 "geo": {
                     "@type": "GeoCoordinates",
                     "latitude": 56.92319869995117,
-                    "longitude": 23.97800064086914
+                    "longitude": 23.978099822998047
                 },
                 "iataCode": "RIX",
                 "name": "Riga"

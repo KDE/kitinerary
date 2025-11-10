@@ -249,8 +249,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.977901458740234,
-                    "longitude": -87.9030990600586
+                    "latitude": 41.978599548339844,
+                    "longitude": -87.90239715576172
                 },
                 "iataCode": "ORD",
                 "name": "O Hare International"
@@ -268,7 +268,7 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 45.587398529052734,
+                    "latitude": 45.58760070800781,
                     "longitude": -122.59300231933594
                 },
                 "iataCode": "PDX",
@@ -307,8 +307,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.977901458740234,
-                    "longitude": -87.9030990600586
+                    "latitude": 41.978599548339844,
+                    "longitude": -87.90239715576172
                 },
                 "iataCode": "ORD",
                 "name": "O Hare International"
@@ -326,7 +326,7 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 45.587398529052734,
+                    "latitude": 45.58760070800781,
                     "longitude": -122.59300231933594
                 },
                 "iataCode": "PDX",
@@ -384,8 +384,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.977901458740234,
-                    "longitude": -87.9030990600586
+                    "latitude": 41.978599548339844,
+                    "longitude": -87.90239715576172
                 },
                 "iataCode": "ORD",
                 "name": "O Hare International"
@@ -442,8 +442,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 41.977901458740234,
-                    "longitude": -87.9030990600586
+                    "latitude": 41.978599548339844,
+                    "longitude": -87.90239715576172
                 },
                 "iataCode": "ORD",
                 "name": "O Hare International"

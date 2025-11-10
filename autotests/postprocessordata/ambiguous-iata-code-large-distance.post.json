@@ -35,8 +35,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 48.69070053100586,
-                    "longitude": 9.193140029907227
+                    "latitude": 48.690399169921875,
+                    "longitude": 9.192700386047363
                 },
                 "iataCode": "STR",
                 "name": "STUTTGART AIRPORT"
