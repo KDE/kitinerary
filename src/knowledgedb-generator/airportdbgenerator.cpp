@@ -19,9 +19,21 @@
 #include <QJsonObject>
 #include <QRegularExpression>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 using namespace KItinerary::KnowledgeDb;
 using namespace KItinerary::Generator;
+
+// override exclusion rules
+static constexpr const char explicit_include[][4] = {
+    "EMA", // false positive on military filter
+    "IXL", // false positive on military filter
+};
+
+// explicit exclusion rules
+static constexpr const char explicit_excludes[][4] = {
+    "RYG", // no passenger operation since 2016
+};
 
 static bool soundsMilitaryish(const QString &s)
 {
@@ -134,64 +146,44 @@ bool AirportDbGenerator::fetchAirports()
             continue;
         }
 
-        if (obj.contains(QLatin1StringView("endDate")) ||
-            obj.contains(QLatin1StringView("demolished")) ||
-            obj.contains(QLatin1StringView("officialClosure")) ||
-            obj.contains(QLatin1StringView("iataEndDate")) ||
-            obj.value(QLatin1StringView("iataRank"))
-                .toObject()
-                .value(QLatin1StringView("value"))
-                .toString()
-                .endsWith(QLatin1StringView("DeprecatedRank"))) {
-          // skip closed airports or those with expired IATA codes
-          continue;
+        if (obj.contains("endDate"_L1) || obj.contains("demolished"_L1) ||
+            obj.contains("officialClosure"_L1) || obj.contains("iataEndDate"_L1) ||
+            obj.value("iataRank"_L1).toObject().value("value"_L1).toString().endsWith("DeprecatedRank"_L1))
+        {
+            // skip closed airports or those with expired IATA codes
+            continue;
         }
 
-        const auto openingdDt =
-            QDateTime::fromString(obj.value(QLatin1StringView("openingDate"))
-                                      .toObject()
-                                      .value(QLatin1StringView("value"))
-                                      .toString(),
-                                  Qt::ISODate);
+        const auto openingdDt = QDateTime::fromString(obj.value("openingDate"_L1).toObject().value("value"_L1).toString(), Qt::ISODate);
         if (openingdDt.isValid() && openingdDt > QDateTime::currentDateTime().addDays(120)) {
             // skip future airports
             continue;
         }
 
         Airport a;
-        a.uri = QUrl(obj.value(QLatin1StringView("airport"))
-                         .toObject()
-                         .value(QLatin1StringView("value"))
-                         .toString());
-        a.iataCode = obj.value(QLatin1StringView("iataCode"))
-                         .toObject()
-                         .value(QLatin1StringView("value"))
-                         .toString();
-        if (a.iataCode.size() != 3 || !a.iataCode.at(0).isUpper() || !a.iataCode.at(1).isUpper() || !a.iataCode.at(2).isUpper()) {
+        a.uri = QUrl(obj.value("airport"_L1).toObject().value("value"_L1).toString());
+        a.iataCode = obj.value("iataCode"_L1).toObject().value("value"_L1).toString();
+        if (a.iataCode.size() != 3 || !std::ranges::all_of(a.iataCode, [](QChar c) { return c.isUpper(); })) {
             // invalid IATA code
             continue;
         }
-        a.icaoCode = obj.value(QLatin1StringView("icaoCode"))
-                         .toObject()
-                         .value(QLatin1StringView("value"))
-                         .toString();
-        a.label = obj.value(QLatin1StringView("airportLabel"))
-                      .toObject()
-                      .value(QLatin1StringView("value"))
-                      .toString();
-        a.alias = obj.value(QLatin1StringView("airportAltLabel"))
-                      .toObject()
-                      .value(QLatin1StringView("value"))
-                      .toString();
-        // primitive military airport filter, turns out to be more reliable than querying for the military airport types
-        if (soundsMilitaryish(a.label) || soundsMilitaryish(a.alias)) {
+
+        if (std::ranges::find_if(explicit_excludes, [&a](auto code) { return a.iataCode == QLatin1StringView(code, 3); }) != std::end(explicit_excludes)) {
+            // manually excluded
+            qDebug() << "manually excluded:" << a.iataCode << a.uri;
             continue;
         }
-        a.coord =
-            WikiData::parseCoordinate(obj.value(QLatin1StringView("coord"))
-                                          .toObject()
-                                          .value(QLatin1StringView("value"))
-                                          .toString());
+        const auto explicitedIncluded = std::ranges::find_if(explicit_include, [&a](auto code) { return a.iataCode == QLatin1StringView(code, 3); }) != std::end(explicit_include);
+
+        a.icaoCode = obj.value("icaoCode"_L1).toObject().value("value"_L1).toString();
+        a.label = obj.value("airportLabel"_L1).toObject().value("value"_L1).toString();
+        a.alias = obj.value("airportAltLabel"_L1).toObject().value("value"_L1).toString();
+        // primitive military airport filter, turns out to be more reliable than querying for the military airport types
+        if (!explicitedIncluded && (soundsMilitaryish(a.label) || soundsMilitaryish(a.alias))) {
+            qDebug() << "military excluded:" << a.iataCode << a.uri << a.label;
+            continue;
+        }
+        a.coord = WikiData::parseCoordinate(obj.value("coord"_L1).toObject().value("value"_L1).toString());
 
         // merge multiple records for the same airport
         auto it = m_airportMap.find(a.uri);
