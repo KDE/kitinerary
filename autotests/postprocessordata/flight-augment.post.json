@@ -1,54 +1,56 @@
-[{
-    "@context": "http://schema.org",
-    "@type": "FlightReservation",
-    "reservationFor": {
-        "@type": "Flight",
-        "airline": {
-            "@type": "Airline",
-            "iataCode": "UA",
-            "name": "United"
-        },
-        "arrivalAirport": {
-            "@type": "Airport",
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "UA",
+                "name": "United"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
                 "address": {
                     "@type": "PostalAddress",
                     "addressCountry": "US"
                 },
-            "geo": {
-                "@type": "GeoCoordinates",
-                "latitude": 38.94900131225586,
-                "longitude": -77.44750213623047
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 38.9557991027832,
+                    "longitude": -77.44830322265625
+                },
+                "iataCode": "IAD",
+                "name": "Washington Dulles International Airport"
             },
-            "iataCode": "IAD",
-            "name": "Washington Dulles International Airport"
-        },
-        "arrivalTime": {
-            "@type": "QDateTime",
-            "@value": "2027-03-05T06:30:00-05:00",
-            "timezone": "America/New_York"
-        },
-        "departureAirport": {
-            "@type": "Airport",
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2027-03-05T06:30:00-05:00",
+                "timezone": "America/New_York"
+            },
+            "departureAirport": {
+                "@type": "Airport",
                 "address": {
                     "@type": "PostalAddress",
                     "addressCountry": "US"
                 },
-            "geo": {
-                "@type": "GeoCoordinates",
-                "latitude": 47.4452018737793,
-                "longitude": -122.2969970703125
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 47.4452018737793,
+                    "longitude": -122.2969970703125
+                },
+                "iataCode": "SEA",
+                "name": "Seattle-Tacoma International Airport"
             },
-            "iataCode": "SEA",
-            "name": "Seattle-Tacoma International Airport"
+            "departureDay": "2027-03-04",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2027-03-04T20:15:00-08:00",
+                "timezone": "America/Los_Angeles"
+            },
+            "flightNumber": "110"
         },
-        "departureDay": "2027-03-04",
-        "departureTime": {
-            "@type": "QDateTime",
-            "@value": "2027-03-04T20:15:00-08:00",
-            "timezone": "America/Los_Angeles"
-        },
-        "flightNumber": "110"
-    },
-    "reservationNumber": "RXJ34P",
-    "reservationStatus": "http://schema.org/ReservationConfirmed"
-}]
+        "reservationNumber": "RXJ34P",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

@@ -35,8 +35,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 23.073400497436523,
-                    "longitude": 72.62210083007812
+                    "latitude": 23.07360076904297,
+                    "longitude": 72.62220001220703
                 },
                 "iataCode": "AMD"
             },
@@ -304,8 +304,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 23.073400497436523,
-                    "longitude": 72.62210083007812
+                    "latitude": 23.07360076904297,
+                    "longitude": 72.62220001220703
                 },
                 "iataCode": "AMD"
             },

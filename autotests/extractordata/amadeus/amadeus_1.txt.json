@@ -71,8 +71,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 42.207801818847656,
-                    "longitude": -83.3561019897461
+                    "latitude": 42.212501525878906,
+                    "longitude": -83.35330200195312
                 },
                 "iataCode": "DTW",
                 "name": "DETROIT, MI (METROPOLITAN WAYNE CO)"
@@ -146,8 +146,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 42.207801818847656,
-                    "longitude": -83.3561019897461
+                    "latitude": 42.212501525878906,
+                    "longitude": -83.35330200195312
                 },
                 "iataCode": "DTW",
                 "name": "DETROIT, MI (METROPOLITAN WAYNE CO)"

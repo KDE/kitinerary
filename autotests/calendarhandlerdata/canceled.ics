@@ -10,7 +10,7 @@ X-KDE-KITINERARY-RESERVATION:[{"@context":"http://schema.org"\,"@type":
  "Airline"\,"iataCode":"UA"}\,"arrivalAirport":{"@type":
  "Airport"\,"address":{"@type":"PostalAddress"\,"addressCountry":
  "US"}\,"geo":{"@type":"GeoCoordinates"\,"latitude":
- 40.63970184326172\,"longitude":-73.77890014648438}\,"iataCode":
+ 40.63999938964844\,"longitude":-73.77999877929688}\,"iataCode":
  "JFK"}\,"arrivalTime":{"@type":"QDateTime"\,"@value":"2027-03-05T06:30:
  00-05:00"\,"timezone":"America/New_York"}\,"boardingTime":"2027-03-05T05:
  30:00-05:00"\,"departureAirport":{"@type":"Airport"\,"address":{"@type":
