@@ -233,6 +233,13 @@ bool MergeUtil::isSame(const QVariant& lhs, const QVariant& rhs)
         if (conflictIfPresent(lhsRes.reservationNumber(), rhsRes.reservationNumber()) || conflictIfPresent(lhsRes.passengerSequenceNumber(), rhsRes.passengerSequenceNumber())) {
             return false;
         }
+        // same single-leg IATA BCBP code is considered equivalent regardless of everything else
+        // this helps with merging extracted results from data with missing context dates
+        const auto lhsTicket = lhsRes.reservedTicket().value<Ticket>();
+        const auto rhsTicket = rhsRes.reservedTicket().value<Ticket>();
+        if (!lhsTicket.ticketToken().isEmpty() && lhsTicket.ticketTokenData().toString().startsWith("M1"_L1) && lhsTicket.ticketToken() == rhsTicket.ticketToken()) {
+            return true;
+        }
         return isSame(lhsRes.reservationFor(), rhsRes.reservationFor());
     }
     if (JsonLd::isA<Flight>(lhs)) {

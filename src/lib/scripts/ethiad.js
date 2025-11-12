@@ -2,13 +2,14 @@
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 function extractTicket(pdf, node) {
-    let reservations = node.result;
+    let reservations = [];
     const text = pdf.text;
     let idx = 0;
 
     let baseRes = JsonLd.newFlightReservation();
     baseRes.reservationNumber = text.match(/Booking reference: (.*)\n/)[1];
     baseRes.reservedTicket.ticketNumber = text.match(/Ticket number: (.*)\n/)[1];
+    baseRes.underName = node.result[0].underName;
 
     while (true) {
         const leg = text.substr(idx).match(/(?:_([A-Z]{3})\n)? *(\d\d:\d\d) +(\d\d:\d\d)\n *([A-Z]{3})? +([A-Z]{3})\n *(\d\d \S{3} \d{4}) +.* +(\d\d \S{3} \d{4})\n *(\S.*)  +(\S.*)\n *(\S.*)  +(\S.*)\n *(\S.*)  +(\S.*)\n.*?([A-Z0-9]{2})(\d{1,4}).*: (\S.*)  /);
@@ -32,6 +33,9 @@ function extractTicket(pdf, node) {
         res.reservationFor.airline.iataCode = leg[14];
         res.reservationFor.airline.name = leg[16];
         res.reservationFor.flightNumber = leg[15];
+
+        if (reservations.length === 0)
+            res.reservedTicket.ticketToken = node.result[0].reservedTicket.ticketToken;
 
         reservations.push(res);
     }
