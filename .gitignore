@@ -32,3 +32,4 @@ compile_commands.json
 Testing/
 /.vscode/
 .qtcreator/
+.flatpak-builder/
