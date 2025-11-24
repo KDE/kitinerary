@@ -4,7 +4,7 @@
 set -e
 set -x
 
-QT_VERSION=6.9.3
+QT_VERSION=6.10.0
 
 function build-static-qt-module() {
     local module=$1
@@ -65,9 +65,10 @@ build-static-qt-module qtdeclarative \
     -DFEATURE_qml_preview=OFF \
     -DFEATURE_qml_profiler=OFF \
     -DFEATURE_qml_animation=OFF \
-    -DFEATURE_qml_delegate_model=OFF \
+    -DFEATURE_qml_itemmodel=OFF \
+    -DFEATURE_qml_object_model=OFF \
+    -DFEATURE_qml_sfpm_model=OFF \
     -DFEATURE_qml_network=OFF \
-    -DFEATURE_qml_list_model=OFF \
     -DFEATURE_qml_worker_script=OFF \
 
 build-static-qt-module qttools \
