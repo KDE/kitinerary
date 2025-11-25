@@ -19,6 +19,8 @@ function parseUicStationCode(value)
 // data starts at offset 20 in the header block, at which point both formats are structurally identical
 function parseBarcodeCommon(res, data) {
     const view = new DataView(data);
+    res.totalPrice = view.getFloat32(4);
+    res.priceCurrency = 'HUF';
     const ticketType = view.getUInt8(8);
     const tripBlockOffset = ticketType == 0x81 ? 87 : 23;
     if (ticketType & 0x01) {
