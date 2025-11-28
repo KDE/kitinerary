@@ -3,30 +3,36 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+function barcodeVersion(data)
+{
+    const view = new DataView(data);
+    return view.getUInt8(0);
+}
+
 function parseDateTime(value)
 {
     const base = new Date(2017, 0, 1);
     return new Date(value * 1000 + base.getTime());
 }
 
-function parseUicStationCode(value)
+function parseUicStationCode(value, version)
 {
     value &= 0xffffff;
-    return value < 1000000 ? undefined : "uic:" + value;
+    return version < 5 ? "uic:" + value : "hu:" + value;
 }
 
 // see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
 // data starts at offset 20 in the header block, at which point both formats are structurally identical
-function parseBarcodeCommon(res, data) {
+function parseBarcodeCommon(res, data, version) {
     const view = new DataView(data);
     res.totalPrice = view.getFloat32(4);
     res.priceCurrency = 'HUF';
     const ticketType = view.getUInt8(8);
     const tripBlockOffset = ticketType == 0x81 ? 87 : 23;
     if (ticketType & 0x01) {
-        res.reservationFor.departureStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset - 1, false));
+        res.reservationFor.departureStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset - 1, false), version);
         res.reservationFor.departureStation.name = "" + (view.getUint32(tripBlockOffset - 1, false) & 0xffffff);
-        res.reservationFor.arrivalStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset + 2 , false));
+        res.reservationFor.arrivalStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset + 2 , false), version);
         res.reservationFor.arrivalStation.name = "" + (view.getUint32(tripBlockOffset + 2, false) & 0xffffff);
         res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(tripBlockOffset + 96, tripBlockOffset + 97));
         res.reservationFor.departureDay = parseDateTime(view.getUint32(tripBlockOffset + 98, false));
@@ -54,7 +60,7 @@ function parseBarcode(data) {
     const view = new DataView(inner);
     res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
     res.reservationFor.provider.identifier = "uic:" + view.getUint16(18, false);
-    parseBarcodeCommon(res, inner.slice(20));
+    parseBarcodeCommon(res, inner.slice(20), barcodeVersion(data));
     res.reservedTicket.ticketToken = "pdf417bin:" + ByteArray.toBase64(data);
     return res;
 }
@@ -66,7 +72,7 @@ function parseBarcodeAlternative(data)
     res.reservationFor.provider.identifier = "uic:" + ByteArray.decodeUtf8(data.slice(20, 24));
 
     const inner = ByteArray.inflate(data.slice(24));
-    parseBarcodeCommon(res, inner);
+    parseBarcodeCommon(res, inner, barcodeVersion(data));
     // HACK technically this is PDF 417 but those seem to render unreliably
     // and result in failed scanning
     // We use Aztec instead now which MAV scanners also support, and which is
