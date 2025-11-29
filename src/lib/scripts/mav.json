@@ -5,21 +5,14 @@
                 "match": "^\\x04\\x03\\x1f\\x8b",
                 "mimeType": "application/octet-stream",
                 "scope": "Current"
-            }
-        ],
-        "function": "parseBarcode",
-        "mimeType": "application/octet-stream",
-        "script": "mav.js"
-    },
-    {
-        "filter": [
+            },
             {
                 "match": "^.\\01[\\dA-Z]{17}\\x001155",
                 "mimeType": "application/octet-stream",
                 "scope": "Current"
             }
         ],
-        "function": "parseBarcodeAlternative",
+        "function": "parseBarcode",
         "mimeType": "application/octet-stream",
         "script": "mav.js"
     },
