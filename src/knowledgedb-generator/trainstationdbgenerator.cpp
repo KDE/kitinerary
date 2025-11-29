@@ -90,7 +90,7 @@ bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map
   const auto stationArray =
       WikiData::query(QLatin1StringView(R"(
         SELECT DISTINCT ?station ?stationLabel ?id ?coord ?replacedBy ?dateOfOfficialClosure WHERE {
-            ?station (wdt:P31/wdt:P279*) wd:Q55488.
+            ?station (wdt:P31/wdt:P279*) wd:Q124673697.
             ?station wdt:)") +
                           QString::fromUtf8(prop) + QLatin1StringView(R"( ?id.
             OPTIONAL { ?station wdt:P625 ?coord. }
@@ -141,7 +141,7 @@ bool TrainStationDbGenerator::fetchIndianRailwaysStationCode()
 {
     const auto stationArray = WikiData::query(R"(
         SELECT DISTINCT ?station ?stationLabel ?irId ?coord WHERE {
-            ?station (wdt:P31/wdt:P279*) wd:Q55488.
+            ?station (wdt:P31/wdt:P279*) wd:Q124673697.
             ?station wdt:P5696 ?irId.
             OPTIONAL { ?station wdt:P625 ?coord. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
@@ -177,7 +177,7 @@ bool TrainStationDbGenerator::fetchFinishStationCodes()
 {
     const auto stationArray = WikiData::query(R"(
         SELECT DISTINCT ?station ?stationLabel ?code ?coord ?ref WHERE {
-            ?station (wdt:P31/wdt:P279*) wd:Q55488.
+            ?station (wdt:P31/wdt:P279*) wd:Q124673697.
             ?station p:P296 ?codeStmt.
             ?codeStmt ps:P296 ?code.
             ?codeStmt prov:wasDerivedFrom ?refnode.
@@ -231,7 +231,7 @@ bool TrainStationDbGenerator::fetchCountryInformation()
 {
     const auto stationArray = WikiData::query(R"(
         SELECT DISTINCT ?station ?isoCode WHERE {
-            ?station (wdt:P31/wdt:P279*) wd:Q55488.
+            ?station (wdt:P31/wdt:P279*) wd:Q124673697.
             ?station wdt:P17 ?country.
             ?country p:P297 [ ps:P297 ?isoCode ].
         } ORDER BY (?station))", "wikidata_trainstation_country.json");
