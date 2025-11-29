@@ -155,11 +155,12 @@ bool TrainStationDbGenerator::fetchIndianRailwaysStationCode()
         const auto stationObj = stationData.toObject();
         const auto uri = insertOrMerge(stationObj);
 
-        const auto id = stationObj.value(QLatin1StringView("irId"))
-                            .toObject()
-                            .value(QLatin1StringView("value"))
-                            .toString()
-                            .toUpper();
+        const auto id = stationObj.value("irId"_L1).toObject().value("value"_L1).toString().toUpper();
+        if (id.size() > 5 || !std::ranges::all_of(id, [](QChar c) { return c.isDigit() || c.isUpper(); })) {
+            ++m_idFormatViolations;
+            qWarning() << "Indian railway station code format violation" << id << uri;
+            continue;
+        }
         const auto it = m_indianRailwaysMap.find(id);
         if (it != m_indianRailwaysMap.end() && (*it).second != uri) {
             ++m_idConflicts;
