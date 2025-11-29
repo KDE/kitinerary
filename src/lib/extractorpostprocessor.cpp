@@ -354,6 +354,9 @@ T ExtractorPostprocessorPrivate::processStation(T station)
     } else if (id.startsWith("uk:"_L1) && id.size() == 6) {
         const auto record = KnowledgeDb::stationForUkRailwayStationCode(KnowledgeDb::UKRailwayStationCode(QStringView(id).mid(3)));
         applyStationData(record, station);
+    } else if (id.startsWith("hu:"_L1) && id.size() >= 6) {
+        const auto record = KnowledgeDb::stationForHungarianStationCode((KnowledgeDb::HungarianStationCode(QStringView(id).mid(3).toUInt())));
+        applyStationData(record, station);
     }
 
     return processPlace(station);
