@@ -76,6 +76,31 @@ function parseBarcode(data) {
     // We use Aztec instead now which MAV scanners also support, and which is
     // generally more robust on mobile screens.
     res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(data);
+
+    // Convert to a generic ticket when we don't have trip information
+    if (!res.reservationFor.departureStation.name) {
+        let ticket = res.reservedTicket;
+        ticket.ticketNumber = res.reservationNumber;
+        ticket.issuedBy = res.reservationFor.provider;
+        ticket.underName = res.underName;
+        ticket.priceCurrency = res.priceCurrency;
+        ticket.totalPrice = res.totalPrice;
+        return ticket;
+    }
+
+    return res;
+}
+
+function reservationFromBarcode(node) {
+    if (node.result[0]['@type'] === 'TrainReservation')
+        return JsonLd.clone(node.result[0]);
+    let res = JsonLd.newTrainReservation();
+    res.reservedTicket = JsonLd.clone(node.result[0]);
+    res.reservationFor.provider = res.reservedTicket.issuedBy;
+    res.reservedTicket.issuedBy = undefined;
+    res.reservationNumber = res.reservedTicket.ticketNumber;
+    res.priceCurrency = res.reservedTicket.priceCurrency;
+    res.totalPrice = res.reservedTicket.totalPrice;
     return res;
 }
 
@@ -88,7 +113,7 @@ function parseTicket(pdf, node, triggerNode) {
         if (!trip)
             break;
         idx += trip.index + trip[0].length;
-        let res = JsonLd.clone(triggerNode.result[0]);
+        let res = reservationFromBarcode(triggerNode);
         res.reservationFor.departureStation.name = trip[3];
         res.reservationFor.arrivalStation.name = trip[4];
         res.reservationFor.departureTime = JsonLd.toDateTime(trip[1] + trip[2], ["yyyy.MM.ddhh:mm", "dd.MM.yyyyhh:mm"], "hu");
@@ -106,7 +131,7 @@ function parseTicket(pdf, node, triggerNode) {
         if (!trip)
             break;
         idx += trip.index + trip[0].length;
-        let res = JsonLd.clone(triggerNode.result[0]);
+        let res = reservationFromBarcode(triggerNode);
         res.reservationFor.departureStation.name = trip[1];
         res.reservationFor.departureTime = JsonLd.toDateTime(trip[4] + trip[2], ["yyyy.MM.ddhh:mm", "dd.MM.yyyyhh:mm"], "hu");
         res.reservationFor.trainNumber = trip[3] ?? trip[5];
