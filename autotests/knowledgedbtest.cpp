@@ -408,6 +408,15 @@ private Q_SLOTS:
 
         QCOMPARE(KnowledgeDb::isPlausibleTimeZone(tz, lat, lon, country, region), result);
     }
+
+    void testHungarianStationLookup()
+    {
+        auto station = KnowledgeDb::stationForHungarianStationCode(HungarianStationCode{});
+        QVERIFY(!station.coordinate.isValid());
+
+        station = KnowledgeDb::stationForHungarianStationCode(HungarianStationCode{3661});
+        QVERIFY(station.coordinate.isValid());
+    }
 };
 
 QTEST_APPLESS_MAIN(KnowledgeDbTest)

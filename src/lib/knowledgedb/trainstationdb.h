@@ -80,6 +80,9 @@ KITINERARY_EXPORT TrainStation stationForViaRailStationCode(ViaRailStationCode c
 
 /** Lookup train station data by UK railway station code. */
 KITINERARY_EXPORT TrainStation stationForUkRailwayStationCode(UKRailwayStationCode code);
+
+/** Lookup train station data by HU railway station code. */
+KITINERARY_EXPORT TrainStation stationForHungarianStationCode(HungarianStationCode code);
 }
 }
 
