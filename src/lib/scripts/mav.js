@@ -30,6 +30,9 @@ function parseBarcodeCommon(res, data, version) {
         res.reservationFor.arrivalStation.name = "" + (view.getUint32(tripBlockOffset + 2, false) & 0xffffff);
         res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(tripBlockOffset + 96, tripBlockOffset + 97));
         res.reservationFor.departureDay = parseDateTime(view.getUint32(tripBlockOffset + 98, false));
+        res.reservedTicket.validFrom = res.reservationFor.departureDay;
+        res.reservedTicket.validUntil = new Date(res.reservedTicket.validFrom);
+        res.reservedTicket.validUntil.setMinutes((view.getUint32(tripBlockOffset + 101, false) & 0xffffff) + res.reservedTicket.validFrom.getMinutes());
         if (ticketType & 0x80) {
             res.underName.name = ByteArray.decodeUtf8(data.slice(19, 19 + 45));
         }
