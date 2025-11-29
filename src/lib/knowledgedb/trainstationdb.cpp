@@ -92,3 +92,8 @@ TrainStation KnowledgeDb::stationForUkRailwayStationCode(UKRailwayStationCode co
 {
     return lookupStation(code, uk_table);
 }
+
+TrainStation KnowledgeDb::stationForHungarianStationCode(HungarianStationCode code)
+{
+    return lookupStation(code, hu_table);
+}
