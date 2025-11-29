@@ -3,12 +3,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function barcodeVersion(data)
-{
-    const view = new DataView(data);
-    return view.getUInt8(0);
-}
-
 function parseDateTime(value)
 {
     const base = new Date(2017, 0, 1);
@@ -55,28 +49,29 @@ function parseBarcodeCommon(res, data, version) {
 }
 
 function parseBarcode(data) {
-    var res = JsonLd.newTrainReservation();
-    const inner = ByteArray.inflate(data.slice(2));
-    const view = new DataView(inner);
-    res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
-    res.reservationFor.provider.identifier = "uic:" + view.getUint16(18, false);
-    parseBarcodeCommon(res, inner.slice(20), barcodeVersion(data));
-    res.reservedTicket.ticketToken = "pdf417bin:" + ByteArray.toBase64(data);
-    return res;
-}
+    const barcodeView = new DataView(data);
+    const version = barcodeView.getUInt8(0);
 
-function parseBarcodeAlternative(data)
-{
-    var res = JsonLd.newTrainReservation();
-    res.reservationNumber = ByteArray.decodeUtf8(data.slice(2, 19));
-    res.reservationFor.provider.identifier = "uic:" + ByteArray.decodeUtf8(data.slice(20, 24));
+    let res = JsonLd.newTrainReservation();
 
-    const inner = ByteArray.inflate(data.slice(24));
-    parseBarcodeCommon(res, inner, barcodeVersion(data));
-    // HACK technically this is PDF 417 but those seem to render unreliably
-    // and result in failed scanning
+    if (version == 4) {
+        const inner = ByteArray.inflate(data.slice(2));
+        const view = new DataView(inner);
+        res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
+        res.reservationFor.provider.identifier = "uic:" + view.getUint16(18, false);
+        parseBarcodeCommon(res, inner.slice(20), version);
+    } else if (version >= 5) { // version 5 and 6
+        res.reservationNumber = ByteArray.decodeUtf8(data.slice(2, 19));
+        res.reservationFor.provider.identifier = "uic:" + ByteArray.decodeUtf8(data.slice(20, 24));
+        const inner = ByteArray.inflate(data.slice(24));
+        parseBarcodeCommon(res, inner, version);
+    } else {
+        return;
+    }
+
+    // Can be PDF417 but those seem to render unreliably and result in failed scanning.
     // We use Aztec instead now which MAV scanners also support, and which is
-    // generally more robust on mobile screens
+    // generally more robust on mobile screens.
     res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(data);
     return res;
 }
