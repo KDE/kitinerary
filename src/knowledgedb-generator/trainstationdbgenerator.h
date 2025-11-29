@@ -52,11 +52,6 @@ private:
     void writeVRMap(QIODevice *out);
     void printSummary();
 
-    template <typename Id>
-    QByteArray encodeId(Id id) const { return '"' + id.toString().toUtf8() + '"'; }
-    QByteArray encodeId(KnowledgeDb::IBNR id) const { return QByteArray::number(id.value()); }
-    QByteArray encodeId(KnowledgeDb::UICStation id) const { return QByteArray::number(id.value()); }
-
     std::vector<Station> m_stations;
     std::map<KnowledgeDb::IBNR, QUrl> m_ibnrMap;
     std::map<KnowledgeDb::UICStation, QUrl> m_uicMap;
@@ -68,6 +63,7 @@ private:
     std::map<KnowledgeDb::AmtrakStationCode, QUrl> m_amtrakMap;
     std::map<KnowledgeDb::ViaRailStationCode, QUrl> m_viaRailMap;
     std::map<KnowledgeDb::UKRailwayStationCode, QUrl> m_ukMap;
+    std::map<KnowledgeDb::HungarianStationCode, QUrl> m_huMap;
 
     int m_idConflicts = 0;
     int m_idFormatViolations = 0;
