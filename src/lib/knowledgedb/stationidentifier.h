@@ -132,5 +132,7 @@ using AmtrakStationCode = AlphaId<uint16_t, 3>;
 using ViaRailStationCode = AlphaId<UnalignedNumber<3>, 4>;
 /** UK railway station code. */
 using UKRailwayStationCode = AlphaId<uint16_t, 3>;
+/** Hungarian station code. */
+using HungarianStationCode = UnalignedNumber<3>;
 }
 }

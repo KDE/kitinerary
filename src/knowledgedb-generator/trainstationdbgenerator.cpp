@@ -32,6 +32,26 @@ static bool operator<(const TrainStationDbGenerator::Station &lhs, const QUrl &r
 }
 }
 
+namespace IdTrait {
+    template  <typename Id>
+    [[nodiscard]] static Id decode(const QString &s) { return Id{s}; }
+    template <>
+    [[nodiscard]] KItinerary::KnowledgeDb::HungarianStationCode decode<KItinerary::KnowledgeDb::HungarianStationCode>(const QString &s) {
+        const auto num = s.toUInt();
+        return KItinerary::KnowledgeDb::HungarianStationCode{num < (1 << 24) ? num : 0};
+    }
+
+    template <typename Id>
+    [[nodiscard]] static bool isValid(const Id &id) { return id.isValid(); }
+    [[nodiscard]] static bool isValid(KItinerary::KnowledgeDb::HungarianStationCode id) { return id.value() != 0; }
+
+    template <typename Id>
+    [[nodiscard]] static QByteArray encode(Id id) { return '"' + id.toString().toUtf8() + '"'; }
+    [[nodiscard]] static QByteArray encode(KItinerary::KnowledgeDb::IBNR id) { return QByteArray::number(id.value()); }
+    [[nodiscard]] static QByteArray encode(KItinerary::KnowledgeDb::UICStation id) { return QByteArray::number(id.value()); }
+    [[nodiscard]] static QByteArray encode(KItinerary::KnowledgeDb::HungarianStationCode id) { return QByteArray::number(id.value()); }
+}
+
 bool TrainStationDbGenerator::generate(QIODevice *out)
 {
     // retrieve content from Wikidata
@@ -43,6 +63,7 @@ bool TrainStationDbGenerator::generate(QIODevice *out)
      || !fetch("P4803", "amtrak", m_amtrakMap)
      || !fetch("P10653", "viarail", m_viaRailMap)
      || !fetch("P4755", "uk", m_ukMap)
+     || !fetch("P11451", "hu", m_huMap)
      || !fetchIndianRailwaysStationCode()
      || !fetchFinishStationCodes()
     ) {
@@ -73,6 +94,7 @@ namespace KnowledgeDb {
     writeIdMap(out, m_amtrakMap, "amtrak", "AmtrakStationCode");
     writeIdMap(out, m_viaRailMap, "viarail", "ViaRailStationCode");
     writeIdMap(out, m_ukMap, "uk", "UKRailwayStationCode");
+    writeIdMap(out, m_huMap, "hu", "HungarianStationCode");
     writeIndianRailwaysMap(out);
     writeVRMap(out);
     out->write(R"(
@@ -87,39 +109,32 @@ namespace KnowledgeDb {
 template<typename Id>
 bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map<Id, QUrl> &idMap)
 {
-  const auto stationArray =
-      WikiData::query(QLatin1StringView(R"(
-        SELECT DISTINCT ?station ?stationLabel ?id ?coord ?replacedBy ?dateOfOfficialClosure WHERE {
-            ?station (wdt:P31/wdt:P279*) wd:Q124673697.
-            ?station wdt:)") +
-                          QString::fromUtf8(prop) + QLatin1StringView(R"( ?id.
-            OPTIONAL { ?station wdt:P625 ?coord. }
-            OPTIONAL { ?station wdt:P1366 ?replacedBy. }
-            OPTIONAL { ?station wdt:P3999 ?dateOfOfficialClosure. }
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-        } ORDER BY (?station))"),
-                      QLatin1StringView("wikidata_trainstation_") +
-                          QString::fromUtf8(name) + QLatin1StringView(".json"));
-  if (stationArray.isEmpty()) {
-    qWarning() << "Empty query result!";
-    return false;
+    const auto stationArray =
+        WikiData::query(R"(
+            SELECT DISTINCT ?station ?stationLabel ?id ?coord ?replacedBy ?dateOfOfficialClosure WHERE {
+                ?station (wdt:P31/wdt:P279*) wd:Q124673697.
+                ?station wdt:)"_L1 + QLatin1StringView(prop) + R"( ?id.
+                OPTIONAL { ?station wdt:P625 ?coord. }
+                OPTIONAL { ?station wdt:P1366 ?replacedBy. }
+                OPTIONAL { ?station wdt:P3999 ?dateOfOfficialClosure. }
+                SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+            } ORDER BY (?station))"_L1,
+            "wikidata_trainstation_"_L1 + QLatin1StringView(name) + ".json"_L1);
+    if (stationArray.isEmpty()) {
+        qWarning() << "Empty query result!";
+        return false;
     }
 
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
-        if (stationObj.contains(QLatin1StringView("replacedBy")) ||
-            stationObj.contains(QLatin1StringView("dateOfOfficialClosure"))) {
-          continue;
+        if (stationObj.contains("replacedBy"_L1) || stationObj.contains("dateOfOfficialClosure"_L1)) {
+            continue;
         }
 
         const auto uri = insertOrMerge(stationObj);
-        const auto idStr = stationObj.value(QLatin1StringView("id"))
-                               .toObject()
-                               .value(QLatin1StringView("value"))
-                               .toString()
-                               .toUpper();
-        const auto id = Id(idStr);
-        if (!id.isValid()) {
+        const auto idStr = stationObj.value("id"_L1).toObject().value("value"_L1).toString().toUpper();
+        const auto id = IdTrait::decode<Id>(idStr);
+        if (!IdTrait::isValid(id)) {
             ++m_idFormatViolations;
             qWarning() << name << "format violation" << idStr << uri;
             continue;
@@ -351,7 +366,7 @@ void TrainStationDbGenerator::writeIdMap(QIODevice *out, const std::map<Id, QUrl
         out->write("    { ");
         out->write(typeName);
         out->write("{");
-        out->write(encodeId(it.first));
+        out->write(IdTrait::encode(it.first));
         out->write("}, TrainStationIndex{");
         out->write(QByteArray::number((int)std::distance(m_stations.begin(), station)));
         out->write("} }, // ");
@@ -446,6 +461,7 @@ void TrainStationDbGenerator::printSummary()
     qDebug() << "Amtrak station code index:" << m_amtrakMap.size() << "elements";
     qDebug() << "Via Rail station code index:" << m_viaRailMap.size() << "elements";
     qDebug() << "UK railway station code index:" << m_ukMap.size() << "elements";
+    qDebug() << "HU railway station code index:" << m_huMap.size() << "elements";
     qDebug() << "Identifier collisions:" << m_idConflicts;
     qDebug() << "Identifier format violations:" << m_idFormatViolations;
     qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;
