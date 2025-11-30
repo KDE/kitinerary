@@ -24,11 +24,14 @@ function parseBarcodeCommon(res, data, version) {
 
     const flags = view.getUInt8(8);
     let offset = 19; // header size
+
+    // passenger block
     if (flags & 0x80) {
         res.underName.name = ByteArray.decodeUtf8(data.slice(offset, offset + 45));
         offset += 64;
     }
 
+    // trip block
     if (flags & 0x01) {
         res.reservationFor.departureStation.identifier = parseUicStationCode(view.getUint32(offset + 3, false), version);
         res.reservationFor.departureStation.name = "" + (view.getUint32(offset + 3, false) & 0xffffff);
@@ -41,17 +44,28 @@ function parseBarcodeCommon(res, data, version) {
         res.reservedTicket.validUntil.setMinutes((view.getUint32(offset + 105, false) & 0xffffff) + res.reservedTicket.validFrom.getMinutes());
         offset += 114
     }
-    for (var i = 0; i < view.getUInt8(10); ++i) {
-        const seatBlock = data.slice(data.byteLength - ((i+1) *57));
+
+    // supplement blocks
+    for (let i = 0; i < view.getUInt8(9); ++i) {
+        const supplementView = new DataView(data.slice(offset, offset + 23));
+        res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(offset + 6, offset + 7));
+        offset += 23;
+    }
+
+    // reservation blocks
+    for (let i = 0; i < view.getUInt8(10); ++i) {
+        const seatBlock = data.slice(offset);
         const seatView = new DataView(seatBlock);
-        res.reservationFor.trainNumber = ByteArray.decodeUtf8(seatBlock.slice(16, 16+5));
-        if (seatView.getUInt8(22) == 0) { // surcharge block
-            continue;
+
+        let seatOffset = 16 + (version < 6 ? 5 : 20);
+        res.reservationFor.trainNumber = ByteArray.decodeUtf8(seatBlock.slice(16, seatOffset));
+        if (seatView.getUInt8(seatOffset + 1)) {
+            res.reservedTicket.ticketedSeat.seatSection = ByteArray.decodeUtf8(seatBlock.slice(seatOffset + 1, seatOffset + 4));
         }
-        res.reservedTicket.ticketedSeat.seatSection = ByteArray.decodeUtf8(seatBlock.slice(22, 25));
-        if (seatView.getUInt16(25, false) !== 0) {
-            res.reservedTicket.ticketedSeat.seatNumber = seatView.getUInt16(25, false);
+        if (seatView.getUInt16(seatOffset + 4, false) !== 0) {
+            res.reservedTicket.ticketedSeat.seatNumber = seatView.getUInt16(seatOffset + 4, false);
         }
+        offset += version < 6 ? 57 : 72;
     }
 }
 
