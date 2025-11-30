@@ -21,21 +21,25 @@ function parseBarcodeCommon(res, data, version) {
     const view = new DataView(data);
     res.totalPrice = view.getFloat32(4);
     res.priceCurrency = 'HUF';
-    const ticketType = view.getUInt8(8);
-    const tripBlockOffset = ticketType == 0x81 ? 87 : 23;
-    if (ticketType & 0x01) {
-        res.reservationFor.departureStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset - 1, false), version);
-        res.reservationFor.departureStation.name = "" + (view.getUint32(tripBlockOffset - 1, false) & 0xffffff);
-        res.reservationFor.arrivalStation.identifier = parseUicStationCode(view.getUint32(tripBlockOffset + 2 , false), version);
-        res.reservationFor.arrivalStation.name = "" + (view.getUint32(tripBlockOffset + 2, false) & 0xffffff);
-        res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(tripBlockOffset + 96, tripBlockOffset + 97));
-        res.reservationFor.departureDay = parseDateTime(view.getUint32(tripBlockOffset + 98, false));
+
+    const flags = view.getUInt8(8);
+    let offset = 19; // header size
+    if (flags & 0x80) {
+        res.underName.name = ByteArray.decodeUtf8(data.slice(offset, offset + 45));
+        offset += 64;
+    }
+
+    if (flags & 0x01) {
+        res.reservationFor.departureStation.identifier = parseUicStationCode(view.getUint32(offset + 3, false), version);
+        res.reservationFor.departureStation.name = "" + (view.getUint32(offset + 3, false) & 0xffffff);
+        res.reservationFor.arrivalStation.identifier = parseUicStationCode(view.getUint32(offset + 6 , false), version);
+        res.reservationFor.arrivalStation.name = "" + (view.getUint32(offset + 6, false) & 0xffffff);
+        res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(offset + 100, offset + 101));
+        res.reservationFor.departureDay = parseDateTime(view.getUint32(offset + 102, false));
         res.reservedTicket.validFrom = res.reservationFor.departureDay;
         res.reservedTicket.validUntil = new Date(res.reservedTicket.validFrom);
-        res.reservedTicket.validUntil.setMinutes((view.getUint32(tripBlockOffset + 101, false) & 0xffffff) + res.reservedTicket.validFrom.getMinutes());
-        if (ticketType & 0x80) {
-            res.underName.name = ByteArray.decodeUtf8(data.slice(19, 19 + 45));
-        }
+        res.reservedTicket.validUntil.setMinutes((view.getUint32(offset + 105, false) & 0xffffff) + res.reservedTicket.validFrom.getMinutes());
+        offset += 114
     }
     for (var i = 0; i < view.getUInt8(10); ++i) {
         const seatBlock = data.slice(data.byteLength - ((i+1) *57));
