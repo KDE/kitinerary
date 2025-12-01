@@ -78,11 +78,11 @@ function parseBarcode(data) {
     if (version == 4) {
         const inner = ByteArray.inflate(data.slice(2));
         const view = new DataView(inner);
-        res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 17));
+        res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 18));
         res.reservationFor.provider.identifier = "uic:" + view.getUint16(18, false);
         parseBarcodeCommon(res, inner.slice(20), version);
     } else if (version >= 5) { // version 5 and 6
-        res.reservationNumber = ByteArray.decodeUtf8(data.slice(2, 19));
+        res.reservationNumber = ByteArray.decodeUtf8(data.slice(2, 20));
         res.reservationFor.provider.identifier = "uic:" + ByteArray.decodeUtf8(data.slice(20, 24));
         const inner = ByteArray.inflate(data.slice(24));
         parseBarcodeCommon(res, inner, version);
