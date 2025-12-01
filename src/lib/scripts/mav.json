@@ -7,7 +7,7 @@
                 "scope": "Current"
             },
             {
-                "match": "^.\\01[\\dA-Z]{17}\\x001155",
+                "match": "^[\\x05\\x06].[\\dA-Z]{17}[\\x00\\dA-Z]1155",
                 "mimeType": "application/octet-stream",
                 "scope": "Current"
             }
@@ -24,7 +24,7 @@
                 "scope": "Descendants"
             },
             {
-                "match": "^.\\01[\\dA-Z]{17}\\x001155",
+                "match": "^[\\x05\\x06].[\\dA-Z]{17}[\\x00\\dA-Z]1155",
                 "mimeType": "application/octet-stream",
                 "scope": "Descendants"
             }
