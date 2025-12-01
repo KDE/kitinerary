@@ -9,10 +9,20 @@ function parseDateTime(value)
     return new Date(value * 1000 + base.getTime());
 }
 
-function parseUicStationCode(value, version)
+function parseStationCode(station, view, offset, version)
 {
-    value &= 0xffffff;
-    return version < 5 ? "uic:" + value : "hu:" + value;
+    if (station.identifier)
+        return;
+
+    let value = 0;
+    for (let i = 0; i < 3; ++i) {
+        value <<= 8;
+        value |= view.getUInt8(offset + i);
+    }
+    if (value > 0) {
+        station.identifier = version < 5 ? "uic:" + value : "hu:" + value;
+        station.name = "" + value;
+    }
 }
 
 // see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
@@ -33,10 +43,8 @@ function parseBarcodeCommon(res, data, version) {
 
     // trip block
     if (flags & 0x01) {
-        res.reservationFor.departureStation.identifier = parseUicStationCode(view.getUint32(offset + 3, false), version);
-        res.reservationFor.departureStation.name = "" + (view.getUint32(offset + 3, false) & 0xffffff);
-        res.reservationFor.arrivalStation.identifier = parseUicStationCode(view.getUint32(offset + 6 , false), version);
-        res.reservationFor.arrivalStation.name = "" + (view.getUint32(offset + 6, false) & 0xffffff);
+        parseStationCode(res.reservationFor.departureStation, view, offset + 4, version);
+        parseStationCode(res.reservationFor.arrivalStation, view, offset + 7, version);
         res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(offset + 100, offset + 101));
         res.reservationFor.departureDay = parseDateTime(view.getUint32(offset + 102, false));
         res.reservedTicket.validFrom = res.reservationFor.departureDay;
@@ -48,6 +56,8 @@ function parseBarcodeCommon(res, data, version) {
     // supplement blocks
     for (let i = 0; i < view.getUInt8(9); ++i) {
         const supplementView = new DataView(data.slice(offset, offset + 23));
+        parseStationCode(res.reservationFor.departureStation, supplementView, 0, version);
+        parseStationCode(res.reservationFor.arrivalStation, supplementView, 3, version);
         res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(offset + 6, offset + 7));
         offset += 23;
     }
@@ -56,6 +66,8 @@ function parseBarcodeCommon(res, data, version) {
     for (let i = 0; i < view.getUInt8(10); ++i) {
         const seatBlock = data.slice(offset);
         const seatView = new DataView(seatBlock);
+        parseStationCode(res.reservationFor.departureStation, seatView, 0, version);
+        parseStationCode(res.reservationFor.arrivalStation, seatView, 3, version);
 
         let seatOffset = 16 + (version < 6 ? 5 : 20);
         res.reservationFor.trainNumber = ByteArray.decodeUtf8(seatBlock.slice(16, seatOffset));
