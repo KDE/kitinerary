@@ -81,7 +81,8 @@ QVariant JsApi::ByteArray::toProtobufStreamReader(const QByteArray &input) const
 
 QJSValue JsApi::ByteArray::decodeRsp6Ticket(const QString &text) const
 {
-    return toArrayBuffer(Rsp6Decoder::decode(text.toLatin1()));
+    const auto b = Rsp6Decoder::decode(text.toLatin1());
+    return b.isEmpty() ? QJSValue::UndefinedValue :toArrayBuffer(b);
 }
 
 QJSValue JsApi::ByteArray::toArrayBuffer(const QByteArray &input) const

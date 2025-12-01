@@ -24,6 +24,8 @@ function readRSP6DateTime(data, start) {
 // see https://git.eta.st/eta/rsp6-decoder/src/branch/master/spec.pdf
 function parseRSP6(text) {
     const rsp6Data = ByteArray.decodeRsp6Ticket(text);
+    if (!rsp6Data)
+        return;
     const rsp6 = ByteArray.toBitArray(rsp6Data);
 
     let res = JsonLd.newTrainReservation();
@@ -99,10 +101,14 @@ function parseRSP6(text) {
 
 function parseTicket(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
-    var res = triggerNode.result[0];
+    let res = triggerNode.result[0];
+    if (!res) {
+        res = JsonLd.newTrainReservation();
+        res.reservedTicket.ticketToken = 'azteccode:' + triggerNode.content;
+    }
     const header = text.match(/ +(\d{2}[ -][A-Z][a-z]{2}[ -]\d{4}) +(?:Out: |Ret: )?([A-Z]{3}) ?- ?([A-Z]{3})\n(.*)  +(.*)/);
     const date = header[1].replace(/-/g, ' ');
-    const itinerary = text.match(/Itinerary.*\n +(.*)\n +(\d{2}:\d{2})\n +([\S\s]*?)\n +(\d{2}:\d{2})\n +(.*)/);
+    const itinerary = text.match(/Itinerary.*\n["⃝ ]+(.*)\n +(\d{2}:\d{2})\n +([\S\s]*?)\n +(\d{2}:\d{2})\n["⃝ ]+(.*)/);
 
     res.reservationFor.departureStation.identifier = 'uk:' + header[2];
     res.reservationFor.arrivalStation.identifier = 'uk:' + header[3];
