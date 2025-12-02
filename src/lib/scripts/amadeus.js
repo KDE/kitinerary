@@ -108,6 +108,7 @@ function parseCytricEvent(ev)
         res.checkinTime = ev.dtStart; // TODO this might break for date-only values?
         res.checkoutTime = ev.dtEnd;
         res.reservationNumber = ev.description.match(/code: (.*)\n/)[1];
+        ExtractorEngine.extractPrice(ev.description, res);
         return res;
     }
     else if (category.match(/Rental|Mietwagen/)) {
