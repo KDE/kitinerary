@@ -9,6 +9,16 @@ function parseDateTime(value)
     return new Date(value * 1000 + base.getTime());
 }
 
+function parseValidityRange(ticket, view, offset, version)
+{
+    if (ticket.validFrom)
+        return;
+    ticket.validFrom = parseDateTime(view.getUint32(offset, false));
+    const interval = version > 3 ? view.getUInt32(offset + 3, false) & 0xffffff : view.getUInt16(offset + 4);
+    ticket.validUntil = new Date(ticket.validFrom);
+    ticket.validUntil.setMinutes(interval + ticket.validFrom.getMinutes());
+}
+
 function parseStationCode(station, view, offset, version)
 {
     if (station.identifier)
@@ -47,9 +57,7 @@ function parseBarcodeCommon(res, data, version) {
         parseStationCode(res.reservationFor.arrivalStation, view, offset + 7, version);
         res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(offset + 100, offset + 101));
         res.reservationFor.departureDay = parseDateTime(view.getUint32(offset + 102, false));
-        res.reservedTicket.validFrom = res.reservationFor.departureDay;
-        res.reservedTicket.validUntil = new Date(res.reservedTicket.validFrom);
-        res.reservedTicket.validUntil.setMinutes((view.getUint32(offset + 105, false) & 0xffffff) + res.reservedTicket.validFrom.getMinutes());
+        parseValidityRange(res.reservedTicket, view, offset + 102, version);
         offset += 114
     }
 
@@ -59,6 +67,7 @@ function parseBarcodeCommon(res, data, version) {
         parseStationCode(res.reservationFor.departureStation, supplementView, 0, version);
         parseStationCode(res.reservationFor.arrivalStation, supplementView, 3, version);
         res.reservedTicket.ticketedSeat.seatingType = ByteArray.decodeUtf8(data.slice(offset + 6, offset + 7));
+        parseValidityRange(res.reservedTicket, supplementView, 11, version);
         offset += 23;
     }
 
@@ -68,6 +77,8 @@ function parseBarcodeCommon(res, data, version) {
         const seatView = new DataView(seatBlock);
         parseStationCode(res.reservationFor.departureStation, seatView, 0, version);
         parseStationCode(res.reservationFor.arrivalStation, seatView, 3, version);
+        if (!res.reservationFor.departureDay)
+            res.reservationFor.departureDay = parseDateTime(seatView.getUint32(10, false));
 
         let seatOffset = 16 + (version < 6 ? 5 : 20);
         res.reservationFor.trainNumber = ByteArray.decodeUtf8(seatBlock.slice(16, seatOffset));
@@ -79,6 +90,13 @@ function parseBarcodeCommon(res, data, version) {
         }
         offset += version < 6 ? 57 : 72;
     }
+
+    // pass blocks
+    for (let i = 0; i < view.getUInt8(11); ++i) {
+        const passView = new DataView(data.slice(offset));
+        parseValidityRange(res.reservedTicket, passView, 12, version);
+        offset += 20;
+    }
 }
 
 function parseBarcode(data) {
@@ -87,7 +105,7 @@ function parseBarcode(data) {
 
     let res = JsonLd.newTrainReservation();
 
-    if (version == 4) {
+    if (version == 3 || version == 4) {
         const inner = ByteArray.inflate(data.slice(2));
         const view = new DataView(inner);
         res.reservationNumber = ByteArray.decodeUtf8(inner.slice(0, 18));
