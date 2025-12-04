@@ -8,19 +8,26 @@ import json
 import os
 import requests
 
+
 def hexToBase64(s):
     if len(s) % 2 == 1:
         s = '0' + s
     return base64.b64encode(bytes.fromhex(s)).decode()
 
+
 parser = argparse.ArgumentParser(description='Download RSP-6 public keys')
+parser.add_argument('--keys', type=str, required=False, help='Local keys JSON file to use instead of downloading')
 parser.add_argument('--output', type=str, required=True, help='Path to which the output should be written')
 arguments = parser.parse_args()
 
-os.makedirs(arguments.output, exist_ok = True)
+os.makedirs(arguments.output, exist_ok=True)
 
-req = requests.get('https://git.eta.st/eta/rsp6-decoder/-/raw/master/keys.json')
-keys = json.loads(req.content)
+if not arguments.keys:
+    req = requests.get('https://git.eta.st/eta/rsp6-decoder/-/raw/master/keys.json')
+    keys = json.loads(req.content)
+else:
+    with open(arguments.keys, 'r') as f:
+        keys = json.load(f)['keys']
 issuers = []
 
 # remove all existing certs so we clean up revoked/expired ones
