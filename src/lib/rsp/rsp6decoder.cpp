@@ -36,7 +36,7 @@ static QByteArray decodeBase45Backward(const char *begin, const char *end)
     return result;
 }
 
-static std::vector<openssl::rsa_ptr> loadKeys(std::string_view keyId)
+static std::vector<openssl::evp_pkey_ptr> loadKeys(std::string_view keyId)
 {
   qDebug() << "looking for key:"
            << QLatin1StringView(keyId.data(), keyId.size());
@@ -52,7 +52,7 @@ static std::vector<openssl::rsa_ptr> loadKeys(std::string_view keyId)
     }
 
     const auto keysArray = QJsonDocument::fromJson(keyFile.readAll()).array();
-    std::vector<openssl::rsa_ptr> keys;
+    std::vector<openssl::evp_pkey_ptr> keys;
     keys.reserve(keysArray.size());
 
     for (const auto &keyVal : keysArray) {
@@ -62,9 +62,20 @@ static std::vector<openssl::rsa_ptr> loadKeys(std::string_view keyId)
         auto e = Bignum::fromByteArray(QByteArray::fromBase64(
             keyObj.value(QLatin1StringView("e")).toString().toLatin1()));
 
-        openssl::rsa_ptr rsa(RSA_new());
-        RSA_set0_key(rsa.get(), n.release(), e.release(), nullptr);
-        keys.push_back(std::move(rsa));
+        openssl::ossl_param_bld_ptr param_bld(OSSL_PARAM_BLD_new());
+        OSSL_PARAM_BLD_push_BN(param_bld.get(), "n", n.get());
+        OSSL_PARAM_BLD_push_BN(param_bld.get(), "e", e.get());
+        openssl::ossl_param_ptr params(OSSL_PARAM_BLD_to_param(param_bld.get()));
+
+        openssl::evp_pkey_ctx_ptr ctx(EVP_PKEY_CTX_new_from_name(nullptr, "RSA", nullptr));
+        EVP_PKEY_fromdata_init(ctx.get());
+        EVP_PKEY *pkey = nullptr;
+        if (const auto res = EVP_PKEY_fromdata(ctx.get(), &pkey, EVP_PKEY_PUBLIC_KEY, params.get()); res <= 0) {
+            qWarning() << ERR_error_string(ERR_get_error(), nullptr);
+            continue;
+        }
+
+        keys.emplace_back(pkey);
     }
 
     return keys;
@@ -90,17 +101,21 @@ QByteArray Rsp6Decoder::decode(const QByteArray &data)
     // decrypt payload, try all keys for the current issuer until we find one that works
     QByteArray decrypted;
     QByteArray depadded;
-    for (const auto &rsa : keys) {
-        decrypted.resize(RSA_size(rsa.get()));
-        const auto decryptedSize = RSA_public_decrypt(decoded.size(), reinterpret_cast<const uint8_t*>(decoded.data()), reinterpret_cast<uint8_t*>(decrypted.data()), rsa.get(), RSA_NO_PADDING);
-        if (decryptedSize < 0) {
-            qDebug() << "RSA error:" << ERR_error_string(ERR_get_error(), nullptr);
+    for (const auto &key : keys) {
+        openssl::evp_pkey_ctx_ptr ctx(EVP_PKEY_CTX_new(key.get(), nullptr));
+        EVP_PKEY_verify_recover_init(ctx.get());
+        EVP_PKEY_CTX_set_rsa_padding(ctx.get(), RSA_NO_PADDING);
+        std::size_t decryptedSize = 0;
+        if (EVP_PKEY_verify_recover(ctx.get(), nullptr, &decryptedSize, reinterpret_cast<const uint8_t*>(decoded.data()), decoded.size()) <= 0) {
             continue;
         }
+        decrypted.resize((qsizetype)decryptedSize);
+        EVP_PKEY_verify_recover(ctx.get(), reinterpret_cast<uint8_t*>(decrypted.data()), &decryptedSize, reinterpret_cast<const uint8_t*>(decoded.data()), decoded.size());
 
         // we don't know the padding scheme, so we have to try all of them
-        depadded.resize(decryptedSize);
+        depadded.resize((qsizetype)decryptedSize);
         // PKCS#1 type 1
+        const auto rsa = openssl::rsa_ptr(EVP_PKEY_get1_RSA(key.get()));
         auto depaddedSize = RSA_padding_check_PKCS1_type_1((uint8_t*)depadded.data(), depadded.size(), (const uint8_t*)decrypted.data(), decrypted.size(), RSA_size(rsa.get()));
         if (depaddedSize > 0) {
             depadded.resize(depaddedSize);
