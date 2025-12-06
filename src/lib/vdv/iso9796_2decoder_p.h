@@ -40,7 +40,7 @@ public:
     QByteArray recoveredMessage() const;
 
 private:
-    openssl::rsa_ptr m_rsa;
+    openssl::evp_pkey_ptr m_key;
     QByteArray m_recoveredMsg;
 };
 
