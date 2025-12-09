@@ -136,12 +136,18 @@ function parseBarcode(data) {
         return ticket;
     }
 
+    // Volan bus tickets
+    if (res.reservationNumber[0] == 'V')
+        return JsonLd.trainToBusReservation(res);
+
     return res;
 }
 
 function reservationFromBarcode(node) {
     if (node.result[0]['@type'] === 'TrainReservation')
         return JsonLd.clone(node.result[0]);
+    if (node.result[0]['@type'] === 'BusReservation')
+        return JsonLd.busToTrainReservation(node.result[0]);
     let res = JsonLd.newTrainReservation();
     res.reservedTicket = JsonLd.clone(node.result[0]);
     res.reservationFor.provider = res.reservedTicket.issuedBy;
