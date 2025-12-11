@@ -2,7 +2,7 @@
     {
         "filter": [
             {
-                "match": "^\\x04\\x03\\x1f\\x8b",
+                "match": "^\\x04.\\x1f\\x8b\\x08\\x00\\x00",
                 "mimeType": "application/octet-stream",
                 "scope": "Current"
             },
@@ -19,7 +19,7 @@
     {
         "filter": [
             {
-                "match": "^\\x04\\x03\\x1f\\x8b",
+                "match": "^\\x04.\\x1f\\x8b\\x08\\x00\\x00",
                 "mimeType": "application/octet-stream",
                 "scope": "Descendants"
             },
