@@ -530,7 +530,7 @@ static bool isSameLineName(const QString &lhs, const QString &rhs)
     }
 
     // deal with both line and route numbers being specified
-    static QRegularExpression rx(QStringLiteral(R"(^(?<type>[A-Za-z-]+) (?<line>\d+)(?: \((?<route>\d{4,})\))?$)"));
+    static QRegularExpression rx(QStringLiteral(R"(^(?<type>[A-Za-z-]+) (?<line>\d+)(?: \((?<route>\d{4,})\))?(?: / (?<altname>[A-Za-z]+ \d+))?$)"));
     const auto lhsMatch = rx.match(lhs);
     const auto rhsMatch = rx.match(rhs);
     if (!lhsMatch.hasMatch() || !rhsMatch.hasMatch()) {
