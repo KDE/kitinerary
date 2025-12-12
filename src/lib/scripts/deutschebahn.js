@@ -185,21 +185,23 @@ function parseReservation(pdf) {
     var idx = 0;
 
     while (true) {
-        var dep = text.substr(idx).match(/  (\S.*\S) +(\d\d.\d\d.\d\d) +ab (\d\d:\d\d)  +(.*?)  +([A-Z].*\S)  +(.*)\n/);
+        const dep = text.substr(idx).match(/ *(\S.*\S) +(\d\d.\d\d\.(?:\d\d)?) +ab (\d\d:\d\d)  +(.*?)  +([A-Z].*\S)  +(.*)\n/);
         if (!dep)
             break;
         idx += dep.index + dep[0].length;
-        var arr = text.substr(idx).match(/  (\S.*\S) +an (\d\d:\d\d)  +(.*?)  +(.*)\n/);
+        const arr = text.substr(idx).match(/ *(\S.*?\S) +(?:\d\d\.\d\d\. +)?an (\d\d:\d\d) +(.*?)  +(.*)\n/);
         if (!arr)
             break;
 
         var res = JsonLd.newTrainReservation();
         res.reservationFor.departureStation.name = dep[1];
-        res.reservationFor.departureTime = JsonLd.toDateTime(dep[2] + dep[3], "dd.MM.yyhh:mm", "de");
+        if (dep[1].match(/  /))
+            res.reservationFor.departureStation.name = dep[1].match(/  +(.*)/)[1];
+        res.reservationFor.departureTime = JsonLd.toDateTime(dep[2] + dep[3], ["dd.MM.yyhh:mm", "dd.MM.HH:mm"], "de");
         res.reservationFor.trainNumber = dep[5];
         res.reservationFor.departurePlatform = dep[4];
         res.reservationFor.arrivalStation.name = arr[1];
-        res.reservationFor.arrivalTime = JsonLd.toDateTime(dep[2] + arr[2], "dd.MM.yyhh:mm", "de");
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(dep[2] + arr[2], ["dd.MM.yyhh:mm", "dd.MM.HH:mm"], "de");
         res.reservationFor.arrivalPlatform = arr[3];
         reservations.push(res);
 
