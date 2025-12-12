@@ -274,6 +274,8 @@ private Q_SLOTS:
         QTest::newRow("denmark-2") << QString() << u"InterCityLyn 12345"_s << QString() << u"IC-Lyntog 12345"_s << true;
         QTest::newRow("denmark-3") << QString() << u"InterCity-tog 12345"_s << QString() << u"InterCity 54321"_s << false;
         QTest::newRow("denmark-4") << QString() << u"InterCityLyn 12345"_s << QString() << u"IC-Lyntog 54321"_s << false;
+
+        QTest::newRow("db-codeshare-1") << QString() << u"RE 56 (52431) / IC 2431"_s << QString() << u"RE 56 (52431)"_s << true;
     }
 
     void testIsSameTrain()
