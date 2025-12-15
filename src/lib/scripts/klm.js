@@ -60,6 +60,9 @@ function extractBoardingPass(pdf, node, barcode) {
         offset += 0.5
         res.reservationFor.departureTime = JsonLd.toDateTime(text.match(/(\d\d:\d\d) \/ \d\d \S{3}/)[1], 'hh:mm', 'en');
         res.reservationFor.boardingTime = JsonLd.toDateTime(text.match(/Boarding +(\d\d:\d\d)/)[1], 'hh:mm', 'en');
+        var zone = text.match(/Gate closed .* (Zone (?:ZONE)?\d)/);
+        if (zone)
+            res.boardingGroup = zone[1];
         res.reservationFor.arrivalTime = JsonLd.toDateTime(text.match(/Arrival .* +(\d\d:\d\d)/)[1], 'hh:mm', 'en');
         results.push(res);
     }
