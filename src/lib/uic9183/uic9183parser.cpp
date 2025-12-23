@@ -32,6 +32,7 @@
 #include <cassert>
 #include <cstring>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 namespace KItinerary {
@@ -86,6 +87,10 @@ QVariant Uic9183Parser::block(const QString &name) const
     BLOCK_FROM_NAME(Vendor0080BLBlock)
     BLOCK_FROM_NAME(Vendor0080VUBlock)
     BLOCK_FROM_NAME(Vendor1154UTBlock)
+    if (name == "3697OT"_L1) {
+        const auto block = Vendor1154UTBlock(findBlock("3697OT"));
+        return block.isValid() ? QVariant::fromValue(block) : QVariant();
+    }
 
 #undef BLOCK_FROM_NAME
 

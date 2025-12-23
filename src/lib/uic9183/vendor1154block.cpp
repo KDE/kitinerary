@@ -11,7 +11,7 @@
 
 using namespace KItinerary;
 
-// 1154UT vendor block sub-block format
+// 1154UT vendor block sub-block format (same format is used for 3697OT)
 // 2x field type
 // 3x field size as ASCII number
 // nx field content
