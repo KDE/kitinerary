@@ -174,7 +174,6 @@ function parsePdfTicket(content, node, triggerNode) {
 
         if (triggerNode.result[0]['@type'] == 'TrainReservation') {
             res = JsonLd.apply(triggerNode.result[0], res);
-            res.reservationNumber = triggerNode.content.block('1154UT').findSubBlock('KK').content;
         }
         res.reservedTicket = JsonLd.apply(triggerNode.result[0].reservedTicket, res.reservedTicket);
 
@@ -189,7 +188,14 @@ function parseUicTicket(uic, node)
 {
     if (node.result[0]['@type'] == 'TrainReservation') {
         let res = node.result[0];
-        res.reservationNumber = uic.block('1154UT').findSubBlock('KK').content;
+        if (block = uic.block('1154UT')) {
+            res.reservationNumber = block.findSubBlock('KK').content;
+        } else if (block = uic.block('3697OT')) {
+            res.reservationNumber = block.findSubBlock('KK').content;
+            res.reservedTicket.validFrom = JsonLd.toDateTime(block.findSubBlock('PO').content, 'ddMMyyyyHHmm', 'cz');
+            res.reservedTicket.validUntil =
+            JsonLd.toDateTime(block.findSubBlock('PD').content, 'ddMMyyyyHHmm', 'cz');
+        }
         res.reservedTicket.ticketNumber = uic.pnr;
         return res;
     } else {
