@@ -87,10 +87,7 @@ QVariant Uic9183Parser::block(const QString &name) const
     BLOCK_FROM_NAME(Vendor0080BLBlock)
     BLOCK_FROM_NAME(Vendor0080VUBlock)
     BLOCK_FROM_NAME(Vendor1154UTBlock)
-    if (name == "3697OT"_L1) {
-        const auto block = Vendor1154UTBlock(findBlock("3697OT"));
-        return block.isValid() ? QVariant::fromValue(block) : QVariant();
-    }
+    BLOCK_FROM_NAME(Vendor3697OTBlock)
 
 #undef BLOCK_FROM_NAME
 
@@ -373,13 +370,22 @@ Person Uic9183Parser::person() const
             return p;
         }
     }
+
     // CD vender block
-    if (const auto b = findBlock<Vendor1154UTBlock>(); b.isValid()) {
-        const auto subBlock = b.findSubBlock("KJ");
-        if (!subBlock.isNull()) {
-            Person p;
-            p.setName(subBlock.toString());
-            return p;
+    struct {
+        const char *block;
+        const char subBlock[3];
+    } constexpr const cz_keys[] = {
+        { Vendor1154UTBlock::RecordId, "KJ"},
+        { Vendor3697OTBlock::RecordId, "JP"}
+    };
+    for (const auto &key : cz_keys) {
+        if (const auto b = Vendor1154UTBlock(findBlock(key.block)); b.isValid()) {
+            if (const auto subBlock = b.findSubBlock(key.subBlock); !subBlock.isNull()) {
+                Person p;
+                p.setName(subBlock.toString());
+                return p;
+            }
         }
     }
 

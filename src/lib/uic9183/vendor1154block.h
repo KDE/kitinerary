@@ -60,6 +60,13 @@ private:
     Uic9183Block m_block;
 };
 
+/** Czech domestic ticket 3697OT block (same format as 1154UT). */
+class Vendor3697OTBlock : public Vendor1154UTBlock
+{
+public:
+    static constexpr const char RecordId[] = "3697OT";
+};
+
 }
 
 #endif // KITINERARY_VENDOR1154BLOCK_H
