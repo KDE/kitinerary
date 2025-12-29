@@ -34,7 +34,11 @@ QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
 {
     if (m_format == QImage::Format_Mono) { // bitmasks are not stored as image streams
         auto img = QImage(m_sourceWidth, m_sourceHeight, QImage::Format_Mono); // TODO implicit Format_Grayscale8 conversion
+#if KPOPPLER_VERSION < QT_VERSION_CHECK(25, 12, 90)
         str->reset();
+#else
+        str->rewind();
+#endif
         const int rowSize = (m_sourceWidth + 7) / 8;
         for (int y = 0; y < m_sourceHeight; ++y) {
             auto imgData = img.scanLine(y);
@@ -55,7 +59,11 @@ QImage PdfImagePrivate::load(Stream* str, GfxImageColorMap* colorMap)
     auto img = QImage(m_sourceWidth, m_sourceHeight, (m_loadingHints & PdfImage::ConvertToGrayscaleHint) ? QImage::Format_Grayscale8 : m_format);
     const auto bytesPerPixel = colorMap->getNumPixelComps();
     std::unique_ptr<ImageStream> imgStream(new ImageStream(str, m_sourceWidth, bytesPerPixel, colorMap->getBits()));
+#if KPOPPLER_VERSION <QT_VERSION_CHECK(25, 12, 90)
     imgStream->reset();
+#else
+    imgStream->rewind();
+#endif
 
     switch (m_format) {
         case QImage::Format_RGB888:
