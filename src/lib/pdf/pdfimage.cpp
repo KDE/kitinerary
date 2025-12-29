@@ -121,13 +121,13 @@ QImage PdfImagePrivate::load()
         {
             const auto dict = obj.getStream()->getDict();
             const auto maskObj = dict->lookup("Mask");
-            return load(maskObj.getStream(), m_colorMap.get());
+            return maskObj.isStream() ? load(maskObj.getStream(), m_colorMap.get()) : QImage();
         }
         case PdfImageType::SMask:
         {
             const auto dict = obj.getStream()->getDict();
             const auto maskObj = dict->lookup("SMask");
-            return load(maskObj.getStream(), m_colorMap.get());
+            return maskObj.isStream() ? load(maskObj.getStream(), m_colorMap.get()) : QImage();
         }
     }
 
