@@ -51,6 +51,39 @@ function main(text) {
     return reservations;
 }
 
+function ticketForYourTripEN(content) {
+    const reservations = new Array();
+    const klmDateFormat = "dddd d MMMM yyyy - hh:mm";
+
+    const commonInfoElement = content.eval("/html/body/table/tr/td/table/tr/td/table[4]/tr")
+    const commonInfoTextString = commonInfoElement[0].recursiveContent
+    const bookingRef = commonInfoTextString.match(/Booking code:\s+([0-9A-z]{6})\n/)[1]
+
+    const bookings = content.eval("/html/body/table/tr/td/table/tr/td/table/tr/td/table/tr/td[contains(., 'Booking class:')]")
+
+    for (i in bookings) {
+        const booking = bookings[i]
+        const res = JsonLd.newFlightReservation();
+        res.reservationNumber = bookingRef
+
+        const bookingLines = booking.content.split('\n')
+        const firstBookingLine = bookingLines[0]
+        const lastBookingLine = bookingLines[bookingLines.length - 1];
+        const airports = booking.eval("strong")
+        const departureAirport = airports[0].content.match(/, ([A-Z]{3})$/)[1]
+        const arrivalAirport = airports[1].content.match(/, ([A-Z]{3})$/)[1]
+        const flightNumber = booking.eval("table/tr/td")[0].recursiveContent.match(/^[A-Z]{2}\d+/)[0];
+        res.reservationFor.arrivalAirport.iataCode = arrivalAirport
+        res.reservationFor.departureAirport.iataCode = departureAirport
+        res.reservationFor.departureTime = JsonLd.toDateTime(firstBookingLine, klmDateFormat, "en")
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(lastBookingLine, klmDateFormat, "en")
+        res.reservationFor.flightNumber = flightNumber
+        reservations.push(res)
+    }
+
+    return reservations;
+}
+
 function extractBoardingPass(pdf, node, barcode) {
     const page = pdf.pages[barcode.location];
     let results = [];
