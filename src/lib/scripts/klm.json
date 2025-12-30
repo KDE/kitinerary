@@ -17,4 +17,17 @@
     "function": "extractBoardingPass",
     "mimeType": "application/pdf",
     "script": "klm.js"
+},
+{
+"filter": [
+        {
+            "field": "From",
+            "match": "KLM@klm-info.com",
+            "mimeType": "message/rfc822",
+            "scope": "Ancestors"
+        }
+    ],
+    "function": "ticketForYourTripEN",
+    "mimeType": "text/html",
+    "script": "klm.js"
 }]
