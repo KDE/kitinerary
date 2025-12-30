@@ -105,6 +105,11 @@ endif()
 add_definitions(-DTRANSLATION_DOMAIN=\"kitinerary6\")
 
 add_definitions(-DQT_NO_CONTEXTLESS_CONNECT)
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # Not setting for GNU due to too many warnings related to private members of base classes or around lambdas
+    # see e.g. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56556 or https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79328
+    string(APPEND CMAKE_CXX_FLAGS " -Wshadow")
+endif()
 ecm_set_disabled_deprecation_versions(QT 6.9.0 KF 6.10.0)
 
 
