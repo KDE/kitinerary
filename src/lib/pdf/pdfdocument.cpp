@@ -26,6 +26,7 @@
 
 #include <cmath>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 void PdfPagePrivate::load()
@@ -243,7 +244,12 @@ PdfDocument::~PdfDocument() = default;
 QString PdfDocument::text() const
 {
     QString text;
-    std::for_each(d->m_pages.begin(), d->m_pages.end(), [&text](const PdfPage &p) { text += p.text(); });
+    std::ranges::for_each(d->m_pages, [&text](const PdfPage &p) {
+        if (!text.isEmpty() && !text.endsWith('\n'_L1)) {
+            text += '\n'_L1;
+        }
+        text += p.text();
+    });
     return text;
 }
 
