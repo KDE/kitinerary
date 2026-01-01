@@ -12,7 +12,9 @@ function dumpValue(value, depth)
     {
         return value;
     } else if (typeof value == "string") {
-        return value.replace('\r\n', '\n');
+        if (value.match(/[^"\{\},]\n  +/)) // normalize whitespace variations between different Poppler versions
+            value = value.replace(/ +/g, ' ').trim();
+        return value.replace(/\r\n/g, '\n').replace(/\n\n/g, '\n');
     } else if (typeof value == "object") {
         if (depth == 0) {
             return "[...]";

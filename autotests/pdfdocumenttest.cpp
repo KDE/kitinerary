@@ -13,8 +13,6 @@
 
 using namespace KItinerary;
 
-#define LINEBREAK "\n"
-
 class PdfDocumentTest : public QObject
 {
     Q_OBJECT
@@ -32,26 +30,26 @@ private Q_SLOTS:
         f.seek(0);
         std::unique_ptr<PdfDocument> doc(PdfDocument::fromData(f.readAll()));
         QVERIFY(doc);
-        QCOMPARE(doc->text(),
-                 QLatin1StringView("This is the first page." LINEBREAK
-                                   "It contains a PDF 417 barcode." LINEBREAK
-                                   "This is the second page." LINEBREAK
-                                   "It contains an Aztec code." LINEBREAK));
+        QCOMPARE(doc->text().trimmed(),
+                 QLatin1StringView("This is the first page.\n"
+                                   "It contains a PDF 417 barcode.\n"
+                                   "This is the second page.\n"
+                                   "It contains an Aztec code."));
         QCOMPARE(doc->pageCount(), 2);
         QCOMPARE(doc->property("pages").toList().size(), 2);
 
         auto page = doc->page(0);
-        QCOMPARE(page.text(),
-                 QLatin1StringView("This is the first page." LINEBREAK
-                                   "It contains a PDF 417 barcode." LINEBREAK));
+        QCOMPARE(page.text().trimmed(),
+                 QLatin1StringView("This is the first page.\n"
+                                   "It contains a PDF 417 barcode."));
         QCOMPARE(page.imageCount(), 2);
         QCOMPARE(PdfPage::staticMetaObject.property(1).readOnGadget(&page).toList().size(), 2);
         QCOMPARE(page.width(), 210);
         QCOMPARE(page.height(), 296);
 
-        QCOMPARE(page.textInRect(0, 0, 1, 0.5),
-                 QLatin1StringView("This is the first page." LINEBREAK
-                                   "It contains a PDF 417 barcode." LINEBREAK));
+        QCOMPARE(page.textInRect(0, 0, 1, 0.5).trimmed(),
+                 QLatin1StringView("This is the first page.\n"
+                                   "It contains a PDF 417 barcode."));
         QCOMPARE(page.textInRect(0, 0.5, 1, 1), QString());
 
         auto img = page.image(0);
@@ -63,9 +61,9 @@ private Q_SLOTS:
         QCOMPARE(img.image().height(), 152);
 
         page = doc->page(1);
-        QCOMPARE(page.text(),
-                 QLatin1StringView("This is the second page." LINEBREAK
-                                   "It contains an Aztec code." LINEBREAK));
+        QCOMPARE(page.text().trimmed(),
+                 QLatin1StringView("This is the second page.\n"
+                                   "It contains an Aztec code."));
         QCOMPARE(page.imageCount(), 2);
         img = page.image(0);
         QCOMPARE(img.width(), 93);
