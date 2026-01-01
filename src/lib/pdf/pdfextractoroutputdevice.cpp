@@ -19,8 +19,9 @@
 using namespace KItinerary;
 
 PdfExtractorOutputDevice::PdfExtractorOutputDevice()
-    : TextOutputDev(nullptr, false, 0, false, false)
+    : TextOutputDev(nullptr, true, 0, false, false)
 {
+    setTextEOL(eolUnix);
 }
 
 void PdfExtractorOutputDevice::addRasterImage(GfxState *state, Object *ref, Stream *str, int width, int height, GfxImageColorMap *colorMap, PdfImageType type)

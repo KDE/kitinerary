@@ -13,11 +13,7 @@
 
 using namespace KItinerary;
 
-#ifdef Q_OS_WINDOWS
-#define LINEBREAK "\r\n"
-#else
 #define LINEBREAK "\n"
-#endif
 
 class PdfDocumentTest : public QObject
 {
