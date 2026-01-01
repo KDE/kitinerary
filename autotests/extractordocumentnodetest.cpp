@@ -17,11 +17,7 @@ using namespace KItinerary;
 
 #define s(x) QStringLiteral(x)
 
-#ifdef Q_OS_WINDOWS
-#define LINEBREAK "\r\n"
-#else
 #define LINEBREAK "\n"
-#endif
 
 class ExtractorDocumentNodeTest : public QObject
 {

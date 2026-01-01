@@ -110,7 +110,8 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
             return {};
     }
 
-    TextOutputDev device(nullptr, false, 0, false, false);
+    TextOutputDev device(nullptr, true, 0, false, false);
+    device.setTextEOL(eolUnix);
     d->m_doc->m_popplerDoc->displayPageSlice(&device, d->m_pageNum + 1, 72, 72, rotate, false, true, false, -1, -1, -1, -1);
 #if KPOPPLER_VERSION <QT_VERSION_CHECK(25, 1, 0)
     std::unique_ptr<GooString> s(device.getText(l, t, r, b));
