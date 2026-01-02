@@ -49,7 +49,7 @@ function parseTicketDirect(pdf, node, triggerNode)
 
     let res = JsonLd.newEventReservation();
     res.reservationNumber = text.match(/Ticket Nummer: (\d+-\d+)\n/)[1];
-    const dt = text.match(/([A-Z][a-z]+, \d{2}\.\d{2}\.\d{4}).*\n.*(\d{2}:\d{2}) Uhr(?:.*\n.*?(\d{2}:\d{2}) Uhr.*)?/);
+    const dt = text.match(/([A-Z][a-z]+, \d{2}\.\d{2}\.\d{4}).*\n+.*(\d{2}:\d{2}) Uhr(?:.*\n.*?(\d{2}:\d{2}) Uhr.*)?/);
 
     if (dt[3]) {
         res.reservationFor.doorTime = JsonLd.toDateTime(dt[1] + dt[2], 'dddd, dd.MM.yyyyhh:mm', 'de');

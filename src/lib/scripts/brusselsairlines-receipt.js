@@ -18,10 +18,10 @@ function extractColumn(page, offset) {
         }
     }
 
-    var dep = text.match(/Departure time.*\n(\d{1,2} \w+ \d{4})\s+(\d{1,2}:\d{2})/);
+    const dep = text.match(/Departure time.*\n+(\d{1,2} \w+ \d{4})\s+(\d{1,2}:\d{2})/);
     if (dep)
         res.reservationFor.departureTime = JsonLd.toDateTime(dep[1] + " " + dep[2], "dd MMMM yyyy hh:mm", "en");
-    var arr = text.match(/Arrival time.*\n(\d{1,2} \w+ \d{4})\s+(\d{1,2}:\d{2})/);
+    const arr = text.match(/Arrival time.*\n+(\d{1,2} \w+ \d{4})\s+(\d{1,2}:\d{2})/);
     if (arr)
         res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[1] + " " + arr[2], "dd MMMM yyyy hh:mm", "en");
 

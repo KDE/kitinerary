@@ -3,10 +3,9 @@
 
 function extractPdf(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
-    console.log(text);
 
     let res = JsonLd.newEventReservation();
-    const ev = text.match(/(.*)\n(\d{4}\.\d{2}\.\d{2}) - (\d{4}\.\d{2}\.\d{2})\n.*?: (.*)\n.*?: (.*)\n/);
+    const ev = text.match(/(.*)\n+(\d{4}\.\d{2}\.\d{2}) - (\d{4}\.\d{2}\.\d{2})\n+.*?: (.*)\n+.*?: (.*)\n/);
 
     res.reservationFor.name = ev[1];
     res.reservationFor.startDate = JsonLd.toDateTime(ev[2], "yyyy.MM.dd", "pl");

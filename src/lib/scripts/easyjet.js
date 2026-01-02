@@ -59,20 +59,19 @@ function parsePdfBoardingPass(pdf, node, triggerNode)
 {
     var res = triggerNode.result[0];
 
-    var page = pdf.pages[triggerNode.location];
-    var rightCol = page.textInRect(0.65, 0, 1, 0.25);
-    var depName = rightCol.match(/(?:from|Flying)\n\([A-Z]{3}\) ([^]*?)\n(?:to|Going)/);
-    if (depName)
-        res.reservationFor.departureAirport.name = depName[1];
-    var arrName = rightCol.match(/(?:to|Going)\n\([A-Z]{3}\) ([^]*?)\ndeparts/);
-    if (arrName)
-        res.reservationFor.arrivalAirport.name = arrName[1];
-    var depTime = rightCol.match(/(?:departs|Flight)\n(\d\d:\d\d)/);
-    if (depTime)
-        res.reservationFor.departureTime = JsonLd.toDateTime(depTime[1], "hh:mm", "en");
+    const page = pdf.pages[triggerNode.location];
+    const rightCol = page.textInRect(0.65, 0, 1, 0.25)
+        .replace(/(?:\n|  +)/g, ' ')
+        .replace(/(?:from Flying|to Going|departs Flight)/g, '')
+        .trim();
 
-    var leftCol = page.textInRect(0, 0, 0.3, 0.25);
-    var boarding = leftCol.match(/(?:closes|Gate)\n(\d\d:\d\d)/);
+    const airports = rightCol.match(/\([A-Z]{3}\) (.*) \([A-Z]{3}\) (.*) (\d\d:\d\d)/);
+    res.reservationFor.departureAirport.name = airports[1];
+    res.reservationFor.arrivalAirport.name = airports[2];
+    res.reservationFor.departureTime = JsonLd.toDateTime(airports[3], "HH:mm", "en");
+
+    const leftCol = page.textInRect(0, 0, 0.3, 0.25);
+    const boarding = leftCol.match(/(?:closes|Gate)\n+ *(\d\d:\d\d)/);
     if (boarding)
         res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[1], "hh:mm", "en");
 

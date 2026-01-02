@@ -17,7 +17,7 @@ function extractInformation(page) {
     var text = page.textInRect(0, 0, 1, 1);
     if (text.match(/\s+Electronic Ticket Itinerary and Receipt/)) {
         var res = new Array();
-        var lines = text.split("\n");
+        var lines = text.split(/\n+/);
         var lastFlight = null;
         var bookingRef = text.match(/Booking Reference:\s* ([A-Z0-9]+)\s/);
         var issueDate = text.match(/.*Date of Issue:\s([0-9A-Z]+)/);

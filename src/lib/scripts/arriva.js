@@ -4,7 +4,7 @@
 function extractTicket(pdf, node, barcode) {
     const text = pdf.pages[barcode.location].text;
     let res = JsonLd.newBusReservation();
-    const trip = text.match(/(\S.*\S)  +(\d{11}-\d)\n.*\n *(\S.*\S)  +(\d+)\n.*\n *(\S.*\S)  +\d.*\n *(\S.*\S)\n.*\n *(\S.*\S)  +(\S.*?)  +(\S.*)\n.*\n *(\S.*?\S)  +/);
+    const trip = text.match(/(\S.*\S)  +(\d{11}-\d)\n+.*\n *(\S.*\S)  +(\d+)\n+.*\n *(\S.*\S)  +\d.*\n *(\S.*\S)\n+.*\n *(\S.*\S)  +(\S.*?)  +(\S.*)\n+.*\n *(\S.*?\S)  +/);
     res.underName.name = trip[1];
     res.reservedTicket.ticketNumber = trip[2];
     res.reservedTicket.name = trip[3];

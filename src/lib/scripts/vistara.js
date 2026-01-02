@@ -7,9 +7,9 @@ function parseBoardingPass(pdf, node, triggerNode) {
     if (triggerNode.result.length != 1) return;
     const page = pdf.pages[triggerNode.location];
     const depText = page.textInRect(0.0, 0.2, 0.5, 0.4);
-    const dep = depText.match(/DEPARTURE\n *(\d{4})\n *(\d{2}\w{3}\d{4})\n(.*\n)?(.*)\nFLIGHT/);
+    const dep = depText.match(/DEPARTURE\n+ *(\d{4})\n+ *(\d{2}\w{3}\d{4})\n+(.*\n+)?(.*)\n+FLIGHT/);
     const arrText = page.textInRect(0.5, 0.2, 1.0, 0.4);
-    const arr = arrText.match(/ *ARRIVAL\n *(\d{4})\n *(\d{2}\w{3}\d{4})\n(.*\n)?(.*)\n *BOARDING TIME .*\n *(\d{4})/);
+    const arr = arrText.match(/ *ARRIVAL\n+ *(\d{4})\n+ *(\d{2}\w{3}\d{4})\n(.*\n)?(.*)\n+ *BOARDING TIME .*\n+ *(\d{4})/);
 
     let res = triggerNode.result[0];
     res.reservationFor.departureAirport.name = dep[4];
@@ -18,7 +18,7 @@ function parseBoardingPass(pdf, node, triggerNode) {
 
     res.reservationFor.arrivalAirport.name = arr[4];
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arr[2] + ' ' + arr[1], 'ddMMMyyyy hhmm', 'en');
-    res.reservationFor.arrivalTerminal = arr[3];
+    res.reservationFor.arrivalTerminal = arr[3]?.trim();
 
     res.reservationFor.boardingTime = JsonLd.toDateTime(dep[2] + ' ' + arr[5], 'ddMMMyyyy hhmm', 'en');
     return res;

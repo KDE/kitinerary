@@ -19,7 +19,7 @@ function parsePdfTicket(pdf, node, triggerNode) {
     let reservations = [res];
     let tokenPrefix = 10001;
     while (true) {
-        const pas = text.substr(idx).match(/  +(\S.*\S)  +[MF]  +\d\d-\d\d-\d{4}\n/);
+        const pas = text.substr(idx).match(/  +(\S.*\S)  +[MF]  +\d\d-\d\d-\d{4}\n?/);
         if (!pas)
             break;
         idx += pas.index + pas[0].length;

@@ -8,7 +8,7 @@ function extractTicket(pdf, node, barcode) {
     res.reservedTicket.ticketToken = 'qrcode:' + barcode.content;
 
     const text = pdf.pages[barcode.location].text;
-    const data = text.match(/(#O\d{10}-\d{5})\n(.*)\n(.*)\nEvent taking place ([\S\s]*)\.\nFrom: .*, (\S+ \d{2}, \d{4}, \d{1,2}:\d\d:\d\d [AP]M).*\nTo: .* (\S+ \d{2}, \d{4}, \d{1,2}:\d\d:\d\d [AP]M)/);
+    const data = text.match(/(#O\d{10}-\d{5})\n+(.*)\n+(.*)\n+Event taking place ([\S\s]*)\.\n+From: .*, (\S+ \d{2}, \d{4}, \d{1,2}:\d\d:\d\d [AP]M).*\n+To: .* (\S+ \d{2}, \d{4}, \d{1,2}:\d\d:\d\d [AP]M)/);
     res.reservationNumber = data[1];
     res.reservationFor.name = data[2];
     res.reservedTicket.name = data[3];

@@ -11,8 +11,8 @@ function parsePdfTicket(pdf, node) {
         res.reservationNumber = text.match(/Auftragsnummer:\s*(\d+)/)[1];
         const name = text.match(/gekauft von:.*\n\s*\d.*\d\s*(\S.*)\n/);
         res.underName.name = name[1];
-        res.reservationFor.name = text.substr(name.index + name[0].length).match(/(.*)\n/)[1];
-        const venue = text.match(/Veranstalter:\n.*\n(.*)\n(.*?)(?:  .*)?\n(.*)\n/);
+        res.reservationFor.name = text.substr(name.index + name[0].length).match(/(\S.*)\n/)[1];
+        const venue = text.match(/Veranstalter:\n.*\n+(.*)\n(.*?)(?:  .*)?\n(.*)\n/);
         res.reservationFor.location.name = venue[1];
         res.reservationFor.location.address.streetAddress = venue[2];
         res.reservationFor.location.address.addressLocality = venue[3];

@@ -21,7 +21,7 @@ function main(pdf, node, triggerNode) {
     if (!text.match(/BOARDING PASS/))
         return null;
 
-    var lines = text.split('\n');
+    const lines = text.split(/\n+/);
 
     var state = 0;
     var flights = [];

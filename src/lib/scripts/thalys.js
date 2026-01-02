@@ -72,7 +72,7 @@ function parsePdfTicket(pdf, node, triggerNode)
     res.reservationFor.arrivalStation.name = arr[1];
     res.reservationFor.arrivalTime = res.reservationFor.departureDay.substr(0, 11) + arr[2];
 
-    const passenger = page.textInRect(0.0, 0.0, 0.35, 0.1).match(/(?:PASSAGER|FAHRGAST|PASSENGER|REIZIGER)\n(.*)\n/);
+    const passenger = page.textInRect(0.0, 0.0, 0.35, 0.1).match(/(?:PASSAGER|FAHRGAST|PASSENGER|REIZIGER)\n+ *(\S.*)/);
     res.underName.name = passenger[1];
     res.reservationNumber = page.textInRect(0.8, 0.0, 1.0,  0.2).match(/PNR\n([A-Z0-9]+)/)[1];
 

@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 function extractPdf(pdf, node, barcode) {
-    console.log(pdf);
     const text = pdf.text;
     let idx = 0;
     let reservations = [];
@@ -10,7 +9,6 @@ function extractPdf(pdf, node, barcode) {
         const trip = text.substr(idx).match(/:  +(\S.*\S)  +.*:  +(\d{2}.\d{2}.\d{4} \d\d:\d\d)\n.*:  +(\S.*\S)  +.*:  +(\d{2}.\d{2}.\d{4} \d\d:\d\d)\n/);
         if (!trip)
             break;
-        console.log(trip);
         idx += trip.index + trip[0].length;
 
         let res = JsonLd.newBoatReservation();

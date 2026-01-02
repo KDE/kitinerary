@@ -3,7 +3,7 @@
 
 function extractPdf(pdf, node, barcode) {
     const page = pdf.pages[barcode.location].text;
-    const trip = page.match(/Boarding card\n(.*)\n(\d{2}\.\d{2}\.\d{4} \d{2}\.\d{2}) (.*) - (.*)\n(.*)\nBooking: (.*)\n/);
+    const trip = page.match(/Boarding card\n(.*)\n(\d{2}\.\d{2}\.\d{4} \d{2}\.\d{2}) (.*) - (.*)\n+(.*)\n+Booking: (.*)\n/);
 
     let res = JsonLd.newBoatReservation();
     res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;

@@ -50,13 +50,13 @@ function parsePass(content, node) {
 function parsePdfPage(pdf, page, barcode) {
     let res = JsonLd.newEventReservation();
     const text = pdf.pages[page].textInRect(0.0, 0.0, 1.0, 0.4);
-    const dt = text.match(/(\d{4}.\d\d.\d\d \d\d:\d\d|\d\d.\d\d.\d{4} \d\d:\d\d|\d{1,2}\. \S+ \d{4})\n/);
+    const dt = text.match(/(\d{4}.\d\d.\d\d \d\d:\d\d|\d\d.\d\d.\d{4} \d\d:\d\d|\d{1,2}\. \S+ \d{4})/);
     res.reservationFor.startDate = JsonLd.toDateTime(dt[1], ['dd.MM.yyyy hh:mm', 'yyyy-MM-dd hh:mm', 'dd. MMMM yyyy'], ['en', 'de']);
 
-    const data1 = text.substr(0, dt.index).trim().split(/\n/);
+    const data1 = text.substr(0, dt.index).trim().split(/\n+/);
     res.reservationFor.name = data1.slice(0, Math.max(data1.length - 2, 1)).join(' ');
 
-    const data2 = text.substr(dt.index + dt[0].length).trim().split(/\n/);
+    const data2 = text.substr(dt.index + dt[0].length).trim().split(/\n+/);
     if (data2 && data2.length > 0 && data2[0]) {
         res.reservationFor.location.name = data2.slice(0, data2.length - 1).join(' ');
         res.reservationNumber = data2[data2.length - 1].match(/(\S+) /)[1];

@@ -63,7 +63,7 @@ function parseTicket(pdf, node, trigger) {
 function parseMobilePdf(pdf, node, ssb) {
     let res = ssb.result[0];
     const text = pdf.pages[ssb.location].textInRect(0.0, 0.0, 0.5, 0.5);
-    const trip = text.match(/(\d{1,2}\.\d{1,2}\.\d{4})\n *(\S.*\S)  +(\S.*)\n *(\d\d:\d\d)  +(\d\d:\d\d)\n/);
+    const trip = text.match(/(\d{1,2}\.\d{1,2}\.\d{4})\n+ *(\S.*\S)  +(\S.*)\n+ *(\d\d:\d\d)  +(\d\d:\d\d)\n/);
     res.reservationFor.departureTime = JsonLd.toDateTime(trip[4], "hh:mm", "en");
     res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[5], "hh:mm", "en");
     res.reservationFor.departureStation.name = trip[2];
