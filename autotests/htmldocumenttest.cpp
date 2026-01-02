@@ -93,7 +93,7 @@ private Q_SLOTS:
     void testContentProcessing()
     {
         QFile f(QStringLiteral(SOURCE_DIR "/misc/test.html"));
-        QVERIFY(f.open(QFile::ReadOnly));
+        QVERIFY(f.open(QFile::ReadOnly | QFile::Text));
 #if HAVE_LIBXML2
         std::unique_ptr<HtmlDocument> doc(HtmlDocument::fromData(f.readAll().replace("<CR>", "\r")));
         QVERIFY(doc);
