@@ -40,7 +40,7 @@ function extractPass(pass, node) {
 function extractPdf(pdf, node, barcode) {
     const page = pdf.pages[barcode.location];
     const topRight = page.textInRect(0.5, 0.0, 1.0, 0.5);
-    const ev = topRight.match(/([\S\s]+)\n(.*,(?: |\n *)\d{4})\n(?:\s*\d{1,2}:\d{2}[ap]m.*\n)?([\S\s]+)/);
+    const ev = topRight.match(/([\S\s]+)\n(.*,(?: |\n *)\d{4})\n(?:\s*\d{1,2}:\d{2}[ap]m.*\n+)?([\S\s]+)/);
 
     let res = JsonLd.newEventReservation();
     res.reservationFor.name = ev[1];
@@ -48,12 +48,12 @@ function extractPdf(pdf, node, barcode) {
     res.reservedTicket.ticketToken = 'qrCode:' + barcode.content;
 
     const left = page.textInRect(0.0, 0.0, 0.5, 1.0);
-    const dt = left.match(/(.*, \d{4})\nTICKET HOLDER\n(.*)\n/);
+    const dt = left.match(/(.*, \d{4})\n+TICKET HOLDER\n(.*)\n/);
     parseDate(res, dt[1]);
     res.underName.name = dt[2];
     res.reservationNumber = left.match(/REFERENCE\n(.*)\n/)[1];
     res.reservedTicket.name = left.match(/TICKET\n(.*)\n/)[1];
-    const org = left.match(/EVENT HOMEPAGE\n *([\S\s]+)\n.*EMAIL\n *(\S.*)\n/);
+    const org = left.match(/EVENT HOMEPAGE\n *([\S\s]+)\n.*EMAIL\n *(\S.*)/);
     res.reservationFor.url = org[1].replace(/\n */, '');
     res.provider = { '@type': 'Organization', email: org[2] };
     return res;

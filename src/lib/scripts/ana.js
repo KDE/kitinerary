@@ -10,7 +10,7 @@ function extractPdfEticket(pdf, node, barcode) {
     let reservations = [];
     let idx = 0;
     while (true) {
-        const leg = text.substr(idx).match(/\] (\S.*?\S) (?: +(\S+)  )? +([A-Z-0-9]{2})(\d{1,4}) +(\d{2}[A-Z]{3}\d{2}) +[A-Z]{3} +(\d{4}).*\n.*\n *(\S.*?\S) (?: +(\S+)  )? +(\d{2}[A-K])? +(\d{2}[A-Z]{3}\d{2}) +[A-Z]{3} +(\d{4}) *(\S.*\S)/);
+        const leg = text.substr(idx).match(/\] (\S.*?\S) (?: +(\S+)  )? +([A-Z-0-9]{2})(\d{1,4}) +(\d{2}[A-Z]{3}\d{2}) +[A-Z]{3} +(\d{4}).*\n.*\n+ *(\S.*?\S) (?: +(\S+)  )? +(\d{2}[A-K])? +(\d{2}[A-Z]{3}\d{2}) +[A-Z]{3} +(\d{4}) *(\S.*\S)/);
         if (!leg)
             break;
         idx += leg.index + leg[0].length;

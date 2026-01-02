@@ -9,11 +9,11 @@ function parsePdfTicket(pdf, node, triggerNode) {
 
     const text = pdf.pages[triggerNode.location].text;
 
-    const stationMatch = text.match(/Nereden From +Nereye To\n +(.+?) {3,}(.+?) {3,}/);
+    const stationMatch = text.match(/Nereden From +Nereye To\n+ +(.+?) {3,}(.+?) {3,}/);
     res.reservationFor.departureStation.name = stationMatch[1];
     res.reservationFor.arrivalStation.name = stationMatch[2];
 
-    const passengerMatch = text.match(/Yolcu +Passenger\n +_+ +(.+?)\(([EK])\)/);
+    const passengerMatch = text.match(/Yolcu +Passenger\n+ +_+ +(.+?)\(([EK])\)/);
     res.underName.name = passengerMatch[1];
     // E = erkek/man, K = kadın/woman, no other option as of 2024
     const gender = passengerMatch[2];

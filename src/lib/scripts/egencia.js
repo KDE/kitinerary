@@ -41,7 +41,7 @@ function extractPdf(pdf) {
         let res = JsonLd.newLodgingReservation();
         res.reservationFor.name = hotel[1];
         res.reservationNumber = hotel[2];
-        const dates = text.substr(idx).match(/CHECK-IN +CHECK-OUT\n *(\d{1,2}[ -][a-z]{3}[ -]\d{4}) +(\d{1,2}[ -][a-z]{3}[ -]\d{4})\n.*\n([\s\S]+?,[ \n][A-Z]{3})\n/);
+        const dates = text.substr(idx).match(/CHECK-IN +CHECK-OUT\n+ *(\d{1,2}[ -][a-z]{3}[ -]\d{4}) +(\d{1,2}[ -][a-z]{3}[ -]\d{4})\n+.*\n+([\s\S]+?,[ \n][A-Z]{3})\n/);
         res.checkinTime = JsonLd.toDateTime(dates[1], ["d-MMM-yyyy", "d MMM yyyy"], ["en", "it"]);
         res.checkoutTime = JsonLd.toDateTime(dates[2], ["d-MMM-yyyy", "d MMM yyyy"], ["en", "it"]);
 

@@ -39,7 +39,7 @@ function extractItinerary(pdf) {
     let reservations = [];
     let idx = 0;
     while (true) {
-        const leg = text.substr(idx).match(/(\d\d:\d\d) +(\S.*)\n *(\d\d \S{3}) +(\S.*)\n +(\S.*\S) *, *([A-Z0-9]{2}) (\d{1,4})\n.*\n.*\n *(\d\d:\d\d) +(\S.*)\n *(\d\d \S{3}) +(\S.*)\n/);
+        const leg = text.substr(idx).match(/(\d\d:\d\d) +(\S.*)\n *(\d\d \S{3}) +(\S.*)\n+ +(\S.*\S) *, *([A-Z0-9]{2}) (\d{1,4})\n.*\n.*\n+ *(\d\d:\d\d) +(\S.*)\n *(\d\d \S{3}) +(\S.*)\n/);
         if (!leg)
             break;
         idx += leg.index + leg[0].length;

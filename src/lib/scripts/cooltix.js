@@ -16,7 +16,7 @@ function extractPdf(pdf, node) {
         }
         const page = pdf.pages[i];
         const leftCol = page.textInRect(0.0, 0.0, 0.33, 1.0);
-        const event = leftCol.match(/.*\n((?:.*\n)*.*)\n.*\n(.{3} \d\d, \d{4} \d{1,2}:\d\d ..)\n.*\n(.{3} \d\d, \d{4} \d{1,2}:\d\d ..)\n.*\n(.*)\n(.*)\n(.*)\n/);
+        const event = leftCol.match(/.*\n((?:.*\n)*.*)\n.*\n(.{3} \d\d, \d{4} \d{1,2}:\d\d ..)\n+.*\n(.{3} \d\d, \d{4} \d{1,2}:\d\d ..)\n+.*\n(.*)\n(.*)\n(.*)\n/);
         res.reservationFor.name = event[1].split('|')[0];
         res.reservationFor.startDate = JsonLd.toDateTime(event[2], 'MMM dd, yyyy h:mm A', 'en');
         res.reservationFor.endDate = JsonLd.toDateTime(event[3], 'MMM dd, yyyy h:mm A', 'en');

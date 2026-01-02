@@ -14,7 +14,7 @@ function parseTicket(pdf, node) {
     res.reservationNumber = text.match(/Auftrag (\d+)/)[1];
     res.underName.givenName = text.match(/Vorname: (.*?)\n/)[1];
     res.underName.familyName = text.match(/Name: (.*?)\n/)[1];
-    res.reservationFor.name = text.match(/ONLINE-TICKET\n *(.*?) -/)[1];
+    res.reservationFor.name = text.match(/ONLINE-TICKET\n+ *(.*?) -/)[1];
     res.reservationFor.location.address.addressCountry = "DE"; // to get the right timezone
     return res;
 }

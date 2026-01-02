@@ -7,13 +7,13 @@
 function main(text) {
     var reservations = new Array();
 
-    var bookingRef = text.match(/Booking code\n.*([0-9A-z]{6})\n/);
+    var bookingRef = text.match(/Booking code\n+.*([0-9A-z]{6})\n/);
     if (!bookingRef)
         return reservations;
 
     var pos = bookingRef.index + bookingRef[0].length;
     while (true) {
-        var firstLine = text.substr(pos).match(/From +([A-Z]{2})(\d{2,4}) +(\d{1,2}-\w{3}) +(\d{1,2}-\w{3}).*\n/);
+        const firstLine = text.substr(pos).match(/From +([A-Z]{2})(\d{2,4}) +(\d{1,2}-\w{3}) +(\d{1,2}-\w{3}).*\n/);
         if (!firstLine)
             break;
         var index = firstLine.index + firstLine[0].length;
@@ -23,7 +23,7 @@ function main(text) {
         res.reservationFor.flightNumber = firstLine[2];
         res.reservationFor.airline.iataCode = firstLine[1];
 
-        var secondLine = text.substr(pos + index).match(/^ (\w+) \(([A-Z]{3})\) +(\d{2}:\d{2}) + (\d{2}:\d{2}) .*\n/);
+        const secondLine = text.substr(pos + index).match(/^ *(\w+) \(([A-Z]{3})\) +(\d{2}:\d{2}) + (\d{2}:\d{2}) .*\n/);
         if (!secondLine)
             break;
         index += secondLine.index + secondLine[0].length;
@@ -33,7 +33,7 @@ function main(text) {
         res.reservationFor.departureTime = JsonLd.toDateTime(firstLine[3] + " " + secondLine[3], "dd-MMM hh:mm", "en");
         res.reservationFor.arrivalTime = JsonLd.toDateTime(firstLine[4] + " " + secondLine[4], "dd-MMM hh:mm", "en");
 
-        var fourthLine = text.substr(pos + index).match(/^.*\n (\w+) \(([A-Z]{3})\) .*\n/);
+        const fourthLine = text.substr(pos + index).match(/^.*\n *(\w+) \(([A-Z]{3})\) .*\n/);
         if (!fourthLine)
             break;
         index += fourthLine.index + fourthLine[0].length;
@@ -63,7 +63,7 @@ function extractBoardingPass(pdf, node, barcode)
     const times = text.match(/\d\d \S+ (\d\d:\d\d) +(?:\d\d \S+)? (\d\d:\d\d)/);
     res.reservationFor.departureTime = JsonLd.toDateTime(times[1], 'hh:mm', 'en');
     res.reservationFor.arrivalTime = JsonLd.toDateTime(times[2], 'hh:mm', 'en');
-    const boarding = text.match(/(?:SEAT|ASIENTO)\n *(\d\d:\d\d) (?:GRUPO (\S*))?/);
+    const boarding = text.match(/(?:SEAT|ASIENTO)\n+ *(\d\d:\d\d) (?:GRUPO (\S*))?/);
     res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[1], 'hh:mm', 'en');
     res.boardingGroup = boarding[2];
     return res;
@@ -85,7 +85,7 @@ function extractReservation(pdf)
     let reservations = [];
     let idx = 0;
     while (true) {
-        const flight = text.substr(idx).match(/ ([A-Z0-9]{2})(\d{1,4}) .* (\d{4}).*? ([A-Z, ]+), [0-9A-Z]{2}\n.*: (\S.*\S), ([A-Z]{3})\((.*)\) +(\d.*)\n.*: (\S.*\S), ([A-Z]{3})\((.*)\) +(\d.*)\n/);
+        const flight = text.substr(idx).match(/ ([A-Z0-9]{2})(\d{1,4}) .* (\d{4}).*? ([A-Z, ]+), [0-9A-Z]{2}\n+.*: (\S.*\S), ([A-Z]{3})\((.*)\) +(\d.*)\n+.*: (\S.*\S), ([A-Z]{3})\((.*)\) +(\d.*)\n/);
         if (!flight)
             break;
         idx += flight.index + flight[0].length;

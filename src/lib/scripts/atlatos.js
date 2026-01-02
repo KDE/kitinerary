@@ -30,12 +30,14 @@ function extractPdf(pdf)
     let text = "";
     for (const page of pdf.pages) {
         text += page.textInRect(0.0, 0.0, 1.0, 0.9);
+        if (!text.endsWith('\n'))
+            text += '\n';
     }
 
     let reservations = [];
     let idx = 0;
     while (true) {
-        const flight = text.substr(idx).match(/: +(\S.*\S) +([A-Z0-9]{2})\/([A-Z0-9]{6})\n.*: +(\S.*?), (\S.*(?:\n +.*)*)\n.*(\d\d[\d\.: ]{14}).*\n.* ([A-Z0-9]{2}) (\d{1,4}) .*\n.*\n.*: +(\S.*?), (\S.*(?:\n +.*)*)\n.*(\d\d[\d\.: ]{14}).*\n/);
+        const flight = text.substr(idx).match(/: +(\S.*\S) +([A-Z0-9]{2})\/([A-Z0-9]{6})\n.*: +(\S.*?), (\S.*(?:\n +.*)*)\n.*(\d\d[\d\.: ]{14}).*\n.* ([A-Z0-9]{2}) (\d{1,4}) .*\n+.*\n+.*: +(\S.*?), (\S.*(?:\n +.*)*)\n.*(\d\d[\d\.: ]{14}).*\n/);
         if (!flight) {
             break;
         }

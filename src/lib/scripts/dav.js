@@ -4,7 +4,7 @@
 */
 
 function parseMembershipCard(pdf, node) {
-    const c = pdf.text.split('\n')
+    const c = pdf.text.split(/\n+/)
     const num = c[6].match(/\d{3}\/\d{2}\/(\d+)\*.*$/)[1]
     let card = {
         '@type': 'ProgramMembership',

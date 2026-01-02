@@ -43,12 +43,11 @@ function parseBarcode(barcode) {
 function parseBoardingPass(pdf, node, triggerNode) {
     var res = node.result[0];
     const text = pdf.pages[triggerNode.location].text;
-    const stationNames = text.match(/FTR\s*:\s*\d+\n(.*)   +(.*)\n/);
+    const stationNames = text.match(/FTR\s*:\s*\d+\n+(.*)   +(.*)\n/);
     res.reservationFor.departureStation.name = stationNames[1];
     res.reservationFor.arrivalStation.name = stationNames[2];
     const arrivalDate = text.match(/Date\s*:.*Date\s*:\s*\w+\.\s*(.*)\n/);
     const arrivalTime = text.match(/Arrival\s*:\s*(.*)\n/);
-    console.log(arrivalDate[1] + ' ' + arrivalTime[1]);
     res.reservationFor.arrivalTime = JsonLd.toDateTime(arrivalDate[1] + ' ' + arrivalTime[1], 'MMM d, yyyy HH:mm AP', 'en');
     return res;
 }

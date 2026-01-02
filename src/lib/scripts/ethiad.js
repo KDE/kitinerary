@@ -12,7 +12,7 @@ function extractTicket(pdf, node) {
     baseRes.underName = node.result[0].underName;
 
     while (true) {
-        const leg = text.substr(idx).match(/(?:_([A-Z]{3})\n)? *(\d\d:\d\d) +(\d\d:\d\d)\n *([A-Z]{3})? +([A-Z]{3})\n *(\d\d \S{3} \d{4}) +.* +(\d\d \S{3} \d{4})\n *(\S.*)  +(\S.*)\n *(\S.*)  +(\S.*)\n *(\S.*)  +(\S.*)\n.*?([A-Z0-9]{2})(\d{1,4}).*: (\S.*)  /);
+        const leg = text.substr(idx).match(/(?:_([A-Z]{3})\n)? *(\d\d:\d\d) +(\d\d:\d\d)\n+ *([A-Z]{3})? +([A-Z]{3})\n *(\d\d \S{3} \d{4}) +.* +(\d\d \S{3} \d{4})\n *(\S.*)  +(\S.*)\n *(\S.*)  +(\S.*)\n *(\S.*)  +(\S.*)\n.*?([A-Z0-9]{2})(\d{1,4}).*: (\S.*)  /);
         if (!leg)
             break;
         idx += leg.index +leg[0].length;

@@ -32,7 +32,7 @@ function extractBoardingPass(iata, node, pdfNode) {
 
     // new? 2025 multi-column layout
     const rightCol = page.textInRect(0.80, 0.0, 1.0, 1.0);
-    let boarding = rightCol.match(/Group\n(.*)\n *Boarding\n *(\d\d:\d\d)\n/);
+    let boarding = rightCol.match(/Group\n+(.*)\n+ *Boarding\n+ *(\d\d:\d\d)\n/);
     if (boarding) {
         res.boardingGroup = boarding[1];
         res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[2], 'hh:mm', 'en');
@@ -43,7 +43,7 @@ function extractBoardingPass(iata, node, pdfNode) {
         res.reservationFor.arrivalTime = JsonLd.toDateTime(times[2], 'hh:mm', 'en');
 
         const midCol = page.textInRect(0.65, 0.0, 0.8, 1.0);
-        const dep = midCol.match(/Terminal\n *(.*)\n *Gate\n *(.*)\n/);
+        const dep = midCol.match(/Terminal\n+ *(.*)\n+ *Gate\n+ *(.*)\n/);
         if (dep) {
             res.reservationFor.departureTerminal = dep[1];
             res.reservationFor.departureGate = dep[2];

@@ -86,8 +86,7 @@ function parsePdf(pdf, node) {
         let j = 0;
         while(true) {
             let personalRes = JsonLd.clone(res);
-            var name = passengerColumn.substr(offset).match(/(?:Passenger Name|Nome Passeggero|Nom du Passager|Passagiername)(?:\/Passenger\n *name)?.*\n(?:    .*\n)* *((?:\w+|\-\-).*?)(?:  |\n)/);
-            console.log(name);
+            const name = passengerColumn.substr(offset).match(/(?:Passenger Name|Nome Passeggero|Nom du Passager|Passagiername)(?:\/Passenger\n *name)?.*\n+(?:    .*\n)* *((?:\w+|\-\-).*?)(?:  |\n)/);
             if (!name)
                 break;
             offset += name.index + name[0].length;

@@ -7,7 +7,7 @@ function extractReservation(pdf, node, barcode) {
         const page = pdf.pages[i].text;
         let idx = 0;
         while (true) {
-            const leg = page.substr(idx).match(/(\d\d\.\S{3}\.) +(\d\d:\d\d) +(\S.*\S)  +(\S.*\S)  +(\d\d\.\S{3}\.)  +(\d\d:\d\d)\n.*\n(\S.*?\S)  +(\d+)  +(\S.*?\S)  +\d  +(\S.*?\S)  +(\S.*\S)\n(\d+)?/)
+            const leg = page.substr(idx).match(/(\d\d\.\S{3}\.) +(\d\d:\d\d) +(\S.*\S)  +(\S.*\S)  +(\d\d\.\S{3}\.)  +(\d\d:\d\d)\n+.*\n+(\S.*?\S)  +(\d+)  +(\S.*?\S)  +\d  +(\S.*?\S)  +(\S.*\S)\n(\d+)?/)
             if (!leg)
                 break;
             idx += leg.index + leg[0].length;

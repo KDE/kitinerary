@@ -14,7 +14,7 @@ function parsePdfTicket(pdf, node, triggerNode) {
     const dt = text.match(/(\d{4}-\d\d-\d\d)(?:\n.*){1,2}(\d\d:\d\d) - (\d\d:\d\d)/);
     res.reservationFor.departureTime = JsonLd.toDateTime(dt[1] + ' ' + dt[2], 'yyyy-MM-dd hh:mm', 'lt');
     res.reservationFor.arrivalTime = JsonLd.toDateTime(dt[1] + ' ' + dt[3], 'yyyy-MM-dd hh:mm', 'lt');
-    const train = text.match(/SEAT\n *(\S.*?)  +(\S.*?)  +(\S.*?)  +(\S.*)\n/);
+    const train = text.match(/SEAT\n+ *(\S.*?)  +(\S.*?)  +(\S.*?)  +(\S.*)\n/);
     res.reservationFor.trainNumber = train[1];
     res.reservedTicket.ticketedSeat.seatingType = train[2];
     res.reservedTicket.ticketedSeat.seatSection = train[3];

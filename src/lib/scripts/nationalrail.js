@@ -106,7 +106,7 @@ function parseTicket(pdf, node, triggerNode) {
         res = JsonLd.newTrainReservation();
         res.reservedTicket.ticketToken = 'azteccode:' + triggerNode.content;
     }
-    const header = text.match(/ +(\d{2}[ -][A-Z][a-z]{2}[ -]\d{4}) +(?:Out: |Ret: )?([A-Z]{3}) ?- ?([A-Z]{3})\n(.*)  +(.*)/);
+    const header = text.match(/ +(\d{2}[ -][A-Z][a-z]{2}[ -]\d{4}) +(?:Out: |Ret: )?([A-Z]{3}) ?- ?([A-Z]{3})\n+(.*)  +(.*)/);
     const date = header[1].replace(/-/g, ' ');
     const itinerary = text.match(/Itinerary.*\n["⃝ ]+(.*)\n +(\d{2}:\d{2})\n +([\S\s]*?)\n +(\d{2}:\d{2})\n["⃝ ]+(.*)/);
 

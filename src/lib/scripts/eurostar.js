@@ -61,7 +61,7 @@ function parsePdfSSB(pdf, node, ssb) {
         res.reservationFor.arrivalTime = JsonLd.toDateTime(date[1] + ' ' + time[2], ["MMM d, yyyy hh:mm", "d MMMM yyyy hh:mm", "d. MMM. yyyy HH:mm", "d MMM. yyyy HH:mm"], ["en", "fr", "de"]);
         res.reservationFor.departureStation.name = dep;
         res.reservationFor.arrivalStation.name = arr;
-        const pas = text.match(/PNR\n *(\S.*\S)  +([A-Z0-9]{6})\n/);
+        const pas = text.match(/PNR\n+ *(\S.*\S)  +([A-Z0-9]{6})\n/);
         res.reservationNumber = pas[2];
         res.underName.name = pas[1];
         // pdf417 works just as well, but the vastly different format surprises people...
