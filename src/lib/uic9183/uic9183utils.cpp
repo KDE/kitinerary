@@ -15,7 +15,7 @@ using namespace KItinerary;
 int Uic9183Utils::readAsciiEncodedNumber(const char* data, int size, int offset, int length)
 {
     if (!data || offset < 0 || length < 1 || size < 1 || offset + length > size) {
-        qCWarning(Log) << "Invalid UIC 918.3 read" << offset << length << size;
+        qCWarning(Log) << "Invalid UIC 918.3 number read" << offset << length << size;
         return {};
     }
 
@@ -44,7 +44,7 @@ QString Uic9183Utils::readUtf8String(const char* data, int size, int offset, int
     }
 
     if (!data || offset < 0 || length < 1 || size < 1 || offset + length > size) {
-        qCWarning(Log) << "Invalid UIC 918.3 read" << offset << length << size;
+        qCWarning(Log) << "Invalid UIC 918.3 string read" << offset << length << size;
         return {};
     }
 
