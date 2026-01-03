@@ -75,6 +75,9 @@ const char* Uic9183Block::content() const
 
 int Uic9183Block::size() const
 {
+    if (isNull()) {
+        return 0;
+    }
     return Uic9183Utils::readAsciiEncodedNumber(m_data, m_offset + BlockSizeOffset, BlockSizeSize);
 }
 
@@ -85,6 +88,9 @@ int Uic9183Block::contentSize() const
 
 int Uic9183Block::version() const
 {
+    if (isNull()) {
+        return 0;
+    }
     return Uic9183Utils::readAsciiEncodedNumber(m_data, m_offset + BlockVersionOffset, BlockVersionSize);
 }
 
@@ -100,6 +106,9 @@ Uic9183Block Uic9183Block::nextBlock() const
 
 QString Uic9183Block::contentText() const
 {
+    if (isNull()) {
+        return {};
+    }
     return Uic9183Utils::readUtf8String(m_data, m_offset + BlockHeaderSize, contentSize());
 }
 
