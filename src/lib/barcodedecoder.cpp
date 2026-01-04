@@ -194,7 +194,11 @@ static ZXing::ImageFormat zxingImageFormat(QImage::Format format)
         case QImage::Format_ARGB32:
         case QImage::Format_RGB32:
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-            return ZXing::ImageFormat::BGRX;
+#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+            return ZXing::ImageFormat::RGBA;
+#else
+            return ZXing::ImageFormat::RGBX;
+#endif
 #else
             return ZXing::ImageFormat::XRGB;
 #endif
@@ -202,7 +206,11 @@ static ZXing::ImageFormat zxingImageFormat(QImage::Format format)
             return ZXing::ImageFormat::RGB;
         case QImage::Format_RGBX8888:
         case QImage::Format_RGBA8888:
+#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+            return ZXing::ImageFormat::RGBA;
+#else
             return ZXing::ImageFormat::RGBX;
+#endif
         case QImage::Format_Grayscale8:
             return ZXing::ImageFormat::Lum;
         default:
@@ -216,7 +224,11 @@ static ZXing::ImageView zxingImageView(const QImage &img)
     return ZXing::ImageView{img.bits(), img.width(), img.height(), zxingImageFormat(img.format()), static_cast<int>(img.bytesPerLine())};
 }
 
+#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+static void applyZXingResult(BarcodeDecoder::Result &result, const ZXing::Barcode &zxingResult, BarcodeDecoder::BarcodeTypes format)
+#else
 static void applyZXingResult(BarcodeDecoder::Result &result, const ZXing::Result &zxingResult, BarcodeDecoder::BarcodeTypes format)
+#endif
 {
     if (zxingResult.isValid()) {
 #if ZXING_VERSION >= QT_VERSION_CHECK(1, 4, 0)
@@ -274,13 +286,19 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
         return;
     }
 
+#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+    ZXing::ReaderOptions hints;
+#else
     ZXing::DecodeHints hints;
+#endif
     hints.setFormats(typeToFormats(hint));
     hints.setBinarizer(ZXing::Binarizer::FixedThreshold);
     hints.setIsPure((hint & BarcodeDecoder::IgnoreAspectRatio) == 0);
 
     // convert if img is in a format ZXing can't handle directly
-#if ZXING_VERSION > QT_VERSION_CHECK(1, 3, 0)
+#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+    ZXing::Barcode res;
+#elif ZXING_VERSION > QT_VERSION_CHECK(1, 3, 0)
     ZXing::Result res;
 #else
     ZXing::Result res(ZXing::DecodeStatus::NotFound);
@@ -301,13 +319,21 @@ void BarcodeDecoder::decodeMultiIfNeeded(const QImage &img, BarcodeDecoder::Barc
         return;
     }
 
+#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+    ZXing::ReaderOptions hints;
+#else
     ZXing::DecodeHints hints;
+#endif
     hints.setFormats(typeToFormats(hint));
     hints.setBinarizer(ZXing::Binarizer::FixedThreshold);
     hints.setIsPure(false);
 
     // convert if img is in a format ZXing can't handle directly
+#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+    std::vector<ZXing::Barcode> zxingResults;
+#else
     std::vector<ZXing::Result> zxingResults;
+#endif
     if (zxingImageFormat(img.format()) == ZXing::ImageFormat::None) {
         zxingResults = ZXing::ReadBarcodes(zxingImageView(img.convertToFormat(QImage::Format_Grayscale8)), hints);
     } else {
