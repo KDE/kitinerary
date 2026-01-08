@@ -313,3 +313,24 @@ void PdfExtractorOutputDevice::processLink(AnnotLink *link)
     PdfLink l(QString::fromStdString(uriLink->getURI()), QRectF(QPointF(std::min(xu1, xu2), std::min(yu1, yu2)), QPointF(std::max(xu1, xu2), std::max(yu1, yu2))));
     m_links.push_back(std::move(l));
 }
+
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(26, 1, 90)
+void PdfExtractorOutputDevice::setDefaultCTM(const std::array<double, 6> &ctm)
+{
+    TextOutputDev::setDefaultCTM(ctm);
+
+    const double det = 1 / (ctm[0] * ctm[3] - ctm[1] * ctm[2]);
+    m_defICTM[0] = ctm[3] * det;
+    m_defICTM[1] = -ctm[1] * det;
+    m_defICTM[2] = -ctm[2] * det;
+    m_defICTM[3] = ctm[0] * det;
+    m_defICTM[4] = (ctm[2] * ctm[5] - ctm[3] * ctm[4]) * det;
+    m_defICTM[5] = (ctm[1] * ctm[4] - ctm[0] * ctm[5]) * det;
+}
+
+void PdfExtractorOutputDevice::cvtDevToUser(double dx, double dy, double *ux, double *uy) const
+{
+    *ux = m_defICTM[0] * dx + m_defICTM[2] * dy + m_defICTM[4];
+    *uy = m_defICTM[1] * dx + m_defICTM[3] * dy + m_defICTM[5];
+}
+#endif

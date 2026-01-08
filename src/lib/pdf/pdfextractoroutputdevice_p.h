@@ -25,6 +25,10 @@ class PdfExtractorOutputDevice : public TextOutputDev
 public:
     explicit PdfExtractorOutputDevice();
 
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(26, 1, 90)
+    void setDefaultCTM(const std::array<double, 6> &ctm) override;
+#endif
+
     // call once displaying has been completed
     void finalize();
 
@@ -61,6 +65,13 @@ public:
 
     // extracted links
     std::vector<PdfLink> m_links;
+
+private:
+#if KPOPPLER_VERSION >= QT_VERSION_CHECK(26, 1, 90)
+    // removed in Poppler 26.02
+    void cvtDevToUser(double dx, double dy, double *ux, double *uy) const;
+    std::array<double, 6> m_defICTM;
+#endif
 };
 
 }
