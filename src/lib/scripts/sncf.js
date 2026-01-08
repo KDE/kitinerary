@@ -291,6 +291,10 @@ function parseSecutix(barcode)
     res.underName.familyName = code.substr(116, 19);
     res.underName.givenName = code.substr(135, 19);
     res.programMembershipUsed.programName = tariffs[code.substr(92, 4)];
+    res.reservedTicket.name = code.substr(96, 20);
+    res.reservedTicket.validFrom = JsonLd.toDateTime(code.substr(186, 8), "ddMMyyyy", "fr");
+    res.reservedTicket.validUntil = JsonLd.toDateTime(code.substr(194, 8), "ddMMyyyy", "fr");
+    res.modifiedTime = JsonLd.toDateTime(code.substr(214, 12), "ddMMyyyyHHmm", "fr");
     res.reservedTicket.totalPrice = code.substr(226, 10) / 100;
     res.reservedTicket.priceCurrency = 'EUR';
     return res;
