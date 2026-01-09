@@ -1,0 +1,64 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2024-12-17T16:38:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 48.689701080322266,
+                    "longitude": 6.173610210418701
+                },
+                "identifier": "sncf:FRENC",
+                "name": "FRENC"
+            },
+            "departureDay": "2024-12-17",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "FR"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 48.58509826660156,
+                    "longitude": 7.734260082244873
+                },
+                "identifier": "sncf:FRAEG",
+                "name": "FRAEG"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "uic:0087"
+            }
+        },
+        "reservationNumber": "123456789",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "name": "GE PX05 DIGITAL TARI",
+            "priceCurrency": "EUR",
+            "ticketToken": "aztecbin:MjIwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMFQxMDA4NzEyMzQ1Njc4OUZSQUVHRlJFTkMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUzE3MTIyMDI0MlBYMDVHRSBQWDA1IERJR0lUQUwgVEFSSURSQUdPTiAgICAgICAgICAgICBLT05RSSAgICAgICAgICAgICAgMTQxMDE5OTZBRFVMVEUgICAgMDEgICAgICAgICAgMDAxNzEyMjAyNDE3MTIyMDI0MDAwMDAwMDAwMDAwMTcxMjIwMjQxNjM4MDAwMDAwMzEzMCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA=",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatingType": "2"
+            },
+            "totalPrice": 31.3,
+            "validFrom": "2024-12-17T00:00:00",
+            "validUntil": "2024-12-17T00:00:00"
+        },
+        "underName": {
+            "@type": "Person",
+            "familyName": "DRAGON",
+            "givenName": "KONQI",
+            "name": "KONQI DRAGON"
+        }
+    }
+]
