@@ -297,6 +297,12 @@ function parseSecutix(barcode)
     res.modifiedTime = JsonLd.toDateTime(code.substr(214, 12), "ddMMyyyyHHmm", "fr");
     res.reservedTicket.totalPrice = code.substr(226, 10) / 100;
     res.reservedTicket.priceCurrency = 'EUR';
+    if (code.substr(82, 1) == 'A') {
+        let ticket = res.reservedTicket;
+        ticket.underName = res.underName;
+        ticket.issuer = res.reservationFor.provider;
+        return ticket;
+    }
     return res;
 }
 
