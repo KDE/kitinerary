@@ -385,8 +385,12 @@ PdfDocument* PdfDocument::fromData(const QByteArray &data, QObject *parent)
     std::unique_ptr<PdfDocument> doc(new PdfDocument(parent));
     doc->d->m_pdfData = data;
     // PDFDoc takes ownership of stream
+#if KPOPPLER_VERSION < QT_VERSION_CHECK(26, 1, 90)
     auto stream = new MemStream(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), Object());
-    std::unique_ptr<PDFDoc> popplerDoc(new PDFDoc(stream));
+#else
+    auto stream = std::make_unique<MemStream>(const_cast<char*>(doc->d->m_pdfData.constData()), 0, doc->d->m_pdfData.size(), Object());
+#endif
+    auto popplerDoc = std::make_unique<PDFDoc>(std::move(stream));
     if (!popplerDoc->isOk()) {
         qCWarning(Log) << "Got invalid PDF document!" << popplerDoc->getErrorCode();
         return nullptr;
