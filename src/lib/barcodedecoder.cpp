@@ -147,7 +147,7 @@ struct {
     BarcodeDecoder::BarcodeType type;
     ZXing::BarcodeFormat zxingType;
 } static constexpr const zxing_format_map[] = {
-#if ZXING_VERSION > QT_VERSION_CHECK(1, 1, 1)
+#if KZXING_VERSION > QT_VERSION_CHECK(1, 1, 1)
     { BarcodeDecoder::Aztec, ZXing::BarcodeFormat::Aztec },
     { BarcodeDecoder::QRCode, ZXing::BarcodeFormat::QRCode },
     { BarcodeDecoder::PDF417, ZXing::BarcodeFormat::PDF417 },
@@ -194,7 +194,7 @@ static ZXing::ImageFormat zxingImageFormat(QImage::Format format)
         case QImage::Format_ARGB32:
         case QImage::Format_RGB32:
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+#if KZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
             return ZXing::ImageFormat::RGBA;
 #else
             return ZXing::ImageFormat::RGBX;
@@ -206,7 +206,7 @@ static ZXing::ImageFormat zxingImageFormat(QImage::Format format)
             return ZXing::ImageFormat::RGB;
         case QImage::Format_RGBX8888:
         case QImage::Format_RGBA8888:
-#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+#if KZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
             return ZXing::ImageFormat::RGBA;
 #else
             return ZXing::ImageFormat::RGBX;
@@ -224,14 +224,14 @@ static ZXing::ImageView zxingImageView(const QImage &img)
     return ZXing::ImageView{img.bits(), img.width(), img.height(), zxingImageFormat(img.format()), static_cast<int>(img.bytesPerLine())};
 }
 
-#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+#if KZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
 static void applyZXingResult(BarcodeDecoder::Result &result, const ZXing::Barcode &zxingResult, BarcodeDecoder::BarcodeTypes format)
 #else
 static void applyZXingResult(BarcodeDecoder::Result &result, const ZXing::Result &zxingResult, BarcodeDecoder::BarcodeTypes format)
 #endif
 {
     if (zxingResult.isValid()) {
-#if ZXING_VERSION >= QT_VERSION_CHECK(1, 4, 0)
+#if KZXING_VERSION >= QT_VERSION_CHECK(1, 4, 0)
         // detect content type
         std::string zxUtf8Text;
         if (zxingResult.contentType() == ZXing::ContentType::Text) {
@@ -286,7 +286,7 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
         return;
     }
 
-#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+#if KZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
     ZXing::ReaderOptions hints;
 #else
     ZXing::DecodeHints hints;
@@ -296,9 +296,9 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
     hints.setIsPure((hint & BarcodeDecoder::IgnoreAspectRatio) == 0);
 
     // convert if img is in a format ZXing can't handle directly
-#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+#if KZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
     ZXing::Barcode res;
-#elif ZXING_VERSION > QT_VERSION_CHECK(1, 3, 0)
+#elif KZXING_VERSION > QT_VERSION_CHECK(1, 3, 0)
     ZXing::Result res;
 #else
     ZXing::Result res(ZXing::DecodeStatus::NotFound);
@@ -314,12 +314,12 @@ void BarcodeDecoder::decodeIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTy
 
 void BarcodeDecoder::decodeMultiIfNeeded(const QImage &img, BarcodeDecoder::BarcodeTypes hint, std::vector<BarcodeDecoder::Result> &results) const
 {
-#if ZXING_VERSION > QT_VERSION_CHECK(1, 2, 0)
+#if KZXING_VERSION > QT_VERSION_CHECK(1, 2, 0)
     if (std::any_of(results.begin(), results.end(), [hint](const auto &r) { return (r.positive & hint) || ((r.negative & hint) == hint); })) {
         return;
     }
 
-#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+#if KZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
     ZXing::ReaderOptions hints;
 #else
     ZXing::DecodeHints hints;
@@ -329,7 +329,7 @@ void BarcodeDecoder::decodeMultiIfNeeded(const QImage &img, BarcodeDecoder::Barc
     hints.setIsPure(false);
 
     // convert if img is in a format ZXing can't handle directly
-#if ZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
+#if KZXING_VERSION >= QT_VERSION_CHECK(2, 3, 0)
     std::vector<ZXing::Barcode> zxingResults;
 #else
     std::vector<ZXing::Result> zxingResults;
