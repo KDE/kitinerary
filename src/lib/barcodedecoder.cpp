@@ -166,13 +166,21 @@ struct {
 #endif
 };
 
-static auto typeToFormats(BarcodeDecoder::BarcodeTypes types)
+static ZXing::BarcodeFormats typeToFormats(BarcodeDecoder::BarcodeTypes types)
 {
+#if KZXING_VERSION <QT_VERSION_CHECK(3, 0, 0)
     ZXing::BarcodeFormats formats;
+#else
+    std::vector<ZXing::BarcodeFormat> formats;
+#endif
 
     for (auto i : zxing_format_map) {
         if (types & i.type) {
+#if KZXING_VERSION < QT_VERSION_CHECK(3, 0, 0)
             formats |= i.zxingType;
+#else
+            formats.push_back(i.zxingType);
+#endif
         }
     }
     return formats;
