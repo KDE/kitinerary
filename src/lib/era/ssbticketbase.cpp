@@ -19,6 +19,16 @@ enum {
 SSBTicketBase::SSBTicketBase() = default;
 SSBTicketBase::~SSBTicketBase() = default;
 
+QByteArray SSBTicketBase::rawData() const
+{
+    return m_data;
+}
+
+QByteArray SSBTicketBase::encodedData() const
+{
+    return m_isBase64 ? m_data.toBase64() : m_data;
+}
+
 quint64 SSBTicketBase::readNumber(int start, int length) const
 {
     if (start < 0 || length < 1 || start / 8 >= m_data.size() || (start + length) / 8 >= m_data.size() || length > 63) {

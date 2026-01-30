@@ -52,11 +52,9 @@ class KITINERARY_EXPORT SSBv2Ticket : protected SSBTicketBase
     SSB_NUM_PROPERTY(railwayCarrierCode, 349, 14)
     SSB_STR_PROPERTY(reference, 363, 8)
 
-    Q_PROPERTY(QByteArray rawData READ rawData STORED false)
-
 public:
     SSBv2Ticket();
-    explicit SSBv2Ticket(const QByteArray &data);
+    explicit SSBv2Ticket(const QByteArray &data, bool isBase64 = false);
     ~SSBv2Ticket();
 
     /** Returns @c true if this is a valid SSB ticket. */
@@ -67,11 +65,10 @@ public:
     /** Last day of validity. */
     Q_INVOKABLE QDate lastDayOfValidity(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 
-    /** Raw barcode data. */
-    QByteArray rawData() const;
-
     /** Returns @c true if @p data might be an ERA SSB ticket. */
     static bool maybeSSB(const QByteArray &data);
+
+    using SSBTicketBase::rawData;
 };
 
 }

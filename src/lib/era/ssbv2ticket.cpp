@@ -18,10 +18,11 @@ enum {
 
 SSBv2Ticket::SSBv2Ticket() = default;
 
-SSBv2Ticket::SSBv2Ticket(const QByteArray &data)
+SSBv2Ticket::SSBv2Ticket(const QByteArray &data, bool isBase64)
 {
     if (maybeSSB(data)) {
         m_data = data;
+        m_isBase64 = isBase64;
 
         // additional sanity checking to catch the maybeSSB heuristic not being good enough
         // trainNumber() > 99999 would also be an effective check, wouldn't it be for the Trenitalia
@@ -66,11 +67,6 @@ QDate SSBv2Ticket::lastDayOfValidity(const QDateTime &contextDate) const
         return {};
     }
     return dayNumberToDate(lastDayOfValidityDay(), contextDate);
-}
-
-QByteArray SSBv2Ticket::rawData() const
-{
-    return m_data;
 }
 
 #include "moc_ssbv2ticket.cpp"

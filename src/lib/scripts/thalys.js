@@ -19,7 +19,10 @@ function parseSsbTicket(ssb, node) {
     res.reservedTicket.ticketedSeat.seatingType = ssb.classOfTravel;
     res.reservedTicket.ticketedSeat.seatSection = ssb.type1CoachNumber;
     res.reservedTicket.ticketedSeat.seatNumber = ssb.type1SeatNumber;
-    res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(ssb.rawData);
+    if (ssb.isBase64)
+        res.reservedTicket.ticketToken = "azteccode:" + ssb.encodedData;
+    else
+        res.reservedTicket.ticketToken = "aztecbin:" + ByteArray.toBase64(ssb.rawData);
     res.reservedTicket.ticketNumber = ssb.tcn;
     return res;
 }

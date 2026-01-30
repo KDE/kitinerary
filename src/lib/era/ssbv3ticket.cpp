@@ -21,10 +21,11 @@ enum {
 
 SSBv3Ticket::SSBv3Ticket() = default;
 
-SSBv3Ticket::SSBv3Ticket(const QByteArray &data)
+SSBv3Ticket::SSBv3Ticket(const QByteArray &data, bool isBase64)
 {
     if (maybeSSB(data)) {
         m_data = data;
+        m_isBase64 = isBase64;
     } else {
         qWarning() << "Trying to construct an SSB ticket from invalid data!";
     }
@@ -114,11 +115,6 @@ QDate SSBv3Ticket::type3ValidUntil(const QDateTime& contextDate) const
     }
 
     return issueDate(contextDate).addDays(type3LastDayOfValidity());
-}
-
-QByteArray SSBv3Ticket::rawData() const
-{
-    return m_data;
 }
 
 #include "moc_ssbv3ticket.cpp"

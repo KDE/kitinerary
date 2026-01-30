@@ -22,6 +22,21 @@ namespace KItinerary {
 class KITINERARY_EXPORT SSBTicketBase
 {
     Q_GADGET
+
+    Q_PROPERTY(QByteArray rawData READ rawData STORED false)
+    Q_PROPERTY(QByteArray encodedData READ encodedData STORED false)
+
+    /** Base 64 encoded payload, off-standard but used by Eurostar
+     *  and necessary to not break their scanners.
+     */
+    Q_PROPERTY(bool isBase64 MEMBER m_isBase64 STORED false)
+
+public:
+    /** Raw SSB data, base64 decoding applied if necessary. */
+    [[nodiscard]] QByteArray rawData() const;
+    /** Barcode content data as it was scanned, possibly base64 encoded if that's how it was. */
+    [[nodiscard]] QByteArray encodedData() const;
+
 protected:
     SSBTicketBase();
     ~SSBTicketBase();
@@ -34,6 +49,7 @@ protected:
     [[nodiscard]] static QDate dayNumberToDate(int days, const QDateTime &context);
 
     QByteArray m_data;
+    bool m_isBase64 = false;
 };
 
 #define SSB_NUM_PROPERTY(Name, Start, Len) \

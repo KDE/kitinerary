@@ -38,7 +38,7 @@ bool SSBTicketReader::maybeSSB(const QByteArray &data)
     return SSBv1Ticket::maybeSSB(decoded) || SSBv2Ticket::maybeSSB(decoded) || SSBv3Ticket::maybeSSB(decoded);
 }
 
-[[nodiscard]] static QVariant readInternal(QByteArray ticketData, int versionOverride)
+[[nodiscard]] static QVariant readInternal(QByteArray ticketData, int versionOverride, bool isBase64)
 {
     auto version = ticketData[0] >> 4;
     if (versionOverride > 0 && version != versionOverride) {
@@ -49,17 +49,17 @@ bool SSBTicketReader::maybeSSB(const QByteArray &data)
     switch (version) {
         case 1:
         {
-            SSBv1Ticket ticket(ticketData);
+            SSBv1Ticket ticket(ticketData, isBase64);
             return ticket.isValid() ? QVariant::fromValue(ticket) : QVariant();
         }
         case 2:
         {
-            SSBv2Ticket ticket(ticketData);
+            SSBv2Ticket ticket(ticketData, isBase64);
             return ticket.isValid() ? QVariant::fromValue(ticket) : QVariant();
         }
         case 3:
         {
-            SSBv3Ticket ticket(ticketData);
+            SSBv3Ticket ticket(ticketData, isBase64);
             return ticket.isValid() ? QVariant::fromValue(ticket) : QVariant();
         }
     }
@@ -72,11 +72,11 @@ QVariant SSBTicketReader::read(const QByteArray& data, int versionOverride)
         return {};
     }
 
-    auto ticket = readInternal(data, versionOverride);
+    auto ticket = readInternal(data, versionOverride, false);
     if (ticket.isValid() || data.size() > 168 || !maybeBase64(data)) {
         return ticket;
     }
 
     // try base64, see above
-    return readInternal(QByteArray::fromBase64(data), versionOverride);
+    return readInternal(QByteArray::fromBase64(data), versionOverride, true);
 }

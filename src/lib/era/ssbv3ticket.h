@@ -101,11 +101,9 @@ class KITINERARY_EXPORT SSBv3Ticket : protected SSBTicketBase {
     };
     Q_ENUM(TicketType)
 
-    Q_PROPERTY(QByteArray rawData READ rawData STORED false)
-
 public:
     SSBv3Ticket();
-    explicit SSBv3Ticket(const QByteArray &data);
+    explicit SSBv3Ticket(const QByteArray &data, bool isBase64 = false);
     ~SSBv3Ticket();
 
     /** Returns @c true if this is a valid SSB ticket. */
@@ -124,11 +122,10 @@ public:
     /** Last day of validity for type 3 (GRP) tickets. */
     Q_INVOKABLE [[nodiscard]] QDate type3ValidUntil(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 
-    /** Raw barcode data. */
-    [[nodiscard]] QByteArray rawData() const;
-
     /** Returns @c true if @p data might be an ERA SSB ticket. */
     [[nodiscard]] static bool maybeSSB(const QByteArray &data);
+
+    using SSBTicketBase::rawData;
 
 private:
     [[nodiscard]] QString readString(int start, int length) const;

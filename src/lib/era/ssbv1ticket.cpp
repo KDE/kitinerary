@@ -20,10 +20,11 @@ enum {
 
 SSBv1Ticket::SSBv1Ticket() = default;
 
-SSBv1Ticket::SSBv1Ticket(const QByteArray &data)
+SSBv1Ticket::SSBv1Ticket(const QByteArray &data, bool isBase64)
 {
     if (maybeSSB(data)) {
         m_data = data;
+        m_isBase64 = isBase64;
     } else {
         qWarning() << "Trying to construct an SSB ticket from invalid data!";
     }
@@ -60,11 +61,6 @@ QDateTime SSBv1Ticket::departureTime(const QDateTime &contextDate) const
 
     QDateTime dt(firstDayOfValidity(contextDate), {0, 0});
     return dt.addSecs(60 * 30 * (departureTimeSlot() - 1));
-}
-
-QByteArray SSBv1Ticket::rawData() const
-{
-    return m_data;
 }
 
 #include "moc_ssbv1ticket.cpp"

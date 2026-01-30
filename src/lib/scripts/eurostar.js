@@ -24,7 +24,7 @@ function parseBarcode(elb, node) {
     res.reservedTicket.ticketedSeat.seatNumber = stripLeadingZeros(elb.segment1.seatNumber);
     res.reservedTicket.ticketedSeat.seatingType = elb.segment1.classOfTransport;
     res.reservedTicket.validFrom = elb.validFromDate();
-    //res.reservedTicket.validUntil = elb.validUntilDate(); TODO this is set bus looks implausible?
+    //res.reservedTicket.validUntil = elb.validUntilDate(); TODO this is set but looks implausible?
     return res;
 }
 

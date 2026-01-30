@@ -54,11 +54,9 @@ class KITINERARY_EXPORT SSBv1Ticket : protected SSBTicketBase
     SSB_NUM_PROPERTY(specimen, 306, 1)
     SSB_STR_PROPERTY(viaStations, 307, 5) // is that the correct encoding? page 131 of TAP TSI Annex B.6 could also be read as 6 times 5 bit content
 
-    Q_PROPERTY(QByteArray rawData READ rawData STORED false)
-
 public:
     SSBv1Ticket();
-    explicit SSBv1Ticket(const QByteArray &data);
+    explicit SSBv1Ticket(const QByteArray &data, bool isBase64 = false);
     ~SSBv1Ticket();
 
     /** Returns @c true if this is a valid SSB ticket. */
@@ -69,11 +67,10 @@ public:
     /** Decoded departure time slot. */
     Q_INVOKABLE QDateTime departureTime(const QDateTime &contextDate = QDateTime::currentDateTime()) const;
 
-    /** Raw barcode data. */
-    QByteArray rawData() const;
-
     /** Returns @c true if @p data might be an ERA SSB ticket. */
     static bool maybeSSB(const QByteArray &data);
+
+    using SSBTicketBase::rawData;
 };
 
 }
