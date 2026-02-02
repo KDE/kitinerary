@@ -33,3 +33,4 @@ Testing/
 /.vscode/
 .qtcreator/
 .flatpak-builder/
+.sentry-native/
