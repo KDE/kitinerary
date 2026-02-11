@@ -139,6 +139,7 @@
                 "iataCode": "SFO",
                 "name": "San Francisco International"
             },
+            "arrivalTerminal": "I",
             "arrivalTime": {
                 "@type": "QDateTime",
                 "@value": "2016-10-17T15:55:00-07:00",
@@ -197,6 +198,7 @@
                 "iataCode": "SFO",
                 "name": "San Francisco International"
             },
+            "arrivalTerminal": "I",
             "arrivalTime": {
                 "@type": "QDateTime",
                 "@value": "2016-10-17T15:55:00-07:00",
@@ -255,6 +257,7 @@
                 "iataCode": "ORD",
                 "name": "O Hare International"
             },
+            "arrivalTerminal": "3",
             "arrivalTime": {
                 "@type": "QDateTime",
                 "@value": "2016-10-22T14:00:00-05:00",
@@ -313,6 +316,7 @@
                 "iataCode": "ORD",
                 "name": "O Hare International"
             },
+            "arrivalTerminal": "3",
             "arrivalTime": {
                 "@type": "QDateTime",
                 "@value": "2016-10-22T14:00:00-05:00",
@@ -391,6 +395,7 @@
                 "name": "O Hare International"
             },
             "departureDay": "2016-10-22",
+            "departureTerminal": "3",
             "departureTime": {
                 "@type": "QDateTime",
                 "@value": "2016-10-22T15:25:00-05:00",
@@ -449,6 +454,7 @@
                 "name": "O Hare International"
             },
             "departureDay": "2016-10-22",
+            "departureTerminal": "3",
             "departureTime": {
                 "@type": "QDateTime",
                 "@value": "2016-10-22T15:25:00-05:00",

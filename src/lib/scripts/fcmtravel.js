@@ -30,16 +30,17 @@ function main(text) {
         const depDate = text.substr(pos + index).match(/(?:Date|Datum): *\S{3} (.*)\n/);
         if (depDate)
             index += depDate.index + depDate[0].length;
-        const depLine = text.substr(pos + index).match(/(?:Departure|Avgång): *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/);
+        const depLine = text.substr(pos + index).match(/(?:Departure|Avgång): *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\).*\n(?:\s+Terminal\s(.*)\n)?/);
         if (!depLine)
             break;
         index += depLine.index + depLine[0].length;
         res.reservationFor.departureTime = JsonLd.toDateTime(depDate[1] + " " + depLine[1], "d MMM yyyy hh:mm", ['en', 'sv']);
         res.reservationFor.departureAirport.name = depLine[2];
         res.reservationFor.departureAirport.iataCode = depLine[3];
+        res.reservationFor.departureTerminal = depLine[4];
 
         let arrDate = text.substr(pos + index).match(/(?:Date|Datum): *[A-Z][a-z]{2} (.*)\n/);
-        const arrLine = text.substr(pos + index).match(/(?:Arrival|Ankomst): *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\)/);
+        const arrLine = text.substr(pos + index).match(/(?:Arrival|Ankomst): *([0-9]+:[0-9]+) *(.*) *\(([A-Z]{3})\).*\n(?:\s+Terminal\s(.*)\n)?/);
         if (!arrLine)
             break;
         if (!arrDate || arrDate.index > arrLine.index) // arrival date is sometimes optional
@@ -48,6 +49,7 @@ function main(text) {
         res.reservationFor.arrivalTime = JsonLd.toDateTime(arrDate[1] + " " + arrLine[1], "d MMM yyyy hh:mm", ['en', 'sv']);
         res.reservationFor.arrivalAirport.name = arrLine[2];
         res.reservationFor.arrivalAirport.iataCode = arrLine[3];
+        res.reservationFor.arrivalTerminal = arrLine[4];
 
         reservations.push(res);
         if (index == 0)
