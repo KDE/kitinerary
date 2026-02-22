@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2023 Volker Krause <vkrause@kde.org>
+    SPDX-FileCopyrightText: 2026 Carl Schwan <carlschwan@kde.org>
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
@@ -41,4 +42,41 @@ function fixSchemaOrg(html, node) {
         res.reservationFor.departureTime = res.reservationFor.departureTime.substr(0, 19);
     }
     return results;
+}
+
+function extractReceipt(content) {
+    let res = JsonLd.newBusReservation();
+
+
+    const lines = content.split('\n');
+
+    for (let i = 0, count = lines.length; i < count; i++) {
+        const line = lines[i];
+
+        if (line.startsWith('Name:')) {
+            res.underName.name = line.split(': ')[1];
+        }
+
+        if (line.startsWith('Booking number:')) {
+            res.reservationNumber = lines[i + 1];
+        }
+
+        if (line.startsWith('Route:')) {
+            const match = line.match("Route: (.*)-(.*)");
+            res.reservationFor.departureBusStop.name = match[1];
+            res.reservationFor.arrivalBusStop.name = match[2];
+        }
+
+        if (line.startsWith('Departure:')) {
+            const match = line.match("Departure: (.*), (.*)");
+            res.reservationFor.departureTime = JsonLd.toDateTime(match[2] + ' ' + match[1], 'dd MMM yyyy hh:mm AP', 'en');
+        }
+
+        if (line.startsWith('Total amount:')) {
+            const match = line.match("Total amount: (.*) (.*)");
+            res.totalPrice = parseFloat(match[1]);
+            res.priceCurrency = match[2];
+        }
+    }
+    return res;
 }
