@@ -1,0 +1,14 @@
+{
+    "filter": [
+        {
+            "field": "title",
+            "match": "^Prepaid Voucher",
+            "mimeType": "application/pdf",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "getyourguide.js"
+}
+
