@@ -1,13 +1,28 @@
-{
-    "filter": [
-        {
-            "field": "From",
-            "match": "@hostelworld.com",
-            "mimeType": "message/rfc822",
-            "scope": "Ancestors"
-        }
-    ],
-    "function": "parseReservationMail",
-    "mimeType": "text/plain",
-    "script": "hostelworld.js"
-}
+[
+	{
+        "filter": [
+            {
+                "field": "From",
+                "match": "@hostelworld.com",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "parseReservationMail",
+        "mimeType": "text/plain",
+        "script": "hostelworld.js"
+    },
+	{
+        "filter": [
+            {
+                "field": "From",
+                "match": "@info.hostelworld.com",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "parseReservationMailV2",
+        "mimeType": "text/plain",
+        "script": "hostelworld.js"
+    }
+]
