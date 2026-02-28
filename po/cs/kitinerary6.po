@@ -1,18 +1,19 @@
 # SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2024 Vit Pelcak <vit@pelcak.org>
+# SPDX-FileCopyrightText: 2026 Libor Filípek <filipek.libor@protonmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: desktop files\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:41+0000\n"
-"PO-Revision-Date: 2024-06-25 10:53+0200\n"
-"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2026-02-02 17:03+0100\n"
+"Last-Translator: Libor Filípek <filipek.libor@protonmail.com>\n"
+"Language-Team: \n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.1\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #: calendarhandler.cpp:171
 #, kde-format
@@ -49,7 +50,7 @@ msgstr "Brána pro odlet: %1"
 #: calendarhandler.cpp:240
 #, kde-format
 msgid "Boarding group: %1"
-msgstr ""
+msgstr "Skupina pro nástup: %1"
 
 #: calendarhandler.cpp:243 calendarhandler.cpp:275 calendarhandler.cpp:303
 #, kde-format
@@ -61,7 +62,7 @@ msgstr "Sedadlo: %1"
 #: calendarhandler.cpp:477 calendarhandler.cpp:509
 #, kde-format
 msgid "Booking reference: %1"
-msgstr ""
+msgstr "Číslo rezervace: %1"
 
 #: calendarhandler.cpp:258
 #, kde-format
@@ -178,3 +179,6 @@ msgid ""
 "Under name: %2\n"
 "Pickup location: %3"
 msgstr ""
+"Číslo rezervace: %1\n"
+"Jméno: %2\n"
+"Místo vyzvednutí: %3"
