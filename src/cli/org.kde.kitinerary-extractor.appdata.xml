@@ -86,6 +86,7 @@
     <p xml:lang="ar">مستخرج مسار الرحلة بسطر الأوامر.</p>
     <p xml:lang="ca">Extractor de les dades d'itineraris mitjançant la línia d'ordres, per a la integració en aplicacions de tercers.</p>
     <p xml:lang="ca-valencia">Extractor de les dades d'itineraris mitjançant la línia d'ordres, per a la integració en aplicacions de tercers.</p>
+    <p xml:lang="cs">Extraktor v příkazovém řádku pro data itineráře a pro integraci do aplikací třetích stran.</p>
     <p xml:lang="da">Kommandolinjeværktøj til at udtrække rejseplan-data, til integration med tredjepartsprogrammer.</p>
     <p xml:lang="de">Reisedaten-Extraktor für die Befehlszeile zur Integration in Drittanwendungen.</p>
     <p xml:lang="en-GB">Command line extractor for itinerary data, for integrating into 3rd party applications.</p>
