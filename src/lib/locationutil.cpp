@@ -402,7 +402,12 @@ bool LocationUtil::isSameLocation(const QVariant &lhs, const QVariant &rhs, Loca
                 if (!lhsAddr.postalCode().isEmpty() && !rhsAddr.postalCode().isEmpty() && lhsAddr.postalCode() != rhsAddr.postalCode()) {
                     return false;
                 }
-                return  (lhsAddr.streetAddress().startsWith(rhsAddr.streetAddress(), Qt::CaseInsensitive) || rhsAddr.streetAddress().startsWith(lhsAddr.streetAddress(), Qt::CaseInsensitive)) && lhsAddr.addressLocality() == rhsAddr.addressLocality();
+                return lhsAddr.addressLocality() == rhsAddr.addressLocality() && (
+                    lhsAddr.streetAddress().startsWith(rhsAddr.streetAddress(), Qt::CaseInsensitive) ||
+                    rhsAddr.streetAddress().startsWith(lhsAddr.streetAddress(), Qt::CaseInsensitive) ||
+                    lhsAddr.streetAddress().endsWith(rhsAddr.streetAddress(), Qt::CaseInsensitive) ||
+                    rhsAddr.streetAddress().endsWith(lhsAddr.streetAddress(), Qt::CaseInsensitive)
+                );
             }
             break;
         case CityLevel:
