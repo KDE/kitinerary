@@ -19,7 +19,7 @@
 
 using namespace KItinerary;
 
-static QByteArray decodeBase45Backward(const char *begin, const char *end)
+static QByteArray decodeBase26Backward(const char *begin, const char *end)
 {
     openssl::bn_ptr bn(BN_new());
     BN_zero(bn.get());
@@ -85,7 +85,7 @@ QByteArray Rsp6Decoder::decode(const QByteArray &data)
     }
 
     // remove base26 transport encoding
-    const auto decoded = decodeBase45Backward(data.begin() + 15, data.end());
+    const auto decoded = decodeBase26Backward(data.begin() + 15, data.end());
 
     // decrypt payload, try all keys for the current issuer until we find one that works
     QByteArray decrypted;
