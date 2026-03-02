@@ -25,7 +25,7 @@ regExMap['fr'] = {
 
 regExMap['de'] = {
     bookingRef: /(?:Buchungsnummer|Bestätigungsnummer): ([0-9]*)\s+/,
-    hotelInformation: /(?:Lage )?(\S[^\n]*(?:,[^\n,]*?\n?[^\n,]*?){2,3})[\n\s]?-?\s+(?:Reiseroute.*\n)?\s*(?:Telefon:? (\+[0-9 \-]+)|Kontakt.*|E-Mail an.*)\n/,
+    hotelInformation: /(?:Lage )?(\S[^\n]*(?:,[^\n,]*?\n?[^\n,]*?){1,3})[\n\s]?-?\s+(?:Reiseroute.*\n)?\s*(?:Telefon:? (\+[0-9 \-]+)|Kontakt.*|E-Mail an.*)\n/,
     hotelName: [/Die Unterkunft (.*)\s+erwartet Sie/, /\n\n\s*([^\s\[].*\S)\n\n\s*\[\S/],
     arrivalDate: /Anreise +([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \((?:ab )?([0-9]{1,2}:[0-9]{2}).*\)/,
     departureDate: /Abreise +([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2})\)/,
@@ -85,13 +85,25 @@ function main(text, node) {
             continue;
         res.reservationNumber = bookingRef[1];
 
-        let hotelName = undefined;
-        for (const nameRx of regExMap[locale]['hotelName']) {
-            hotelName = text.match(nameRx);
-            if (hotelName)
-                break;
+        // try subject first, before looking for the name in the body
+        let mime = node.parent;
+        while (mime && mime.mimeType !== "message/rfc822")
+            mime = mime.parent;
+        if (mime) {
+            const name = mime.content.subject.match(/(?:confirmed at|bestätigt:) (.*)/);
+            if (name)
+                res.reservationFor.name = name[1];
         }
-        res.reservationFor.name = hotelName[1];
+
+        if (!res.reservationFor.name) {
+            let hotelName = undefined;
+            for (const nameRx of regExMap[locale]['hotelName']) {
+                hotelName = text.match(nameRx);
+                if (hotelName)
+                    break;
+            }
+            res.reservationFor.name = hotelName[1];
+        }
 
         const hotel = text.match(regExMap[locale]['hotelInformation']);
         const addr = hotel[1].split(/, */);
