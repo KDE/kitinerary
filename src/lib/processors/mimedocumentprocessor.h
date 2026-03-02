@@ -14,12 +14,13 @@ namespace KItinerary {
 class MimeDocumentProcessor : public ExtractorDocumentProcessor
 {
 public:
-    bool canHandleData(const QByteArray &encodedData, QStringView fileName) const override;
-    ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
-    ExtractorDocumentNode createNodeFromContent(const QVariant &decodedData) const override;
+    [[nodiscard]] bool canHandleData(const QByteArray &encodedData, QStringView fileName) const override;
+    [[nodiscard]] ExtractorDocumentNode createNodeFromData(const QByteArray &encodedData) const override;
+    [[nodiscard]] ExtractorDocumentNode createNodeFromContent(const QVariant &decodedData) const override;
     void expandNode(ExtractorDocumentNode& node, const ExtractorEngine *engine) const override;
-    bool matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const override;
+    [[nodiscard]] bool matches(const ExtractorFilter &filter, const ExtractorDocumentNode &node) const override;
     void destroyNode(ExtractorDocumentNode &node) const override;
+    [[nodiscard]] QJSValue contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const override;
 };
 
 }

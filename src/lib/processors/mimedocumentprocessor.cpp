@@ -13,6 +13,7 @@
 #include <KMime/Message>
 
 #include <QDebug>
+#include <QJSEngine>
 
 using namespace Qt::Literals::StringLiterals;
 using namespace KItinerary;
@@ -47,6 +48,24 @@ const T* findHeader(const KMime::Content *content)
     return findHeader<T>(content->parent());
 }
 }
+
+/** Script API wrapper for MIME content nodes. */
+class MimeNodeWrapper {
+    Q_GADGET
+    Q_PROPERTY(QString subject READ subject)
+public:
+
+    explicit MimeNodeWrapper(const KMime::Content *content) : m_content(content) {}
+
+    [[nodiscard]] QString subject() const {
+        const auto s = findHeader<KMime::Headers::Subject>(m_content);
+        return s ? s->asUnicodeString() : QString();
+    }
+
+private:
+    const KMime::Content *m_content;
+};
+
 
 bool MimeDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
@@ -200,3 +219,10 @@ void MimeDocumentProcessor::destroyNode(ExtractorDocumentNode &node) const
 {
     destroyIfOwned<const KMime::Content>(node);
 }
+
+QJSValue MimeDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const
+{
+    return engine->toScriptValue(MimeNodeWrapper(node.content<const KMime::Content*>()));
+}
+
+#include "mimedocumentprocessor.moc"
