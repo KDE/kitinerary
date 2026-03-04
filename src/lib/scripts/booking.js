@@ -107,9 +107,10 @@ function main(text, node) {
 
         const hotel = text.match(regExMap[locale]['hotelInformation']);
         const addr = hotel[1].split(/, */);
-        res.reservationFor.address.streetAddress = addr.slice(0, addr.length >= 4 ? addr.length - 3 : addr.length - 2).join(", ");
-        res.reservationFor.address.postalCode = addr.length >= 4 ? addr[addr.length - 2] : ""
-        res.reservationFor.address.addressLocality = addr.length >= 4 ? addr[addr.length - 3] : addr[addr.length - 2];
+        const separatePostCode = addr.length >= 4 && (locale !== "de" || addr[addr.length - 2].match(/\d{4}$/) !== null);
+        res.reservationFor.address.streetAddress = addr.slice(0, separatePostCode ? addr.length - 3 : addr.length - 2).join(", ");
+        res.reservationFor.address.postalCode = separatePostCode ? addr[addr.length - 2] : ""
+        res.reservationFor.address.addressLocality = separatePostCode ? addr[addr.length - 3] : addr[addr.length - 2];
         res.reservationFor.address.addressCountry = addr[addr.length - 1]
         res.reservationFor.telephone = hotel[2];
 
