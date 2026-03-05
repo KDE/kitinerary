@@ -13,9 +13,9 @@ function extractPdfTicket(pdf, node, barcode) {
     const trip = text.match(/Origin : (.*?)\s\s+Destination : (.*)/);
     res.reservationFor.departureStation.name = trip[1];
     res.reservationFor.arrivalStation.name = trip[2];
-    const times = text.match(/(\d\d\/\d\d\/\d{4})\s+(\d\d:\d\d)\s+(\d\d:\d\d)\s+(\S.*?)\s-\s.*(\S.*)-(\S.*?)\s\s/);
-    res.reservationFor.departureTime = JsonLd.toDateTime(times[1] + times[2], "dd/MM/yyyyhh:mm", "en");
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(times[1] + times[3], "dd/MM/yyyyhh:mm", "en");
+    const times = text.match(/(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d\d:\d\d)\s+(\d\d:\d\d)\s+(\S.*?)\s-\s.*(\S.*)-\s*(\S.*?)\s\s/);
+    res.reservationFor.departureTime = JsonLd.toDateTime(times[1] + times[2], "d/M/yyyyhh:mm", "en");
+    res.reservationFor.arrivalTime = JsonLd.toDateTime(times[1] + times[3], "d/M/yyyyhh:mm", "en");
     res.reservedTicket.ticketedSeat.seatingType = times[4];
     res.reservedTicket.ticketedSeat.seatSection = times[5];
     res.reservedTicket.ticketedSeat.seatNumber = times[6];
