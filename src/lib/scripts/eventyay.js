@@ -8,7 +8,7 @@ function extractTicket(pdf, node, barcode) {
     res.reservedTicket.ticketToken = 'qrcode:' + barcode.content;
 
     const text = pdf.pages[barcode.location].text;
-    const data = text.match(/(#O\d{10}-\d{5})\n+(.*)\n+(.*)\n+Event taking place ([\S\s]*)\.\n+From: .*, (\S+ \d{2}, \d{4}, \d{1,2}:\d\d:\d\d [AP]M).*\n+To: .* (\S+ \d{2}, \d{4}, \d{1,2}:\d\d:\d\d [AP]M)/);
+    const data = text.match(/(#O\d{10}-\d{5})\n+(.*)\n+(.*)\n+(?:Event taking place|Die Veranstaltung findet) ([\S\s]*)\n+(?:From|Von): .*, (\S+ \d{1,2}, \d{4}, \d{1,2}:\d\d:\d\d [AP]M).*\n+(?:To|Bis): .* (\S+ \d{1,2}, \d{4}, \d{1,2}:\d\d:\d\d [AP]M)/);
     res.reservationNumber = data[1];
     res.reservationFor.name = data[2];
     res.reservedTicket.name = data[3];
@@ -20,7 +20,7 @@ function extractTicket(pdf, node, barcode) {
     res.reservationFor.location.address.postalCode = addr[addr.length - 2];
     res.reservationFor.location.address.addressCountry = addr[addr.length - 1];
 
-    res.reservationFor.startDate = JsonLd.toDateTime(data[5], 'MMMM dd, yyyy, h:mm:ss AP', 'en');
-    res.reservationFor.endDate = JsonLd.toDateTime(data[6], 'MMMM dd, yyyy, h:mm:ss AP', 'en');
+    res.reservationFor.startDate = JsonLd.toDateTime(data[5], 'MMMM d, yyyy, h:mm:ss AP', 'en');
+    res.reservationFor.endDate = JsonLd.toDateTime(data[6], 'MMMM d, yyyy, h:mm:ss AP', 'en');
     return res;
 }
