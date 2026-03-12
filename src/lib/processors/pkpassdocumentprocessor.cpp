@@ -153,7 +153,7 @@ static Flight extractBoardingPass(const KPkPass::Pass *pass, Flight flight)
     const auto fields = pass->fields();
     for (const auto &field : fields) {
         // boarding time
-        if (!flight.boardingTime().isValid() && field.key().contains("boarding"_L1, Qt::CaseInsensitive)) {
+        if (!flight.boardingTime().isValid() && (field.key().contains("boarding"_L1, Qt::CaseInsensitive) || field.label().contains("boarding"_L1, Qt::CaseInsensitive))) {
             const auto time = timeFinder.findSingularTime(field.value().toString());
             if (time.isValid()) {
                 // this misses date, but the postprocessor will fill that in
