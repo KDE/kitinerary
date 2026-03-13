@@ -2,7 +2,7 @@
     "filter": [
         {
             "field": "From",
-            "match": "noreply@spenderservice.net",
+            "match": "noreply.*@spenderservice.net",
             "mimeType": "message/rfc822",
             "scope": "Parent"
         }
