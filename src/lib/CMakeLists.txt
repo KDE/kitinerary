@@ -7,7 +7,7 @@ if (BUILD_TOOLS)
 endif()
 configure_file(config-kitinerary.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-kitinerary.h)
 
-add_library(KPim6Itinerary ${kitinerary_lib_srcs})
+add_library(KPim6Itinerary)
 add_library(KPim6::Itinerary ALIAS KPim6Itinerary)
 
 target_sources(KPim6Itinerary PRIVATE
@@ -399,7 +399,6 @@ install(FILES
 )
 install(FILES
     ${KItinerary_HEADERS}
-    ${KItinerary_AirportDb_HEADERS}
     ${KItinerary_Asn1_HEADERS}
     ${KItinerary_Datatypes_HEADERS}
     ${KItinerary_KnowledgeDb_HEADERS}
@@ -440,7 +439,6 @@ if (BUILD_QCH)
         ORG_DOMAIN org.kde
         SOURCES # using only public headers, to cover only public API
         ${KItinerary_HEADERS}
-        ${KItinerary_AirportDb_HEADERS}
         ${KItinerary_Datatypes_HEADERS}
         ${KItinerary_KnowledgeDb_HEADERS}
         ${KItinerary_Engine_HEADERS}
