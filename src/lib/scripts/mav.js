@@ -35,6 +35,11 @@ function parseStationCode(station, view, offset, version)
     }
 }
 
+// product code map (heavily incomplete)
+const product_codes = {
+    0x7CF45977: "ORSZÁGBÉRLET"
+}
+
 // see https://community.kde.org/KDE_PIM/KItinerary/MAV_Barcode
 // data starts at offset 20 in the header block, at which point both formats are structurally identical
 function parseBarcodeCommon(res, data, version) {
@@ -95,6 +100,7 @@ function parseBarcodeCommon(res, data, version) {
     for (let i = 0; i < view.getUInt8(11); ++i) {
         const passView = new DataView(data.slice(offset));
         parseValidityRange(res.reservedTicket, passView, 12, version);
+        res.reservedTicket.name = product_codes[passView.getUInt32(0, false)];
         offset += 20;
     }
 }
