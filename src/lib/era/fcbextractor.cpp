@@ -495,6 +495,15 @@ void FcbExtractor::readArrivalStation(const QVariant &doc, TrainStation &station
 
 void FcbExtractor::fixStationCode(TrainStation &station)
 {
+    // ensure there's a name, otherwise we wont get through result validation
+    if (station.name().isEmpty() && !station.identifier().isEmpty()) {
+        if (station.identifier().startsWith("uic:"_L1)) {
+            station.setName(station.identifier().mid(4));
+        } else {
+            station.setName(station.identifier());
+        }
+    }
+
     // UIC codes in Germany are wildly unreliable, there seem to be different
     // code tables in use by different operators, so we unfortunately have to ignore
     // those entirely
