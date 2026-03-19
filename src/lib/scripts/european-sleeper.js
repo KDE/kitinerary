@@ -6,6 +6,8 @@
 function parseTicket(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
     let res = triggerNode.result[0];
+
+    //BEGIN pre 2025 workarounds
     res.reservationFor.trainNumber = text.match(/(?:Train number|Treinnummer|Zugnummer|Numéro du train) ([A-Z]+ \d+)\n/)[1];
     res.reservedTicket.ticketNumber = res.reservationNumber;
     res.reservationNumber = text.match(/(?:code|nummer|Code de réservation|Code du bilet) ([A-Z0-9]{4}-[A-Z0-9]{4})\n/)[1];
@@ -17,6 +19,13 @@ function parseTicket(pdf, node, triggerNode) {
     if (seat) {
         res.reservedTicket.ticketedSeat.seatSection = seat[1];
         res.reservedTicket.ticketedSeat.seatNumber = seat[2];
+    }
+    //END pre 2025 workarounds
+
+    // recover station names from RCT2
+    if (res.reservationFor.departureStation.name > 100000) {
+        res.reservationFor.departureStation.name = triggerNode.content.rct2Ticket.outboundDepartureStation;
+        res.reservationFor.arrivalStation.name = triggerNode.content.rct2Ticket.outboundArrivalStation;
     }
     return res;
 }
