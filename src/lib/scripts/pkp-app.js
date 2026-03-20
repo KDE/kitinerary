@@ -108,3 +108,28 @@ function main(content, node) {
 
     return reservations;
 }
+
+function fixStationCode(station) {
+    // UIC codes in FCB barcodes in Germany are wildly unreliable, there seem to be different
+    // code tables in use by different operators, so we unfortunately have to ignore
+    // those entirely
+    if (!station.identifier || !station.identifier.startsWith("uic:80"))
+        return;
+    station.identifier = undefined;
+    station.address = {
+        "@type": "PostalAddress",
+        addressCountry: "DE"
+    };
+}
+
+function fixFCB(code, node)
+{
+    if (code.block("U_FLEX")) {
+        let result = node.result;
+        for (res of result) {
+            fixStationCode(res.reservationFor.departureStation);
+            fixStationCode(res.reservationFor.arrivalStation);
+        }
+        return result;
+    }
+}

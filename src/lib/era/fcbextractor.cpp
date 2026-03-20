@@ -503,14 +503,4 @@ void FcbExtractor::fixStationCode(TrainStation &station)
             station.setName(station.identifier());
         }
     }
-
-    // UIC codes in Germany are wildly unreliable, there seem to be different
-    // code tables in use by different operators, so we unfortunately have to ignore
-    // those entirely
-    if (station.identifier().startsWith("uic:80"_L1)) {
-      PostalAddress addr;
-      addr.setAddressCountry(u"DE"_s);
-      station.setAddress(addr);
-      station.setIdentifier(QString());
-    }
 }
