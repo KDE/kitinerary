@@ -1,4 +1,4 @@
-{
+[{
     "filter": [
         {
             "match": "Bilet ważny wyłącznie w pociągach Spółki PKP Intercity",
@@ -14,4 +14,17 @@
     "function": "main",
     "mimeType": "application/pdf",
     "script": "pkp-app.js"
-}
+},
+{
+   "filter": [
+        {
+            "field": "carrierId",
+            "match": "1251",
+            "mimeType": "internal/uic9183",
+            "scope": "Current"
+        }
+    ],
+    "function": "fixFCB",
+    "mimeType": "internal/uic9183",
+    "script": "pkp-app.js"}
+]

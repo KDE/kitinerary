@@ -110,6 +110,19 @@ function parseLegs(text, year, compact) {
     return reservations;
 }
 
+function fixStationCode(station) {
+    // UIC codes in FCB barcodes in Germany are wildly unreliable, there seem to be different
+    // code tables in use by different operators, so we unfortunately have to ignore
+    // those entirely
+    if (!station.identifier || !station.identifier.startsWith("uic:80"))
+        return;
+    station.identifier = undefined;
+    station.address = {
+        "@type": "PostalAddress",
+        addressCountry: "DE"
+    };
+}
+
 function parseText(text) { // used by unit tests
     return parseTicket(text, null);
 }
@@ -142,7 +155,9 @@ function parseTicket(text, uic918ticket) {
         // for outward journeys we have station ids from the UIC 918-3 code
         if (uic918ticket && header[1] !== "Rück") {
             reservations[0].reservationFor.departureStation = JsonLd.apply(JsonLd.toJson(uic918ticket.outboundDepartureStation), reservations[0].reservationFor.departureStation);
+            fixStationCode(reservations[0].reservationFor.departureStation);
             reservations[reservations.length - 1].reservationFor.arrivalStation = JsonLd.apply(JsonLd.toJson(uic918ticket.outboundArrivalStation), reservations[reservations.length - 1].reservationFor.arrivalStation);
+            fixStationCode(reservations[reservations.length - 1].reservationFor.arrivalStation);
             returnResIndex = reservations.length;
         } else {
             // propagate station ids from outward to return journey
@@ -324,6 +339,15 @@ function parseUic9183(code, node) {
         ret.reservationFor.departureStation = JsonLd.toJson(code.returnDepartureStation);
         ret.reservationFor.arrivalStation = JsonLd.toJson(code.returnArrivalStation);
         return [res, ret];
+    }
+
+    if (code.block("U_FLEX")) {
+        let result = node.result;
+        for (res of result) {
+            fixStationCode(res.reservationFor.departureStation);
+            fixStationCode(res.reservationFor.arrivalStation);
+        }
+        return result;
     }
 }
 
