@@ -1,10 +1,9 @@
 {
     "filter": [
         {
-            "field": "title",
-            "match": "Din billett",
-            "mimeType": "application/pdf",
-            "scope": "Current"
+            "match": "^IACAA[A-Za-z0-9+/]{425}==$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
         }
     ],
     "function": "extractPdf",
