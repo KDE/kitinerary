@@ -4,7 +4,7 @@
 set -e
 set -x
 
-CMAKE_VERSION=3.27.9
+CMAKE_VERSION=3.31.11
 
 # patch repository URLs to use vault.centos.org
 # WARNING: this is using EOL software, we should not do this!
