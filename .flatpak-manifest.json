@@ -12,6 +12,15 @@
     "finish-args": [
         "--filesystem=host:ro"
     ],
+    "cleanup": [
+        "/include",
+        "/lib/cmake",
+        "/lib/pkgconfig",
+        "/mkspecs",
+        "/share/qlogging-categories6",
+        "*.la",
+        "*.a"
+    ],
     "modules": [
         {
             "name": "poppler",
@@ -33,14 +42,16 @@
             "builddir": true,
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://invent.kde.org/mirrors/poppler.git",
-                    "branch": "master"
+                    "type": "archive",
+                    "url": "https://poppler.freedesktop.org/poppler-26.03.0.tar.xz",
+                    "sha256": "8b3c5e2a9f2ab4c3ec5029f28af1b433c6b71f0d1e7b3997aa561cf1c0ca4ebe",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 3686,
+                        "stable-only": true,
+                        "url-template": "https://poppler.freedesktop.org/poppler-$version.tar.xz"
+                    }
                 }
-            ],
-            "cleanup": [
-                "/include",
-                "/lib/pkgconfig"
             ]
         },
         {
@@ -61,8 +72,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/google/libphonenumber/archive/refs/tags/v9.0.20.tar.gz",
-                    "sha256": "5de298e4a8c72564ac9cdae415f6cc9ea2952e9f1f9e71dd6d1c70755c92bf2f",
+                    "url": "https://github.com/google/libphonenumber/archive/refs/tags/v9.0.25.tar.gz",
+                    "sha256": "de4cfebe1e1da4ecfb687c7bdf312d93b37548737f5e52444d2d29d0b36d2512",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 89344,
@@ -70,11 +81,6 @@
                         "url-template": "https://github.com/google/libphonenumber/archive/refs/tags/v$version.tar.gz"
                     }
                 }
-            ],
-            "cleanup": [
-                "/include",
-                "/lib/*.a",
-                "/lib/cmake"
             ],
             "modules": [
                 {
@@ -88,8 +94,8 @@
                     "sources": [
                         {
                             "type": "archive",
-                            "url": "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v33.2.tar.gz",
-                            "sha256": "eb671d900b05d8e17f4cd6ca61bfcc60770d209af1a289cb1a200815d6b621ae",
+                            "url": "https://github.com/protocolbuffers/protobuf/archive/refs/tags/v34.0.tar.gz",
+                            "sha256": "61c47fabb1190e0acb2d47e67f31baac05d9b4ce69d7d1b43f6c83744f83898e",
                             "x-checker-data": {
                                 "type": "anitya",
                                 "project-id": 3715,
@@ -100,13 +106,8 @@
                     ],
                     "cleanup": [
                         "/bin",
-                        "/include",
-                        "/lib/*.a",
-                        "/lib/*.la",
                         "/lib/libprotobuf.*",
-                        "/lib/libprotoc*",
-                        "/lib/cmake",
-                        "/lib/pkgconfig"
+                        "/lib/libprotoc*"
                     ]
                 }
             ]
@@ -123,7 +124,7 @@
                 {
                     "type": "git",
                     "url": "https://invent.kde.org/pim/kpkpass",
-                    "branch": "master"
+                    "branch": "release/26.04"
                 }
             ],
             "cleanup": [
@@ -145,7 +146,7 @@
                 {
                     "type": "git",
                     "url": "https://invent.kde.org/pim/kmime",
-                    "branch": "master"
+                    "branch": "release/26.04"
                 }
             ],
             "cleanup": [
@@ -166,12 +167,6 @@
             ],
             "buildsystem": "cmake-ninja",
             "builddir": true,
-            "cleanup": [
-                "/include",
-                "*.pc",
-                "/lib/cmake",
-                "libZXing.a"
-            ],
             "sources": [
                 {
                     "type": "archive",
