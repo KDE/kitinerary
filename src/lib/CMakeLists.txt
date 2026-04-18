@@ -213,7 +213,7 @@ target_include_directories(KPim6Itinerary PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(KPim6Itinerary
     PUBLIC
         Qt::Core
-        KPim6::Mime
+        KF6::Mime
     PRIVATE
         Qt::Qml
         KF6::Archive
