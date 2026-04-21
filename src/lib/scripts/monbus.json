@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^http://www.monbus.es",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "monbus.js"
+}
