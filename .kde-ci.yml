@@ -9,7 +9,7 @@ Dependencies:
     'frameworks/kcontacts' : '@latest-kf6'
     'frameworks/kcalendarcore' : '@latest-kf6'
     'frameworks/kcodecs' : '@latest-kf6'
-    'pim/kmime' : '@same'
+    'frameworks/kmime': '@latest-kf6'
     'pim/kpkpass' : '@same'
     'third-party/zxing-cpp': '@latest'
 
