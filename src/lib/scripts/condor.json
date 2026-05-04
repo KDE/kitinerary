@@ -1,0 +1,14 @@
+[
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.com.condor.buchung",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "condor.js"
+    }
+]
