@@ -44,11 +44,14 @@ void PdfPagePrivate::load()
 #if KPOPPLER_VERSION < QT_VERSION_CHECK(25, 1, 0)
     std::unique_ptr<GooString> s(device.getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
     m_text = QString::fromUtf8(s->c_str());
-#elif KPOPPLER_VERSION <QT_VERSION_CHECK(25, 12, 90)
+#elif KPOPPLER_VERSION < QT_VERSION_CHECK(25, 12, 90)
     const auto s = device.getText(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2);
     m_text = QString::fromUtf8(s.c_str());
-#else
+#elif KPOPPLER_VERSION < QT_VERSION_CHECK(26, 5, 90)
     const auto s = device.getText(PDFRectangle(pageRect->x1, pageRect->y1, pageRect->x2, pageRect->y2));
+    m_text = QString::fromUtf8(s.c_str());
+#else
+    const auto s = device.getText(pageRect);
     m_text = QString::fromUtf8(s.c_str());
 #endif
 
@@ -59,7 +62,11 @@ void PdfPagePrivate::load()
 
     m_links = std::move(device.m_links);
     for (auto &link : m_links) {
+#if KPOPPLER_VERSION < QT_VERSION_CHECK(26, 5, 90)
         link.convertToPageRect(pageRect);
+#else
+        link.convertToPageRect(&pageRect);
+#endif
     }
 
     m_loaded = true;
@@ -98,16 +105,30 @@ QString PdfPage::textInRect(double left, double top, double right, double bottom
     double b;
     switch (page->getRotate()) {
         case 0:
+#if KPOPPLER_VERSION < QT_VERSION_CHECK(26, 5, 90)
             l = ratio(pageRect->x1, pageRect->x2, left);
             t = ratio(pageRect->y1, pageRect->y2, top);
             r = ratio(pageRect->x1, pageRect->x2, right);
             b = ratio(pageRect->y1, pageRect->y2, bottom);
+#else
+            l = ratio(pageRect.x1, pageRect.x2, left);
+            t = ratio(pageRect.y1, pageRect.y2, top);
+            r = ratio(pageRect.x1, pageRect.x2, right);
+            b = ratio(pageRect.y1, pageRect.y2, bottom);
+#endif
             break;
         case 90:
+#if KPOPPLER_VERSION < QT_VERSION_CHECK(26, 5, 90)
             l = ratio(pageRect->y1, pageRect->y2, left);
             t = ratio(pageRect->x1, pageRect->x2, top);
             r = ratio(pageRect->y1, pageRect->y2, right);
             b = ratio(pageRect->x1, pageRect->x2, bottom);
+#else
+            l = ratio(pageRect.y1, pageRect.y2, left);
+            t = ratio(pageRect.x1, pageRect.x2, top);
+            r = ratio(pageRect.y1, pageRect.y2, right);
+            b = ratio(pageRect.x1, pageRect.x2, bottom);
+#endif
             break;
         default:
             qCWarning(Log) << "Unsupported page rotation!" << page->getRotate();
@@ -158,8 +179,13 @@ QVariantList PdfPage::imagesInRect(double left, double top, double right, double
     const auto pageRect = d->m_doc->m_popplerDoc->getPage(d->m_pageNum + 1)->getCropBox();
 
     for (const auto &img : d->m_images) {
+#if KPOPPLER_VERSION < QT_VERSION_CHECK(26, 5, 90)
         if ((img.d->m_transform.dx() >= ratio(pageRect->x1, pageRect->x2, left) && img.d->m_transform.dx() <= ratio(pageRect->x1, pageRect->x2, right)) &&
             (img.d->m_transform.dy() >= ratio(pageRect->y1, pageRect->y2, top)  && img.d->m_transform.dy() <= ratio(pageRect->y1, pageRect->y2, bottom)))
+#else
+        if ((img.d->m_transform.dx() >= ratio(pageRect.x1, pageRect.x2, left) && img.d->m_transform.dx() <= ratio(pageRect.x1, pageRect.x2, right)) &&
+            (img.d->m_transform.dy() >= ratio(pageRect.y1, pageRect.y2, top)  && img.d->m_transform.dy() <= ratio(pageRect.y1, pageRect.y2, bottom)))
+#endif
         {
             l.push_back(QVariant::fromValue(img));
         }
