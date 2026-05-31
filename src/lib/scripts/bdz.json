@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "title",
+            "match": "^tickets print$",
+            "mimeType": "application/pdf",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractPdfTicket",
+    "mimeType": "application/pdf",
+    "script": "bdz.js"
+}
