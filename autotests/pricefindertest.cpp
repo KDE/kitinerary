@@ -85,6 +85,8 @@ private Q_SLOTS:
         QTest::newRow("non-breaking-space-1") << s("Total price:                         17 704 SEK\n") << 37 << 47 << s("SEK") << 17704.0;
         QTest::newRow("non-breaking-space-2") << s("35,90 €") << 0 << 7 << s("EUR") << 35.9 ;
         QTest::newRow("non-breaking-space-3") << s("5 €") << 0 << 3 << s("EUR") << 5.0 ;
+
+        QTest::newRow("irctc") << u"Total Fare (all inclusive)                                          ₹ 1,045.40"_s << 68 << 78 << u"INR"_s << 1045.40;
     }
 
     void testFindHighest()
