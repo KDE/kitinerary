@@ -445,6 +445,7 @@ void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTick
 
             TrainTrip retBaseTrip;
             retBaseTrip.setProvider(baseTrip.provider());
+            retBaseTrip.setDepartureDay(baseTrip.departureDay());
             retBaseTrip.setDepartureStation(retDep);
             retBaseTrip.setArrivalStation(retArr);
 
@@ -455,7 +456,7 @@ void FcbExtractor::extractOpenTicket(const QVariant &res, const Fcb::UicRailTick
 
             if (!retTrainLinkTypeFound && validator.isValidElement(retBaseTrip)) {
                 res.setReservationFor(retBaseTrip);
-                result.push_back(retBaseTrip);
+                result.push_back(res);
             }
         }
     }).visit<FCB_VERSIONED(OpenTicketData)>(res);
