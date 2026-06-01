@@ -19,5 +19,7 @@ function extractPdfTicket(pdf, node, barcode) {
     res.reservedTicket.ticketedSeat.seatingType = times[4];
     res.reservedTicket.ticketedSeat.seatSection = times[5];
     res.reservedTicket.ticketedSeat.seatNumber = times[6];
+    res.totalPrice = parseFloat(text.match(/Price : (\d*\.*\d*)/)[1]);
+    res.priceCurrency = 'THB';
     return res;
 }
