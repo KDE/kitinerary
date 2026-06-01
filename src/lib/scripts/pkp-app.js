@@ -14,6 +14,11 @@ const lineMatchers = {
     arrivalHeader: /\s*(PRZYJAZD|ARRIVAL)\s*(DATA|DATE)/,
     narrowTrainHeader: /^\s*(CZAS|TIME)\s*(POCIĄG|TRAIN)\s*(WAGON|CARRIAGE)/,
     narrowSeatsHeader: /^\s*(MIEJSCA|SEATS)\s*$/,
+    newDateHeader: /(Data odjazdu|Departure)\s*\/\s*(przyjazdu|arrival date):/,
+    newTimeHeader: /(Godzina odjazdu|Departure)\s*\/\s*(przyjazdu|arrival time):/,
+    newTrainHeader: /(Pociąg|Train):/,
+    newCarriageHeader: /(Wagon|Carriage):/,
+    newSeatsHeader: /(Miejsca|Seats):/,
     ticketNumber: /^.*(TICKET NO|BILET NR)/,
     routePrefix: /^.*(odcinek:|route)/,
     ticketClass: /(klasa|class)/g
@@ -21,36 +26,30 @@ const lineMatchers = {
 
 const ticketLayoutHandlers = {
     wide: applyWideLayout,
-    narrow: applyNarrowLayout
+    narrow: applyNarrowLayout,
+    app2026: applyApp2026Layout
 };
 
 function columns(line) {
     return removeEmptyElements((line || '').split(/\s{2,}/));
 }
 
-function ticketNumberFrom(line) {
-    return (line || '').replace(lineMatchers.ticketNumber, '').trim();
+function cut(line, regexp) {
+    return (line || '').replace(regexp, '').trim();
 }
 
-function routeNameFrom(line) {
-    return (line || '').replace(lineMatchers.routePrefix, '').trim();
-}
-
-function isFirstRouteFallback(routeCount, lineIndex) {
-    return routeCount === 0 && lineIndex === 7;
-}
-
-function parseTickets(contentLines) {
+function parseOldTickets(contentLines) {
     const tickets = [];
 
     contentLines.forEach((line, index) => {
         let ticket = tickets[tickets.length - 1];
 
-        if (lineMatchers.routeStart.test(line) || isFirstRouteFallback(tickets.length, index)) {
+        const singleRouteTicket= (tickets.length === 0 && index === 7)
+        if (lineMatchers.routeStart.test(line) || singleRouteTicket) {
             ticket = {
                 routeNo: tickets.length + 1,
-                stations: routeNameFrom(line),
-                reservationNumber: ticketNumberFrom(contentLines[6])
+                stations: cut(line, lineMatchers.routePrefix),
+                reservationNumber: cut(contentLines[6], lineMatchers.ticketNumber)
             };
             tickets.push(ticket);
             return;
@@ -61,7 +60,7 @@ function parseTickets(contentLines) {
         }
 
         if (lineMatchers.ticketNumber.test(line)) { // only valid for narrow tickets
-            ticket.reservationNumber = ticketNumberFrom(line);
+            ticket.reservationNumber = cut(line, lineMatchers.ticketNumber);
         } else if (lineMatchers.wideHeader.test(line)) {
             ticket.layout = 'wide';
             ticket.wideData = columns(contentLines[index + 1]);
@@ -85,14 +84,41 @@ function parseTickets(contentLines) {
     return tickets;
 }
 
-function detectLayout(ticket) {
-    if (ticket.layout) {
-        return ticket.layout;
+function hasApp2026Layout(contentLines) {
+    return [lineMatchers.newDateHeader, lineMatchers.newTimeHeader, lineMatchers.newTrainHeader]
+        .every(regexp => contentLines.some(line => regexp.test(line)));
+}
+
+function parseApp2026Fields(line, ticket) {
+    if (lineMatchers.newDateHeader.test(line)) {
+        [ticket.departureDate, ticket.arrivalDate] = cut(line, /^.*:/).split(/\s+/);
+    } else if (lineMatchers.newTimeHeader.test(line)) {
+        [ticket.departureTime, ticket.arrivalTime] = cut(line, /^.*?:/).split(/\s+/);
+    } else if (lineMatchers.newTrainHeader.test(line)) {
+        const train = cut(line, /^.*?:/).match(/^(\S+)\s*(.*)$/);
+        ticket.trainNumber = train ? train[1] : undefined;
+        ticket.trainName = train ? train[2].trim() : undefined;
+    } else if (lineMatchers.newCarriageHeader.test(line)) {
+        ticket.seatSection = (line.match(/(?:Wagon|Carriage):\s*([^,]+)/) || [])[1];
+        ticket.seatingType = (line.match(/(?:klasa|class)\s*(\S+)/) || [])[1];
+    } else if (lineMatchers.newSeatsHeader.test(line)) {
+        ticket.seatNumber = (line.match(/(?:Miejsca|Seats):\s*(.*?)(?:\s{2,}|$)/) || [])[1];
     }
-    if ('wideData' in ticket) {
-        return 'wide';
-    }
-    return 'narrow';
+}
+
+function parseApp2026Ticket(contentLines) {
+    const ticket = { layout: 'app2026', routeNo: 1 };
+
+    contentLines.forEach((line, index) => {
+        if (lineMatchers.ticketNumber.test(line)) {
+            ticket.reservationNumber = cut(line, lineMatchers.ticketNumber).replace(/KOD.*$/, '').trim();
+            ticket.stations = (contentLines[index + 1] || '').trim();
+        } else {
+            parseApp2026Fields(line, ticket);
+        }
+    });
+
+    return [ticket];
 }
 
 function ticketToken(node, childIndex) {
@@ -103,45 +129,57 @@ function setDateTime(target, propertyName, parts) {
     target[propertyName] = JsonLd.toDateTime(parts[0] + parts[1], "hh:mmdd.MM.yyyy", "pl");
 }
 
-function applyCommonReservationData(reservation, ticket) {
-    reservation.reservationFor.departureStation.name = ticket.stations;
-    reservation.reservationFor.arrivalStation.name = ticket.stations;
-    reservation.reservationNumber = ticket.reservationNumber;
-    reservation.reservationProvider = "PKP Intercity";
+function setTrain(reservation, trainNumber, trainName) {
+    reservation.reservationFor.trainNumber = trainNumber;
+    reservation.reservationFor.trainName = trainName;
+}
+
+function setSeat(reservation, seatSection, seatingType, seatNumber) {
+    const seat = reservation.reservedTicket.ticketedSeat;
+    seat.seatSection = seatSection;
+    seat.seatingType = seatingType;
+    seat.seatNumber = seatNumber;
 }
 
 function applyWideLayout(reservation, ticket, context) {
-    reservation.reservedTicket.ticketedSeat.seatSection = ticket.wideData[4];
-    reservation.reservedTicket.ticketedSeat.seatingType = ticket.wideData2[1].replace(lineMatchers.ticketClass, '');
-    reservation.reservationFor.trainName = ticket.wideData2[0];
-    reservation.reservationFor.trainNumber = ticket.wideData[3];
+    setSeat(reservation, ticket.wideData[4], ticket.wideData2[1].replace(lineMatchers.ticketClass, ''), ticket.arrivalDateAndMore.slice(2).join(" "));
+    setTrain(reservation, ticket.wideData[3], ticket.wideData2[0]);
     setDateTime(reservation.reservationFor, 'departureTime', ticket.wideData);
     setDateTime(reservation.reservationFor, 'arrivalTime', ticket.arrivalDateAndMore);
-    reservation.reservedTicket.ticketedSeat.seatNumber = ticket.arrivalDateAndMore.slice(2).join(" ");
     reservation.reservedTicket.ticketToken = ticketToken(context.node, 1);
 
     ExtractorEngine.extractPrice(context.contentLines[5], reservation);
 }
 
 function applyNarrowLayout(reservation, ticket, context) {
-    reservation.reservedTicket.ticketedSeat.seatSection = ticket.timeAndTrain[2];
-    reservation.reservedTicket.ticketedSeat.seatingType = ticket.timeAndTrain2[1].replace(lineMatchers.ticketClass, '');
-    reservation.reservationFor.trainName = ticket.timeAndTrain2[0];
-    reservation.reservationFor.trainNumber = ticket.timeAndTrain[1];
+    setSeat(reservation, ticket.timeAndTrain[2], ticket.timeAndTrain2[1].replace(lineMatchers.ticketClass, ''), ticket.seats);
+    setTrain(reservation, ticket.timeAndTrain[1], ticket.timeAndTrain2[0]);
     setDateTime(reservation.reservationFor, 'departureTime', ticket.departureDate);
     setDateTime(reservation.reservationFor, 'arrivalTime', ticket.arrivalDateAndMore);
-    reservation.reservedTicket.ticketedSeat.seatNumber = ticket.seats;
     reservation.reservedTicket.ticketToken = ticketToken(context.node, ticket.routeNo);
 
     ExtractorEngine.extractPrice(columns(context.contentLines[1])[2], reservation);
 }
 
+function applyApp2026Layout(reservation, ticket, context) {
+    setSeat(reservation, ticket.seatSection, ticket.seatingType, ticket.seatNumber);
+    setTrain(reservation, ticket.trainNumber, ticket.trainName);
+    setDateTime(reservation.reservationFor, 'departureTime', [ticket.departureTime, ticket.departureDate]);
+    setDateTime(reservation.reservationFor, 'arrivalTime', [ticket.arrivalTime, ticket.arrivalDate]);
+    reservation.reservedTicket.ticketToken = ticketToken(context.node, 1);
+
+    ExtractorEngine.extractPrice(context.contentLines[1], reservation);
+}
+
 function reservationFromTicket(ticket, context) {
     const reservation = JsonLd.newTrainReservation();
-    const layout = detectLayout(ticket);
 
-    applyCommonReservationData(reservation, ticket);
-    ticketLayoutHandlers[layout](reservation, ticket, context);
+    reservation.reservationFor.departureStation.name = ticket.stations;
+    reservation.reservationFor.arrivalStation.name = ticket.stations;
+    reservation.reservationNumber = ticket.reservationNumber;
+    reservation.reservationProvider = "PKP Intercity";
+
+    ticketLayoutHandlers[ticket.layout || ('wideData' in ticket ? 'wide' : 'narrow')](reservation, ticket, context);
 
     return reservation;
 }
@@ -151,14 +189,14 @@ function main(content, node) {
      * Known ticket layouts:
      * - "wide": Single QR for multiple trains or one train.
      * - "narrow": Separate QR code for each train.
+     * - "app2026": Randomly pkp changed ticket layout in early 2026 (previous wide)
      * Names are made up.
+     * ps. app2026 layout (for now) works only for single train without exchange
+     *     app2026 narrow ticket type was not found yet
      *
-     * To add another incompatible layout, keep the common route parsing here and add:
-     * - a parser branch in parseTickets() that sets ticket.layout
-     * - a layout function in ticketLayoutHandlers
      */
     const contentLines = removeEmptyElements(content.text.split('\n'));
-    const tickets = parseTickets(contentLines);
+    const tickets = hasApp2026Layout(contentLines) ? parseApp2026Ticket(contentLines) : parseOldTickets(contentLines);
 
     console.log(`Number of routes: ${tickets.length}`);
 
