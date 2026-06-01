@@ -1,0 +1,45 @@
+[{
+    "filter": [
+        {
+            "match": "^[0-9]*,[a-f0-9-]{36},T",
+            "mimeType": "text/plain",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractQrTicket",
+    "mimeType": "text/plain",
+    "script": "ktmb.js"
+},{
+    "filter": [
+        {
+            "match": "^[0-9]*,[a-f0-9-]{36},T",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdfTicketWithQr",
+    "mimeType": "application/pdf",
+    "script": "ktmb.js"
+},{
+    "filter": [
+        {
+            "match": "KTMB Corporate Headquarters",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdfTicketWithoutQr",
+    "mimeType": "application/pdf",
+    "script": "ktmb.js"
+},{
+    "filter": [
+        {
+            "match": "KTMB Corporate Headquarters",
+            "mimeType": "text/plain",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractTextTicket",
+    "mimeType": "text/plain",
+    "script": "ktmb.js"
+}]
