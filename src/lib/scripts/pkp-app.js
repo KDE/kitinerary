@@ -7,106 +7,162 @@ function removeEmptyElements(arr) {
     return arr.filter(element => element !== undefined && element !== null && element !== '').filter(Boolean);
 }
 
+const lineMatchers = {
+    routeStart: /odcinek|route/,
+    wideHeader: /\s*(ODJAZD|DEPARTURE)\s*(DATA|DATE)\s*(CZAS|TIME)\s*(POCIĄG|TRAIN)\s*(WAGON|CARRIAGE)/,
+    narrowDepartureHeader: /^\s*(ODJAZD|DEPARTURE)\s*(DATA|DATE)/,
+    arrivalHeader: /\s*(PRZYJAZD|ARRIVAL)\s*(DATA|DATE)/,
+    narrowTrainHeader: /^\s*(CZAS|TIME)\s*(POCIĄG|TRAIN)\s*(WAGON|CARRIAGE)/,
+    narrowSeatsHeader: /^\s*(MIEJSCA|SEATS)\s*$/,
+    ticketNumber: /^.*(TICKET NO|BILET NR)/,
+    routePrefix: /^.*(odcinek:|route)/,
+    ticketClass: /(klasa|class)/g
+};
+
+const ticketLayoutHandlers = {
+    wide: applyWideLayout,
+    narrow: applyNarrowLayout
+};
+
+function columns(line) {
+    return removeEmptyElements((line || '').split(/\s{2,}/));
+}
+
+function ticketNumberFrom(line) {
+    return (line || '').replace(lineMatchers.ticketNumber, '').trim();
+}
+
+function routeNameFrom(line) {
+    return (line || '').replace(lineMatchers.routePrefix, '').trim();
+}
+
+function isFirstRouteFallback(routeCount, lineIndex) {
+    return routeCount === 0 && lineIndex === 7;
+}
+
+function parseTickets(contentLines) {
+    const tickets = [];
+
+    contentLines.forEach((line, index) => {
+        let ticket = tickets[tickets.length - 1];
+
+        if (lineMatchers.routeStart.test(line) || isFirstRouteFallback(tickets.length, index)) {
+            ticket = {
+                routeNo: tickets.length + 1,
+                stations: routeNameFrom(line),
+                reservationNumber: ticketNumberFrom(contentLines[6])
+            };
+            tickets.push(ticket);
+            return;
+        }
+
+        if (!ticket) {
+            return;
+        }
+
+        if (lineMatchers.ticketNumber.test(line)) { // only valid for narrow tickets
+            ticket.reservationNumber = ticketNumberFrom(line);
+        } else if (lineMatchers.wideHeader.test(line)) {
+            ticket.layout = 'wide';
+            ticket.wideData = columns(contentLines[index + 1]);
+            ticket.wideData2 = columns(contentLines[index + 2]);
+        } else if (lineMatchers.narrowDepartureHeader.test(line)) {
+            ticket.layout = 'narrow';
+            ticket.stations = contentLines[index + 1];
+            ticket.departureDate = columns(contentLines[index + 2]);
+        } else if (lineMatchers.arrivalHeader.test(line)) {
+            ticket.arrivalDateAndMore = columns(contentLines[index + 1]);
+        } else if (lineMatchers.narrowTrainHeader.test(line)) {
+            ticket.layout = 'narrow';
+            ticket.timeAndTrain = columns(contentLines[index + 1]);
+            ticket.timeAndTrain2 = columns(contentLines[index + 2]);
+        } else if (lineMatchers.narrowSeatsHeader.test(line)) {
+            ticket.layout = 'narrow';
+            ticket.seats = (contentLines[index + 1] || '').replace(/ +/g, ' ');
+        }
+    });
+
+    return tickets;
+}
+
+function detectLayout(ticket) {
+    if (ticket.layout) {
+        return ticket.layout;
+    }
+    if ('wideData' in ticket) {
+        return 'wide';
+    }
+    return 'narrow';
+}
+
+function ticketToken(node, childIndex) {
+    return 'azteccode:' + node.childNodes[childIndex].childNodes[0].content;
+}
+
+function setDateTime(target, propertyName, parts) {
+    target[propertyName] = JsonLd.toDateTime(parts[0] + parts[1], "hh:mmdd.MM.yyyy", "pl");
+}
+
+function applyCommonReservationData(reservation, ticket) {
+    reservation.reservationFor.departureStation.name = ticket.stations;
+    reservation.reservationFor.arrivalStation.name = ticket.stations;
+    reservation.reservationNumber = ticket.reservationNumber;
+    reservation.reservationProvider = "PKP Intercity";
+}
+
+function applyWideLayout(reservation, ticket, context) {
+    reservation.reservedTicket.ticketedSeat.seatSection = ticket.wideData[4];
+    reservation.reservedTicket.ticketedSeat.seatingType = ticket.wideData2[1].replace(lineMatchers.ticketClass, '');
+    reservation.reservationFor.trainName = ticket.wideData2[0];
+    reservation.reservationFor.trainNumber = ticket.wideData[3];
+    setDateTime(reservation.reservationFor, 'departureTime', ticket.wideData);
+    setDateTime(reservation.reservationFor, 'arrivalTime', ticket.arrivalDateAndMore);
+    reservation.reservedTicket.ticketedSeat.seatNumber = ticket.arrivalDateAndMore.slice(2).join(" ");
+    reservation.reservedTicket.ticketToken = ticketToken(context.node, 1);
+
+    ExtractorEngine.extractPrice(context.contentLines[5], reservation);
+}
+
+function applyNarrowLayout(reservation, ticket, context) {
+    reservation.reservedTicket.ticketedSeat.seatSection = ticket.timeAndTrain[2];
+    reservation.reservedTicket.ticketedSeat.seatingType = ticket.timeAndTrain2[1].replace(lineMatchers.ticketClass, '');
+    reservation.reservationFor.trainName = ticket.timeAndTrain2[0];
+    reservation.reservationFor.trainNumber = ticket.timeAndTrain[1];
+    setDateTime(reservation.reservationFor, 'departureTime', ticket.departureDate);
+    setDateTime(reservation.reservationFor, 'arrivalTime', ticket.arrivalDateAndMore);
+    reservation.reservedTicket.ticketedSeat.seatNumber = ticket.seats;
+    reservation.reservedTicket.ticketToken = ticketToken(context.node, ticket.routeNo);
+
+    ExtractorEngine.extractPrice(columns(context.contentLines[1])[2], reservation);
+}
+
+function reservationFromTicket(ticket, context) {
+    const reservation = JsonLd.newTrainReservation();
+    const layout = detectLayout(ticket);
+
+    applyCommonReservationData(reservation, ticket);
+    ticketLayoutHandlers[layout](reservation, ticket, context);
+
+    return reservation;
+}
+
 function main(content, node) {
     /**
-     * Two main types of tickets:
+     * Known ticket layouts:
      * - "wide": Single QR for multiple trains or one train.
      * - "narrow": Separate QR code for each train.
      * Names are made up.
+     *
+     * To add another incompatible layout, keep the common route parsing here and add:
+     * - a parser branch in parseTickets() that sets ticket.layout
+     * - a layout function in ticketLayoutHandlers
      */
-
-    const reservations = [];
     const contentLines = removeEmptyElements(content.text.split('\n'));
+    const tickets = parseTickets(contentLines);
 
-    const startRegex = /(?:odcinek|route)/g;
-    const wideDataRegex = /\s*(ODJAZD|DEPARTURE)\s*(DATA|DATE)\s*(CZAS|TIME)\s*(POCIĄG|TRAIN)\s*(WAGON|CARRIAGE)/g;
-    const narrowData1 = /^\s*(ODJAZD|DEPARTURE)\s*(DATA|DATE)/g;
-    const arrivalDateAndMore = /\s*(PRZYJAZD|ARRIVAL)\s*(DATA|DATE)/g;
-    const narrowData3 = /^\s*(CZAS|TIME)\s*(POCIĄG|TRAIN)\s*(WAGON|CARRIAGE)/g;
-    const narrowData4 = /^\s*(MIEJSCA|SEATS)\s*$/g;
-    const ticketNo = /^.*(TICKET NO|BILET NR)/g;
+    console.log(`Number of routes: ${tickets.length}`);
 
-    const routeCutter = /^.*(odcinek:|route)/g;
-    const classCutter = /(klasa|class)/g;
-
-    const matches = [];
-    let routeNo = 0;
-
-    // Parse content lines
-    contentLines.forEach((line, index) => {
-        if (startRegex.test(line) || (routeNo === 0 && index === 7)) { // edge case for single route ticket
-            routeNo++;
-            matches[routeNo] = {
-                routeNo,
-                stations: contentLines[index].replace(routeCutter, '').trim(),
-                reservationNumber: contentLines[6].replace(ticketNo, "").trim()
-            };
-        } else if (ticketNo.test(line) && routeNo > 0) { // its only valid for narrow tickets
-            matches[routeNo].reservationNumber = line.replace(ticketNo, "").trim();
-        } else if (wideDataRegex.test(line)) {
-            matches[routeNo].wideData = removeEmptyElements(contentLines[index + 1].split(/\s{2,}/));
-            matches[routeNo].wideData2 = removeEmptyElements(contentLines[index + 2].split(/\s{2,}/));
-        } else if (narrowData1.test(line)) {
-            matches[routeNo].stations = contentLines[index + 1];
-            matches[routeNo].departureDate = removeEmptyElements(contentLines[index + 2].split(/\s{2,}/));
-        } else if (arrivalDateAndMore.test(line)) {
-            matches[routeNo].arrivalDateAndMore = removeEmptyElements(contentLines[index + 1].split(/\s{2,}/));
-        } else if (narrowData3.test(line)) {
-            matches[routeNo].timeAndTrain = removeEmptyElements(contentLines[index + 1].split(/\s{2,}/));
-            matches[routeNo].timeAndTrain2 = removeEmptyElements(contentLines[index + 2].split(/\s{2,}/));
-        } else if (narrowData4.test(line)) {
-            matches[routeNo].seats = contentLines[index + 1].replace(/ +/g, ' ');
-        }
-    });
-
-    console.log(`Number of routes: ${matches.length}`);
-
-    matches.forEach((ticket, index) => {
-        const reservation = JsonLd.newTrainReservation();
-
-        reservation.reservationFor.departureStation.name = ticket.stations;
-        reservation.reservationFor.arrivalStation.name = ticket.stations;
-
-        if ('wideData' in ticket) {
-            reservation.reservedTicket.ticketedSeat.seatSection = ticket.wideData[4];
-            reservation.reservedTicket.ticketedSeat.seatingType = ticket.wideData2[1].replace(classCutter, '');
-            reservation.reservationFor.trainName = ticket.wideData2[0];
-            reservation.reservationFor.trainNumber = ticket.wideData[3];
-            reservation.reservationFor.departureTime = JsonLd.toDateTime(
-                ticket.wideData[0] + ticket.wideData[1], "hh:mmdd.MM.yyyy", "pl"
-            );
-            reservation.reservationFor.arrivalTime = JsonLd.toDateTime(
-                ticket.arrivalDateAndMore[0] + ticket.arrivalDateAndMore[1], "hh:mmdd.MM.yyyy", "pl"
-            );
-            reservation.reservedTicket.ticketedSeat.seatNumber = ticket.arrivalDateAndMore.slice(2).join(" ");
-            reservation.reservedTicket.ticketToken = 'azteccode:' + node.childNodes[1].childNodes[0].content;
-
-            ExtractorEngine.extractPrice(contentLines[5], reservation);
-        } else {
-            // Narrow ticket
-            reservation.reservedTicket.ticketedSeat.seatSection = ticket.timeAndTrain[2];
-            reservation.reservedTicket.ticketedSeat.seatingType = ticket.timeAndTrain2[1].replace(classCutter, '');
-            reservation.reservationFor.trainName = ticket.timeAndTrain2[0];
-            reservation.reservationFor.trainNumber = ticket.timeAndTrain[1];
-            reservation.reservationFor.departureTime = JsonLd.toDateTime(
-                ticket.departureDate[0] + ticket.departureDate[1], "hh:mmdd.MM.yyyy", "pl"
-            );
-            reservation.reservationFor.arrivalTime = JsonLd.toDateTime(
-                ticket.arrivalDateAndMore[0] + ticket.arrivalDateAndMore[1], "hh:mmdd.MM.yyyy", "pl"
-            );
-            reservation.reservedTicket.ticketedSeat.seatNumber = ticket.seats;
-            reservation.reservedTicket.ticketToken = 'azteccode:' + node.childNodes[ticket.routeNo].childNodes[0].content;
-
-            ExtractorEngine.extractPrice(contentLines[1].split(/\s{2,}/)[2], reservation);
-        }
-
-        reservation.reservationNumber = ticket.reservationNumber;
-        reservation.reservationProvider = "PKP Intercity";
-
-        reservations.push(reservation);
-    });
-
-    return reservations;
+    return tickets.map(ticket => reservationFromTicket(ticket, { contentLines, node }));
 }
 
 function fixStationCode(station) {
