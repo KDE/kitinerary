@@ -43,6 +43,11 @@ function extractQrTicket(text) {
         res.reservationFor.departureDay = JsonLd.toDateTime(text.match(/Date Of Journey:(.*),/)[1], "dd-MMM-yyyy", "en");
     }
     res.reservedTicket.ticketedSeat.seatingType = text.match(/Class:(.*),/)[1];
+    // There may be missing charges but this is the best extractable from QR.
+    let fare = parseFloat(text.match(/Ticket Fare: Rs(.*),/)[1]);
+    let fees = parseFloat(text.match(/IRCTC C Fee: Rs(.*)\+/)[1]);
+    res.totalPrice = fare + fees;
+    res.priceCurrency = 'INR';
 
     let idx = 0;
     let reservations = [];
@@ -64,7 +69,12 @@ function extractPdfTicket(pdf, node, triggerNode) {
     const text = pdf.pages[triggerNode.location].text;
     const arr = JsonLd.toDateTime(text.match(/Arrival\* (.*)\n/)[1], "hh:mm dd-MMM-yyyy", "en");
     let res = triggerNode.result;
-    for (let r of res)
+    // Manually redo price since having a value prevents the data from being extracted
+    // again automatically, and PDF gives a better estimate than QR.
+    let totalPrice = parseFloat(text.match(/Total Fare \(all inclusive\) *₹ ([0-9\,]+\.\d{2})/)[1].replaceAll(',',''));
+    for (let r of res) {
         r.reservationFor.arrivalTime = arr;
+        r.totalPrice = totalPrice;
+    }
     return res;
 }
