@@ -71,7 +71,8 @@ function extractPdfTicket(pdf, node, triggerNode) {
     let res = triggerNode.result;
     // Manually redo price since having a value prevents the data from being extracted
     // again automatically, and PDF gives a better estimate than QR.
-    let totalPrice = parseFloat(text.match(/Total Fare \(all inclusive\) *₹ ([0-9\,]+\.\d{2})/)[1].replaceAll(',',''));
+    const priceAsString = text.match(/Total Fare \(all inclusive\) *₹ ([0-9\,]+\.\d{2})/)[1];
+    let totalPrice = parseFloat(priceAsString.replace(/,/g,''));
     for (let r of res) {
         r.reservationFor.arrivalTime = arr;
         r.totalPrice = totalPrice;
