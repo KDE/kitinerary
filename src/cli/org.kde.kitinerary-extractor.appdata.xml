@@ -42,6 +42,7 @@
   <name xml:lang="sl">KItinerary ekstraktor ukazne vrstice</name>
   <name xml:lang="sv">Kitinerary extrahering på kommandoraden</name>
   <name xml:lang="tr">K Yol Kılavuzu Komut Satırı Çıkarıcısı</name>
+  <name xml:lang="ug">KItinerary بۇيرۇق قۇرى ئاجراتقۇچ</name>
   <name xml:lang="uk">Командний засіб видобування KItinerary</name>
   <name xml:lang="zh-CN">KItinerary 命令行导出工具</name>
   <name xml:lang="zh-TW">KItinerary 命令列取出工具</name>
@@ -77,6 +78,7 @@
   <summary xml:lang="sl">Ekstraktor podatkov o rezervaciji v ukazni vrstici</summary>
   <summary xml:lang="sv">Extrahering av reservationsdata på kommandoraden</summary>
   <summary xml:lang="tr">Komut satırında çalışan rezervasyon verisi çıkarıcısı</summary>
+  <summary xml:lang="ug">KItinerary بۇيرۇق قۇرى بۇيرۇتما سانلىق مەلۇماتىنى ئاجراتقۇچ</summary>
   <summary xml:lang="uk">Програма для видобування даних бронювання, керування якою відбувається з командного рядка</summary>
   <summary xml:lang="zh-CN">命令行行程预订数据导出工具</summary>
   <summary xml:lang="zh-TW">命令列預約資料取出工具</summary>
