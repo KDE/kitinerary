@@ -51,6 +51,53 @@ function extractPdfTicketWithQr(pdf, node, triggerNode) {
     return res;
 }
 
+function extractPdfTicketWithQrFromEmail(pdf, node, triggerNode) {
+    var res = triggerNode.result;
+    if (!res || res.length == 0) {
+        res = [JsonLd.newTrainReservation()];
+    }
+
+    const textLeft = pdf.pages[0].textInRect(0.0, 0.0, 0.56, 1.0);
+    const textRight = pdf.pages[0].textInRect(0.56, 0.0, 0.67, 0.50);
+
+    var extrDataLeft = textLeft.match(/\s*(.+) - (.+)\n+\s*Berlepas\s*\/\s*Departure\s*:\s*Tiba\s*\/\s*Arrival\s*:\n+\s+(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2} [AP]M)\s+(\d{2}\/\d{2}\/\d{4} \d{2}:\d{2} [AP]M)\n+\s*(.+)\s*-\s*\n*\s*Adult\n+\s*(\S+)\n+\s*MYR ([0-9.]+).*\n+\s*(K\w{12,14})\s*\*\*\s*(T\w{12,14})/);
+
+    var extrDataRight = textRight.match(/(.*)\n+(.*)\n+\s*Coach.*Seat\n+(.*)\/(.*)/);
+    var hasSeatingData = Boolean(extrDataRight);
+    if (!extrDataRight) {
+        extrDataRight = textRight.match(/Please scan your\npassport at ACG\n+\s*(\S.*)/);
+    }
+
+    // TODO: not supposed to be there for just "adults"
+    // This may include other classes such as "senior" or "student"
+    for (let r of res) {
+        // left side
+        r.reservationFor.departureStation.name = extrDataLeft[1];
+        r.reservationFor.arrivalStation.name = extrDataLeft[2];
+        r.reservationFor.departureTime = JsonLd.toDateTime(extrDataLeft[3], "dd/MM/yyyy hh:mm ap", "en");
+        r.reservationFor.arrivalTime = JsonLd.toDateTime(extrDataLeft[4], "dd/MM/yyyy hh:mm ap", "en");
+        r.underName.name = extrDataLeft[5];
+        // r.underName.identifier = extrDataLeft[6]; // FIXME: Confirm
+        r.totalPrice = parseFloat(extrDataLeft[7]);
+        r.priceCurrency = 'MYR';
+        // There are two numbers: booking, which is common for all, and ticket, unique for each passenger
+        r.reservationNumber = extrDataLeft[9];
+
+        // right side
+        if (hasSeatingData) {
+            r.reservationFor.trainNumber = extrDataRight[1];
+            r.reservationFor.trainName = extrDataRight[2];
+            r.reservedTicket.ticketedSeat.seatSection = extrDataRight[3];
+            r.reservedTicket.ticketedSeat.seatNumber = extrDataRight[4];
+        }
+        else if (extrDataRight) {
+            r.reservationFor.trainName = extrDataRight[1];
+        }
+    }
+
+    return res;
+}
+
 function extractTextTicket(text) {
     let res = JsonLd.newTrainReservation();
 

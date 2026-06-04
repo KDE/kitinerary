@@ -17,7 +17,7 @@
             "scope": "Descendants"
         }
     ],
-    "function": "extractPdfTicketWithQr",
+    "function": "extractPdfTicketWithQrFromEmail",
     "mimeType": "application/pdf",
     "script": "ktmb.js"
 },{
@@ -28,7 +28,7 @@
             "scope": "Descendants"
         }
     ],
-    "function": "extractPdfTicketWithoutQr",
+    "function": "extractPdfTicketWithQrFromEmail",
     "mimeType": "application/pdf",
     "script": "ktmb.js"
 },{
