@@ -44,7 +44,7 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
 )
 
 find_package(Qt6 ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Gui Qml)
-find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS Contacts CalendarCore I18n)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS Contacts CalendarCore Codecs I18n)
 if (NOT ANDROID)
     find_package(SharedMimeInfo 1.3 REQUIRED)
 endif()
