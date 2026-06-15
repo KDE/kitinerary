@@ -20,6 +20,7 @@
 #include <QRegularExpression>
 #include <QUrl>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 JsApi::JsonLd::JsonLd(QJSEngine* engine)
@@ -213,55 +214,63 @@ QDateTime JsApi::JsonLd::toDateTime(const QString &dtStr, const QString &format,
     QLocale locale(localeName);
     auto dt = locale.toDateTime(dtStr, format);
 
+    const bool hasFullYear = format.contains("yyyy"_L1);
+    const bool hasYear = hasFullYear || format.contains("yy"_L1);
+    const bool hasMonthName =  format.contains("MMM"_L1);
+    const bool hasDayOfWeek = format.contains("ddd"_L1);
+
     // try harder for the "MMM" month format
     // QLocale expects the exact string in QLocale::shortMonthName(), while we often encounter a three
     // letter month identifier. For en_US that's the same, for Swedish it isn't though for example. So
     // let's try to fix up the month identifiers to the full short name.
-    if (!dt.isValid() && format.contains(QLatin1StringView("MMM"))) {
-      auto dtStrFixed = dtStr;
-      for (int i = 1; i <= 12; ++i) {
-        const auto monthName = locale.monthName(i, QLocale::ShortFormat);
-        dtStrFixed.replace(monthName.left(3), monthName, Qt::CaseInsensitive);
-      }
-      dt = locale.toDateTime(dtStrFixed, format);
+    if (!dt.isValid() && hasMonthName) {
+        auto dtStrFixed = dtStr;
+        for (int i = 1; i <= 12; ++i) {
+            const auto monthName = locale.monthName(i, QLocale::ShortFormat);
+            dtStrFixed.replace(monthName.left(3), monthName, Qt::CaseInsensitive);
+        }
+        dt = locale.toDateTime(dtStrFixed, format);
     }
 
     // try even harder for "MMM" month format
     // in the de_DE locale we encounter sometimes almost arbitrary abbreviations for month
     // names (eg. Mrz, Mär for März). So try to identify those and replace them with what QLocale
     // expects
-    if (!dt.isValid() && format.contains(QLatin1StringView("MMM"))) {
-      auto dtStrFixed = dtStr;
-      for (int i = 1; i <= 12; ++i) {
-        const auto monthName = locale.monthName(i, QLocale::LongFormat);
-        const auto beginIdx = dtStr.indexOf(monthName.at(0));
-        if (beginIdx < 0) {
-          continue;
+    if (!dt.isValid() && hasMonthName) {
+        auto dtStrFixed = dtStr;
+        for (int i = 1; i <= 12; ++i) {
+            const auto monthName = locale.monthName(i, QLocale::LongFormat);
+            const auto beginIdx = dtStr.indexOf(monthName.at(0));
+            if (beginIdx < 0) {
+                continue;
+            }
+            auto endIdx = beginIdx;
+            for (auto nameIdx = 0; endIdx < dtStr.size() && nameIdx < monthName.size(); ++nameIdx) {
+                if (dtStr.at(endIdx).toCaseFolded() ==
+                    monthName.at(nameIdx).toCaseFolded()) {
+                    ++endIdx;
+                }
+            }
+            if (endIdx - beginIdx >= 3) {
+                dtStrFixed.replace(beginIdx, endIdx - beginIdx, locale.monthName(i, QLocale::ShortFormat));
+                break;
+            }
         }
-        auto endIdx = beginIdx;
-        for (auto nameIdx = 0;
-             endIdx < dtStr.size() && nameIdx < monthName.size(); ++nameIdx) {
-          if (dtStr.at(endIdx).toCaseFolded() ==
-              monthName.at(nameIdx).toCaseFolded()) {
-            ++endIdx;
-          }
+        dt = locale.toDateTime(dtStrFixed, format);
+    }
+
+    // try to determine the year based on the day of the week
+    if (!dt.isValid() && hasDayOfWeek && !hasYear && m_contextDate.isValid()) {
+        for (int i = 0; i < 10 && !dt.isValid(); ++i) {
+            dt = locale.toDateTime(dtStr + ' '_L1 + QString::number(m_contextDate.date().year() + i), format + " yyyy"_L1);
         }
-        if (endIdx - beginIdx >= 3) {
-          dtStrFixed.replace(beginIdx, endIdx - beginIdx,
-                             locale.monthName(i, QLocale::ShortFormat));
-          break;
-        }
-      }
-      dt = locale.toDateTime(dtStrFixed, format);
+        return dt;
     }
 
     if (!dt.isValid()) {
         return dt;
     }
 
-    const bool hasFullYear = format.contains(QLatin1StringView("yyyy"));
-    const bool hasYear =
-        hasFullYear || format.contains(QLatin1StringView("yy"));
     const bool hasMonth = format.contains(QLatin1Char('M'));
     const bool hasDay = format.contains(QLatin1Char('d'));
 

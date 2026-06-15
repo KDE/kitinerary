@@ -52,6 +52,11 @@ private Q_SLOTS:
         QTest::newRow("short month de 3") << s("2018 Jun 22 19:37") << s("yyyy MMM dd hh:mm") << s("de") << QDateTime({2018, 6, 22}, {19, 37});
         QTest::newRow("short month de 4") << s("2018 Jul 22 19:37") << s("yyyy MMM dd hh:mm") << s("de") << QDateTime({2018, 7, 22}, {19, 37});
         QTest::newRow("short month de 5") << s("2018 Okt 22 19:37") << s("yyyy MMM dd hh:mm") << s("de") << QDateTime({2018, 10, 22}, {19, 37});
+
+        // recovering year from day of week
+        QTest::newRow("day of week no year en 1") << u"Sun, 27 Oct18:40"_s << u"ddd, dd MMMhh:mm"_s << u"en"_s << QDateTime({2019, 10, 27}, {18, 40});
+        QTest::newRow("day of week no year en 2") << u"Mon, 27 Oct18:40"_s << u"ddd, dd MMMhh:mm"_s << u"en"_s << QDateTime({2025, 10, 27}, {18, 40});
+        QTest::newRow("day of week no year de") << u"So., 27 Okt.18:40"_s << u"ddd, dd MMMhh:mm"_s << u"de"_s << QDateTime({2019, 10, 27}, {18, 40});
     }
 
     void testToDateTime()
