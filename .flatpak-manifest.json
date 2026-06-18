@@ -183,7 +183,7 @@
                     "sha256": "64e4139103fdbc57752698ee15b5f0b0f7af9a0331ecbdc492047e0772c417ba",
                     "x-checker-data": {
                         "type": "anitya",
-                        "project-id": 376699,
+                        "project-id": 101246,
                         "stable-only": true,
                         "url-template": "https://github.com/zxing-cpp/zxing-cpp/archive/v$version.tar.gz"
                     }
