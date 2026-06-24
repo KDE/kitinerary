@@ -416,6 +416,20 @@ static Person extractPerson(const KPkPass::Pass *pass, Person person)
     return it != std::end(barcodes) ? *it : barcodes.at(0);
 }
 
+struct {
+    KPkPass::Barcode::Format passBarcodeType;
+    Token::TokenType tokenType;
+} static constexpr const barcode_type_map[] = {
+    { KPkPass::Barcode::QR, Token::QRCode },
+    { KPkPass::Barcode::Aztec, Token::AztecCode },
+    { KPkPass::Barcode::PDF417, Token::PDF417 },
+    { KPkPass::Barcode::Code128, Token::Code128 },
+    { KPkPass::Barcode::EAN13, Token::EAN13 },
+    { KPkPass::Barcode::Code39, Token::Code39 },
+    { KPkPass::Barcode::Codabar, Token::Codabar },
+    { KPkPass::Barcode::I2of5, Token::ITF },
+};
+
 void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
 {
     const auto pass = node.content<const KPkPass::Pass*>();
@@ -454,26 +468,11 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
     // barcode contains the ticket token
     if (const auto bcs = pass->barcodes(); !bcs.isEmpty()) {
         const auto barcode = pickBestBarcode(bcs);
-        QString token;
-        switch (barcode.format()) {
-            case KPkPass::Barcode::Invalid:
-                break;
-            case KPkPass::Barcode::QR:
-                token = "qrCode:"_L1;
-                break;
-            case KPkPass::Barcode::Aztec:
-                token = "aztecCode:"_L1;
-              break;
-            case KPkPass::Barcode::PDF417:
-                token = "pdf417:"_L1;
-                break;
-            case KPkPass::Barcode::Code128:
-                token = "barcode128:"_L1;
-        }
-        token += barcode.message();
+        const auto it = std::ranges::find_if(barcode_type_map, [f = barcode.format()](const auto &m) { return m.passBarcodeType == f; });
+        const auto type = it == std::end(barcode_type_map) ? Token::Unknown : (*it).tokenType;
         QJsonObject ticket = result.value("reservedTicket"_L1).toObject();
         ticket.insert("@type"_L1, "Ticket"_L1);
-        ticket.insert("ticketToken"_L1, token);
+        ticket.insert("ticketToken"_L1, Token::encodeTokenData(type, barcode.message()));
         result.insert("reservedTicket"_L1, ticket);
     }
 

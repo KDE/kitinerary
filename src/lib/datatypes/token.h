@@ -35,6 +35,8 @@ public:
         PDF417, ///< A PDF417 barcode
         Code39, ///< A Code 39 barcode
         EAN13, ///< A EAN13 barcode
+        ITF, ///< A ITF barcode
+        Codabar, ///< A Codabar barcode
     };
     Q_ENUM(TokenType)
 
@@ -42,6 +44,10 @@ public:
     static TokenType tokenType(QStringView token);
     /** Determine token content for the given token. */
     static QVariant tokenData(const QString &token);
+
+    /** Encode the given token data for the spcified token type. */
+    static QString encodeTokenData(TokenType type, const QString &token);
+    // TODO byte array overload once needed
 };
 
 }
