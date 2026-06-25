@@ -68,7 +68,9 @@ private Q_SLOTS:
 
         JsApi::JsonLd jsonLd(nullptr);
         jsonLd.setContextDate({{2018, 4, 1}, {}});
+#if QT_VERSION >= QT_VERSION_CHECK(6, 12, 0)
         QEXPECT_FAIL("day of week no year en 2", "Qt 6.12 behavior change/regression", Continue);
+#endif
         QCOMPARE(jsonLd.toDateTime(input, QJSValue(format), QJSValue(locale)), result);
     }
 
