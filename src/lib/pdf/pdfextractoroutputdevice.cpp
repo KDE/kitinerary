@@ -13,6 +13,7 @@
 #include <Annot.h>
 #include <Link.h>
 #include <Page.h>
+#include <Stream.h>
 
 #include <QDebug>
 
