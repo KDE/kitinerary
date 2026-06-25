@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "creator",
+            "match": "PaxSold\\)$",
+            "mimeType": "application/pdf",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractTicket",
+    "mimeType": "application/pdf",
+    "script": "polferries.js"
+}
