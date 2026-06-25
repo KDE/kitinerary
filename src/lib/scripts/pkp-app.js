@@ -19,6 +19,8 @@ const lineMatchers = {
     newTrainHeader: /(Pociąg|Train):/,
     newCarriageHeader: /(Wagon|Carriage):/,
     newSeatsHeader: /(Miejsca|Seats):/,
+    newRouteStart: /^\s*\d+\.\s*(odcinek|route):/,
+    newRoutePrefix: /^.*(?:odcinek:|route:)/,
     ticketNumber: /^.*(TICKET NO|BILET NR)/,
     routePrefix: /^.*(odcinek:|route)/,
     ticketClass: /(klasa|class)/g
@@ -107,18 +109,35 @@ function parseApp2026Fields(line, ticket) {
 }
 
 function parseApp2026Ticket(contentLines) {
-    const ticket = { layout: 'app2026', routeNo: 1 };
+    const hasRouteSections = contentLines.some(line => lineMatchers.newRouteStart.test(line));
+    const tickets = hasRouteSections ? [] : [{ layout: 'app2026', routeNo: 1 }];
+    let reservationNumber;
+    let ticket = tickets[0];
 
     contentLines.forEach((line, index) => {
         if (lineMatchers.ticketNumber.test(line)) {
-            ticket.reservationNumber = cut(line, lineMatchers.ticketNumber).replace(/KOD.*$/, '').trim();
-            ticket.stations = (contentLines[index + 1] || '').trim();
+            reservationNumber = cut(line, lineMatchers.ticketNumber).replace(/KOD.*$/, '').trim();
+            tickets.forEach(t => { t.reservationNumber = reservationNumber; });
+            if (ticket && !hasRouteSections) {
+                ticket.stations = (contentLines[index + 1] || '').trim();
+            }
+        } else if (lineMatchers.newRouteStart.test(line)) {
+            ticket = {
+                layout: 'app2026',
+                routeNo: tickets.length + 1,
+                reservationNumber,
+                stations: cut(line, lineMatchers.newRoutePrefix)
+            };
+            tickets.push(ticket);
         } else {
-            parseApp2026Fields(line, ticket);
+            if (ticket) {
+                parseApp2026Fields(line, ticket);
+            }
         }
     });
 
-    return [ticket];
+    tickets.forEach(t => { t.reservationNumber = t.reservationNumber || reservationNumber; });
+    return tickets;
 }
 
 function ticketToken(node, childIndex) {
@@ -191,8 +210,7 @@ function main(content, node) {
      * - "narrow": Separate QR code for each train.
      * - "app2026": Randomly pkp changed ticket layout in early 2026 (previous wide)
      * Names are made up.
-     * ps. app2026 layout (for now) works only for single train without exchange
-     *     app2026 narrow ticket type was not found yet
+     * ps. app2026 narrow ticket type was not found yet
      *
      */
     const contentLines = removeEmptyElements(content.text.split('\n'));
