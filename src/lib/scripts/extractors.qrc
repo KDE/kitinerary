@@ -303,6 +303,10 @@
         <file>pkp-app.js</file>
         <file>planway.json</file>
         <file>planway.js</file>
+        <file>polferries.json</file>
+        <file>polferries.js</file>
+        <file>polregio.json</file>
+        <file>polregio.js</file>
         <file>predpredaj.json</file>
         <file>predpredaj.js</file>
         <file>premier-inn.json</file>
