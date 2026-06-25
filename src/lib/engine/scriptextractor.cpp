@@ -52,7 +52,7 @@ bool ScriptExtractor::load(const QJsonObject &obj, const QString &fileName, int 
     for (const auto &filterValue : filterArray) {
         ExtractorFilter f;
         if (!f.load(filterValue.toObject())) {
-            qCDebug(Log) << "invalid filter expression:" << fileName;
+            qCWarning(Log) << "invalid filter expression:" << fileName;
             return false;
         }
         d->m_filters.push_back(std::move(f));

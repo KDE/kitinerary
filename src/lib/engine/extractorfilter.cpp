@@ -65,7 +65,7 @@ void ExtractorFilter::setFieldName(const QString &fieldName)
 bool ExtractorFilter::matches(const QString &data) const
 {
     if (!d->m_exp.isValid()) {
-        qCDebug(Log) << d->m_exp.errorString() << d->m_exp.pattern();
+        qCWarning(Log) << d->m_exp.errorString() << d->m_exp.pattern();
     }
     return d->m_exp.match(data).hasMatch();
 }
