@@ -23,6 +23,11 @@ function extractPdfTicket(pdf, node) {
         res.reservedTicket.ticketedSeat.seatNumber = leg[10];
         const barcode = node.findChildNodes({ scope: "Descendants", mimeType: "application/octet-stream" })[0];
         res.reservedTicket.ticketToken = 'qrcodebin:' + ByteArray.toBase64(barcode.content);
+
+        const price = text.match(/(\d+\.\d\d) (?:euro|евро)/);
+        res.priceCurrency = "EUR";
+        res.totalPrice = price[1];
+
         reservations.push(res);
     }
     return reservations;
