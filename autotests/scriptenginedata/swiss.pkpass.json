@@ -299,6 +299,7 @@
                     "valueDisplayString": ""
                 }
             ],
+            "semanticTags": "[object Object]",
             "serialNumber": "123456789",
             "transitType": 0,
             "type": 0
@@ -669,6 +670,7 @@
                     "valueDisplayString": ""
                 }
             ],
+            "semanticTags": "[object Object]",
             "serialNumber": "123456789",
             "transitType": 0,
             "type": 0
