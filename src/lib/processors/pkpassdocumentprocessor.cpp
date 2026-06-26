@@ -409,6 +409,14 @@ static Person extractPerson(const KPkPass::Pass *pass, Person person)
     return person;
 }
 
+[[nodiscard]] static QVariant childResult(const ExtractorDocumentNode &node)
+{
+    if (node.childNodes().empty() || node.childNodes()[0].result().isEmpty()) {
+        return {};
+    }
+    return node.childNodes()[0].result().result().at(0);
+}
+
 [[nodiscard]] static KPkPass::Barcode pickBestBarcode(const QList<KPkPass::Barcode> &barcodes)
 {
     // prefer 2D barcodes that are more robust to scan
@@ -430,125 +438,109 @@ struct {
     { KPkPass::Barcode::I2of5, Token::ITF },
 };
 
-void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
+[[nodiscard]] static QString tokenFromBarcode(const KPkPass::Pass *pass)
 {
-    const auto pass = node.content<const KPkPass::Pass*>();
-    QJsonObject result;
-    if (auto boardingPass = qobject_cast<const KPkPass::BoardingPass*>(pass)) {
-        switch (boardingPass->transitType()) {
-            case KPkPass::BoardingPass::Air:
-                result.insert("@type"_L1, "FlightReservation"_L1);
-                break;
-            case KPkPass::BoardingPass::Train:
-                result.insert("@type"_L1, "TrainReservation"_L1);
-                break;
-            case KPkPass::BoardingPass::Bus:
-                result.insert("@type"_L1, "BusReservation"_L1);
-                break;
-            case KPkPass::BoardingPass::Boat:
-                result.insert("@type"_L1, "BoatReservation"_L1);
-                break;
-            case KPkPass::BoardingPass::Generic:
-                return;
-        }
-    } else {
-        switch (pass->type()) {
-            case KPkPass::Pass::BoardingPass:
-                Q_UNREACHABLE(); // handled above
-            case KPkPass::Pass::EventTicket:
-                result.insert("@type"_L1, "EventReservation"_L1);
-                break;
-            case KPkPass::Pass::Coupon:
-            case KPkPass::Pass::StoreCard:
-            case KPkPass::Pass::Generic:
-                return;
-        }
-    }
-
     // barcode contains the ticket token
     if (const auto bcs = pass->barcodes(); !bcs.isEmpty()) {
         const auto barcode = pickBestBarcode(bcs);
         const auto it = std::ranges::find_if(barcode_type_map, [f = barcode.format()](const auto &m) { return m.passBarcodeType == f; });
         const auto type = it == std::end(barcode_type_map) ? Token::Unknown : (*it).tokenType;
-        QJsonObject ticket = result.value("reservedTicket"_L1).toObject();
-        ticket.insert("@type"_L1, "Ticket"_L1);
-        ticket.insert("ticketToken"_L1, Token::encodeTokenData(type, barcode.message()));
-        result.insert("reservedTicket"_L1, ticket);
+        return Token::encodeTokenData(type, barcode.message());
+    }
+    return {};
+}
+
+template <typename T>
+static void applyTicketToken(const QString &token, T &res)
+{
+    if (token.isEmpty()) {
+        return;
+    }
+    auto ticket = res.reservedTicket().template value<Ticket>();
+    ticket.setTicketToken(token);
+    res.setReservedTicket(ticket);
+}
+
+void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_unused]] const ExtractorEngine *engine) const
+{
+    // barcode extraction produced more than we can handle here
+    if (!node.childNodes().empty() && node.childNodes()[0].result().size() > 1) {
+        return;
     }
 
-    // explicitly merge with the decoded barcode data, as this would otherwise not match
-    auto res = JsonLdDocument::fromJsonSingular(result);
-    if (JsonLd::isA<FlightReservation>(res)) {
-        // if this doesn't contain a single IATA BCBP we wont be able to get sufficient information out of this
-        if (node.childNodes().size() != 1 || node.childNodes()[0].result().size() != 1) {
-            return;
-        }
-        res = JsonLdDocument::apply(node.childNodes()[0].result().result().at(0), res).value<FlightReservation>();
-    }
-    if (JsonLd::isA<TrainReservation>(res)) {
-        // if this is a IATA BCBP the child node extractor will have classified this as a flight
-        if (!node.childNodes().empty() && node.childNodes()[0].result().size() > 1) {
-            return;
-        }
-        if (!node.result().isEmpty()) {
-            if (JsonLd::isA<FlightReservation>(node.childNodes()[0].result().result().at(0))) {
-                const auto flightRes = node.childNodes()[0].result().jsonLdResult().at(0).toObject();
-                res = JsonLdDocument::apply(JsonLdDocument::fromJsonSingular(ReservationConverter::flightToTrain(flightRes)), res).value<TrainReservation>();
-            } else {
-                res = JsonLdDocument::apply(node.childNodes()[0].result().result().at(0), res).value<TrainReservation>();
-            }
-        }
-    }
+    const auto pass = node.content<const KPkPass::Pass*>();
+    QVariant res;
 
-    // extract structured data from a pkpass, if the extractor script hasn't done so already
     switch (pass->type()) {
         case KPkPass::Pass::BoardingPass:
         {
-            if (auto boardingPass = qobject_cast<const KPkPass::BoardingPass*>(pass)) {
-                switch (boardingPass->transitType()) {
-                    case KPkPass::BoardingPass::Air:
-                    {
-                        auto flightRes = res.value<FlightReservation>();
-                        flightRes.setReservationFor(extractBoardingPass(pass, flightRes.reservationFor().value<Flight>()));
-                        flightRes.setUnderName(extractPerson(pass, flightRes.underName().value<Person>()));
-                        res = flightRes;
-                        break;
+            const auto boardingPass = qobject_cast<const KPkPass::BoardingPass*>(pass);
+            if (!boardingPass) {
+                return;
+            }
+
+            switch (boardingPass->transitType()) {
+                case KPkPass::BoardingPass::Air: {
+                    if (node.childNodes().empty() || node.childNodes()[0].result().isEmpty()) {
+                        return; // without the IATA BCBP data we wont get enough details here
                     }
-                    case KPkPass::BoardingPass::Train:
-                    {
-                        auto trainRes = res.value<TrainReservation>();
-                        trainRes = extractTrainTicket(pass, trainRes);
-                        trainRes.setUnderName(extractPerson(pass, trainRes.underName().value<Person>()));
-                        res = trainRes;
-                        break;
-                    }
-                    case KPkPass::BoardingPass::Bus:
-                    {
-                        auto busRes = res.value<BusReservation>();
-                        busRes = extractBusTicket(pass, busRes);
-                        busRes.setUnderName(extractPerson(pass, busRes.underName().value<Person>()));
-                        res = busRes;
-                        break;
-                    }
-                    default:
-                        if (!node.result().isEmpty()) { // don't overwrite better results from child nodes
-                            return;
-                        }
-                        break;
+                    auto r = childResult(node).value<FlightReservation>();
+                    applyTicketToken(tokenFromBarcode(pass), r);
+                    r.setReservationFor(extractBoardingPass(pass, r.reservationFor().value<Flight>()));
+                    r.setUnderName(extractPerson(pass, r.underName().value<Person>()));
+                    res = r;
+                    break;
                 }
+                case KPkPass::BoardingPass::Train:
+                {
+                    // if this is a IATA BCBP the child node extractor will have classified this as a flight, so convert that
+                    auto r = childResult(node).value<TrainReservation>();
+                    if (!node.childNodes().empty() && !node.childNodes()[0].result().isEmpty() && JsonLd::isA<FlightReservation>(node.childNodes()[0].result().result().at(0))) {
+                        const auto flightRes = node.childNodes()[0].result().jsonLdResult().at(0).toObject();
+                        res = JsonLdDocument::apply(JsonLdDocument::fromJsonSingular(ReservationConverter::flightToTrain(flightRes)), res).value<TrainReservation>();
+                    }
+                    applyTicketToken(tokenFromBarcode(pass), r);
+                    r = extractTrainTicket(pass, r);
+                    r.setUnderName(extractPerson(pass, r.underName().value<Person>()));
+                    res = r;
+                    break;
+                }
+                case KPkPass::BoardingPass::Bus:
+                {
+                    auto r = childResult(node).value<BusReservation>();
+                    applyTicketToken(tokenFromBarcode(pass), r);
+                    r = extractBusTicket(pass, r);
+                    r.setUnderName(extractPerson(pass, r.underName().value<Person>()));
+                    res = r;
+                    break;
+                }
+                case KPkPass::BoardingPass::Boat:
+                {
+                    auto r = childResult(node).value<BoatReservation>();
+                    applyTicketToken(tokenFromBarcode(pass), r);
+                    r.setUnderName(extractPerson(pass, r.underName().value<Person>()));
+                    res = r;
+                    break;
+                }
+                case KPkPass::BoardingPass::Generic:
+                    return;
             }
             break;
         }
         case KPkPass::Pass::EventTicket:
         {
-            auto evRes = res.value<EventReservation>();
-            extractEventTicketPass(pass, evRes);
-            res = evRes;
+            auto r = childResult(node).value<EventReservation>();
+            applyTicketToken(tokenFromBarcode(pass), r);
+            extractEventTicketPass(pass, r);
+            res = r;
             break;
         }
-        default:
-            break;
+        case KPkPass::Pass::Coupon:
+        case KPkPass::Pass::StoreCard:
+        case KPkPass::Pass::Generic:
+            return;
     }
+
     node.setResult(QList<QVariant>({res}));
 }
 
