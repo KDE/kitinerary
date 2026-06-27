@@ -89,6 +89,8 @@
         <file>citizenm.js</file>
         <file>citycity-se.json</file>
         <file>citycity-se.js</file>
+        <file>collegeboard.json</file>
+        <file>collegeboard.js</file>
         <file>colorline.json</file>
         <file>colorline.js</file>
         <file>coloseumticket.json</file>
@@ -116,6 +118,8 @@
         <file>direct-book.js</file>
         <file>djh.json</file>
         <file>djh.js</file>
+        <file>doodle.json</file>
+        <file>doodle.js</file>
         <file>drk-blutspendedienst.json</file>
         <file>drk-blutspendedienst.js</file>
         <file>dsb.json</file>
@@ -363,6 +367,8 @@
         <file>southwest.js</file>
         <file>spiritec.json</file>
         <file>spiritec.js</file>
+        <file>sportio.js</file>
+        <file>sportio.json</file>
         <file>springairlines.json</file>
         <file>springairlines.js</file>
         <file>stansted-express.json</file>
@@ -391,6 +397,8 @@
         <file>ticketmaster.js</file>
         <file>ticketportal.json</file>
         <file>ticketportal.js</file>
+        <file>ticketspot.js</file>
+        <file>ticketspot.json</file>
         <file>tickets-ua.json</file>
         <file>tickets-ua.js</file>
         <file>tierparkberlin.json</file>

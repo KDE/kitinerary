@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "From",
+            "match": "mailer@doodle.com",
+            "mimeType": "message/rfc822",
+            "scope": "Parent"
+        }
+    ],
+    "function": "parseEmail",
+    "mimeType": "text/html",
+    "script": "doodle.js"
+}

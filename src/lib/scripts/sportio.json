@@ -1,0 +1,13 @@
+{
+	"mimeType": "text/html",
+	"filter": [
+		{
+			"mimeType": "message/rfc822",
+			"field": "From",
+			"match": "^system@sportio.sk$",
+			"scope": "Ancestors"
+		}
+	],
+	"script": "sportio.js",
+	"function": "parseMail"
+}

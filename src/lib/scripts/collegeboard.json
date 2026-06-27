@@ -1,0 +1,13 @@
+{
+	"filter": [
+		{
+			"field": "From",
+			"match": "collegeboard@e.collegeboard.org",
+			"mimeType": "message/rfc822",
+			"scope": "Ancestors"
+		}
+	],
+	"function": "extractHtml",
+	"mimeType": "text/html",
+	"script": "collegeboard.js"
+}
