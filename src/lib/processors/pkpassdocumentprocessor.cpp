@@ -402,6 +402,16 @@ static void extractEventTicketPass(const KPkPass::Pass *pass, EventReservation &
 
 static Person extractPerson(const KPkPass::Pass *pass, Person person)
 {
+    if (const auto &nameObj = pass->semanticTags().value("passengerName"_L1).toObject(); !nameObj.isEmpty()) {
+        if (const auto n = nameObj.value("familyName"_L1).toString(); !n.isEmpty()) {
+            person.setFamilyName(n);
+        }
+        if (const auto n = nameObj.value("givenName"_L1).toString(); !n.isEmpty()) {
+            person.setGivenName(n);
+        }
+        return person;
+    }
+
     const auto fields = pass->fields();
     for (const auto &field : fields) {
         person = NameOptimizer::optimizeName(field.valueDisplayString(), person);
