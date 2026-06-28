@@ -113,6 +113,49 @@ QJSValue PkPassDocumentProcessor::contentToScriptValue(const ExtractorDocumentNo
     return engine->toScriptValue(node.content<const KPkPass::Pass*>());
 }
 
+static Airport extractSemanticTags(const KPkPass::Pass *pass, Airport airport, QLatin1StringView prefix)
+{
+    const auto semObj = pass->semanticTags();
+    if (airport.iataCode().isEmpty()) {
+        airport.setIataCode(semObj.value(prefix + "AirportCode"_L1).toString());
+    }
+    airport.setName(semObj.value(prefix + "AirportName"_L1).toString());
+    auto addr = airport.address();
+    addr.setAddressLocality(semObj.value(prefix + "CityName"_L1).toString());
+    airport.setAddress(addr);
+    const auto loc = semObj.value(prefix + "Location"_L1).toObject();
+    airport.setGeo(GeoCoordinates{loc.value("latitude"_L1).toDouble(NAN), loc.value("longitude"_L1).toDouble(NAN)});
+    return airport;
+}
+
+static void extractSemanticTags(const KPkPass::Pass *pass, FlightReservation &r)
+{
+    const auto semObj = pass->semanticTags();
+    if (semObj.isEmpty()) {
+        return;
+    }
+
+    auto flight = r.reservationFor().value<Flight>();
+    flight.setBoardingTime(QDateTime::fromString(semObj.value("originalBoardingDate"_L1).toString(), Qt::ISODate).toTimeZone(QTimeZone(semObj.value("departureLocationTimeZone"_L1).toString().toUtf8())));
+    r.setBoardingGroup(semObj.value("boardingGroup"_L1).toString());
+
+    flight.setDepartureAirport(extractSemanticTags(pass, flight.departureAirport(), "departure"_L1));
+    flight.setDepartureTerminal(semObj.value("departureTerminal"_L1).toString());
+    flight.setDepartureGate(semObj.value("departureGate"_L1).toString());
+    flight.setDepartureTime(QDateTime::fromString(semObj.value("originalDepartureDate"_L1).toString(), Qt::ISODate).toTimeZone(QTimeZone(semObj.value("departureLocationTimeZone"_L1).toString().toUtf8())));
+
+    flight.setArrivalAirport(extractSemanticTags(pass, flight.departureAirport(), "destination"_L1));
+    flight.setArrivalTerminal(semObj.value("destinationTerminal"_L1).toString());
+    flight.setDepartureTime(QDateTime::fromString(semObj.value("originalArrivalDate"_L1).toString(), Qt::ISODate).toTimeZone(QTimeZone(semObj.value("destinationLocationTimeZone"_L1).toString().toUtf8())));
+
+    auto airline = flight.airline();
+    airline.setIataCode(semObj.value("airlineCode"_L1).toString());
+    flight.setAirline(airline);
+    flight.setFlightNumber(semObj.value("flightNumber"_L1).toString());
+
+    r.setReservationFor(flight);
+}
+
 static QList<KPkPass::Field> frontFieldsForPass(const KPkPass::Pass *pass) {
     QList<KPkPass::Field> fields;
     fields += pass->headerFields();
@@ -495,6 +538,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
                         return; // without the IATA BCBP data we wont get enough details here
                     }
                     auto r = childResult(node).value<FlightReservation>();
+                    extractSemanticTags(pass, r);
                     applyTicketToken(tokenFromBarcode(pass), r);
                     r.setReservationFor(extractBoardingPass(pass, r.reservationFor().value<Flight>()));
                     r.setUnderName(extractPerson(pass, r.underName().value<Person>()));
