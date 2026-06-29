@@ -275,6 +275,8 @@
                 }
             ],
             "relevantDate": "Invalid Date",
+            "seats": [
+            ],
             "secondaryFields": [
                 {
                     "changeMessage": "passengerchangeMessage",
@@ -646,6 +648,8 @@
                 }
             ],
             "relevantDate": "Invalid Date",
+            "seats": [
+            ],
             "secondaryFields": [
                 {
                     "changeMessage": "passengerchangeMessage",
