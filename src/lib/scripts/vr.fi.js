@@ -61,18 +61,25 @@ function parseTicket(pdf, node, trigger) {
 }
 
 function parseMobilePdf(pdf, node, ssb) {
+    const ssbCodes = node.findChildNodes({ scope: "Descendants", mimeType: "internal/era-ssb" })
+        .filter((ssbNode) => ssbNode.location == ssb.location);
+
     let res = ssb.result[0];
-    const text = pdf.pages[ssb.location].textInRect(0.0, 0.0, 0.5, 0.5);
-    const trip = text.match(/(\d{1,2}\.\d{1,2}\.\d{4})\n+ *(\S.*\S)  +(\S.*)\n+ *(\d\d:\d\d)  +(\d\d:\d\d)\n/);
-    res.reservationFor.departureTime = JsonLd.toDateTime(trip[4], "hh:mm", "en");
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[5], "hh:mm", "en");
-    res.reservationFor.departureStation.name = trip[2];
-    res.reservationFor.arrivalStation.name = trip[3];
-    const seat = text.substr(trip.index + trip[0].length).match(/.*\n *([A-Z]+ \d+)  +(\d+).* (\d+)/);
-    if (seat) {
-        res.reservationFor.trainNumber = seat[1];
-        res.reservedTicket.ticketedSeat.seatSection = seat[2];
-        res.reservedTicket.ticketedSeat.seatNumber = seat[3];
+    for (const column in [0, 1]) {
+        const text = pdf.pages[ssb.location].textInRect(0.0 + column * 0.5, 0.0, 0.5 + column * 0.5, 0.5);
+        const trip = text.match(/(\d{1,2}\.\d{1,2}\.\d{4})\n+ *(\S.*\S)  +(\S.*)\n+ *(\d\d:\d\d)  +(\d\d:\d\d)\n/);
+        if (ssbCodes.length > 1 && trip[4].substr(0, 4) != res.reservationFor.departureTime.substr(11, 4))
+            continue;
+        res.reservationFor.departureTime = JsonLd.toDateTime(trip[4], "hh:mm", "en");
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(trip[5], "hh:mm", "en");
+        res.reservationFor.departureStation.name = trip[2];
+        res.reservationFor.arrivalStation.name = trip[3];
+        const seat = text.substr(trip.index + trip[0].length).match(/.*\n *([A-Z]+ \d+)  +(?:(\d+).* (\d+)|Any)/);
+        if (seat) {
+            res.reservationFor.trainNumber = seat[1];
+            res.reservedTicket.ticketedSeat.seatSection = seat[2];
+            res.reservedTicket.ticketedSeat.seatNumber = seat[3];
+        }
+        return res;
     }
-    return res;
 }
