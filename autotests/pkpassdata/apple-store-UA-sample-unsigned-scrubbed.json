@@ -1,0 +1,80 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "airplaneSeat": "52C",
+        "boardingGroup": "2",
+        "modifiedTime": "2017-12-29T18:46:02",
+        "passengerSequenceNumber": "288",
+        "pkpassPassTypeIdentifier": "pass.united.UnitedMobileBoardingPass",
+        "pkpassSerialNumber": "H8JP44-ORD07/09/25-MARTINEZ/LANI-UA987-en",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "UA",
+                "name": "United Airlines"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US",
+                    "addressLocality": "Paris"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.978599548339844,
+                    "longitude": -87.90239715576172
+                },
+                "iataCode": "ORD",
+                "name": "Charles de Gaulle Airport"
+            },
+            "boardingTime": {
+                "@type": "QDateTime",
+                "@value": "2025-12-09T16:10:00-06:00",
+                "timezone": "America/Chicago"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US",
+                    "addressLocality": "Chicago"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.9742,
+                    "longitude": -87.9073
+                },
+                "iataCode": "ORD",
+                "name": "O'Hare International Airport"
+            },
+            "departureDay": "2025-07-09",
+            "departureGate": "C10",
+            "departureTerminal": "1",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2025-12-10T08:01:00+01:00",
+                "timezone": "Europe/Paris"
+            },
+            "flightNumber": "987"
+        },
+        "reservationNumber": "H8JP44",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketNumber": "016 2312703474",
+            "ticketToken": "aztecCode:M1MARTINEZ/LANI       EH8JP44 ORDCDGUA 0987 190Y052C0288 15D>8180 M5190BUA              2A01623127034740 UA                        N*30600    09         ^160MEUCIDBN+wNLg69XOW4P7BCWfKUDKP1idPkXsrdvLpbBmY2UAiEA3hXI24W0iipZnFZ8GDV7DrpXb9AHYReogkVlclL62cQ="
+        },
+        "subjectOf": [
+            "pkpass://pass.united.unitedmobileboardingpass/H8JP44-ORD07/09/25-MARTINEZ/LANI-UA987-en"
+        ],
+        "underName": {
+            "@type": "Person",
+            "familyName": "Martinez",
+            "givenName": "Lani",
+            "name": "Lani Martinez"
+        }
+    }
+]
