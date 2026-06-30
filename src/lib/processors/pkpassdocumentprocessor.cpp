@@ -128,11 +128,11 @@ static Airport extractSemanticTags(const KPkPass::Pass *pass, Airport airport, Q
     return airport;
 }
 
-static void extractSemanticTags(const KPkPass::Pass *pass, FlightReservation &r)
+static FlightReservation extractSemanticTags(const KPkPass::Pass *pass, FlightReservation r)
 {
     const auto semObj = pass->semanticTags();
     if (semObj.isEmpty()) {
-        return;
+        return r;
     }
 
     auto flight = r.reservationFor().value<Flight>();
@@ -154,6 +154,34 @@ static void extractSemanticTags(const KPkPass::Pass *pass, FlightReservation &r)
     flight.setFlightNumber(semObj.value("flightNumber"_L1).toString());
 
     r.setReservationFor(flight);
+    return r;
+}
+
+static EventReservation extractSemanticTags(const KPkPass::Pass *pass, EventReservation r)
+{
+    const auto semObj = pass->semanticTags();
+    if (semObj.isEmpty()) {
+        return r;
+    }
+
+    auto ev = r.reservationFor().value<Event>();
+    if (const auto infoObj = semObj.value("eventStartDateInfo"_L1).toObject(); !infoObj.isEmpty()) {
+        auto dt = QDateTime::fromString(infoObj.value("date"_L1).toString(), Qt::ISODate);
+        if (const auto tz = infoObj.value("timezone"_L1).toString(); !tz.isEmpty()) {
+            dt = dt.toTimeZone(QTimeZone(tz.toUtf8()));
+        }
+        ev.setStartDate(dt);
+    } else {
+        ev.setStartDate(QDateTime::fromString(semObj.value("eventStartDate"_L1).toString(), Qt::ISODate));
+    }
+    ev.setEndDate(QDateTime::fromString(semObj.value("eventEndDate"_L1).toString(), Qt::ISODate));
+
+    auto loc = ev.location().value<Place>();
+    loc.setName(semObj.value("venueName"_L1).toString());
+    ev.setLocation(loc);
+
+    r.setReservationFor(ev);
+    return r;
 }
 
 static QList<KPkPass::Field> frontFieldsForPass(const KPkPass::Pass *pass) {
@@ -538,7 +566,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
                         return; // without the IATA BCBP data we wont get enough details here
                     }
                     auto r = childResult(node).value<FlightReservation>();
-                    extractSemanticTags(pass, r);
+                    r = extractSemanticTags(pass, r);
                     applyTicketToken(tokenFromBarcode(pass), r);
                     r.setReservationFor(extractBoardingPass(pass, r.reservationFor().value<Flight>()));
                     r.setUnderName(extractPerson(pass, r.underName().value<Person>()));
@@ -584,6 +612,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
         case KPkPass::Pass::EventTicket:
         {
             auto r = childResult(node).value<EventReservation>();
+            r = extractSemanticTags(pass, r);
             applyTicketToken(tokenFromBarcode(pass), r);
             extractEventTicketPass(pass, r);
             res = r;
