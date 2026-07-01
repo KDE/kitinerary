@@ -1,0 +1,33 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "EventReservation",
+        "modifiedTime": "2017-12-29T18:46:02",
+        "pkpassPassTypeIdentifier": "userpass.com.apple.wallet.B61A0D3D-095D-40C7-9119-66DEBFB790ED",
+        "pkpassSerialNumber": "6F1D1F20-2913-4238-8D8F-AD4623340762",
+        "reservationFor": {
+            "@type": "Event",
+            "endDate": "2026-06-13T20:00:00+02:00",
+            "location": {
+                "@type": "Place",
+                "name": "Event Location Name"
+            },
+            "name": "Event Name",
+            "startDate": "2026-06-12T20:00:00+02:00"
+        },
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "qrCode:3082665871",
+            "ticketedSeat": {
+                "@type": "Seat",
+                "seatNumber": "3",
+                "seatRow": "2",
+                "seatSection": "1"
+            }
+        },
+        "subjectOf": [
+            "pkpass://userpass.com.apple.wallet.b61a0d3d-095d-40c7-9119-66debfb790ed/6F1D1F20-2913-4238-8D8F-AD4623340762"
+        ]
+    }
+]

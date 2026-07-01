@@ -30,6 +30,7 @@
 #include <KPkPass/Location>
 #include <KPkPass/Field>
 #include <KPkPass/Pass>
+#include <KPkPass/Seat>
 
 #include <QJsonObject>
 #include <QJSEngine>
@@ -154,7 +155,25 @@ static FlightReservation extractSemanticTags(const KPkPass::Pass *pass, FlightRe
     flight.setFlightNumber(semObj.value("flightNumber"_L1).toString());
 
     r.setReservationFor(flight);
+    if (const auto seats = pass->seats(); !seats.empty()) {
+        r.setAirplaneSeat(seats.front().asAirplaneSeat());
+    }
+
     return r;
+}
+
+static Seat extractSemanticTags(const KPkPass::Seat &seat, Seat s)
+{
+    if (seat.hasSeatNumber()) {
+        s.setSeatNumber(seat.seatNumber());
+    }
+    if (seat.hasSeatRow()) {
+        s.setSeatRow(seat.seatRow());
+    }
+    if (seat.hasSeatSection()) {
+        s.setSeatSection(seat.seatSection());
+    }
+    return s;
 }
 
 static EventReservation extractSemanticTags(const KPkPass::Pass *pass, EventReservation r)
@@ -181,6 +200,13 @@ static EventReservation extractSemanticTags(const KPkPass::Pass *pass, EventRese
     ev.setLocation(loc);
 
     r.setReservationFor(ev);
+
+    if (const auto seats = pass->seats(); !seats.isEmpty()) {
+        auto ticket = r.reservedTicket().value<Ticket>();
+        ticket.setTicketedSeat(extractSemanticTags(seats.front(), ticket.ticketedSeat()));
+        r.setReservedTicket(ticket);
+    }
+
     return r;
 }
 
