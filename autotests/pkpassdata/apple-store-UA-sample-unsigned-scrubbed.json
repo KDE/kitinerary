@@ -8,6 +8,12 @@
         "passengerSequenceNumber": "288",
         "pkpassPassTypeIdentifier": "pass.united.UnitedMobileBoardingPass",
         "pkpassSerialNumber": "H8JP44-ORD07/09/25-MARTINEZ/LANI-UA987-en",
+        "potentialAction": [
+            {
+                "@type": "UpdateAction",
+                "target": "https://www.united.com/en/us/manageres/mytrips"
+            }
+        ],
         "reservationFor": {
             "@type": "Flight",
             "airline": {

@@ -6,6 +6,7 @@
 
 #include "pkpassdocumentprocessor.h"
 
+#include <KItinerary/Action>
 #include <KItinerary/BusTrip>
 #include <KItinerary/DocumentUtil>
 #include <KItinerary/Event>
@@ -114,6 +115,20 @@ QJSValue PkPassDocumentProcessor::contentToScriptValue(const ExtractorDocumentNo
     return engine->toScriptValue(node.content<const KPkPass::Pass*>());
 }
 
+template <typename ResT>
+static void extractActions(const KPkPass::Pass *pass, ResT &r)
+{
+    for (const auto &type : { "managementURL"_L1, "changeSeatURL"_L1, "purchaseAdditionalBaggageURL"_L1, "upgradeURL"_L1, "purchaseWifiURL"_L1, "purchaseLoungeAccessURL"_L1, "registerServiceAnimalURL"_L1, "requestWheelchairURL"_L1 }) {
+        const auto url = QUrl(pass->rawValue(type).toString());
+        if (url.isValid()) {
+            UpdateAction action;
+            action.setTarget(url);
+            r.setPotentialAction({action});
+            break;
+        }
+    }
+}
+
 static Airport extractSemanticTags(const KPkPass::Pass *pass, Airport airport, QLatin1StringView prefix)
 {
     const auto semObj = pass->semanticTags();
@@ -159,6 +174,7 @@ static FlightReservation extractSemanticTags(const KPkPass::Pass *pass, FlightRe
         r.setAirplaneSeat(seats.front().asAirplaneSeat());
     }
 
+    extractActions(pass, r);
     return r;
 }
 
@@ -207,6 +223,7 @@ static EventReservation extractSemanticTags(const KPkPass::Pass *pass, EventRese
         r.setReservedTicket(ticket);
     }
 
+    extractActions(pass, r);
     return r;
 }
 
