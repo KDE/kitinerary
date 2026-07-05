@@ -43,12 +43,15 @@ static-extractor:
 # CentOS image building this.
 static-extractor-publish:
   stage: deploy
-  image: invent-registry.kde.org/sysadmin/ci-images/sles15-craft:latest
+  image: storage.kde.org/vm-images/craft-appimage-alma9
   tags:
-    - Linux
+    - VM
+    - amd64
   needs:
     - static-extractor
   interruptible: true
+  variables:
+    KDECI_PYTHON_CMD: python3.11
   before_script:
     - export LANG=en_US.UTF-8
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1
@@ -59,4 +62,4 @@ static-extractor-publish:
     - tar xv -C $CI_PROJECT_DIR/tmp -f $CI_PROJECT_DIR/kde-ci-packages/*.tgz
     - $CI_PROJECT_DIR/tmp/bin/kitinerary-extractor $CI_PROJECT_DIR/autotests/extractordata/synthetic/iata-bcbp-demo.pdf | grep "FlightReservation"
     # Publish
-    - python3 -u ci-notary-service/publishbuild.py --config ci-utilities/signing/publishbuild.ini --platform linux "$CI_PROJECT_DIR/kde-ci-packages/"
+    - $KDECI_PYTHON_CMD -u ci-notary-service/publishbuild.py --config ci-utilities/signing/publishbuild.ini --platform linux "$CI_PROJECT_DIR/kde-ci-packages/"
