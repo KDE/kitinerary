@@ -21,7 +21,7 @@ const lineMatchers = {
     newSeatsHeader: /(Miejsca|Seats):/,
     newRouteStart: /^\s*\d+\.\s*(odcinek|route):/,
     newRoutePrefix: /^.*(?:odcinek:|route:)/,
-    ticketNumber: /^.*(TICKET NO|BILET NR)/,
+    ticketNumberText: /^.*(TICKET NO|BILET NR)/,
     routePrefix: /^.*(odcinek:|route)/,
     ticketClass: /(klasa|class)/g,
     ticketCode: /KOD|CODE.*$/
@@ -52,7 +52,7 @@ function parseOldTickets(contentLines) {
             ticket = {
                 routeNo: tickets.length + 1,
                 stations: cut(line, lineMatchers.routePrefix),
-                reservationNumber: cut(contentLines[6], lineMatchers.ticketNumber)
+                reservationNumber: cut(contentLines[6], lineMatchers.ticketNumberText)
             };
             tickets.push(ticket);
             return;
@@ -62,8 +62,8 @@ function parseOldTickets(contentLines) {
             return;
         }
 
-        if (lineMatchers.ticketNumber.test(line)) { // only valid for narrow tickets
-            ticket.reservationNumber = cut(line, lineMatchers.ticketNumber);
+        if (lineMatchers.ticketNumberText.test(line)) { // only valid for narrow tickets
+            ticket.reservationNumber = cut(line, lineMatchers.ticketNumberText);
         } else if (lineMatchers.wideHeader.test(line)) {
             ticket.layout = 'wide';
             ticket.wideData = columns(contentLines[index + 1]);
@@ -116,16 +116,18 @@ function parseApp2026Ticket(contentLines) {
     let ticket = tickets[0];
 
     contentLines.forEach((line, index) => {
-        if (lineMatchers.ticketNumber.test(line)) {
-            reservationNumber = cut(line, lineMatchers.ticketNumber).replace(lineMatchers.ticketCode, ' ').trim();
-            tickets.forEach(t => { t.reservationNumber = reservationNumber; });
+        if (lineMatchers.ticketNumberText.test(line)) {
+            reservationNumber = cut(line, lineMatchers.ticketNumberText).replace(/\s*(KOD|CODE)/, " $1").trim();
             if (ticket && !hasRouteSections) {
                 if (lineMatchers.ticketCode.test(line)) {
                     ticket.stations = (contentLines[index + 1] || '').trim();
                 } else {
+                    //EN ticket needs CODE glued back in
+                    reservationNumber = reservationNumber + contentLines[index+1];
                     ticket.stations = (contentLines[index + 2] || '').trim();
                 }
             }
+            tickets.reservationNumber = reservationNumber;
         } else if (lineMatchers.newRouteStart.test(line)) {
             ticket = {
                 layout: 'app2026',
