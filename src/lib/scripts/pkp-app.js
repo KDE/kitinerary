@@ -102,8 +102,11 @@ function parseApp2026Fields(line, ticket) {
         ticket.trainNumber = train ? train[1] : undefined;
         ticket.trainName = train ? train[2].trim() : undefined;
     } else if (lineMatchers.newCarriageHeader.test(line)) {
-        ticket.seatSection = (line.match(/(?:Wagon|Carriage):\s*([^,]+)/) || [])[1];
-        ticket.seatingType = (line.match(/(?:klasa|class)\s*(\S+)/) || [])[1];
+        //Cheat as depending on language the word order changes
+        const [seatSection, seatingType] = line.match(/\d+/g) || [];
+
+        ticket.seatSection = seatSection
+        ticket.seatingType = seatingType
     } else if (lineMatchers.newSeatsHeader.test(line)) {
         ticket.seatNumber = (line.match(/(?:Miejsca|Seats):\s*(.*?)(?:\s{2,}|$)/) || [])[1];
     }
