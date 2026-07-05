@@ -24,7 +24,7 @@ const lineMatchers = {
     ticketNumberText: /^.*(TICKET NO|BILET NR)/,
     routePrefix: /^.*(odcinek:|route)/,
     ticketClass: /(klasa|class)/g,
-    ticketCode: /KOD|CODE.*$/
+    ticketCode: /\s*(KOD|CODE)/
 };
 
 const ticketLayoutHandlers = {
@@ -117,7 +117,7 @@ function parseApp2026Ticket(contentLines) {
 
     contentLines.forEach((line, index) => {
         if (lineMatchers.ticketNumberText.test(line)) {
-            reservationNumber = cut(line, lineMatchers.ticketNumberText).replace(/\s*(KOD|CODE)/, " $1").trim();
+            reservationNumber = cut(line, lineMatchers.ticketNumberText).replace(lineMatchers.ticketCode, " $1").trim();
             if (ticket && !hasRouteSections) {
                 if (lineMatchers.ticketCode.test(line)) {
                     ticket.stations = (contentLines[index + 1] || '').trim();
