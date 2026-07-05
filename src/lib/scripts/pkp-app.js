@@ -23,7 +23,8 @@ const lineMatchers = {
     newRoutePrefix: /^.*(?:odcinek:|route:)/,
     ticketNumber: /^.*(TICKET NO|BILET NR)/,
     routePrefix: /^.*(odcinek:|route)/,
-    ticketClass: /(klasa|class)/g
+    ticketClass: /(klasa|class)/g,
+    ticketCode: /KOD|CODE.*$/
 };
 
 const ticketLayoutHandlers = {
@@ -116,10 +117,14 @@ function parseApp2026Ticket(contentLines) {
 
     contentLines.forEach((line, index) => {
         if (lineMatchers.ticketNumber.test(line)) {
-            reservationNumber = cut(line, lineMatchers.ticketNumber).replace(/KOD.*$/, '').trim();
+            reservationNumber = cut(line, lineMatchers.ticketNumber).replace(lineMatchers.ticketCode, ' ').trim();
             tickets.forEach(t => { t.reservationNumber = reservationNumber; });
             if (ticket && !hasRouteSections) {
-                ticket.stations = (contentLines[index + 1] || '').trim();
+                if (lineMatchers.ticketCode.test(line)) {
+                    ticket.stations = (contentLines[index + 1] || '').trim();
+                } else {
+                    ticket.stations = (contentLines[index + 2] || '').trim();
+                }
             }
         } else if (lineMatchers.newRouteStart.test(line)) {
             ticket = {
