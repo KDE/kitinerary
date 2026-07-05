@@ -43,7 +43,7 @@ static-extractor:
 # CentOS image building this.
 static-extractor-publish:
   stage: deploy
-  image: invent-registry.kde.org/sysadmin/ci-images/sles15-craft:latest
+  image: invent-registry.kde.org/sysadmin/ci-images/craft-appimage-alma9:latest
   tags:
     - Linux
   needs:
