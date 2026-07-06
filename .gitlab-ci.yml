@@ -43,9 +43,10 @@ static-extractor:
 # CentOS image building this.
 static-extractor-publish:
   stage: deploy
-  image: invent-registry.kde.org/sysadmin/ci-images/craft-appimage-alma9:latest
+  image: storage.kde.org/vm-images/craft-appimage-alma9
   tags:
-    - Linux
+    - VM
+    - amd64
   needs:
     - static-extractor
   interruptible: true
