@@ -50,6 +50,8 @@ static-extractor-publish:
   needs:
     - static-extractor
   interruptible: true
+  variables:
+    KDECI_PYTHON_CMD: python3.11
   before_script:
     - export LANG=en_US.UTF-8
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1
