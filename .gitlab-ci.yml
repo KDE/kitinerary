@@ -60,4 +60,4 @@ static-extractor-publish:
     - tar xv -C $CI_PROJECT_DIR/tmp -f $CI_PROJECT_DIR/kde-ci-packages/*.tgz
     - $CI_PROJECT_DIR/tmp/bin/kitinerary-extractor $CI_PROJECT_DIR/autotests/extractordata/synthetic/iata-bcbp-demo.pdf | grep "FlightReservation"
     # Publish
-    - python3 -u ci-notary-service/publishbuild.py --config ci-utilities/signing/publishbuild.ini --platform linux "$CI_PROJECT_DIR/kde-ci-packages/"
+    - $KDECI_PYTHON_CMD -u ci-notary-service/publishbuild.py --config ci-utilities/signing/publishbuild.ini --platform linux "$CI_PROJECT_DIR/kde-ci-packages/"
