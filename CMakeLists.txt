@@ -49,7 +49,7 @@ if (NOT ANDROID)
 endif()
 
 set(KMIME_VERSION "6.7.0")
-set(PIM_PKPASS "6.7.41")
+set(PIM_PKPASS "6.7.80")
 
 find_package(KF6Mime ${KF_MIN_VERSION} CONFIG)
 if(NOT TARGET KF6::Mime)
