@@ -1,5 +1,6 @@
 /*
    SPDX-FileCopyrightText: 2019-2022 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2026 David Pilarcik <meow@charliecat.space>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -89,9 +90,9 @@ function parsePdf(pdf, node, triggerNode)
     return [res1, res2];
 }
 
-function parsePkPass(content)
+function parsePkPass(content, node)
 {
-    var res = parseBarcode(content.barcodes[0].message);
+    let res = node.result[0];
     res.reservationFor.provider.name = content.organizationName;
 
     const day = content.field['destinofecha'].value;
@@ -99,8 +100,11 @@ function parsePkPass(content)
     res.reservationFor.departureStation.name = content.field['boardingTime'].label;
     res.reservationFor.arrivalTime = JsonLd.toDateTime(day + ' ' + content.field['destino'].value, 'dd/MM/yyyy hh:mm', 'es');
     res.reservationFor.arrivalStation.name = content.field['destino'].label;
-
+    res.reservedTicket.ticketedSeat.seatingType = content.field["clasefrontal"].value;
+    res.reservedTicket.dateIssued = JsonLd.toDateTime(content.field['fechaventa'].value, 'dd/MM/yyyy hh:mm:ss', 'es');
+    res.reservedTicket.name = content.field['tarifa'].value
     res.underName.name = content.field['nombrepasajero'].value;
+    res.underName.email = content.field['email'].value;
 
     if (content.field['documentos']) {
         const program = content.field['documentos'].value.match(/(.*) +: +(.*)/);

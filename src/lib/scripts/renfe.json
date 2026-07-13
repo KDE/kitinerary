@@ -13,7 +13,7 @@
     "filter": [
         {
             "field": "passTypeIdentifier",
-            "match": "pass.com.renfe-RenfeTicket",
+            "match": "pass.com.renfe-[Rr]enfe[Tt]icket",
             "mimeType": "application/vnd.apple.pkpass",
             "scope": "Current"
         }
