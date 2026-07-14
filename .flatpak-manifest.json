@@ -61,8 +61,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/google/libphonenumber/archive/refs/tags/v9.0.32.tar.gz",
-                    "sha256": "fef1a587ff4793d02cf10dc87d083e7a230e0caf56e8dfdf0da6a15f78420ed8",
+                    "url": "https://github.com/google/libphonenumber/archive/refs/tags/v9.0.34.tar.gz",
+                    "sha256": "5d2a61572110f0538fdb1afbc1f8381426fbfbbf544b45e8ae905297f2f5befa",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 89344,
@@ -153,8 +153,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/zxing-cpp/zxing-cpp/archive/v2.3.0.tar.gz",
-                    "sha256": "64e4139103fdbc57752698ee15b5f0b0f7af9a0331ecbdc492047e0772c417ba",
+                    "url": "https://github.com/zxing-cpp/zxing-cpp/archive/v3.1.0.tar.gz",
+                    "sha256": "3fb23a3a82788fd176f0109ddbaa76c6a53e78fd19fc93554eeb6b9e16ae6f90",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 101246,
