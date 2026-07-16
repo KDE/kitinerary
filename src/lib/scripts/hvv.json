@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "field": "description",
+            "match": "https://geofox\\.hvv\\.de/",
+            "mimeType": "internal/event",
+            "scope": "Current"
+        }
+    ],
+    "function": "extractEvent",
+    "mimeType": "internal/event",
+    "script": "hvv.js"
+}
