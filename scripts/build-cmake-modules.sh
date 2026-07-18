@@ -78,7 +78,7 @@ build_cmake_module https://gitlab.gnome.org/GNOME/libxml2.git libxml2 $LIBXML_VE
 build_cmake_module https://github.com/nu-book/zxing-cpp.git zxing-cpp $ZXING_VERSION \
     -DBUILD_SHARED_LIBRARY=OFF -DZXING_EXAMPLES=OFF -DZXING_UNIT_TESTS=OFF -DZXING_BLACKBOX_TESTS=OFF -DZXING_PYTHON_MODULE=OFF \
     -DZXING_DEPENDENCIES=LOCAL -DZXING_C_API=OFF -DZXING_WRITERS=OLD -DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=TRUE \
-    -ZXING_WRITERS=OFF
+    -DZXING_WRITERS=OFF
 
 # KDE Frameworks
 build_kf_module frameworks/extra-cmake-modules
