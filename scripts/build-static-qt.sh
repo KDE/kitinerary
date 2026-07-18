@@ -58,7 +58,7 @@ build-static-qt-module qtbase \
     -no-fontconfig -no-harfbuzz \
     -no-feature-sessionmanager \
     -no-feature-textmarkdownreader -no-feature-textmarkdownwriter \
-    -static -confirm-license -opensource -make libs -make tools
+    -static -confirm-license -opensource
 
 build-static-qt-module qtdeclarative \
     -DFEATURE_qml_debug=OFF \
