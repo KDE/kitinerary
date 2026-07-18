@@ -4,7 +4,7 @@
 set -e
 set -x
 
-ISOCODES_VERSION=4.18.0
+ISOCODES_VERSION=4.19.0
 
 mkdir -p $BUILD_ROOT
 mkdir -p $STAGING_ROOT

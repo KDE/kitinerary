@@ -6,10 +6,10 @@ set -x
 
 FREETYPE_VERSION="VER-2-13-2"
 POPPLER_VERSION="poppler-26.01.0"
-LIBICAL_VERSION="v3.0.17"
-LIBXML_VERSION="v2.12.7"
-ZXING_VERSION="v2.3.0"
-KF_VERSION="v6.24.0"
+LIBICAL_VERSION="v3.0.20"
+LIBXML_VERSION="v2.14.5"
+ZXING_VERSION="v3.1.0"
+KF_VERSION="v6.28.0"
 GEAR_VERSION="master"
 
 function build_cmake_module() {
@@ -87,9 +87,9 @@ build_kf_module frameworks/kcoreaddons -DKCOREADDONS_USE_QML=OFF -DKF_SKIP_PO_PR
 build_kf_module frameworks/ki18n -DBUILD_WITH_QML=OFF -DKI18N_EMBEDDED_ISO_CODES_CACHE=ON -DKF_SKIP_PO_PROCESSING=ON
 build_kf_module frameworks/kcalendarcore -DKF_SKIP_PO_PROCESSING=ON
 build_kf_module frameworks/kcontacts -DKF_SKIP_PO_PROCESSING=ON
+build_kf_module frameworks/kmime -DKF_SKIP_PO_PROCESSING=ON
 
 # PIM
-build_kde_module pim/kmime -DKF_SKIP_PO_PROCESSING=ON
 build_kde_module pim/kpkpass -DKF_SKIP_PO_PROCESSING=ON
 
 export CXXFLAGS="-static-libstdc++ -static-libgcc"

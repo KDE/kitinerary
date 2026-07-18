@@ -4,7 +4,7 @@
 set -e
 set -x
 
-OPENSSL_VERSION=3.6.1
+OPENSSL_VERSION=3.6.3
 
 mkdir -p $BUILD_ROOT
 mkdir -p $STAGING_ROOT

@@ -4,7 +4,7 @@
 set -e
 set -x
 
-QT_VERSION=6.10.2
+QT_VERSION=6.11.1
 
 function build-static-qt-module() {
     local module=$1
