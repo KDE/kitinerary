@@ -1,0 +1,26 @@
+[
+	{
+        "filter": [
+            { "field": "operatingCarrierDesignator", "match": "W6", "mimeType": "internal/iata-bcbp", "scope": "Current" },
+            { "field": "operatingCarrierDesignator", "match": "W4", "mimeType": "internal/iata-bcbp", "scope": "Current" },
+            { "field": "operatingCarrierDesignator", "match": "W9", "mimeType": "internal/iata-bcbp", "scope": "Current" },
+            { "field": "operatingCarrierDesignator", "match": "5W", "mimeType": "internal/iata-bcbp", "scope": "Current" }
+        ],
+        "function": "enchanceFromBCBP",
+        "mimeType": "internal/iata-bcbp",
+        "script": "wizzair.js"
+	},
+	{
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.com.wizzair.WizzAirApp.BoardingCard",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "extractPKPass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "wizzair.js"
+	}
+]
