@@ -27,5 +27,18 @@
         "filter": [ { "field": "url", "match": "^https://[a-z.]*booking\\.com/mybooking", "mimeType": "internal/event", "scope": "Current" } ],
         "script": "booking.js",
         "function": "parseEvent"
+    },
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.com.booking.reservation",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "parsePkPass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "booking.js"
     }
 ]

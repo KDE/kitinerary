@@ -310,3 +310,32 @@ function parseCoordinates(input) {
 
     return [latitude, longitude];
 }
+
+function parsePkPass(pass, node) {
+    const res = JsonLd.newLodgingReservation();
+
+    res.reservationFor.name = pass.field["hotel"].value
+    res.underName.name = pass.field["guestName"].value
+    // "2024-08-24  15:00"
+    res.checkinTime = JsonLd.toDateTime(pass.field["checkinDateTime"].value, "yyyy-MM-dd  hh:mm", "en")
+    res.checkoutTime = JsonLd.toDateTime(pass.field["checkoutDateTime"].value, "yyyy-MM-dd  hh:mm", "en")
+
+    let [hotelName, hotelAddressString, hotelPhoneNumber] = pass.field["hotelDetails"].value.split("\n")
+    res.reservationFor.address = hotelAddressString
+    res.reservationFor.telephone = hotelPhoneNumber
+
+    let hotelGeoLocation = pass.locations[0]
+    res.reservationFor.geo.latitude = hotelGeoLocation.latitude;
+    res.reservationFor.geo.longitude = hotelGeoLocation.longitude;
+
+    let [_r, reservationNumber, pin] = /Booking Number: (.*)\n?(?:PIN: (\d+))?/.exec(pass.field["reservationDetails"].value)
+    res.reservationNumber = reservationNumber + (pin ? `, PIN: ${pin}` : "")
+
+    res.potentialAction = JsonLd.newObject("UpdateAction");
+    res.potentialAction.url = pass.field["myReservationUrl"].value
+
+    res.totalPrice = pass.field["totalPrice"].value
+    res.priceCurrency = pass.field["totalPrice"].currencyCode
+
+    return res
+}
