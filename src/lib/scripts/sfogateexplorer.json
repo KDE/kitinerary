@@ -1,0 +1,13 @@
+{
+	"filter": [
+		{
+			"field": "operatingCarrierDesignator",
+			"match": "SFO",
+			"mimeType": "internal/iata-bcbp",
+			"scope": "Current"
+		}
+	],
+	"function": "parseBCBP",
+	"mimeType": "internal/iata-bcbp",
+	"script": "sfogateexplorer.js"
+}
