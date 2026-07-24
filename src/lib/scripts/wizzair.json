@@ -22,5 +22,18 @@
         "function": "extractPKPass",
         "mimeType": "application/vnd.apple.pkpass",
         "script": "wizzair.js"
+	},
+	{
+		"filter": [
+			{
+				"field": "From",
+				"match": "noreply@wizzair.com",
+				"mimeType": "message/rfc822",
+				"scope": "Ancestors"
+			}
+		],
+		"function": "parseMail",
+		"mimeType": "text/html",
+		"script": "wizzair.js"
 	}
 ]

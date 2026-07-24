@@ -65,3 +65,60 @@ function extractPKPass(pass, node) {
 
 	return result
 }
+
+function parseMail(html) {
+	const result = []
+	const baseRes = JsonLd.newFlightReservation();
+
+	baseRes.reservationNumber = html.eval("//td[contains(normalize-space(.),'Flight confirmation code:')]/following-sibling::td[1]")[0].content.trim();
+	let [_fn, iataCode, flightNumber] = 
+		// Flight Number: W6 7001
+		/Flight Number: (.{2}) (\d+)/.exec(html.eval("//tr[td[contains(normalize-space(.),'GOING OUT')]]/td[3]")[0].content.trim());
+	baseRes.reservationFor.airline.iataCode = iataCode;
+	baseRes.reservationFor.airline.name = WIZZ_AIR_IATA_CODES[iataCode] || baseRes.reservationFor.airline.name;
+	baseRes.reservationFor.flightNumber = flightNumber;
+
+	let [_d, departingCity, departingAirportIATACode] =
+		// Bratislava (BTS)
+		/(.*) \((.{3})\)/.exec(html.eval("//tr[td[contains(normalize-space(.),'Departs from:')]]/following-sibling::tr[1]/td[1]")[0].content.trim());
+	let [_a, arrivingCity, arrivingAirportIATACode] =
+		// Kosice (KSC)
+		/(.*) \((.{3})\)/.exec(html.eval("//tr[td[contains(normalize-space(.),'Departs from:')]]/following-sibling::tr[1]/td[3]")[0].content.trim());
+
+	baseRes.reservationFor.departureAirport.name = departingCity;
+	baseRes.reservationFor.departureAirport.iataCode = departingAirportIATACode;
+	baseRes.reservationFor.arrivalAirport.name = arrivingCity;
+	baseRes.reservationFor.arrivalAirport.iataCode = arrivingAirportIATACode;
+
+	baseRes.reservationFor.departureTime = JsonLd.toDateTime(
+		// 22/07/2026 06:00
+		html.eval("//tr[td[contains(normalize-space(.),'Departs from:')]]/following-sibling::tr[2]/td[1]")[0].content.trim(),
+		"dd/MM/yyyy hh:mm",
+		"en"
+	);
+	baseRes.reservationFor.departureTime = JsonLd.toDateTime(
+		// 22/07/2026 06:55
+		html.eval("//tr[td[contains(normalize-space(.),'Departs from:')]]/following-sibling::tr[2]/td[3]")[0].content.trim(),
+		"dd/MM/yyyy hh:mm",
+		"en"
+	);
+
+	ExtractorEngine.extractPrice(html.eval("//tr[td[normalize-space(.)='Grand total']]")[0].recursiveContent.split("\n").join(""), baseRes);
+
+	let passangers = html.eval("//tr[td[normalize-space(.)='Title'] and td[normalize-space(.)='First name']]/following-sibling::tr[position()>1]")
+	for (const passangerRow of passangers) {
+		let res = Object.assign({}, baseRes);
+		let passanger = passangerRow.eval("td").map(e => e.content.trim());
+		res.underName.familyName = passanger[2]
+		res.underName.givenName = passanger[1]
+		res.underName.title = passanger[0]
+		res.airplaneSeat = passanger[6]
+
+		res.potentialAction = JsonLd.newObject("UpdateAction");
+		res.potentialAction.url = `https://www.wizzair.com/en-gb/itinerary/${res.reservationNumber}/${res.underName.familyName}`
+
+		result.push(res);
+	}
+
+	return result
+}
