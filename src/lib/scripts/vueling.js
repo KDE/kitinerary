@@ -56,3 +56,59 @@ function parsePdfBoardingPass(pdf, node, triggerNode) {
     }
     return res;
 }
+
+function enchanceFromBCBP(bcbp, node) {
+	const result = node.result;
+	for (const res of result) {
+		// Vueling send a link to the Itinerary in the reservation confirmation
+		// this link allows to view and edit (after logging in) the Itinerary
+		// user has to be on mobile for this
+		res.potentialAction = JsonLd.newObject("UpdateAction");
+		// https://mobile.vueling.com/MyBookings/Index?pnr=[PNR]&o=[departure airport iata code]
+		res.potentialAction.url = `https://mobile.vueling.com/MyBookings/Index?pnr=${res.reservationNumber}&o=${res.reservationFor.departureAirport.iataCode}`
+	}
+	return result;
+}
+
+function parsePKPass(pass, node) {
+	const res = node.result[0];
+
+	// Vueling had an awesome idea to surface the boarding group in an image...
+	// other SSRs, and priority boarding are shown in a image too...
+
+	res.reservationFor.boardingTime = JsonLd.toDateTime(
+		`${res.reservationFor.departureDay} ${pass.field["departureboarding"].value.replace("h", "")}`,
+		"yyyy-MM-dd hh:mm",
+		"en"
+	);
+	
+	let [_d, departureTime, departureTerminal] = /· Departure (\d+:\d+)h(?: - Terminal (.*))?/gm.exec(pass.field["flightinfo"])
+	res.reservationFor.departureTime = JsonLd.toDateTime(
+		`${res.reservationFor.departureDay} ${departureTime}`,
+		"yyyy-MM-dd h:mm",
+		"en"
+	);
+	res.reservationFor.departureTerminal = departureTerminal || res.reservationFor.departureTerminal;
+
+	let [_a, arrivalTime, arrivalTerminal] = /· Arrival (\d+:\d+)h(?: - Terminal (.*))?/gm.exec(pass.field["flightinfo"])
+	res.reservationFor.arrivalTime = JsonLd.toDateTime(
+		`${res.reservationFor.departureDay} ${arrivalTime}`,
+		"yyyy-MM-dd h:mm",
+		"en"
+	);
+	res.reservationFor.arrivalTerminal = arrivalTerminal || res.reservationFor.arrivalTerminal;
+
+	let [_eb, endBoardingMinutes] = /· End of boarding: (\d+) min before departure./.exec(pass.field["flightinfo"])
+	res.reservationFor.departureGateCloseTime = addMinutes(res.reservationFor.departureTime["@value"], -parseInt(endBoardingMinutes));
+	
+	return res
+}
+
+/**
+ * @param {string} date 
+ * @param {number} minutes 
+ * @returns {Date}
+ */
+function addMinutes(date, minutes) {
+    return new Date((new Date(date)).getTime() + minutes*60000);
+}

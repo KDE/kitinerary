@@ -24,5 +24,26 @@
         "function": "parsePdfBoardingPass",
         "mimeType": "application/pdf",
         "script": "vueling.js"
+    },
+    {
+        "filter": [
+            { "field": "operatingCarrierDesignator", "match": "VY", "mimeType": "internal/iata-bcbp", "scope": "Current" }
+        ],
+        "function": "enchanceFromBCBP",
+        "mimeType": "internal/iata-bcbp",
+        "script": "vueling.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.vueling.boardingpass",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "parsePKPass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "vueling.js"
     }
 ]
