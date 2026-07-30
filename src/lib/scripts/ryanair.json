@@ -23,4 +23,24 @@
     "function": "fixHtmlBooking",
     "mimeType": "text/html",
     "script": "ryanair.js"
+},
+{
+    "filter": [
+        { "field": "operatingCarrierDesignator", "match": "FR", "mimeType": "internal/iata-bcbp", "scope": "Current" },
+        { "field": "operatingCarrierDesignator", "match": "RR", "mimeType": "internal/iata-bcbp", "scope": "Current" },
+        { "field": "operatingCarrierDesignator", "match": "AL", "mimeType": "internal/iata-bcbp", "scope": "Current" },
+        { "field": "operatingCarrierDesignator", "match": "OE", "mimeType": "internal/iata-bcbp", "scope": "Current" },
+        { "field": "operatingCarrierDesignator", "match": "RK", "mimeType": "internal/iata-bcbp", "scope": "Current" }
+    ],
+    "function": "enchanceFromBCBP",
+    "mimeType": "internal/iata-bcbp",
+    "script": "ryanair.js"
+},
+{
+    "filter": [
+        { "field": "passTypeIdentifier", "match": "pass.com.ryanair", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" }
+    ],
+    "function": "extractPKPass",
+    "mimeType": "application/vnd.apple.pkpass",
+    "script": "ryanair.js"
 }]
