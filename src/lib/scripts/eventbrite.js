@@ -83,7 +83,7 @@ function parsePdf(pdf, node, triggerNode) {
         }
     }
     const timeFormats = ['dd MMMM yyyy hh:mm', 'dd. MMMM yyyy hh:mm', 'MMMM d, yyyy h:mm AP'];
-    res.reservationFor.startDate = JsonLd.toDateTime(startDate[1] + ' ' + startTime[1], timeFormats , ['en', 'de', 'fr']);
+    res.reservationFor.startDate = JsonLd.toDateTime(startDate[1] + ' ' + startTime[1], timeFormats, ['en', 'de', 'fr']);
     res.reservationFor.endDate = JsonLd.toDateTime((endDate ? endDate[1] : startDate[1]) + ' ' + endTime[1], timeFormats, ['en', 'de', 'fr']);
     const addr = page.textInRect(0.0, 0.2, 1.0, 0.27).split(',');
     res.reservationFor.location.name = addr[0];
@@ -99,13 +99,11 @@ function parsePdf(pdf, node, triggerNode) {
 
 function parsePkPass(pass, node) {
     let res = node.result[0];
-    console.log(JSON.stringify(pass, null, 4));
-    console.log(JSON.stringify(res, null, 4))
 
     res.reservationFor.name = pass.field["event-name"].value
     res.reservationNumber = pass.field["order-id"]?.value.replace("#", "")
     res.provider = Object.assign(
-        JsonLd.newObject('Organization'), 
+        JsonLd.newObject('Organization'),
         {
             name: pass.field["organizer-name"].value,
         }
@@ -120,21 +118,42 @@ function parsePkPass(pass, node) {
     res.reservedTicket.name = pass.field["ticket-type"].value
 
     // Example: "The Spot, Sky Park Bratislava - Bottova 2/A - 811 09 Bratislava - Slovakia"
-    let location = pass.field["venue-name"].value.split(" - ")
-    res.reservationFor.location = Object.assign(
-        JsonLd.newObject('Place'),
-        {
-            name: location.length >= 4 ? location[0] : undefined,
-            address: Object.assign(
-                JsonLd.newObject('PostalAddress'),
-                {
-                    streetAddress: location.length >= 4 ? location[1] : location[0],
-                    addressLocality: location.length >= 4 ? location[2] : location[1],
-                    addressCountry: location.length >= 4 ? location[3] : location[2],
-                }
-            )
-        }
-    )
+    res.reservationFor.location = tryParseEventbriteAddress(pass.field["venue-name"].value)
 
     return res
+}
+
+/**
+* Tries to parse Eventbrite formated addresses
+* @param {`${string} - ${string} - ${string}`} address
+*/
+function tryParseEventbriteAddress(address) {
+    // Examples Found:
+    // "The Spot, Sky Park Bratislava - Bottova 2/A - 811 09 Bratislava - Slovakia"
+    // "Smithsonian National Museum of African Art - 950 Independence Avenue Southwest - Washington, DC 20560"
+
+    const addressFields = address.split(" - ")
+    if (addressFields.length > 2) {
+        // Hoping that event organizer hasn't added a quite weird venue (which could be an administritive district)
+        return {
+            "@type": "Place",
+            name: addressFields[0],
+            address: {
+                "@type": "PostalAddress",
+                streetAddress: addressFields[1],
+                addressLocality: addressFields[2],
+                addressCountry: addressFields[3],
+            }
+        }
+    } else {
+        return {
+            "@type": "Place",
+            name: addressFields[0],
+            address: {
+                "@type": "PostalAddress",
+                streetAddress: addressFields[1],
+            }
+        }
+    }
+
 }
