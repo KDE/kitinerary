@@ -1,33 +1,53 @@
-[{
-    "mimeType": "text/plain",
-    "filter": [
-        { "field": "From", "match": "noreply@klm.com", "mimeType": "message/rfc822", "scope": "Ancestors" }
-    ],
-    "script": "klm.js"
-},
-{
-    "filter": [
-        {
-            "field": "airlineDesignatorOfBoardingPassIssuer",
-            "match": "KL",
-            "mimeType": "internal/iata-bcbp",
-            "scope": "Descendants"
-        }
-    ],
-    "function": "extractBoardingPass",
-    "mimeType": "application/pdf",
-    "script": "klm.js"
-},
-{
-"filter": [
-        {
-            "field": "From",
-            "match": "KLM@klm-info.com",
-            "mimeType": "message/rfc822",
-            "scope": "Ancestors"
-        }
-    ],
-    "function": "ticketForYourTripEN",
-    "mimeType": "text/html",
-    "script": "klm.js"
-}]
+[
+    {
+        "mimeType": "text/plain",
+        "filter": [
+            {
+                "field": "From",
+                "match": "noreply@klm.com",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "script": "klm.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "airlineDesignatorOfBoardingPassIssuer",
+                "match": "KL",
+                "mimeType": "internal/iata-bcbp",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "extractBoardingPass",
+        "mimeType": "application/pdf",
+        "script": "klm.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "From",
+                "match": "KLM@klm-info.com",
+                "mimeType": "message/rfc822",
+                "scope": "Ancestors"
+            }
+        ],
+        "function": "ticketForYourTripEN",
+        "mimeType": "text/html",
+        "script": "klm.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.com.klm.mobile.iphone.klmmobile.boardingpass",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "function": "extractPKPass",
+        "mimeType": "application/vnd.apple.pkpass",
+        "script": "klm.js"
+    }
+]

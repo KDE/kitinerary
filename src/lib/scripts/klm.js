@@ -1,5 +1,6 @@
 /*
    SPDX-FileCopyrightText: 2017 Volker Krause <vkrause@kde.org>
+   SPDX-FileCopyrightText: 2026 David Pilarčík <meow@charliecat.space>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -100,4 +101,15 @@ function extractBoardingPass(pdf, node, barcode) {
         results.push(res);
     }
     return results;
+}
+
+function extractPKPass(pass, node) {
+	let res = node.result[0];
+	res.reservationFor.boardingTime = JsonLd.toDateTime(`${res.reservationFor.departureDay} ${pass.field["board"].value}`, "yyyy-MM-dd hh:mm", "en");
+	res.reservationFor.departureTime = JsonLd.toDateTime(`${res.reservationFor.departureDay} ${pass.field["depart"].value}`, "yyyy-MM-dd hh:mm", "en");
+	res.boardingGroup = pass.field["zone"].value;
+	res.reservationFor.departureTerminal = pass.field["terminal"].value;
+	res.reservationFor.departureGate = pass.field["gate"].value;
+	res.airplaneSeatClass = { "@type": "AirplaneSeatClass", name: pass.field["class"] }
+	return res
 }
