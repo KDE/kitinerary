@@ -77,3 +77,25 @@ function parsePdfBoardingPass(pdf, node, triggerNode)
 
     return res;
 }
+
+function parsePKPass(pass, node) {
+	const res = node.result[0];
+	let [_, terminal, cityName] = /(?:\((.*)\) )?(.*)/gm.exec(pass.field["from"].label)
+	res.reservationFor.departureTerminal = terminal || res.reservationFor.departureTerminal;
+	res.reservationFor.departureAirport.name = cityName || res.reservationFor.departureAirport.name;
+	[_, terminal, cityName] = /(?:\((.*)\) )?(.*)/gm.exec(pass.field["to"].label)
+	res.reservationFor.arrivalTerminal = terminal || res.reservationFor.arrivalTerminal;
+	res.reservationFor.arrivalAirport.name = cityName || res.reservationFor.arrivalAirport.name;
+	res.reservationFor.departureGateCloseTime = JsonLd.toDateTime(
+		`${res.reservationFor.departureDay} ${pass.field["gateCloses"].value}`,
+		"yyyy-MM-dd hh:mm",
+		"en"
+	)
+	res.reservationFor.departureTime = res.reservationFor.boardingTime
+	res.reservationFor.boardingTime = null
+	res.boardingGroup = [
+		pass.field["speedyBoarding"].value === "Yes" ? "Speedy Boarding" : null,
+		`${pass.field["board"].value} Door`
+		].filter(x => !!x).join(" + ");
+	return res
+}

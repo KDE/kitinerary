@@ -14,5 +14,11 @@
         ],
         "script": "easyjet.js",
         "function": "parsePdfBoardingPass"
+    },
+    {
+    	"mimeType": "application/vnd.apple.pkpass",
+		"filter": [ { "field": "passTypeIdentifier", "match": "pass.com.easyjet.production", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
+		"script": "easyjet.js",
+		"function": "parsePKPass"
     }
 ]
