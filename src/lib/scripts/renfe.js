@@ -96,6 +96,18 @@ function parsePkPass(content, node)
     res.reservationFor.provider.name = content.organizationName;
 
     const day = content.field['destinofecha'].value;
+
+    if (!res.reservationFor.departureStation)
+        res.reservationFor.departureStation = JsonLd.newObject("TrainStation");
+    if (!res.reservationFor.arrivalStation)
+        res.reservationFor.arrivalStation = JsonLd.newObject("TrainStation");
+    if (!res.reservedTicket.ticketedSeat)
+        res.reservedTicket.ticketedSeat = JsonLd.newObject("Seat");
+    if (!res.underName)
+        res.underName = JsonLd.newObject("Person");
+    if (!res.programMembershipUsed)
+        res.programMembershipUsed = JsonLd.newObject("ProgramMembership");
+
     res.reservationFor.departureTime = JsonLd.toDateTime(day + ' ' + content.field['boardingTime'].value, 'dd/MM/yyyy hh:mm', 'es');
     res.reservationFor.departureStation.name = content.field['boardingTime'].label;
     res.reservationFor.arrivalTime = JsonLd.toDateTime(day + ' ' + content.field['destino'].value, 'dd/MM/yyyy hh:mm', 'es');
@@ -113,6 +125,12 @@ function parsePkPass(content, node)
             res.programMembershipUsed.membershipNumber = program[2];
         }
     }
+
+    // Renfe has a multimodal agreement with Avanza buses,
+    // so we need to convert the train reservation to a bus reservation if the ticket is for a bus
+    if (content.field["tren"].label === "Tren AVZA.PORT")
+        res = JsonLd.trainToBusReservation(res)
+
     ExtractorEngine.extractPrice(content.field['precio'].value, res);
     return res;
 }
