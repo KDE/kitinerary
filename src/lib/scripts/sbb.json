@@ -3,7 +3,7 @@
         "filter": [
             {
                 "field": "From",
-                "match": "sbbclient@sbb.ch",
+                "match": "sbbclient@.*sbb\\.ch",
                 "mimeType": "message/rfc822",
                 "scope": "Ancestors"
             },
