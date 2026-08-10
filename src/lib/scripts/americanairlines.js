@@ -62,7 +62,7 @@ function main(html) {
                 const departure = row === 0;
                 const arrival = row === 1;
 
-                const flightPaths = collectChildren(flightData[row]);
+                const flightPaths = collectChildren(flightData[row]).filter(x => x.recursiveContent.length > 0);
                 for (const j in flightPaths) {
                     const column = Number(j);
                     if (column === 0) {
@@ -101,8 +101,8 @@ function main(html) {
                             // NOTE: The company (if not AA) that owns/operates this plane is on this row, but there's nowhere to put that in Itinerary.
                         } else if (arrival) {
                             // The arrival row contains seat information
-                            const seatNumberElement = flightPaths[column].eval("table/tbody/tr/td/table/tbody/tr/td")[1];
-                            res.reservationFor.airplaneSeat = seatNumberElement.recursiveContent;
+                            const seatNumberElement = flightPaths[column].eval(".//table/tbody/tr/td/table/tbody/tr/td/span[contains(.,'Seat:')]/following-sibling::span")[0];
+                            res.airplaneSeat = seatNumberElement?.recursiveContent;
                         }
                     }
                 }
@@ -116,13 +116,13 @@ function main(html) {
     // Isn't HTML amazing?
     const purchase = html.eval("//table[tr[td[table[tbody[tr[td[contains(., 'Your purchase')]]]]]]]")[0];
 
-    const travelerName = purchase.eval("tr/td/table/tbody/tr/td/table/tbody/tr/td")[0];
+    const travelerName = purchase.eval(".//td/span")[0];
 
     // merge traveler and reservation data
     let result = new Array();
     for (let i = 0; i < reservations.length; ++i) {
         let r = JsonLd.clone(reservations[i]);
-        r.underName.name = travelerName.recursiveContent; // the name is in two separate spans
+        r.underName.name = travelerName.content + ' ' + travelerName.nextSibling.content; // the name is in two separate spans
         result.push(r);
     }
 
