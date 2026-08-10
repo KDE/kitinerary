@@ -27,26 +27,48 @@ function extractOldEvent(ev) {
 }
 
 function extractEvent(ev) {
-    let res = JsonLd.newFlightReservation();
+    if (/Train:|Zug:/.test(ev.description)) {
+        let res = JsonLd.newTrainReservation();
 
-    res.reservationFor.departureTime = JsonLd.readQDateTime(ev, 'dtStart');
-    res.reservationFor.arrivalTime = JsonLd.readQDateTime(ev, 'dtEnd');
+        res.reservationFor.departureTime = JsonLd.readQDateTime(ev, 'dtStart');
+        res.reservationFor.arrivalTime = JsonLd.readQDateTime(ev, 'dtEnd');
 
-    const flight = ev.description.match(/(?:Flight number|Flugnummer): (\S{2}) (\d+)/);
-    res.reservationFor.airline.iataCode = flight[1];
-    res.reservationFor.flightNumber = flight[2];
-    res.reservationFor.airline.name = ev.description.match(/(?:Operated by|Durchgeführt von): (.*)/)[1];
+        const flight = ev.description.match(/(?:Train|Zug): +(\S{2} \d+)/);
+        res.reservationFor.trainNumber = flight[1];
+        res.reservationFor.provider.name = ev.description.match(/(?:Operated by|Durchgeführt von): (.*?) *\n/)[1];
 
-    const dep = ev.description.match(/(?:From|Von): (.*) \(([A-Z]{3})\)/);
-    res.reservationFor.departureAirport.name = dep[1];
-    res.reservationFor.departureAirport.iataCode = dep[2];
+        const dep = ev.description.match(/(?:From|Von): (.*) \(([A-Z]{3})\)/);
+        res.reservationFor.departureStation.name = dep[1];
+        res.reservationFor.departureStation.identifier = 'iata:' + dep[2];
 
-    const arr = ev.description.match(/(?:At|In): (.*) \(([A-Z]{3})\)/);
-    res.reservationFor.arrivalAirport.name = arr[1];
-    res.reservationFor.arrivalAirport.iataCode = arr[2];
+        const arr = ev.description.match(/(?:At|In): (.*) \(([A-Z]{3})\)/);
+        res.reservationFor.arrivalStation.name = arr[1];
+        res.reservationFor.arrivalStation.identifier = 'iata:' + arr[2];
 
-    res.reservationNumber = ev.description.match(/^(?:Booking reference|Buchungsreferenz): (.*)/)[1];
-    return res;
+        res.reservationNumber = ev.description.match(/^(?:Booking reference|Buchungsreferenz): (.*)/)[1];
+        return res;
+    } else {
+        let res = JsonLd.newFlightReservation();
+
+        res.reservationFor.departureTime = JsonLd.readQDateTime(ev, 'dtStart');
+        res.reservationFor.arrivalTime = JsonLd.readQDateTime(ev, 'dtEnd');
+
+        const flight = ev.description.match(/(?:Flight number|Flugnummer): (\S{2}) (\d+)/);
+        res.reservationFor.airline.iataCode = flight[1];
+        res.reservationFor.flightNumber = flight[2];
+        res.reservationFor.airline.name = ev.description.match(/(?:Operated by|Durchgeführt von): (.*) *\n/)[1];
+
+        const dep = ev.description.match(/(?:From|Von): (.*) \(([A-Z]{3})\)/);
+        res.reservationFor.departureAirport.name = dep[1];
+        res.reservationFor.departureAirport.iataCode = dep[2];
+
+        const arr = ev.description.match(/(?:At|In): (.*) \(([A-Z]{3})\)/);
+        res.reservationFor.arrivalAirport.name = arr[1];
+        res.reservationFor.arrivalAirport.iataCode = arr[2];
+
+        res.reservationNumber = ev.description.match(/^(?:Booking reference|Buchungsreferenz): (.*)/)[1];
+        return res;
+    }
 }
 
 function extractBoardingPass(iata, node, pdfNode) {
