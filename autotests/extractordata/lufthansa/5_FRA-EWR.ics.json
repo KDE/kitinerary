@@ -1,0 +1,57 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LH",
+                "name": "Lufthansa"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 40.69350051879883,
+                    "longitude": -74.1802978515625
+                },
+                "iataCode": "EWR",
+                "name": "Newark Intl Apt"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2026-12-02T09:14:00-05:00",
+                "timezone": "America/New_York"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.051300048828125,
+                    "longitude": 8.571749687194824
+                },
+                "iataCode": "FRA",
+                "name": "Frankfurt International"
+            },
+            "departureDay": "2026-12-01",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2026-12-01T14:13:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "flightNumber": "123"
+        },
+        "reservationNumber": "123XYZ",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]

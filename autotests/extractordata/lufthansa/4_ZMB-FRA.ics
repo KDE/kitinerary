@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+METHOD:PUBLISH
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VEVENT
+UID:4-1234567890@reservation.swiss.com
+DTSTAMP:20260701T000000Z
+DTSTART:20261201T070000Z
+DTEND:20261201T105000Z
+SUMMARY:Your train from ZMB to FRA
+DESCRIPTION:Booking reference: 123XYZ  \n \n Operated by: Deutsche Bahn AG on behalf of Lufthansa \n Train:  LH 1234 \n Total travel time: 3h 50m \n\n Departure - Date: 01 Dec 2026 \n Time: 06:00 \n From: Hamburg Hbf– Main Station (ZMB) \n Track: Please check track at railway station  \n\n Arrival \n Date: 01 Dec 2026 \n Time: 09:50 \n At: Frankfurt International (FRA) \n Track: Please check track at railway station  \n\n All times noted are local times. No responsibility is taken for the correctness of the details provided.
+X-ALT-DESC;FMTTYPE=text/html:<font size='2'>Booking reference: 123XYZ <br><br>Operated by: Deutsche Bahn AG on behalf of Lufthansa <br> Train:  LH 1234 <br> Total travel time: 3h 50m <br><br> Departure <br>Date: 01 Dec 2026 <br>Time: 06:00 <br>From: Hamburg Hbf– Main Station (ZMB) <br>Track: Please check track at railway station  <br><br> Arrival <br>Date: 01 Dec 2026 <br>Time: 09:50 <br>At: Frankfurt International (FRA) <br>Track: Please check track at railway station  <br><br> All times noted are local times. No responsibility is taken for the correctness of the details provided.<br></font>
+END:VEVENT
+END:VCALENDAR

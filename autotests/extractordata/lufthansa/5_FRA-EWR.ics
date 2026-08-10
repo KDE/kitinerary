@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+METHOD:PUBLISH
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VEVENT
+UID:5-1234567890@reservation.swiss.com
+DTSTAMP:20260701T010203Z
+DTSTART:20261201T131300Z
+DTEND:20261202T141400Z
+SUMMARY:Your flight from FRA to EWR
+DESCRIPTION:Booking reference: 123XYZ  \n \n Operated by: Lufthansa  \n Flight number: LH 123 \n Total travel time: 12h 34m \n\n Departure - Date: 01 Dec 2026 \n Time: 01:02 \n From: Frankfurt International (FRA) \n Terminal: 1 \n\n Arrival \n Date: 02 Dec 2026 \n Time: 14:14 \n At: Newark Intl Apt (EWR) \n Terminal: Please see Check-in Area/terminal information at airport \n\n All times noted are local times. No responsibility is taken for the correctness of the details provided.
+X-ALT-DESC;FMTTYPE=text/html:<font size='2'>Booking reference: 123XYZ <br><br>Operated by: Lufthansa  <br> Flight number: LH 123 <br> Total travel time: 12h 34m <br><br> Departure <br>Date: 01 Dec 2026 <br>Time: 01:02 <br>From: Frankfurt International (FRA) <br>Terminal: 1 <br><br> Arrival <br>Date: 02 Dec 2026 <br>Time: 14:14 <br>At: Newark Intl Apt (EWR) <br>Terminal: Please see Check-in Area/terminal information at airport <br><br> All times noted are local times. No responsibility is taken for the correctness of the details provided.<br></font>
+END:VEVENT
+END:VCALENDAR
