@@ -3,7 +3,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-function extractEvent(ev) {
+function extractOldEvent(ev) {
     let res = JsonLd.newFlightReservation();
 
     res.reservationFor.departureTime = JsonLd.readQDateTime(ev, 'dtStart');
@@ -23,6 +23,29 @@ function extractEvent(ev) {
     res.reservationFor.arrivalAirport.iataCode = arr[2];
 
     res.reservationNumber = ev.description.match(/Reservation code: (.*)/)[1];
+    return res;
+}
+
+function extractEvent(ev) {
+    let res = JsonLd.newFlightReservation();
+
+    res.reservationFor.departureTime = JsonLd.readQDateTime(ev, 'dtStart');
+    res.reservationFor.arrivalTime = JsonLd.readQDateTime(ev, 'dtEnd');
+
+    const flight = ev.description.match(/(?:Flight number|Flugnummer): (\S{2}) (\d+)/);
+    res.reservationFor.airline.iataCode = flight[1];
+    res.reservationFor.flightNumber = flight[2];
+    res.reservationFor.airline.name = ev.description.match(/(?:Operated by|Durchgeführt von): (.*)/)[1];
+
+    const dep = ev.description.match(/(?:From|Von): (.*) \(([A-Z]{3})\)/);
+    res.reservationFor.departureAirport.name = dep[1];
+    res.reservationFor.departureAirport.iataCode = dep[2];
+
+    const arr = ev.description.match(/(?:At|In): (.*) \(([A-Z]{3})\)/);
+    res.reservationFor.arrivalAirport.name = arr[1];
+    res.reservationFor.arrivalAirport.iataCode = arr[2];
+
+    res.reservationNumber = ev.description.match(/^(?:Booking reference|Buchungsreferenz): (.*)/)[1];
     return res;
 }
 
