@@ -1,0 +1,51 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2018-01-01T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "identifier": "iata:FRA",
+                "name": "Frankfurt International"
+            },
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2026-12-01T11:50:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "departureDay": "2026-12-01",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 53.552799224853516,
+                    "longitude": 10.006400108337402
+                },
+                "identifier": "iata:ZMB",
+                "name": "Hamburg Hbf– Main Station"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2026-12-01T08:00:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "name": "Deutsche Bahn AG on behalf of Lufthansa"
+            },
+            "trainNumber": "LH 1234"
+        },
+        "reservationNumber": "123XYZ",
+        "reservationStatus": "http://schema.org/ReservationConfirmed"
+    }
+]
