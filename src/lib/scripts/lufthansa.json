@@ -21,6 +21,19 @@
                 "scope": "Current"
             }
         ],
+        "function": "extractOldEvent",
+        "mimeType": "internal/event",
+        "script": "lufthansa.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "uid",
+                "match": "@reservation.swiss.com$",
+                "mimeType": "internal/event",
+                "scope": "Current"
+            }
+        ],
         "function": "extractEvent",
         "mimeType": "internal/event",
         "script": "lufthansa.js"
