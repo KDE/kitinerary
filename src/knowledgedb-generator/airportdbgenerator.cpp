@@ -26,6 +26,7 @@ using namespace KItinerary::Generator;
 
 // override exclusion rules
 static constexpr const char explicit_include[][4] = {
+    "CLT", // false positive on military filter
     "EMA", // false positive on military filter
     "IXL", // false positive on military filter
 };
