@@ -199,6 +199,9 @@ private Q_SLOTS:
         QFETCH(QString, name);
         QFETCH(KnowledgeDb::IataCode, iataCode);
 
+        QEXPECT_FAIL("SFO", "ambiguous with new name for OAK", Continue);
+        QEXPECT_FAIL("SFO2", "ambiguous with new name for OAK", Continue);
+
         QCOMPARE(KnowledgeDb::iataCodesFromName(name), (std::vector<IataCode>{iataCode}));
     }
 
