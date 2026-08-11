@@ -29,6 +29,7 @@ static constexpr const char explicit_include[][4] = {
     "CLT", // false positive on military filter
     "EMA", // false positive on military filter
     "IXL", // false positive on military filter
+    "RAF", // false positive on military filter
 };
 
 // explicit exclusion rules
@@ -123,7 +124,7 @@ bool AirportDbGenerator::fetchAirports()
     // sorted by URI to stabilize the result in case of conflicts
     const auto airportArray = WikiData::query(R"(
         SELECT DISTINCT ?airport ?airportLabel ?airportAltLabel ?iataCode ?icaoCode ?coord ?endDate ?demolished ?officialClosure ?openingDate ?iataEndDate ?iataRank WHERE {
-            ?airport (wdt:P31/wdt:P279*) wd:Q1248784.
+            { ?airport (wdt:P31/wdt:P279*) wd:Q1248784. } UNION { ?airport (wdt:P31/wdt:P279*) wd:Q94993988. }
             ?airport p:P238 ?iataStmt.
             ?iataStmt ps:P238 ?iataCode.
             OPTIONAL { ?airport wdt:P239 ?icaoCode. }
@@ -210,7 +211,7 @@ bool AirportDbGenerator::fetchCountries()
 {
     const auto array = WikiData::query(R"(
         SELECT DISTINCT ?airport ?isoCode WHERE {
-            ?airport (wdt:P31/wdt:P279*) wd:Q1248784.
+            { ?airport (wdt:P31/wdt:P279*) wd:Q1248784. } UNION { ?airport (wdt:P31/wdt:P279*) wd:Q94993988. }
             ?airport wdt:P17 ?country.
             ?country wdt:P297 ?isoCode.
         } ORDER BY (?airport))", "wikidata_airport_country.json");
