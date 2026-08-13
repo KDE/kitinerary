@@ -54,6 +54,15 @@ QJsonArray WikiData::query(const QString &sparqlQuery, const QString &cacheFileN
     }
 
     if (data.isEmpty()) {
+        // write out SPARQL next to the cache data, convenient for debugging/developing queries
+        QFile sparqlFile("data/"_L1 + cacheFileName + ".sparql"_L1);
+        if (sparqlFile.open(QFile::WriteOnly | QFile::Truncate)) {
+            sparqlFile.write(sparqlQuery.toUtf8());
+            sparqlFile.close();
+        } else {
+            qWarning() << sparqlFile.errorString() << sparqlFile.fileName();
+        }
+
         QUrl url(QStringLiteral("https://query.wikidata.org/sparql"));
         QUrlQuery query;
         query.addQueryItem(QStringLiteral("query"), sparqlQuery.trimmed().simplified());
