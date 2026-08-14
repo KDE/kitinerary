@@ -14,7 +14,7 @@ set(PIM_VERSION "6.8.40")
 project(KItinerary VERSION ${PIM_VERSION})
 
 set(QT_REQUIRED_VERSION "6.7.0")
-set(KF_MIN_VERSION "6.26.0")
+set(KF_MIN_VERSION "6.27.0")
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
@@ -43,19 +43,13 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
 )
 
 find_package(Qt6 ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Gui Qml)
-find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS Contacts CalendarCore Codecs I18n)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS Contacts CalendarCore Codecs I18n Mime)
 if (NOT ANDROID)
     find_package(SharedMimeInfo 1.3 REQUIRED)
 endif()
 
-set(KMIME_VERSION "6.7.0")
 set(PIM_PKPASS "6.7.41")
 
-find_package(KF6Mime ${KF_MIN_VERSION} CONFIG)
-if(NOT TARGET KF6::Mime)
-    find_package(KPim6Mime ${KMIME_VERSION} CONFIG REQUIRED)
-    add_library(KF6::Mime ALIAS KPim6::Mime)
-endif()
 find_package(KPim6PkPass ${PIM_PKPASS} CONFIG REQUIRED)
 find_package(Poppler COMPONENTS Core)
 set_package_properties("Poppler" PROPERTIES TYPE REQUIRED PURPOSE "Support for extraction from PDF booking confirmations.")
