@@ -106,3 +106,34 @@ function extractBoardingPass(iata, node, pdfNode) {
     res.boardingGroup = boarding[2];
     return res;
 }
+
+function extractItinerary(pdf)
+{
+    const text = pdf.text;
+    const pas = text.match(/(\S.*), (\S.*) M[a-z]{1,2}  +([A-Z0-9]{6,7})  +(\d{13})\n/);
+
+    let reservations = [];
+    let idx = 0;
+    while (true) {
+        const leg = text.substr(idx).match(/([A-Z0-9]{2})(\d{1,4})\*? +(\d\d\S{3}\d\d)  +(\d\d:\d\d)  +(\S.*\S)\/([A-Z]{3})  +(\S.*\S)\/([A-Z]{3})/);
+        if (!leg)
+            break;
+        idx += leg.index + leg[0].length;
+
+        let res = JsonLd.newFlightReservation();
+        res.reservationFor.airline.iataCode = leg[1];
+        res.reservationFor.flightNumber = leg[2];
+        res.reservationFor.departureTime = JsonLd.toDateTime(leg[3] + leg[4], "ddMMMyyHH:mm", "en");
+        res.reservationFor.departureAirport.name = leg[5];
+        res.reservationFor.departureAirport.iataCode = leg[6];
+        res.reservationFor.arrivalAirport.name = leg[7];
+        res.reservationFor.arrivalAirport.iataCode = leg[8];
+
+        res.underName.familyName = pas[1];
+        res.underName.givenName = pas[2];
+        res.reservationNumber = pas[3];
+        res.reservedTicket.ticketNumber = pas[4];
+        reservations.push(res);
+    }
+    return reservations;
+}
