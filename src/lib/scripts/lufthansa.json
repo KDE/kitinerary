@@ -50,5 +50,17 @@
         "function": "extractBoardingPass",
         "mimeType": "internal/iata-bcbp",
         "script": "lufthansa.js"
+    },
+    {
+        "filter": [
+            {
+                "match": "\nDeutsche Lufthansa AG\n",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "extractItinerary",
+        "mimeType": "application/pdf",
+        "script": "lufthansa.js"
     }
 ]
