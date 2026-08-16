@@ -139,13 +139,12 @@ bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map
 {
     const auto stationArray =
         WikiData::query(R"(
-            SELECT DISTINCT ?station ?type ?stationLabel ?id ?coord ?replacedBy ?dateOfOfficialClosure WHERE {
+            SELECT DISTINCT ?station ?type ?stationLabel ?id ?coord ?status WHERE {
                 ?station wdt:P31 ?type.
                 ?station wdt:)"_L1 + QLatin1StringView(prop) + R"( ?id.
                 OPTIONAL { ?station wdt:P625 ?coord. }
-                OPTIONAL { ?station wdt:P1366 ?replacedBy. }
-                OPTIONAL { ?station wdt:P3999 ?dateOfOfficialClosure. }
-                SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+                OPTIONAL { ?station wdt:P5817 ?status. }
+                OPTIONAL { ?station rdfs:label ?stationLabel. FILTER( LANG(?stationLabel)="en" ) }
             } ORDER BY (?station))"_L1,
             "wikidata_trainstation_"_L1 + QLatin1StringView(name) + ".json"_L1);
     if (stationArray.isEmpty()) {
@@ -155,12 +154,13 @@ bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map
 
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
-        const auto type =  stationObj.value("type"_L1).toObject().value("value"_L1).toString();
+        const auto type = stationObj.value("type"_L1).toObject().value("value"_L1).toString();
         if (!m_stationTypes.contains(type)) {
             continue; // not a station
         }
 
-        if (stationObj.contains("replacedBy"_L1) || stationObj.contains("dateOfOfficialClosure"_L1)) {
+        const auto status = stationObj.value("status"_L1).toObject().value("value"_L1).toString();
+        if (!status.isEmpty() && !status.endsWith("/Q55654238"_L1)) { // Q55654238 is "in use"
             continue;
         }
 
@@ -307,10 +307,10 @@ QUrl TrainStationDbGenerator::insertOrMerge(const QJsonObject &obj, bool mergeOn
                      .toObject()
                      .value(QLatin1StringView("value"))
                      .toString());
-    s.name = obj.value(QLatin1StringView("stationLabel"))
-                 .toObject()
-                 .value(QLatin1StringView("value"))
-                 .toString();
+    s.name = obj.value("stationLabel"_L1).toObject().value("value"_L1).toString();
+    if (s.name.isEmpty()) {
+        s.name = s.uri.fileName();
+    }
     s.coord = WikiData::parseCoordinate(obj.value(QLatin1StringView("coord"))
                                             .toObject()
                                             .value(QLatin1StringView("value"))
