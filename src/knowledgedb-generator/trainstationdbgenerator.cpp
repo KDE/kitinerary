@@ -54,6 +54,12 @@ namespace IdTrait {
 
 bool TrainStationDbGenerator::generate(QIODevice *out)
 {
+    // fetch all station types first, so we don't have to do that as part of all the following queries
+    // as we practically filter on stations anyway by the use of station ids this is actually significantly faster
+    if (!fetchTypes()) {
+        return false;
+    }
+
     // retrieve content from Wikidata
     if (!fetch("P954", "ibnr", m_ibnrMap)
      || !fetch("P722", "uic", m_uicMap)
@@ -106,13 +112,35 @@ namespace KnowledgeDb {
     return true;
 }
 
+bool TrainStationDbGenerator::fetchTypes()
+{
+    const auto typeArray = WikiData::query(R"(
+        SELECT ?item ?itemLabel WHERE {
+            ?item wdt:P279* wd:Q124673697.
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],mul,en". }
+        }
+    )"_L1, "wikidata_trainstation_types.json"_L1);
+    if (typeArray.isEmpty()) {
+        qWarning() << "Failed to fetch station types!";
+        return false;
+    }
+
+    for (const auto typeData : typeArray) {
+        const auto typeObj = typeData.toObject();
+        const auto uri = typeObj.value("item"_L1).toObject().value("value"_L1).toString();
+        m_stationTypes.insert(uri);
+    }
+
+    return true;
+}
+
 template<typename Id>
 bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map<Id, QUrl> &idMap)
 {
     const auto stationArray =
         WikiData::query(R"(
-            SELECT DISTINCT ?station ?stationLabel ?id ?coord ?replacedBy ?dateOfOfficialClosure WHERE {
-                ?station (wdt:P31/wdt:P279*) wd:Q124673697.
+            SELECT DISTINCT ?station ?type ?stationLabel ?id ?coord ?replacedBy ?dateOfOfficialClosure WHERE {
+                ?station wdt:P31 ?type.
                 ?station wdt:)"_L1 + QLatin1StringView(prop) + R"( ?id.
                 OPTIONAL { ?station wdt:P625 ?coord. }
                 OPTIONAL { ?station wdt:P1366 ?replacedBy. }
@@ -127,6 +155,11 @@ bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map
 
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
+        const auto type =  stationObj.value("type"_L1).toObject().value("value"_L1).toString();
+        if (!m_stationTypes.contains(type)) {
+            continue; // not a station
+        }
+
         if (stationObj.contains("replacedBy"_L1) || stationObj.contains("dateOfOfficialClosure"_L1)) {
             continue;
         }
@@ -451,6 +484,7 @@ void TrainStationDbGenerator::writeVRMap(QIODevice *out)
 void TrainStationDbGenerator::printSummary()
 {
     qDebug() << "Generated database containing" << m_stations.size() << "train stations";
+    qDebug() << "Station types:" << m_stationTypes.size();
     qDebug() << "IBNR index:" << m_ibnrMap.size() << "elements";
     qDebug() << "UIC index:" << m_uicMap.size() << "elements";
     qDebug() << "SNCF station code index:" << m_sncfIdMap.size() << "elements";

@@ -38,6 +38,7 @@ public:
     };
 
 private:
+    bool fetchTypes();
     template <typename Id>
     bool fetch(const char *prop, const char *name, std::map<Id, QUrl> &idMap);
     bool fetchIndianRailwaysStationCode();
@@ -52,6 +53,7 @@ private:
     void writeVRMap(QIODevice *out);
     void printSummary();
 
+    std::unordered_set<QString> m_stationTypes;
     std::vector<Station> m_stations;
     std::map<KnowledgeDb::IBNR, QUrl> m_ibnrMap;
     std::map<KnowledgeDb::UICStation, QUrl> m_uicMap;
