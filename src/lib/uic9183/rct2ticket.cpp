@@ -80,20 +80,19 @@ QDateTime Rct2TicketPrivate::parseTime(const QString &dateStr, const QString &ti
 }
 
 static constexpr const char* res_patterns[] = {
-    "ZUG +(?P<train_number>\\d+) +(?P<train_category>[A-Z][A-Z0-9]+) +WAGEN +(?P<coach>\\d+) +PLATZ +(?P<seat>\\d[\\d, ]+)",
-    "ZUG +(?P<train_number>\\d+) +WAGEN +(?P<coach>\\d+) +PLATZ +(?P<seat>\\d[\\d, ]+)",
+    "ZUG +(?P<train_number>\\d+) +(?P<train_category>[A-Z][A-Z0-9]+) +WAGEN +(?P<coach>\\d+)[ /]+(?:PLATZ|PLÄTZE|SITZPLATZ|SITZPLÄTZE)[ /]+(?P<seat>\\d[\\d, -]+)",
+    "ZUG +(?P<train_number>\\d+) +WAGEN +(?P<coach>\\d+) +PLATZ +(?P<seat>\\d[\\d, -]+)",
 };
 
 QString Rct2TicketPrivate::reservationPatternCapture(QStringView name) const
 {
     const auto text = layout.text(8, 0, 72, 1);
     for (const auto *pattern : res_patterns) {
-      QRegularExpression re{QLatin1StringView(pattern),
-                            QRegularExpression::CaseInsensitiveOption};
-      Q_ASSERT(re.isValid());
-      const auto match = re.match(text);
-      if (match.hasMatch()) {
-        return match.captured(name);
+        QRegularExpression re{QString::fromUtf8(pattern), QRegularExpression::CaseInsensitiveOption};
+        Q_ASSERT(re.isValid());
+        const auto match = re.match(text);
+        if (match.hasMatch()) {
+            return match.captured(name);
         }
     }
     return {};
