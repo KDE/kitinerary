@@ -40,7 +40,7 @@ public:
 private:
     bool fetchTypes();
     template <typename Id>
-    bool fetch(const char *prop, const char *name, std::map<Id, QUrl> &idMap);
+    bool fetch(QLatin1StringView prop, QLatin1StringView name, std::map<Id, QUrl> &idMap, bool includeDeprecatedRank = false);
     bool fetchIndianRailwaysStationCode();
     bool fetchFinishStationCodes();
     bool fetchCountryInformation();

@@ -61,15 +61,15 @@ bool TrainStationDbGenerator::generate(QIODevice *out)
     }
 
     // retrieve content from Wikidata
-    if (!fetch("P954", "ibnr", m_ibnrMap)
-     || !fetch("P722", "uic", m_uicMap)
-     || !fetch("P8181", "sncf", m_sncfIdMap)
-     || !fetch("P8448", "benerail", m_benerailIdMap)
-     || !fetch("P238", "iata", m_iataMap)
-     || !fetch("P4803", "amtrak", m_amtrakMap)
-     || !fetch("P10653", "viarail", m_viaRailMap)
-     || !fetch("P4755", "uk", m_ukMap)
-     || !fetch("P11451", "hu", m_huMap)
+    if (!fetch("P954"_L1, "ibnr"_L1, m_ibnrMap)
+     || !fetch("P722"_L1, "uic"_L1, m_uicMap)
+     || !fetch("P8181"_L1, "sncf"_L1, m_sncfIdMap)
+     || !fetch("P8448"_L1, "benerail"_L1, m_benerailIdMap)
+     || !fetch("P238"_L1, "iata"_L1, m_iataMap, true) // include deprecated rank ids as those are mainly disputed sources, not disputed/wrong claims
+     || !fetch("P4803"_L1, "amtrak"_L1, m_amtrakMap)
+     || !fetch("P10653"_L1, "viarail"_L1, m_viaRailMap)
+     || !fetch("P4755"_L1, "uk"_L1, m_ukMap)
+     || !fetch("P11451"_L1, "hu"_L1, m_huMap)
      || !fetchIndianRailwaysStationCode()
      || !fetchFinishStationCodes()
     ) {
@@ -135,41 +135,60 @@ bool TrainStationDbGenerator::fetchTypes()
 }
 
 template<typename Id>
-bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map<Id, QUrl> &idMap)
+bool TrainStationDbGenerator::fetch(QLatin1StringView prop, QLatin1StringView name, std::map<Id, QUrl> &idMap, bool includeDeprecatedRank)
 {
-    const auto stationArray =
-        WikiData::query(R"(
+    QJsonArray stationArray;
+    if (!includeDeprecatedRank) {
+        stationArray = WikiData::query(R"(
             SELECT DISTINCT ?station ?type ?stationLabel ?id ?coord ?status WHERE {
                 ?station wdt:P31 ?type.
-                ?station wdt:)"_L1 + QLatin1StringView(prop) + R"( ?id.
+                ?station wdt:)"_L1 + prop + R"( ?id.
                 OPTIONAL { ?station wdt:P625 ?coord. }
                 OPTIONAL { ?station wdt:P5817 ?status. }
                 OPTIONAL { ?station rdfs:label ?stationLabel. FILTER( LANG(?stationLabel)="en" ) }
             } ORDER BY (?station))"_L1,
-            "wikidata_trainstation_"_L1 + QLatin1StringView(name) + ".json"_L1);
+            "wikidata_trainstation_"_L1 + name + ".json"_L1);
+    } else {
+        stationArray = WikiData::query(R"(
+            SELECT DISTINCT ?station ?type ?stationLabel ?id ?idRank ?coord ?status WHERE {
+                ?station wdt:P31 ?type.
+                ?station p:)"_L1 + prop + " [ ps:"_L1 + prop + R"( ?id ; wikibase:rank ?idRank ].
+                OPTIONAL { ?station wdt:P625 ?coord. }
+                OPTIONAL { ?station wdt:P5817 ?status. }
+                OPTIONAL { ?station rdfs:label ?stationLabel. FILTER( LANG(?stationLabel)="en" ) }
+            } ORDER BY (?station))"_L1,
+            "wikidata_trainstation_"_L1 + name + ".json"_L1);
+    }
+
     if (stationArray.isEmpty()) {
         qWarning() << "Empty query result!";
         return false;
     }
 
+    std::vector<std::pair<QUrl, Id>> depreatedIds;
     for (const auto &stationData : stationArray) {
         const auto stationObj = stationData.toObject();
-        const auto type = stationObj.value("type"_L1).toObject().value("value"_L1).toString();
+        const auto type = WikiData::value(stationObj, "type"_L1);
         if (!m_stationTypes.contains(type)) {
             continue; // not a station
         }
 
-        const auto status = stationObj.value("status"_L1).toObject().value("value"_L1).toString();
+        const auto status = WikiData::value(stationObj, "status"_L1);
         if (!status.isEmpty() && !status.endsWith("/Q55654238"_L1)) { // Q55654238 is "in use"
             continue;
         }
 
         const auto uri = insertOrMerge(stationObj);
-        const auto idStr = stationObj.value("id"_L1).toObject().value("value"_L1).toString().toUpper();
+        const auto idStr = WikiData::value(stationObj, "id"_L1).toUpper();
         const auto id = IdTrait::decode<Id>(idStr);
         if (!IdTrait::isValid(id)) {
             ++m_idFormatViolations;
             qWarning() << name << "format violation" << idStr << uri;
+            continue;
+        }
+
+        if (includeDeprecatedRank && WikiData::value(stationObj, "idRank"_L1).endsWith("#DeprecatedRank"_L1)) {
+            depreatedIds.push_back(std::make_pair(uri, id));
             continue;
         }
 
@@ -179,6 +198,14 @@ bool TrainStationDbGenerator::fetch(const char *prop, const char *name, std::map
             qWarning() << "Conflict on" << name << idStr << uri << idMap[id];
         } else {
             idMap[id] = uri;
+        }
+    }
+
+    // use deprecated ids only if they don't conflict
+    for (const auto &id : depreatedIds) {
+        const auto it = idMap.find(id.second);
+        if (it == idMap.end()) {
+            idMap[id.second] = id.first;
         }
     }
 
