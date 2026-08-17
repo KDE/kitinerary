@@ -23,13 +23,18 @@ using namespace Qt::Literals;
 using namespace KItinerary;
 using namespace KItinerary::Generator;
 
-KnowledgeDb::Coordinate WikiData::parseCoordinate(const QString& value)
+QString WikiData::value(const QJsonObject &obj, QLatin1StringView name)
+{
+    return obj.value(name).toObject().value("value"_L1).toString();
+}
+
+KnowledgeDb::Coordinate WikiData::parseCoordinate(QStringView value)
 {
     const auto idx = value.indexOf(QLatin1Char(' '));
     bool latOk = false, longOk = false;
     KnowledgeDb::Coordinate c;
-    c.longitude = QStringView(value).mid(6, idx - 6).toFloat(&latOk);
-    c.latitude = QStringView(value).mid(idx + 1, value.size() - idx - 2).toFloat(&longOk);
+    c.longitude = value.mid(6, idx - 6).toFloat(&latOk);
+    c.latitude = value.mid(idx + 1, value.size() - idx - 2).toFloat(&longOk);
     if (!latOk || !longOk) {
         c.longitude = NAN;
         c.latitude = NAN;
@@ -47,8 +52,7 @@ QJsonArray WikiData::query(const QString &sparqlQuery, const QString &cacheFileN
     QDir().mkdir(QStringLiteral("data"));
     QFile cacheFile(QLatin1StringView("data/") + cacheFileName);
     QByteArray data;
-    if (cacheFile.exists() && qEnvironmentVariableIsSet("KITINERARY_USE_WIKIDATA_CACHE")) {
-        cacheFile.open(QFile::ReadOnly);
+    if (qEnvironmentVariableIsSet("KITINERARY_USE_WIKIDATA_CACHE") && cacheFile.open(QFile::ReadOnly)) {
         data = cacheFile.readAll();
         cacheFile.close();
     }
@@ -82,8 +86,11 @@ QJsonArray WikiData::query(const QString &sparqlQuery, const QString &cacheFileN
         }
 
         data = reply->readAll();
-        cacheFile.open(QFile::WriteOnly);
-        cacheFile.write(data);
+        if (cacheFile.open(QFile::WriteOnly)) {
+            cacheFile.write(data);
+        } else {
+            qWarning() << cacheFile.errorString() << cacheFile.fileName();
+        }
     }
 
     const auto doc = QJsonDocument::fromJson(data);

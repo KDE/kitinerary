@@ -8,7 +8,11 @@
 
 #include "knowledgedb.h"
 
+#include <QLatin1StringView>
+#include <QStringView>
+
 class QJsonArray;
+class QJsonObject;
 class QString;
 
 namespace KItinerary {
@@ -17,8 +21,11 @@ namespace Generator {
 /** Utilities for interaction with Wikidata. */
 namespace WikiData
 {
+    /** Return the value for the given variable from a SPARQL result row. */
+    [[nodiscard]] QString value(const QJsonObject &obj, QLatin1StringView name);
+
     /** Parse a geo coordinate from a Wikidata JSON-LD response. */
-    KnowledgeDb::Coordinate parseCoordinate(const QString &value);
+    KnowledgeDb::Coordinate parseCoordinate(QStringView value);
 
     /** Retrieve the result of a SPARQL query from Wikidata.
      *  This has the ability to use an already retrieved local cache
