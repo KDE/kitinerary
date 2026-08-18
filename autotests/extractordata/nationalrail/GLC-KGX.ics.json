@@ -33,8 +33,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 55.8588981628418,
-                    "longitude": -4.258220195770264
+                    "latitude": 55.86029815673828,
+                    "longitude": -4.258059978485107
                 },
                 "identifier": "uk:GLC",
                 "name": "Glasgow Central"
@@ -61,8 +61,8 @@
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": 51.53089904785156,
-                    "longitude": -0.12330599874258041
+                    "latitude": 51.53099822998047,
+                    "longitude": -0.12333299964666367
                 },
                 "identifier": "uk:KGX",
                 "name": "London Kings Cross"

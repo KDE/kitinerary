@@ -11,6 +11,11 @@
                     "@type": "PostalAddress",
                     "addressCountry": "DE"
                 },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.052799224853516,
+                    "longitude": 8.569999694824219
+                },
                 "identifier": "iata:FRA",
                 "name": "Frankfurt International"
             },
