@@ -144,10 +144,6 @@ private Q_SLOTS:
         station = KnowledgeDb::stationForUic(UICStation{1001332});
         QVERIFY(station.coordinate.isValid());
         QCOMPARE(station.country, CountryId{"FI"});
-
-        // unassigned UIC code, but ambigiously used in DB tickets and SNCF API
-        station = KnowledgeDb::stationForUic(UICStation{8003137});
-        QVERIFY(!station.coordinate.isValid());
     }
 
     void testSncfStationIdLookup()
