@@ -468,7 +468,6 @@ static const NameNIndex nameN_string_index[] = {
     qDebug() << "IATA code collisions:" << m_iataCollisions;
     qDebug() << "Coordinate conflicts:" << m_coordinateConflicts;
     qDebug() << "Country conflicts:" << m_countryConflicts;
-    qDebug() << "Failed timezone lookups:" << m_timezoneLoopupFails;
 
     return true;
 }

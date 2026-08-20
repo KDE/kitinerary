@@ -33,9 +33,7 @@ public:
         QString label;
         QString alias;
         QString country;
-        QByteArray tz;
         QList<QString> fragments; // name string fragments used for indexing
-        int tzOffset;
         KnowledgeDb::Coordinate coord;
     };
 
@@ -56,7 +54,6 @@ private:
     int m_iataCollisions = 0;
     int m_coordinateConflicts = 0;
     int m_countryConflicts = 0;
-    int m_timezoneLoopupFails = 0;
 };
 
 }
