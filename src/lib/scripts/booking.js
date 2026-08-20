@@ -6,17 +6,17 @@
 
 var regExMap = [];
 regExMap['en'] = {
-    bookingRef: /(?:Booking number|Confirmation:) +([0-9]*)\s+/,
-    hotelInformation: /(?:Location )?(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){1,3})(?: -|\n)\s*Phone:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/,
-    hotelName: [/(?:\[checkmark\.png\] |\.\d\n)(.*?)(?: is\s+expecting you on|\n *\[)/, /\n\n\s*(?:You'll pay when you stay at )?(\S.*\S)\n\n\s*Reservation details\n/, /Please inform (.*) of your expected/],
-    arrivalDate: /Check-in *?\s+? *?([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2}(?: [AP]M)?)[^\)]*\)/,
-    departureDate: /Check-out *?\s+? *?([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(.*?(?:- )?([0-9]{1,2}:[0-9]{2}(?: [AP]M)?)\)/,
+    bookingRef: /(?:Booking number|Confirmation:)\s+([0-9]*)\s+/,
+    hotelInformation: [/(?:Location )?(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){1,3})(?: -|\n)\s*Phone:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/, /Property address\s+([^\n]+)\s+([^\n]+)\s+([^\n]+)/],
+    hotelName: [/(?:\[checkmark\.png\] |\.\d\n)(.*?)(?: is\s+expecting you on|\n *\[)/, /\n\n\s*(?:You'll pay when you stay at )?(\S.*\S)\n\n\s*Reservation details\n/, /Please inform (.*) of your expected/, /Property name\s+(.*)/],
+    arrivalDate: /Check-in *?\s+? *?([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4})(?: \(f?r?o?m? ?([0-9]{1,2}:[0-9]{2}(?: [AP]M)?)[^\)]*\))?/,
+    departureDate: /Check-out *?\s+? *?([A-z]+,? [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4})(?: \(.*?(?:- )?([0-9]{1,2}:[0-9]{2}(?: [AP]M)?)\))?/,
     person: /Guest name[\n\s]+(.*?)(?:\n| Edit guest name)/
 }
 
 regExMap['fr'] = {
     bookingRef: /Numéro de réservation : ([0-9]*)\s+/,
-    hotelInformation: /(\S[^,\n]*(?:,[^\n,]*\n?[^\n,]*){2,3}) -\s+Téléphone : (\+[0-9]*)\s+/,
+    hotelInformation: [/(\S[^,\n]*(?:,[^\n,]*\n?[^\n,]*){2,3}) -\s+Téléphone : (\+[0-9]*)\s+/],
     hotelName: [/L'établissement (.*) vous attend le/],
     arrivalDate: /Arrivée  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \(([0-9]{1,2}:[0-9]{2}) - ([0-9]{1,2}:[0-9]{2})\)/,
     departureDate: /Départ  ([a-z]+ [0-9]{1,2} [a-zûé]+ [0-9]+) \([0-9]{1,2}:[0-9]{2} - ([0-9]{1,2}:[0-9]{2})\)/,
@@ -25,7 +25,7 @@ regExMap['fr'] = {
 
 regExMap['de'] = {
     bookingRef: /(?:Buchungsnummer|Bestätigungsnummer): ([0-9]*)\s+/,
-    hotelInformation: /(?:Lage )?(\S[^\n]*(?:,[^\n,]*?\n?[^\n,]*?){1,3})[\n\s]?-?\s+(?:Reiseroute.*\n)?\s*(?:Telefon:? (\+[0-9 \-]+)|Kontakt.*|E-Mail an.*)\n/,
+    hotelInformation: [/(?:Lage )?(\S[^\n]*(?:,[^\n,]*?\n?[^\n,]*?){1,3})[\n\s]?-?\s+(?:Reiseroute.*\n)?\s*(?:Telefon:? (\+[0-9 \-]+)|Kontakt.*|E-Mail an.*)\n/],
     hotelName: [/Die Unterkunft (.*)\s+erwartet Sie/, /\n\n\s*([^\s\[].*\S)\n\n\s*\[\S/],
     arrivalDate: /Anreise +([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \((?:ab )?([0-9]{1,2}:[0-9]{2}).*\)/,
     departureDate: /Abreise +([A-Z][a-z]+, [0-9]{1,2}\. \S+ [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2})\)/,
@@ -34,7 +34,7 @@ regExMap['de'] = {
 
 regExMap['da'] = {
     bookingRef: /Bekræftelsesnummer: ([0-9]*)\s+/,
-    hotelInformation: /Beliggenhed[\s\n]+(\S[^,\n]*(?:,[^\n,]*\n?[^\n,]*){2,3})[\s\n]+Telefon (\+[0-9 \-]+)\n/,
+    hotelInformation: [/Beliggenhed[\s\n]+(\S[^,\n]*(?:,[^\n,]*\n?[^\n,]*){2,3})[\s\n]+Telefon (\+[0-9 \-]+)\n/],
     hotelName: [/(.*) forventer at se/],
     arrivalDate: /Indtjekning .* (\d{1,2}. \S+ \d{4}) \(.*(\d\d\.\d\d)\)/,
     departureDate: /Udtjekning .* (\d{1,2}. \S+ \d{4}) \(.*(\d\d\.\d\d)\)/,
@@ -43,7 +43,7 @@ regExMap['da'] = {
 
 regExMap['es'] = {
     bookingRef: /(?:Confirmación: ([0-9]*)\s+|está confirmada)/,
-    hotelInformation: /(?:Ubicación |Modificar tu reserva\n.*\n)?(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){2,})[\n\s]+Teléfono:? (\+[0-9- ]*)\s+/,
+    hotelInformation: [/(?:Ubicación |Modificar tu reserva\n.*\n)?(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){2,})[\n\s]+Teléfono:? (\+[0-9- ]*)\s+/],
     hotelName: [/El (\S.*\S) te espera/, /reserva en (\S.*\S) está confirmada/],
     arrivalDate: /Entrada +(\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.*?([0-9]{1,2}:[0-9]{2}).*\)/,
     departureDate: /Salida +(\S+, [0-9]{1,2} de \S+ de [0-9]{4}) \(.* ([0-9]{1,2}:[0-9]{2})\)/,
@@ -52,7 +52,7 @@ regExMap['es'] = {
 
 regExMap['it'] = {
     bookingRef: /(?:Conferma:) +([0-9]*)\s+/,
-    hotelInformation: /(?:Location )?(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){1,3})(?: -|\n)\s*Telefono:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/,
+    hotelInformation: [/(?:Location )?(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){1,3})(?: -|\n)\s*Telefono:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/],
     hotelName: [/(?:\[checkmark\.png\] |\.\d\n)(.*?)(?: ti aspetta|\n *\[)/, /\n\n\s*(?:You'll pay when you stay at )?(\S.*\S)\n\n\s*Reservation details\n/, /Please inform (.*) of your expected/],
     arrivalDate: /Arrivo\s+(\S+ [0-9]{1,2} [A-z]+ [0-9]{4}) \(.*(\d{2}:\d{2})\)/,
     departureDate: /Partenza\s+(\S+ [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(.*?(?: - )?(\d{2}:\d{2})\)/,
@@ -70,6 +70,7 @@ const timeFormats = [
     "dddd, d 'de' MMMM 'de' yyyy HH:mm",
     "d. MMMM yyyy hh.mm",
     "dddd dd MMMM yyyy HH:mm",
+    "dddd, dd MMMM yyyy",
 ];
 
 
@@ -81,8 +82,9 @@ function main(text, node) {
     for (var locale in regExMap) {
         const bookingRef = text.match(regExMap[locale]['bookingRef']);
         // If no booking reference go to the next locale
-        if (!bookingRef || !regExMap[locale]['bookingRef'])
+        if (!bookingRef || !regExMap[locale]['bookingRef']) {
             continue;
+        }
         res.reservationNumber = bookingRef[1];
 
         // try subject first, before looking for the name in the body
@@ -99,29 +101,59 @@ function main(text, node) {
             let hotelName = undefined;
             for (const nameRx of regExMap[locale]['hotelName']) {
                 hotelName = text.match(nameRx);
-                if (hotelName)
+                if (hotelName) {
                     break;
+                }
             }
             res.reservationFor.name = hotelName[1];
         }
-
-        const hotel = text.match(regExMap[locale]['hotelInformation']);
-        const addr = hotel[1].split(/, */);
-        const separatePostCode = addr.length >= 4 && (locale !== "de" || addr[addr.length - 2].match(/\d{4}$/) !== null);
-        res.reservationFor.address.streetAddress = addr.slice(0, separatePostCode ? addr.length - 3 : addr.length - 2).join(", ");
-        res.reservationFor.address.postalCode = separatePostCode ? addr[addr.length - 2] : ""
-        res.reservationFor.address.addressLocality = separatePostCode ? addr[addr.length - 3] : addr[addr.length - 2];
-        res.reservationFor.address.addressCountry = addr[addr.length - 1]
-        res.reservationFor.telephone = hotel[2];
+        let hotel = undefined;
+        let index = 0;
+        for (const infoRx of regExMap[locale]['hotelInformation']) {
+            hotel = text.match(infoRx);
+            if (hotel) {
+                break;
+            }
+            index++;
+        }
+        if (locale !== "en" || index !== 1) {
+            const addr = hotel[1].split(/, */);
+            const separatePostCode = addr.length >= 4 && (locale !== "de" || addr[addr.length - 2].match(/\d{4}$/) !== null);
+            res.reservationFor.address.streetAddress = addr.slice(0, separatePostCode ? addr.length - 3 : addr.length - 2).join(", ");
+            res.reservationFor.address.postalCode = separatePostCode ? addr[addr.length - 2] : ""
+            res.reservationFor.address.addressLocality = separatePostCode ? addr[addr.length - 3] : addr[addr.length - 2];
+            res.reservationFor.address.addressCountry = addr[addr.length - 1]
+            res.reservationFor.telephone = hotel[2];
+        } else {
+            let citySplit = hotel[2].split(", ");
+            res.reservationFor.address.streetAddress = hotel[1]
+            if (citySplit.length === 1) {
+                res.reservationFor.address.postalCode = hotel[3]
+                res.reservationFor.address.addressLocality = citySplit[0].slice(0, -1)
+            } else {
+                res.reservationFor.address.addressLocality = citySplit[0]
+                res.reservationFor.address.addressCountry = citySplit[1]
+            }
+        }
 
         const arrivalDate = text.match(regExMap[locale]['arrivalDate']);
-        res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], timeFormats, locale);
+        if (arrivalDate[2]) {
+            res.checkinTime = JsonLd.toDateTime(arrivalDate[1] + " " + arrivalDate[2], timeFormats, locale);
+        } else {
+            res.checkinTime = JsonLd.toDateTime(arrivalDate[1], timeFormats, locale);
+        }
 
         const departureDate = text.match(regExMap[locale]['departureDate']);
-        res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], timeFormats, locale);
+        if (departureDate[2]) {
+            res.checkoutTime = JsonLd.toDateTime(departureDate[1] + " " + departureDate[2], timeFormats, locale);
+        } else {
+            res.checkoutTime = JsonLd.toDateTime(departureDate[1], timeFormats, locale);
+        }
 
         const name = text.match(regExMap[locale]['person']);
-        res.underName.name = name[1];
+        if (name) {
+            res.underName.name = name[1];
+        }
 
         return res;
     }
