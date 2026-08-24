@@ -146,6 +146,7 @@ void FlightPostProcessor::pickAirportByDistance(std::chrono::seconds duration, c
     for (auto it = codes.begin(); it != codes.end();) {
         const auto destCoord = KnowledgeDb::coordinateForAirport(*it);
         if (!destCoord.isValid()) {
+            ++it;
             continue;
         }
 
