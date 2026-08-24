@@ -21,8 +21,14 @@ namespace KItinerary {
 namespace KnowledgeDb {
 
 static_assert(alignof(Airport) <= sizeof(Airport), "Airport struct alignment too big!");
+#if 0
+static_assert(std::ranges::is_sorted(airport_table, [](const Airport &lhs, const Airport &rhs)
+{
+    return lhs.iataCode < rhs.iataCode;
+}), "Airport table is not sorted by IATA code!");
+#endif
 
-static bool operator<(const Airport &lhs, IataCode rhs)
+static constexpr bool operator<(const Airport &lhs, IataCode rhs)
 {
     return lhs.iataCode < rhs;
 }

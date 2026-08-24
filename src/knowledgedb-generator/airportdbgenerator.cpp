@@ -25,16 +25,23 @@ using namespace KItinerary::KnowledgeDb;
 using namespace KItinerary::Generator;
 
 // override exclusion rules
+// all of those are false positives of the military airport heuristic
 static constexpr const char explicit_include[][4] = {
-    "CLT", // false positive on military filter
-    "EMA", // false positive on military filter
-    "IXL", // false positive on military filter
-    "RAF", // false positive on military filter
+    "BQH",
+    "CLT",
+    "EMA",
+    "IXL",
+    "PBI",
+    "RAF",
 };
 
 // explicit exclusion rules
 static constexpr const char explicit_excludes[][4] = {
     "RYG", // no passenger operation since 2016
+};
+
+static constexpr const char* excluded_types[] = {
+    "Q20992031", // abandoned airport
 };
 
 static bool soundsMilitaryish(const QString &s)
@@ -119,12 +126,46 @@ void AirportDbGenerator::merge(Airport &lhs, const Airport &rhs)
     }
 }
 
+bool AirportDbGenerator::fetchTypes()
+{
+    // airport type hierarchy, which we'll use to filter "things with IATA codes" against below
+    // as almost all "things with IATA codes are airports this is vastly cheaper to query separately
+    const auto airportTypes = WikiData::query(R"(
+        SELECT ?type ?typeLabel WHERE {
+            { ?type wdt:P279* wd:Q1248784. } UNION { ?type wdt:P279* wd:Q94993988. }
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        })", "wikidata_airport_types.json");
+    if (airportTypes.isEmpty()) {
+        qWarning() << "Could not query airport types.";
+        return false;
+    }
+
+    for (const auto &typeV : airportTypes) {
+        const auto typeObj = typeV.toObject();
+        const auto uri = QUrl(WikiData::value(typeObj, "type"_L1));
+        bool skip = false;
+        for (const auto &excl : excluded_types) {
+            if (uri.fileName() == QLatin1StringView(excl)) {
+                skip = true;
+                break;
+            }
+        }
+        if (skip || !uri.isValid()) {
+            continue;
+        }
+
+        m_airportTypes.insert(uri);
+    }
+
+    return true;
+}
+
 bool AirportDbGenerator::fetchAirports()
 {
     // sorted by URI to stabilize the result in case of conflicts
     const auto airportArray = WikiData::query(R"(
-        SELECT DISTINCT ?airport ?airportLabel ?airportAltLabel ?iataCode ?icaoCode ?coord ?endDate ?demolished ?officialClosure ?openingDate ?iataEndDate ?iataRank WHERE {
-            { ?airport (wdt:P31/wdt:P279*) wd:Q1248784. } UNION { ?airport (wdt:P31/wdt:P279*) wd:Q94993988. }
+        SELECT DISTINCT ?airport ?airportLabel ?airportAltLabel ?iataCode ?icaoCode ?coord ?endDate ?demolished ?officialClosure ?openingDate ?iataEndDate ?iataRank ?type WHERE {
+            ?airport wdt:P31 ?type.
             ?airport p:P238 ?iataStmt.
             ?iataStmt ps:P238 ?iataCode.
             OPTIONAL { ?airport wdt:P239 ?icaoCode. }
@@ -145,6 +186,11 @@ bool AirportDbGenerator::fetchAirports()
     for (const auto &data: airportArray) {
         const auto obj = data.toObject();
         if (obj.isEmpty()) {
+            continue;
+        }
+
+        const auto type = QUrl(WikiData::value(obj, "type"_L1));
+        if (!m_airportTypes.contains(type)) {
             continue;
         }
 
@@ -314,7 +360,7 @@ void AirportDbGenerator::indexNames()
 bool AirportDbGenerator::generate(QIODevice* out)
 {
     // step 1 query wikidata for all airports
-    if (!fetchAirports() || !fetchCountries()) {
+    if (!fetchTypes() || !fetchAirports() || !fetchCountries()) {
         return false;
     }
 
