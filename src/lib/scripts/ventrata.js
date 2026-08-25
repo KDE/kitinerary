@@ -5,9 +5,14 @@ function parsePkPass(pass, node) {
     const res = node.result[0];
 
 	res.reservationNumber = pass.barcodes[0].alternativeText;
-	res.reservedTicket.name = pass.field['tickets'].value;
-	res.reservationFor.startTime = pass.field['date_time'].value
-	res.reservationFor.endTime = parseDurationAsDate(res.reservationFor.startTime, pass.field['duration'].value);
+	res.reservedTicket.name = pass.field['tickets'].value ?? pass.field['product'].value;
+
+	if (pass.field.hasOwnProperty('date_time') && pass.field.hasOwnProperty('duration')) {
+		res.reservationFor.startTime = pass.field['date_time'].value
+		res.reservationFor.endTime = parseDurationAsDate(res.reservationFor.startTime, pass.field['duration'].value);
+	} else if (pass.field.hasOwnProperty('travel_date')) { // seen at transport adjesoned tickets, but these tickets more fall under events
+		res.reservationFor.startTime = pass.field['travel_date'].value
+	}
 	
 	return res
 }
