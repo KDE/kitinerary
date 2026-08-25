@@ -41,6 +41,7 @@ public:
 private:
     bool fetchTypes();
     bool fetchAirports();
+    bool fetchState();
     bool fetchCountries();
     void merge(Airport &lhs, const Airport &rhs);
     void improveCoordinates();
@@ -48,7 +49,7 @@ private:
 
     QSet<QUrl> m_airportTypes;
     QHash<QUrl, Airport> m_airportMap;
-    QMap<QString, QUrl> m_iataMap;
+    QMultiMap<QString, QUrl> m_iataMap;
     // mapping IATA codes to indexed string fragments
     QMap<QString, QList<QString>> m_labelMap;
 

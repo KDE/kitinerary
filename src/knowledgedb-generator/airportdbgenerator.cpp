@@ -247,7 +247,37 @@ bool AirportDbGenerator::fetchAirports()
             ++m_iataCollisions;
             qDebug() << "duplicate iata code:" << a.iataCode << a.label << a.uri << m_airportMap.value(m_iataMap.value(a.iataCode)).label << m_airportMap.value(m_iataMap.value(a.iataCode)).uri;
         }
-        m_iataMap.insert(a.iataCode, a.uri);
+        if (!m_iataMap.contains(a.iataCode, a.uri)) {
+            m_iataMap.insert(a.iataCode, a.uri);
+        }
+    }
+
+    return true;
+}
+
+bool AirportDbGenerator::fetchState()
+{
+    const auto array = WikiData::query(R"(
+        SELECT DISTINCT ?airport ?state WHERE {
+            ?airport wdt:P238 ?iataCode.
+            hint:Prior hint:runFirst true.
+            ?airport wdt:P5817 ?state.
+        } ORDER BY (?airport))", "wikidata_airport_state.json");
+    if (array.isEmpty()) {
+        qWarning() << "Failed to query airport state.";
+        return false;
+    }
+
+    for (const auto &stateV : array) {
+        const auto obj = stateV.toObject();
+        const auto uri = QUrl(WikiData::value(obj, "airport"_L1));
+        const auto state = QUrl(WikiData::value(obj, "state"_L1));
+        if (state.fileName() != "Q11639308"_L1) {
+            continue; // not decommissioned
+        }
+        const auto iataCode = m_airportMap.value(uri).iataCode;
+        m_airportMap.remove(uri);
+        m_iataMap.remove(iataCode, uri);
     }
 
     return true;
@@ -363,12 +393,25 @@ void AirportDbGenerator::indexNames()
 bool AirportDbGenerator::generate(QIODevice* out)
 {
     // step 1 query wikidata for all airports
-    if (!fetchTypes() || !fetchAirports() || !fetchCountries()) {
+    if (!fetchTypes() || !fetchAirports() || !fetchState() || !fetchCountries()) {
         return false;
     }
 
     // step 2 augment the data with optimized OSM airport positions
     improveCoordinates();
+
+    // purge IATA code collisions
+    {
+        QMap<QString, QUrl> uniqueCodes;
+        for (const auto it : m_iataMap.asKeyValueRange()) {
+            if (!uniqueCodes.contains(it.first)) {
+                uniqueCodes.insert(it.first, it.second);
+            } else {
+                qDebug() << "Dropping airport due to IATA code collision:" << it.first << it.second;
+            }
+        }
+        m_iataMap = QMultiMap<QString, QUrl>(uniqueCodes);
+    }
 
     // step 3 index the names for reverse lookup
     indexNames();
