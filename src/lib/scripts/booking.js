@@ -59,6 +59,15 @@ regExMap['it'] = {
     person: /Nome dell'ospite[\n\s]+(.*?)\n/
 }
 
+regExMap['sk'] = {
+    bookingRef: /(?:ČÍSLO POTVRDENEJ REZERVÁCIE): ([0-9]*)\s+/,
+    hotelInformation: /(?:Adresa:)?(\S[^\n]*(?:,[^\n,]*\n?[^\n,]*){1,3})(?: -|\n)\s*Telefón:? ?(?:[\s]+?)(\+[0-9 ]*)\s+/,
+    hotelName: [/(?:\[checkmark\.png\] |\.\d\n)(.*?)(?: ti aspetta|\n *\[)/, /\n\n\s*(?:You'll pay when you stay at )?(\S.*\S)\n\n\s*Reservation details\n/, /Please inform (.*) of your expected/],
+    arrivalDate: /Príchod\s+(\S+ [0-9]{1,2} [A-z]+ [0-9]{4}) \(.*(\d{2}:\d{2})\)/,
+    departureDate: /Odchod\s+(\S+ [0-9]{1,2} [A-z]+ [0-9]+|[A-z]+, [A-z]+ \d{1,2}, \d{4}) \(.*?(?: - )?(\d{2}:\d{2})\)/,
+    person: /Meno hosťa[\n\s]+(.*?)\n/
+}
+
 const timeFormats = [
     "dddd d MMMM yyyy hh:mm",
     "dddd, d MMMM yyyy hh:mm",
