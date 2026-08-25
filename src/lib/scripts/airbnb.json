@@ -1,0 +1,13 @@
+{
+	"filter": [
+		{
+			"field": "From",
+			"match": "automated@airbnb.com",
+			"mimeType": "message/rfc822",
+			"scope": "Parent"
+		}
+	],
+	"function": "parseJsonLdMail",
+	"mimeType": "text/plain",
+	"script": "airbnb.js"
+}
