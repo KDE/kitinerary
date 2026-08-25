@@ -1,0 +1,12 @@
+{
+	"filter": [
+		{
+			"match": "^\\d{4}[A-Z]{2}\\d{6}$",
+			"mimeType": "text/plain",
+			"scope": "Descendants"
+		}
+	],
+	"function": "parsePdfTicket",
+	"mimeType": "application/pdf",
+	"script": "artticketing.js"
+}
