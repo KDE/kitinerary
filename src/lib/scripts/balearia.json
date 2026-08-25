@@ -1,0 +1,26 @@
+[
+	{
+		"filter": [
+			{
+				"match": "^\\d{27}[A-Z]{10}\\d{8}\/\\d{2}\/\\d{4} \\d{2}:\\d{2}\\d{6}.{9}.*",
+				"mimeType": "text/plain",
+				"scope": "Current"
+			}
+		],
+		"function": "parseBoardingPass",
+		"script": "balearia.js",
+		"mimeType": "text/plain"
+	},
+	{
+		"filter": [
+			{
+				"match": "^.{175}$",
+				"mimeType": "text/plain",
+				"scope": "Descendants"
+			}
+		],
+		"function": "parsePdf",
+		"mimeType": "application/pdf",
+		"script": "balearia.js"
+	}
+]
