@@ -443,6 +443,8 @@
         <file>travelport-galileo.js</file>
         <file>trenitalia.json</file>
         <file>trenitalia.js</file>
+        <file>uber.json</file>
+        <file>uber.js</file>
         <file>united.json</file>
         <file>united.js</file>
         <file>universe.json</file>

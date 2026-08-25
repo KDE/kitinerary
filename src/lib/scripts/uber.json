@@ -1,0 +1,8 @@
+{
+    "mimeType": "text/html",
+    "filter": [
+        { "mimeType": "message/rfc822", "field": "From", "match": "no-reply@uber.com", "scope": "Ancestors" }
+    ],
+    "script": "uber.js",
+    "function": "parseEmailReservation"
+}
