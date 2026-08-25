@@ -256,10 +256,11 @@ bool AirportDbGenerator::fetchAirports()
 bool AirportDbGenerator::fetchCountries()
 {
     const auto array = WikiData::query(R"(
-        SELECT DISTINCT ?airport ?isoCode WHERE {
-            { ?airport (wdt:P31/wdt:P279*) wd:Q1248784. } UNION { ?airport (wdt:P31/wdt:P279*) wd:Q94993988. }
+        SELECT DISTINCT ?airport ?country ?isoCode WHERE {
+            ?airport wdt:P238 ?iataCode.
+            hint:Prior hint:runFirst true.
             ?airport wdt:P17 ?country.
-            ?country wdt:P297 ?isoCode.
+            OPTIONAL { ?country wdt:P297 ?isoCode. }
         } ORDER BY (?airport))", "wikidata_airport_country.json");
     if (array.isEmpty()) {
         qWarning() << "Empty query result!";
@@ -268,14 +269,16 @@ bool AirportDbGenerator::fetchCountries()
 
     for (const auto &airportData: array) {
         const auto obj = airportData.toObject();
-        const auto uri = QUrl(obj.value(QLatin1StringView("airport"))
-                                  .toObject()
-                                  .value(QLatin1StringView("value"))
-                                  .toString());
-        const auto isoCode = obj.value(QLatin1StringView("isoCode"))
-                                 .toObject()
-                                 .value(QLatin1StringView("value"))
-                                 .toString();
+        const auto uri = QUrl(WikiData::value(obj, "airport"_L1));
+        const auto country = QUrl(WikiData::value(obj, "country"_L1));
+        auto isoCode = WikiData::value(obj, "isoCode"_L1);
+        if (isoCode.isEmpty() && country.fileName() == "Q55"_L1) { // Netherlands (Q55) are special...
+            isoCode = "NL"_L1;
+        }
+        if (isoCode.isEmpty()) {
+            continue;
+        }
+
         const auto it = m_airportMap.find(uri);
         if (it != m_airportMap.end()) {
             if ((*it).country != isoCode && !(*it).country.isEmpty()) {
