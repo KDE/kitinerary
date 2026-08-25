@@ -1,0 +1,8 @@
+{
+    "mimeType": "text/html",
+    "filter": [
+        { "mimeType": "message/rfc822", "field": "From", "match": "ventas@ticketsgranadacristiana.com", "scope": "Ancestors" }
+    ],
+    "script": "ticketsgranadacristiana.js",
+    "function": "parseEmailTicket"
+}
