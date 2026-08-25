@@ -1,0 +1,27 @@
+[
+    {
+        "mimeType": "application/vnd.apple.pkpass",
+        "filter": [
+            {
+                "field": "passTypeIdentifier",
+                "match": "pass.com.clorian.passbook",
+                "mimeType": "application/vnd.apple.pkpass",
+                "scope": "Current"
+            }
+        ],
+        "script": "clorian.js",
+        "function": "parsePkPass"
+    },
+    {
+        "filter": [
+            {
+                "match": "^SG00\\d{18}$",
+                "mimeType": "text/plain",
+                "scope": "Descendants"
+            }
+        ],
+        "function": "parsePdfTicket",
+        "mimeType": "application/pdf",
+        "script": "clorian.js"
+    }
+]
