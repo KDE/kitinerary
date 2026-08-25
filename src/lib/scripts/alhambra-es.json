@@ -1,0 +1,12 @@
+{
+		"filter": [
+			{
+				"match": "^\\/OI\\/P\\d+\\/I0\\/A.*",
+				"mimeType": "text/plain",
+				"scope": "Current"
+			}
+		],
+		"function": "parsePassCode",
+		"script": "alhambra-es.js",
+		"mimeType": "text/plain"
+}
