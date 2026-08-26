@@ -167,6 +167,7 @@ bool AirportDbGenerator::fetchAirports()
         SELECT DISTINCT ?airport ?airportLabel ?airportAltLabel ?iataCode ?icaoCode ?coord ?endDate ?demolished ?officialClosure ?openingDate ?iataEndDate ?iataRank ?type WHERE {
             ?airport wdt:P31 ?type.
             ?airport p:P238 ?iataStmt.
+            hint:Prior hint:runFirst true.
             ?iataStmt ps:P238 ?iataCode.
             OPTIONAL { ?airport wdt:P239 ?icaoCode. }
             OPTIONAL { ?airport wdt:P625 ?coord. }
