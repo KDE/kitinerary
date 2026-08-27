@@ -4,11 +4,11 @@
 Dependencies:
 - 'on': ['Linux', 'FreeBSD', 'Windows', 'Android']
   'require':
-    'frameworks/extra-cmake-modules': '@latest-kf6'
-    'frameworks/ki18n' : '@latest-kf6'
-    'frameworks/kcontacts' : '@latest-kf6'
-    'frameworks/kcalendarcore' : '@latest-kf6'
-    'frameworks/kcodecs' : '@latest-kf6'
+    'frameworks/extra-cmake-modules': 'Frameworks/6.24'
+    'frameworks/ki18n' : 'Frameworks/6.24'
+    'frameworks/kcontacts' : 'Frameworks/6.24'
+    'frameworks/kcalendarcore' : 'Frameworks/6.24'
+    'frameworks/kcodecs' : 'Frameworks/6.24'
     'pim/kmime' : '@same'
     'pim/kpkpass' : '@same'
     'third-party/zxing-cpp': '@latest'
