@@ -1,0 +1,8 @@
+{
+	"filter": [
+		{ "mimeType": "text/plain", "match": "MOVELIA TECNOLOGíAS, S.L. CIF:", "scope": "Descendants" }
+	],
+	"function": "parsePdfTicket",
+	"mimeType": "application/pdf",
+	"script": "movelia.js"
+}
