@@ -495,7 +495,7 @@ function parseOuigoTicket(pdf, node) {
 
     res.reservationFor.trainNumber = text.match(/N°\s*(\S+)/)[1];
 
-    var seat = text.match(/Voiture\s*(\S+)\s*Place\s*(\S+)/);
+    const seat = text.match(/Voiture(?: \(Coach\))?\s*(\S+)\s*Place(?: \(Seat\))?\s*(\S+)/);
     res.reservedTicket.ticketedSeat.seatSection = seat[1];
     res.reservedTicket.ticketedSeat.seatNumber = seat[2];
 
