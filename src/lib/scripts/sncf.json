@@ -94,7 +94,7 @@
                 "scope": "Ancestors"
             },
             {
-                "match": "^0[A-Za-z0-9=+\\/]{172}$",
+                "match": "^0[A-Za-z0-9=+\\/]{172,192}$",
                 "mimeType": "text/plain",
                 "scope": "Descendants"
             }
