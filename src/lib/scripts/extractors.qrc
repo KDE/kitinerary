@@ -107,6 +107,8 @@
         <file>czechrailways.js</file>
         <file>dav.json</file>
         <file>dav.js</file>
+        <file>delta.json</file>
+        <file>delta.js</file>
         <file>deutschebahn.json</file>
         <file>deutschebahn.js</file>
         <file>deutschebahn-online-ticket.js</file>
