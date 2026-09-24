@@ -104,7 +104,7 @@ void ExtractorDocumentProcessor::postExtract([[maybe_unused]] ExtractorDocumentN
 {
 }
 
-QJSValue ExtractorDocumentProcessor::contentToScriptValue([[maybe_unused]] const ExtractorDocumentNode &node, QJSEngine *engine) const
+QJSValue ExtractorDocumentProcessor::contentToScriptValue(const ExtractorDocumentNode &node, QJSEngine *engine) const
 {
     return engine->toScriptValue(node.content());
 }
