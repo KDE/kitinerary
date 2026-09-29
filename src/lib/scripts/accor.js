@@ -20,10 +20,11 @@ function parseConfirmation(html, node) {
         "dd.MM.yyyyHH:mm", "dd.MM.yyyy",
         "dd/MM/yyyyHH:mm", "dd/MM/yyyy",
         "MMM. dd, yyyyHH:mm", "MMM. dd, yyyy",
-        "dd MMM yyyyHH:mm", "dd MMM yyyy"
+        "dd MMM yyyyHH:mm", "dd MMM yyyy",
+        "yyyy-MM-ddHH:mm", "yyyy-MM-dd"
     ];
-    res.checkinTime = JsonLd.toDateTime(dt[1] + (times ? times[1] : ""), formats, "en");
-    res.checkoutTime = JsonLd.toDateTime(dt[2] + (times ? times[2] : ""), formats, "en");
+    res.checkinTime = JsonLd.toDateTime((res.checkinDate ? res.checkinDate : dt[1]) + (times ? times[1] : ""), formats, "en");
+    res.checkoutTime = JsonLd.toDateTime((res.checkoutDate ? res.checkoutDate : dt[2]) + (times ? times[2] : ""), formats, "en");
 
     let hotelNode = html.eval('//table//table//table[@class="table-full"]');
     if (!hotelNode || hotelNode.length === 0)
