@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "^[A-Z0-9]{6}-\\d{5}$",
+            "mimeType": "text/plain",
+            "scope": "Descendants"
+        }
+    ],
+    "function": "extractPdf",
+    "mimeType": "application/pdf",
+    "script": "snalltaget.js"
+}
