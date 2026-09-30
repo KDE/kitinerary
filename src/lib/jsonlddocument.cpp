@@ -187,7 +187,7 @@ static QVariant propertyValue(const QMetaProperty &prop, const QJsonValue &v)
         }
         return v.toString();
     case QMetaType::QDate:
-        return QDate::fromString(v.toString(), Qt::ISODate);
+        return QDate::fromString(QStringView(v.toString()).left(10), Qt::ISODate);
     case QMetaType::QDateTime:
     {
         QDateTime dt;
