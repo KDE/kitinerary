@@ -112,12 +112,12 @@ msgstr "Бронирование гостиницы: %1"
 #: calendarhandler.cpp:351
 #, kde-format
 msgid "Check-in: %1"
-msgstr "Регистрация заезда: %1"
+msgstr "Заезд: %1"
 
 #: calendarhandler.cpp:354
 #, kde-format
 msgid "Check-out: %1"
-msgstr "Регистрация отъезда: %1"
+msgstr "Выезд: %1"
 
 #: calendarhandler.cpp:357
 #, kde-format
@@ -137,7 +137,7 @@ msgstr "Веб-сайт: %1"
 #: calendarhandler.cpp:413
 #, kde-format
 msgid "Entrance for %1"
-msgstr "Имя: %1"
+msgstr "Вход на %1"
 
 #: calendarhandler.cpp:460
 #, kde-format
@@ -152,7 +152,7 @@ msgstr "Количество посетителей: %1"
 #: calendarhandler.cpp:481 calendarhandler.cpp:513
 #, kde-format
 msgid "Under name: %1"
-msgstr "Имя для резервирования: %1"
+msgstr "Имя для бронирования: %1"
 
 #: calendarhandler.cpp:491
 #, kde-format
