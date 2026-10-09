@@ -13,7 +13,6 @@ find_program(RSYNC_EXECUTABLE rsync) # needed for the initial download
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(OsmTools
-    FOUND_VAR OsmTools_FOUND
     REQUIRED_VARS OSMCONVERT_EXECUTABLE OSMFILTER_EXECUTABLE OSMUPDATE_EXECUTABLE WGET_EXECUTABLE RSYNC_EXECUTABLE
 )
 
