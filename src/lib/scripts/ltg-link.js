@@ -14,11 +14,16 @@ function parsePdfTicket(pdf, node, triggerNode) {
     const dt = text.match(/(\d{4}-\d\d-\d\d)(?:\n.*){1,2}(\d\d:\d\d) - (\d\d:\d\d)/);
     res.reservationFor.departureTime = JsonLd.toDateTime(dt[1] + ' ' + dt[2], 'yyyy-MM-dd hh:mm', 'lt');
     res.reservationFor.arrivalTime = JsonLd.toDateTime(dt[1] + ' ' + dt[3], 'yyyy-MM-dd hh:mm', 'lt');
-    const train = text.match(/SEAT\n+ *(\S.*?)  +(\S.*?)  +(\S.*?)  +(\S.*)\n/);
-    res.reservationFor.trainNumber = train[1];
-    res.reservedTicket.ticketedSeat.seatingType = train[2];
-    res.reservedTicket.ticketedSeat.seatSection = train[3];
-    res.reservedTicket.ticketedSeat.seatNumber = train[4];
+    const reservation = text.match(/SEAT\n+ *(\S.*?)  +(\S.*?)  +(\S.*?)  +(\S.*)\n/);
+    if (reservation) {
+        res.reservationFor.trainNumber = reservation[1];
+        res.reservedTicket.ticketedSeat.seatingType = reservation[2];
+        res.reservedTicket.ticketedSeat.seatSection = reservation[3];
+        res.reservedTicket.ticketedSeat.seatNumber = reservation[4];
+    } else {
+        const trainNumber = text.match(/TRAIN[^\n]*\n(?:[^\n]*\n){1,4}\s*(\d+)\s+\d+/);
+        res.reservationFor.trainNumber = trainNumber[1];
+    }
     res.reservedTicket.ticketToken = 'qrcode:' + triggerNode.content;
     return res;
 }
