@@ -34,16 +34,22 @@ function extractPass(pass, node) {
         '@type': 'TrainStation',
         name: pass.field['departure'].value
     };
-    res.reservationFor.departureTime = JsonLd.readQDateTime(pass.field['departure_time'], 'value');
+
+    if (typeof pass.field['departure_time'].value === "string") {
+        res.reservationFor.departureTime = JsonLd.readQDateTime(pass.field['date'], 'value');
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(pass.field['arrival_time'].value, "HH:mm", "en");
+    } else {
+        res.reservationFor.departureTime = JsonLd.readQDateTime(pass.field['departure_time'], 'value');
+        res.reservationFor.arrivalTime = JsonLd.readQDateTime(pass.field['arrival_time'], 'value');
+    }
     res.reservationFor.arrivalStation = {
         '@type': 'TrainStation',
         name: pass.field['destination'].value
     };
-    res.reservationFor.arrivalTime = JsonLd.readQDateTime(pass.field['arrival_time'], 'value');
     res.reservationFor.trainNumber = pass.field['line'].value;
     res.reservationFor.provider.identifier = "uic:1124";
     res.reservedTicket.ticketedSeat.seatSection = pass.field['vehicle'].value;
-    res.reservedTicket.ticketedSeat.seatNumber = pass.field['seat'].value;
+    res.reservedTicket.ticketedSeat.seatNumber = pass.field['seat']?.value;
     const program = pass.field['campaign_ticket_code'];
     if (program) {
         res.programMembershipUsed = {
