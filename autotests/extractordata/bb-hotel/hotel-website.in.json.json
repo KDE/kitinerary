@@ -4,7 +4,7 @@
         "@type": "LodgingBusiness",
         "address": {
             "@type": "PostalAddress",
-            "addressCountry": "DE",
+            "addressCountry": "Deutschland",
             "addressLocality": "Berlin",
             "postalCode": "10179",
             "streetAddress": "Voltairestraße 3a"
