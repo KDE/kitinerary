@@ -257,9 +257,12 @@ void ExtractorDocumentNodeFactory::registerProcessor(std::unique_ptr<ExtractorDo
 
 void ExtractorDocumentNodeFactory::setUseSeparateProcess(bool separateProcess)
 {
+#if QT_CONFIG(process)
     if (separateProcess && !d->interceptProcessor) {
         d->interceptProcessor = std::make_unique<ExternalProcessor>();
-    } else if (!separateProcess && d->interceptProcessor) {
+    } else
+#endif
+    if (!separateProcess && d->interceptProcessor) {
         d->interceptProcessor.reset();
     }
 }

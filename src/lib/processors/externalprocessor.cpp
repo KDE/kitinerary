@@ -7,6 +7,8 @@
 #include <config-kitinerary.h>
 
 #include "externalprocessor.h"
+
+#if QT_CONFIG(process)
 #include "logging.h"
 
 #include <KItinerary/AbstractExtractor>
@@ -98,3 +100,5 @@ void ExternalProcessor::preExtract(ExtractorDocumentNode &node, const ExtractorE
     const auto res = QJsonDocument::fromJson(proc.readAllStandardOutput()).array();
     node.addResult(res);
 }
+
+#endif

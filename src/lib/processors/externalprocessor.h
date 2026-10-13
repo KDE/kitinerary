@@ -10,6 +10,8 @@
 
 #include <QString>
 
+#if QT_CONFIG(process)
+
 namespace KItinerary {
 
 /** Dummy node to delegate to an external extractor process. */
@@ -29,3 +31,4 @@ private:
 
 }
 
+#endif
