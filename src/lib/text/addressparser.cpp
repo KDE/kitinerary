@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QRegularExpression>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 AddressParser::AddressParser() = default;
@@ -119,7 +120,12 @@ void AddressParser::splitPostalCode()
                    QLatin1Char(')');
         }
         if ((*it).isLiteral()) {
-            regex += (*it).literal();
+            // allow the first literal to be missing, those are typically country-prefixes those postal codes
+            if (regex.size() == 1) {
+                regex += "(:?"_L1 + (*it).literal() + ")?"_L1;
+            } else {
+                regex += (*it).literal();
+            }
         }
     }
 

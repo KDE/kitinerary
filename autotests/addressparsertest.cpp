@@ -10,6 +10,7 @@
 
 #include <QTest>
 
+using namespace Qt::Literals;
 using namespace KItinerary;
 
 #define s(x) QStringLiteral(x)
@@ -35,6 +36,8 @@ private Q_SLOTS:
         QTest::newRow("PT-wrong-country") << s("1000-205 Lisboa") << s("1000-205 Lisboa") << QString() << s("DE");
         QTest::newRow("AR-short") << s("C1420 Buenos Aires") << s("Buenos Aires") << s("C1420") << s("AR");
         QTest::newRow("AR-full") << s("C1420ABC Buenos Aires") << s("Buenos Aires") << s("C1420ABC") << s("AR");
+        QTest::newRow("FI-prefix") << u"FI-90100 Oulu"_s << u"Oulu"_s << u"90100"_s << u"FI"_s;
+        QTest::newRow("FI-noprefix") << u"90100 Oulu"_s << u"Oulu"_s << u"90100"_s << u"FI"_s;
     }
 
     void testPostalCodeExtraction()
