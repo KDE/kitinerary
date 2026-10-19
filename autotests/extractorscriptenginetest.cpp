@@ -13,8 +13,6 @@
 #include <KItinerary/ExtractorResult>
 #include <KItinerary/ScriptExtractor>
 
-#include <kcalendarcore_version.h>
-
 #include <QDebug>
 #include <QFile>
 #include <QJsonDocument>
@@ -87,9 +85,6 @@ private Q_SLOTS:
         QFile ref(refFile);
         QVERIFY(ref.open(QFile::ReadOnly));
         const auto refResult = QJsonDocument::fromJson(ref.readAll()).array();
-#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 30, 0)
-        QEXPECT_FAIL("ical", "test assumes KCalendarCore 6.30 or newer", Abort);
-#endif
         QVERIFY(Test::compareJson(refFile, result, refResult));
     }
 
