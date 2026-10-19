@@ -38,7 +38,7 @@ ecm_add_test(barcodedecodertest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary Qt:
 ecm_add_test(pkpassextractortest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary KPim6::PkPass)
 ecm_add_test(terminalfindertest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary)
 ecm_add_test(extractorutiltest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary)
-ecm_add_test(addressparsertest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary KF6::Contacts)
+ecm_add_test(addressparsertest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary KF6::Contacts KF6::I18nLocaleData)
 ecm_add_test(timefindertest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary)
 ecm_add_test(nameoptimizertest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary KF6::Codecs)
 ecm_add_test(pricefindertest.cpp LINK_LIBRARIES Qt::Test KPim6::Itinerary)

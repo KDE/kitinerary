@@ -30,6 +30,7 @@ public:
     PostalAddress result() const;
 
 private:
+    void identifyFromPostalCode();
     void splitPostalCode();
     KContacts::AddressFormat addressFormat() const;
 

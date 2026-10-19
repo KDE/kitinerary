@@ -6,6 +6,7 @@
 #include "addressparser_p.h"
 
 #include <KContacts/AddressFormat>
+#include <KCountry>
 
 #include <QDebug>
 #include <QRegularExpression>
@@ -24,6 +25,10 @@ void AddressParser::setFallbackCountry(const QString &countryCode)
 void AddressParser::parse(PostalAddress addr)
 {
     m_address = addr;
+    if (m_address.addressCountry().isEmpty() && !m_address.addressLocality().isEmpty() && m_address.postalCode().isEmpty()) {
+        identifyFromPostalCode();
+    }
+
     if ((m_address.postalCode().isEmpty() && !m_address.addressLocality().isEmpty()) ||
         (!m_address.postalCode().isEmpty() && m_address.addressLocality().contains(m_address.postalCode())))
     {
@@ -64,24 +69,18 @@ static QString captureExpression(KContacts::AddressFormatField field)
   return QLatin1StringView("?<") + captureName(field) + QLatin1Char('>');
 }
 
-void AddressParser::splitPostalCode()
+static std::vector<KContacts::AddressFormatElement> postalCodeLine(const KContacts::AddressFormat &format)
 {
-    const auto format = addressFormat();
-    if (format.elements().empty() || format.postalCodeRegularExpression().isEmpty()) {
-        return;
-    }
-
-    // find the format line containing the postal code and locality
     using namespace KContacts;
     auto startIt = format.elements().begin();
     auto endIt = startIt;
-    enum {
+    enum : uint8_t {
         None = 0,
         HasLocality = 1,
         HasPostalCode = 2,
         HasBoth = 3,
     };
-    int inRelevantLine = None;
+    uint8_t inRelevantLine = None;
     for (auto it = format.elements().begin(); it != format.elements().end(); ++it) {
         if ((*it).isSeparator() && inRelevantLine != HasBoth) {
             startIt = endIt = it;
@@ -102,7 +101,69 @@ void AddressParser::splitPostalCode()
     if (inRelevantLine == HasBoth) {
         endIt = format.elements().end();
     }
-    std::vector<AddressFormatElement> line(startIt, endIt);
+    return std::vector<AddressFormatElement>(startIt, endIt);
+}
+
+void AddressParser::identifyFromPostalCode()
+{
+    KCountry matchedCountry;
+    for (const auto &country : KCountry::allCountries()) {
+        // TODO check script
+        const auto format = KContacts::AddressFormatRepository::formatForCountry(country.alpha2(), KContacts::AddressFormatScriptPreference::Local);
+        if (format.elements().empty() || format.postalCodeRegularExpression().isEmpty()) {
+            continue;
+        }
+
+        const auto line = postalCodeLine(format);
+        if (line.empty()) {
+            continue;
+        }
+
+        // build regex for that format line
+        QString regex('^'_L1);
+        for (const auto &elem : line) {
+            if (elem.isField()) {
+                regex += (elem.field() == KContacts::AddressFormatField::PostalCode ? format.postalCodeRegularExpression() : "\\S.*"_L1);
+            }
+            else if (elem.isLiteral()) {
+                regex += elem.literal();
+            }
+        }
+        regex += '$'_L1;
+
+        QRegularExpression re(regex);
+        if (!re.isValid()) {
+            qWarning() << "generated invalid address parsing pattern:" << regex;
+            return;
+        }
+
+        // match against the input
+        if (const auto match = re.match(m_address.addressLocality()); !match.hasMatch()) {
+            continue;
+        }
+
+        if (matchedCountry.isValid()) {
+            qDebug() << "ambiguous postal code, can't identify country based on that" << matchedCountry.alpha2() << country.alpha2();
+            return;
+        }
+        matchedCountry = country;
+    }
+
+    if (matchedCountry.isValid()) {
+        m_address.setAddressCountry(matchedCountry.alpha2());
+    }
+}
+
+void AddressParser::splitPostalCode()
+{
+    const auto format = addressFormat();
+    if (format.elements().empty() || format.postalCodeRegularExpression().isEmpty()) {
+        return;
+    }
+
+    // find the format line containing the postal code and locality
+    using namespace KContacts;
+    const auto line = postalCodeLine(format);
     // TODO also handle the case the region is part of the same line
     if (line.empty() || std::count_if(line.begin(), line.end(), std::mem_fn(&AddressFormatElement::isField)) > 2) {
         return;

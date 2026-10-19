@@ -62,6 +62,42 @@ private Q_SLOTS:
         const auto out2 = p.result();
         QCOMPARE(out, out2);
     }
+
+    void testCountryIdentification_data()
+    {
+        QTest::addColumn<QString>("input");
+        QTest::addColumn<QString>("country");
+
+        QTest::newRow("empty") << QString() << QString();
+        QTest::newRow("no code") << u"PARIS"_s << QString();
+        QTest::newRow("BE") << u"1060 Brussels"_s << QString();
+        QTest::newRow("FR") << u"75012 Paris Some Suffix"_s << QString();
+        QTest::newRow("NZ") << u"Palmerston North 4414"_s << QString();
+        QTest::newRow("PT") << u"1000-205 Lisboa"_s << u"PT"_s;
+        QTest::newRow("AR-short") << u"C1420 Buenos Aires"_s << u"AR"_s;
+        QTest::newRow("AR-full") << u"C1420ABC Buenos Aires"_s << u"AR"_s;
+        QTest::newRow("FI-prefix") << u"FI-90100 Oulu"_s << u"FI"_s;
+        QTest::newRow("FI-noprefix") << u"90100 Oulu"_s << QString();
+    }
+
+    void testCountryIdentification()
+    {
+        QFETCH(QString, input);
+        QFETCH(QString, country);
+
+        PostalAddress a;
+        a.setAddressLocality(input);
+
+        AddressParser p;
+        p.setFallbackCountry(u"GB"_s);
+        p.parse(a);
+        const auto out = p.result();
+        QCOMPARE(out.addressCountry(), country);
+
+        p.parse(out);
+        const auto out2 = p.result();
+        QCOMPARE(out, out2);
+    }
 };
 
 QTEST_GUILESS_MAIN(AddressParserTest)
