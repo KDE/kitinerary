@@ -72,6 +72,7 @@ static constexpr const JsonLdFilterEngine::PropertyMapping flight_to_train_prope
     { "TrainTrip", "airline", "provider" },
     { "TrainTrip", "arrivalAirport", "arrivalStation" },
     { "TrainTrip", "departureAirport", "departureStation" },
+    { "TrainTrip", "flightNumber", "trainNumber" },
 };
 
 static void addIataIdentifierPrefix(QJsonObject &obj, QLatin1StringView key)
@@ -79,6 +80,15 @@ static void addIataIdentifierPrefix(QJsonObject &obj, QLatin1StringView key)
     auto o = obj.value(key).toObject();
     if (const auto id = o.value("identifier"_L1).toString(); !id.isEmpty()) {
         o["identifier"_L1] = QString("iata:"_L1 + id);
+        obj[key] = o;
+    }
+}
+
+static void setNamefromIdentifierIfEmpty(QJsonObject &obj, QLatin1StringView key)
+{
+    auto o = obj.value(key).toObject();
+    if (const auto value = o.value("name"_L1).toString(); value.isEmpty()) {
+        o["name"_L1] = o["identifier"_L1];
         obj[key] = o;
     }
 }
@@ -93,6 +103,13 @@ QJsonObject ReservationConverter::flightToTrain(const QJsonObject &flightRes)
 
     // changes that also need proeprty value adjustments
     auto flight = obj.value("reservationFor"_L1).toObject();
+    if (const auto number = flight.value("trainNumber"_L1).toString(); !number.isEmpty()) {
+        if (const auto iataCode = flight.value("provider"_L1).toObject().value("identifier"_L1).toString(); !iataCode.isEmpty()) {
+            flight["trainNumber"_L1] = QString(iataCode + u' ' + number);
+        }
+    }
+    setNamefromIdentifierIfEmpty(flight, "departureStation"_L1);
+    setNamefromIdentifierIfEmpty(flight, "arrivalStation"_L1);
     addIataIdentifierPrefix(flight, "provider"_L1);
     addIataIdentifierPrefix(flight, "departureStation"_L1);
     addIataIdentifierPrefix(flight, "arrivalStation"_L1);

@@ -1,0 +1,57 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "TrainReservation",
+        "modifiedTime": "2026-10-21T00:00:00",
+        "reservationFor": {
+            "@type": "TrainTrip",
+            "arrivalStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.052799224853516,
+                    "longitude": 8.569999694824219
+                },
+                "identifier": "iata:FRA",
+                "name": "Frankfurt"
+            },
+            "departureDay": "2026-10-27",
+            "departureStation": {
+                "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 49.80270004272461,
+                    "longitude": 9.936070442199707
+                },
+                "identifier": "iata:QWU",
+                "name": "Würzburg"
+            },
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2026-10-27T09:55:00+01:00",
+                "timezone": "Europe/Berlin"
+            },
+            "provider": {
+                "@type": "Organization",
+                "identifier": "iata:LH"
+            },
+            "trainNumber": "LH 3455"
+        },
+        "reservationNumber": "123456",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHN",
+            "name": "JOHN DOE"
+        }
+    }
+]

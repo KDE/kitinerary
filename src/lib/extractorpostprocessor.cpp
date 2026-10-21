@@ -17,6 +17,7 @@
 #include "mergeutil.h"
 #include "sortutil.h"
 #include "text/addressparser_p.h"
+#include "reservationconverter.h"
 
 #include "knowledgedb/airportdb.h"
 #include "knowledgedb/timezonedb_p.h"
@@ -43,6 +44,7 @@
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QMetaProperty>
 #include <QTimeZone>
 #include <QUrl>
@@ -225,6 +227,18 @@ void ExtractorPostprocessorPrivate::mergeOrAppend(const QVariant &elem)
     }
 }
 
+static bool flightIsTrain(const Flight &flight)
+{
+    const auto from = KnowledgeDb::IataCode(flight.departureAirport().iataCode());
+    const auto to = KnowledgeDb::IataCode(flight.arrivalAirport().iataCode());
+
+    auto isTrainStation = [](KnowledgeDb::IataCode code) {
+       return !KnowledgeDb::coordinateForAirport(code).isValid() && KnowledgeDb::stationForIataCode(code).coordinate.isValid();
+    };
+
+    return isTrainStation(from) || isTrainStation(to);
+}
+
 QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservation res) const
 {
     // expand ticketToken for IATA BCBP data
@@ -248,7 +262,12 @@ QVariant ExtractorPostprocessorPrivate::processFlightReservation(FlightReservati
     res.setBoardingGroup(StringUtil::simplifiedNoPlaceholder(res.boardingGroup()));
     if (res.reservationFor().isValid()) {
         FlightPostProcessor p;
-        res.setReservationFor(p.processFlight(res.reservationFor().value<Flight>()));
+        const auto flight = p.processFlight(res.reservationFor().value<Flight>());
+        if (flightIsTrain(flight)) {
+              auto trainRes = JsonLdDocument::fromJsonSingular(ReservationConverter::flightToTrain(JsonLdDocument::toJson(res))).value<TrainReservation>();
+            return processTrainReservation(trainRes);
+        }
+        res.setReservationFor(flight);
     }
     return processReservation(res);
 }

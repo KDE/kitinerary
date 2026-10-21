@@ -1,0 +1,34 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "modifiedTime": "2026-10-21T00:00:00",
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "LH"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "iataCode": "FRA",
+                "name": "Frankfurt"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "iataCode": "QWU",
+                "name": "Würzburg"
+            },
+            "departureDay": "2026-10-27",
+            "departureTime": "2026-10-27T09:55:00",
+            "flightNumber": "3455"
+        },
+        "reservationNumber": "123456",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "underName": {
+            "@type": "Person",
+            "familyName": "DOE",
+            "givenName": "JOHN"
+        }
+    }
+]

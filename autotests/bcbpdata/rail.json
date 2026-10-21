@@ -18,7 +18,8 @@
             "provider": {
                 "@type": "Organization",
                 "identifier": "iata:LH"
-            }
+            },
+            "trainNumber": "LH 3489"
         },
         "reservationNumber": "XXX007",
         "reservationStatus": "http://schema.org/ReservationConfirmed",
