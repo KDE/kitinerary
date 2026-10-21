@@ -115,7 +115,7 @@ function extractItinerary(pdf)
     let reservations = [];
     let idx = 0;
     while (true) {
-        const leg = text.substr(idx).match(/([A-Z0-9]{2})(\d{1,4})\*? +(\d\d\S{3}\d\d)  +(\d\d:\d\d)  +(\S.*\S)\/([A-Z]{3})  +(\S.*\S)\/([A-Z]{3})/);
+        const leg = text.substr(idx).match(/([A-Z0-9]{2})(\d{1,4})\*? +(\d\d\S{3}\d\d)  +(\d\d:\d\d)  +(\S.*\S) ?\/([A-Z]{3})  +(\S.*\S) ?\/([A-Z]{3})/);
         if (!leg)
             break;
         idx += leg.index + leg[0].length;
