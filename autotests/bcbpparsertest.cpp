@@ -8,6 +8,7 @@
 
 #include "../lib/iata/iatabcbp.h"
 #include "../lib/iata/iatabcbpparser.h"
+#include "../lib/extractorpostprocessor.h"
 
 #include <KItinerary/JsonLdDocument>
 #include <KItinerary/Organization>
@@ -59,16 +60,17 @@ private Q_SLOTS:
 
         // Qatar claiming zero-length field sizes
         QTest::newRow("zero size conditional") << QStringLiteral("M1DOE/JANE            EXXX007 MXPDOHQR 0128 256Y042F0023 100>2180  0255BBR              2963456000789980                            0") << QStringLiteral("qatar-zero-size-conditional-section");
-
-        // LH rail ticket
-        QTest::newRow("rail") << u"M1DRAGON/KONQI DR     EXXX007 XHJFRALH 3489 129M092H0002 359>6180WM4128BLH              2A22012345678900 LH                        N*30600000K05     "_s << u"rail"_s;
     }
 
     void testParserValid()
     {
         QFETCH(QString, message);
         QFETCH(QString, refFile);
+        doTestParser(message, refFile, false);
+    }
 
+    void doTestParser(const QString &message, const QString &refFile, bool postProcess)
+    {
         QVERIFY(IataBcbp::maybeIataBcbp(message));
         QVERIFY(IataBcbp::maybeIataBcbp(message.toUtf8()));
         IataBcbp bcbp(message);
@@ -108,11 +110,19 @@ private Q_SLOTS:
         const auto refArray = QJsonDocument::fromJson(f.readAll()).array();
         QVERIFY(!refArray.isEmpty());
 
-        const auto res = IataBcbpParser::parse(bcbp, QDateTime({2018, 4, 2}, {}));
+        auto res = IataBcbpParser::parse(bcbp, QDateTime({2018, 4, 2}, {}));
+
+        if (postProcess) {
+            ExtractorPostprocessor p;
+            p.process(res);
+            res = p.result();
+        }
+
         const auto resJson = JsonLdDocument::toJson(res);
 
         QVERIFY(Test::compareJson(f.fileName(), resJson, refArray));
     }
+
 
     void testParserInvalid_data()
     {
@@ -130,6 +140,13 @@ private Q_SLOTS:
         QFETCH(QString, message);
         IataBcbp bcbp(message);
         QVERIFY(!bcbp.isValid());
+    }
+
+    void testRailPostProcess()
+    {
+        const QString message = u"M1DRAGON/KONQI DR     EXXX007 XHJFRALH 3489 129M092H0002 359>6180WM4128BLH              2A22012345678900 LH                        N*30600000K05     "_s;
+        const QString file = u"rail"_s;
+        doTestParser(message, file, true);
     }
 };
 
