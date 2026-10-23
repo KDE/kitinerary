@@ -6,12 +6,30 @@
             "@type": "TrainTrip",
             "arrivalStation": {
                 "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.052799224853516,
+                    "longitude": 8.569999694824219
+                },
                 "identifier": "iata:FRA",
                 "name": "FRA"
             },
             "departureDay": "2014-05-09",
             "departureStation": {
                 "@type": "TrainStation",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "DE"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 50.767799377441406,
+                    "longitude": 6.0913801193237305
+                },
                 "identifier": "iata:XHJ",
                 "name": "XHJ"
             },
@@ -31,7 +49,8 @@
         "underName": {
             "@type": "Person",
             "familyName": "DRAGON",
-            "givenName": "KONQI DR"
+            "givenName": "KONQI",
+            "name": "KONQI DRAGON"
         }
     }
 ]

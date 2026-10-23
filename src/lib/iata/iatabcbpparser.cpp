@@ -55,35 +55,6 @@ QList<QVariant> IataBcbpParser::parse(const QString &message, const QDateTime &e
     return airlineNumericCode + ' '_L1 + documentNumber;
 }
 
-// check if one of the airports is actually a train station, and convert the reservation accordingly
-[[nodiscard]] QVariant checkModeOfTransport(FlightReservation &&res)
-{
-    const auto flight = res.reservationFor().value<Flight>();
-    const auto from = KnowledgeDb::IataCode(flight.departureAirport().iataCode());
-    const auto to = KnowledgeDb::IataCode(flight.arrivalAirport().iataCode());
-
-    if (KnowledgeDb::coordinateForAirport(from).isValid() && KnowledgeDb::coordinateForAirport(to).isValid()) {
-        return res;
-    }
-    if (KnowledgeDb::stationForIataCode(from).coordinate.isValid() || KnowledgeDb::stationForIataCode(to).coordinate.isValid()) {
-        auto trainRes = JsonLdDocument::fromJsonSingular(ReservationConverter::flightToTrain(JsonLdDocument::toJson(res))).value<TrainReservation>();
-        auto trip = trainRes.reservationFor().value<TrainTrip>();
-        {
-            auto station = trip.departureStation();
-            station.setName(from.toString());
-            trip.setDepartureStation(station);
-        }
-        {
-            auto station = trip.arrivalStation();
-            station.setName(to.toString());
-            trip.setArrivalStation(station);
-        }
-        trainRes.setReservationFor(std::move(trip));
-        return trainRes;
-    }
-    return res;
-}
-
 QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDateTime &contextDate) {
     const auto count = bcbp.uniqueMandatorySection().numberOfLegs();
     const auto issueDate = bcbp.uniqueConditionalSection().dateOfIssue(contextDate);
@@ -142,7 +113,7 @@ QList<QVariant> IataBcbpParser::parse(const IataBcbp &bcbp, const QDateTime &con
             res.setProgramMembershipUsed(program);
         }
 
-        result.push_back(checkModeOfTransport(std::move(res)));
+        result.push_back(std::move(res));
     }
 
     return result;
