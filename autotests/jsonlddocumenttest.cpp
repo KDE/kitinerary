@@ -414,7 +414,10 @@ private Q_SLOTS:
         QTest::addColumn<QDateTime>("result");
 
         QTest::newRow("iso") << QByteArray("2018-08-15T22:00:00+02:00") << QDateTime({2018, 8, 15}, {22 ,00}, QTimeZone::fromSecondsAheadOfUtc(7200));
+#if QT_VERSION != QT_VERSION_CHECK(6, 13, 0)
+        // TODO skipping due to ASAN issue in Qt on the 6.13.0 pre-release CI builds
         QTest::newRow("weird LH format") << QByteArray("20200826T200000Z") << QDateTime({2020, 8, 26}, {20 ,00}, QTimeZone::UTC);
+#endif
     }
 
     void testDateTimeParsing()
