@@ -622,7 +622,7 @@ void PkPassDocumentProcessor::preExtract(ExtractorDocumentNode &node, [[maybe_un
                     auto r = childResult(node).value<TrainReservation>();
                     if (!node.childNodes().empty() && !node.childNodes()[0].result().isEmpty() && JsonLd::isA<FlightReservation>(node.childNodes()[0].result().result().at(0))) {
                         const auto flightRes = node.childNodes()[0].result().jsonLdResult().at(0).toObject();
-                        res = JsonLdDocument::apply(JsonLdDocument::fromJsonSingular(ReservationConverter::flightToTrain(flightRes)), res).value<TrainReservation>();
+                        r = JsonLdDocument::apply(JsonLdDocument::fromJsonSingular(ReservationConverter::flightToTrain(flightRes)), res).value<TrainReservation>();
                     }
                     applyTicketToken(tokenFromBarcode(pass), r);
                     r = extractTrainTicket(pass, r);
