@@ -3,7 +3,7 @@
         "filter": [
             {
                 "field": "passTypeIdentifier",
-                "match": "pass.com.lufthansa.mbp",
+                "match": "pass.com.lufthansa.mbp|pass.com.digitalhangar.mbp",
                 "mimeType": "application/vnd.apple.pkpass",
                 "scope": "Current"
             }

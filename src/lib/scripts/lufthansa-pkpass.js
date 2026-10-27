@@ -14,7 +14,11 @@ function main(pass, node)
             res.boardingGroup = pass.field["group"].value;
     } else {
         res.reservationFor.departureStation.name = pass.field["origin"].label;
+        res.reservationFor.departureStation.identifier = "iata:" + pass.field["origin"].value;
         res.reservationFor.arrivalStation.name = pass.field["destination"].label;
+        res.reservationFor.arrivalStation.identifier = "iata:" + pass.field["destination"].value;
+        res.reservationFor.arrivalTime = JsonLd.toDateTime(pass.field["arrivalTime"]?.value, "HH:mm", "de");
+        res.reservationFor.trainNumber = pass.field["trainName"]?.value;
     }
 
     const back = pass.backFields;
