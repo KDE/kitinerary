@@ -83,7 +83,7 @@ function extractBoardingPass(iata, node, pdfNode) {
         res.reservationFor.boardingTime = JsonLd.toDateTime(boarding[2], 'hh:mm', 'en');
 
         const leftCol = page.textInRect(0.0, 0.0, 0.65, 1.0);
-        const times = leftCol.match(/(\d\d:\d\d)  +(\d\d:\d\d)\n/);
+        const times = leftCol.match(/(\d\d:\d\d)  +(\d\d:\d\d)(?:\+1)?\n/);
         res.reservationFor.departureTime = JsonLd.toDateTime(times[1], 'hh:mm', 'en');
         res.reservationFor.arrivalTime = JsonLd.toDateTime(times[2], 'hh:mm', 'en');
 
