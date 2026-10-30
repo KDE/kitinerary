@@ -35,7 +35,7 @@ constexpr inline auto BOARDING_TO_DEPARTURE_MAX = std::chrono::minutes(75);
 constexpr inline auto CHECKIN_TO_BOARDING_MIN = std::chrono::minutes(0);
 constexpr inline auto CHECKIN_TO_BOARDING_MAX = std::chrono::minutes(35);
 constexpr inline auto BOARDING_TO_GATE_CLOSE_MIN = std::chrono::minutes(15);
-constexpr inline auto BOARDING_TO_GATE_CLOSE_MAX = std::chrono::minutes(30);
+constexpr inline auto BOARDING_TO_GATE_CLOSE_MAX = std::chrono::minutes(35);
 constexpr inline auto GATE_CLOSE_TO_DEPARTURE_MIN = std::chrono::minutes(10);
 constexpr inline auto GATE_CLOSE_TO_DEPARTURE_MAX = std::chrono::minutes(15);
 constexpr inline auto MINIMUM_FLIGHT_TIME = std::chrono::minutes(60);
@@ -310,7 +310,13 @@ ExtractorResult GenericBoardingPassExtractor::extract(const ExtractorDocumentNod
                 } else if (isPlausibleBoardingTime(times[0], times[2]) && isPlausibleGateClose(times[0], times[1], times[2]) && isPlausibleFlightTime(times[2], times[3], from, to)) {
                     applyFlightTimes(result, times[0], times[2], times[3]);
                 }
-                // TODO across midnight variants
+                // baggage drop or checkin close/boarding/departure/arrival, arrival on the next day
+                else if (isPlausibleCheckinClose(times[1], times[2]) && isPlausibleBoardingTime(times[2], times[3]) && isPlausibleFlightTime(times[3], times[0].addDays(1), from, to)) {
+                    applyFlightTimes(result, times[2], times[3], times[0].addDays(1));
+                // boarding/gate close/departure/arrival, on the next day
+                } else if (isPlausibleBoardingTime(times[1], times[3]) && isPlausibleGateClose(times[1], times[2], times[3]) && isPlausibleFlightTime(times[3], times[0].addDays(1), from, to)) {
+                    applyFlightTimes(result, times[1], times[3], times[0].addDays(1));
+                }
             }
         }
 
