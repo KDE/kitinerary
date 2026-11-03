@@ -1,0 +1,144 @@
+[
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "modifiedTime": "2026-09-26T12:18:38Z",
+        "potentialAction": [
+            {
+                "@type": "UpdateAction",
+                "target": "https://ezy.flypeach.com/en/manage/manage-authenitcate"
+            }
+        ],
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "MM",
+                "name": "Peach Aviation"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "JP"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 35.76539993286133,
+                    "longitude": 140.38600158691406
+                },
+                "iataCode": "NRT",
+                "name": "Tokyo (Narita)"
+            },
+            "arrivalTerminal": "Terminal 1",
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2026-11-13T21:30:00+09:00",
+                "timezone": "Asia/Tokyo"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "TW"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 25.079200744628906,
+                    "longitude": 121.23500061035156
+                },
+                "iataCode": "TPE",
+                "name": "Taipei (Taoyuan)"
+            },
+            "departureDay": "2026-11-13",
+            "departureTerminal": "Terminal 1",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2026-11-13T17:15:00+08:00",
+                "timezone": "Asia/Taipei"
+            },
+            "flightNumber": "628"
+        },
+        "reservationNumber": "ABC123",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "qrCode:ABC123"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "EXAMPLE ALICE"
+        }
+    },
+    {
+        "@context": "http://schema.org",
+        "@type": "FlightReservation",
+        "modifiedTime": "2026-09-26T12:18:38Z",
+        "potentialAction": [
+            {
+                "@type": "UpdateAction",
+                "target": "https://ezy.flypeach.com/en/manage/manage-authenitcate"
+            }
+        ],
+        "reservationFor": {
+            "@type": "Flight",
+            "airline": {
+                "@type": "Airline",
+                "iataCode": "MM",
+                "name": "Peach Aviation"
+            },
+            "arrivalAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "JP"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 35.76539993286133,
+                    "longitude": 140.38600158691406
+                },
+                "iataCode": "NRT",
+                "name": "Tokyo (Narita)"
+            },
+            "arrivalTerminal": "Terminal 1",
+            "arrivalTime": {
+                "@type": "QDateTime",
+                "@value": "2026-11-13T21:30:00+09:00",
+                "timezone": "Asia/Tokyo"
+            },
+            "departureAirport": {
+                "@type": "Airport",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "TW"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 25.079200744628906,
+                    "longitude": 121.23500061035156
+                },
+                "iataCode": "TPE",
+                "name": "Taipei (Taoyuan)"
+            },
+            "departureDay": "2026-11-13",
+            "departureTerminal": "Terminal 1",
+            "departureTime": {
+                "@type": "QDateTime",
+                "@value": "2026-11-13T17:15:00+08:00",
+                "timezone": "Asia/Taipei"
+            },
+            "flightNumber": "628"
+        },
+        "reservationNumber": "ABC123",
+        "reservationStatus": "http://schema.org/ReservationConfirmed",
+        "reservedTicket": {
+            "@type": "Ticket",
+            "ticketToken": "qrCode:ABC123"
+        },
+        "underName": {
+            "@type": "Person",
+            "name": "EXAMPLE BOB"
+        }
+    }
+]

@@ -4,25 +4,73 @@
 */
 
 function parseReservation(content) {
-    const ref = content.match(/Booking Reference\n(\S{6})/)[1];
+    content = content.replace(/\r\n/g, '\n');
+    const ref = content.match(/Booking Reference\n(\S{6})/);
+    if (!ref)
+        return [];
 
-    // TODO multiple legs?
-    const leg = content.match(/(\S{2}\d{1,4})】[\s\S]*?├ (.*)　(.*)\n├ (\d{4}\/\d{2}\/\d{2}).*(\d{2}:\d{2})\n｜ ↓\n├ (.*)　(.*)\n└ (\d{4}\/\d{2}\/\d{2}).*(\d{2}:\d{2})/);
+    const passengers = content.split(/\nName: ([^\n]+)\n/);
+    const legs = /([A-Z0-9]{2})(\d{1,4})】[^\n]*\n\s*├ (.*)　(.*)\n├ (\d{4}\/\d{2}\/\d{2}).*(\d{2}:\d{2})\n[｜│] ↓\n├ (.*)　(.*)\n└ (\d{4}\/\d{2}\/\d{2}).*(\d{2}:\d{2})/g;
+    let reservations = [];
+    let leg;
+    while ((leg = legs.exec(content)) !== null) {
+        let base = JsonLd.newFlightReservation();
+        base.reservationNumber = ref[1];
+        base.reservationFor.airline.iataCode = leg[1];
+        base.reservationFor.flightNumber = leg[2];
+        base.reservationFor.departureAirport.name = leg[3];
+        base.reservationFor.departureTerminal = leg[4];
+        base.reservationFor.departureTime = JsonLd.toDateTime(leg[5] + ' ' + leg[6], 'yyyy/MM/dd hh:mm', 'en');
+        base.reservationFor.arrivalAirport.name = leg[7];
+        base.reservationFor.arrivalTerminal = leg[8];
+        base.reservationFor.arrivalTime = JsonLd.toDateTime(leg[9] + ' ' + leg[10], 'yyyy/MM/dd hh:mm', 'en');
 
-    var res = JsonLd.newFlightReservation();
-    res.reservationNumber = ref;
-    res.reservationFor.flightNumber = leg[1];
-    res.reservationFor.departureAirport.name = leg[2];
-    res.reservationFor.departureTerminal = leg[3];
-    res.reservationFor.departureTime = JsonLd.toDateTime(leg[4] + ' ' + leg[5], 'yyyy/MM/dd hh:mm', 'jp');
-    res.reservationFor.arrivalAirport.name = leg[6];
-    res.reservationFor.arrivalTerminal = leg[7];
-    res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[8] + ' ' + leg[9], 'yyyy/MM/dd hh:mm', 'jp');
+        for (let i = 1; i < passengers.length; i += 2) {
+            const flight = passengers[i + 1].match(new RegExp('(?:^|\\n)' + leg[1] + leg[2] + '\\n├ (?:Advance Seat selection|Seat): ([^\\n]+)'));
+            if (!flight)
+                continue;
+            let res = JsonLd.clone(base);
+            res.underName.name = passengers[i];
+            if (/^\d+[A-Z]$/.test(flight[1]))
+                res.airplaneSeat = flight[1];
+            reservations.push(res);
+        }
+    }
+    return reservations;
+}
 
-    // TODO multiple passengers?
-    const pas = content.match(/Name: (.*)\nTitle: .*\n\S{2}\d{1,4}\n├ Advance Seat selection: (.*)\n/);
-    res.underName.name = pas[1];
-    res.airplaneSeat = pas[2];
-
-    return res;
+function parseHtmlReservation(html, node) {
+    let reservations = [];
+    const tables = html.eval("//table[tbody/tr/td[@colspan='3']/div]");
+    for (const base of node.result) {
+        if (base['@type'] !== 'FlightReservation')
+            continue;
+        let passengersFound = false;
+        for (const table of tables) {
+            const parents = table.eval('ancestor::table[1]');
+            if (parents.length === 0)
+                continue;
+            const flight = parents[0].recursiveContent.match(/\bMM(\d{1,4})\b/);
+            if (!flight || flight[1] !== base.reservationFor.flightNumber)
+                continue;
+            const rows = table.eval("tbody/tr[td[@colspan='3']/div]");
+            for (const row of rows) {
+                const cells = row.nextSibling.eval('td');
+                if (cells.length !== 3)
+                    continue;
+                let res = JsonLd.clone(base);
+                res.underName = {
+                    '@type': 'Person',
+                    name: row.recursiveContent.trim().replace(/\s+\([^)]*\)$/, '')
+                };
+                const seat = cells[0].recursiveContent.trim();
+                res.airplaneSeat = /^\d+[A-Z]$/.test(seat) ? seat : undefined;
+                reservations.push(res);
+                passengersFound = true;
+            }
+        }
+        if (!passengersFound)
+            reservations.push(base);
+    }
+    return reservations;
 }

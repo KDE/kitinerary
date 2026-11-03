@@ -1,0 +1,71 @@
+From: Peach <itinerary@resmail.flypeach.com>
+Date: Sat, 26 Sep 2026 12:18:38 +0000
+Subject: Your Peach Reservation
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+
+<!DOCTYPE html>
+<html><head><title>Itinerary | Peach</title>
+<script type="application/ld+json">
+[
+  {
+    "@context": "http://schema.org",
+    "@type": "FlightReservation",
+    "reservationNumber": "ABC123",
+    "reservationStatus": "http://schema.org/Confirmed",
+    "modifyReservationUrl": "https://ezy.flypeach.com/en/manage/manage-authenitcate",
+    "underName": {
+      "@type": "Person",
+      "name": "EXAMPLE ALICE"
+    },
+    "reservationFor": {
+      "@type": "Flight",
+      "flightNumber": "628",
+      "airline": {
+        "@type": "Airline",
+        "name": "Peach Aviation",
+        "iataCode": "MM"
+      },
+      "departureAirport": {
+        "@type": "Airport",
+        "name": "Taipei (Taoyuan)",
+        "iataCode": "TPE"
+      },
+      "departureTerminal": "Terminal 1",
+      "departureTime": "2026-11-13T17:15:00+08:00",
+      "arrivalAirport": {
+        "@type": "Airport",
+        "name": "Tokyo (Narita)",
+        "iataCode": "NRT"
+      },
+      "arrivalTerminal": "Terminal 1",
+      "arrivalTime": "2026-11-13T21:30:00+09:00"
+    },
+    "airplaneSeat": "",
+    "ticketNumber": "ABC123",
+    "ticketToken": "qrCode:ABC123"
+  }
+]
+</script>
+</head><body>
+<table><tbody>
+<tr><td><div role="heading"><table><tbody><tr>
+<td>Out bound</td><td><span>MM628<span>(A320neo)</span></span></td>
+</tr></tbody></table></div></td></tr>
+<tr><td>
+<table><tbody>
+<tr><th colspan="2">Departure</th><th>Arrival</th></tr>
+<tr><td><div>Taipei (Taoyuan)</div><div>2026-11-13T17:15:00+08:00</div><div>Terminal 1</div></td>
+<td></td><td><div>Tokyo (Narita)</div><div>2026-11-13T21:30:00+09:00</div><div>Terminal 1</div></td></tr>
+</tbody></table>
+<table><tbody>
+<tr><th colspan="3">Passenger</th></tr>
+<tr><th><div>Seat</div><div><a href="https://manage.flypeach.com/">Add</a></div></th><th>Checked Baggage</th><th>Inflight Meal</th></tr>
+<tr><td colspan="3"><div>EXAMPLE ALICE (Adult)</div></td></tr>
+<tr><td><div>-</div></td><td><div><div>1 piece(s)</div></div></td><td><div>-</div></td></tr>
+<tr><td colspan="3"><div>EXAMPLE BOB (Adult)</div></td></tr>
+<tr><td><div>-</div></td><td><div>-</div></td><td><div>-</div></td></tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</body></html>
