@@ -1,0 +1,11 @@
+{
+    "mimeType": "text/plain",
+    "filter": [
+        {
+            "mimeType": "text/plain",
+            "match": "Air China-Bestätigungsnummer:"
+        }
+    ],
+    "script": "airchina.js",
+    "function": "parseConfirmation"
+}
