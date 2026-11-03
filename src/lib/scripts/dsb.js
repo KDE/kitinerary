@@ -3,25 +3,38 @@
 
 function extractReservation(pdf, node, barcode) {
     let reservations = [];
-    for (let i = barcode.location; i < barcode.location + 2; ++i) {
+    for (let i = barcode.location; i < barcode.location + 2 && i < pdf.pageCount; ++i) {
         const page = pdf.pages[i].text;
         let idx = 0;
         while (true) {
             const leg = page.substr(idx).match(/(\d\d\.\S{3}\.) +(\d\d:\d\d) +(\S.*\S)  +(\S.*\S)  +(\d\d\.\S{3}\.)  +(\d\d:\d\d)\n+.*\n+(\S.*?\S)  +(\d+)  +(\S.*?\S)  +\d  +(\S.*?\S)  +(\S.*\S)\n(\d+)?/)
-            if (!leg)
+            const altLeg = page.substr(idx).match(/(\d\d\.\S{3}\.\d{4}?) +(\d\d:\d\d) +(\S.*\S)  +(\S.*\S)  +(\d\d\.\S{3}\.\d{4}?)  +(\d\d:\d\d)\n+.*\n+\s*(\S.*?\S)  +(\d+)  +(\S.*?\S)  +\d /);
+            if (!leg && !altLeg)
                 break;
-            idx += leg.index + leg[0].length;
+            idx += leg ? leg.index + leg[0].length : altLeg.index + altLeg[0].length;
 
-            let res = JsonLd.newTrainReservation();
-            res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + leg[2], "dd.MMM.HH:mm", "da");
-            res.reservationFor.departureStation.name = leg[3];
-            res.reservationFor.arrivalStation.name = leg[4];
-            res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[5] + leg[6], "dd.MMM.HH:mm", "da");
-            res.reservationFor.trainNumber = leg[7] + " " + (leg[12] ? leg[12] : "");
-            res.reservedTicket.ticketedSeat.seatSection = leg[8];
-            res.reservedTicket.ticketedSeat.seatNumber = leg[9];
-            res.reservedTicket.name = leg[10];
-            reservations.push(res);
+            if (leg) {
+                let res = JsonLd.newTrainReservation();
+                res.reservationFor.departureTime = JsonLd.toDateTime(leg[1] + leg[2], "dd.MMM.HH:mm", "da");
+                res.reservationFor.departureStation.name = leg[3];
+                res.reservationFor.arrivalStation.name = leg[4];
+                res.reservationFor.arrivalTime = JsonLd.toDateTime(leg[5] + leg[6], "dd.MMM.HH:mm", "da");
+                res.reservationFor.trainNumber = leg[7] + " " + (leg[12] ? leg[12] : "");
+                res.reservedTicket.ticketedSeat.seatSection = leg[8];
+                res.reservedTicket.ticketedSeat.seatNumber = leg[9];
+                res.reservedTicket.name = leg[10];
+                reservations.push(res);
+            } else {
+                let res = node.result[0];
+                res.reservationFor.departureTime = JsonLd.toDateTime(altLeg[1] + altLeg[2], "dd.MMM.yyyyHH:mm", "da");
+                res.reservationFor.departureStation.name = altLeg[3];
+                res.reservationFor.arrivalStation.name = altLeg[4];
+                res.reservationFor.arrivalTime = JsonLd.toDateTime(altLeg[5] + altLeg[6], "dd.MMM.yyyyHH:mm", "da");
+                res.reservationFor.trainNumber = altLeg[7]
+                res.reservedTicket.ticketedSeat.seatSection = altLeg[8];
+                res.reservedTicket.ticketedSeat.seatNumber = altLeg[9];
+                reservations.push(res);
+            }
         }
 
     }
