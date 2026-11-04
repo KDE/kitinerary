@@ -12,6 +12,14 @@ set (RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE
 
 set(PIM_VERSION "6.8.40")
 project(KItinerary VERSION ${PIM_VERSION})
+# use a different SOVERSION for each minor release because we don't guarantee any ABI stability;
+# bump the SOVERSION with the first development version, i.e. major.minor.40
+if(PROJECT_VERSION_PATCH VERSION_GREATER_EQUAL "40")
+    math(EXPR minorPlus1 "${PROJECT_VERSION_MINOR} + 1")
+    set(PROJECT_SOVERSION ${PROJECT_VERSION_MAJOR}.${minorPlus1})
+else()
+    set(PROJECT_SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
+endif()
 
 set(QT_REQUIRED_VERSION "6.7.0")
 set(KF_MIN_VERSION "6.30.0")
@@ -39,7 +47,7 @@ add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt 
 ecm_setup_version(PROJECT VARIABLE_PREFIX KITINERARY
     VERSION_HEADER kitinerary_version.h
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPim6ItineraryConfigVersion.cmake"
-    SOVERSION 6
+    SOVERSION ${PROJECT_SOVERSION}
 )
 
 find_package(Qt6 ${QT_REQUIRED_VERSION} REQUIRED COMPONENTS Gui Qml)
