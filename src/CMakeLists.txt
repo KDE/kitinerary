@@ -1,7 +1,11 @@
 # SPDX-FileCopyrightText: 2021 Volker Krause <vkrause@kde.org>
 # SPDX-License-Identifier: BSD-3-Clause
 
-option(BUILD_TOOLS "Build development tools" ON)
+if (ANDROID OR IOS)
+    option(BUILD_TOOLS "Build development tools" OFF)
+else()
+    option(BUILD_TOOLS "Build development tools" ON)
+endif()
 
 add_subdirectory(osm)
 if (TARGET Qt::Network AND NOT CMAKE_CROSSCOMPILING)
