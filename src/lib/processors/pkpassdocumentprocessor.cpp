@@ -490,9 +490,11 @@ static void extractEventTicketPass(const KPkPass::Pass *pass, EventReservation &
     auto geo = venue.geo();
     if (!pass->locations().isEmpty() && !geo.isValid()) {
         const auto loc = pass->locations().at(0);
-        geo.setLatitude(loc.latitude());
-        geo.setLongitude(loc.longitude());
-        venue.setGeo(geo);
+        if (loc.latitude() != 0.0 && loc.longitude() != 0.0) {
+            geo.setLatitude(loc.latitude());
+            geo.setLongitude(loc.longitude());
+            venue.setGeo(geo);
+        }
         if (venue.name().isEmpty()) {
             venue.setName(loc.relevantText());
         }
