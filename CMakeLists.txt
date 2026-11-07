@@ -10,7 +10,7 @@ set (RELEASE_SERVICE_VERSION_MINOR "03")
 set (RELEASE_SERVICE_VERSION_MICRO "70")
 set (RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${RELEASE_SERVICE_VERSION_MICRO}")
 
-set(PIM_VERSION "6.8.40")
+set(PIM_VERSION "6.9.40")
 project(KItinerary VERSION ${PIM_VERSION})
 # use a different SOVERSION for each minor release because we don't guarantee any ABI stability;
 # bump the SOVERSION with the first development version, i.e. major.minor.40
