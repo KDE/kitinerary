@@ -1,0 +1,6 @@
+{
+    "mimeType": "application/vnd.apple.pkpass",
+    "filter": [ { "field": "passTypeIdentifier", "match": "pass\\.distribusion", "mimeType": "application/vnd.apple.pkpass", "scope": "Current" } ],
+    "script": "distribusion.js",
+    "function": "parsePkPass"
+}

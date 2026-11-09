@@ -1,6 +1,7 @@
 /*
    SPDX-FileCopyrightText: 2017-2022 Volker Krause <vkrause@kde.org>
-
+   SPDX-FileCopyrightText: 2026 David Pilarcik <meow@charliecat.space>
+   
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
@@ -57,4 +58,44 @@ function parseEvent(event)
     res.reservationFor.arrivalAirport.name = event.description.match(/At: (.*)\n/)[1];
 
     return res;
+}
+
+function parseOneBookingEvent(event) {
+	let res = JsonLd.newFlightReservation();
+	res.reservationFor.departureTime = JsonLd.readQDateTime(event, 'dtStart');
+	res.reservationFor.arrivalTime = JsonLd.readQDateTime(event, 'dtEnd');
+
+	res.reservationNumber = event.description.match(/Booking reference: (.*)\n/)[1];
+
+	let [, fromAirportCity, fromAirportName, fromTerminal, departureTime] =
+		/From (.*) \((.*)(?:, Terminal (.*))?\)\nDeparture time: (\d+:\d+)\n/gm.exec(event.description)
+	let [, toAirportCity, toAirportName, toTerminal, arrivalTime] =
+		/To (.*) \((.*)(?:, Terminal (.*))?\)\nArrival time: (\d+:\d+)\n/gm.exec(event.description)
+
+	res.reservationFor.departureAirport.name = fromAirportName
+	res.reservationFor.departureAirport.address.addressLocality = fromAirportCity
+	if (fromTerminal) {
+		res.reservationFor.departureAirport.terminal = fromTerminal
+	}
+	res.reservationFor.arrivalAirport.name = toAirportName
+	res.reservationFor.arrivalAirport.address.addressLocality = toAirportCity
+	if (toTerminal) {
+		res.reservationFor.arrivalAirport.terminal = toTerminal
+	}
+
+	let [, iataAirlineCode, flightNumber, fromAirportCode, toAirportCode] =
+		/Flight (?:([A-Z]{2})(\d+))?: ([A-Z]{3}) - ([A-Z]{3})/m.exec(event.summary)
+
+	if (iataAirlineCode) {
+		res.reservationFor.airline.iataCode = iataAirlineCode
+	}
+	if (flightNumber) {
+		res.reservationFor.flightNumber = flightNumber
+	}
+	res.reservationFor.departureAirport.iataCode = fromAirportCode
+	res.reservationFor.arrivalAirport.iataCode = toAirportCode
+
+	// res.reservedTicket.ticketedSeat.seatSection = event.description.match(/Cabin: (.*)\n/)[1];
+
+	return res
 }
