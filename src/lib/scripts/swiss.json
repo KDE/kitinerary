@@ -16,5 +16,18 @@
         "function": "parseEvent",
         "mimeType": "internal/event",
         "script": "swiss.js"
+    },
+    {
+        "filter": [
+            {
+                "field": "summary",
+                "match": "^Flight [A-Z0-9]*: [A-Z]{3} - [A-Z]{3}",
+                "mimeType": "internal/event",
+                "scope": "Current"
+            }
+        ],
+        "function": "parseOneBookingEvent",
+        "mimeType": "internal/event",
+        "script": "swiss.js"
     }
 ]

@@ -159,6 +159,18 @@ function main(text, node) {
     }
 }
 
+function parseEvent(event) {
+    var res = JsonLd.newLodgingReservation();
+    res.reservationFor.name = event.summary;
+    res.checkinTime = JsonLd.readQDateTime(event, 'dtStart');
+    res.checkoutTime = JsonLd.readQDateTime(event, 'dtEnd');
+    res.modifyReservationUrl = event.url;
+
+    res.reservationFor.address.streetAddress = event.location;
+
+    return res;
+}
+
 function parseDateTimeAttribute(attr) {
     // valid ISO format (when time is present)
     if (attr.match(/^\d{4}-\d\d-\d\dT\d\d:\d\d/)) {

@@ -21,5 +21,11 @@
         "filter": [ { "mimeType": "text/plain", "match": "This print version of your confirmation contains the most important information about your booking. It can be used to check in", "scope": "Descendants" } ],
         "script": "booking.js",
         "function": "parsePdf"
+    },
+    {
+        "mimeType": "internal/event",
+        "filter": [ { "field": "url", "match": "^https://[a-z.]*booking\\.com/mybooking", "mimeType": "internal/event", "scope": "Current" } ],
+        "script": "booking.js",
+        "function": "parseEvent"
     }
 ]
