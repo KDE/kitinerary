@@ -5,11 +5,12 @@ function parsePkPass(pass, node) {
     const res = node.result[0];
 
     ExtractorEngine.extractPrice(pass.field["amount"]?.value ?? "0 ", res)
-    res.reservedTicket.name = `${pass.field["product"].value} - ${pass.field["buyer_type"].value}`
+    res.reservedTicket.name = `${pass.field["product"]?.value ?? ""} - ${pass.field["buyer_type"].value}`
     res.reservationFor.url = pass.field["client_url"]?.value
     res.reservationNumber = pass.field["loc_reservation"]?.value
     res.reservedTicket.ticketNumber = pass.field["loc_ticket"]?.value
-    res.reservationFor.location.name = pass.field["venue_access"]?.value
+    res.reservationFor.location.name = pass.field["venue_access"]?.value ?? pass.field["access"]?.value
+    res.reservationFor.name = pass.field["venue"]?.value;
 
     return res
 }
