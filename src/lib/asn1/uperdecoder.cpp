@@ -5,6 +5,7 @@
 
 #include "uperdecoder.h"
 
+#include <QList>
 #include <bit>
 
 using namespace KItinerary;

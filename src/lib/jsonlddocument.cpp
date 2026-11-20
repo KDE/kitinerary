@@ -28,6 +28,7 @@
 #include <KItinerary/Visit>
 
 #include <QDateTime>
+#include <QHash>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMetaProperty>

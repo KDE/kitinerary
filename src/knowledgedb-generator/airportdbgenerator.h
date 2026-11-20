@@ -11,6 +11,7 @@
 
 #include <QHash>
 #include <QMap>
+#include <QSet>
 #include <QUrl>
 
 class QIODevice;

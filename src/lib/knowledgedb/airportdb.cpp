@@ -12,6 +12,7 @@
 #include "timezonedb_p.h"
 
 #include <QDebug>
+#include <QSet>
 #include <QTimeZone>
 
 #include <algorithm>

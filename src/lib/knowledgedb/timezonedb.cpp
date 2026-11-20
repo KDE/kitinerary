@@ -10,6 +10,7 @@
 #include <KTimeZone>
 
 #include <QDebug>
+#include <QList>
 #include <QTimeZone>
 
 #include <cmath>

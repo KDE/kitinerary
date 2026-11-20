@@ -8,6 +8,7 @@
 #include <KItinerary/PriceUtil>
 
 #include <QDebug>
+#include <QList>
 #include <QLocale>
 #include <QRegularExpression>
 

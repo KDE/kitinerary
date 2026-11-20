@@ -8,6 +8,7 @@
 
 #include <KItinerary/ExtractorDocumentNode>
 #include <KItinerary/ExtractorEngine>
+#include <QObject>
 
 namespace KItinerary {
 

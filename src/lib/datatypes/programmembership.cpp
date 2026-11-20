@@ -6,6 +6,7 @@
 
 #include "programmembership.h"
 #include "datatypes_p.h"
+#include <QList>
 
 using namespace KItinerary;
 
