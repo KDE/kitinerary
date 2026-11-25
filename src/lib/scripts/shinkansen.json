@@ -1,0 +1,12 @@
+{
+    "filter": [
+        {
+            "match": "Shinkansen Internet Reservation Service",
+            "mimeType": "text/plain",
+            "scope": "Children"
+        }
+    ],
+    "function": "parseQrTicket",
+    "mimeType": "text/html",
+    "script": "shinkansen.js"
+}
