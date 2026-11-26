@@ -8,6 +8,6 @@
 		}
 	],
 	"function": "parseJsonLdMail",
-	"mimeType": "text/plain",
+	"mimeType": "text/html",
 	"script": "airbnb.js"
 }
