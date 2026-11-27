@@ -40,6 +40,7 @@ public:
     [[nodiscard]] QString name() const;
     /** Value of the attribute @p attr. */
     Q_INVOKABLE [[nodiscard]] QString attribute(const QString &attr) const;
+    [[nodiscard]] QString attribute(const char *attr) const;
     /** Returns the parent element of this node. */
     [[nodiscard]] HtmlElement parent() const;
     /** Returns the first child element of this node. */
@@ -55,6 +56,7 @@ public:
     [[nodiscard]] QString recursiveContent() const;
     /** Checks whether an attribute with name @p attr exists. */
     [[nodiscard]] bool hasAttribute(const QString &attr) const;
+    [[nodiscard]] bool hasAttribute(const char *attr) const;
     /** Returns the list of all attributes of this node. */
     [[nodiscard]] QStringList attributes() const;
 

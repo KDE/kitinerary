@@ -70,9 +70,14 @@ QString HtmlElement::name() const
 
 QString HtmlElement::attribute(const QString &attr) const
 {
+    return attribute(attr.toUtf8().constData());
+}
+
+QString HtmlElement::attribute(const char *attr) const
+{
 #if HAVE_LIBXML2
     if (d) {
-        const auto val = std::unique_ptr<xmlChar, decltype(xmlFree)>(xmlGetProp(d, reinterpret_cast<const xmlChar*>(attr.toUtf8().constData())), xmlFree);
+        const auto val = std::unique_ptr<xmlChar, decltype(xmlFree)>(xmlGetProp(d, reinterpret_cast<const xmlChar*>(attr)), xmlFree);
         return QString::fromUtf8(reinterpret_cast<const char*>(val.get()));
     }
 #else
@@ -308,18 +313,20 @@ QVariant HtmlElement::eval(const QString &xpath) const
 
 bool HtmlElement::hasAttribute(const QString& attr) const
 {
+    return hasAttribute(attr.toUtf8().constData());
+}
+
+bool HtmlElement::hasAttribute(const char *attr) const
+{
 #if HAVE_LIBXML2
     if (!d) {
         return false;
     }
 
-    auto attribute = d->properties;
-    while(attribute)
-    {
-        if (qstricmp(attr.toUtf8().constData(), reinterpret_cast<const char*>(attribute->name)) == 0) {
+    for (auto attribute = d->properties; attribute; attribute = attribute->next) {
+        if (qstricmp(attr, reinterpret_cast<const char*>(attribute->name)) == 0) {
             return true;
         }
-        attribute = attribute->next;
     }
 #else
     Q_UNUSED(attr)
