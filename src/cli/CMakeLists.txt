@@ -22,7 +22,7 @@ target_link_libraries(kitinerary-extractor
 if (KITINERARY_STANDALONE_CLI_EXTRACTOR)
     install(TARGETS kitinerary-extractor DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
     install(PROGRAMS org.kde.kitinerary-extractor.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-    install(FILES org.kde.kitinerary-extractor.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+    install(FILES org.kde.kitinerary-extractor.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 else()
     install(TARGETS kitinerary-extractor DESTINATION ${KDE_INSTALL_LIBEXECDIR_KF})
 endif()
