@@ -35,31 +35,31 @@ public:
     ~HtmlElement();
 
     /** Check if the element is null. */
-    bool isNull() const;
+    [[nodiscard]] bool isNull() const;
     /** The element name. */
-    QString name() const;
+    [[nodiscard]] QString name() const;
     /** Value of the attribute @p attr. */
-    Q_INVOKABLE QString attribute(const QString &attr) const;
+    Q_INVOKABLE [[nodiscard]] QString attribute(const QString &attr) const;
     /** Returns the parent element of this node. */
-    HtmlElement parent() const;
+    [[nodiscard]] HtmlElement parent() const;
     /** Returns the first child element of this node. */
-    HtmlElement firstChild() const;
+    [[nodiscard]] HtmlElement firstChild() const;
     /** Returns the next sibling element of this node. */
-    HtmlElement nextSibling() const;
+    [[nodiscard]] HtmlElement nextSibling() const;
     /** Returns the content of this element.
      *  That is, all text nodes that are immediate children of this element.
      *  The content is trimmed from leading or trailing whitespaces.
      */
-    QString content() const;
+    [[nodiscard]] QString content() const;
     /** Returns the content of this element and all its children. */
-    QString recursiveContent() const;
+    [[nodiscard]] QString recursiveContent() const;
     /** Checks whether an attribute with name @p attr exists. */
-    bool hasAttribute(const QString &attr) const;
+    [[nodiscard]] bool hasAttribute(const QString &attr) const;
     /** Returns the list of all attributes of this node. */
-    QStringList attributes() const;
+    [[nodiscard]] QStringList attributes() const;
 
     /** Evaluate an XPath expression relative to this node. */
-    Q_INVOKABLE QVariant eval(const QString &xpath) const;
+    Q_INVOKABLE [[nodiscard]] QVariant eval(const QString &xpath) const;
 
     /** Checks if two HtmlElement instances refer to the same DOM node. */
     bool operator==(const HtmlElement &other) const;
@@ -93,13 +93,13 @@ public:
     static HtmlDocument* fromString(const QString &data, QObject *parent = nullptr);
 
     /** Returns the root element of the document. */
-    HtmlElement root() const;
+    [[nodiscard]] HtmlElement root() const;
 
     /** Returns the raw textual HTML data. */
-    QString rawData() const;
+    [[nodiscard]] QString rawData() const;
 
     /** Evaluate an XPath expression relative to the document root. */
-    Q_INVOKABLE QVariant eval(const QString &xpath) const;
+    Q_INVOKABLE [[nodiscard]] QVariant eval(const QString &xpath) const;
 
 private:
     explicit HtmlDocument(QObject *parent = nullptr);
