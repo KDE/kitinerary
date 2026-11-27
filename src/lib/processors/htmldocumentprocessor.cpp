@@ -25,8 +25,6 @@
 #include <QString>
 #include <QUrl>
 
-#include <cmath>
-
 using namespace Qt::Literals;
 using namespace KItinerary;
 
@@ -35,8 +33,8 @@ Q_DECLARE_METATYPE(KItinerary::Internal::OwnedPtr<KItinerary::HtmlDocument>)
 bool HtmlDocumentProcessor::canHandleData(const QByteArray &encodedData, QStringView fileName) const
 {
   return StringUtil::startsWithIgnoreSpace(encodedData, "<") ||
-         fileName.endsWith(QLatin1StringView(".html"), Qt::CaseInsensitive) ||
-         fileName.endsWith(QLatin1StringView(".htm"), Qt::CaseInsensitive);
+         fileName.endsWith(".html"_L1, Qt::CaseInsensitive) ||
+         fileName.endsWith(".htm"_L1, Qt::CaseInsensitive);
 }
 
 static ExtractorDocumentNode nodeFromHtml(HtmlDocument *html)
@@ -77,9 +75,7 @@ void HtmlDocumentProcessor::expandNode(ExtractorDocumentNode &node, const Extrac
 
 static bool isJsonLdTag(const HtmlElement &elem)
 {
-  return elem.name() == QLatin1StringView("script") &&
-         elem.attribute(QStringLiteral("type")) ==
-             QLatin1StringView("application/ld+json");
+  return elem.name() == "script"_L1 && elem.attribute("type") == "application/ld+json"_L1;
 }
 
 static QByteArray fixupJson(const QByteArray &data)
@@ -144,24 +140,22 @@ static QString valueForItemProperty(const HtmlElement &elem)
     // TODO see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#Values
     const auto elemName = elem.name();
     QString v;
-    if (elemName == QLatin1StringView("meta")) {
-      v = elem.attribute(QStringLiteral("content"));
-    } else if (elemName == QLatin1StringView("time")) {
-      v = elem.attribute(QStringLiteral("datetime"));
-    } else if (elemName == QLatin1StringView("link") ||
-               elemName == QLatin1Char('a') ||
-               elemName == QLatin1StringView("img")) {
-      if (elem.hasAttribute(QStringLiteral("href"))) {
-        v = elem.attribute(QStringLiteral("href"));
-      } else if (elem.hasAttribute(QStringLiteral("content"))) {
-        v = elem.attribute(QStringLiteral("content"));
-      } else if (elem.hasAttribute(QStringLiteral("src"))) {
-        v = elem.attribute(QStringLiteral("src"));
-      } else {
-        v = elem.recursiveContent();
-      }
+    if (elemName == "meta"_L1) {
+        v = elem.attribute("content");
+    } else if (elemName == "time"_L1) {
+        v = elem.attribute("datetime");
+    } else if (elemName == "link"_L1 || elemName == 'a'_L1 || elemName == "img"_L1) {
+        if (elem.hasAttribute("href")) {
+            v = elem.attribute("href");
+        } else if (elem.hasAttribute("content")) {
+            v = elem.attribute("content");
+        } else if (elem.hasAttribute("src")) {
+            v = elem.attribute("src");
+        } else {
+            v = elem.recursiveContent();
+        }
     } else {
-      v = elem.recursiveContent();
+        v = elem.recursiveContent();
     }
 
     return v;
@@ -170,7 +164,7 @@ static QString valueForItemProperty(const HtmlElement &elem)
 static void insertProperties(QJsonObject &obj, const QString &prop, const QJsonValue &val)
 {
     // multiple properties can be specified at once, as a space-separated list
-    const auto props = prop.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+    const auto props = prop.split(' '_L1, Qt::SkipEmptyParts);
     for (const auto &p : props) {
         auto valRef = obj[p];
         if (valRef.isUndefined() || valRef.isNull()) {
@@ -191,13 +185,13 @@ static void parseMicroData(const HtmlElement &elem, QJsonObject &obj, QJsonArray
 {
     auto child = elem.firstChild();
     while (!child.isNull()) {
-        const auto prop = child.attribute(QStringLiteral("itemprop"));
-        const auto type = child.attribute(QStringLiteral("itemtype"));
+        const auto prop = child.attribute("itemprop");
+        const auto type = child.attribute("itemtype");
         if (JsonLd::isSchemaOrgNamespace(type)) {
             QJsonObject subObj;
             parseMicroData(child, subObj, result);
             const QUrl typeUrl(type);
-            subObj.insert(QStringLiteral("@type"), typeUrl.fileName());
+            subObj.insert("@type"_L1, typeUrl.fileName());
             if (prop.isEmpty()) {
                 result.push_back(subObj); // stand-alone object that just happens to be nested
             } else {
@@ -225,7 +219,7 @@ static void extractRecursive(const HtmlElement &elem, QJsonArray &result)
     }
 
     // Microdata
-    const auto itemType = elem.attribute(QStringLiteral("itemtype"));
+    const auto itemType = elem.attribute("itemtype");
     if (JsonLd::isSchemaOrgNamespace(itemType)) {
         QJsonObject obj;
         parseMicroData(elem, obj, result);
@@ -234,16 +228,16 @@ static void extractRecursive(const HtmlElement &elem, QJsonArray &result)
         }
 
         const QUrl typeUrl(itemType);
-        obj.insert(QStringLiteral("@type"), typeUrl.fileName());
+        obj.insert("@type"_L1, typeUrl.fileName());
 
-        const auto itemProp = elem.attribute(QStringLiteral("itemprop"));
+        const auto itemProp = elem.attribute("itemprop"_L1);
         if (!itemProp.isEmpty() && !result.isEmpty()) {
             // this is likely a child of our preceding sibling, but broken XML put it here
             auto parent = result.last().toObject();
             parent.insert(itemProp, obj);
             result[result.size() - 1] = parent;
         } else {
-            obj.insert(QStringLiteral("@context"), QStringLiteral("http://schema.org"));
+            obj.insert("@context"_L1, "http://schema.org"_L1);
             result.push_back(obj);
         }
         return;
@@ -307,23 +301,23 @@ void HtmlDocumentProcessor::expandElementRecursive(ExtractorDocumentNode &node, 
 
 void HtmlDocumentProcessor::expandDataUrl(ExtractorDocumentNode &node, QStringView data, const ExtractorEngine *engine) const
 {
-    const auto idx = data.indexOf(QLatin1Char(','));
+    const auto idx = data.indexOf(','_L1);
     if (idx < 0) {
         return;
     }
     const auto header = data.mid(5, idx - 5);
-    const auto headerItems = header.split(QLatin1Char(';'));
+    const auto headerItems = header.split(';'_L1);
     if (headerItems.isEmpty()) {
         return;
     }
 
-    if (headerItems.front() != QLatin1StringView("image/png")) {
-      return;
+    if (headerItems.front() != "image/png"_L1) {
+        return;
     }
 
     auto imgData = data.mid(idx).toUtf8();
-    if (headerItems.back() == QLatin1StringView("base64")) {
-      imgData = QByteArray::fromBase64(imgData.trimmed());
+    if (headerItems.back() == "base64"_L1) {
+        imgData = QByteArray::fromBase64(imgData.trimmed());
     }
 
     auto child = engine->documentNodeFactory()->createNode(imgData, {}, headerItems.front());
